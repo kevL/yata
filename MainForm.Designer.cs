@@ -63,6 +63,7 @@
 		private System.Windows.Forms.ToolStripMenuItem checkRowOrderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
 		private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem presetFoldersToolStripMenuItem;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -90,6 +91,7 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.presetFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -169,6 +171,7 @@
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.openToolStripMenuItem,
 			this.reloadToolStripMenuItem,
+			this.presetFoldersToolStripMenuItem,
 			this.createToolStripMenuItem,
 			this.toolStripSeparator2,
 			this.saveToolStripMenuItem,
@@ -179,6 +182,7 @@
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
+			this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.FileToolStripMenuItemDropDownOpening);
 			// 
 			// openToolStripMenuItem
 			// 
@@ -193,6 +197,13 @@
 			this.reloadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.reloadToolStripMenuItem.Text = "Reload";
 			this.reloadToolStripMenuItem.Click += new System.EventHandler(this.ReloadToolStripMenuItemClick);
+			// 
+			// presetFoldersToolStripMenuItem
+			// 
+			this.presetFoldersToolStripMenuItem.Name = "presetFoldersToolStripMenuItem";
+			this.presetFoldersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.presetFoldersToolStripMenuItem.Text = "Folders";
+			this.presetFoldersToolStripMenuItem.Visible = false;
 			// 
 			// createToolStripMenuItem
 			// 

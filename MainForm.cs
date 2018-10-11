@@ -32,6 +32,9 @@ namespace yata
 
 		int _editId;
 		List<string> _copy = new List<string>();
+
+		List<ToolStripItem> _presets = new List<ToolStripItem>();
+		string _initialDir = String.Empty;
 #endregion Fields
 
 
@@ -67,18 +70,39 @@ namespace yata
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
-						if (line.StartsWith("font=", StringComparison.InvariantCulture)
-							&& !String.IsNullOrEmpty(line = line.Substring(5).Trim()))
+						if (line.StartsWith("font=", StringComparison.InvariantCulture))
 						{
-							TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-							Font = tc.ConvertFromInvariantString(line) as Font;
+							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
+							{
+								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+								Font = tc.ConvertFromInvariantString(line) as Font;
+							}
+						}
+						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
+								&& Directory.Exists(line))
+							{
+								presetFoldersToolStripMenuItem.Visible = true;
 
-							break;
+								if (_presets.Count == 0)
+								{
+									var clear = presetFoldersToolStripMenuItem.DropDownItems.Add("clear current");
+									_presets.Add(clear);
+
+									clear.Visible = false;
+									clear.Click += PresetClick;
+								}
+
+								var preset = presetFoldersToolStripMenuItem.DropDownItems.Add(line);
+								_presets.Add(preset);
+
+								preset.Click += PresetClick;
+							}
 						}
 					}
 				}
 			}
-
 
 			DrawingControl.SetDoubleBuffered(_table);
 
@@ -191,9 +215,10 @@ namespace yata
 			{
 				using (var ofd = new OpenFileDialog())
 				{
-					ofd.Title  = "Select a 2da file";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-	
+					ofd.Title            = "Select a 2da file";
+					ofd.Filter           = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.InitialDirectory = _initialDir;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						_pfe = ofd.FileName;
@@ -205,8 +230,11 @@ namespace yata
 
 		void ReloadToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			CloseToolStripMenuItemClick(null, EventArgs.Empty);
-			Load2da();
+			if (!String.IsNullOrEmpty(_pfe))
+			{
+				CloseToolStripMenuItemClick(null, EventArgs.Empty);
+				Load2da();
+			}
 		}
 
 		const int LABELS = 2;
@@ -741,6 +769,61 @@ namespace yata
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void FileToolStripMenuItemDropDownOpening(object sender, EventArgs e)
+		{
+			if (_presets.Count != 0)
+			{
+				var itDelete = new List<ToolStripItem>();
+
+				foreach (var it in _presets)
+				{
+					if (it.Text == "clear current")
+					{
+						it.Visible = !String.IsNullOrEmpty(_initialDir);
+					}
+					else if (!Directory.Exists(it.Text))
+					{
+						itDelete.Add(it);
+					}
+				}
+
+				if (itDelete.Count != 0)
+				{
+					foreach (var it in itDelete)
+					{
+						presetFoldersToolStripMenuItem.DropDownItems.Remove(it);
+						_presets.Remove(it);
+					}
+				}
+
+				if (_presets.Count < 2) // ie. no presets or only "clear current" left
+				{
+					_initialDir = String.Empty;
+					presetFoldersToolStripMenuItem.Visible = false;
+
+					presetFoldersToolStripMenuItem.DropDownItems.Clear();
+					_presets.Clear();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Sets a directory as the initial directory for the FileOpen dialog.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void PresetClick(object sender, EventArgs e)
+		{
+			var it = sender as ToolStripItem;
+			if ((_initialDir = it.Text) == "clear current")
+				_initialDir = String.Empty;
 		}
 #endregion File menu
 
