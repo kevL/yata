@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // https://stackoverflow.com/questions/118528/horrible-redraw-performance-of-the-datagridview-on-one-of-my-two-screens#answer-16625788
@@ -27,8 +28,8 @@ namespace yata
 			{
 				// set instance non-public property with name "DoubleBuffered" to true
 				typeof(Control).InvokeMember("DoubleBuffered",
-											 System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance
-											 											| System.Reflection.BindingFlags.NonPublic,
+											 BindingFlags.SetProperty | BindingFlags.Instance
+											 						  | BindingFlags.NonPublic,
 											 null,
 											 control,
 											 new object[] { true });

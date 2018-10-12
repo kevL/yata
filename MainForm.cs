@@ -278,7 +278,7 @@ namespace yata
 					string st = line.Trim();
 					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
 					{
-						string error = "The 2da-file contains an malformed version header."
+						string error = "The 2da-file contains a malformed version header."
 									 + Environment.NewLine + Environment.NewLine
 									 + _pfe;
 						switch (ShowLoadError(error))
@@ -477,7 +477,6 @@ namespace yata
 								&& Directory.Exists(line))
 							{
 								GropeLabels(line);
-								break;
 							}
 						}
 					}
