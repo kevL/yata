@@ -74,6 +74,12 @@ namespace yata
 		/// </summary>
 		internal static List<string> iphitspellLabels = new List<string>();
 
+		/// <summary>
+		/// A list that holds labels for feats in Iprp_Feats.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> ipfeatsLabels = new List<string>();
+
 
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
@@ -225,6 +231,7 @@ namespace yata
 						// ability constant(IP_CONST_ABILITY_*) and the bonus. The bonus should
 						// be a positive integer between 1 and 12.
 						// itemproperty ItemPropertyAbilityBonus(int nAbility, int nBonus);
+						// Iprp_Abilities.2da
 						case 0: // ITEM_PROPERTY_ABILITY_BONUS
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -273,6 +280,7 @@ namespace yata
 						// The AC bonus should be an integer between 1 and 20. The modifier
 						// type depends on the item it is being applied to.
 						// itemproperty ItemPropertyACBonusVsAlign(int nAlignGroup, int nACBonus);
+						// Iprp_AlignGrp.2da
 						case 2: // ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -307,6 +315,7 @@ namespace yata
 						// modifier type depends on the item it is being applied to.
 						// NOTE: Only the first 3 damage types may be used here, the 3 basic physical types.
 						// itemproperty ItemPropertyACBonusVsDmgType(int nDamageType, int nACBonus);
+						// Iprp_CombatDam.2da
 						case 3: // ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -344,7 +353,8 @@ namespace yata
 						// the racial group constant(IP_CONST_RACIALTYPE_*) and the AC bonus. The AC
 						// bonus should be an integer between 1 and 20. The modifier type depends
 						// on the item it is being applied to.
-						//itemproperty ItemPropertyACBonusVsRace(int nRace, int nACBonus);
+						// itemproperty ItemPropertyACBonusVsRace(int nRace, int nACBonus);
+						// RacialTypes.2da
 						case 4: // ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -373,6 +383,7 @@ namespace yata
 						// bonus. The AC bonus should be an integer between 1 and 20. The
 						// modifier type depends on the item it is being applied to.
 						// itemproperty ItemPropertyACBonusVsSAlign(int nAlign, int nACBonus);
+						// Iprp_Alignment.2da
 						case 5: // ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -426,6 +437,7 @@ namespace yata
 						// and the enhancement bonus. The Enhancement bonus should be an integer
 						// between 1 and 20.
 						// itemproperty ItemPropertyEnhancementBonusVsAlign(int nAlignGroup, int nBonus);
+						// Iprp_AlignGrp.2da
 						case 7: // ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -454,12 +466,42 @@ namespace yata
 								info += " bork";
 							break;
 
+						// Returns Item property Enhancement bonus vs. Racial group. You need
+						// to specify the racial group constant(IP_CONST_RACIALTYPE_*) and the
+						// enhancement bonus. The enhancement bonus should be an integer between
+						// 1 and 20.
+						// itemproperty ItemPropertyEnhancementBonusVsRace(int nRace, int nBonus);
+						// RacialTypes.2da
+						case 8: // ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP
+							info += "[2](";
+							if ((par = GetPar(pars, 0)) != -1)
+							{
+								if (raceLabels.Count != 0
+									&& par < raceLabels.Count)
+								{
+									info += "vs " + raceLabels[par];
+								}
+								else
+									info += "vs " + par;
+							}
+							else
+								info += "bork";
+
+							if ((par = GetPar(pars, 1)) > 0 && par < 21)
+							{
+								info += " +" + par;
+							}
+							else
+								info += " bork";
+							break;
+
 						// Returns Item property Enhancement bonus vs. a specific alignment. You
 						// need to specify the alignment constant(IP_CONST_ALIGNMENT_*) and the
 						// enhancement bonus. The enhancement bonus should be an integer between
 						// 1 and 20.
 						// itemproperty ItemPropertyEnhancementBonusVsSAlign(int nAlign, int nBonus);
-						case 8: // ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT
+						// Iprp_Alignment.2da
+						case 9: // ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT
 							info += "[2](";
 							switch (GetPar(pars, 0))
 							{
@@ -484,34 +526,6 @@ namespace yata
 
 								default: info += "bork"; break;
 							}
-
-							if ((par = GetPar(pars, 1)) > 0 && par < 21)
-							{
-								info += " +" + par;
-							}
-							else
-								info += " bork";
-							break;
-
-						// Returns Item property Enhancement bonus vs. Racial group. You need
-						// to specify the racial group constant(IP_CONST_RACIALTYPE_*) and the
-						// enhancement bonus. The enhancement bonus should be an integer between
-						// 1 and 20.
-						// itemproperty ItemPropertyEnhancementBonusVsRace(int nRace, int nBonus);
-						case 9: // ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP
-							info += "[2](";
-							if ((par = GetPar(pars, 0)) != -1)
-							{
-								if (raceLabels.Count != 0
-									&& par < raceLabels.Count)
-								{
-									info += "vs " + raceLabels[par];
-								}
-								else
-									info += "vs " + par;
-							}
-							else
-								info += "bork";
 
 							if ((par = GetPar(pars, 1)) > 0 && par < 21)
 							{
@@ -567,16 +581,16 @@ namespace yata
 
 						// Returns Item property Bonus Feat. You need to specify the the feat
 						// constant(IP_CONST_FEAT_*).
-						// kL_NOTE: Don't be ridiculous. Use true Feat IDs.
 						// itemproperty ItemPropertyBonusFeat(int nFeat);
+						// Iprp_Feats.2da
 						case 12: // ITEM_PROPERTY_BONUS_FEAT
 							info += "[1](";
 							if ((par = GetPar(pars, 0)) != -1)
 							{
-								if (featsLabels.Count != 0
-									&& par < featsLabels.Count)
+								if (ipfeatsLabels.Count != 0
+									&& par < ipfeatsLabels.Count)
 								{
-									info += featsLabels[par];
+									info += ipfeatsLabels[par];
 								}
 								else
 									info += par.ToString();
@@ -589,8 +603,8 @@ namespace yata
 						// specify the class constant(IP_CONST_CLASS_*) of the bonus spell(MUST BE a
 						// spell casting class) and the level of the bonus spell. The level of the
 						// bonus spell should be an integer between 0 and 9.
-						// kL_NOTE: Don't be ridiculous. Use true Class IDs.
 						// itemproperty ItemPropertyBonusLevelSpell(int nClass, int nSpellLevel);
+						// Classes.2da
 						case 13: // ITEM_PROPERTY_BONUS_SPELL_SLOT_OF_LEVEL_N
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1) // TODO: Check if 'nClass' has "SpellCaster" enabled in Classes.2da
@@ -614,7 +628,7 @@ namespace yata
 								info += " bork";
 							break;
 
-//						case 14: // no case 14 in nwscript
+//						case 14: // no case 14 in nwscript: "Boomerang" in ItemPropDef.2da
 
 						// Returns Item property Cast spell. You must specify the spell constant
 						// (IP_CONST_CASTSPELL_*) and the number of uses constant(IP_CONST_CASTSPELL_NUMUSES_*).
@@ -630,8 +644,8 @@ namespace yata
 						// not work.
 						// NOTE: Even if spells have multiple versions of different levels they are only
 						// listed below once.
-						// kL_NOTE: See Iprp_Spells.2da
 						// itemproperty ItemPropertyCastSpell(int nSpell, int nNumUses);
+						// Iprp_Spells.2da
 						case 15: // ITEM_PROPERTY_CAST_SPELL
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -685,6 +699,7 @@ namespace yata
 						// NOTE: not all the damage types will work, use only the following: Acid, Bludgeoning,
 						// Cold, Electrical, Fire, Piercing, Slashing, Sonic.
 						// itemproperty ItemPropertyDamageBonus(int nDamageType, int nDamage);
+						// Iprp_DamageType.2da
 						case 16: // ITEM_PROPERTY_DAMAGE_BONUS
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -710,7 +725,7 @@ namespace yata
 								case  7: info += "cold";       break;
 								case  9: info += "electrical"; break;
 								case 10: info += "fire";       break;
-								case 13: info += "sonic";      break;
+								case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
 								default: info += "bork"; break;
 							}
@@ -790,6 +805,7 @@ namespace yata
 						// NOTE: not all the damage types will work, use only the following: Acid, Bludgeoning,
 						// Cold, Electrical, Fire, Piercing, Slashing, Sonic.
 						// itemproperty ItemPropertyDamageBonusVsAlign(int nAlignGroup, int nDamageType, int nDamage);
+						// Iprp_AlignGrp.2da
 						case 17: // ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP
 							info += "[3](";
 							switch (GetPar(pars, 0))
@@ -833,7 +849,7 @@ namespace yata
 								case  7: info += " cold";       break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
-								case 13: info += " sonic";      break;
+								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
 							}
@@ -913,6 +929,7 @@ namespace yata
 						// NOTE: not all the damage types will work, use only the following: Acid, Bludgeoning,
 						// Cold, Electrical, Fire, Piercing, Slashing, Sonic.
 						// itemproperty ItemPropertyDamageBonusVsRace(int nRace, int nDamageType, int nDamage);
+						// RacialTypes.2da
 						case 18: // ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP
 							info += "[3](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -951,7 +968,7 @@ namespace yata
 								case  7: info += " cold";       break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
-								case 13: info += " sonic";      break;
+								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
 							}
@@ -1031,6 +1048,7 @@ namespace yata
 						// NOTE: not all the damage types will work, use only the following: Acid, Bludgeoning,
 						// Cold, Electrical, Fire, Piercing, Slashing, Sonic.
 						// itemproperty ItemPropertyDamageBonusVsSAlign(int nAlign, int nDamageType, int nDamage);
+						// Iprp_Alignment.2da
 						case 19: // ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT
 							info += "[3](";
 							switch (GetPar(pars, 0))
@@ -1080,7 +1098,7 @@ namespace yata
 								case  7: info += " cold";       break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
-								case 13: info += " sonic";      break;
+								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
 							}
@@ -1160,6 +1178,7 @@ namespace yata
 						// NOTE: not all the damage types will work, use only the following: Acid, Bludgeoning,
 						// Cold, Electrical, Fire, Piercing, Slashing, Sonic.
 						// itemproperty ItemPropertyDamageImmunity(int nDamageType, int nImmuneBonus);
+						// Iprp_DamageType.2da
 						case 20: // ITEM_PROPERTY_IMMUNITY_DAMAGE_TYPE
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1185,7 +1204,7 @@ namespace yata
 								case  7: info += "cold";       break;
 								case  9: info += "electrical"; break;
 								case 10: info += "fire";       break;
-								case 13: info += "sonic";      break;
+								case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
 								default: info += "bork"; break;
 							}
@@ -1224,12 +1243,13 @@ namespace yata
 								info += "bork";
 							break;
 
-//						case 22: // ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED
+//						case 22: // ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED "DamageReduced" in ItemPropDef.2da / Iprp_Protection.2da
 
 						// Returns Item property damage resistance. You must specify the damage type
 						// constant(IP_CONST_DAMAGETYPE_*) and the amount of HP of damage constant
 						// (IP_CONST_DAMAGERESIST_*) that will be resisted against each round.
 						// itemproperty ItemPropertyDamageResistance(int nDamageType, int nHPResist);
+						// Iprp_DamageType.2da
 						case 23: // ITEM_PROPERTY_DAMAGE_RESISTANCE
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1297,6 +1317,7 @@ namespace yata
 						// constant(IP_CONST_DAMAGETYPE_*) that you want the user to be extra vulnerable to
 						// and the percentage vulnerability constant(IP_CONST_DAMAGEVULNERABILITY_*).
 						// itemproperty ItemPropertyDamageVulnerability(int nDamageType, int nVulnerability);
+						// Iprp_DamageType.2da
 						case 24: // ITEM_PROPERTY_DAMAGE_VULNERABILITY
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1354,7 +1375,7 @@ namespace yata
 							}
 							break;
 
-//						case 25: // no case 25 in nwscript
+//						case 25: // no case 25 in nwscript: "Dancing_Scimitar" in ItemPropDef.2da
 
 						// Return Item property Darkvision.
 						// itemproperty ItemPropertyDarkvision();
@@ -1366,6 +1387,7 @@ namespace yata
 						// constant(IP_CONST_ABILITY_*) and the modifier constant. The modifier must be
 						// a POSITIVE integer between 1 and 10 (ie. 1 = -1).
 						// itemproperty ItemPropertyDecreaseAbility(int nAbility, int nModifier);
+						// Iprp_Ablities.2da
 						case 27: // ITEM_PROPERTY_DECREASED_ABILITY_SCORE
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1398,6 +1420,7 @@ namespace yata
 						// modifier type constant(IP_CONST_ACMODIFIERTYPE_*) and the armor class penalty.
 						// The penalty must be a POSITIVE integer between 1 and 5 (ie. 1 = -1).
 						// itemproperty ItemPropertyDecreaseAC(int nModifierType, int nPenalty);
+						// Iprp_AcModType.2da
 						case 28: // ITEM_PROPERTY_DECREASED_AC
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1428,6 +1451,7 @@ namespace yata
 						// skill to be decreased(SKILL_*) and the amount of the penalty. The penalty
 						// must be a POSITIVE integer between 1 and 10 (ie. 1 = -1).
 						// itemproperty ItemPropertyDecreaseSkill(int nSkill, int nPenalty);
+						// Skills.2da
 						case 29: // ITEM_PROPERTY_DECREASED_SKILL_MODIFIER
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -1451,8 +1475,8 @@ namespace yata
 								info += " bork";
 							break;
 
-//						case 30: // no case 30 in nwscript
-//						case 31: // no case 31 in nwscript
+//						case 30: // no case 30 in nwscript: "DoubleStack" in ItemPropDef.2da
+//						case 31: // no case 31 in nwscript: "EnhancedContainer_BonusSlot" in ItemPropDef.2da
 
 						// Returns Item property container reduced weight. This is used for special
 						// containers that reduce the weight of the objects inside them. You must
@@ -1483,6 +1507,7 @@ namespace yata
 						// here.
 						// NOTE: It is also only applicable to melee weapons.
 						// itemproperty ItemPropertyExtraMeleeDamageType(int nDamageType);
+						// Iprp_CombatDam.2da
 						case 33: // ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -1515,6 +1540,7 @@ namespace yata
 						// here.
 						// NOTE: It is also only applicable to ranged weapons.
 						// itemproperty ItemPropertyExtraRangeDamageType(int nDamageType);
+						// Iprp_CombatDam.2da
 						case 34: // ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -1556,6 +1582,7 @@ namespace yata
 						// Returns Item property immunity to miscellaneous effects. You must specify the
 						// effect to which the user is immune, it is a constant(IP_CONST_IMMUNITYMISC_*).
 						// itemproperty ItemPropertyImmunityMisc(int nImmunityType);
+						// Iprp_Immunity.2da
 						case 37: // ITEM_PROPERTY_IMMUNITY_MISCELLANEOUS
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -1633,6 +1660,7 @@ namespace yata
 						// to which the user gets the bonus and the bonus that he/she will get. The
 						// bonus must be an integer between 1 and 20.
 						// itemproperty ItemPropertyBonusSavingThrow(int nBaseSaveType, int nBonus);
+						// Iprp_SaveElement.2da (does not use that)
 						case 40: // ITEM_PROPERTY_SAVING_THROW_BONUS
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1662,6 +1690,7 @@ namespace yata
 						// applied to and the bonus that is be applied. The bonus must be an integer
 						// between 1 and 20.
 						// itemproperty ItemPropertyBonusSavingThrowVsX(int nBonusType, int nBonus);
+						// Iprp_SavingThrow.2da (does not use that)
 						case 41: // ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -1821,6 +1850,7 @@ namespace yata
 						// kL_NOTE: For dispel-type spells 'nSaveDC' is used to pass in casterlevel.
 						// kL_NOTE: See Iprp_OnHit.2da
 						// itemproperty ItemPropertyOnHitProps(int nProperty, int nSaveDC, int nSpecial=0);
+						// Iprp_OnHit.2da
 						case 48: // ITEM_PROPERTY_ON_HIT_PROPERTIES
 							info += "[2/3](";
 							switch (par = GetPar(pars, 0))
@@ -2153,15 +2183,16 @@ namespace yata
 						// to be applied. The constant for the base type starts with (IP_CONST_SAVEBASETYPE_*).
 						// The penalty must be a POSITIVE integer between 1 and 20 (ie. 1 = -1).
 						// itemproperty ItemPropertyReducedSavingThrow(int nBonusType, int nPenalty);
+						// Iprp_SaveElement.2da (probably does not use that)
 						case 49: // ITEM_PROPERTY_DECREASED_SAVING_THROWS
 							info += "[2](";
 							switch (GetPar(pars, 0))
 							{
-								//int IP_CONST_SAVEBASETYPE_ALL       = 0;
+								//int IP_CONST_SAVEBASETYPE_ALL       = 0;	// probably does not work IG - cf #40 SavingThrowBonus.
 								//int IP_CONST_SAVEBASETYPE_FORTITUDE = 1;
 								//int IP_CONST_SAVEBASETYPE_WILL      = 2;
 								//int IP_CONST_SAVEBASETYPE_REFLEX    = 3;
-								case 0: info += "all";  break;
+//								case 0: info += "all";  break;				// probably does not work IG - cf #40 SavingThrowBonus.
 								case 1: info += "fort"; break;
 								case 2: info += "will"; break;
 								case 3: info += "refl"; break;
@@ -2182,6 +2213,7 @@ namespace yata
 						// penalty to be applied. The penalty must be a POSITIVE integer between 1 and 20
 						// (ie. 1 = -1).
 						// itemproperty ItemPropertyReducedSavingThrowVsX(int nBaseSaveType, int nPenalty);
+						// Iprp_SavingThrow.2da (probably does not use that)
 						case 50: // ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -2243,6 +2275,7 @@ namespace yata
 						// will get a bonus(SKILL_*) and the amount of the bonus. The bonus amount must
 						// be an integer between 1 and 50.
 						// itemproperty ItemPropertySkillBonus(int nSkill, int nBonus);
+						// Skills.2da
 						case 52: // ITEM_PROPERTY_SKILL_BONUS
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -2289,6 +2322,7 @@ namespace yata
 						// Returns Item property spell immunity vs. spell school. You must specify the
 						// school to which the user will be immune(IP_CONST_SPELLSCHOOL_*).
 						// itemproperty ItemPropertySpellImmunitySchool(int nSchool);
+						// Iprp_SpellShl.2da
 						case 54: // ITEM_PROPERTY_IMMUNITY_SPELL_SCHOOL
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -2344,6 +2378,7 @@ namespace yata
 						// alignment group constant(IP_CONST_ALIGNMENTGROUP_*) and the attack bonus. The
 						// bonus must be an integer between 1 and 20.
 						// itemproperty ItemPropertyAttackBonusVsAlign(int nAlignGroup, int nBonus);
+						// Iprp_AlignGrp.2da
 						case 57: // ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -2376,6 +2411,7 @@ namespace yata
 						// racial group constant(IP_CONST_RACIALTYPE_*) and the attack bonus. The bonus
 						// must be an integer between 1 and 20.
 						// itemproperty ItemPropertyAttackBonusVsRace(int nRace, int nBonus);
+						// RacialTypes.2da
 						case 58: // ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -2403,6 +2439,7 @@ namespace yata
 						// the alignment you want the bonus to work against(IP_CONST_ALIGNMENT_*) and the
 						// attack bonus. The bonus must be an integer between 1 and 20.
 						// itemproperty ItemPropertyAttackBonusVsSAlign(int nAlignment, int nBonus);
+						// Iprp_Alignment.2da
 						case 59: // ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -2456,15 +2493,16 @@ namespace yata
 						// bonus). For this parmeter you use the constants beginning with:
 						// IP_CONST_UNLIMITEDAMMO_*.
 						// itemproperty ItemPropertyUnlimitedAmmo(int nAmmoDamage=IP_CONST_UNLIMITEDAMMO_BASIC);
+						// Iprp_AmmoType.2da (appears to be irrelevant - see Iprp_AmmoCost.2da the CostTable)
 						case 61: // ITEM_PROPERTY_UNLIMITED_AMMUNITION
 							info += "[1](";
 							switch (GetPar(pars, 0))
 							{
-								//int IP_CONST_UNLIMITEDAMMO_BASIC        = 1;
-								//int IP_CONST_UNLIMITEDAMMO_1D6FIRE      = 2;
-								//int IP_CONST_UNLIMITEDAMMO_1D6COLD      = 3;
-								//int IP_CONST_UNLIMITEDAMMO_1D6LIGHT     = 4;
-								//int IP_CONST_UNLIMITEDAMMO_NATURES_RAGE = 5;
+								//int IP_CONST_UNLIMITEDAMMO_BASIC        =  1;
+								//int IP_CONST_UNLIMITEDAMMO_1D6FIRE      =  2;
+								//int IP_CONST_UNLIMITEDAMMO_1D6COLD      =  3;
+								//int IP_CONST_UNLIMITEDAMMO_1D6LIGHT     =  4;
+								//int IP_CONST_UNLIMITEDAMMO_NATURES_RAGE =  5;
 								//int IP_CONST_UNLIMITEDAMMO_PLUS1        = 11;
 								//int IP_CONST_UNLIMITEDAMMO_PLUS2        = 12;
 								//int IP_CONST_UNLIMITEDAMMO_PLUS3        = 13;
@@ -2488,6 +2526,7 @@ namespace yata
 						// Returns Item property limit use by alignment group. You must specify the
 						// alignment group(s) that you want to be able to use this item(IP_CONST_ALIGNMENTGROUP_*).
 						// itemproperty ItemPropertyLimitUseByAlign(int nAlignGroup);
+						// Iprp_AlignGrp.2da
 						case 62: // ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -2512,6 +2551,7 @@ namespace yata
 						// Returns Item property limit use by class. You must specify the class(es) who
 						// are able to use this item(IP_CONST_CLASS_*).
 						// itemproperty ItemPropertyLimitUseByClass(int nClass);
+						// Classes.2da
 						case 63: // ITEM_PROPERTY_USE_LIMITATION_CLASS
 							info += "[1](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -2531,6 +2571,7 @@ namespace yata
 						// Returns Item property limit use by race. You must specify the race(s) who are
 						// allowed to use this item(IP_CONST_RACIALTYPE_*).
 						// itemproperty ItemPropertyLimitUseByRace(int nRace);
+						// RacialTypes.2da
 						case 64: // ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE
 							info += "[1](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -2550,6 +2591,7 @@ namespace yata
 						// Returns Item property limit use by specific alignment. You must specify the
 						// alignment(s) of those allowed to use the item(IP_CONST_ALIGNMENT_*).
 						// itemproperty ItemPropertyLimitUseBySAlign(int nAlignment);
+						// Iprp_Alignment.2da
 						case 65: // ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -2599,12 +2641,13 @@ namespace yata
 								info += "bork";
 							break;
 
-//						case 68: // no case 68 in nwscript
-//						case 69: // no case 69 in nwscript
+//						case 68: // no case 68 in nwscript: "Vorpal" in ItemPropDef.2da
+//						case 69: // no case 69 in nwscript: "Wounding" in ItemPropDef.2da
 
 						// Returns Item property Trap. You must specify the trap level constant
 						// (IP_CONST_TRAPSTRENGTH_*) and the trap type constant(IP_CONST_TRAPTYPE_*).
 						// itemproperty ItemPropertyTrap(int nTrapLevel, int nTrapType);
+						// Iprp_Traps.2da
 						case 70: // ITEM_PROPERTY_TRAP
 							info += "[2](";
 							switch (GetPar(pars, 0))
@@ -2617,6 +2660,8 @@ namespace yata
 								case 1: info += "average"; break;
 								case 2: info += "strong";  break;
 								case 3: info += "deadly";  break;
+								case 4: info += "epic";    break; // NOTE: no IP_CONST_TRAPSTRENGTH_* defined in nwscript.
+//								case 5: fatal
 
 								default: info += "bork"; break;
 							}
@@ -2676,8 +2721,9 @@ namespace yata
 						// NOTE: These can only be applied to monster NATURAL weapons (ie. bite, claw,
 						// gore, and slam). IT WILL NOT WORK ON NORMAL WEAPONS.
 						// itemproperty ItemPropertyOnMonsterHitProperties(int nProperty, int nSpecial=0);
+						// Iprp_MonsterHit.2da
 //						case 72: // ITEM_PROPERTY_ON_MONSTER_HIT
-							// kL_NOTE: I don't think we'll be enchating any creature-items ....
+							// kL_NOTE: I don't think we'll be enchanting any creature-items ....
 							// But if so see case 48: // ITEM_PROPERTY_ON_HIT_PROPERTIES
 //							break;
 
@@ -2774,6 +2820,7 @@ namespace yata
 							info += "[0](";
 							break;
 
+						// Poison.2da
 						case 76: // ITEM_PROPERTY_POISON
 							info += "(obsolete - use IP 48: ITEM_PROPERTY_ON_HIT_PROPERTIES";
 							break;
@@ -2784,7 +2831,7 @@ namespace yata
 						// gore, and slam). IT WILL NOT WORK ON NORMAL WEAPONS.
 						// itemproperty ItemPropertyMonsterDamage(int nDamage);
 //						case 77: // ITEM_PROPERTY_MONSTER_DAMAGE
-							// kL_NOTE: I don't think we'll be enchating any creature-items ....
+							// kL_NOTE: I don't think we'll be enchanting any creature-items ....
 //							break;
 
 						// Returns Item property immunity to spell level. You must specify the level of
@@ -2806,6 +2853,7 @@ namespace yata
 						// automatically use the zombie walk. This will apply the special walk animation
 						// to the user.
 						// itemproperty ItemPropertySpecialWalk(int nWalkType=0);
+						// Iprp_Walk.2da
 						case 79: // ITEM_PROPERTY_SPECIAL_WALK
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -2857,8 +2905,8 @@ namespace yata
 						// Creates an item property that (when applied to a weapon item) causes a spell to be cast
 						// when a successful strike is made, or (when applied to armor) is struck by an opponent.
 						// - nSpell uses the IP_CONST_ONHIT_CASTSPELL_* constants
-						// kL_NOTE: Don't be ridiculous. Use true Spell IDs. BZZZT Use Iprp_OnHitSpells.2da
 						// itemproperty ItemPropertyOnHitCastSpell(int nSpell, int nLevel);
+						// Iprp_OnHitSpells.2da
 						case 82: // ITEM_PROPERTY_ONHITCASTSPELL
 							info += "[2](";
 							if ((par = GetPar(pars, 0)) != -1)
@@ -2885,6 +2933,7 @@ namespace yata
 						// Creates a visual effect (ITEM_VISUAL_*) that may be applied to
 						// melee weapons only.
 						// itemproperty ItemPropertyVisualEffect(int nEffect);
+						// Iprp_VisualFx.2da
 						case 83: // ITEM_PROPERTY_VISUALEFFECT
 							info += "[1](";
 							switch (GetPar(pars, 0))
@@ -2917,11 +2966,11 @@ namespace yata
 							info += GetPar(pars, 0) + " raw"; // TODO: investigate
 							break;
 
-//						case 85: // no case 85 in nwscript
-//						case 86: // no case 86 in nwscript
-//						case 87: // no case 87 in nwscript
-//						case 88: // no case 88 in nwscript
-//						case 89: // no case 89 in nwscript
+//						case 85: // no case 85 in nwscript: "ArrowCatching"
+//						case 86: // no case 86 in nwscript: "Bashing"
+//						case 87: // no case 87 in nwscript: "Animated"
+//						case 88: // no case 88 in nwscript: "Wild"
+//						case 89: // no case 89 in nwscript: "Etherealness"
 
 						// JLR-OEI 04/03/06: This version is REPLACING the old DEPRECATED one.
 						// Returns Item property damage reduction. You must specify:
@@ -2938,6 +2987,7 @@ namespace yata
 						//   Set to zero for infinite
 						// - nDRType: DR_TYPE_*
 						// itemproperty ItemPropertyDamageReduction(int nAmount, int nDRSubType, int nLimit=0, int nDRType=DR_TYPE_MAGICBONUS);
+						// Iprp_DamageReduction.2da
 						case 22: // ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED
 						case 90: // ITEM_PROPERTY_DAMAGE_REDUCTION
 							info += "[4](ip DamageReduction cannot be scripted.";

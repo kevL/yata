@@ -75,7 +75,7 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-								Font = tc.ConvertFromInvariantString(line) as Font;
+								_table.Font = tc.ConvertFromInvariantString(line) as Font;
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
@@ -1468,6 +1468,11 @@ namespace yata
 								  CraftInfo.diseaseLabels,
 								  pathDisease2daToolStripMenuItem,
 								  1);
+
+			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
+								  CraftInfo.ipfeatsLabels,
+								  pathIprpFeats2daToolStripMenuItem,
+								  2);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
 								  CraftInfo.ipspellsLabels,
