@@ -113,28 +113,15 @@ namespace yata
 			});
 			toolStripComboBox1.SelectedIndex = 0;
 
-
+			// init the Table ->
 			panel1.Controls.Add(_table);
 
 			_table.Name = "_table";
 			_table.Dock = DockStyle.Fill;
 
-//			_table.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-//			_table.MultiSelect = false;
-
 			_table.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-//			_table.ColumnHeadersDefaultCellStyle.Font = new Font(_table.Font, FontStyle.Bold);
-
-			// IMPORTANT: Please note that auto-sizing rows and columns has been
-			// set up to maximize speed of operations like renumbering. If you
-			// change them from what they are it is very likely you'll slow
-			// something down - perhaps to a crawl.
-
-			_table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-			_table.AutoSizeRowsMode    = DataGridViewAutoSizeRowsMode   .None;
 
 			_table.AllowUserToResizeRows = false;
-			_table.AllowUserToResizeColumns = true;
 
 			_table.CellValueChanged    += CellValueChanged;
 			_table.RowHeaderMouseClick += RowHeaderContextMenu;
@@ -142,7 +129,6 @@ namespace yata
 			_table.KeyUp               += TableSearch;
 			_table.SortCompare         += TableSortCompare;
 			_table.Sorted              += TableSortCompared;
-//			_table.KeyDown             += TableEdit;
 		}
 #endregion cTor
 
@@ -490,6 +476,8 @@ namespace yata
 			PopulateColumnHeaders();
 			PopulateTableRows();
 
+			_table.AutoResizeColumns();
+
 			DrawingControl.ResumeDrawing(_table);
 			_loading = false;
 
@@ -545,7 +533,6 @@ namespace yata
 			_table.Columns[0].Name       =
 			_table.Columns[0].HeaderText = "id";
 			_table.Columns[0].Frozen     = true;
-//			_table.Columns[0].SortMode   = DataGridViewColumnSortMode.NotSortable;
 
 			int colId = 0;
 			foreach (string col in _cols)
@@ -553,8 +540,6 @@ namespace yata
 				++colId;
 				_table.Columns[colId].Name       =
 				_table.Columns[colId].HeaderText = col;
-
-//				_table.Columns[colId].SortMode = DataGridViewColumnSortMode.NotSortable;
 			}
 		}
 
@@ -585,14 +570,7 @@ namespace yata
 				pb.Step();
 			}
 
-			int width = 51;
-			if (id != -1)
-			{
-				while ((id /= 10) != 0)
-					width += 8;
-			}
-
-			_table.RowHeadersWidth = width;
+			_table.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
 		}
 
 		/// <summary>
@@ -1029,8 +1007,6 @@ namespace yata
 		{
 			if (_table.Rows.Count > 1)
 			{
-				_table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-
 				DrawingControl.SuspendDrawing(_table); // bongo
 
 				var pb = new ProgBar();
@@ -1043,8 +1019,7 @@ namespace yata
 				int rows = _table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
-					val = _table.Rows[id].Cells[0].Value;
-					if (val == null
+					if ((val = _table.Rows[id].Cells[0].Value) == null
 						|| !Int32.TryParse(val.ToString(), out result)
 						|| result != id)
 					{
@@ -1054,8 +1029,6 @@ namespace yata
 				}
 
 				DrawingControl.ResumeDrawing(_table);
-
-				_table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 			}
 		}
 
@@ -1068,16 +1041,125 @@ namespace yata
 				int rows = _table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
-					if (id % 2 == 0)
-						color = Color.AliceBlue;
-					else
-						color = Color.BlanchedAlmond;
-
+					color = (id % 2 == 0) ? Color.AliceBlue
+										  : Color.BlanchedAlmond;
 					_table.Rows[id].DefaultCellStyle.BackColor = color;
 				}
 			}
 		}
 #endregion Edit menu
+
+
+#region Options menu
+		/// <summary>
+		/// Opens an output-box with the current table-font as a string for
+		/// copying to Settings.Cfg if desired.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var f = new TextOutputBox();
+			f.Font = _table.Font;
+
+			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+			f.SetText("font=" + tc.ConvertToString(_table.Font));
+
+			f.ShowDialog();
+		}
+
+		void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			_table.AutoResizeColumns();
+		}
+
+		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
+			if (_table.Columns.Count > 2)
+			{
+				_table.Columns[2].Frozen = false;
+			}
+
+			if (_table.Columns.Count > 1) // then do the freeze1 col
+			{
+				_table.Columns[1].Frozen              =
+				freeze1stColToolStripMenuItem.Checked = !freeze1stColToolStripMenuItem.Checked;
+			}
+		}
+
+		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
+			if (_table.Columns.Count > 1)
+			{
+				_table.Columns[1].Frozen = false;
+
+				if (_table.Columns.Count > 2) // then do the freeze2 col
+				{
+					_table.Columns[2].Frozen              =
+					freeze2ndColToolStripMenuItem.Checked = !freeze2ndColToolStripMenuItem.Checked;
+				}
+			}
+		}
+#endregion Options menu
+
+
+#region Font
+		Font _font;
+		bool _fontChanged;
+
+		bool _fontWarned;
+
+		void FontToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			if (_fontWarned
+				|| MessageBox.Show("Be patient – changing the font on a table with several"
+								   + " thousand rows can take several seconds or longer."
+								   + Environment.NewLine + Environment.NewLine
+								   + "Further, only legitimately valid TrueType fonts are"
+								   + " indeed valid. There are fonts that masquerade as TrueType"
+								   + " but are not valid – such fonts will crash the application."
+								   + " You should cancel and save any progress first if you're"
+								   + " unsure about a font that you may apply or okay in the"
+								   + " Font Dialog that appears if you choose to proceed."
+								   + Environment.NewLine + Environment.NewLine + Environment.NewLine
+								   + "– this warning will not be shown again during this run of"
+								   + " the application.",
+								   "beware, Grasshoppar",
+								   MessageBoxButtons.OKCancel,
+								   MessageBoxIcon.Warning,
+								   MessageBoxDefaultButton.Button1) == DialogResult.OK)
+			{
+				_fontChanged = false;
+
+				_font            =
+				fontDialog1.Font = _table.Font;
+
+				if (fontDialog1.ShowDialog() == DialogResult.OK)
+				{
+					if (!_table.Font.Equals(fontDialog1.Font))
+					{
+						_table.Font = fontDialog1.Font;
+					}
+				}
+				else if (_fontChanged)
+				{
+					_table.Font = _font;
+				}
+			}
+			_fontWarned = true;
+		}
+
+		void FontDialog1Apply(object sender, EventArgs e)
+		{
+			if (!_table.Font.Equals(fontDialog1.Font))
+			{
+				_fontChanged = true;
+				_table.Font = fontDialog1.Font;
+			}
+		}
+#endregion Font
 
 
 #region Crafting info
@@ -1515,7 +1597,7 @@ namespace yata
 								  pathRaces2daToolStripMenuItem,
 								  1);
 		}
-		#endregion Crafting info
+#endregion Crafting info
 
 
 #region Search
@@ -1595,111 +1677,6 @@ namespace yata
 #endregion Search
 
 
-#region Font
-		Font _font;
-		bool _fontChanged;
-
-		bool _fontWarned;
-
-		void FontToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			if (_fontWarned
-				|| MessageBox.Show("Be patient – changing the font on a table with several"
-								   + " thousand rows can take several seconds or longer."
-								   + Environment.NewLine + Environment.NewLine
-								   + "Further, only legitimately valid TrueType fonts are"
-								   + " indeed valid. There are fonts that masquerade as TrueType"
-								   + " but are not valid – such fonts will crash the application."
-								   + " You should cancel and save any progress first if you're"
-								   + " unsure about a font that you may apply or okay in the"
-								   + " Font Dialog that appears if you choose to proceed."
-								   + Environment.NewLine + Environment.NewLine + Environment.NewLine
-								   + "– this warning will not be shown again during this run of"
-								   + " the application.",
-								   "beware, Grasshoppar",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button1) == DialogResult.OK)
-			{
-				_fontChanged = false;
-
-				_font            =
-				fontDialog1.Font = _table.Font;
-
-				if (fontDialog1.ShowDialog() == DialogResult.OK)
-				{
-					if (!_table.Font.Equals(fontDialog1.Font))
-					{
-						_table.Font = fontDialog1.Font;
-					}
-				}
-				else if (_fontChanged)
-				{
-					_table.Font = _font;
-				}
-			}
-			_fontWarned = true;
-		}
-
-		void FontDialog1Apply(object sender, EventArgs e)
-		{
-			if (!_table.Font.Equals(fontDialog1.Font))
-			{
-				_fontChanged = true;
-				_table.Font = fontDialog1.Font;
-			}
-		}
-
-		/// <summary>
-		/// Opens an output-box with the current table-font as a string for
-		/// copying to Settings.Cfg if desired.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var f = new TextOutputBox();
-			f.Font = _table.Font;
-
-			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			f.SetText("font=" + tc.ConvertToString(_table.Font));
-
-			f.ShowDialog();
-		}
-#endregion Font
-
-
-		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
-			if (_table.Columns.Count > 2)
-			{
-				_table.Columns[2].Frozen = false;
-			}
-
-			if (_table.Columns.Count > 1) // then do the freeze1 col
-			{
-				_table.Columns[1].Frozen              =
-				freeze1stColToolStripMenuItem.Checked = !freeze1stColToolStripMenuItem.Checked;
-			}
-		}
-
-		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
-			if (_table.Columns.Count > 1)
-			{
-				_table.Columns[1].Frozen = false;
-
-				if (_table.Columns.Count > 2) // then do the freeze2 col
-				{
-					_table.Columns[2].Frozen              =
-					freeze2ndColToolStripMenuItem.Checked = !freeze2ndColToolStripMenuItem.Checked;
-				}
-			}
-		}
-
-
 #region Sort
 		int _a, _b;
 
@@ -1761,23 +1738,7 @@ namespace yata
 			}
 		}
 #endregion Sort
-
-
-/*		void TableEdit(object sender, KeyEventArgs e)
-		{
-			if (e.KeyData == Keys.Enter)
-			{
-				if (_table.SelectedCells[0] != null)
-					_table.CurrentCell = _table.SelectedCells[0];
-
-				if (_table.CurrentCell != null)
-					_table.BeginEdit(true);
-
-				e.Handled = true;
-			}
-		} */
 	}
-
 
 
 	// https://stackoverflow.com/questions/21873361/datagridview-enter-key-event-handling#answer-21882188
@@ -1785,11 +1746,6 @@ namespace yata
 		:
 			DataGridView
 	{
-//		internal YataDataGridView()
-//		{
-//		}
-
-
 		/// <summary>
 		/// Handles starting editing a cell by pressing Enter - this fires
 		/// before edit begins.
@@ -1799,10 +1755,6 @@ namespace yata
 		{
 			if (e.KeyData == Keys.Enter)
 			{
-//				int id  = CurrentCell.RowIndex;
-//				int col = CurrentCell.ColumnIndex;
-//				CurrentCell = this[col, id];
-
 				if (SelectedCells[0] != null)
 					CurrentCell = SelectedCells[0];
 

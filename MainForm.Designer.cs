@@ -66,6 +66,7 @@
 		private System.Windows.Forms.ToolStripMenuItem presetFoldersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem pathIprpFeats2daToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+		private System.Windows.Forms.ToolStripMenuItem autosizeColsToolStripMenuItem;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -125,10 +126,10 @@
 			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.pathClasses2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathDisease2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.pathIprpFeats2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathIprpOnHitSpell2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathIprpSpells2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathRaces2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.pathIprpFeats2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,6 +150,7 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fontDialog1 = new System.Windows.Forms.FontDialog();
+			this.autosizeColsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -298,6 +300,7 @@
 			this.fontToolStripMenuItem,
 			this.showCurrentFontStringToolStripMenuItem,
 			this.toolStripSeparator7,
+			this.autosizeColsToolStripMenuItem,
 			this.freeze1stColToolStripMenuItem,
 			this.freeze2ndColToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
@@ -442,6 +445,13 @@
 			this.pathDisease2daToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
 			this.pathDisease2daToolStripMenuItem.Text = "path Disease.2da";
 			// 
+			// pathIprpFeats2daToolStripMenuItem
+			// 
+			this.pathIprpFeats2daToolStripMenuItem.Enabled = false;
+			this.pathIprpFeats2daToolStripMenuItem.Name = "pathIprpFeats2daToolStripMenuItem";
+			this.pathIprpFeats2daToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.pathIprpFeats2daToolStripMenuItem.Text = "path Iprp_Feats.2da";
+			// 
 			// pathIprpOnHitSpell2daToolStripMenuItem
 			// 
 			this.pathIprpOnHitSpell2daToolStripMenuItem.Enabled = false;
@@ -462,13 +472,6 @@
 			this.pathRaces2daToolStripMenuItem.Name = "pathRaces2daToolStripMenuItem";
 			this.pathRaces2daToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
 			this.pathRaces2daToolStripMenuItem.Text = "path RacialTypes.2da";
-			// 
-			// pathIprpFeats2daToolStripMenuItem
-			// 
-			this.pathIprpFeats2daToolStripMenuItem.Enabled = false;
-			this.pathIprpFeats2daToolStripMenuItem.Name = "pathIprpFeats2daToolStripMenuItem";
-			this.pathIprpFeats2daToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-			this.pathIprpFeats2daToolStripMenuItem.Text = "path Iprp_Feats.2da";
 			// 
 			// panel1
 			// 
@@ -631,6 +634,13 @@
 			this.fontDialog1.ShowApply = true;
 			this.fontDialog1.ShowColor = true;
 			this.fontDialog1.Apply += new System.EventHandler(this.FontDialog1Apply);
+			// 
+			// autosizeColsToolStripMenuItem
+			// 
+			this.autosizeColsToolStripMenuItem.Name = "autosizeColsToolStripMenuItem";
+			this.autosizeColsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.autosizeColsToolStripMenuItem.Text = "autosize cols";
+			this.autosizeColsToolStripMenuItem.Click += new System.EventHandler(this.AutosizeColsToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 

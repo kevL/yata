@@ -45,7 +45,7 @@
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.textBox1.Location = new System.Drawing.Point(3, 58);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(446, 20);
+			this.textBox1.Size = new System.Drawing.Size(486, 20);
 			this.textBox1.TabIndex = 0;
 			// 
 			// label1
@@ -53,7 +53,7 @@
 			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.label1.Location = new System.Drawing.Point(3, 3);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(446, 55);
+			this.label1.Size = new System.Drawing.Size(486, 55);
 			this.label1.TabIndex = 1;
 			this.label1.Text = "Current Font (string)\r\n\r\nThis string can be used in Settings.Cfg to override Yata" +
 	"\'s default font.";
@@ -67,7 +67,7 @@
 			this.button1.Location = new System.Drawing.Point(5, 5);
 			this.button1.Margin = new System.Windows.Forms.Padding(0);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(215, 30);
+			this.button1.Size = new System.Drawing.Size(235, 30);
 			this.button1.TabIndex = 2;
 			this.button1.Text = "Copy";
 			this.button1.UseVisualStyleBackColor = true;
@@ -79,10 +79,10 @@
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(230, 5);
+			this.button2.Location = new System.Drawing.Point(250, 5);
 			this.button2.Margin = new System.Windows.Forms.Padding(0);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(215, 30);
+			this.button2.Size = new System.Drawing.Size(235, 30);
 			this.button2.TabIndex = 3;
 			this.button2.Text = "Cancel";
 			this.button2.UseVisualStyleBackColor = true;
@@ -95,7 +95,7 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(3, 78);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(446, 35);
+			this.panel1.Size = new System.Drawing.Size(486, 35);
 			this.panel1.TabIndex = 4;
 			// 
 			// TextOutputBox
@@ -104,7 +104,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(452, 117);
+			this.ClientSize = new System.Drawing.Size(492, 117);
 			this.ControlBox = false;
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textBox1);
