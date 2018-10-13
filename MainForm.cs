@@ -134,6 +134,7 @@ namespace yata
 			_table.AutoSizeRowsMode    = DataGridViewAutoSizeRowsMode   .None;
 
 			_table.AllowUserToResizeRows = false;
+			_table.AllowUserToResizeColumns = true;
 
 			_table.CellValueChanged    += CellValueChanged;
 			_table.RowHeaderMouseClick += RowHeaderContextMenu;
@@ -954,20 +955,37 @@ namespace yata
 				object val;
 				int result;
 
+				bool stop = false;
+
 				int rows = _table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
 					val = _table.Rows[id].Cells[0].Value;
 					if (val == null)
 					{
+						if (list.Count == 20) // stop this Madness
+						{
+							stop = true;
+							break;
+						}
 						list.Add("id " + id + " is not valid");
 					}
 					else if (!Int32.TryParse(val.ToString(), out result))
 					{
+						if (list.Count == 20)
+						{
+							stop = true;
+							break;
+						}
 						list.Add("id " + id + " is not an integer");
 					}
 					else if (result != id)
 					{
+						if (list.Count == 20)
+						{
+							stop = true;
+							break;
+						}
 						list.Add("id " + id + " is out of order");
 					}
 				}
@@ -979,8 +997,15 @@ namespace yata
 					{
 						info += it + Environment.NewLine;
 					}
+
+					if (stop)
+					{
+						info += Environment.NewLine
+							  + "The check has been stopped at 20 borks.";
+					}
+
 					info += Environment.NewLine + Environment.NewLine
-						  + "Do you want to reorder the IDs";
+						  + "Do you want to auto-sequence the ID fields?";
 
 					if (MessageBox.Show(info,
 										"burp",

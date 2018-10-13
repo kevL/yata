@@ -122,6 +122,7 @@
 			this.pathItemPropDef2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathSkills2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathSpells2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.pathClasses2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathDisease2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathIprpOnHitSpell2daToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -148,7 +149,6 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fontDialog1 = new System.Windows.Forms.FontDialog();
-			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -367,10 +367,10 @@
 			this.toolStripSeparator10,
 			this.pathClasses2daToolStripMenuItem,
 			this.pathDisease2daToolStripMenuItem,
+			this.pathIprpFeats2daToolStripMenuItem,
 			this.pathIprpOnHitSpell2daToolStripMenuItem,
 			this.pathIprpSpells2daToolStripMenuItem,
-			this.pathRaces2daToolStripMenuItem,
-			this.pathIprpFeats2daToolStripMenuItem});
+			this.pathRaces2daToolStripMenuItem});
 			this.pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
 			this.pathsToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
 			this.pathsToolStripMenuItem.Text = "Paths";
@@ -422,6 +422,11 @@
 			this.pathSpells2daToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
 			this.pathSpells2daToolStripMenuItem.Text = "path Spells.2da";
 			this.pathSpells2daToolStripMenuItem.Click += new System.EventHandler(this.PathSpells2daToolStripMenuItemClick);
+			// 
+			// toolStripSeparator10
+			// 
+			this.toolStripSeparator10.Name = "toolStripSeparator10";
+			this.toolStripSeparator10.Size = new System.Drawing.Size(187, 6);
 			// 
 			// pathClasses2daToolStripMenuItem
 			// 
@@ -626,11 +631,6 @@
 			this.fontDialog1.ShowApply = true;
 			this.fontDialog1.ShowColor = true;
 			this.fontDialog1.Apply += new System.EventHandler(this.FontDialog1Apply);
-			// 
-			// toolStripSeparator10
-			// 
-			this.toolStripSeparator10.Name = "toolStripSeparator10";
-			this.toolStripSeparator10.Size = new System.Drawing.Size(187, 6);
 			// 
 			// MainForm
 			// 
