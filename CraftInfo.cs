@@ -167,15 +167,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the TCC-type as a string for a given int.
+		/// Gets the TCC-type as a string for a given (int)tag.
 		/// </summary>
-		/// <param name="result"></param>
+		/// <param name="tag"></param>
 		/// <returns></returns>
-		internal static string GetTccType(int result)
+		internal static string GetTccType(int tag)
 		{
-			switch (result)
+			switch (tag)
 			{
-				case -2: return "Misc Equippable";
+				case -2: return "Equippable";
 				case -1: return "Any";
 				case  0: return "None";
 				case  1: return "Melee";
@@ -191,13 +191,14 @@ namespace yata
 				case 11: return "Wrists";
 				case 15: return "Instrument";
 				case 16: return "Container";
-				case 17: return "Head";
-				case 19: return "Neck";
-				case 21: return "Waist";
-				case 26: return "Feet";
+				case 17: return "Helmet";
+				case 19: return "Amulet";
+				case 21: return "Belt";
+				case 26: return "Boots";
 				case 36: return "Gloves";
 				case 52: return "Ring";
-				case 80: return "Back";
+				case 78: return "Bracer";
+				case 80: return "Cloak";
 			}
 			return "unknown";
 		}

@@ -1214,80 +1214,82 @@ namespace yata
 							if ((val = _table.Rows[id].Cells[col].Value) != null)
 							{
 								int pos;
-								string st0;
+								string tag;
 
-								string st = val.ToString();
-								if (st.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
+								string tags = val.ToString();
+								if (tags.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 								{
 									if (pathBaseItems2daToolStripMenuItem.Checked)
 									{
-										st = st.Substring(1); // lose the "B"
-										while (!String.IsNullOrEmpty(st))
+										const string basetype = "(base) ";
+
+										tags = tags.Substring(1); // lose the "B"
+										while (!String.IsNullOrEmpty(tags))
 										{
-											pos = st.IndexOf(',');
-											if (pos != -1) // has multiple Tags
+											if ((pos = tags.IndexOf(',')) != -1) // has multiple Tags
 											{
-												st0 = st.Substring(0, pos);
-												if (Int32.TryParse(st0, out result)
+												tag = tags.Substring(0, pos);
+												if (Int32.TryParse(tag, out result)
 													&& result < CraftInfo.tagLabels.Count)
 												{
 													if (String.IsNullOrEmpty(info))
-														info = _table.Columns[col].HeaderCell.Value + ": ";
+														info = _table.Columns[col].HeaderCell.Value + ": " + basetype;
 													else
 														info += ", ";
 
 													info += CraftInfo.tagLabels[result];
 												}
-												st = st.Substring(pos + 1);
+												tags = tags.Substring(pos + 1);
 											}
 											else // only 1 Tag OR the last Tag in the list
 											{
-												if (Int32.TryParse(st, out result)
+												if (Int32.TryParse(tags, out result)
 													&& result < CraftInfo.tagLabels.Count)
 												{
 													if (String.IsNullOrEmpty(info))
-														info = _table.Columns[col].HeaderCell.Value + ": ";
+														info = _table.Columns[col].HeaderCell.Value + ": " + basetype;
 													else
 														info += ", ";
 
 													info += CraftInfo.tagLabels[result];
 												}
-												st = String.Empty;
+												tags = String.Empty;
 											}
 										}
 									}
 								}
 								else // is a TCC item-type
 								{
-									while (!String.IsNullOrEmpty(st))
+									const string tcc = "(tcc) ";
+
+									while (!String.IsNullOrEmpty(tags))
 									{
-										pos = st.IndexOf(',');
-										if (pos != -1) // has multiple Tags
+										if ((pos = tags.IndexOf(',')) != -1) // has multiple Tags
 										{
-											st0 = st.Substring(0, pos);
-											if (Int32.TryParse(st0, out result))
+											tag = tags.Substring(0, pos);
+											if (Int32.TryParse(tag, out result))
 											{
 												if (String.IsNullOrEmpty(info))
-													info = _table.Columns[col].HeaderCell.Value + ": ";
+													info = _table.Columns[col].HeaderCell.Value + ": " + tcc;
 												else
 													info += ", ";
 
 												info += CraftInfo.GetTccType(result);
 											}
-											st = st.Substring(pos + 1);
+											tags = tags.Substring(pos + 1);
 										}
 										else // only 1 Tag OR the last Tag in the list
 										{
-											if (Int32.TryParse(st, out result))
+											if (Int32.TryParse(tags, out result))
 											{
 												if (String.IsNullOrEmpty(info))
-													info = _table.Columns[col].HeaderCell.Value + ": ";
+													info = _table.Columns[col].HeaderCell.Value + ": " + tcc;
 												else
 													info += ", ";
 
 												info += CraftInfo.GetTccType(result);
 											}
-											st = String.Empty;
+											tags = String.Empty;
 										}
 									}
 								}
@@ -1304,28 +1306,28 @@ namespace yata
 									{
 										info = _table.Columns[col].HeaderCell.Value + ": ";
 
+										string par = String.Empty;
 										int pos;
 
 										string[] ips = st.Split(';');
 										for (int ip = 0; ip != ips.Length; ++ip)
 										{
-											if ((pos = ips[ip].IndexOf(',')) != -1)
+											par = ips[ip];
+											if ((pos = par.IndexOf(',')) != -1)
 											{
-												string ip0 = ips[ip].Substring(0, pos);
-
-												if (Int32.TryParse(ip0, out result)
+												if (Int32.TryParse(par.Substring(0, pos), out result)
 													&& result < CraftInfo.ipLabels.Count)
 												{
 													info += CraftInfo.ipLabels[result]
-														  + CraftInfo.GetEncodedParsDescription(ips[ip]);
+														  + CraftInfo.GetEncodedParsDescription(par);
 
 													if (ip != ips.Length - 1)
 														info += ", ";
 												}
 											}
-											else // is a PropertySet initialization val.
+											else // is a PropertySet preparation val.
 											{
-												info += "PropertySet val=" + ips[ip]; // TODO: description of val.
+												info += "PropertySet val=" + par; // TODO: description for par.
 											}
 										}
 									}
