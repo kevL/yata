@@ -1141,11 +1141,13 @@ namespace yata
 					if (!_table.Font.Equals(fontDialog1.Font))
 					{
 						_table.Font = fontDialog1.Font;
+						_table.AutoResizeColumns();
 					}
 				}
 				else if (_fontChanged)
 				{
 					_table.Font = _font;
+					_table.AutoResizeColumns();
 				}
 			}
 			_fontWarned = true;
@@ -1157,6 +1159,7 @@ namespace yata
 			{
 				_fontChanged = true;
 				_table.Font = fontDialog1.Font;
+				_table.AutoResizeColumns();
 			}
 		}
 #endregion Font
@@ -1301,19 +1304,28 @@ namespace yata
 									{
 										info = _table.Columns[col].HeaderCell.Value + ": ";
 
+										int pos;
+
 										string[] ips = st.Split(';');
 										for (int ip = 0; ip != ips.Length; ++ip)
 										{
-											string ip0 = ips[ip].Substring(0, ips[ip].IndexOf(','));
-
-											if (Int32.TryParse(ip0, out result)
-												&& result < CraftInfo.ipLabels.Count)
+											if ((pos = ips[ip].IndexOf(',')) != -1)
 											{
-												info += CraftInfo.ipLabels[result]
-													  + CraftInfo.GetEncodedParsDescription(ips[ip]);
+												string ip0 = ips[ip].Substring(0, pos);
 
-												if (ip != ips.Length - 1)
-													info += ", ";
+												if (Int32.TryParse(ip0, out result)
+													&& result < CraftInfo.ipLabels.Count)
+												{
+													info += CraftInfo.ipLabels[result]
+														  + CraftInfo.GetEncodedParsDescription(ips[ip]);
+
+													if (ip != ips.Length - 1)
+														info += ", ";
+												}
+											}
+											else // is a PropertySet initialization val.
+											{
+												info += "PropertySet val=" + ips[ip]; // TODO: description of val.
 											}
 										}
 									}
