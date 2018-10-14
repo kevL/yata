@@ -11,6 +11,14 @@ namespace yata
 		:
 			DataGridView
 	{
+		internal enum Frozen
+		{
+			FreezeOff,
+			FreezeFirstCol,
+			FreezeSecondCol
+		}
+
+
 		YataForm _f;
 
 		internal string Pfe
@@ -29,6 +37,9 @@ namespace yata
 		internal bool CraftInfo
 		{ get; set; }
 
+		internal Frozen Freeze
+		{ get; set; }
+
 
 		/// <summary>
 		/// cTor.
@@ -42,9 +53,7 @@ namespace yata
 			Pfe = pfe;
 
 			Dock = DockStyle.Fill;
-
 			ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
 			AllowUserToResizeRows = false;
 
 			DrawingControl.SetDoubleBuffered(this);
@@ -52,6 +61,8 @@ namespace yata
 			CellValueChanged += CellChanged;
 			SortCompare      += TableSortCompare;
 			Sorted           += TableSortCompared;
+
+			Freeze = Frozen.FreezeOff;
 		}
 
 		const int LABELS = 2;
@@ -497,7 +508,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles relabeling the row-headers after selecting a row and
-		/// pressing the Delete key.
+		/// pressing the Delete key - this does not fire during edit.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyUp(KeyEventArgs e)
@@ -546,6 +557,12 @@ namespace yata
 #region Sort
 		int _a, _b;
 
+		/// <summary>
+		/// Sorts fields as integers iff they convert to integers and performs
+		/// a secondary sort against their IDs if applicable.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void TableSortCompare(object sender, DataGridViewSortCompareEventArgs e)
 		{
 			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
@@ -567,13 +584,13 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Ensures that the searched-for field is displayed and re-orders the
+		/// row-headers.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void TableSortCompared(object sender, EventArgs e)
-		{
-			EnsureVisibleRow();
-			RelabelRowHeaders();
-		}
-
-		void EnsureVisibleRow()
 		{
 			int sel = -1;
 
@@ -602,6 +619,7 @@ namespace yata
 					}
 				}
 			}
+			RelabelRowHeaders();
 		}
 #endregion Sort
 	}

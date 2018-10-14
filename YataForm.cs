@@ -147,23 +147,54 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Handles tab-selection/deselection.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void TabControl1SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (tabControl1.SelectedIndex != -1)
 			{
 				_table = tabControl1.SelectedTab.Tag as YataDataGridView;
 				pathsToolStripMenuItem.Visible = _table.CraftInfo;
-				panel1.Hide();
+				panel_ColorFill.Hide();
+
+				freeze1stColToolStripMenuItem.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+				freeze2ndColToolStripMenuItem.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 			}
 			else
 			{
 				pathsToolStripMenuItem.Visible = false;
-				panel1.Show();
+				panel_ColorFill.Show();
+
+				freeze1stColToolStripMenuItem.Checked =
+				freeze2ndColToolStripMenuItem.Checked = false;
 			}
 
 			SetTitlebarText();
 		}
 
+		/// <summary>
+		/// Draws the tab-text in Bold iff selected.
+		/// @note Has the peculiar side-effect of dropping the text to the
+		/// bottom of the tab-rect. But I like it
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void TabControl1DrawItem(object sender, DrawItemEventArgs e)
+		{
+			var page = tabControl1.TabPages[e.Index];
+
+			FontStyle style = (page == tabControl1.SelectedTab) ? FontStyle.Bold
+																: FontStyle.Regular;
+			e.Graphics.DrawString(page.Text,
+								  new Font(Font, style),
+								  Brushes.Black,
+								  e.Bounds,
+								  new StringFormat { Alignment     = StringAlignment.Center,
+													 LineAlignment = StringAlignment.Far });
+		}
 
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -175,9 +206,6 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-//				freeze1stColToolStripMenuItem.Checked =
-//				freeze2ndColToolStripMenuItem.Checked = false;
-
 				tabControl1.TabPages.Remove(tabControl1.SelectedTab);
 
 				if (tabControl1.TabPages.Count == 0)
@@ -687,16 +715,23 @@ namespace yata
 		{
 			if (_table != null)
 			{
-				freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
-				if (_table.Columns.Count > 2)
+				if (_table.Columns.Count > 1)
 				{
-					_table.Columns[2].Frozen = false;
-				}
+					if (_table.Columns.Count > 2)
+					{
+						freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
+						_table.Columns[2].Frozen = false;
+					}
 
-				if (_table.Columns.Count > 1) // then do the freeze1 col
-				{
-					_table.Columns[1].Frozen              =
-					freeze1stColToolStripMenuItem.Checked = !freeze1stColToolStripMenuItem.Checked;
+					if (!freeze1stColToolStripMenuItem.Checked)
+					{
+						_table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
+					}
+					else
+						_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+
+					freeze1stColToolStripMenuItem.Checked = // then do the freeze1 col
+					_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
 				}
 			}
 		}
@@ -705,15 +740,22 @@ namespace yata
 		{
 			if (_table != null)
 			{
-				freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
 				if (_table.Columns.Count > 1)
 				{
+					freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
 					_table.Columns[1].Frozen = false;
 
-					if (_table.Columns.Count > 2) // then do the freeze2 col
+					if (_table.Columns.Count > 2)
 					{
-						_table.Columns[2].Frozen              =
-						freeze2ndColToolStripMenuItem.Checked = !freeze2ndColToolStripMenuItem.Checked;
+						if (!freeze2ndColToolStripMenuItem.Checked)
+						{
+							_table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
+						}
+						else
+							_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+
+						freeze2ndColToolStripMenuItem.Checked = // then do the freeze2 col
+						_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 					}
 				}
 			}

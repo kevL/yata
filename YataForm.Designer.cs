@@ -67,7 +67,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
 		private System.Windows.Forms.ToolStripMenuItem autosizeColsToolStripMenuItem;
 		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel panel_ColorFill;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -152,7 +152,7 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fontDialog1 = new System.Windows.Forms.FontDialog();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -170,7 +170,7 @@
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menuStrip1.Size = new System.Drawing.Size(792, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(846, 24);
 			this.menuStrip1.TabIndex = 0;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -485,14 +485,16 @@
 			// tabControl1
 			// 
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 			this.tabControl1.Location = new System.Drawing.Point(0, 24);
 			this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControl1.Multiline = true;
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(792, 328);
+			this.tabControl1.Size = new System.Drawing.Size(846, 408);
 			this.tabControl1.TabIndex = 0;
+			this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl1DrawItem);
 			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
 			// 
 			// contextMenuStrip1
@@ -613,9 +615,9 @@
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.toolStripStatusLabel1,
 			this.toolStripStatusLabel2});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 352);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 432);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(792, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(846, 22);
 			this.statusStrip1.TabIndex = 2;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -632,7 +634,7 @@
 			this.toolStripStatusLabel2.AutoSize = false;
 			this.toolStripStatusLabel2.Font = new System.Drawing.Font("Consolas", 8.3F);
 			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(677, 17);
+			this.toolStripStatusLabel2.Size = new System.Drawing.Size(731, 17);
 			this.toolStripStatusLabel2.Spring = true;
 			this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -645,21 +647,21 @@
 			this.fontDialog1.ShowColor = true;
 			this.fontDialog1.Apply += new System.EventHandler(this.FontDialog1Apply);
 			// 
-			// panel1
+			// panel_ColorFill
 			// 
-			this.panel1.BackColor = System.Drawing.Color.LightSeaGreen;
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 24);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(792, 328);
-			this.panel1.TabIndex = 3;
+			this.panel_ColorFill.BackColor = System.Drawing.Color.LightSeaGreen;
+			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
+			this.panel_ColorFill.Name = "panel_ColorFill";
+			this.panel_ColorFill.Size = new System.Drawing.Size(846, 408);
+			this.panel_ColorFill.TabIndex = 3;
 			// 
-			// MainForm
+			// YataForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(792, 374);
-			this.Controls.Add(this.panel1);
+			this.ClientSize = new System.Drawing.Size(846, 454);
+			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -667,7 +669,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.Name = "MainForm";
+			this.Name = "YataForm";
 			this.Text = "Yata";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
 			this.menuStrip1.ResumeLayout(false);
