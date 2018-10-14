@@ -8,6 +8,12 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	static class Constants
+	{
+		internal const string Stars = "****";
+	}
+
+
 	/// <summary>
 	/// Yata ....
 	/// </summary>
@@ -16,32 +22,13 @@ namespace yata
 			Form
 	{
 #region Fields
-		const string STARS = "****";
+		YataDataGridView _table;
 
-		string _pfe = String.Empty;
-
-		bool _loading, _changed;
-		bool _craftInfo;
-
-		YataDataGridView _table = new YataDataGridView();
-
-		string[] _cols;
-		int _colsQty;
-
-		List<string[]> _rows = new List<string[]>();
-
-		int _editId;
 		List<string> _copy = new List<string>();
 
 		List<ToolStripItem> _presets = new List<ToolStripItem>();
 		string _initialDir = String.Empty;
 #endregion Fields
-
-
-#region Properties
-		public static MainForm Instance
-		{ get; set; }
-#endregion Properties
 
 
 #region cTor
@@ -58,8 +45,6 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
-			Instance = this;
-
 			// load an Optional manual settings file
 			string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
 			if (File.Exists(pathCfg))
@@ -75,7 +60,7 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-								_table.Font = tc.ConvertFromInvariantString(line) as Font;
+								Font = tc.ConvertFromInvariantString(line) as Font;
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
@@ -104,385 +89,161 @@ namespace yata
 				}
 			}
 
-			DrawingControl.SetDoubleBuffered(_table);
-
 			toolStripComboBox1.Items.AddRange(new object[]
 			{
 				"search substring",
 				"search wholeword"
 			});
 			toolStripComboBox1.SelectedIndex = 0;
-
-			// init the Table ->
-			panel1.Controls.Add(_table);
-
-			_table.Name = "_table";
-			_table.Dock = DockStyle.Fill;
-
-			_table.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-			_table.AllowUserToResizeRows = false;
-
-			_table.CellValueChanged    += CellValueChanged;
-			_table.RowHeaderMouseClick += RowHeaderContextMenu;
-			_table.CellMouseEnter      += PrintCraftInfo;
-			_table.KeyUp               += TableSearch;
-			_table.SortCompare         += TableSortCompare;
-			_table.Sorted              += TableSortCompared;
 		}
 #endregion cTor
 
 
 #region File menu
-		void MainFormFormClosing(object sender, CancelEventArgs e)
+		void OpenToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			e.Cancel = _changed
-					&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-									   "warning",
-									   MessageBoxButtons.OKCancel,
-									   MessageBoxIcon.Warning,
-									   MessageBoxDefaultButton.Button2) == DialogResult.Cancel;
+			using (var ofd = new OpenFileDialog())
+			{
+				ofd.Title            = "Select a 2da file";
+				ofd.Filter           = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+				ofd.InitialDirectory = _initialDir;
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+				{
+					CreateTabPage(ofd.FileName);
+				}
+			}
+		}
+
+		void CreateTabPage(string pfe)
+		{
+			var page = new TabPage();
+			tabControl1.TabPages.Add(page);
+
+			page.Text = Path.GetFileNameWithoutExtension(pfe);
+
+
+			var table = new YataDataGridView(pfe);
+
+			table.RowHeaderMouseClick += RowHeaderContextMenu;
+			table.CellMouseEnter      += PrintCraftInfo;
+			table.KeyUp               += TableSearch;
+
+			table.Load2da(this);
+
+			page.Controls.Add(table);
+			page.Tag = table;
+
+			tabControl1.SelectedTab = page;
+			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
+
+			SetTitlebarText();
+		}
+
+
+		void TabControl1SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (tabControl1.SelectedIndex != -1)
+			{
+				_table = tabControl1.SelectedTab.Tag as YataDataGridView;
+				pathsToolStripMenuItem.Visible = _table.CraftInfo;
+			}
+			else
+				pathsToolStripMenuItem.Visible = false;
+
+			SetTitlebarText();
+		}
+
+
+		void CloseToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			if (_table != null && !_table.Changed
+				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+								   "warning",
+								   MessageBoxButtons.YesNo,
+								   MessageBoxIcon.Warning,
+								   MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+			{
+//				freeze1stColToolStripMenuItem.Checked =
+//				freeze2ndColToolStripMenuItem.Checked = false;
+
+				tabControl1.TabPages.Remove(tabControl1.SelectedTab);
+
+				if (tabControl1.TabPages.Count == 0)
+					_table = null;
+
+				SetTitlebarText();
+			}
 		}
 
 		void QuitToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!_changed
-				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-								   "warning",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button2) == DialogResult.OK)
+			Close(); // let MainFormFormClosing() handle it ...
+		}
+
+		void MainFormFormClosing(object sender, CancelEventArgs e)
+		{
+			var tables = GetChangedTables();
+			if (tables.Count != 0)
 			{
-				_changed = false;
-				Close();
+				string info = String.Empty;
+				foreach (string table in tables)
+				{
+					info += table + Environment.NewLine;
+				}
+
+				e.Cancel = MessageBox.Show("Data has changed."
+										   + Environment.NewLine + Environment.NewLine
+										   + info
+										   + Environment.NewLine
+										   + "Okay to exit ...",
+										   "warning",
+										   MessageBoxButtons.YesNo,
+										   MessageBoxIcon.Warning,
+										   MessageBoxDefaultButton.Button2) == DialogResult.Yes;
 			}
 		}
 
-		void CloseToolStripMenuItemClick(object sender, EventArgs e)
+		List<string> GetChangedTables()
 		{
-			if (!_changed
-				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-								   "warning",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button2) == DialogResult.OK)
-			{
-				_changed                              =
-				_craftInfo                            =
-				pathsToolStripMenuItem.Visible        =
-				freeze1stColToolStripMenuItem.Checked =
-				freeze2ndColToolStripMenuItem.Checked = false;
+			var changed = new List<string>();
 
-				_rows         .Clear();
+			foreach (TabPage page in tabControl1.TabPages)
+			{
+				var table = page.Tag as YataDataGridView;
+				if (table.Changed)
+				{
+					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe));
+				}
+			}
+			return changed;
+		}
+
+
+		void ReloadToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			if (_table != null && File.Exists(_table.Pfe)
+				&& (!_table.Changed
+					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+									   "warning",
+									   MessageBoxButtons.YesNo,
+									   MessageBoxIcon.Warning,
+									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
+			{
+				_table.Changed = false;
+	
 				_table.Columns.Clear();
 				_table.Rows   .Clear();
 
-				// NOTE: '_cols' and '_colsQty' could also be cleared but it's not necessary.
-
-				if (sender != null) // ie. is NOT Reload
-				{
-					_pfe = String.Empty;
-					SetTitlebarText();
-				}
+				_table.Load2da(this);
 			}
+			// TODO: Show an error if file no longer exists.
 		}
 
 		// nb. the Create option is disabled in the designer
 		void CreateToolStripMenuItemClick(object sender, EventArgs e)
 		{}
 
-		void OpenToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			if (!_changed
-				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-								   "warning",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button2) == DialogResult.OK)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title            = "Select a 2da file";
-					ofd.Filter           = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-					ofd.InitialDirectory = _initialDir;
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						_pfe = ofd.FileName;
-						Load2da();
-					}
-				}
-			}
-		}
-
-		void ReloadToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			if (!String.IsNullOrEmpty(_pfe))
-			{
-				CloseToolStripMenuItemClick(null, EventArgs.Empty);
-				Load2da();
-			}
-		}
-
-		const int LABELS = 2;
-
-		/// <summary>
-		/// Tries to load a 2da file.
-		/// </summary>
-		void Load2da()
-		{
-			Text = "Yata";
-
-			_rows         .Clear();
-			_table.Columns.Clear();
-			_table.Rows   .Clear();
-
-			_changed                              =
-			_craftInfo                            =
-			pathsToolStripMenuItem.Visible        =
-			freeze1stColToolStripMenuItem.Checked =
-			freeze2ndColToolStripMenuItem.Checked = false;
-
-			// NOTE: '_cols' and '_colsQty' could also be cleared but it's not necessary.
-
-
-			bool ignoreErrors = false;
-
-			string[] lines = File.ReadAllLines(_pfe);
-
-			_cols = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-			_colsQty = _cols.Length + 1;
-
-			int quotes =  0;
-			int id     = -1;
-			int lineId = -1;
-
-			foreach (string line in lines)
-			{
-				// test version header
-				if (++lineId == 0)
-				{
-					string st = line.Trim();
-					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
-					{
-						string error = "The 2da-file contains a malformed version header."
-									 + Environment.NewLine + Environment.NewLine
-									 + _pfe;
-						switch (ShowLoadError(error))
-						{
-							case DialogResult.Abort:
-								return;
-
-							case DialogResult.Retry:
-								break;
-
-							case DialogResult.Ignore:
-								ignoreErrors = true;
-								break;
-						}
-					}
-				}
-
-				// test for blank 2nd line
-				if (!ignoreErrors && lineId == 1 && !String.IsNullOrEmpty(line)) // .Trim() // uh yeah ... right.
-				{
-					string error = "The 2nd line in the 2da should be blank."
-								 + " This editor does not support default value-types."
-								 + Environment.NewLine + Environment.NewLine
-								 + _pfe;
-					switch (ShowLoadError(error))
-					{
-						case DialogResult.Abort:
-							return;
-
-						case DialogResult.Retry:
-							break;
-
-						case DialogResult.Ignore:
-							ignoreErrors = true;
-							break;
-					}
-				}
-
-				if (lineId > LABELS)
-				{
-					string[] row = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-					// test for well-formed, consistent IDs
-					++id;
-
-					if (!ignoreErrors)
-					{
-						int result;
-						if (!Int32.TryParse(row[0], out result) || result != id)
-						{
-							string error = "The 2da-file contains an ID that is either not an integer or out of sequence."
-										 + Environment.NewLine + Environment.NewLine
-										 + _pfe
-										 + Environment.NewLine + Environment.NewLine
-										 + id + " / " + row[0];
-							switch (ShowLoadError(error))
-							{
-								case DialogResult.Abort:
-									return;
-
-								case DialogResult.Retry:
-									break;
-
-								case DialogResult.Ignore:
-									ignoreErrors = true;
-									break;
-							}
-						}
-					}
-
-					// test for matching fields under columns
-					if (!ignoreErrors && row.Length != _colsQty)
-					{
-						string error = "The 2da-file contains fields that do not align with its columns."
-									 + Environment.NewLine + Environment.NewLine
-									 + _pfe
-									 + Environment.NewLine + Environment.NewLine
-									 + "id " + id;
-						switch (ShowLoadError(error))
-						{
-							case DialogResult.Abort:
-								return;
-
-							case DialogResult.Retry:
-								break;
-
-							case DialogResult.Ignore:
-								ignoreErrors = true;
-								break;
-						}
-					}
-
-					// test for matching double-quote characters on the fly
-					if (!ignoreErrors)
-					{
-						bool quoteFirst, quoteLast;
-						int col = -1;
-						foreach (string field in row)
-						{
-							++col;
-							quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-							quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
-							if (   ( quoteFirst && !quoteLast)
-								|| (!quoteFirst &&  quoteLast))
-							{
-								string error = "Found a missing double-quote character."
-											 + Environment.NewLine + Environment.NewLine
-											 + _pfe
-											 + Environment.NewLine + Environment.NewLine
-											 + "id " + id + " / col " + col;
-								switch (ShowLoadError(error))
-								{
-									case DialogResult.Abort:
-										return;
-
-									case DialogResult.Retry:
-										break;
-
-									case DialogResult.Ignore:
-										ignoreErrors = true;
-										break;
-								}
-							}
-							else if (quoteFirst && quoteLast
-								&& field.Length == 1)
-							{
-								string error = "Found an isolated double-quote character."
-											 + Environment.NewLine + Environment.NewLine
-											 + _pfe
-											 + Environment.NewLine + Environment.NewLine
-											 + "id " + id + " / col " + col;
-								switch (ShowLoadError(error))
-								{
-									case DialogResult.Abort:
-										return;
-
-									case DialogResult.Retry:
-										break;
-
-									case DialogResult.Ignore:
-										ignoreErrors = true;
-										break;
-								}
-							}
-						}
-					}
-
-					_rows.Add(row);
-				}
-
-				// also test for an odd quantity of double-quote characters
-				foreach (char character in line)
-				{
-					if (character == '"')
-						++quotes;
-				}
-			}
-
-			// safety test for double-quotes (ought be caught above)
-			if (quotes % 2 == 1)
-			{
-				string error = "The 2da-file contains an odd quantity of double-quote characters."
-							 + Environment.NewLine + Environment.NewLine
-							 + _pfe;
-				switch (ShowLoadError(error))
-				{
-					case DialogResult.Abort:
-						return;
-
-					case DialogResult.Retry:
-						break;
-
-					case DialogResult.Ignore:
-						ignoreErrors = true;
-						break;
-				}
-			}
-
-			_craftInfo                     = // special handling for mouseovers if Crafting.2da is loaded.
-			pathsToolStripMenuItem.Visible = (Path.GetFileNameWithoutExtension(_pfe).ToLower() == "crafting");
-
-			if (_craftInfo)
-			{
-				// load all paths for Crafting from the optional manual settings file
-				string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
-				if (File.Exists(pathCfg))
-				{
-					using (var fs = File.OpenRead(pathCfg))
-					using (var sr = new StreamReader(fs))
-					{
-						string line;
-						while ((line = sr.ReadLine()) != null)
-						{
-							if (line.StartsWith("pathall=", StringComparison.InvariantCulture)
-								&& !String.IsNullOrEmpty(line = line.Substring(8).Trim())
-								&& Directory.Exists(line))
-							{
-								GropeLabels(line);
-							}
-						}
-					}
-				}
-			}
-
-			_loading = true;
-			DrawingControl.SuspendDrawing(_table);
-
-			PopulateColumnHeaders();
-			PopulateTableRows();
-
-			_table.AutoResizeColumns();
-
-			DrawingControl.ResumeDrawing(_table);
-			_loading = false;
-
-			SetTitlebarText();
-		}
 
 		/// <summary>
 		/// Sets the titlebar text to something reasonable.
@@ -491,148 +252,72 @@ namespace yata
 		{
 			string text = "Yata";
 
-			if (!String.IsNullOrEmpty(_pfe))
+			if (tabControl1.SelectedIndex != -1)
 			{
-				text += " - " + Path.GetFileName(_pfe);
-
-				string path = Path.GetDirectoryName(_pfe);
-				if (!String.IsNullOrEmpty(path))
+				var table = tabControl1.SelectedTab.Tag as YataDataGridView;
+				if (table != null)
 				{
-					text += " - " + path;
+					string pfe = table.Pfe;
+					text += " - " + Path.GetFileName(pfe);
+
+					string path = Path.GetDirectoryName(pfe);
+					if (!String.IsNullOrEmpty(path))
+					{
+						text += " - " + path;
+					}
 				}
 			}
 			Text = text;
 		}
 
-		/// <summary>
-		/// A generic error-box if something goes wrong while loading a 2da file.
-		/// </summary>
-		/// <param name="error"></param>
-		DialogResult ShowLoadError(string error)
-		{
-			error += Environment.NewLine + Environment.NewLine
-				   + "abort\t- stop loading"         + Environment.NewLine
-				   + "retry\t- check for next error" + Environment.NewLine
-				   + "ignore\t- just load the file";
-
-			return MessageBox.Show(error,
-								   "burp",
-								   MessageBoxButtons.AbortRetryIgnore,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
-		}
-
-
-		/// <summary>
-		/// Populates the table's columnheaders.
-		/// </summary>
-		void PopulateColumnHeaders()
-		{
-			_table.ColumnCount = _colsQty;
-
-			_table.Columns[0].Name       =
-			_table.Columns[0].HeaderText = "id";
-			_table.Columns[0].Frozen     = true;
-
-			int colId = 0;
-			foreach (string col in _cols)
-			{
-				++colId;
-				_table.Columns[colId].Name       =
-				_table.Columns[colId].HeaderText = col;
-			}
-		}
-
-		/// <summary>
-		/// Populates the table's rows.
-		/// </summary>
-		void PopulateTableRows()
-		{
-			var pb = new ProgBar();
-			pb.ValTop = _rows.Count;
-			pb.Show();
-
-			Color color;
-
-			int id = -1;
-			foreach (string[] row in _rows)
-			{
-				_table.Rows.Add(row);
-				_table.Rows[++id].HeaderCell.Value = id.ToString(); // label row header
-
-				if (id % 2 == 0)
-					color = Color.AliceBlue;
-				else
-					color = Color.BlanchedAlmond;
-
-				_table.Rows[id].DefaultCellStyle.BackColor = color;
-
-				pb.Step();
-			}
-
-			_table.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
-		}
-
-		/// <summary>
-		/// Relabels the rowheaders when inserting/deleting/sorting rows.
-		/// </summary>
-		public void RelabelRowHeaders()
-		{
-			if (_table.Rows.Count > 1) // safety - ought be checked in calling funct.
-			{
-				_loading = true; // (re)use '_loading' to prevent firing CellChanged events for the RowHeaders
-
-				int rows = _table.Rows.Count - 1;
-				for (int id = 0; id != rows; ++id)
-				{
-					_table.Rows[id].HeaderCell.Value = id.ToString();
-				}
-				_loading = false;
-			}
-		}
-
 
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!String.IsNullOrEmpty(_pfe)
-				&& _table.Rows.Count > 1)
+			if (_table != null)
 			{
-				_changed = false;
+				string pfe = _table.Pfe;
 
-				using (var sw = new StreamWriter(_pfe))
+				if (!String.IsNullOrEmpty(pfe))
 				{
-					sw.WriteLine("2DA V2.0");
-					sw.WriteLine("");
-
-					string line = String.Empty;
-					foreach (string col in _cols)
+					int rows = _table.Rows.Count;
+					if (rows > 1)
 					{
-						line += " " + col;
-					}
-					sw.WriteLine(line);
+						_table.Changed = false;
 
-					if (_table.RowCount != 0)
-					{
-						object val;
-
-						for (int row = 0; row != _table.RowCount - 1; ++row)
+						using (var sw = new StreamWriter(pfe))
 						{
-							line = String.Empty;
+							sw.WriteLine("2DA V2.0");
+							sw.WriteLine("");
 
-							for (int cell = 0; cell != _table.Rows[row].Cells.Count; ++cell)
+							string line = String.Empty;
+							foreach (string col in _table.Cols)
 							{
-								if (cell != 0)
-									line += " ";
-
-								val = _table.Rows[row].Cells[cell].Value;
-								if (val != null)
-									line += val.ToString();
-								else
-									line += STARS;
+								line += " " + col;
 							}
+							sw.WriteLine(line);
 
-							if (!String.IsNullOrEmpty(line))
+
+							object val;
+
+							int cols = _table.Columns.Count;
+
+							for (int row = 0; row != rows - 1; ++row)
+							{
+								line = String.Empty;
+
+								for (int cell = 0; cell != cols; ++cell)
+								{
+									if (cell != 0)
+										line += " ";
+
+									if ((val = _table.Rows[row].Cells[cell].Value) != null)
+										line += val.ToString();
+									else
+										line += Constants.Stars;
+								}
+
 								sw.WriteLine(line);
+							}
 						}
 					}
 				}
@@ -641,109 +326,21 @@ namespace yata
 
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table.Rows.Count > 1)
+			if (_table != null && _table.Rows.Count > 1)
 			{
 				using (var sfd = new SaveFileDialog())
 				{
 					sfd.Title    = "Save as ...";
 					sfd.Filter   = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-					sfd.FileName = Path.GetFileName(_pfe);
+					sfd.FileName = Path.GetFileName(_table.Pfe);
 
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
-						_pfe = sfd.FileName;
+						_table.Pfe = sfd.FileName;
 
 						SetTitlebarText();
 
 						SaveToolStripMenuItemClick(null, EventArgs.Empty);
-					}
-				}
-			}
-		}
-
-		void CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		{
-			if (!_loading)
-			{
-				_changed = true;
-
-				int id  = e.RowIndex;
-				int col = e.ColumnIndex;
-
-				if (id == _table.Rows.Count - 2)
-				{
-					RelabelRowHeaders();
-				}
-
-
-				// checks for invalid fields ->
-
-				object val = _table.Rows[id].Cells[col].Value;
-				if (val == null || String.IsNullOrEmpty(val.ToString()))
-				{
-					_table.Rows[id].Cells[col].Value = STARS;
-				}
-				else
-				{
-					string field = val.ToString();
-					bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-					bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
-					if (quoteFirst && quoteLast)
-					{
-						if (field.Length == 1)
-						{
-							_table.Rows[id].Cells[col].Value = STARS;
-						}
-						else if (field.Length > 2
-							&& field.Substring(1, field.Length - 2).Trim() == String.Empty)
-						{
-							_table.Rows[id].Cells[col].Value = "\"\""; // TODO: this triggers the event a second time ...
-
-							const string error = "It is not allowed to have double-quotes"
-											   + " around whitespace only.";
-							MessageBox.Show(error,
-											"burp",
-											MessageBoxButtons.OK,
-											MessageBoxIcon.Exclamation,
-											MessageBoxDefaultButton.Button1);
-						}
-					}
-					else if (( quoteFirst && !quoteLast)
-						||   (!quoteFirst &&  quoteLast))
-					{
-						if (quoteFirst)
-							_table.Rows[id].Cells[col].Value = field + "\"";
-						else
-							_table.Rows[id].Cells[col].Value = "\"" + field;
-
-						const string error = "It is not allowed to have only 1 double-quote"
-										   + " surrounding a field.";
-						MessageBox.Show(error,
-										"burp",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Exclamation,
-										MessageBoxDefaultButton.Button1);
-					}
-
-					if (field.Length > 2) // lol but it works ->
-					{
-						string first     = field.Substring(0, 1);
-						string last      = field.Substring(field.Length - 1, 1);
-						string fieldTest = field.Substring(1, field.Length - 2);
-
-						if (fieldTest.Contains("\""))
-						{
-							fieldTest = fieldTest.Remove(fieldTest.IndexOf('"'), 1);
-							_table.Rows[id].Cells[col].Value = first + fieldTest + last;
-
-							const string error = "It is not allowed to use double-quotes except"
-											   + " at the beginning and end of a field.";
-							MessageBox.Show(error,
-											"burp",
-											MessageBoxButtons.OK,
-											MessageBoxIcon.Exclamation,
-											MessageBoxDefaultButton.Button1);
-						}
 					}
 				}
 			}
@@ -811,15 +408,14 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Right)
 			{
-				_editId = e.RowIndex;
-				if (_editId != _table.Rows.Count - 1)
+				if (e.RowIndex != _table.Rows.Count - 1)
 				{
 					_table.ClearSelection();
-					_table.Rows[_editId].Selected = true;
+					_table.Rows[e.RowIndex].Selected = true;
 
-					_table.CurrentCell = _table.Rows[_editId].Cells[0];
+					_table.CurrentCell = _table.Rows[e.RowIndex].Cells[0];
 
-					toolStripMenuItem2.Text = "@ id " + _editId;
+					toolStripMenuItem2.Text = "@ id " + e.RowIndex;
 
 					pasteAboveToolStripMenuItem.Enabled =
 					pasteToolStripMenuItem     .Enabled =
@@ -835,9 +431,10 @@ namespace yata
 		{
 			_copy.Clear();
 
-			for (int col = 0; col != _colsQty; ++col)
+			int cols = _table.Columns.Count;
+			for (int col = 0; col != cols; ++col)
 			{
-				_copy.Add(_table.Rows[_editId].Cells[col].Value.ToString());
+				_copy.Add(_table.SelectedRows[0].Cells[col].Value.ToString());
 			}
 		}
 
@@ -846,79 +443,80 @@ namespace yata
 			CopyToolStripMenuItemClick(null, EventArgs.Empty);
 			DeleteToolStripMenuItemClick(null, EventArgs.Empty);
 
-			RelabelRowHeaders();
+			_table.RelabelRowHeaders();
 		}
 
 		void PasteAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_copy.Count == _colsQty)
+			if (_copy.Count == _table.Columns.Count)
 			{
-				_table.Rows.Insert(_editId, _copy.ToArray());
-
-				RelabelRowHeaders();
+				_table.Rows.Insert(_table.SelectedRows[0].Index, _copy.ToArray());
+				_table.RelabelRowHeaders();
 			}
 		}
 
 		void PasteToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_copy.Count == _colsQty)
+			int cols = _table.Columns.Count;
+			if (_copy.Count == cols)
 			{
-				for (int col = 0; col != _colsQty; ++col)
+				for (int col = 0; col != cols; ++col)
 				{
-					_table.Rows[_editId].Cells[col].Value = _copy[col];
+					_table.SelectedRows[0].Cells[col].Value = _copy[col];
 				}
-				_table.Rows[_editId].DefaultCellStyle.BackColor = DefaultBackColor;
+				_table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
 			}
 		}
 
 		void PasteBelowToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_copy.Count == _colsQty)
+			if (_copy.Count == _table.Columns.Count)
 			{
-				_table.Rows.Insert(_editId + 1, _copy.ToArray());
-
-				RelabelRowHeaders();
+				_table.Rows.Insert(_table.SelectedRows[0].Index + 1, _copy.ToArray());
+				_table.RelabelRowHeaders();
 			}
 		}
 
 		void CreateAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var row = new string[_colsQty];
-			for (int col = 0; col != _colsQty; ++col)
-			{
-				row[col] = STARS;
-			}
-			_table.Rows.Insert(_editId, row);
+			int cols = _table.Columns.Count;
 
-			RelabelRowHeaders();
+			var row = new string[cols];
+			for (int col = 0; col != cols; ++col)
+			{
+				row[col] = Constants.Stars;
+			}
+			_table.Rows.Insert(_table.SelectedRows[0].Index, row);
+			_table.RelabelRowHeaders();
 		}
 
 		void CreateBelowToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var row = new string[_colsQty];
-			for (int col = 0; col != _colsQty; ++col)
-			{
-				row[col] = STARS;
-			}
-			_table.Rows.Insert(_editId + 1, row);
+			int cols = _table.Columns.Count;
 
-			RelabelRowHeaders();
+			var row = new string[cols];
+			for (int col = 0; col != cols; ++col)
+			{
+				row[col] = Constants.Stars;
+			}
+			_table.Rows.Insert(_table.SelectedRows[0].Index + 1, row);
+			_table.RelabelRowHeaders();
 		}
 
 		void ClearToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			for (int i = 1; i != _colsQty; ++i)
+			int cols = _table.Columns.Count;
+			for (int col = 1; col != cols; ++col)
 			{
-				_table.Rows[_editId].Cells[i].Value = STARS;
+				_table.SelectedRows[0].Cells[col].Value = Constants.Stars;
 			}
-			_table.Rows[_editId].DefaultCellStyle.BackColor = DefaultBackColor;
+			_table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
 		}
 
 		void DeleteToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.Rows.Remove(_table.Rows[_editId]);
-
-			RelabelRowHeaders();
+			_table.Rows.Remove(_table.SelectedRows[0]);
+			_table.RelabelRowHeaders();
 		}
 #endregion Context menu
 
@@ -926,7 +524,7 @@ namespace yata
 #region Edit menu
 		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table.Rows.Count > 1)
+			if (_table != null && _table.Rows.Count > 1)
 			{
 				var list = new List<string>();
 
@@ -1005,7 +603,7 @@ namespace yata
 
 		void RenumberToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table.Rows.Count > 1)
+			if (_table != null && _table.Rows.Count > 1)
 			{
 				DrawingControl.SuspendDrawing(_table); // bongo
 
@@ -1034,7 +632,7 @@ namespace yata
 
 		void RecolorToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table.Rows.Count > 1)
+			if (_table != null && _table.Rows.Count > 1)
 			{
 				Color color;
 
@@ -1060,45 +658,52 @@ namespace yata
 		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			var f = new TextOutputBox();
-			f.Font = _table.Font;
+			f.Font = Font;
 
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			f.SetText("font=" + tc.ConvertToString(_table.Font));
+			f.SetText("font=" + tc.ConvertToString(Font));
 
 			f.ShowDialog();
 		}
 
 		void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.AutoResizeColumns();
+			if (_table != null)
+				_table.AutoResizeColumns();
 		}
 
 		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
-			if (_table.Columns.Count > 2)
+			if (_table != null)
 			{
-				_table.Columns[2].Frozen = false;
-			}
+				freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
+				if (_table.Columns.Count > 2)
+				{
+					_table.Columns[2].Frozen = false;
+				}
 
-			if (_table.Columns.Count > 1) // then do the freeze1 col
-			{
-				_table.Columns[1].Frozen              =
-				freeze1stColToolStripMenuItem.Checked = !freeze1stColToolStripMenuItem.Checked;
+				if (_table.Columns.Count > 1) // then do the freeze1 col
+				{
+					_table.Columns[1].Frozen              =
+					freeze1stColToolStripMenuItem.Checked = !freeze1stColToolStripMenuItem.Checked;
+				}
 			}
 		}
 
 		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
-			if (_table.Columns.Count > 1)
+			if (_table != null)
 			{
-				_table.Columns[1].Frozen = false;
-
-				if (_table.Columns.Count > 2) // then do the freeze2 col
+				freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
+				if (_table.Columns.Count > 1)
 				{
-					_table.Columns[2].Frozen              =
-					freeze2ndColToolStripMenuItem.Checked = !freeze2ndColToolStripMenuItem.Checked;
+					_table.Columns[1].Frozen = false;
+
+					if (_table.Columns.Count > 2) // then do the freeze2 col
+					{
+						_table.Columns[2].Frozen              =
+						freeze2ndColToolStripMenuItem.Checked = !freeze2ndColToolStripMenuItem.Checked;
+					}
 				}
 			}
 		}
@@ -1134,19 +739,19 @@ namespace yata
 				_fontChanged = false;
 
 				_font            =
-				fontDialog1.Font = _table.Font;
+				fontDialog1.Font = Font;
 
 				if (fontDialog1.ShowDialog() == DialogResult.OK)
 				{
-					if (!_table.Font.Equals(fontDialog1.Font))
+					if (!Font.Equals(fontDialog1.Font))
 					{
-						_table.Font = fontDialog1.Font;
+						Font = fontDialog1.Font;
 						_table.AutoResizeColumns();
 					}
 				}
 				else if (_fontChanged)
 				{
-					_table.Font = _font;
+					Font = _font;
 					_table.AutoResizeColumns();
 				}
 			}
@@ -1155,10 +760,10 @@ namespace yata
 
 		void FontDialog1Apply(object sender, EventArgs e)
 		{
-			if (!_table.Font.Equals(fontDialog1.Font))
+			if (!Font.Equals(fontDialog1.Font))
 			{
 				_fontChanged = true;
-				_table.Font = fontDialog1.Font;
+				Font = fontDialog1.Font;
 				_table.AutoResizeColumns();
 			}
 		}
@@ -1179,7 +784,7 @@ namespace yata
 
 			toolStripStatusLabel1.Text = "id= " + id + " col= " + col;
 
-			if (_craftInfo)
+			if (_table != null && _table.CraftInfo)
 			{
 				string info = String.Empty;
 
@@ -1236,7 +841,7 @@ namespace yata
 								{
 									info = _table.Columns[col].HeaderCell.Value + ": (tcc) ";
 
-									if (tags == STARS)
+									if (tags == Constants.Stars)
 									{
 										info += CraftInfo.GetTccType(0); // TCC_TYPE_NONE
 									}
@@ -1264,7 +869,7 @@ namespace yata
 								if ((val = _table.Rows[id].Cells[col].Value) != null)
 								{
 									string effects = val.ToString();
-									if (effects != STARS)
+									if (effects != Constants.Stars)
 									{
 										info = _table.Columns[col].HeaderCell.Value + ": ";
 
@@ -1512,7 +1117,7 @@ namespace yata
 			}
 		}
 
-		void GropeLabels(string directory)
+		internal void GropeLabels(string directory)
 		{
 			CraftInfo.GropeLabels(Path.Combine(directory, "baseitems.2da"),
 								  CraftInfo.tagLabels,
@@ -1651,77 +1256,482 @@ namespace yata
 			}
 		}
 #endregion Search
-
-
-#region Sort
-		int _a, _b;
-
-		void TableSortCompare(object sender, DataGridViewSortCompareEventArgs e)
-		{
-			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
-				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
-			{
-				e.SortResult = _a.CompareTo(_b);
-				e.Handled = true;
-			}
-
-			if (e.Column != _table.Columns[0] // secondary sort on id ->
-				&& e.CellValue1.ToString() == e.CellValue2.ToString())
-			{
-				if (   Int32.TryParse(_table.Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
-					&& Int32.TryParse(_table.Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
-				{
-					e.SortResult = _a.CompareTo(_b);
-					e.Handled = true;
-				}
-			}
-		}
-
-		void TableSortCompared(object sender, EventArgs e)
-		{
-			EnsureVisibleRow();
-			RelabelRowHeaders();
-		}
-
-		void EnsureVisibleRow()
-		{
-			int sel = -1;
-
-			if (_table.SelectedRows.Count != 0)
-			{
-				sel = _table.SelectedRows[0].Index;
-			}
-			else if (_table.SelectedCells.Count != 0)
-			{
-				sel = _table.SelectedCells[0].RowIndex;
-			}
-
-			if (sel != -1 && sel < _table.RowCount - 1)
-			{
-				int visFirst = _table.FirstDisplayedScrollingRowIndex;
-				if (sel < visFirst)
-				{
-					_table.FirstDisplayedScrollingRowIndex = sel;
-				}
-				else
-				{
-					int visCount = _table.DisplayedRowCount(false);
-					if (sel >= visFirst + visCount)
-					{
-						_table.FirstDisplayedScrollingRowIndex = sel - visCount + 1;
-					}
-				}
-			}
-		}
-#endregion Sort
 	}
 
 
-	// https://stackoverflow.com/questions/21873361/datagridview-enter-key-event-handling#answer-21882188
+
 	class YataDataGridView
 		:
 			DataGridView
 	{
+		internal string Pfe
+		{ get; set; }
+
+		internal string[] Cols // 'Cols' does NOT contain #0 col IDs so that often needs +1
+		{ get; set; }
+
+		List<string[]> _rows = new List<string[]>();
+
+		bool _loading;
+
+		internal bool Changed
+		{ get; set; }
+
+		internal bool CraftInfo
+		{ get; set; }
+
+
+		/// <summary>
+		/// cTor.
+		/// </summary>
+		internal YataDataGridView(string pfe)
+		{
+			Pfe = pfe;
+
+			Dock = DockStyle.Fill;
+
+			ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+			AllowUserToResizeRows = false;
+
+			DrawingControl.SetDoubleBuffered(this);
+
+			CellValueChanged += CellChanged;
+			SortCompare      += TableSortCompare;
+			Sorted           += TableSortCompared;
+		}
+
+		const int LABELS = 2;
+
+		/// <summary>
+		/// Tries to load a 2da file.
+		/// </summary>
+		internal void Load2da(MainForm f)
+		{
+			Text = "Yata";
+
+//			_rows         .Clear();
+//			_table.Columns.Clear();
+//			_table.Rows   .Clear();
+
+//			_changed                              =
+//			_craftInfo                            =
+//			pathsToolStripMenuItem.Visible        =
+//			freeze1stColToolStripMenuItem.Checked =
+//			freeze2ndColToolStripMenuItem.Checked = false;
+
+			// NOTE: '_cols' and '_colsQty' could also be cleared but it's not necessary.
+
+
+			bool ignoreErrors = false;
+
+			string[] lines = File.ReadAllLines(Pfe);
+
+			Cols = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+			int quotes =  0;
+			int id     = -1;
+			int lineId = -1;
+
+			foreach (string line in lines)
+			{
+				// test version header
+				if (++lineId == 0)
+				{
+					string st = line.Trim();
+					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					{
+						string error = "The 2da-file contains a malformed version header."
+									 + Environment.NewLine + Environment.NewLine
+									 + Pfe;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return;
+
+							case DialogResult.Retry:
+								break;
+
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
+					}
+				}
+
+				// test for blank 2nd line
+				if (!ignoreErrors && lineId == 1 && !String.IsNullOrEmpty(line)) // .Trim() // uh yeah ... right.
+				{
+					string error = "The 2nd line in the 2da should be blank."
+								 + " This editor does not support default value-types."
+								 + Environment.NewLine + Environment.NewLine
+								 + Pfe;
+					switch (ShowLoadError(error))
+					{
+						case DialogResult.Abort:
+							return;
+
+						case DialogResult.Retry:
+							break;
+
+						case DialogResult.Ignore:
+							ignoreErrors = true;
+							break;
+					}
+				}
+
+				if (lineId > LABELS)
+				{
+					string[] row = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+					// test for well-formed, consistent IDs
+					++id;
+
+					if (!ignoreErrors)
+					{
+						int result;
+						if (!Int32.TryParse(row[0], out result) || result != id)
+						{
+							string error = "The 2da-file contains an ID that is either not an integer or out of sequence."
+										 + Environment.NewLine + Environment.NewLine
+										 + Pfe
+										 + Environment.NewLine + Environment.NewLine
+										 + id + " / " + row[0];
+							switch (ShowLoadError(error))
+							{
+								case DialogResult.Abort:
+									return;
+
+								case DialogResult.Retry:
+									break;
+
+								case DialogResult.Ignore:
+									ignoreErrors = true;
+									break;
+							}
+						}
+					}
+
+					// test for matching fields under columns
+					if (!ignoreErrors && row.Length != Cols.Length + 1)
+					{
+						string error = "The 2da-file contains fields that do not align with its columns."
+									 + Environment.NewLine + Environment.NewLine
+									 + Pfe
+									 + Environment.NewLine + Environment.NewLine
+									 + "id " + id;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return;
+
+							case DialogResult.Retry:
+								break;
+
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
+					}
+
+					// test for matching double-quote characters on the fly
+					if (!ignoreErrors)
+					{
+						bool quoteFirst, quoteLast;
+						int col = -1;
+						foreach (string field in row)
+						{
+							++col;
+							quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+							quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+							if (   ( quoteFirst && !quoteLast)
+								|| (!quoteFirst &&  quoteLast))
+							{
+								string error = "Found a missing double-quote character."
+											 + Environment.NewLine + Environment.NewLine
+											 + Pfe
+											 + Environment.NewLine + Environment.NewLine
+											 + "id " + id + " / col " + col;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return;
+
+									case DialogResult.Retry:
+										break;
+
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+							}
+							else if (quoteFirst && quoteLast
+								&& field.Length == 1)
+							{
+								string error = "Found an isolated double-quote character."
+											 + Environment.NewLine + Environment.NewLine
+											 + Pfe
+											 + Environment.NewLine + Environment.NewLine
+											 + "id " + id + " / col " + col;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return;
+
+									case DialogResult.Retry:
+										break;
+
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+							}
+						}
+					}
+
+					_rows.Add(row);
+				}
+
+				// also test for an odd quantity of double-quote characters
+				foreach (char character in line)
+				{
+					if (character == '"')
+						++quotes;
+				}
+			}
+
+			// safety test for double-quotes (ought be caught above)
+			if (quotes % 2 == 1)
+			{
+				string error = "The 2da-file contains an odd quantity of double-quote characters."
+							 + Environment.NewLine + Environment.NewLine
+							 + Pfe;
+				switch (ShowLoadError(error))
+				{
+					case DialogResult.Abort:
+						return;
+
+					case DialogResult.Retry:
+						break;
+
+					case DialogResult.Ignore:
+						ignoreErrors = true;
+						break;
+				}
+			}
+
+			CraftInfo = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting");
+
+			if (CraftInfo)
+			{
+				// load all paths for Crafting from the optional manual settings file
+				string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
+				if (File.Exists(pathCfg))
+				{
+					using (var fs = File.OpenRead(pathCfg))
+					using (var sr = new StreamReader(fs))
+					{
+						string line;
+						while ((line = sr.ReadLine()) != null)
+						{
+							if (line.StartsWith("pathall=", StringComparison.InvariantCulture)
+								&& !String.IsNullOrEmpty(line = line.Substring(8).Trim())
+								&& Directory.Exists(line))
+							{
+								f.GropeLabels(line);
+							}
+						}
+					}
+				}
+			}
+
+			_loading = true;
+			DrawingControl.SuspendDrawing(this);
+
+			PopulateColumnHeaders();
+			PopulateTableRows();
+
+			AutoResizeColumns();
+
+			DrawingControl.ResumeDrawing(this);
+			_loading = false;
+		}
+
+		/// <summary>
+		/// A generic error-box if something goes wrong while loading a 2da file.
+		/// </summary>
+		/// <param name="error"></param>
+		DialogResult ShowLoadError(string error)
+		{
+			error += Environment.NewLine + Environment.NewLine
+				   + "abort\t- stop loading"         + Environment.NewLine
+				   + "retry\t- check for next error" + Environment.NewLine
+				   + "ignore\t- just load the file";
+
+			return MessageBox.Show(error,
+								   "burp",
+								   MessageBoxButtons.AbortRetryIgnore,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
+		}
+
+		/// <summary>
+		/// Populates the table's columnheaders.
+		/// </summary>
+		void PopulateColumnHeaders()
+		{
+			ColumnCount = Cols.Length + 1; // 'Cols' does NOT contain #0 col IDs so that needs +1
+
+			Columns[0].HeaderText = "id";
+			Columns[0].Frozen     = true;
+
+			int colId = 0;
+			foreach (string col in Cols)
+			{
+				Columns[++colId].HeaderText = col;
+			}
+		}
+
+		/// <summary>
+		/// Populates the table's rows.
+		/// </summary>
+		void PopulateTableRows()
+		{
+			var pb = new ProgBar();
+			pb.ValTop = _rows.Count;
+			pb.Show();
+
+			Color color;
+
+			int id = -1;
+			foreach (string[] row in _rows)
+			{
+				Rows.Add(row);
+				Rows[++id].HeaderCell.Value = id.ToString(); // label row header
+
+				color = (id % 2 == 0) ? Color.AliceBlue
+									  : Color.BlanchedAlmond;
+
+				Rows[id].DefaultCellStyle.BackColor = color;
+
+				pb.Step();
+			}
+			_rows.Clear();
+
+			RowHeadersWidth = 63;
+//			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+		}
+
+		void CellChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (!_loading)
+			{
+				Changed = true;
+
+				int id  = e.RowIndex;
+				int col = e.ColumnIndex;
+
+				if (id == Rows.Count - 2)
+				{
+					RelabelRowHeaders();
+				}
+
+
+				// checks for invalid fields ->
+
+				object val = Rows[id].Cells[col].Value;
+				if (val == null || String.IsNullOrEmpty(val.ToString()))
+				{
+					Rows[id].Cells[col].Value = Constants.Stars;
+				}
+				else
+				{
+					string field = val.ToString();
+					bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+					bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+					if (quoteFirst && quoteLast)
+					{
+						if (field.Length == 1)
+						{
+							Rows[id].Cells[col].Value = Constants.Stars;
+						}
+						else if (field.Length > 2
+							&& field.Substring(1, field.Length - 2).Trim() == String.Empty)
+						{
+							Rows[id].Cells[col].Value = "\"\""; // TODO: this triggers the event a second time ...
+
+							const string error = "It is not allowed to have double-quotes"
+											   + " around whitespace only.";
+							MessageBox.Show(error,
+											"burp",
+											MessageBoxButtons.OK,
+											MessageBoxIcon.Exclamation,
+											MessageBoxDefaultButton.Button1);
+						}
+					}
+					else if (( quoteFirst && !quoteLast)
+						||   (!quoteFirst &&  quoteLast))
+					{
+						if (quoteFirst)
+							Rows[id].Cells[col].Value = field + "\"";
+						else
+							Rows[id].Cells[col].Value = "\"" + field;
+
+						const string error = "It is not allowed to have only 1 double-quote"
+										   + " surrounding a field.";
+						MessageBox.Show(error,
+										"burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Exclamation,
+										MessageBoxDefaultButton.Button1);
+					}
+
+					if (field.Length > 2) // lol but it works ->
+					{
+						string first     = field.Substring(0, 1);
+						string last      = field.Substring(field.Length - 1, 1);
+						string fieldTest = field.Substring(1, field.Length - 2);
+
+						if (fieldTest.Contains("\""))
+						{
+							fieldTest = fieldTest.Remove(fieldTest.IndexOf('"'), 1);
+							Rows[id].Cells[col].Value = first + fieldTest + last;
+
+							const string error = "It is not allowed to use double-quotes except"
+											   + " at the beginning and end of a field.";
+							MessageBox.Show(error,
+											"burp",
+											MessageBoxButtons.OK,
+											MessageBoxIcon.Exclamation,
+											MessageBoxDefaultButton.Button1);
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Relabels the rowheaders when inserting/deleting/sorting rows.
+		/// </summary>
+		internal void RelabelRowHeaders()
+		{
+			if (Rows.Count > 1) // safety - ought be checked in calling funct.
+			{
+				_loading = true; // (re)use '_loading' to prevent firing CellChanged events for the RowHeaders
+
+				int rows = Rows.Count - 1;
+				for (int id = 0; id != rows; ++id)
+				{
+					Rows[id].HeaderCell.Value = id.ToString();
+				}
+				_loading = false;
+			}
+		}
+
+
+#region Events (override)
+		// https://stackoverflow.com/questions/21873361/datagridview-enter-key-event-handling#answer-21882188
+
 		/// <summary>
 		/// Handles starting editing a cell by pressing Enter - this fires
 		/// before edit begins.
@@ -1751,7 +1761,7 @@ namespace yata
 		{
 			if (e.KeyData == Keys.Delete)
 			{
-				MainForm.Instance.RelabelRowHeaders();
+				RelabelRowHeaders();
 			}
 		}
 
@@ -1775,5 +1785,69 @@ namespace yata
 			}
 			return base.ProcessDialogKey(keyData);
 		}
+#endregion Events (override)
+
+
+#region Sort
+		int _a, _b;
+
+		void TableSortCompare(object sender, DataGridViewSortCompareEventArgs e)
+		{
+			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
+				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
+			{
+				e.SortResult = _a.CompareTo(_b);
+				e.Handled = true;
+			}
+
+			if (e.Column != Columns[0] // secondary sort on id ->
+				&& e.CellValue1.ToString() == e.CellValue2.ToString())
+			{
+				if (   Int32.TryParse(Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
+					&& Int32.TryParse(Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
+				{
+					e.SortResult = _a.CompareTo(_b);
+					e.Handled = true;
+				}
+			}
+		}
+
+		void TableSortCompared(object sender, EventArgs e)
+		{
+			EnsureVisibleRow();
+			RelabelRowHeaders();
+		}
+
+		void EnsureVisibleRow()
+		{
+			int sel = -1;
+
+			if (SelectedRows.Count != 0)
+			{
+				sel = SelectedRows[0].Index;
+			}
+			else if (SelectedCells.Count != 0)
+			{
+				sel = SelectedCells[0].RowIndex;
+			}
+
+			if (sel != -1 && sel < Rows.Count - 1)
+			{
+				int visFirst = FirstDisplayedScrollingRowIndex;
+				if (sel < visFirst)
+				{
+					FirstDisplayedScrollingRowIndex = sel;
+				}
+				else
+				{
+					int visCount = DisplayedRowCount(false);
+					if (sel >= visFirst + visCount)
+					{
+						FirstDisplayedScrollingRowIndex = sel - visCount + 1;
+					}
+				}
+			}
+		}
+#endregion Sort
 	}
 }
