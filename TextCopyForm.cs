@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class TextOutputBox
+	partial class TextCopyForm
 		:
 			Form
 	{
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal TextOutputBox()
+		internal TextCopyForm()
 		{
 			InitializeComponent();
 		}

@@ -1,6 +1,6 @@
 ﻿namespace yata
 {
-	partial class TextOutputBox
+	partial class TextCopyForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
