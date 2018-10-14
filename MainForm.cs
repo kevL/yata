@@ -1197,99 +1197,61 @@ namespace yata
 							if (pathSpells2daToolStripMenuItem.Checked)
 							{
 								if ((val = _table.Rows[id].Cells[col].Value) != null
-									&& Int32.TryParse(val.ToString(), out result))
+									&& Int32.TryParse(val.ToString(), out result)
+									&& result < CraftInfo.spellLabels.Count)
 								{
-									if (result < CraftInfo.spellLabels.Count)
-									{
-										info = _table.Columns[col].HeaderCell.Value + ": "
-											 + CraftInfo.spellLabels[result];
-									}
+									info = _table.Columns[col].HeaderCell.Value + ": "
+										 + CraftInfo.spellLabels[result];
 								}
 							}
 							break;
 
 //						case  2: // "REAGENTS"
 
-						case  3: // "TAGS" // TODO: parse this using Split() see #4 EFFECTS
+						case  3: // "TAGS"
 							if ((val = _table.Rows[id].Cells[col].Value) != null)
 							{
-								int pos;
-								string tag;
-
 								string tags = val.ToString();
 								if (tags.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 								{
 									if (pathBaseItems2daToolStripMenuItem.Checked)
 									{
-										const string basetype = "(base) ";
+										info = _table.Columns[col].HeaderCell.Value + ": (base) ";
 
-										tags = tags.Substring(1); // lose the "B"
-										while (!String.IsNullOrEmpty(tags))
+										string[] array = tags.Substring(1).Split(','); // lose the "B"
+										for (int tag = 0; tag != array.Length; ++tag)
 										{
-											if ((pos = tags.IndexOf(',')) != -1) // has multiple Tags
+											if (Int32.TryParse(array[tag], out result)
+												&& result < CraftInfo.tagLabels.Count)
 											{
-												tag = tags.Substring(0, pos);
-												if (Int32.TryParse(tag, out result)
-													&& result < CraftInfo.tagLabels.Count)
-												{
-													if (String.IsNullOrEmpty(info))
-														info = _table.Columns[col].HeaderCell.Value + ": " + basetype;
-													else
-														info += ", ";
+												info += CraftInfo.tagLabels[result];
 
-													info += CraftInfo.tagLabels[result];
-												}
-												tags = tags.Substring(pos + 1);
-											}
-											else // only 1 Tag OR the last Tag in the list
-											{
-												if (Int32.TryParse(tags, out result)
-													&& result < CraftInfo.tagLabels.Count)
-												{
-													if (String.IsNullOrEmpty(info))
-														info = _table.Columns[col].HeaderCell.Value + ": " + basetype;
-													else
-														info += ", ";
-
-													info += CraftInfo.tagLabels[result];
-												}
-												tags = String.Empty;
+												if (tag != array.Length - 1)
+													info += ", ";
 											}
 										}
 									}
 								}
 								else // is a TCC item-type
 								{
-									const string tcc = "(tcc) ";
+									info = _table.Columns[col].HeaderCell.Value + ": (tcc) ";
 
-									while (!String.IsNullOrEmpty(tags))
+									if (tags == STARS)
 									{
-										if ((pos = tags.IndexOf(',')) != -1) // has multiple Tags
+										info += CraftInfo.GetTccType(0); // TCC_TYPE_NONE
+									}
+									else
+									{
+										string[] array = tags.Split(',');
+										for (int tag = 0; tag != array.Length; ++tag)
 										{
-											tag = tags.Substring(0, pos);
-											if (Int32.TryParse(tag, out result))
+											if (Int32.TryParse(array[tag], out result))
 											{
-												if (String.IsNullOrEmpty(info))
-													info = _table.Columns[col].HeaderCell.Value + ": " + tcc;
-												else
-													info += ", ";
-
 												info += CraftInfo.GetTccType(result);
-											}
-											tags = tags.Substring(pos + 1);
-										}
-										else // only 1 Tag OR the last Tag in the list
-										{
-											if (Int32.TryParse(tags, out result))
-											{
-												if (String.IsNullOrEmpty(info))
-													info = _table.Columns[col].HeaderCell.Value + ": " + tcc;
-												else
-													info += ", ";
 
-												info += CraftInfo.GetTccType(result);
+												if (tag != array.Length - 1)
+													info += ", ";
 											}
-											tags = String.Empty;
 										}
 									}
 								}
@@ -1301,15 +1263,15 @@ namespace yata
 							{
 								if ((val = _table.Rows[id].Cells[col].Value) != null)
 								{
-									string st = val.ToString();
-									if (st != STARS)
+									string effects = val.ToString();
+									if (effects != STARS)
 									{
 										info = _table.Columns[col].HeaderCell.Value + ": ";
 
 										string par = String.Empty;
 										int pos;
 
-										string[] ips = st.Split(';');
+										string[] ips = effects.Split(';');
 										for (int ip = 0; ip != ips.Length; ++ip)
 										{
 											par = ips[ip];

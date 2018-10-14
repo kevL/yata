@@ -200,7 +200,7 @@ namespace yata
 				case 78: return "Bracer";
 				case 80: return "Cloak";
 			}
-			return "unknown";
+			return "bork";
 		}
 
 		/// <summary>
