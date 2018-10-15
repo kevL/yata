@@ -74,18 +74,18 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
 								&& Directory.Exists(line))
 							{
-								presetFoldersToolStripMenuItem.Visible = true;
+								it_Folders.Visible = true;
 
 								if (_presets.Count == 0)
 								{
-									var clear = presetFoldersToolStripMenuItem.DropDownItems.Add("clear current");
+									var clear = it_Folders.DropDownItems.Add("clear current");
 									_presets.Add(clear);
 
 									clear.Visible = false;
 									clear.Click += PresetClick;
 								}
 
-								var preset = presetFoldersToolStripMenuItem.DropDownItems.Add(line);
+								var preset = it_Folders.DropDownItems.Add(line);
 								_presets.Add(preset);
 
 								preset.Click += PresetClick;
@@ -95,12 +95,12 @@ namespace yata
 				}
 			}
 
-			toolStripComboBox1.Items.AddRange(new object[]
+			cb_SearchOption.Items.AddRange(new object[]
 			{
 				"search substring",
 				"search wholeword"
 			});
-			toolStripComboBox1.SelectedIndex = 0;
+			cb_SearchOption.SelectedIndex = 0;
 		}
 #endregion cTor
 
@@ -124,7 +124,7 @@ namespace yata
 		void CreateTabPage(string pfe)
 		{
 			var page = new TabPage();
-			tabControl1.TabPages.Add(page);
+			tabControl.TabPages.Add(page);
 
 			page.Text = Path.GetFileNameWithoutExtension(pfe);
 
@@ -138,7 +138,7 @@ namespace yata
 			page.Controls.Add(table);
 			page.Tag = table;
 
-			tabControl1.SelectedTab = page;
+			tabControl.SelectedTab = page;
 			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
 
 			table.Select();
@@ -154,22 +154,22 @@ namespace yata
 		/// <param name="e"></param>
 		void TabControl1SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (tabControl1.SelectedIndex != -1)
+			if (tabControl.SelectedIndex != -1)
 			{
-				_table = tabControl1.SelectedTab.Tag as YataDataGridView;
-				pathsToolStripMenuItem.Visible = _table.CraftInfo;
+				_table = tabControl.SelectedTab.Tag as YataDataGridView;
+				it_MenuPaths.Visible = _table.CraftInfo;
 				panel_ColorFill.Hide();
 
-				freeze1stColToolStripMenuItem.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-				freeze2ndColToolStripMenuItem.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+				it_freeze1.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+				it_freeze2.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 			}
 			else
 			{
-				pathsToolStripMenuItem.Visible = false;
+				it_MenuPaths.Visible = false;
 				panel_ColorFill.Show();
 
-				freeze1stColToolStripMenuItem.Checked =
-				freeze2ndColToolStripMenuItem.Checked = false;
+				it_freeze1.Checked =
+				it_freeze2.Checked = false;
 			}
 
 			SetTitlebarText();
@@ -184,17 +184,66 @@ namespace yata
 		/// <param name="e"></param>
 		void TabControl1DrawItem(object sender, DrawItemEventArgs e)
 		{
-			var page = tabControl1.TabPages[e.Index];
+			var page = tabControl.TabPages[e.Index];
 
-			FontStyle style = (page == tabControl1.SelectedTab) ? FontStyle.Bold
+			FontStyle style = (page == tabControl.SelectedTab) ? FontStyle.Bold
 																: FontStyle.Regular;
-			e.Graphics.DrawString(page.Text,
-								  new Font(Font, style),
+
+			var text = page.Text; // + " "; // <- pad
+//			var font = new Font(Font.Name, Font.SizeInPoints + 1.0f);
+			var font = new Font(Font, style);
+
+//			var w = e.Graphics.MeasureString(text, font).Width;
+//			var h = e.Graphics.MeasureString(text, font).Height;
+
+			var sf           = new StringFormat();
+			sf.Alignment     = StringAlignment.Center;
+			sf.LineAlignment = StringAlignment.Far;
+
+			e.Graphics.DrawString(text,
+								  font,
 								  Brushes.Black,
+//								  e.Bounds.Left + (e.Bounds.Width  - w) / 2 - 1,
+//								  e.Bounds.Top  + (e.Bounds.Height - h  - 2));
 								  e.Bounds,
-								  new StringFormat { Alignment     = StringAlignment.Center,
-													 LineAlignment = StringAlignment.Far });
+								  sf);
 		}
+/* private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+{
+
+    Graphics g = e.Graphics;
+    Brush _TextBrush;
+
+    // Get the item from the collection.
+    TabPage _TabPage = tabControl1.TabPages[e.Index];
+
+    // Get the real bounds for the tab rectangle.
+    Rectangle _TabBounds = tabControl1.GetTabRect(e.Index);
+
+    if (e.State == DrawItemState.Selected)
+    {
+        // Draw a different background color, and don't paint a focus rectangle.
+        _TextBrush = new SolidBrush(Color.Blue);
+        g.FillRectangle(Brushes.Gray, e.Bounds);
+    }
+    else
+    {
+        _TextBrush = new System.Drawing.SolidBrush(e.ForeColor);
+       // e.DrawBackground();
+    }
+
+    // Use our own font. Because we CAN.
+    Font _TabFont = new Font(e.Font.FontFamily, (float)9, FontStyle.Bold, GraphicsUnit.Pixel);
+    //Font fnt = new Font(e.Font.FontFamily, (float)7.5, FontStyle.Bold);
+
+    // Draw string. Center the text.
+    StringFormat _StringFlags = new StringFormat();
+    _StringFlags.Alignment = StringAlignment.Center;
+    _StringFlags.LineAlignment = StringAlignment.Center;
+    g.DrawString(tabControl1.TabPages[e.Index].Text, _TabFont, _TextBrush,
+                 _TabBounds, new StringFormat(_StringFlags));
+
+} */
 
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -206,9 +255,9 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				tabControl1.TabPages.Remove(tabControl1.SelectedTab);
+				tabControl.TabPages.Remove(tabControl.SelectedTab);
 
-				if (tabControl1.TabPages.Count == 0)
+				if (tabControl.TabPages.Count == 0)
 					_table = null;
 
 				SetTitlebarText();
@@ -247,7 +296,7 @@ namespace yata
 		{
 			var changed = new List<string>();
 
-			foreach (TabPage page in tabControl1.TabPages)
+			foreach (TabPage page in tabControl.TabPages)
 			{
 				var table = page.Tag as YataDataGridView;
 				if (table.Changed)
@@ -291,9 +340,9 @@ namespace yata
 		{
 			string text = "Yata";
 
-			if (tabControl1.SelectedIndex != -1)
+			if (tabControl.SelectedIndex != -1)
 			{
-				var table = tabControl1.SelectedTab.Tag as YataDataGridView;
+				var table = tabControl.SelectedTab.Tag as YataDataGridView;
 				if (table != null)
 				{
 					string pfe = table.Pfe;
@@ -412,7 +461,7 @@ namespace yata
 				{
 					foreach (var it in itDelete)
 					{
-						presetFoldersToolStripMenuItem.DropDownItems.Remove(it);
+						it_Folders.DropDownItems.Remove(it);
 						_presets.Remove(it);
 					}
 				}
@@ -420,9 +469,9 @@ namespace yata
 				if (_presets.Count < 2) // ie. no presets or only "clear current" left
 				{
 					_initialDir = String.Empty;
-					presetFoldersToolStripMenuItem.Visible = false;
+					it_Folders.Visible = false;
 
-					presetFoldersToolStripMenuItem.DropDownItems.Clear();
+					it_Folders.DropDownItems.Clear();
 					_presets.Clear();
 				}
 			}
@@ -454,13 +503,13 @@ namespace yata
 
 					_table.CurrentCell = _table.Rows[e.RowIndex].Cells[0];
 
-					toolStripMenuItem2.Text = "@ id " + e.RowIndex;
+					context_it_Header.Text = "@ id " + e.RowIndex;
 
-					pasteAboveToolStripMenuItem.Enabled =
-					pasteToolStripMenuItem     .Enabled =
-					pasteBelowToolStripMenuItem.Enabled = (_copy.Count != 0);
+					context_it_PasteAbove.Enabled =
+					context_it_Paste     .Enabled =
+					context_it_PasteBelow.Enabled = (_copy.Count != 0);
 
-					contextMenuStrip1.Show(_table, new Point(_table.RowHeadersWidth - 10,
+					contextEditor.Show(_table, new Point(_table.RowHeadersWidth - 10,
 															 _table.Location.Y      + 10));
 				}
 			}
@@ -719,18 +768,18 @@ namespace yata
 				{
 					if (_table.Columns.Count > 2)
 					{
-						freeze2ndColToolStripMenuItem.Checked = false; // first toggle the freeze2 col off
+						it_freeze2.Checked = false; // first toggle the freeze2 col off
 						_table.Columns[2].Frozen = false;
 					}
 
-					if (!freeze1stColToolStripMenuItem.Checked)
+					if (!it_freeze1.Checked)
 					{
 						_table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
 					}
 					else
 						_table.Freeze = YataDataGridView.Frozen.FreezeOff;
 
-					freeze1stColToolStripMenuItem.Checked = // then do the freeze1 col
+					it_freeze1.Checked = // then do the freeze1 col
 					_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
 				}
 			}
@@ -742,19 +791,19 @@ namespace yata
 			{
 				if (_table.Columns.Count > 1)
 				{
-					freeze1stColToolStripMenuItem.Checked = false; // first toggle the freeze1 col off
+					it_freeze1.Checked = false; // first toggle the freeze1 col off
 					_table.Columns[1].Frozen = false;
 
 					if (_table.Columns.Count > 2)
 					{
-						if (!freeze2ndColToolStripMenuItem.Checked)
+						if (!it_freeze2.Checked)
 						{
 							_table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
 						}
 						else
 							_table.Freeze = YataDataGridView.Frozen.FreezeOff;
 
-						freeze2ndColToolStripMenuItem.Checked = // then do the freeze2 col
+						it_freeze2.Checked = // then do the freeze2 col
 						_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 					}
 				}
@@ -792,13 +841,13 @@ namespace yata
 				_fontChanged = false;
 
 				_font            =
-				fontDialog1.Font = Font;
+				dialog_Font.Font = Font;
 
-				if (fontDialog1.ShowDialog() == DialogResult.OK)
+				if (dialog_Font.ShowDialog() == DialogResult.OK)
 				{
-					if (!Font.Equals(fontDialog1.Font))
+					if (!Font.Equals(dialog_Font.Font))
 					{
-						Font = fontDialog1.Font;
+						Font = dialog_Font.Font;
 						_table.AutoResizeColumns();
 					}
 				}
@@ -813,10 +862,10 @@ namespace yata
 
 		void FontDialog1Apply(object sender, EventArgs e)
 		{
-			if (!Font.Equals(fontDialog1.Font))
+			if (!Font.Equals(dialog_Font.Font))
 			{
 				_fontChanged = true;
-				Font = fontDialog1.Font;
+				Font = dialog_Font.Font;
 				_table.AutoResizeColumns();
 			}
 		}
@@ -835,7 +884,7 @@ namespace yata
 			int id  = e.RowIndex;
 			int col = e.ColumnIndex;
 
-			toolStripStatusLabel1.Text = "id= " + id + " col= " + col;
+			statusbar_label_Coords.Text = "id= " + id + " col= " + col;
 
 			if (_table != null && _table.CraftInfo)
 			{
@@ -852,7 +901,7 @@ namespace yata
 //						case  0: // id
 
 						case  1: // "CATEGORY"
-							if (pathSpells2daToolStripMenuItem.Checked)
+							if (it_PathSpells2da.Checked)
 							{
 								if ((val = _table.Rows[id].Cells[col].Value) != null
 									&& Int32.TryParse(val.ToString(), out result)
@@ -872,7 +921,7 @@ namespace yata
 								string tags = val.ToString();
 								if (tags.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 								{
-									if (pathBaseItems2daToolStripMenuItem.Checked)
+									if (it_PathBaseItems2da.Checked)
 									{
 										info = _table.Columns[col].HeaderCell.Value + ": (base) ";
 
@@ -917,7 +966,7 @@ namespace yata
 							break;
 
 						case  4: // "EFFECTS"
-							if (pathItemPropDef2daToolStripMenuItem.Checked)
+							if (it_PathItemPropDef2da.Checked)
 							{
 								if ((val = _table.Rows[id].Cells[col].Value) != null)
 								{
@@ -958,7 +1007,7 @@ namespace yata
 //						case  5: // "OUTPUT"
 
 						case  6: // "SKILL"
-							if (pathFeat2daToolStripMenuItem.Checked)
+							if (it_PathFeat2da.Checked)
 							{
 								if ((val = _table.Rows[id].Cells[col].Value) != null
 									&& Int32.TryParse(val.ToString(), out result))
@@ -996,7 +1045,7 @@ namespace yata
 					}
 				}
 
-				toolStripStatusLabel2.Text = info;
+				statusbar_label_CraftInfo.Text = info;
 			}
 		}
 
@@ -1008,7 +1057,7 @@ namespace yata
 		/// <param name="e"></param>
 		void PathSpells2daToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!pathSpells2daToolStripMenuItem.Checked)
+			if (!it_PathSpells2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1019,14 +1068,14 @@ namespace yata
 					{
 						CraftInfo.GropeLabels(ofd.FileName,
 											  CraftInfo.spellLabels,
-											  pathSpells2daToolStripMenuItem,
+											  it_PathSpells2da,
 											  1);
 					}
 				}
 			}
 			else
 			{
-				pathSpells2daToolStripMenuItem.Checked = false;
+				it_PathSpells2da.Checked = false;
 				CraftInfo.spellLabels.Clear();
 			}
 		}
@@ -1039,7 +1088,7 @@ namespace yata
 		/// <param name="e"></param>
 		void PathFeat2daToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!pathFeat2daToolStripMenuItem.Checked)
+			if (!it_PathFeat2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1050,14 +1099,14 @@ namespace yata
 					{
 						CraftInfo.GropeLabels(ofd.FileName,
 											  CraftInfo.featsLabels,
-											  pathFeat2daToolStripMenuItem,
+											  it_PathFeat2da,
 											  1);
 					}
 				}
 			}
 			else
 			{
-				pathFeat2daToolStripMenuItem.Checked = false;
+				it_PathFeat2da.Checked = false;
 				CraftInfo.featsLabels.Clear();
 			}
 		}
@@ -1070,7 +1119,7 @@ namespace yata
 		/// <param name="e"></param>
 		void PathItemPropDef2daToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!pathItemPropDef2daToolStripMenuItem.Checked)
+			if (!it_PathItemPropDef2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1081,14 +1130,14 @@ namespace yata
 					{
 						CraftInfo.GropeLabels(ofd.FileName,
 											  CraftInfo.ipLabels,
-											  pathItemPropDef2daToolStripMenuItem,
+											  it_PathItemPropDef2da,
 											  2);
 					}
 				}
 			}
 			else
 			{
-				pathItemPropDef2daToolStripMenuItem.Checked = false;
+				it_PathItemPropDef2da.Checked = false;
 				CraftInfo.ipLabels.Clear();
 			}
 		}
@@ -1101,7 +1150,7 @@ namespace yata
 		/// <param name="e"></param>
 		void PathBaseItems2daToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!pathBaseItems2daToolStripMenuItem.Checked)
+			if (!it_PathBaseItems2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1112,14 +1161,14 @@ namespace yata
 					{
 						CraftInfo.GropeLabels(ofd.FileName,
 											  CraftInfo.tagLabels,
-											  pathBaseItems2daToolStripMenuItem,
+											  it_PathBaseItems2da,
 											  2);
 					}
 				}
 			}
 			else
 			{
-				pathBaseItems2daToolStripMenuItem.Checked = false;
+				it_PathBaseItems2da.Checked = false;
 				CraftInfo.tagLabels.Clear();
 			}
 		}
@@ -1132,7 +1181,7 @@ namespace yata
 		/// <param name="e"></param>
 		void PathSkills2daToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (!pathSkills2daToolStripMenuItem.Checked)
+			if (!it_PathSkills2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1143,14 +1192,14 @@ namespace yata
 					{
 						CraftInfo.GropeLabels(ofd.FileName,
 											  CraftInfo.skillLabels,
-											  pathSkills2daToolStripMenuItem,
+											  it_PathSkills2da,
 											  1);
 					}
 				}
 			}
 			else
 			{
-				pathSkills2daToolStripMenuItem.Checked = false;
+				it_PathSkills2da.Checked = false;
 				CraftInfo.skillLabels.Clear();
 			}
 		}
@@ -1174,61 +1223,61 @@ namespace yata
 		{
 			CraftInfo.GropeLabels(Path.Combine(directory, "baseitems.2da"),
 								  CraftInfo.tagLabels,
-								  pathBaseItems2daToolStripMenuItem,
+								  it_PathBaseItems2da,
 								  2);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "feat.2da"),
 								  CraftInfo.featsLabels,
-								  pathFeat2daToolStripMenuItem,
+								  it_PathFeat2da,
 								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "itempropdef.2da"),
 								  CraftInfo.ipLabels,
-								  pathItemPropDef2daToolStripMenuItem,
+								  it_PathItemPropDef2da,
 								  2);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "skills.2da"),
 								  CraftInfo.skillLabels,
-								  pathSkills2daToolStripMenuItem,
+								  it_PathSkills2da,
 								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "spells.2da"),
 								  CraftInfo.spellLabels,
-								  pathSpells2daToolStripMenuItem,
+								  it_PathSpells2da,
 								  1);
 
 
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "classes.2da"),
 								  CraftInfo.classLabels,
-								  pathClasses2daToolStripMenuItem,
+								  it_PathClasses2da,
 								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "disease.2da"),
 								  CraftInfo.diseaseLabels,
-								  pathDisease2daToolStripMenuItem,
+								  it_PathDisease2da,
 								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
 								  CraftInfo.ipfeatsLabels,
-								  pathIprpFeats2daToolStripMenuItem,
+								  it_PathIprpFeats2da,
 								  2);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
 								  CraftInfo.ipspellsLabels,
-								  pathIprpSpells2daToolStripMenuItem,
+								  it_PathIprpSpells2da,
 								  1, // label
 								  3, // level
 								  CraftInfo.ipspellsLevels);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_onhitspell.2da"),
 								  CraftInfo.iphitspellLabels,
-								  pathIprpOnHitSpell2daToolStripMenuItem,
+								  it_PathIprpOnHitSpell2da,
 								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "racialtypes.2da"),
 								  CraftInfo.raceLabels,
-								  pathRaces2daToolStripMenuItem,
+								  it_PathRaces2da,
 								  1);
 		}
 #endregion Crafting info
@@ -1241,7 +1290,7 @@ namespace yata
 				&& (sender == null
 					|| e.KeyCode == Keys.Enter || e.KeyCode == Keys.F3))
 			{
-				string search = toolStripTextBox1.Text;
+				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
 				{
 					search = search.ToLower();
@@ -1280,8 +1329,8 @@ namespace yata
 							if ((val = _table.Rows[id].Cells[col].Value) != null)
 							{
 								st = val.ToString().ToLower();
-								if (   (toolStripComboBox1.SelectedIndex == 0 && st.Contains(search))
-									|| (toolStripComboBox1.SelectedIndex == 1 && st == search))
+								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
+									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
 								{
 									_table.CurrentCell = _table.Rows[id].Cells[col];
 									stop = true;

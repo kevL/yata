@@ -128,25 +128,18 @@ namespace yata
 				if (ints != null)
 					ints.Clear();
 
-				string row_;
-
-				//logfile.Log("col= " + col);
+				string line;
 				string[] cols;
-				foreach (string row in rows)
-				{
-					row_ = row.Trim();
-					//logfile.Log("row= " + row_);
 
-					if (!String.IsNullOrEmpty(row_))
+				for (int row = 0; row != rows.Length; ++row)
+				{
+					if (!String.IsNullOrEmpty(line = rows[row].Trim()))
 					{
-						cols = row_.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-						//logfile.Log(". cols[0]= " + cols[0]);
+						cols = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
 						int id;
 						if (Int32.TryParse(cols[0], out id)) // is a valid 2da row
 						{
-							//logfile.Log(". . id= " + id);
-							//logfile.Log(". . cols[col]= " + cols[col]);
 							labels.Add(cols[col]); // and hope for the best.
 
 							if (col2 != -1)
