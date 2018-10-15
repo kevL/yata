@@ -123,6 +123,8 @@ namespace yata
 
 		void CreateTabPage(string pfe)
 		{
+			panel_ColorFill.Show();
+
 			var page = new TabPage();
 			tabControl.TabPages.Add(page);
 
@@ -143,7 +145,11 @@ namespace yata
 
 			table.Select();
 
+			AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+
 			SetTitlebarText();
+
+			panel_ColorFill.Hide();
 		}
 
 
@@ -187,63 +193,19 @@ namespace yata
 			var page = tabControl.TabPages[e.Index];
 
 			FontStyle style = (page == tabControl.SelectedTab) ? FontStyle.Bold
-																: FontStyle.Regular;
-
-			var text = page.Text; // + " "; // <- pad
-//			var font = new Font(Font.Name, Font.SizeInPoints + 1.0f);
+															   : FontStyle.Regular;
 			var font = new Font(Font, style);
-
-//			var w = e.Graphics.MeasureString(text, font).Width;
-//			var h = e.Graphics.MeasureString(text, font).Height;
 
 			var sf           = new StringFormat();
 			sf.Alignment     = StringAlignment.Center;
 			sf.LineAlignment = StringAlignment.Far;
 
-			e.Graphics.DrawString(text,
+			e.Graphics.DrawString(page.Text,
 								  font,
 								  Brushes.Black,
-//								  e.Bounds.Left + (e.Bounds.Width  - w) / 2 - 1,
-//								  e.Bounds.Top  + (e.Bounds.Height - h  - 2));
 								  e.Bounds,
 								  sf);
 		}
-/* private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-{
-
-    Graphics g = e.Graphics;
-    Brush _TextBrush;
-
-    // Get the item from the collection.
-    TabPage _TabPage = tabControl1.TabPages[e.Index];
-
-    // Get the real bounds for the tab rectangle.
-    Rectangle _TabBounds = tabControl1.GetTabRect(e.Index);
-
-    if (e.State == DrawItemState.Selected)
-    {
-        // Draw a different background color, and don't paint a focus rectangle.
-        _TextBrush = new SolidBrush(Color.Blue);
-        g.FillRectangle(Brushes.Gray, e.Bounds);
-    }
-    else
-    {
-        _TextBrush = new System.Drawing.SolidBrush(e.ForeColor);
-       // e.DrawBackground();
-    }
-
-    // Use our own font. Because we CAN.
-    Font _TabFont = new Font(e.Font.FontFamily, (float)9, FontStyle.Bold, GraphicsUnit.Pixel);
-    //Font fnt = new Font(e.Font.FontFamily, (float)7.5, FontStyle.Bold);
-
-    // Draw string. Center the text.
-    StringFormat _StringFlags = new StringFormat();
-    _StringFlags.Alignment = StringAlignment.Center;
-    _StringFlags.LineAlignment = StringAlignment.Center;
-    g.DrawString(tabControl1.TabPages[e.Index].Text, _TabFont, _TextBrush,
-                 _TabBounds, new StringFormat(_StringFlags));
-
-} */
 
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -299,7 +261,7 @@ namespace yata
 			foreach (TabPage page in tabControl.TabPages)
 			{
 				var table = page.Tag as YataDataGridView;
-				if (table.Changed)
+				if (table != null && table.Changed)
 				{
 					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe));
 				}
@@ -754,7 +716,7 @@ namespace yata
 			f.ShowDialog();
 		}
 
-		void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
+		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null)
 				_table.AutoResizeColumns();
@@ -848,13 +810,15 @@ namespace yata
 					if (!Font.Equals(dialog_Font.Font))
 					{
 						Font = dialog_Font.Font;
-						_table.AutoResizeColumns();
+						if (_table != null)
+							_table.AutoResizeColumns();
 					}
 				}
 				else if (_fontChanged)
 				{
 					Font = _font;
-					_table.AutoResizeColumns();
+					if (_table != null)
+						_table.AutoResizeColumns();
 				}
 			}
 			_fontWarned = true;
@@ -866,7 +830,8 @@ namespace yata
 			{
 				_fontChanged = true;
 				Font = dialog_Font.Font;
-				_table.AutoResizeColumns();
+				if (_table != null)
+					_table.AutoResizeColumns();
 			}
 		}
 #endregion Font
@@ -1350,5 +1315,19 @@ namespace yata
 			}
 		}
 #endregion Search
+
+
+#region Events (override)
+
+		/// <summary>
+		/// Sends (unhandled) mousewheel events on the Form to the table.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			if (_table != null)
+				_table.ForceScroll(e);
+		}
+#endregion Events (override)
 	}
 }

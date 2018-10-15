@@ -48,6 +48,8 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataDataGridView(YataForm f, string pfe)
 		{
+			DrawingControl.SetDoubleBuffered(this);
+
 			_f = f;
 
 			Pfe = pfe;
@@ -56,13 +58,32 @@ namespace yata
 			ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			AllowUserToResizeRows = false;
 
-			DrawingControl.SetDoubleBuffered(this);
-
 			CellValueChanged += CellChanged;
 			SortCompare      += TableSortCompare;
 			Sorted           += TableSortCompared;
+			CellPainting     += PaintCell;
 
 			Freeze = Frozen.FreezeOff;
+		}
+
+		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			if (e.RowIndex != -1 && e.ColumnIndex != -1)
+			{
+				var sf           = new StringFormat(StringFormat.GenericDefault);
+//				sf.Alignment     = StringAlignment.Center;
+//				sf.LineAlignment = StringAlignment.Center;
+//				sf.FormatFlags   = StringFormatFlags.NoClip;
+
+				e.PaintBackground(e.ClipBounds, true);
+				e.Graphics.DrawString(Convert.ToString(e.FormattedValue),
+									  e.CellStyle.Font,
+									  Brushes.Black,
+									  e.CellBounds.X,
+									  e.CellBounds.Y + 3,
+									  sf);
+				e.Handled = true;
+			}
 		}
 
 		const int LABELS = 2;
@@ -73,9 +94,6 @@ namespace yata
 		internal void Load2da()
 		{
 			Text = "Yata";
-
-//			freeze1stColToolStripMenuItem.Checked =
-//			freeze2ndColToolStripMenuItem.Checked = false;
 
 			bool ignoreErrors = false;
 
@@ -136,7 +154,8 @@ namespace yata
 
 				if (lineId > LABELS)
 				{
-					string[] row = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+//					string[] row = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+					string[] row = ParseLine(line);
 
 					// test for well-formed, consistent IDs
 					++id;
@@ -305,8 +324,137 @@ namespace yata
 			PopulateColumnHeaders();
 			PopulateTableRows();
 
+//			SizeCols();
+
 			DrawingControl.ResumeDrawing(this);
 			_loading = false;
+		}
+
+/*		/// <summary>
+		/// An attempt to layout the cols according to text-widths.
+		/// Note that although this is a couple of seconds faster on large 2das
+		/// I haven't been able to find an accurate text-measurer ... so will
+		/// use the slower but more consistent AutoResizeColumns() funct - see
+		/// YataForm.CreateTabPage() - which tends to overestimate the required
+		/// width unfortunately.
+		/// TODO: This might work if PaintCell() can be designed to use exactly
+		/// the same parameters as the text-measurement here.
+		/// </summary>
+		void SizeCols()
+		{
+			int rows = Rows.Count;
+			if (rows > 1)
+			{
+				int cols = Columns.Count;
+				var widths = new int[cols];
+
+				int width, widthTest;
+
+				// unfortunately, TextRenderer measures alphabetical text too wide
+				// and numeric text too short.
+//				var font = new Font(Font.ToString(), Font.SizeInPoints + 1);
+				var font = Font;
+
+//				var image = new Bitmap(1,1);
+//				var graphics = Graphics.FromImage(image);
+//				var graphics = Graphics.FromHwnd();
+
+				//Graphics g=Graphics.FromHwnd(YOUR CONTROL HERE.Handle);
+				//SizeF s=g.MeasureString("YOUR STRING HERE", Font, NULL, NULL, STRING LENGTH HERE, 1)
+
+//				var dc = new IDeviceContext();
+//				IntPtr ptr = dc.GetHdc();
+
+				object val;
+				for (int col = 0; col != cols; ++col)
+				{
+					if (col == 0)
+//						width = TextRenderer.MeasureText(dc, "id", font).Width;
+//						width = TextRenderer.MeasureText("id", font, new Size(Int32.MaxValue, Int32.MaxValue), TextFormatFlags.NoClipping).Width;
+						width = TextRenderer.MeasureText("id", font).Width;
+//						width = Convert.ToInt32(graphics.MeasureString("id", font).Width);
+					else
+//						width = TextRenderer.MeasureText(dc, Columns[col].HeaderText, font).Width;
+//						width = TextRenderer.MeasureText(Columns[col].HeaderText, font, new Size(Int32.MaxValue, Int32.MaxValue), TextFormatFlags.NoClipping).Width;
+						width = TextRenderer.MeasureText(Columns[col].HeaderText, font).Width;
+//						width = Convert.ToInt32(graphics.MeasureString(Columns[col].HeaderText, font).Width);
+
+					width += 15; // pad
+//					width += width / 2; // +50%
+
+					if (width < 25)
+						width = 25;
+
+					for (int id = 0; id != rows - 1; ++id) // NOTE: Does not include col-headers.
+					{
+						if ((val = Rows[id].Cells[col].Value) != null)
+						{
+							widthTest = TextRenderer.MeasureText(val.ToString(), font).Width;
+							widthTest += 20; // pad
+//							widthTest += width / 5; // +20%
+							if (widthTest > width)
+								width = widthTest;
+						}
+					}
+					widths[col] = width;
+				}
+
+				for (int col = 0; col != cols; ++col)
+				{
+					Columns[col].Width = widths[col];
+				}
+//				dc.ReleaseHdc();
+			}
+		} */
+
+		/// <summary>
+		/// TODO: optimize.
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
+		string[] ParseLine(string line)
+		{
+			//logfile.Log("line= " + line); // -> logging a large 2da will freeze the app.
+
+			var list  = new List<string>();
+			var field = new List<char>();
+
+			bool go = false;
+			bool inQuotes = false;
+
+			foreach (char c in line)
+			{
+				//logfile.Log(". c= " + c);
+
+				if (c == '"' || inQuotes) // start or continue quotation
+				{
+					go = true;
+					if (inQuotes && c == '"') // end quotation
+					{
+						inQuotes = false;
+					}
+					else
+						inQuotes = true;
+
+					field.Add(c);
+				}
+				else if (c != ' ' && c != '\t')
+				{
+					go = true;
+					field.Add(c);
+				}
+				else if (go) // hit a space or tab
+				{
+					//logfile.Log(". . ADD");
+
+					go = false;
+					list.Add(new string(field.ToArray()));
+
+					field.Clear();
+				}
+			}
+
+			return list.ToArray();
 		}
 
 		/// <summary>
@@ -371,9 +519,8 @@ namespace yata
 			_rows.Clear();
 
 
-			RowHeadersWidth = 62;
-			AutoResizeColumns();
-			//AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+			RowHeadersWidth = 72;
+//			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
 		}
 
 		void CellChanged(object sender, DataGridViewCellEventArgs e)
@@ -552,6 +699,12 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 #endregion Events (override)
+
+
+		internal void ForceScroll(MouseEventArgs e)
+		{
+			base.OnMouseWheel(e);
+		}
 
 
 #region Sort
