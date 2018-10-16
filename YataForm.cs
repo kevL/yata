@@ -1326,6 +1326,28 @@ namespace yata
 #endregion Search
 
 
+#region Tabmenu
+		void It_tabCloseClick(object sender, EventArgs e)
+		{
+			CloseToolStripMenuItemClick(null, EventArgs.Empty);
+		}
+
+		void tabMenu_Opening(object sender, CancelEventArgs e)
+		{
+			Point pt = tabControl.PointToClient(Cursor.Position);
+			for (int i = 0; i != tabControl.TabCount; ++i)
+			{
+				if (tabControl.GetTabRect(i).Contains(pt))
+				{
+					tabControl.SelectedIndex = i; // i is the index of tab under cursor
+					return;
+				}
+			}
+			e.Cancel = true;
+		}
+#endregion Tabmenu
+
+
 		internal void TableChanged(bool changed)
 		{
 			string asterisk = changed ? "*"

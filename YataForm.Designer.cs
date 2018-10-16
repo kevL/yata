@@ -71,6 +71,8 @@
 		private System.Windows.Forms.ToolStripSeparator separator_6;
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 		private System.Windows.Forms.Panel panel_ColorFill;
+		private System.Windows.Forms.ContextMenuStrip tabMenu;
+		private System.Windows.Forms.ToolStripMenuItem it_tabClose;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -97,6 +99,8 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YataForm));
 			this.tabControl = new yata.DraggableTabControl();
+			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -158,6 +162,7 @@
 			this.statusbar_label_CraftInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.dialog_Font = new System.Windows.Forms.FontDialog();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
 			this.statusbar.SuspendLayout();
@@ -166,6 +171,7 @@
 			// tabControl
 			// 
 			this.tabControl.AllowDrop = true;
+			this.tabControl.ContextMenuStrip = this.tabMenu;
 			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 			this.tabControl.Location = new System.Drawing.Point(0, 24);
@@ -178,6 +184,22 @@
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl1DrawItem);
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
+			// 
+			// tabMenu
+			// 
+			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_tabClose});
+			this.tabMenu.Name = "tabMenu";
+			this.tabMenu.Size = new System.Drawing.Size(153, 48);
+			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
+			// 
+			// it_tabClose
+			// 
+			this.it_tabClose.Name = "it_tabClose";
+			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
+			this.it_tabClose.Text = "Close";
+			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.it_tabClose.Click += new System.EventHandler(this.It_tabCloseClick);
 			// 
 			// menubar
 			// 
@@ -216,28 +238,30 @@
 			// it_Open
 			// 
 			this.it_Open.Name = "it_Open";
-			this.it_Open.Size = new System.Drawing.Size(125, 22);
+			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.it_Open.Size = new System.Drawing.Size(160, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
 			// 
 			// it_Reload
 			// 
 			this.it_Reload.Name = "it_Reload";
-			this.it_Reload.Size = new System.Drawing.Size(125, 22);
+			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+			this.it_Reload.Size = new System.Drawing.Size(160, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.ReloadToolStripMenuItemClick);
 			// 
 			// it_Folders
 			// 
 			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(125, 22);
+			this.it_Folders.Size = new System.Drawing.Size(160, 22);
 			this.it_Folders.Text = "Folders";
 			this.it_Folders.Visible = false;
 			// 
 			// it_Create
 			// 
 			this.it_Create.Name = "it_Create";
-			this.it_Create.Size = new System.Drawing.Size(125, 22);
+			this.it_Create.Size = new System.Drawing.Size(160, 22);
 			this.it_Create.Text = "Create ...";
 			this.it_Create.Visible = false;
 			this.it_Create.Click += new System.EventHandler(this.CreateToolStripMenuItemClick);
@@ -245,38 +269,41 @@
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(122, 6);
+			this.separator_1.Size = new System.Drawing.Size(157, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
-			this.it_Save.Size = new System.Drawing.Size(125, 22);
+			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			this.it_Save.Size = new System.Drawing.Size(160, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(125, 22);
+			this.it_SaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.it_SaveAs.Size = new System.Drawing.Size(160, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.SaveAsToolStripMenuItemClick);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(125, 22);
+			this.it_Close.Size = new System.Drawing.Size(160, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.CloseToolStripMenuItemClick);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(122, 6);
+			this.separator_2.Size = new System.Drawing.Size(157, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
-			this.it_Quit.Size = new System.Drawing.Size(125, 22);
+			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+			this.it_Quit.Size = new System.Drawing.Size(160, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.QuitToolStripMenuItemClick);
 			// 
@@ -359,6 +386,7 @@
 			// it_freeze1
 			// 
 			this.it_freeze1.Name = "it_freeze1";
+			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.it_freeze1.Size = new System.Drawing.Size(190, 22);
 			this.it_freeze1.Text = "freeze 1st col";
 			this.it_freeze1.Click += new System.EventHandler(this.Freeze1stColToolStripMenuItemClick);
@@ -366,6 +394,7 @@
 			// it_freeze2
 			// 
 			this.it_freeze2.Name = "it_freeze2";
+			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
 			this.it_freeze2.Size = new System.Drawing.Size(190, 22);
 			this.it_freeze2.Text = "freeze 2nd col";
 			this.it_freeze2.Click += new System.EventHandler(this.Freeze2ndColToolStripMenuItemClick);
@@ -678,6 +707,7 @@
 			this.Name = "YataForm";
 			this.Text = "Yata";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+			this.tabMenu.ResumeLayout(false);
 			this.menubar.ResumeLayout(false);
 			this.menubar.PerformLayout();
 			this.contextEditor.ResumeLayout(false);
