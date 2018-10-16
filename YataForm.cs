@@ -145,6 +145,8 @@ namespace yata
 
 				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+
+				DrawingControl.ResumeDrawing(_table);
 			}
 
 			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
@@ -279,12 +281,19 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
+				panel_ColorFill.Show();
+
 				_table.Changed = false;
-	
+
 				_table.Columns.Clear();
 				_table.Rows   .Clear();
 
-				_table.Load2da();
+				if (_table.Load2da())
+					AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+
+				DrawingControl.ResumeDrawing(_table);
+
+				panel_ColorFill.Hide();
 			}
 			// TODO: Show an error if file no longer exists.
 		}

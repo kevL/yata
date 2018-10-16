@@ -327,14 +327,13 @@ namespace yata
 			}
 
 			_loading = true;
-			DrawingControl.SuspendDrawing(this);
-
+			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
+													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
 			PopulateColumnHeaders();
 			PopulateTableRows();
 
 //			SizeCols();
 
-			DrawingControl.ResumeDrawing(this);
 			_loading = false;
 
 			return true;
