@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CraftInfo.cs" />
+    <Compile Include="DraggableTabControl.cs" />
     <Compile Include="TextCopyForm.cs" />
     <Compile Include="TextCopyForm.Designer.cs">
       <DependentUpon>TextCopyForm.cs</DependentUpon>

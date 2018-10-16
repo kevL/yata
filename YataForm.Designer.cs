@@ -1,11 +1,15 @@
 ﻿namespace yata
 {
+//	private System.Windows.Forms.TabControl tabControl;
+//	private yata.DraggableTabControl tabControl;
+
 	partial class YataForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
+		private yata.DraggableTabControl tabControl;
 		private System.Windows.Forms.MenuStrip menubar;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuFile;
 		private System.Windows.Forms.ToolStripMenuItem it_Open;
@@ -66,7 +70,6 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpFeats2da;
 		private System.Windows.Forms.ToolStripSeparator separator_6;
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
-		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.Panel panel_ColorFill;
 
 		/// <summary>
@@ -82,6 +85,8 @@
 			base.Dispose(disposing);
 		}
 
+//			this.tabControl = new System.Windows.Forms.TabControl();
+//			this.tabControl = new yata.DraggableTabControl();
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The Forms designer might
@@ -91,6 +96,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YataForm));
+			this.tabControl = new yata.DraggableTabControl();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,7 +138,6 @@
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.tabControl = new System.Windows.Forms.TabControl();
 			this.contextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.context_it_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
@@ -157,6 +162,22 @@
 			this.contextEditor.SuspendLayout();
 			this.statusbar.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// tabControl
+			// 
+			this.tabControl.AllowDrop = true;
+			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+			this.tabControl.Location = new System.Drawing.Point(0, 24);
+			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
+			this.tabControl.Multiline = true;
+			this.tabControl.Name = "tabControl";
+			this.tabControl.Padding = new System.Drawing.Point(0, 0);
+			this.tabControl.SelectedIndex = 0;
+			this.tabControl.Size = new System.Drawing.Size(846, 408);
+			this.tabControl.TabIndex = 0;
+			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl1DrawItem);
+			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
 			// 
 			// menubar
 			// 
@@ -481,21 +502,6 @@
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
 			this.it_PathRaces2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
-			// 
-			// tabControl
-			// 
-			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-			this.tabControl.Location = new System.Drawing.Point(0, 24);
-			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
-			this.tabControl.Multiline = true;
-			this.tabControl.Name = "tabControl";
-			this.tabControl.Padding = new System.Drawing.Point(0, 0);
-			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(846, 408);
-			this.tabControl.TabIndex = 0;
-			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl1DrawItem);
-			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
 			// 
 			// contextEditor
 			// 
