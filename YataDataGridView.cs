@@ -72,23 +72,24 @@ namespace yata
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
-			if (e.RowIndex != -1 && e.ColumnIndex != -1)
-			{
-				var sf           = new StringFormat(StringFormat.GenericDefault);
-//				sf.Alignment     = StringAlignment.Center;
-//				sf.LineAlignment = StringAlignment.Center;
-//				sf.FormatFlags   = StringFormatFlags.NoClip;
+			var sf           = new StringFormat(StringFormat.GenericDefault);
+//			sf.Alignment     = StringAlignment.Center;
+//			sf.LineAlignment = StringAlignment.Center;
+//			sf.FormatFlags   = StringFormatFlags.NoClip;
 
-				e.PaintBackground(e.ClipBounds, true);
-				e.Graphics.DrawString(Convert.ToString(e.FormattedValue),
-									  e.CellStyle.Font,
-									  Brushes.Black,
-									  e.CellBounds.X,
-									  e.CellBounds.Y + 4,
-									  sf);
-				e.Handled = true;
-			}
+			int x = (e.ColumnIndex == -1) ? 11 // row-header
+										  : 1;
+
+			e.PaintBackground(e.ClipBounds, true);
+			e.Graphics.DrawString(Convert.ToString(e.FormattedValue),
+								  e.CellStyle.Font,
+								  Brushes.Black,
+								  e.CellBounds.X + x,
+								  e.CellBounds.Y + 4,
+								  sf);
+			e.Handled = true;
 		}
+
 
 		const int LABELS = 2;
 
@@ -533,7 +534,7 @@ namespace yata
 			_rows.Clear();
 
 
-			RowHeadersWidth = 72;
+			RowHeadersWidth = 65;
 //			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
 		}
 
