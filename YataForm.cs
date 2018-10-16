@@ -125,31 +125,29 @@ namespace yata
 		{
 			panel_ColorFill.Show();
 
-			var page = new TabPage();
-			tabControl.TabPages.Add(page);
-
-			page.Text = Path.GetFileNameWithoutExtension(pfe);
-
 			var table = new YataDataGridView(this, pfe);
+			if (table.Load2da())
+			{
+				table.RowHeaderMouseClick += RowHeaderContextMenu;
+				table.CellMouseEnter      += PrintCraftInfo;
 
-			table.RowHeaderMouseClick += RowHeaderContextMenu;
-			table.CellMouseEnter      += PrintCraftInfo;
+				var page = new TabPage();
+				tabControl.TabPages.Add(page);
 
-			table.Load2da();
+				page.Tag = table;
+				page.Text = Path.GetFileNameWithoutExtension(pfe);
 
-			page.Controls.Add(table);
-			page.Tag = table;
+				page.Controls.Add(table);
 
-			tabControl.SelectedTab = page;
+				tabControl.SelectedTab = page;
+
+				table.Select(); // focus the table.
+
+				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
+				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+			}
+
 			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
-
-			table.Select();
-
-			AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
-
-			SetTitlebarText();
-
-			panel_ColorFill.Hide();
 		}
 
 
@@ -162,7 +160,8 @@ namespace yata
 		{
 			if (tabControl.SelectedIndex != -1)
 			{
-				_table = tabControl.SelectedTab.Tag as YataDataGridView;
+				_table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--
+
 				it_MenuPaths.Visible = _table.CraftInfo;
 				panel_ColorFill.Hide();
 
@@ -716,7 +715,7 @@ namespace yata
 			f.ShowDialog();
 		}
 
-		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
+		void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null)
 				_table.AutoResizeColumns();
@@ -1318,7 +1317,6 @@ namespace yata
 
 
 #region Events (override)
-
 		/// <summary>
 		/// Sends (unhandled) mousewheel events on the Form to the table.
 		/// </summary>

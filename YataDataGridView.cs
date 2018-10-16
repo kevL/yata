@@ -91,7 +91,8 @@ namespace yata
 		/// <summary>
 		/// Tries to load a 2da file.
 		/// </summary>
-		internal void Load2da()
+		/// <returns>true if 2da loaded successfully perhaps</returns>
+		internal bool Load2da()
 		{
 			Text = "Yata";
 
@@ -99,7 +100,7 @@ namespace yata
 
 			string[] lines = File.ReadAllLines(Pfe);
 
-			Cols = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+			Cols = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries); // TODO: test for double-quotes
 
 			int quotes =  0;
 			int id     = -1;
@@ -107,6 +108,8 @@ namespace yata
 
 			foreach (string line in lines)
 			{
+				//logfile.Log("line= " + line);
+
 				// test version header
 				if (++lineId == 0)
 				{
@@ -119,7 +122,7 @@ namespace yata
 						switch (ShowLoadError(error))
 						{
 							case DialogResult.Abort:
-								return;
+								return false;
 
 							case DialogResult.Retry:
 								break;
@@ -141,7 +144,7 @@ namespace yata
 					switch (ShowLoadError(error))
 					{
 						case DialogResult.Abort:
-							return;
+							return false;
 
 						case DialogResult.Retry:
 							break;
@@ -165,7 +168,7 @@ namespace yata
 						int result;
 						if (!Int32.TryParse(row[0], out result) || result != id)
 						{
-							string error = "The 2da-file contains an ID that is either not an integer or out of sequence."
+							string error = "The 2da-file contains an ID that is not an integer or is out of sequence."
 										 + Environment.NewLine + Environment.NewLine
 										 + Pfe
 										 + Environment.NewLine + Environment.NewLine
@@ -173,7 +176,7 @@ namespace yata
 							switch (ShowLoadError(error))
 							{
 								case DialogResult.Abort:
-									return;
+									return false;
 
 								case DialogResult.Retry:
 									break;
@@ -188,7 +191,7 @@ namespace yata
 					// test for matching fields under columns
 					if (!ignoreErrors && row.Length != Cols.Length + 1)
 					{
-						string error = "The 2da-file contains fields that do not align with its columns."
+						string error = "The 2da-file contains fields that do not align with its cols."
 									 + Environment.NewLine + Environment.NewLine
 									 + Pfe
 									 + Environment.NewLine + Environment.NewLine
@@ -196,7 +199,7 @@ namespace yata
 						switch (ShowLoadError(error))
 						{
 							case DialogResult.Abort:
-								return;
+								return false;
 
 							case DialogResult.Retry:
 								break;
@@ -228,7 +231,7 @@ namespace yata
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
-										return;
+										return false;
 
 									case DialogResult.Retry:
 										break;
@@ -249,7 +252,7 @@ namespace yata
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
-										return;
+										return false;
 
 									case DialogResult.Retry:
 										break;
@@ -282,7 +285,7 @@ namespace yata
 				switch (ShowLoadError(error))
 				{
 					case DialogResult.Abort:
-						return;
+						return false;
 
 					case DialogResult.Retry:
 						break;
@@ -328,6 +331,8 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(this);
 			_loading = false;
+
+			return true;
 		}
 
 /*		/// <summary>
@@ -414,46 +419,51 @@ namespace yata
 		/// <returns></returns>
 		string[] ParseLine(string line)
 		{
-			//logfile.Log("line= " + line); // -> logging a large 2da will freeze the app.
-
 			var list  = new List<string>();
 			var field = new List<char>();
 
-			bool go = false;
+			bool add = false;
 			bool inQuotes = false;
 
-			foreach (char c in line)
+			char c;
+
+			int posLast = line.Length + 1; // include an extra iteration to get the last field (that has no whitespace after it)
+			for (int pos = 0; pos != posLast; ++pos)
 			{
-				//logfile.Log(". c= " + c);
-
-				if (c == '"' || inQuotes) // start or continue quotation
+				if (add && pos == line.Length)				// hit lineend: make sure to catch the last field
+				{											// if there's no whitespace after it (last fields
+					list.Add(new string(field.ToArray()));	// w/ trailing whitespace are dealt with below)
+				}
+				else if (pos != line.Length)
 				{
-					go = true;
-					if (inQuotes && c == '"') // end quotation
+					c = line[pos];
+
+					if (c == '"' || inQuotes)				// start or continue quotation
 					{
-						inQuotes = false;
+						add = true;
+						if (inQuotes && c == '"')			// end quotation
+						{
+							inQuotes = false;
+						}
+						else
+							inQuotes = true;
+
+						field.Add(c);
 					}
-					else
-						inQuotes = true;
+					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
+					{
+						add = true;
+						field.Add(c);
+					}
+					else if (add)							// hit a space or tab
+					{
+						add = false;
+						list.Add(new string(field.ToArray()));
 
-					field.Add(c);
-				}
-				else if (c != ' ' && c != '\t')
-				{
-					go = true;
-					field.Add(c);
-				}
-				else if (go) // hit a space or tab
-				{
-					//logfile.Log(". . ADD");
-
-					go = false;
-					list.Add(new string(field.ToArray()));
-
-					field.Clear();
+						field.Clear();
+					}
 				}
 			}
-
 			return list.ToArray();
 		}
 

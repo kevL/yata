@@ -649,13 +649,11 @@
 			// 
 			// panel_ColorFill
 			// 
-			this.panel_ColorFill.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.panel_ColorFill.BackColor = System.Drawing.Color.LightSeaGreen;
-			this.panel_ColorFill.Location = new System.Drawing.Point(0, 25);
+			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(846, 430);
+			this.panel_ColorFill.Size = new System.Drawing.Size(846, 408);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
 			// YataForm

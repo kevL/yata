@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -14,6 +15,17 @@ namespace yata
 		internal TextCopyForm()
 		{
 			InitializeComponent();
+
+			const string text = "This string can be used in Settings.Cfg to override Yata's default font.";
+//			Width = TextRenderer.MeasureText(text, Font).Width;
+
+//			var image = new Bitmap(1,1);
+//			var graphics = Graphics.FromImage(image);
+//			Width = Convert.ToInt32(graphics.MeasureString(text, Font).Width);
+
+			label1.Text = "Current Font (string)"
+						+ Environment.NewLine + Environment.NewLine
+						+ text;
 		}
 
 		internal void SetText(string text)
