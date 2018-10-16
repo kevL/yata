@@ -31,8 +31,12 @@ namespace yata
 
 		bool _loading;
 
+		bool _changed;
 		internal bool Changed
-		{ get; set; }
+		{
+			get { return _changed; }
+			set { _f.TableChanged(_changed = value); }
+		}
 
 		internal bool CraftInfo
 		{ get; set; }
@@ -80,7 +84,7 @@ namespace yata
 									  e.CellStyle.Font,
 									  Brushes.Black,
 									  e.CellBounds.X,
-									  e.CellBounds.Y + 3,
+									  e.CellBounds.Y + 4,
 									  sf);
 				e.Handled = true;
 			}

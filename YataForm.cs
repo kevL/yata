@@ -386,6 +386,7 @@ namespace yata
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
 						_table.Pfe = sfd.FileName;
+						tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(_table.Pfe);
 
 						SetTitlebarText();
 
@@ -1314,6 +1315,14 @@ namespace yata
 			}
 		}
 #endregion Search
+
+
+		internal void TableChanged(bool changed)
+		{
+			string asterisk = changed ? "*"
+									  : "";
+			tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(_table.Pfe) + asterisk;
+		}
 
 
 #region Events (override)
