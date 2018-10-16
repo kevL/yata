@@ -66,6 +66,7 @@ namespace yata
 			SortCompare      += TableSortCompare;
 			Sorted           += TableSortCompared;
 			CellPainting     += PaintCell;
+			SelectionChanged += EnsureLastColDisplayed;
 
 			Freeze = Frozen.FreezeOff;
 		}
@@ -533,7 +534,7 @@ namespace yata
 			_rows.Clear();
 
 
-			RowHeadersWidth = 65;
+			RowHeadersWidth = 60;
 //			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
 		}
 
@@ -789,5 +790,19 @@ namespace yata
 			RelabelRowHeaders();
 		}
 #endregion Sort
+
+		/// <summary>
+		/// The last col can be partly or basically completely hidden even when
+		/// it's selected; this workaround ensures that if it is selected it is
+		/// displayed fully.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void EnsureLastColDisplayed(object sender, EventArgs e)
+		{
+			int col = Columns.Count - 1;
+			if (SelectedCells[0].ColumnIndex == col)
+				HorizontalScrollingOffset += Columns[col].Width;
+		}
 	}
 }
