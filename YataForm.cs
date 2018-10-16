@@ -289,11 +289,15 @@ namespace yata
 				_table.Rows   .Clear();
 
 				if (_table.Load2da())
+				{
 					AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+					DrawingControl.ResumeDrawing(_table);
+				}
+				else
+					CloseToolStripMenuItemClick(null, EventArgs.Empty);
 
-				DrawingControl.ResumeDrawing(_table);
-
-				panel_ColorFill.Hide();
+				if (tabControl.TabPages.Count != 0)
+					panel_ColorFill.Hide();
 			}
 			// TODO: Show an error if file no longer exists.
 		}
@@ -465,24 +469,22 @@ namespace yata
 #region Context menu
 		void RowHeaderContextMenu(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right)
+			if (e.Button == MouseButtons.Right
+				&& e.RowIndex != _table.Rows.Count - 1)
 			{
-				if (e.RowIndex != _table.Rows.Count - 1)
-				{
-					_table.ClearSelection();
-					_table.Rows[e.RowIndex].Selected = true;
+				_table.ClearSelection();
+				_table.Rows[e.RowIndex].Selected = true;
 
-					_table.CurrentCell = _table.Rows[e.RowIndex].Cells[0];
+				_table.CurrentCell = _table.Rows[e.RowIndex].Cells[0];
 
-					context_it_Header.Text = "@ id " + e.RowIndex;
+				context_it_Header.Text = "@ id " + e.RowIndex;
 
-					context_it_PasteAbove.Enabled =
-					context_it_Paste     .Enabled =
-					context_it_PasteBelow.Enabled = (_copy.Count != 0);
+				context_it_PasteAbove.Enabled =
+				context_it_Paste     .Enabled =
+				context_it_PasteBelow.Enabled = (_table.Columns.Count == _copy.Count);
 
-					contextEditor.Show(_table, new Point(_table.RowHeadersWidth - 10,
-															 _table.Location.Y      + 10));
-				}
+				contextEditor.Show(_table, new Point(_table.RowHeadersWidth - 10,
+													 _table.Location.Y + 10));
 			}
 		}
 
@@ -501,14 +503,13 @@ namespace yata
 		{
 			CopyToolStripMenuItemClick(null, EventArgs.Empty);
 			DeleteToolStripMenuItemClick(null, EventArgs.Empty);
-
-			_table.RelabelRowHeaders();
 		}
 
 		void PasteAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_copy.Count == _table.Columns.Count)
 			{
+				_table.Changed = true;
 				_table.Rows.Insert(_table.SelectedRows[0].Index, _copy.ToArray());
 				_table.RelabelRowHeaders();
 			}
@@ -519,6 +520,7 @@ namespace yata
 			int cols = _table.Columns.Count;
 			if (_copy.Count == cols)
 			{
+				_table.Changed = true;
 				for (int col = 0; col != cols; ++col)
 				{
 					_table.SelectedRows[0].Cells[col].Value = _copy[col];
@@ -531,6 +533,7 @@ namespace yata
 		{
 			if (_copy.Count == _table.Columns.Count)
 			{
+				_table.Changed = true;
 				_table.Rows.Insert(_table.SelectedRows[0].Index + 1, _copy.ToArray());
 				_table.RelabelRowHeaders();
 			}
@@ -538,6 +541,7 @@ namespace yata
 
 		void CreateAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			_table.Changed = true;
 			int cols = _table.Columns.Count;
 
 			var row = new string[cols];
@@ -551,6 +555,7 @@ namespace yata
 
 		void CreateBelowToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			_table.Changed = true;
 			int cols = _table.Columns.Count;
 
 			var row = new string[cols];
@@ -564,6 +569,7 @@ namespace yata
 
 		void ClearToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			_table.Changed = true;
 			int cols = _table.Columns.Count;
 			for (int col = 1; col != cols; ++col)
 			{
@@ -574,6 +580,7 @@ namespace yata
 
 		void DeleteToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			_table.Changed = true;
 			_table.Rows.Remove(_table.SelectedRows[0]);
 			_table.RelabelRowHeaders();
 		}

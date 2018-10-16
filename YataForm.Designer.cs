@@ -190,13 +190,13 @@
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_tabClose});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(153, 48);
+			this.tabMenu.Size = new System.Drawing.Size(96, 26);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(95, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.It_tabCloseClick);
@@ -551,7 +551,7 @@
 			this.context_it_ClearRow,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(196, 248);
+			this.contextEditor.Size = new System.Drawing.Size(176, 248);
 			// 
 			// context_it_Header
 			// 
@@ -559,89 +559,89 @@
 			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7.25F, System.Drawing.FontStyle.Bold);
 			this.context_it_Header.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.context_it_Header.Name = "context_it_Header";
-			this.context_it_Header.Size = new System.Drawing.Size(195, 22);
+			this.context_it_Header.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Header.Text = "_";
 			// 
 			// separator_7
 			// 
 			this.separator_7.Name = "separator_7";
-			this.separator_7.Size = new System.Drawing.Size(192, 6);
+			this.separator_7.Size = new System.Drawing.Size(172, 6);
 			// 
 			// context_it_Cut
 			// 
 			this.context_it_Cut.Name = "context_it_Cut";
-			this.context_it_Cut.Size = new System.Drawing.Size(195, 22);
+			this.context_it_Cut.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Cut.Text = "Cut row @ id";
 			this.context_it_Cut.Click += new System.EventHandler(this.CutToolStripMenuItemClick);
 			// 
 			// context_it_Copy
 			// 
 			this.context_it_Copy.Name = "context_it_Copy";
-			this.context_it_Copy.Size = new System.Drawing.Size(195, 22);
+			this.context_it_Copy.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Copy.Text = "Copy row @ id";
 			this.context_it_Copy.Click += new System.EventHandler(this.CopyToolStripMenuItemClick);
 			// 
 			// separator_8
 			// 
 			this.separator_8.Name = "separator_8";
-			this.separator_8.Size = new System.Drawing.Size(192, 6);
+			this.separator_8.Size = new System.Drawing.Size(172, 6);
 			// 
 			// context_it_PasteAbove
 			// 
 			this.context_it_PasteAbove.Name = "context_it_PasteAbove";
-			this.context_it_PasteAbove.Size = new System.Drawing.Size(195, 22);
-			this.context_it_PasteAbove.Text = "Paste new clip above id";
+			this.context_it_PasteAbove.Size = new System.Drawing.Size(175, 22);
+			this.context_it_PasteAbove.Text = "Paste clip above id";
 			this.context_it_PasteAbove.Click += new System.EventHandler(this.PasteAboveToolStripMenuItemClick);
 			// 
 			// context_it_Paste
 			// 
 			this.context_it_Paste.Name = "context_it_Paste";
-			this.context_it_Paste.Size = new System.Drawing.Size(195, 22);
+			this.context_it_Paste.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Paste.Text = "Paste clip @ id";
 			this.context_it_Paste.Click += new System.EventHandler(this.PasteToolStripMenuItemClick);
 			// 
 			// context_it_PasteBelow
 			// 
 			this.context_it_PasteBelow.Name = "context_it_PasteBelow";
-			this.context_it_PasteBelow.Size = new System.Drawing.Size(195, 22);
-			this.context_it_PasteBelow.Text = "Paste new clip below id";
+			this.context_it_PasteBelow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_PasteBelow.Text = "Paste clip below id";
 			this.context_it_PasteBelow.Click += new System.EventHandler(this.PasteBelowToolStripMenuItemClick);
 			// 
 			// separator_9
 			// 
 			this.separator_9.Name = "separator_9";
-			this.separator_9.Size = new System.Drawing.Size(192, 6);
+			this.separator_9.Size = new System.Drawing.Size(172, 6);
 			// 
 			// context_it_CreateAbove
 			// 
 			this.context_it_CreateAbove.Name = "context_it_CreateAbove";
-			this.context_it_CreateAbove.Size = new System.Drawing.Size(195, 22);
-			this.context_it_CreateAbove.Text = "Create blank row above id";
+			this.context_it_CreateAbove.Size = new System.Drawing.Size(175, 22);
+			this.context_it_CreateAbove.Text = "Create blank above id";
 			this.context_it_CreateAbove.Click += new System.EventHandler(this.CreateAboveToolStripMenuItemClick);
 			// 
 			// context_it_CreateBelow
 			// 
 			this.context_it_CreateBelow.Name = "context_it_CreateBelow";
-			this.context_it_CreateBelow.Size = new System.Drawing.Size(195, 22);
-			this.context_it_CreateBelow.Text = "Create blank row below id";
+			this.context_it_CreateBelow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_CreateBelow.Text = "Create blank below id";
 			this.context_it_CreateBelow.Click += new System.EventHandler(this.CreateBelowToolStripMenuItemClick);
 			// 
 			// separator_10
 			// 
 			this.separator_10.Name = "separator_10";
-			this.separator_10.Size = new System.Drawing.Size(192, 6);
+			this.separator_10.Size = new System.Drawing.Size(172, 6);
 			// 
 			// context_it_ClearRow
 			// 
 			this.context_it_ClearRow.Name = "context_it_ClearRow";
-			this.context_it_ClearRow.Size = new System.Drawing.Size(195, 22);
+			this.context_it_ClearRow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_ClearRow.Text = "Clear fields @ id";
 			this.context_it_ClearRow.Click += new System.EventHandler(this.ClearToolStripMenuItemClick);
 			// 
 			// context_it_DeleteRow
 			// 
 			this.context_it_DeleteRow.Name = "context_it_DeleteRow";
-			this.context_it_DeleteRow.Size = new System.Drawing.Size(195, 22);
+			this.context_it_DeleteRow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_DeleteRow.Text = "Delete row @ id";
 			this.context_it_DeleteRow.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
 			// 

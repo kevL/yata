@@ -801,7 +801,7 @@ namespace yata
 		void EnsureLastColDisplayed(object sender, EventArgs e)
 		{
 			int col = Columns.Count - 1;
-			if (SelectedCells[0].ColumnIndex == col)
+			if (SelectedCells.Count != 0 && SelectedCells[0].ColumnIndex == col)
 				HorizontalScrollingOffset += Columns[col].Width;
 		}
 	}
