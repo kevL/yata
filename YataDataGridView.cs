@@ -21,7 +21,7 @@ namespace yata
 
 		YataForm _f;
 
-		internal string Pfe
+		internal string Pfe // Path-File-Extension (ie. fullpath)
 		{ get; set; }
 
 		internal string[] Cols // 'Cols' does NOT contain #0 col IDs (so that often needs +1)
@@ -760,6 +760,8 @@ namespace yata
 		/// <param name="e"></param>
 		void TableSortCompared(object sender, EventArgs e)
 		{
+			Changed = true;
+
 			int sel = -1;
 
 			if (SelectedRows.Count != 0)
@@ -800,9 +802,12 @@ namespace yata
 		/// <param name="e"></param>
 		void EnsureLastColDisplayed(object sender, EventArgs e)
 		{
-			int col = Columns.Count - 1;
-			if (SelectedCells.Count != 0 && SelectedCells[0].ColumnIndex == col)
-				HorizontalScrollingOffset += Columns[col].Width;
+			if (SelectedCells.Count != 0)
+			{
+				int col = Columns.Count - 1;
+				if (SelectedCells[0].ColumnIndex == col)
+					HorizontalScrollingOffset += Columns[col].Width;	// NOTE: I highly doubt this is accurate
+			}															// but it gets the job done.
 		}
 	}
 }

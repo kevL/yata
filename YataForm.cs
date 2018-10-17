@@ -1357,7 +1357,7 @@ namespace yata
 
 		internal void TableChanged(bool changed)
 		{
-			string asterisk = changed ? "*"
+			string asterisk = changed ? " *"
 									  : "";
 			tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(_table.Pfe) + asterisk;
 		}

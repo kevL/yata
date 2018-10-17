@@ -47,13 +47,13 @@ namespace yata
 					}
 					while (src != dst);
 				}
-				else if (dst < src)
+				else //if (dst < src)
 				{
 					do
 					{
 						TabPages[src] = TabPages[--src];
 					}
-					while (dst != src);
+					while (src != dst);
 				}
 
 				TabPages[dst] = _tabDrag;

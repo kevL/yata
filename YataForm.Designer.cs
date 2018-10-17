@@ -642,7 +642,7 @@
 			// 
 			this.context_it_DeleteRow.Name = "context_it_DeleteRow";
 			this.context_it_DeleteRow.Size = new System.Drawing.Size(175, 22);
-			this.context_it_DeleteRow.Text = "Delete row @ id";
+			this.context_it_DeleteRow.Text = "Delete @ id";
 			this.context_it_DeleteRow.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
 			// 
 			// statusbar
