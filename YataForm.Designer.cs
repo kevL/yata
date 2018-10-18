@@ -119,12 +119,20 @@
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
+			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -160,14 +168,6 @@
 			this.statusbar_label_CraftInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.dialog_Font = new System.Windows.Forms.FontDialog();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -327,7 +327,7 @@
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(152, 22);
+			this.it_Search.Size = new System.Drawing.Size(130, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.It_SearchClick);
 			// 
@@ -335,47 +335,9 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(152, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(130, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.It_FindnextClick);
-			// 
-			// it_MenuOptions
-			// 
-			this.it_MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_CheckRows,
-			this.it_RenumberRows,
-			this.toolStripSeparator1,
-			this.it_RecolorRows,
-			this.it_AutoCols,
-			this.toolStripSeparator2,
-			this.it_freeze1,
-			this.it_freeze2});
-			this.it_MenuOptions.Name = "it_MenuOptions";
-			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
-			this.it_MenuOptions.Text = "2da Ops";
-			// 
-			// it_AutoCols
-			// 
-			this.it_AutoCols.Name = "it_AutoCols";
-			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
-			this.it_AutoCols.Text = "autosize cols";
-			this.it_AutoCols.Click += new System.EventHandler(this.AutosizeColsToolStripMenuItemClick);
-			// 
-			// it_freeze1
-			// 
-			this.it_freeze1.Name = "it_freeze1";
-			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.it_freeze1.Size = new System.Drawing.Size(155, 22);
-			this.it_freeze1.Text = "freeze 1st col";
-			this.it_freeze1.Click += new System.EventHandler(this.Freeze1stColToolStripMenuItemClick);
-			// 
-			// it_freeze2
-			// 
-			this.it_freeze2.Name = "it_freeze2";
-			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.it_freeze2.Size = new System.Drawing.Size(155, 22);
-			this.it_freeze2.Text = "freeze 2nd col";
-			this.it_freeze2.Click += new System.EventHandler(this.Freeze2ndColToolStripMenuItemClick);
 			// 
 			// tb_Search
 			// 
@@ -393,6 +355,99 @@
 			this.cb_SearchOption.Name = "cb_SearchOption";
 			this.cb_SearchOption.Size = new System.Drawing.Size(119, 18);
 			this.cb_SearchOption.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
+			// 
+			// it_MenuOptions
+			// 
+			this.it_MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_CheckRows,
+			this.it_RenumberRows,
+			this.toolStripSeparator1,
+			this.it_RecolorRows,
+			this.it_AutoCols,
+			this.toolStripSeparator2,
+			this.it_freeze1,
+			this.it_freeze2});
+			this.it_MenuOptions.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
+			this.it_MenuOptions.Name = "it_MenuOptions";
+			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
+			this.it_MenuOptions.Text = "2da Ops";
+			// 
+			// it_CheckRows
+			// 
+			this.it_CheckRows.Name = "it_CheckRows";
+			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
+			this.it_CheckRows.Text = "test row order";
+			this.it_CheckRows.Click += new System.EventHandler(this.CheckRowOrderToolStripMenuItemClick);
+			// 
+			// it_RenumberRows
+			// 
+			this.it_RenumberRows.Name = "it_RenumberRows";
+			this.it_RenumberRows.Size = new System.Drawing.Size(155, 22);
+			this.it_RenumberRows.Text = "order row ids";
+			this.it_RenumberRows.Click += new System.EventHandler(this.RenumberToolStripMenuItemClick);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+			// 
+			// it_RecolorRows
+			// 
+			this.it_RecolorRows.Name = "it_RecolorRows";
+			this.it_RecolorRows.Size = new System.Drawing.Size(155, 22);
+			this.it_RecolorRows.Text = "recolor rows";
+			this.it_RecolorRows.Click += new System.EventHandler(this.RecolorToolStripMenuItemClick);
+			// 
+			// it_AutoCols
+			// 
+			this.it_AutoCols.Name = "it_AutoCols";
+			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
+			this.it_AutoCols.Text = "autosize cols";
+			this.it_AutoCols.Click += new System.EventHandler(this.AutosizeColsToolStripMenuItemClick);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(152, 6);
+			// 
+			// it_freeze1
+			// 
+			this.it_freeze1.Name = "it_freeze1";
+			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.it_freeze1.Size = new System.Drawing.Size(155, 22);
+			this.it_freeze1.Text = "freeze 1st col";
+			this.it_freeze1.Click += new System.EventHandler(this.Freeze1stColToolStripMenuItemClick);
+			// 
+			// it_freeze2
+			// 
+			this.it_freeze2.Name = "it_freeze2";
+			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
+			this.it_freeze2.Size = new System.Drawing.Size(155, 22);
+			this.it_freeze2.Text = "freeze 2nd col";
+			this.it_freeze2.Click += new System.EventHandler(this.Freeze2ndColToolStripMenuItemClick);
+			// 
+			// fontToolStripMenuItem
+			// 
+			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_Font,
+			this.it_CurrentFont});
+			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
+			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fontToolStripMenuItem.Text = "Font";
+			// 
+			// it_Font
+			// 
+			this.it_Font.Name = "it_Font";
+			this.it_Font.Size = new System.Drawing.Size(165, 22);
+			this.it_Font.Text = "Font ... be patient";
+			this.it_Font.Click += new System.EventHandler(this.FontToolStripMenuItemClick);
+			// 
+			// it_CurrentFont
+			// 
+			this.it_CurrentFont.Name = "it_CurrentFont";
+			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
+			this.it_CurrentFont.Text = "current font string";
+			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
 			// 
 			// it_MenuPaths
 			// 
@@ -668,60 +723,6 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(846, 408);
 			this.panel_ColorFill.TabIndex = 3;
-			// 
-			// fontToolStripMenuItem
-			// 
-			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_Font,
-			this.it_CurrentFont});
-			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.fontToolStripMenuItem.Text = "Font";
-			// 
-			// it_Font
-			// 
-			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(165, 22);
-			this.it_Font.Text = "Font ... be patient";
-			this.it_Font.Click += new System.EventHandler(this.FontToolStripMenuItemClick);
-			// 
-			// it_CurrentFont
-			// 
-			this.it_CurrentFont.Name = "it_CurrentFont";
-			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
-			this.it_CurrentFont.Text = "current font string";
-			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
-			// 
-			// it_RenumberRows
-			// 
-			this.it_RenumberRows.Name = "it_RenumberRows";
-			this.it_RenumberRows.Size = new System.Drawing.Size(155, 22);
-			this.it_RenumberRows.Text = "order row ids";
-			this.it_RenumberRows.Click += new System.EventHandler(this.RenumberToolStripMenuItemClick);
-			// 
-			// it_CheckRows
-			// 
-			this.it_CheckRows.Name = "it_CheckRows";
-			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
-			this.it_CheckRows.Text = "test row order";
-			this.it_CheckRows.Click += new System.EventHandler(this.CheckRowOrderToolStripMenuItemClick);
-			// 
-			// it_RecolorRows
-			// 
-			this.it_RecolorRows.Name = "it_RecolorRows";
-			this.it_RecolorRows.Size = new System.Drawing.Size(155, 22);
-			this.it_RecolorRows.Text = "recolor rows";
-			this.it_RecolorRows.Click += new System.EventHandler(this.RecolorToolStripMenuItemClick);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(152, 6);
 			// 
 			// YataForm
 			// 

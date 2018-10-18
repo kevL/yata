@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using yata.Properties;
+
 
 namespace yata
 {
@@ -205,21 +207,51 @@ namespace yata
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
-			var sf           = new StringFormat(StringFormat.GenericDefault);
-//			sf.Alignment     = StringAlignment.Center;
-//			sf.LineAlignment = StringAlignment.Center;
-//			sf.FormatFlags   = StringFormatFlags.NoClip;
-
-			int x = (e.ColumnIndex == -1) ? 11 // row-header
-										  : 1;
-
 			e.PaintBackground(e.ClipBounds, true);
-			e.Graphics.DrawString(Convert.ToString(e.FormattedValue),
+
+			int col = e.ColumnIndex;
+
+			int x;
+
+			if (col != -1)
+			{
+				x = 0;
+
+				if (e.RowIndex == -1)
+				{
+					Bitmap arrow = null;
+					if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
+					{
+						if (col == 0)
+							arrow = Resources.asc_16px;
+					}
+					else if (SortedColumn.Index == col)
+					{
+						arrow = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
+																   : Resources.des_16px;
+					}
+
+					if (arrow != null) // ... stupid compiler.
+						e.Graphics.DrawImage(arrow,
+											 e.CellBounds.X + e.CellBounds.Width - 19,
+											 e.CellBounds.Y + 4);
+				}
+			}
+			else // row-header
+				x = 10;
+
+			TextRenderer.DrawText(e.Graphics,
+								  Convert.ToString(e.FormattedValue),
 								  e.CellStyle.Font,
-								  Brushes.Black,
-								  e.CellBounds.X + x,
-								  e.CellBounds.Y + 4,
-								  sf);
+								  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
+								  e.CellStyle.ForeColor);
+//								  TextFormatFlags.Left
+//			TextRenderer.DrawText(e.Graphics,
+//								  tabPage.Text,
+//								  tabPage.Font,
+//								  tabRect,
+//								  tabPage.ForeColor,
+//								  TextFormatFlags.Left);
 			e.Handled = true;
 		}
 
@@ -870,23 +902,20 @@ namespace yata
 		/// <param name="e"></param>
 		void LastColDisplay(object sender, EventArgs e)
 		{
-			int col = Columns.Count - 1;
-
 			if (_lastColClicked)
 			{
 				if (_lastColDisplay)
 				{
 					_lastColDisplay = false;
-	
 					if (SelectedCells.Count != 0)
-					{
-						HorizontalScrollingOffset += Columns[col].Width;
-					}
+						HorizontalScrollingOffset += Columns[Columns.Count - 1].Width;
 				}
 			}
-			else if (CurrentCell != null && CurrentCell.Selected && CurrentCell.ColumnIndex == col)
+			else if (CurrentCell != null && CurrentCell.Selected)
 			{
-				HorizontalScrollingOffset += Columns[col].Width;
+				int col = Columns.Count - 1;
+				if (CurrentCell.ColumnIndex == col)
+					HorizontalScrollingOffset += Columns[col].Width;
 			}
 		}
 	}

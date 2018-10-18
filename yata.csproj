@@ -71,6 +71,9 @@
   <ItemGroup>
     <Compile Include="CraftInfo.cs" />
     <Compile Include="DraggableTabControl.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TextCopyForm.cs" />
     <Compile Include="TextCopyForm.Designer.cs">
       <DependentUpon>TextCopyForm.cs</DependentUpon>
@@ -87,6 +90,10 @@
     <Compile Include="YataDataGridView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TextCopyForm.resx">
       <DependentUpon>TextCopyForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
