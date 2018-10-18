@@ -44,8 +44,8 @@ namespace yata
 		internal Frozen Freeze
 		{ get; set; }
 
-		bool _forceLastDisplay, _stopLastDisplay;	// set these *only* when clicking a col-header
-													// they do not get reset otherwise.
+		bool _lastColClicked, _lastColDisplay;
+
 
 		/// <summary>
 		/// cTor.
@@ -88,12 +88,14 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Left)
 			{
+				int col = e.ColumnIndex;
+
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)	// Shift+LMB = sort by col
 				{
 					// if this is the first sort on the ID col
 					// sort it twice. Because in a well-formed 2da nothing will happen on the first sort.
 					// (ids are by default Ascending)
-					if (e.ColumnIndex == 0 && SortOrder == SortOrder.None)
+					if (col == 0 && SortOrder == SortOrder.None)
 						base.OnColumnHeaderMouseClick(e);
 
 					base.OnColumnHeaderMouseClick(e);			// -> triggers SortCompare
@@ -102,23 +104,28 @@ namespace yata
 				{
 					bool sel = false;
 
-					foreach (DataGridViewRow row in Rows)
+					int rows = Rows.Count - 1;
+
+					for (int id = 0; id != rows; ++id)
 					{
-						if (!row.Cells[e.ColumnIndex].Selected)
+						if (!Rows[id].Cells[col].Selected)
 						{
 							sel = true; // NOTE: get this before wiping selection.
 							break;
 						}
 					}
 
-					_forceLastDisplay = (sel && e.ColumnIndex == Columns.Count - 1);
-					_stopLastDisplay  = (sel && e.ColumnIndex != Columns.Count - 1);
+					_lastColClicked = (col == Columns.Count - 1);
+					_lastColDisplay = (_lastColClicked && sel);
 
 					if ((ModifierKeys & Keys.Control) != Keys.Control)
 						ClearSelection();
 
-					foreach (DataGridViewRow row in Rows)
-						row.Cells[e.ColumnIndex].Selected = sel;
+					for (int id = 0; id != rows; ++id)
+					{
+						Rows[id].Cells[col].Selected = sel;
+					}
+					_lastColClicked = false;
 				}
 			}
 		}
@@ -291,7 +298,6 @@ namespace yata
 
 				if (lineId > LABELS)
 				{
-//					string[] row = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 					string[] row = ParseLine(line);
 
 					// test for well-formed, consistent IDs
@@ -854,43 +860,33 @@ namespace yata
 		/// it's selected; this workaround ensures that if it is selected it is
 		/// displayed fully.
 		/// NOTE: Cols cannot be selected - all cells in the col are selected
-		/// instead.
+		/// individually instead.
+		/// NOTE: This has to run only if (a) user clicked a cell in the last
+		/// col (ergo there's a valid CurrentCell in the last col) or (b) user
+		/// clicked the col-header (ergo there might not be any CurrentCell but
+		/// the last col has been selected/unselected per OnColumnHeaderMouseClick()).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void LastColDisplay(object sender, EventArgs e)
 		{
-			if (!_stopLastDisplay
-				&&  SelectedCells.Count != 0
-				&& (SelectedRows.Count == 0 || _forceLastDisplay))
+			int col = Columns.Count - 1;
+
+			if (_lastColClicked)
 			{
-				// ensure that no cell in the table is selected (except any in the last col) ->>
-				int rows = Rows   .Count - 2; // don't test the default row at the bottom of the table
-				int cols = Columns.Count - 2; // don't test the last col either
-
-				int col = Columns.Count - 1;
-
-				if (!_forceLastDisplay
-					&& (CurrentCell == null || CurrentCell.ColumnIndex != col))
+				if (_lastColDisplay)
 				{
-					for (int id = 0; id != rows; ++id)
+					_lastColDisplay = false;
+	
+					if (SelectedCells.Count != 0)
 					{
-						for (int cell = 0; cell != cols; ++cell)
-						{
-							if (Rows[id].Cells[cell].Selected)
-								return;
-						}
+						HorizontalScrollingOffset += Columns[col].Width;
 					}
 				}
-
-				for (int cell = 0; cell != SelectedCells.Count; ++cell)
-				{
-					if (SelectedCells[cell].ColumnIndex == col)
-					{
-						HorizontalScrollingOffset += Columns[col].Width;	// NOTE: I doubt this is accurate
-						break;												// but it gets the job done.
-					}
-				}
+			}
+			else if (CurrentCell != null && CurrentCell.Selected && CurrentCell.ColumnIndex == col)
+			{
+				HorizontalScrollingOffset += Columns[col].Width;
 			}
 		}
 	}

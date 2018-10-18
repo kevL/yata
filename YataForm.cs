@@ -1350,7 +1350,7 @@ namespace yata
 						}
 					}
 
-//					if (startId != 0 || startCol != 0) // TODO; tighten exact star/end-cells
+//					if (startId != 0 || startCol != 0) // TODO; tighten exact start/end-cells
 //					{
 					for (id = 0; id != startId + 1; ++id) // quick and dirty wrap ->
 					{
