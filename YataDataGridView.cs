@@ -798,8 +798,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles relabeling the row-headers after selecting a row and
-		/// pressing the Delete key - this does not fire during edit. Also
-		/// handles F3 for find-next.
+		/// pressing the Delete key - this does not fire during edit.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyUp(KeyEventArgs e)
@@ -808,11 +807,6 @@ namespace yata
 			{
 				case Keys.Delete:
 					RelabelRowHeaders();
-					e.Handled = true;
-					break;
-
-				case Keys.F3:
-					_f.ToolStripTextBox1KeyUp(null, null);
 					e.Handled = true;
 					break;
 

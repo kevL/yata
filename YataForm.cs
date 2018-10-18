@@ -97,8 +97,8 @@ namespace yata
 
 			cb_SearchOption.Items.AddRange(new object[]
 			{
-				"search substring",
-				"search wholeword"
+				"find substring",
+				"find wholeword"
 			});
 			cb_SearchOption.SelectedIndex = 0;
 		}
@@ -588,6 +588,16 @@ namespace yata
 
 
 		#region Edit menu
+		void It_SearchClick(object sender, EventArgs e)
+		{
+			tb_Search.Focus();
+		}
+
+		void It_FindnextClick(object sender, EventArgs e)
+		{
+			Search();
+		}
+
 		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null && _table.Rows.Count > 1)
@@ -1265,11 +1275,9 @@ namespace yata
 
 
 		#region Search
-		internal void ToolStripTextBox1KeyUp(object sender, KeyEventArgs e)
+		void Search()
 		{
-			if (_table != null && _table.Rows.Count > 1
-				&& (sender == null
-					|| e.KeyCode == Keys.Enter || e.KeyCode == Keys.F3))
+			if (_table != null && _table.Rows.Count > 1)
 			{
 				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
@@ -1323,12 +1331,10 @@ namespace yata
 			}
 		}
 
-		void ToolStripComboBox1KeyUp(object sender, KeyEventArgs e)
+		void SearchKeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.F3 || e.KeyCode == Keys.Enter)
-			{
-				ToolStripTextBox1KeyUp(null, null);
-			}
+			if (e.KeyCode == Keys.Enter)
+				Search();
 		}
 		#endregion Search
 
