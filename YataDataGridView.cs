@@ -63,13 +63,127 @@ namespace yata
 			AllowUserToResizeRows = false;
 
 			CellValueChanged += CellChanged;
-			SortCompare      += TableSortCompare;
-			Sorted           += TableSortCompared;
 			CellPainting     += PaintCell;
-			SelectionChanged += EnsureLastColDisplayed;
+
+			SelectionChanged += LastColDisplay;
+
+			SortCompare      += TableSort;
+			Sorted           += TableSorted;
 
 			Freeze = Frozen.FreezeOff;
 		}
+
+
+
+		/// <summary>
+		/// Handles clicking a col header. For LMB only.
+		/// LMB selects the col, Ctrl+LMB adds the col to current selection(s).
+		/// Shift+LMB sorts the col.
+		/// NOTE: S for Shift == S for Sort
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				if ((ModifierKeys & Keys.Shift) == Keys.Shift)	// Shift+LMB = sort by col
+				{
+					base.OnColumnHeaderMouseClick(e);			// -> triggers SortCompare
+				}
+				else											// LMB (no Shift) = select col
+				{
+					bool sel = false;
+
+					foreach (DataGridViewRow row in Rows)
+					{
+						if (!row.Cells[e.ColumnIndex].Selected)
+						{
+							sel = true; // NOTE: get this before wiping selection.
+							break;
+						}
+					}
+
+					if ((ModifierKeys & Keys.Control) != Keys.Control)
+						ClearSelection();
+
+					foreach (DataGridViewRow row in Rows)
+						row.Cells[e.ColumnIndex].Selected = sel;
+				}
+			}
+		}
+
+
+#region Sort
+		int _a, _b;
+
+		/// <summary>
+		/// Sorts fields as integers iff they convert to integers and performs
+		/// a secondary sort against their IDs if applicable.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void TableSort(object sender, DataGridViewSortCompareEventArgs e)
+		{
+			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
+				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
+			{
+				e.SortResult = _a.CompareTo(_b);
+				e.Handled = true;
+			}
+
+			if (e.Column != Columns[0] // secondary sort on id ->
+				&& e.CellValue1.ToString() == e.CellValue2.ToString())
+			{
+				if (   Int32.TryParse(Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
+					&& Int32.TryParse(Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
+				{
+					e.SortResult = _a.CompareTo(_b);
+					e.Handled = true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Ensures that the searched-for field is displayed and re-orders the
+		/// row-headers.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void TableSorted(object sender, EventArgs e)
+		{
+			Changed = true;
+
+			int sel = -1;
+
+			if (SelectedRows.Count != 0)
+			{
+				sel = SelectedRows[0].Index;
+			}
+			else if (SelectedCells.Count != 0)
+			{
+				sel = SelectedCells[0].RowIndex;
+			}
+
+			if (sel != -1 && sel < Rows.Count - 1)
+			{
+				int visFirst = FirstDisplayedScrollingRowIndex;
+				if (sel < visFirst)
+				{
+					FirstDisplayedScrollingRowIndex = sel;
+				}
+				else
+				{
+					int visCount = DisplayedRowCount(false);
+					if (sel >= visFirst + visCount)
+					{
+						FirstDisplayedScrollingRowIndex = sel - visCount + 1;
+					}
+				}
+			}
+			RelabelRowHeaders();
+		}
+#endregion Sort
+
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
@@ -111,6 +225,9 @@ namespace yata
 			int quotes =  0;
 			int id     = -1;
 			int lineId = -1;
+
+			// TODO: Test for an even quantity of double-quotes on each line.
+			// ie. Account for the fact that ParseLine() needs to ASSUME that quotes are fairly accurate.
 
 			foreach (string line in lines)
 			{
@@ -335,6 +452,7 @@ namespace yata
 
 //			SizeCols();
 
+
 			_loading = false;
 
 			return true;
@@ -427,7 +545,7 @@ namespace yata
 			var list  = new List<string>();
 			var field = new List<char>();
 
-			bool add = false;
+			bool add      = false;
 			bool inQuotes = false;
 
 			char c;
@@ -435,24 +553,22 @@ namespace yata
 			int posLast = line.Length + 1; // include an extra iteration to get the last field (that has no whitespace after it)
 			for (int pos = 0; pos != posLast; ++pos)
 			{
-				if (add && pos == line.Length)				// hit lineend: make sure to catch the last field
-				{											// if there's no whitespace after it (last fields
-					list.Add(new string(field.ToArray()));	// w/ trailing whitespace are dealt with below)
+				if (pos == line.Length)	// hit lineend -> add the last field
+				{						// if there's no whitespace after it (last fields
+					if (add)			// w/ trailing whitespace are dealt with below)
+					{
+						list.Add(new string(field.ToArray()));
+					}
 				}
-				else if (pos != line.Length)
+				else
 				{
 					c = line[pos];
 
 					if (c == '"' || inQuotes)				// start or continue quotation
 					{
-						add = true;
-						if (inQuotes && c == '"')			// end quotation
-						{
-							inQuotes = false;
-						}
-						else
-							inQuotes = true;
+						inQuotes = (!inQuotes || c != '"');	// end quotation
 
+						add = true;
 						field.Add(c);
 					}
 					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
@@ -535,9 +651,15 @@ namespace yata
 
 
 			RowHeadersWidth = 60;
-//			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+//			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders); // bleh.
 		}
 
+		/// <summary>
+		/// Fires when user commits text to a cell.
+		/// NOTE: Changing the value of a cell will re-fire this event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void CellChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			if (!_loading)
@@ -547,13 +669,13 @@ namespace yata
 				int id  = e.RowIndex;
 				int col = e.ColumnIndex;
 
-				if (id == Rows.Count - 2)
-				{
+				if (id == Rows.Count - 2)	// ie. User created a new row by editing the last
+				{							// row so .NET created a new last row under it.
 					RelabelRowHeaders();
 				}
 
 
-				// checks for invalid fields ->
+				// checks for invalid field contents ->
 
 				object val = Rows[id].Cells[col].Value;
 				if (val == null || String.IsNullOrEmpty(val.ToString()))
@@ -670,7 +792,8 @@ namespace yata
 
 		/// <summary>
 		/// Handles relabeling the row-headers after selecting a row and
-		/// pressing the Delete key - this does not fire during edit.
+		/// pressing the Delete key - this does not fire during edit. Also
+		/// handles F3 for find-next.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyUp(KeyEventArgs e)
@@ -721,78 +844,6 @@ namespace yata
 			base.OnMouseWheel(e);
 		}
 
-
-#region Sort
-		int _a, _b;
-
-		/// <summary>
-		/// Sorts fields as integers iff they convert to integers and performs
-		/// a secondary sort against their IDs if applicable.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void TableSortCompare(object sender, DataGridViewSortCompareEventArgs e)
-		{
-			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
-				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
-			{
-				e.SortResult = _a.CompareTo(_b);
-				e.Handled = true;
-			}
-
-			if (e.Column != Columns[0] // secondary sort on id ->
-				&& e.CellValue1.ToString() == e.CellValue2.ToString())
-			{
-				if (   Int32.TryParse(Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
-					&& Int32.TryParse(Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
-				{
-					e.SortResult = _a.CompareTo(_b);
-					e.Handled = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Ensures that the searched-for field is displayed and re-orders the
-		/// row-headers.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void TableSortCompared(object sender, EventArgs e)
-		{
-			Changed = true;
-
-			int sel = -1;
-
-			if (SelectedRows.Count != 0)
-			{
-				sel = SelectedRows[0].Index;
-			}
-			else if (SelectedCells.Count != 0)
-			{
-				sel = SelectedCells[0].RowIndex;
-			}
-
-			if (sel != -1 && sel < Rows.Count - 1)
-			{
-				int visFirst = FirstDisplayedScrollingRowIndex;
-				if (sel < visFirst)
-				{
-					FirstDisplayedScrollingRowIndex = sel;
-				}
-				else
-				{
-					int visCount = DisplayedRowCount(false);
-					if (sel >= visFirst + visCount)
-					{
-						FirstDisplayedScrollingRowIndex = sel - visCount + 1;
-					}
-				}
-			}
-			RelabelRowHeaders();
-		}
-#endregion Sort
-
 		/// <summary>
 		/// The last col can be partly or basically completely hidden even when
 		/// it's selected; this workaround ensures that if it is selected it is
@@ -800,7 +851,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void EnsureLastColDisplayed(object sender, EventArgs e)
+		void LastColDisplay(object sender, EventArgs e)
 		{
 			if (SelectedCells.Count != 0)
 			{
