@@ -21,17 +21,17 @@ namespace yata
 		:
 			Form
 	{
-#region Fields
+		#region Fields
 		YataDataGridView _table;
 
 		List<string> _copy = new List<string>();
 
 		List<ToolStripItem> _presets = new List<ToolStripItem>();
 		string _initialDir = String.Empty;
-#endregion Fields
+		#endregion Fields
 
 
-#region cTor
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -102,10 +102,10 @@ namespace yata
 			});
 			cb_SearchOption.SelectedIndex = 0;
 		}
-#endregion cTor
+		#endregion cTor
 
 
-#region File menu
+		#region File menu
 		void OpenToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
@@ -463,10 +463,10 @@ namespace yata
 			if ((_initialDir = it.Text) == "clear current")
 				_initialDir = String.Empty;
 		}
-#endregion File menu
+		#endregion File menu
 
 
-#region Context menu
+		#region Context menu
 		void RowHeaderContextMenu(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right
@@ -584,10 +584,10 @@ namespace yata
 			_table.Rows.Remove(_table.SelectedRows[0]);
 			_table.RelabelRowHeaders();
 		}
-#endregion Context menu
+		#endregion Context menu
 
 
-#region Edit menu
+		#region Edit menu
 		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null && _table.Rows.Count > 1)
@@ -711,10 +711,10 @@ namespace yata
 				}
 			}
 		}
-#endregion Edit menu
+		#endregion Edit menu
 
 
-#region Options menu
+		#region Options menu
 		/// <summary>
 		/// Opens an output-box with the current table-font as a string for
 		/// copying to Settings.Cfg if desired.
@@ -787,10 +787,10 @@ namespace yata
 				}
 			}
 		}
-#endregion Options menu
+		#endregion Options menu
 
 
-#region Font
+		#region Font
 		Font _font;
 		bool _fontChanged;
 
@@ -850,10 +850,10 @@ namespace yata
 					_table.AutoResizeColumns();
 			}
 		}
-#endregion Font
+		#endregion Font
 
 
-#region Crafting info
+		#region Crafting info
 		/// <summary>
 		/// Mouseover datacells prints info to the statusbar if Crafting.2da is
 		/// loaded.
@@ -1261,10 +1261,10 @@ namespace yata
 								  it_PathRaces2da,
 								  1);
 		}
-#endregion Crafting info
+		#endregion Crafting info
 
 
-#region Search
+		#region Search
 		internal void ToolStripTextBox1KeyUp(object sender, KeyEventArgs e)
 		{
 			if (_table != null && _table.Rows.Count > 1
@@ -1330,10 +1330,10 @@ namespace yata
 				ToolStripTextBox1KeyUp(null, null);
 			}
 		}
-#endregion Search
+		#endregion Search
 
 
-#region Tabmenu
+		#region Tabmenu
 		void It_tabCloseClick(object sender, EventArgs e)
 		{
 			CloseToolStripMenuItemClick(null, EventArgs.Empty);
@@ -1352,7 +1352,7 @@ namespace yata
 			}
 			e.Cancel = true;
 		}
-#endregion Tabmenu
+		#endregion Tabmenu
 
 
 		internal void TableChanged(bool changed)
@@ -1363,7 +1363,7 @@ namespace yata
 		}
 
 
-#region Events (override)
+		#region Events (override)
 		/// <summary>
 		/// Sends (unhandled) mousewheel events on the Form to the table.
 		/// </summary>
@@ -1373,6 +1373,6 @@ namespace yata
 			if (_table != null)
 				_table.ForceScroll(e);
 		}
-#endregion Events (override)
+		#endregion Events (override)
 	}
 }

@@ -79,7 +79,7 @@ namespace yata
 		/// Handles clicking a col header. For LMB only.
 		/// LMB selects the col, Ctrl+LMB adds the col to current selection(s).
 		/// Shift+LMB sorts the col.
-		/// NOTE: S for Shift == S for Sort
+		/// NOTE: S for Shift ~ S for Sort
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e)
@@ -88,6 +88,12 @@ namespace yata
 			{
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)	// Shift+LMB = sort by col
 				{
+					// if this is the first sort on the ID col
+					// sort it twice. Because in a well-formed 2da nothing will happen on the first sort.
+					// (ids are by default Ascending)
+					if (e.ColumnIndex == 0 && SortOrder == SortOrder.None)
+						base.OnColumnHeaderMouseClick(e);
+
 					base.OnColumnHeaderMouseClick(e);			// -> triggers SortCompare
 				}
 				else											// LMB (no Shift) = select col
@@ -113,7 +119,7 @@ namespace yata
 		}
 
 
-#region Sort
+		#region Sort
 		int _a, _b;
 
 		/// <summary>
@@ -182,7 +188,7 @@ namespace yata
 			}
 			RelabelRowHeaders();
 		}
-#endregion Sort
+		#endregion Sort
 
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
@@ -767,7 +773,7 @@ namespace yata
 		}
 
 
-#region Events (override)
+		#region Events (override)
 		// https://stackoverflow.com/questions/21873361/datagridview-enter-key-event-handling#answer-21882188
 
 		/// <summary>
@@ -836,7 +842,7 @@ namespace yata
 			}
 			return base.ProcessDialogKey(keyData);
 		}
-#endregion Events (override)
+		#endregion Events (override)
 
 
 		internal void ForceScroll(MouseEventArgs e)

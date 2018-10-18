@@ -73,6 +73,9 @@
 		private System.Windows.Forms.Panel panel_ColorFill;
 		private System.Windows.Forms.ContextMenuStrip tabMenu;
 		private System.Windows.Forms.ToolStripMenuItem it_tabClose;
+		private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem findNextToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -162,6 +165,9 @@
 			this.statusbar_label_CraftInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.dialog_Font = new System.Windows.Forms.FontDialog();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.findNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -310,8 +316,11 @@
 			// it_MenuEdit
 			// 
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_CheckRows,
+			this.searchToolStripMenuItem,
+			this.findNextToolStripMenuItem,
+			this.toolStripSeparator1,
 			this.it_RenumberRows,
+			this.it_CheckRows,
 			this.separator_3,
 			this.it_RecolorRows});
 			this.it_MenuEdit.Name = "it_MenuEdit";
@@ -403,6 +412,7 @@
 			// 
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_Search.Font = new System.Drawing.Font("Consolas", 6.75F);
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(120, 18);
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ToolStripTextBox1KeyUp);
@@ -690,6 +700,25 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(846, 408);
 			this.panel_ColorFill.TabIndex = 3;
+			// 
+			// searchToolStripMenuItem
+			// 
+			this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+			this.searchToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+			this.searchToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.searchToolStripMenuItem.Text = "Search";
+			// 
+			// findNextToolStripMenuItem
+			// 
+			this.findNextToolStripMenuItem.Name = "findNextToolStripMenuItem";
+			this.findNextToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+			this.findNextToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.findNextToolStripMenuItem.Text = "Find next";
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
 			// 
 			// YataForm
 			// 
