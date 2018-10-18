@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+//using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -23,7 +23,7 @@ namespace yata
 //			var graphics = Graphics.FromImage(image);
 //			Width = Convert.ToInt32(graphics.MeasureString(text, Font).Width);
 
-			label1.Text = "Current Font (string)"
+			label1.Text = "Current Font"
 						+ Environment.NewLine + Environment.NewLine
 						+ text;
 		}

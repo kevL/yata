@@ -44,6 +44,8 @@ namespace yata
 		internal Frozen Freeze
 		{ get; set; }
 
+		bool _forceLastDisplay, _stopLastDisplay;	// set these *only* when clicking a col-header
+													// they do not get reset otherwise.
 
 		/// <summary>
 		/// cTor.
@@ -108,6 +110,9 @@ namespace yata
 							break;
 						}
 					}
+
+					_forceLastDisplay = (sel && e.ColumnIndex == Columns.Count - 1);
+					_stopLastDisplay  = (sel && e.ColumnIndex != Columns.Count - 1);
 
 					if ((ModifierKeys & Keys.Control) != Keys.Control)
 						ClearSelection();
@@ -828,7 +833,7 @@ namespace yata
 			{
 				int id  = CurrentCell.RowIndex;
 				int col = CurrentCell.ColumnIndex;
-				CurrentCell = this[col, id];
+				CurrentCell = this[col,id];
 
 				EndEdit();
 
@@ -848,17 +853,45 @@ namespace yata
 		/// The last col can be partly or basically completely hidden even when
 		/// it's selected; this workaround ensures that if it is selected it is
 		/// displayed fully.
+		/// NOTE: Cols cannot be selected - all cells in the col are selected
+		/// instead.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void LastColDisplay(object sender, EventArgs e)
 		{
-			if (SelectedCells.Count != 0)
+			if (!_stopLastDisplay
+				&&  SelectedCells.Count != 0
+				&& (SelectedRows.Count == 0 || _forceLastDisplay))
 			{
+				// ensure that no cell in the table is selected (except any in the last col) ->>
+				int rows = Rows   .Count - 2; // don't test the default row at the bottom of the table
+				int cols = Columns.Count - 2; // don't test the last col either
+
 				int col = Columns.Count - 1;
-				if (SelectedCells[0].ColumnIndex == col)
-					HorizontalScrollingOffset += Columns[col].Width;	// NOTE: I highly doubt this is accurate
-			}															// but it gets the job done.
+
+				if (!_forceLastDisplay
+					&& (CurrentCell == null || CurrentCell.ColumnIndex != col))
+				{
+					for (int id = 0; id != rows; ++id)
+					{
+						for (int cell = 0; cell != cols; ++cell)
+						{
+							if (Rows[id].Cells[cell].Selected)
+								return;
+						}
+					}
+				}
+
+				for (int cell = 0; cell != SelectedCells.Count; ++cell)
+				{
+					if (SelectedCells[cell].ColumnIndex == col)
+					{
+						HorizontalScrollingOffset += Columns[col].Width;	// NOTE: I doubt this is accurate
+						break;												// but it gets the job done.
+					}
+				}
+			}
 		}
 	}
 }

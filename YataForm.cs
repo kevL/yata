@@ -165,7 +165,7 @@ namespace yata
 		{
 			if (tabControl.SelectedIndex != -1)
 			{
-				_table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--
+				_table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
 
 				it_MenuPaths.Visible = _table.CraftInfo;
 				panel_ColorFill.Hide();
@@ -478,7 +478,7 @@ namespace yata
 				_table.ClearSelection();
 				_table.Rows[e.RowIndex].Selected = true;
 
-				_table.CurrentCell = _table.Rows[e.RowIndex].Cells[0];
+				_table.CurrentCell = _table[0,e.RowIndex]; //.Rows[e.RowIndex].Cells[0]; // TODO: not req'd; perhaps null CurrentCell
 
 				context_it_Header.Text = "@ id " + e.RowIndex;
 
@@ -1287,11 +1287,23 @@ namespace yata
 				{
 					search = search.ToLower();
 
-					int startId  = _table.CurrentCell.RowIndex;
-					int startCol = _table.CurrentCell.ColumnIndex;
+					int startId;
+					int startCol;
 
-					if (startId  == -1) startId  = 0;
-					if (startCol == -1) startCol = 0;
+					if (_table.CurrentCell != null)
+					{
+						startId  = _table.CurrentCell.RowIndex;
+						startCol = _table.CurrentCell.ColumnIndex;
+
+						if (startId  == -1) startId  = 0;
+						if (startCol == -1) startCol = 0;
+					}
+					else
+					{
+						startId  =
+						startCol = 0;
+					}
+
 
 					object val;
 
@@ -1299,33 +1311,57 @@ namespace yata
 					int col;
 
 					bool start = true;
-					bool stop = false;
 
 					string st;
 
-					for (id = startId; id != _table.Rows.Count - 1 && !stop; ++id)
+					for (id = startId; id != _table.Rows.Count - 1; ++id)
 					{
 						if (start)
 						{
 							start = false;
 							col = startCol + 1;
+
+							if (col == _table.Columns.Count)		// if starting on the last cell of a row
+							{										// jump to the first cell of the next row
+								if (id != _table.Rows.Count - 2)	// -> unless it's the last row (above the default last row)
+								{
+									col = 0;
+									++id;
+								}
+								else
+									return;
+							}
 						}
 						else
 							col = 0;
 
-						if (col == _table.Columns.Count)
-							col = 0;
-
-						for (; col != _table.Columns.Count && !stop; ++col)
+						for (; col != _table.Columns.Count; ++col)
 						{
-							if ((val = _table.Rows[id].Cells[col].Value) != null)
+							if ((val = _table[col,id].Value) != null) //_table.Rows[id].Cells[col]
 							{
 								st = val.ToString().ToLower();
 								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
 									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
 								{
-									_table.CurrentCell = _table.Rows[id].Cells[col];
-									stop = true;
+									_table.CurrentCell = _table[col,id]; //.Rows[id].Cells[col];
+									return;
+								}
+							}
+						}
+					}
+
+					for (id = 0; id != startId + 1; ++id) // quick and dirty wrap ->
+					{
+						for (col = 0; col != _table.Columns.Count; ++col)
+						{
+							if ((val = _table[col,id].Value) != null)
+							{
+								st = val.ToString().ToLower();
+								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
+									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
+								{
+									_table.CurrentCell = _table[col,id];
+									return;
 								}
 							}
 						}
