@@ -146,6 +146,9 @@ namespace yata
 				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 
+				_table.CurrentCell = null;
+				_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+
 				DrawingControl.ResumeDrawing(_table);
 			}
 

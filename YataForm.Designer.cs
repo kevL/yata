@@ -59,7 +59,6 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathDisease2da;
 		private System.Windows.Forms.ToolStripMenuItem it_freeze1;
 		private System.Windows.Forms.ToolStripMenuItem it_freeze2;
-		private System.Windows.Forms.ToolStripSeparator separator_4;
 		private System.Windows.Forms.ToolStripSeparator separator_5;
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpOnHitSpell2da;
 		private System.Windows.Forms.ToolStripMenuItem it_CurrentFont;
@@ -121,7 +120,6 @@
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -348,7 +346,6 @@
 			this.it_RenumberRows,
 			this.toolStripSeparator1,
 			this.it_RecolorRows,
-			this.separator_4,
 			this.it_AutoCols,
 			this.toolStripSeparator2,
 			this.it_freeze1,
@@ -356,11 +353,6 @@
 			this.it_MenuOptions.Name = "it_MenuOptions";
 			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
 			this.it_MenuOptions.Text = "2da Ops";
-			// 
-			// separator_4
-			// 
-			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(152, 6);
 			// 
 			// it_AutoCols
 			// 
@@ -689,15 +681,15 @@
 			// it_Font
 			// 
 			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(190, 22);
+			this.it_Font.Size = new System.Drawing.Size(165, 22);
 			this.it_Font.Text = "Font ... be patient";
 			this.it_Font.Click += new System.EventHandler(this.FontToolStripMenuItemClick);
 			// 
 			// it_CurrentFont
 			// 
 			this.it_CurrentFont.Name = "it_CurrentFont";
-			this.it_CurrentFont.Size = new System.Drawing.Size(190, 22);
-			this.it_CurrentFont.Text = "show current font string";
+			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
+			this.it_CurrentFont.Text = "current font string";
 			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
 			// 
 			// it_RenumberRows
