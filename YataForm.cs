@@ -101,6 +101,10 @@ namespace yata
 				"find wholeword"
 			});
 			cb_SearchOption.SelectedIndex = 0;
+
+
+			// debug ->
+//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\armor.2da");
 		}
 		#endregion cTor
 
@@ -194,15 +198,15 @@ namespace yata
 		/// <param name="e"></param>
 		void TabControl1DrawItem(object sender, DrawItemEventArgs e)
 		{
-			var page = tabControl.TabPages[e.Index];
+			var tab = tabControl.TabPages[e.Index];
 
-//			Color color = (page == tabControl.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work on tabs.
-//														   : Color.Brown;
+//			Color color = (tab == tabControl.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work on tabs.
+//														  : Color.Brown;
 
 			int y;
 
 			FontStyle style;
-			if (page == tabControl.SelectedTab)
+			if (tab == tabControl.SelectedTab)
 			{
 				style = FontStyle.Bold;
 				y = 6;
@@ -213,17 +217,17 @@ namespace yata
 				y = 3;
 			}
 
-			var font = new Font(Font.Name, Font.SizeInPoints - 1);
+			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f);
 				font = new Font(font, style);
 
-			int w = TextRenderer.MeasureText(page.Text, font).Width;
+			int w = TextRenderer.MeasureText(tab.Text, font).Width;
 
 			var pt = new Point(e.Bounds.X + (e.Bounds.Width/2 - w/2),
 							   e.Bounds.Y + y);
 
 
 			TextRenderer.DrawText(e.Graphics,
-								  page.Text,
+								  tab.Text,
 								  font,
 								  pt,
 								  Color.Black);
@@ -336,6 +340,9 @@ namespace yata
 				{
 					AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 					DrawingControl.ResumeDrawing(_table);
+
+					_table.CurrentCell = null;
+					_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
 				}
 				else
 					CloseToolStripMenuItemClick(null, EventArgs.Empty);
@@ -1411,6 +1418,8 @@ namespace yata
 					}
 //					}
 				}
+				// TODO: If only 1 cell is found and user has scrolled off of its display
+				// scroll the table to show it again.
 			}
 		}
 

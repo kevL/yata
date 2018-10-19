@@ -20,6 +20,13 @@ namespace yata
 			FreezeSecondCol
 		}
 
+		enum ColDisplay
+		{
+			DisplayOff,
+			DisplayDone,
+			DisplayReady
+		}
+
 
 		YataForm _f;
 
@@ -46,7 +53,10 @@ namespace yata
 		internal Frozen Freeze
 		{ get; set; }
 
-		bool _lastColClicked, _lastColDisplay;
+		ColDisplay Display
+		{ get; set; }
+
+		int _col;
 
 
 		/// <summary>
@@ -69,7 +79,7 @@ namespace yata
 			CellValueChanged += CellChanged;
 			CellPainting     += PaintCell;
 
-			SelectionChanged += LastColDisplay;
+			SelectionChanged += DisplayCell; // forget it.
 
 			SortCompare      += TableSort;
 			Sorted           += TableSorted;
@@ -90,14 +100,14 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				int col = e.ColumnIndex;
+				_col = e.ColumnIndex; // NOTE: '_col' is reset here only.
 
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)	// Shift+LMB = sort by col
 				{
 					// if this is the first sort on the ID col
 					// sort it twice. Because in a well-formed 2da nothing will happen on the first sort.
 					// (ids are by default Ascending)
-					if (col == 0 && SortOrder == SortOrder.None)
+					if (_col == 0 && SortOrder == SortOrder.None)
 						base.OnColumnHeaderMouseClick(e);
 
 					base.OnColumnHeaderMouseClick(e);			// -> triggers SortCompare
@@ -110,24 +120,78 @@ namespace yata
 
 					for (int id = 0; id != rows; ++id)
 					{
-						if (!Rows[id].Cells[col].Selected)
+						if (!Rows[id].Cells[_col].Selected)
 						{
 							sel = true; // NOTE: get this before wiping selection.
 							break;
 						}
 					}
 
-					_lastColClicked = (col == Columns.Count - 1);
-					_lastColDisplay = (_lastColClicked && sel);
-
-					if ((ModifierKeys & Keys.Control) != Keys.Control)
+					bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
+					if (!ctrl)
 						ClearSelection();
 
-					for (int id = 0; id != rows; ++id)
+					if (sel || ctrl)
 					{
-						Rows[id].Cells[col].Selected = sel;
+						if (sel)
+							Display = ColDisplay.DisplayReady;
+
+						for (int id = 0; id != rows; ++id)
+						{
+							Rows[id].Cells[_col].Selected = sel;
+						}
+
+						Display = ColDisplay.DisplayOff;
 					}
-					_lastColClicked = false;
+				}
+			}
+		}
+
+		/// <summary>
+		/// The last cell can be partly or basically completely hidden even when
+		/// it's selected; this workaround ensures that if it is selected it is
+		/// displayed fully. Also ensures that partly hidden cells to the left
+		/// get fully displayed.
+		/// NOTE: Cols cannot be selected - all cells in the col are selected
+		/// individually instead.
+		/// NOTE: This has to run only if (a) user clicked a cell (ergo there's
+		/// a valid CurrentCell) or (b) user clicked a col-header (ergo there
+		/// might not be any CurrentCell but a col has been selected/unselected
+		/// per OnColumnHeaderMouseClick()).
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void DisplayCell(object sender, EventArgs e)
+		{
+			if (Display == ColDisplay.DisplayReady)
+			{
+				Display = ColDisplay.DisplayDone;
+
+				int colLast = Columns.Count - 1;
+
+				if (_col == colLast)
+				{
+					HorizontalScrollingOffset += Columns[colLast].Width;
+				}
+				else if (_col == FirstDisplayedScrollingColumnIndex
+					&& FirstDisplayedScrollingColumnHiddenWidth != 0)
+				{
+					HorizontalScrollingOffset -= FirstDisplayedScrollingColumnHiddenWidth;
+				}
+			}
+			else if (CurrentCell != null && CurrentCell.Selected)
+			{
+				int colCell = CurrentCell.ColumnIndex;
+				int colLast = Columns.Count - 1;
+
+				if (colCell == colLast)
+				{
+					HorizontalScrollingOffset += Columns[colLast].Width;
+				}
+				else if (colCell == FirstDisplayedScrollingColumnIndex
+					&& FirstDisplayedScrollingColumnHiddenWidth != 0)
+				{
+					HorizontalScrollingOffset -= FirstDisplayedScrollingColumnHiddenWidth;
 				}
 			}
 		}
@@ -210,49 +274,44 @@ namespace yata
 			e.PaintBackground(e.ClipBounds, true);
 
 			int col = e.ColumnIndex;
+			if (col != FirstDisplayedScrollingColumnIndex)	// *snap*
+			{												// note: FirstDisplayedScrollingColumnHiddenWidth (also)
+				int x;
 
-			int x;
-
-			if (col != -1)
-			{
-				x = 0;
-
-				if (e.RowIndex == -1)
+				if (col != -1)
 				{
-					Bitmap arrow = null;
-					if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
-					{
-						if (col == 0)
-							arrow = Resources.asc_16px;
-					}
-					else if (SortedColumn.Index == col)
-					{
-						arrow = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
-																   : Resources.des_16px;
-					}
+					x = 0;
 
-					if (arrow != null) // ... stupid compiler.
-						e.Graphics.DrawImage(arrow,
-											 e.CellBounds.X + e.CellBounds.Width - 19,
-											 e.CellBounds.Y + 4);
+					if (e.RowIndex == -1)
+					{
+						Bitmap arrow = null;
+						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
+						{
+							if (col == 0)
+								arrow = Resources.asc_16px;
+						}
+						else if (SortedColumn.Index == col)
+						{
+							arrow = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
+																	   : Resources.des_16px;
+						}
+
+						if (arrow != null) // ... stupid compiler.
+							e.Graphics.DrawImage(arrow,
+												 e.CellBounds.X + e.CellBounds.Width - 19,
+												 e.CellBounds.Y + 4);
+					}
 				}
-			}
-			else // row-header
-				x = 10;
+				else // row-header
+					x = 10;
 
-			TextRenderer.DrawText(e.Graphics,
-								  Convert.ToString(e.FormattedValue),
-								  e.CellStyle.Font,
-								  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
-								  e.CellStyle.ForeColor);
-//								  TextFormatFlags.Left
-//			TextRenderer.DrawText(e.Graphics,
-//								  tabPage.Text,
-//								  tabPage.Font,
-//								  tabRect,
-//								  tabPage.ForeColor,
-//								  TextFormatFlags.Left);
-			e.Handled = true;
+				TextRenderer.DrawText(e.Graphics,
+									  Convert.ToString(e.FormattedValue),
+									  e.CellStyle.Font,
+									  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
+									  e.CellStyle.ForeColor);
+				e.Handled = true;
+			}
 		}
 
 
@@ -826,17 +885,31 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (e.KeyData == Keys.Enter)
+			switch (e.KeyData)
 			{
-				if (SelectedCells[0] != null)
-					CurrentCell = SelectedCells[0];
+				case Keys.Enter:
+					if (SelectedCells[0] != null)
+						CurrentCell = SelectedCells[0];
 
-				if (CurrentCell != null)
-					BeginEdit(true);
+					if (CurrentCell != null)
+						BeginEdit(true);
 
-				e.Handled = true;
+					e.Handled = true;
+					break;
+
+				case Keys.Escape:
+					CurrentCell = null;
+					for (int cell = 0; cell != SelectedCells.Count; ++cell)
+					{
+						SelectedCells[cell].Selected = false;
+					}
+					e.Handled = true;
+					break;
+
+				default:
+					base.OnKeyDown(e);
+					break;
 			}
-			base.OnKeyDown(e);
 		}
 
 		/// <summary>
@@ -885,38 +958,6 @@ namespace yata
 		internal void ForceScroll(MouseEventArgs e)
 		{
 			base.OnMouseWheel(e);
-		}
-
-		/// <summary>
-		/// The last col can be partly or basically completely hidden even when
-		/// it's selected; this workaround ensures that if it is selected it is
-		/// displayed fully.
-		/// NOTE: Cols cannot be selected - all cells in the col are selected
-		/// individually instead.
-		/// NOTE: This has to run only if (a) user clicked a cell in the last
-		/// col (ergo there's a valid CurrentCell in the last col) or (b) user
-		/// clicked the col-header (ergo there might not be any CurrentCell but
-		/// the last col has been selected/unselected per OnColumnHeaderMouseClick()).
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void LastColDisplay(object sender, EventArgs e)
-		{
-			if (_lastColClicked)
-			{
-				if (_lastColDisplay)
-				{
-					_lastColDisplay = false;
-					if (SelectedCells.Count != 0)
-						HorizontalScrollingOffset += Columns[Columns.Count - 1].Width;
-				}
-			}
-			else if (CurrentCell != null && CurrentCell.Selected)
-			{
-				int col = Columns.Count - 1;
-				if (CurrentCell.ColumnIndex == col)
-					HorizontalScrollingOffset += Columns[col].Width;
-			}
 		}
 	}
 }
