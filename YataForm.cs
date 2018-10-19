@@ -51,6 +51,13 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
+
+			int x = -1,
+				y = -1,
+				w =  0,
+				h =  0;
+			int result;
+
 			// load an Optional manual settings file
 			string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
 			if (File.Exists(pathCfg))
@@ -91,9 +98,50 @@ namespace yata
 								preset.Click += PresetClick;
 							}
 						}
+						else if (line.StartsWith("x=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+								&& Int32.TryParse(line, out result))
+							{
+								x = result;
+							}
+						}
+						else if (line.StartsWith("y=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+								&& Int32.TryParse(line, out result))
+							{
+								y = result;
+							}
+						}
+						else if (line.StartsWith("w=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+								&& Int32.TryParse(line, out result))
+							{
+								w = result;
+							}
+						}
+						else if (line.StartsWith("h=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+								&& Int32.TryParse(line, out result))
+							{
+								h = result;
+							}
+						}
 					}
 				}
 			}
+
+			if (x != -1 && y != -1)
+			{
+				StartPosition = FormStartPosition.Manual;
+				Location = new Point(x,y);
+			}
+
+			if (w != 0 && h != 0) ClientSize = new Size(w,h);
+
 
 			cb_SearchOption.Items.AddRange(new object[]
 			{
