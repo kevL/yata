@@ -104,7 +104,7 @@ namespace yata
 
 
 			// debug ->
-//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\armor.2da");
+			//CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\armor.2da");
 		}
 		#endregion cTor
 
@@ -343,6 +343,9 @@ namespace yata
 
 					_table.CurrentCell = null;
 					_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+
+					_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+					_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 				}
 				else
 					CloseToolStripMenuItemClick(null, EventArgs.Empty);
@@ -801,50 +804,44 @@ namespace yata
 
 		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null)
+			if (_table != null && _table.Columns.Count > 1)
 			{
-				if (_table.Columns.Count > 1)
+				if (_table.Columns.Count > 2)
 				{
-					if (_table.Columns.Count > 2)
-					{
-						it_freeze2.Checked = false; // first toggle the freeze2 col off
-						_table.Columns[2].Frozen = false;
-					}
-
-					if (!it_freeze1.Checked)
-					{
-						_table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
-					}
-					else
-						_table.Freeze = YataDataGridView.Frozen.FreezeOff;
-
-					it_freeze1.Checked = // then do the freeze1 col
-					_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+					it_freeze2.Checked = false; // first toggle the freeze2 col off
+					_table.Columns[2].Frozen = false;
 				}
+
+				if (!it_freeze1.Checked)
+				{
+					_table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
+				}
+				else
+					_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+
+				it_freeze1.Checked = // then do the freeze1 col
+				_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
 			}
 		}
 
 		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null)
+			if (_table != null && _table.Columns.Count > 1)
 			{
-				if (_table.Columns.Count > 1)
+				it_freeze1.Checked = false; // first toggle the freeze1 col off
+				_table.Columns[1].Frozen = false;
+
+				if (_table.Columns.Count > 2)
 				{
-					it_freeze1.Checked = false; // first toggle the freeze1 col off
-					_table.Columns[1].Frozen = false;
-
-					if (_table.Columns.Count > 2)
+					if (!it_freeze2.Checked)
 					{
-						if (!it_freeze2.Checked)
-						{
-							_table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
-						}
-						else
-							_table.Freeze = YataDataGridView.Frozen.FreezeOff;
-
-						it_freeze2.Checked = // then do the freeze2 col
-						_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+						_table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
 					}
+					else
+						_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+
+					it_freeze2.Checked = // then do the freeze2 col
+					_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 				}
 			}
 		}
