@@ -196,19 +196,60 @@ namespace yata
 		{
 			var page = tabControl.TabPages[e.Index];
 
-			FontStyle style = (page == tabControl.SelectedTab) ? FontStyle.Bold
-															   : FontStyle.Regular;
+//			Color color = (page == tabControl.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work on tabs.
+//														   : Color.Brown;
+
+			int y;
+
+			FontStyle style;
+			if (page == tabControl.SelectedTab)
+			{
+				style = FontStyle.Bold;
+				y = 6;
+			}
+			else
+			{
+				style = FontStyle.Regular;
+				y = 3;
+			}
+
+			var font = new Font(Font.Name, Font.SizeInPoints - 1);
+				font = new Font(font, style);
+
+			int w = TextRenderer.MeasureText(page.Text, font).Width;
+
+			var pt = new Point(e.Bounds.X + (e.Bounds.Width/2 - w/2),
+							   e.Bounds.Y + y);
+
+
+			TextRenderer.DrawText(e.Graphics,
+								  page.Text,
+								  font,
+								  pt,
+								  Color.Black);
+
+
+/*			var rect = e.Bounds;
+			if (page == tabControl.SelectedTab)
+			{
+				style = FontStyle.Bold;
+				rect.Y -= 4;
+			}
+			else
+			{
+				style = FontStyle.Regular;
+				rect.Y += 1;
+			}
 			var font = new Font(Font, style);
 
 			var sf           = new StringFormat();
 			sf.Alignment     = StringAlignment.Center;
 			sf.LineAlignment = StringAlignment.Far;
-
 			e.Graphics.DrawString(page.Text,
 								  font,
 								  Brushes.Black,
-								  e.Bounds,
-								  sf);
+								  rect,
+								  sf); */
 		}
 
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
