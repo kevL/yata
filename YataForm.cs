@@ -125,6 +125,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// IMPORTANT: Assumes 'pfe' is VALID.
+		/// </summary>
+		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
 			panel_ColorFill.Show();

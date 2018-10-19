@@ -274,8 +274,9 @@ namespace yata
 			e.PaintBackground(e.ClipBounds, true);
 
 			int col = e.ColumnIndex;
-			if (col != FirstDisplayedScrollingColumnIndex)	// *snap*
-			{												// note: FirstDisplayedScrollingColumnHiddenWidth (also)
+//			if (col != FirstDisplayedScrollingColumnIndex) // *snap*
+//				|| FirstDisplayedScrollingColumnHiddenWidth == 0)
+			{
 				int x;
 
 				if (col != -1)
@@ -284,22 +285,22 @@ namespace yata
 
 					if (e.RowIndex == -1)
 					{
-						Bitmap arrow = null;
+						Bitmap sort = null;
 						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
 						{
 							if (col == 0)
-								arrow = Resources.asc_16px;
+								sort = Resources.asc_16px;
 						}
 						else if (SortedColumn.Index == col)
 						{
-							arrow = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
-																	   : Resources.des_16px;
+							sort = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
+																	  : Resources.des_16px;
 						}
 
-						if (arrow != null) // ... stupid compiler.
-							e.Graphics.DrawImage(arrow,
+						if (sort != null)
+							e.Graphics.DrawImage(sort,
 												 e.CellBounds.X + e.CellBounds.Width - 19,
-												 e.CellBounds.Y + 4);
+												 e.CellBounds.Y + 3);
 					}
 				}
 				else // row-header
@@ -310,8 +311,17 @@ namespace yata
 									  e.CellStyle.Font,
 									  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
 									  e.CellStyle.ForeColor);
-				e.Handled = true;
+
+
+				// TODO: for the encore repaint the row-header col and all frozen cols.
+				if (col >= FirstDisplayedScrollingColumnIndex
+					&& e.RowIndex >= FirstDisplayedScrollingRowIndex
+					&& e.RowIndex <= FirstDisplayedScrollingRowIndex + DisplayedRowCount(true))
+				{
+					
+				}
 			}
+			e.Handled = true;
 		}
 
 
