@@ -19,7 +19,7 @@ namespace yata
 
 		YataForm _f;
 		Font _fontCached;
-		bool _load;
+		bool _load, _dirty;
 
 		/// <summary>
 		/// cTor.
@@ -68,7 +68,10 @@ namespace yata
 			if (idFont != -1)
 				list_Font.SelectedIndex = idFont;
 			else
+			{
+				_dirty = true;
 				list_Font.SelectedIndex = 0;
+			}
 
 			list_Size.Items.AddRange(new object[]
 			{
@@ -79,30 +82,47 @@ namespace yata
 
 			if (idFont != -1)
 				tb_Size.Text = _fontCached.SizeInPoints.ToString();
+			else
+				_dirty = true;
 
+			_load = false;
 
 			lbl_Example.Text = EXAMPLE;
 		}
 
 
 
+		bool _applied;
+
 		void btnOk_click(object sender, EventArgs e)
 		{
-			_f.Font = lbl_Example.Font;
-			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			if (!_applied && _dirty)
+			{
+				_f.Font = lbl_Example.Font;
+				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			}
 			Close();
 		}
 
 		void btnApply_click(object sender, EventArgs e)
 		{
-			_f.Font = lbl_Example.Font;
-			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			if (_dirty)
+			{
+				_dirty = false;
+				_applied = true;
+
+				_f.Font = lbl_Example.Font;
+				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			}
 		}
 
 		void btnCancel_click(object sender, EventArgs e)
 		{
-			_f.Font = _fontCached;
-			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			if (_applied)
+			{
+				_f.Font = _fontCached;
+				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			}
 			Close();
 		}
 
@@ -136,6 +156,8 @@ namespace yata
 
 		void fontList_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			_dirty |= !_load;
+
 			list_Style.Items.Clear();
 
 			var styleLoad = _fontCached.Style;
@@ -153,10 +175,7 @@ namespace yata
 					{
 						++idStyleTest;
 						if (style == styleLoad)
-						{
-							_load = false; // not needed anymore.
 							idStyle = idStyleTest;
-						}
 					}
 					list_Style.Items.Add(style);
 				}
@@ -188,6 +207,7 @@ namespace yata
 
 		void fontStyle_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			_dirty |= !_load;
 			SetExampleText();
 		}
 
@@ -215,6 +235,7 @@ namespace yata
 
 		void fontSize_TextChanged(object sender, EventArgs e)
 		{
+			_dirty |= !_load;
 			SetExampleText();
 		}
 
@@ -231,8 +252,6 @@ namespace yata
 
 					lbl_Example.Font = new Font(_families[list_Font.SelectedIndex].Name,
 												size, style);
-
-					lbl_Example.Refresh();
 				}
 			}
 		}
