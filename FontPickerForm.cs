@@ -15,11 +15,13 @@ namespace yata
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
 		List<FontFamily> _families = new List<FontFamily>();
-		List<Font>       _fonts    = new List<Font>(); // will be disposed below
+		List<Font>       _fonts    = new List<Font>(); // fonts will be disposed below
 
 		YataForm _f;
 		Font _fontCached;
-		bool _load, _dirty;
+		bool
+			_load,
+			_dirty; // ie. displayed font and its characteristics have changed from the start-font's
 
 		/// <summary>
 		/// cTor.
@@ -34,8 +36,8 @@ namespace yata
 
 //			Font = _f.Font;
 
-			int idFont     = -1; // for showing the start-font's characteristics
-			int idFontTest = -1; // in the lists
+			int fontStart  = -1; // for showing the start-font's characteristics
+			int fontStartT = -1; // in the lists
 
 			Font font;
 			foreach (var family in FontFamily.Families)
@@ -47,7 +49,7 @@ namespace yata
 					if (styleTest != FontStyle.Strikeout && styleTest != FontStyle.Underline
 						&& family.IsStyleAvailable(styleTest))
 					{
-						style = styleTest;
+						style = styleTest; // NOTE: not all fonts have fontstyle Regular.
 						break;
 					}
 				}
@@ -55,18 +57,19 @@ namespace yata
 				if (style != null
 					&& (font = new Font(family, 10, style.Value)) != null) // WARNING: 10pts is way too big for some fonts.
 				{
-					++idFontTest;
+					++fontStartT;
 					if (font.Name == _fontCached.Name)
-						idFont = idFontTest;
+						fontStart = fontStartT;
 
 					_families.Add(family);
-					_fonts.Add(font); // is purely for Disposal.
 					list_Font.Items.Add(font);
+
+					_fonts.Add(font); // is purely for Disposal.
 				}
 			}
 
-			if (idFont != -1)
-				list_Font.SelectedIndex = idFont;
+			if (fontStart != -1)
+				list_Font.SelectedIndex = fontStart;
 			else
 			{
 				_dirty = true;
@@ -80,7 +83,7 @@ namespace yata
 			});
 			list_Size.SelectedIndex = 4; // 10pt
 
-			if (idFont != -1)
+			if (fontStart != -1)
 				tb_Size.Text = _fontCached.SizeInPoints.ToString();
 			else
 				_dirty = true;
@@ -108,7 +111,7 @@ namespace yata
 		{
 			if (_dirty)
 			{
-				_dirty = false;
+				_dirty   = false;
 				_applied = true;
 
 				_f.Font = lbl_Example.Font;
@@ -161,8 +164,8 @@ namespace yata
 			list_Style.Items.Clear();
 
 			var styleLoad = _fontCached.Style;
-			int idStyle     = -1;
-			int idStyleTest = -1;
+			int idStyle   = -1;
+			int idStyleT  = -1;
 
 			var family = _families[list_Font.SelectedIndex];
 
@@ -173,9 +176,9 @@ namespace yata
 				{
 					if (_load)
 					{
-						++idStyleTest;
+						++idStyleT;
 						if (style == styleLoad)
-							idStyle = idStyleTest;
+							idStyle = idStyleT;
 					}
 					list_Style.Items.Add(style);
 				}
@@ -219,7 +222,6 @@ namespace yata
 				e.DrawBackground();
 				e.DrawFocusRectangle();
 
-				logfile.Log(list_Size.Items[e.Index].ToString());
 				TextRenderer.DrawText(e.Graphics,
 									  list_Size.Items[e.Index].ToString(),
 									  Font,
@@ -249,7 +251,6 @@ namespace yata
 					&& size > 0)
 				{
 					var style = (FontStyle)list_Style.SelectedItem;
-
 					lbl_Example.Font = new Font(_families[list_Font.SelectedIndex].Name,
 												size, style);
 				}
@@ -263,7 +264,7 @@ namespace yata
 		/// </summary>
 		void DisposeFonts()
 		{
-			foreach (Font font in _fonts)
+			foreach (var font in _fonts)
 				font.Dispose();
 		}
 	}
