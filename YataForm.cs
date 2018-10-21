@@ -738,7 +738,10 @@ namespace yata
 		{
 			Search();
 		}
+		#endregion Edit menu
 
+
+		#region 2da Ops menu
 		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null && _table.Rows.Count > 1)
@@ -862,26 +865,6 @@ namespace yata
 				}
 			}
 		}
-		#endregion Edit menu
-
-
-		#region Options menu
-		/// <summary>
-		/// Opens an output-box with the current table-font as a string for
-		/// copying to Settings.Cfg if desired.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var f = new TextCopyForm();
-			f.Font = Font;
-
-			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			f.SetText("font=" + tc.ConvertToString(Font));
-
-			f.ShowDialog();
-		}
 
 		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -932,76 +915,33 @@ namespace yata
 				}
 			}
 		}
-		#endregion Options menu
+		#endregion 2da Ops menu
 
 
-		#region Font
-		Font _font;
-		bool _fontChanged;
-
-		bool _fontWarned;
-
+		#region Font menu
 		void itClick_Font(object sender, EventArgs e)
 		{
 			var f = new FontPickerForm(this);
 			f.ShowDialog();
 		}
 
-		void FontToolStripMenuItemClick(object sender, EventArgs e)
+		/// <summary>
+		/// Opens an output-box with the current table-font as a string for
+		/// copying to Settings.Cfg if desired.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_fontWarned
-				|| MessageBox.Show("Be patient – changing the font on a table with several"
-								   + " thousand rows can take several seconds or longer."
-								   + Environment.NewLine + Environment.NewLine
-								   + "Further, only legitimately valid TrueType fonts are"
-								   + " indeed valid. There are fonts that masquerade as TrueType"
-								   + " but are not valid – such fonts will crash the application."
-								   + " You should cancel and save any progress first if you're"
-								   + " unsure about a font that you may apply or okay in the"
-								   + " Font Dialog that appears if you choose to proceed."
-								   + Environment.NewLine + Environment.NewLine + Environment.NewLine
-								   + "– this warning will not be shown again during this run of"
-								   + " the application.",
-								   "beware, Grasshoppar",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button1) == DialogResult.OK)
-			{
-				_fontChanged = false;
+			var f = new TextCopyForm();
+			f.Font = Font;
 
-				_font            =
-				dialog_Font.Font = Font;
+			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+			f.SetText("font=" + tc.ConvertToString(Font));
 
-				if (dialog_Font.ShowDialog() == DialogResult.OK)
-				{
-					if (!Font.Equals(dialog_Font.Font))
-					{
-						Font = dialog_Font.Font;
-						if (_table != null)
-							_table.AutoResizeColumns();
-					}
-				}
-				else if (_fontChanged)
-				{
-					Font = _font;
-					if (_table != null)
-						_table.AutoResizeColumns();
-				}
-			}
-			_fontWarned = true;
+			f.ShowDialog();
 		}
-
-		void FontDialog1Apply(object sender, EventArgs e)
-		{
-			if (!Font.Equals(dialog_Font.Font))
-			{
-				_fontChanged = true;
-				Font = dialog_Font.Font;
-				if (_table != null)
-					_table.AutoResizeColumns();
-			}
-		}
-		#endregion Font
+		#endregion Font menu
 
 
 		#region Crafting info

@@ -49,8 +49,6 @@
 		private System.Windows.Forms.ToolStripTextBox tb_Search;
 		private System.Windows.Forms.ToolStripComboBox cb_SearchOption;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuOptions;
-		private System.Windows.Forms.ToolStripMenuItem it_Font0;
-		private System.Windows.Forms.FontDialog dialog_Font;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSkills2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathAll;
 		private System.Windows.Forms.ToolStripMenuItem it_PathRaces2da;
@@ -132,9 +130,8 @@
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Font0 = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -168,7 +165,6 @@
 			this.statusbar = new System.Windows.Forms.StatusStrip();
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_CraftInfo = new System.Windows.Forms.ToolStripStatusLabel();
-			this.dialog_Font = new System.Windows.Forms.FontDialog();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
@@ -431,19 +427,18 @@
 			// fontToolStripMenuItem
 			// 
 			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_Font0,
-			this.it_CurrentFont,
-			this.it_Font});
+			this.it_Font,
+			this.it_CurrentFont});
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
 			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fontToolStripMenuItem.Text = "Font";
 			// 
-			// it_Font0
+			// it_Font
 			// 
-			this.it_Font0.Name = "it_Font0";
-			this.it_Font0.Size = new System.Drawing.Size(165, 22);
-			this.it_Font0.Text = "Font ... be patient";
-			this.it_Font0.Click += new System.EventHandler(this.FontToolStripMenuItemClick);
+			this.it_Font.Name = "it_Font";
+			this.it_Font.Size = new System.Drawing.Size(165, 22);
+			this.it_Font.Text = "Font ... be patient";
+			this.it_Font.Click += new System.EventHandler(this.itClick_Font);
 			// 
 			// it_CurrentFont
 			// 
@@ -451,13 +446,6 @@
 			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
 			this.it_CurrentFont.Text = "current font string";
 			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
-			// 
-			// it_Font
-			// 
-			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(165, 22);
-			this.it_Font.Text = "Font ...";
-			this.it_Font.Click += new System.EventHandler(this.itClick_Font);
 			// 
 			// it_MenuPaths
 			// 
@@ -715,15 +703,6 @@
 			this.statusbar_label_CraftInfo.Size = new System.Drawing.Size(681, 17);
 			this.statusbar_label_CraftInfo.Spring = true;
 			this.statusbar_label_CraftInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// dialog_Font
-			// 
-			this.dialog_Font.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.dialog_Font.MaxSize = 18;
-			this.dialog_Font.MinSize = 8;
-			this.dialog_Font.ShowApply = true;
-			this.dialog_Font.ShowColor = true;
-			this.dialog_Font.Apply += new System.EventHandler(this.FontDialog1Apply);
 			// 
 			// panel_ColorFill
 			// 
