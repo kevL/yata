@@ -71,6 +71,10 @@
   <ItemGroup>
     <Compile Include="CraftInfo.cs" />
     <Compile Include="DraggableTabControl.cs" />
+    <Compile Include="FontPickerForm.cs" />
+    <Compile Include="FontPickerForm.Designer.cs">
+      <DependentUpon>FontPickerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
@@ -90,6 +94,9 @@
     <Compile Include="YataDataGridView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FontPickerForm.resx">
+      <DependentUpon>FontPickerForm.Designer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

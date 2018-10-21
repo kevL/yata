@@ -262,17 +262,50 @@ namespace yata
 			FontStyle style;
 			if (tab == tabControl.SelectedTab)
 			{
-				style = FontStyle.Bold;
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
+				{
+					if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Underline))
+					{
+						if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
+						{
+							foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+							{
+								if (Font.FontFamily.IsStyleAvailable(styleTest))
+								{
+									style = styleTest;
+									break;
+								}
+							}
+						}
+					}
+				}
+
 				y = 6;
 			}
 			else
 			{
-				style = FontStyle.Regular;
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Regular))
+				{
+					if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
+					{
+						if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
+						{
+							foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+							{
+								if (Font.FontFamily.IsStyleAvailable(styleTest))
+								{
+									style = styleTest;
+									break;
+								}
+							}
+						}
+					}
+				}
+
 				y = 2;
 			}
 
-			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f);
-				font = new Font(font, style);
+			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
 
 			int w = TextRenderer.MeasureText(tab.Text, font).Width;
 
@@ -850,7 +883,7 @@ namespace yata
 			f.ShowDialog();
 		}
 
-		void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
+		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			if (_table != null)
 				_table.AutoResizeColumns();
@@ -907,6 +940,12 @@ namespace yata
 		bool _fontChanged;
 
 		bool _fontWarned;
+
+		void itClick_Font(object sender, EventArgs e)
+		{
+			var f = new FontPickerForm(this);
+			f.ShowDialog();
+		}
 
 		void FontToolStripMenuItemClick(object sender, EventArgs e)
 		{
