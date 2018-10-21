@@ -244,13 +244,8 @@ namespace yata
 		/// </summary>
 		void DisposeFonts()
 		{
-			if (_fonts != null)
-			{
-				foreach (Font font in _fonts)
-					font.Dispose();
-
-				_fonts = null;
-			}
+			foreach (Font font in _fonts)
+				font.Dispose();
 		}
 	}
 }
