@@ -29,8 +29,6 @@ namespace yata
 			_f = f;
 			_fontCached = _f.Font;
 
-			list_Font.Items.Clear(); // ... stop drawing listbox fonts 3 times.
-
 			Font font;
 			foreach (var family in FontFamily.Families)
 			{
