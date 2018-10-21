@@ -52,11 +52,9 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
-			int x = -1,
-				y = -1,
-				w =  0,
-				h =  0;
 			int result;
+			int x,y,w,h;
+			x = y = w = h = -1;
 
 			// load an Optional manual settings file
 			string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
@@ -134,13 +132,17 @@ namespace yata
 				}
 			}
 
-			if (x != -1 && y != -1)
+			if (x != -1 || y != -1)
 			{
 				StartPosition = FormStartPosition.Manual;
+				if (x == -1) x = Left;
+				if (y == -1) y = Top;
 				Location = new Point(x,y);
 			}
 
-			if (w != 0 && h != 0) ClientSize = new Size(w,h);
+			if (w == -1) w = Width;
+			if (h == -1) h = Height;
+			ClientSize = new Size(w,h);
 
 
 			cb_SearchOption.Items.AddRange(new object[]
@@ -266,7 +268,7 @@ namespace yata
 			else
 			{
 				style = FontStyle.Regular;
-				y = 3;
+				y = 2;
 			}
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f);
@@ -274,7 +276,7 @@ namespace yata
 
 			int w = TextRenderer.MeasureText(tab.Text, font).Width;
 
-			var pt = new Point(e.Bounds.X + (e.Bounds.Width/2 - w/2),
+			var pt = new Point(e.Bounds.X + (e.Bounds.Width - w) / 2,
 							   e.Bounds.Y + y);
 
 
@@ -1375,6 +1377,7 @@ namespace yata
 
 
 		#region Search
+		// TODO: option to search selected cells (excluding unselected)
 		void Search()
 		{
 			if (_table != null && _table.Rows.Count > 1)

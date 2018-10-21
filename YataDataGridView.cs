@@ -77,16 +77,55 @@ namespace yata
 			AllowUserToResizeRows = false;
 
 			CellValueChanged += CellChanged;
-			CellPainting     += PaintCell;
+//			CellPainting     += PaintCell;
 
-			SelectionChanged += DisplayCell; // forget it.
+			SelectionChanged += HoriscrollCell; // forget it.
 
 			SortCompare      += TableSort;
 			Sorted           += TableSorted;
 
+//			Paint += doPaint;
+
 			Freeze = Frozen.FreezeOff;
 		}
 
+
+/*		protected override void OnPaint(PaintEventArgs e)
+		{
+			Brush brush = Brushes.AliceBlue;
+			Region region = e.Graphics.Clip;
+			e.Graphics.FillRegion(brush, region);
+
+			// TODO: for the encore repaint the row-header col and all frozen cols.
+			// NOTE: Only needs to be done when de-selecting a col.
+
+			for (int row = 0; row != Rows.Count - 2; ++row)
+			{
+				var cell = Rows[row].Cells[0]; // id col
+				object val = cell.Value;
+				if (val != null)
+				{
+					TextRenderer.DrawText(e.Graphics,
+										  val.ToString(),
+										  cell.Style.Font,
+										  new Point(cell.ContentBounds.X, cell.ContentBounds.Y),
+										  cell.Style.ForeColor);
+				}
+			}
+
+			base.OnPaint(e);
+		} */
+
+/*		void doPaint(object sender, PaintEventArgs e)
+		{
+			logfile.Log("doPaint()");
+
+			TextRenderer.DrawText(e.Graphics,
+								  Convert.ToString(e.FormattedValue),
+								  e.CellStyle.Font,
+								  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
+								  e.CellStyle.ForeColor);
+		} */
 
 
 		/// <summary>
@@ -127,22 +166,94 @@ namespace yata
 						}
 					}
 
+					Display = ColDisplay.DisplayReady;
+
+//					DrawingControl.SuspendDrawing(this);
+//					SuspendLayout();
+					//int offset = HorizontalScrollingOffset;
+//					Columns[0].Frozen = false;
+
+
 					bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
 					if (!ctrl)
-						ClearSelection();
+						ClearSelection(); // NOTE: This fires SelectionChanged->DisplayCell only *once*
 
 					if (sel || ctrl)
 					{
-						if (sel)
-							Display = ColDisplay.DisplayReady;
+//						if (sel) Display = ColDisplay.DisplayReady;
 
 						for (int id = 0; id != rows; ++id)
 						{
 							Rows[id].Cells[_col].Selected = sel;
 						}
 
-						Display = ColDisplay.DisplayOff;
+//						Display = ColDisplay.DisplayOff;
 					}
+
+					Display = ColDisplay.DisplayOff;
+
+
+					//_f.Refresh();
+
+					//Rows[0].Cells[0].Value = "";
+
+//					var cell = Rows[0].Cells[0];
+//					cell.Selected = !cell.Selected;
+//					cell.Selected = !cell.Selected;
+
+					//var r = new Rectangle(0, 0, Width, Height);
+					//Invalidate(r);
+					//Update();
+
+//					Columns[0].Frozen = true;
+					//HorizontalScrollingOffset = offset;
+					//ResumeLayout();
+//					DrawingControl.ResumeDrawing(this);
+
+					//PerformLayout();
+					//RelabelRowHeaders(); // no.
+
+					//HorizontalScrollingOffset -= 1; // no.
+					//HorizontalScrollingOffset += 1;
+
+					//Invalidate();	// no.
+					//Update();		// no.
+					//Refresh();	// no. All together no.
+
+					/* for (int row = 0; row != Rows.Count - 2; ++row) 
+					{
+						Rows[row].Cells[0] -> raise OnPaint or something
+						Invalidate();
+						Update();
+						Refresh();
+					} */
+					//Visible = false;
+					//Visible = true;
+
+//					_f.Width += 1; // no.
+//					Location = new Point(Location.X + 1, Location.Y + 1); // no.
+
+/*					int cols = Columns.Count;
+					var row = new string[cols]; // ... no.
+					for (int col = 0; col != cols; ++col)
+					{
+						row[col] = Constants.Stars;
+					}
+					Rows.Insert(Rows.Count - 1, row);
+					Rows.Remove(Rows[Rows.Count - 2]); */
+
+
+					// TODO: for the encore repaint the row-header col and all frozen cols.
+					// NOTE: Only needs to be done when de-selecting a col.
+/*					if (!sel)
+					{
+						if (_col >= FirstDisplayedScrollingColumnIndex
+							&& e.RowIndex >= FirstDisplayedScrollingRowIndex
+							&& e.RowIndex <= FirstDisplayedScrollingRowIndex + DisplayedRowCount(true))
+						{
+							
+						}
+					} */
 				}
 			}
 		}
@@ -161,7 +272,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void DisplayCell(object sender, EventArgs e)
+		void HoriscrollCell(object sender, EventArgs e)
 		{
 			if (Display == ColDisplay.DisplayReady)
 			{
@@ -179,12 +290,12 @@ namespace yata
 					HorizontalScrollingOffset -= FirstDisplayedScrollingColumnHiddenWidth;
 				}
 			}
-			else if (CurrentCell != null && CurrentCell.Selected)
+			else if (CurrentCell != null)// && CurrentCell.Selected)
 			{
 				int colCell = CurrentCell.ColumnIndex;
 				int colLast = Columns.Count - 1;
 
-				if (colCell == colLast)
+				if (colCell == colLast && CurrentCell.Selected)
 				{
 					HorizontalScrollingOffset += Columns[colLast].Width;
 				}
@@ -195,6 +306,80 @@ namespace yata
 				}
 			}
 		}
+
+
+/*		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
+		{
+			logfile.Log("PaintCell()");
+			//if (Display == ColDisplay.DisplayOff) return;
+
+			e.PaintBackground(e.ClipBounds, true);
+
+//			e.Paint(e.ClipBounds, (DataGridViewPaintParts.All & ~DataGridViewPaintParts.Background));
+
+
+			int col = e.ColumnIndex;
+
+//			if (col == FirstDisplayedScrollingColumnIndex)
+//			{
+//				logfile.Log("cellbounds= " + e.CellBounds);
+//				logfile.Log("clipbounds= " + e.ClipBounds);
+//
+//				int rhw = RowHeadersWidth;
+//				Rectangle clip = e.CellBounds;
+//				if (e.CellBounds.X < rhw)
+//				{
+//					clip = new Rectangle(rhw, clip.Y, clip.Width - rhw, clip.Height);
+//					e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Replace); // fucked.
+//				}
+//			}
+
+
+//			if (col != FirstDisplayedScrollingColumnIndex) // *snap*
+//				|| FirstDisplayedScrollingColumnHiddenWidth == 0)
+			{
+				int x;
+
+				if (col != -1)
+				{
+					x = 0;
+
+					if (e.RowIndex == -1)
+					{
+						Bitmap sort = null;
+						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
+						{
+							if (col == 0)
+								sort = Resources.asc_16px;
+						}
+						else if (SortedColumn.Index == col)
+						{
+							sort = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
+																	  : Resources.des_16px;
+						}
+
+						if (sort != null)
+							e.Graphics.DrawImage(sort,
+												 e.CellBounds.X + e.CellBounds.Width - 19,
+												 e.CellBounds.Y + 3);
+					}
+				}
+				else // row-header
+					x = 10;
+
+//				if (col != FirstDisplayedScrollingColumnIndex
+//					|| FirstDisplayedScrollingColumnHiddenWidth == 0)
+				{
+					TextRenderer.DrawText(e.Graphics,
+										  Convert.ToString(e.FormattedValue),
+										  e.CellStyle.Font,
+										  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
+										  e.CellStyle.ForeColor);
+//					e.Handled = true;
+				}
+			}
+			e.Handled = true;
+		} */
 
 
 		#region Sort
@@ -267,62 +452,6 @@ namespace yata
 			RelabelRowHeaders();
 		}
 		#endregion Sort
-
-
-		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
-		{
-			e.PaintBackground(e.ClipBounds, true);
-
-			int col = e.ColumnIndex;
-//			if (col != FirstDisplayedScrollingColumnIndex) // *snap*
-//				|| FirstDisplayedScrollingColumnHiddenWidth == 0)
-			{
-				int x;
-
-				if (col != -1)
-				{
-					x = 0;
-
-					if (e.RowIndex == -1)
-					{
-						Bitmap sort = null;
-						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
-						{
-							if (col == 0)
-								sort = Resources.asc_16px;
-						}
-						else if (SortedColumn.Index == col)
-						{
-							sort = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
-																	  : Resources.des_16px;
-						}
-
-						if (sort != null)
-							e.Graphics.DrawImage(sort,
-												 e.CellBounds.X + e.CellBounds.Width - 19,
-												 e.CellBounds.Y + 3);
-					}
-				}
-				else // row-header
-					x = 10;
-
-				TextRenderer.DrawText(e.Graphics,
-									  Convert.ToString(e.FormattedValue),
-									  e.CellStyle.Font,
-									  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
-									  e.CellStyle.ForeColor);
-
-
-				// TODO: for the encore repaint the row-header col and all frozen cols.
-				if (col >= FirstDisplayedScrollingColumnIndex
-					&& e.RowIndex >= FirstDisplayedScrollingRowIndex
-					&& e.RowIndex <= FirstDisplayedScrollingRowIndex + DisplayedRowCount(true))
-				{
-					
-				}
-			}
-			e.Handled = true;
-		}
 
 
 		const int LABELS = 2;
