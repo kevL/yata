@@ -18,6 +18,7 @@ namespace yata
 
 		YataForm _f;
 		Font _fontCached;
+		bool _load;
 
 		/// <summary>
 		/// cTor.
@@ -28,6 +29,12 @@ namespace yata
 
 			_f = f;
 			_fontCached = _f.Font;
+			_load = true;
+
+//			Font = _f.Font;
+
+			int idFont     = -1;
+			int idFontTest = -1;
 
 			Font font;
 			foreach (var family in FontFamily.Families)
@@ -44,15 +51,26 @@ namespace yata
 					}
 				}
 
-				if (style != null)// && style.HasValue)
+				if (style != null)
 				{
 					if ((font = new Font(family, 10, style.Value)) != null) // TODO: 10pts is way too big for some fonts.
 					{
+						++idFontTest;
+						if (font.Name == _fontCached.Name)
+						{
+							idFont = idFontTest;
+						}
+
 						_families.Add(family);
 						list_Font.Items.Add(font);
 					}
 				}
 			}
+
+			if (idFont != -1)
+				list_Font.SelectedIndex = idFont;
+			else
+				list_Font.SelectedIndex = 0;
 
 			list_Size.Items.AddRange(new object[]
 			{
@@ -71,6 +89,10 @@ namespace yata
 				"18"
 			});
 			list_Size.SelectedIndex = 4; // 10pt
+
+			if (idFont != -1)
+				tb_Size.Text = _fontCached.SizeInPoints.ToString();
+
 
 			lbl_Example.Text = EXAMPLE;
 		}
@@ -129,6 +151,10 @@ namespace yata
 		{
 			list_Style.Items.Clear();
 
+			var styleLoad = _fontCached.Style;
+			int idStyle     = -1;
+			int idStyleTest = -1;
+
 			var family = _families[list_Font.SelectedIndex];
 
 			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
@@ -136,10 +162,23 @@ namespace yata
 				if (style != FontStyle.Strikeout && style != FontStyle.Underline
 					&& family.IsStyleAvailable(style))
 				{
+					if (_load)
+					{
+						++idStyleTest;
+						if (style == styleLoad)
+						{
+							_load = false; // not needed anymore.
+							idStyle = idStyleTest;
+						}
+					}
 					list_Style.Items.Add(style);
 				}
 			}
-			list_Style.SelectedIndex = 0;
+
+			if (idStyle != -1)
+				list_Style.SelectedIndex = idStyle;
+			else
+				list_Style.SelectedIndex = 0;
 
 			SetExampleText();
 		}
