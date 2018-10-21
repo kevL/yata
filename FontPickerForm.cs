@@ -15,6 +15,7 @@ namespace yata
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
 		List<FontFamily> _families = new List<FontFamily>();
+		List<Font>       _fonts    = new List<Font>(); // will be disposed below
 
 		YataForm _f;
 		Font _fontCached;
@@ -33,8 +34,8 @@ namespace yata
 
 //			Font = _f.Font;
 
-			int idFont     = -1;
-			int idFontTest = -1;
+			int idFont     = -1; // for showing the start-font's characteristics
+			int idFontTest = -1; // in the lists
 
 			Font font;
 			foreach (var family in FontFamily.Families)
@@ -51,19 +52,16 @@ namespace yata
 					}
 				}
 
-				if (style != null)
+				if (style != null
+					&& (font = new Font(family, 10, style.Value)) != null) // WARNING: 10pts is way too big for some fonts.
 				{
-					if ((font = new Font(family, 10, style.Value)) != null) // TODO: 10pts is way too big for some fonts.
-					{
-						++idFontTest;
-						if (font.Name == _fontCached.Name)
-						{
-							idFont = idFontTest;
-						}
+					++idFontTest;
+					if (font.Name == _fontCached.Name)
+						idFont = idFontTest;
 
-						_families.Add(family);
-						list_Font.Items.Add(font);
-					}
+					_families.Add(family);
+					_fonts.Add(font); // is purely for Disposal.
+					list_Font.Items.Add(font);
 				}
 			}
 
@@ -74,19 +72,8 @@ namespace yata
 
 			list_Size.Items.AddRange(new object[]
 			{
-				 "6",
-				 "7",
-				 "8",
-				 "9",
-				"10",
-				"11",
-				"12",
-				"13",
-				"14",
-				"15",
-				"16",
-				"17",
-				"18"
+				 "6", "7", "8", "9","10","11","12",
+				"13","14","15","16","17","18"
 			});
 			list_Size.SelectedIndex = 4; // 10pt
 
@@ -249,133 +236,21 @@ namespace yata
 				}
 			}
 		}
-	}
-}
-
-
-/*	/// <summary>
-	/// https://stackoverflow.com/questions/8017927/filtering-out-removing-non-true-type-fonts-from-font-dialog-in-c-sharp#answer-8260245
-	/// </summary>
-	public class FontListBox
-		:
-			ListBox
-	{
-		List<Font> _fonts = new List<Font>();
-
-		Brush _foreBrush;
 
 
 		/// <summary>
-		/// cTor.
+		/// Disposes the fonts in the fontList.
+		/// not sure if this is required but here it is ...
 		/// </summary>
-		internal FontListBox()
+		void DisposeFonts()
 		{
-			Font font;
-
-			foreach (FontFamily ff in FontFamily.Families)
-			{
-				// determine the first available style since all fonts don't support all styles
-				FontStyle? styleOk = null;
-				foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
-				{
-					if (ff.IsStyleAvailable(style))
-					{
-						styleOk = style;
-						break;
-					}
-				}
-
-				if (styleOk.HasValue)
-				{
-					if ((font = new Font(ff, 10, styleOk.Value)) != null)
-					{
-						_fonts.Add(font);
-						Items.Add(font);
-					}
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="disposing"></param>
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-
 			if (_fonts != null)
 			{
 				foreach (Font font in _fonts)
-				{
 					font.Dispose();
-				}
+
 				_fonts = null;
 			}
-
-			if (_foreBrush != null)
-			{
-				_foreBrush.Dispose();
-				_foreBrush = null;
-			}
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnDrawItem(DrawItemEventArgs e)
-		{
-			base.OnDrawItem(e);
-
-			if (e.Index > -1)
-			{
-				e.DrawBackground();
-				e.DrawFocusRectangle();
-
-				var font = Items[e.Index] as Font;
-				e.Graphics.DrawString(font.Name,
-									  font,
-									  ForeBrush,
-									  e.Bounds.Left,
-									  e.Bounds.Top);
-			}
-		}
-
-
-		/// <summary>
-		/// 
-		/// </summary>
-		Brush ForeBrush
-		{
-			get
-			{
-				if (_foreBrush == null)
-					_foreBrush = new SolidBrush(base.ForeColor);
-//					_foreBrush = new SolidBrush(ForeColor);
-
-				return _foreBrush;
-			}
-		}
-	} */
-
-/*		/// <summary>
-		/// 
-		/// </summary>
-		public override Color ForeColor
-		{
-			get
-			{
-				return base.ForeColor;
-			}
-			set
-			{
-				base.ForeColor = value;
-
-				if (_foreBrush != null)
-					_foreBrush.Dispose();
-
-				_foreBrush = null;
-			}
-		} */
+	}
+}
