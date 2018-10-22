@@ -81,7 +81,7 @@ namespace yata
 
 			RowHeadersWidth = 50;
 
-			SetRowHeight(true);
+			SetRowMetric(true);
 
 			CellValueChanged += CellChanged;
 			CellPainting     += PaintCell;
@@ -908,7 +908,7 @@ namespace yata
 //			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders); // bleh.
 		}
 
-		internal void SetRowHeight(bool init)
+		internal void SetRowMetric(bool init)
 		{
 			int h = TextRenderer.MeasureText("X", _f.Font).Height + _padVert * 2;
 			RowTemplate.Height = h;
@@ -918,10 +918,12 @@ namespace yata
 				for (int row = 0; row != Rows.Count; ++row)
 					Rows[row].Height = h;
 
+				YataDataGridView table;
+
 				int w = 25, wT;
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
-					var table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+					table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
 					if ((wT = table.Rows.Count - 2) > w)
 						w = wT;
 				}
@@ -929,7 +931,7 @@ namespace yata
 				w = TextRenderer.MeasureText(w.ToString(), _f.Font).Width + 20;
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
-					var table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+					table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
 					table.RowHeadersWidth = w; // keep row-headers' width uniform across all tabpages.
 				}
 			}

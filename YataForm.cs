@@ -211,7 +211,7 @@ namespace yata
 				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 
-				_table.SetRowHeight(false);
+				_table.SetRowMetric(false);
 
 				_table.CurrentCell = null;
 				_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
@@ -626,7 +626,7 @@ namespace yata
 				_table.ClearSelection();
 				_table.Rows[e.RowIndex].Selected = true;
 
-				_table.CurrentCell = _table[0,e.RowIndex]; //.Rows[e.RowIndex].Cells[0]; // TODO: not req'd; perhaps null CurrentCell
+				_table.CurrentCell = _table[0,e.RowIndex]; // TODO: not req'd; perhaps null CurrentCell
 
 				context_it_Header.Text = "@ id " + e.RowIndex;
 
@@ -634,8 +634,8 @@ namespace yata
 				context_it_Paste     .Enabled =
 				context_it_PasteBelow.Enabled = (_table.Columns.Count == _copy.Count);
 
-				contextEditor.Show(_table, new Point(_table.RowHeadersWidth - 10,
-													 _table.Location.Y + 10));
+				contextEditor.Show(_table, new Point(_table.RowHeadersWidth,
+													 _table.ColumnHeadersHeight));
 			}
 		}
 

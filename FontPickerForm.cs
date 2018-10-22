@@ -133,7 +133,7 @@ namespace yata
 
 			_f.Font = font;
 			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-			_f.Table.SetRowHeight(false);
+			_f.Table.SetRowMetric(false);
 
 			_f.Width  = w;
 			_f.Height = h;
