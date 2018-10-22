@@ -79,7 +79,7 @@ namespace yata
 			AllowUserToResizeRows = false;
 			AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
-			RowHeadersWidth = 60;
+			RowHeadersWidth = 50;
 
 			SetRowHeight(true);
 
@@ -319,7 +319,7 @@ namespace yata
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
-			logfile.Log("PaintCell()");
+			//logfile.Log("PaintCell()");
 			//if (Display == ColDisplay.DisplayOff) return;
 
 			e.PaintBackground(e.ClipBounds, true);
@@ -905,7 +905,6 @@ namespace yata
 			}
 			_rows.Clear();
 
-			SetRowHeight(false);
 //			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders); // bleh.
 		}
 
@@ -918,6 +917,21 @@ namespace yata
 			{
 				for (int row = 0; row != Rows.Count; ++row)
 					Rows[row].Height = h;
+
+				int w = 25, wT;
+				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+				{
+					var table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+					if ((wT = table.Rows.Count - 2) > w)
+						w = wT;
+				}
+
+				w = TextRenderer.MeasureText(w.ToString(), _f.Font).Width + 20;
+				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+				{
+					var table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+					table.RowHeadersWidth = w; // keep row-headers' width uniform across all tabpages.
+				}
 			}
 		}
 

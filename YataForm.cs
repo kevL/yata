@@ -30,6 +30,9 @@ namespace yata
 
 		List<ToolStripItem> _presets = new List<ToolStripItem>();
 		string _initialDir = String.Empty;
+
+		internal TabControl Tabs
+		{ get { return tabControl; } }
 		#endregion Fields
 
 
@@ -186,7 +189,7 @@ namespace yata
 			panel_ColorFill.Show();
 
 			var table = new YataDataGridView(this, pfe);
-			((System.ComponentModel.ISupportInitialize)(table)).BeginInit();
+			((ISupportInitialize)(table)).BeginInit();
 
 			if (table.Load2da())
 			{
@@ -208,12 +211,14 @@ namespace yata
 				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 
+				_table.SetRowHeight(false);
+
 				_table.CurrentCell = null;
 				_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
 
 				DrawingControl.ResumeDrawing(_table);
 			}
-			((System.ComponentModel.ISupportInitialize)(table)).EndInit();
+			((ISupportInitialize)(table)).EndInit();
 
 			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
 		}
