@@ -210,10 +210,10 @@ namespace yata
 				Table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 
-				Table.SetRowMetric();
+				Table.SetRowSize();
 
 				Table.CurrentCell = null;
-				Table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+				Table[0,0].Selected = false; // blow away the default/selected cell.
 
 				DrawingControl.ResumeDrawing(Table);
 			}
@@ -972,7 +972,7 @@ namespace yata
 			if (Table != null)
 			{
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-				Table.SetRowMetric();
+				Table.SetRowSize();
 			}
 
 			Width  = w;

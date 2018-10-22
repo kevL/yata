@@ -915,7 +915,10 @@ namespace yata
 			_rows.Clear();
 		}
 
-		internal void SetRowMetric()
+		/// <summary>
+		/// Maintains row-sizing wrt current Font.
+		/// </summary>
+		internal void SetRowSize()
 		{
 			int h = TextRenderer.MeasureText("X", _f.Font).Height + _padVert * 2;
 			RowTemplate.Height = h;

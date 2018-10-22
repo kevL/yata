@@ -140,7 +140,7 @@ namespace yata
 			if (_f.Table != null)
 			{
 				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-				_f.Table.SetRowMetric();
+				_f.Table.SetRowSize();
 			}
 
 			_f.Width  = w;
