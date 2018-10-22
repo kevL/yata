@@ -21,7 +21,7 @@ namespace yata
 		Font _fontCached;
 		bool
 			_load,
-			_dirty; // ie. displayed font and its characteristics have changed from the start-font's
+			_dirty; // ie. displayed font and its characteristics have changed
 
 		/// <summary>
 		/// cTor.
@@ -99,11 +99,9 @@ namespace yata
 
 		void btnOk_click(object sender, EventArgs e)
 		{
-			if (!_applied && _dirty)
-			{
-				_f.Font = lbl_Example.Font;
-				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-			}
+			if (_dirty)
+				doFont(lbl_Example.Font);
+
 			Close();
 		}
 
@@ -111,24 +109,37 @@ namespace yata
 		{
 			if (_dirty)
 			{
-				_dirty   = false;
+				_dirty = false;
 				_applied = true;
 
-				_f.Font = lbl_Example.Font;
-				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+				doFont(lbl_Example.Font);
 			}
 		}
 
 		void btnCancel_click(object sender, EventArgs e)
 		{
 			if (_applied)
-			{
-				_f.Font = _fontCached;
-				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-			}
+				doFont(_fontCached);
+
 			Close();
 		}
 
+		void doFont(Font font)
+		{
+			DrawingControl.SuspendDrawing(_f);
+
+			int w = _f.Width;
+			int h = _f.Height;
+
+			_f.Font = font;
+			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+			_f.Table.SetRowHeight(false);
+
+			_f.Width  = w;
+			_f.Height = h;
+
+			DrawingControl.ResumeDrawing(_f);
+		}
 
 
 		void fontList_DrawItem(object sender, DrawItemEventArgs e)

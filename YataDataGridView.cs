@@ -58,6 +58,8 @@ namespace yata
 
 		int _col;
 
+		const int _padVert = 4;
+
 
 		/// <summary>
 		/// cTor.
@@ -75,16 +77,23 @@ namespace yata
 			Dock = DockStyle.Fill;
 			ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			AllowUserToResizeRows = false;
+			AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+			RowHeadersWidth = 60;
+
+			SetRowHeight(true);
 
 			CellValueChanged += CellChanged;
-//			CellPainting     += PaintCell;
+			CellPainting     += PaintCell;
 
-			SelectionChanged += HoriscrollCell; // forget it.
+			SelectionChanged += HoriscrollCell;
 
 			SortCompare      += TableSort;
 			Sorted           += TableSorted;
 
 //			Paint += doPaint;
+
+//			Scroll += (s, e) => Invalidate(); // interesting ...
 
 			Freeze = Frozen.FreezeOff;
 		}
@@ -308,7 +317,7 @@ namespace yata
 		}
 
 
-/*		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
+		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
 			logfile.Log("PaintCell()");
 			//if (Display == ColDisplay.DisplayOff) return;
@@ -379,7 +388,7 @@ namespace yata
 				}
 			}
 			e.Handled = true;
-		} */
+		}
 
 
 		#region Sort
@@ -896,9 +905,20 @@ namespace yata
 			}
 			_rows.Clear();
 
-
-			RowHeadersWidth = 60;
+			SetRowHeight(false);
 //			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders); // bleh.
+		}
+
+		internal void SetRowHeight(bool init)
+		{
+			int h = TextRenderer.MeasureText("X", _f.Font).Height + _padVert * 2;
+			RowTemplate.Height = h;
+
+			if (!init)
+			{
+				for (int row = 0; row != Rows.Count; ++row)
+					Rows[row].Height = h;
+			}
 		}
 
 		/// <summary>

@@ -58,10 +58,6 @@ namespace yata
 
 				TabPages[dst] = _tabDrag;
 				SelectedIndex = TabPages.IndexOf(_tabDrag);
-
-				//logfile.Log("SELid= " + SelectedIndex + " " + TabPages[SelectedIndex].Text);
-				//foreach (TabPage tab in TabPages)
-				//	logfile.Log("pageId= " + TabPages.IndexOf(tab) + " " + tab.Text);
 			}
 		}
 

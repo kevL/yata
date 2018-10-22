@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace yata
 {
-	public static class DrawingControl
+	static class DrawingControl
 	{
 		[DllImport("user32.dll")]
 		public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
@@ -21,7 +21,7 @@ namespace yata
 		/// constructor just after InitializeComponent().
 		/// </summary>
 		/// <param name="control">the Control on which to set DoubleBuffered to true</param>
-		public static void SetDoubleBuffered(Control control)
+		internal static void SetDoubleBuffered(object control)
 		{
 			// if not remote desktop session then enable double-buffering optimization
 			if (!SystemInformation.TerminalServerSession)
@@ -41,7 +41,7 @@ namespace yata
 		/// has been updated call DrawingControl.ResumeDrawing(Control control).
 		/// </summary>
 		/// <param name="control">the control to suspend draw updates on</param>
-		public static void SuspendDrawing(Control control)
+		internal static void SuspendDrawing(IWin32Window control)
 		{
 			SendMessage(control.Handle, WM_SETREDRAW, false, 0);
 		}
@@ -50,7 +50,7 @@ namespace yata
 		/// Resume drawing updates for the specified control.
 		/// </summary>
 		/// <param name="control">the control to resume draw updates on</param>
-		public static void ResumeDrawing(Control control)
+		internal static void ResumeDrawing(Control control)
 		{
 			SendMessage(control.Handle, WM_SETREDRAW, true, 0);
 			control.Refresh();

@@ -23,6 +23,8 @@ namespace yata
 	{
 		#region Fields
 		YataDataGridView _table;
+		internal YataDataGridView Table
+		{ get { return _table; } }
 
 		List<string> _copy = new List<string>();
 
@@ -184,6 +186,8 @@ namespace yata
 			panel_ColorFill.Show();
 
 			var table = new YataDataGridView(this, pfe);
+			((System.ComponentModel.ISupportInitialize)(table)).BeginInit();
+
 			if (table.Load2da())
 			{
 				table.RowHeaderMouseClick += RowHeaderContextMenu;
@@ -209,6 +213,7 @@ namespace yata
 
 				DrawingControl.ResumeDrawing(_table);
 			}
+			((System.ComponentModel.ISupportInitialize)(table)).EndInit();
 
 			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
 		}
@@ -317,7 +322,7 @@ namespace yata
 								  tab.Text,
 								  font,
 								  pt,
-								  Color.Black);
+								  SystemColors.ControlText);
 
 
 /*			var rect = e.Bounds;
