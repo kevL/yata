@@ -124,6 +124,10 @@ namespace yata
 			Close();
 		}
 
+		/// <summary>
+		/// See also: YataForm.itClick_FontDefault()
+		/// </summary>
+		/// <param name="font"></param>
 		void doFont(Font font)
 		{
 			DrawingControl.SuspendDrawing(_f);
@@ -132,8 +136,12 @@ namespace yata
 			int h = _f.Height;
 
 			_f.Font = font;
-			_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-			_f.Table.SetRowMetric(false);
+
+			if (_f.Table != null)
+			{
+				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+				_f.Table.SetRowMetric();
+			}
 
 			_f.Width  = w;
 			_f.Height = h;
@@ -154,7 +162,8 @@ namespace yata
 									  font.Name,
 									  font,
 									  new Point(e.Bounds.X, e.Bounds.Y),
-									  SystemColors.ControlText);
+									  SystemColors.ControlText,
+									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 //				TextRenderer.DrawText(e.Graphics,
 //									  font.Name,
 //									  e.CellStyle.Font,
@@ -215,7 +224,8 @@ namespace yata
 									  list_Style.Items[e.Index].ToString(),
 									  Font,
 									  new Point(e.Bounds.X, e.Bounds.Y),
-									  SystemColors.ControlText);
+									  SystemColors.ControlText,
+									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 			}
 		}
 
@@ -237,7 +247,8 @@ namespace yata
 									  list_Size.Items[e.Index].ToString(),
 									  Font,
 									  new Point(e.Bounds.X, e.Bounds.Y),
-									  SystemColors.ControlText);
+									  SystemColors.ControlText,
+									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 			}
 		}
 

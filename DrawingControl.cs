@@ -10,7 +10,7 @@ namespace yata
 	static class DrawingControl
 	{
 		[DllImport("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+		internal static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
 
 		const int WM_SETREDRAW = 11;
 

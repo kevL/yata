@@ -79,9 +79,7 @@ namespace yata
 			AllowUserToResizeRows = false;
 			AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
-			RowHeadersWidth = 50;
-
-			SetRowMetric(true);
+			RowHeadersWidth = 45;
 
 			CellValueChanged += CellChanged;
 			CellPainting     += PaintCell;
@@ -321,8 +319,13 @@ namespace yata
 		{
 			//logfile.Log("PaintCell()");
 			//if (Display == ColDisplay.DisplayOff) return;
+			//if (e.Handled) return;
 
 			e.PaintBackground(e.ClipBounds, true);
+
+
+//			e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ...
+//			return;
 
 //			e.Paint(e.ClipBounds, (DataGridViewPaintParts.All & ~DataGridViewPaintParts.Background));
 
@@ -344,7 +347,7 @@ namespace yata
 //			}
 
 
-//			if (col != FirstDisplayedScrollingColumnIndex) // *snap*
+//			if (col != FirstDisplayedScrollingColumnIndex // *snap*
 //				|| FirstDisplayedScrollingColumnHiddenWidth == 0)
 			{
 				int x;
@@ -383,10 +386,15 @@ namespace yata
 										  Convert.ToString(e.FormattedValue),
 										  e.CellStyle.Font,
 										  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
-										  e.CellStyle.ForeColor);
+										  e.CellStyle.ForeColor,
+										  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 //					e.Handled = true;
 				}
 			}
+//			else
+//				e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ... uh no.
+
+
 			e.Handled = true;
 		}
 
@@ -547,7 +555,7 @@ namespace yata
 						int result;
 						if (!Int32.TryParse(row[0], out result) || result != id)
 						{
-							string error = "The 2da-file contains an ID that is not an integer or is out of sequence."
+							string error = "The 2da-file contains an ID that is not an integer or is out of order."
 										 + Environment.NewLine + Environment.NewLine
 										 + Pfe
 										 + Environment.NewLine + Environment.NewLine
@@ -700,14 +708,15 @@ namespace yata
 				}
 			}
 
+
 			_loading = true;
+
 			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
 													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
 			PopulateColumnHeaders();
 			PopulateTableRows();
 
 //			SizeCols();
-
 
 			_loading = false;
 
@@ -904,36 +913,34 @@ namespace yata
 				pb.Step();
 			}
 			_rows.Clear();
-
-//			AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders); // bleh.
 		}
 
-		internal void SetRowMetric(bool init)
+		internal void SetRowMetric()
 		{
 			int h = TextRenderer.MeasureText("X", _f.Font).Height + _padVert * 2;
 			RowTemplate.Height = h;
 
-			if (!init)
+
+			for (int row = 0; row != Rows.Count; ++row)
+				Rows[row].Height = h;
+
+			YataDataGridView table;
+
+			int w = 25, wT; // row-headers' width stays uniform across all tabpages ->
+
+			int tabs = _f.Tabs.TabCount;
+			for (int tab = 0; tab != tabs; ++tab)
 			{
-				for (int row = 0; row != Rows.Count; ++row)
-					Rows[row].Height = h;
+				table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+				if ((wT = table.Rows.Count - 2) > w)
+					w = wT;
+			}
 
-				YataDataGridView table;
-
-				int w = 25, wT;
-				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
-				{
-					table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
-					if ((wT = table.Rows.Count - 2) > w)
-						w = wT;
-				}
-
-				w = TextRenderer.MeasureText(w.ToString(), _f.Font).Width + 20;
-				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
-				{
-					table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
-					table.RowHeadersWidth = w; // keep row-headers' width uniform across all tabpages.
-				}
+			w = TextRenderer.MeasureText(w.ToString(), _f.Font).Width + 20;
+			for (int tab = 0; tab != tabs; ++tab)
+			{
+				table = _f.Tabs.TabPages[tab].Tag as YataDataGridView;
+				table.RowHeadersWidth = w;
 			}
 		}
 
@@ -1127,6 +1134,21 @@ namespace yata
 			}
 			return base.ProcessDialogKey(keyData);
 		}
+
+/*		/// <summary>
+		/// Handles stopping the stupid insta-cell selection @ [0,0] right after
+		/// a table loads and a row-header is clicked. Has side-effect of
+		/// jumping the table-scroll around ....
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
+		{
+			if (e.RowIndex == -1 && e.ColumnIndex != -1 && SelectedCells.Count == 0)
+			{
+//				CurrentCell = this[e.ColumnIndex,0];
+			}
+			base.OnCellMouseDown(e);
+		} */
 		#endregion Events (override)
 
 

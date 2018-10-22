@@ -75,6 +75,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
+		private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -132,6 +133,7 @@
 			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
+			this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -428,7 +430,8 @@
 			// 
 			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Font,
-			this.it_CurrentFont});
+			this.it_CurrentFont,
+			this.defaultToolStripMenuItem});
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
 			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fontToolStripMenuItem.Text = "Font";
@@ -446,6 +449,13 @@
 			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
 			this.it_CurrentFont.Text = "current font string";
 			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
+			// 
+			// defaultToolStripMenuItem
+			// 
+			this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
+			this.defaultToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.defaultToolStripMenuItem.Text = "default";
+			this.defaultToolStripMenuItem.Click += new System.EventHandler(this.itClick_FontDefault);
 			// 
 			// it_MenuPaths
 			// 

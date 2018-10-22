@@ -7,7 +7,7 @@ namespace yata
 	/// <summary>
 	/// Class with program entry point.
 	/// </summary>
-	internal sealed class Program
+	sealed class Program
 	{
 		/// <summary>
 		/// Program entry point.
@@ -16,9 +16,8 @@ namespace yata
 		static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new YataForm());
+			Application.SetCompatibleTextRenderingDefault(false);	// ie, use GDI aka TextRenderer class. (perhaps, read:
+			Application.Run(new YataForm());						// perhaps depends on the Control that's being drawn)
 		}
-		
 	}
 }

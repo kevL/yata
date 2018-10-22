@@ -17,6 +17,7 @@
 		private System.Windows.Forms.ListBox list_Size;
 		private System.Windows.Forms.Label lbl_Example;
 		private System.Windows.Forms.TextBox tb_Size;
+		private System.Windows.Forms.GroupBox groupBox1;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -50,6 +51,8 @@
 			this.list_Size = new System.Windows.Forms.ListBox();
 			this.lbl_Example = new System.Windows.Forms.Label();
 			this.tb_Size = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// list_Font
@@ -66,11 +69,9 @@
 			// 
 			// btn_Ok
 			// 
-			this.btn_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Ok.Location = new System.Drawing.Point(335, 25);
 			this.btn_Ok.Name = "btn_Ok";
-			this.btn_Ok.Size = new System.Drawing.Size(208, 35);
+			this.btn_Ok.Size = new System.Drawing.Size(115, 35);
 			this.btn_Ok.TabIndex = 0;
 			this.btn_Ok.Text = "ok";
 			this.btn_Ok.UseVisualStyleBackColor = true;
@@ -78,11 +79,9 @@
 			// 
 			// btn_Apply
 			// 
-			this.btn_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Apply.Location = new System.Drawing.Point(335, 65);
 			this.btn_Apply.Name = "btn_Apply";
-			this.btn_Apply.Size = new System.Drawing.Size(206, 35);
+			this.btn_Apply.Size = new System.Drawing.Size(115, 35);
 			this.btn_Apply.TabIndex = 1;
 			this.btn_Apply.Text = "apply";
 			this.btn_Apply.UseVisualStyleBackColor = true;
@@ -90,12 +89,10 @@
 			// 
 			// btn_Cancel
 			// 
-			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_Cancel.Location = new System.Drawing.Point(335, 105);
 			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(208, 35);
+			this.btn_Cancel.Size = new System.Drawing.Size(115, 35);
 			this.btn_Cancel.TabIndex = 2;
 			this.btn_Cancel.Text = "cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -154,10 +151,10 @@
 			this.lbl_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.lbl_Example.Location = new System.Drawing.Point(0, 290);
+			this.lbl_Example.Location = new System.Drawing.Point(5, 15);
 			this.lbl_Example.Name = "lbl_Example";
 			this.lbl_Example.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-			this.lbl_Example.Size = new System.Drawing.Size(553, 111);
+			this.lbl_Example.Size = new System.Drawing.Size(440, 93);
 			this.lbl_Example.TabIndex = 10;
 			// 
 			// tb_Size
@@ -168,18 +165,30 @@
 			this.tb_Size.TabIndex = 11;
 			this.tb_Size.TextChanged += new System.EventHandler(this.fontSize_TextChanged);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.lbl_Example);
+			this.groupBox1.Location = new System.Drawing.Point(5, 285);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(449, 113);
+			this.groupBox1.TabIndex = 12;
+			this.groupBox1.TabStop = false;
+			// 
 			// FontPickerForm
 			// 
 			this.AcceptButton = this.btn_Ok;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(553, 401);
+			this.ClientSize = new System.Drawing.Size(457, 399);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.btn_Ok);
 			this.Controls.Add(this.btn_Apply);
 			this.Controls.Add(this.tb_Size);
 			this.Controls.Add(this.btn_Cancel);
-			this.Controls.Add(this.lbl_Example);
 			this.Controls.Add(this.list_Size);
 			this.Controls.Add(this.list_Style);
 			this.Controls.Add(this.list_Font);
@@ -191,6 +200,7 @@
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Choose Font";
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -1,27 +1,21 @@
 ﻿using System;
-//using System.Drawing;
 using System.Windows.Forms;
 
 
 namespace yata
 {
-	partial class TextCopyForm
+	partial class FontCopyForm
 		:
 			Form
 	{
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal TextCopyForm()
+		internal FontCopyForm()
 		{
 			InitializeComponent();
 
 			const string text = "This string can be used in Settings.Cfg to override Yata's default font.";
-//			Width = TextRenderer.MeasureText(text, Font).Width;
-
-//			var image = new Bitmap(1,1);
-//			var graphics = Graphics.FromImage(image);
-//			Width = Convert.ToInt32(graphics.MeasureString(text, Font).Width);
 
 			label1.Text = "Current Font"
 						+ Environment.NewLine + Environment.NewLine

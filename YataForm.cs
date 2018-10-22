@@ -21,10 +21,9 @@ namespace yata
 		:
 			Form
 	{
-		#region Fields
-		YataDataGridView _table;
+		#region Fields & Properties
 		internal YataDataGridView Table
-		{ get { return _table; } }
+		{ get; private set; }
 
 		List<string> _copy = new List<string>();
 
@@ -33,7 +32,7 @@ namespace yata
 
 		internal TabControl Tabs
 		{ get { return tabControl; } }
-		#endregion Fields
+		#endregion Fields & Properties
 
 
 		#region cTor
@@ -104,7 +103,7 @@ namespace yata
 						else if (line.StartsWith("x=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result))
+								&& Int32.TryParse(line, out result) && result > 0)
 							{
 								x = result;
 							}
@@ -112,7 +111,7 @@ namespace yata
 						else if (line.StartsWith("y=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result))
+								&& Int32.TryParse(line, out result) && result > 0)
 							{
 								y = result;
 							}
@@ -120,7 +119,7 @@ namespace yata
 						else if (line.StartsWith("w=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result))
+								&& Int32.TryParse(line, out result) && result > 0)
 							{
 								w = result;
 							}
@@ -128,7 +127,7 @@ namespace yata
 						else if (line.StartsWith("h=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result))
+								&& Int32.TryParse(line, out result) && result > 0)
 							{
 								h = result;
 							}
@@ -208,15 +207,15 @@ namespace yata
 
 				table.Select(); // focus the table.
 
-				_table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
+				Table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
 				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
 
-				_table.SetRowMetric(false);
+				Table.SetRowMetric();
 
-				_table.CurrentCell = null;
-				_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+				Table.CurrentCell = null;
+				Table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
 
-				DrawingControl.ResumeDrawing(_table);
+				DrawingControl.ResumeDrawing(Table);
 			}
 			((ISupportInitialize)(table)).EndInit();
 
@@ -233,13 +232,13 @@ namespace yata
 		{
 			if (tabControl.SelectedIndex != -1)
 			{
-				_table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
+				Table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
 
-				it_MenuPaths.Visible = _table.CraftInfo;
+				it_MenuPaths.Visible = Table.CraftInfo;
 				panel_ColorFill.Hide();
 
-				it_freeze1.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-				it_freeze2.Checked = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+				it_freeze1.Checked = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+				it_freeze2.Checked = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 			}
 			else
 			{
@@ -327,7 +326,8 @@ namespace yata
 								  tab.Text,
 								  font,
 								  pt,
-								  SystemColors.ControlText);
+								  SystemColors.ControlText,
+								  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 
 
 /*			var rect = e.Bounds;
@@ -355,8 +355,8 @@ namespace yata
 
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null
-				&& (!_table.Changed
+			if (Table != null
+				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 									   "warning",
 									   MessageBoxButtons.YesNo,
@@ -366,7 +366,7 @@ namespace yata
 				tabControl.TabPages.Remove(tabControl.SelectedTab);
 
 				if (tabControl.TabPages.Count == 0)
-					_table = null;
+					Table = null;
 
 				SetTitlebarText();
 			}
@@ -418,8 +418,8 @@ namespace yata
 
 		void ReloadToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && File.Exists(_table.Pfe)
-				&& (!_table.Changed
+			if (Table != null && File.Exists(Table.Pfe)
+				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 									   "warning",
 									   MessageBoxButtons.YesNo,
@@ -428,21 +428,21 @@ namespace yata
 			{
 				panel_ColorFill.Show();
 
-				_table.Changed = false;
+				Table.Changed = false;
 
-				_table.Columns.Clear();
-				_table.Rows   .Clear();
+				Table.Columns.Clear();
+				Table.Rows   .Clear();
 
-				if (_table.Load2da())
+				if (Table.Load2da())
 				{
 					AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
-					DrawingControl.ResumeDrawing(_table);
+					DrawingControl.ResumeDrawing(Table);
 
-					_table.CurrentCell = null;
-					_table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+					Table.CurrentCell = null;
+					Table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
 
-					_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-					_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+					Table.Columns[1].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+					Table.Columns[2].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 				}
 				else
 					CloseToolStripMenuItemClick(null, EventArgs.Empty);
@@ -486,16 +486,16 @@ namespace yata
 
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null)
+			if (Table != null)
 			{
-				string pfe = _table.Pfe;
+				string pfe = Table.Pfe;
 
 				if (!String.IsNullOrEmpty(pfe))
 				{
-					int rows = _table.Rows.Count;
+					int rows = Table.Rows.Count;
 					if (rows > 1)
 					{
-						_table.Changed = false;
+						Table.Changed = false;
 
 						using (var sw = new StreamWriter(pfe))
 						{
@@ -503,7 +503,7 @@ namespace yata
 							sw.WriteLine("");
 
 							string line = String.Empty;
-							foreach (string col in _table.Cols)
+							foreach (string col in Table.Cols)
 							{
 								line += " " + col;
 							}
@@ -512,7 +512,7 @@ namespace yata
 
 							object val;
 
-							int cols = _table.Columns.Count;
+							int cols = Table.Columns.Count;
 
 							for (int row = 0; row != rows - 1; ++row)
 							{
@@ -523,7 +523,7 @@ namespace yata
 									if (cell != 0)
 										line += " ";
 
-									if ((val = _table.Rows[row].Cells[cell].Value) != null)
+									if ((val = Table.Rows[row].Cells[cell].Value) != null)
 										line += val.ToString();
 									else
 										line += Constants.Stars;
@@ -539,18 +539,18 @@ namespace yata
 
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Rows.Count > 1)
+			if (Table != null && Table.Rows.Count > 1)
 			{
 				using (var sfd = new SaveFileDialog())
 				{
 					sfd.Title    = "Save as ...";
 					sfd.Filter   = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-					sfd.FileName = Path.GetFileName(_table.Pfe);
+					sfd.FileName = Path.GetFileName(Table.Pfe);
 
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
-						_table.Pfe = sfd.FileName;
-						tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(_table.Pfe);
+						Table.Pfe = sfd.FileName;
+						tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe);
 
 						SetTitlebarText();
 
@@ -621,21 +621,21 @@ namespace yata
 		void RowHeaderContextMenu(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right
-				&& e.RowIndex != _table.Rows.Count - 1)
+				&& e.RowIndex != Table.Rows.Count - 1)
 			{
-				_table.ClearSelection();
-				_table.Rows[e.RowIndex].Selected = true;
+				Table.ClearSelection();
+				Table.Rows[e.RowIndex].Selected = true;
 
-				_table.CurrentCell = _table[0,e.RowIndex]; // TODO: not req'd; perhaps null CurrentCell
+				Table.CurrentCell = Table[0,e.RowIndex]; // TODO: not req'd; perhaps null CurrentCell
 
 				context_it_Header.Text = "@ id " + e.RowIndex;
 
 				context_it_PasteAbove.Enabled =
 				context_it_Paste     .Enabled =
-				context_it_PasteBelow.Enabled = (_table.Columns.Count == _copy.Count);
+				context_it_PasteBelow.Enabled = (Table.Columns.Count == _copy.Count);
 
-				contextEditor.Show(_table, new Point(_table.RowHeadersWidth,
-													 _table.ColumnHeadersHeight));
+				contextEditor.Show(Table, new Point(Table.RowHeadersWidth,
+													Table.ColumnHeadersHeight));
 			}
 		}
 
@@ -643,10 +643,10 @@ namespace yata
 		{
 			_copy.Clear();
 
-			int cols = _table.Columns.Count;
+			int cols = Table.Columns.Count;
 			for (int col = 0; col != cols; ++col)
 			{
-				_copy.Add(_table.SelectedRows[0].Cells[col].Value.ToString());
+				_copy.Add(Table.SelectedRows[0].Cells[col].Value.ToString());
 			}
 		}
 
@@ -658,82 +658,82 @@ namespace yata
 
 		void PasteAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_copy.Count == _table.Columns.Count)
+			if (_copy.Count == Table.Columns.Count)
 			{
-				_table.Changed = true;
-				_table.Rows.Insert(_table.SelectedRows[0].Index, _copy.ToArray());
-				_table.RelabelRowHeaders();
+				Table.Changed = true;
+				Table.Rows.Insert(Table.SelectedRows[0].Index, _copy.ToArray());
+				Table.RelabelRowHeaders();
 			}
 		}
 
 		void PasteToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			int cols = _table.Columns.Count;
+			int cols = Table.Columns.Count;
 			if (_copy.Count == cols)
 			{
-				_table.Changed = true;
+				Table.Changed = true;
 				for (int col = 0; col != cols; ++col)
 				{
-					_table.SelectedRows[0].Cells[col].Value = _copy[col];
+					Table.SelectedRows[0].Cells[col].Value = _copy[col];
 				}
-				_table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
+				Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
 			}
 		}
 
 		void PasteBelowToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_copy.Count == _table.Columns.Count)
+			if (_copy.Count == Table.Columns.Count)
 			{
-				_table.Changed = true;
-				_table.Rows.Insert(_table.SelectedRows[0].Index + 1, _copy.ToArray());
-				_table.RelabelRowHeaders();
+				Table.Changed = true;
+				Table.Rows.Insert(Table.SelectedRows[0].Index + 1, _copy.ToArray());
+				Table.RelabelRowHeaders();
 			}
 		}
 
 		void CreateAboveToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.Changed = true;
-			int cols = _table.Columns.Count;
+			Table.Changed = true;
+			int cols = Table.Columns.Count;
 
 			var row = new string[cols];
 			for (int col = 0; col != cols; ++col)
 			{
 				row[col] = Constants.Stars;
 			}
-			_table.Rows.Insert(_table.SelectedRows[0].Index, row);
-			_table.RelabelRowHeaders();
+			Table.Rows.Insert(Table.SelectedRows[0].Index, row);
+			Table.RelabelRowHeaders();
 		}
 
 		void CreateBelowToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.Changed = true;
-			int cols = _table.Columns.Count;
+			Table.Changed = true;
+			int cols = Table.Columns.Count;
 
 			var row = new string[cols];
 			for (int col = 0; col != cols; ++col)
 			{
 				row[col] = Constants.Stars;
 			}
-			_table.Rows.Insert(_table.SelectedRows[0].Index + 1, row);
-			_table.RelabelRowHeaders();
+			Table.Rows.Insert(Table.SelectedRows[0].Index + 1, row);
+			Table.RelabelRowHeaders();
 		}
 
 		void ClearToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.Changed = true;
-			int cols = _table.Columns.Count;
+			Table.Changed = true;
+			int cols = Table.Columns.Count;
 			for (int col = 1; col != cols; ++col)
 			{
-				_table.SelectedRows[0].Cells[col].Value = Constants.Stars;
+				Table.SelectedRows[0].Cells[col].Value = Constants.Stars;
 			}
-			_table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
+			Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
 		}
 
 		void DeleteToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			_table.Changed = true;
-			_table.Rows.Remove(_table.SelectedRows[0]);
-			_table.RelabelRowHeaders();
+			Table.Changed = true;
+			Table.Rows.Remove(Table.SelectedRows[0]);
+			Table.RelabelRowHeaders();
 		}
 		#endregion Context menu
 
@@ -754,7 +754,7 @@ namespace yata
 		#region 2da Ops menu
 		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Rows.Count > 1)
+			if (Table != null && Table.Rows.Count > 1)
 			{
 				var list = new List<string>();
 
@@ -763,10 +763,10 @@ namespace yata
 
 				bool stop = false;
 
-				int rows = _table.Rows.Count - 1;
+				int rows = Table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
-					val = _table.Rows[id].Cells[0].Value;
+					val = Table.Rows[id].Cells[0].Value;
 					if (val == null)
 					{
 						if (list.Count == 20) // stop this Madness
@@ -833,95 +833,95 @@ namespace yata
 
 		void RenumberToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Rows.Count > 1)
+			if (Table != null && Table.Rows.Count > 1)
 			{
-				DrawingControl.SuspendDrawing(_table); // bongo
+				DrawingControl.SuspendDrawing(Table); // bongo
 
 				var pb = new ProgBar();
-				pb.ValTop = _table.Rows.Count - 1;
+				pb.ValTop = Table.Rows.Count - 1;
 				pb.Show();
 
 				object val;
 				int result;
 
-				int rows = _table.Rows.Count - 1;
+				int rows = Table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
-					if ((val = _table.Rows[id].Cells[0].Value) == null
+					if ((val = Table.Rows[id].Cells[0].Value) == null
 						|| !Int32.TryParse(val.ToString(), out result)
 						|| result != id)
 					{
-						_table.Rows[id].Cells[0].Value = id;
+						Table.Rows[id].Cells[0].Value = id;
 					}
 					pb.Step();
 				}
 
-				DrawingControl.ResumeDrawing(_table);
+				DrawingControl.ResumeDrawing(Table);
 			}
 		}
 
 		void RecolorToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Rows.Count > 1)
+			if (Table != null && Table.Rows.Count > 1)
 			{
 				Color color;
 
-				int rows = _table.Rows.Count - 1;
+				int rows = Table.Rows.Count - 1;
 				for (int id = 0; id != rows; ++id)
 				{
 					color = (id % 2 == 0) ? Color.AliceBlue
 										  : Color.BlanchedAlmond;
-					_table.Rows[id].DefaultCellStyle.BackColor = color;
+					Table.Rows[id].DefaultCellStyle.BackColor = color;
 				}
 			}
 		}
 
 		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null)
-				_table.AutoResizeColumns();
+			if (Table != null)
+				Table.AutoResizeColumns();
 		}
 
 		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Columns.Count > 1)
+			if (Table != null && Table.Columns.Count > 1)
 			{
-				if (_table.Columns.Count > 2)
+				if (Table.Columns.Count > 2)
 				{
 					it_freeze2.Checked = false; // first toggle the freeze2 col off
-					_table.Columns[2].Frozen = false;
+					Table.Columns[2].Frozen = false;
 				}
 
 				if (!it_freeze1.Checked)
 				{
-					_table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
+					Table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
 				}
 				else
-					_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+					Table.Freeze = YataDataGridView.Frozen.FreezeOff;
 
 				it_freeze1.Checked = // then do the freeze1 col
-				_table.Columns[1].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
+				Table.Columns[1].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
 			}
 		}
 
 		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			if (_table != null && _table.Columns.Count > 1)
+			if (Table != null && Table.Columns.Count > 1)
 			{
 				it_freeze1.Checked = false; // first toggle the freeze1 col off
-				_table.Columns[1].Frozen = false;
+				Table.Columns[1].Frozen = false;
 
-				if (_table.Columns.Count > 2)
+				if (Table.Columns.Count > 2)
 				{
 					if (!it_freeze2.Checked)
 					{
-						_table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
+						Table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
 					}
 					else
-						_table.Freeze = YataDataGridView.Frozen.FreezeOff;
+						Table.Freeze = YataDataGridView.Frozen.FreezeOff;
 
 					it_freeze2.Checked = // then do the freeze2 col
-					_table.Columns[2].Frozen = (_table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+					Table.Columns[2].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 				}
 			}
 		}
@@ -943,13 +943,42 @@ namespace yata
 		/// <param name="e"></param>
 		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var f = new TextCopyForm();
+			var f = new FontCopyForm();
 			f.Font = Font;
 
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 			f.SetText("font=" + tc.ConvertToString(Font));
 
 			f.ShowDialog();
+		}
+
+		/// <summary>
+		/// Sets the form's font to a default Font.
+		/// See also: FontPickerForm.doFont()
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itClick_FontDefault(object sender, EventArgs e)
+		{
+			DrawingControl.SuspendDrawing(this);
+
+			Font.Dispose();
+
+			int w = Width;
+			int h = Height;
+
+			Font = new Font("Georgia", 8);
+
+			if (Table != null)
+			{
+				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+				Table.SetRowMetric();
+			}
+
+			Width  = w;
+			Height = h;
+
+			DrawingControl.ResumeDrawing(this);
 		}
 		#endregion Font menu
 
@@ -968,12 +997,12 @@ namespace yata
 
 			statusbar_label_Coords.Text = "id= " + id + " col= " + col;
 
-			if (_table != null && _table.CraftInfo)
+			if (Table != null && Table.CraftInfo)
 			{
 				string info = String.Empty;
 
-				if (   id  > -1 && id  < _table.Rows.Count - 1
-					&& col > -1 && col < _table.Columns.Count)
+				if (   id  > -1 && id  < Table.Rows.Count - 1
+					&& col > -1 && col < Table.Columns.Count)
 				{
 					object val; int result;
 
@@ -985,11 +1014,11 @@ namespace yata
 						case  1: // "CATEGORY"
 							if (it_PathSpells2da.Checked)
 							{
-								if ((val = _table.Rows[id].Cells[col].Value) != null
+								if ((val = Table.Rows[id].Cells[col].Value) != null
 									&& Int32.TryParse(val.ToString(), out result)
 									&& result < CraftInfo.spellLabels.Count)
 								{
-									info = _table.Columns[col].HeaderCell.Value + ": "
+									info = Table.Columns[col].HeaderCell.Value + ": "
 										 + CraftInfo.spellLabels[result];
 								}
 							}
@@ -998,14 +1027,14 @@ namespace yata
 //						case  2: // "REAGENTS"
 
 						case  3: // "TAGS"
-							if ((val = _table.Rows[id].Cells[col].Value) != null)
+							if ((val = Table.Rows[id].Cells[col].Value) != null)
 							{
 								string tags = val.ToString();
 								if (tags.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 								{
 									if (it_PathBaseItems2da.Checked)
 									{
-										info = _table.Columns[col].HeaderCell.Value + ": (base) ";
+										info = Table.Columns[col].HeaderCell.Value + ": (base) ";
 
 										string[] array = tags.Substring(1).Split(','); // lose the "B"
 										for (int tag = 0; tag != array.Length; ++tag)
@@ -1023,7 +1052,7 @@ namespace yata
 								}
 								else // is a TCC item-type
 								{
-									info = _table.Columns[col].HeaderCell.Value + ": (tcc) ";
+									info = Table.Columns[col].HeaderCell.Value + ": (tcc) ";
 
 									if (tags == Constants.Stars)
 									{
@@ -1050,12 +1079,12 @@ namespace yata
 						case  4: // "EFFECTS"
 							if (it_PathItemPropDef2da.Checked)
 							{
-								if ((val = _table.Rows[id].Cells[col].Value) != null)
+								if ((val = Table.Rows[id].Cells[col].Value) != null)
 								{
 									string effects = val.ToString();
 									if (effects != Constants.Stars)
 									{
-										info = _table.Columns[col].HeaderCell.Value + ": ";
+										info = Table.Columns[col].HeaderCell.Value + ": ";
 
 										string par = String.Empty;
 										int pos;
@@ -1091,10 +1120,10 @@ namespace yata
 						case  6: // "SKILL"
 							if (it_PathFeat2da.Checked)
 							{
-								if ((val = _table.Rows[id].Cells[col].Value) != null
+								if ((val = Table.Rows[id].Cells[col].Value) != null
 									&& Int32.TryParse(val.ToString(), out result))
 								{
-									object cat = _table.Rows[id].Cells[1].Value;
+									object cat = Table.Rows[id].Cells[1].Value;
 									if (cat != null)
 									{
 										int result2;
@@ -1102,7 +1131,7 @@ namespace yata
 										{
 											if (result < CraftInfo.featsLabels.Count)
 											{
-												info = _table.Columns[col].HeaderCell.Value + ": "
+												info = Table.Columns[col].HeaderCell.Value + ": "
 													 + CraftInfo.featsLabels[result];
 											}
 										}
@@ -1110,7 +1139,7 @@ namespace yata
 										{
 											if (result < CraftInfo.skillLabels.Count)
 											{
-												info = _table.Columns[col].HeaderCell.Value + ": "
+												info = Table.Columns[col].HeaderCell.Value + ": "
 													 + CraftInfo.skillLabels[result];
 											}
 										}
@@ -1369,7 +1398,7 @@ namespace yata
 		// TODO: option to search selected cells (excluding unselected)
 		void Search()
 		{
-			if (_table != null && _table.Rows.Count > 1)
+			if (Table != null && Table.Rows.Count > 1)
 			{
 				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
@@ -1379,10 +1408,10 @@ namespace yata
 					int startId;
 					int startCol;
 
-					if (_table.CurrentCell != null)
+					if (Table.CurrentCell != null)
 					{
-						startId  = _table.CurrentCell.RowIndex;
-						startCol = _table.CurrentCell.ColumnIndex;
+						startId  = Table.CurrentCell.RowIndex;
+						startCol = Table.CurrentCell.ColumnIndex;
 
 						if (startId  == -1) startId  = 0;
 						if (startCol == -1) startCol = 0;
@@ -1403,16 +1432,16 @@ namespace yata
 
 					string st;
 
-					for (id = startId; id != _table.Rows.Count - 1; ++id)
+					for (id = startId; id != Table.Rows.Count - 1; ++id)
 					{
 						if (start)
 						{
 							start = false;
 							col = startCol + 1;
 
-							if (col == _table.Columns.Count)		// if starting on the last cell of a row
-							{										// jump to the first cell of the next row
-								if (id != _table.Rows.Count - 2)	// -> unless it's the last row (above the default last row)
+							if (col == Table.Columns.Count)		// if starting on the last cell of a row
+							{									// jump to the first cell of the next row
+								if (id != Table.Rows.Count - 2)	// -> unless it's the last row (above the default last row)
 								{
 									col = 0;
 									++id;
@@ -1424,15 +1453,15 @@ namespace yata
 						else
 							col = 0;
 
-						for (; col != _table.Columns.Count; ++col)
+						for (; col != Table.Columns.Count; ++col)
 						{
-							if ((val = _table[col,id].Value) != null) //_table.Rows[id].Cells[col]
+							if ((val = Table[col,id].Value) != null) //Table.Rows[id].Cells[col]
 							{
 								st = val.ToString().ToLower();
 								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
 									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
 								{
-									_table.CurrentCell = _table[col,id]; //.Rows[id].Cells[col];
+									Table.CurrentCell = Table[col,id]; //.Rows[id].Cells[col];
 									return;
 								}
 							}
@@ -1443,15 +1472,15 @@ namespace yata
 //					{
 					for (id = 0; id != startId + 1; ++id) // quick and dirty wrap ->
 					{
-						for (col = 0; col != _table.Columns.Count; ++col)
+						for (col = 0; col != Table.Columns.Count; ++col)
 						{
-							if ((val = _table[col,id].Value) != null)
+							if ((val = Table[col,id].Value) != null)
 							{
 								st = val.ToString().ToLower();
 								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
 									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
 								{
-									_table.CurrentCell = _table[col,id];
+									Table.CurrentCell = Table[col,id];
 									return;
 								}
 							}
@@ -1498,7 +1527,7 @@ namespace yata
 		{
 			string asterisk = changed ? " *"
 									  : "";
-			tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(_table.Pfe) + asterisk;
+			tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe) + asterisk;
 		}
 
 
@@ -1509,8 +1538,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			if (_table != null)
-				_table.ForceScroll(e);
+			if (Table != null)
+				Table.ForceScroll(e);
 		}
 		#endregion Events (override)
 	}

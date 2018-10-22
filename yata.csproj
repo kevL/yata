@@ -78,9 +78,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TextCopyForm.cs" />
-    <Compile Include="TextCopyForm.Designer.cs">
-      <DependentUpon>TextCopyForm.cs</DependentUpon>
+    <Compile Include="FontCopyForm.cs" />
+    <Compile Include="FontCopyForm.Designer.cs">
+      <DependentUpon>FontCopyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="logger.cs" />
     <Compile Include="YataForm.cs" />
@@ -101,8 +101,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextCopyForm.resx">
-      <DependentUpon>TextCopyForm.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="FontCopyForm.resx">
+      <DependentUpon>FontCopyForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>
