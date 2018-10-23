@@ -699,29 +699,11 @@ namespace yata
 				}
 			}
 
-			CraftInfo = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting");
 
-			if (CraftInfo)
+			if (CraftInfo = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
 			{
-				// load all paths for Crafting from the optional manual settings file
-				string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
-				if (File.Exists(pathCfg))
-				{
-					using (var fs = File.OpenRead(pathCfg))
-					using (var sr = new StreamReader(fs))
-					{
-						string line;
-						while ((line = sr.ReadLine()) != null)
-						{
-							if (line.StartsWith("pathall=", StringComparison.InvariantCulture)
-								&& !String.IsNullOrEmpty(line = line.Substring(8).Trim())
-								&& Directory.Exists(line))
-							{
-								_f.GropeLabels(line);
-							}
-						}
-					}
-				}
+				foreach (var dir in Settings._pathall)
+					_f.GropeLabels(dir);
 			}
 
 

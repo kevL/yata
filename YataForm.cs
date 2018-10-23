@@ -56,120 +56,47 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
-			int result;
-			int x,y,w,h;
-			x = y = w = h = -1;
+			Settings.ScanSettings(); // load an Optional manual settings file
 
-			// load an Optional manual settings file
-			string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
-			if (File.Exists(pathCfg))
+			if (Settings._font != null)
 			{
-				using (var fs = File.OpenRead(pathCfg))
-				using (var sr = new StreamReader(fs))
+				Font.Dispose();
+				Font = Settings._font;
+			}
+
+			if (Settings._font2 != null)
+			{
+				menubar.Font.Dispose();
+				menubar.Font = Settings._font2;
+
+				contextEditor.Font.Dispose();
+				contextEditor.Font = Settings._font2;
+			}
+
+			if (Settings._dirpreset.Count != 0)
+			{
+				it_Folders.Visible = true;
+
+				var clear = it_Folders.DropDownItems.Add("clear current");
+				_presets.Add(clear);
+
+				clear.Visible = false;
+				clear.Click += PresetClick;
+
+				foreach (var dir in Settings._dirpreset)
 				{
-					string line;
-					while ((line = sr.ReadLine()) != null)
-					{
-						if (line.StartsWith("font=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
-							{
-								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-								var font = tc.ConvertFromInvariantString(line) as Font;
+					var preset = it_Folders.DropDownItems.Add(dir);
+					_presets.Add(preset);
 
-								int pos = line.IndexOf(',');
-								if (pos == -1)
-									pos = line.Length;
-
-								if (line.Substring(0, pos) == font.Name)
-								{
-									Font.Dispose();
-									Font = font;
-								}
-								else
-									font.Dispose(); // NOTE: Fail silently.
-							}
-						}
-						else if (line.StartsWith("font2=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
-							{
-								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-								var font = tc.ConvertFromInvariantString(line) as Font;
-
-								int pos = line.IndexOf(',');
-								if (pos == -1)
-									pos = line.Length;
-
-								if (line.Substring(0, pos) == font.Name)
-								{
-									menubar.Font.Dispose();
-									menubar.Font = font;
-
-									contextEditor.Font.Dispose();
-									contextEditor.Font = font;
-								}
-								else
-									font.Dispose(); // NOTE: Fail silently.
-							}
-						}
-						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
-								&& Directory.Exists(line))
-							{
-								it_Folders.Visible = true;
-
-								if (_presets.Count == 0)
-								{
-									var clear = it_Folders.DropDownItems.Add("clear current");
-									_presets.Add(clear);
-
-									clear.Visible = false;
-									clear.Click += PresetClick;
-								}
-
-								var preset = it_Folders.DropDownItems.Add(line);
-								_presets.Add(preset);
-
-								preset.Click += PresetClick;
-							}
-						}
-						else if (line.StartsWith("x=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result) && result > 0)
-							{
-								x = result;
-							}
-						}
-						else if (line.StartsWith("y=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result) && result > 0)
-							{
-								y = result;
-							}
-						}
-						else if (line.StartsWith("w=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result) && result > 0)
-							{
-								w = result;
-							}
-						}
-						else if (line.StartsWith("h=", StringComparison.InvariantCulture))
-						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
-								&& Int32.TryParse(line, out result) && result > 0)
-							{
-								h = result;
-							}
-						}
-					}
+					preset.Click += PresetClick;
 				}
 			}
+
+			int
+				x = Settings._x,
+				y = Settings._y,
+				w = Settings._w,
+				h = Settings._h;
 
 			if (x != -1 || y != -1)
 			{
