@@ -164,7 +164,7 @@ namespace yata
 
 
 		#region File menu
-		void OpenToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Open(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
@@ -192,23 +192,25 @@ namespace yata
 
 			if (table.Load2da())
 			{
-				table.RowHeaderMouseClick += RowHeaderContextMenu;
+				table.RowHeaderMouseClick += context_;
 				table.CellMouseEnter      += PrintCraftInfo;
 
 				var page = new TabPage();
-				tabControl.TabPages.Add(page);
+				Tabs.TabPages.Add(page);
 
 				page.Tag = table;
 				page.Text = Path.GetFileNameWithoutExtension(pfe);
 
+				SetTabSize();
+
 				page.Controls.Add(table);
 
-				tabControl.SelectedTab = page;
+				Tabs.SelectedTab = page;
 
 				table.Select(); // focus the table.
 
-				Table = table; // NOTE: Is done also in TabControl1SelectedIndexChanged()
-				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+				opsclick_AutosizeCols(null, EventArgs.Empty); // that works ... finally. so to speak
 
 				Table.SetRowSize();
 
@@ -219,8 +221,26 @@ namespace yata
 			}
 			((ISupportInitialize)(table)).EndInit();
 
-			TabControl1SelectedIndexChanged(null, EventArgs.Empty);
+			tab_SelectedIndexChanged(null, EventArgs.Empty);
 		}
+
+
+		void SetTabSize()
+		{
+			if (Tabs != null && Tabs.TabCount != 0)
+			{
+				int w = 25, wT;
+				for (int tab = 0; tab != Tabs.TabCount; ++tab)
+				{
+					wT = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, Font).Width;
+					if (wT > w)
+						w = wT;
+				}
+				Tabs.ItemSize = new Size(w + 10,0);
+				Tabs.Refresh(); // prevent text-drawing glitches ...
+			}
+		}
+
 
 
 		/// <summary>
@@ -228,11 +248,11 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void TabControl1SelectedIndexChanged(object sender, EventArgs e)
+		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (tabControl.SelectedIndex != -1)
+			if (Tabs.SelectedIndex != -1)
 			{
-				Table = tabControl.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
+				Table = Tabs.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
 
 				it_MenuPaths.Visible = Table.CraftInfo;
 				panel_ColorFill.Hide();
@@ -254,64 +274,48 @@ namespace yata
 
 		/// <summary>
 		/// Draws the tab-text in Bold iff selected.
-		/// @note Has the peculiar side-effect of dropping the text to the
-		/// bottom of the tab-rect. But I like it
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void TabControl1DrawItem(object sender, DrawItemEventArgs e)
+		void tab_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			var tab = tabControl.TabPages[e.Index];
+			var tab = Tabs.TabPages[e.Index];
 
-//			Color color = (tab == tabControl.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work on tabs.
-//														  : Color.Brown;
+//			Color color = (tab == Tabs.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work normally on tabs.
+//													: Color.Brown;
 
 			int y;
 
 			FontStyle style;
-			if (tab == tabControl.SelectedTab)
+			if (tab == Tabs.SelectedTab)
 			{
 				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Underline))
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
+				foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
 				{
-					if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Underline))
+					if (Font.FontFamily.IsStyleAvailable(styleTest))
 					{
-						if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
-						{
-							foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
-							{
-								if (Font.FontFamily.IsStyleAvailable(styleTest))
-								{
-									style = styleTest;
-									break;
-								}
-							}
-						}
+						style = styleTest;
+						break;
 					}
 				}
-
 				y = 6;
 			}
 			else
 			{
 				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Regular))
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
+				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
+				foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
 				{
-					if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
+					if (Font.FontFamily.IsStyleAvailable(styleTest))
 					{
-						if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
-						{
-							foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
-							{
-								if (Font.FontFamily.IsStyleAvailable(styleTest))
-								{
-									style = styleTest;
-									break;
-								}
-							}
-						}
+						style = styleTest;
+						break;
 					}
 				}
-
-				y = 2;
+				y = 3;
 			}
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
@@ -331,7 +335,7 @@ namespace yata
 
 
 /*			var rect = e.Bounds;
-			if (page == tabControl.SelectedTab)
+			if (page == Tabs.SelectedTab)
 			{
 				style = FontStyle.Bold;
 				rect.Y -= 4;
@@ -353,7 +357,7 @@ namespace yata
 								  sf); */
 		}
 
-		void CloseToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Close(object sender, EventArgs e)
 		{
 			if (Table != null
 				&& (!Table.Changed
@@ -363,21 +367,22 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				tabControl.TabPages.Remove(tabControl.SelectedTab);
+				Tabs.TabPages.Remove(Tabs.SelectedTab);
 
-				if (tabControl.TabPages.Count == 0)
+				if (Tabs.TabCount == 0)
 					Table = null;
 
+				SetTabSize();
 				SetTitlebarText();
 			}
 		}
 
-		void QuitToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Quit(object sender, EventArgs e)
 		{
 			Close(); // let MainFormFormClosing() handle it ...
 		}
 
-		void MainFormFormClosing(object sender, CancelEventArgs e)
+		void yata_Closing(object sender, CancelEventArgs e)
 		{
 			var tables = GetChangedTables();
 			if (tables.Count != 0)
@@ -404,7 +409,7 @@ namespace yata
 		{
 			var changed = new List<string>();
 
-			foreach (TabPage page in tabControl.TabPages)
+			foreach (TabPage page in Tabs.TabPages)
 			{
 				var table = page.Tag as YataDataGridView;
 				if (table != null && table.Changed)
@@ -416,7 +421,7 @@ namespace yata
 		}
 
 
-		void ReloadToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Reload(object sender, EventArgs e)
 		{
 			if (Table != null && File.Exists(Table.Pfe)
 				&& (!Table.Changed
@@ -435,7 +440,7 @@ namespace yata
 
 				if (Table.Load2da())
 				{
-					AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty); // that works ... finally. so to speak
+					opsclick_AutosizeCols(null, EventArgs.Empty); // that works ... finally. so to speak
 					DrawingControl.ResumeDrawing(Table);
 
 					Table.CurrentCell = null;
@@ -445,16 +450,16 @@ namespace yata
 					Table.Columns[2].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
 				}
 				else
-					CloseToolStripMenuItemClick(null, EventArgs.Empty);
+					fileclick_Close(null, EventArgs.Empty);
 
-				if (tabControl.TabPages.Count != 0)
+				if (Tabs.TabCount != 0)
 					panel_ColorFill.Hide();
 			}
 			// TODO: Show an error if file no longer exists.
 		}
 
 		// nb. the Create option is disabled in the designer
-		void CreateToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Create(object sender, EventArgs e)
 		{}
 
 
@@ -465,9 +470,9 @@ namespace yata
 		{
 			string text = "Yata";
 
-			if (tabControl.SelectedIndex != -1)
+			if (Tabs.SelectedIndex != -1)
 			{
-				var table = tabControl.SelectedTab.Tag as YataDataGridView;
+				var table = Tabs.SelectedTab.Tag as YataDataGridView;
 				if (table != null)
 				{
 					string pfe = table.Pfe;
@@ -484,7 +489,7 @@ namespace yata
 		}
 
 
-		void SaveToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -537,7 +542,7 @@ namespace yata
 			}
 		}
 
-		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
+		void fileclick_SaveAs(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Rows.Count > 1)
 			{
@@ -550,11 +555,11 @@ namespace yata
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
 						Table.Pfe = sfd.FileName;
-						tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe);
+						Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe);
 
 						SetTitlebarText();
 
-						SaveToolStripMenuItemClick(null, EventArgs.Empty);
+						fileclick_Save(null, EventArgs.Empty);
 					}
 				}
 			}
@@ -565,7 +570,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void FileToolStripMenuItemDropDownOpening(object sender, EventArgs e)
+		void file_dropdownopening_FolderPresets(object sender, EventArgs e)
 		{
 			if (_presets.Count != 0)
 			{
@@ -618,7 +623,7 @@ namespace yata
 
 
 		#region Context menu
-		void RowHeaderContextMenu(object sender, DataGridViewCellMouseEventArgs e)
+		void context_(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right
 				&& e.RowIndex != Table.Rows.Count - 1)
@@ -639,7 +644,7 @@ namespace yata
 			}
 		}
 
-		void CopyToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditCopy(object sender, EventArgs e)
 		{
 			_copy.Clear();
 
@@ -650,13 +655,13 @@ namespace yata
 			}
 		}
 
-		void CutToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditCut(object sender, EventArgs e)
 		{
-			CopyToolStripMenuItemClick(null, EventArgs.Empty);
-			DeleteToolStripMenuItemClick(null, EventArgs.Empty);
+			contextclick_EditCopy(null, EventArgs.Empty);
+			contextclick_EditDelete(null, EventArgs.Empty);
 		}
 
-		void PasteAboveToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
 			if (_copy.Count == Table.Columns.Count)
 			{
@@ -666,7 +671,7 @@ namespace yata
 			}
 		}
 
-		void PasteToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditPaste(object sender, EventArgs e)
 		{
 			int cols = Table.Columns.Count;
 			if (_copy.Count == cols)
@@ -680,7 +685,7 @@ namespace yata
 			}
 		}
 
-		void PasteBelowToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
 			if (_copy.Count == Table.Columns.Count)
 			{
@@ -690,7 +695,7 @@ namespace yata
 			}
 		}
 
-		void CreateAboveToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
 			Table.Changed = true;
 			int cols = Table.Columns.Count;
@@ -704,7 +709,7 @@ namespace yata
 			Table.RelabelRowHeaders();
 		}
 
-		void CreateBelowToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
 			Table.Changed = true;
 			int cols = Table.Columns.Count;
@@ -718,7 +723,7 @@ namespace yata
 			Table.RelabelRowHeaders();
 		}
 
-		void ClearToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditClear(object sender, EventArgs e)
 		{
 			Table.Changed = true;
 			int cols = Table.Columns.Count;
@@ -729,7 +734,7 @@ namespace yata
 			Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
 		}
 
-		void DeleteToolStripMenuItemClick(object sender, EventArgs e)
+		void contextclick_EditDelete(object sender, EventArgs e)
 		{
 			Table.Changed = true;
 			Table.Rows.Remove(Table.SelectedRows[0]);
@@ -739,12 +744,12 @@ namespace yata
 
 
 		#region Edit menu
-		void It_SearchClick(object sender, EventArgs e)
+		void editclick_Search(object sender, EventArgs e)
 		{
 			tb_Search.Focus();
 		}
 
-		void It_FindnextClick(object sender, EventArgs e)
+		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			Search();
 		}
@@ -752,7 +757,7 @@ namespace yata
 
 
 		#region 2da Ops menu
-		void CheckRowOrderToolStripMenuItemClick(object sender, EventArgs e)
+		void opsclick_CheckRowOrder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Rows.Count > 1)
 			{
@@ -819,7 +824,7 @@ namespace yata
 										MessageBoxIcon.Exclamation,
 										MessageBoxDefaultButton.Button1) == DialogResult.Yes)
 					{
-						RenumberToolStripMenuItemClick(null, EventArgs.Empty);
+						opsclick_Reorder(null, EventArgs.Empty);
 					}
 				}
 				else
@@ -831,7 +836,7 @@ namespace yata
 			}
 		}
 
-		void RenumberToolStripMenuItemClick(object sender, EventArgs e)
+		void opsclick_Reorder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Rows.Count > 1)
 			{
@@ -860,7 +865,7 @@ namespace yata
 			}
 		}
 
-		void RecolorToolStripMenuItemClick(object sender, EventArgs e)
+		void opsclick_Recolor(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Rows.Count > 1)
 			{
@@ -876,13 +881,13 @@ namespace yata
 			}
 		}
 
-		internal void AutosizeColsToolStripMenuItemClick(object sender, EventArgs e)
+		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			if (Table != null)
 				Table.AutoResizeColumns();
 		}
 
-		void Freeze1stColToolStripMenuItemClick(object sender, EventArgs e)
+		void opsclick_Freeze1stCol(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Columns.Count > 1)
 			{
@@ -904,7 +909,7 @@ namespace yata
 			}
 		}
 
-		void Freeze2ndColToolStripMenuItemClick(object sender, EventArgs e)
+		void opsclick_Freeze2ndCol(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Columns.Count > 1)
 			{
@@ -929,7 +934,7 @@ namespace yata
 
 
 		#region Font menu
-		void itClick_Font(object sender, EventArgs e)
+		void fontclick_Font(object sender, EventArgs e)
 		{
 			var f = Application.OpenForms["FontPickerForm"];
 			if (f == null)
@@ -947,7 +952,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void ShowCurrentFontStringToolStripMenuItemClick(object sender, EventArgs e)
+		void fontclick_CurrentFont(object sender, EventArgs e)
 		{
 			var f = new FontCopyForm();
 			f.Font = Font;
@@ -964,7 +969,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void itClick_FontDefault(object sender, EventArgs e)
+		void fontclick_Default(object sender, EventArgs e)
 		{
 			doFont(new Font("Georgia", 8));
 		}
@@ -985,8 +990,10 @@ namespace yata
 
 			if (Table != null)
 			{
-				AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
+				opsclick_AutosizeCols(null, EventArgs.Empty);
 				Table.SetRowSize();
+
+				SetTabSize();
 			}
 
 			Width  = w;
@@ -1522,19 +1529,19 @@ namespace yata
 
 
 		#region Tabmenu
-		void It_tabCloseClick(object sender, EventArgs e)
+		void tabclick_Close(object sender, EventArgs e)
 		{
-			CloseToolStripMenuItemClick(null, EventArgs.Empty);
+			fileclick_Close(null, EventArgs.Empty);
 		}
 
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
-			Point pt = tabControl.PointToClient(Cursor.Position);
-			for (int i = 0; i != tabControl.TabCount; ++i)
+			Point pt = Tabs.PointToClient(Cursor.Position);
+			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
-				if (tabControl.GetTabRect(i).Contains(pt))
+				if (Tabs.GetTabRect(i).Contains(pt))
 				{
-					tabControl.SelectedIndex = i; // i is the index of tab under cursor
+					Tabs.SelectedIndex = i; // i is the index of tab under cursor
 					return;
 				}
 			}
@@ -1547,7 +1554,8 @@ namespace yata
 		{
 			string asterisk = changed ? " *"
 									  : "";
-			tabControl.TabPages[tabControl.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe) + asterisk;
+			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe) + asterisk;
+			SetTabSize();
 		}
 
 

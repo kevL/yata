@@ -96,6 +96,7 @@ namespace yata
 				ClearTabs();
 			}
 			base.OnDragDrop(drgevent);
+			Refresh(); // prevent text-drawing glitches on the tabs ...
 		}
 
 		// NOTE: Either OnDragDrop fires on a successful target or OnDragLeave

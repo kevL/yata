@@ -187,9 +187,10 @@
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
 			this.tabControl.Size = new System.Drawing.Size(846, 408);
+			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tabControl.TabIndex = 0;
-			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl1DrawItem);
-			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
+			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
+			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tab_SelectedIndexChanged);
 			// 
 			// tabMenu
 			// 
@@ -205,7 +206,7 @@
 			this.it_tabClose.Size = new System.Drawing.Size(95, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabClose.Click += new System.EventHandler(this.It_tabCloseClick);
+			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
 			// 
 			// menubar
 			// 
@@ -240,7 +241,7 @@
 			this.it_MenuFile.Name = "it_MenuFile";
 			this.it_MenuFile.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuFile.Text = "File";
-			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.FileToolStripMenuItemDropDownOpening);
+			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening_FolderPresets);
 			// 
 			// it_Open
 			// 
@@ -248,7 +249,7 @@
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.it_Open.Size = new System.Drawing.Size(160, 22);
 			this.it_Open.Text = "Open ...";
-			this.it_Open.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
+			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
 			// it_Reload
 			// 
@@ -256,7 +257,7 @@
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.it_Reload.Size = new System.Drawing.Size(160, 22);
 			this.it_Reload.Text = "Reload";
-			this.it_Reload.Click += new System.EventHandler(this.ReloadToolStripMenuItemClick);
+			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// it_Folders
 			// 
@@ -271,7 +272,7 @@
 			this.it_Create.Size = new System.Drawing.Size(160, 22);
 			this.it_Create.Text = "Create ...";
 			this.it_Create.Visible = false;
-			this.it_Create.Click += new System.EventHandler(this.CreateToolStripMenuItemClick);
+			this.it_Create.Click += new System.EventHandler(this.fileclick_Create);
 			// 
 			// separator_1
 			// 
@@ -284,7 +285,7 @@
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.it_Save.Size = new System.Drawing.Size(160, 22);
 			this.it_Save.Text = "Save";
-			this.it_Save.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
+			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
@@ -292,14 +293,14 @@
 			this.it_SaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.it_SaveAs.Size = new System.Drawing.Size(160, 22);
 			this.it_SaveAs.Text = "Save As ...";
-			this.it_SaveAs.Click += new System.EventHandler(this.SaveAsToolStripMenuItemClick);
+			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
 			this.it_Close.Size = new System.Drawing.Size(160, 22);
 			this.it_Close.Text = "Close";
-			this.it_Close.Click += new System.EventHandler(this.CloseToolStripMenuItemClick);
+			this.it_Close.Click += new System.EventHandler(this.fileclick_Close);
 			// 
 			// separator_2
 			// 
@@ -312,7 +313,7 @@
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
 			this.it_Quit.Size = new System.Drawing.Size(160, 22);
 			this.it_Quit.Text = "Quit";
-			this.it_Quit.Click += new System.EventHandler(this.QuitToolStripMenuItemClick);
+			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
 			// it_MenuEdit
 			// 
@@ -329,7 +330,7 @@
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.it_Search.Size = new System.Drawing.Size(130, 22);
 			this.it_Search.Text = "Find";
-			this.it_Search.Click += new System.EventHandler(this.It_SearchClick);
+			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
 			// it_Findnext
 			// 
@@ -337,7 +338,7 @@
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.it_Findnext.Size = new System.Drawing.Size(130, 22);
 			this.it_Findnext.Text = "Find next";
-			this.it_Findnext.Click += new System.EventHandler(this.It_FindnextClick);
+			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// tb_Search
 			// 
@@ -377,14 +378,14 @@
 			this.it_CheckRows.Name = "it_CheckRows";
 			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
 			this.it_CheckRows.Text = "test row order";
-			this.it_CheckRows.Click += new System.EventHandler(this.CheckRowOrderToolStripMenuItemClick);
+			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
 			// it_RenumberRows
 			// 
 			this.it_RenumberRows.Name = "it_RenumberRows";
 			this.it_RenumberRows.Size = new System.Drawing.Size(155, 22);
 			this.it_RenumberRows.Text = "order row ids";
-			this.it_RenumberRows.Click += new System.EventHandler(this.RenumberToolStripMenuItemClick);
+			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
 			// 
 			// toolStripSeparator1
 			// 
@@ -396,14 +397,14 @@
 			this.it_RecolorRows.Name = "it_RecolorRows";
 			this.it_RecolorRows.Size = new System.Drawing.Size(155, 22);
 			this.it_RecolorRows.Text = "recolor rows";
-			this.it_RecolorRows.Click += new System.EventHandler(this.RecolorToolStripMenuItemClick);
+			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// it_AutoCols
 			// 
 			this.it_AutoCols.Name = "it_AutoCols";
 			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
 			this.it_AutoCols.Text = "autosize cols";
-			this.it_AutoCols.Click += new System.EventHandler(this.AutosizeColsToolStripMenuItemClick);
+			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// toolStripSeparator2
 			// 
@@ -416,7 +417,7 @@
 			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.it_freeze1.Size = new System.Drawing.Size(155, 22);
 			this.it_freeze1.Text = "freeze 1st col";
-			this.it_freeze1.Click += new System.EventHandler(this.Freeze1stColToolStripMenuItemClick);
+			this.it_freeze1.Click += new System.EventHandler(this.opsclick_Freeze1stCol);
 			// 
 			// it_freeze2
 			// 
@@ -424,7 +425,7 @@
 			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
 			this.it_freeze2.Size = new System.Drawing.Size(155, 22);
 			this.it_freeze2.Text = "freeze 2nd col";
-			this.it_freeze2.Click += new System.EventHandler(this.Freeze2ndColToolStripMenuItemClick);
+			this.it_freeze2.Click += new System.EventHandler(this.opsclick_Freeze2ndCol);
 			// 
 			// fontToolStripMenuItem
 			// 
@@ -441,21 +442,21 @@
 			this.it_Font.Name = "it_Font";
 			this.it_Font.Size = new System.Drawing.Size(165, 22);
 			this.it_Font.Text = "Font ... be patient";
-			this.it_Font.Click += new System.EventHandler(this.itClick_Font);
+			this.it_Font.Click += new System.EventHandler(this.fontclick_Font);
 			// 
 			// it_CurrentFont
 			// 
 			this.it_CurrentFont.Name = "it_CurrentFont";
 			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
 			this.it_CurrentFont.Text = "current font string";
-			this.it_CurrentFont.Click += new System.EventHandler(this.ShowCurrentFontStringToolStripMenuItemClick);
+			this.it_CurrentFont.Click += new System.EventHandler(this.fontclick_CurrentFont);
 			// 
 			// defaultToolStripMenuItem
 			// 
 			this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
 			this.defaultToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
 			this.defaultToolStripMenuItem.Text = "default";
-			this.defaultToolStripMenuItem.Click += new System.EventHandler(this.itClick_FontDefault);
+			this.defaultToolStripMenuItem.Click += new System.EventHandler(this.fontclick_Default);
 			// 
 			// it_MenuPaths
 			// 
@@ -613,14 +614,14 @@
 			this.context_it_Cut.Name = "context_it_Cut";
 			this.context_it_Cut.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Cut.Text = "Cut row @ id";
-			this.context_it_Cut.Click += new System.EventHandler(this.CutToolStripMenuItemClick);
+			this.context_it_Cut.Click += new System.EventHandler(this.contextclick_EditCut);
 			// 
 			// context_it_Copy
 			// 
 			this.context_it_Copy.Name = "context_it_Copy";
 			this.context_it_Copy.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Copy.Text = "Copy row @ id";
-			this.context_it_Copy.Click += new System.EventHandler(this.CopyToolStripMenuItemClick);
+			this.context_it_Copy.Click += new System.EventHandler(this.contextclick_EditCopy);
 			// 
 			// separator_8
 			// 
@@ -632,21 +633,21 @@
 			this.context_it_PasteAbove.Name = "context_it_PasteAbove";
 			this.context_it_PasteAbove.Size = new System.Drawing.Size(175, 22);
 			this.context_it_PasteAbove.Text = "Paste clip above id";
-			this.context_it_PasteAbove.Click += new System.EventHandler(this.PasteAboveToolStripMenuItemClick);
+			this.context_it_PasteAbove.Click += new System.EventHandler(this.contextclick_EditPasteAbove);
 			// 
 			// context_it_Paste
 			// 
 			this.context_it_Paste.Name = "context_it_Paste";
 			this.context_it_Paste.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Paste.Text = "Paste clip @ id";
-			this.context_it_Paste.Click += new System.EventHandler(this.PasteToolStripMenuItemClick);
+			this.context_it_Paste.Click += new System.EventHandler(this.contextclick_EditPaste);
 			// 
 			// context_it_PasteBelow
 			// 
 			this.context_it_PasteBelow.Name = "context_it_PasteBelow";
 			this.context_it_PasteBelow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_PasteBelow.Text = "Paste clip below id";
-			this.context_it_PasteBelow.Click += new System.EventHandler(this.PasteBelowToolStripMenuItemClick);
+			this.context_it_PasteBelow.Click += new System.EventHandler(this.contextclick_EditPasteBelow);
 			// 
 			// separator_9
 			// 
@@ -658,14 +659,14 @@
 			this.context_it_CreateAbove.Name = "context_it_CreateAbove";
 			this.context_it_CreateAbove.Size = new System.Drawing.Size(175, 22);
 			this.context_it_CreateAbove.Text = "Create blank above id";
-			this.context_it_CreateAbove.Click += new System.EventHandler(this.CreateAboveToolStripMenuItemClick);
+			this.context_it_CreateAbove.Click += new System.EventHandler(this.contextclick_EditCreateAbove);
 			// 
 			// context_it_CreateBelow
 			// 
 			this.context_it_CreateBelow.Name = "context_it_CreateBelow";
 			this.context_it_CreateBelow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_CreateBelow.Text = "Create blank below id";
-			this.context_it_CreateBelow.Click += new System.EventHandler(this.CreateBelowToolStripMenuItemClick);
+			this.context_it_CreateBelow.Click += new System.EventHandler(this.contextclick_EditCreateBelow);
 			// 
 			// separator_10
 			// 
@@ -677,14 +678,14 @@
 			this.context_it_ClearRow.Name = "context_it_ClearRow";
 			this.context_it_ClearRow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_ClearRow.Text = "Clear fields @ id";
-			this.context_it_ClearRow.Click += new System.EventHandler(this.ClearToolStripMenuItemClick);
+			this.context_it_ClearRow.Click += new System.EventHandler(this.contextclick_EditClear);
 			// 
 			// context_it_DeleteRow
 			// 
 			this.context_it_DeleteRow.Name = "context_it_DeleteRow";
 			this.context_it_DeleteRow.Size = new System.Drawing.Size(175, 22);
 			this.context_it_DeleteRow.Text = "Delete @ id";
-			this.context_it_DeleteRow.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
+			this.context_it_DeleteRow.Click += new System.EventHandler(this.contextclick_EditDelete);
 			// 
 			// statusbar
 			// 
@@ -738,7 +739,7 @@
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";
 			this.Text = "Yata";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.yata_Closing);
 			this.tabMenu.ResumeLayout(false);
 			this.menubar.ResumeLayout(false);
 			this.menubar.PerformLayout();
