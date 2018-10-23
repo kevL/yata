@@ -36,6 +36,10 @@ namespace yata
 
 //			Font = _f.Font;
 
+			Left = _f.Left + 20;
+			Top  = _f.Top  + 20;
+
+
 			int fontStart  = -1; // for showing the start-font's characteristics
 			int fontStartT = -1; // in the lists
 
@@ -99,7 +103,7 @@ namespace yata
 		void btnOk_click(object sender, EventArgs e)
 		{
 			if (_dirty)
-				doFont(lbl_Example.Font);
+				_f.doFont(lbl_Example.Font);
 
 			Close();
 		}
@@ -111,46 +115,16 @@ namespace yata
 				_dirty = false;
 				_applied = true;
 
-				doFont(lbl_Example.Font);
+				_f.doFont(lbl_Example.Font);
 			}
 		}
 
 		void btnCancel_click(object sender, EventArgs e)
 		{
 			if (_applied)
-				doFont(_fontCached);
+				_f.doFont(_fontCached);
 
 			Close();
-		}
-
-		/// <summary>
-		/// See also: YataForm.itClick_FontDefault()
-		/// </summary>
-		/// <param name="font"></param>
-		void doFont(Font font)
-		{
-			DrawingControl.SuspendDrawing(_f);
-
-			int w = _f.Width;
-			int h = _f.Height;
-
-			_f.Font = font;
-
-			if (_f.Table != null)
-			{
-				_f.AutosizeColsToolStripMenuItemClick(null, EventArgs.Empty);
-				_f.Table.SetRowSize();
-			}
-
-			_f.Width  = w;
-			_f.Height = h;
-
-			DrawingControl.ResumeDrawing(_f);
-
-			if (_f.Table != null)
-				_f.Table.DisplaySelected();
-
-			Refresh(); // for big tables ...
 		}
 
 
@@ -162,6 +136,7 @@ namespace yata
 				e.DrawFocusRectangle();
 
 				var font = list_Font.Items[e.Index] as Font;
+
 				// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
 				TextRenderer.DrawText(e.Graphics,
 									  font.Name,

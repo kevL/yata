@@ -40,6 +40,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FontPickerForm));
 			this.list_Font = new System.Windows.Forms.ListBox();
 			this.btn_Ok = new System.Windows.Forms.Button();
 			this.btn_Apply = new System.Windows.Forms.Button();
@@ -69,9 +70,9 @@
 			// 
 			// btn_Ok
 			// 
-			this.btn_Ok.Location = new System.Drawing.Point(335, 25);
+			this.btn_Ok.Location = new System.Drawing.Point(290, 135);
 			this.btn_Ok.Name = "btn_Ok";
-			this.btn_Ok.Size = new System.Drawing.Size(115, 35);
+			this.btn_Ok.Size = new System.Drawing.Size(170, 45);
 			this.btn_Ok.TabIndex = 0;
 			this.btn_Ok.Text = "ok";
 			this.btn_Ok.UseVisualStyleBackColor = true;
@@ -79,9 +80,9 @@
 			// 
 			// btn_Apply
 			// 
-			this.btn_Apply.Location = new System.Drawing.Point(335, 65);
+			this.btn_Apply.Location = new System.Drawing.Point(290, 185);
 			this.btn_Apply.Name = "btn_Apply";
-			this.btn_Apply.Size = new System.Drawing.Size(115, 35);
+			this.btn_Apply.Size = new System.Drawing.Size(170, 45);
 			this.btn_Apply.TabIndex = 1;
 			this.btn_Apply.Text = "apply";
 			this.btn_Apply.UseVisualStyleBackColor = true;
@@ -90,9 +91,9 @@
 			// btn_Cancel
 			// 
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(335, 105);
+			this.btn_Cancel.Location = new System.Drawing.Point(290, 235);
 			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(115, 35);
+			this.btn_Cancel.Size = new System.Drawing.Size(170, 45);
 			this.btn_Cancel.TabIndex = 2;
 			this.btn_Cancel.Text = "cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -102,7 +103,7 @@
 			// 
 			this.lbl_Font.Location = new System.Drawing.Point(10, 5);
 			this.lbl_Font.Name = "lbl_Font";
-			this.lbl_Font.Size = new System.Drawing.Size(220, 15);
+			this.lbl_Font.Size = new System.Drawing.Size(40, 15);
 			this.lbl_Font.TabIndex = 3;
 			this.lbl_Font.Text = "FONT";
 			// 
@@ -110,7 +111,7 @@
 			// 
 			this.lbl_Style.Location = new System.Drawing.Point(245, 10);
 			this.lbl_Style.Name = "lbl_Style";
-			this.lbl_Style.Size = new System.Drawing.Size(80, 15);
+			this.lbl_Style.Size = new System.Drawing.Size(40, 15);
 			this.lbl_Style.TabIndex = 4;
 			this.lbl_Style.Text = "Style";
 			// 
@@ -118,7 +119,7 @@
 			// 
 			this.lbl_Size.Location = new System.Drawing.Point(290, 85);
 			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Size = new System.Drawing.Size(35, 15);
+			this.lbl_Size.Size = new System.Drawing.Size(20, 15);
 			this.lbl_Size.TabIndex = 5;
 			this.lbl_Size.Text = "pt";
 			// 
@@ -154,7 +155,7 @@
 			this.lbl_Example.Location = new System.Drawing.Point(5, 15);
 			this.lbl_Example.Name = "lbl_Example";
 			this.lbl_Example.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-			this.lbl_Example.Size = new System.Drawing.Size(440, 93);
+			this.lbl_Example.Size = new System.Drawing.Size(450, 90);
 			this.lbl_Example.TabIndex = 10;
 			// 
 			// tb_Size
@@ -173,7 +174,7 @@
 			this.groupBox1.Controls.Add(this.lbl_Example);
 			this.groupBox1.Location = new System.Drawing.Point(5, 285);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(449, 113);
+			this.groupBox1.Size = new System.Drawing.Size(460, 110);
 			this.groupBox1.TabIndex = 12;
 			this.groupBox1.TabStop = false;
 			// 
@@ -183,7 +184,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(457, 399);
+			this.ClientSize = new System.Drawing.Size(467, 399);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.btn_Ok);
 			this.Controls.Add(this.btn_Apply);
@@ -196,9 +197,10 @@
 			this.Controls.Add(this.lbl_Style);
 			this.Controls.Add(this.lbl_Font);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FontPickerForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Choose Font";
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);

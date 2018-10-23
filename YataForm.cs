@@ -966,14 +966,22 @@ namespace yata
 		/// <param name="e"></param>
 		void itClick_FontDefault(object sender, EventArgs e)
 		{
+			doFont(new Font("Georgia", 8));
+		}
+
+		/// <summary>
+		/// Applies a specified font to the Form.
+		/// </summary>
+		/// <param name="font"></param>
+		internal void doFont(Font font)
+		{
 			DrawingControl.SuspendDrawing(this);
 
-			Font.Dispose();
-
-			int w = Width;
+			int w = Width; // grab these before auto-sizing happens
 			int h = Height;
 
-			Font = new Font("Georgia", 8);
+			Font.Dispose();
+			Font = font;
 
 			if (Table != null)
 			{
@@ -987,9 +995,10 @@ namespace yata
 			DrawingControl.ResumeDrawing(this);
 
 			if (Table != null)
+			{
 				Table.DisplaySelected();
-
-			Refresh(); // for big tables ...
+				Refresh(); // for big tables ...
+			}
 		}
 		#endregion Font menu
 
