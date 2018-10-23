@@ -210,6 +210,7 @@
 			// 
 			// menubar
 			// 
+			this.menubar.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
@@ -354,7 +355,7 @@
 			this.cb_SearchOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
-			this.cb_SearchOption.Size = new System.Drawing.Size(119, 18);
+			this.cb_SearchOption.Size = new System.Drawing.Size(122, 18);
 			this.cb_SearchOption.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
 			// it_MenuOptions
@@ -576,7 +577,7 @@
 			// 
 			// contextEditor
 			// 
-			this.contextEditor.Font = new System.Drawing.Font("Consolas", 6.75F);
+			this.contextEditor.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.contextEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.context_it_Header,
 			this.separator_7,

@@ -75,7 +75,42 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-								Font = tc.ConvertFromInvariantString(line) as Font;
+								var font = tc.ConvertFromInvariantString(line) as Font;
+
+								int pos = line.IndexOf(',');
+								if (pos == -1)
+									pos = line.Length;
+
+								if (line.Substring(0, pos) == font.Name)
+								{
+									Font.Dispose();
+									Font = font;
+								}
+								else
+									font.Dispose(); // NOTE: Fail silently.
+							}
+						}
+						else if (line.StartsWith("font2=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							{
+								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+								var font = tc.ConvertFromInvariantString(line) as Font;
+
+								int pos = line.IndexOf(',');
+								if (pos == -1)
+									pos = line.Length;
+
+								if (line.Substring(0, pos) == font.Name)
+								{
+									contextEditor.Font.Dispose();
+									contextEditor.Font = font;
+
+									menubar.Font.Dispose();
+									menubar.Font = font;
+								}
+								else
+									font.Dispose(); // NOTE: Fail silently.
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
