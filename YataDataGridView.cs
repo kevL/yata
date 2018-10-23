@@ -450,6 +450,12 @@ namespace yata
 		{
 			Changed = true;
 
+			DisplaySelected();
+			RelabelRowHeaders();
+		}
+
+		internal void DisplaySelected()
+		{
 			int sel = -1;
 
 			if (SelectedRows.Count != 0)
@@ -477,7 +483,6 @@ namespace yata
 					}
 				}
 			}
-			RelabelRowHeaders();
 		}
 		#endregion Sort
 

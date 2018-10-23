@@ -932,15 +932,13 @@ namespace yata
 		void itClick_Font(object sender, EventArgs e)
 		{
 			var f = Application.OpenForms["FontPickerForm"];
-			if (f != null)
-			{
-				f.BringToFront();
-			}
-			else
+			if (f == null)
 			{
 				f = new FontPickerForm(this);
 				f.Show();
 			}
+			else
+				f.BringToFront();
 		}
 
 		/// <summary>
@@ -987,6 +985,11 @@ namespace yata
 			Height = h;
 
 			DrawingControl.ResumeDrawing(this);
+
+			if (Table != null)
+				Table.DisplaySelected();
+
+			Refresh(); // for big tables ...
 		}
 		#endregion Font menu
 

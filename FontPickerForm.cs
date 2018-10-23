@@ -146,6 +146,11 @@ namespace yata
 			_f.Height = h;
 
 			DrawingControl.ResumeDrawing(_f);
+
+			if (_f.Table != null)
+				_f.Table.DisplaySelected();
+
+			Refresh(); // for big tables ...
 		}
 
 
