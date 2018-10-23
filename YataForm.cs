@@ -316,16 +316,16 @@ namespace yata
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
 
+			// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
 			int w = TextRenderer.MeasureText(tab.Text, font).Width;
-
-			var pt = new Point(e.Bounds.X + (e.Bounds.Width - w) / 2,
-							   e.Bounds.Y + y);
-
+			var rect = e.Bounds;
+			rect.X   = e.Bounds.X + (e.Bounds.Width - w) / 2;
+			rect.Y   = e.Bounds.Y + y;
 
 			TextRenderer.DrawText(e.Graphics,
 								  tab.Text,
 								  font,
-								  pt,
+								  rect,
 								  SystemColors.ControlText,
 								  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 
@@ -931,8 +931,16 @@ namespace yata
 		#region Font menu
 		void itClick_Font(object sender, EventArgs e)
 		{
-			var f = new FontPickerForm(this);
-			f.ShowDialog();
+			var f = Application.OpenForms["FontPickerForm"];
+			if (f != null)
+			{
+				f.BringToFront();
+			}
+			else
+			{
+				f = new FontPickerForm(this);
+				f.Show();
+			}
 		}
 
 		/// <summary>

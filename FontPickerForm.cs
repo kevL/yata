@@ -81,7 +81,6 @@ namespace yata
 				 "6", "7", "8", "9","10","11","12",
 				"13","14","15","16","17","18"
 			});
-			list_Size.SelectedIndex = 4; // 10pt
 
 			if (fontStart != -1)
 				tb_Size.Text = _fontCached.SizeInPoints.ToString();
@@ -158,22 +157,13 @@ namespace yata
 				e.DrawFocusRectangle();
 
 				var font = list_Font.Items[e.Index] as Font;
+				// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
 				TextRenderer.DrawText(e.Graphics,
 									  font.Name,
 									  font,
-									  new Point(e.Bounds.X, e.Bounds.Y),
+									  e.Bounds,
 									  SystemColors.ControlText,
 									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
-//				TextRenderer.DrawText(e.Graphics,
-//									  font.Name,
-//									  e.CellStyle.Font,
-//									  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
-//									  e.CellStyle.ForeColor);
-//				e.Graphics.DrawString(font.Name,
-//									  font,
-//									  e.Style.ForeBrush,
-//									  e.Bounds.Left,
-//									  e.Bounds.Top);
 			}
 		}
 
@@ -223,7 +213,7 @@ namespace yata
 				TextRenderer.DrawText(e.Graphics,
 									  list_Style.Items[e.Index].ToString(),
 									  Font,
-									  new Point(e.Bounds.X, e.Bounds.Y),
+									  e.Bounds,
 									  SystemColors.ControlText,
 									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 			}
@@ -246,7 +236,7 @@ namespace yata
 				TextRenderer.DrawText(e.Graphics,
 									  list_Size.Items[e.Index].ToString(),
 									  Font,
-									  new Point(e.Bounds.X, e.Bounds.Y),
+									  e.Bounds,
 									  SystemColors.ControlText,
 									  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
 			}

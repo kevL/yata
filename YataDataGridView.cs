@@ -58,6 +58,8 @@ namespace yata
 
 		int _col;
 
+		int _a, _b; // for sorting cols (premature optimization only.)
+
 		const int _padVert = 4;
 
 
@@ -92,6 +94,9 @@ namespace yata
 //			Paint += doPaint;
 
 //			Scroll += (s, e) => Invalidate(); // interesting ...
+
+
+			//DefaultCellStyle <- TODO: these <--
 
 			Freeze = Frozen.FreezeOff;
 		}
@@ -146,7 +151,7 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				_col = e.ColumnIndex; // NOTE: '_col' is reset here only.
+				_col = e.ColumnIndex; // NOTE: '_col' is set/reset here only.
 
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)	// Shift+LMB = sort by col
 				{
@@ -251,7 +256,6 @@ namespace yata
 
 
 					// TODO: for the encore repaint the row-header col and all frozen cols.
-					// NOTE: Only needs to be done when de-selecting a col.
 /*					if (!sel)
 					{
 						if (_col >= FirstDisplayedScrollingColumnIndex
@@ -313,6 +317,13 @@ namespace yata
 				}
 			}
 		}
+
+
+//Another tip about speeding up DGV's...
+//1. turn off the auto resizing
+//2. set the row height manually
+//3. set column width manually
+//4. set the DefaultCellStyle of the columns
 
 
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
@@ -379,29 +390,29 @@ namespace yata
 				else // row-header
 					x = 10;
 
-//				if (col != FirstDisplayedScrollingColumnIndex
-//					|| FirstDisplayedScrollingColumnHiddenWidth == 0)
+				if (e.FormattedValue != null) // safety.
 				{
+					// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
+					var rect = e.CellBounds;
+					rect.X += x;
+					rect.Y += 4;
 					TextRenderer.DrawText(e.Graphics,
 										  Convert.ToString(e.FormattedValue),
 										  e.CellStyle.Font,
-										  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
+										  rect,
 										  e.CellStyle.ForeColor,
 										  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
-//					e.Handled = true;
 				}
 			}
-//			else
-//				e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ... uh no.
-
+//			else								// the best option so far -> (and this is after 3+ days fucking about with their shit.)
+//				e.PaintContent(e.ClipBounds);	// works but reverts text-painting to default ... uh leaves glitches
+//												// on the (hidden) col-headers once they are scrolled into display.
 
 			e.Handled = true;
 		}
 
 
 		#region Sort
-		int _a, _b;
-
 		/// <summary>
 		/// Sorts fields as integers iff they convert to integers and performs
 		/// a secondary sort against their IDs if applicable.
@@ -545,7 +556,7 @@ namespace yata
 
 				if (lineId > LABELS)
 				{
-					string[] row = ParseLine(line);
+					string[] row = Parse2daRow(line);
 
 					// test for well-formed, consistent IDs
 					++id;
@@ -805,7 +816,7 @@ namespace yata
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
-		string[] ParseLine(string line)
+		string[] Parse2daRow(string line)
 		{
 			var list  = new List<string>();
 			var field = new List<char>();
