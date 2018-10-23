@@ -225,6 +225,9 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Sets the width of the tabs on the TabControl.
+		/// </summary>
 		void SetTabSize()
 		{
 			if (Tabs != null && Tabs.TabCount != 0)
@@ -232,8 +235,7 @@ namespace yata
 				int w = 25, wT;
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
-					wT = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, Font).Width;
-					if (wT > w)
+					if ((wT = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, Font).Width) > w)
 						w = wT;
 				}
 				Tabs.ItemSize = new Size(w + 10,0);
@@ -1422,7 +1424,21 @@ namespace yata
 
 
 		#region Search
-		// TODO: option to search selected cells (excluding unselected)
+		/// <summary>
+		/// Performs a search when the Enter-key is released.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void SearchKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				Search();
+		}
+
+		/// <summary>
+		/// Searches the current table for the string in the search-box.
+		/// TODO: option to search selected cells (excluding unselected)
+		/// </summary>
 		void Search()
 		{
 			if (Table != null && Table.Rows.Count > 1)
@@ -1519,24 +1535,19 @@ namespace yata
 				// scroll the table to show it again.
 			}
 		}
-
-		void SearchKeyUp(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-				Search();
-		}
 		#endregion Search
 
 
 		#region Tabmenu
-		void tabclick_Close(object sender, EventArgs e)
-		{
-			fileclick_Close(null, EventArgs.Empty);
-		}
-
+		/// <summary>
+		/// Sets the selected tab when a right-click on a tab is about to open
+		/// a context.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
-			Point pt = Tabs.PointToClient(Cursor.Position);
+			var pt = Tabs.PointToClient(Cursor.Position);
 			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
 				if (Tabs.GetTabRect(i).Contains(pt))
@@ -1546,6 +1557,16 @@ namespace yata
 				}
 			}
 			e.Cancel = true;
+		}
+
+		/// <summary>
+		/// Closes a table when a tab's context-close item is clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void tabclick_Close(object sender, EventArgs e)
+		{
+			fileclick_Close(null, EventArgs.Empty);
 		}
 		#endregion Tabmenu
 
