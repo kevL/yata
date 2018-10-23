@@ -103,11 +103,11 @@ namespace yata
 
 								if (line.Substring(0, pos) == font.Name)
 								{
-									contextEditor.Font.Dispose();
-									contextEditor.Font = font;
-
 									menubar.Font.Dispose();
 									menubar.Font = font;
+
+									contextEditor.Font.Dispose();
+									contextEditor.Font = font;
 								}
 								else
 									font.Dispose(); // NOTE: Fail silently.
