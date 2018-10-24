@@ -345,7 +345,6 @@
 			// 
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_Search.Font = new System.Drawing.Font("Consolas", 6.75F);
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
@@ -582,8 +581,8 @@
 			this.contextEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.context_it_Header,
 			this.separator_7,
-			this.context_it_Cut,
 			this.context_it_Copy,
+			this.context_it_Cut,
 			this.separator_8,
 			this.context_it_PasteAbove,
 			this.context_it_Paste,
