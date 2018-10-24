@@ -79,18 +79,18 @@ namespace yata
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
 
-				statusbar_label_CraftInfo.Font.Dispose();
-				statusbar_label_CraftInfo.Font = new Font(Settings._font2.FontFamily,
-														  Settings._font2.SizeInPoints + 1.5f);
+				statusbar_label_Info.Font.Dispose();
+				statusbar_label_Info.Font = new Font(Settings._font2.FontFamily,
+													 Settings._font2.SizeInPoints + 1.5f);
 
-				int hBar = TextRenderer.MeasureText("X", statusbar_label_CraftInfo.Font).Height + 2;
+				int hBar = TextRenderer.MeasureText("X", statusbar_label_Info.Font).Height + 2;
 
-				statusbar                .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
-				statusbar_label_Coords   .Height =
-				statusbar_label_CraftInfo.Height = (hBar     < 17) ? 17 : hBar;
+				statusbar             .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
+				statusbar_label_Coords.Height =
+				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
 
 				int wCoords0 = statusbar_label_Coords.Width;
-				int wCoords = TextRenderer.MeasureText("id= 99 col= 99", statusbar_label_CraftInfo.Font).Width + 10;
+				int wCoords = TextRenderer.MeasureText("id= 99 col= 99", statusbar_label_Info.Font).Width + 10;
 				statusbar_label_Coords.Width = (wCoords < wCoords0) ? wCoords0 : wCoords;
 
 
@@ -1198,7 +1198,7 @@ namespace yata
 					}
 				}
 
-				statusbar_label_CraftInfo.Text = info;
+				statusbar_label_Info.Text = info;
 			}
 		}
 

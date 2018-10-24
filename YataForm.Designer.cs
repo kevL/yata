@@ -40,7 +40,7 @@
 		private System.Windows.Forms.ToolStripSeparator separator_10;
 		private System.Windows.Forms.StatusStrip statusbar;
 		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Coords;
-		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_CraftInfo;
+		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Info;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuPaths;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSpells2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathFeat2da;
@@ -166,7 +166,7 @@
 			this.context_it_DeleteRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
-			this.statusbar_label_CraftInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
@@ -345,6 +345,7 @@
 			// 
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_Search.Font = new System.Drawing.Font("Consolas", 6.75F);
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
@@ -693,7 +694,7 @@
 			this.statusbar.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.statusbar_label_Coords,
-			this.statusbar_label_CraftInfo});
+			this.statusbar_label_Info});
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(846, 22);
@@ -708,14 +709,14 @@
 			this.statusbar_label_Coords.Size = new System.Drawing.Size(160, 17);
 			this.statusbar_label_Coords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// statusbar_label_CraftInfo
+			// statusbar_label_Info
 			// 
-			this.statusbar_label_CraftInfo.AutoSize = false;
-			this.statusbar_label_CraftInfo.Font = new System.Drawing.Font("Consolas", 8F);
-			this.statusbar_label_CraftInfo.Name = "statusbar_label_CraftInfo";
-			this.statusbar_label_CraftInfo.Size = new System.Drawing.Size(671, 17);
-			this.statusbar_label_CraftInfo.Spring = true;
-			this.statusbar_label_CraftInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statusbar_label_Info.AutoSize = false;
+			this.statusbar_label_Info.Font = new System.Drawing.Font("Consolas", 8F);
+			this.statusbar_label_Info.Name = "statusbar_label_Info";
+			this.statusbar_label_Info.Size = new System.Drawing.Size(671, 17);
+			this.statusbar_label_Info.Spring = true;
+			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill
 			// 
