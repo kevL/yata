@@ -589,9 +589,9 @@
 			this.context_it_PasteBelow,
 			this.separator_9,
 			this.context_it_CreateAbove,
+			this.context_it_ClearRow,
 			this.context_it_CreateBelow,
 			this.separator_10,
-			this.context_it_ClearRow,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
 			this.contextEditor.Size = new System.Drawing.Size(176, 248);
