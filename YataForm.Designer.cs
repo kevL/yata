@@ -346,7 +346,7 @@
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Search.Name = "tb_Search";
-			this.tb_Search.Size = new System.Drawing.Size(120, 18);
+			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
 			// cb_SearchOption
@@ -355,7 +355,7 @@
 			this.cb_SearchOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
-			this.cb_SearchOption.Size = new System.Drawing.Size(122, 18);
+			this.cb_SearchOption.Size = new System.Drawing.Size(95, 18);
 			this.cb_SearchOption.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
 			// it_MenuOptions
@@ -594,16 +594,16 @@
 			this.context_it_ClearRow,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(176, 248);
+			this.contextEditor.Size = new System.Drawing.Size(176, 270);
 			// 
 			// context_it_Header
 			// 
 			this.context_it_Header.Enabled = false;
-			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7.25F, System.Drawing.FontStyle.Bold);
+			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7F, System.Drawing.FontStyle.Bold);
 			this.context_it_Header.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.context_it_Header.Name = "context_it_Header";
 			this.context_it_Header.Size = new System.Drawing.Size(175, 22);
-			this.context_it_Header.Text = "_";
+			this.context_it_Header.Text = "_row @ 16";
 			// 
 			// separator_7
 			// 
@@ -690,6 +690,7 @@
 			// 
 			// statusbar
 			// 
+			this.statusbar.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.statusbar_label_Coords,
 			this.statusbar_label_CraftInfo});
@@ -704,17 +705,17 @@
 			this.statusbar_label_Coords.AutoSize = false;
 			this.statusbar_label_Coords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statusbar_label_Coords.Name = "statusbar_label_Coords";
-			this.statusbar_label_Coords.Size = new System.Drawing.Size(150, 17);
+			this.statusbar_label_Coords.Size = new System.Drawing.Size(160, 17);
 			this.statusbar_label_Coords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// statusbar_label_CraftInfo
 			// 
 			this.statusbar_label_CraftInfo.AutoSize = false;
-			this.statusbar_label_CraftInfo.Font = new System.Drawing.Font("Consolas", 8.3F);
+			this.statusbar_label_CraftInfo.Font = new System.Drawing.Font("Consolas", 8F);
 			this.statusbar_label_CraftInfo.Name = "statusbar_label_CraftInfo";
-			this.statusbar_label_CraftInfo.Size = new System.Drawing.Size(681, 17);
+			this.statusbar_label_CraftInfo.Size = new System.Drawing.Size(671, 17);
 			this.statusbar_label_CraftInfo.Spring = true;
-			this.statusbar_label_CraftInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statusbar_label_CraftInfo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// panel_ColorFill
 			// 

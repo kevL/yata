@@ -121,6 +121,7 @@ namespace yata
 				_applied = true;
 
 				_f.doFont((Font)lbl_Example.Font.Clone());
+				btn_Cancel.Text = "— revert —";
 			}
 		}
 

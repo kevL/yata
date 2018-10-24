@@ -74,7 +74,7 @@
 			this.btn_Ok.Name = "btn_Ok";
 			this.btn_Ok.Size = new System.Drawing.Size(170, 45);
 			this.btn_Ok.TabIndex = 0;
-			this.btn_Ok.Text = "ok";
+			this.btn_Ok.Text = "— ok —";
 			this.btn_Ok.UseVisualStyleBackColor = true;
 			this.btn_Ok.Click += new System.EventHandler(this.btnOk_click);
 			// 
@@ -84,7 +84,7 @@
 			this.btn_Apply.Name = "btn_Apply";
 			this.btn_Apply.Size = new System.Drawing.Size(170, 45);
 			this.btn_Apply.TabIndex = 1;
-			this.btn_Apply.Text = "apply";
+			this.btn_Apply.Text = "— apply —";
 			this.btn_Apply.UseVisualStyleBackColor = true;
 			this.btn_Apply.Click += new System.EventHandler(this.btnApply_click);
 			// 
@@ -95,7 +95,7 @@
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(170, 45);
 			this.btn_Cancel.TabIndex = 2;
-			this.btn_Cancel.Text = "cancel";
+			this.btn_Cancel.Text = "— cancel —";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.btnCancel_click);
 			// 

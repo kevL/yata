@@ -75,6 +75,29 @@ namespace yata
 
 				contextEditor.Font.Dispose();
 				contextEditor.Font = Settings._font2;
+
+				statusbar.Font.Dispose();
+				statusbar.Font = Settings._font2;
+
+				statusbar_label_CraftInfo.Font.Dispose();
+				statusbar_label_CraftInfo.Font = new Font(Settings._font2.FontFamily,
+														  Settings._font2.SizeInPoints + 1.5f);
+
+				int hBar = TextRenderer.MeasureText("X", statusbar_label_CraftInfo.Font).Height + 2;
+
+				statusbar                .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
+				statusbar_label_Coords   .Height =
+				statusbar_label_CraftInfo.Height = (hBar     < 17) ? 17 : hBar;
+
+				int wCoords0 = statusbar_label_Coords.Width;
+				int wCoords = TextRenderer.MeasureText("id= 99 col= 99", statusbar_label_CraftInfo.Font).Width + 10;
+				statusbar_label_Coords.Width = (wCoords < wCoords0) ? wCoords0 : wCoords;
+
+
+				context_it_Header.Font.Dispose();
+				context_it_Header.Font = new Font(Settings._font2.FontFamily,
+												  Settings._font2.SizeInPoints + 1.0f,
+												  getStyleAccented(Settings._font2.FontFamily));
 			}
 
 			if (Settings._dirpreset.Count != 0)
@@ -127,6 +150,43 @@ namespace yata
 			//CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\armor.2da");
 		}
 		#endregion cTor
+
+
+		#region Methods (static)
+		static FontStyle getStyleAccented(FontFamily ff)
+		{
+			FontStyle style;
+			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
+			if (!ff.IsStyleAvailable(style = FontStyle.Underline))
+			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
+			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+			{
+				if (ff.IsStyleAvailable(styleTest))
+				{
+					style = styleTest;
+					break;
+				}
+			}
+			return style;
+		}
+
+		static FontStyle getStyleStandard(FontFamily ff)
+		{
+			FontStyle style;
+			if (!ff.IsStyleAvailable(style = FontStyle.Regular))
+			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
+			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
+			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+			{
+				if (ff.IsStyleAvailable(styleTest))
+				{
+					style = styleTest;
+					break;
+				}
+			}
+			return style;
+		}
+		#endregion Methods (static)
 
 
 		#region File menu
@@ -249,40 +309,17 @@ namespace yata
 		{
 			var tab = Tabs.TabPages[e.Index];
 
-//			Color color = (tab == Tabs.SelectedTab) ? Color.CornflowerBlue // NOTE: Color doesn't work normally on tabs.
-//													: Color.Brown;
-
 			int y;
 
 			FontStyle style;
 			if (tab == Tabs.SelectedTab)
 			{
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Underline))
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
-				foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
-				{
-					if (Font.FontFamily.IsStyleAvailable(styleTest))
-					{
-						style = styleTest;
-						break;
-					}
-				}
+				style = getStyleAccented(Font.FontFamily);
 				y = 6;
 			}
 			else
 			{
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Regular))
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Italic))
-				if (!Font.FontFamily.IsStyleAvailable(style = FontStyle.Bold))
-				foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
-				{
-					if (Font.FontFamily.IsStyleAvailable(styleTest))
-					{
-						style = styleTest;
-						break;
-					}
-				}
+				style = getStyleStandard(Font.FontFamily);
 				y = 3;
 			}
 
@@ -601,7 +638,7 @@ namespace yata
 
 				Table.CurrentCell = Table[0,e.RowIndex]; // TODO: not req'd; perhaps null CurrentCell
 
-				context_it_Header.Text = "@ id " + e.RowIndex;
+				context_it_Header.Text = "_row @ id " + e.RowIndex;
 
 				context_it_PasteAbove.Enabled =
 				context_it_Paste     .Enabled =
@@ -951,8 +988,13 @@ namespace yata
 		{
 			DrawingControl.SuspendDrawing(this);
 
-			int w = Width; // grab these before auto-sizing happens
+			int w = Width; // grab these before auto-sizing happens -->
 			int h = Height;
+
+			int w2 = tb_Search      .Width;
+			int w3 = cb_SearchOption.Width;
+
+			int h2 = statusbar.Height;
 
 			Font = font; // rely on GC here
 
@@ -966,6 +1008,11 @@ namespace yata
 
 			Width  = w;
 			Height = h;
+
+			tb_Search      .Width = w2;
+			cb_SearchOption.Width = w3;
+
+			statusbar.Height = h2;
 
 			DrawingControl.ResumeDrawing(this);
 
