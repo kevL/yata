@@ -32,6 +32,9 @@ namespace yata
 
 		internal TabControl Tabs
 		{ get { return tabControl; } }
+
+		Font FontDefault
+		{ get; set; }
 		#endregion Fields & Properties
 
 
@@ -56,11 +59,12 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
+			FontDefault = Font;
+
 			Settings.ScanSettings(); // load an Optional manual settings file
 
 			if (Settings._font != null)
 			{
-				Font.Dispose();
 				Font = Settings._font;
 			}
 
@@ -935,7 +939,8 @@ namespace yata
 		/// <param name="e"></param>
 		void fontclick_Default(object sender, EventArgs e)
 		{
-			doFont(new Font("Georgia", 8));
+			if (!Font.Equals(FontDefault))
+				doFont(FontDefault);
 		}
 
 		/// <summary>
@@ -949,8 +954,7 @@ namespace yata
 			int w = Width; // grab these before auto-sizing happens
 			int h = Height;
 
-			Font.Dispose();
-			Font = font;
+			Font = font; // rely on GC here
 
 			if (Table != null)
 			{

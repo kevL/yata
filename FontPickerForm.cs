@@ -14,11 +14,11 @@ namespace yata
 							  + "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
-		List<FontFamily> _families = new List<FontFamily>();
-		List<Font>       _fonts    = new List<Font>(); // fonts will be disposed below
+		List<FontFamily> _ffs   = new List<FontFamily>();
+		List<Font>       _fonts = new List<Font>(); // fonts will be disposed below
 
 		YataForm _f;
-		Font _fontCached;
+		Font _font;
 		bool
 			_load,
 			_dirty; // ie. displayed font and its characteristics have changed
@@ -31,10 +31,8 @@ namespace yata
 			InitializeComponent();
 
 			_f = f;
-			_fontCached = _f.Font;
+			_font = _f.Font;
 			_load = true;
-
-//			Font = _f.Font;
 
 			Left = _f.Left + 20;
 			Top  = _f.Top  + 20;
@@ -42,6 +40,11 @@ namespace yata
 
 			int fontStart  = -1; // for showing the start-font's characteristics
 			int fontStartT = -1; // in the lists
+
+//			var fontCollection = new System.Drawing.Text.InstalledFontCollection();
+//			foreach (var family in fontCollection.Families)
+//			{
+//			}
 
 			Font font;
 			foreach (var family in FontFamily.Families)
@@ -62,13 +65,13 @@ namespace yata
 					&& (font = new Font(family, 10, style.Value)) != null) // WARNING: 10pts is way too big for some fonts.
 				{
 					++fontStartT;
-					if (font.Name == _fontCached.Name)
+					if (font.Name == _font.Name)
 						fontStart = fontStartT;
 
-					_families.Add(family);
+					_ffs.Add(family);
 					list_Font.Items.Add(font);
 
-					_fonts.Add(font); // is purely for Disposal.
+					_fonts.Add(font); // <- is purely for Disposal.
 				}
 			}
 
@@ -87,7 +90,7 @@ namespace yata
 			});
 
 			if (fontStart != -1)
-				tb_Size.Text = _fontCached.SizeInPoints.ToString();
+				tb_Size.Text = _font.SizeInPoints.ToString();
 			else
 				_dirty = true;
 
@@ -103,7 +106,9 @@ namespace yata
 		void btnOk_click(object sender, EventArgs e)
 		{
 			if (_dirty)
-				_f.doFont(lbl_Example.Font);
+				_f.doFont((Font)lbl_Example.Font.Clone());
+
+			lbl_Example.Font.Dispose();
 
 			Close();
 		}
@@ -115,15 +120,16 @@ namespace yata
 				_dirty = false;
 				_applied = true;
 
-				_f.doFont(lbl_Example.Font);
+				_f.doFont((Font)lbl_Example.Font.Clone());
 			}
 		}
 
 		void btnCancel_click(object sender, EventArgs e)
 		{
 			if (_applied)
-				_f.doFont(_fontCached);
+				_f.doFont(_font);
 
+			lbl_Example.Font.Dispose();
 			Close();
 		}
 
@@ -153,11 +159,11 @@ namespace yata
 
 			list_Style.Items.Clear();
 
-			var styleLoad = _fontCached.Style;
+			var styleLoad = _font.Style;
 			int idStyle   = -1;
 			int idStyleT  = -1;
 
-			var family = _families[list_Font.SelectedIndex];
+			var family = _ffs[list_Font.SelectedIndex];
 
 			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
 			{
@@ -243,7 +249,7 @@ namespace yata
 					&& size > 0)
 				{
 					var style = (FontStyle)list_Style.SelectedItem;
-					lbl_Example.Font = new Font(_families[list_Font.SelectedIndex].Name,
+					lbl_Example.Font = new Font(_ffs[list_Font.SelectedIndex].Name, // rely on GC here
 												size, style);
 				}
 			}
