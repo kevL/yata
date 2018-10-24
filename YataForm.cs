@@ -1461,63 +1461,63 @@ namespace yata
 				{
 					search = search.ToLower();
 
-					int startId;
+					int startRow;
 					int startCol;
 
 					if (Table.CurrentCell != null)
 					{
-						startId  = Table.CurrentCell.RowIndex;
+						startRow = Table.CurrentCell.RowIndex;
 						startCol = Table.CurrentCell.ColumnIndex;
 
-						if (startId  == -1) startId  = 0;
+						if (startRow == -1) startRow = 0;
 						if (startCol == -1) startCol = 0;
 					}
 					else
 					{
-						startId  =
+						startRow =
 						startCol = 0;
 					}
 
 
 					object val;
 
-					int id;
-					int col;
+					int r,c;
 
 					bool start = true;
 
-					string st;
+					string field;
 
-					for (id = startId; id != Table.Rows.Count - 1; ++id)
+					for (r = startRow; r != Table.Rows.Count - 1; ++r)
 					{
 						if (start)
 						{
 							start = false;
-							col = startCol + 1;
+							c = startCol + 1;
 
-							if (col == Table.Columns.Count)		// if starting on the last cell of a row
+							if (c == Table.Columns.Count)		// if starting on the last cell of a row
 							{									// jump to the first cell of the next row
-								if (id != Table.Rows.Count - 2)	// -> unless it's the last row (above the default last row)
+								c = 0;
+
+								if (r != Table.Rows.Count - 2)	// or to the top of the table if on the last row
 								{
-									col = 0;
-									++id;
+									++r;
 								}
 								else
-									return;
+									r = 0;
 							}
 						}
 						else
-							col = 0;
+							c = 0;
 
-						for (; col != Table.Columns.Count; ++col)
+						for (; c != Table.Columns.Count; ++c)
 						{
-							if ((val = Table[col,id].Value) != null) //Table.Rows[id].Cells[col]
+							if ((val = Table[c,r].Value) != null) //Table.Rows[id].Cells[col]
 							{
-								st = val.ToString().ToLower();
-								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
-									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
+								field = val.ToString().ToLower();
+								if (   (cb_SearchOption.SelectedIndex == 0 && field.Contains(search))
+									|| (cb_SearchOption.SelectedIndex == 1 && field == search))
 								{
-									Table.CurrentCell = Table[col,id]; //.Rows[id].Cells[col];
+									Table.CurrentCell = Table[c,r]; //.Rows[id].Cells[col];
 									return;
 								}
 							}
@@ -1526,17 +1526,17 @@ namespace yata
 
 //					if (startId != 0 || startCol != 0) // TODO; tighten exact start/end-cells
 //					{
-					for (id = 0; id != startId + 1; ++id) // quick and dirty wrap ->
+					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
 					{
-						for (col = 0; col != Table.Columns.Count; ++col)
+						for (c = 0; c != Table.Columns.Count; ++c)
 						{
-							if ((val = Table[col,id].Value) != null)
+							if ((val = Table[c,r].Value) != null)
 							{
-								st = val.ToString().ToLower();
-								if (   (cb_SearchOption.SelectedIndex == 0 && st.Contains(search))
-									|| (cb_SearchOption.SelectedIndex == 1 && st == search))
+								field = val.ToString().ToLower();
+								if (   (cb_SearchOption.SelectedIndex == 0 && field.Contains(search))
+									|| (cb_SearchOption.SelectedIndex == 1 && field == search))
 								{
-									Table.CurrentCell = Table[col,id];
+									Table.CurrentCell = Table[c,r];
 									return;
 								}
 							}
