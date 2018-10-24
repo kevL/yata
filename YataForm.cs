@@ -1484,6 +1484,7 @@ namespace yata
 					int r,c;
 
 					bool start = true;
+					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
 
 					string field;
 
@@ -1495,14 +1496,14 @@ namespace yata
 							c = startCol + 1;
 
 							if (c == Table.Columns.Count)		// if starting on the last cell of a row
-							{									// jump to the first cell of the next row
+							{
 								c = 0;
 
-								if (r != Table.Rows.Count - 2)	// or to the top of the table if on the last row
+								if (r < Table.Rows.Count - 2)	// jump to the first cell of the next row
 								{
 									++r;
 								}
-								else
+								else							// or to the top of the table if on the last row(s)
 									r = 0;
 							}
 						}
@@ -1511,20 +1512,20 @@ namespace yata
 
 						for (; c != Table.Columns.Count; ++c)
 						{
-							if ((val = Table[c,r].Value) != null) //Table.Rows[id].Cells[col]
+							if ((val = Table[c,r].Value) != null)
 							{
 								field = val.ToString().ToLower();
-								if (   (cb_SearchOption.SelectedIndex == 0 && field.Contains(search))
-									|| (cb_SearchOption.SelectedIndex == 1 && field == search))
+								if (field == search
+									|| (substring && field.Contains(search)))
 								{
-									Table.CurrentCell = Table[c,r]; //.Rows[id].Cells[col];
+									Table.CurrentCell = Table[c,r];
 									return;
 								}
 							}
 						}
 					}
 
-//					if (startId != 0 || startCol != 0) // TODO; tighten exact start/end-cells
+//					if (startRow != 0 || startCol != 0) // TODO; tighten exact start/end-cells
 //					{
 					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
 					{
@@ -1533,8 +1534,8 @@ namespace yata
 							if ((val = Table[c,r].Value) != null)
 							{
 								field = val.ToString().ToLower();
-								if (   (cb_SearchOption.SelectedIndex == 0 && field.Contains(search))
-									|| (cb_SearchOption.SelectedIndex == 1 && field == search))
+								if (field == search
+									|| (substring && field.Contains(search)))
 								{
 									Table.CurrentCell = Table[c,r];
 									return;
