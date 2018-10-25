@@ -37,6 +37,7 @@ namespace yata
 		Font FontDefault
 		{ get; set; }
 
+		WaitForm _fwait;
 		#endregion Fields & Properties
 
 
@@ -60,6 +61,8 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
+
+			_fwait = new WaitForm(this);
 
 			FontDefault = Font;
 
@@ -208,8 +211,6 @@ namespace yata
 		}
 
 
-		bool _wait;
-
 		/// <summary>
 		/// IMPORTANT: Assumes 'pfe' is VALID.
 		/// </summary>
@@ -217,10 +218,6 @@ namespace yata
 		void CreateTabPage(string pfe)
 		{
 			panel_ColorFill.Show();
-
-			_wait = true;
-			var t1 = new Thread(wait);
-			t1.Start();
 
 			var table = new YataDataGridView(this, pfe);
 			((ISupportInitialize)(table)).BeginInit();
@@ -256,21 +253,7 @@ namespace yata
 			}
 			((ISupportInitialize)(table)).EndInit();
 
-			_wait = false;
-
 			tab_SelectedIndexChanged(null, EventArgs.Empty);
-		}
-
-		void wait()
-		{
-			var f = new WaitForm(this);
-			f.Show();
-
-			while (_wait)
-			{
-				f.Refresh();
-				Thread.Sleep(150);
-			}
 		}
 
 
@@ -442,10 +425,6 @@ namespace yata
 			{
 				panel_ColorFill.Show();
 
-				_wait = true;
-				var t1 = new Thread(wait);
-				t1.Start();
-
 				Table.Changed = false;
 
 				Table.Columns.Clear();
@@ -467,8 +446,6 @@ namespace yata
 
 				if (Tabs.TabCount != 0)
 					panel_ColorFill.Hide();
-
-				_wait = false;
 			}
 			// TODO: Show an error if file no longer exists.
 		}
@@ -899,15 +876,7 @@ namespace yata
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			if (Table != null)
-			{
-				_wait = true;
-				var t1 = new Thread(wait);
-				t1.Start();
-
 				Table.AutoResizeColumns();
-
-				_wait = false;
-			}
 		}
 
 		void opsclick_Freeze1stCol(object sender, EventArgs e)

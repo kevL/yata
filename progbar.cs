@@ -5,8 +5,6 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	// TODO: Do I have to dispose this.
-
 	/// <summary>
 	/// A progress bar.
 	/// </summary>
