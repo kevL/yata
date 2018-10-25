@@ -285,6 +285,12 @@ namespace yata
 		/// <param name="e"></param>
 		void HoriscrollCell(object sender, EventArgs e)
 		{
+//			var pt = CurrentCellAddress;
+//			CurrentCell = null;
+//			if (pt.X != -1 && pt.Y != -1)
+//				CurrentCell = this[pt.X,pt.Y]; // nice idea. Except it leaves only the current cell selected.
+
+
 			if (Display == ColDisplay.DisplayReady)
 			{
 				Display = ColDisplay.DisplayDone;
@@ -300,6 +306,26 @@ namespace yata
 				{
 					HorizontalScrollingOffset -= FirstDisplayedScrollingColumnHiddenWidth;
 				}
+
+
+/*				var cells = new List<SelectedCell>();
+				for (int row = 0; row != RowCount    - 1; ++row)
+				for (int col = 0; col != ColumnCount - 1; ++col)
+				{
+					if (this[col,row].Selected)
+					{
+						this[col,row].Selected = false;
+
+						var cell = new SelectedCell();
+						cell.Col = col;
+						cell.Row = row;
+						cells.Add(cell);
+					}
+				}
+				foreach (var cell in cells)
+				{
+					this[cell.Col,cell.Row].Selected = true;
+				} */
 			}
 			else if (CurrentCell != null)// && CurrentCell.Selected)
 			{
@@ -317,6 +343,14 @@ namespace yata
 				}
 			}
 		}
+
+/*		struct SelectedCell
+		{
+			internal int Col
+			{ get; set; }
+			internal int Row
+			{ get; set; }
+		} */
 
 
 //Another tip about speeding up DGV's...
@@ -340,22 +374,46 @@ namespace yata
 
 //			e.Paint(e.ClipBounds, (DataGridViewPaintParts.All & ~DataGridViewPaintParts.Background));
 
+//			DataGridViewTextBoxColumn
+//			DataGridViewTextBoxCell
 
 			int col = e.ColumnIndex;
 
-//			if (col == FirstDisplayedScrollingColumnIndex)
-//			{
-//				logfile.Log("cellbounds= " + e.CellBounds);
-//				logfile.Log("clipbounds= " + e.ClipBounds);
-//
-//				int rhw = RowHeadersWidth;
-//				Rectangle clip = e.CellBounds;
-//				if (e.CellBounds.X < rhw)
-//				{
-//					clip = new Rectangle(rhw, clip.Y, clip.Width - rhw, clip.Height);
-//					e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Replace); // fucked.
-//				}
-//			}
+
+/*			if (col == FirstDisplayedScrollingColumnIndex)
+			{
+				logfile.Log(e.ColumnIndex + "," + e.RowIndex);
+				logfile.Log("cellbounds= " + e.CellBounds);
+				logfile.Log("clipbounds= " + e.ClipBounds);
+
+
+				Rectangle clip = e.CellBounds;
+
+				int w = RowHeadersWidth;
+				logfile.Log("w1= " + w);
+
+				w += Columns[0].Width;
+				logfile.Log("w2= " + w);
+
+				if (Columns[1].Frozen)
+				{
+					w += Columns[1].Width;
+					logfile.Log("w3= " + w);
+				}
+
+				if (Columns[2].Frozen)
+				{
+					w += Columns[2].Width;
+					logfile.Log("w4= " + w);
+				}
+
+				if (e.CellBounds.X < w)
+				{
+					logfile.Log(". do Clip");
+					clip = new Rectangle(w, clip.Y, clip.Width - w, clip.Height);
+					e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Replace); // fucked.
+				}
+			} */
 
 
 //			if (col != FirstDisplayedScrollingColumnIndex // *snap*
@@ -392,9 +450,30 @@ namespace yata
 
 				if (e.FormattedValue != null) // safety.
 				{
+/*					string st = Convert.ToString(e.FormattedValue);
+
+					int blork = 0;
+
+					if (col == FirstDisplayedScrollingColumnIndex
+						&& FirstDisplayedScrollingColumnHiddenWidth != 0)
+					{
+						blork = FirstDisplayedScrollingColumnHiddenWidth;
+
+						int length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
+						int target = e.CellBounds.Width - FirstDisplayedScrollingColumnHiddenWidth;
+
+						while (length > target)
+						{
+							st = st.Substring(1);
+							length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
+						}
+					} */ // totally fucked.
+
+
+
 					// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
 					var rect = e.CellBounds;
-					rect.X += x;
+					rect.X += x;// + blork;
 					rect.Y += 4;
 					TextRenderer.DrawText(e.Graphics,
 										  Convert.ToString(e.FormattedValue),
@@ -409,7 +488,39 @@ namespace yata
 //												// on the (hidden) col-headers once they are scrolled into display.
 
 			e.Handled = true;
+
+//			var bounds = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width - 1, e.CellBounds.Height - 1);
+//			e.Graphics.DrawRectangle(Pens.Red, bounds);
 		}
+/*
+Size size = TextRenderer.MeasureText(g,
+                                     "Ala ma kota",
+                                     font,
+                                     new Size(int.MaxValue, int.MaxValue),
+                                     TextFormatFlags.NoPadding);
+
+TextRenderer.DrawText(g, "Ala ma kota", font,
+                      new Point(10, 10),
+                      Color.Black,
+                      TextFormatFlags.NoPadding);
+*/
+
+/* for e.Graphics.MeasureString()
+var g = Graphics.FromHwnd(tstLabel.Handle);
+StringFormat strFormat = new StringFormat(StringFormat.GenericTypographic)
+                     { FormatFlags = StringFormatFlags.MeasureTrailingSpaces };
+size = g.MeasureString(text, tstLabel.Font, tstLabel.Size.Width, strFormat);
+
+using(Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+{
+    SizeF size = g.MeasureString("some text", SystemFonts.DefaultFont);
+}
+using(Graphics g = someControl.CreateGraphics())
+{
+    SizeF size = g.MeasureString("some text", SystemFonts.DefaultFont);
+}
+*/
+
 
 
 		#region Sort

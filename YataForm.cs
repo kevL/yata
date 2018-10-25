@@ -1530,7 +1530,7 @@ namespace yata
 						}
 					}
 
-//					if (startRow != 0 || startCol != 0) // TODO; tighten exact start/end-cells
+//					if (startRow != 0 || startCol != 0) // TODO: tighten exact start/end-cells
 //					{
 					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
 					{
