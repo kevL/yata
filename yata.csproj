@@ -84,6 +84,10 @@
     </Compile>
     <Compile Include="logger.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="WaitForm.cs" />
+    <Compile Include="WaitForm.Designer.cs">
+      <DependentUpon>WaitForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="YataForm.cs" />
     <Compile Include="YataForm.Designer.cs">
       <DependentUpon>YataForm.cs</DependentUpon>
@@ -104,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FontCopyForm.resx">
       <DependentUpon>FontCopyForm.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaitForm.resx">
+      <DependentUpon>WaitForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>

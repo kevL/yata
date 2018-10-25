@@ -657,7 +657,7 @@ namespace yata
 		/// </summary>
 		void PopulateTableRows()
 		{
-			var pb = new ProgBar();
+			var pb = new ProgBar(_f);
 			pb.ValTop = _rows.Count;
 			pb.Show();
 

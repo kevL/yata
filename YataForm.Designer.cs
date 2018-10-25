@@ -75,7 +75,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
-		private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -133,7 +133,7 @@
 			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
-			this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -152,17 +152,17 @@
 			this.contextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.context_it_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
-			this.context_it_Cut = new System.Windows.Forms.ToolStripMenuItem();
 			this.context_it_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.context_it_Cut = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_8 = new System.Windows.Forms.ToolStripSeparator();
 			this.context_it_PasteAbove = new System.Windows.Forms.ToolStripMenuItem();
 			this.context_it_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.context_it_PasteBelow = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_9 = new System.Windows.Forms.ToolStripSeparator();
 			this.context_it_CreateAbove = new System.Windows.Forms.ToolStripMenuItem();
+			this.context_it_ClearRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.context_it_CreateBelow = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_10 = new System.Windows.Forms.ToolStripSeparator();
-			this.context_it_ClearRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.context_it_DeleteRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
@@ -433,7 +433,7 @@
 			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Font,
 			this.it_CurrentFont,
-			this.defaultToolStripMenuItem});
+			this.it_FontDefault});
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
 			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fontToolStripMenuItem.Text = "Font";
@@ -452,12 +452,12 @@
 			this.it_CurrentFont.Text = "current font string";
 			this.it_CurrentFont.Click += new System.EventHandler(this.fontclick_CurrentFont);
 			// 
-			// defaultToolStripMenuItem
+			// it_FontDefault
 			// 
-			this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-			this.defaultToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-			this.defaultToolStripMenuItem.Text = "default";
-			this.defaultToolStripMenuItem.Click += new System.EventHandler(this.fontclick_Default);
+			this.it_FontDefault.Name = "it_FontDefault";
+			this.it_FontDefault.Size = new System.Drawing.Size(165, 22);
+			this.it_FontDefault.Text = "default";
+			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
 			// 
 			// it_MenuPaths
 			// 
@@ -610,19 +610,19 @@
 			this.separator_7.Name = "separator_7";
 			this.separator_7.Size = new System.Drawing.Size(172, 6);
 			// 
-			// context_it_Cut
-			// 
-			this.context_it_Cut.Name = "context_it_Cut";
-			this.context_it_Cut.Size = new System.Drawing.Size(175, 22);
-			this.context_it_Cut.Text = "Cut row @ id";
-			this.context_it_Cut.Click += new System.EventHandler(this.contextclick_EditCut);
-			// 
 			// context_it_Copy
 			// 
 			this.context_it_Copy.Name = "context_it_Copy";
 			this.context_it_Copy.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Copy.Text = "Copy row @ id";
 			this.context_it_Copy.Click += new System.EventHandler(this.contextclick_EditCopy);
+			// 
+			// context_it_Cut
+			// 
+			this.context_it_Cut.Name = "context_it_Cut";
+			this.context_it_Cut.Size = new System.Drawing.Size(175, 22);
+			this.context_it_Cut.Text = "Cut row @ id";
+			this.context_it_Cut.Click += new System.EventHandler(this.contextclick_EditCut);
 			// 
 			// separator_8
 			// 
@@ -662,6 +662,13 @@
 			this.context_it_CreateAbove.Text = "Create blank above id";
 			this.context_it_CreateAbove.Click += new System.EventHandler(this.contextclick_EditCreateAbove);
 			// 
+			// context_it_ClearRow
+			// 
+			this.context_it_ClearRow.Name = "context_it_ClearRow";
+			this.context_it_ClearRow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_ClearRow.Text = "Clear fields @ id";
+			this.context_it_ClearRow.Click += new System.EventHandler(this.contextclick_EditClear);
+			// 
 			// context_it_CreateBelow
 			// 
 			this.context_it_CreateBelow.Name = "context_it_CreateBelow";
@@ -673,13 +680,6 @@
 			// 
 			this.separator_10.Name = "separator_10";
 			this.separator_10.Size = new System.Drawing.Size(172, 6);
-			// 
-			// context_it_ClearRow
-			// 
-			this.context_it_ClearRow.Name = "context_it_ClearRow";
-			this.context_it_ClearRow.Size = new System.Drawing.Size(175, 22);
-			this.context_it_ClearRow.Text = "Clear fields @ id";
-			this.context_it_ClearRow.Click += new System.EventHandler(this.contextclick_EditClear);
 			// 
 			// context_it_DeleteRow
 			// 

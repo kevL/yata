@@ -22,7 +22,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal ProgBar()
+		internal ProgBar(YataForm f)
 		{
 			Size            = new Size(300, 40);
 			ControlBox      = false;
@@ -32,18 +32,11 @@ namespace yata
 			ShowIcon        = false;
 			ShowInTaskbar   = false;
 			SizeGripStyle   = SizeGripStyle.Hide;
-			StartPosition   = FormStartPosition.CenterScreen;
+			StartPosition   = FormStartPosition.Manual;
 			TopMost         = true;
 
-/*			var text       = new TextBox();
-			text.Size      = new Size(75, 15);
-			text.Location  = new Point(112, 6);
-			text.Text      = " wait ...";
-			text.Font      = new Font("Courier New", 8.00F, FontStyle.Bold, GraphicsUnit.Point, (byte)(0));
-			text.ReadOnly  = true;
-			text.BackColor = BackColor;
-
-			Controls.Add(text); */
+			Left = f.Left + (f.Width  - Width)  / 2;
+			Top  = f.Top  + (f.Height - Height) / 2 - 15;
 		}
 
 
@@ -66,28 +59,5 @@ namespace yata
 			else
 				Close();
 		}
-
-
-/*		#region Windows Form Designer generated code
-		private System.ComponentModel.Container components = null;
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
-
-		/// <summary>
-		/// Required method for Designer support - do not modify the contents of
-		/// this method with the code editor.
-		/// </summary>
-		void InitializeComponent()
-		{}
-		#endregion */
 	}
 }

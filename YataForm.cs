@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -35,6 +36,7 @@ namespace yata
 
 		Font FontDefault
 		{ get; set; }
+
 		#endregion Fields & Properties
 
 
@@ -205,6 +207,9 @@ namespace yata
 			}
 		}
 
+
+		bool _wait;
+
 		/// <summary>
 		/// IMPORTANT: Assumes 'pfe' is VALID.
 		/// </summary>
@@ -212,6 +217,10 @@ namespace yata
 		void CreateTabPage(string pfe)
 		{
 			panel_ColorFill.Show();
+
+			_wait = true;
+			var t1 = new Thread(wait);
+			t1.Start();
 
 			var table = new YataDataGridView(this, pfe);
 			((ISupportInitialize)(table)).BeginInit();
@@ -247,7 +256,21 @@ namespace yata
 			}
 			((ISupportInitialize)(table)).EndInit();
 
+			_wait = false;
+
 			tab_SelectedIndexChanged(null, EventArgs.Empty);
+		}
+
+		void wait()
+		{
+			var f = new WaitForm(this);
+			f.Show();
+
+			while (_wait)
+			{
+				f.Refresh();
+				Thread.Sleep(150);
+			}
 		}
 
 
@@ -337,29 +360,6 @@ namespace yata
 								  rect,
 								  SystemColors.ControlText,
 								  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
-
-
-/*			var rect = e.Bounds;
-			if (page == Tabs.SelectedTab)
-			{
-				style = FontStyle.Bold;
-				rect.Y -= 4;
-			}
-			else
-			{
-				style = FontStyle.Regular;
-				rect.Y += 1;
-			}
-			var font = new Font(Font, style);
-
-			var sf           = new StringFormat();
-			sf.Alignment     = StringAlignment.Center;
-			sf.LineAlignment = StringAlignment.Far;
-			e.Graphics.DrawString(page.Text,
-								  font,
-								  Brushes.Black,
-								  rect,
-								  sf); */
 		}
 
 		void fileclick_Close(object sender, EventArgs e)
@@ -442,6 +442,10 @@ namespace yata
 			{
 				panel_ColorFill.Show();
 
+				_wait = true;
+				var t1 = new Thread(wait);
+				t1.Start();
+
 				Table.Changed = false;
 
 				Table.Columns.Clear();
@@ -463,6 +467,8 @@ namespace yata
 
 				if (Tabs.TabCount != 0)
 					panel_ColorFill.Hide();
+
+				_wait = false;
 			}
 			// TODO: Show an error if file no longer exists.
 		}
@@ -851,7 +857,7 @@ namespace yata
 			{
 				DrawingControl.SuspendDrawing(Table); // bongo
 
-				var pb = new ProgBar();
+				var pb = new ProgBar(this);
 				pb.ValTop = Table.Rows.Count - 1;
 				pb.Show();
 
@@ -893,7 +899,15 @@ namespace yata
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			if (Table != null)
+			{
+				_wait = true;
+				var t1 = new Thread(wait);
+				t1.Start();
+
 				Table.AutoResizeColumns();
+
+				_wait = false;
+			}
 		}
 
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
@@ -982,6 +996,11 @@ namespace yata
 		{
 			if (!Font.Equals(FontDefault))
 				doFont(FontDefault);
+		}
+
+		internal void ToggleFontDefaultEnabled()
+		{
+			it_FontDefault.Enabled = !it_FontDefault.Enabled;
 		}
 
 		/// <summary>

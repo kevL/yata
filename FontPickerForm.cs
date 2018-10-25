@@ -107,6 +107,8 @@ namespace yata
 			_load = false;
 
 			lbl_Example.Text = EXAMPLE;
+
+			_f.ToggleFontDefaultEnabled();
 		}
 
 		/// <summary>
@@ -173,6 +175,8 @@ namespace yata
 		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
+			_f.ToggleFontDefaultEnabled();
+
 			_x = Left;
 			_y = Top;
 
