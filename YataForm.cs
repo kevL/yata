@@ -1485,6 +1485,7 @@ namespace yata
 
 					bool start = true;
 					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+//					bool selected = (Table.SelectedCells.Count != 0); // bah. First hit deselects all other cells ...
 
 					string field;
 
@@ -1518,8 +1519,12 @@ namespace yata
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-									Table.CurrentCell = Table[c,r];
-									return;
+//									if (!selected || Table[c,r].Selected)
+									{
+										Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
+										Table.CurrentCell = Table[c,r];
+										return;
+									}
 								}
 							}
 						}
@@ -1537,18 +1542,41 @@ namespace yata
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-									Table.CurrentCell = Table[c,r];
-									return;
+//									if (!selected || Table[c,r].Selected)
+									{
+										Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
+										Table.CurrentCell = Table[c,r];
+										return;
+									}
 								}
 							}
 						}
 					}
 //					}
 				}
-				// TODO: If only 1 cell is found and user has scrolled off of its display
-				// scroll the table to show it again.
+				// If only 1 cell is found and user has scrolled off of its display
+				// scroll the table to show it again. done above^
+//				DisplayCurrentCell();
 			}
 		}
+
+/*		void DisplayCurrentCell()
+		{
+			logfile.Log("DisplayCurrentCell()");
+
+			var cell = Table.CurrentCell;
+			if (cell != null && cell.ColumnIndex != -1 && cell.RowIndex != -1)
+			{
+				var rect = Table.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, false);
+				var pt = new Point(rect.Left, rect.Top);
+
+				int offsetX = Table.GetCellDisplayRectangle(Table.FirstDisplayedScrollingColumnIndex, 0, true).Left;
+				if (pt.X < offsetX)
+				{
+					Table.HorizontalScrollingOffset -= offsetX - pt.X;
+				}
+			}
+		} */
 		#endregion Search
 
 
