@@ -875,6 +875,10 @@ namespace yata
 					e.Handled = true;
 					break;
 
+				case Keys.Home:
+					HorizontalScrollingOffset = 0;
+					break;
+
 				default:
 					base.OnKeyUp(e);
 					break;

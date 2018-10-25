@@ -410,6 +410,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Returns a list of currently loaded tables that have been modified.
+		/// </summary>
+		/// <returns></returns>
 		List<string> GetChangedTables()
 		{
 			var changed = new List<string>();
@@ -419,7 +423,7 @@ namespace yata
 				var table = page.Tag as YataDataGridView;
 				if (table != null && table.Changed)
 				{
-					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe));
+					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe).ToUpperInvariant());
 				}
 			}
 			return changed;
