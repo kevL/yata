@@ -91,53 +91,10 @@ namespace yata
 			SortCompare      += TableSort;
 			Sorted           += TableSorted;
 
-//			Paint += doPaint;
-
-//			Scroll += (s, e) => Invalidate(); // interesting ...
-
-
 			//DefaultCellStyle <- TODO: these <--
 
 			Freeze = Frozen.FreezeOff;
 		}
-
-
-/*		protected override void OnPaint(PaintEventArgs e)
-		{
-			Brush brush = Brushes.AliceBlue;
-			Region region = e.Graphics.Clip;
-			e.Graphics.FillRegion(brush, region);
-
-			// TODO: for the encore repaint the row-header col and all frozen cols.
-			// NOTE: Only needs to be done when de-selecting a col.
-
-			for (int row = 0; row != Rows.Count - 2; ++row)
-			{
-				var cell = Rows[row].Cells[0]; // id col
-				object val = cell.Value;
-				if (val != null)
-				{
-					TextRenderer.DrawText(e.Graphics,
-										  val.ToString(),
-										  cell.Style.Font,
-										  new Point(cell.ContentBounds.X, cell.ContentBounds.Y),
-										  cell.Style.ForeColor);
-				}
-			}
-
-			base.OnPaint(e);
-		} */
-
-/*		void doPaint(object sender, PaintEventArgs e)
-		{
-			logfile.Log("doPaint()");
-
-			TextRenderer.DrawText(e.Graphics,
-								  Convert.ToString(e.FormattedValue),
-								  e.CellStyle.Font,
-								  new Point(e.CellBounds.X + x, e.CellBounds.Y + 4),
-								  e.CellStyle.ForeColor);
-		} */
 
 
 		/// <summary>
@@ -180,91 +137,19 @@ namespace yata
 
 					Display = ColDisplay.DisplayReady;
 
-//					DrawingControl.SuspendDrawing(this);
-//					SuspendLayout();
-					//int offset = HorizontalScrollingOffset;
-//					Columns[0].Frozen = false;
-
-
 					bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
 					if (!ctrl)
 						ClearSelection(); // NOTE: This fires SelectionChanged->DisplayCell only *once*
 
 					if (sel || ctrl)
 					{
-//						if (sel) Display = ColDisplay.DisplayReady;
-
 						for (int id = 0; id != rows; ++id)
 						{
 							Rows[id].Cells[_col].Selected = sel;
 						}
-
-//						Display = ColDisplay.DisplayOff;
 					}
 
 					Display = ColDisplay.DisplayOff;
-
-
-					//_f.Refresh();
-
-					//Rows[0].Cells[0].Value = "";
-
-//					var cell = Rows[0].Cells[0];
-//					cell.Selected = !cell.Selected;
-//					cell.Selected = !cell.Selected;
-
-					//var r = new Rectangle(0, 0, Width, Height);
-					//Invalidate(r);
-					//Update();
-
-//					Columns[0].Frozen = true;
-					//HorizontalScrollingOffset = offset;
-					//ResumeLayout();
-//					DrawingControl.ResumeDrawing(this);
-
-					//PerformLayout();
-					//RelabelRowHeaders(); // no.
-
-					//HorizontalScrollingOffset -= 1; // no.
-					//HorizontalScrollingOffset += 1;
-
-					//Invalidate();	// no.
-					//Update();		// no.
-					//Refresh();	// no. All together no.
-
-					/* for (int row = 0; row != Rows.Count - 2; ++row) 
-					{
-						Rows[row].Cells[0] -> raise OnPaint or something
-						Invalidate();
-						Update();
-						Refresh();
-					} */
-					//Visible = false;
-					//Visible = true;
-
-//					_f.Width += 1; // no.
-//					Location = new Point(Location.X + 1, Location.Y + 1); // no.
-
-/*					int cols = Columns.Count;
-					var row = new string[cols]; // ... no.
-					for (int col = 0; col != cols; ++col)
-					{
-						row[col] = Constants.Stars;
-					}
-					Rows.Insert(Rows.Count - 1, row);
-					Rows.Remove(Rows[Rows.Count - 2]); */
-
-
-					// TODO: for the encore repaint the row-header col and all frozen cols.
-/*					if (!sel)
-					{
-						if (_col >= FirstDisplayedScrollingColumnIndex
-							&& e.RowIndex >= FirstDisplayedScrollingRowIndex
-							&& e.RowIndex <= FirstDisplayedScrollingRowIndex + DisplayedRowCount(true))
-						{
-							
-						}
-					} */
 				}
 			}
 		}
@@ -285,12 +170,6 @@ namespace yata
 		/// <param name="e"></param>
 		void HoriscrollCell(object sender, EventArgs e)
 		{
-//			var pt = CurrentCellAddress;
-//			CurrentCell = null;
-//			if (pt.X != -1 && pt.Y != -1)
-//				CurrentCell = this[pt.X,pt.Y]; // nice idea. Except it leaves only the current cell selected.
-
-
 			if (Display == ColDisplay.DisplayReady)
 			{
 				Display = ColDisplay.DisplayDone;
@@ -306,26 +185,6 @@ namespace yata
 				{
 					HorizontalScrollingOffset -= FirstDisplayedScrollingColumnHiddenWidth;
 				}
-
-
-/*				var cells = new List<SelectedCell>();
-				for (int row = 0; row != RowCount    - 1; ++row)
-				for (int col = 0; col != ColumnCount - 1; ++col)
-				{
-					if (this[col,row].Selected)
-					{
-						this[col,row].Selected = false;
-
-						var cell = new SelectedCell();
-						cell.Col = col;
-						cell.Row = row;
-						cells.Add(cell);
-					}
-				}
-				foreach (var cell in cells)
-				{
-					this[cell.Col,cell.Row].Selected = true;
-				} */
 			}
 			else if (CurrentCell != null)// && CurrentCell.Selected)
 			{
@@ -344,239 +203,60 @@ namespace yata
 			}
 		}
 
-/*		struct SelectedCell
-		{
-			internal int Col
-			{ get; set; }
-			internal int Row
-			{ get; set; }
-		} */
-
-
-//Another tip about speeding up DGV's...
-//1. turn off the auto resizing
-//2. set the row height manually
-//3. set column width manually
-//4. set the DefaultCellStyle of the columns
-
-
+		/// <summary>
+		/// Handles painting the cells in the table.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void PaintCell(object sender, DataGridViewCellPaintingEventArgs e)
 		{
-			//logfile.Log("PaintCell()");
-			//if (Display == ColDisplay.DisplayOff) return;
-			//if (e.Handled) return;
+			e.PaintBackground(e.ClipBounds, true);
 
 			int col = e.ColumnIndex;
 
-			e.PaintBackground(e.ClipBounds, true);
-
 			if (col != -1)
-				e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ...
-
-//			return;
-
-//			e.Paint(e.ClipBounds, (DataGridViewPaintParts.All & ~DataGridViewPaintParts.Background));
-
-//			DataGridViewTextBoxColumn
-//			DataGridViewTextBoxCell
-
-
-/*			if (col == FirstDisplayedScrollingColumnIndex)
 			{
-				logfile.Log(e.ColumnIndex + "," + e.RowIndex);
-				logfile.Log("cellbounds= " + e.CellBounds);
-				logfile.Log("clipbounds= " + e.ClipBounds);
+				e.PaintContent(e.ClipBounds);
 
-
-				Rectangle clip = e.CellBounds;
-
-				int w = RowHeadersWidth;
-				logfile.Log("w1= " + w);
-
-				w += Columns[0].Width;
-				logfile.Log("w2= " + w);
-
-				if (Columns[1].Frozen)
+				if (e.RowIndex == -1)
 				{
-					w += Columns[1].Width;
-					logfile.Log("w3= " + w);
-				}
-
-				if (Columns[2].Frozen)
-				{
-					w += Columns[2].Width;
-					logfile.Log("w4= " + w);
-				}
-
-				if (e.CellBounds.X < w)
-				{
-					logfile.Log(". do Clip");
-					clip = new Rectangle(w, clip.Y, clip.Width - w, clip.Height);
-					e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Replace); // fucked.
-				}
-			} */
-
-
-//			if (col != FirstDisplayedScrollingColumnIndex // *snap*
-//				|| FirstDisplayedScrollingColumnHiddenWidth == 0)
-			{
-				int x;
-
-				if (col != -1)
-				{
-					x = 0;
-
-					if (e.RowIndex == -1)
+					Bitmap sort = null;
+					if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
 					{
-						Bitmap sort = null;
-						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
-						{
-							if (col == 0)
-								sort = Resources.asc_16px;
-						}
-						else if (SortedColumn.Index == col)
-						{
-							sort = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
-																	  : Resources.des_16px;
-						}
-
-						if (sort != null)
-							e.Graphics.DrawImage(sort,
-												 e.CellBounds.X + e.CellBounds.Width - 17, // -19
-												 e.CellBounds.Y + 3);
+						if (col == 0)
+							sort = Resources.asc_16px;
 					}
-				}
-				else // row-header
-					x = 10;
-
-				if (e.FormattedValue != null // safety.
-					&& col == -1)
-				{
-//					string st = Convert.ToString(e.FormattedValue);
-
-//					int blork = 0;
-
-					var flags = TextFormatFlags.NoPrefix;
-
-/*					if (col == FirstDisplayedScrollingColumnIndex
-						&& FirstDisplayedScrollingColumnHiddenWidth != 0)
+					else if (SortedColumn.Index == col)
 					{
-						logfile.Log(e.ColumnIndex + "," + e.RowIndex);
-						logfile.Log("cellbounds= " + e.CellBounds);
-//						logfile.Log("clipbounds= " + e.ClipBounds);
+						sort = (SortOrder == SortOrder.Ascending) ? Resources.asc_16px
+																  : Resources.des_16px;
+					}
 
-						Rectangle clip = e.CellBounds;
-
-						int w = RowHeadersWidth;
-						logfile.Log("w1= " + w);
-
-						w += Columns[0].Width;
-						logfile.Log("w2= " + w);
-
-						if (Columns[1].Frozen)
-						{
-							w += Columns[1].Width;
-							logfile.Log("w3= " + w);
-						}
-
-						if (Columns[2].Frozen)
-						{
-							w += Columns[2].Width;
-							logfile.Log("w4= " + w);
-						}
-
-						if (e.CellBounds.X < w)
-						{
-							logfile.Log(". do Clip");
-							clip = new Rectangle(w, clip.Y, clip.Width - w, clip.Height);
-							e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Complement);
-
-							logfile.Log(". clip= " + clip);
-							flags |= TextFormatFlags.PreserveGraphicsClipping;
-						}
-
-//						blork = FirstDisplayedScrollingColumnHiddenWidth;
-
-//						int length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
-//						int target = e.CellBounds.Width - FirstDisplayedScrollingColumnHiddenWidth;
-
-//						while (length > target)
-//						{
-//							st = st.Substring(1);
-//							length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
-//						} // totally fucked.
-					} */
-
-
-
-					// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
-					var rect = e.CellBounds;
-					rect.X += x;// + blork;
-					rect.Y += 4;
-					TextRenderer.DrawText(e.Graphics,
-										  Convert.ToString(e.FormattedValue),
-										  e.CellStyle.Font,
-										  rect,
-										  e.CellStyle.ForeColor,
-//										  Color.Empty,
-										  flags);
+					if (sort != null)
+						e.Graphics.DrawImage(sort,
+											 e.CellBounds.X + e.CellBounds.Width - 17,
+											 e.CellBounds.Y + 3);
 				}
 			}
-//			else								// the best option so far -> (and this is after 3+ days fucking about with their shit.)
-//				e.PaintContent(e.ClipBounds);	// works but reverts text-painting to default ... uh leaves glitches
-//												// on the (hidden) col-headers once they are scrolled into display.
+			else if (e.FormattedValue != null) // safety. is row-header
+			{
+				var flags = TextFormatFlags.NoPrefix;
+
+				// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
+				var rect = e.CellBounds;
+				rect.X += 10;
+				rect.Y += 4;
+
+				TextRenderer.DrawText(e.Graphics,
+									  Convert.ToString(e.FormattedValue),
+									  e.CellStyle.Font,
+									  rect,
+									  e.CellStyle.ForeColor,
+									  flags);
+			}
 
 			e.Handled = true;
-
-//			var bounds = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width - 1, e.CellBounds.Height - 1);
-//			e.Graphics.DrawRectangle(Pens.Red, bounds);
 		}
-
-//		void SetTextClip()
-//		{
-//		}
-
-
-
-
-/*
-TextRenderer.DrawText(e.Graphics,
-                      "Testing",
-                      font,
-                      new Point(150, 28),
-                      Color.Black,
-                      Color.Empty,
-                      TextFormatFlags.PreserveGraphicsClipping);
-*/
-/*
-Size size = TextRenderer.MeasureText(g,
-                                     "Ala ma kota",
-                                     font,
-                                     new Size(int.MaxValue, int.MaxValue),
-                                     TextFormatFlags.NoPadding);
-
-TextRenderer.DrawText(g, "Ala ma kota", font,
-                      new Point(10, 10),
-                      Color.Black,
-                      TextFormatFlags.NoPadding);
-*/
-
-/* for e.Graphics.MeasureString()
-var g = Graphics.FromHwnd(tstLabel.Handle);
-StringFormat strFormat = new StringFormat(StringFormat.GenericTypographic)
-                     { FormatFlags = StringFormatFlags.MeasureTrailingSpaces };
-size = g.MeasureString(text, tstLabel.Font, tstLabel.Size.Width, strFormat);
-
-using(Graphics g = Graphics.FromHwnd(IntPtr.Zero))
-{
-    SizeF size = g.MeasureString("some text", SystemFonts.DefaultFont);
-}
-using(Graphics g = someControl.CreateGraphics())
-{
-    SizeF size = g.MeasureString("some text", SystemFonts.DefaultFont);
-}
-*/
-
 
 
 		#region Sort
@@ -679,8 +359,6 @@ using(Graphics g = someControl.CreateGraphics())
 
 			foreach (string line in lines)
 			{
-				//logfile.Log("line= " + line);
-
 				// test version header
 				if (++lineId == 0)
 				{
@@ -881,89 +559,10 @@ using(Graphics g = someControl.CreateGraphics())
 			PopulateColumnHeaders();
 			PopulateTableRows();
 
-//			SizeCols();
-
 			_loading = false;
 
 			return true;
 		}
-
-/*		/// <summary>
-		/// An attempt to layout the cols according to text-widths.
-		/// Note that although this is a couple of seconds faster on large 2das
-		/// I haven't been able to find an accurate text-measurer ... so will
-		/// use the slower but more consistent AutoResizeColumns() funct - see
-		/// YataForm.CreateTabPage() - which tends to overestimate the required
-		/// width unfortunately.
-		/// TODO: This might work if PaintCell() can be designed to use exactly
-		/// the same parameters as the text-measurement here.
-		/// </summary>
-		void SizeCols()
-		{
-			int rows = Rows.Count;
-			if (rows > 1)
-			{
-				int cols = Columns.Count;
-				var widths = new int[cols];
-
-				int width, widthTest;
-
-				// unfortunately, TextRenderer measures alphabetical text too wide
-				// and numeric text too short.
-//				var font = new Font(Font.ToString(), Font.SizeInPoints + 1);
-				var font = Font;
-
-//				var image = new Bitmap(1,1);
-//				var graphics = Graphics.FromImage(image);
-//				var graphics = Graphics.FromHwnd();
-
-				//Graphics g=Graphics.FromHwnd(YOUR CONTROL HERE.Handle);
-				//SizeF s=g.MeasureString("YOUR STRING HERE", Font, NULL, NULL, STRING LENGTH HERE, 1)
-
-//				var dc = new IDeviceContext();
-//				IntPtr ptr = dc.GetHdc();
-
-				object val;
-				for (int col = 0; col != cols; ++col)
-				{
-					if (col == 0)
-//						width = TextRenderer.MeasureText(dc, "id", font).Width;
-//						width = TextRenderer.MeasureText("id", font, new Size(Int32.MaxValue, Int32.MaxValue), TextFormatFlags.NoClipping).Width;
-						width = TextRenderer.MeasureText("id", font).Width;
-//						width = Convert.ToInt32(graphics.MeasureString("id", font).Width);
-					else
-//						width = TextRenderer.MeasureText(dc, Columns[col].HeaderText, font).Width;
-//						width = TextRenderer.MeasureText(Columns[col].HeaderText, font, new Size(Int32.MaxValue, Int32.MaxValue), TextFormatFlags.NoClipping).Width;
-						width = TextRenderer.MeasureText(Columns[col].HeaderText, font).Width;
-//						width = Convert.ToInt32(graphics.MeasureString(Columns[col].HeaderText, font).Width);
-
-					width += 15; // pad
-//					width += width / 2; // +50%
-
-					if (width < 25)
-						width = 25;
-
-					for (int id = 0; id != rows - 1; ++id) // NOTE: Does not include col-headers.
-					{
-						if ((val = Rows[id].Cells[col].Value) != null)
-						{
-							widthTest = TextRenderer.MeasureText(val.ToString(), font).Width;
-							widthTest += 20; // pad
-//							widthTest += width / 5; // +20%
-							if (widthTest > width)
-								width = widthTest;
-						}
-					}
-					widths[col] = width;
-				}
-
-				for (int col = 0; col != cols; ++col)
-				{
-					Columns[col].Width = widths[col];
-				}
-//				dc.ReleaseHdc();
-			}
-		} */
 
 		/// <summary>
 		/// TODO: optimize.
@@ -1302,21 +901,6 @@ using(Graphics g = someControl.CreateGraphics())
 			}
 			return base.ProcessDialogKey(keyData);
 		}
-
-/*		/// <summary>
-		/// Handles stopping the stupid insta-cell selection @ [0,0] right after
-		/// a table loads and a row-header is clicked. Has side-effect of
-		/// jumping the table-scroll around ....
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
-		{
-			if (e.RowIndex == -1 && e.ColumnIndex != -1 && SelectedCells.Count == 0)
-			{
-//				CurrentCell = this[e.ColumnIndex,0];
-			}
-			base.OnCellMouseDown(e);
-		} */
 		#endregion Events (override)
 
 
