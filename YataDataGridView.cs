@@ -366,18 +366,19 @@ namespace yata
 			//if (Display == ColDisplay.DisplayOff) return;
 			//if (e.Handled) return;
 
+			int col = e.ColumnIndex;
+
 			e.PaintBackground(e.ClipBounds, true);
 
+			if (col != -1)
+				e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ...
 
-//			e.PaintContent(e.ClipBounds); // works but reverts text-painting to default ...
 //			return;
 
 //			e.Paint(e.ClipBounds, (DataGridViewPaintParts.All & ~DataGridViewPaintParts.Background));
 
 //			DataGridViewTextBoxColumn
 //			DataGridViewTextBoxCell
-
-			int col = e.ColumnIndex;
 
 
 /*			if (col == FirstDisplayedScrollingColumnIndex)
@@ -441,33 +442,70 @@ namespace yata
 
 						if (sort != null)
 							e.Graphics.DrawImage(sort,
-												 e.CellBounds.X + e.CellBounds.Width - 19,
+												 e.CellBounds.X + e.CellBounds.Width - 17, // -19
 												 e.CellBounds.Y + 3);
 					}
 				}
 				else // row-header
 					x = 10;
 
-				if (e.FormattedValue != null) // safety.
+				if (e.FormattedValue != null // safety.
+					&& col == -1)
 				{
-/*					string st = Convert.ToString(e.FormattedValue);
+//					string st = Convert.ToString(e.FormattedValue);
 
-					int blork = 0;
+//					int blork = 0;
 
-					if (col == FirstDisplayedScrollingColumnIndex
+					var flags = TextFormatFlags.NoPrefix;
+
+/*					if (col == FirstDisplayedScrollingColumnIndex
 						&& FirstDisplayedScrollingColumnHiddenWidth != 0)
 					{
-						blork = FirstDisplayedScrollingColumnHiddenWidth;
+						logfile.Log(e.ColumnIndex + "," + e.RowIndex);
+						logfile.Log("cellbounds= " + e.CellBounds);
+//						logfile.Log("clipbounds= " + e.ClipBounds);
 
-						int length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
-						int target = e.CellBounds.Width - FirstDisplayedScrollingColumnHiddenWidth;
+						Rectangle clip = e.CellBounds;
 
-						while (length > target)
+						int w = RowHeadersWidth;
+						logfile.Log("w1= " + w);
+
+						w += Columns[0].Width;
+						logfile.Log("w2= " + w);
+
+						if (Columns[1].Frozen)
 						{
-							st = st.Substring(1);
-							length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
+							w += Columns[1].Width;
+							logfile.Log("w3= " + w);
 						}
-					} */ // totally fucked.
+
+						if (Columns[2].Frozen)
+						{
+							w += Columns[2].Width;
+							logfile.Log("w4= " + w);
+						}
+
+						if (e.CellBounds.X < w)
+						{
+							logfile.Log(". do Clip");
+							clip = new Rectangle(w, clip.Y, clip.Width - w, clip.Height);
+							e.Graphics.SetClip(clip, System.Drawing.Drawing2D.CombineMode.Complement);
+
+							logfile.Log(". clip= " + clip);
+							flags |= TextFormatFlags.PreserveGraphicsClipping;
+						}
+
+//						blork = FirstDisplayedScrollingColumnHiddenWidth;
+
+//						int length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
+//						int target = e.CellBounds.Width - FirstDisplayedScrollingColumnHiddenWidth;
+
+//						while (length > target)
+//						{
+//							st = st.Substring(1);
+//							length = TextRenderer.MeasureText(st, e.CellStyle.Font).Width;
+//						} // totally fucked.
+					} */
 
 
 
@@ -480,7 +518,8 @@ namespace yata
 										  e.CellStyle.Font,
 										  rect,
 										  e.CellStyle.ForeColor,
-										  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
+//										  Color.Empty,
+										  flags);
 				}
 			}
 //			else								// the best option so far -> (and this is after 3+ days fucking about with their shit.)
@@ -492,6 +531,23 @@ namespace yata
 //			var bounds = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width - 1, e.CellBounds.Height - 1);
 //			e.Graphics.DrawRectangle(Pens.Red, bounds);
 		}
+
+//		void SetTextClip()
+//		{
+//		}
+
+
+
+
+/*
+TextRenderer.DrawText(e.Graphics,
+                      "Testing",
+                      font,
+                      new Point(150, 28),
+                      Color.Black,
+                      Color.Empty,
+                      TextFormatFlags.PreserveGraphicsClipping);
+*/
 /*
 Size size = TextRenderer.MeasureText(g,
                                      "Ala ma kota",
