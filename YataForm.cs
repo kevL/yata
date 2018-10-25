@@ -36,8 +36,6 @@ namespace yata
 
 		Font FontDefault
 		{ get; set; }
-
-		WaitForm _fwait;
 		#endregion Fields & Properties
 
 
@@ -61,8 +59,6 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
-
-			_fwait = new WaitForm(this);
 
 			FontDefault = Font;
 
