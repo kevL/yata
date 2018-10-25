@@ -486,7 +486,7 @@
 			this.it_PathAll.Name = "it_PathAll";
 			this.it_PathAll.Size = new System.Drawing.Size(190, 22);
 			this.it_PathAll.Text = "Path all ...";
-			this.it_PathAll.Click += new System.EventHandler(this.PathAllToolStripMenuItemClick);
+			this.it_PathAll.Click += new System.EventHandler(this.itclick_PathAll);
 			// 
 			// separator_5
 			// 
@@ -498,35 +498,35 @@
 			this.it_PathBaseItems2da.Name = "it_PathBaseItems2da";
 			this.it_PathBaseItems2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathBaseItems2da.Text = "path BaseItems.2da";
-			this.it_PathBaseItems2da.Click += new System.EventHandler(this.PathBaseItems2daToolStripMenuItemClick);
+			this.it_PathBaseItems2da.Click += new System.EventHandler(this.itclick_PathBaseItems2da);
 			// 
 			// it_PathFeat2da
 			// 
 			this.it_PathFeat2da.Name = "it_PathFeat2da";
 			this.it_PathFeat2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathFeat2da.Text = "path Feat.2da";
-			this.it_PathFeat2da.Click += new System.EventHandler(this.PathFeat2daToolStripMenuItemClick);
+			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
 			// 
 			// it_PathItemPropDef2da
 			// 
 			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
 			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathItemPropDef2da.Text = "path ItemPropDef.2da";
-			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.PathItemPropDef2daToolStripMenuItemClick);
+			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
 			// 
 			// it_PathSkills2da
 			// 
 			this.it_PathSkills2da.Name = "it_PathSkills2da";
 			this.it_PathSkills2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathSkills2da.Text = "path Skills.2da";
-			this.it_PathSkills2da.Click += new System.EventHandler(this.PathSkills2daToolStripMenuItemClick);
+			this.it_PathSkills2da.Click += new System.EventHandler(this.itclick_PathSkills2da);
 			// 
 			// it_PathSpells2da
 			// 
 			this.it_PathSpells2da.Name = "it_PathSpells2da";
 			this.it_PathSpells2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathSpells2da.Text = "path Spells.2da";
-			this.it_PathSpells2da.Click += new System.EventHandler(this.PathSpells2daToolStripMenuItemClick);
+			this.it_PathSpells2da.Click += new System.EventHandler(this.itclick_PathSpells2da);
 			// 
 			// separator_6
 			// 

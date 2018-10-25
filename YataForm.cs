@@ -1208,7 +1208,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void PathSpells2daToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathSpells2da(object sender, EventArgs e)
 		{
 			if (!it_PathSpells2da.Checked)
 			{
@@ -1239,7 +1239,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void PathFeat2daToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathFeat2da(object sender, EventArgs e)
 		{
 			if (!it_PathFeat2da.Checked)
 			{
@@ -1270,7 +1270,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void PathItemPropDef2daToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathItemPropDef2da(object sender, EventArgs e)
 		{
 			if (!it_PathItemPropDef2da.Checked)
 			{
@@ -1301,7 +1301,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void PathBaseItems2daToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathBaseItems2da(object sender, EventArgs e)
 		{
 			if (!it_PathBaseItems2da.Checked)
 			{
@@ -1332,7 +1332,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void PathSkills2daToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathSkills2da(object sender, EventArgs e)
 		{
 			if (!it_PathSkills2da.Checked)
 			{
@@ -1357,7 +1357,7 @@ namespace yata
 			}
 		}
 
-		void PathAllToolStripMenuItemClick(object sender, EventArgs e)
+		void itclick_PathAll(object sender, EventArgs e)
 		{
 			using (var fbd = new FolderBrowserDialog())
 			{
@@ -1450,7 +1450,6 @@ namespace yata
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
-		/// TODO: option to search selected cells (excluding unselected)
 		/// </summary>
 		void Search()
 		{
@@ -1485,7 +1484,6 @@ namespace yata
 
 					bool start = true;
 					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
-//					bool selected = (Table.SelectedCells.Count != 0); // bah. First hit deselects all other cells ...
 
 					string field;
 
@@ -1519,19 +1517,15 @@ namespace yata
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-//									if (!selected || Table[c,r].Selected)
-									{
-										Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
-										Table.CurrentCell = Table[c,r];
-										return;
-									}
+									Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
+									Table.CurrentCell = Table[c,r];
+									return;
 								}
 							}
 						}
 					}
 
-//					if (startRow != 0 || startCol != 0) // TODO: tighten exact start/end-cells
-//					{
+					// TODO: tighten exact start/end-cells
 					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
 					{
 						for (c = 0; c != Table.Columns.Count; ++c)
@@ -1542,41 +1536,16 @@ namespace yata
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-//									if (!selected || Table[c,r].Selected)
-									{
-										Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
-										Table.CurrentCell = Table[c,r];
-										return;
-									}
+									Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
+									Table.CurrentCell = Table[c,r];
+									return;
 								}
 							}
 						}
 					}
-//					}
 				}
-				// If only 1 cell is found and user has scrolled off of its display
-				// scroll the table to show it again. done above^
-//				DisplayCurrentCell();
 			}
 		}
-
-/*		void DisplayCurrentCell()
-		{
-			logfile.Log("DisplayCurrentCell()");
-
-			var cell = Table.CurrentCell;
-			if (cell != null && cell.ColumnIndex != -1 && cell.RowIndex != -1)
-			{
-				var rect = Table.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, false);
-				var pt = new Point(rect.Left, rect.Top);
-
-				int offsetX = Table.GetCellDisplayRectangle(Table.FirstDisplayedScrollingColumnIndex, 0, true).Left;
-				if (pt.X < offsetX)
-				{
-					Table.HorizontalScrollingOffset -= offsetX - pt.X;
-				}
-			}
-		} */
 		#endregion Search
 
 
