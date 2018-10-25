@@ -66,7 +66,7 @@
 			this.list_Font.Location = new System.Drawing.Point(5, 19);
 			this.list_Font.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(224, 244);
+			this.list_Font.Size = new System.Drawing.Size(225, 244);
 			this.list_Font.TabIndex = 6;
 			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_DrawItem);
 			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.fontList_SelectedIndexChanged);
@@ -76,7 +76,7 @@
 			this.btn_Ok.Location = new System.Drawing.Point(290, 125);
 			this.btn_Ok.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.btn_Ok.Name = "btn_Ok";
-			this.btn_Ok.Size = new System.Drawing.Size(170, 41);
+			this.btn_Ok.Size = new System.Drawing.Size(170, 40);
 			this.btn_Ok.TabIndex = 0;
 			this.btn_Ok.Text = "— ok —";
 			this.btn_Ok.UseVisualStyleBackColor = true;
@@ -84,10 +84,10 @@
 			// 
 			// btn_Apply
 			// 
-			this.btn_Apply.Location = new System.Drawing.Point(290, 171);
+			this.btn_Apply.Location = new System.Drawing.Point(290, 170);
 			this.btn_Apply.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.btn_Apply.Name = "btn_Apply";
-			this.btn_Apply.Size = new System.Drawing.Size(170, 41);
+			this.btn_Apply.Size = new System.Drawing.Size(170, 40);
 			this.btn_Apply.TabIndex = 1;
 			this.btn_Apply.Text = "— apply —";
 			this.btn_Apply.UseVisualStyleBackColor = true;
@@ -96,10 +96,10 @@
 			// btn_Cancel
 			// 
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(290, 219);
+			this.btn_Cancel.Location = new System.Drawing.Point(290, 215);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(170, 41);
+			this.btn_Cancel.Size = new System.Drawing.Size(170, 40);
 			this.btn_Cancel.TabIndex = 2;
 			this.btn_Cancel.Text = "— cancel —";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -109,7 +109,7 @@
 			// 
 			this.lbl_Font.Location = new System.Drawing.Point(5, 5);
 			this.lbl_Font.Name = "lbl_Font";
-			this.lbl_Font.Size = new System.Drawing.Size(40, 14);
+			this.lbl_Font.Size = new System.Drawing.Size(40, 15);
 			this.lbl_Font.TabIndex = 3;
 			this.lbl_Font.Text = "FONT";
 			// 
@@ -117,15 +117,15 @@
 			// 
 			this.lbl_Style.Location = new System.Drawing.Point(245, 15);
 			this.lbl_Style.Name = "lbl_Style";
-			this.lbl_Style.Size = new System.Drawing.Size(40, 14);
+			this.lbl_Style.Size = new System.Drawing.Size(40, 15);
 			this.lbl_Style.TabIndex = 4;
 			this.lbl_Style.Text = "Style";
 			// 
 			// lbl_Size
 			// 
-			this.lbl_Size.Location = new System.Drawing.Point(290, 79);
+			this.lbl_Size.Location = new System.Drawing.Point(290, 80);
 			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Size = new System.Drawing.Size(20, 14);
+			this.lbl_Size.Size = new System.Drawing.Size(20, 15);
 			this.lbl_Size.TabIndex = 5;
 			this.lbl_Size.Text = "pt";
 			// 
@@ -134,7 +134,7 @@
 			this.list_Size.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.list_Size.FormattingEnabled = true;
 			this.list_Size.ItemHeight = 15;
-			this.list_Size.Location = new System.Drawing.Point(240, 80);
+			this.list_Size.Location = new System.Drawing.Point(240, 85);
 			this.list_Size.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.list_Size.Name = "list_Size";
 			this.list_Size.Size = new System.Drawing.Size(40, 169);
@@ -149,13 +149,12 @@
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.lbl_Example.Location = new System.Drawing.Point(5, 14);
 			this.lbl_Example.Name = "lbl_Example";
-			this.lbl_Example.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-			this.lbl_Example.Size = new System.Drawing.Size(450, 83);
+			this.lbl_Example.Size = new System.Drawing.Size(450, 80);
 			this.lbl_Example.TabIndex = 10;
 			// 
 			// tb_Size
 			// 
-			this.tb_Size.Location = new System.Drawing.Point(285, 98);
+			this.tb_Size.Location = new System.Drawing.Point(285, 95);
 			this.tb_Size.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.tb_Size.Name = "tb_Size";
 			this.tb_Size.Size = new System.Drawing.Size(40, 20);
@@ -172,17 +171,17 @@
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.groupBox1.Size = new System.Drawing.Size(460, 101);
+			this.groupBox1.Size = new System.Drawing.Size(460, 100);
 			this.groupBox1.TabIndex = 12;
 			this.groupBox1.TabStop = false;
 			// 
 			// cb_Bold
 			// 
 			this.cb_Bold.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Bold.Location = new System.Drawing.Point(245, 32);
+			this.cb_Bold.Location = new System.Drawing.Point(245, 35);
 			this.cb_Bold.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.cb_Bold.Name = "cb_Bold";
-			this.cb_Bold.Size = new System.Drawing.Size(55, 19);
+			this.cb_Bold.Size = new System.Drawing.Size(55, 15);
 			this.cb_Bold.TabIndex = 14;
 			this.cb_Bold.Text = "bold";
 			this.cb_Bold.UseVisualStyleBackColor = true;
@@ -191,10 +190,10 @@
 			// cb_Italic
 			// 
 			this.cb_Italic.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Italic.Location = new System.Drawing.Point(245, 51);
+			this.cb_Italic.Location = new System.Drawing.Point(245, 55);
 			this.cb_Italic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.cb_Italic.Name = "cb_Italic";
-			this.cb_Italic.Size = new System.Drawing.Size(55, 19);
+			this.cb_Italic.Size = new System.Drawing.Size(55, 15);
 			this.cb_Italic.TabIndex = 15;
 			this.cb_Italic.Text = "italic";
 			this.cb_Italic.UseVisualStyleBackColor = true;

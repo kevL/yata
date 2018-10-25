@@ -280,12 +280,6 @@ namespace yata
 				SetSampleFont();
 			}
 		}
-
-		void fontStyle_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			_dirty |= !_load;
-			SetSampleFont();
-		}
 		#endregion FontStyle
 
 
