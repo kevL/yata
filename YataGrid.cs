@@ -1,0 +1,832 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Windows.Forms;
+
+
+namespace yata
+{
+	sealed class YataGrid
+		:
+			Control
+	{
+		internal string Pfe // Path-File-Extension (ie. fullpath)
+		{ get; set; }
+
+		readonly YataForm _f;
+
+		int HeightColhead;
+		int HeightRow;
+
+		int WidthRowhead;
+
+		int ColCount;
+		int RowCount;
+
+		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
+		{ get; set; }
+
+		readonly List<string[]> _rows = new List<string[]>();
+
+		readonly List<Col> Cols = new List<Col>();
+		readonly List<Row> Rows = new List<Row>();
+
+		Cell[,] _cells;
+		/// <summary>
+		/// Gets the cell at pos.
+		/// </summary>
+		public Cell this[int c, int r]
+		{
+			get { return _cells[c,r]; }
+			set { _cells[c,r] = value; }
+		}
+
+
+		Graphics _graphics;
+
+		readonly Brush _brushColhead = new SolidBrush(Color.Thistle);
+		readonly Brush _brushAlice   = new SolidBrush(Color.AliceBlue);
+		readonly Brush _brushBlanche = new SolidBrush(Color.BlanchedAlmond);
+
+		readonly Pen _penLine = new Pen(SystemColors.ControlDark);
+
+		Color _colorText = SystemColors.ControlText;
+
+
+		const int _padHori = 6;
+		const int _padVert = 4;
+
+//		bool _load;
+
+
+		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
+															| TextFormatFlags.NoPadding
+															| TextFormatFlags.Left
+															| TextFormatFlags.VerticalCenter
+															| TextFormatFlags.SingleLine;
+		Size _size = new Size(int.MaxValue, int.MaxValue);
+
+
+		internal bool Craft
+		{ get; set; }
+
+
+		readonly VScrollBar _scrollVert = new VScrollBar();
+		readonly HScrollBar _scrollHori = new HScrollBar();
+
+		int offsetVert;
+		int offsetHori;
+
+		int HeightTable;
+		int WidthTable;
+
+
+		/// <summary>
+		/// cTor.
+		/// </summary>
+		/// <param name="f"></param>
+		/// <param name="pfe"></param>
+		internal YataGrid(YataForm f, string pfe)
+		{
+			DrawingControl.SetDoubleBuffered(this);
+
+			SetStyle(ControlStyles.OptimizedDoubleBuffer
+				   | ControlStyles.AllPaintingInWmPaint
+				   | ControlStyles.UserPaint
+				   | ControlStyles.ResizeRedraw, true);
+
+			_f = f;
+
+			Pfe = pfe;
+
+			Dock = DockStyle.Fill;
+			BackColor = SystemColors.ControlDark;
+
+			Font = _f.Font;
+
+
+			_scrollVert.Dock = DockStyle.Right;
+			_scrollVert.SmallChange = 1;
+			_scrollVert.ValueChanged += OnVertScrollValueChanged;
+
+			_scrollHori.Dock = DockStyle.Bottom;
+			_scrollHori.SmallChange = 1;
+			_scrollHori.ValueChanged += OnHoriScrollValueChanged;
+
+			Controls.Add(_scrollHori);
+			Controls.Add(_scrollVert);
+		}
+
+
+		void OnVertScrollValueChanged(object sender, EventArgs e)
+		{
+			//logfile.Log("OnVertScrollValueChanged");
+			offsetVert = _scrollVert.Value;
+			//logfile.Log(". offsetVert= " + offsetVert);
+
+			Refresh();
+		}
+
+		void OnHoriScrollValueChanged(object sender, EventArgs e)
+		{
+			//logfile.Log("OnHoriScrollValueChanged");
+			offsetHori = _scrollHori.Value;
+			//logfile.Log(". offsetHori= " + offsetHori);
+
+			Refresh();
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			//logfile.Log("OnResize");
+			//logfile.Log(". Height= " + Height);
+			//logfile.Log(". Width= "  + Width);
+
+			InitScrollers(); // do this here 'cause h/w aren't valid in Load2da() ...
+			base.OnResize(e);
+		}
+
+		/// <summary>
+		/// Initializes the vertical and horizontal scrollbars.
+		/// </summary>
+		void InitScrollers()
+		{
+			//logfile.Log("InitScrollers");
+			HeightTable = HeightColhead + HeightRow * RowCount;
+
+			WidthTable = WidthRowhead;
+			for (int c = 0; c != ColCount; ++c)
+			{
+				WidthTable += Cols[c].width;
+			}
+
+			//logfile.Log(". HeightTable= " + HeightTable + " Height= " + Height);
+			//logfile.Log(". WidthTable= "  + WidthTable  + " Width= "  + Width);
+
+			//logfile.Log(". HeightRow= " + HeightRow);
+
+			_scrollVert.LargeChange = HeightRow;
+			_scrollHori.LargeChange = HeightRow; // why not.
+
+			int vert = HeightTable + _scrollVert.LargeChange - Height;
+			int hori = WidthTable  + _scrollHori.LargeChange - Width;
+
+			if (vert < _scrollVert.LargeChange) vert = 0;
+			if (hori < _scrollHori.LargeChange) hori = 0;
+
+			_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
+			_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
+
+			//logfile.Log(". _scrollVert.Value= "   + _scrollVert.Value);
+			//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
+			//logfile.Log(". _scrollVert.Maximum= " + _scrollVert.Maximum);
+			//logfile.Log(". _scrollHori.Maximum= " + _scrollHori.Maximum);
+		}
+
+
+		/// <summary>
+		/// Handles the paint event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			//logfile.Log("OnPaint");
+			//logfile.Log(". Height= " + Height);
+			//logfile.Log(". Width= "  + Width);
+
+			if (ColCount != 0 && RowCount != 0 && _cells != null)
+			{
+				_graphics = e.Graphics;
+				_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+//				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
+
+
+				int c,r;
+				float x,y;
+
+				// NOTE: Paint backgrounds full-width of table ->
+
+				// rows background - scrollable
+				var rect = new Rectangle(Left, HeightColhead - offsetVert, WidthTable, HeightRow);
+
+				Brush brush;
+				for (r = 0; r != RowCount; ++r)
+				{
+					brush = (r % 2 == 0) ? _brushAlice
+										 : _brushBlanche;
+
+					_graphics.FillRectangle(brush, rect);
+
+					rect.Y += HeightRow;
+				}
+
+				// cell text - scrollable
+				int xInt = WidthRowhead - offsetHori + _padHori;
+				for (r = 0; r != RowCount; ++r)
+				{
+					if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+						break;
+
+					if (rect.Y + HeightRow > HeightColhead)
+					{
+						rect.X = xInt;
+						for (c = 0; c != ColCount; ++c)
+						{
+							if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
+							{
+								TextRenderer.DrawText(_graphics, this[c,r].text, Font, rect, _colorText, _flags);
+								_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
+							}
+
+							if ((rect.X += rect.Width) > Right)
+								break;
+						}
+					}
+				}
+
+				// colhead background - static
+				rect = new Rectangle(Left, Top, WidthTable, HeightColhead);
+				_graphics.FillRectangle(_brushColhead, rect);
+
+
+				// NOTE: Paint horizontal lines full-width of table.
+
+				// row lines - scrollable
+				for (r = 1; r != RowCount + 1; ++r)
+				{
+					if ((y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+						break;
+
+					if (y > HeightColhead)
+						_graphics.DrawLine(_penLine, Left, y, WidthTable, y);
+				}
+
+				// colhead line - static
+				_graphics.DrawLine(_penLine, Left, HeightColhead, WidthTable, HeightColhead);
+
+
+				// NOTE: Paint vertical lines full-height of table.
+
+				// col lines - scrollable
+				x = WidthRowhead - offsetHori;
+				for (c = 0; c != ColCount; ++c)
+				{
+					if ((x += Cols[c].width) > Right)
+						break;
+
+					if (x > WidthRowhead)
+						_graphics.DrawLine(_penLine, x, Top, x, Bottom);
+				}
+
+				// rowhead line - static
+				_graphics.DrawLine(_penLine, WidthRowhead, Top, WidthRowhead, Bottom);
+
+
+				// rowhead text
+				LabelRowheads();
+
+				// colhead text
+				LabelColHeads();
+			}
+		}
+
+		/// <summary>
+		/// Labels the rowheads when inserting/deleting/sorting rows.
+		/// </summary>
+		internal void LabelRowheads()
+		{
+			if (RowCount != 0) // safety - ought be checked in calling funct.
+			{
+//				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
+
+				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				{
+					var rect = new Rectangle(8, 0, WidthRowhead, HeightRow);
+
+					for (int r = 0; r != RowCount; ++r)
+					{
+						if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+							break;
+
+						if (rect.Y + HeightRow > Top)
+							TextRenderer.DrawText(_graphics, r.ToString(), font, rect, _colorText, _flags);
+					}
+				}
+//				_load = false;
+			}
+		}
+
+		void LabelColHeads()
+		{
+			if (ColCount != 0) // safety.
+			{
+				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				{
+					var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+
+					for (int c = 0; c != ColCount; ++c)
+					{
+						if (rect.X + (rect.Width = Cols[c].width) > Left)
+							TextRenderer.DrawText(_graphics, Cols[c].text, font, rect, _colorText, _flags);
+
+						if ((rect.X += rect.Width) > Right)
+							break;
+					}
+				}
+			}
+		}
+
+
+		const int LABELS = 2;
+
+		/// <summary>
+		/// Tries to load a 2da file.
+		/// </summary>
+		/// <returns>true if 2da loaded successfully perhaps</returns>
+		internal bool Load2da()
+		{
+			Text = "Yata";
+
+			bool ignoreErrors = false;
+
+			string[] lines = File.ReadAllLines(Pfe);
+
+			Fields = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries); // TODO: test for double-quotes
+
+			int quotes =  0;
+			int id     = -1;
+			int lineId = -1;
+
+			// TODO: Test for an even quantity of double-quotes on each line.
+			// ie. Account for the fact that ParseLine() needs to ASSUME that quotes are fairly accurate.
+
+			foreach (string line in lines)
+			{
+				// test version header
+				if (++lineId == 0)
+				{
+					string st = line.Trim();
+					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					{
+						string error = "The 2da-file contains a malformed version header."
+									 + Environment.NewLine + Environment.NewLine
+									 + Pfe;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return false;
+
+							case DialogResult.Retry:
+								break;
+
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
+					}
+				}
+
+				// test for blank 2nd line
+				if (!ignoreErrors && lineId == 1 && !String.IsNullOrEmpty(line)) // .Trim() // uh yeah ... right.
+				{
+					string error = "The 2nd line in the 2da should be blank."
+								 + " This editor does not support default value-types."
+								 + Environment.NewLine + Environment.NewLine
+								 + Pfe;
+					switch (ShowLoadError(error))
+					{
+						case DialogResult.Abort:
+							return false;
+
+						case DialogResult.Retry:
+							break;
+
+						case DialogResult.Ignore:
+							ignoreErrors = true;
+							break;
+					}
+				}
+
+				if (lineId > LABELS)
+				{
+					string[] row = Parse2daRow(line);
+
+					// test for well-formed, consistent IDs
+					++id;
+
+					if (!ignoreErrors)
+					{
+						int result;
+						if (!Int32.TryParse(row[0], out result) || result != id)
+						{
+							string error = "The 2da-file contains an ID that is not an integer or is out of order."
+										 + Environment.NewLine + Environment.NewLine
+										 + Pfe
+										 + Environment.NewLine + Environment.NewLine
+										 + id + " / " + row[0];
+							switch (ShowLoadError(error))
+							{
+								case DialogResult.Abort:
+									return false;
+
+								case DialogResult.Retry:
+									break;
+
+								case DialogResult.Ignore:
+									ignoreErrors = true;
+									break;
+							}
+						}
+					}
+
+					// test for matching fields under columns
+					if (!ignoreErrors && row.Length != Fields.Length + 1)
+					{
+						string error = "The 2da-file contains fields that do not align with its cols."
+									 + Environment.NewLine + Environment.NewLine
+									 + Pfe
+									 + Environment.NewLine + Environment.NewLine
+									 + "id " + id;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return false;
+
+							case DialogResult.Retry:
+								break;
+
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
+					}
+
+					// test for matching double-quote characters on the fly
+					if (!ignoreErrors)
+					{
+						bool quoteFirst, quoteLast;
+						int col = -1;
+						foreach (string field in row)
+						{
+							++col;
+							quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+							quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+							if (   ( quoteFirst && !quoteLast)
+								|| (!quoteFirst &&  quoteLast))
+							{
+								string error = "Found a missing double-quote character."
+											 + Environment.NewLine + Environment.NewLine
+											 + Pfe
+											 + Environment.NewLine + Environment.NewLine
+											 + "id " + id + " / col " + col;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return false;
+
+									case DialogResult.Retry:
+										break;
+
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+							}
+							else if (quoteFirst && quoteLast
+								&& field.Length == 1)
+							{
+								string error = "Found an isolated double-quote character."
+											 + Environment.NewLine + Environment.NewLine
+											 + Pfe
+											 + Environment.NewLine + Environment.NewLine
+											 + "id " + id + " / col " + col;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return false;
+
+									case DialogResult.Retry:
+										break;
+
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+							}
+						}
+					}
+
+					_rows.Add(row);
+				}
+
+				// also test for an odd quantity of double-quote characters
+				foreach (char character in line)
+				{
+					if (character == '"')
+						++quotes;
+				}
+			}
+
+			// safety test for double-quotes (ought be caught above)
+			if (quotes % 2 == 1)
+			{
+				string error = "The 2da-file contains an odd quantity of double-quote characters."
+							 + Environment.NewLine + Environment.NewLine
+							 + Pfe;
+				switch (ShowLoadError(error))
+				{
+					case DialogResult.Abort:
+						return false;
+
+					case DialogResult.Retry:
+						break;
+
+					case DialogResult.Ignore:
+						ignoreErrors = true;
+						break;
+				}
+			}
+
+
+			if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
+			{
+				foreach (var dir in Settings._pathall)
+					_f.GropeLabels(dir);
+			}
+
+
+//			_load = true;
+
+			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
+													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
+
+			PopulateCols();
+			PopulateRows();
+			PopulateCells();
+
+			SetRowheadWidth();
+
+//			_load = false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// A generic error-box if something goes wrong while loading a 2da file.
+		/// </summary>
+		/// <param name="error"></param>
+		DialogResult ShowLoadError(string error)
+		{
+			error += Environment.NewLine + Environment.NewLine
+				   + "abort\t- stop loading"         + Environment.NewLine
+				   + "retry\t- check for next error" + Environment.NewLine
+				   + "ignore\t- just load the file";
+
+			return MessageBox.Show(error,
+								   "burp",
+								   MessageBoxButtons.AbortRetryIgnore,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
+		}
+
+		/// <summary>
+		/// TODO: optimize.
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
+		string[] Parse2daRow(string line)
+		{
+			var list  = new List<string>();
+			var field = new List<char>();
+
+			bool add      = false;
+			bool inQuotes = false;
+
+			char c;
+
+			int posLast = line.Length + 1; // include an extra iteration to get the last field (that has no whitespace after it)
+			for (int pos = 0; pos != posLast; ++pos)
+			{
+				if (pos == line.Length)	// hit lineend -> add the last field
+				{						// if there's no whitespace after it (last fields
+					if (add)			// w/ trailing whitespace are dealt with below)
+					{
+						list.Add(new string(field.ToArray()));
+					}
+				}
+				else
+				{
+					c = line[pos];
+
+					if (c == '"' || inQuotes)				// start or continue quotation
+					{
+						inQuotes = (!inQuotes || c != '"');	// end quotation
+
+						add = true;
+						field.Add(c);
+					}
+					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
+					{
+						add = true;
+						field.Add(c);
+					}
+					else if (add)							// hit a space or tab
+					{
+						add = false;
+						list.Add(new string(field.ToArray()));
+
+						field.Clear();
+					}
+				}
+			}
+			return list.ToArray();
+		}
+
+
+		/// <summary>
+		/// Populates the table's colheads.
+		/// </summary>
+		void PopulateCols()
+		{
+			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
+
+			int c = 0;
+			for (; c != ColCount; ++c)
+			{
+				Cols.Add(new Col(c));
+			}
+
+			Cols[0].text = "id";
+//			Cols[0].Frozen = true;
+
+			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			{
+				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily))) // TODO: make accented font static.
+				{
+					Size size;
+					int h;
+					c = 0;
+					foreach (string head in Fields)
+					{
+						Cols[++c].text = head;
+						size = TextRenderer.MeasureText(graphics, head, font, _size, _flags);
+						Cols[c].width = size.Width + _padHori * 2;
+
+						h = size.Height + _padVert * 2;
+						if (h > HeightColhead)
+							HeightColhead = h;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Populates the table's rows.
+		/// </summary>
+		void PopulateRows()
+		{
+			var pb = new ProgBar(_f);
+			pb.ValTop = _rows.Count;
+			pb.Show();
+
+			RowCount = _rows.Count;
+
+			for (int r = 0; r != RowCount; ++r)
+			{
+				Rows.Add(new Row(r, _rows[r]));
+				pb.Step();
+			}
+			_rows.Clear(); // done w/ '_rows'
+		}
+
+
+		/// <summary>
+		/// Populates the table's cells.
+		/// </summary>
+		void PopulateCells()
+		{
+			_cells = new Cell[ColCount, RowCount];
+
+			for (int r = 0; r != RowCount; ++r)
+			{
+				for (int c = 0; c != ColCount; ++c)
+				{
+					_cells[c,r] = new Cell(Rows[r].fields[c]); //c, r,
+				}
+			}
+
+			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			{
+				Size size;
+				int w, wT, hT;
+				for (int c = 0; c != ColCount; ++c)
+				{
+					w = 25;
+					for (int r = 0; r != RowCount; ++r)
+					{
+						size = TextRenderer.MeasureText(graphics, this[c,r].text, Font, _size, _flags);
+
+						wT = size.Width + _padHori * 2;
+						if (wT > w) w = wT;
+
+						hT = size.Height + _padVert * 2;
+						if (hT > HeightRow) HeightRow = hT;
+					}
+					Cols[c].width = w;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Maintains rowhead width wrt current Font across all tabs/tables.
+		/// </summary>
+		internal void SetRowheadWidth()
+		{
+			YataGrid table;
+
+			int widthRowhead = 20, test; // row-headers' width stays uniform across all tabpages ->
+
+			int tabs = _f.Tabs.TabCount;
+			int tab = 0;
+			for (; tab != tabs; ++tab)
+			{
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				if ((test = table.RowCount - 1) > widthRowhead)
+					widthRowhead = test;
+			}
+
+			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			{
+				widthRowhead = TextRenderer.MeasureText(graphics, widthRowhead.ToString(), Font, _size, _flags).Width + _padHori * 3;
+			}
+
+			for (tab = 0; tab != tabs; ++tab)
+			{
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				table.WidthRowhead = widthRowhead;
+			}
+		}
+	}
+
+
+
+	/// <summary>
+	/// Contains data about a col.
+	/// </summary>
+	sealed class Col
+	{
+		internal int id;
+		internal string text; // the header text
+
+		int _width;
+		internal int width
+		{
+			get { return _width; }
+			set
+			{
+				if (value > _width) // TODO: not exactly. If user shortens a field '_width' could decrease.
+					_width = value;
+			}
+		}
+
+		internal Col(int c)
+		{
+			id = c;
+		}
+	}
+
+	/// <summary>
+	/// Contains data about a row.
+	/// </summary>
+	sealed class Row
+	{
+		internal int id;
+		internal string[] fields; // the row's fields
+
+		internal Row(int r, string[] cells)
+		{
+			id = r;
+			fields = cells;
+		}
+	}
+
+	/// <summary>
+	/// Contains data about a cell.
+	/// </summary>
+	sealed class Cell
+	{
+//		internal int x;
+//		internal int y;
+		internal string text; // the field's text
+
+		internal Cell(string field) //int c, int r,
+		{
+//			x = c;
+//			y = r;
+			text = field;
+		}
+	}
+}

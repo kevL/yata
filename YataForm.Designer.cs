@@ -186,7 +186,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(846, 408);
+			this.tabControl.Size = new System.Drawing.Size(842, 408);
 			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
@@ -222,7 +222,7 @@
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(846, 24);
+			this.menubar.Size = new System.Drawing.Size(842, 24);
 			this.menubar.TabIndex = 0;
 			this.menubar.Text = "menuStrip1";
 			// 
@@ -696,7 +696,7 @@
 			this.statusbar_label_Info});
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
-			this.statusbar.Size = new System.Drawing.Size(846, 22);
+			this.statusbar.Size = new System.Drawing.Size(842, 22);
 			this.statusbar.TabIndex = 2;
 			this.statusbar.Text = "statusStrip1";
 			// 
@@ -713,7 +713,7 @@
 			this.statusbar_label_Info.AutoSize = false;
 			this.statusbar_label_Info.Font = new System.Drawing.Font("Consolas", 8F);
 			this.statusbar_label_Info.Name = "statusbar_label_Info";
-			this.statusbar_label_Info.Size = new System.Drawing.Size(671, 17);
+			this.statusbar_label_Info.Size = new System.Drawing.Size(667, 17);
 			this.statusbar_label_Info.Spring = true;
 			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -723,14 +723,14 @@
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(846, 408);
+			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
 			// YataForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(846, 454);
+			this.ClientSize = new System.Drawing.Size(842, 454);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.statusbar);

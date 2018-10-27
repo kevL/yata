@@ -148,13 +148,13 @@ namespace yata
 
 
 			// debug ->
-			//CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\armor.2da");
+//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\appearance.2da");
 		}
 		#endregion cTor
 
 
 		#region Methods (static)
-		static FontStyle getStyleAccented(FontFamily ff)
+		internal static FontStyle getStyleAccented(FontFamily ff)
 		{
 			FontStyle style;
 			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
@@ -213,7 +213,30 @@ namespace yata
 		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
-			panel_ColorFill.Show();
+			panel_ColorFill.Hide(); // test
+
+			var table = new YataGrid(this, pfe);
+
+			var tab = new TabPage();
+			Tabs.TabPages.Add(tab);
+
+			tab.Tag = table;
+			tab.Text = "test";
+
+			if (table.Load2da())
+			{
+				SetTabSize();
+
+				tab.Controls.Add(table);
+
+				Tabs.SelectedTab = tab;
+
+				table.Select();
+
+				DrawingControl.ResumeDrawing(table);
+			}
+
+/*			panel_ColorFill.Show();
 
 			var table = new YataDataGridView(this, pfe);
 			((ISupportInitialize)(table)).BeginInit();
@@ -223,17 +246,17 @@ namespace yata
 				table.RowHeaderMouseClick += context_;
 				table.CellMouseEnter      += PrintCraftInfo;
 
-				var page = new TabPage();
-				Tabs.TabPages.Add(page);
+				var tab = new TabPage();
+				Tabs.TabPages.Add(tab);
 
-				page.Tag = table;
-				page.Text = Path.GetFileNameWithoutExtension(pfe);
+				tab.Tag = table;
+				tab.Text = Path.GetFileNameWithoutExtension(pfe);
 
 				SetTabSize();
 
-				page.Controls.Add(table);
+				tab.Controls.Add(table);
 
-				Tabs.SelectedTab = page;
+				Tabs.SelectedTab = tab;
 
 				table.Select(); // focus the table.
 
@@ -249,7 +272,7 @@ namespace yata
 			}
 			((ISupportInitialize)(table)).EndInit();
 
-			tab_SelectedIndexChanged(null, EventArgs.Empty);
+			tab_SelectedIndexChanged(null, EventArgs.Empty); */
 		}
 
 
