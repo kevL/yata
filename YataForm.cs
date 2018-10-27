@@ -148,7 +148,7 @@ namespace yata
 
 
 			// debug ->
-//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\appearance.2da");
+//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\baseitems.2da");
 		}
 		#endregion cTor
 
@@ -213,7 +213,7 @@ namespace yata
 		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
-			panel_ColorFill.Hide(); // test
+			panel_ColorFill.Hide(); // TEST
 
 			var table = new YataGrid(this, pfe);
 
@@ -221,10 +221,10 @@ namespace yata
 			Tabs.TabPages.Add(tab);
 
 			tab.Tag = table;
-			tab.Text = "test";
+			tab.Text = Path.GetFileNameWithoutExtension(pfe);
 
-			if (table.Load2da())
-			{
+			if (table.Load2da())	// TODO: <- Investigate how curmudgeonly the table becomes
+			{						// if the stuff above is placed within the following codeblock ->
 				SetTabSize();
 
 				tab.Controls.Add(table);

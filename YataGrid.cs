@@ -5,6 +5,8 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
+using yata.Properties;
+
 
 namespace yata
 {
@@ -53,6 +55,8 @@ namespace yata
 		readonly Pen _penLine = new Pen(SystemColors.ControlDark);
 
 		Color _colorText = SystemColors.ControlText;
+
+		Bitmap _bluePi = Resources.bluepixel;
 
 
 		const int _padHori = 6;
@@ -158,9 +162,7 @@ namespace yata
 
 			WidthTable = WidthRowhead;
 			for (int c = 0; c != ColCount; ++c)
-			{
 				WidthTable += Cols[c].width;
-			}
 
 			//logfile.Log(". HeightTable= " + HeightTable + " Height= " + Height);
 			//logfile.Log(". WidthTable= "  + WidthTable  + " Width= "  + Width);
@@ -170,11 +172,30 @@ namespace yata
 			_scrollVert.LargeChange = HeightRow;
 			_scrollHori.LargeChange = HeightRow; // why not.
 
-			int vert = HeightTable + _scrollVert.LargeChange - Height;
-			int hori = WidthTable  + _scrollHori.LargeChange - Width;
+			int vert = HeightTable + _scrollVert.LargeChange - Height + _scrollHori.Height - 1;
+			int hori = WidthTable  + _scrollHori.LargeChange - Width  + _scrollVert.Width  - 1;
 
 			if (vert < _scrollVert.LargeChange) vert = 0;
 			if (hori < _scrollHori.LargeChange) hori = 0;
+
+
+//			int hori2 = hori;
+			if (vert == 0)
+			{
+				hori = WidthTable  + _scrollHori.LargeChange - Width - 1;
+			}
+
+//			int vert2 = vert;
+			if (hori == 0)
+			{
+				vert = HeightTable + _scrollVert.LargeChange - Height - 1;
+			}
+
+//			if (vert2 == 0)
+//			{
+//				hori = WidthTable  + _scrollHori.LargeChange - Width - 1;
+//			}
+
 
 			_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
 			_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
@@ -183,6 +204,38 @@ namespace yata
 			//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
 			//logfile.Log(". _scrollVert.Maximum= " + _scrollVert.Maximum);
 			//logfile.Log(". _scrollHori.Maximum= " + _scrollHori.Maximum);
+
+			_scrollVert.Visible = (vert != 0);
+			_scrollHori.Visible = (hori != 0);
+		}
+
+		/// <summary>
+		/// Scrolls the table vertically by the mousewheel.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+//			var args = e as HandledMouseEventArgs;
+//			if (args != null)
+//				args.Handled = true;
+
+			if (_scrollVert.Visible)
+			{
+				if (e.Delta > 0)
+				{
+					if (_scrollVert.Value - _scrollVert.LargeChange < 0)
+						_scrollVert.Value = 0;
+					else
+						_scrollVert.Value -= _scrollVert.LargeChange;
+				}
+				else if (e.Delta < 0)
+				{
+					if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+						_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+					else
+						_scrollVert.Value += _scrollVert.LargeChange;
+				}
+			}
 		}
 
 
@@ -205,9 +258,8 @@ namespace yata
 
 
 				int c,r;
-				float x,y;
 
-				// NOTE: Paint backgrounds full-width of table ->
+				// NOTE: Paint backgrounds full-height/width of table ->
 
 				// rows background - scrollable
 				var rect = new Rectangle(Left, HeightColhead - offsetVert, WidthTable, HeightRow);
@@ -223,8 +275,15 @@ namespace yata
 					rect.Y += HeightRow;
 				}
 
+				// colhead background - stationary
+//				rect.Y = Top;
+//				rect.Height = HeightColhead;
+//				_graphics.FillRectangle(_brushColhead, rect);
+
+
 				// cell text - scrollable
-				int xInt = WidthRowhead - offsetHori + _padHori;
+				rect.Height = HeightRow;
+				int start = WidthRowhead - offsetHori + _padHori;
 				for (r = 0; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
@@ -232,13 +291,13 @@ namespace yata
 
 					if (rect.Y + HeightRow > HeightColhead)
 					{
-						rect.X = xInt;
+						rect.X = start;
 						for (c = 0; c != ColCount; ++c)
 						{
 							if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
 							{
 								TextRenderer.DrawText(_graphics, this[c,r].text, Font, rect, _colorText, _flags);
-								_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
+//								_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 							}
 
 							if ((rect.X += rect.Width) > Right)
@@ -247,14 +306,18 @@ namespace yata
 					}
 				}
 
-				// colhead background - static
-				rect = new Rectangle(Left, Top, WidthTable, HeightColhead);
-				_graphics.FillRectangle(_brushColhead, rect);
+
+				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
+					_graphics.DrawImage(pi, 0,0);
+
+				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
+					_graphics.DrawImage(pi, 0,0);
 
 
 				// NOTE: Paint horizontal lines full-width of table.
 
 				// row lines - scrollable
+				int y;
 				for (r = 1; r != RowCount + 1; ++r)
 				{
 					if ((y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
@@ -264,14 +327,14 @@ namespace yata
 						_graphics.DrawLine(_penLine, Left, y, WidthTable, y);
 				}
 
-				// colhead line - static
+				// colhead line - stationary
 				_graphics.DrawLine(_penLine, Left, HeightColhead, WidthTable, HeightColhead);
 
 
 				// NOTE: Paint vertical lines full-height of table.
 
 				// col lines - scrollable
-				x = WidthRowhead - offsetHori;
+				int x = WidthRowhead - offsetHori;
 				for (c = 0; c != ColCount; ++c)
 				{
 					if ((x += Cols[c].width) > Right)
@@ -281,14 +344,14 @@ namespace yata
 						_graphics.DrawLine(_penLine, x, Top, x, Bottom);
 				}
 
-				// rowhead line - static
+				// rowhead line - stationary
 				_graphics.DrawLine(_penLine, WidthRowhead, Top, WidthRowhead, Bottom);
 
 
-				// rowhead text
+				// rowhead text - stationary
 				LabelRowheads();
 
-				// colhead text
+				// colhead text - stationary
 				LabelColHeads();
 			}
 		}
@@ -656,7 +719,7 @@ namespace yata
 			int c = 0;
 			for (; c != ColCount; ++c)
 			{
-				Cols.Add(new Col(c));
+				Cols.Add(new Col()); //c
 			}
 
 			Cols[0].text = "id";
@@ -696,7 +759,7 @@ namespace yata
 
 			for (int r = 0; r != RowCount; ++r)
 			{
-				Rows.Add(new Row(r, _rows[r]));
+				Rows.Add(new Row(_rows[r])); //r
 				pb.Step();
 			}
 			_rows.Clear(); // done w/ '_rows'
@@ -778,7 +841,7 @@ namespace yata
 	/// </summary>
 	sealed class Col
 	{
-		internal int id;
+//		internal int id;
 		internal string text; // the header text
 
 		int _width;
@@ -792,10 +855,10 @@ namespace yata
 			}
 		}
 
-		internal Col(int c)
+/*		internal Col() //int c
 		{
-			id = c;
-		}
+//			id = c;
+		} */
 	}
 
 	/// <summary>
@@ -803,12 +866,12 @@ namespace yata
 	/// </summary>
 	sealed class Row
 	{
-		internal int id;
+//		internal int id;
 		internal string[] fields; // the row's fields
 
-		internal Row(int r, string[] cells)
+		internal Row(string[] cells) //int r,
 		{
-			id = r;
+//			id = r;
 			fields = cells;
 		}
 	}

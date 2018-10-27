@@ -84,6 +84,18 @@ namespace yata.Properties
 		/// <summary>
 		///   Looks up a localized resource of type System.Drawing.Bitmap.
 		/// </summary>
+		internal static System.Drawing.Bitmap bluepixel
+		{
+			get
+			{
+				object obj = ResourceManager.GetObject("bluepixel", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
 		internal static System.Drawing.Bitmap des_16px
 		{
 			get
