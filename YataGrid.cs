@@ -221,7 +221,16 @@ namespace yata
 					if (vert < _scrollVert.LargeChange) vert = 0;
 
 					_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
+
+					// handle another .NET scrollbar anomaly ->
+					if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
+					{
+						_scrollVert.Value =
+						offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+					}
 				}
+				else
+					offsetVert = 0;
 
 				if (_scrollHori.Visible)
 				{
@@ -234,7 +243,16 @@ namespace yata
 					if (hori < _scrollHori.LargeChange) hori = 0;
 
 					_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
+
+					// handle another .NET scrollbar anomaly ->
+					if (WidthTable - offsetHori < Width - ((_scrollVert.Visible) ? _scrollVert.Width : 0))
+					{
+						_scrollHori.Value =
+						offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+					}
 				}
+				else
+					offsetHori = 0;
 
 				//logfile.Log(". _scrollVert.Value= "   + _scrollVert.Value);
 				//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
