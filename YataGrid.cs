@@ -10,6 +10,12 @@ using yata.Properties;
 
 namespace yata
 {
+	static class Pens
+	{
+		internal static readonly Pen DarkLine = new Pen(SystemColors.ControlDark);
+	}
+
+
 	sealed class YataGrid
 		:
 			Control
@@ -27,9 +33,9 @@ namespace yata
 		}
 
 		int HeightColhead;
-		int HeightRow;
-
 		int WidthRowhead;
+
+		int HeightRow;
 
 		int ColCount;
 		int RowCount;
@@ -59,11 +65,11 @@ namespace yata
 		readonly Brush _brushAlice   = new SolidBrush(Color.AliceBlue);
 		readonly Brush _brushBlanche = new SolidBrush(Color.BlanchedAlmond);
 
-		readonly Pen _penLine = new Pen(SystemColors.ControlDark);
-
 		Color _colorText = SystemColors.ControlText;
 
 		Bitmap _bluePi = Resources.bluepixel;
+//		Bitmap _piColhead;
+//		Bitmap _piRowhead;
 
 
 		const int _padHori = 6;
@@ -94,6 +100,11 @@ namespace yata
 		int WidthTable;
 
 
+		YataPanelCols _panelCols;
+		YataPanelRows _panelRows;
+
+
+
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -101,7 +112,8 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataGrid(YataForm f, string pfe)
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			//DrawingControl.SetDoubleBuffered(this);
+//			DoubleBuffered = true;
 
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
@@ -154,7 +166,14 @@ namespace yata
 			//logfile.Log(". Width= "  + Width);
 
 			InitScrollers(); // do this here 'cause h/w aren't valid in Load2da() ...
-			base.OnResize(e);
+
+//			if (_piColhead != null) _piColhead.Dispose();
+//			_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
+
+//			if (_piRowhead != null) _piRowhead.Dispose();
+//			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
+
+//			base.OnResize(e);
 		}
 
 
@@ -322,6 +341,8 @@ namespace yata
 
 			if (ColCount != 0 && RowCount != 0 && _cells != null)
 			{
+				//SuspendLayout();
+
 				_graphics = e.Graphics;
 				_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
@@ -347,22 +368,22 @@ namespace yata
 				}
 
 				// colhead background - stationary
-				rect.Y = Top;
-				rect.Height = HeightColhead;
-				_graphics.FillRectangle(_brushColhead, rect);
+//				rect.Y = Top;
+//				rect.Height = HeightColhead;
+//				_graphics.FillRectangle(_brushColhead, rect);
 
 
 				// cell text - scrollable
 				rect.Height = HeightRow;
-				int start = WidthRowhead - offsetHori + _padHori;
-				for (r = 0; r != RowCount; ++r)
+				int xStart = WidthRowhead - offsetHori + _padHori;
+				for (r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
 						break;
 
 					if (rect.Y + HeightRow > HeightColhead)
 					{
-						rect.X = start;
+						rect.X = xStart;
 						for (c = 0; c != ColCount; ++c)
 						{
 							if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
@@ -378,11 +399,11 @@ namespace yata
 				}
 
 
-				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
-					_graphics.DrawImage(pi, 0,0);
+//				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
+//				if (_piColhead != null) _graphics.DrawImage(_piColhead, 0,0);
 
-				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
-					_graphics.DrawImage(pi, 0,0);
+//				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
+//				if (_piRowhead != null) _graphics.DrawImage(_piRowhead, 0,0);
 
 
 				// NOTE: Paint horizontal lines full-width of table.
@@ -395,11 +416,11 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						_graphics.DrawLine(_penLine, Left, y, WidthTable, y);
+						_graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
 				}
 
 				// colhead line - stationary
-				_graphics.DrawLine(_penLine, Left, HeightColhead, WidthTable, HeightColhead);
+//				_graphics.DrawLine(Pens.PenLine, Left, HeightColhead, WidthTable, HeightColhead);
 
 
 				// NOTE: Paint vertical lines full-height of table.
@@ -412,25 +433,27 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						_graphics.DrawLine(_penLine, x, Top, x, Bottom);
+						_graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 
 				// rowhead line - stationary
-				_graphics.DrawLine(_penLine, WidthRowhead, Top, WidthRowhead, Bottom);
+//				_graphics.DrawLine(Pens.PenLine, WidthRowhead, Top, WidthRowhead, Bottom);
 
 
 				// rowhead text - stationary
-				LabelRowheads();
+//				LabelRowheads();
 
 				// colhead text - stationary
-				LabelColHeads();
+//				LabelColHeads();
+
+				//ResumeLayout();
 			}
 		}
 
 		/// <summary>
 		/// Labels the rowheads when inserting/deleting/sorting rows.
 		/// </summary>
-		internal void LabelRowheads()
+		internal void LabelRowheads(IDeviceContext graphics)
 		{
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
@@ -446,14 +469,14 @@ namespace yata
 							break;
 
 						if (rect.Y + HeightRow > Top)
-							TextRenderer.DrawText(_graphics, r.ToString(), font, rect, _colorText, _flags);
+							TextRenderer.DrawText(graphics, r.ToString(), font, rect, _colorText, _flags);
 					}
 				}
 //				_load = false;
 			}
 		}
 
-		void LabelColHeads()
+		internal void LabelColHeads(IDeviceContext graphics)
 		{
 			if (ColCount != 0) // safety.
 			{
@@ -464,7 +487,7 @@ namespace yata
 					for (int c = 0; c != ColCount; ++c)
 					{
 						if (rect.X + (rect.Width = Cols[c].width) > Left)
-							TextRenderer.DrawText(_graphics, Cols[c].text, font, rect, _colorText, _flags);
+							TextRenderer.DrawText(graphics, Cols[c].text, font, rect, _colorText, _flags);
 
 						if ((rect.X += rect.Width) > Right)
 							break;
@@ -694,17 +717,23 @@ namespace yata
 
 //			_load = true;
 
-			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
+//			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
 													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
 
-			PopulateCols();
-			PopulateRows();
-			PopulateCells();
+			CacheCols();
+			CacheRows();
+			CacheCells();
 
 			_scrollVert.LargeChange =
 			_scrollHori.LargeChange = HeightRow;
 
 			SetRowheadWidth();
+
+			_panelCols = new YataPanelCols(this, HeightColhead);
+			_panelRows = new YataPanelRows(this, WidthRowhead);
+
+			Controls.Add(_panelRows);
+			Controls.Add(_panelCols);
 
 //			_load = false;
 
@@ -786,7 +815,7 @@ namespace yata
 		/// <summary>
 		/// Populates the table's colheads.
 		/// </summary>
-		void PopulateCols()
+		void CacheCols()
 		{
 			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
@@ -823,7 +852,7 @@ namespace yata
 		/// <summary>
 		/// Populates the table's rows.
 		/// </summary>
-		void PopulateRows()
+		void CacheRows()
 		{
 			var pb = new ProgBar(_f);
 			pb.ValTop = _rows.Count;
@@ -843,7 +872,7 @@ namespace yata
 		/// <summary>
 		/// Populates the table's cells.
 		/// </summary>
-		void PopulateCells()
+		void CacheCells()
 		{
 			_cells = new Cell[ColCount, RowCount];
 
@@ -880,7 +909,7 @@ namespace yata
 		/// <summary>
 		/// Maintains rowhead width wrt current Font across all tabs/tables.
 		/// </summary>
-		internal void SetRowheadWidth()
+		void SetRowheadWidth()
 		{
 			YataGrid table;
 
@@ -970,6 +999,69 @@ namespace yata
 //			x = c;
 //			y = r;
 			text = field;
+		}
+	}
+
+
+	sealed class YataPanelCols
+		:
+			Panel
+	{
+		YataGrid _grid;
+
+		internal YataPanelCols(YataGrid grid, int h)
+		{
+			_grid = grid;
+
+			Dock      = DockStyle.Top;
+			BackColor = Color.Thistle;
+
+			Height = h;
+		}
+
+		/// <summary>
+		/// Handles the paint event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			e.Graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
+
+			_grid.LabelColHeads(e.Graphics);
+
+		}
+	}
+
+	sealed class YataPanelRows
+		:
+			Panel
+	{
+		YataGrid _grid;
+
+		internal YataPanelRows(YataGrid grid, int w)
+		{
+			_grid = grid;
+
+			Dock      = DockStyle.Left;
+			BackColor = Color.Azure;
+
+			Width = w;
+		}
+
+		/// <summary>
+		/// Handles the paint event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			e.Graphics.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
+
+			_grid.LabelRowheads(e.Graphics);
+
 		}
 	}
 }

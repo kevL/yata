@@ -186,7 +186,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(842, 408);
+			this.tabControl.Size = new System.Drawing.Size(842, 430);
 			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
@@ -723,7 +723,7 @@
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
+			this.panel_ColorFill.Size = new System.Drawing.Size(842, 430);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
 			// YataForm
@@ -731,9 +731,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(842, 454);
+			this.Controls.Add(this.statusbar);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.tabControl);
-			this.Controls.Add(this.statusbar);
 			this.Controls.Add(this.menubar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

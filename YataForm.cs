@@ -215,6 +215,7 @@ namespace yata
 		{
 			panel_ColorFill.Hide(); // TEST
 
+
 			var table = new YataGrid(this, pfe);
 
 			var tab = new TabPage();
@@ -233,7 +234,7 @@ namespace yata
 
 				table.Select();
 
-				DrawingControl.ResumeDrawing(table);
+				//DrawingControl.ResumeDrawing(table);
 			}
 
 /*			panel_ColorFill.Show();
