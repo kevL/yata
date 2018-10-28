@@ -67,7 +67,7 @@ namespace yata
 
 		Color _colorText = SystemColors.ControlText;
 
-		Bitmap _bluePi = Resources.bluepixel;
+//		Bitmap _bluePi = Resources.bluepixel;
 //		Bitmap _piColhead;
 //		Bitmap _piRowhead;
 
@@ -112,7 +112,7 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataGrid(YataForm f, string pfe)
 		{
-			//DrawingControl.SetDoubleBuffered(this);
+//			DrawingControl.SetDoubleBuffered(this);
 //			DoubleBuffered = true;
 
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -143,29 +143,19 @@ namespace yata
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
-			//logfile.Log("OnVertScrollValueChanged");
 			offsetVert = _scrollVert.Value;
-			//logfile.Log(". offsetVert= " + offsetVert);
-
 			Refresh();
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
 		{
-			//logfile.Log("OnHoriScrollValueChanged");
 			offsetHori = _scrollHori.Value;
-			//logfile.Log(". offsetHori= " + offsetHori);
-
 			Refresh();
 		}
 
 		protected override void OnResize(EventArgs e)
 		{
-			//logfile.Log("OnResize");
-			//logfile.Log(". Height= " + Height);
-			//logfile.Log(". Width= "  + Width);
-
-			InitScrollers(); // do this here 'cause h/w aren't valid in Load2da() ...
+			InitScrollers();
 
 //			if (_piColhead != null) _piColhead.Dispose();
 //			_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
@@ -177,7 +167,7 @@ namespace yata
 		}
 
 
-		bool _bypassScroll;
+//		bool _bypassScroll;
 
 		/// <summary>
 		/// Initializes the vertical and horizontal scrollbars OnResize (which
@@ -185,27 +175,17 @@ namespace yata
 		/// </summary>
 		void InitScrollers()
 		{
-			if (!_bypassScroll)
+//			if (!_bypassScroll)
 			{
-				_bypassScroll = true; // not sure if useful.
+//				_bypassScroll = true; // not sure if useful.
 
-				//logfile.Log("");
-				//logfile.Log("InitScrollers");
 				HeightTable = HeightColhead + HeightRow * RowCount;
 
 				WidthTable = WidthRowhead;
 				for (int c = 0; c != ColCount; ++c)
 					WidthTable += Cols[c].width;
 
-				//logfile.Log(". HeightTable= " + HeightTable + " Height= " + Height);
-				//logfile.Log(". WidthTable= "  + WidthTable  + " Width= "  + Width);
-
-				//logfile.Log(". HeightRow= " + HeightRow);
-
-				//logfile.Log(". Height + hori= " + (Height + _scrollHori.Height));
-				//logfile.Log(". Width + vert= "  + (Width  + _scrollVert.Width));
-
-				// NOTE: Height/Width *includes* the height/width of the relevant scrollbar.
+				// NOTE: Height/Width *includes* the height/width of the relevant scrollbar and panel.
 
 				bool visVert = HeightTable > Height;
 				bool visHori = WidthTable  > Width;
@@ -273,12 +253,7 @@ namespace yata
 				else
 					offsetHori = 0;
 
-				//logfile.Log(". _scrollVert.Value= "   + _scrollVert.Value);
-				//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
-				//logfile.Log(". _scrollVert.Maximum= " + _scrollVert.Maximum);
-				//logfile.Log(". _scrollHori.Maximum= " + _scrollHori.Maximum);
-
-				_bypassScroll = false;
+//				_bypassScroll = false;
 			}
 		}
 
@@ -335,10 +310,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			//logfile.Log("OnPaint");
-			//logfile.Log(". Height= " + Height);
-			//logfile.Log(". Width= "  + Width);
-
 			if (ColCount != 0 && RowCount != 0 && _cells != null)
 			{
 				//SuspendLayout();
@@ -465,7 +436,7 @@ namespace yata
 
 					for (int r = 0; r != RowCount; ++r)
 					{
-						if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+						if ((rect.Y = HeightRow * r - offsetVert) > Bottom)
 							break;
 
 						if (rect.Y + HeightRow > Top)
@@ -1007,7 +978,7 @@ namespace yata
 		:
 			Panel
 	{
-		YataGrid _grid;
+		readonly YataGrid _grid;
 
 		internal YataPanelCols(YataGrid grid, int h)
 		{
@@ -1038,7 +1009,7 @@ namespace yata
 		:
 			Panel
 	{
-		YataGrid _grid;
+		readonly YataGrid _grid;
 
 		internal YataPanelRows(YataGrid grid, int w)
 		{
