@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
-using yata.Properties;
+//using yata.Properties;
 
 
 namespace yata
@@ -75,6 +75,8 @@ namespace yata
 		const int _padHori = 6;
 		const int _padVert = 4;
 
+		const int _padHoriRowhead = 8;
+
 //		bool _load;
 
 
@@ -113,7 +115,7 @@ namespace yata
 		internal YataGrid(YataForm f, string pfe)
 		{
 //			DrawingControl.SetDoubleBuffered(this);
-//			DoubleBuffered = true;
+			DoubleBuffered = true;
 
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
@@ -125,6 +127,7 @@ namespace yata
 			Pfe = pfe;
 
 			Dock = DockStyle.Fill;
+//			Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			BackColor = SystemColors.ControlDark;
 
 			Font = _f.Font;
@@ -162,6 +165,8 @@ namespace yata
 
 //			if (_piRowhead != null) _piRowhead.Dispose();
 //			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
+
+			Refresh(); // table-drawing can tear without that.
 
 //			base.OnResize(e);
 		}
@@ -347,12 +352,13 @@ namespace yata
 				// cell text - scrollable
 				rect.Height = HeightRow;
 				int xStart = WidthRowhead - offsetHori + _padHori;
+				int yOffset = HeightColhead - offsetVert;
 				for (r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
-					if ((rect.Y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+					if ((rect.Y = HeightRow * r + yOffset) > Bottom)
 						break;
 
-					if (rect.Y + HeightRow > HeightColhead)
+//					if (rect.Y + HeightRow > HeightColhead)
 					{
 						rect.X = xStart;
 						for (c = 0; c != ColCount; ++c)
@@ -383,7 +389,7 @@ namespace yata
 				int y;
 				for (r = 1; r != RowCount + 1; ++r)
 				{
-					if ((y = HeightColhead - offsetVert + HeightRow * r) > Bottom)
+					if ((y = HeightRow * r + yOffset) > Bottom)
 						break;
 
 					if (y > HeightColhead)
@@ -423,7 +429,9 @@ namespace yata
 
 		/// <summary>
 		/// Labels the rowheads when inserting/deleting/sorting rows.
+		/// @note Called by OnPaint of the left-panel.
 		/// </summary>
+		/// <param name="graphics"></param>
 		internal void LabelRowheads(IDeviceContext graphics)
 		{
 			if (RowCount != 0) // safety - ought be checked in calling funct.
@@ -432,14 +440,14 @@ namespace yata
 
 				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
 				{
-					var rect = new Rectangle(8, 0, WidthRowhead, HeightRow);
+					var rect = new Rectangle(_padHoriRowhead, 0, WidthRowhead, HeightRow);
 
-					for (int r = 0; r != RowCount; ++r)
+					for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 					{
 						if ((rect.Y = HeightRow * r - offsetVert) > Bottom)
 							break;
 
-						if (rect.Y + HeightRow > Top)
+//						if (rect.Y + HeightRow > Top)
 							TextRenderer.DrawText(graphics, r.ToString(), font, rect, _colorText, _flags);
 					}
 				}
@@ -447,6 +455,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Labels the colheads.
+		/// @note Called by OnPaint of the top-panel.
+		/// </summary>
+		/// <param name="graphics"></param>
 		internal void LabelColHeads(IDeviceContext graphics)
 		{
 			if (ColCount != 0) // safety.
@@ -788,6 +801,10 @@ namespace yata
 		/// </summary>
 		void CacheCols()
 		{
+//			var pb = new ProgBar(_f); // not work <-
+//			pb.ValTop = Fields.Length;
+//			pb.Show();
+
 			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
 			int c = 0;
@@ -815,6 +832,8 @@ namespace yata
 						h = size.Height + _padVert * 2;
 						if (h > HeightColhead)
 							HeightColhead = h;
+
+//						pb.Step();
 					}
 				}
 			}
@@ -825,16 +844,16 @@ namespace yata
 		/// </summary>
 		void CacheRows()
 		{
-			var pb = new ProgBar(_f);
-			pb.ValTop = _rows.Count;
-			pb.Show();
+//			var pb = new ProgBar(_f);
+//			pb.ValTop = _rows.Count;
+//			pb.Show();
 
 			RowCount = _rows.Count;
 
 			for (int r = 0; r != RowCount; ++r)
 			{
 				Rows.Add(new Row(_rows[r])); //r
-				pb.Step();
+//				pb.Step();
 			}
 			_rows.Clear(); // done w/ '_rows'
 		}
@@ -912,6 +931,93 @@ namespace yata
 		{
 			base.OnMouseWheel(e);
 		}
+
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Home:
+					if (e.Modifiers == Keys.Control)
+					{
+						if (_scrollVert.Visible)
+						{
+							_scrollVert.Value =
+							offsetVert = 0;
+						}
+					}
+					else
+					{
+						if (_scrollHori.Visible)
+						{
+							_scrollHori.Value =
+							offsetHori = 0;
+						}
+					}
+					break;
+
+				case Keys.End:
+					if (e.Modifiers == Keys.Control)
+					{
+						if (_scrollVert.Visible)
+						{
+							_scrollVert.Value =
+							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+						}
+					}
+					else
+					{
+						if (_scrollHori.Visible)
+						{
+							_scrollHori.Value =
+							offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+						}
+					}
+					break;
+
+				case Keys.PageUp:
+					if (_scrollVert.Visible)
+					{
+						int val;
+						if (_scrollVert.Value < _scrollVert.LargeChange)
+							val = _scrollVert.Value;
+						else
+							val = _scrollVert.LargeChange;
+
+						_scrollVert.Value =
+						offsetVert = (_scrollVert.Value - val);
+					}
+					break;
+
+				case Keys.PageDown:
+					if (_scrollVert.Visible)
+					{
+						DrawingControl.SuspendDrawing(this);
+
+						int val;
+						if (_scrollVert.Maximum < _scrollVert.Value + _scrollVert.LargeChange)
+							val = _scrollVert.Maximum - _scrollVert.Value;
+						else
+							val = _scrollVert.LargeChange;
+
+						_scrollVert.Value =
+						offsetVert = (_scrollVert.Value + val);
+
+
+						// handle another .NET scrollbar anomaly ->
+						if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
+						{
+							_scrollVert.Value =
+							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+						}
+
+						DrawingControl.ResumeDrawing(this);
+					}
+					break;
+			}
+//			e.Handled = true;
+//			base.OnKeyDown(e);
+		}
 	}
 
 
@@ -982,6 +1088,8 @@ namespace yata
 
 		internal YataPanelCols(YataGrid grid, int h)
 		{
+			DoubleBuffered = true;
+
 			_grid = grid;
 
 			Dock      = DockStyle.Top;
@@ -996,12 +1104,15 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
+//			DrawingControl.SuspendDrawing(this);
+
 			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			e.Graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
 
 			_grid.LabelColHeads(e.Graphics);
 
+//			DrawingControl.ResumeDrawing(this);
 		}
 	}
 
@@ -1013,6 +1124,8 @@ namespace yata
 
 		internal YataPanelRows(YataGrid grid, int w)
 		{
+			DoubleBuffered = true;
+
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
@@ -1027,12 +1140,15 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
+//			DrawingControl.SuspendDrawing(this);
+
 			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			e.Graphics.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
 
 			_grid.LabelRowheads(e.Graphics);
 
+//			DrawingControl.ResumeDrawing(this);
 		}
 	}
 }
