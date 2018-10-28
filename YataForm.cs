@@ -23,8 +23,8 @@ namespace yata
 			Form
 	{
 		#region Fields & Properties
-		internal YataDataGridView Table
-		{ get; private set; }
+		YataGrid Table
+		{ get; set; }
 
 		List<string> _copy = new List<string>();
 
@@ -305,21 +305,21 @@ namespace yata
 		{
 			if (Tabs.SelectedIndex != -1)
 			{
-				Table = Tabs.SelectedTab.Tag as YataDataGridView; // <- very Important <--||
+				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
-				it_MenuPaths.Visible = Table.CraftInfo;
+				it_MenuPaths.Visible = Table.Craft;
 				panel_ColorFill.Hide();
 
-				it_freeze1.Checked = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-				it_freeze2.Checked = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+//				it_freeze1.Checked = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
+//				it_freeze2.Checked = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
 			}
 			else
 			{
 				it_MenuPaths.Visible = false;
 				panel_ColorFill.Show();
 
-				it_freeze1.Checked =
-				it_freeze2.Checked = false;
+//				it_freeze1.Checked =
+//				it_freeze2.Checked = false;
 			}
 
 			SetTitlebarText();
@@ -422,7 +422,7 @@ namespace yata
 
 			foreach (TabPage page in Tabs.TabPages)
 			{
-				var table = page.Tag as YataDataGridView;
+				var table = page.Tag as YataGrid;
 				if (table != null && table.Changed)
 				{
 					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe).ToUpperInvariant());
@@ -434,7 +434,7 @@ namespace yata
 
 		void fileclick_Reload(object sender, EventArgs e)
 		{
-			if (Table != null && File.Exists(Table.Pfe)
+/*			if (Table != null && File.Exists(Table.Pfe)
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 									   "warning",
@@ -457,15 +457,15 @@ namespace yata
 					Table.CurrentCell = null;
 					Table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
 
-					Table.Columns[1].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-					Table.Columns[2].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+					Table.Columns[1].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
+					Table.Columns[2].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
 				}
 				else
 					fileclick_Close(null, EventArgs.Empty);
 
 				if (Tabs.TabCount != 0)
 					panel_ColorFill.Hide();
-			}
+			} */
 			// TODO: Show an error if file no longer exists.
 		}
 
@@ -483,7 +483,7 @@ namespace yata
 
 			if (Tabs.SelectedIndex != -1)
 			{
-				var table = Tabs.SelectedTab.Tag as YataDataGridView;
+				var table = Tabs.SelectedTab.Tag as YataGrid;
 				if (table != null)
 				{
 					string pfe = table.Pfe;
@@ -502,7 +502,7 @@ namespace yata
 
 		void fileclick_Save(object sender, EventArgs e)
 		{
-			if (Table != null)
+/*			if (Table != null)
 			{
 				string pfe = Table.Pfe;
 
@@ -550,12 +550,12 @@ namespace yata
 						}
 					}
 				}
-			}
+			} */
 		}
 
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Rows.Count > 1)
+/*			if (Table != null && Table.Rows.Count > 1)
 			{
 				using (var sfd = new SaveFileDialog())
 				{
@@ -573,7 +573,7 @@ namespace yata
 						fileclick_Save(null, EventArgs.Empty);
 					}
 				}
-			}
+			} */
 		}
 
 		/// <summary>
@@ -636,7 +636,7 @@ namespace yata
 		#region Context menu
 		void context_(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right
+/*			if (e.Button == MouseButtons.Right
 				&& e.RowIndex != Table.Rows.Count - 1)
 			{
 				Table.ClearSelection();
@@ -652,18 +652,18 @@ namespace yata
 
 				contextEditor.Show(Table, new Point(Table.RowHeadersWidth,
 													Table.ColumnHeadersHeight));
-			}
+			} */
 		}
 
 		void contextclick_EditCopy(object sender, EventArgs e)
 		{
-			_copy.Clear();
+/*			_copy.Clear();
 
 			int cols = Table.Columns.Count;
 			for (int col = 0; col != cols; ++col)
 			{
 				_copy.Add(Table.SelectedRows[0].Cells[col].Value.ToString());
-			}
+			} */
 		}
 
 		void contextclick_EditCut(object sender, EventArgs e)
@@ -674,17 +674,17 @@ namespace yata
 
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
-			if (_copy.Count == Table.Columns.Count)
+/*			if (_copy.Count == Table.Columns.Count)
 			{
 				Table.Changed = true;
 				Table.Rows.Insert(Table.SelectedRows[0].Index, _copy.ToArray());
 				Table.RelabelRowHeaders();
-			}
+			} */
 		}
 
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
-			int cols = Table.Columns.Count;
+/*			int cols = Table.Columns.Count;
 			if (_copy.Count == cols)
 			{
 				Table.Changed = true;
@@ -693,22 +693,22 @@ namespace yata
 					Table.SelectedRows[0].Cells[col].Value = _copy[col];
 				}
 				Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
-			}
+			} */
 		}
 
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
-			if (_copy.Count == Table.Columns.Count)
+/*			if (_copy.Count == Table.Columns.Count)
 			{
 				Table.Changed = true;
 				Table.Rows.Insert(Table.SelectedRows[0].Index + 1, _copy.ToArray());
 				Table.RelabelRowHeaders();
-			}
+			} */
 		}
 
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
-			Table.Changed = true;
+/*			Table.Changed = true;
 			int cols = Table.Columns.Count;
 
 			var row = new string[cols];
@@ -717,12 +717,12 @@ namespace yata
 				row[col] = Constants.Stars;
 			}
 			Table.Rows.Insert(Table.SelectedRows[0].Index, row);
-			Table.RelabelRowHeaders();
+			Table.RelabelRowHeaders(); */
 		}
 
 		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
-			Table.Changed = true;
+/*			Table.Changed = true;
 			int cols = Table.Columns.Count;
 
 			var row = new string[cols];
@@ -731,25 +731,25 @@ namespace yata
 				row[col] = Constants.Stars;
 			}
 			Table.Rows.Insert(Table.SelectedRows[0].Index + 1, row);
-			Table.RelabelRowHeaders();
+			Table.RelabelRowHeaders(); */
 		}
 
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
-			Table.Changed = true;
+/*			Table.Changed = true;
 			int cols = Table.Columns.Count;
 			for (int col = 1; col != cols; ++col)
 			{
 				Table.SelectedRows[0].Cells[col].Value = Constants.Stars;
 			}
-			Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
+			Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor; */
 		}
 
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
-			Table.Changed = true;
+/*			Table.Changed = true;
 			Table.Rows.Remove(Table.SelectedRows[0]);
-			Table.RelabelRowHeaders();
+			Table.RelabelRowHeaders(); */
 		}
 		#endregion Context menu
 
@@ -762,7 +762,7 @@ namespace yata
 
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			Search();
+//			Search();
 		}
 		#endregion Edit menu
 
@@ -770,7 +770,7 @@ namespace yata
 		#region 2da Ops menu
 		void opsclick_CheckRowOrder(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Rows.Count > 1)
+/*			if (Table != null && Table.Rows.Count > 1)
 			{
 				var list = new List<string>();
 
@@ -844,12 +844,12 @@ namespace yata
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Information,
 									MessageBoxDefaultButton.Button1);
-			}
+			} */
 		}
 
 		void opsclick_Reorder(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Rows.Count > 1)
+/*			if (Table != null && Table.Rows.Count > 1)
 			{
 				DrawingControl.SuspendDrawing(Table); // bongo
 
@@ -873,12 +873,12 @@ namespace yata
 				}
 
 				DrawingControl.ResumeDrawing(Table);
-			}
+			} */
 		}
 
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Rows.Count > 1)
+/*			if (Table != null && Table.Rows.Count > 1)
 			{
 				Color color;
 
@@ -889,18 +889,18 @@ namespace yata
 										  : Color.BlanchedAlmond;
 					Table.Rows[id].DefaultCellStyle.BackColor = color;
 				}
-			}
+			} */
 		}
 
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
-			if (Table != null)
-				Table.AutoResizeColumns();
+/*			if (Table != null)
+				Table.AutoResizeColumns(); */
 		}
 
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Columns.Count > 1)
+/*			if (Table != null && Table.Columns.Count > 1)
 			{
 				if (Table.Columns.Count > 2)
 				{
@@ -910,19 +910,19 @@ namespace yata
 
 				if (!it_freeze1.Checked)
 				{
-					Table.Freeze = YataDataGridView.Frozen.FreezeFirstCol;
+					Table.Freeze = YataGrid.Frozen.FreezeFirstCol;
 				}
 				else
-					Table.Freeze = YataDataGridView.Frozen.FreezeOff;
+					Table.Freeze = YataGrid.Frozen.FreezeOff;
 
 				it_freeze1.Checked = // then do the freeze1 col
-				Table.Columns[1].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeFirstCol);
-			}
+				Table.Columns[1].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
+			} */
 		}
 
 		void opsclick_Freeze2ndCol(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Columns.Count > 1)
+/*			if (Table != null && Table.Columns.Count > 1)
 			{
 				it_freeze1.Checked = false; // first toggle the freeze1 col off
 				Table.Columns[1].Frozen = false;
@@ -931,15 +931,15 @@ namespace yata
 				{
 					if (!it_freeze2.Checked)
 					{
-						Table.Freeze = YataDataGridView.Frozen.FreezeSecondCol;
+						Table.Freeze = YataGrid.Frozen.FreezeSecondCol;
 					}
 					else
-						Table.Freeze = YataDataGridView.Frozen.FreezeOff;
+						Table.Freeze = YataGrid.Frozen.FreezeOff;
 
 					it_freeze2.Checked = // then do the freeze2 col
-					Table.Columns[2].Frozen = (Table.Freeze == YataDataGridView.Frozen.FreezeSecondCol);
+					Table.Columns[2].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
 				}
-			}
+			} */
 		}
 		#endregion 2da Ops menu
 
@@ -997,7 +997,7 @@ namespace yata
 		/// <param name="font"></param>
 		internal void doFont(Font font)
 		{
-			DrawingControl.SuspendDrawing(this);
+/*			DrawingControl.SuspendDrawing(this);
 
 			int w = Width; // grab these before auto-sizing happens -->
 			int h = Height;
@@ -1031,7 +1031,7 @@ namespace yata
 			{
 				Table.DisplaySelected();
 				Refresh(); // for big tables ...
-			}
+			} */
 		}
 		#endregion Font menu
 
@@ -1045,12 +1045,12 @@ namespace yata
 		/// <param name="e"></param>
 		void PrintCraftInfo(object sender, DataGridViewCellEventArgs e)
 		{
-			int id  = e.RowIndex;
+/*			int id  = e.RowIndex;
 			int col = e.ColumnIndex;
 
 			statusbar_label_Coords.Text = "id= " + id + " col= " + col;
 
-			if (Table != null && Table.CraftInfo)
+			if (Table != null && Table.Craft)
 			{
 				string info = String.Empty;
 
@@ -1210,7 +1210,7 @@ namespace yata
 				}
 
 				statusbar_label_Info.Text = info;
-			}
+			} */
 		}
 
 		/// <summary>
@@ -1455,8 +1455,8 @@ namespace yata
 		/// <param name="e"></param>
 		void SearchKeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-				Search();
+//			if (e.KeyCode == Keys.Enter)
+//				Search();
 		}
 
 		/// <summary>
@@ -1464,7 +1464,7 @@ namespace yata
 		/// </summary>
 		void Search()
 		{
-			if (Table != null && Table.Rows.Count > 1)
+/*			if (Table != null && Table.Rows.Count > 1)
 			{
 				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
@@ -1555,7 +1555,7 @@ namespace yata
 						}
 					}
 				}
-			}
+			} */
 		}
 		#endregion Search
 

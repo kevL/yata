@@ -19,6 +19,13 @@ namespace yata
 
 		readonly YataForm _f;
 
+		bool _changed;
+		internal bool Changed
+		{
+			get { return _changed; }
+			set { _f.TableChanged(_changed = value); }
+		}
+
 		int HeightColhead;
 		int HeightRow;
 
@@ -112,11 +119,9 @@ namespace yata
 
 
 			_scrollVert.Dock = DockStyle.Right;
-			_scrollVert.SmallChange = 1;
 			_scrollVert.ValueChanged += OnVertScrollValueChanged;
 
 			_scrollHori.Dock = DockStyle.Bottom;
-			_scrollHori.SmallChange = 1;
 			_scrollHori.ValueChanged += OnHoriScrollValueChanged;
 
 			Controls.Add(_scrollHori);
@@ -152,61 +157,92 @@ namespace yata
 			base.OnResize(e);
 		}
 
+
+		bool _bypassScroll;
+
 		/// <summary>
-		/// Initializes the vertical and horizontal scrollbars.
+		/// Initializes the vertical and horizontal scrollbars OnResize (which
+		/// also happens auto after load).
 		/// </summary>
 		void InitScrollers()
 		{
-			//logfile.Log("InitScrollers");
-			HeightTable = HeightColhead + HeightRow * RowCount;
-
-			WidthTable = WidthRowhead;
-			for (int c = 0; c != ColCount; ++c)
-				WidthTable += Cols[c].width;
-
-			//logfile.Log(". HeightTable= " + HeightTable + " Height= " + Height);
-			//logfile.Log(". WidthTable= "  + WidthTable  + " Width= "  + Width);
-
-			//logfile.Log(". HeightRow= " + HeightRow);
-
-			_scrollVert.LargeChange = HeightRow;
-			_scrollHori.LargeChange = HeightRow; // why not.
-
-			int vert = HeightTable + _scrollVert.LargeChange - Height + _scrollHori.Height - 1;
-			int hori = WidthTable  + _scrollHori.LargeChange - Width  + _scrollVert.Width  - 1;
-
-			if (vert < _scrollVert.LargeChange) vert = 0;
-			if (hori < _scrollHori.LargeChange) hori = 0;
-
-
-//			int hori2 = hori;
-			if (vert == 0)
+			if (!_bypassScroll)
 			{
-				hori = WidthTable  + _scrollHori.LargeChange - Width - 1;
+				_bypassScroll = true; // not sure if useful.
+
+				//logfile.Log("");
+				//logfile.Log("InitScrollers");
+				HeightTable = HeightColhead + HeightRow * RowCount;
+
+				WidthTable = WidthRowhead;
+				for (int c = 0; c != ColCount; ++c)
+					WidthTable += Cols[c].width;
+
+				//logfile.Log(". HeightTable= " + HeightTable + " Height= " + Height);
+				//logfile.Log(". WidthTable= "  + WidthTable  + " Width= "  + Width);
+
+				//logfile.Log(". HeightRow= " + HeightRow);
+
+				//logfile.Log(". Height + hori= " + (Height + _scrollHori.Height));
+				//logfile.Log(". Width + vert= "  + (Width  + _scrollVert.Width));
+
+				// NOTE: Height/Width *includes* the height/width of the relevant scrollbar.
+
+				bool visVert = HeightTable > Height;
+				bool visHori = WidthTable  > Width;
+
+				_scrollVert.Visible =
+				_scrollHori.Visible = false;
+
+				if (visVert && visHori)
+				{
+					_scrollVert.Visible =
+					_scrollHori.Visible = true;
+				}
+				else if (visVert)
+				{
+					_scrollVert.Visible = true;
+					_scrollHori.Visible |= (WidthTable > Width - _scrollVert.Width);
+				}
+				else if (visHori)
+				{
+					_scrollHori.Visible = true;
+					_scrollVert.Visible |= (HeightTable > Height - _scrollHori.Height);
+				}
+
+				if (_scrollVert.Visible)
+				{
+					int vert = HeightTable
+							 + _scrollVert.LargeChange
+							 - Height
+							 + ((_scrollHori.Visible) ? _scrollHori.Height : 0)
+							 - 1;
+
+					if (vert < _scrollVert.LargeChange) vert = 0;
+
+					_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
+				}
+
+				if (_scrollHori.Visible)
+				{
+					int hori = WidthTable
+							 + _scrollHori.LargeChange
+							 - Width
+							 + ((_scrollVert.Visible) ? _scrollVert.Width : 0)
+							 - 1;
+
+					if (hori < _scrollHori.LargeChange) hori = 0;
+
+					_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
+				}
+
+				//logfile.Log(". _scrollVert.Value= "   + _scrollVert.Value);
+				//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
+				//logfile.Log(". _scrollVert.Maximum= " + _scrollVert.Maximum);
+				//logfile.Log(". _scrollHori.Maximum= " + _scrollHori.Maximum);
+
+				_bypassScroll = false;
 			}
-
-//			int vert2 = vert;
-			if (hori == 0)
-			{
-				vert = HeightTable + _scrollVert.LargeChange - Height - 1;
-			}
-
-//			if (vert2 == 0)
-//			{
-//				hori = WidthTable  + _scrollHori.LargeChange - Width - 1;
-//			}
-
-
-			_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
-			_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
-
-			//logfile.Log(". _scrollVert.Value= "   + _scrollVert.Value);
-			//logfile.Log(". _scrollHori.Value= "   + _scrollHori.Value);
-			//logfile.Log(". _scrollVert.Maximum= " + _scrollVert.Maximum);
-			//logfile.Log(". _scrollHori.Maximum= " + _scrollHori.Maximum);
-
-			_scrollVert.Visible = (vert != 0);
-			_scrollHori.Visible = (hori != 0);
 		}
 
 		/// <summary>
@@ -234,6 +270,23 @@ namespace yata
 						_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
 					else
 						_scrollVert.Value += _scrollVert.LargeChange;
+				}
+			}
+			else if (_scrollHori.Visible)
+			{
+				if (e.Delta > 0)
+				{
+					if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+						_scrollHori.Value = 0;
+					else
+						_scrollHori.Value -= _scrollHori.LargeChange;
+				}
+				else if (e.Delta < 0)
+				{
+					if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
+						_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+					else
+						_scrollHori.Value += _scrollHori.LargeChange;
 				}
 			}
 		}
@@ -276,9 +329,9 @@ namespace yata
 				}
 
 				// colhead background - stationary
-//				rect.Y = Top;
-//				rect.Height = HeightColhead;
-//				_graphics.FillRectangle(_brushColhead, rect);
+				rect.Y = Top;
+				rect.Height = HeightColhead;
+				_graphics.FillRectangle(_brushColhead, rect);
 
 
 				// cell text - scrollable
@@ -630,6 +683,9 @@ namespace yata
 			PopulateRows();
 			PopulateCells();
 
+			_scrollVert.LargeChange =
+			_scrollHori.LargeChange = HeightRow;
+
 			SetRowheadWidth();
 
 //			_load = false;
@@ -831,6 +887,12 @@ namespace yata
 				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
 				table.WidthRowhead = widthRowhead;
 			}
+		}
+
+
+		internal void ForceScroll(MouseEventArgs e)
+		{
+			base.OnMouseWheel(e);
 		}
 	}
 
