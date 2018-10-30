@@ -88,6 +88,7 @@
     <Compile Include="WaitForm.Designer.cs">
       <DependentUpon>WaitForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="YataData.cs" />
     <Compile Include="YataForm.cs" />
     <Compile Include="YataForm.Designer.cs">
       <DependentUpon>YataForm.cs</DependentUpon>
@@ -98,6 +99,7 @@
     <Compile Include="DrawingControl.cs" />
     <Compile Include="YataDataGridView.cs" />
     <Compile Include="YataGrid.cs" />
+    <Compile Include="YataPanels.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FontPickerForm.resx">

@@ -234,6 +234,8 @@ namespace yata
 
 				table.Select();
 
+				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+
 				//DrawingControl.ResumeDrawing(table);
 			}
 
@@ -899,48 +901,35 @@ namespace yata
 				Table.AutoResizeColumns(); */
 		}
 
+
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Columns.Count > 1)
+			if (Table != null && Table.ColCount > 1)
 			{
-				if (Table.Columns.Count > 2)
-				{
-					it_freeze2.Checked = false; // first toggle the freeze2 col off
-					Table.Columns[2].Frozen = false;
-				}
+				it_freeze2.Checked = false;
 
-				if (!it_freeze1.Checked)
+				if (it_freeze1.Checked = !it_freeze1.Checked)
 				{
-					Table.Freeze = YataGrid.Frozen.FreezeFirstCol;
+					Table.FrozenCount = YataGrid.FreezeFirst;
 				}
 				else
-					Table.Freeze = YataGrid.Frozen.FreezeOff;
-
-				it_freeze1.Checked = // then do the freeze1 col
-				Table.Columns[1].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
-			} */
+					Table.FrozenCount = YataGrid.FreezeId;
+			}
 		}
 
 		void opsclick_Freeze2ndCol(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Columns.Count > 1)
+			if (Table != null && Table.ColCount > 2)
 			{
-				it_freeze1.Checked = false; // first toggle the freeze1 col off
-				Table.Columns[1].Frozen = false;
+				it_freeze1.Checked = false;
 
-				if (Table.Columns.Count > 2)
+				if (it_freeze2.Checked = !it_freeze2.Checked)
 				{
-					if (!it_freeze2.Checked)
-					{
-						Table.Freeze = YataGrid.Frozen.FreezeSecondCol;
-					}
-					else
-						Table.Freeze = YataGrid.Frozen.FreezeOff;
-
-					it_freeze2.Checked = // then do the freeze2 col
-					Table.Columns[2].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
+					Table.FrozenCount = YataGrid.FreezeSecond;
 				}
-			} */
+				else
+					Table.FrozenCount = YataGrid.FreezeId;
+			}
 		}
 		#endregion 2da Ops menu
 

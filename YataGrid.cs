@@ -15,6 +15,21 @@ namespace yata
 		internal static readonly Pen DarkLine = new Pen(SystemColors.ControlDark);
 	}
 
+	static class Brushes
+	{
+		internal static readonly Brush Alice   = new SolidBrush(Color.AliceBlue);
+		internal static readonly Brush Blanche = new SolidBrush(Color.BlanchedAlmond);
+	}
+
+	static class Colors
+	{
+		internal static readonly Color ColheadPanel = Color.Thistle;
+		internal static readonly Color RowheadPanel = Color.Azure;
+
+		internal static readonly Color FrozenHead  = Color.Moccasin;
+		internal static readonly Color FrozenPanel = Color.OldLace;
+	}
+
 
 	sealed class YataGrid
 		:
@@ -37,7 +52,7 @@ namespace yata
 
 		int HeightRow;
 
-		int ColCount;
+		internal int ColCount;
 		int RowCount;
 
 		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
@@ -45,12 +60,12 @@ namespace yata
 
 		readonly List<string[]> _rows = new List<string[]>();
 
-		readonly List<Col> Cols = new List<Col>();
+		internal readonly List<Col> Cols = new List<Col>();
 		readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
 		/// <summary>
-		/// Gets the cell at pos.
+		/// Gets the cell at pos [c,r].
 		/// </summary>
 		public Cell this[int c, int r]
 		{
@@ -59,11 +74,34 @@ namespace yata
 		}
 
 
-		Graphics _graphics;
+		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
+		internal const int FreezeFirst  = 2;
+		internal const int FreezeSecond = 3;
 
-		readonly Brush _brushColhead = new SolidBrush(Color.Thistle);
-		readonly Brush _brushAlice   = new SolidBrush(Color.AliceBlue);
-		readonly Brush _brushBlanche = new SolidBrush(Color.BlanchedAlmond);
+		int _frozenCount = FreezeId; // starts out w/ id-col only.
+		internal int FrozenCount
+		{
+			get { return _frozenCount; }
+			set
+			{
+				_frozenCount = value;
+
+				int w = 0;
+				for (int c = 0; c != _frozenCount; ++c)
+				{
+					w += Cols[c].width;
+				}
+				_panelFrozen.Width = w;
+
+				_panelFrozen.Refresh();
+
+				_labelfirst .Visible = (_frozenCount > 1);
+				_labelsecond.Visible = (_frozenCount > 2);
+			}
+		}
+
+
+		Graphics _graphics;
 
 		Color _colorText = SystemColors.ControlText;
 
@@ -79,6 +117,8 @@ namespace yata
 
 //		bool _load;
 
+
+		Font FontAccent;
 
 		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
 															| TextFormatFlags.NoPadding
@@ -105,6 +145,11 @@ namespace yata
 		YataPanelCols _panelCols;
 		YataPanelRows _panelRows;
 
+		YataPanelFrozen _panelFrozen;
+
+		Label _labelid     = new Label();
+		Label _labelfirst  = new Label();
+		Label _labelsecond = new Label();
 
 
 		/// <summary>
@@ -130,7 +175,11 @@ namespace yata
 //			Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			BackColor = SystemColors.ControlDark;
 
+//			this.ProcessKeyPreview();
+//			this.OnPreviewKeyDown();
+
 			Font = _f.Font;
+			FontAccent = new Font(Font, YataForm.getStyleAccented(Font.FontFamily));
 
 
 			_scrollVert.Dock = DockStyle.Right;
@@ -335,8 +384,8 @@ namespace yata
 				Brush brush;
 				for (r = 0; r != RowCount; ++r)
 				{
-					brush = (r % 2 == 0) ? _brushAlice
-										 : _brushBlanche;
+					brush = (r % 2 == 0) ? Brushes.Alice
+										 : Brushes.Blanche;
 
 					_graphics.FillRectangle(brush, rect);
 
@@ -428,6 +477,31 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Labels the colheads.
+		/// @note Called by OnPaint of the top-panel.
+		/// </summary>
+		/// <param name="graphics"></param>
+		internal void LabelColHeads(IDeviceContext graphics)
+		{
+			if (ColCount != 0) // safety.
+			{
+//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				{
+					var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+
+					for (int c = 0; c != ColCount; ++c)
+					{
+						if (rect.X + (rect.Width = Cols[c].width) > Left)
+							TextRenderer.DrawText(graphics, Cols[c].text, FontAccent, rect, _colorText, _flags);
+
+						if ((rect.X += rect.Width) > Right)
+							break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		/// Labels the rowheads when inserting/deleting/sorting rows.
 		/// @note Called by OnPaint of the left-panel.
 		/// </summary>
@@ -438,17 +512,17 @@ namespace yata
 			{
 //				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
 
-				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
 				{
 					var rect = new Rectangle(_padHoriRowhead, 0, WidthRowhead, HeightRow);
 
 					for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 					{
-						if ((rect.Y = HeightRow * r - offsetVert) > Bottom)
+						if ((rect.Y = HeightRow * r - offsetVert) > Height)
 							break;
 
 //						if (rect.Y + HeightRow > Top)
-							TextRenderer.DrawText(graphics, r.ToString(), font, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics, r.ToString(), FontAccent, rect, _colorText, _flags);
 					}
 				}
 //				_load = false;
@@ -456,26 +530,40 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Labels the colheads.
-		/// @note Called by OnPaint of the top-panel.
+		/// Labels the frozen cols.
+		/// @note Called by OnPaint of the frozen panel.
 		/// </summary>
 		/// <param name="graphics"></param>
-		internal void LabelColHeads(IDeviceContext graphics)
+		internal void LabelFrozen(Graphics graphics)
 		{
-			if (ColCount != 0) // safety.
+			if (RowCount != 0) // safety.
 			{
-				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				int x = 0;
+				int c = 0;
+				for (; c != FrozenCount; ++c)
 				{
-					var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+					x += Cols[c].width;
+					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
+				}
 
-					for (int c = 0; c != ColCount; ++c)
+				var rect = new Rectangle(0, 0, 0, HeightRow);
+
+				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
+				{
+					if ((rect.Y = HeightRow * r - offsetVert) > Height)
+						break;
+
+					rect.X = _padHori;
+
+					for (c = 0; c != FrozenCount; ++c)
 					{
-						if (rect.X + (rect.Width = Cols[c].width) > Left)
-							TextRenderer.DrawText(graphics, Cols[c].text, font, rect, _colorText, _flags);
+						rect.Width = Cols[c].width;
+						TextRenderer.DrawText(graphics, _cells[c,r].text, Font, rect, _colorText, _flags);
 
-						if ((rect.X += rect.Width) > Right)
-							break;
+						rect.X += rect.Width;
 					}
+
+					graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
 				}
 			}
 		}
@@ -716,13 +804,82 @@ namespace yata
 			_panelCols = new YataPanelCols(this, HeightColhead);
 			_panelRows = new YataPanelRows(this, WidthRowhead);
 
+			_panelFrozen = new YataPanelFrozen(this, Cols[0].width);
+
+			Controls.Add(_panelFrozen);
+
 			Controls.Add(_panelRows);
 			Controls.Add(_panelCols);
+
+			InitFrozenLabels();
 
 //			_load = false;
 
 			return true;
 		}
+
+
+		void InitFrozenLabels()
+		{
+			DrawingControl.SetDoubleBuffered(_labelid);
+			_labelid.Location = new Point(0,0);
+			_labelid.Size = new Size(WidthRowhead + Cols[0].width - 1, HeightColhead - 1);
+			_labelid.BackColor = Colors.FrozenHead;
+
+			_labelid.Paint += labelid_Paint;
+
+			DrawingControl.SetDoubleBuffered(_labelfirst);
+			_labelfirst.Visible = false;
+			_labelfirst.Location = new Point(WidthRowhead + Cols[0].width, 0);
+			_labelfirst.Size = new Size(Cols[1].width - 1, HeightColhead - 1);
+			_labelfirst.BackColor = Colors.FrozenHead;
+
+			_labelfirst.Paint += labelfirst_Paint;
+
+			DrawingControl.SetDoubleBuffered(_labelsecond);
+			_labelsecond.Visible = false;
+			_labelsecond.Location = new Point(WidthRowhead + Cols[0].width + Cols[1].width, 0);
+			_labelsecond.Size = new Size(Cols[2].width - 1, HeightColhead - 1);
+			_labelsecond.BackColor = Colors.FrozenHead;
+
+			_labelsecond.Paint += labelsecond_Paint;
+
+
+			_panelCols.Controls.Add(_labelid);
+			_panelCols.Controls.Add(_labelfirst);
+			_panelCols.Controls.Add(_labelsecond);
+		}
+
+		// NOTE: DrawLine tends to bork out and doesn't draw lines or draws
+		// only part way. Solution: reduce the size of these labels and let
+		// other OnPaint events handle stuff fairly reasonably.
+		void labelid_Paint(object sender, PaintEventArgs e)
+		{
+			_graphics = e.Graphics;
+			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width, HeightColhead);
+			TextRenderer.DrawText(_graphics, "id", FontAccent, rect, _colorText, _flags);
+		}
+
+		void labelfirst_Paint(object sender, PaintEventArgs e)
+		{
+			_graphics = e.Graphics;
+			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(_padHori, Top, Cols[1].width, HeightColhead);
+			TextRenderer.DrawText(_graphics, Cols[1].text, FontAccent, rect, _colorText, _flags);
+		}
+
+		void labelsecond_Paint(object sender, PaintEventArgs e)
+		{
+			_graphics = e.Graphics;
+			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(_padHori, Top, Cols[2].width, HeightColhead);
+			TextRenderer.DrawText(_graphics, Cols[2].text, FontAccent, rect, _colorText, _flags);
+		}
+
 
 		/// <summary>
 		/// A generic error-box if something goes wrong while loading a 2da file.
@@ -818,7 +975,7 @@ namespace yata
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
-				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily))) // TODO: make accented font static.
+//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
 				{
 					Size size;
 					int h;
@@ -826,7 +983,7 @@ namespace yata
 					foreach (string head in Fields)
 					{
 						Cols[++c].text = head;
-						size = TextRenderer.MeasureText(graphics, head, font, _size, _flags);
+						size = TextRenderer.MeasureText(graphics, head, FontAccent, _size, _flags);
 						Cols[c].width = size.Width + _padHori * 2;
 
 						h = size.Height + _padVert * 2;
@@ -927,12 +1084,38 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
 		internal void ForceScroll(MouseEventArgs e)
 		{
-			base.OnMouseWheel(e);
+//			base.OnMouseWheel(e); TODO: should probably call this.OnMouseWheel()
 		}
 
 
+		/// <summary>
+		/// Disables navigation etc. keys to allow table scrolling on certain
+		/// key-events.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Up:
+				case Keys.Down:
+				case Keys.Left:
+				case Keys.Right:
+					e.IsInputKey = true;
+					break;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			switch (e.KeyCode)
@@ -946,13 +1129,10 @@ namespace yata
 							offsetVert = 0;
 						}
 					}
-					else
+					else if (_scrollHori.Visible)
 					{
-						if (_scrollHori.Visible)
-						{
-							_scrollHori.Value =
-							offsetHori = 0;
-						}
+						_scrollHori.Value =
+						offsetHori = 0;
 					}
 					break;
 
@@ -965,17 +1145,54 @@ namespace yata
 							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
 						}
 					}
-					else
+					else if (_scrollHori.Visible)
 					{
-						if (_scrollHori.Visible)
-						{
-							_scrollHori.Value =
-							offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
-						}
+						_scrollHori.Value =
+						offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
 					}
 					break;
 
 				case Keys.PageUp:
+					if (_scrollVert.Visible)
+					{
+						int val;
+						if (_scrollVert.Value < Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
+							val = _scrollVert.Value;
+						else
+							val = Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0);
+
+						_scrollVert.Value =
+						offsetVert = (_scrollVert.Value - val);
+					}
+					break;
+
+				case Keys.PageDown:
+					if (_scrollVert.Visible)
+					{
+						DrawingControl.SuspendDrawing(this);
+
+						int val;
+						if (_scrollVert.Value > _scrollVert.Maximum - Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
+							val = _scrollVert.Maximum - _scrollVert.Value;
+						else
+							val = Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0);
+
+						_scrollVert.Value =
+						offsetVert = (_scrollVert.Value + val);
+
+
+						// handle another .NET scrollbar anomaly ->
+						if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
+						{
+							_scrollVert.Value =
+							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+						}
+
+						DrawingControl.ResumeDrawing(this);
+					}
+					break;
+
+				case Keys.Up: // NOTE: Needs to bypass KeyPreview
 					if (_scrollVert.Visible)
 					{
 						int val;
@@ -989,13 +1206,13 @@ namespace yata
 					}
 					break;
 
-				case Keys.PageDown:
+				case Keys.Down: // NOTE: Needs to bypass KeyPreview
 					if (_scrollVert.Visible)
 					{
 						DrawingControl.SuspendDrawing(this);
 
 						int val;
-						if (_scrollVert.Maximum < _scrollVert.Value + _scrollVert.LargeChange)
+						if (_scrollVert.Value > _scrollVert.Maximum - _scrollVert.LargeChange)
 							val = _scrollVert.Maximum - _scrollVert.Value;
 						else
 							val = _scrollVert.LargeChange;
@@ -1014,141 +1231,34 @@ namespace yata
 						DrawingControl.ResumeDrawing(this);
 					}
 					break;
+
+				case Keys.Left: // NOTE: Needs to bypass KeyPreview
+					if (_scrollHori.Visible)
+					{
+					}
+					break;
+
+				case Keys.Right: // NOTE: Needs to bypass KeyPreview
+					if (_scrollHori.Visible)
+					{
+					}
+					break;
 			}
 //			e.Handled = true;
 //			base.OnKeyDown(e);
-		}
-	}
 
-
-
-	/// <summary>
-	/// Contains data about a col.
-	/// </summary>
-	sealed class Col
-	{
-//		internal int id;
-		internal string text; // the header text
-
-		int _width;
-		internal int width
-		{
-			get { return _width; }
-			set
-			{
-				if (value > _width) // TODO: not exactly. If user shortens a field '_width' could decrease.
-					_width = value;
-			}
-		}
-
-/*		internal Col() //int c
-		{
-//			id = c;
-		} */
-	}
-
-	/// <summary>
-	/// Contains data about a row.
-	/// </summary>
-	sealed class Row
-	{
-//		internal int id;
-		internal string[] fields; // the row's fields
-
-		internal Row(string[] cells) //int r,
-		{
-//			id = r;
-			fields = cells;
-		}
-	}
-
-	/// <summary>
-	/// Contains data about a cell.
-	/// </summary>
-	sealed class Cell
-	{
-//		internal int x;
-//		internal int y;
-		internal string text; // the field's text
-
-		internal Cell(string field) //int c, int r,
-		{
-//			x = c;
-//			y = r;
-			text = field;
-		}
-	}
-
-
-	sealed class YataPanelCols
-		:
-			Panel
-	{
-		readonly YataGrid _grid;
-
-		internal YataPanelCols(YataGrid grid, int h)
-		{
-			DoubleBuffered = true;
-
-			_grid = grid;
-
-			Dock      = DockStyle.Top;
-			BackColor = Color.Thistle;
-
-			Height = h;
+//			Input.SetFlag(e.KeyCode);
+//			e.Handled = true;
 		}
 
 		/// <summary>
-		/// Handles the paint event.
+		/// 
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnPaint(PaintEventArgs e)
+		protected override void OnKeyUp(KeyEventArgs e)
 		{
-//			DrawingControl.SuspendDrawing(this);
-
-			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			e.Graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
-
-			_grid.LabelColHeads(e.Graphics);
-
-//			DrawingControl.ResumeDrawing(this);
-		}
-	}
-
-	sealed class YataPanelRows
-		:
-			Panel
-	{
-		readonly YataGrid _grid;
-
-		internal YataPanelRows(YataGrid grid, int w)
-		{
-			DoubleBuffered = true;
-
-			_grid = grid;
-
-			Dock      = DockStyle.Left;
-			BackColor = Color.Azure;
-
-			Width = w;
-		}
-
-		/// <summary>
-		/// Handles the paint event.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnPaint(PaintEventArgs e)
-		{
-//			DrawingControl.SuspendDrawing(this);
-
-			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			e.Graphics.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
-
-			_grid.LabelRowheads(e.Graphics);
-
-//			DrawingControl.ResumeDrawing(this);
+//			Input.RemoveFlag(e.KeyCode);
+//			e.Handled = true;
 		}
 	}
 }
