@@ -1028,6 +1028,17 @@ namespace yata
 		#endregion Font menu
 
 
+		internal void PrintInfo(int id, int col, string info)
+		{
+			string coords = String.Empty;
+
+			if (id != -1)
+				coords = "id= " + id + " col= " + col;
+
+			statusbar_label_Coords.Text = coords;
+			statusbar_label_Info  .Text = info;
+		}
+
 		#region Crafting info
 		/// <summary>
 		/// Mouseover datacells prints info to the statusbar if Crafting.2da is

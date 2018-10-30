@@ -152,6 +152,9 @@ namespace yata
 		Label _labelsecond = new Label();
 
 
+		Timer timer1 = new Timer();
+
+
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -189,6 +192,10 @@ namespace yata
 
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
+
+			timer1.Interval = 225;
+			timer1.Enabled = true;
+			timer1.Tick += timer1_Tick;
 		}
 
 
@@ -752,7 +759,6 @@ namespace yata
 
 			CreateCols();
 			CreateRows();
-//			_f.GetWaiter().RunWorkerAsync(); // show progbar while creating cells
 			CreateCells();
 
 			_scrollVert.LargeChange =
@@ -1198,6 +1204,81 @@ namespace yata
 		{
 //			Input.RemoveFlag(e.KeyCode);
 //			e.Handled = true;
+		}
+
+
+		/// <summary>
+		/// - mouseclick position does not register on any of the top or leftside
+		///   panels
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			var pt = new Point(e.X, e.Y);
+
+			logfile.Log("x= " + e.X);
+			logfile.Log("y= " + e.Y);
+
+			//logfile.Log("point to client= " + PointToClient(pt));
+			//logfile.Log("point to screen= " + PointToScreen(pt));
+
+//			base.OnMouseClick(e);
+		}
+
+		protected override void OnMouseMove(MouseEventArgs e)
+		{
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
+
+			int right = 0;
+			for (int col = 0; col != ColCount; ++col)
+			{
+				right += Cols[col].width;
+			}
+
+			int bot = HeightColhead + HeightRow * RowCount;
+
+			if (   e.X > left          && e.X < right	// safety. Mousemove won't even register unless
+				&& e.Y > HeightColhead && e.Y < bot)	// it's on the exposed part of the table.
+			{
+				int c = e.X + offsetHori;
+				int col = FrozenCount - 1;
+				do
+				{
+					++col;
+				}
+				while ((left += Cols[col].width) < c);
+
+				int top = HeightColhead;
+				int r = e.Y + offsetVert;
+				int id = 0;
+				while ((top += HeightRow) < r)
+				{
+					++id;
+				}
+
+				_f.PrintInfo(id, col, "n/a");
+//				_f.PrintInfo(e.Y, e.X, "n/a");
+			}
+			else
+				_f.PrintInfo(-1,-1,"");
+
+
+//			base.OnMouseMove(e);
+		}
+
+
+		void timer1_Tick(object sender, EventArgs e)
+		{
+			int xStart = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) xStart += Cols[1].width;
+			if (FrozenCount > 2) xStart += Cols[2].width;
+
+			var rect = new Rectangle(xStart, HeightColhead, Width - xStart, Height - HeightColhead);
+
+			if (!rect.Contains(PointToClient(Cursor.Position)))
+				_f.PrintInfo(-1,-1,"");
 		}
 	}
 }
