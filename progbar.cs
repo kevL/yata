@@ -12,19 +12,24 @@ namespace yata
 		:
 			Form
 	{
-		int _valCur; // inits to 0
+		readonly Graphics _graphics;
+		Rectangle _rect;
+
+		public int ValCur
+		{ get; set; }
 
 		public int ValTop
 		{ get; set; }
+
 
 		/// <summary>
 		/// cTor.
 		/// </summary>
 		internal ProgBar(YataForm f)
 		{
-			Size            = new Size(300, 40);
+			Size            = new Size(300, 20);
 			ControlBox      = false;
-			FormBorderStyle = FormBorderStyle.SizableToolWindow;
+			FormBorderStyle = FormBorderStyle.FixedToolWindow;
 			MaximizeBox     = false;
 			MinimizeBox     = false;
 			ShowIcon        = false;
@@ -35,27 +40,21 @@ namespace yata
 
 			Left = f.Left + (f.Width  - Width)  / 2;
 			Top  = f.Top  + (f.Height - Height) / 2 - 15;
+
+			_graphics = CreateGraphics();
+			_rect = new Rectangle(0, 0, 0, Height);
 		}
 
 
-		const int margin = 1;
-
 		internal void Step()
 		{
-			if (++_valCur != ValTop)
+			if (++ValCur != ValTop)
 			{
-				using (var graphics = CreateGraphics())
-				{
-					var rect = new Rectangle(ClientRectangle.X + margin,
-											 ClientRectangle.Y + margin,
-											 ClientRectangle.Width * _valCur / ValTop - margin * 2,
-											 ClientRectangle.Height - margin * 2);
-
-					ProgressBarRenderer.DrawHorizontalChunks(graphics, rect);
-				}
+				_rect.Width = Width * ValCur / ValTop;
+				_graphics.FillRectangle(Brushes.Alice, _rect);
 			}
 			else
-				Close();
+				Hide();
 		}
 	}
 }

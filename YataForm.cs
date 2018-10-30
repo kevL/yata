@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 
 
@@ -215,6 +214,7 @@ namespace yata
 		{
 			panel_ColorFill.Hide(); // TEST
 
+			Enabled = false;
 
 			var table = new YataGrid(this, pfe);
 
@@ -238,6 +238,8 @@ namespace yata
 
 				//DrawingControl.ResumeDrawing(table);
 			}
+
+			Enabled = true;
 
 /*			panel_ColorFill.Show();
 

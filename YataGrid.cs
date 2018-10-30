@@ -55,19 +55,19 @@ namespace yata
 		internal int ColCount;
 		int RowCount;
 
-		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
+		string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
 		{ get; set; }
 
 		readonly List<string[]> _rows = new List<string[]>();
 
-		internal readonly List<Col> Cols = new List<Col>();
+		readonly List<Col> Cols = new List<Col>();
 		readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
 		/// <summary>
 		/// Gets the cell at pos [c,r].
 		/// </summary>
-		public Cell this[int c, int r]
+		Cell this[int c, int r]
 		{
 			get { return _cells[c,r]; }
 			set { _cells[c,r] = value; }
@@ -172,7 +172,6 @@ namespace yata
 			Pfe = pfe;
 
 			Dock = DockStyle.Fill;
-//			Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			BackColor = SystemColors.ControlDark;
 
 //			this.ProcessKeyPreview();
@@ -221,94 +220,86 @@ namespace yata
 		}
 
 
-//		bool _bypassScroll;
-
 		/// <summary>
 		/// Initializes the vertical and horizontal scrollbars OnResize (which
 		/// also happens auto after load).
 		/// </summary>
 		void InitScrollers()
 		{
-//			if (!_bypassScroll)
+			HeightTable = HeightColhead + HeightRow * RowCount;
+
+			WidthTable = WidthRowhead;
+			for (int c = 0; c != ColCount; ++c)
+				WidthTable += Cols[c].width;
+
+			// NOTE: Height/Width *includes* the height/width of the relevant
+			// scrollbar and panel.
+
+			bool visVert = HeightTable > Height;
+			bool visHori = WidthTable  > Width;
+
+			_scrollVert.Visible =
+			_scrollHori.Visible = false;
+
+			if (visVert && visHori)
 			{
-//				_bypassScroll = true; // not sure if useful.
-
-				HeightTable = HeightColhead + HeightRow * RowCount;
-
-				WidthTable = WidthRowhead;
-				for (int c = 0; c != ColCount; ++c)
-					WidthTable += Cols[c].width;
-
-				// NOTE: Height/Width *includes* the height/width of the relevant scrollbar and panel.
-
-				bool visVert = HeightTable > Height;
-				bool visHori = WidthTable  > Width;
-
 				_scrollVert.Visible =
-				_scrollHori.Visible = false;
-
-				if (visVert && visHori)
-				{
-					_scrollVert.Visible =
-					_scrollHori.Visible = true;
-				}
-				else if (visVert)
-				{
-					_scrollVert.Visible = true;
-					_scrollHori.Visible |= (WidthTable > Width - _scrollVert.Width);
-				}
-				else if (visHori)
-				{
-					_scrollHori.Visible = true;
-					_scrollVert.Visible |= (HeightTable > Height - _scrollHori.Height);
-				}
-
-				if (_scrollVert.Visible)
-				{
-					int vert = HeightTable
-							 + _scrollVert.LargeChange
-							 - Height
-							 + ((_scrollHori.Visible) ? _scrollHori.Height : 0)
-							 - 1;
-
-					if (vert < _scrollVert.LargeChange) vert = 0;
-
-					_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
-
-					// handle another .NET scrollbar anomaly ->
-					if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
-					{
-						_scrollVert.Value =
-						offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
-					}
-				}
-				else
-					offsetVert = 0;
-
-				if (_scrollHori.Visible)
-				{
-					int hori = WidthTable
-							 + _scrollHori.LargeChange
-							 - Width
-							 + ((_scrollVert.Visible) ? _scrollVert.Width : 0)
-							 - 1;
-
-					if (hori < _scrollHori.LargeChange) hori = 0;
-
-					_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
-
-					// handle another .NET scrollbar anomaly ->
-					if (WidthTable - offsetHori < Width - ((_scrollVert.Visible) ? _scrollVert.Width : 0))
-					{
-						_scrollHori.Value =
-						offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
-					}
-				}
-				else
-					offsetHori = 0;
-
-//				_bypassScroll = false;
+				_scrollHori.Visible = true;
 			}
+			else if (visVert)
+			{
+				_scrollVert.Visible = true;
+				_scrollHori.Visible |= (WidthTable > Width - _scrollVert.Width);
+			}
+			else if (visHori)
+			{
+				_scrollHori.Visible = true;
+				_scrollVert.Visible |= (HeightTable > Height - _scrollHori.Height);
+			}
+
+			if (_scrollVert.Visible)
+			{
+				int vert = HeightTable
+						 + _scrollVert.LargeChange
+						 - Height
+						 + ((_scrollHori.Visible) ? _scrollHori.Height : 0)
+						 - 1;
+
+				if (vert < _scrollVert.LargeChange) vert = 0;
+
+				_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
+
+				// handle another .NET scrollbar anomaly ->
+				if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
+				{
+					_scrollVert.Value =
+					offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+				}
+			}
+			else
+				offsetVert = 0;
+
+			if (_scrollHori.Visible)
+			{
+				int hori = WidthTable
+						 + _scrollHori.LargeChange
+						 - Width
+						 + ((_scrollVert.Visible) ? _scrollVert.Width : 0)
+						 - 1;
+
+				if (hori < _scrollHori.LargeChange) hori = 0;
+
+				_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
+
+				// handle another .NET scrollbar anomaly ->
+				if (WidthTable - offsetHori < Width - ((_scrollVert.Visible) ? _scrollVert.Width : 0))
+				{
+					_scrollHori.Value =
+					offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+				}
+			}
+			else
+				offsetHori = 0;
 		}
 
 		/// <summary>
@@ -366,8 +357,6 @@ namespace yata
 		{
 			if (ColCount != 0 && RowCount != 0 && _cells != null)
 			{
-				//SuspendLayout();
-
 				_graphics = e.Graphics;
 				_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
@@ -392,12 +381,6 @@ namespace yata
 					rect.Y += HeightRow;
 				}
 
-				// colhead background - stationary
-//				rect.Y = Top;
-//				rect.Height = HeightColhead;
-//				_graphics.FillRectangle(_brushColhead, rect);
-
-
 				// cell text - scrollable
 				rect.Height = HeightRow;
 				int xStart = WidthRowhead - offsetHori + _padHori;
@@ -407,20 +390,17 @@ namespace yata
 					if ((rect.Y = HeightRow * r + yOffset) > Bottom)
 						break;
 
-//					if (rect.Y + HeightRow > HeightColhead)
+					rect.X = xStart;
+					for (c = 0; c != ColCount; ++c)
 					{
-						rect.X = xStart;
-						for (c = 0; c != ColCount; ++c)
+						if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
 						{
-							if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
-							{
-								TextRenderer.DrawText(_graphics, this[c,r].text, Font, rect, _colorText, _flags);
-//								_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
-							}
-
-							if ((rect.X += rect.Width) > Right)
-								break;
+							TextRenderer.DrawText(_graphics, this[c,r].text, Font, rect, _colorText, _flags);
+//							_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
+
+						if ((rect.X += rect.Width) > Right)
+							break;
 					}
 				}
 
@@ -445,9 +425,6 @@ namespace yata
 						_graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
 				}
 
-				// colhead line - stationary
-//				_graphics.DrawLine(Pens.PenLine, Left, HeightColhead, WidthTable, HeightColhead);
-
 
 				// NOTE: Paint vertical lines full-height of table.
 
@@ -461,18 +438,6 @@ namespace yata
 					if (x > WidthRowhead)
 						_graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
-
-				// rowhead line - stationary
-//				_graphics.DrawLine(Pens.PenLine, WidthRowhead, Top, WidthRowhead, Bottom);
-
-
-				// rowhead text - stationary
-//				LabelRowheads();
-
-				// colhead text - stationary
-//				LabelColHeads();
-
-				//ResumeLayout();
 			}
 		}
 
@@ -485,18 +450,15 @@ namespace yata
 		{
 			if (ColCount != 0) // safety.
 			{
-//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+
+				for (int c = 0; c != ColCount; ++c)
 				{
-					var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+					if (rect.X + (rect.Width = Cols[c].width) > Left)
+						TextRenderer.DrawText(graphics, Cols[c].text, FontAccent, rect, _colorText, _flags);
 
-					for (int c = 0; c != ColCount; ++c)
-					{
-						if (rect.X + (rect.Width = Cols[c].width) > Left)
-							TextRenderer.DrawText(graphics, Cols[c].text, FontAccent, rect, _colorText, _flags);
-
-						if ((rect.X += rect.Width) > Right)
-							break;
-					}
+					if ((rect.X += rect.Width) > Right)
+						break;
 				}
 			}
 		}
@@ -512,18 +474,14 @@ namespace yata
 			{
 //				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
 
-//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				var rect = new Rectangle(_padHoriRowhead, 0, WidthRowhead, HeightRow);
+
+				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
-					var rect = new Rectangle(_padHoriRowhead, 0, WidthRowhead, HeightRow);
+					if ((rect.Y = HeightRow * r - offsetVert) > Height)
+						break;
 
-					for (int r = offsetVert / HeightRow; r != RowCount; ++r)
-					{
-						if ((rect.Y = HeightRow * r - offsetVert) > Height)
-							break;
-
-//						if (rect.Y + HeightRow > Top)
-						TextRenderer.DrawText(graphics, r.ToString(), FontAccent, rect, _colorText, _flags);
-					}
+					TextRenderer.DrawText(graphics, r.ToString(), FontAccent, rect, _colorText, _flags);
 				}
 //				_load = false;
 			}
@@ -792,14 +750,15 @@ namespace yata
 //			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
 													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
 
-			CacheCols();
-			CacheRows();
-			CacheCells();
+			CreateCols();
+			CreateRows();
+//			_f.GetWaiter().RunWorkerAsync(); // show progbar while creating cells
+			CreateCells();
 
 			_scrollVert.LargeChange =
 			_scrollHori.LargeChange = HeightRow;
 
-			SetRowheadWidth();
+			SetWidthRowhead();
 
 			_panelCols = new YataPanelCols(this, HeightColhead);
 			_panelRows = new YataPanelRows(this, WidthRowhead);
@@ -904,7 +863,7 @@ namespace yata
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
-		string[] Parse2daRow(string line)
+		static string[] Parse2daRow(string line)
 		{
 			var list  = new List<string>();
 			var field = new List<char>();
@@ -954,14 +913,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Populates the table's colheads.
+		/// Creates the cols and caches the 2da's colhead data.
 		/// </summary>
-		void CacheCols()
+		void CreateCols()
 		{
-//			var pb = new ProgBar(_f); // not work <-
-//			pb.ValTop = Fields.Length;
-//			pb.Show();
-
 			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
 			int c = 0;
@@ -971,65 +926,48 @@ namespace yata
 			}
 
 			Cols[0].text = "id";
-//			Cols[0].Frozen = true;
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
-//				using (var font = new Font(Font, YataForm.getStyleAccented(Font.FontFamily)))
+				Size size;
+				int h;
+				c = 0;
+				foreach (string head in Fields)
 				{
-					Size size;
-					int h;
-					c = 0;
-					foreach (string head in Fields)
-					{
-						Cols[++c].text = head;
-						size = TextRenderer.MeasureText(graphics, head, FontAccent, _size, _flags);
-						Cols[c].width = size.Width + _padHori * 2;
+					Cols[++c].text = head;
+					size = TextRenderer.MeasureText(graphics, head, FontAccent, _size, _flags);
+					Cols[c].width = size.Width + _padHori * 2;
 
-						h = size.Height + _padVert * 2;
-						if (h > HeightColhead)
-							HeightColhead = h;
-
-//						pb.Step();
-					}
+					h = size.Height + _padVert * 2;
+					if (h > HeightColhead)
+						HeightColhead = h;
 				}
 			}
 		}
 
 		/// <summary>
-		/// Populates the table's rows.
+		/// Creates the rows.
 		/// </summary>
-		void CacheRows()
+		void CreateRows()
 		{
-//			var pb = new ProgBar(_f);
-//			pb.ValTop = _rows.Count;
-//			pb.Show();
-
 			RowCount = _rows.Count;
 
 			for (int r = 0; r != RowCount; ++r)
-			{
 				Rows.Add(new Row(_rows[r])); //r
-//				pb.Step();
-			}
+
 			_rows.Clear(); // done w/ '_rows'
 		}
 
-
 		/// <summary>
-		/// Populates the table's cells.
+		/// Creates the cells' 2d-array.
 		/// </summary>
-		void CacheCells()
+		internal void CreateCells()
 		{
 			_cells = new Cell[ColCount, RowCount];
 
 			for (int r = 0; r != RowCount; ++r)
-			{
-				for (int c = 0; c != ColCount; ++c)
-				{
-					_cells[c,r] = new Cell(Rows[r].fields[c]); //c, r,
-				}
-			}
+			for (int c = 0; c != ColCount; ++c)
+				_cells[c,r] = new Cell(Rows[r].fields[c]); //c, r,
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
@@ -1054,9 +992,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Maintains rowhead width wrt current Font across all tabs/tables.
+		/// Calculates and maintains rowhead width wrt/ current Font across all
+		/// tabs/tables.
 		/// </summary>
-		void SetRowheadWidth()
+		void SetWidthRowhead()
 		{
 			YataGrid table;
 
@@ -1066,14 +1005,14 @@ namespace yata
 			int tab = 0;
 			for (; tab != tabs; ++tab)
 			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-				if ((test = table.RowCount - 1) > widthRowhead)
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;	// NOTE: is quick and inaccurate (a lower val
+				if ((test = table.RowCount - 1) > widthRowhead)	// can actually be longer than a higher val).
 					widthRowhead = test;
 			}
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
-				widthRowhead = TextRenderer.MeasureText(graphics, widthRowhead.ToString(), Font, _size, _flags).Width + _padHori * 3;
+				widthRowhead = TextRenderer.MeasureText(graphics, widthRowhead.ToString(), Font, _size, _flags).Width + _padHoriRowhead * 2;
 			}
 
 			for (tab = 0; tab != tabs; ++tab)
