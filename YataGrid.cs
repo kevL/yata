@@ -159,7 +159,7 @@ namespace yata
 		Timer _t1 = new Timer();
 
 		TextBox _editor = new TextBox();
-		bool _edit;
+		Cell _editcell;
 
 
 		/// <summary>
@@ -206,6 +206,7 @@ namespace yata
 
 			_editor.BackColor = Colors.Edit;
 			_editor.Visible = false;
+//			_editor.KeyDown += OnEditKeyDown;
 
 			Controls.Add(_editor);
 		}
@@ -330,7 +331,7 @@ namespace yata
 //			if (args != null)
 //				args.Handled = true;
 
-			if (!_edit)
+			if (!_editor.Visible)
 			{
 				if (_scrollVert.Visible)
 				{
@@ -1220,6 +1221,25 @@ namespace yata
 //			e.Handled = true;
 		}
 
+/*		/// <summary>
+		/// Handles keydown events in the editorbox.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void OnEditKeyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Tab:
+				case Keys.Enter:
+					_editcell.text = _editor.Text;
+					_editor.Visible = false;
+					e.Handled = true;
+					break;
+			}
+		} */
+
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1228,6 +1248,23 @@ namespace yata
 		{
 //			Input.RemoveFlag(e.KeyCode);
 //			e.Handled = true;
+		}
+
+		/// <summary>
+		/// Handles ending editing a cell by pressing Enter or Tab - this fires
+		/// during edit.
+		/// </summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if (keyData == Keys.Enter || keyData == Keys.Tab)
+			{
+				_editcell.text = _editor.Text;
+				_editor.Visible = false;
+				return true;
+			}
+			return base.ProcessDialogKey(keyData);
 		}
 
 
@@ -1257,22 +1294,37 @@ namespace yata
 			var rect = getCellRectangle(cell);
 
 //			cell.selected = !cell.selected;
-			if (cell.selected && !_edit)
+			if (cell.selected)
 			{
-//				_f.FormBorderStyle = FormBorderStyle.Fixed3D;
+				if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+				{
+//					_f.FormBorderStyle = FormBorderStyle.Fixed3D;
 
-				_editor.Left   = rect.X;
-				_editor.Top    = rect.Y + 1;
-				_editor.Width  = rect.Width;
-				_editor.Height = rect.Height;
+					_editcell = cell;
 
-				_editor.Visible = true;
-				_editor.Text = cell.text;
+					_editor.Left   = rect.X;
+					_editor.Top    = rect.Y + 1;
+					_editor.Width  = rect.Width;
+					_editor.Height = rect.Height;
 
-				_edit = true;
+					_editor.Visible = true;
+					_editor.Text = cell.text;
+					_editor.SelectionStart = _editor.Text.Length;
+
+					_editor.Focus();
+				}
 			}
 			else
+			{
+				if (_editor.Visible)
+				{
+					_editcell.text = _editor.Text;
+					_editor.Visible = false;
+				}
+
 				cell.selected = true;
+				Refresh();
+			}
 
 //			base.OnMouseClick(e);
 		}
