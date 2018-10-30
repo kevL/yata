@@ -19,6 +19,8 @@ namespace yata
 	{
 		internal static readonly Brush Alice   = new SolidBrush(Color.AliceBlue);
 		internal static readonly Brush Blanche = new SolidBrush(Color.BlanchedAlmond);
+
+		internal static readonly Brush CellSel = new SolidBrush(Color.PaleGreen);
 	}
 
 	static class Colors
@@ -28,6 +30,8 @@ namespace yata
 
 		internal static readonly Color FrozenHead  = Color.Moccasin;
 		internal static readonly Color FrozenPanel = Color.OldLace;
+
+		internal static readonly Color Edit = Color.PaleTurquoise;
 	}
 
 
@@ -152,7 +156,10 @@ namespace yata
 		Label _labelsecond = new Label();
 
 
-		Timer timer1 = new Timer();
+		Timer _t1 = new Timer();
+
+		TextBox _editor = new TextBox();
+		bool _edit;
 
 
 		/// <summary>
@@ -193,9 +200,14 @@ namespace yata
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
 
-			timer1.Interval = 225;
-			timer1.Enabled = true;
-			timer1.Tick += timer1_Tick;
+			_t1.Interval = 223;
+			_t1.Enabled = true;
+			_t1.Tick += timer1_Tick;
+
+			_editor.BackColor = Colors.Edit;
+			_editor.Visible = false;
+
+			Controls.Add(_editor);
 		}
 
 
@@ -222,7 +234,6 @@ namespace yata
 //			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 
 			Refresh(); // table-drawing can tear without that.
-
 //			base.OnResize(e);
 		}
 
@@ -319,39 +330,44 @@ namespace yata
 //			if (args != null)
 //				args.Handled = true;
 
-			if (_scrollVert.Visible)
+			if (!_edit)
 			{
-				if (e.Delta > 0)
+				if (_scrollVert.Visible)
 				{
-					if (_scrollVert.Value - _scrollVert.LargeChange < 0)
-						_scrollVert.Value = 0;
-					else
-						_scrollVert.Value -= _scrollVert.LargeChange;
+					if (e.Delta > 0)
+					{
+						if (_scrollVert.Value - _scrollVert.LargeChange < 0)
+							_scrollVert.Value = 0;
+						else
+							_scrollVert.Value -= _scrollVert.LargeChange;
+					}
+					else if (e.Delta < 0)
+					{
+						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+						else
+							_scrollVert.Value += _scrollVert.LargeChange;
+					}
 				}
-				else if (e.Delta < 0)
+				else if (_scrollHori.Visible)
 				{
-					if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-						_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
-					else
-						_scrollVert.Value += _scrollVert.LargeChange;
+					if (e.Delta > 0)
+					{
+						if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+							_scrollHori.Value = 0;
+						else
+							_scrollHori.Value -= _scrollHori.LargeChange;
+					}
+					else if (e.Delta < 0)
+					{
+						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
+							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+						else
+							_scrollHori.Value += _scrollHori.LargeChange;
+					}
 				}
-			}
-			else if (_scrollHori.Visible)
-			{
-				if (e.Delta > 0)
-				{
-					if (_scrollHori.Value - _scrollHori.LargeChange < 0)
-						_scrollHori.Value = 0;
-					else
-						_scrollHori.Value -= _scrollHori.LargeChange;
-				}
-				else if (e.Delta < 0)
-				{
-					if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
-						_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
-					else
-						_scrollHori.Value += _scrollHori.LargeChange;
-				}
+
+				OnMouseMove(e);
 			}
 		}
 
@@ -390,19 +406,27 @@ namespace yata
 
 				// cell text - scrollable
 				rect.Height = HeightRow;
-				int xStart = WidthRowhead - offsetHori + _padHori;
+				int left = WidthRowhead - offsetHori + _padHori;
 				int yOffset = HeightColhead - offsetVert;
 				for (r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r + yOffset) > Bottom)
 						break;
 
-					rect.X = xStart;
+					rect.X = left;
 					for (c = 0; c != ColCount; ++c)
 					{
 						if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
 						{
-							TextRenderer.DrawText(_graphics, this[c,r].text, Font, rect, _colorText, _flags);
+							var cell = this[c,r];
+							if (cell.selected)
+							{
+								rect.X -= _padHori;
+								_graphics.FillRectangle(Brushes.CellSel, rect);
+								rect.X += _padHori;
+							}
+
+							TextRenderer.DrawText(_graphics, cell.text, Font, rect, _colorText, _flags);
 //							_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
 
@@ -973,7 +997,7 @@ namespace yata
 
 			for (int r = 0; r != RowCount; ++r)
 			for (int c = 0; c != ColCount; ++c)
-				_cells[c,r] = new Cell(Rows[r].fields[c]); //c, r,
+				_cells[c,r] = new Cell(c, r, Rows[r].fields[c]);
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
@@ -1222,6 +1246,34 @@ namespace yata
 			//logfile.Log("point to client= " + PointToClient(pt));
 			//logfile.Log("point to screen= " + PointToScreen(pt));
 
+
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
+
+			var coords = getCoords(e.X, e.Y, left);
+
+			var cell = _cells[coords.c, coords.r];
+			var rect = getCellRectangle(cell);
+
+//			cell.selected = !cell.selected;
+			if (cell.selected && !_edit)
+			{
+//				_f.FormBorderStyle = FormBorderStyle.Fixed3D;
+
+				_editor.Left   = rect.X;
+				_editor.Top    = rect.Y + 1;
+				_editor.Width  = rect.Width;
+				_editor.Height = rect.Height;
+
+				_editor.Visible = true;
+				_editor.Text = cell.text;
+
+				_edit = true;
+			}
+			else
+				cell.selected = true;
+
 //			base.OnMouseClick(e);
 		}
 
@@ -1242,24 +1294,8 @@ namespace yata
 			if (   e.X > left          && e.X < right	// safety. Mousemove won't even register unless
 				&& e.Y > HeightColhead && e.Y < bot)	// it's on the exposed part of the table.
 			{
-				int c = e.X + offsetHori;
-				int col = FrozenCount - 1;
-				do
-				{
-					++col;
-				}
-				while ((left += Cols[col].width) < c);
-
-				int top = HeightColhead;
-				int r = e.Y + offsetVert;
-				int id = 0;
-				while ((top += HeightRow) < r)
-				{
-					++id;
-				}
-
-				_f.PrintInfo(id, col, "n/a");
-//				_f.PrintInfo(e.Y, e.X, "n/a");
+				var coords = getCoords(e.X, e.Y, left);
+				_f.PrintInfo(coords.r, coords.c, "n/a");
 			}
 			else
 				_f.PrintInfo(-1,-1,"");
@@ -1271,14 +1307,67 @@ namespace yata
 
 		void timer1_Tick(object sender, EventArgs e)
 		{
-			int xStart = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) xStart += Cols[1].width;
-			if (FrozenCount > 2) xStart += Cols[2].width;
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
 
-			var rect = new Rectangle(xStart, HeightColhead, Width - xStart, Height - HeightColhead);
+			var rect = new Rectangle(left, HeightColhead, Width - left, Height - HeightColhead);
 
 			if (!rect.Contains(PointToClient(Cursor.Position)))
 				_f.PrintInfo(-1,-1,"");
+		}
+
+
+		struct Coords
+		{
+			internal int c;
+			internal int r;
+		}
+
+		Coords getCoords(int x, int y, int left)
+		{
+			var coords = new Coords();
+
+			x += offsetHori;
+			coords.c = FrozenCount - 1;
+			do
+			{
+				++coords.c;
+			}
+			while ((left += Cols[coords.c].width) < x);
+
+			int top = HeightColhead;
+			y += offsetVert;
+			coords.r = 0;
+			while ((top += HeightRow) < y)
+			{
+				++coords.r;
+			}
+
+			return coords;
+		}
+
+
+		Rectangle getCellRectangle(Cell cell)
+		{
+			var rect = new Rectangle();
+
+			rect.X = WidthRowhead - offsetHori;
+			for (int c = 0; c != cell.x; ++c)
+			{
+				rect.X += Cols[c].width;
+			}
+
+			rect.Y = HeightColhead - offsetVert;
+			for (int r = 0; r != cell.y; ++r)
+			{
+				rect.Y += HeightRow;
+			}
+
+			rect.Width = Cols[cell.x].width;
+			rect.Height = HeightRow;
+
+			return rect;
 		}
 	}
 }

@@ -45,14 +45,17 @@
 	/// </summary>
 	sealed class Cell
 	{
-//		internal int x;
-//		internal int y;
 		internal string text; // the field's text
 
-		internal Cell(string field) //int c, int r,
+		internal int x;
+		internal int y;
+
+		internal bool selected;
+
+		internal Cell(int c, int r, string field)
 		{
-//			x = c;
-//			y = r;
+			x = c;
+			y = r;
 			text = field;
 		}
 	}
