@@ -203,12 +203,11 @@ namespace yata
 
 			_t1.Interval = 223;
 			_t1.Enabled = true;
-			_t1.Tick += timer1_Tick;
+			_t1.Tick += t1_Tick;
 
 			_editor.BackColor = Colors.Edit;
 			_editor.Visible = false;
 			_editor.BorderStyle = BorderStyle.None;
-//			_editor.KeyDown += OnEditKeyDown;
 
 			Controls.Add(_editor);
 		}
@@ -1202,7 +1201,25 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
-					if (_scrollVert.Visible)
+				{
+					var cell = GetOnlySelectedCell();
+					if (cell != null) // selection to the cell above
+					{
+						if (cell.y != 0)
+						{
+							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
+//							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
+
+							cell.selected = false;
+							cell = _cells[cell.x, cell.y - 1];
+							cell.selected = true;
+
+							EnsureDisplayed(cell);
+
+							Refresh();
+						}
+					}
+					else if (_scrollVert.Visible)
 					{
 						int val;
 						if (_scrollVert.Value < _scrollVert.LargeChange)
@@ -1214,9 +1231,25 @@ namespace yata
 						offsetVert = (_scrollVert.Value - val);
 					}
 					break;
+				}
 
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
-					if (_scrollVert.Visible)
+				{
+					var cell = GetOnlySelectedCell();
+					if (cell != null) // selection to the cell below
+					{
+						if (cell.y != RowCount - 1)
+						{
+							cell.selected = false;
+							cell = _cells[cell.x, cell.y + 1];
+							cell.selected = true;
+
+							EnsureDisplayed(cell);
+
+							Refresh();
+						}
+					}
+					else if (_scrollVert.Visible) // scroll the table
 					{
 						DrawingControl.SuspendDrawing(this);
 
@@ -1240,20 +1273,53 @@ namespace yata
 						DrawingControl.ResumeDrawing(this);
 					}
 					break;
+				}
 
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
-					if (_scrollHori.Visible)
+				{
+					var cell = GetOnlySelectedCell();
+					if (cell != null) // selection to the cell left
+					{
+						if (cell.x != FrozenCount)
+						{
+							cell.selected = false;
+							cell = _cells[cell.x - 1, cell.y];
+							cell.selected = true;
+
+							EnsureDisplayed(cell);
+
+							Refresh();
+						}
+					}
+					else if (_scrollHori.Visible)
 					{
 					}
 					break;
+				}
 
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
-					if (_scrollHori.Visible)
+				{
+					var cell = GetOnlySelectedCell();
+					if (cell != null) // selection to the cell right
+					{
+						if (cell.x != ColCount - 1)
+						{
+							cell.selected = false;
+							cell = _cells[cell.x + 1, cell.y];
+							cell.selected = true;
+
+							EnsureDisplayed(cell);
+
+							Refresh();
+						}
+					}
+					else if (_scrollHori.Visible)
 					{
 					}
 					break;
+				}
 
-				case Keys.Escape:
+				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
 					ClearCellSelects();
 					Refresh();
 					break;
@@ -1264,24 +1330,6 @@ namespace yata
 //			Input.SetFlag(e.KeyCode);
 //			e.Handled = true;
 		}
-
-/*		/// <summary>
-		/// Handles keydown events in the editorbox.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void OnEditKeyDown(object sender, KeyEventArgs e)
-		{
-			switch (e.KeyCode)
-			{
-				case Keys.Tab:
-				case Keys.Enter:
-					_editcell.text = _editor.Text;
-					_editor.Visible = false;
-					e.Handled = true;
-					break;
-			}
-		} */
 
 
 		/// <summary>
@@ -1311,7 +1359,7 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					if ((_editcell = CanStartEdit()) != null)
+					if ((_editcell = GetOnlySelectedCell()) != null)
 					{
 						var rect = getCellRectangle(_editcell);
 						_editor.Left   = rect.X + 6;
@@ -1344,7 +1392,7 @@ namespace yata
 		/// Checks if only one cell is currently selected.
 		/// </summary>
 		/// <returns>the only cell selected</returns>
-		Cell CanStartEdit()
+		Cell GetOnlySelectedCell()
 		{
 			Cell cell0 = null;
 
@@ -1362,7 +1410,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the edited cell's text.
+		/// Sets the edited cell's text and recalculates col width.
 		/// </summary>
 		void SetCellText()
 		{
@@ -1440,8 +1488,6 @@ namespace yata
 				{
 					if (_editor.Visible && cell != _editcell)
 					{
-//						ClearCellSelects();
-
 						SetCellText();
 						_editor.Visible = false;
 						Select();
@@ -1520,7 +1566,7 @@ namespace yata
 		}
 
 
-		void timer1_Tick(object sender, EventArgs e)
+		void t1_Tick(object sender, EventArgs e)
 		{
 			int left = WidthRowhead + Cols[0].width;
 			if (FrozenCount > 1) left += Cols[1].width;
@@ -1584,6 +1630,52 @@ namespace yata
 
 			return rect;
 		}
+
+		void EnsureDisplayed(Cell cell)
+		{
+			var rect = getCellRectangle(cell);
+
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
+
+			if (rect.X < left)
+			{
+				_scrollHori.Value = (offsetHori -= left - rect.X);
+			}
+			else
+			{
+				int vBar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				if (rect.X + rect.Width + vBar > Width)
+					_scrollHori.Value = (offsetHori += rect.X + rect.Width + vBar - Width);
+			}
+
+			if (rect.Y < HeightColhead)
+			{
+				_scrollVert.Value = (offsetVert -= HeightColhead - rect.Y);
+			}
+			else
+			{
+				int hBar = _scrollHori.Visible ? _scrollHori.Height : 0;
+				if (rect.Y + rect.Height + hBar > Height)
+					_scrollVert.Value = (offsetVert += rect.Y + rect.Height + hBar - Height);
+			}
+
+//			getTableWidth();
+		}
+
+/*		int getTableWidth()
+		{
+			int w = WidthRowhead;
+			foreach (var col in Cols)
+			{
+				w += col.width;
+			}
+			logfile.Log("w= " + w);
+			logfile.Log("Width= " + Width);
+			logfile.Log("Right= " + Right);
+			return w;
+		} */
 
 
 		/// <summary>
