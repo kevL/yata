@@ -842,7 +842,7 @@ namespace yata
 
 				DrawingControl.SetDoubleBuffered(_labelid);
 				_labelid.Location = new Point(0,0);
-				_labelid.Size = new Size(WidthRowhead + Cols[0].width - 1, HeightColhead - 1);
+				_labelid.Size = new Size(WidthRowhead + Cols[0].width, HeightColhead - 1);
 				_labelid.BackColor = Colors.FrozenHead;
 
 				_labelid.Paint += labelid_Paint;
@@ -853,7 +853,7 @@ namespace yata
 				{
 					DrawingControl.SetDoubleBuffered(_labelfirst);
 					_labelfirst.Location = new Point(WidthRowhead + Cols[0].width, 0);
-					_labelfirst.Size = new Size(Cols[1].width - 1, HeightColhead - 1);
+					_labelfirst.Size = new Size(Cols[1].width, HeightColhead - 1);
 					_labelfirst.BackColor = Colors.FrozenHead;
 
 					_labelfirst.Paint += labelfirst_Paint;
@@ -864,7 +864,7 @@ namespace yata
 					{
 						DrawingControl.SetDoubleBuffered(_labelsecond);
 						_labelsecond.Location = new Point(WidthRowhead + Cols[0].width + Cols[1].width, 0);
-						_labelsecond.Size = new Size(Cols[2].width - 1, HeightColhead - 1);
+						_labelsecond.Size = new Size(Cols[2].width, HeightColhead - 1);
 						_labelsecond.BackColor = Colors.FrozenHead;
 
 						_labelsecond.Paint += labelsecond_Paint;
@@ -875,9 +875,6 @@ namespace yata
 			}
 		}
 
-		// NOTE: DrawLine tends to bork out and doesn't draw lines or draws
-		// only part way. Solution: reduce the size of these labels and let
-		// other OnPaint events handle stuff fairly reasonably.
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
 			_graphics = e.Graphics;
@@ -885,6 +882,8 @@ namespace yata
 
 			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width, HeightColhead);
 			TextRenderer.DrawText(_graphics, "id", FontAccent, rect, _colorText, _flags);
+
+			_graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 		}
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
@@ -894,6 +893,8 @@ namespace yata
 
 			var rect = new Rectangle(_padHori, Top, Cols[1].width, HeightColhead);
 			TextRenderer.DrawText(_graphics, Cols[1].text, FontAccent, rect, _colorText, _flags);
+
+			_graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 		}
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
@@ -903,6 +904,8 @@ namespace yata
 
 			var rect = new Rectangle(_padHori, Top, Cols[2].width, HeightColhead);
 			TextRenderer.DrawText(_graphics, Cols[2].text, FontAccent, rect, _colorText, _flags);
+
+			_graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 		}
 
 
@@ -1308,8 +1311,7 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					_editcell = CanStartEdit();
-					if (_editcell != null)
+					if ((_editcell = CanStartEdit()) != null)
 					{
 						var rect = getCellRectangle(_editcell);
 						_editor.Left   = rect.X + 6;
