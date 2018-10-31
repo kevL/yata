@@ -21,6 +21,7 @@ namespace yata
 		internal static readonly Brush Blanche = new SolidBrush(Color.BlanchedAlmond);
 
 		internal static readonly Brush CellSel = new SolidBrush(Color.PaleGreen);
+		internal static readonly Brush Edit    = new SolidBrush(Colors.Edit);
 	}
 
 	static class Colors
@@ -31,7 +32,7 @@ namespace yata
 		internal static readonly Color FrozenHead  = Color.Moccasin;
 		internal static readonly Color FrozenPanel = Color.OldLace;
 
-		internal static readonly Color Edit = Color.PaleTurquoise;
+		internal static readonly Color Edit = Color.Crimson;
 	}
 
 
@@ -206,6 +207,7 @@ namespace yata
 
 			_editor.BackColor = Colors.Edit;
 			_editor.Visible = false;
+			_editor.BorderStyle = BorderStyle.None;
 //			_editor.KeyDown += OnEditKeyDown;
 
 			Controls.Add(_editor);
@@ -214,14 +216,24 @@ namespace yata
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
-			offsetVert = _scrollVert.Value;
-			Refresh();
+			if (!_editor.Visible)
+			{
+				offsetVert = _scrollVert.Value;
+				Refresh();
+			}
+			else
+				_scrollVert.Value = offsetVert;
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
 		{
-			offsetHori = _scrollHori.Value;
-			Refresh();
+			if (!_editor.Visible)
+			{
+				offsetHori = _scrollHori.Value;
+				Refresh();
+			}
+			else
+				_scrollHori.Value = offsetHori;
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -235,6 +247,8 @@ namespace yata
 //			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 
 			Refresh(); // table-drawing can tear without that.
+
+
 //			base.OnResize(e);
 		}
 
@@ -423,7 +437,12 @@ namespace yata
 							if (cell.selected)
 							{
 								rect.X -= _padHori;
-								_graphics.FillRectangle(Brushes.CellSel, rect);
+
+								if (_editor.Visible && _editcell == cell)
+									_graphics.FillRectangle(Brushes.Edit, rect);
+								else
+									_graphics.FillRectangle(Brushes.CellSel, rect);
+
 								rect.X += _padHori;
 							}
 
@@ -811,33 +830,47 @@ namespace yata
 
 		void InitFrozenLabels()
 		{
-			DrawingControl.SetDoubleBuffered(_labelid);
-			_labelid.Location = new Point(0,0);
-			_labelid.Size = new Size(WidthRowhead + Cols[0].width - 1, HeightColhead - 1);
-			_labelid.BackColor = Colors.FrozenHead;
-
-			_labelid.Paint += labelid_Paint;
-
-			DrawingControl.SetDoubleBuffered(_labelfirst);
-			_labelfirst.Visible = false;
-			_labelfirst.Location = new Point(WidthRowhead + Cols[0].width, 0);
-			_labelfirst.Size = new Size(Cols[1].width - 1, HeightColhead - 1);
-			_labelfirst.BackColor = Colors.FrozenHead;
-
-			_labelfirst.Paint += labelfirst_Paint;
-
-			DrawingControl.SetDoubleBuffered(_labelsecond);
+			_labelid    .Visible =
+			_labelfirst .Visible =
 			_labelsecond.Visible = false;
-			_labelsecond.Location = new Point(WidthRowhead + Cols[0].width + Cols[1].width, 0);
-			_labelsecond.Size = new Size(Cols[2].width - 1, HeightColhead - 1);
-			_labelsecond.BackColor = Colors.FrozenHead;
 
-			_labelsecond.Paint += labelsecond_Paint;
+			if (ColCount > 0)
+			{
+				_labelid.Visible = true;
 
+				DrawingControl.SetDoubleBuffered(_labelid);
+				_labelid.Location = new Point(0,0);
+				_labelid.Size = new Size(WidthRowhead + Cols[0].width - 1, HeightColhead - 1);
+				_labelid.BackColor = Colors.FrozenHead;
 
-			_panelCols.Controls.Add(_labelid);
-			_panelCols.Controls.Add(_labelfirst);
-			_panelCols.Controls.Add(_labelsecond);
+				_labelid.Paint += labelid_Paint;
+
+				_panelCols.Controls.Add(_labelid);
+
+				if (ColCount > 1)
+				{
+					DrawingControl.SetDoubleBuffered(_labelfirst);
+					_labelfirst.Location = new Point(WidthRowhead + Cols[0].width, 0);
+					_labelfirst.Size = new Size(Cols[1].width - 1, HeightColhead - 1);
+					_labelfirst.BackColor = Colors.FrozenHead;
+
+					_labelfirst.Paint += labelfirst_Paint;
+
+					_panelCols.Controls.Add(_labelfirst);
+
+					if (ColCount > 2)
+					{
+						DrawingControl.SetDoubleBuffered(_labelsecond);
+						_labelsecond.Location = new Point(WidthRowhead + Cols[0].width + Cols[1].width, 0);
+						_labelsecond.Size = new Size(Cols[2].width - 1, HeightColhead - 1);
+						_labelsecond.BackColor = Colors.FrozenHead;
+
+						_labelsecond.Paint += labelsecond_Paint;
+
+						_panelCols.Controls.Add(_labelsecond);
+					}
+				}
+			}
 		}
 
 		// NOTE: DrawLine tends to bork out and doesn't draw lines or draws
@@ -1258,11 +1291,18 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if (keyData == Keys.Enter || keyData == Keys.Tab)
+			switch (keyData)
 			{
-				_editcell.text = _editor.Text;
-				_editor.Visible = false;
-				return true;
+				case Keys.Enter:
+					_editcell.text = _editor.Text;
+					goto case Keys.Escape;
+
+				case Keys.Escape:
+				case Keys.Tab:
+					_editor.Visible = false;
+					Select();
+					Refresh();
+					return true;
 			}
 			return base.ProcessDialogKey(keyData);
 		}
@@ -1275,59 +1315,90 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			var pt = new Point(e.X, e.Y);
-
-			logfile.Log("x= " + e.X);
-			logfile.Log("y= " + e.Y);
-
-			//logfile.Log("point to client= " + PointToClient(pt));
-			//logfile.Log("point to screen= " + PointToScreen(pt));
-
-
 			int left = WidthRowhead + Cols[0].width;
 			if (FrozenCount > 1) left += Cols[1].width;
 			if (FrozenCount > 2) left += Cols[2].width;
 
-			var coords = getCoords(e.X, e.Y, left);
-
-			var cell = _cells[coords.c, coords.r];
-			var rect = getCellRectangle(cell);
-
-//			cell.selected = !cell.selected;
-			if (cell.selected)
+			int right = 0;
+			for (int col = 0; col != ColCount; ++col)
 			{
-				if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
-				{
-//					_f.FormBorderStyle = FormBorderStyle.Fixed3D;
-
-					_editcell = cell;
-
-					_editor.Left   = rect.X;
-					_editor.Top    = rect.Y + 1;
-					_editor.Width  = rect.Width;
-					_editor.Height = rect.Height;
-
-					_editor.Visible = true;
-					_editor.Text = cell.text;
-					_editor.SelectionStart = _editor.Text.Length;
-
-					_editor.Focus();
-				}
+				right += Cols[col].width;
 			}
-			else
+
+			int bot = HeightColhead + HeightRow * RowCount;
+
+			if (   e.X > left          && e.X < right	// safety. Mousemove won't even register unless
+				&& e.Y > HeightColhead && e.Y < bot)	// it's on the exposed part of the table.
 			{
-				if (_editor.Visible)
+				var coords = getCoords(e.X, e.Y, left);
+
+				var cell = _cells[coords.c, coords.r];
+				var rect = getCellRectangle(cell);
+
+				if ((ModifierKeys & Keys.Control) == Keys.Control)
 				{
-					_editcell.text = _editor.Text;
-					_editor.Visible = false;
+					if (_editor.Visible)
+					{
+						_editcell.text = _editor.Text;
+						_editor.Visible = false;
+						Select();
+					}
+
+					cell.selected = !cell.selected;
+				}
+				else if (cell.selected)
+				{
+					if (_editor.Visible && cell != _editcell)
+					{
+//						ClearCellSelects();
+
+						_editcell.text = _editor.Text;
+						_editor.Visible = false;
+						Select();
+					}
+					else
+					{
+						if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+						{
+							_editcell = cell;
+
+							_editor.Left   = rect.X + 6;
+							_editor.Top    = rect.Y + 4;
+							_editor.Width  = rect.Width - 7;
+							_editor.Height = rect.Height;
+
+							_editor.Visible = true;
+							_editor.Text = cell.text;
+							_editor.SelectionStart = _editor.Text.Length;
+						}
+						_editor.Focus();
+					}
+				}
+				else
+				{
+					if (_editor.Visible)
+					{
+						_editcell.text = _editor.Text;
+						_editor.Visible = false;
+						Select();
+					}
+
+					ClearCellSelects();
+					cell.selected = true;
 				}
 
-				cell.selected = true;
 				Refresh();
 			}
 
 //			base.OnMouseClick(e);
 		}
+
+		void ClearCellSelects()
+		{
+			foreach (var cell in _cells)
+				cell.selected = false;
+		}
+
 
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
