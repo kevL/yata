@@ -812,6 +812,7 @@ namespace yata
 
 			_panelCols = new YataPanelCols(this, HeightColhead);
 			_panelRows = new YataPanelRows(this, WidthRowhead);
+			_panelRows.MouseClick += onmouseclick_RowPanel;
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width);
 
@@ -989,7 +990,7 @@ namespace yata
 				Cols.Add(new Col()); //c
 			}
 
-			Cols[0].text = "id";
+			Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
@@ -1110,6 +1111,7 @@ namespace yata
 				case Keys.Down:
 				case Keys.Left:
 				case Keys.Right:
+				case Keys.Escape:
 					e.IsInputKey = true;
 					break;
 			}
@@ -1246,6 +1248,11 @@ namespace yata
 					{
 					}
 					break;
+
+				case Keys.Escape:
+					ClearCellSelects();
+					Refresh();
+					break;
 			}
 //			e.Handled = true;
 //			base.OnKeyDown(e);
@@ -1319,7 +1326,7 @@ namespace yata
 			if (FrozenCount > 1) left += Cols[1].width;
 			if (FrozenCount > 2) left += Cols[2].width;
 
-			int right = 0;
+			int right = WidthRowhead;
 			for (int col = 0; col != ColCount; ++col)
 			{
 				right += Cols[col].width;
@@ -1327,13 +1334,11 @@ namespace yata
 
 			int bot = HeightColhead + HeightRow * RowCount;
 
-			if (   e.X > left          && e.X < right	// safety. Mousemove won't even register unless
-				&& e.Y > HeightColhead && e.Y < bot)	// it's on the exposed part of the table.
+			if (   e.X > left          && e.X < right
+				&& e.Y > HeightColhead && e.Y < bot)
 			{
 				var coords = getCoords(e.X, e.Y, left);
-
 				var cell = _cells[coords.c, coords.r];
-				var rect = getCellRectangle(cell);
 
 				if ((ModifierKeys & Keys.Control) == Keys.Control)
 				{
@@ -1362,6 +1367,7 @@ namespace yata
 						{
 							_editcell = cell;
 
+							var rect = getCellRectangle(cell);
 							_editor.Left   = rect.X + 6;
 							_editor.Top    = rect.Y + 4;
 							_editor.Width  = rect.Width - 7;
@@ -1406,7 +1412,7 @@ namespace yata
 			if (FrozenCount > 1) left += Cols[1].width;
 			if (FrozenCount > 2) left += Cols[2].width;
 
-			int right = 0;
+			int right = WidthRowhead;
 			for (int col = 0; col != ColCount; ++col)
 			{
 				right += Cols[col].width;
@@ -1414,8 +1420,8 @@ namespace yata
 
 			int bot = HeightColhead + HeightRow * RowCount;
 
-			if (   e.X > left          && e.X < right	// safety. Mousemove won't even register unless
-				&& e.Y > HeightColhead && e.Y < bot)	// it's on the exposed part of the table.
+			if (   e.X > left          && e.X < right
+				&& e.Y > HeightColhead && e.Y < bot)
 			{
 				var coords = getCoords(e.X, e.Y, left);
 				_f.PrintInfo(coords.r, coords.c, "n/a");
@@ -1491,6 +1497,42 @@ namespace yata
 			rect.Height = HeightRow;
 
 			return rect;
+		}
+
+
+		/// <summary>
+		/// Handles a mouseclick on the rowhead. Selects or deselects a row.
+		/// Fires on the rowhead panel.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void onmouseclick_RowPanel(object sender, MouseEventArgs e)
+		{
+			if (_editor.Visible)
+			{
+				_editor.Visible = false;
+				Select();
+			}
+
+			int r = (e.Y + offsetVert) / HeightRow;
+
+			bool select = false;
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (!_cells[c,r].selected)
+				{
+					select = true;
+					break;
+				}
+			}
+
+			if ((ModifierKeys & Keys.Control) != Keys.Control)
+				ClearCellSelects();
+
+			for (int c = 0; c != ColCount; ++c)
+				_cells[c,r].selected = select;
+
+			Refresh();
 		}
 	}
 }
