@@ -1455,9 +1455,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
+			int left = getLeft();
 
 			int right = WidthRowhead;
 			for (int col = 0; col != ColCount; ++col)
@@ -1540,9 +1538,7 @@ namespace yata
 
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
+			int left = getLeft();
 
 			int right = WidthRowhead;
 			for (int col = 0; col != ColCount; ++col)
@@ -1568,11 +1564,11 @@ namespace yata
 
 		void t1_Tick(object sender, EventArgs e)
 		{
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
-
-			var rect = new Rectangle(left, HeightColhead, Width - left, Height - HeightColhead);
+			int left = getLeft();
+			var rect = new Rectangle(left,
+									 HeightColhead,
+									 Width - left - (_scrollVert.Visible ? _scrollVert.Width : 0),
+									 Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0));
 
 			if (!rect.Contains(PointToClient(Cursor.Position)))
 				_f.PrintInfo(-1,-1,"");
@@ -1635,9 +1631,7 @@ namespace yata
 		{
 			var rect = getCellRectangle(cell);
 
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
+			int left = getLeft();
 
 			if (rect.X < left)
 			{
@@ -1662,6 +1656,15 @@ namespace yata
 			}
 
 //			getTableWidth();
+		}
+
+		int getLeft()
+		{
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
+
+			return left;
 		}
 
 /*		int getTableWidth()
@@ -1729,9 +1732,7 @@ namespace yata
 
 			int x = e.X + offsetHori;
 
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
+			int left = getLeft();
 
 			int c = FrozenCount - 1;
 			do
