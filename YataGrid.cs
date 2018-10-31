@@ -159,7 +159,7 @@ namespace yata
 
 		Timer _t1 = new Timer();
 
-		TextBox _editor = new TextBox();
+		readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
 
@@ -830,7 +830,7 @@ namespace yata
 		}
 
 
-		void InitFrozenLabels()
+		void InitFrozenLabels() // TODO: enable/disable Menu items per table
 		{
 			_labelid    .Visible =
 			_labelfirst .Visible =
@@ -1041,7 +1041,7 @@ namespace yata
 				int w, wT, hT;
 				for (int c = 0; c != ColCount; ++c)
 				{
-					w = 25;
+					w = 25; // cellwidth min.
 					for (int r = 0; r != RowCount; ++r)
 					{
 						size = TextRenderer.MeasureText(graphics, this[c,r].text, Font, _size, _flags);
@@ -1302,7 +1302,7 @@ namespace yata
 			switch (keyData)
 			{
 				case Keys.Enter:
-					_editcell.text = _editor.Text;
+					SetCellText();
 					goto case Keys.Escape;
 
 				case Keys.Escape:
@@ -1313,6 +1313,41 @@ namespace yata
 					return true;
 			}
 			return base.ProcessDialogKey(keyData);
+		}
+
+		void SetCellText()
+		{
+			_editcell.text = _editor.Text;
+
+			int c = _editcell.x;
+			int pre = Cols[c].width;
+
+			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			{
+				int w = TextRenderer.MeasureText(graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+
+				if (w > pre)
+				{
+					Cols[c].width = w;
+				}
+				else if (w < pre) // recalc width on the entire col
+				{
+					w = TextRenderer.MeasureText(graphics, Cols[c].text, FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
+					int wT;
+					for (int r = 0; r != RowCount; ++r)
+					{
+						wT = TextRenderer.MeasureText(graphics, this[c,r].text, Font, _size, _flags).Width + _padHori * 2;
+						if (wT > w) w = wT;
+					}
+					Cols[c].SetColWidth(w);
+				}
+			}
+
+			if (Cols[c].width != pre)
+			{
+				InitScrollers();
+				Refresh(); // is required - and yet another Refresh() will follow ....
+			}
 		}
 
 
@@ -1345,7 +1380,7 @@ namespace yata
 				{
 					if (_editor.Visible)
 					{
-						_editcell.text = _editor.Text;
+						SetCellText();
 						_editor.Visible = false;
 						Select();
 					}
@@ -1358,7 +1393,7 @@ namespace yata
 					{
 //						ClearCellSelects();
 
-						_editcell.text = _editor.Text;
+						SetCellText();
 						_editor.Visible = false;
 						Select();
 					}
@@ -1376,6 +1411,7 @@ namespace yata
 
 							_editor.Visible = true;
 							_editor.Text = cell.text;
+							_editor.SelectionStart = 0; // because .NET
 							_editor.SelectionStart = _editor.Text.Length;
 						}
 						_editor.Focus();
@@ -1385,7 +1421,7 @@ namespace yata
 				{
 					if (_editor.Visible)
 					{
-						_editcell.text = _editor.Text;
+						SetCellText();
 						_editor.Visible = false;
 						Select();
 					}

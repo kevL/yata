@@ -23,6 +23,11 @@
 		{
 //			id = c;
 		} */
+
+		internal void SetColWidth(int w)
+		{
+			_width = w;
+		}
 	}
 
 	/// <summary>
