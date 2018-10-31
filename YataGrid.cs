@@ -267,8 +267,8 @@ namespace yata
 			// NOTE: Height/Width *includes* the height/width of the relevant
 			// scrollbar and panel.
 
-			bool visVert = HeightTable > Height;
-			bool visHori = WidthTable  > Width;
+			bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
+			bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
 
 			_scrollVert.Visible =
 			_scrollHori.Visible = false;
@@ -299,17 +299,18 @@ namespace yata
 
 				if (vert < _scrollVert.LargeChange) vert = 0;
 
-				_scrollVert.Maximum = vert; // NOTE: Do not set these until after deciding
+				_scrollVert.Maximum = vert;	// NOTE: Do not set this until after deciding
+											// whether or not max < 0. 'Cause it fucks everything up. bingo.
 
-				// handle another .NET scrollbar anomaly ->
+				// handle .NET OnResize anomaly ->
+				// keep the bottom of the table snuggled against the bottom of the visible area
 				if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
 				{
-					_scrollVert.Value =
-					offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+					_scrollVert.Value = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
 				}
 			}
 			else
-				offsetVert = 0;
+				_scrollVert.Value = 0;
 
 			if (_scrollHori.Visible)
 			{
@@ -321,17 +322,18 @@ namespace yata
 
 				if (hori < _scrollHori.LargeChange) hori = 0;
 
-				_scrollHori.Maximum = hori; // whether or not max < 0. 'Cause it fucks everything up. bingo.
+				_scrollHori.Maximum = hori;	// NOTE: Do not set this until after deciding
+											// whether or not max < 0. 'Cause it fucks everything up. bingo.
 
-				// handle another .NET scrollbar anomaly ->
+				// handle .NET OnResize anomaly ->
+				// keep the right of the table snuggled against the right of the visible area
 				if (WidthTable - offsetHori < Width - ((_scrollVert.Visible) ? _scrollVert.Width : 0))
 				{
-					_scrollHori.Value =
-					offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+					_scrollHori.Value = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
 				}
 			}
 			else
-				offsetHori = 0;
+				_scrollHori.Value = 0;
 		}
 
 		/// <summary>
@@ -1132,15 +1134,11 @@ namespace yata
 					if (e.Modifiers == Keys.Control)
 					{
 						if (_scrollVert.Visible)
-						{
-							_scrollVert.Value =
-							offsetVert = 0;
-						}
+							_scrollVert.Value = 0;
 					}
 					else if (_scrollHori.Visible)
 					{
-						_scrollHori.Value =
-						offsetHori = 0;
+						_scrollHori.Value = 0;
 					}
 					break;
 
@@ -1148,55 +1146,35 @@ namespace yata
 					if (e.Modifiers == Keys.Control)
 					{
 						if (_scrollVert.Visible)
-						{
-							_scrollVert.Value =
-							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
-						}
+							_scrollVert.Value = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
 					}
 					else if (_scrollHori.Visible)
 					{
-						_scrollHori.Value =
-						offsetHori = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+						_scrollHori.Value = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
 					}
 					break;
 
 				case Keys.PageUp:
 					if (_scrollVert.Visible)
 					{
-						int val;
-						if (_scrollVert.Value < Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
-							val = _scrollVert.Value;
-						else
-							val = Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0);
+						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
 
-						_scrollVert.Value =
-						offsetVert = (_scrollVert.Value - val);
+						if (_scrollVert.Value - h < 0)
+							_scrollVert.Value = 0;
+						else
+							_scrollVert.Value -= h;
 					}
 					break;
 
 				case Keys.PageDown:
 					if (_scrollVert.Visible)
 					{
-						DrawingControl.SuspendDrawing(this);
+						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
 
-						int val;
-						if (_scrollVert.Value > _scrollVert.Maximum - Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
-							val = _scrollVert.Maximum - _scrollVert.Value;
+						if (_scrollVert.Value + h + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
 						else
-							val = Height - _panelCols.Height - (_scrollHori.Visible ? _scrollHori.Height : 0);
-
-						_scrollVert.Value =
-						offsetVert = (_scrollVert.Value + val);
-
-
-						// handle another .NET scrollbar anomaly ->
-						if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
-						{
-							_scrollVert.Value =
-							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
-						}
-
-						DrawingControl.ResumeDrawing(this);
+							_scrollVert.Value += h;
 					}
 					break;
 
@@ -1215,20 +1193,15 @@ namespace yata
 							cell.selected = true;
 
 							EnsureDisplayed(cell);
-
 							Refresh();
 						}
 					}
 					else if (_scrollVert.Visible)
 					{
-						int val;
-						if (_scrollVert.Value < _scrollVert.LargeChange)
-							val = _scrollVert.Value;
+						if (_scrollVert.Value - _scrollVert.LargeChange < 0)
+							_scrollVert.Value = 0;
 						else
-							val = _scrollVert.LargeChange;
-
-						_scrollVert.Value =
-						offsetVert = (_scrollVert.Value - val);
+							_scrollVert.Value -= _scrollVert.LargeChange;
 					}
 					break;
 				}
@@ -1245,32 +1218,15 @@ namespace yata
 							cell.selected = true;
 
 							EnsureDisplayed(cell);
-
 							Refresh();
 						}
 					}
 					else if (_scrollVert.Visible) // scroll the table
 					{
-						DrawingControl.SuspendDrawing(this);
-
-						int val;
-						if (_scrollVert.Value > _scrollVert.Maximum - _scrollVert.LargeChange)
-							val = _scrollVert.Maximum - _scrollVert.Value;
+						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
 						else
-							val = _scrollVert.LargeChange;
-
-						_scrollVert.Value =
-						offsetVert = (_scrollVert.Value + val);
-
-
-						// handle another .NET scrollbar anomaly ->
-						if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
-						{
-							_scrollVert.Value =
-							offsetVert = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
-						}
-
-						DrawingControl.ResumeDrawing(this);
+							_scrollVert.Value += _scrollVert.LargeChange;
 					}
 					break;
 				}
@@ -1287,12 +1243,15 @@ namespace yata
 							cell.selected = true;
 
 							EnsureDisplayed(cell);
-
 							Refresh();
 						}
 					}
 					else if (_scrollHori.Visible)
 					{
+						if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+							_scrollHori.Value = 0;
+						else
+							_scrollHori.Value -= _scrollHori.LargeChange;
 					}
 					break;
 				}
@@ -1309,12 +1268,15 @@ namespace yata
 							cell.selected = true;
 
 							EnsureDisplayed(cell);
-
 							Refresh();
 						}
 					}
 					else if (_scrollHori.Visible)
 					{
+						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
+							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+						else
+							_scrollHori.Value += _scrollHori.LargeChange;
 					}
 					break;
 				}
