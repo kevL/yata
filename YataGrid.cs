@@ -1302,8 +1302,30 @@ namespace yata
 			switch (keyData)
 			{
 				case Keys.Enter:
-					SetCellText();
-					goto case Keys.Escape;
+					if (_editor.Visible)
+					{
+						SetCellText();
+						goto case Keys.Escape;
+					}
+
+					_editcell = CanStartEdit();
+					if (_editcell != null)
+					{
+						var rect = getCellRectangle(_editcell);
+						_editor.Left   = rect.X + 6;
+						_editor.Top    = rect.Y + 4;
+						_editor.Width  = rect.Width - 7;
+						_editor.Height = rect.Height;
+
+						_editor.Visible = true;
+						_editor.Text = _editcell.text;
+						_editor.SelectionStart = 0; // because .NET
+						_editor.SelectionStart = _editor.Text.Length;
+
+						_editor.Focus();
+						Refresh();
+					}
+					return true;
 
 				case Keys.Escape:
 				case Keys.Tab:
@@ -1315,6 +1337,31 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 
+
+		/// <summary>
+		/// Checks if only one cell is currently selected.
+		/// </summary>
+		/// <returns>the only cell selected</returns>
+		Cell CanStartEdit()
+		{
+			Cell cell0 = null;
+
+			foreach (var cell in _cells)
+			{
+				if (cell.selected)
+				{
+					if (cell0 != null)
+						return null;
+
+					cell0 = cell;
+				}
+			}
+			return cell0;
+		}
+
+		/// <summary>
+		/// Sets the edited cell's text.
+		/// </summary>
 		void SetCellText()
 		{
 			_editcell.text = _editor.Text;
