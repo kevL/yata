@@ -811,8 +811,9 @@ namespace yata
 			SetWidthRowhead();
 
 			_panelCols = new YataPanelCols(this, HeightColhead);
+			_panelCols.MouseClick += click_ColPanel;
 			_panelRows = new YataPanelRows(this, WidthRowhead);
-			_panelRows.MouseClick += onmouseclick_RowPanel;
+			_panelRows.MouseClick += click_RowPanel;
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width);
 
@@ -1506,7 +1507,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void onmouseclick_RowPanel(object sender, MouseEventArgs e)
+		void click_RowPanel(object sender, MouseEventArgs e)
 		{
 			if (_editor.Visible)
 			{
@@ -1530,6 +1531,53 @@ namespace yata
 				ClearCellSelects();
 
 			for (int c = 0; c != ColCount; ++c)
+				_cells[c,r].selected = select;
+
+			Refresh();
+		}
+
+		/// <summary>
+		/// Handles a mouseclick on the colhead. Selects or deselects a col.
+		/// Fires on the colhead panel.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_ColPanel(object sender, MouseEventArgs e)
+		{
+			if (_editor.Visible)
+			{
+				_editor.Visible = false;
+				Select();
+			}
+
+			int x = e.X + offsetHori;
+
+			int left = WidthRowhead + Cols[0].width;
+			if (FrozenCount > 1) left += Cols[1].width;
+			if (FrozenCount > 2) left += Cols[2].width;
+
+			int c = FrozenCount - 1;
+			do
+			{
+				++c;
+			}
+			while ((left += Cols[c].width) < x);
+
+
+			bool select = false;
+			for (int r = 0; r != RowCount; ++r)
+			{
+				if (!_cells[c,r].selected)
+				{
+					select = true;
+					break;
+				}
+			}
+
+			if ((ModifierKeys & Keys.Control) != Keys.Control)
+				ClearCellSelects();
+
+			for (int r = 0; r != RowCount; ++r)
 				_cells[c,r].selected = select;
 
 			Refresh();
