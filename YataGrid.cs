@@ -446,7 +446,7 @@ namespace yata
 					{
 						if (rect.X + (rect.Width = Cols[c].width) > WidthRowhead)
 						{
-							var cell = this[c,r];
+							var cell = _cells[c,r];
 							if (cell.selected)
 							{
 								rect.X -= _padHori;
@@ -512,7 +512,7 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelColheads(IDeviceContext graphics)
 		{
-			logfile.Log("LabelColHeads()");
+			logfile.Log("LabelColheads()");
 
 			if (ColCount != 0) // safety.
 			{
@@ -813,11 +813,40 @@ namespace yata
 		}
 
 
-		internal void Init()
+		internal void Init(bool reload)
 		{
 			logfile.Log("Init()");
 
-			if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
+			if (reload)
+			{
+				_init = true;
+
+				Changed = false;
+
+				FrozenCount = YataGrid.FreezeId;
+
+				Cols.Clear();
+				Rows.Clear();
+
+				if (_panelCols != null)
+				{
+					Controls.Remove(_panelCols);
+//					_panelCols.Dispose(); // breaks the frozen-labels
+				}
+
+				if (_panelRows != null)
+				{
+					Controls.Remove(_panelRows);
+//					_panelRows.Dispose();
+				}
+
+				if (_panelFrozen != null)
+				{
+					Controls.Remove(_panelFrozen);
+//					_panelFrozen.Dispose();
+				}
+			}
+			else if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
 			{
 				foreach (var dir in Settings._pathall)
 					_f.GropeLabels(dir);
@@ -1059,7 +1088,7 @@ namespace yata
 
 			_rows.Clear(); // done w/ '_rows'
 
-			SetWidthRowhead();
+			SetRowheadWidth();
 		}
 
 		/// <summary>
@@ -1082,7 +1111,7 @@ namespace yata
 					w = 25; // cellwidth min.
 					for (int r = 0; r != RowCount; ++r)
 					{
-						size = TextRenderer.MeasureText(graphics, this[c,r].text, Font, _size, _flags);
+						size = TextRenderer.MeasureText(graphics, _cells[c,r].text, Font, _size, _flags);
 
 						wT = size.Width + _padHori * 2;
 						if (wT > w) w = wT;
@@ -1099,9 +1128,9 @@ namespace yata
 		/// Calculates and maintains rowhead width wrt/ current Font across all
 		/// tabs/tables.
 		/// </summary>
-		void SetWidthRowhead()
+		void SetRowheadWidth()
 		{
-			logfile.Log("SetWidthRowhead()");
+			logfile.Log("SetRowheadWidth()");
 
 			YataGrid table;
 
@@ -1116,9 +1145,17 @@ namespace yata
 					widthRowhead = test;
 			}
 
+			string text = "9";
+			int w = 1;
+			while ((widthRowhead /= 10) != 0)
+			{
+				++w;
+				text += "9";
+			}
+
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
-				widthRowhead = TextRenderer.MeasureText(graphics, widthRowhead.ToString(), Font, _size, _flags).Width + _padHoriRowhead * 2;
+				widthRowhead = TextRenderer.MeasureText(graphics, text, Font, _size, _flags).Width + _padHoriRowhead * 2;
 			}
 
 			for (tab = 0; tab != tabs; ++tab)
@@ -1431,7 +1468,7 @@ namespace yata
 					int wT;
 					for (int r = 0; r != RowCount; ++r)
 					{
-						wT = TextRenderer.MeasureText(graphics, this[c,r].text, Font, _size, _flags).Width + _padHori * 2;
+						wT = TextRenderer.MeasureText(graphics, _cells[c,r].text, Font, _size, _flags).Width + _padHori * 2;
 						if (wT > w) w = wT;
 					}
 					Cols[c].SetColWidth(w);

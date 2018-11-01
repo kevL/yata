@@ -235,7 +235,7 @@ namespace yata
 				tab.Controls.Add(Table);
 				Tabs.SelectedTab = tab;
 
-				Table.Init();
+				Table.Init(false);
 
 				//DrawingControl.ResumeDrawing(table);
 			}
@@ -407,7 +407,7 @@ namespace yata
 
 		void fileclick_Reload(object sender, EventArgs e)
 		{
-/*			if (Table != null && File.Exists(Table.Pfe)
+			if (Table != null && File.Exists(Table.Pfe)
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 									   "warning",
@@ -417,28 +417,21 @@ namespace yata
 			{
 				panel_ColorFill.Show();
 
-				Table.Changed = false;
-
-				Table.Columns.Clear();
-				Table.Rows   .Clear();
-
 				if (Table.Load2da())
 				{
-					opsclick_AutosizeCols(null, EventArgs.Empty); // that works ... finally. so to speak
-					DrawingControl.ResumeDrawing(Table);
+					it_freeze1.Checked =
+					it_freeze2.Checked = false;
 
-					Table.CurrentCell = null;
-					Table.Rows[0].Cells[0].Selected = false; // blow away the default/selected cell.
+					Table.Init(true);
 
-					Table.Columns[1].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
-					Table.Columns[2].Frozen = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
+//					DrawingControl.ResumeDrawing(Table);
 				}
 				else
 					fileclick_Close(null, EventArgs.Empty);
 
 				if (Tabs.TabCount != 0)
 					panel_ColorFill.Hide();
-			} */
+			}
 			// TODO: Show an error if file no longer exists.
 		}
 
