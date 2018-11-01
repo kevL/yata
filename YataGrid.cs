@@ -227,7 +227,7 @@ namespace yata
 			else
 				_scrollVert.Value = offsetVert;
 
-//			Select();
+			Select(); // workaround: refocus the table (bar has to move > 1px)
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
@@ -240,7 +240,7 @@ namespace yata
 			else
 				_scrollHori.Value = offsetHori;
 
-//			Select();
+			Select(); // workaround: refocus the table (bar has to move > 1px)
 		}
 
 		protected override void OnResize(EventArgs e)
