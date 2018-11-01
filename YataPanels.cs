@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -39,7 +38,7 @@ namespace yata
 
 			e.Graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
 
-			_grid.LabelColHeads(e.Graphics);
+			_grid.LabelColheads(e.Graphics);
 
 //			DrawingControl.ResumeDrawing(this);
 		}

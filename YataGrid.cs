@@ -162,6 +162,8 @@ namespace yata
 		readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
+		bool _init = true;
+
 
 		/// <summary>
 		/// cTor.
@@ -170,6 +172,8 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataGrid(YataForm f, string pfe)
 		{
+			logfile.Log("YataGrid() cTor");
+
 //			DrawingControl.SetDoubleBuffered(this);
 			DoubleBuffered = true;
 
@@ -237,6 +241,8 @@ namespace yata
 
 		protected override void OnResize(EventArgs e)
 		{
+			logfile.Log("OnResize()");
+
 			InitScrollers();
 
 //			if (_piColhead != null) _piColhead.Dispose();
@@ -258,6 +264,8 @@ namespace yata
 		/// </summary>
 		void InitScrollers()
 		{
+			logfile.Log("InitScrollers()");
+
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
 			WidthTable = WidthRowhead;
@@ -394,7 +402,11 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (ColCount != 0 && RowCount != 0 && _cells != null)
+			logfile.Log("OnPaint()");
+
+			if (_init) return;
+
+//			if (ColCount != 0 && RowCount != 0 && _cells != null)
 			{
 				_graphics = e.Graphics;
 				_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -498,8 +510,10 @@ namespace yata
 		/// @note Called by OnPaint of the top-panel.
 		/// </summary>
 		/// <param name="graphics"></param>
-		internal void LabelColHeads(IDeviceContext graphics)
+		internal void LabelColheads(IDeviceContext graphics)
 		{
+			logfile.Log("LabelColHeads()");
+
 			if (ColCount != 0) // safety.
 			{
 				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
@@ -522,6 +536,8 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelRowheads(IDeviceContext graphics)
 		{
+			logfile.Log("LabelRowheads()");
+
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
 //				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
@@ -546,6 +562,8 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelFrozen(Graphics graphics)
 		{
+			logfile.Log("LabelFrozen()");
+
 			if (RowCount != 0) // safety.
 			{
 				int x = 0;
@@ -587,6 +605,8 @@ namespace yata
 		/// <returns>true if 2da loaded successfully perhaps</returns>
 		internal bool Load2da()
 		{
+			logfile.Log("Load2da()");
+
 			Text = "Yata";
 
 			bool ignoreErrors = false;
@@ -789,6 +809,13 @@ namespace yata
 				}
 			}
 
+			return true;
+		}
+
+
+		internal void Init()
+		{
+			logfile.Log("Init()");
 
 			if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
 			{
@@ -809,8 +836,6 @@ namespace yata
 			_scrollVert.LargeChange =
 			_scrollHori.LargeChange = HeightRow;
 
-			SetWidthRowhead();
-
 			_panelCols = new YataPanelCols(this, HeightColhead);
 			_panelCols.MouseClick += click_ColPanel;
 			_panelRows = new YataPanelRows(this, WidthRowhead);
@@ -825,11 +850,14 @@ namespace yata
 
 			InitFrozenLabels();
 
+			InitScrollers();
+
+			Select();
+
+			_init = false;
+
 //			_load = false;
-
-			return true;
 		}
-
 
 		void InitFrozenLabels() // TODO: enable/disable Menu items per table
 		{
@@ -987,6 +1015,8 @@ namespace yata
 		/// </summary>
 		void CreateCols()
 		{
+			logfile.Log("CreateCols()");
+
 			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
 			int c = 0;
@@ -1020,18 +1050,22 @@ namespace yata
 		/// </summary>
 		void CreateRows()
 		{
+			logfile.Log("CreateRows()");
+
 			RowCount = _rows.Count;
 
 			for (int r = 0; r != RowCount; ++r)
 				Rows.Add(new Row(_rows[r])); //r
 
 			_rows.Clear(); // done w/ '_rows'
+
+			SetWidthRowhead();
 		}
 
 		/// <summary>
 		/// Creates the cells' 2d-array.
 		/// </summary>
-		internal void CreateCells()
+		void CreateCells()
 		{
 			_cells = new Cell[ColCount, RowCount];
 
@@ -1067,6 +1101,8 @@ namespace yata
 		/// </summary>
 		void SetWidthRowhead()
 		{
+			logfile.Log("SetWidthRowhead()");
+
 			YataGrid table;
 
 			int widthRowhead = 20, test; // row-headers' width stays uniform across all tabpages ->
@@ -1608,9 +1644,21 @@ namespace yata
 
 		int getLeft()
 		{
-			int left = WidthRowhead + Cols[0].width;
-			if (FrozenCount > 1) left += Cols[1].width;
-			if (FrozenCount > 2) left += Cols[2].width;
+			int left = WidthRowhead;
+			switch (FrozenCount)
+			{
+				case FreezeSecond:
+					left += Cols[2].width;
+					goto case FreezeFirst;
+
+				case FreezeFirst:
+					left += Cols[1].width;
+					goto case FreezeId;
+
+				case FreezeId:
+					left += Cols[0].width;
+					break;
+			}
 
 			return left;
 		}

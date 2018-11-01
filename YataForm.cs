@@ -90,7 +90,7 @@ namespace yata
 				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
 
 				int wCoords0 = statusbar_label_Coords.Width;
-				int wCoords = TextRenderer.MeasureText("id= 99 col= 99", statusbar_label_Info.Font).Width + 10;
+				int wCoords = TextRenderer.MeasureText("id= 99999 col= 99", statusbar_label_Info.Font).Width + 10;
 				statusbar_label_Coords.Width = (wCoords < wCoords0) ? wCoords0 : wCoords;
 
 
@@ -212,72 +212,37 @@ namespace yata
 		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
-			panel_ColorFill.Hide(); // TEST
+			logfile.Log("CreateTabPage()");
+
+			panel_ColorFill.Show();
 
 			Enabled = false;
 
 			var table = new YataGrid(this, pfe);
 
-			var tab = new TabPage();
-			Tabs.TabPages.Add(tab);
+			if (table.Load2da())
+			{
+				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
 
-			tab.Tag = table;
-			tab.Text = Path.GetFileNameWithoutExtension(pfe);
+				var tab = new TabPage();
+				Tabs.TabPages.Add(tab);
 
-			if (table.Load2da())	// TODO: <- Investigate how curmudgeonly the table becomes
-			{						// if the stuff above is placed within the following codeblock ->
+				tab.Tag = Table;
+
+				tab.Text = Path.GetFileNameWithoutExtension(pfe);
 				SetTabSize();
 
-				tab.Controls.Add(table);
-
+				tab.Controls.Add(Table);
 				Tabs.SelectedTab = tab;
 
-				table.Select();
-
-				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+				Table.Init();
 
 				//DrawingControl.ResumeDrawing(table);
 			}
 
 			Enabled = true;
 
-/*			panel_ColorFill.Show();
-
-			var table = new YataDataGridView(this, pfe);
-			((ISupportInitialize)(table)).BeginInit();
-
-			if (table.Load2da())
-			{
-				table.RowHeaderMouseClick += context_;
-				table.CellMouseEnter      += PrintCraftInfo;
-
-				var tab = new TabPage();
-				Tabs.TabPages.Add(tab);
-
-				tab.Tag = table;
-				tab.Text = Path.GetFileNameWithoutExtension(pfe);
-
-				SetTabSize();
-
-				tab.Controls.Add(table);
-
-				Tabs.SelectedTab = tab;
-
-				table.Select(); // focus the table.
-
-				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
-				opsclick_AutosizeCols(null, EventArgs.Empty); // that works ... finally. so to speak
-
-				Table.SetRowSize();
-
-				Table.CurrentCell = null;
-				Table[0,0].Selected = false; // blow away the default/selected cell.
-
-				DrawingControl.ResumeDrawing(Table);
-			}
-			((ISupportInitialize)(table)).EndInit();
-
-			tab_SelectedIndexChanged(null, EventArgs.Empty); */
+			tab_SelectedIndexChanged(null, EventArgs.Empty);
 		}
 
 
@@ -300,7 +265,6 @@ namespace yata
 		}
 
 
-
 		/// <summary>
 		/// Handles tab-selection/deselection.
 		/// </summary>
@@ -308,23 +272,27 @@ namespace yata
 		/// <param name="e"></param>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			logfile.Log("tab_SelectedIndexChanged id= " + Tabs.SelectedIndex);
+
 			if (Tabs.SelectedIndex != -1)
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
-				it_MenuPaths.Visible = Table.Craft;
 				panel_ColorFill.Hide();
 
-//				it_freeze1.Checked = (Table.Freeze == YataGrid.Frozen.FreezeFirstCol);
-//				it_freeze2.Checked = (Table.Freeze == YataGrid.Frozen.FreezeSecondCol);
+				it_MenuPaths.Visible = Table.Craft;
+
+				it_freeze1.Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
+				it_freeze2.Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
 			}
 			else
 			{
-				it_MenuPaths.Visible = false;
 				panel_ColorFill.Show();
 
-//				it_freeze1.Checked =
-//				it_freeze2.Checked = false;
+				it_MenuPaths.Visible = false;
+
+				it_freeze1.Checked =
+				it_freeze2.Checked = false;
 			}
 
 			SetTitlebarText();
