@@ -1223,7 +1223,7 @@ namespace yata
 					}
 					else if (_scrollVert.Visible) // scroll the table
 					{
-						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum) // what is this witchcraft
 							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
 						else
 							_scrollVert.Value += _scrollVert.LargeChange;
@@ -1273,7 +1273,7 @@ namespace yata
 					}
 					else if (_scrollHori.Visible)
 					{
-						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
+						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum) // what is this witchcraft
 							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
 						else
 							_scrollHori.Value += _scrollHori.LargeChange;
@@ -1419,19 +1419,13 @@ namespace yata
 		{
 			int left = getLeft();
 
-			int right = WidthRowhead;
-			for (int col = 0; col != ColCount; ++col)
-			{
-				right += Cols[col].width;
-			}
-
-			int bot = HeightColhead + HeightRow * RowCount;
-
-			if (   e.X > left          && e.X < right
-				&& e.Y > HeightColhead && e.Y < bot)
+			if (   e.X > left          && e.X < WidthTable
+				&& e.Y > HeightColhead && e.Y < HeightTable)
 			{
 				var coords = getCoords(e.X, e.Y, left);
 				var cell = _cells[coords.c, coords.r];
+
+				EnsureDisplayed(cell);
 
 				if ((ModifierKeys & Keys.Control) == Keys.Control)
 				{
@@ -1502,23 +1496,14 @@ namespace yata
 		{
 			int left = getLeft();
 
-			int right = WidthRowhead;
-			for (int col = 0; col != ColCount; ++col)
-			{
-				right += Cols[col].width;
-			}
-
-			int bot = HeightColhead + HeightRow * RowCount;
-
-			if (   e.X > left          && e.X < right
-				&& e.Y > HeightColhead && e.Y < bot)
+			if (   e.X > left          && e.X < WidthTable
+				&& e.Y > HeightColhead && e.Y < HeightTable)
 			{
 				var coords = getCoords(e.X, e.Y, left);
 				_f.PrintInfo(coords.r, coords.c, "n/a");
 			}
 			else
 				_f.PrintInfo(-1,-1,"");
-
 
 //			base.OnMouseMove(e);
 		}
@@ -1589,35 +1574,36 @@ namespace yata
 			return rect;
 		}
 
-		void EnsureDisplayed(Cell cell)
+		/// <summary>
+		/// Not really a point but the upper and lower bounds of a row.
+		/// </summary>
+		/// <param name="r"></param>
+		/// <returns></returns>
+		Point getRowEdges(int r)
 		{
-			var rect = getCellRectangle(cell);
+			var bounds = new Point();
+			bounds.X = HeightColhead + HeightRow * r - offsetVert;
+			bounds.Y = bounds.X + HeightRow;
 
-			int left = getLeft();
+			return bounds;
+		}
 
-			if (rect.X < left)
+		/// <summary>
+		/// Not really a point but the left and right bounds of a col.
+		/// </summary>
+		/// <param name="c"></param>
+		/// <returns></returns>
+		Point getColEdges(int c)
+		{
+			var bounds = new Point();
+			bounds.X = WidthRowhead - offsetHori;
+			for (int col = 0; col != c; ++col)
 			{
-				_scrollHori.Value = (offsetHori -= left - rect.X);
+				bounds.X += Cols[col].width;
 			}
-			else
-			{
-				int vBar = _scrollVert.Visible ? _scrollVert.Width : 0;
-				if (rect.X + rect.Width + vBar > Width)
-					_scrollHori.Value = (offsetHori += rect.X + rect.Width + vBar - Width);
-			}
+			bounds.Y = (bounds.X + Cols[c].width);
 
-			if (rect.Y < HeightColhead)
-			{
-				_scrollVert.Value = (offsetVert -= HeightColhead - rect.Y);
-			}
-			else
-			{
-				int hBar = _scrollHori.Visible ? _scrollHori.Height : 0;
-				if (rect.Y + rect.Height + hBar > Height)
-					_scrollVert.Value = (offsetVert += rect.Y + rect.Height + hBar - Height);
-			}
-
-//			getTableWidth();
+			return bounds;
 		}
 
 		int getLeft()
@@ -1628,6 +1614,73 @@ namespace yata
 
 			return left;
 		}
+
+
+		void EnsureDisplayed(Cell cell)
+		{
+			var rect = getCellRectangle(cell);
+
+			int left = getLeft();
+
+			if (rect.X < left)
+			{
+				_scrollHori.Value -= left - rect.X;
+			}
+			else
+			{
+				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				if (rect.X + rect.Width + bar > Width)
+					_scrollHori.Value += rect.X + rect.Width + bar - Width;
+			}
+
+			if (rect.Y < HeightColhead)
+			{
+				_scrollVert.Value -= HeightColhead - rect.Y;
+			}
+			else
+			{
+				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+				if (rect.Y + rect.Height + bar > Height)
+					_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+			}
+
+//			getTableWidth();
+		}
+
+		void EnsureDisplayedRow(int r)
+		{
+			var bounds = getRowEdges(r);
+
+			if (bounds.X < HeightColhead)
+			{
+				_scrollVert.Value -= HeightColhead - bounds.X;
+			}
+			else
+			{
+				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+				if (bounds.Y + bar > Height)
+					_scrollVert.Value += bounds.Y + bar - Height;
+			}
+		}
+
+		void EnsureDisplayedCol(int c)
+		{
+			var bounds = getColEdges(c);
+
+			int left = getLeft();
+
+			if (bounds.X < left)
+			{
+				_scrollHori.Value -= left - bounds.X;
+			}
+			else
+			{
+				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				if (bounds.Y + bar > Width)
+					_scrollHori.Value += bounds.Y + bar - Width;
+			}
+		}
+
 
 /*		int getTableWidth()
 		{
@@ -1671,6 +1724,9 @@ namespace yata
 
 			if ((ModifierKeys & Keys.Control) != Keys.Control)
 				ClearCellSelects();
+
+			if (select)
+				EnsureDisplayedRow(r);
 
 			for (int c = 0; c != ColCount; ++c)
 				_cells[c,r].selected = select;
@@ -1716,6 +1772,9 @@ namespace yata
 
 			if ((ModifierKeys & Keys.Control) != Keys.Control)
 				ClearCellSelects();
+
+			if (select)
+				EnsureDisplayedCol(c);
 
 			for (int r = 0; r != RowCount; ++r)
 				_cells[c,r].selected = select;
