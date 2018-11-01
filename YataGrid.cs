@@ -137,8 +137,8 @@ namespace yata
 		{ get; set; }
 
 
-		readonly VScrollBar _scrollVert = new VScrollBar();
-		readonly HScrollBar _scrollHori = new HScrollBar();
+		readonly VScrollBar _scrollVert = new VScrollBar();// ScrollbarVert();
+		readonly HScrollBar _scrollHori = new HScrollBar();// ScrollbarHori();
 
 		int offsetVert;
 		int offsetHori;
@@ -226,6 +226,8 @@ namespace yata
 			}
 			else
 				_scrollVert.Value = offsetVert;
+
+//			Select();
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
@@ -237,6 +239,8 @@ namespace yata
 			}
 			else
 				_scrollHori.Value = offsetHori;
+
+//			Select();
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -345,9 +349,13 @@ namespace yata
 
 		/// <summary>
 		/// Scrolls the table vertically by the mousewheel.
+		/// @note Fired from the form's OnMouseWheel event to catch all
+		/// unhandled MouseWheel events hovered on the app (without firing
+		/// twice).
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnMouseWheel(MouseEventArgs e)
+//		protected override void OnMouseWheel(MouseEventArgs e)
+		internal void Scroll(MouseEventArgs e)
 		{
 //			var args = e as HandledMouseEventArgs;
 //			if (args != null)
@@ -390,7 +398,7 @@ namespace yata
 					}
 				}
 
-				OnMouseMove(e);
+				OnMouseMove(e); // update coords on the Statusbar
 			}
 
 //			base.OnMouseWheel(e);
@@ -1177,16 +1185,6 @@ namespace yata
 
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		internal void ForceScroll(MouseEventArgs e)
-		{
-			OnMouseWheel(e);
-		}
-
-
-		/// <summary>
 		/// Disables navigation etc. keys to allow table scrolling on certain
 		/// key-events.
 		/// </summary>
@@ -1879,4 +1877,39 @@ namespace yata
 			Refresh();
 		}
 	}
+
+
+
+/*	sealed class ScrollbarVert
+		:
+			VScrollBar
+	{
+		internal ScrollbarVert()
+		{
+			SetStyle(ControlStyles.StandardClick, true);
+			logfile.Log(GetStyle(ControlStyles.StandardClick).ToString());
+		}
+
+		protected override void OnClick(EventArgs e)
+		{
+			logfile.Log("OnClick"); // ffs.
+//			base.OnClick(e);
+		}
+
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			logfile.Log("OnMouseClick");
+//			base.OnMouseClick(e);
+		}
+	}
+
+	sealed class ScrollbarHori
+		:
+			HScrollBar
+	{
+		internal ScrollbarHori()
+		{
+			SetStyle(ControlStyles.StandardClick, true);
+		}
+	} */
 }

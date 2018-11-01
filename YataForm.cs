@@ -1578,7 +1578,7 @@ namespace yata
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			if (Table != null)
-				Table.ForceScroll(e);
+				Table.Scroll(e);
 
 //			base.OnMouseWheel(e);
 		}
