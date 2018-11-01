@@ -253,7 +253,6 @@ namespace yata
 
 			Refresh(); // table-drawing can tear without that.
 
-
 //			base.OnResize(e);
 		}
 
@@ -393,6 +392,8 @@ namespace yata
 
 				OnMouseMove(e);
 			}
+
+//			base.OnMouseWheel(e);
 		}
 
 
@@ -503,6 +504,7 @@ namespace yata
 						_graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 			}
+//			base.OnPaint(e);
 		}
 
 		/// <summary>
@@ -823,6 +825,11 @@ namespace yata
 
 				Changed = false;
 
+				_editor.Visible = false;
+
+				_scrollVert.Value =
+				_scrollHori.Value = 0;
+
 				FrozenCount = YataGrid.FreezeId;
 
 				Cols.Clear();
@@ -904,6 +911,7 @@ namespace yata
 				_labelid.BackColor = Colors.FrozenHead;
 
 				_labelid.Paint += labelid_Paint;
+				_labelid.MouseClick += (sender, e) => Select();
 
 				_panelCols.Controls.Add(_labelid);
 
@@ -915,6 +923,7 @@ namespace yata
 					_labelfirst.BackColor = Colors.FrozenHead;
 
 					_labelfirst.Paint += labelfirst_Paint;
+					_labelfirst.MouseClick += (sender, e) => Select();
 
 					_panelCols.Controls.Add(_labelfirst);
 
@@ -926,6 +935,7 @@ namespace yata
 						_labelsecond.BackColor = Colors.FrozenHead;
 
 						_labelsecond.Paint += labelsecond_Paint;
+						_labelsecond.MouseClick += (sender, e) => Select();
 
 						_panelCols.Controls.Add(_labelsecond);
 					}
@@ -1140,8 +1150,8 @@ namespace yata
 			int tab = 0;
 			for (; tab != tabs; ++tab)
 			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;	// NOTE: is quick and inaccurate (a lower val
-				if ((test = table.RowCount - 1) > widthRowhead)	// can actually be longer than a higher val).
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				if ((test = table.RowCount - 1) > widthRowhead)
 					widthRowhead = test;
 			}
 
@@ -1172,7 +1182,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void ForceScroll(MouseEventArgs e)
 		{
-//			base.OnMouseWheel(e); TODO: should probably call this.OnMouseWheel()
+			OnMouseWheel(e);
 		}
 
 
@@ -1490,6 +1500,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+			Select();
+
 			int left = getLeft();
 
 			if (   e.X > left          && e.X < WidthTable
@@ -1789,11 +1801,11 @@ namespace yata
 		/// <param name="e"></param>
 		void click_RowPanel(object sender, MouseEventArgs e)
 		{
-			if (_editor.Visible)
-			{
-				_editor.Visible = false;
-				Select();
-			}
+//			if (_editor.Visible)
+//			{
+			_editor.Visible = false;
+			Select();
+//			}
 
 			int r = (e.Y + offsetVert) / HeightRow;
 
@@ -1827,11 +1839,11 @@ namespace yata
 		/// <param name="e"></param>
 		void click_ColPanel(object sender, MouseEventArgs e)
 		{
-			if (_editor.Visible)
-			{
-				_editor.Visible = false;
-				Select();
-			}
+//			if (_editor.Visible)
+//			{
+			_editor.Visible = false;
+			Select();
+//			}
 
 			int x = e.X + offsetHori;
 

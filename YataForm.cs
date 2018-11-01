@@ -869,6 +869,8 @@ namespace yata
 		{
 			if (Table != null && Table.ColCount > 1)
 			{
+				Table.Select();
+
 				it_freeze2.Checked = false;
 
 				if (it_freeze1.Checked = !it_freeze1.Checked)
@@ -884,6 +886,8 @@ namespace yata
 		{
 			if (Table != null && Table.ColCount > 2)
 			{
+				Table.Select();
+
 				it_freeze1.Checked = false;
 
 				if (it_freeze2.Checked = !it_freeze2.Checked)
@@ -1575,6 +1579,8 @@ namespace yata
 		{
 			if (Table != null)
 				Table.ForceScroll(e);
+
+//			base.OnMouseWheel(e);
 		}
 		#endregion Events (override)
 	}
