@@ -212,7 +212,7 @@ namespace yata
 		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
-			logfile.Log("CreateTabPage()");
+			//logfile.Log("CreateTabPage()");
 
 			panel_ColorFill.Show();
 
@@ -272,7 +272,7 @@ namespace yata
 		/// <param name="e"></param>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			logfile.Log("tab_SelectedIndexChanged id= " + Tabs.SelectedIndex);
+			//logfile.Log("tab_SelectedIndexChanged id= " + Tabs.SelectedIndex);
 
 			if (Tabs.SelectedIndex != -1)
 			{

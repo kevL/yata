@@ -172,7 +172,7 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataGrid(YataForm f, string pfe)
 		{
-			logfile.Log("YataGrid() cTor");
+			//logfile.Log("YataGrid() cTor");
 
 //			DrawingControl.SetDoubleBuffered(this);
 			DoubleBuffered = true;
@@ -227,7 +227,11 @@ namespace yata
 			else
 				_scrollVert.Value = offsetVert;
 
-			Select(); // workaround: refocus the table (bar has to move > 1px)
+			Select(); // workaround: refocus the table (bar has to move > 0px)
+
+			var pt = PointToClient(Cursor.Position);
+			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
+			OnMouseMove(args); // update coords on the Statusbar
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
@@ -240,12 +244,16 @@ namespace yata
 			else
 				_scrollHori.Value = offsetHori;
 
-			Select(); // workaround: refocus the table (bar has to move > 1px)
+			Select(); // workaround: refocus the table (bar has to move > 0px)
+
+			var pt = PointToClient(Cursor.Position);
+			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
+			OnMouseMove(args); // update coords on the Statusbar
 		}
 
 		protected override void OnResize(EventArgs e)
 		{
-			logfile.Log("OnResize()");
+			//logfile.Log("OnResize()");
 
 			InitScrollers();
 
@@ -267,7 +275,7 @@ namespace yata
 		/// </summary>
 		void InitScrollers()
 		{
-			logfile.Log("InitScrollers()");
+			//logfile.Log("InitScrollers()");
 
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
@@ -348,7 +356,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Scrolls the table vertically by the mousewheel.
+		/// Scrolls the table by the mousewheel.
 		/// @note Fired from the form's OnMouseWheel event to catch all
 		/// unhandled MouseWheel events hovered on the app (without firing
 		/// twice).
@@ -397,8 +405,6 @@ namespace yata
 							_scrollHori.Value += _scrollHori.LargeChange;
 					}
 				}
-
-				OnMouseMove(e); // update coords on the Statusbar
 			}
 
 //			base.OnMouseWheel(e);
@@ -411,7 +417,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			logfile.Log("OnPaint()");
+			//logfile.Log("OnPaint()");
 
 			if (_init) return;
 
@@ -522,7 +528,7 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelColheads(IDeviceContext graphics)
 		{
-			logfile.Log("LabelColheads()");
+			//logfile.Log("LabelColheads()");
 
 			if (ColCount != 0) // safety.
 			{
@@ -546,7 +552,7 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelRowheads(IDeviceContext graphics)
 		{
-			logfile.Log("LabelRowheads()");
+			//logfile.Log("LabelRowheads()");
 
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
@@ -572,7 +578,7 @@ namespace yata
 		/// <param name="graphics"></param>
 		internal void LabelFrozen(Graphics graphics)
 		{
-			logfile.Log("LabelFrozen()");
+			//logfile.Log("LabelFrozen()");
 
 			if (RowCount != 0) // safety.
 			{
@@ -615,7 +621,7 @@ namespace yata
 		/// <returns>true if 2da loaded successfully perhaps</returns>
 		internal bool Load2da()
 		{
-			logfile.Log("Load2da()");
+			//logfile.Log("Load2da()");
 
 			Text = "Yata";
 
@@ -825,7 +831,7 @@ namespace yata
 
 		internal void Init(bool reload)
 		{
-			logfile.Log("Init()");
+			//logfile.Log("Init()");
 
 			if (reload)
 			{
@@ -1062,7 +1068,7 @@ namespace yata
 		/// </summary>
 		void CreateCols()
 		{
-			logfile.Log("CreateCols()");
+			//logfile.Log("CreateCols()");
 
 			ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
@@ -1097,7 +1103,7 @@ namespace yata
 		/// </summary>
 		void CreateRows()
 		{
-			logfile.Log("CreateRows()");
+			//logfile.Log("CreateRows()");
 
 			RowCount = _rows.Count;
 
@@ -1148,7 +1154,7 @@ namespace yata
 		/// </summary>
 		void SetRowheadWidth()
 		{
-			logfile.Log("SetRowheadWidth()");
+			//logfile.Log("SetRowheadWidth()");
 
 			YataGrid table;
 
