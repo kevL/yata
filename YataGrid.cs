@@ -1794,20 +1794,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Not really a point but the upper and lower bounds of a row.
-		/// </summary>
-		/// <param name="r"></param>
-		/// <returns></returns>
-		Point getRowEdges(int r)
-		{
-			var bounds = new Point();
-			bounds.X = HeightColhead + HeightRow * r - offsetVert;
-			bounds.Y = bounds.X + HeightRow;
-
-			return bounds;
-		}
-
-		/// <summary>
 		/// Not really a point but the left and right bounds of a col.
 		/// </summary>
 		/// <param name="c"></param>
@@ -1821,6 +1807,20 @@ namespace yata
 				bounds.X += Cols[col].width();
 			}
 			bounds.Y = (bounds.X + Cols[c].width());
+
+			return bounds;
+		}
+
+		/// <summary>
+		/// Not really a point but the upper and lower bounds of a row.
+		/// </summary>
+		/// <param name="r"></param>
+		/// <returns></returns>
+		Point getRowEdges(int r)
+		{
+			var bounds = new Point();
+			bounds.X = HeightColhead + HeightRow * r - offsetVert;
+			bounds.Y = bounds.X + HeightRow;
 
 			return bounds;
 		}
@@ -1852,45 +1852,39 @@ namespace yata
 			var rect = getCellRectangle(cell);
 
 			int left = getLeft();
+			int bar;
 
-			if (rect.X < left)
+			if (rect.X != left)
 			{
-				_scrollHori.Value -= left - rect.X;
-			}
-			else if (rect.X != left)
-			{
-				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
-				if (rect.X + rect.Width + bar > Width)
+				bar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				int right = Width - bar;
+
+				if (rect.X < left
+					|| (rect.Width > right - left
+						&& (rect.X > right || rect.X + left > (right - left) / 2)))
+				{
+					_scrollHori.Value -= left - rect.X;
+				}
+				else if (rect.X + rect.Width > right && rect.Width < right - left)
+				{
 					_scrollHori.Value += rect.X + rect.Width + bar - Width;
+				}
 			}
 
-			if (rect.Y < HeightColhead)
+			if (rect.Y != HeightColhead)
 			{
-				_scrollVert.Value -= HeightColhead - rect.Y;
-			}
-			else if (rect.Y != HeightColhead)
-			{
-				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
-				if (rect.Y + rect.Height + bar > Height)
-					_scrollVert.Value += rect.Y + rect.Height + bar - Height;
-			}
-
-//			getTableWidth();
-		}
-
-		void EnsureDisplayedRow(int r)
-		{
-			var bounds = getRowEdges(r);
-
-			if (bounds.X < HeightColhead)
-			{
-				_scrollVert.Value -= HeightColhead - bounds.X;
-			}
-			else if (bounds.X != HeightColhead)
-			{
-				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
-				if (bounds.Y + bar > Height)
-					_scrollVert.Value += bounds.Y + bar - Height;
+				if (rect.Y < HeightColhead)
+				{
+					_scrollVert.Value -= HeightColhead - rect.Y;
+				}
+				else
+				{
+					bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+					if (rect.Y + rect.Height + bar > Height)
+					{
+						_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+					}
+				}
 			}
 		}
 
@@ -1900,31 +1894,46 @@ namespace yata
 
 			int left = getLeft();
 
-			if (bounds.X < left)
-			{
-				_scrollHori.Value -= left - bounds.X;
-			}
-			else if (bounds.X != left)
+			if (bounds.X != left)
 			{
 				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
-				if (bounds.Y + bar > Width)
-					_scrollHori.Value += bounds.Y + bar - Width;
+				int right = Width - bar;
+
+				int width = bounds.Y - bounds.X;
+
+				if (bounds.X < left
+					|| (width > right - left
+						&& (bounds.X > right || bounds.X + left > (right - left) / 2)))
+				{
+					_scrollHori.Value -= left - bounds.X;
+				}
+				else if (bounds.Y > right && width < right - left)
+				{
+					_scrollHori.Value += bounds.X + width + bar - Width;
+				}
 			}
 		}
 
-
-/*		int getTableWidth()
+		void EnsureDisplayedRow(int r)
 		{
-			int w = WidthRowhead;
-			foreach (var col in Cols)
+			var bounds = getRowEdges(r);
+
+			if (bounds.X != HeightColhead)
 			{
-				w += col.width;
+				if (bounds.X < HeightColhead)
+				{
+					_scrollVert.Value -= HeightColhead - bounds.X;
+				}
+				else
+				{
+					int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+					if (bounds.Y + bar > Height)
+					{
+						_scrollVert.Value += bounds.Y + bar - Height;
+					}
+				}
 			}
-			logfile.Log("w= " + w);
-			logfile.Log("Width= " + Width);
-			logfile.Log("Right= " + Right);
-			return w;
-		} */
+		}
 
 
 		/// <summary>
