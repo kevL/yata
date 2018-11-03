@@ -993,192 +993,193 @@ namespace yata
 		#endregion Font menu
 
 
-		internal void PrintInfo(int id, int col, string info)
-		{
-			string coords = String.Empty;
-
-			if (id != -1)
-				coords = "id= " + id + " col= " + col;
-
-			statusbar_label_Coords.Text = coords;
-			statusbar_label_Info  .Text = info;
-		}
-
 		#region Crafting info
 		/// <summary>
 		/// Mouseover datacells prints info to the statusbar if Crafting.2da is
 		/// loaded.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void PrintCraftInfo(object sender, DataGridViewCellEventArgs e)
+		/// <param name="id"></param>
+		/// <param name="col"></param>
+		internal void PrintInfo(int id, int col = -1)
 		{
-/*			int id  = e.RowIndex;
-			int col = e.ColumnIndex;
+			string st = String.Empty;
 
-			statusbar_label_Coords.Text = "id= " + id + " col= " + col;
-
-			if (Table != null && Table.Craft)
+			if (id != -1)
 			{
-				string info = String.Empty;
+				statusbar_label_Coords.Text = "id= " + id + " col= " + col;
 
-				if (   id  > -1 && id  < Table.Rows.Count - 1
-					&& col > -1 && col < Table.Columns.Count)
-				{
-					object val; int result;
+				if (Table.Craft && id < Table.RowCount && col < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
+					statusbar_label_Info.Text = getCraftInfo(id, col);
+				else
+					statusbar_label_Info.Text = st;
+			}
+			else
+			{
+				statusbar_label_Coords.Text =
+				statusbar_label_Info  .Text = st;
+			}
+		}
 
-					switch (col)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="col"></param>
+		/// <returns></returns>
+		string getCraftInfo(int id, int col)
+		{
+			string info = "n/a";
+
+			string val;
+			int result;
+
+			switch (col)
+			{
+//				case -1: // row-header
+//				case  0: // id
+
+				case  1: // "CATEGORY"
+					if (it_PathSpells2da.Checked)
 					{
-//						case -1: // row-header
-//						case  0: // id
-
-						case  1: // "CATEGORY"
-							if (it_PathSpells2da.Checked)
-							{
-								if ((val = Table.Rows[id].Cells[col].Value) != null
-									&& Int32.TryParse(val.ToString(), out result)
-									&& result < CraftInfo.spellLabels.Count)
-								{
-									info = Table.Columns[col].HeaderCell.Value + ": "
-										 + CraftInfo.spellLabels[result];
-								}
-							}
-							break;
-
-//						case  2: // "REAGENTS"
-
-						case  3: // "TAGS"
-							if ((val = Table.Rows[id].Cells[col].Value) != null)
-							{
-								string tags = val.ToString();
-								if (tags.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
-								{
-									if (it_PathBaseItems2da.Checked)
-									{
-										info = Table.Columns[col].HeaderCell.Value + ": (base) ";
-
-										string[] array = tags.Substring(1).Split(','); // lose the "B"
-										for (int tag = 0; tag != array.Length; ++tag)
-										{
-											if (Int32.TryParse(array[tag], out result)
-												&& result < CraftInfo.tagLabels.Count)
-											{
-												info += CraftInfo.tagLabels[result];
-
-												if (tag != array.Length - 1)
-													info += ", ";
-											}
-										}
-									}
-								}
-								else // is a TCC item-type
-								{
-									info = Table.Columns[col].HeaderCell.Value + ": (tcc) ";
-
-									if (tags == Constants.Stars)
-									{
-										info += CraftInfo.GetTccType(0); // TCC_TYPE_NONE
-									}
-									else
-									{
-										string[] array = tags.Split(',');
-										for (int tag = 0; tag != array.Length; ++tag)
-										{
-											if (Int32.TryParse(array[tag], out result))
-											{
-												info += CraftInfo.GetTccType(result);
-
-												if (tag != array.Length - 1)
-													info += ", ";
-											}
-										}
-									}
-								}
-							}
-							break;
-
-						case  4: // "EFFECTS"
-							if (it_PathItemPropDef2da.Checked)
-							{
-								if ((val = Table.Rows[id].Cells[col].Value) != null)
-								{
-									string effects = val.ToString();
-									if (effects != Constants.Stars)
-									{
-										info = Table.Columns[col].HeaderCell.Value + ": ";
-
-										string par = String.Empty;
-										int pos;
-
-										string[] ips = effects.Split(';');
-										for (int ip = 0; ip != ips.Length; ++ip)
-										{
-											par = ips[ip];
-											if ((pos = par.IndexOf(',')) != -1)
-											{
-												if (Int32.TryParse(par.Substring(0, pos), out result)
-													&& result < CraftInfo.ipLabels.Count)
-												{
-													info += CraftInfo.ipLabels[result]
-														  + CraftInfo.GetEncodedParsDescription(par);
-
-													if (ip != ips.Length - 1)
-														info += ", ";
-												}
-											}
-											else // is a PropertySet preparation val.
-											{
-												info += "PropertySet val=" + par; // TODO: description for par.
-											}
-										}
-									}
-								}
-							}
-							break;
-
-//						case  5: // "OUTPUT"
-
-						case  6: // "SKILL"
-							if (it_PathFeat2da.Checked)
-							{
-								if ((val = Table.Rows[id].Cells[col].Value) != null
-									&& Int32.TryParse(val.ToString(), out result))
-								{
-									object cat = Table.Rows[id].Cells[1].Value;
-									if (cat != null)
-									{
-										int result2;
-										if (Int32.TryParse(cat.ToString(), out result2)) // is triggered by spell id
-										{
-											if (result < CraftInfo.featsLabels.Count)
-											{
-												info = Table.Columns[col].HeaderCell.Value + ": "
-													 + CraftInfo.featsLabels[result];
-											}
-										}
-										else // is triggered NOT by spell - but by mold-tag, or is Alchemy or Distillation
-										{
-											if (result < CraftInfo.skillLabels.Count)
-											{
-												info = Table.Columns[col].HeaderCell.Value + ": "
-													 + CraftInfo.skillLabels[result];
-											}
-										}
-									}
-								}
-							}
-							break;
-
-//						case  7: // "LEVEL"
-//						case  8: // "EXCLUDE"
-//						case  9: // "XP"
-//						case 10: // "GP"
-//						case 11: // "DISABLE"
+						if (!String.IsNullOrEmpty(val = Table[col,id].text)
+							&& Int32.TryParse(val, out result)
+							&& result < CraftInfo.spellLabels.Count)
+						{
+							info = Table.Cols[col].text + ": "
+								 + CraftInfo.spellLabels[result];
+						}
 					}
-				}
+					break;
 
-				statusbar_label_Info.Text = info;
-			} */
+//				case  2: // "REAGENTS"
+
+				case  3: // "TAGS"
+					if (!String.IsNullOrEmpty(val = Table[col,id].text))
+					{
+						if (val.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
+						{
+							if (it_PathBaseItems2da.Checked)
+							{
+								info = Table.Cols[col].text + ": (base) ";
+
+								string[] array = val.Substring(1).Split(','); // lose the "B"
+								for (int tag = 0; tag != array.Length; ++tag)
+								{
+									if (Int32.TryParse(array[tag], out result)
+										&& result < CraftInfo.tagLabels.Count)
+									{
+										info += CraftInfo.tagLabels[result];
+
+										if (tag != array.Length - 1)
+											info += ", ";
+									}
+								}
+							}
+						}
+						else // is a TCC item-type
+						{
+							info = Table.Cols[col].text + ": (tcc) ";
+
+							if (val == Constants.Stars)
+							{
+								info += CraftInfo.GetTccType(0); // TCC_TYPE_NONE
+							}
+							else
+							{
+								string[] array = val.Split(',');
+								for (int tag = 0; tag != array.Length; ++tag)
+								{
+									if (Int32.TryParse(array[tag], out result))
+									{
+										info += CraftInfo.GetTccType(result);
+
+										if (tag != array.Length - 1)
+											info += ", ";
+									}
+								}
+							}
+						}
+					}
+					break;
+
+				case  4: // "EFFECTS"
+					if (it_PathItemPropDef2da.Checked)
+					{
+						if (!String.IsNullOrEmpty(val = Table[col,id].text))
+						{
+							if (val != Constants.Stars)
+							{
+								info = Table.Cols[col].text + ": ";
+
+								string par = String.Empty;
+								int pos;
+
+								string[] ips = val.Split(';');
+								for (int ip = 0; ip != ips.Length; ++ip)
+								{
+									par = ips[ip];
+									if ((pos = par.IndexOf(',')) != -1)
+									{
+										if (Int32.TryParse(par.Substring(0, pos), out result)
+											&& result < CraftInfo.ipLabels.Count)
+										{
+											info += CraftInfo.ipLabels[result]
+												  + CraftInfo.GetEncodedParsDescription(par);
+
+											if (ip != ips.Length - 1)
+												info += ", ";
+										}
+									}
+									else // is a PropertySet preparation val.
+									{
+										info += "PropertySet val=" + par; // TODO: description for par.
+									}
+								}
+							}
+						}
+					}
+					break;
+
+//				case  5: // "OUTPUT"
+
+				case  6: // "SKILL"
+					if (it_PathFeat2da.Checked)
+					{
+						if (!String.IsNullOrEmpty(val = Table[col,id].text)
+							&& Int32.TryParse(val, out result))
+						{
+							string cat = Table[1, id].text;
+							if (!String.IsNullOrEmpty(cat))
+							{
+								int result2;
+								if (Int32.TryParse(cat, out result2)) // is triggered by spell id
+								{
+									if (result < CraftInfo.featsLabels.Count)
+									{
+										info = Table.Cols[col].text + ": "
+											 + CraftInfo.featsLabels[result];
+									}
+								}
+								else // is triggered NOT by spell - but by mold-tag, or is Alchemy or Distillation
+								{
+									if (result < CraftInfo.skillLabels.Count)
+									{
+										info = Table.Cols[col].text + ": "
+											 + CraftInfo.skillLabels[result];
+									}
+								}
+							}
+						}
+					}
+					break;
+
+//				case  7: // "LEVEL"
+//				case  8: // "EXCLUDE"
+//				case  9: // "XP"
+//				case 10: // "GP"
+//				case 11: // "DISABLE"
+			}
+			return info;
 		}
 
 		/// <summary>

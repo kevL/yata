@@ -58,21 +58,21 @@ namespace yata
 		int HeightRow;
 
 		internal int ColCount;
-		int RowCount;
+		internal int RowCount;
 
 		string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
 		{ get; set; }
 
 		readonly List<string[]> _rows = new List<string[]>();
 
-		readonly List<Col> Cols = new List<Col>();
+		internal readonly List<Col> Cols = new List<Col>();
 		readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
 		/// <summary>
 		/// Gets the cell at pos [c,r].
 		/// </summary>
-		Cell this[int c, int r]
+		internal Cell this[int c, int r]
 		{
 			get { return _cells[c,r]; }
 			set { _cells[c,r] = value; }
@@ -1506,12 +1506,15 @@ namespace yata
 		{
 			Select();
 
+			int x = e.X + offsetHori;
+			int y = e.Y + offsetVert;
+
 			int left = getLeft();
 
-			if (   e.X > left          && e.X < WidthTable
-				&& e.Y > HeightColhead && e.Y < HeightTable)
+			if (   x > left          && x < WidthTable
+				&& y > HeightColhead && y < HeightTable)
 			{
-				var coords = getCoords(e.X, e.Y, left);
+				var coords = getCoords(x, y, left);
 				var cell = _cells[coords.c, coords.r];
 
 				EnsureDisplayed(cell);
@@ -1583,31 +1586,39 @@ namespace yata
 
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			int left = getLeft();
-
-			if (   e.X > left          && e.X < WidthTable
-				&& e.Y > HeightColhead && e.Y < HeightTable)
+			if (!_init)
 			{
-				var coords = getCoords(e.X, e.Y, left);
-				_f.PrintInfo(coords.r, coords.c, "n/a");
-			}
-			else
-				_f.PrintInfo(-1,-1,"");
+				int x = e.X + offsetHori;
+				int y = e.Y + offsetVert;
 
+				int left = getLeft();
+
+				if (   x > left          && x < WidthTable  && e.X < Width  - (_scrollVert.Visible ? _scrollVert.Width  : 0)
+					&& y > HeightColhead && y < HeightTable && e.Y < Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
+				{
+					var coords = getCoords(x, y, left);
+					_f.PrintInfo(coords.r, coords.c);
+				}
+				else
+					_f.PrintInfo(-1);
+			}
 //			base.OnMouseMove(e);
 		}
 
 
 		void t1_Tick(object sender, EventArgs e)
 		{
-			int left = getLeft();
-			var rect = new Rectangle(left,
-									 HeightColhead,
-									 Width - left - (_scrollVert.Visible ? _scrollVert.Width : 0),
-									 Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0));
+			if (!_init)
+			{
+				int left = getLeft();
+				var rect = new Rectangle(left,
+										 HeightColhead,
+										 Width  - left          - (_scrollVert.Visible ? _scrollVert.Width  : 0),
+										 Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0));
 
-			if (!rect.Contains(PointToClient(Cursor.Position)))
-				_f.PrintInfo(-1,-1,"");
+				if (!rect.Contains(PointToClient(Cursor.Position)))
+					_f.PrintInfo(-1);
+			}
 		}
 
 
@@ -1621,7 +1632,7 @@ namespace yata
 		{
 			var coords = new Coords();
 
-			x += offsetHori;
+//			x += offsetHori;
 			coords.c = FrozenCount - 1;
 			do
 			{
@@ -1629,8 +1640,10 @@ namespace yata
 			}
 			while ((left += Cols[coords.c].width) < x);
 
+
 			int top = HeightColhead;
-			y += offsetVert;
+
+//			y += offsetVert;
 			coords.r = 0;
 			while ((top += HeightRow) < y)
 			{
