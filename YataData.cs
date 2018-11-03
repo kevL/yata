@@ -9,24 +9,30 @@
 		internal string text; // the header text
 
 		int _width;
-		internal int width
-		{
-			get { return _width; }
-			set
-			{
-				if (value > _width) // TODO: not exactly. If user shortens a field '_width' could decrease.
-					_width = value;
-			}
-		}
 
 /*		internal Col() //int c
 		{
 //			id = c;
 		} */
 
-		internal void SetColWidth(int w)
+		/// <summary>
+		/// Sets the width.
+		/// </summary>
+		/// <param name="w">the width in pixels</param>
+		/// <param name="force">true to allow decreasing the width</param>
+		internal void width(int w, bool force = false)
 		{
-			_width = w;
+			if (force || w > _width)
+				_width = w;
+		}
+
+		/// <summary>
+		/// Gets the width.
+		/// </summary>
+		/// <returns></returns>
+		internal int width()
+		{
+			return _width;
 		}
 	}
 

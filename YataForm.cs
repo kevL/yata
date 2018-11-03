@@ -37,6 +37,8 @@ namespace yata
 		{ get; set; }
 		#endregion Fields & Properties
 
+		internal Font FontAccent;
+
 
 		#region cTor
 		/// <summary>
@@ -67,6 +69,8 @@ namespace yata
 			{
 				Font = Settings._font;
 			}
+
+			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
 			if (Settings._font2 != null)
 			{
@@ -235,7 +239,7 @@ namespace yata
 				tab.Controls.Add(Table);
 				Tabs.SelectedTab = tab;
 
-				Table.Init(false);
+				Table.Init();
 
 				//DrawingControl.ResumeDrawing(table);
 			}
@@ -259,7 +263,7 @@ namespace yata
 					if ((wT = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, Font).Width) > w)
 						w = wT;
 				}
-				Tabs.ItemSize = new Size(w + 10,0);
+				Tabs.ItemSize = new Size(w + 8,0);
 				Tabs.Refresh(); // prevent text-drawing glitches ...
 			}
 		}
@@ -902,6 +906,11 @@ namespace yata
 
 
 		#region Font menu
+		/// <summary>
+		/// Opens the FontPicker form.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void fontclick_Font(object sender, EventArgs e)
 		{
 			var f = Application.OpenForms["FontPickerForm"];
@@ -932,7 +941,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the form's font to a default Font.
+		/// Sets the form's font to the default Font.
 		/// See also: FontPickerForm.doFont()
 		/// </summary>
 		/// <param name="sender"></param>
@@ -954,7 +963,7 @@ namespace yata
 		/// <param name="font"></param>
 		internal void doFont(Font font)
 		{
-/*			DrawingControl.SuspendDrawing(this);
+			DrawingControl.SuspendDrawing(this);
 
 			int w = Width; // grab these before auto-sizing happens -->
 			int h = Height;
@@ -965,12 +974,11 @@ namespace yata
 			int h2 = statusbar.Height;
 
 			Font = font; // rely on GC here
+			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
 			if (Table != null)
 			{
-				opsclick_AutosizeCols(null, EventArgs.Empty);
-				Table.SetRowSize();
-
+				Table.Calibrate();
 				SetTabSize();
 			}
 
@@ -984,11 +992,11 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(this);
 
-			if (Table != null)
-			{
-				Table.DisplaySelected();
-				Refresh(); // for big tables ...
-			} */
+//			if (Table != null)
+//			{
+//				Table.DisplaySelected();
+//				Refresh(); // for big tables ...
+//			}
 		}
 		#endregion Font menu
 
