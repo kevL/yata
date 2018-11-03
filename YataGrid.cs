@@ -1037,10 +1037,17 @@ namespace yata
 				widthRowhead = TextRenderer.MeasureText(graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
 			}
 
+			//logfile.Log(". widthRowhead= " + widthRowhead);
 			for (tab = 0; tab != tabs; ++tab)
 			{
 				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
 				table.WidthRowhead = widthRowhead;
+				
+				if (table._panelRows != null)
+					table._panelRows.Width = widthRowhead;
+
+				if (table._labelid != null)
+					table._labelid.Width = widthRowhead;
 			}
 		}
 
