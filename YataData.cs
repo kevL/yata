@@ -7,6 +7,7 @@
 	{
 //		internal int id;
 		internal string text; // the header text
+		internal bool selected;
 
 		int _width;
 
@@ -43,6 +44,7 @@
 	{
 //		internal int id;
 		internal string[] fields; // the row's fields
+		internal bool selected;
 
 		internal Row(string[] cells) //int r,
 		{
@@ -57,11 +59,10 @@
 	sealed class Cell
 	{
 		internal string text; // the field's text
+		internal bool selected;
 
 		internal int x;
 		internal int y;
-
-		internal bool selected;
 
 		internal Cell(int c, int r, string field)
 		{

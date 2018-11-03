@@ -1412,6 +1412,11 @@ namespace yata
 								  it_PathDisease2da,
 								  1);
 
+			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_ammocost.2da"),
+								  CraftInfo.ipammoLabels,
+								  it_PathIprpAmmoCost2da,
+								  2);
+
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
 								  CraftInfo.ipfeatsLabels,
 								  it_PathIprpFeats2da,

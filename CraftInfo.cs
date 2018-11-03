@@ -80,6 +80,12 @@ namespace yata
 		/// </summary>
 		internal static List<string> ipfeatsLabels = new List<string>();
 
+		/// <summary>
+		/// A list that holds labels for ammo in Iprp_AmmoCost.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> ipammoLabels = new List<string>();
+
 
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
@@ -715,10 +721,14 @@ namespace yata
 								case  0: info += "bludg";      break;
 								case  1: info += "pierc";      break;
 								case  2: info += "slash";      break;
+								case  5: info += "magical^";   break;
 								case  6: info += "acid";       break;
 								case  7: info += "cold";       break;
+								case  8: info += "divine^";    break;
 								case  9: info += "electrical"; break;
 								case 10: info += "fire";       break;
+								case 11: info += "negative^";  break;
+								case 12: info += "positive^";  break;
 								case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
 								default: info += "bork"; break;
@@ -839,10 +849,14 @@ namespace yata
 								case  0: info += " bludg";      break;
 								case  1: info += " pierc";      break;
 								case  2: info += " slash";      break;
+								case  5: info += " magical^";   break;
 								case  6: info += " acid";       break;
 								case  7: info += " cold";       break;
+								case  8: info += " divine^";    break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
+								case 11: info += " negative^";  break;
+								case 12: info += " positive^";  break;
 								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
@@ -958,10 +972,14 @@ namespace yata
 								case  0: info += " bludg";      break;
 								case  1: info += " pierc";      break;
 								case  2: info += " slash";      break;
+								case  5: info += " magical^";   break;
 								case  6: info += " acid";       break;
 								case  7: info += " cold";       break;
+								case  8: info += " divine^";    break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
+								case 11: info += " negative^";  break;
+								case 12: info += " positive^";  break;
 								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
@@ -1088,10 +1106,14 @@ namespace yata
 								case  0: info += " bludg";      break;
 								case  1: info += " pierc";      break;
 								case  2: info += " slash";      break;
+								case  5: info += " magical^";   break;
 								case  6: info += " acid";       break;
 								case  7: info += " cold";       break;
+								case  8: info += " divine^";    break;
 								case  9: info += " electrical"; break;
 								case 10: info += " fire";       break;
+								case 11: info += " negative^";  break;
+								case 12: info += " positive^";  break;
 								case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
 								default: info += " bork"; break;
@@ -1194,10 +1216,14 @@ namespace yata
 								case  0: info += "bludg";      break;
 								case  1: info += "pierc";      break;
 								case  2: info += "slash";      break;
+								case  5: info += "magical^";   break;
 								case  6: info += "acid";       break;
 								case  7: info += "cold";       break;
+								case  8: info += "divine^";    break;
 								case  9: info += "electrical"; break;
 								case 10: info += "fire";       break;
+								case 11: info += "negative^";  break;
+								case 12: info += "positive^";  break;
 								case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
 								default: info += "bork"; break;
@@ -1265,8 +1291,8 @@ namespace yata
 								case  0: info += "bludg";      break;
 								case  1: info += "pierc";      break;
 								case  2: info += "slash";      break;
-								case  3: info += "subdual (don't use this)";  break;
-								case  4: info += "physical (don't use this)"; break;
+//								case  3: info += "subdual (don't use this)";  break;
+//								case  4: info += "physical (don't use this)"; break;
 								case  5: info += "magical";    break;
 								case  6: info += "acid";       break;
 								case  7: info += "cold";       break;
@@ -1333,8 +1359,8 @@ namespace yata
 								case  0: info += "bludg";      break;
 								case  1: info += "pierc";      break;
 								case  2: info += "slash";      break;
-								case  3: info += "subdual (don't use this)";  break;
-								case  4: info += "physical (don't use this)"; break;
+//								case  3: info += "subdual (don't use this)";  break;
+//								case  4: info += "physical (don't use this)"; break;
 								case  5: info += "magical";    break;
 								case  6: info += "acid";       break;
 								case  7: info += "cold";       break;
@@ -2490,31 +2516,18 @@ namespace yata
 						// Iprp_AmmoType.2da (appears to be irrelevant - see Iprp_AmmoCost.2da the CostTable)
 						case 61: // ITEM_PROPERTY_UNLIMITED_AMMUNITION
 							info += "[1](";
-							switch (GetPar(pars, 0))
+							if ((par = GetPar(pars, 0)) != -1)
 							{
-								//int IP_CONST_UNLIMITEDAMMO_BASIC        =  1;
-								//int IP_CONST_UNLIMITEDAMMO_1D6FIRE      =  2;
-								//int IP_CONST_UNLIMITEDAMMO_1D6COLD      =  3;
-								//int IP_CONST_UNLIMITEDAMMO_1D6LIGHT     =  4;
-								//int IP_CONST_UNLIMITEDAMMO_NATURES_RAGE =  5;
-								//int IP_CONST_UNLIMITEDAMMO_PLUS1        = 11;
-								//int IP_CONST_UNLIMITEDAMMO_PLUS2        = 12;
-								//int IP_CONST_UNLIMITEDAMMO_PLUS3        = 13;
-								//int IP_CONST_UNLIMITEDAMMO_PLUS4        = 14;
-								//int IP_CONST_UNLIMITEDAMMO_PLUS5        = 15;
-								case  1: info += "basic";          break;
-								case  2: info += "1d6 fire";       break;
-								case  3: info += "1d6 cold";       break;
-								case  4: info += "1d6 electrical"; break;
-								case  5: info += "naturerage";     break;
-								case 11: info += "+1 dam";         break;
-								case 12: info += "+2 dam";         break;
-								case 13: info += "+3 dam";         break;
-								case 14: info += "+4 dam";         break;
-								case 15: info += "+5 dam";         break;
-
-								default: info += "bork"; break;
+								if (ipammoLabels.Count != 0
+									&& par < ipammoLabels.Count)
+								{
+									info += ipammoLabels[par];
+								}
+								else
+									info += par.ToString();
 							}
+							else
+								info += "bork";
 							break;
 
 						// Returns Item property limit use by alignment group. You must specify the

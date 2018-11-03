@@ -76,6 +76,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
 		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
+		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -145,6 +146,7 @@
 			this.separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_PathClasses2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathDisease2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathIprpAmmoCost2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpFeats2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
@@ -347,6 +349,7 @@
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
+			this.tb_Search.Text = "search";
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
 			// cb_SearchOption
@@ -472,6 +475,7 @@
 			this.separator_6,
 			this.it_PathClasses2da,
 			this.it_PathDisease2da,
+			this.it_PathIprpAmmoCost2da,
 			this.it_PathIprpFeats2da,
 			this.it_PathIprpOnHitSpell2da,
 			this.it_PathIprpSpells2da,
@@ -546,6 +550,13 @@
 			this.it_PathDisease2da.Name = "it_PathDisease2da";
 			this.it_PathDisease2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathDisease2da.Text = "path Disease.2da";
+			// 
+			// it_PathIprpAmmoCost2da
+			// 
+			this.it_PathIprpAmmoCost2da.Enabled = false;
+			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
+			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathIprpAmmoCost2da.Text = "path Iprp_AmmoCost.2da";
 			// 
 			// it_PathIprpFeats2da
 			// 

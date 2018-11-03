@@ -1621,74 +1621,80 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			Select();
-
-			int x = e.X + offsetHori;
-			int y = e.Y + offsetVert;
-
-			int left = getLeft();
-
-			if (   x > left          && x < WidthTable
-				&& y > HeightColhead && y < HeightTable)
+			if (e.Button == MouseButtons.Left)
 			{
-				var coords = getCoords(x, y, left);
-				var cell = _cells[coords.X, coords.Y];
+				Select();
 
-				EnsureDisplayed(cell);
+				foreach (var row in Rows)
+					row.selected = false;
 
-				if ((ModifierKeys & Keys.Control) == Keys.Control)
+				int x = e.X + offsetHori;
+				int y = e.Y + offsetVert;
+
+				int left = getLeft();
+
+				if (   x > left          && x < WidthTable
+					&& y > HeightColhead && y < HeightTable)
 				{
-					if (_editor.Visible)
+					var coords = getCoords(x, y, left);
+					var cell = _cells[coords.X, coords.Y];
+
+					EnsureDisplayed(cell);
+
+					if ((ModifierKeys & Keys.Control) == Keys.Control)
 					{
-						SetCellText();
-						_editor.Visible = false;
-						Select();
+						if (_editor.Visible)
+						{
+							SetCellText();
+							_editor.Visible = false;
+							Select();
+						}
+
+						cell.selected = !cell.selected;
 					}
-
-					cell.selected = !cell.selected;
-				}
-				else if (cell.selected)
-				{
-					if (_editor.Visible && cell != _editcell)
+					else if (cell.selected)
 					{
-						SetCellText();
-						_editor.Visible = false;
-						Select();
+						if (_editor.Visible && cell != _editcell)
+						{
+							SetCellText();
+							_editor.Visible = false;
+							Select();
+						}
+						else
+						{
+							if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+							{
+								_editcell = cell;
+
+								var rect = getCellRectangle(cell);
+								_editor.Left   = rect.X + 6;
+								_editor.Top    = rect.Y + 4;
+								_editor.Width  = rect.Width - 7;
+								_editor.Height = rect.Height;
+
+								_editor.Visible = true;
+								_editor.Text = cell.text;
+								_editor.SelectionStart = 0; // because .NET
+								_editor.SelectionStart = _editor.Text.Length;
+							}
+							_editor.Focus();
+						}
 					}
 					else
 					{
-						if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+						if (_editor.Visible)
 						{
-							_editcell = cell;
-
-							var rect = getCellRectangle(cell);
-							_editor.Left   = rect.X + 6;
-							_editor.Top    = rect.Y + 4;
-							_editor.Width  = rect.Width - 7;
-							_editor.Height = rect.Height;
-
-							_editor.Visible = true;
-							_editor.Text = cell.text;
-							_editor.SelectionStart = 0; // because .NET
-							_editor.SelectionStart = _editor.Text.Length;
+							SetCellText();
+							_editor.Visible = false;
+							Select();
 						}
-						_editor.Focus();
-					}
-				}
-				else
-				{
-					if (_editor.Visible)
-					{
-						SetCellText();
-						_editor.Visible = false;
-						Select();
+
+						ClearCellSelects();
+						cell.selected = true;
 					}
 
-					ClearCellSelects();
-					cell.selected = true;
+					Refresh();
 				}
-
-				Refresh();
 			}
 
 //			base.OnMouseClick(e);
@@ -1743,7 +1749,6 @@ namespace yata
 		{
 			var coords = new Point();
 
-//			x += offsetHori;
 			coords.X = FrozenCount - 1;
 			do
 			{
@@ -1754,7 +1759,6 @@ namespace yata
 
 			int top = HeightColhead;
 
-//			y += offsetVert;
 			coords.Y = 0;
 			while ((top += HeightRow) < y)
 			{
@@ -1931,89 +1935,209 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles a mouseclick on the rowhead. Selects or deselects a row.
-		/// Fires on the rowhead panel.
+		/// Handles a mouseclick on the rowhead. Selects or deselects row(s).
+		/// Fires only on the rowhead panel.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_RowPanel(object sender, MouseEventArgs e)
 		{
-//			if (_editor.Visible)
-//			{
-			_editor.Visible = false;
-			Select();
-//			}
-
-			int r = (e.Y + offsetVert) / HeightRow;
-
-			bool select = false;
-			for (int c = 0; c != ColCount; ++c)
+			if (e.Button == MouseButtons.Left)
 			{
-				if (!_cells[c,r].selected)
+//				if (_editor.Visible)
+//				{
+				_editor.Visible = false;
+				Select();
+//				}
+
+				int r = (e.Y + offsetVert) / HeightRow;
+
+				bool select = false;
+
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
-					select = true;
-					break;
+					for (int c = 0; c != ColCount; ++c)
+					{
+						if (!_cells[c,r].selected)
+						{
+							select = true;
+							break;
+						}
+					}
 				}
+				else
+					select = true;
+
+
+				if ((ModifierKeys & Keys.Control) != Keys.Control)
+				{
+					ClearCellSelects();
+				}
+
+				if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+				{
+					int sel = getSelectedRow();
+					if (sel != -1)
+					{
+						int start, stop;
+						if (sel < r)
+						{
+							start = sel;
+							stop  = r;
+						}
+						else
+						{
+							start = r;
+							stop  = sel;
+						}
+
+						while (start != stop + 1)
+						{
+							if (start != r) // done below
+							{
+								for (int col = 0; col != ColCount; ++col)
+								{
+									_cells[col, start].selected = true;
+								}
+							}
+							++start;
+						}
+					}
+				}
+				else
+				{
+					foreach (var row in Rows)
+						row.selected = false;
+
+					Rows[r].selected = select;
+				}
+
+				if (select)
+				{
+					EnsureDisplayedRow(r);
+				}
+
+				for (int c = 0; c != ColCount; ++c)
+					_cells[c,r].selected = select;
+
+				Refresh();
 			}
+		}
 
-			if ((ModifierKeys & Keys.Control) != Keys.Control)
-				ClearCellSelects();
-
-			if (select)
-				EnsureDisplayedRow(r);
-
-			for (int c = 0; c != ColCount; ++c)
-				_cells[c,r].selected = select;
-
-			Refresh();
+		int getSelectedRow()
+		{
+			for (int r = 0; r != RowCount; ++r)
+			{
+				if (Rows[r].selected)
+					return r;
+			}
+			return -1;
 		}
 
 		/// <summary>
-		/// Handles a mouseclick on the colhead. Selects or deselects a col.
-		/// Fires on the colhead panel.
+		/// Handles a mouseclick on the colhead. Selects or deselects col(s).
+		/// Fires only on the colhead panel.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_ColPanel(object sender, MouseEventArgs e)
 		{
-//			if (_editor.Visible)
-//			{
-			_editor.Visible = false;
-			Select();
-//			}
-
-			int x = e.X + offsetHori;
-
-			int left = getLeft();
-
-			int c = FrozenCount - 1;
-			do
+			if (e.Button == MouseButtons.Left)
 			{
-				++c;
-			}
-			while ((left += Cols[c].width()) < x);
+//				if (_editor.Visible)
+//				{
+				_editor.Visible = false;
+				Select();
+//				}
 
+				int x = e.X + offsetHori;
 
-			bool select = false;
-			for (int r = 0; r != RowCount; ++r)
-			{
-				if (!_cells[c,r].selected)
+				int left = getLeft();
+
+				int c = FrozenCount - 1;
+				do
 				{
-					select = true;
-					break;
+					++c;
 				}
+				while ((left += Cols[c].width()) < x);
+
+
+				bool select = false;
+
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
+				{
+					for (int r = 0; r != RowCount; ++r)
+					{
+						if (!_cells[c,r].selected)
+						{
+							select = true;
+							break;
+						}
+					}
+				}
+				else
+					select = true;
+
+
+				if ((ModifierKeys & Keys.Control) != Keys.Control)
+					ClearCellSelects();
+
+				if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+				{
+					int sel = getSelectedCol();
+					if (sel != -1)
+					{
+						int start, stop;
+						if (sel < c)
+						{
+							start = sel;
+							stop  = c;
+						}
+						else
+						{
+							start = c;
+							stop  = sel;
+						}
+
+						while (start != stop + 1)
+						{
+							if (start != c) // done below
+							{
+								for (int row = 0; row != RowCount; ++row)
+								{
+									_cells[start, row].selected = true;
+								}
+							}
+							++start;
+						}
+					}
+				}
+				else
+				{
+					foreach (var col in Cols)
+						col.selected = false;
+
+					Cols[c].selected = select;
+				}
+
+				if (select)
+					EnsureDisplayedCol(c);
+
+				for (int r = 0; r != RowCount; ++r)
+					_cells[c,r].selected = select;
+
+				Refresh();
 			}
+		}
 
-			if ((ModifierKeys & Keys.Control) != Keys.Control)
-				ClearCellSelects();
-
-			if (select)
-				EnsureDisplayedCol(c);
-
-			for (int r = 0; r != RowCount; ++r)
-				_cells[c,r].selected = select;
-
-			Refresh();
+		int getSelectedCol()
+		{
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (Cols[c].selected)
+					return c;
+			}
+			return -1;
 		}
 	}
 
