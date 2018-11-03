@@ -1632,7 +1632,7 @@ namespace yata
 				&& y > HeightColhead && y < HeightTable)
 			{
 				var coords = getCoords(x, y, left);
-				var cell = _cells[coords.c, coords.r];
+				var cell = _cells[coords.X, coords.Y];
 
 				EnsureDisplayed(cell);
 
@@ -1714,7 +1714,7 @@ namespace yata
 					&& y > HeightColhead && y < HeightTable && e.Y < Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
 				{
 					var coords = getCoords(x, y, left);
-					_f.PrintInfo(coords.r, coords.c);
+					_f.PrintInfo(coords.Y, coords.X);
 				}
 				else
 					_f.PrintInfo(-1);
@@ -1739,32 +1739,26 @@ namespace yata
 		}
 
 
-		struct Coords
+		Point getCoords(int x, int y, int left)
 		{
-			internal int c;
-			internal int r;
-		}
-
-		Coords getCoords(int x, int y, int left)
-		{
-			var coords = new Coords();
+			var coords = new Point();
 
 //			x += offsetHori;
-			coords.c = FrozenCount - 1;
+			coords.X = FrozenCount - 1;
 			do
 			{
-				++coords.c;
+				++coords.X;
 			}
-			while ((left += Cols[coords.c].width()) < x);
+			while ((left += Cols[coords.X].width()) < x);
 
 
 			int top = HeightColhead;
 
 //			y += offsetVert;
-			coords.r = 0;
+			coords.Y = 0;
 			while ((top += HeightRow) < y)
 			{
-				++coords.r;
+				++coords.Y;
 			}
 
 			return coords;
