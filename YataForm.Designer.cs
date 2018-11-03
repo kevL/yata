@@ -728,8 +728,7 @@
 			// 
 			// YataForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(842, 454);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.tabControl);

@@ -965,13 +965,20 @@ namespace yata
 		{
 			DrawingControl.SuspendDrawing(this);
 
-			int w = Width; // grab these before auto-sizing happens -->
-			int h = Height;
+			// NOTE: Cf f.AutoScaleMode (None,Font,DPI,Inherit)
+			// Since I'm doing all the necessary scaling due to font-changes
+			// w/ code the AutoScaleMode should not be set to default "Font".
+			// It might better be set to "DPI" for those weirdos and I don't
+			// know what "Inherit" means.
+			// AutoScaleMode is currently set to "None".
 
-			int w2 = tb_Search      .Width;
-			int w3 = cb_SearchOption.Width;
+//			int w = Width; // grab these before auto-scaling/re-sizing happens -->
+//			int h = Height;
 
-			int h2 = statusbar.Height;
+//			int w2 = tb_Search      .Width;
+//			int w3 = cb_SearchOption.Width;
+
+//			int h2 = statusbar.Height;
 
 			Font = font; // rely on GC here
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
@@ -988,13 +995,13 @@ namespace yata
 				SetTabSize();
 			}
 
-			Width  = w;
-			Height = h;
+//			Width  = w;
+//			Height = h;
 
-			tb_Search      .Width = w2;
-			cb_SearchOption.Width = w3;
+//			tb_Search      .Width = w2;
+//			cb_SearchOption.Width = w3;
 
-			statusbar.Height = h2;
+//			statusbar.Height = h2;
 
 			DrawingControl.ResumeDrawing(this);
 
