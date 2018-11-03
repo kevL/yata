@@ -1276,25 +1276,62 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			Cell sel = GetOnlySelectedCell();
+
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
 					if (e.Modifiers == Keys.Control)
 					{
-						if (_scrollVert.Visible)
+						if (sel != null)
+						{
+							if (sel.x != FrozenCount || sel.y != 0)
+							{
+								sel.selected = false;
+								sel = _cells[FrozenCount, 0];
+								sel.selected = true;
+							}
+						}
+						else if (_scrollVert.Visible)
 							_scrollVert.Value = 0;
 					}
-					else if (_scrollHori.Visible)
+					else if (sel != null)
 					{
-						_scrollHori.Value = 0;
+						if (sel.x != FrozenCount)
+						{
+							sel.selected = false;
+							sel = _cells[FrozenCount, sel.y];
+							sel.selected = true;
+						}
 					}
+					else if (_scrollHori.Visible)
+						_scrollHori.Value = 0;
+
 					break;
 
 				case Keys.End:
 					if (e.Modifiers == Keys.Control)
 					{
-						if (_scrollVert.Visible)
+						if (sel != null)
+						{
+							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
+							{
+								sel.selected = false;
+								sel = _cells[ColCount - 1, RowCount - 1];
+								sel.selected = true;
+							}
+						}
+						else if (_scrollVert.Visible)
 							_scrollVert.Value = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+					}
+					else if (sel != null)
+					{
+						if (sel.x != ColCount - 1)
+						{
+							sel.selected = false;
+							sel = _cells[ColCount - 1, sel.y];
+							sel.selected = true;
+						}
 					}
 					else if (_scrollHori.Visible)
 					{
@@ -1303,7 +1340,22 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
-					if (_scrollVert.Visible)
+					if (sel != null)
+					{
+						if (sel.y != 0)
+						{
+							sel.selected = false;
+							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+							logfile.Log("rows= " + rows);
+							if (sel.y < rows)
+								sel = _cells[sel.x, 0];
+							else
+								sel = _cells[sel.x, sel.y - rows];
+
+							sel.selected = true;
+						}
+					}
+					else if (_scrollVert.Visible)
 					{
 						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
 
@@ -1315,7 +1367,22 @@ namespace yata
 					break;
 
 				case Keys.PageDown:
-					if (_scrollVert.Visible)
+					if (sel != null)
+					{
+						if (sel.y != RowCount - 1)
+						{
+							sel.selected = false;
+							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+							logfile.Log("rows= " + rows);
+							if (sel.y > RowCount - 1 - rows)
+								sel = _cells[sel.x, RowCount - 1];
+							else
+								sel = _cells[sel.x, sel.y + rows];
+
+							sel.selected = true;
+						}
+					}
+					else if (_scrollVert.Visible)
 					{
 						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
 
@@ -1328,20 +1395,16 @@ namespace yata
 
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
 				{
-					var cell = GetOnlySelectedCell();
-					if (cell != null) // selection to the cell above
+					if (sel != null) // selection to the cell above
 					{
-						if (cell.y != 0)
+						if (sel.y != 0)
 						{
 							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
 
-							cell.selected = false;
-							cell = _cells[cell.x, cell.y - 1];
-							cell.selected = true;
-
-							EnsureDisplayed(cell);
-							Refresh();
+							sel.selected = false;
+							sel = _cells[sel.x, sel.y - 1];
+							sel.selected = true;
 						}
 					}
 					else if (_scrollVert.Visible)
@@ -1356,17 +1419,13 @@ namespace yata
 
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
 				{
-					var cell = GetOnlySelectedCell();
-					if (cell != null) // selection to the cell below
+					if (sel != null) // selection to the cell below
 					{
-						if (cell.y != RowCount - 1)
+						if (sel.y != RowCount - 1)
 						{
-							cell.selected = false;
-							cell = _cells[cell.x, cell.y + 1];
-							cell.selected = true;
-
-							EnsureDisplayed(cell);
-							Refresh();
+							sel.selected = false;
+							sel = _cells[sel.x, sel.y + 1];
+							sel.selected = true;
 						}
 					}
 					else if (_scrollVert.Visible) // scroll the table
@@ -1381,17 +1440,13 @@ namespace yata
 
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
 				{
-					var cell = GetOnlySelectedCell();
-					if (cell != null) // selection to the cell left
+					if (sel != null) // selection to the cell left
 					{
-						if (cell.x != FrozenCount)
+						if (sel.x != FrozenCount)
 						{
-							cell.selected = false;
-							cell = _cells[cell.x - 1, cell.y];
-							cell.selected = true;
-
-							EnsureDisplayed(cell);
-							Refresh();
+							sel.selected = false;
+							sel = _cells[sel.x - 1, sel.y];
+							sel.selected = true;
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1406,17 +1461,13 @@ namespace yata
 
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
 				{
-					var cell = GetOnlySelectedCell();
-					if (cell != null) // selection to the cell right
+					if (sel != null) // selection to the cell right
 					{
-						if (cell.x != ColCount - 1)
+						if (sel.x != ColCount - 1)
 						{
-							cell.selected = false;
-							cell = _cells[cell.x + 1, cell.y];
-							cell.selected = true;
-
-							EnsureDisplayed(cell);
-							Refresh();
+							sel.selected = false;
+							sel = _cells[sel.x + 1, sel.y];
+							sel.selected = true;
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1431,9 +1482,14 @@ namespace yata
 
 				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
 					ClearCellSelects();
-					Refresh();
 					break;
 			}
+
+			if ((sel = GetOnlySelectedCell()) != null)
+				EnsureDisplayed(sel);
+
+			Refresh();
+
 //			e.Handled = true;
 //			base.OnKeyDown(e);
 
@@ -1801,7 +1857,7 @@ namespace yata
 			{
 				_scrollHori.Value -= left - rect.X;
 			}
-			else
+			else if (rect.X != left)
 			{
 				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
 				if (rect.X + rect.Width + bar > Width)
@@ -1812,7 +1868,7 @@ namespace yata
 			{
 				_scrollVert.Value -= HeightColhead - rect.Y;
 			}
-			else
+			else if (rect.Y != HeightColhead)
 			{
 				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
 				if (rect.Y + rect.Height + bar > Height)
@@ -1830,7 +1886,7 @@ namespace yata
 			{
 				_scrollVert.Value -= HeightColhead - bounds.X;
 			}
-			else
+			else if (bounds.X != HeightColhead)
 			{
 				int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
 				if (bounds.Y + bar > Height)
@@ -1848,7 +1904,7 @@ namespace yata
 			{
 				_scrollHori.Value -= left - bounds.X;
 			}
-			else
+			else if (bounds.X != left)
 			{
 				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
 				if (bounds.Y + bar > Width)
