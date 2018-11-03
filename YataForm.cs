@@ -740,20 +740,19 @@ namespace yata
 		#region 2da Ops menu
 		void opsclick_CheckRowOrder(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Rows.Count > 1)
+			if (Table != null && Table.RowCount != 0)
 			{
 				var list = new List<string>();
 
-				object val;
+				string val;
 				int result;
 
 				bool stop = false;
 
-				int rows = Table.Rows.Count - 1;
-				for (int id = 0; id != rows; ++id)
+				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					val = Table.Rows[id].Cells[0].Value;
-					if (val == null)
+					val = Table[0, id].text;
+					if (String.IsNullOrEmpty(val))
 					{
 						if (list.Count == 20) // stop this Madness
 						{
@@ -762,7 +761,7 @@ namespace yata
 						}
 						list.Add("id " + id + " is not valid");
 					}
-					else if (!Int32.TryParse(val.ToString(), out result))
+					else if (!Int32.TryParse(val, out result))
 					{
 						if (list.Count == 20)
 						{
@@ -814,36 +813,40 @@ namespace yata
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Information,
 									MessageBoxDefaultButton.Button1);
-			} */
+			}
 		}
 
 		void opsclick_Reorder(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Rows.Count > 1)
+			if (Table != null && Table.RowCount != 0)
 			{
-				DrawingControl.SuspendDrawing(Table); // bongo
+//				DrawingControl.SuspendDrawing(Table); // bongo
 
 				var pb = new ProgBar(this);
-				pb.ValTop = Table.Rows.Count - 1;
+				pb.ValTop = Table.RowCount;
 				pb.Show();
 
-				object val;
+				bool changed = false;
+
+				string val;
 				int result;
 
-				int rows = Table.Rows.Count - 1;
-				for (int id = 0; id != rows; ++id)
+				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					if ((val = Table.Rows[id].Cells[0].Value) == null
-						|| !Int32.TryParse(val.ToString(), out result)
+					if (String.IsNullOrEmpty(val = Table[0, id].text)
+						|| !Int32.TryParse(val, out result)
 						|| result != id)
 					{
-						Table.Rows[id].Cells[0].Value = id;
+						Table[0, id].text = id.ToString();
+						changed = true;
 					}
 					pb.Step();
 				}
 
-				DrawingControl.ResumeDrawing(Table);
-			} */
+				Table.Changed = changed;
+
+//				DrawingControl.ResumeDrawing(Table);
+			}
 		}
 
 		void opsclick_Recolor(object sender, EventArgs e)

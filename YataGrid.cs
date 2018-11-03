@@ -1625,6 +1625,9 @@ namespace yata
 			{
 				Select();
 
+				foreach (var col in Cols)
+					col.selected = false;
+
 				foreach (var row in Rows)
 					row.selected = false;
 
