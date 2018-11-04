@@ -732,7 +732,11 @@ namespace yata
 
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			Search();
+			if (Table != null)
+			{
+				Table.Select(); // F3 shall focus the table, Enter shall keep focus on the tb/cbx.
+				Search();
+			}
 		}
 		#endregion Edit menu
 
@@ -1453,8 +1457,14 @@ namespace yata
 		void SearchKeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
+			{
+				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
 				Search();
+				_search = false;
+			}
 		}
+
+		internal bool _search;
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
@@ -1463,6 +1473,10 @@ namespace yata
 		{
 			if (Table != null && Table.RowCount != 0)
 			{
+				Table._editor.Visible = false;
+
+				// TODO: fix exception when a field in a FrozenCol is found
+
 				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
 				{
@@ -1516,7 +1530,7 @@ namespace yata
 
 						for (; c != Table.ColCount; ++c)
 						{
-							if (!String.IsNullOrEmpty(val = Table[c,r].text))
+							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
 							{
 								field = val.ToLower();
 								if (field == search
@@ -1539,7 +1553,7 @@ namespace yata
 					{
 						for (c = 0; c != Table.ColCount; ++c)
 						{
-							if (!String.IsNullOrEmpty(val = Table[c,r].text))
+							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
 							{
 								field = val.ToLower();
 								if (field == search

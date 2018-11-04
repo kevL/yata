@@ -158,7 +158,7 @@ namespace yata
 
 		Timer _t1 = new Timer();
 
-		readonly TextBox _editor = new TextBox();
+		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
 		bool _init = true;
@@ -222,7 +222,8 @@ namespace yata
 			else
 				_scrollVert.Value = offsetVert;
 
-			Select(); // workaround: refocus the table (bar has to move > 0px)
+			if (!_f._search)
+				Select(); // workaround: refocus the table (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -239,7 +240,8 @@ namespace yata
 			else
 				_scrollHori.Value = offsetHori;
 
-			Select(); // workaround: refocus the table (bar has to move > 0px)
+			if (!_f._search)
+				Select(); // workaround: refocus the table (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -1829,6 +1831,7 @@ namespace yata
 
 		int getLeft()
 		{
+			logfile.Log(". WidthRowhead= " + WidthRowhead);
 			int left = WidthRowhead;
 			switch (FrozenCount)
 			{
@@ -1841,6 +1844,7 @@ namespace yata
 					goto case FreezeId;
 
 				case FreezeId:
+					logfile.Log(". col0= " + Cols[0].width());
 					left += Cols[0].width();
 					break;
 			}
@@ -1865,6 +1869,10 @@ namespace yata
 					|| (rect.Width > right - left
 						&& (rect.X > right || rect.X + left > (right - left) / 2)))
 				{
+					logfile.Log("");
+					logfile.Log("val= " + _scrollHori.Value);
+					logfile.Log("left= " + left);
+					logfile.Log("x= " + rect.X);
 					_scrollHori.Value -= left - rect.X;
 				}
 				else if (rect.X + rect.Width > right && rect.Width < right - left)
