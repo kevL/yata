@@ -1559,7 +1559,7 @@ namespace yata
 		/// Checks if only one cell is currently selected.
 		/// </summary>
 		/// <returns>the only cell selected</returns>
-		Cell GetOnlySelectedCell()
+		internal Cell GetOnlySelectedCell()
 		{
 			Cell cell0 = null;
 
@@ -1849,7 +1849,7 @@ namespace yata
 		}
 
 
-		void EnsureDisplayed(Cell cell)
+		internal void EnsureDisplayed(Cell cell)
 		{
 			var rect = getCellRectangle(cell);
 

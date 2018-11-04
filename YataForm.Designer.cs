@@ -408,6 +408,7 @@
 			this.it_AutoCols.Name = "it_AutoCols";
 			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
 			this.it_AutoCols.Text = "autosize cols";
+			this.it_AutoCols.Visible = false;
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// toolStripSeparator2

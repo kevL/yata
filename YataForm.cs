@@ -732,7 +732,7 @@ namespace yata
 
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-//			Search();
+			Search();
 		}
 		#endregion Edit menu
 
@@ -863,10 +863,10 @@ namespace yata
 			}
 		}
 
-		internal void opsclick_AutosizeCols(object sender, EventArgs e)
+		internal void opsclick_AutosizeCols(object sender, EventArgs e) // NOTE: Disabled in designer w/ Visible=false
 		{
-/*			if (Table != null)
-				Table.AutoResizeColumns(); */
+//			if (Table != null)
+//				Table.AutoResizeColumns();
 		}
 
 
@@ -1445,14 +1445,15 @@ namespace yata
 
 		#region Search
 		/// <summary>
-		/// Performs a search when the Enter-key is released.
+		/// Performs a search when the Enter-key is released and focus is on
+		/// either the search-box or the search-option dropdown.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void SearchKeyUp(object sender, KeyEventArgs e)
 		{
-//			if (e.KeyCode == Keys.Enter)
-//				Search();
+			if (e.KeyCode == Keys.Enter)
+				Search();
 		}
 
 		/// <summary>
@@ -1460,7 +1461,7 @@ namespace yata
 		/// </summary>
 		void Search()
 		{
-/*			if (Table != null && Table.Rows.Count > 1)
+			if (Table != null && Table.RowCount != 0)
 			{
 				string search = tb_Search.Text;
 				if (!String.IsNullOrEmpty(search))
@@ -1470,13 +1471,11 @@ namespace yata
 					int startRow;
 					int startCol;
 
-					if (Table.CurrentCell != null)
+					Cell sel = Table.GetOnlySelectedCell();
+					if (sel != null)
 					{
-						startRow = Table.CurrentCell.RowIndex;
-						startCol = Table.CurrentCell.ColumnIndex;
-
-						if (startRow == -1) startRow = 0;
-						if (startCol == -1) startCol = 0;
+						startRow = sel.y;
+						startCol = sel.x;
 					}
 					else
 					{
@@ -1485,8 +1484,7 @@ namespace yata
 					}
 
 
-					object val;
-
+					string val;
 					int r,c;
 
 					bool start = true;
@@ -1494,38 +1492,42 @@ namespace yata
 
 					string field;
 
-					for (r = startRow; r != Table.Rows.Count - 1; ++r)
+					for (r = startRow; r != Table.RowCount; ++r)
 					{
 						if (start)
 						{
 							start = false;
 							c = startCol + 1;
 
-							if (c == Table.Columns.Count)		// if starting on the last cell of a row
+							if (c == Table.ColCount)		// if starting on the last cell of a row
 							{
 								c = 0;
 
-								if (r < Table.Rows.Count - 2)	// jump to the first cell of the next row
+								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
 								{
 									++r;
 								}
-								else							// or to the top of the table if on the last row(s)
+								else						// or to the top of the table if on the last row(s)
 									r = 0;
 							}
 						}
 						else
 							c = 0;
 
-						for (; c != Table.Columns.Count; ++c)
+						for (; c != Table.ColCount; ++c)
 						{
-							if ((val = Table[c,r].Value) != null)
+							if (!String.IsNullOrEmpty(val = Table[c,r].text))
 							{
-								field = val.ToString().ToLower();
+								field = val.ToLower();
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-									Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
-									Table.CurrentCell = Table[c,r];
+									if (sel != null)
+										sel.selected = false;
+
+									Table[c,r].selected = true;
+									Table.EnsureDisplayed(Table[c,r]);
+									Table.Refresh();
 									return;
 								}
 							}
@@ -1535,23 +1537,27 @@ namespace yata
 					// TODO: tighten exact start/end-cells
 					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
 					{
-						for (c = 0; c != Table.Columns.Count; ++c)
+						for (c = 0; c != Table.ColCount; ++c)
 						{
-							if ((val = Table[c,r].Value) != null)
+							if (!String.IsNullOrEmpty(val = Table[c,r].text))
 							{
-								field = val.ToString().ToLower();
+								field = val.ToLower();
 								if (field == search
 									|| (substring && field.Contains(search)))
 								{
-									Table.CurrentCell = null; // re-select the cell to auto-scroll the table to it.
-									Table.CurrentCell = Table[c,r];
+									if (sel != null)
+										sel.selected = false;
+
+									Table[c,r].selected = true;
+									Table.EnsureDisplayed(Table[c,r]);
+									Table.Refresh();
 									return;
 								}
 							}
 						}
 					}
 				}
-			} */
+			}
 		}
 		#endregion Search
 
