@@ -1,4 +1,7 @@
-﻿namespace yata
+﻿using System.Drawing;
+
+
+namespace yata
 {
 	/// <summary>
 	/// Contains data about a col.
@@ -46,10 +49,13 @@
 		internal string[] fields; // the row's fields
 		internal bool selected;
 
-		internal Row(string[] cells) //int r,
+		internal Brush _brush;
+
+		internal Row(string[] cells, Brush brush) //int r,
 		{
 //			id = r;
 			fields = cells;
+			_brush = brush;
 		}
 	}
 

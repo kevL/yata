@@ -19,6 +19,7 @@ namespace yata
 	{
 		internal static readonly Brush Alice   = new SolidBrush(Color.AliceBlue);
 		internal static readonly Brush Blanche = new SolidBrush(Color.BlanchedAlmond);
+		internal static readonly Brush Created = new SolidBrush(SystemColors.ControlLight);
 
 		internal static readonly Brush CellSel = new SolidBrush(Color.PaleGreen);
 		internal static readonly Brush Edit    = new SolidBrush(Colors.Edit);
@@ -66,7 +67,7 @@ namespace yata
 		readonly List<string[]> _rows = new List<string[]>();
 
 		internal readonly List<Col> Cols = new List<Col>();
-		readonly List<Row> Rows = new List<Row>();
+		internal readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
 		/// <summary>
@@ -430,14 +431,9 @@ namespace yata
 				// rows background - scrollable
 				var rect = new Rectangle(Left, HeightColhead - offsetVert, WidthTable, HeightRow);
 
-				Brush brush;
 				for (r = 0; r != RowCount; ++r)
 				{
-					brush = (r % 2 == 0) ? Brushes.Alice
-										 : Brushes.Blanche;
-
-					_graphics.FillRectangle(brush, rect);
-
+					_graphics.FillRectangle(Rows[r]._brush, rect);
 					rect.Y += HeightRow;
 				}
 
@@ -995,8 +991,13 @@ namespace yata
 
 			RowCount = _rows.Count;
 
+			Brush brush;
 			for (int r = 0; r != RowCount; ++r)
-				Rows.Add(new Row(_rows[r])); //r
+			{
+				brush = (r % 2 == 0) ? Brushes.Alice
+									 : Brushes.Blanche;
+				Rows.Add(new Row(_rows[r], brush)); //r
+			}
 
 			_rows.Clear(); // done w/ '_rows'
 

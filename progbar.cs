@@ -51,7 +51,7 @@ namespace yata
 			if (++ValCur != ValTop)
 			{
 				_rect.Width = Width * ValCur / ValTop;
-				_graphics.FillRectangle(Brushes.Alice, _rect);
+				_graphics.FillRectangle(Brushes.CellSel, _rect);
 			}
 			else
 				Hide();

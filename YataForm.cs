@@ -751,8 +751,7 @@ namespace yata
 
 				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					val = Table[0, id].text;
-					if (String.IsNullOrEmpty(val))
+					if (String.IsNullOrEmpty(val = Table[0, id].text))
 					{
 						if (list.Count == 20) // stop this Madness
 						{
@@ -851,18 +850,17 @@ namespace yata
 
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Rows.Count > 1)
+			if (Table != null && Table.RowCount != 0)
 			{
-				Color color;
-
-				int rows = Table.Rows.Count - 1;
-				for (int id = 0; id != rows; ++id)
+				Brush brush;
+				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					color = (id % 2 == 0) ? Color.AliceBlue
-										  : Color.BlanchedAlmond;
-					Table.Rows[id].DefaultCellStyle.BackColor = color;
+					brush = (id % 2 == 0) ? Brushes.Alice
+										  : Brushes.Blanche;
+					Table.Rows[id]._brush = brush;
 				}
-			} */
+				// TODO: Refresh perhaps
+			}
 		}
 
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
