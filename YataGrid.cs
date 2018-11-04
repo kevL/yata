@@ -53,10 +53,10 @@ namespace yata
 			set { _f.TableChanged(_changed = value); }
 		}
 
-		int HeightColhead;
-		int WidthRowhead;
+		internal int HeightColhead;
+		internal int WidthRowhead;
 
-		int HeightRow;
+		internal int HeightRow;
 
 		internal int ColCount;
 		internal int RowCount;
@@ -71,12 +71,14 @@ namespace yata
 
 		Cell[,] _cells;
 		/// <summary>
-		/// Gets the cell at pos [c,r].
+		/// Gets the cell at pos [r,c].
+		/// NOTE: 1st dimension is rows, 2nd dimension is cols. That's better
+		/// for resizing the array.
 		/// </summary>
-		internal Cell this[int c, int r]
+		internal Cell this[int r, int c]
 		{
-			get { return _cells[c,r]; }
-			set { _cells[c,r] = value; }
+			get { return _cells[r,c]; }
+			set { _cells[r,c] = value; }
 		}
 
 
@@ -136,10 +138,10 @@ namespace yata
 		{ get; set; }
 
 
-		readonly VScrollBar _scrollVert = new VScrollBar();// ScrollbarVert();
-		readonly HScrollBar _scrollHori = new HScrollBar();// ScrollbarHori();
+		readonly VScrollBar _scrollVert = new VScrollBar();
+		readonly HScrollBar _scrollHori = new HScrollBar();
 
-		int offsetVert;
+		internal int offsetVert;
 		int offsetHori;
 
 		int HeightTable;
@@ -426,7 +428,7 @@ namespace yata
 //				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
 
 
-				int c,r;
+				int r,c;
 
 				// NOTE: Paint backgrounds full-height/width of table ->
 
@@ -453,7 +455,7 @@ namespace yata
 					{
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
-							var cell = _cells[c,r];
+							var cell = _cells[r,c];
 							if (cell.selected)
 							{
 								rect.X -= _padHori;
@@ -594,7 +596,7 @@ namespace yata
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics, _cells[c,r].text, Font, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics, _cells[r,c].text, Font, rect, _colorText, _flags);
 
 						rect.X += rect.Width;
 					}
@@ -896,12 +898,14 @@ namespace yata
 		/// </summary>
 		internal void Calibrate()
 		{
+			//logfile.Log("Calibrate()");
+
 			_init = true;
 
 			_editor.Visible = false;
 
-			_scrollVert.Value =
-			_scrollHori.Value = 0;
+//			_scrollVert.Value =
+//			_scrollHori.Value = 0;
 
 			CreateCols(true);
 			SetRowheadWidth();
@@ -998,10 +1002,10 @@ namespace yata
 			{
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
-				Rows.Add(new Row(_rows[r], brush)); //r
+				Rows.Add(new Row(brush)); //r
 			}
 
-			_rows.Clear(); // done w/ '_rows'
+//			_rows.Clear(); // done w/ '_rows'
 
 			SetRowheadWidth();
 		}
@@ -1064,31 +1068,39 @@ namespace yata
 
 			if (!calibrate)
 			{
-				_cells = new Cell[ColCount, RowCount];
+				_cells = new Cell[RowCount, ColCount];
 
 				for (int r = 0; r != RowCount; ++r)
 				for (int c = 0; c != ColCount; ++c)
-					_cells[c,r] = new Cell(c, r, Rows[r].fields[c]);
+					_cells[r,c] = new Cell(r, c, _rows[r][c]);
 			}
 			else
 				HeightRow = 0;
+
+			_rows.Clear(); // done w/ '_rows'
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
 				Size size;
 				int w, wT, hT;
+				//logfile.Log("ColCount= " + ColCount);
 				for (int c = 0; c != ColCount; ++c)
 				{
+					//logfile.Log(". c= " + c);
 					w = 25; // cellwidth min.
 					for (int r = 0; r != RowCount; ++r)
 					{
-						size = TextRenderer.MeasureText(graphics, _cells[c,r].text, Font, _size, _flags);
+						//logfile.Log(". . r= " + r);// + " text= " + _cells[r,c].text);
+//						if (r < 11)
+						{
+						size = TextRenderer.MeasureText(graphics, _cells[r,c].text, Font, _size, _flags);
 
 						wT = size.Width + _padHori * 2;
 						if (wT > w) w = wT;
 
 						hT = size.Height + _padVert * 2;
 						if (hT > HeightRow) HeightRow = hT;
+						}
 					}
 					Cols[c].width(w);
 					//logfile.Log(". c= " + c + " width= " + Cols[c].width());
@@ -1291,7 +1303,7 @@ namespace yata
 							if (sel.x != FrozenCount || sel.y != 0)
 							{
 								sel.selected = false;
-								sel = _cells[FrozenCount, 0];
+								sel = _cells[0, FrozenCount];
 								sel.selected = true;
 							}
 						}
@@ -1303,7 +1315,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = _cells[FrozenCount, sel.y];
+							sel = _cells[sel.y, FrozenCount];
 							sel.selected = true;
 						}
 					}
@@ -1320,7 +1332,7 @@ namespace yata
 							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
 							{
 								sel.selected = false;
-								sel = _cells[ColCount - 1, RowCount - 1];
+								sel = _cells[RowCount - 1, ColCount - 1];
 								sel.selected = true;
 							}
 						}
@@ -1332,7 +1344,7 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = _cells[ColCount - 1, sel.y];
+							sel = _cells[sel.y, ColCount - 1];
 							sel.selected = true;
 						}
 					}
@@ -1351,9 +1363,9 @@ namespace yata
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
 							if (sel.y < rows)
-								sel = _cells[sel.x, 0];
+								sel = _cells[0, sel.x];
 							else
-								sel = _cells[sel.x, sel.y - rows];
+								sel = _cells[sel.y - rows, sel.x];
 
 							sel.selected = true;
 						}
@@ -1378,9 +1390,9 @@ namespace yata
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
 							if (sel.y > RowCount - 1 - rows)
-								sel = _cells[sel.x, RowCount - 1];
+								sel = _cells[RowCount - 1, sel.x];
 							else
-								sel = _cells[sel.x, sel.y + rows];
+								sel = _cells[sel.y + rows, sel.x];
 
 							sel.selected = true;
 						}
@@ -1406,7 +1418,7 @@ namespace yata
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
 
 							sel.selected = false;
-							sel = _cells[sel.x, sel.y - 1];
+							sel = _cells[sel.y - 1, sel.x];
 							sel.selected = true;
 						}
 					}
@@ -1427,7 +1439,7 @@ namespace yata
 						if (sel.y != RowCount - 1)
 						{
 							sel.selected = false;
-							sel = _cells[sel.x, sel.y + 1];
+							sel = _cells[sel.y + 1, sel.x];
 							sel.selected = true;
 						}
 					}
@@ -1448,7 +1460,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = _cells[sel.x - 1, sel.y];
+							sel = _cells[sel.y, sel.x - 1];
 							sel.selected = true;
 						}
 					}
@@ -1469,7 +1481,7 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = _cells[sel.x + 1, sel.y];
+							sel = _cells[sel.y, sel.x + 1];
 							sel.selected = true;
 						}
 					}
@@ -1583,36 +1595,41 @@ namespace yata
 		/// </summary>
 		void SetCellText()
 		{
-			_editcell.text = _editor.Text;
-
-			int c = _editcell.x;
-			int pre = Cols[c].width();
-
-			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			if (_editor.Text != _editcell.text)
 			{
-				int w = TextRenderer.MeasureText(graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+				Changed = true;
 
-				if (w > pre)
+				_editcell.text = _editor.Text;
+
+				int c = _editcell.x;
+				int pre = Cols[c].width();
+
+				using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 				{
-					Cols[c].width(w);
-				}
-				else if (w < pre) // recalc width on the entire col
-				{
-					w = TextRenderer.MeasureText(graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
-					int wT;
-					for (int r = 0; r != RowCount; ++r)
+					int w = TextRenderer.MeasureText(graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+
+					if (w > pre)
 					{
-						wT = TextRenderer.MeasureText(graphics, _cells[c,r].text, Font, _size, _flags).Width + _padHori * 2;
-						if (wT > w) w = wT;
+						Cols[c].width(w);
 					}
-					Cols[c].width(w, true);
+					else if (w < pre) // recalc width on the entire col
+					{
+						w = TextRenderer.MeasureText(graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
+						int wT;
+						for (int r = 0; r != RowCount; ++r)
+						{
+							wT = TextRenderer.MeasureText(graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2;
+							if (wT > w) w = wT;
+						}
+						Cols[c].width(w, true);
+					}
 				}
-			}
 
-			if (Cols[c].width() != pre)
-			{
-				InitScrollers();
-				Refresh(); // is required - and yet another Refresh() will follow ....
+				if (Cols[c].width() != pre)
+				{
+					InitScrollers();
+					Refresh(); // is required - and yet another Refresh() will follow ....
+				}
 			}
 		}
 
@@ -1643,7 +1660,7 @@ namespace yata
 					&& y > HeightColhead && y < HeightTable)
 				{
 					var coords = getCoords(x, y, left);
-					var cell = _cells[coords.X, coords.Y];
+					var cell = _cells[coords.Y, coords.X];
 
 					EnsureDisplayed(cell);
 
@@ -1706,7 +1723,7 @@ namespace yata
 //			base.OnMouseClick(e);
 		}
 
-		void ClearCellSelects()
+		internal void ClearCellSelects()
 		{
 			foreach (var cell in _cells)
 				cell.selected = false;
@@ -1909,7 +1926,7 @@ namespace yata
 			}
 		}
 
-		void EnsureDisplayedRow(int r)
+		internal void EnsureDisplayedRow(int r)
 		{
 			var bounds = getRowEdges(r);
 
@@ -1954,7 +1971,7 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int c = 0; c != ColCount; ++c)
-					if (!_cells[c,r].selected)
+					if (!_cells[r,c].selected)
 					{
 						select = true;
 						break;
@@ -1988,7 +2005,7 @@ namespace yata
 						{
 							if (start != r) // done below
 							for (int col = 0; col != ColCount; ++col)
-								_cells[col, start].selected = true;
+								_cells[start, col].selected = true;
 
 							++start;
 						}
@@ -2006,9 +2023,13 @@ namespace yata
 					EnsureDisplayedRow(r);
 
 				for (int c = 0; c != ColCount; ++c)
-					_cells[c,r].selected = select;
+					_cells[r,c].selected = select;
 
 				Refresh();
+			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				_f.context_(sender, e);
 			}
 		}
 
@@ -2052,7 +2073,7 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int r = 0; r != RowCount; ++r)
-					if (!_cells[c,r].selected)
+					if (!_cells[r,c].selected)
 					{
 						select = true;
 						break;
@@ -2086,7 +2107,7 @@ namespace yata
 						{
 							if (start != c) // done below
 							for (int row = 0; row != RowCount; ++row)
-								_cells[start, row].selected = true;
+								_cells[row, start].selected = true;
 
 							++start;
 						}
@@ -2104,7 +2125,7 @@ namespace yata
 					EnsureDisplayedCol(c);
 
 				for (int r = 0; r != RowCount; ++r)
-					_cells[c,r].selected = select;
+					_cells[r,c].selected = select;
 
 				Refresh();
 			}
@@ -2118,6 +2139,130 @@ namespace yata
 					return c;
 			}
 			return -1;
+		}
+
+
+		/// <summary>
+		/// Inserts a row into the table.
+		/// NOTE: 'Rows' and '_cells' are two entirely separate entities.
+		/// </summary>
+		/// <param name="r">row</param>
+		/// <param name="list">null to delete the row</param>
+		internal void Insert(int r, IList<string> list)
+		{
+			//logfile.Log("Insert() r= " + r);
+
+			DrawingControl.SuspendDrawing(this);
+
+			if (list != null)
+			{
+				Rows.Insert(r, new Row(Brushes.Created));
+				++RowCount;
+
+				ResizeArray(ref _cells, r);
+
+				for (int c = 0; c != ColCount; ++c)
+					_cells[r,c] = new Cell(r,c, list[c]);
+
+				for (int row = r + 1; row != RowCount; ++row)
+				for (int col = 0; col != ColCount; ++col)
+				{
+					++_cells[row,col].y;
+				}
+			}
+			else // delete 'r'
+			{
+				Rows.Remove(Rows[r]);
+				--RowCount;
+
+				ReduceArray<Cell>(ref _cells, r);
+
+				for (int row = r; row != RowCount; ++row)
+				for (int col = 0; col != ColCount; ++col)
+				{
+					//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
+					--_cells[row,col].y;
+				}
+			}
+
+			Calibrate();
+
+			DrawingControl.ResumeDrawing(this);
+		}
+
+
+		/// <summary>
+		/// ... witchcraft ...
+		/// </summary>
+		/// <param name="cells"></param>
+		/// <param name="insert">id to insert a row at</param>
+		void ResizeArray<Cell>(ref Cell[,] cells, int insert)
+		{
+			//logfile.Log("ResizeArray() rows= " + RowCount + " cols= " + ColCount + " insert= " + insert);
+
+			var array = new Cell[RowCount, ColCount];
+			//logfile.Log("array length= " + array.Length);
+
+			int preLength = ColCount * insert;
+			//logfile.Log("preLength= " + preLength);
+			if (preLength != 0)
+			{
+				Array.Copy(cells,		// source array
+						   0,			// source id
+						   array,		// destination array
+						   0,			// destination id
+						   preLength);	// length
+			}
+
+			int postLength = ColCount * (RowCount - 1) - preLength;
+			//logfile.Log("postLength= " + postLength);
+			if (postLength != 0)
+			{
+				Array.Copy(cells,					// source array
+						   preLength,				// source id
+						   array,					// destination array
+						   preLength + ColCount,	// destination id
+						   postLength);				// length
+			}
+
+			cells = array;
+		}
+
+		/// <summary>
+		/// ... witchcraft ...
+		/// </summary>
+		/// <param name="cells"></param>
+		/// <param name="delete">id to delete a row at</param>
+		void ReduceArray<Cell>(ref Cell[,] cells, int delete)
+		{
+			//logfile.Log("ReduceArray() rows= " + RowCount + " cols= " + ColCount + " delete= " + delete);
+
+			var array = new Cell[RowCount, ColCount];
+			//logfile.Log("array length= " + array.Length);
+
+			int preLength = ColCount * delete;
+			//logfile.Log("preLength= " + preLength);
+			if (preLength != 0)
+			{
+				Array.Copy(cells,		// source array
+						   0,			// source id
+						   array,		// destination array
+						   0,			// destination id
+						   preLength);	// length
+			}
+
+			int postLength = ColCount * RowCount - preLength;
+			//logfile.Log("postLength= " + postLength);
+			if (postLength != 0)
+			{
+				Array.Copy(cells,					// source array
+						   preLength + ColCount,	// source id
+						   array,					// destination array
+						   preLength,				// destination id
+						   postLength);				// length
+			}
+
+			cells = array;
 		}
 	}
 }

@@ -39,6 +39,8 @@ namespace yata
 
 		internal Font FontAccent;
 
+		internal bool _search;
+
 
 		#region cTor
 		/// <summary>
@@ -604,36 +606,39 @@ namespace yata
 
 
 		#region Context menu
-		void context_(object sender, DataGridViewCellMouseEventArgs e)
+		int _r;
+
+		internal void context_(object sender, MouseEventArgs e)
 		{
-/*			if (e.Button == MouseButtons.Right
-				&& e.RowIndex != Table.Rows.Count - 1)
-			{
-				Table.ClearSelection();
-				Table.Rows[e.RowIndex].Selected = true;
+			_r = (e.Y + Table.offsetVert) / Table.HeightRow;
 
-				Table.CurrentCell = Table[0,e.RowIndex]; // TODO: not req'd; perhaps null CurrentCell
+			Table.ClearCellSelects();
+			for (int c = 0; c != Table.ColCount; ++c)
+				Table[_r,c].selected = true;
 
-				context_it_Header.Text = "_row @ id " + e.RowIndex;
+			foreach (var row in Table.Rows)
+				row.selected = false;
 
-				context_it_PasteAbove.Enabled =
-				context_it_Paste     .Enabled =
-				context_it_PasteBelow.Enabled = (Table.Columns.Count == _copy.Count);
+			Table.Rows[_r].selected = true;
+			Table.EnsureDisplayedRow(_r);
+			Table.Refresh();
 
-				contextEditor.Show(Table, new Point(Table.RowHeadersWidth,
-													Table.ColumnHeadersHeight));
-			} */
+			context_it_Header.Text = "_row @ id " + _r;
+
+			context_it_PasteAbove.Enabled =
+			context_it_Paste     .Enabled =
+			context_it_PasteBelow.Enabled = (Table.ColCount == _copy.Count);
+
+			contextEditor.Show(Table, new Point(Table.WidthRowhead,
+												Table.HeightColhead));
 		}
 
 		void contextclick_EditCopy(object sender, EventArgs e)
 		{
-/*			_copy.Clear();
+			_copy.Clear();
 
-			int cols = Table.Columns.Count;
-			for (int col = 0; col != cols; ++col)
-			{
-				_copy.Add(Table.SelectedRows[0].Cells[col].Value.ToString());
-			} */
+			for (int c = 0; c != Table.ColCount; ++c)
+				_copy.Add(Table[_r,c].text);
 		}
 
 		void contextclick_EditCut(object sender, EventArgs e)
@@ -644,82 +649,106 @@ namespace yata
 
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
-/*			if (_copy.Count == Table.Columns.Count)
+			if (_copy.Count == Table.ColCount)
 			{
 				Table.Changed = true;
-				Table.Rows.Insert(Table.SelectedRows[0].Index, _copy.ToArray());
-				Table.RelabelRowHeaders();
-			} */
+
+				Table.Insert(_r, _copy);
+
+//				var graphics = CreateGraphics();
+//				Table.LabelRowheads(graphics); // TODO: static Graphics
+
+				Table.Refresh();
+			}
 		}
 
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
-/*			int cols = Table.Columns.Count;
+			int cols = Table.ColCount;
 			if (_copy.Count == cols)
 			{
 				Table.Changed = true;
-				for (int col = 0; col != cols; ++col)
+				for (int c = 0; c != cols; ++c)
 				{
-					Table.SelectedRows[0].Cells[col].Value = _copy[col];
+					Table[_r,c].text = _copy[c];
 				}
-				Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor;
-			} */
+				Table.Rows[_r]._brush = Brushes.Created;
+				Table.Refresh();
+			}
 		}
 
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
-/*			if (_copy.Count == Table.Columns.Count)
+			if (_copy.Count == Table.ColCount)
 			{
 				Table.Changed = true;
-				Table.Rows.Insert(Table.SelectedRows[0].Index + 1, _copy.ToArray());
-				Table.RelabelRowHeaders();
-			} */
+				Table.Insert(_r + 1, _copy);
+
+//				var graphics = CreateGraphics();
+//				Table.LabelRowheads(graphics); // TODO: static Graphics
+
+				Table.Refresh();
+			}
 		}
 
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
-/*			Table.Changed = true;
-			int cols = Table.Columns.Count;
+			Table.Changed = true;
+			int cols = Table.ColCount;
 
-			var row = new string[cols];
-			for (int col = 0; col != cols; ++col)
+			var fields = new string[cols];
+			for (int c = 0; c != cols; ++c)
 			{
-				row[col] = Constants.Stars;
+				fields[c] = Constants.Stars;
 			}
-			Table.Rows.Insert(Table.SelectedRows[0].Index, row);
-			Table.RelabelRowHeaders(); */
-		}
+			Table.Insert(_r, fields);
 
-		void contextclick_EditCreateBelow(object sender, EventArgs e)
-		{
-/*			Table.Changed = true;
-			int cols = Table.Columns.Count;
+//			var graphics = CreateGraphics();
+//			Table.LabelRowheads(graphics); // TODO: static Graphics
 
-			var row = new string[cols];
-			for (int col = 0; col != cols; ++col)
-			{
-				row[col] = Constants.Stars;
-			}
-			Table.Rows.Insert(Table.SelectedRows[0].Index + 1, row);
-			Table.RelabelRowHeaders(); */
+			Table.Refresh();
 		}
 
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
-/*			Table.Changed = true;
-			int cols = Table.Columns.Count;
-			for (int col = 1; col != cols; ++col)
+			Table.Changed = true;
+			int cols = Table.ColCount;
+			for (int c = 1; c != cols; ++c)
 			{
-				Table.SelectedRows[0].Cells[col].Value = Constants.Stars;
+				Table[_r,c].text = Constants.Stars;
 			}
-			Table.SelectedRows[0].DefaultCellStyle.BackColor = DefaultBackColor; */
+			Table.Rows[_r]._brush = Brushes.Created;
+			Table.Refresh();
+		}
+
+		void contextclick_EditCreateBelow(object sender, EventArgs e)
+		{
+			Table.Changed = true;
+			int cols = Table.ColCount;
+
+			var fields = new string[cols];
+			for (int c = 0; c != cols; ++c)
+			{
+				fields[c] = Constants.Stars;
+			}
+			Table.Insert(_r + 1, fields);
+
+//			var graphics = CreateGraphics();
+//			Table.LabelRowheads(graphics); // TODO: static Graphics
+
+			Table.Refresh();
 		}
 
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
-/*			Table.Changed = true;
-			Table.Rows.Remove(Table.SelectedRows[0]);
-			Table.RelabelRowHeaders(); */
+			Table.Changed = true;
+
+			Table.Insert(_r, null);
+
+//			var graphics = CreateGraphics();
+//			Table.LabelRowheads(graphics); // TODO: static Graphics
+
+			Table.Refresh();
 		}
 		#endregion Context menu
 
@@ -736,6 +765,129 @@ namespace yata
 			{
 				Table.Select(); // F3 shall focus the table, Enter shall keep focus on the tb/cbx.
 				Search();
+			}
+		}
+
+		/// <summary>
+		/// Performs a search when the Enter-key is released and focus is on
+		/// either the search-box or the search-option dropdown.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void SearchKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter
+				&& Table != null && Table.RowCount != 0)
+			{
+				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
+				Search();
+				_search = false;
+			}
+		}
+
+		/// <summary>
+		/// Searches the current table for the string in the search-box.
+		/// NOTE: Ensure that 'Table' is valid before call.
+		/// </summary>
+		void Search()
+		{
+			Table._editor.Visible = false;
+
+			// TODO: Allow frozen col(s) to be searched through also.
+
+			string search = tb_Search.Text;
+			if (!String.IsNullOrEmpty(search))
+			{
+				search = search.ToLower();
+
+				int startRow;
+				int startCol;
+
+				Cell sel = Table.GetOnlySelectedCell();
+				if (sel != null)
+				{
+					startRow = sel.y;
+					startCol = sel.x;
+				}
+				else
+				{
+					startRow =
+					startCol = 0;
+				}
+
+
+				string val;
+				int r,c;
+
+				bool start = true;
+				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+
+				string field;
+
+				for (r = startRow; r != Table.RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						c = startCol + 1;
+
+						if (c == Table.ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+							{
+								++r;
+							}
+							else						// or to the top of the table if on the last row(s)
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[r,c].text))
+						{
+							field = val.ToLower();
+							if (field == search
+								|| (substring && field.Contains(search)))
+							{
+								if (sel != null)
+									sel.selected = false;
+
+								Table[r,c].selected = true;
+								Table.EnsureDisplayed(Table[r,c]);
+								Table.Refresh();
+								return;
+							}
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
+				{
+					for (c = 0; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[r,c].text))
+						{
+							field = val.ToLower();
+							if (field == search
+								|| (substring && field.Contains(search)))
+							{
+								if (sel != null)
+									sel.selected = false;
+
+								Table[r,c].selected = true;
+								Table.EnsureDisplayed(Table[r,c]);
+								Table.Refresh();
+								return;
+							}
+						}
+					}
+				}
 			}
 		}
 		#endregion Edit menu
@@ -755,7 +907,7 @@ namespace yata
 
 				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					if (String.IsNullOrEmpty(val = Table[0, id].text))
+					if (String.IsNullOrEmpty(val = Table[id,0].text))
 					{
 						if (list.Count == 20) // stop this Madness
 						{
@@ -836,11 +988,11 @@ namespace yata
 
 				for (int id = 0; id != Table.RowCount; ++id)
 				{
-					if (String.IsNullOrEmpty(val = Table[0, id].text)
+					if (String.IsNullOrEmpty(val = Table[id,0].text)
 						|| !Int32.TryParse(val, out result)
 						|| result != id)
 					{
-						Table[0, id].text = id.ToString();
+						Table[id,0].text = id.ToString();
 						changed = true;
 					}
 					pb.Step();
@@ -863,7 +1015,7 @@ namespace yata
 										  : Brushes.Blanche;
 					Table.Rows[id]._brush = brush;
 				}
-				// TODO: Refresh perhaps
+				Table.Refresh();
 			}
 		}
 
@@ -1067,7 +1219,7 @@ namespace yata
 				case  1: // "CATEGORY"
 					if (it_PathSpells2da.Checked)
 					{
-						if (!String.IsNullOrEmpty(val = Table[col,id].text)
+						if (!String.IsNullOrEmpty(val = Table[id,col].text)
 							&& Int32.TryParse(val, out result)
 							&& result < CraftInfo.spellLabels.Count)
 						{
@@ -1080,7 +1232,7 @@ namespace yata
 //				case  2: // "REAGENTS"
 
 				case  3: // "TAGS"
-					if (!String.IsNullOrEmpty(val = Table[col,id].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						if (val.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 						{
@@ -1131,7 +1283,7 @@ namespace yata
 				case  4: // "EFFECTS"
 					if (it_PathItemPropDef2da.Checked)
 					{
-						if (!String.IsNullOrEmpty(val = Table[col,id].text))
+						if (!String.IsNullOrEmpty(val = Table[id,col].text))
 						{
 							if (val != Constants.Stars)
 							{
@@ -1171,10 +1323,10 @@ namespace yata
 				case  6: // "SKILL"
 					if (it_PathFeat2da.Checked)
 					{
-						if (!String.IsNullOrEmpty(val = Table[col,id].text)
+						if (!String.IsNullOrEmpty(val = Table[id,col].text)
 							&& Int32.TryParse(val, out result))
 						{
-							string cat = Table[1, id].text;
+							string cat = Table[id,1].text;
 							if (!String.IsNullOrEmpty(cat))
 							{
 								int result2;
@@ -1447,134 +1599,6 @@ namespace yata
 		#endregion Crafting info
 
 
-		#region Search
-		/// <summary>
-		/// Performs a search when the Enter-key is released and focus is on
-		/// either the search-box or the search-option dropdown.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void SearchKeyUp(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter
-				&& Table != null && Table.RowCount != 0)
-			{
-				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
-				Search();
-				_search = false;
-			}
-		}
-
-		internal bool _search;
-
-		/// <summary>
-		/// Searches the current table for the string in the search-box.
-		/// NOTE: Ensure that 'Table' is valid before call.
-		/// </summary>
-		void Search()
-		{
-			Table._editor.Visible = false;
-
-			// TODO: fix exception when a field in a FrozenCol is found
-
-			string search = tb_Search.Text;
-			if (!String.IsNullOrEmpty(search))
-			{
-				search = search.ToLower();
-
-				int startRow;
-				int startCol;
-
-				Cell sel = Table.GetOnlySelectedCell();
-				if (sel != null)
-				{
-					startRow = sel.y;
-					startCol = sel.x;
-				}
-				else
-				{
-					startRow =
-					startCol = 0;
-				}
-
-
-				string val;
-				int r,c;
-
-				bool start = true;
-				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
-
-				string field;
-
-				for (r = startRow; r != Table.RowCount; ++r)
-				{
-					if (start)
-					{
-						start = false;
-						c = startCol + 1;
-
-						if (c == Table.ColCount)		// if starting on the last cell of a row
-						{
-							c = 0;
-
-							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-							{
-								++r;
-							}
-							else						// or to the top of the table if on the last row(s)
-								r = 0;
-						}
-					}
-					else
-						c = 0;
-
-					for (; c != Table.ColCount; ++c)
-					{
-						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
-						{
-							field = val.ToLower();
-							if (field == search
-								|| (substring && field.Contains(search)))
-							{
-								if (sel != null)
-									sel.selected = false;
-
-								Table[c,r].selected = true;
-								Table.EnsureDisplayed(Table[c,r]);
-								Table.Refresh();
-								return;
-							}
-						}
-					}
-				}
-
-				// TODO: tighten exact start/end-cells
-				for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
-				{
-					for (c = 0; c != Table.ColCount; ++c)
-					{
-						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
-						{
-							field = val.ToLower();
-							if (field == search
-								|| (substring && field.Contains(search)))
-							{
-								if (sel != null)
-									sel.selected = false;
-
-								Table[c,r].selected = true;
-								Table.EnsureDisplayed(Table[c,r]);
-								Table.Refresh();
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-		#endregion Search
-
-
 		#region Tabmenu
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
@@ -1610,10 +1634,14 @@ namespace yata
 
 		internal void TableChanged(bool changed)
 		{
+			DrawingControl.SuspendDrawing(this);
+
 			string asterisk = changed ? " *"
 									  : "";
 			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe) + asterisk;
 			SetTabSize();
+
+			DrawingControl.ResumeDrawing(this);
 		}
 
 

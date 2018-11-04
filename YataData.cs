@@ -46,15 +46,13 @@ namespace yata
 	sealed class Row
 	{
 //		internal int id;
-		internal string[] fields; // the row's fields
 		internal bool selected;
 
 		internal Brush _brush;
 
-		internal Row(string[] cells, Brush brush) //int r,
+		internal Row(Brush brush) //int r,
 		{
 //			id = r;
-			fields = cells;
 			_brush = brush;
 		}
 	}
@@ -64,16 +62,16 @@ namespace yata
 	/// </summary>
 	sealed class Cell
 	{
-		internal string text; // the field's text
+		internal string text; // the cell's text
 		internal bool selected;
 
 		internal int x;
 		internal int y;
 
-		internal Cell(int c, int r, string field)
+		internal Cell(int r, int c, string field)
 		{
-			x = c;
 			y = r;
+			x = c;
 			text = field;
 		}
 	}
