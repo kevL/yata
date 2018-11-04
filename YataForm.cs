@@ -732,7 +732,7 @@ namespace yata
 
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null && Table.RowCount != 0)
 			{
 				Table.Select(); // F3 shall focus the table, Enter shall keep focus on the tb/cbx.
 				Search();
@@ -1456,7 +1456,8 @@ namespace yata
 		/// <param name="e"></param>
 		void SearchKeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
+			if (e.KeyCode == Keys.Enter
+				&& Table != null && Table.RowCount != 0)
 			{
 				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
 				Search();
@@ -1468,105 +1469,103 @@ namespace yata
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
+		/// NOTE: Ensure that 'Table' is valid before call.
 		/// </summary>
 		void Search()
 		{
-			if (Table != null && Table.RowCount != 0)
+			Table._editor.Visible = false;
+
+			// TODO: fix exception when a field in a FrozenCol is found
+
+			string search = tb_Search.Text;
+			if (!String.IsNullOrEmpty(search))
 			{
-				Table._editor.Visible = false;
+				search = search.ToLower();
 
-				// TODO: fix exception when a field in a FrozenCol is found
+				int startRow;
+				int startCol;
 
-				string search = tb_Search.Text;
-				if (!String.IsNullOrEmpty(search))
+				Cell sel = Table.GetOnlySelectedCell();
+				if (sel != null)
 				{
-					search = search.ToLower();
+					startRow = sel.y;
+					startCol = sel.x;
+				}
+				else
+				{
+					startRow =
+					startCol = 0;
+				}
 
-					int startRow;
-					int startCol;
 
-					Cell sel = Table.GetOnlySelectedCell();
-					if (sel != null)
+				string val;
+				int r,c;
+
+				bool start = true;
+				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+
+				string field;
+
+				for (r = startRow; r != Table.RowCount; ++r)
+				{
+					if (start)
 					{
-						startRow = sel.y;
-						startCol = sel.x;
-					}
-					else
-					{
-						startRow =
-						startCol = 0;
-					}
+						start = false;
+						c = startCol + 1;
 
-
-					string val;
-					int r,c;
-
-					bool start = true;
-					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
-
-					string field;
-
-					for (r = startRow; r != Table.RowCount; ++r)
-					{
-						if (start)
+						if (c == Table.ColCount)		// if starting on the last cell of a row
 						{
-							start = false;
-							c = startCol + 1;
-
-							if (c == Table.ColCount)		// if starting on the last cell of a row
-							{
-								c = 0;
-
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-								{
-									++r;
-								}
-								else						// or to the top of the table if on the last row(s)
-									r = 0;
-							}
-						}
-						else
 							c = 0;
 
-						for (; c != Table.ColCount; ++c)
-						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
+							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
 							{
-								field = val.ToLower();
-								if (field == search
-									|| (substring && field.Contains(search)))
-								{
-									if (sel != null)
-										sel.selected = false;
+								++r;
+							}
+							else						// or to the top of the table if on the last row(s)
+								r = 0;
+						}
+					}
+					else
+						c = 0;
 
-									Table[c,r].selected = true;
-									Table.EnsureDisplayed(Table[c,r]);
-									Table.Refresh();
-									return;
-								}
+					for (; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
+						{
+							field = val.ToLower();
+							if (field == search
+								|| (substring && field.Contains(search)))
+							{
+								if (sel != null)
+									sel.selected = false;
+
+								Table[c,r].selected = true;
+								Table.EnsureDisplayed(Table[c,r]);
+								Table.Refresh();
+								return;
 							}
 						}
 					}
+				}
 
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
+				{
+					for (c = 0; c != Table.ColCount; ++c)
 					{
-						for (c = 0; c != Table.ColCount; ++c)
+						if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
 						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(val = Table[c,r].text))
+							field = val.ToLower();
+							if (field == search
+								|| (substring && field.Contains(search)))
 							{
-								field = val.ToLower();
-								if (field == search
-									|| (substring && field.Contains(search)))
-								{
-									if (sel != null)
-										sel.selected = false;
+								if (sel != null)
+									sel.selected = false;
 
-									Table[c,r].selected = true;
-									Table.EnsureDisplayed(Table[c,r]);
-									Table.Refresh();
-									return;
-								}
+								Table[c,r].selected = true;
+								Table.EnsureDisplayed(Table[c,r]);
+								Table.Refresh();
+								return;
 							}
 						}
 					}

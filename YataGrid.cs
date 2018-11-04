@@ -1756,10 +1756,7 @@ namespace yata
 			var coords = new Point();
 
 			coords.X = FrozenCount - 1;
-			do
-			{
-				++coords.X;
-			}
+			do { ++coords.X; }
 			while ((left += Cols[coords.X].width()) < x);
 
 
@@ -1767,9 +1764,7 @@ namespace yata
 
 			coords.Y = 0;
 			while ((top += HeightRow) < y)
-			{
 				++coords.Y;
-			}
 
 			return coords;
 		}
@@ -1781,15 +1776,11 @@ namespace yata
 
 			rect.X = WidthRowhead - offsetHori;
 			for (int c = 0; c != cell.x; ++c)
-			{
 				rect.X += Cols[c].width();
-			}
 
 			rect.Y = HeightColhead - offsetVert;
 			for (int r = 0; r != cell.y; ++r)
-			{
 				rect.Y += HeightRow;
-			}
 
 			rect.Width = Cols[cell.x].width();
 			rect.Height = HeightRow;
@@ -1805,11 +1796,11 @@ namespace yata
 		Point getColEdges(int c)
 		{
 			var bounds = new Point();
+
 			bounds.X = WidthRowhead - offsetHori;
 			for (int col = 0; col != c; ++col)
-			{
 				bounds.X += Cols[col].width();
-			}
+
 			bounds.Y = (bounds.X + Cols[c].width());
 
 			return bounds;
@@ -1831,7 +1822,6 @@ namespace yata
 
 		int getLeft()
 		{
-			logfile.Log(". WidthRowhead= " + WidthRowhead);
 			int left = WidthRowhead;
 			switch (FrozenCount)
 			{
@@ -1844,7 +1834,6 @@ namespace yata
 					goto case FreezeId;
 
 				case FreezeId:
-					logfile.Log(". col0= " + Cols[0].width());
 					left += Cols[0].width();
 					break;
 			}
@@ -1869,10 +1858,6 @@ namespace yata
 					|| (rect.Width > right - left
 						&& (rect.X > right || rect.X + left > (right - left) / 2)))
 				{
-					logfile.Log("");
-					logfile.Log("val= " + _scrollHori.Value);
-					logfile.Log("left= " + left);
-					logfile.Log("x= " + rect.X);
 					_scrollHori.Value -= left - rect.X;
 				}
 				else if (rect.X + rect.Width > right && rect.Width < right - left)
@@ -1969,12 +1954,10 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int c = 0; c != ColCount; ++c)
+					if (!_cells[c,r].selected)
 					{
-						if (!_cells[c,r].selected)
-						{
-							select = true;
-							break;
-						}
+						select = true;
+						break;
 					}
 				}
 				else
@@ -1982,9 +1965,7 @@ namespace yata
 
 
 				if ((ModifierKeys & Keys.Control) != Keys.Control)
-				{
 					ClearCellSelects();
-				}
 
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)
 				{
@@ -2006,12 +1987,9 @@ namespace yata
 						while (start != stop + 1)
 						{
 							if (start != r) // done below
-							{
-								for (int col = 0; col != ColCount; ++col)
-								{
-									_cells[col, start].selected = true;
-								}
-							}
+							for (int col = 0; col != ColCount; ++col)
+								_cells[col, start].selected = true;
+
 							++start;
 						}
 					}
@@ -2025,9 +2003,7 @@ namespace yata
 				}
 
 				if (select)
-				{
 					EnsureDisplayedRow(r);
-				}
 
 				for (int c = 0; c != ColCount; ++c)
 					_cells[c,r].selected = select;
@@ -2067,10 +2043,7 @@ namespace yata
 				int left = getLeft();
 
 				int c = FrozenCount - 1;
-				do
-				{
-					++c;
-				}
+				do { ++c; }
 				while ((left += Cols[c].width()) < x);
 
 
@@ -2079,12 +2052,10 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int r = 0; r != RowCount; ++r)
+					if (!_cells[c,r].selected)
 					{
-						if (!_cells[c,r].selected)
-						{
-							select = true;
-							break;
-						}
+						select = true;
+						break;
 					}
 				}
 				else
@@ -2114,12 +2085,9 @@ namespace yata
 						while (start != stop + 1)
 						{
 							if (start != c) // done below
-							{
-								for (int row = 0; row != RowCount; ++row)
-								{
-									_cells[start, row].selected = true;
-								}
-							}
+							for (int row = 0; row != RowCount; ++row)
+								_cells[start, row].selected = true;
+
 							++start;
 						}
 					}
@@ -2152,39 +2120,4 @@ namespace yata
 			return -1;
 		}
 	}
-
-
-
-/*	sealed class ScrollbarVert
-		:
-			VScrollBar
-	{
-		internal ScrollbarVert()
-		{
-			SetStyle(ControlStyles.StandardClick, true);
-			logfile.Log(GetStyle(ControlStyles.StandardClick).ToString());
-		}
-
-		protected override void OnClick(EventArgs e)
-		{
-			logfile.Log("OnClick"); // ffs.
-//			base.OnClick(e);
-		}
-
-		protected override void OnMouseClick(MouseEventArgs e)
-		{
-			logfile.Log("OnMouseClick");
-//			base.OnMouseClick(e);
-		}
-	}
-
-	sealed class ScrollbarHori
-		:
-			HScrollBar
-	{
-		internal ScrollbarHori()
-		{
-			SetStyle(ControlStyles.StandardClick, true);
-		}
-	} */
 }
