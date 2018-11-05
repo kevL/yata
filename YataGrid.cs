@@ -342,7 +342,7 @@ namespace yata
 				int vert = HeightTable
 						 + _scrollVert.LargeChange
 						 - Height
-						 + ((_scrollHori.Visible) ? _scrollHori.Height : 0)
+						 + (visHori2 ? _scrollHori.Height : 0)
 						 - 1;
 
 				if (vert < _scrollVert.LargeChange) vert = 0;
@@ -352,9 +352,9 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the bottom of the table snuggled against the bottom of the visible area
-				if (HeightTable - offsetVert < Height - ((_scrollHori.Visible) ? _scrollHori.Height : 0))
+				if (HeightTable - offsetVert < Height - (visHori2 ? _scrollHori.Height : 0))
 				{
-					_scrollVert.Value = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+					_scrollVert.Value = HeightTable - Height + (visHori2 ? _scrollHori.Height : 0);
 				}
 			}
 			else
@@ -365,7 +365,7 @@ namespace yata
 				int hori = WidthTable
 						 + _scrollHori.LargeChange
 						 - Width
-						 + ((_scrollVert.Visible) ? _scrollVert.Width : 0)
+						 + (visVert2 ? _scrollVert.Width : 0)
 						 - 1;
 
 				if (hori < _scrollHori.LargeChange) hori = 0;
@@ -375,9 +375,9 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the right of the table snuggled against the right of the visible area
-				if (WidthTable - offsetHori < Width - ((_scrollVert.Visible) ? _scrollVert.Width : 0))
+				if (WidthTable - offsetHori < Width - (visVert2 ? _scrollVert.Width : 0))
 				{
-					_scrollHori.Value = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+					_scrollHori.Value = WidthTable - Width + (visVert2 ? _scrollVert.Width : 0);
 				}
 			}
 			else
