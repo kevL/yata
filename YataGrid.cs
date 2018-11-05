@@ -109,9 +109,10 @@ namespace yata
 		}
 
 
-		Graphics _graphics; // is used only for MeasureText()
+		internal static Graphics graphics_; // is used to paint crap.
+		static Graphics _graphics; // is used only for MeasureText()
 
-		Color _colorText = SystemColors.ControlText;
+		static Color _colorText = SystemColors.ControlText;
 
 //		Bitmap _bluePi = Resources.bluepixel;
 //		Bitmap _piColhead;
@@ -420,12 +421,12 @@ namespace yata
 		{
 			//logfile.Log("OnPaint()");
 
-			if (_init) return;
-
 //			if (ColCount != 0 && RowCount != 0 && _cells != null)
+
+			if (!_init)
 			{
-				var graphics = e.Graphics;
-				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				graphics_ = e.Graphics;
+				graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 //				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
 
@@ -439,7 +440,7 @@ namespace yata
 
 				for (r = 0; r != RowCount; ++r)
 				{
-					graphics.FillRectangle(Rows[r]._brush, rect);
+					graphics_.FillRectangle(Rows[r]._brush, rect);
 					rect.Y += HeightRow;
 				}
 
@@ -463,15 +464,15 @@ namespace yata
 								rect.X -= _padHori;
 
 								if (_editor.Visible && _editcell == cell)
-									graphics.FillRectangle(Brushes.Edit, rect);
+									graphics_.FillRectangle(Brushes.Edit, rect);
 								else
-									graphics.FillRectangle(Brushes.CellSel, rect);
+									graphics_.FillRectangle(Brushes.CellSel, rect);
 
 								rect.X += _padHori;
 							}
 
-							TextRenderer.DrawText(graphics, cell.text, Font, rect, _colorText, _flags);
-//							graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
+							TextRenderer.DrawText(graphics_, cell.text, Font, rect, _colorText, _flags);
+//							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
 
 						if ((rect.X += rect.Width) > Right)
@@ -481,10 +482,10 @@ namespace yata
 
 
 //				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
-//				if (_piColhead != null) graphics.DrawImage(_piColhead, 0,0);
+//				if (_piColhead != null) graphics_.DrawImage(_piColhead, 0,0);
 
 //				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
-//				if (_piRowhead != null) graphics.DrawImage(_piRowhead, 0,0);
+//				if (_piRowhead != null) graphics_.DrawImage(_piRowhead, 0,0);
 
 
 				// NOTE: Paint horizontal lines full-width of table.
@@ -497,7 +498,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
+						graphics_.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
 				}
 
 
@@ -511,7 +512,7 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
+						graphics_.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 			}
 //			base.OnPaint(e);
@@ -522,8 +523,7 @@ namespace yata
 		/// @note Called by OnPaint of the top-panel.
 		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
-		/// <param name="graphics"></param>
-		internal void LabelColheads(IDeviceContext graphics)
+		internal void LabelColheads()
 		{
 			//logfile.Log("LabelColheads()");
 
@@ -534,7 +534,7 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
-						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, _colorText, _flags);
 
 					if ((rect.X += rect.Width) > Right)
 						break;
@@ -547,8 +547,7 @@ namespace yata
 		/// @note Called by OnPaint of the left-panel.
 		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
-		/// <param name="graphics"></param>
-		internal void LabelRowheads(IDeviceContext graphics)
+		internal void LabelRowheads()
 		{
 			//logfile.Log("LabelRowheads()");
 
@@ -563,7 +562,7 @@ namespace yata
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, _colorText, _flags);
+					TextRenderer.DrawText(graphics_, r.ToString(), _f.FontAccent, rect, _colorText, _flags);
 				}
 //				_load = false;
 			}
@@ -571,35 +570,35 @@ namespace yata
 
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics_ = e.Graphics;
+			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, "id", _f.FontAccent, rect, _colorText, _flags);
 
-			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 		}
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics_ = e.Graphics;
+			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, Cols[1].text, _f.FontAccent, rect, _colorText, _flags);
 
-			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
+			graphics_.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 		}
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics_ = e.Graphics;
+			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, Cols[2].text, _f.FontAccent, rect, _colorText, _flags);
 
-			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+			graphics_.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 		}
 
 		/// <summary>
@@ -607,8 +606,7 @@ namespace yata
 		/// @note Called by OnPaint of the frozen panel.
 		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
-		/// <param name="graphics"></param>
-		internal void LabelFrozen(Graphics graphics)
+		internal void PaintFrozenPanel()
 		{
 			//logfile.Log("LabelFrozen()");
 
@@ -619,10 +617,10 @@ namespace yata
 				for (; c != FrozenCount; ++c)
 				{
 					x += Cols[c].width();
-					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
+					graphics_.DrawLine(Pens.DarkLine, x, 0, x, Height);
 				}
 
-				var rect = new Rectangle(0, 0, 0, HeightRow);
+				var rect = new Rectangle(0,0, 0, HeightRow);
 
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
@@ -634,12 +632,12 @@ namespace yata
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics, _cells[r,c].text, Font, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics_, _cells[r,c].text, Font, rect, _colorText, _flags);
 
 						rect.X += rect.Width;
 					}
 
-					graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
+					graphics_.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
 				}
 			}
 		}

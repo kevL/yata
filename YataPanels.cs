@@ -34,10 +34,10 @@ namespace yata
 		{
 //			DrawingControl.SuspendDrawing(this);
 
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
-			_grid.LabelColheads(graphics);
+			YataGrid.graphics_ = e.Graphics;
+			YataGrid.graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			YataGrid.graphics_.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
+			_grid.LabelColheads();
 
 //			DrawingControl.ResumeDrawing(this);
 		}
@@ -72,10 +72,10 @@ namespace yata
 		{
 //			DrawingControl.SuspendDrawing(this);
 
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			graphics.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
-			_grid.LabelRowheads(graphics);
+			YataGrid.graphics_ = e.Graphics;
+			YataGrid.graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			YataGrid.graphics_.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
+			_grid.LabelRowheads();
 
 //			DrawingControl.ResumeDrawing(this);
 		}
@@ -110,9 +110,9 @@ namespace yata
 		{
 //			DrawingControl.SuspendDrawing(this);
 
-			var graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			_grid.LabelFrozen(graphics);
+			YataGrid.graphics_ = e.Graphics;
+			YataGrid.graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			_grid.PaintFrozenPanel();
 
 //			DrawingControl.ResumeDrawing(this);
 		}
