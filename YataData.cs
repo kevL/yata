@@ -8,16 +8,10 @@ namespace yata
 	/// </summary>
 	sealed class Col
 	{
-//		internal int id;
 		internal string text; // the header text
 		internal bool selected;
 
 		int _width;
-
-/*		internal Col() //int c
-		{
-//			id = c;
-		} */
 
 		/// <summary>
 		/// Sets the width.
@@ -45,14 +39,11 @@ namespace yata
 	/// </summary>
 	sealed class Row
 	{
-//		internal int id;
+		internal Brush _brush;
 		internal bool selected;
 
-		internal Brush _brush;
-
-		internal Row(Brush brush) //int r,
+		internal Row(Brush brush)
 		{
-//			id = r;
 			_brush = brush;
 		}
 	}

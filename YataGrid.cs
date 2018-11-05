@@ -109,7 +109,7 @@ namespace yata
 		}
 
 
-		Graphics _graphics;
+		Graphics _graphics; // is used only for MeasureText()
 
 		Color _colorText = SystemColors.ControlText;
 
@@ -184,6 +184,7 @@ namespace yata
 				   | ControlStyles.ResizeRedraw, true);
 
 			_f = f;
+			_graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
 			Pfe = pfe;
 
@@ -412,6 +413,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles the paint event.
+		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -422,8 +424,8 @@ namespace yata
 
 //			if (ColCount != 0 && RowCount != 0 && _cells != null)
 			{
-				_graphics = e.Graphics;
-				_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				var graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 //				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
 
@@ -437,7 +439,7 @@ namespace yata
 
 				for (r = 0; r != RowCount; ++r)
 				{
-					_graphics.FillRectangle(Rows[r]._brush, rect);
+					graphics.FillRectangle(Rows[r]._brush, rect);
 					rect.Y += HeightRow;
 				}
 
@@ -461,15 +463,15 @@ namespace yata
 								rect.X -= _padHori;
 
 								if (_editor.Visible && _editcell == cell)
-									_graphics.FillRectangle(Brushes.Edit, rect);
+									graphics.FillRectangle(Brushes.Edit, rect);
 								else
-									_graphics.FillRectangle(Brushes.CellSel, rect);
+									graphics.FillRectangle(Brushes.CellSel, rect);
 
 								rect.X += _padHori;
 							}
 
-							TextRenderer.DrawText(_graphics, cell.text, Font, rect, _colorText, _flags);
-//							_graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
+							TextRenderer.DrawText(graphics, cell.text, Font, rect, _colorText, _flags);
+//							graphics.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
 
 						if ((rect.X += rect.Width) > Right)
@@ -479,10 +481,10 @@ namespace yata
 
 
 //				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
-//				if (_piColhead != null) _graphics.DrawImage(_piColhead, 0,0);
+//				if (_piColhead != null) graphics.DrawImage(_piColhead, 0,0);
 
 //				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
-//				if (_piRowhead != null) _graphics.DrawImage(_piRowhead, 0,0);
+//				if (_piRowhead != null) graphics.DrawImage(_piRowhead, 0,0);
 
 
 				// NOTE: Paint horizontal lines full-width of table.
@@ -495,7 +497,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						_graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
+						graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
 				}
 
 
@@ -509,7 +511,7 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						_graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
+						graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 			}
 //			base.OnPaint(e);
@@ -518,6 +520,7 @@ namespace yata
 		/// <summary>
 		/// Labels the colheads.
 		/// @note Called by OnPaint of the top-panel.
+		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
 		/// <param name="graphics"></param>
 		internal void LabelColheads(IDeviceContext graphics)
@@ -542,6 +545,7 @@ namespace yata
 		/// <summary>
 		/// Labels the rowheads when inserting/deleting/sorting rows.
 		/// @note Called by OnPaint of the left-panel.
+		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
 		/// <param name="graphics"></param>
 		internal void LabelRowheads(IDeviceContext graphics)
@@ -565,9 +569,43 @@ namespace yata
 			}
 		}
 
+		void labelid_Paint(object sender, PaintEventArgs e)
+		{
+			var graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
+			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, _colorText, _flags);
+
+			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+		}
+
+		void labelfirst_Paint(object sender, PaintEventArgs e)
+		{
+			var graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
+			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, _colorText, _flags);
+
+			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
+		}
+
+		void labelsecond_Paint(object sender, PaintEventArgs e)
+		{
+			var graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
+			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, _colorText, _flags);
+
+			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+		}
+
 		/// <summary>
 		/// Labels the frozen cols.
 		/// @note Called by OnPaint of the frozen panel.
+		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
 		/// <param name="graphics"></param>
 		internal void LabelFrozen(Graphics graphics)
@@ -948,13 +986,14 @@ namespace yata
 		{
 			//logfile.Log("CreateCols()");
 
+			int c = 0;
 			if (!calibrate)
 			{
 				ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
 
-				for (int c = 0; c != ColCount; ++c)
+				for (; c != ColCount; ++c)
 				{
-					Cols.Add(new Col()); //c
+					Cols.Add(new Col());
 				}
 
 				Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
@@ -965,27 +1004,24 @@ namespace yata
 				Cols[0].width(0, true);
 			}
 
-			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			Size size;
+			int h; c = 0;
+			foreach (string head in Fields)
 			{
-				Size size;
-				int c = 0, h;
-				foreach (string head in Fields)
-				{
-					++c;
+				++c;
 
-					if (!calibrate)
-						Cols[c].text = head;
+				if (!calibrate)
+					Cols[c].text = head;
 
-					size = TextRenderer.MeasureText(graphics, head, _f.FontAccent, _size, _flags);
-					Cols[c].width(size.Width + _padHori * 2, calibrate);
-					//logfile.Log(". c= " + c + " width= " + Cols[c].width());
+				size = TextRenderer.MeasureText(_graphics, head, _f.FontAccent, _size, _flags);
+				Cols[c].width(size.Width + _padHori * 2, calibrate);
+				//logfile.Log(". c= " + c + " width= " + Cols[c].width());
 
-					h = size.Height + _padVert * 2;
-					if (h > HeightColhead)
-						HeightColhead = h;
-				}
-				//logfile.Log(". HeightColhead= " + HeightColhead);
+				h = size.Height + _padVert * 2;
+				if (h > HeightColhead)
+					HeightColhead = h;
 			}
+			//logfile.Log(". HeightColhead= " + HeightColhead);
 		}
 
 		/// <summary>
@@ -1002,10 +1038,8 @@ namespace yata
 			{
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
-				Rows.Add(new Row(brush)); //r
+				Rows.Add(new Row(brush));
 			}
-
-//			_rows.Clear(); // done w/ '_rows'
 
 			SetRowheadWidth();
 		}
@@ -1039,10 +1073,7 @@ namespace yata
 				text += "9";
 			}
 
-			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-			{
-				widthRowhead = TextRenderer.MeasureText(graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
-			}
+			widthRowhead = TextRenderer.MeasureText(_graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
 
 			//logfile.Log(". widthRowhead= " + widthRowhead);
 			for (tab = 0; tab != tabs; ++tab)
@@ -1072,41 +1103,36 @@ namespace yata
 
 				for (int r = 0; r != RowCount; ++r)
 				for (int c = 0; c != ColCount; ++c)
-					_cells[r,c] = new Cell(r, c, _rows[r][c]);
+					_cells[r,c] = new Cell(r,c, _rows[r][c]);
 			}
 			else
 				HeightRow = 0;
 
 			_rows.Clear(); // done w/ '_rows'
 
-			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+			Size size;
+			int w, wT, hT;
+			//logfile.Log("ColCount= " + ColCount);
+			for (int c = 0; c != ColCount; ++c)
 			{
-				Size size;
-				int w, wT, hT;
-				//logfile.Log("ColCount= " + ColCount);
-				for (int c = 0; c != ColCount; ++c)
+				//logfile.Log(". c= " + c);
+
+				w = 20; // cellwidth min.
+				for (int r = 0; r != RowCount; ++r)
 				{
-					//logfile.Log(". c= " + c);
-					w = 25; // cellwidth min.
-					for (int r = 0; r != RowCount; ++r)
-					{
-						//logfile.Log(". . r= " + r);// + " text= " + _cells[r,c].text);
-//						if (r < 11)
-						{
-						size = TextRenderer.MeasureText(graphics, _cells[r,c].text, Font, _size, _flags);
+					//logfile.Log(". . r= " + r + " text= " + _cells[r,c].text);
+					size = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags);
 
-						wT = size.Width + _padHori * 2;
-						if (wT > w) w = wT;
+					wT = size.Width + _padHori * 2;
+					if (wT > w) w = wT;
 
-						hT = size.Height + _padVert * 2;
-						if (hT > HeightRow) HeightRow = hT;
-						}
-					}
-					Cols[c].width(w);
-					//logfile.Log(". c= " + c + " width= " + Cols[c].width());
+					hT = size.Height + _padVert * 2;
+					if (hT > HeightRow) HeightRow = hT;
 				}
-				//logfile.Log(". HeightRow= " + HeightRow);
+				Cols[c].width(w);
+				//logfile.Log(". c= " + c + " width= " + Cols[c].width());
 			}
+			//logfile.Log(". HeightRow= " + HeightRow);
 		}
 
 		/// <summary>
@@ -1158,39 +1184,6 @@ namespace yata
 					}
 				}
 			}
-		}
-
-		void labelid_Paint(object sender, PaintEventArgs e)
-		{
-			_graphics = e.Graphics;
-			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(_graphics, "id", _f.FontAccent, rect, _colorText, _flags);
-
-			_graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
-		}
-
-		void labelfirst_Paint(object sender, PaintEventArgs e)
-		{
-			_graphics = e.Graphics;
-			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(_graphics, Cols[1].text, _f.FontAccent, rect, _colorText, _flags);
-
-			_graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
-		}
-
-		void labelsecond_Paint(object sender, PaintEventArgs e)
-		{
-			_graphics = e.Graphics;
-			_graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(_graphics, Cols[2].text, _f.FontAccent, rect, _colorText, _flags);
-
-			_graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 		}
 
 
@@ -1604,25 +1597,21 @@ namespace yata
 				int c = _editcell.x;
 				int pre = Cols[c].width();
 
-				using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+				if (w > pre)
 				{
-					int w = TextRenderer.MeasureText(graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
-
-					if (w > pre)
+					Cols[c].width(w);
+				}
+				else if (w < pre) // recalc width on the entire col
+				{
+					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
+					int wT;
+					for (int r = 0; r != RowCount; ++r)
 					{
-						Cols[c].width(w);
+						wT = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2;
+						if (wT > w) w = wT;
 					}
-					else if (w < pre) // recalc width on the entire col
-					{
-						w = TextRenderer.MeasureText(graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
-						int wT;
-						for (int r = 0; r != RowCount; ++r)
-						{
-							wT = TextRenderer.MeasureText(graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2;
-							if (wT > w) w = wT;
-						}
-						Cols[c].width(w, true);
-					}
+					Cols[c].width(w, true);
 				}
 
 				if (Cols[c].width() != pre)
@@ -1635,7 +1624,7 @@ namespace yata
 
 
 		/// <summary>
-		/// - mouseclick position does not register on any of the top or leftside
+		/// - mouseclick position does not register on any of the top or left
 		///   panels
 		/// </summary>
 		/// <param name="e"></param>

@@ -652,12 +652,7 @@ namespace yata
 			if (_copy.Count == Table.ColCount)
 			{
 				Table.Changed = true;
-
 				Table.Insert(_r, _copy);
-
-//				var graphics = CreateGraphics();
-//				Table.LabelRowheads(graphics); // TODO: static Graphics
-
 				Table.Refresh();
 			}
 		}
@@ -683,10 +678,6 @@ namespace yata
 			{
 				Table.Changed = true;
 				Table.Insert(_r + 1, _copy);
-
-//				var graphics = CreateGraphics();
-//				Table.LabelRowheads(graphics); // TODO: static Graphics
-
 				Table.Refresh();
 			}
 		}
@@ -702,10 +693,6 @@ namespace yata
 				fields[c] = Constants.Stars;
 			}
 			Table.Insert(_r, fields);
-
-//			var graphics = CreateGraphics();
-//			Table.LabelRowheads(graphics); // TODO: static Graphics
-
 			Table.Refresh();
 		}
 
@@ -732,10 +719,6 @@ namespace yata
 				fields[c] = Constants.Stars;
 			}
 			Table.Insert(_r + 1, fields);
-
-//			var graphics = CreateGraphics();
-//			Table.LabelRowheads(graphics); // TODO: static Graphics
-
 			Table.Refresh();
 		}
 
@@ -744,10 +727,6 @@ namespace yata
 			Table.Changed = true;
 
 			Table.Insert(_r, null);
-
-//			var graphics = CreateGraphics();
-//			Table.LabelRowheads(graphics); // TODO: static Graphics
-
 			Table.Refresh();
 		}
 		#endregion Context menu
@@ -794,6 +773,8 @@ namespace yata
 			Table._editor.Visible = false;
 
 			// TODO: Allow frozen col(s) to be searched through also.
+			// TODO: option to invert the search direction (or at least back to
+			//       previous find)
 
 			string search = tb_Search.Text;
 			if (!String.IsNullOrEmpty(search))
@@ -1128,6 +1109,8 @@ namespace yata
 			// It might better be set to "DPI" for those weirdos and I don't
 			// know what "Inherit" means (other than the obvious).
 			// AutoScaleMode is currently set to "None".
+			//
+			// See also SetProcessDPIAware()
 
 //			int w = Width; // grab these before auto-scaling/re-sizing happens -->
 //			int h = Height;
