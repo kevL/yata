@@ -612,6 +612,7 @@ namespace yata
 		{
 			_r = (e.Y + Table.offsetVert) / Table.HeightRow;
 
+			Table._editor.Visible = false;
 			Table.ClearCellSelects();
 			for (int c = 0; c != Table.ColCount; ++c)
 				Table[_r,c].selected = true;
@@ -629,8 +630,8 @@ namespace yata
 			context_it_Paste     .Enabled =
 			context_it_PasteBelow.Enabled = (Table.ColCount == _copy.Count);
 
-			contextEditor.Show(Table, new Point(Table.WidthRowhead,
-												Table.HeightColhead));
+			contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
+												YataGrid.HeightColhead));
 		}
 
 		void contextclick_EditCopy(object sender, EventArgs e)

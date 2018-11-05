@@ -55,8 +55,8 @@ namespace yata
 			set { _f.TableChanged(_changed = value); }
 		}
 
-		internal int HeightColhead;
-		internal int WidthRowhead;
+		internal static int HeightColhead;
+		internal static int WidthRowhead;
 
 		internal int HeightRow;
 
@@ -84,33 +84,6 @@ namespace yata
 		}
 
 
-		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
-		internal const int FreezeFirst  = 2;
-		internal const int FreezeSecond = 3;
-
-		int _frozenCount = FreezeId; // starts out w/ id-col only.
-		internal int FrozenCount
-		{
-			get { return _frozenCount; }
-			set
-			{
-				_frozenCount = value;
-
-				int w = 0;
-				for (int c = 0; c != _frozenCount; ++c)
-				{
-					w += Cols[c].width();
-				}
-				_panelFrozen.Width = w;
-
-				_panelFrozen.Refresh();
-
-				_labelfirst .Visible = (_frozenCount > FreezeId);
-				_labelsecond.Visible = (_frozenCount > FreezeFirst);
-			}
-		}
-
-
 		internal static Graphics graphics_; // is used to paint crap.
 		static Graphics _graphics; // is used only for MeasureText()
 
@@ -123,8 +96,6 @@ namespace yata
 		const int _padVert = 4;
 
 		const int _padHoriRowhead = 8;
-
-//		bool _load;
 
 
 		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
@@ -158,6 +129,32 @@ namespace yata
 		Label _labelfirst  = new Label();
 		Label _labelsecond = new Label();
 
+		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
+		internal const int FreezeFirst  = 2;
+		internal const int FreezeSecond = 3;
+
+		int _frozenCount = FreezeId; // starts out w/ id-col only.
+		internal int FrozenCount
+		{
+			get { return _frozenCount; }
+			set
+			{
+				_frozenCount = value;
+
+				int w = 0;
+				for (int c = 0; c != _frozenCount; ++c)
+				{
+					w += Cols[c].width();
+				}
+				_panelFrozen.Width = w;
+
+				_panelFrozen.Refresh();
+
+				_labelfirst .Visible = (_frozenCount > FreezeId);
+				_labelsecond.Visible = (_frozenCount > FreezeFirst);
+			}
+		}
+
 
 		Timer _t1 = new Timer();
 
@@ -177,7 +174,7 @@ namespace yata
 			//logfile.Log("YataGrid() cTor");
 
 //			DrawingControl.SetDoubleBuffered(this);
-			DoubleBuffered = true;
+//			DoubleBuffered = true;
 
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
@@ -883,8 +880,8 @@ namespace yata
 				Controls.Remove(_panelRows);
 				Controls.Remove(_panelFrozen);
 
-//				_panelCols.Dispose(); // breaks the frozen-labels
-//				_panelRows.Dispose();
+//				_panelCols  .Dispose(); // breaks the frozen-labels
+//				_panelRows  .Dispose();
 //				_panelFrozen.Dispose();
 			}
 			else if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
@@ -894,43 +891,39 @@ namespace yata
 			}
 
 
-//			_load = true;
-
 //			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
 													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
+
+			_panelCols = new YataPanelCols(this);
+			_panelCols.MouseClick += click_ColPanel;
+			_panelRows = new YataPanelRows(this);
+			_panelRows.MouseClick += click_RowPanel;
 
 			CreateCols();
 			CreateRows();
 			CreateCells();
 
-			_scrollVert.LargeChange =
-			_scrollHori.LargeChange = HeightRow;
-
-			_panelCols = new YataPanelCols(this, HeightColhead);
-			_panelCols.MouseClick += click_ColPanel;
-			_panelRows = new YataPanelRows(this, WidthRowhead);
-			_panelRows.MouseClick += click_RowPanel;
-
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
+			FrozenLabelsInit();
+
+			SetStaticHeads();
 
 			Controls.Add(_panelFrozen);
-
 			Controls.Add(_panelRows);
 			Controls.Add(_panelCols);
 
-			InitFrozenLabels();
 
+			_scrollVert.LargeChange =
+			_scrollHori.LargeChange = HeightRow;
 			InitScrollers();
 
 			Select();
 
 			_init = false;
-
-//			_load = false;
 		}
 
 		/// <summary>
-		/// Redimensions everything.
+		/// Redimensions everything when Font changes.
 		/// </summary>
 		internal void Calibrate()
 		{
@@ -943,32 +936,31 @@ namespace yata
 //			_scrollVert.Value =
 //			_scrollHori.Value = 0;
 
-			CreateCols(true);
-			SetRowheadWidth();
-			CreateCells(true);
-
-			_scrollVert.LargeChange =
-			_scrollHori.LargeChange = HeightRow;
-
 			Controls.Remove(_panelCols);
 			Controls.Remove(_panelRows);
 			Controls.Remove(_panelFrozen);
 
-			_panelCols = new YataPanelCols(this, HeightColhead);
+			_panelCols = new YataPanelCols(this);
 			_panelCols.MouseClick += click_ColPanel;
-			_panelRows = new YataPanelRows(this, WidthRowhead);
+			_panelRows = new YataPanelRows(this);
 			_panelRows.MouseClick += click_RowPanel;
+
+			CreateCols(true);
+			CreateCells(true);
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenCount = FrozenCount; // refresh the Frozen panel
+			FrozenLabelsInit();
+
+			SetStaticHeads();
 
 			Controls.Add(_panelFrozen);
-
 			Controls.Add(_panelRows);
 			Controls.Add(_panelCols);
 
-			InitFrozenLabels();
 
+			_scrollVert.LargeChange =
+			_scrollHori.LargeChange = HeightRow;
 			InitScrollers();
 
 			Select();
@@ -998,7 +990,7 @@ namespace yata
 			}
 			else
 			{
-				HeightColhead = 0;
+				_panelCols.Height = 10;
 				Cols[0].width(0, true);
 			}
 
@@ -1013,13 +1005,11 @@ namespace yata
 
 				size = TextRenderer.MeasureText(_graphics, head, _f.FontAccent, _size, _flags);
 				Cols[c].width(size.Width + _padHori * 2, calibrate);
-				//logfile.Log(". c= " + c + " width= " + Cols[c].width());
 
 				h = size.Height + _padVert * 2;
-				if (h > HeightColhead)
-					HeightColhead = h;
+				if (h > _panelCols.Height)
+					_panelCols.Height = h;
 			}
-			//logfile.Log(". HeightColhead= " + HeightColhead);
 		}
 
 		/// <summary>
@@ -1037,53 +1027,6 @@ namespace yata
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
 				Rows.Add(new Row(brush));
-			}
-
-			SetRowheadWidth();
-		}
-
-		/// <summary>
-		/// Calculates and maintains rowhead width wrt/ current Font across all
-		/// tabs/tables.
-		/// </summary>
-		void SetRowheadWidth()
-		{
-			//logfile.Log("SetRowheadWidth()");
-
-			YataGrid table;
-
-			int widthRowhead = 20, test; // row-headers' width stays uniform across all tabpages ->
-
-			int tabs = _f.Tabs.TabCount;
-			int tab = 0;
-			for (; tab != tabs; ++tab)
-			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-				if ((test = table.RowCount - 1) > widthRowhead)
-					widthRowhead = test;
-			}
-
-			string text = "9";
-			int w = 1;
-			while ((widthRowhead /= 10) != 0)
-			{
-				++w;
-				text += "9";
-			}
-
-			widthRowhead = TextRenderer.MeasureText(_graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
-
-			//logfile.Log(". widthRowhead= " + widthRowhead);
-			for (tab = 0; tab != tabs; ++tab)
-			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-				table.WidthRowhead = widthRowhead;
-				
-				if (table._panelRows != null)
-					table._panelRows.Width = widthRowhead;
-
-				if (table._labelid != null)
-					table._labelid.Width = widthRowhead;
 			}
 		}
 
@@ -1136,19 +1079,17 @@ namespace yata
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
 		/// </summary>
-		void InitFrozenLabels()
+		void FrozenLabelsInit()
 		{
 			_labelid    .Visible =
 			_labelfirst .Visible =
 			_labelsecond.Visible = false;
 
-			if (ColCount > 0)
+			if (ColCount != 0)
 			{
 				_labelid.Visible = true;
 
 				DrawingControl.SetDoubleBuffered(_labelid);
-				_labelid.Location = new Point(0,0);
-				_labelid.Size = new Size(WidthRowhead + Cols[0].width(), HeightColhead - 1);
 				_labelid.BackColor = Colors.FrozenHead;
 
 				_labelid.Paint += labelid_Paint;
@@ -1159,8 +1100,6 @@ namespace yata
 				if (ColCount > 1)
 				{
 					DrawingControl.SetDoubleBuffered(_labelfirst);
-					_labelfirst.Location = new Point(WidthRowhead + Cols[0].width(), 0);
-					_labelfirst.Size = new Size(Cols[1].width(), HeightColhead - 1);
 					_labelfirst.BackColor = Colors.FrozenHead;
 
 					_labelfirst.Paint += labelfirst_Paint;
@@ -1171,14 +1110,84 @@ namespace yata
 					if (ColCount > 2)
 					{
 						DrawingControl.SetDoubleBuffered(_labelsecond);
-						_labelsecond.Location = new Point(WidthRowhead + Cols[0].width() + Cols[1].width(), 0);
-						_labelsecond.Size = new Size(Cols[2].width(), HeightColhead - 1);
 						_labelsecond.BackColor = Colors.FrozenHead;
 
 						_labelsecond.Paint += labelsecond_Paint;
 						_labelsecond.MouseClick += (sender, e) => Select();
 
 						_panelCols.Controls.Add(_labelsecond);
+					}
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Calculates and maintains rowhead width wrt/ current Font across all
+		/// tabs/tables.
+		/// TODO: Maintain colhead height also.
+		/// </summary>
+		void SetStaticHeads()
+		{
+			//logfile.Log("SetStaticHeads()");
+
+			YataGrid table;
+
+			int heightColhead = 10;				// col-headers' height stays uniform across all tabpages
+			int widthRowhead  = 20, testWidth;	// row-headers' width stays uniform across all tabpages
+
+			int tabs = _f.Tabs.TabCount;
+			int tab = 0;
+			for (; tab != tabs; ++tab)
+			{
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				if (table._panelCols.Height > heightColhead)
+					heightColhead = table._panelCols.Height;
+
+				if ((testWidth = table.RowCount - 1) > widthRowhead)
+					widthRowhead = testWidth;
+			}
+
+			string text = "9";
+			int w = 1;
+			while ((widthRowhead /= 10) != 0)
+			{
+				++w;
+				text += "9";
+			}
+
+			HeightColhead = heightColhead;
+			WidthRowhead = TextRenderer.MeasureText(_graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
+
+			for (tab = 0; tab != tabs; ++tab)
+			{
+				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				table._panelCols.Height = HeightColhead;
+				table._panelRows.Width  = WidthRowhead;
+
+				FrozenLabelsSet(table);
+
+//				if (table._panelFrozen != null)
+//					table._labelid.Width = WidthRowhead;
+			}
+		}
+
+		void FrozenLabelsSet(YataGrid table)
+		{
+			if (table.ColCount != 0)
+			{
+				table._labelid.Location = new Point(0,0);
+				table._labelid.Size = new Size(WidthRowhead + table.Cols[0].width(), HeightColhead - 1);
+
+				if (table.ColCount > 1)
+				{
+					table._labelfirst.Location = new Point(WidthRowhead + table.Cols[0].width(), 0);
+					table._labelfirst.Size = new Size(table.Cols[1].width(), HeightColhead - 1);
+
+					if (table.ColCount > 2)
+					{
+						table._labelsecond.Location = new Point(WidthRowhead + table.Cols[0].width() + table.Cols[1].width(), 0);
+						table._labelsecond.Size = new Size(table.Cols[2].width(), HeightColhead - 1);
 					}
 				}
 			}
@@ -2173,7 +2182,7 @@ namespace yata
 				}
 			}
 
-			Calibrate();
+			Calibrater();
 
 			if (r < RowCount)
 				EnsureDisplayedRow(r);
@@ -2254,6 +2263,52 @@ namespace yata
 			}
 
 			cells = array;
+		}
+
+		/// <summary>
+		/// Redimensions everything.
+		/// </summary>
+		internal void Calibrater()
+		{
+			//logfile.Log("Calibrater()");
+
+			_init = true;
+
+//			_editor.Visible = false; // done when the contextmenu appears
+
+//			_scrollVert.Value =
+//			_scrollHori.Value = 0;
+
+			Controls.Remove(_panelCols);
+			Controls.Remove(_panelRows);
+			Controls.Remove(_panelFrozen);
+
+			_panelCols = new YataPanelCols(this);
+			_panelCols.MouseClick += click_ColPanel;
+			_panelRows = new YataPanelRows(this);
+			_panelRows.MouseClick += click_RowPanel;
+
+//			CreateCols(true);	// might need to adjust col-width if row is pasted in from a different table
+			CreateCells(true);
+
+			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
+			FrozenCount = FrozenCount; // refresh the Frozen panel
+			FrozenLabelsInit();
+
+			SetStaticHeads();	// need this in case qty rows changes by a power of 10
+
+			Controls.Add(_panelFrozen);
+			Controls.Add(_panelRows);
+			Controls.Add(_panelCols);
+
+
+			_scrollVert.LargeChange =
+			_scrollHori.LargeChange = HeightRow;
+			InitScrollers();
+
+			Select();
+
+			_init = false;
 		}
 	}
 }

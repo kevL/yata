@@ -14,7 +14,7 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
-		internal YataPanelCols(YataGrid grid, int h)
+		internal YataPanelCols(YataGrid grid)
 		{
 			DoubleBuffered = true;
 
@@ -23,7 +23,7 @@ namespace yata
 			Dock      = DockStyle.Top;
 			BackColor = Colors.ColheadPanel;
 
-			Height = h;
+			Height = 10;
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
-		internal YataPanelRows(YataGrid grid, int w)
+		internal YataPanelRows(YataGrid grid)
 		{
 			DoubleBuffered = true;
 
@@ -60,8 +60,6 @@ namespace yata
 
 			Dock      = DockStyle.Left;
 			BackColor = Colors.RowheadPanel;
-
-			Width = w;
 		}
 
 		/// <summary>
