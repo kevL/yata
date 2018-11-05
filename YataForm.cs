@@ -1126,7 +1126,7 @@ namespace yata
 			// Since I'm doing all the necessary scaling due to font-changes
 			// w/ code the AutoScaleMode should not be set to default "Font".
 			// It might better be set to "DPI" for those weirdos and I don't
-			// know what "Inherit" means.
+			// know what "Inherit" means (other than the obvious).
 			// AutoScaleMode is currently set to "None".
 
 //			int w = Width; // grab these before auto-scaling/re-sizing happens -->
@@ -1160,13 +1160,17 @@ namespace yata
 
 //			statusbar.Height = h2;
 
-			DrawingControl.ResumeDrawing(this);
+			if (Table != null)
+			{
+				var cell = Table.GetOnlySelectedCell();
+				if (cell != null)
+				{
+					Table.EnsureDisplayed(cell);
+					Refresh(); // for big tables ...
+				}
+			}
 
-//			if (Table != null)
-//			{
-//				Table.DisplaySelected();
-//				Refresh(); // for big tables ...
-//			}
+			DrawingControl.ResumeDrawing(this);
 		}
 		#endregion Font menu
 

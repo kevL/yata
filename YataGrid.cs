@@ -2167,6 +2167,7 @@ namespace yata
 				for (int row = r + 1; row != RowCount; ++row)
 				for (int col = 0; col != ColCount; ++col)
 				{
+					//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
 					++_cells[row,col].y;
 				}
 			}
@@ -2186,6 +2187,9 @@ namespace yata
 			}
 
 			Calibrate();
+
+			if (r < RowCount)
+				EnsureDisplayedRow(r);
 
 			DrawingControl.ResumeDrawing(this);
 		}
