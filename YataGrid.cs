@@ -156,7 +156,7 @@ namespace yata
 		}
 
 
-		Timer _t1 = new Timer();
+		static Timer _t1 = new Timer();
 
 		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
@@ -215,13 +215,15 @@ namespace yata
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
-			if (!_editor.Visible)
+			if (_table == null) _table = this;
+
+			if (!_table._editor.Visible)
 			{
-				offsetVert = _scrollVert.Value;
-				Refresh();
+				_table.offsetVert = _table._scrollVert.Value;
+				_table.Refresh();
 			}
 			else
-				_scrollVert.Value = offsetVert;
+				_table._scrollVert.Value = _table.offsetVert;
 
 			if (!_f._search)
 				Select(); // workaround: refocus the table (bar has to move > 0px)
@@ -233,13 +235,15 @@ namespace yata
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
 		{
-			if (!_editor.Visible)
+			if (_table == null) _table = this;
+
+			if (!_table._editor.Visible)
 			{
-				offsetHori = _scrollHori.Value;
-				Refresh();
+				_table.offsetHori = _table._scrollHori.Value;
+				_table.Refresh();
 			}
 			else
-				_scrollHori.Value = offsetHori;
+				_table._scrollHori.Value = _table.offsetHori;
 
 			if (!_f._search)
 				Select(); // workaround: refocus the table (bar has to move > 0px)
@@ -249,19 +253,34 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 		}
 
+		YataGrid _table;
 		protected override void OnResize(EventArgs e)
 		{
 			//logfile.Log("OnResize()");
+			if (_init) return;
 
-			InitScrollers();
+			for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+			{
+				_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+
+				//logfile.Log("- " + Path.GetFileNameWithoutExtension(_table.Pfe));
+
+				_table.InitScrollers();
+
+				// NOTE: The panels can be null during the load sequence.
+				if (_table._panelCols   != null) _table._panelCols  .Width  = Width;
+				if (_table._panelRows   != null) _table._panelRows  .Height = Height;
+				if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
+
+				_table.Refresh(); // _table-drawing can tear without that.
+			}
+			_table = null;
 
 //			if (_piColhead != null) _piColhead.Dispose();
 //			_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
 
 //			if (_piRowhead != null) _piRowhead.Dispose();
 //			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
-
-			Refresh(); // table-drawing can tear without that.
 
 //			base.OnResize(e);
 		}
@@ -274,6 +293,7 @@ namespace yata
 		void InitScrollers()
 		{
 			//logfile.Log("InitScrollers()");
+			//logfile.Log("- " + Path.GetFileNameWithoutExtension(this.Pfe));
 
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
@@ -281,32 +301,43 @@ namespace yata
 			for (int c = 0; c != ColCount; ++c)
 				WidthTable += Cols[c].width();
 
+			//logfile.Log("Width/Height= " + WidthTable + "/" + HeightTable);
+
 			// NOTE: Height/Width *includes* the height/width of the relevant
 			// scrollbar and panel.
 
 			bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
 			bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
 
+			bool visVert2 = false; // again don't ask. Be happy.
+			bool visHori2 = false;
+
 			_scrollVert.Visible =
 			_scrollHori.Visible = false;
 
 			if (visVert && visHori)
 			{
+				visVert2 =
+				visHori2 = true;
 				_scrollVert.Visible =
 				_scrollHori.Visible = true;
 			}
 			else if (visVert)
 			{
+				visVert2 = true;
+				visHori2 |= (WidthTable > Width - _scrollVert.Width);
 				_scrollVert.Visible = true;
 				_scrollHori.Visible |= (WidthTable > Width - _scrollVert.Width);
 			}
 			else if (visHori)
 			{
+				visHori2 = true;
+				visVert2 = (HeightTable > Height - _scrollHori.Height);
 				_scrollHori.Visible = true;
 				_scrollVert.Visible |= (HeightTable > Height - _scrollHori.Height);
 			}
 
-			if (_scrollVert.Visible)
+			if (visVert2)
 			{
 				int vert = HeightTable
 						 + _scrollVert.LargeChange
@@ -329,7 +360,7 @@ namespace yata
 			else
 				_scrollVert.Value = 0;
 
-			if (_scrollHori.Visible)
+			if (visHori2)
 			{
 				int hori = WidthTable
 						 + _scrollHori.LargeChange
@@ -2266,13 +2297,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Redimensions everything.
+		/// For changing RowCount ...
 		/// </summary>
 		internal void Calibrater()
 		{
 			//logfile.Log("Calibrater()");
 
-			_init = true;
+/*			_init = true;
 
 //			_editor.Visible = false; // done when the contextmenu appears
 
@@ -2308,7 +2339,7 @@ namespace yata
 
 			Select();
 
-			_init = false;
+			_init = false; */
 		}
 	}
 }

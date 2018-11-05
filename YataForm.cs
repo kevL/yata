@@ -1127,8 +1127,7 @@ namespace yata
 			if (Table != null)
 			{
 				YataGrid table;
-				int tabs = Tabs.TabCount;
-				for (int tab = 0; tab != tabs; ++tab)
+				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
 					table.Calibrate();
