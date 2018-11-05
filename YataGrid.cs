@@ -34,6 +34,8 @@ namespace yata
 		internal static readonly Color FrozenPanel = Color.OldLace;
 
 		internal static readonly Color Edit = Color.Crimson;
+
+		internal static readonly Color Text = SystemColors.ControlText;
 	}
 
 
@@ -111,8 +113,6 @@ namespace yata
 
 		internal static Graphics graphics_; // is used to paint crap.
 		static Graphics _graphics; // is used only for MeasureText()
-
-		static Color _colorText = SystemColors.ControlText;
 
 //		Bitmap _bluePi = Resources.bluepixel;
 //		Bitmap _piColhead;
@@ -471,7 +471,7 @@ namespace yata
 								rect.X += _padHori;
 							}
 
-							TextRenderer.DrawText(graphics_, cell.text, Font, rect, _colorText, _flags);
+							TextRenderer.DrawText(graphics_, cell.text, Font, rect, Colors.Text, _flags);
 //							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
 
@@ -534,7 +534,7 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
-						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, Colors.Text, _flags);
 
 					if ((rect.X += rect.Width) > Right)
 						break;
@@ -562,7 +562,7 @@ namespace yata
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					TextRenderer.DrawText(graphics_, r.ToString(), _f.FontAccent, rect, _colorText, _flags);
+					TextRenderer.DrawText(graphics_, r.ToString(), _f.FontAccent, rect, Colors.Text, _flags);
 				}
 //				_load = false;
 			}
@@ -574,7 +574,7 @@ namespace yata
 			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, "id", _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, "id", _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 		}
@@ -585,7 +585,7 @@ namespace yata
 			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, Cols[1].text, _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, Cols[1].text, _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 		}
@@ -596,7 +596,7 @@ namespace yata
 			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, Cols[2].text, _f.FontAccent, rect, _colorText, _flags);
+			TextRenderer.DrawText(graphics_, Cols[2].text, _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 		}
@@ -632,7 +632,7 @@ namespace yata
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics_, _cells[r,c].text, Font, rect, _colorText, _flags);
+						TextRenderer.DrawText(graphics_, _cells[r,c].text, Font, rect, Colors.Text, _flags);
 
 						rect.X += rect.Width;
 					}
