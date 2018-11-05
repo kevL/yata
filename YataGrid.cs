@@ -325,16 +325,16 @@ namespace yata
 			else if (visVert)
 			{
 				visVert2 = true;
-				visHori2 |= (WidthTable > Width - _scrollVert.Width);
+				visHori2 = (WidthTable > Width - _scrollVert.Width);
 				_scrollVert.Visible = true;
-				_scrollHori.Visible |= (WidthTable > Width - _scrollVert.Width);
+				_scrollHori.Visible = visHori2;
 			}
 			else if (visHori)
 			{
 				visHori2 = true;
 				visVert2 = (HeightTable > Height - _scrollHori.Height);
 				_scrollHori.Visible = true;
-				_scrollVert.Visible |= (HeightTable > Height - _scrollHori.Height);
+				_scrollVert.Visible = visVert2;
 			}
 
 			if (visVert2)
