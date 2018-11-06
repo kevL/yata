@@ -798,8 +798,8 @@ namespace yata
 				}
 				else
 				{
-					startRow =
-					startCol = 0;
+					startRow =  0;
+					startCol = -1;
 				}
 
 
@@ -816,7 +816,10 @@ namespace yata
 					if (start)
 					{
 						start = false;
-						c = startCol + 1;
+						if (startCol == -1)
+							c = 0;
+						else
+							c = startCol + 1;
 
 						if (c == Table.ColCount)		// if starting on the last cell of a row
 						{
