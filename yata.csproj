@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CraftInfo.cs" />
-    <Compile Include="DraggableTabControl.cs" />
+    <Compile Include="YataTabs.cs" />
     <Compile Include="FontPickerForm.cs" />
     <Compile Include="FontPickerForm.Designer.cs">
       <DependentUpon>FontPickerForm.cs</DependentUpon>

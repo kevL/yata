@@ -9,7 +9,7 @@
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		private yata.DraggableTabControl tabControl;
+		private yata.YataTabs tabControl;
 		private System.Windows.Forms.MenuStrip menubar;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuFile;
 		private System.Windows.Forms.ToolStripMenuItem it_Open;
@@ -102,7 +102,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YataForm));
-			this.tabControl = new yata.DraggableTabControl();
+			this.tabControl = new yata.YataTabs();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();

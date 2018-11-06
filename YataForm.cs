@@ -259,13 +259,18 @@ namespace yata
 		{
 			if (Tabs != null && Tabs.TabCount != 0)
 			{
-				int w = 25, wT;
+				Size size;
+				int w = 25, wT, h = 10, hT;
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
-					if ((wT = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, Font).Width) > w)
+					size = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, FontAccent);
+					if ((wT = size.Width) > w)
 						w = wT;
+
+					if ((hT = size.Height) > h)
+						h = hT;
 				}
-				Tabs.ItemSize = new Size(w + 8,0);
+				Tabs.ItemSize = new Size(w + 8, h + 4);
 				Tabs.Refresh(); // prevent text-drawing glitches ...
 			}
 		}
@@ -319,12 +324,12 @@ namespace yata
 			if (tab == Tabs.SelectedTab)
 			{
 				style = getStyleAccented(Font.FontFamily);
-				y = 6;
+				y = 5;
 			}
 			else
 			{
 				style = getStyleStandard(Font.FontFamily);
-				y = 3;
+				y = 2;
 			}
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
@@ -988,6 +993,13 @@ namespace yata
 
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
+//			YataGrid table; // debug->
+//			for (int tab = 0; tab != Tabs.TabCount; ++tab)
+//			{
+//				table = Tabs.TabPages[tab].Tag as YataGrid;
+//				logfile.Log(Path.GetFileNameWithoutExtension(table.Pfe) + " Height= " + Height);
+//			} // end debug.
+
 			if (Table != null && Table.RowCount != 0)
 			{
 				Brush brush;
@@ -1113,43 +1125,53 @@ namespace yata
 			//
 			// See also SetProcessDPIAware()
 
-//			int w = Width; // grab these before auto-scaling/re-sizing happens -->
-//			int h = Height;
-
-//			int w2 = tb_Search      .Width;
-//			int w3 = cb_SearchOption.Width;
-
-//			int h2 = statusbar.Height;
-
 			Font = font; // rely on GC here
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
 			if (Table != null)
 			{
+				SetTabSize();
+
 				YataGrid table;
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
+					//logfile.Log(Path.GetFileNameWithoutExtension(table.Pfe));
+
 					table.Calibrate();
-				}
-				SetTabSize();
-			}
 
-//			Width  = w;
-//			Height = h;
+					// TODO: This is effed because the Height (at least) of each
+					// table is not well-defined by .NET - OnResize() for the
+					// tables gets called multiples times per table and the
+					// value of Height changes arbitrarily. Since an accurate
+					// Height is required by InitScrollers() a glitch occurs
+					// when the height of Font increases. That is if a cell or
+					// a row is currently selected it will NOT be fully
+					// displayed if it is NOT on the currently displayed page
+					// and it is near the bottom of the tab-control's page-area;
+					// several pixels of the selected cell or row will still be
+					// covered by the horizontal scroller. Given the arbitrary
+					// Height changes that occur throughout this function's
+					// sequence in fact it's surprising/remarkable that things
+					// turn out even almost correct.
+					// NOTE: Height of any table should NOT be changing at all.
 
-//			tb_Search      .Width = w2;
-//			cb_SearchOption.Width = w3;
-
-//			statusbar.Height = h2;
-
-			if (Table != null)
-			{
-				var cell = Table.GetOnlySelectedCell();
-				if (cell != null)
-				{
-					Table.EnsureDisplayed(cell);
-					Refresh(); // for big tables ...
+					var cell = table.GetOnlySelectedCell();
+					if (cell != null)
+					{
+						table.EnsureDisplayed(cell);
+						Refresh(); // for big tables ...
+					}
+					else
+					{
+						for (int r = 0; r != table.RowCount; ++r)
+						if (table.Rows[r].selected)
+						{
+							table.EnsureDisplayedRow(r);
+							table.Refresh();
+							break;
+						}
+					}
 				}
 			}
 
@@ -1600,7 +1622,7 @@ namespace yata
 			{
 				if (Tabs.GetTabRect(i).Contains(pt))
 				{
-					Tabs.SelectedIndex = i; // i is the index of tab under cursor
+					Tabs.SelectedIndex = i;
 					return;
 				}
 			}
@@ -1616,6 +1638,12 @@ namespace yata
 		{
 			fileclick_Close(null, EventArgs.Empty);
 		}
+
+		// TODO: Close all
+		// TODO: Reload
+		// TODO: Quit
+		// TODO: FreezeFirst/Second
+		// TODO: etc ...
 		#endregion Tabmenu
 
 

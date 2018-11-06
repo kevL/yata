@@ -114,6 +114,9 @@ namespace yata
 		readonly VScrollBar _scrollVert = new VScrollBar();
 		readonly HScrollBar _scrollHori = new HScrollBar();
 
+		bool _visVert; // Be happy. happy happy
+		bool _visHori;
+
 		internal int offsetVert;
 		int offsetHori;
 
@@ -162,7 +165,7 @@ namespace yata
 		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
-		bool _init = true;
+		static bool _init = true;
 
 
 		/// <summary>
@@ -282,6 +285,8 @@ namespace yata
 //				if (_piRowhead != null) _piRowhead.Dispose();
 //				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 			}
+			//else logfile.Log(". bypass");
+
 //			base.OnResize(e);
 		}
 
@@ -292,8 +297,8 @@ namespace yata
 		/// </summary>
 		void InitScrollers()
 		{
-			//logfile.Log("InitScrollers()");
-			//logfile.Log("- " + Path.GetFileNameWithoutExtension(this.Pfe));
+			//logfile.Log("InitScrollers() " + Path.GetFileNameWithoutExtension(Pfe));
+			//logfile.Log(". Height= " + Height);
 
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
@@ -309,40 +314,40 @@ namespace yata
 			bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
 			bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
 
-			bool visVert2 = false; // again don't ask. Be happy.
-			bool visHori2 = false;
+			_visVert = false; // again don't ask. Be happy.
+			_visHori = false;
 
 			_scrollVert.Visible =
 			_scrollHori.Visible = false;
 
 			if (visVert && visHori)
 			{
-				visVert2 =
-				visHori2 = true;
+				_visVert =
+				_visHori = true;
 				_scrollVert.Visible =
 				_scrollHori.Visible = true;
 			}
 			else if (visVert)
 			{
-				visVert2 = true;
-				visHori2 = (WidthTable > Width - _scrollVert.Width);
+				_visVert = true;
+				_visHori = (WidthTable > Width - _scrollVert.Width);
 				_scrollVert.Visible = true;
-				_scrollHori.Visible = visHori2;
+				_scrollHori.Visible = _visHori;
 			}
 			else if (visHori)
 			{
-				visVert2 = (HeightTable > Height - _scrollHori.Height);
-				visHori2 = true;
-				_scrollVert.Visible = visVert2;
+				_visVert = (HeightTable > Height - _scrollHori.Height);
+				_visHori = true;
+				_scrollVert.Visible = _visVert;
 				_scrollHori.Visible = true;
 			}
 
-			if (visVert2)
+			if (_visVert)
 			{
 				int vert = HeightTable
 						 + _scrollVert.LargeChange
 						 - Height
-						 + (visHori2 ? _scrollHori.Height : 0)
+						 + (_visHori ? _scrollHori.Height : 0)
 						 - 1;
 
 				if (vert < _scrollVert.LargeChange) vert = 0;
@@ -352,20 +357,20 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the bottom of the table snuggled against the bottom of the visible area
-				if (HeightTable - offsetVert < Height - (visHori2 ? _scrollHori.Height : 0))
+				if (HeightTable - offsetVert < Height - (_visHori ? _scrollHori.Height : 0))
 				{
-					_scrollVert.Value = HeightTable - Height + (visHori2 ? _scrollHori.Height : 0);
+					_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
 				}
 			}
 			else
 				_scrollVert.Value = 0;
 
-			if (visHori2)
+			if (_visHori)
 			{
 				int hori = WidthTable
 						 + _scrollHori.LargeChange
 						 - Width
-						 + (visVert2 ? _scrollVert.Width : 0)
+						 + (_visVert ? _scrollVert.Width : 0)
 						 - 1;
 
 				if (hori < _scrollHori.LargeChange) hori = 0;
@@ -375,9 +380,9 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the right of the table snuggled against the right of the visible area
-				if (WidthTable - offsetHori < Width - (visVert2 ? _scrollVert.Width : 0))
+				if (WidthTable - offsetHori < Width - (_visVert ? _scrollVert.Width : 0))
 				{
-					_scrollHori.Value = WidthTable - Width + (visVert2 ? _scrollVert.Width : 0);
+					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
 				}
 			}
 			else
@@ -1893,7 +1898,7 @@ namespace yata
 
 			if (rect.X != left)
 			{
-				bar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				bar = _visVert ? _scrollVert.Width : 0;
 				int right = Width - bar;
 
 				if (rect.X < left
@@ -1916,7 +1921,7 @@ namespace yata
 				}
 				else
 				{
-					bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+					bar = _visHori ? _scrollHori.Height : 0;
 					if (rect.Y + rect.Height + bar > Height)
 					{
 						_scrollVert.Value += rect.Y + rect.Height + bar - Height;
@@ -1963,7 +1968,7 @@ namespace yata
 				}
 				else
 				{
-					int bar = _scrollHori.Visible ? _scrollHori.Height : 0;
+					int bar = _visHori ? _scrollHori.Height : 0;
 					if (bounds.Y + bar > Height)
 					{
 						_scrollVert.Value += bounds.Y + bar - Height;

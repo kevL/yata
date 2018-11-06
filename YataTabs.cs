@@ -7,12 +7,56 @@ namespace yata
 	/// <summary>
 	/// Theirs was fucked so I figured it out. Tks
 	/// </summary>
-	class DraggableTabControl
+	class YataTabs
 		:
 			TabControl
 	{
 		// DoDragDrop/OnDragEnter/OnDragOver/OnDragDrop/OnDragLeave
 		// NOTE: The MouseUp event does NOT fire when a drag-drop is underway.
+
+		#region OnePage no tabs
+		// https://stackoverflow.com/questions/1824036/tabcontrol-how-can-you-remove-the-tabpage-title#answer-1824130
+
+/*		int mPages;
+
+		void checkOnePage()
+		{
+			if (IsHandleCreated)
+			{
+				int pages = mPages;
+				mPages = TabCount;
+				if ((pages == 1 && mPages > 1) || (pages > 1 && mPages == 1))
+					RecreateHandle();
+			}
+		}
+
+		protected override void OnControlAdded(ControlEventArgs e)
+		{
+			base.OnControlAdded(e);
+			checkOnePage();
+		}
+
+		protected override void OnControlRemoved(ControlEventArgs e)
+		{
+			base.OnControlRemoved(e);
+			checkOnePage();
+		}
+
+		protected override void WndProc(ref Message m)
+		{
+			// Hide tabs by trapping the TCM_ADJUSTRECT message
+			if (m.Msg == 0x1328 && !DesignMode && TabCount == 1)
+				m.Result = (IntPtr)1;
+			else
+				base.WndProc(ref m);
+		} */
+
+		// Or try this:
+		//tabControl.Top = tabControl.Top - tabControl.ItemSize.Height;
+		//tabControl.Height = tabControl.Height + tabControl.ItemSize.Height;
+		//tabControl.Region = new Region(new RectangleF(tabPage.Left, tabPage.Top, tabPage.Width, tabPage.Height + tabControl.ItemSize.Height));
+		#endregion OnePage no tabs
+
 
 		#region Fields
 		TabPage _tabDrag, _tabOver;
