@@ -1163,7 +1163,6 @@ namespace yata
 		/// <summary>
 		/// Calculates and maintains rowhead width wrt/ current Font across all
 		/// tabs/tables.
-		/// TODO: Maintain colhead height also.
 		/// </summary>
 		void SetStaticHeads()
 		{
@@ -1200,6 +1199,11 @@ namespace yata
 			for (tab = 0; tab != tabs; ++tab)
 			{
 				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+
+				table.WidthTable = WidthRowhead;
+				for (int c = 0; c != table.ColCount; ++c)
+					table.WidthTable += table.Cols[c].width();
+
 				table._panelCols.Height = HeightColhead;
 				table._panelRows.Width  = WidthRowhead;
 
