@@ -47,6 +47,7 @@ namespace yata
 		{ get; set; }
 
 		readonly YataForm _f;
+		YataGrid _table; // for cycling through all tables
 
 		bool _changed;
 		internal bool Changed
@@ -63,7 +64,7 @@ namespace yata
 		internal int ColCount;
 		internal int RowCount;
 
-		string[] Fields // 'Fields' does NOT contain #0 col IDs (so that often needs +1)
+		string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
 		{ get; set; }
 
 		readonly List<string[]> _rows = new List<string[]>();
@@ -156,7 +157,7 @@ namespace yata
 		}
 
 
-		static Timer _t1 = new Timer();
+		static Timer _t1 = new Timer(); // hides info on the statusbar when mouse leaves the table-area
 
 		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
@@ -202,7 +203,7 @@ namespace yata
 			Controls.Add(_scrollVert);
 
 			_t1.Interval = 223;
-			_t1.Enabled = true;
+			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
 			_t1.Tick += t1_Tick;
 
 			_editor.BackColor = Colors.Edit;
@@ -253,35 +254,34 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 		}
 
-		YataGrid _table;
 		protected override void OnResize(EventArgs e)
 		{
 			//logfile.Log("OnResize()");
-			if (_init) return;
-
-			for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+			if (!_init)
 			{
-				_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+				{
+					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
 
-				//logfile.Log("- " + Path.GetFileNameWithoutExtension(_table.Pfe));
+					//logfile.Log(". " + Path.GetFileNameWithoutExtension(_table.Pfe));
 
-				_table.InitScrollers();
+					_table.InitScrollers();
 
-				// NOTE: The panels can be null during the load sequence.
-				if (_table._panelCols   != null) _table._panelCols  .Width  = Width;
-				if (_table._panelRows   != null) _table._panelRows  .Height = Height;
-				if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
+					// NOTE: The panels can be null during the load sequence.
+					if (_table._panelCols   != null) _table._panelCols  .Width  = Width;
+					if (_table._panelRows   != null) _table._panelRows  .Height = Height;
+					if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
 
-				_table.Refresh(); // _table-drawing can tear without that.
+					_table.Refresh(); // _table-drawing can tear without that.
+				}
+				_table = null;
+
+//				if (_piColhead != null) _piColhead.Dispose();
+//				_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
+
+//				if (_piRowhead != null) _piRowhead.Dispose();
+//				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 			}
-			_table = null;
-
-//			if (_piColhead != null) _piColhead.Dispose();
-//			_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
-
-//			if (_piRowhead != null) _piRowhead.Dispose();
-//			_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
-
 //			base.OnResize(e);
 		}
 
@@ -331,10 +331,10 @@ namespace yata
 			}
 			else if (visHori)
 			{
-				visHori2 = true;
 				visVert2 = (HeightTable > Height - _scrollHori.Height);
-				_scrollHori.Visible = true;
+				visHori2 = true;
 				_scrollVert.Visible = visVert2;
+				_scrollHori.Visible = true;
 			}
 
 			if (visVert2)
@@ -583,7 +583,7 @@ namespace yata
 			{
 //				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
 
-				var rect = new Rectangle(_padHoriRowhead, 0, WidthRowhead, HeightRow);
+				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead, HeightRow); // NOTE: -1 is a padding tweak.
 
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
@@ -647,6 +647,7 @@ namespace yata
 					x += Cols[c].width();
 					graphics_.DrawLine(Pens.DarkLine, x, 0, x, Height);
 				}
+//				graphics_.DrawLine(Pens.DarkLine, x - 1, 0, x - 1, Height);
 
 				var rect = new Rectangle(0,0, 0, HeightRow);
 
@@ -655,7 +656,7 @@ namespace yata
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					rect.X = _padHori;
+					rect.X = _padHori - 1; // NOTE: -1 is a padding tweak.
 
 					for (c = 0; c != FrozenCount; ++c)
 					{
@@ -1197,9 +1198,6 @@ namespace yata
 				table._panelRows.Width  = WidthRowhead;
 
 				FrozenLabelsSet(table);
-
-//				if (table._panelFrozen != null)
-//					table._labelid.Width = WidthRowhead;
 			}
 		}
 

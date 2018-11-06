@@ -73,6 +73,7 @@ namespace yata
 			YataGrid.graphics_ = e.Graphics;
 			YataGrid.graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			YataGrid.graphics_.DrawLine(Pens.DarkLine, Width, 0, Width, Height);
+//			YataGrid.graphics_.DrawLine(Pens.DarkLine, Width - 1, 0, Width - 1, Height);
 			_grid.LabelRowheads();
 
 //			DrawingControl.ResumeDrawing(this);
@@ -96,6 +97,7 @@ namespace yata
 
 			Dock      = DockStyle.Left;
 			BackColor = Colors.FrozenPanel;
+			MouseClick += (sender, e) => grid.Select();
 
 			Width = w;
 		}
