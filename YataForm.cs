@@ -1191,7 +1191,7 @@ namespace yata
 		{
 			string st = String.Empty;
 
-			if (id != -1)
+			if (id != -1 && Table != null) // else CloseAll can throw on invalid object.
 			{
 				statusbar_label_Coords.Text = "id= " + id + " col= " + col;
 
@@ -1618,11 +1618,11 @@ namespace yata
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
 			var pt = Tabs.PointToClient(Cursor.Position);
-			for (int i = 0; i != Tabs.TabCount; ++i)
+			for (int tab = 0; tab != Tabs.TabCount; ++tab)
 			{
-				if (Tabs.GetTabRect(i).Contains(pt))
+				if (Tabs.GetTabRect(tab).Contains(pt))
 				{
-					Tabs.SelectedIndex = i;
+					Tabs.SelectedIndex = tab;
 					return;
 				}
 			}
@@ -1639,7 +1639,41 @@ namespace yata
 			fileclick_Close(null, EventArgs.Empty);
 		}
 
-		// TODO: Close all
+		void tabclick_CloseAll(object sender, EventArgs e)
+		{
+			bool yes = true;
+
+			var tables = GetChangedTables();
+			if (tables.Count != 0)
+			{
+				string info = String.Empty;
+				foreach (string table in tables)
+				{
+					info += table + Environment.NewLine;
+				}
+
+				yes = MessageBox.Show("Data has changed."
+									  + Environment.NewLine + Environment.NewLine
+									  + info
+									  + Environment.NewLine
+									  + "Okay to exit ...",
+									  "warning",
+									  MessageBoxButtons.YesNo,
+									  MessageBoxIcon.Warning,
+									  MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+			}
+
+			if (yes)
+			{
+				Table = null;
+
+				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+					Tabs.TabPages.Remove(Tabs.TabPages[tab]);
+
+				SetTitlebarText();
+			}
+		}
+
 		// TODO: Reload
 		// TODO: Quit
 		// TODO: FreezeFirst/Second

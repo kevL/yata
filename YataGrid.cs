@@ -165,7 +165,7 @@ namespace yata
 		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
-		static bool _init = true;
+		static bool _init;
 
 
 		/// <summary>
@@ -189,6 +189,7 @@ namespace yata
 			_graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
 			Pfe = pfe;
+			_init = true;
 
 			Dock = DockStyle.Fill;
 			BackColor = SystemColors.ControlDark;
@@ -1576,17 +1577,7 @@ namespace yata
 
 					if ((_editcell = GetOnlySelectedCell()) != null)
 					{
-						var rect = getCellRectangle(_editcell);
-						_editor.Left   = rect.X + 6;
-						_editor.Top    = rect.Y + 4;
-						_editor.Width  = rect.Width - 7;
-						_editor.Height = rect.Height;
-
-						_editor.Visible = true;
-						_editor.Text = _editcell.text;
-						_editor.SelectionStart = 0; // because .NET
-						_editor.SelectionStart = _editor.Text.Length;
-
+						EditCell();
 						_editor.Focus();
 						Refresh();
 					}
@@ -1718,17 +1709,7 @@ namespace yata
 							if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
 							{
 								_editcell = cell;
-
-								var rect = getCellRectangle(cell);
-								_editor.Left   = rect.X + 6;
-								_editor.Top    = rect.Y + 4;
-								_editor.Width  = rect.Width - 7;
-								_editor.Height = rect.Height;
-
-								_editor.Visible = true;
-								_editor.Text = cell.text;
-								_editor.SelectionStart = 0; // because .NET
-								_editor.SelectionStart = _editor.Text.Length;
+								EditCell();
 							}
 							_editor.Focus();
 						}
@@ -1753,6 +1734,29 @@ namespace yata
 //			base.OnMouseClick(e);
 		}
 
+		/// <summary>
+		/// Starts cell edit on either LMB or Enter-key.
+		/// </summary>
+		void EditCell()
+		{
+			var rect = getCellRectangle(_editcell);
+			_editor.Left   = rect.X + 6;
+			_editor.Top    = rect.Y + 4;
+			_editor.Width  = rect.Width - 7;
+			_editor.Height = rect.Height;
+
+			_editor.Visible = true;
+			_editor.Text = _editcell.text;
+
+			_editor.SelectionStart = 0; // because .NET
+			if (_editor.Text == Constants.Stars)
+			{
+				_editor.SelectionLength = _editor.Text.Length;
+			}
+			else
+				_editor.SelectionStart = _editor.Text.Length;
+		}
+
 		internal void ClearCellSelects()
 		{
 			foreach (var cell in _cells)
@@ -1769,8 +1773,8 @@ namespace yata
 
 				int left = getLeft();
 
-				if (   x > left          && x < WidthTable  && e.X < Width  - (_scrollVert.Visible ? _scrollVert.Width  : 0)
-					&& y > HeightColhead && y < HeightTable && e.Y < Height - (_scrollHori.Visible ? _scrollHori.Height : 0))
+				if (   x > left          && x < WidthTable  && e.X < Width  - (_visVert ? _scrollVert.Width  : 0)
+					&& y > HeightColhead && y < HeightTable && e.Y < Height - (_visHori ? _scrollHori.Height : 0))
 				{
 					var coords = getCoords(x, y, left);
 					_f.PrintInfo(coords.Y, coords.X);
@@ -1784,13 +1788,13 @@ namespace yata
 
 		void t1_Tick(object sender, EventArgs e)
 		{
-			if (!_init)
+			if (!_init && _f.Tabs.TabCount != 0 && _f.Tabs.SelectedTab.Tag == this) // required for CloseAll ...
 			{
 				int left = getLeft();
 				var rect = new Rectangle(left,
 										 HeightColhead,
-										 Width  - left          - (_scrollVert.Visible ? _scrollVert.Width  : 0),
-										 Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0));
+										 Width  - left          - (_visVert ? _scrollVert.Width  : 0),
+										 Height - HeightColhead - (_visHori ? _scrollHori.Height : 0));
 
 				if (!rect.Contains(PointToClient(Cursor.Position)))
 					_f.PrintInfo(-1);

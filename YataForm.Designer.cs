@@ -77,6 +77,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
 		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
+		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAll;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -105,6 +106,7 @@
 			this.tabControl = new yata.YataTabs();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -197,18 +199,27 @@
 			// tabMenu
 			// 
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_tabClose});
+			this.it_tabClose,
+			this.it_tabCloseAll});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(96, 26);
+			this.tabMenu.Size = new System.Drawing.Size(153, 70);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(95, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
+			// 
+			// it_tabCloseAll
+			// 
+			this.it_tabCloseAll.Name = "it_tabCloseAll";
+			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAll.Text = "Close all";
+			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
 			// 
 			// menubar
 			// 
