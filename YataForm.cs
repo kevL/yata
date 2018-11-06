@@ -474,14 +474,14 @@ namespace yata
 
 		void fileclick_Save(object sender, EventArgs e)
 		{
-/*			if (Table != null)
+			if (Table != null)
 			{
 				string pfe = Table.Pfe;
 
 				if (!String.IsNullOrEmpty(pfe))
 				{
-					int rows = Table.Rows.Count;
-					if (rows > 1)
+					int rows = Table.RowCount;
+					if (rows != 0)
 					{
 						Table.Changed = false;
 
@@ -491,28 +491,28 @@ namespace yata
 							sw.WriteLine("");
 
 							string line = String.Empty;
-							foreach (string col in Table.Cols)
+							foreach (string field in Table.Fields)
 							{
-								line += " " + col;
+								line += " " + field;
 							}
 							sw.WriteLine(line);
 
 
-							object val;
+							string val;
 
-							int cols = Table.Columns.Count;
+							int cols = Table.ColCount;
 
-							for (int row = 0; row != rows - 1; ++row)
+							for (int r = 0; r != rows; ++r)
 							{
 								line = String.Empty;
 
-								for (int cell = 0; cell != cols; ++cell)
+								for (int c = 0; c != cols; ++c)
 								{
-									if (cell != 0)
+									if (c != 0)
 										line += " ";
 
-									if ((val = Table.Rows[row].Cells[cell].Value) != null)
-										line += val.ToString();
+									if (!String.IsNullOrEmpty(val = Table[r,c].text))
+										line += val;
 									else
 										line += Constants.Stars;
 								}
@@ -522,12 +522,12 @@ namespace yata
 						}
 					}
 				}
-			} */
+			}
 		}
 
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-/*			if (Table != null && Table.Rows.Count > 1)
+			if (Table != null && Table.RowCount != 0)
 			{
 				using (var sfd = new SaveFileDialog())
 				{
@@ -545,7 +545,7 @@ namespace yata
 						fileclick_Save(null, EventArgs.Empty);
 					}
 				}
-			} */
+			}
 		}
 
 		/// <summary>
@@ -687,9 +687,9 @@ namespace yata
 		{
 			Table.Changed = true;
 			int cols = Table.ColCount;
-
 			var fields = new string[cols];
-			for (int c = 0; c != cols; ++c)
+			fields[0] = _r.ToString();
+			for (int c = 1; c != cols; ++c)
 			{
 				fields[c] = Constants.Stars;
 			}
@@ -713,9 +713,9 @@ namespace yata
 		{
 			Table.Changed = true;
 			int cols = Table.ColCount;
-
 			var fields = new string[cols];
-			for (int c = 0; c != cols; ++c)
+			fields[0] = (_r + 1).ToString();
+			for (int c = 1; c != cols; ++c)
 			{
 				fields[c] = Constants.Stars;
 			}

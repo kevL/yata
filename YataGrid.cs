@@ -64,7 +64,7 @@ namespace yata
 		internal int ColCount;
 		internal int RowCount;
 
-		string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
+		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
 		{ get; set; }
 
 		readonly List<string[]> _rows = new List<string[]>();
@@ -2168,7 +2168,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Inserts a row into the table.
+		/// Inserts/deletes a row into the table.
 		/// NOTE: 'Rows' and '_cells' are two entirely separate entities.
 		/// </summary>
 		/// <param name="r">row</param>
@@ -2184,7 +2184,7 @@ namespace yata
 				Rows.Insert(r, new Row(Brushes.Created));
 				++RowCount;
 
-				ResizeArray(ref _cells, r);
+				GrowArray(ref _cells, r);
 
 				for (int c = 0; c != ColCount; ++c)
 					_cells[r,c] = new Cell(r,c, list[c]);
@@ -2201,7 +2201,7 @@ namespace yata
 				Rows.Remove(Rows[r]);
 				--RowCount;
 
-				ReduceArray<Cell>(ref _cells, r);
+				ShrinkArray<Cell>(ref _cells, r);
 
 				for (int row = r; row != RowCount; ++row)
 				for (int col = 0; col != ColCount; ++col)
@@ -2211,7 +2211,7 @@ namespace yata
 				}
 			}
 
-			Calibrater();
+			InitScrollers();
 
 			if (r < RowCount)
 				EnsureDisplayedRow(r);
@@ -2225,7 +2225,7 @@ namespace yata
 		/// </summary>
 		/// <param name="cells"></param>
 		/// <param name="insert">id to insert a row at</param>
-		void ResizeArray<Cell>(ref Cell[,] cells, int insert)
+		void GrowArray<Cell>(ref Cell[,] cells, int insert)
 		{
 			//logfile.Log("ResizeArray() rows= " + RowCount + " cols= " + ColCount + " insert= " + insert);
 
@@ -2262,7 +2262,7 @@ namespace yata
 		/// </summary>
 		/// <param name="cells"></param>
 		/// <param name="delete">id to delete a row at</param>
-		void ReduceArray<Cell>(ref Cell[,] cells, int delete)
+		void ShrinkArray<Cell>(ref Cell[,] cells, int delete)
 		{
 			//logfile.Log("ReduceArray() rows= " + RowCount + " cols= " + ColCount + " delete= " + delete);
 
@@ -2292,52 +2292,6 @@ namespace yata
 			}
 
 			cells = array;
-		}
-
-		/// <summary>
-		/// For changing RowCount ...
-		/// </summary>
-		internal void Calibrater()
-		{
-			//logfile.Log("Calibrater()");
-
-/*			_init = true;
-
-//			_editor.Visible = false; // done when the contextmenu appears
-
-//			_scrollVert.Value =
-//			_scrollHori.Value = 0;
-
-			Controls.Remove(_panelCols);
-			Controls.Remove(_panelRows);
-			Controls.Remove(_panelFrozen);
-
-			_panelCols = new YataPanelCols(this);
-			_panelCols.MouseClick += click_ColPanel;
-			_panelRows = new YataPanelRows(this);
-			_panelRows.MouseClick += click_RowPanel;
-
-//			CreateCols(true);	// might need to adjust col-width if row is pasted in from a different table
-			CreateCells(true);
-
-			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
-			FrozenCount = FrozenCount; // refresh the Frozen panel
-			FrozenLabelsInit();
-
-			SetStaticHeads();	// need this in case qty rows changes by a power of 10
-
-			Controls.Add(_panelFrozen);
-			Controls.Add(_panelRows);
-			Controls.Add(_panelCols);
-
-
-			_scrollVert.LargeChange =
-			_scrollHori.LargeChange = HeightRow;
-			InitScrollers();
-
-			Select();
-
-			_init = false; */
 		}
 	}
 }
