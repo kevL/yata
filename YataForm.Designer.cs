@@ -78,6 +78,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAll;
+		private System.Windows.Forms.ToolStripMenuItem it_CloseAll;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -117,6 +118,7 @@
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Close = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Quit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -202,13 +204,13 @@
 			this.it_tabClose,
 			this.it_tabCloseAll});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(153, 70);
+			this.tabMenu.Size = new System.Drawing.Size(116, 48);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(115, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -216,7 +218,7 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(115, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
@@ -250,6 +252,7 @@
 			this.it_Save,
 			this.it_SaveAs,
 			this.it_Close,
+			this.it_CloseAll,
 			this.separator_2,
 			this.it_Quit});
 			this.it_MenuFile.Name = "it_MenuFile";
@@ -315,6 +318,13 @@
 			this.it_Close.Size = new System.Drawing.Size(160, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_Close);
+			// 
+			// it_CloseAll
+			// 
+			this.it_CloseAll.Name = "it_CloseAll";
+			this.it_CloseAll.Size = new System.Drawing.Size(160, 22);
+			this.it_CloseAll.Text = "Close all";
+			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAll);
 			// 
 			// separator_2
 			// 

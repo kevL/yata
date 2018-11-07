@@ -368,6 +368,41 @@ namespace yata
 			}
 		}
 
+		void fileclick_CloseAll(object sender, EventArgs e)
+		{
+			bool close = true;
+
+			var tables = GetChangedTables();
+			if (tables.Count != 0)
+			{
+				string info = String.Empty;
+				foreach (string table in tables)
+				{
+					info += table + Environment.NewLine;
+				}
+
+				close = MessageBox.Show("Data has changed."
+										+ Environment.NewLine + Environment.NewLine
+										+ info
+										+ Environment.NewLine
+										+ "Okay to exit ...",
+										"warning",
+										MessageBoxButtons.YesNo,
+										MessageBoxIcon.Warning,
+										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+			}
+
+			if (close)
+			{
+				Table = null;
+
+				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+					Tabs.TabPages.Remove(Tabs.TabPages[tab]);
+
+				SetTitlebarText();
+			}
+		}
+
 		void fileclick_Quit(object sender, EventArgs e)
 		{
 			Close(); // let MainFormFormClosing() handle it ...
@@ -1644,37 +1679,7 @@ namespace yata
 
 		void tabclick_CloseAll(object sender, EventArgs e)
 		{
-			bool yes = true;
-
-			var tables = GetChangedTables();
-			if (tables.Count != 0)
-			{
-				string info = String.Empty;
-				foreach (string table in tables)
-				{
-					info += table + Environment.NewLine;
-				}
-
-				yes = MessageBox.Show("Data has changed."
-									  + Environment.NewLine + Environment.NewLine
-									  + info
-									  + Environment.NewLine
-									  + "Okay to exit ...",
-									  "warning",
-									  MessageBoxButtons.YesNo,
-									  MessageBoxIcon.Warning,
-									  MessageBoxDefaultButton.Button2) == DialogResult.Yes;
-			}
-
-			if (yes)
-			{
-				Table = null;
-
-				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-					Tabs.TabPages.Remove(Tabs.TabPages[tab]);
-
-				SetTitlebarText();
-			}
+			fileclick_CloseAll(null, EventArgs.Empty);
 		}
 
 		// TODO: Reload
