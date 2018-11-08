@@ -2018,6 +2018,25 @@ namespace yata
 			}
 		}
 
+		internal bool EnsureDisplayedCellOrRow()
+		{
+			var cell = GetOnlySelectedCell();
+			if (cell != null)
+			{
+				EnsureDisplayed(cell);
+				return true;
+			}
+
+			for (int r = 0; r != RowCount; ++r)
+			if (Rows[r].selected)
+			{
+				EnsureDisplayedRow(r);
+				return true;
+			}
+
+			return false;
+		}
+
 
 		/// <summary>
 		/// Handles a mouseclick on the rowhead. Selects or deselects row(s).
@@ -2217,6 +2236,7 @@ namespace yata
 					while ((left += Cols[c].width()) < x);
 
 					ColSort(c);
+					EnsureDisplayedCellOrRow();
 				}
 			}
 		}
@@ -2241,6 +2261,7 @@ namespace yata
 				Select();
 
 				ColSort(0);
+				EnsureDisplayedCellOrRow();
 			}
 		}
 
@@ -2253,6 +2274,7 @@ namespace yata
 				Select();
 
 				ColSort(1);
+				EnsureDisplayedCellOrRow();
 			}
 		}
 
@@ -2265,6 +2287,7 @@ namespace yata
 				Select();
 
 				ColSort(2);
+				EnsureDisplayedCellOrRow();
 			}
 		}
 
@@ -2444,7 +2467,8 @@ namespace yata
 			}
 		}
 
-		int _a, _b;
+		string _a, _b;
+		int     a_, b_;
 
 		/// <summary>
 		/// Sorts fields as integers iff they convert to integers and performs
@@ -2458,46 +2482,30 @@ namespace yata
 		///           1 first is second, second is first</returns>
 		int Sort(int r, int c)
 		{
-			string a = _cells[r  ,c].text;
-			string b = _cells[r+1,c].text;
+			_a = _cells[r  ,c].text;
+			_b = _cells[r+1,c].text;
 
-			int result = 0;
+			int result;
 
-			if (   Int32.TryParse(a, out _a)		// try int comparision first ->
-				&& Int32.TryParse(b, out _b))
+			if (   Int32.TryParse(_a, out a_)			// try int comparision first
+				&& Int32.TryParse(_b, out b_))
 			{
-				result = _a.CompareTo(_b);
-				if (result != 0)
-					return result;
+				result = a_.CompareTo(b_);
 			}
+			else
+				result = String.CompareOrdinal(_a,_b);	// else try string comparison
 
-			result = String.CompareOrdinal(a,b);	// try string comparison second ->
 			if (result != 0)
 				return result;
 
-			if (c != 0								// secondary sort on id if primary sort matches ->
-				&& Int32.TryParse(_cells[r  ,0].text, out _a)
-				&& Int32.TryParse(_cells[r+1,0].text, out _b))
+			if (c != 0									// secondary sort on id if primary sort matches
+				&& Int32.TryParse(_cells[r  ,0].text, out a_)
+				&& Int32.TryParse(_cells[r+1,0].text, out b_))
 			{
-				return _a.CompareTo(_b);
+				return a_.CompareTo(b_);
 			}
-
-			return result;							// return the result of int or string comparison above.
+			return 0;									// else return identical.
 		}
-
-/*		/// <summary>
-		/// Ensures that the searched-for field is displayed and re-orders the
-		/// row-headers.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void TableSorted(object sender, EventArgs e)
-		{
-			Changed = true;
-
-//			DisplaySelected();
-//			RelabelRowHeaders();
-		} */
 		#endregion Sort
 	}
 

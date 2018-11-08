@@ -1194,22 +1194,8 @@ namespace yata
 					// turn out even almost correct.
 					// NOTE: Height of any table should NOT be changing at all.
 
-					var cell = table.GetOnlySelectedCell();
-					if (cell != null)
-					{
-						table.EnsureDisplayed(cell);
-						Refresh(); // for big tables ...
-					}
-					else
-					{
-						for (int r = 0; r != table.RowCount; ++r)
-						if (table.Rows[r].selected)
-						{
-							table.EnsureDisplayedRow(r);
-							table.Refresh();
-							break;
-						}
-					}
+					if (table.EnsureDisplayedCellOrRow())
+						table.Refresh(); // for big tables ...
 				}
 			}
 
