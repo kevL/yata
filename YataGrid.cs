@@ -2519,7 +2519,7 @@ namespace yata
 			_sortcol = c;
 
 			int result;
-			bool stop;
+			bool stop, changed = false;
 			var cellT = new Cell[ColCount];
 			Row rowT; // NOTE: Cells are NOT properties of Rows; they act independently.
 
@@ -2530,9 +2530,10 @@ namespace yata
 				{
 					result = Sort(r,c);
 					if (   (_sortdir ==  1 && result > 0)
-					    || (_sortdir == -1 && result < 0))
+						|| (_sortdir == -1 && result < 0))
 					{
 						stop = false;
+						changed = true;
 
 						rowT = Rows[r];
 						for (int i = 0; i != ColCount; ++i)
@@ -2555,6 +2556,7 @@ namespace yata
 				}
 				if (stop) break;
 			}
+			Changed = changed;
 		}
 
 		string _a,  _b;
