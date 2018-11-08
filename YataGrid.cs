@@ -1174,7 +1174,7 @@ namespace yata
 					//logfile.Log(". text= " + _rows[r][c]);
 					_cells0[r,c] = new Cell(r,c, _rows[r][c]);
 				}
-				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0); // '_cells' is that table that gets modified/sorted/saved.
+				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0); // '_cells' is the table that gets modified/sorted/saved.
 			}
 			else
 				HeightRow = 0; // reset
