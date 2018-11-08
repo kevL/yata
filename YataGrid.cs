@@ -1652,12 +1652,7 @@ namespace yata
 					break;
 			}
 
-			if (display)
-			{
-//				if ((sel = GetOnlySelectedCell()) != null)
-				EnsureDisplayed(sel);
-			}
-
+			if (display) EnsureDisplayed(sel);
 			Refresh();
 
 //			e.Handled = true;
@@ -2511,7 +2506,7 @@ namespace yata
 
 		#region Sort
 		/// <summary>
-		/// 
+		/// Sorts rows by a col either ascending or descending.
 		/// </summary>
 		/// <param name="c">the col id to sort by</param>
 		void ColSort(int c)
@@ -2526,6 +2521,7 @@ namespace yata
 			int result;
 			bool stop;
 			var cellT = new Cell[ColCount];
+			Row rowT; // NOTE: Cells are NOT properties of Rows; they act independently.
 
 			for (int sort = 0; sort != RowCount; ++sort)
 			{
@@ -2538,15 +2534,18 @@ namespace yata
 					{
 						stop = false;
 
+						rowT = Rows[r];
 						for (int i = 0; i != ColCount; ++i)
 							cellT[i] = _cells[r,i];
 
+						Rows[r] = Rows[r+1];
 						for (int i = 0; i != ColCount; ++i)
 						{
 							_cells[r,i] = _cells[r+1,i];
 							_cells[r,i].y -= 1;
 						}
 
+						Rows[r+1] = rowT;
 						for (int i = 0; i != ColCount; ++i)
 						{
 							_cells[r+1,i] = cellT[i];
