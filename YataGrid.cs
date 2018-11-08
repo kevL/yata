@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
-//using yata.Properties;
+using yata.Properties;
 
 
 namespace yata
@@ -112,10 +112,10 @@ namespace yata
 //		Bitmap _piRowhead;
 
 
-		const int _padHori = 6;
-		const int _padVert = 4;
-
+		const int _padHori        = 6;
+		const int _padVert        = 4;
 		const int _padHoriRowhead = 8;
+		const int _padHoriSort    = 12;
 
 
 		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
@@ -186,6 +186,8 @@ namespace yata
 
 		static bool _init;
 
+		int _sortcol;
+		int _sortdir;
 
 		/// <summary>
 		/// cTor.
@@ -587,7 +589,28 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
+					{
 						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, Colors.Text, _flags);
+
+//						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
+//						{
+//							if (col == 0)
+//								sort = Resources.asc_16px;
+//						}
+//						else
+						if (_sortdir != 0 && c == _sortcol)
+						{
+							Bitmap sort;
+							if (_sortdir == 1) // asc
+								sort = Resources.asc_16px;
+							else //if (_sortdir == -1) // des
+								sort = Resources.des_16px;
+
+							graphics_.DrawImage(sort,
+												rect.X + rect.Width  - 22,
+												rect.Y + rect.Height - 15);
+						}
+					}
 
 					if ((rect.X += rect.Width) > Right)
 						break;
@@ -1065,7 +1088,7 @@ namespace yata
 					Cols[c].text = head;
 
 				size = TextRenderer.MeasureText(_graphics, head, _f.FontAccent, _size, _flags);
-				Cols[c].width(size.Width + _padHori * 2, calibrate);
+				Cols[c].width(size.Width + _padHori * 2 + _padHoriSort, calibrate);
 
 				h = size.Height + _padVert * 2;
 				if (h > _panelCols.Height)
@@ -1132,7 +1155,7 @@ namespace yata
 					//logfile.Log(". . r= " + r + " text= " + _cells[r,c].text);
 					size = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags);
 
-					wT = size.Width + _padHori * 2;
+					wT = size.Width + _padHori * 2 + _padHoriSort;
 					if (wT > w) w = wT;
 
 					hT = size.Height + _padVert * 2;
@@ -1168,6 +1191,8 @@ namespace yata
 
 				if (ColCount > 1)
 				{
+					_labelfirst.Visible = (_frozenCount > FreezeId); // required after Font calibration
+
 					DrawingControl.SetDoubleBuffered(_labelfirst);
 					_labelfirst.BackColor = Colors.FrozenHead;
 
@@ -1179,6 +1204,8 @@ namespace yata
 
 					if (ColCount > 2)
 					{
+						_labelsecond.Visible = ((_frozenCount > FreezeFirst)); // required after Font calibration
+
 						DrawingControl.SetDoubleBuffered(_labelsecond);
 						_labelsecond.BackColor = Colors.FrozenHead;
 
@@ -1666,18 +1693,18 @@ namespace yata
 				int c = _editcell.x;
 				int pre = Cols[c].width();
 
-				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2 + _padHoriSort;
 				if (w > pre)
 				{
 					Cols[c].width(w);
 				}
 				else if (w < pre) // recalc width on the entire col
 				{
-					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2; // cellwidth min.
+					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2 + _padHoriSort; // cellwidth min.
 					int wT;
 					for (int r = 0; r != RowCount; ++r)
 					{
-						wT = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2;
+						wT = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2 + _padHoriSort;
 						if (wT > w) w = wT;
 					}
 					Cols[c].width(w, true);
@@ -2433,9 +2460,10 @@ namespace yata
 		/// <param name="c">the col id to sort by</param>
 		void ColSort(int c)
 		{
-//			Cell cell;
-			bool stop;
+			_sortcol = c;
+			_sortdir = 1; // TODO: neg if descending
 
+			bool stop;
 			var cellT = new Cell[ColCount];
 
 			for (int sort = 0; sort != RowCount; ++sort)
@@ -2467,8 +2495,9 @@ namespace yata
 			}
 		}
 
-		string _a, _b;
-		int     a_, b_;
+		string _a,  _b;
+		int    _ai, _bi;
+		float  _af, _bf;
 
 		/// <summary>
 		/// Sorts fields as integers iff they convert to integers and performs
@@ -2487,22 +2516,27 @@ namespace yata
 
 			int result;
 
-			if (   Int32.TryParse(_a, out a_)			// try int comparision first
-				&& Int32.TryParse(_b, out b_))
+			if (   Int32.TryParse(_a, out _ai)			// try int comparision first
+				&& Int32.TryParse(_b, out _bi))
 			{
-				result = a_.CompareTo(b_);
+				result = _ai.CompareTo(_bi);
+			}
+			else if (float.TryParse(_a, out _af)		// try float comparison next
+				  && float.TryParse(_b, out _bf))
+			{
+				result = _af.CompareTo(_bf);
 			}
 			else
-				result = String.CompareOrdinal(_a,_b);	// else try string comparison
+				result = String.CompareOrdinal(_a,_b);	// else do string comparison
 
 			if (result != 0)
 				return result;
 
 			if (c != 0									// secondary sort on id if primary sort matches
-				&& Int32.TryParse(_cells[r  ,0].text, out a_)
-				&& Int32.TryParse(_cells[r+1,0].text, out b_))
+				&& Int32.TryParse(_cells[r  ,0].text, out _ai)
+				&& Int32.TryParse(_cells[r+1,0].text, out _bi))
 			{
-				return a_.CompareTo(b_);
+				return _ai.CompareTo(_bi);
 			}
 			return 0;									// else return identical.
 		}
