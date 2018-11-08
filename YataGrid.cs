@@ -1161,6 +1161,7 @@ namespace yata
 				_labelid.BackColor = Colors.FrozenHead;
 
 				_labelid.Paint += labelid_Paint;
+				_labelid.MouseClick += click_IdLabel;
 				_labelid.MouseClick += (sender, e) => Select();
 
 				_panelCols.Controls.Add(_labelid);
@@ -1171,6 +1172,7 @@ namespace yata
 					_labelfirst.BackColor = Colors.FrozenHead;
 
 					_labelfirst.Paint += labelfirst_Paint;
+					_labelfirst.MouseClick += click_FirstLabel;
 					_labelfirst.MouseClick += (sender, e) => Select();
 
 					_panelCols.Controls.Add(_labelfirst);
@@ -1181,6 +1183,7 @@ namespace yata
 						_labelsecond.BackColor = Colors.FrozenHead;
 
 						_labelsecond.Paint += labelsecond_Paint;
+						_labelsecond.MouseClick += click_SecondLabel;
 						_labelsecond.MouseClick += (sender, e) => Select();
 
 						_panelCols.Controls.Add(_labelsecond);
@@ -1690,8 +1693,8 @@ namespace yata
 
 
 		/// <summary>
-		/// - mouseclick position does not register on any of the top or left
-		///   panels
+		/// LMB selects a cell or enables/disables the editbox.
+		/// @note MouseClick does not register on any of the top or left panels.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
@@ -2229,6 +2232,43 @@ namespace yata
 		}
 
 
+		void click_IdLabel(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
+			{
+				_editor.Visible = false;
+				Select();
+
+				ColSort(0);
+			}
+		}
+
+		void click_FirstLabel(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
+			{
+				_editor.Visible = false;
+				Select();
+
+				ColSort(1);
+			}
+		}
+
+		void click_SecondLabel(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
+			{
+				_editor.Visible = false;
+				Select();
+
+				ColSort(2);
+			}
+		}
+
+
 		/// <summary>
 		/// Inserts/deletes a row into the table.
 		/// NOTE: 'Rows' and '_cells' are two entirely separate entities.
@@ -2365,14 +2405,12 @@ namespace yata
 
 		#region Sort
 		/// <summary>
-		/// Sorts fields as integers iff they convert to integers and performs
-		/// a secondary sort against their IDs if applicable.
-		/// TODO: descending sort
+		/// 
 		/// </summary>
 		/// <param name="c">the col id to sort by</param>
 		void ColSort(int c)
 		{
-			Cell cell;
+//			Cell cell;
 			bool stop;
 
 			var cellT = new Cell[ColCount];
@@ -2382,7 +2420,7 @@ namespace yata
 				stop = true;
 				for (int r = 0; r != RowCount - 1; ++r)
 				{
-					if (String.CompareOrdinal(_cells[r,c].text, _cells[r+1,c].text) > 0)
+					if (Sort(r,c) > 0)
 					{
 						stop = false;
 
@@ -2391,39 +2429,60 @@ namespace yata
 
 						for (int i = 0; i != ColCount; ++i)
 						{
-							cell          = _cells[r+1,i];
-							_cells[r,i].y = cell.y;
-							_cells[r,i]   = cell;
+							_cells[r,i] = _cells[r+1,i];
+							_cells[r,i].y -= 1;
 						}
 
 						for (int i = 0; i != ColCount; ++i)
 						{
-							cell            = cellT[i];
-							_cells[r+1,i].y = cell.y;
-							_cells[r+1,i]   = cell;
+							_cells[r+1,i] = cellT[i];
+							_cells[r+1,i].y += 1;
 						}
 					}
 				}
 				if (stop) break;
 			}
+		}
 
-/*			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
-				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
+		int _a, _b;
+
+		/// <summary>
+		/// Sorts fields as integers iff they convert to integers and performs
+		/// a secondary sort against their IDs if applicable.
+		/// TODO: descending sort
+		/// </summary>
+		/// <param name="r">row</param>
+		/// <param name="c">col</param>
+		/// <returns>-1 first is first, second is second
+		///           0 identical
+		///           1 first is second, second is first</returns>
+		int Sort(int r, int c)
+		{
+			string a = _cells[r  ,c].text;
+			string b = _cells[r+1,c].text;
+
+			int result = 0;
+
+			if (   Int32.TryParse(a, out _a)		// try int comparision first ->
+				&& Int32.TryParse(b, out _b))
 			{
-				e.SortResult = _a.CompareTo(_b);
-				e.Handled = true;
+				result = _a.CompareTo(_b);
+				if (result != 0)
+					return result;
 			}
 
-			if (e.Column != Columns[0] // secondary sort on id ->
-				&& e.CellValue1.ToString() == e.CellValue2.ToString())
+			result = String.CompareOrdinal(a,b);	// try string comparison second ->
+			if (result != 0)
+				return result;
+
+			if (c != 0								// secondary sort on id if primary sort matches ->
+				&& Int32.TryParse(_cells[r  ,0].text, out _a)
+				&& Int32.TryParse(_cells[r+1,0].text, out _b))
 			{
-				if (   Int32.TryParse(Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
-					&& Int32.TryParse(Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
-				{
-					e.SortResult = _a.CompareTo(_b);
-					e.Handled = true;
-				}
-			} */
+				return _a.CompareTo(_b);
+			}
+
+			return result;							// return the result of int or string comparison above.
 		}
 
 /*		/// <summary>
