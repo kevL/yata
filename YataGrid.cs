@@ -1431,15 +1431,19 @@ namespace yata
 		{
 			Cell sel = GetOnlySelectedCell();
 
+			bool display = false;
+
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
-					if (e.Modifiers == Keys.Control)
+					if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
 						if (sel != null)
 						{
 							if (sel.x != FrozenCount || sel.y != 0)
 							{
+								display = true;
+
 								sel.selected = false;
 								sel = _cells[0, FrozenCount];
 								sel.selected = true;
@@ -1452,6 +1456,8 @@ namespace yata
 					{
 						if (sel.x != FrozenCount)
 						{
+							display = true;
+
 							sel.selected = false;
 							sel = _cells[sel.y, FrozenCount];
 							sel.selected = true;
@@ -1463,12 +1469,14 @@ namespace yata
 					break;
 
 				case Keys.End:
-					if (e.Modifiers == Keys.Control)
+					if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
 						if (sel != null)
 						{
 							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
 							{
+								display = true;
+
 								sel.selected = false;
 								sel = _cells[RowCount - 1, ColCount - 1];
 								sel.selected = true;
@@ -1481,6 +1489,8 @@ namespace yata
 					{
 						if (sel.x != ColCount - 1)
 						{
+							display = true;
+
 							sel.selected = false;
 							sel = _cells[sel.y, ColCount - 1];
 							sel.selected = true;
@@ -1497,6 +1507,8 @@ namespace yata
 					{
 						if (sel.y != 0)
 						{
+							display = true;
+
 							sel.selected = false;
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
@@ -1524,6 +1536,8 @@ namespace yata
 					{
 						if (sel.y != RowCount - 1)
 						{
+							display = true;
+
 							sel.selected = false;
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
@@ -1547,13 +1561,14 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
-				{
 					if (sel != null) // selection to the cell above
 					{
 						if (sel.y != 0)
 						{
 							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
+
+							display = true;
 
 							sel.selected = false;
 							sel = _cells[sel.y - 1, sel.x];
@@ -1568,14 +1583,14 @@ namespace yata
 							_scrollVert.Value -= _scrollVert.LargeChange;
 					}
 					break;
-				}
 
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
-				{
 					if (sel != null) // selection to the cell below
 					{
 						if (sel.y != RowCount - 1)
 						{
+							display = true;
+
 							sel.selected = false;
 							sel = _cells[sel.y + 1, sel.x];
 							sel.selected = true;
@@ -1589,14 +1604,14 @@ namespace yata
 							_scrollVert.Value += _scrollVert.LargeChange;
 					}
 					break;
-				}
 
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
-				{
 					if (sel != null) // selection to the cell left
 					{
 						if (sel.x != FrozenCount)
 						{
+							display = true;
+
 							sel.selected = false;
 							sel = _cells[sel.y, sel.x - 1];
 							sel.selected = true;
@@ -1610,14 +1625,14 @@ namespace yata
 							_scrollHori.Value -= _scrollHori.LargeChange;
 					}
 					break;
-				}
 
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
-				{
 					if (sel != null) // selection to the cell right
 					{
 						if (sel.x != ColCount - 1)
 						{
+							display = true;
+
 							sel.selected = false;
 							sel = _cells[sel.y, sel.x + 1];
 							sel.selected = true;
@@ -1631,15 +1646,17 @@ namespace yata
 							_scrollHori.Value += _scrollHori.LargeChange;
 					}
 					break;
-				}
 
 				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
 					ClearCellSelects();
 					break;
 			}
 
-			if ((sel = GetOnlySelectedCell()) != null)
+			if (display)
+			{
+//				if ((sel = GetOnlySelectedCell()) != null)
 				EnsureDisplayed(sel);
+			}
 
 			Refresh();
 
