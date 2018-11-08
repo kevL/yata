@@ -653,6 +653,19 @@ namespace yata
 			TextRenderer.DrawText(graphics_, "id", _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+
+			if (_sortdir != 0 && _sortcol == 0)
+			{
+				Bitmap sort;
+				if (_sortdir == 1) // asc
+					sort = Resources.asc_16px;
+				else //if (_sortdir == -1) // des
+					sort = Resources.des_16px;
+
+				graphics_.DrawImage(sort,
+									rect.X + rect.Width  - 22,
+									rect.Y + rect.Height - 15);
+			}
 		}
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
@@ -664,6 +677,19 @@ namespace yata
 			TextRenderer.DrawText(graphics_, Cols[1].text, _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
+
+			if (_sortdir != 0 && _sortcol == 1)
+			{
+				Bitmap sort;
+				if (_sortdir == 1) // asc
+					sort = Resources.asc_16px;
+				else //if (_sortdir == -1) // des
+					sort = Resources.des_16px;
+
+				graphics_.DrawImage(sort,
+									rect.X + rect.Width  - 22,
+									rect.Y + rect.Height - 15);
+			}
 		}
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
@@ -675,6 +701,19 @@ namespace yata
 			TextRenderer.DrawText(graphics_, Cols[2].text, _f.FontAccent, rect, Colors.Text, _flags);
 
 			graphics_.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+
+			if (_sortdir != 0 && _sortcol == 2)
+			{
+				Bitmap sort;
+				if (_sortdir == 1) // asc
+					sort = Resources.asc_16px;
+				else //if (_sortdir == -1) // des
+					sort = Resources.des_16px;
+
+				graphics_.DrawImage(sort,
+									rect.X + rect.Width  - 22,
+									rect.Y + rect.Height - 15);
+			}
 		}
 
 		/// <summary>
