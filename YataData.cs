@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 
 namespace yata
@@ -39,11 +40,15 @@ namespace yata
 	/// </summary>
 	sealed class Row
 	{
+		internal int _id;	// pre-sorted id (can change when array is resized)
+//		int id_;			// sorted id
+
 		internal Brush _brush;
 		internal bool selected;
 
-		internal Row(Brush brush)
+		internal Row(int id, Brush brush)
 		{
+			_id = id;
 			_brush = brush;
 		}
 	}
@@ -51,6 +56,7 @@ namespace yata
 	/// <summary>
 	/// Contains data about a cell.
 	/// </summary>
+	[SerializableAttribute]
 	sealed class Cell
 	{
 		internal string text; // the cell's text
@@ -59,9 +65,11 @@ namespace yata
 		internal int x;
 		internal int y;
 
+//		internal int y_sorted; // y-pos sorted; sort does NOT change the position of a cell in the 2d-table-array.
+
 		internal Cell(int r, int c, string field)
 		{
-			y = r;
+			y = r; // = y_sorted
 			x = c;
 			text = field;
 		}

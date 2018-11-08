@@ -186,13 +186,13 @@
 			this.tabControl.ContextMenuStrip = this.tabMenu;
 			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-			this.tabControl.Location = new System.Drawing.Point(0, 24);
+			this.tabControl.Location = new System.Drawing.Point(0, 27);
 			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControl.Multiline = true;
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(842, 408);
+			this.tabControl.Size = new System.Drawing.Size(842, 405);
 			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
@@ -237,7 +237,7 @@
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(842, 24);
+			this.menubar.Size = new System.Drawing.Size(842, 27);
 			this.menubar.TabIndex = 0;
 			this.menubar.Text = "menuStrip1";
 			// 
@@ -256,7 +256,7 @@
 			this.separator_2,
 			this.it_Quit});
 			this.it_MenuFile.Name = "it_MenuFile";
-			this.it_MenuFile.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuFile.Size = new System.Drawing.Size(37, 23);
 			this.it_MenuFile.Text = "File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening_FolderPresets);
 			// 
@@ -345,7 +345,7 @@
 			this.it_Search,
 			this.it_Findnext});
 			this.it_MenuEdit.Name = "it_MenuEdit";
-			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuEdit.Size = new System.Drawing.Size(37, 23);
 			this.it_MenuEdit.Text = "Edit";
 			// 
 			// it_Search
@@ -369,7 +369,7 @@
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Search.Name = "tb_Search";
-			this.tb_Search.Size = new System.Drawing.Size(125, 18);
+			this.tb_Search.Size = new System.Drawing.Size(125, 23);
 			this.tb_Search.Text = "search";
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
@@ -395,7 +395,7 @@
 			this.it_freeze2});
 			this.it_MenuOptions.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
 			this.it_MenuOptions.Name = "it_MenuOptions";
-			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
+			this.it_MenuOptions.Size = new System.Drawing.Size(52, 23);
 			this.it_MenuOptions.Text = "2da Ops";
 			// 
 			// it_CheckRows
@@ -460,7 +460,7 @@
 			this.it_CurrentFont,
 			this.it_FontDefault});
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 23);
 			this.fontToolStripMenuItem.Text = "Font";
 			// 
 			// it_Font
@@ -754,9 +754,9 @@
 			// 
 			this.panel_ColorFill.BackColor = System.Drawing.Color.LightSeaGreen;
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
+			this.panel_ColorFill.Location = new System.Drawing.Point(0, 27);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
+			this.panel_ColorFill.Size = new System.Drawing.Size(842, 405);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
 			// YataForm

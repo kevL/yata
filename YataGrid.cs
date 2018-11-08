@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 //using yata.Properties;
@@ -73,6 +74,7 @@ namespace yata
 		internal readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
+		Cell[,] _cells0; // a cache of the originally loaded data that shall be pure
 		/// <summary>
 		/// Gets the cell at pos [r,c].
 		/// NOTE: 1st dimension is rows, 2nd dimension is cols. That's better
@@ -80,9 +82,26 @@ namespace yata
 		/// </summary>
 		internal Cell this[int r, int c]
 		{
-			get { return _cells[r,c]; }
-			set { _cells[r,c] = value; }
+			get
+			{
+//				if (_cells0 != null)
+//					return _cells0[r,c];
+
+				return _cells[r,c];
+			}
+			set
+			{
+//				if (_cells0 != null)
+//					_cells0[r,c] = value;
+//				else
+					_cells[r,c] = value;
+			}
 		}
+//		internal Cell this[int r, int c]
+//		{
+//			get { return _cells[r,c]; }
+//			set { _cells[r,c] = value; }
+//		}
 
 
 		internal static Graphics graphics_; // is used to paint crap.
@@ -754,19 +773,45 @@ namespace yata
 				{
 					string[] row = Parse2daRow(line);
 
-					// test for well-formed, consistent IDs
-					++id;
-
-					if (!ignoreErrors)
+					// allow blank lines on load - they will be removed if/when file is saved.
+					if (row.Length != 0)
 					{
-						int result;
-						if (!Int32.TryParse(row[0], out result) || result != id)
+						// test for well-formed, consistent IDs
+						++id;
+
+						if (!ignoreErrors)
 						{
-							string error = "The 2da-file contains an ID that is not an integer or is out of order."
+							int result;
+							if (!Int32.TryParse(row[0], out result) || result != id)
+							{
+								string error = "The 2da-file contains an ID that is not an integer or is out of order."
+											 + Environment.NewLine + Environment.NewLine
+											 + Pfe
+											 + Environment.NewLine + Environment.NewLine
+											 + id + " / " + row[0];
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return false;
+
+									case DialogResult.Retry:
+										break;
+
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+							}
+						}
+
+						// test for matching fields under columns
+						if (!ignoreErrors && row.Length != Fields.Length + 1)
+						{
+							string error = "The 2da-file contains fields that do not align with its cols."
 										 + Environment.NewLine + Environment.NewLine
 										 + Pfe
 										 + Environment.NewLine + Environment.NewLine
-										 + id + " / " + row[0];
+										 + "id " + id;
 							switch (ShowLoadError(error))
 							{
 								case DialogResult.Abort:
@@ -780,86 +825,64 @@ namespace yata
 									break;
 							}
 						}
-					}
 
-					// test for matching fields under columns
-					if (!ignoreErrors && row.Length != Fields.Length + 1)
-					{
-						string error = "The 2da-file contains fields that do not align with its cols."
-									 + Environment.NewLine + Environment.NewLine
-									 + Pfe
-									 + Environment.NewLine + Environment.NewLine
-									 + "id " + id;
-						switch (ShowLoadError(error))
+						// test for matching double-quote characters on the fly
+						if (!ignoreErrors)
 						{
-							case DialogResult.Abort:
-								return false;
-
-							case DialogResult.Retry:
-								break;
-
-							case DialogResult.Ignore:
-								ignoreErrors = true;
-								break;
-						}
-					}
-
-					// test for matching double-quote characters on the fly
-					if (!ignoreErrors)
-					{
-						bool quoteFirst, quoteLast;
-						int col = -1;
-						foreach (string field in row)
-						{
-							++col;
-							quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-							quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
-							if (   ( quoteFirst && !quoteLast)
-								|| (!quoteFirst &&  quoteLast))
+							bool quoteFirst, quoteLast;
+							int col = -1;
+							foreach (string field in row)
 							{
-								string error = "Found a missing double-quote character."
-											 + Environment.NewLine + Environment.NewLine
-											 + Pfe
-											 + Environment.NewLine + Environment.NewLine
-											 + "id " + id + " / col " + col;
-								switch (ShowLoadError(error))
+								++col;
+								quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+								quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+								if (   ( quoteFirst && !quoteLast)
+									|| (!quoteFirst &&  quoteLast))
 								{
-									case DialogResult.Abort:
-										return false;
+									string error = "Found a missing double-quote character."
+												 + Environment.NewLine + Environment.NewLine
+												 + Pfe
+												 + Environment.NewLine + Environment.NewLine
+												 + "id " + id + " / col " + col;
+									switch (ShowLoadError(error))
+									{
+										case DialogResult.Abort:
+											return false;
 
-									case DialogResult.Retry:
-										break;
+										case DialogResult.Retry:
+											break;
 
-									case DialogResult.Ignore:
-										ignoreErrors = true;
-										break;
+										case DialogResult.Ignore:
+											ignoreErrors = true;
+											break;
+									}
 								}
-							}
-							else if (quoteFirst && quoteLast
-								&& field.Length == 1)
-							{
-								string error = "Found an isolated double-quote character."
-											 + Environment.NewLine + Environment.NewLine
-											 + Pfe
-											 + Environment.NewLine + Environment.NewLine
-											 + "id " + id + " / col " + col;
-								switch (ShowLoadError(error))
+								else if (quoteFirst && quoteLast
+									&& field.Length == 1)
 								{
-									case DialogResult.Abort:
-										return false;
+									string error = "Found an isolated double-quote character."
+												 + Environment.NewLine + Environment.NewLine
+												 + Pfe
+												 + Environment.NewLine + Environment.NewLine
+												 + "id " + id + " / col " + col;
+									switch (ShowLoadError(error))
+									{
+										case DialogResult.Abort:
+											return false;
 
-									case DialogResult.Retry:
-										break;
+										case DialogResult.Retry:
+											break;
 
-									case DialogResult.Ignore:
-										ignoreErrors = true;
-										break;
+										case DialogResult.Ignore:
+											ignoreErrors = true;
+											break;
+									}
 								}
 							}
 						}
-					}
 
-					_rows.Add(row);
+						_rows.Add(row);
+					}
 				}
 
 				// also test for an odd quantity of double-quote characters
@@ -1028,8 +1051,8 @@ namespace yata
 			}
 			else
 			{
-				_panelCols.Height = 10;
-				Cols[0].width(0, true);
+				_panelCols.Height = 10; // reset
+				Cols[0].width(0, true); // reset
 			}
 
 			Size size;
@@ -1064,33 +1087,40 @@ namespace yata
 			{
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
-				Rows.Add(new Row(brush));
+				Rows.Add(new Row(r, brush));
 			}
 		}
 
 		/// <summary>
 		/// Creates the cells' 2d-array.
 		/// </summary>
-		/// <param name="calibrate">true to only adjust dimensions</param>
+		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
 		void CreateCells(bool calibrate = false)
 		{
 			//logfile.Log("CreateCells()");
+			//logfile.Log(". RowCount= " + RowCount);
+			//logfile.Log(". ColCount= " + ColCount);
 
 			if (!calibrate)
 			{
-				_cells = new Cell[RowCount, ColCount];
+				_cells0 = new Cell[RowCount, ColCount];
 
 				for (int r = 0; r != RowCount; ++r)
 				for (int c = 0; c != ColCount; ++c)
-					_cells[r,c] = new Cell(r,c, _rows[r][c]);
+				{
+					//logfile.Log(". text= " + _rows[r][c]);
+					_cells0[r,c] = new Cell(r,c, _rows[r][c]);
+				}
+				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0);
 			}
 			else
-				HeightRow = 0;
+				HeightRow = 0; // reset
 
 			_rows.Clear(); // done w/ '_rows'
 
 			Size size;
 			int w, wT, hT;
+
 			//logfile.Log("ColCount= " + ColCount);
 			for (int c = 0; c != ColCount; ++c)
 			{
@@ -1684,8 +1714,8 @@ namespace yata
 				if (   x > left          && x < WidthTable
 					&& y > HeightColhead && y < HeightTable)
 				{
-					var coords = getCoords(x, y, left);
-					var cell = _cells[coords.Y, coords.X];
+					var cords = getCords(x,y, left);
+					var cell = _cells[cords.Y, cords.X];
 
 					EnsureDisplayed(cell);
 
@@ -1780,8 +1810,8 @@ namespace yata
 				if (   x > left          && x < WidthTable  && e.X < Width  - (_visVert ? _scrollVert.Width  : 0)
 					&& y > HeightColhead && y < HeightTable && e.Y < Height - (_visHori ? _scrollHori.Height : 0))
 				{
-					var coords = getCoords(x, y, left);
-					_f.PrintInfo(coords.Y, coords.X);
+					var cords = getCords(x, y, left);
+					_f.PrintInfo(cords.Y, cords.X);
 				}
 				else
 					_f.PrintInfo(-1);
@@ -1806,22 +1836,22 @@ namespace yata
 		}
 
 
-		Point getCoords(int x, int y, int left)
+		Point getCords(int x, int y, int left)
 		{
-			var coords = new Point();
+			var cords = new Point();
 
-			coords.X = FrozenCount - 1;
-			do { ++coords.X; }
-			while ((left += Cols[coords.X].width()) < x);
+			cords.X = FrozenCount - 1;
+			do { ++cords.X; }
+			while ((left += Cols[cords.X].width()) < x);
 
 
 			int top = HeightColhead;
 
-			coords.Y = 0;
+			cords.Y = 0;
 			while ((top += HeightRow) < y)
-				++coords.Y;
+				++cords.Y;
 
-			return coords;
+			return cords;
 		}
 
 
@@ -2098,9 +2128,7 @@ namespace yata
 //				}
 
 				int x = e.X + offsetHori;
-
 				int left = getLeft();
-
 				int c = FrozenCount - 1;
 				do { ++c; }
 				while ((left += Cols[c].width()) < x);
@@ -2167,6 +2195,27 @@ namespace yata
 
 				Refresh();
 			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
+				{
+//					if (_editor.Visible)
+//					{
+					_editor.Visible = false;
+					Select();
+//					}
+	
+					int x = e.X + offsetHori;
+	
+					int left = getLeft();
+	
+					int c = FrozenCount - 1;
+					do { ++c; }
+					while ((left += Cols[c].width()) < x);
+
+					ColSort(c);
+				}
+			}
 		}
 
 		int getSelectedCol()
@@ -2184,9 +2233,9 @@ namespace yata
 		/// Inserts/deletes a row into the table.
 		/// NOTE: 'Rows' and '_cells' are two entirely separate entities.
 		/// </summary>
-		/// <param name="r">row</param>
+		/// <param name="id">row</param>
 		/// <param name="list">null to delete the row</param>
-		internal void Insert(int r, IList<string> list)
+		internal void Insert(int id, IList<string> list)
 		{
 			//logfile.Log("Insert() r= " + r);
 
@@ -2194,40 +2243,46 @@ namespace yata
 
 			if (list != null)
 			{
-				Rows.Insert(r, new Row(Brushes.Created));
+				Rows.Insert(id, new Row(id, Brushes.Created));
 				++RowCount;
 
-				GrowArray(ref _cells, r);
+				GrowArray(ref _cells, id);
 
 				for (int c = 0; c != ColCount; ++c)
-					_cells[r,c] = new Cell(r,c, list[c]);
+					_cells[id,c] = new Cell(id,c, list[c]);
 
-				for (int row = r + 1; row != RowCount; ++row)
-				for (int col = 0; col != ColCount; ++col)
+				for (int r = id + 1; r != RowCount; ++r)
 				{
-					//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
-					++_cells[row,col].y;
+					++Rows[r]._id;
+					for (int c = 0; c != ColCount; ++c)
+					{
+						//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
+						++_cells[r,c].y;
+					}
 				}
 			}
 			else // delete 'r'
 			{
-				Rows.Remove(Rows[r]);
+				Rows.Remove(Rows[id]);
 				--RowCount;
 
-				ShrinkArray<Cell>(ref _cells, r);
+				ShrinkArray<Cell>(ref _cells, id);
 
-				for (int row = r; row != RowCount; ++row)
-				for (int col = 0; col != ColCount; ++col)
+				for (int r = id; r != RowCount; ++r)
 				{
-					//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
-					--_cells[row,col].y;
+					--Rows[r]._id;
+					for (int c = 0; c != ColCount; ++c)
+					{
+						//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
+						--_cells[r,c].y;
+					}
 				}
 			}
 
 			InitScrollers();
 
-			if (r < RowCount)
-				EnsureDisplayedRow(r);
+			if (id < RowCount)
+				EnsureDisplayedRow(id);
 
 			DrawingControl.ResumeDrawing(this);
 		}
@@ -2305,6 +2360,103 @@ namespace yata
 			}
 
 			cells = array;
+		}
+
+
+		#region Sort
+		/// <summary>
+		/// Sorts fields as integers iff they convert to integers and performs
+		/// a secondary sort against their IDs if applicable.
+		/// TODO: descending sort
+		/// </summary>
+		/// <param name="c">the col id to sort by</param>
+		void ColSort(int c)
+		{
+			Cell cell;
+			bool stop;
+
+			var cellT = new Cell[ColCount];
+
+			for (int sort = 0; sort != RowCount; ++sort)
+			{
+				stop = true;
+				for (int r = 0; r != RowCount - 1; ++r)
+				{
+					if (String.CompareOrdinal(_cells[r,c].text, _cells[r+1,c].text) > 0)
+					{
+						stop = false;
+
+						for (int i = 0; i != ColCount; ++i)
+							cellT[i] = _cells[r,i];
+
+						for (int i = 0; i != ColCount; ++i)
+						{
+							cell          = _cells[r+1,i];
+							_cells[r,i].y = cell.y;
+							_cells[r,i]   = cell;
+						}
+
+						for (int i = 0; i != ColCount; ++i)
+						{
+							cell            = cellT[i];
+							_cells[r+1,i].y = cell.y;
+							_cells[r+1,i]   = cell;
+						}
+					}
+				}
+				if (stop) break;
+			}
+
+/*			if (   Int32.TryParse(e.CellValue1.ToString(), out _a)
+				&& Int32.TryParse(e.CellValue2.ToString(), out _b))
+			{
+				e.SortResult = _a.CompareTo(_b);
+				e.Handled = true;
+			}
+
+			if (e.Column != Columns[0] // secondary sort on id ->
+				&& e.CellValue1.ToString() == e.CellValue2.ToString())
+			{
+				if (   Int32.TryParse(Rows[e.RowIndex1].Cells[0].Value.ToString(), out _a)
+					&& Int32.TryParse(Rows[e.RowIndex2].Cells[0].Value.ToString(), out _b))
+				{
+					e.SortResult = _a.CompareTo(_b);
+					e.Handled = true;
+				}
+			} */
+		}
+
+/*		/// <summary>
+		/// Ensures that the searched-for field is displayed and re-orders the
+		/// row-headers.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void TableSorted(object sender, EventArgs e)
+		{
+			Changed = true;
+
+//			DisplaySelected();
+//			RelabelRowHeaders();
+		} */
+		#endregion Sort
+	}
+
+
+	/// <summary>
+	/// Returns a deep copy of the 2d Cell[,] array.
+	/// </summary>
+	static class ArrayCopy<T>
+	{
+		internal static T CloneCells(object cells)
+		{
+			using (var str = new MemoryStream())
+			{
+				var bf = new BinaryFormatter();
+				bf.Serialize(str, cells);
+				str.Seek(0, SeekOrigin.Begin);
+				return (T)bf.Deserialize(str);
+			}
 		}
 	}
 }
