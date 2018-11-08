@@ -1165,15 +1165,16 @@ namespace yata
 
 			if (!calibrate)
 			{
-				_cells0 = new Cell[RowCount, ColCount];
-
+				_cells0 = new Cell[RowCount, ColCount];	// '_cells0' is not currently used ......
+														// To be useful any Changed event would have to compare '_cells' against '_cells0'
+														// Or to revert Sorting it would need to track any inserted/deleted cells
 				for (int r = 0; r != RowCount; ++r)
 				for (int c = 0; c != ColCount; ++c)
 				{
 					//logfile.Log(". text= " + _rows[r][c]);
 					_cells0[r,c] = new Cell(r,c, _rows[r][c]);
 				}
-				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0);
+				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0); // '_cells' is that table that gets modified/sorted/saved.
 			}
 			else
 				HeightRow = 0; // reset
