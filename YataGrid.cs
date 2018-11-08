@@ -2499,9 +2499,14 @@ namespace yata
 		/// <param name="c">the col id to sort by</param>
 		void ColSort(int c)
 		{
-			_sortcol = c;
-			_sortdir = 1; // TODO: neg if descending
+			if (_sortdir != 1 || _sortcol != c)
+				_sortdir = 1;
+			else
+				_sortdir = -1;
 
+			_sortcol = c;
+
+			int result;
 			bool stop;
 			var cellT = new Cell[ColCount];
 
@@ -2510,7 +2515,9 @@ namespace yata
 				stop = true;
 				for (int r = 0; r != RowCount - 1; ++r)
 				{
-					if (Sort(r,c) > 0)
+					result = Sort(r,c);
+					if (   (_sortdir ==  1 && result > 0)
+					    || (_sortdir == -1 && result < 0))
 					{
 						stop = false;
 
