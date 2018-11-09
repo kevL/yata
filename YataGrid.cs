@@ -2539,6 +2539,7 @@ namespace yata
 		#region Sort
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
+		/// @note Bubblesort. TODO: Mergesort.
 		/// </summary>
 		/// <param name="c">the col id to sort by</param>
 		void ColSort(int c)
@@ -2551,9 +2552,7 @@ namespace yata
 			_sortcol = c;
 
 			bool stop, changed = false;
-//			var cellT = new Cell[ColCount];
-			Row rowT, row; // NOTE: Cells are NOT properties of Rows; they act independently.
-//			Cell cell;
+			Row rowT, row;
 
 			if (_sortdir == 1)
 			{
@@ -2568,32 +2567,16 @@ namespace yata
 							changed = true;
 
 							rowT = Rows[r];
-//							for (int i = 0; i != ColCount; ++i)
-//								cellT[i] = _cells[r,i];
 
 							row = (Rows[r] = Rows[r+1]);
 							row._id = r+1;
-
 							foreach (var cell in row.cells)
 								cell.y = r+1;
 
-//							for (int i = 0; i != ColCount; ++i)
-//							{
-//								cell = (_cells[r,i] = _cells[r+1,i]);
-//								cell.y -= 1;
-//							}
-
 							row = (Rows[r+1] = rowT);
 							row._id = r;
-
 							foreach (var cell in row.cells)
 								cell.y = r;
-
-//							for (int i = 0; i != ColCount; ++i)
-//							{
-//								cell = (_cells[r+1,i] = cellT[i]);
-//								cell.y += 1;
-//							}
 						}
 					}
 					if (stop) break;
@@ -2612,32 +2595,16 @@ namespace yata
 							changed = true;
 
 							rowT = Rows[r];
-//							for (int i = 0; i != ColCount; ++i)
-//								cellT[i] = _cells[r,i];
 
 							row = (Rows[r] = Rows[r+1]);
 							row._id = r+1;
-
 							foreach (var cell in row.cells)
 								cell.y = r+1;
 
-//							for (int i = 0; i != ColCount; ++i)
-//							{
-//								cell = (_cells[r,i] = _cells[r+1,i]);
-//								cell.y -= 1;
-//							}
-
 							Rows[r+1] = rowT;
 							row._id = r;
-
 							foreach (var cell in row.cells)
 								cell.y = r;
-
-//							for (int i = 0; i != ColCount; ++i)
-//							{
-//								cell = (_cells[r+1,i] = cellT[i]);
-//								cell.y += 1;
-//							}
 						}
 					}
 					if (stop) break;
