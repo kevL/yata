@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-//using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 using yata.Properties;
@@ -73,18 +72,6 @@ namespace yata
 		internal readonly List<Col> Cols = new List<Col>();
 		internal readonly List<Row> Rows = new List<Row>();
 
-//		Cell[,] _cells;
-//		Cell[,] _cells0; // a cache of the originally loaded data that shall be pure
-/*		/// <summary>
-		/// Gets the cell at pos [r,c].
-		/// NOTE: 1st dimension is rows, 2nd dimension is cols. That's better
-		/// for resizing the array when rows are inserted/deleted.
-		/// </summary>
-		internal Cell this[int r, int c]
-		{
-			get { return _cells[r,c]; }
-			set { _cells[r,c] = value; }
-		} */
 		internal Cell this[int r, int c]
 		{
 			get { return Rows[r].cells[c]; }
@@ -408,13 +395,8 @@ namespace yata
 		/// twice).
 		/// </summary>
 		/// <param name="e"></param>
-//		protected override void OnMouseWheel(MouseEventArgs e)
 		internal void Scroll(MouseEventArgs e)
 		{
-//			var args = e as HandledMouseEventArgs;
-//			if (args != null)
-//				args.Handled = true;
-
 			if (!_editor.Visible)
 			{
 				if (_scrollVert.Visible)
@@ -452,8 +434,6 @@ namespace yata
 					}
 				}
 			}
-
-//			base.OnMouseWheel(e);
 		}
 
 
@@ -564,6 +544,7 @@ namespace yata
 						graphics_.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 			}
+
 //			base.OnPaint(e);
 		}
 
@@ -623,8 +604,6 @@ namespace yata
 
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
-//				_load = true; // (re)use '_load' to prevent firing CellChanged events for the Rowheads
-
 				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead, HeightRow); // NOTE: -1 is a padding tweak.
 
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
@@ -634,7 +613,6 @@ namespace yata
 
 					TextRenderer.DrawText(graphics_, r.ToString(), _f.FontAccent, rect, Colors.Text, _flags);
 				}
-//				_load = false;
 			}
 		}
 
@@ -651,9 +629,9 @@ namespace yata
 			if (_sortdir != 0 && _sortcol == 0)
 			{
 				Bitmap sort;
-				if (_sortdir == 1) // asc
+				if (_sortdir == 1)			// asc
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1) // des
+				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
@@ -675,9 +653,9 @@ namespace yata
 			if (_sortdir != 0 && _sortcol == 1)
 			{
 				Bitmap sort;
-				if (_sortdir == 1) // asc
+				if (_sortdir == 1)			// asc
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1) // des
+				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
@@ -699,9 +677,9 @@ namespace yata
 			if (_sortdir != 0 && _sortcol == 2)
 			{
 				Bitmap sort;
-				if (_sortdir == 1) // asc
+				if (_sortdir == 1)			// asc
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1) // des
+				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
@@ -1020,7 +998,6 @@ namespace yata
 
 			CreateCols();
 			CreateRows();
-//			CreateCells();
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenLabelsInit();
@@ -1052,9 +1029,6 @@ namespace yata
 
 			_editor.Visible = false;
 
-//			_scrollVert.Value =
-//			_scrollHori.Value = 0;
-
 			Controls.Remove(_panelCols);
 			Controls.Remove(_panelRows);
 			Controls.Remove(_panelFrozen);
@@ -1066,7 +1040,6 @@ namespace yata
 
 			CreateCols(true);
 			CreateRows(true);
-//			CreateCells(true);
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenCount = FrozenCount; // refresh the Frozen panel
@@ -1179,60 +1152,6 @@ namespace yata
 				Cols[c].width(w);
 			}
 		}
-
-/*		/// <summary>
-		/// Creates the cells' 2d-array.
-		/// </summary>
-		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
-		void CreateCells(bool calibrate = false)
-		{
-			//logfile.Log("CreateCells()");
-			//logfile.Log(". RowCount= " + RowCount);
-			//logfile.Log(". ColCount= " + ColCount);
-
-			if (!calibrate)
-			{
-				_cells = new Cell[RowCount, ColCount];	// '_cells0' is not currently used ......
-														// To be useful any Changed event would have to compare '_cells' against '_cells0'
-														// Or to revert Sorting it would need to track any inserted/deleted cells
-				for (int r = 0; r != RowCount; ++r)
-				for (int c = 0; c != ColCount; ++c)
-				{
-					//logfile.Log(". text= " + _rows[r][c]);
-					_cells[r,c] = new Cell(r,c, _rows[r][c]);
-				}
-//				_cells0 = ArrayCopy<Cell[,]>.CloneCells(_cells); // '_cells' is the table that gets modified/sorted/saved.
-			}
-			else
-				HeightRow = 0; // reset
-
-			_rows.Clear(); // done w/ '_rows'
-
-			Size size;
-			int w, wT, hT;
-
-			//logfile.Log("ColCount= " + ColCount);
-			for (int c = 0; c != ColCount; ++c)
-			{
-				//logfile.Log(". c= " + c);
-
-				w = 20; // cellwidth min.
-				for (int r = 0; r != RowCount; ++r)
-				{
-					//logfile.Log(". . r= " + r + " text= " + _cells[r,c].text);
-					size = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags);
-
-					wT = size.Width + _padHori * 2 + _padHoriSort;
-					if (wT > w) w = wT;
-
-					hT = size.Height + _padVert * 2;
-					if (hT > HeightRow) HeightRow = hT;
-				}
-				Cols[c].width(w);
-				//logfile.Log(". c= " + c + " width= " + Cols[c].width());
-			}
-			//logfile.Log(". HeightRow= " + HeightRow);
-		} */
 
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
@@ -1379,7 +1298,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// TODO: optimize.
+		/// 
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
@@ -1685,21 +1604,9 @@ namespace yata
 
 //			e.Handled = true;
 //			base.OnKeyDown(e);
-
 //			Input.SetFlag(e.KeyCode);
-//			e.Handled = true;
 		}
 
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnKeyUp(KeyEventArgs e)
-		{
-//			Input.RemoveFlag(e.KeyCode);
-//			e.Handled = true;
-		}
 
 		/// <summary>
 		/// Handles ending editing a cell by pressing Enter or Tab - this fires
@@ -1932,6 +1839,7 @@ namespace yata
 				else
 					_f.PrintInfo(-1);
 			}
+
 //			base.OnMouseMove(e);
 		}
 
@@ -2161,11 +2069,8 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-//				if (_editor.Visible)
-//				{
 				_editor.Visible = false;
 				Select();
-//				}
 
 				int r = (e.Y + offsetVert) / HeightRow;
 				var row = Rows[r];
@@ -2260,11 +2165,8 @@ namespace yata
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-//				if (_editor.Visible)
-//				{
 				_editor.Visible = false;
 				Select();
-//				}
 
 				int x = e.X + offsetHori;
 				int left = getLeft();
@@ -2336,13 +2238,10 @@ namespace yata
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
-//				if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
+				if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
 				{
-//					if (_editor.Visible)
-//					{
 					_editor.Visible = false;
 					Select();
-//					}
 	
 					int x = e.X + offsetHori;
 	
@@ -2371,8 +2270,8 @@ namespace yata
 
 		void click_IdLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right)
-//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
 			{
 				_editor.Visible = false;
 				Select();
@@ -2384,8 +2283,8 @@ namespace yata
 
 		void click_FirstLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right)
-//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
 			{
 				_editor.Visible = false;
 				Select();
@@ -2397,8 +2296,8 @@ namespace yata
 
 		void click_SecondLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right)
-//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
+			if (e.Button == MouseButtons.Right
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
 			{
 				_editor.Visible = false;
 				Select();
@@ -2416,16 +2315,12 @@ namespace yata
 		/// <param name="list">null to delete the row</param>
 		internal void Insert(int id, IList<string> list)
 		{
-			//logfile.Log("Insert() id= " + id);
-
 			DrawingControl.SuspendDrawing(this);
 
 			if (list != null)
 			{
 				Rows.Insert(id, new Row(id, ColCount, Brushes.Created));
 				++RowCount;
-
-//				GrowArray(ref _cells, id);
 
 				for (int c = 0; c != ColCount; ++c)
 					Rows[id].cells[c] = new Cell(id,c, list[c]);
@@ -2442,8 +2337,6 @@ namespace yata
 				Rows.Remove(Rows[id]);
 				--RowCount;
 
-//				ShrinkArray<Cell>(ref _cells, id);
-
 				for (int r = id; r != RowCount; ++r)
 				{
 					--Rows[r]._id;
@@ -2459,81 +2352,6 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(this);
 		}
-
-
-/*		/// <summary>
-		/// ... witchcraft ...
-		/// </summary>
-		/// <param name="cells"></param>
-		/// <param name="insert">id to insert a row at</param>
-		void GrowArray<Cell>(ref Cell[,] cells, int insert)
-		{
-			//logfile.Log("ResizeArray() rows= " + RowCount + " cols= " + ColCount + " insert= " + insert);
-
-			var array = new Cell[RowCount, ColCount];
-			//logfile.Log("array length= " + array.Length);
-
-			int preLength = ColCount * insert;
-			//logfile.Log("preLength= " + preLength);
-			if (preLength != 0)
-			{
-				Array.Copy(cells,		// source array
-						   0,			// source id
-						   array,		// destination array
-						   0,			// destination id
-						   preLength);	// length
-			}
-
-			int postLength = ColCount * (RowCount - 1) - preLength;
-			//logfile.Log("postLength= " + postLength);
-			if (postLength != 0)
-			{
-				Array.Copy(cells,					// source array
-						   preLength,				// source id
-						   array,					// destination array
-						   preLength + ColCount,	// destination id
-						   postLength);				// length
-			}
-
-			cells = array;
-		} */
-
-/*		/// <summary>
-		/// ... witchcraft ...
-		/// </summary>
-		/// <param name="cells"></param>
-		/// <param name="delete">id to delete a row at</param>
-		void ShrinkArray<Cell>(ref Cell[,] cells, int delete)
-		{
-			//logfile.Log("ReduceArray() rows= " + RowCount + " cols= " + ColCount + " delete= " + delete);
-
-			var array = new Cell[RowCount, ColCount];
-			//logfile.Log("array length= " + array.Length);
-
-			int preLength = ColCount * delete;
-			//logfile.Log("preLength= " + preLength);
-			if (preLength != 0)
-			{
-				Array.Copy(cells,		// source array
-						   0,			// source id
-						   array,		// destination array
-						   0,			// destination id
-						   preLength);	// length
-			}
-
-			int postLength = ColCount * RowCount - preLength;
-			//logfile.Log("postLength= " + postLength);
-			if (postLength != 0)
-			{
-				Array.Copy(cells,					// source array
-						   preLength + ColCount,	// source id
-						   array,					// destination array
-						   preLength,				// destination id
-						   postLength);				// length
-			}
-
-			cells = array;
-		} */
 
 
 		#region Sort
@@ -2561,7 +2379,7 @@ namespace yata
 					stop = true;
 					for (int r = 0; r != RowCount - 1; ++r)
 					{
-						if (Sort(r,c) > 0)
+						if (Sort(Rows[r], Rows[r+1], c) > 0)
 						{
 							stop = false;
 							changed = true;
@@ -2589,7 +2407,7 @@ namespace yata
 					stop = true;
 					for (int r = 0; r != RowCount - 1; ++r)
 					{
-						if (Sort(r,c) < 0)
+						if (Sort(Rows[r], Rows[r+1], c) < 0)
 						{
 							stop = false;
 							changed = true;
@@ -2618,19 +2436,20 @@ namespace yata
 		float  _af, _bf;
 
 		/// <summary>
-		/// Sorts fields as integers iff they convert to integers and performs
-		/// a secondary sort against their IDs if applicable.
-		/// TODO: descending sort
+		/// Sorts fields as integers iff they convert to integers, or floats as
+		/// floats, else as strings and performs a secondary sort against their
+		/// IDs if applicable.
 		/// </summary>
-		/// <param name="r">row</param>
+		/// <param name="row0">the value of the reference to a 'Row'</param>
+		/// <param name="row1">the value of the reference to a 'Row'</param>
 		/// <param name="c">col</param>
 		/// <returns>-1 first is first, second is second
 		///           0 identical
 		///           1 first is second, second is first</returns>
-		int Sort(int r, int c)
+		int Sort(Row row0, Row row1, int c)
 		{
-			_a = Rows[r]  .cells[c].text;
-			_b = Rows[r+1].cells[c].text;
+			_a = row0.cells[c].text;
+			_b = row1.cells[c].text;
 
 			int result;
 
@@ -2648,8 +2467,8 @@ namespace yata
 				result = String.CompareOrdinal(_a,_b);	// else do string comparison
 
 			if (result == 0 && c != 0					// secondary sort on id if primary sort matches
-			    && Int32.TryParse(Rows[r]  .cells[0].text, out _ai)
-			    && Int32.TryParse(Rows[r+1].cells[0].text, out _bi))
+			    && Int32.TryParse(row0.cells[0].text, out _ai)
+			    && Int32.TryParse(row1.cells[0].text, out _bi))
 			{
 				return _ai.CompareTo(_bi);
 			}
@@ -2657,22 +2476,4 @@ namespace yata
 		}
 		#endregion Sort
 	}
-
-
-/*	/// <summary>
-	/// Returns a deep copy of the 2d Cell[,] array.
-	/// </summary>
-	static class ArrayCopy<T>
-	{
-		internal static T CloneCells(object cells)
-		{
-			using (var str = new MemoryStream())
-			{
-				var bf = new BinaryFormatter();
-				bf.Serialize(str, cells);
-				str.Seek(0, SeekOrigin.Begin);
-				return (T)bf.Deserialize(str);
-			}
-		}
-	} */
 }

@@ -97,8 +97,8 @@ LMB+Ctrl - adds or subtracts a cell from the currently selected cells
 Note that frozen-col cells cannot be selected or edited.
 
 OPERATIONS ON LARGE TABLES (tens of thousands of Rows) WILL TAKE A LONG TIME.
-Example: loading Placeables.2da with ~25,000 rows takes about 15-20 seconds.
-Sorting descending by ID (which involves shuffling every row) takes about 6
+Example: loading Placeables.2da with ~25,000 rows takes 15-20 seconds, while
+Sorting descending by ID (which involves shuffling every row) takes about 4
 minutes on my decently fast computer.
 
 
