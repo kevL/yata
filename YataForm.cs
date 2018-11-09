@@ -444,7 +444,7 @@ namespace yata
 				var table = page.Tag as YataGrid;
 				if (table != null && table.Changed)
 				{
-					changed.Add(Path.GetFileNameWithoutExtension(table.Pfe).ToUpperInvariant());
+					changed.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
 				}
 			}
 			return changed;
@@ -453,7 +453,7 @@ namespace yata
 
 		void fileclick_Reload(object sender, EventArgs e)
 		{
-			if (Table != null && File.Exists(Table.Pfe)
+			if (Table != null && File.Exists(Table.Fullpath)
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 									   "warning",
@@ -498,7 +498,7 @@ namespace yata
 				var table = Tabs.SelectedTab.Tag as YataGrid;
 				if (table != null)
 				{
-					string pfe = table.Pfe;
+					string pfe = table.Fullpath;
 					text += " - " + Path.GetFileName(pfe);
 
 					string path = Path.GetDirectoryName(pfe);
@@ -516,7 +516,7 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				string pfe = Table.Pfe;
+				string pfe = Table.Fullpath;
 
 				if (!String.IsNullOrEmpty(pfe))
 				{
@@ -573,12 +573,12 @@ namespace yata
 				{
 					sfd.Title    = "Save as ...";
 					sfd.Filter   = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-					sfd.FileName = Path.GetFileName(Table.Pfe);
+					sfd.FileName = Path.GetFileName(Table.Fullpath);
 
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
-						Table.Pfe = sfd.FileName;
-						Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe);
+						Table.Fullpath = sfd.FileName;
+						Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
 
 						SetTitlebarText();
 
@@ -1681,7 +1681,7 @@ namespace yata
 
 			string asterisk = changed ? " *"
 									  : "";
-			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Pfe) + asterisk;
+			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath) + asterisk;
 			SetTabSize();
 
 			DrawingControl.ResumeDrawing(this);

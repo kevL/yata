@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+//using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 using yata.Properties;
@@ -44,7 +44,7 @@ namespace yata
 		:
 			Control
 	{
-		internal string Pfe // Path-File-Extension (ie. fullpath)
+		internal string Fullpath // Path-File-Extension
 		{ get; set; }
 
 		readonly YataForm _f;
@@ -74,49 +74,34 @@ namespace yata
 		internal readonly List<Row> Rows = new List<Row>();
 
 		Cell[,] _cells;
-		Cell[,] _cells0; // a cache of the originally loaded data that shall be pure
+//		Cell[,] _cells0; // a cache of the originally loaded data that shall be pure
 		/// <summary>
 		/// Gets the cell at pos [r,c].
 		/// NOTE: 1st dimension is rows, 2nd dimension is cols. That's better
-		/// for resizing the array.
+		/// for resizing the array when rows are inserted/deleted.
 		/// </summary>
 		internal Cell this[int r, int c]
 		{
-			get
-			{
-//				if (_cells0 != null)
-//					return _cells0[r,c];
-
-				return _cells[r,c];
-			}
-			set
-			{
-//				if (_cells0 != null)
-//					_cells0[r,c] = value;
-//				else
-					_cells[r,c] = value;
-			}
+			get { return _cells[r,c]; }
+			set { _cells[r,c] = value; }
 		}
-//		internal Cell this[int r, int c]
-//		{
-//			get { return _cells[r,c]; }
-//			set { _cells[r,c] = value; }
-//		}
 
 
-		internal static Graphics graphics_; // is used to paint crap.
-		static Graphics _graphics; // is used only for MeasureText()
+		internal static Graphics graphics_;	// is used to paint/draw crap.
+		static Graphics _graphics;			// is used only for MeasureText()
 
 //		Bitmap _bluePi = Resources.bluepixel;
 //		Bitmap _piColhead;
 //		Bitmap _piRowhead;
 
 
-		const int _padHori        = 6;
-		const int _padVert        = 4;
-		const int _padHoriRowhead = 8;
-		const int _padHoriSort    = 12;
+		const int _padHori        =  6; // horizontal text padding in the table
+		const int _padVert        =  4; // vertical text padding in the table and col/rowheads
+		const int _padHoriRowhead =  8; // horizontal text padding for the rowheads
+		const int _padHoriSort    = 12; // additional horizontal text padding to the right in the colheads for the sort-arrow
 
+		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
+		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
 
 		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
 															| TextFormatFlags.NoPadding
@@ -209,7 +194,7 @@ namespace yata
 			_f = f;
 			_graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
-			Pfe = pfe;
+			Fullpath = pfe;
 			_init = true;
 
 			Dock = DockStyle.Fill;
@@ -607,8 +592,8 @@ namespace yata
 								sort = Resources.des_16px;
 
 							graphics_.DrawImage(sort,
-												rect.X + rect.Width  - 22,
-												rect.Y + rect.Height - 15);
+												rect.X + rect.Width  - _offsetHoriSort,
+												rect.Y + rect.Height - _offsetVertSort);
 						}
 					}
 
@@ -663,8 +648,8 @@ namespace yata
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
-									rect.X + rect.Width  - 22,
-									rect.Y + rect.Height - 15);
+									rect.X + rect.Width  - _offsetHoriSort,
+									rect.Y + rect.Height - _offsetVertSort);
 			}
 		}
 
@@ -687,8 +672,8 @@ namespace yata
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
-									rect.X + rect.Width  - 22,
-									rect.Y + rect.Height - 15);
+									rect.X + rect.Width  - _offsetHoriSort,
+									rect.Y + rect.Height - _offsetVertSort);
 			}
 		}
 
@@ -711,8 +696,8 @@ namespace yata
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
-									rect.X + rect.Width  - 22,
-									rect.Y + rect.Height - 15);
+									rect.X + rect.Width  - _offsetHoriSort,
+									rect.Y + rect.Height - _offsetVertSort);
 			}
 		}
 
@@ -773,7 +758,7 @@ namespace yata
 
 			bool ignoreErrors = false;
 
-			string[] lines = File.ReadAllLines(Pfe);
+			string[] lines = File.ReadAllLines(Fullpath);
 
 			Fields = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries); // TODO: test for double-quotes
 
@@ -794,7 +779,7 @@ namespace yata
 					{
 						string error = "The 2da-file contains a malformed version header."
 									 + Environment.NewLine + Environment.NewLine
-									 + Pfe;
+									 + Fullpath;
 						switch (ShowLoadError(error))
 						{
 							case DialogResult.Abort:
@@ -816,7 +801,7 @@ namespace yata
 					string error = "The 2nd line in the 2da should be blank."
 								 + " This editor does not support default value-types."
 								 + Environment.NewLine + Environment.NewLine
-								 + Pfe;
+								 + Fullpath;
 					switch (ShowLoadError(error))
 					{
 						case DialogResult.Abort:
@@ -848,7 +833,7 @@ namespace yata
 							{
 								string error = "The 2da-file contains an ID that is not an integer or is out of order."
 											 + Environment.NewLine + Environment.NewLine
-											 + Pfe
+											 + Fullpath
 											 + Environment.NewLine + Environment.NewLine
 											 + id + " / " + row[0];
 								switch (ShowLoadError(error))
@@ -871,7 +856,7 @@ namespace yata
 						{
 							string error = "The 2da-file contains fields that do not align with its cols."
 										 + Environment.NewLine + Environment.NewLine
-										 + Pfe
+										 + Fullpath
 										 + Environment.NewLine + Environment.NewLine
 										 + "id " + id;
 							switch (ShowLoadError(error))
@@ -903,7 +888,7 @@ namespace yata
 								{
 									string error = "Found a missing double-quote character."
 												 + Environment.NewLine + Environment.NewLine
-												 + Pfe
+												 + Fullpath
 												 + Environment.NewLine + Environment.NewLine
 												 + "id " + id + " / col " + col;
 									switch (ShowLoadError(error))
@@ -924,7 +909,7 @@ namespace yata
 								{
 									string error = "Found an isolated double-quote character."
 												 + Environment.NewLine + Environment.NewLine
-												 + Pfe
+												 + Fullpath
 												 + Environment.NewLine + Environment.NewLine
 												 + "id " + id + " / col " + col;
 									switch (ShowLoadError(error))
@@ -960,7 +945,7 @@ namespace yata
 			{
 				string error = "The 2da-file contains an odd quantity of double-quote characters."
 							 + Environment.NewLine + Environment.NewLine
-							 + Pfe;
+							 + Fullpath;
 				switch (ShowLoadError(error))
 				{
 					case DialogResult.Abort:
@@ -1007,7 +992,7 @@ namespace yata
 //				_panelRows  .Dispose();
 //				_panelFrozen.Dispose();
 			}
-			else if (Craft = (Path.GetFileNameWithoutExtension(Pfe).ToLower() == "crafting"))
+			else if (Craft = (Path.GetFileNameWithoutExtension(Fullpath).ToLower() == "crafting"))
 			{
 				foreach (var dir in Settings._pathall)
 					_f.GropeLabels(dir);
@@ -1165,16 +1150,16 @@ namespace yata
 
 			if (!calibrate)
 			{
-				_cells0 = new Cell[RowCount, ColCount];	// '_cells0' is not currently used ......
+				_cells = new Cell[RowCount, ColCount];	// '_cells0' is not currently used ......
 														// To be useful any Changed event would have to compare '_cells' against '_cells0'
 														// Or to revert Sorting it would need to track any inserted/deleted cells
 				for (int r = 0; r != RowCount; ++r)
 				for (int c = 0; c != ColCount; ++c)
 				{
 					//logfile.Log(". text= " + _rows[r][c]);
-					_cells0[r,c] = new Cell(r,c, _rows[r][c]);
+					_cells[r,c] = new Cell(r,c, _rows[r][c]);
 				}
-				_cells = ArrayCopy<Cell[,]>.CloneCells(_cells0); // '_cells' is the table that gets modified/sorted/saved.
+//				_cells0 = ArrayCopy<Cell[,]>.CloneCells(_cells); // '_cells' is the table that gets modified/sorted/saved.
 			}
 			else
 				HeightRow = 0; // reset
@@ -2298,7 +2283,7 @@ namespace yata
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
-				if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
+//				if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
 				{
 //					if (_editor.Visible)
 //					{
@@ -2333,8 +2318,8 @@ namespace yata
 
 		void click_IdLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
+			if (e.Button == MouseButtons.Right)
+//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
 			{
 				_editor.Visible = false;
 				Select();
@@ -2346,8 +2331,8 @@ namespace yata
 
 		void click_FirstLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
+			if (e.Button == MouseButtons.Right)
+//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
 			{
 				_editor.Visible = false;
 				Select();
@@ -2359,8 +2344,8 @@ namespace yata
 
 		void click_SecondLabel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
+			if (e.Button == MouseButtons.Right)
+//				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
 			{
 				_editor.Visible = false;
 				Select();
@@ -2519,43 +2504,78 @@ namespace yata
 
 			_sortcol = c;
 
-			int result;
 			bool stop, changed = false;
 			var cellT = new Cell[ColCount];
 			Row rowT; // NOTE: Cells are NOT properties of Rows; they act independently.
+			Cell cell;
 
-			for (int sort = 0; sort != RowCount; ++sort)
+			if (_sortdir == 1)
 			{
-				stop = true;
-				for (int r = 0; r != RowCount - 1; ++r)
+				for (int sort = 0; sort != RowCount; ++sort)
 				{
-					result = Sort(r,c);
-					if (   (_sortdir ==  1 && result > 0)
-						|| (_sortdir == -1 && result < 0))
+					stop = true;
+					for (int r = 0; r != RowCount - 1; ++r)
 					{
-						stop = false;
-						changed = true;
-
-						rowT = Rows[r];
-						for (int i = 0; i != ColCount; ++i)
-							cellT[i] = _cells[r,i];
-
-						Rows[r] = Rows[r+1];
-						for (int i = 0; i != ColCount; ++i)
+						if (Sort(r,c) > 0)
 						{
-							_cells[r,i] = _cells[r+1,i];
-							_cells[r,i].y -= 1;
-						}
+							stop = false;
+							changed = true;
 
-						Rows[r+1] = rowT;
-						for (int i = 0; i != ColCount; ++i)
-						{
-							_cells[r+1,i] = cellT[i];
-							_cells[r+1,i].y += 1;
+							rowT = Rows[r];
+							for (int i = 0; i != ColCount; ++i)
+								cellT[i] = _cells[r,i];
+
+							Rows[r] = Rows[r+1];
+							for (int i = 0; i != ColCount; ++i)
+							{
+								cell = (_cells[r,i] = _cells[r+1,i]);
+								cell.y -= 1;
+							}
+
+							Rows[r+1] = rowT;
+							for (int i = 0; i != ColCount; ++i)
+							{
+								cell = (_cells[r+1,i] = cellT[i]);
+								cell.y += 1;
+							}
 						}
 					}
+					if (stop) break;
 				}
-				if (stop) break;
+			}
+			else //if (_sortdir == -1)
+			{
+				for (int sort = 0; sort != RowCount; ++sort)
+				{
+					stop = true;
+					for (int r = 0; r != RowCount - 1; ++r)
+					{
+						if (Sort(r,c) < 0)
+						{
+							stop = false;
+							changed = true;
+
+							rowT = Rows[r];
+							for (int i = 0; i != ColCount; ++i)
+								cellT[i] = _cells[r,i];
+
+							Rows[r] = Rows[r+1];
+							for (int i = 0; i != ColCount; ++i)
+							{
+								cell = (_cells[r,i] = _cells[r+1,i]);
+								cell.y -= 1;
+							}
+
+							Rows[r+1] = rowT;
+							for (int i = 0; i != ColCount; ++i)
+							{
+								cell = (_cells[r+1,i] = cellT[i]);
+								cell.y += 1;
+							}
+						}
+					}
+					if (stop) break;
+				}
 			}
 			Changed = changed;
 		}
@@ -2594,22 +2614,19 @@ namespace yata
 			else
 				result = String.CompareOrdinal(_a,_b);	// else do string comparison
 
-			if (result != 0)
-				return result;
-
-			if (c != 0									// secondary sort on id if primary sort matches
+			if (result == 0 && c != 0					// secondary sort on id if primary sort matches
 				&& Int32.TryParse(_cells[r  ,0].text, out _ai)
 				&& Int32.TryParse(_cells[r+1,0].text, out _bi))
 			{
 				return _ai.CompareTo(_bi);
 			}
-			return 0;									// else return identical.
+			return result;								// else return result.
 		}
 		#endregion Sort
 	}
 
 
-	/// <summary>
+/*	/// <summary>
 	/// Returns a deep copy of the 2d Cell[,] array.
 	/// </summary>
 	static class ArrayCopy<T>
@@ -2624,5 +2641,5 @@ namespace yata
 				return (T)bf.Deserialize(str);
 			}
 		}
-	}
+	} */
 }

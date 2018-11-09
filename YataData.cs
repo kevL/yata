@@ -55,7 +55,7 @@ namespace yata
 	/// <summary>
 	/// Contains data about a cell.
 	/// </summary>
-	[SerializableAttribute]
+//	[SerializableAttribute]
 	sealed class Cell
 	{
 		internal string text; // the cell's text
