@@ -73,9 +73,9 @@ namespace yata
 		internal readonly List<Col> Cols = new List<Col>();
 		internal readonly List<Row> Rows = new List<Row>();
 
-		Cell[,] _cells;
+//		Cell[,] _cells;
 //		Cell[,] _cells0; // a cache of the originally loaded data that shall be pure
-		/// <summary>
+/*		/// <summary>
 		/// Gets the cell at pos [r,c].
 		/// NOTE: 1st dimension is rows, 2nd dimension is cols. That's better
 		/// for resizing the array when rows are inserted/deleted.
@@ -84,6 +84,11 @@ namespace yata
 		{
 			get { return _cells[r,c]; }
 			set { _cells[r,c] = value; }
+		} */
+		internal Cell this[int r, int c]
+		{
+			get { return Rows[r].cells[c]; }
+			set { Rows[r].cells[c] = value; }
 		}
 
 
@@ -485,6 +490,8 @@ namespace yata
 				}
 
 				// cell text - scrollable
+				Row row;
+
 				rect.Height = HeightRow;
 				int left = WidthRowhead - offsetHori + _padHori;
 				int yOffset = HeightColhead - offsetVert;
@@ -494,11 +501,13 @@ namespace yata
 						break;
 
 					rect.X = left;
+
+					row = Rows[r];
 					for (c = 0; c != ColCount; ++c)
 					{
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
-							var cell = _cells[r,c];
+							var cell = row.cells[c];
 							if (cell.selected)
 							{
 								rect.X -= _padHori;
@@ -723,6 +732,7 @@ namespace yata
 
 				var rect = new Rectangle(0,0, 0, HeightRow);
 
+				Row row;
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
@@ -730,10 +740,11 @@ namespace yata
 
 					rect.X = _padHori - 1; // NOTE: -1 is a padding tweak.
 
+					row = Rows[r];
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics_, _cells[r,c].text, Font, rect, Colors.Text, _flags);
+						TextRenderer.DrawText(graphics_, row.cells[c].text, Font, rect, Colors.Text, _flags);
 
 						rect.X += rect.Width;
 					}
@@ -1009,7 +1020,7 @@ namespace yata
 
 			CreateCols();
 			CreateRows();
-			CreateCells();
+//			CreateCells();
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenLabelsInit();
@@ -1054,7 +1065,8 @@ namespace yata
 			_panelRows.MouseClick += click_RowPanel;
 
 			CreateCols(true);
-			CreateCells(true);
+			CreateRows(true);
+//			CreateCells(true);
 
 			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenCount = FrozenCount; // refresh the Frozen panel
@@ -1079,7 +1091,7 @@ namespace yata
 		/// <summary>
 		/// Creates the cols and caches the 2da's colhead data.
 		/// </summary>
-		/// <param name="calibrate">true to only adjust dimensions</param>
+		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
 		void CreateCols(bool calibrate = false)
 		{
 			//logfile.Log("CreateCols()");
@@ -1121,24 +1133,54 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Creates the rows.
+		/// Creates the rows and adds cells to each row.
 		/// </summary>
-		void CreateRows()
+		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
+		void CreateRows(bool calibrate = false)
 		{
 			//logfile.Log("CreateRows()");
 
-			RowCount = _rows.Count;
-
-			Brush brush;
-			for (int r = 0; r != RowCount; ++r)
+			if (!calibrate)
 			{
-				brush = (r % 2 == 0) ? Brushes.Alice
-									 : Brushes.Blanche;
-				Rows.Add(new Row(r, brush));
+				RowCount = _rows.Count;
+
+				Brush brush;
+				for (int r = 0; r != RowCount; ++r)
+				{
+					brush = (r % 2 == 0) ? Brushes.Alice
+										 : Brushes.Blanche;
+
+					Rows.Add(new Row(r, ColCount, brush));
+					for (int c = 0; c != ColCount; ++c)
+						Rows[r].cells[c] = new Cell(r,c, _rows[r][c]);
+				}
+			}
+			else
+				HeightRow = 0; // reset
+
+			_rows.Clear(); // done w/ '_rows'
+
+			Size size;
+			int w, wT, hT;
+
+			for (int c = 0; c != ColCount; ++c)
+			{
+				w = 20; // cellwidth.
+				foreach (var row in Rows)
+				{
+					size = TextRenderer.MeasureText(_graphics, row[c].text, Font, _size, _flags);
+
+					hT = size.Height + _padVert * 2;
+					if (hT > HeightRow) HeightRow = hT;
+
+					wT = size.Width + _padHori * 2;
+					if (wT > w) w = wT;
+				}
+				Cols[c].width(w);
 			}
 		}
 
-		/// <summary>
+/*		/// <summary>
 		/// Creates the cells' 2d-array.
 		/// </summary>
 		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
@@ -1190,7 +1232,7 @@ namespace yata
 				//logfile.Log(". c= " + c + " width= " + Cols[c].width());
 			}
 			//logfile.Log(". HeightRow= " + HeightRow);
-		}
+		} */
 
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
@@ -1431,7 +1473,7 @@ namespace yata
 								display = true;
 
 								sel.selected = false;
-								sel = _cells[0, FrozenCount];
+								sel = Rows[0].cells[FrozenCount];
 								sel.selected = true;
 							}
 						}
@@ -1445,7 +1487,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y, FrozenCount];
+							sel = Rows[sel.y].cells[FrozenCount];
 							sel.selected = true;
 						}
 					}
@@ -1464,7 +1506,7 @@ namespace yata
 								display = true;
 
 								sel.selected = false;
-								sel = _cells[RowCount - 1, ColCount - 1];
+								sel = Rows[RowCount - 1].cells[ColCount - 1];
 								sel.selected = true;
 							}
 						}
@@ -1478,7 +1520,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y, ColCount - 1];
+							sel = Rows[sel.y].cells[ColCount - 1];
 							sel.selected = true;
 						}
 					}
@@ -1499,9 +1541,9 @@ namespace yata
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
 							if (sel.y < rows)
-								sel = _cells[0, sel.x];
+								sel = Rows[0].cells[sel.x];
 							else
-								sel = _cells[sel.y - rows, sel.x];
+								sel = Rows[sel.y - rows].cells[sel.x];
 
 							sel.selected = true;
 						}
@@ -1528,9 +1570,9 @@ namespace yata
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 							logfile.Log("rows= " + rows);
 							if (sel.y > RowCount - 1 - rows)
-								sel = _cells[RowCount - 1, sel.x];
+								sel = Rows[RowCount - 1].cells[sel.x];
 							else
-								sel = _cells[sel.y + rows, sel.x];
+								sel = Rows[sel.y + rows].cells[sel.x];
 
 							sel.selected = true;
 						}
@@ -1557,7 +1599,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y - 1, sel.x];
+							sel = Rows[sel.y - 1].cells[sel.x];
 							sel.selected = true;
 						}
 					}
@@ -1578,7 +1620,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y + 1, sel.x];
+							sel = Rows[sel.y + 1].cells[sel.x];
 							sel.selected = true;
 						}
 					}
@@ -1599,7 +1641,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y, sel.x - 1];
+							sel = Rows[sel.y].cells[sel.x - 1];
 							sel.selected = true;
 						}
 					}
@@ -1620,7 +1662,7 @@ namespace yata
 							display = true;
 
 							sel.selected = false;
-							sel = _cells[sel.y, sel.x + 1];
+							sel = Rows[sel.y].cells[sel.x + 1];
 							sel.selected = true;
 						}
 					}
@@ -1672,7 +1714,7 @@ namespace yata
 				case Keys.Enter:
 					if (_editor.Visible)
 					{
-						SetCellText();
+						ApplyEditorText();
 						goto case Keys.Escape;
 					}
 
@@ -1703,23 +1745,27 @@ namespace yata
 		{
 			Cell cell0 = null;
 
-			foreach (var cell in _cells)
+			Cell cell;
+			foreach (var row in Rows)
 			{
-				if (cell.selected)
+				for (int c = 0; c != ColCount; ++c)
 				{
-					if (cell0 != null)
-						return null;
+					if ((cell = row.cells[c]).selected)
+					{
+						if (cell0 != null)
+							return null;
 
-					cell0 = cell;
+						cell0 = cell;
+					}
 				}
 			}
 			return cell0;
 		}
 
 		/// <summary>
-		/// Sets an edited cell's text and recalculates col width.
+		/// Sets an edited cell's text and recalculates col-width.
 		/// </summary>
-		void SetCellText()
+		void ApplyEditorText()
 		{
 			if (_editor.Text != _editcell.text)
 			{
@@ -1730,18 +1776,18 @@ namespace yata
 				int c = _editcell.x;
 				int pre = Cols[c].width();
 
-				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2 + _padHoriSort;
+				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
 				if (w > pre)
 				{
 					Cols[c].width(w);
 				}
 				else if (w < pre) // recalc width on the entire col
 				{
-					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2 + _padHoriSort; // cellwidth min.
+					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2 + _padHoriSort; // cellwidth.
 					int wT;
 					for (int r = 0; r != RowCount; ++r)
 					{
-						wT = TextRenderer.MeasureText(_graphics, _cells[r,c].text, Font, _size, _flags).Width + _padHori * 2 + _padHoriSort;
+						wT = TextRenderer.MeasureText(_graphics, Rows[r].cells[c].text, Font, _size, _flags).Width + _padHori * 2;
 						if (wT > w) w = wT;
 					}
 					Cols[c].width(w, true);
@@ -1782,7 +1828,7 @@ namespace yata
 					&& y > HeightColhead && y < HeightTable)
 				{
 					var cords = getCords(x,y, left);
-					var cell = _cells[cords.Y, cords.X];
+					var cell = Rows[cords.Y].cells[cords.X];
 
 					EnsureDisplayed(cell);
 
@@ -1790,7 +1836,7 @@ namespace yata
 					{
 						if (_editor.Visible)
 						{
-							SetCellText();
+							ApplyEditorText();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1801,7 +1847,7 @@ namespace yata
 					{
 						if (_editor.Visible && cell != _editcell)
 						{
-							SetCellText();
+							ApplyEditorText();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1819,7 +1865,7 @@ namespace yata
 					{
 						if (_editor.Visible)
 						{
-							SetCellText();
+							ApplyEditorText();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1860,8 +1906,11 @@ namespace yata
 
 		internal void ClearCellSelects()
 		{
-			foreach (var cell in _cells)
-				cell.selected = false;
+			foreach (var row in Rows)
+			{
+				for (int c = 0; c != ColCount; ++c)
+					row.cells[c].selected = false;
+			}
 		}
 
 
@@ -2119,13 +2168,14 @@ namespace yata
 //				}
 
 				int r = (e.Y + offsetVert) / HeightRow;
+				var row = Rows[r];
 
 				bool select = false;
 
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int c = 0; c != ColCount; ++c)
-					if (!_cells[r,c].selected)
+					if (!row.cells[c].selected)
 					{
 						select = true;
 						break;
@@ -2155,29 +2205,32 @@ namespace yata
 							stop  = sel;
 						}
 
+						Row ro;
 						while (start != stop + 1)
 						{
+							ro = Rows[start];
 							if (start != r) // done below
-							for (int col = 0; col != ColCount; ++col)
-								_cells[start, col].selected = true;
-
+							{
+								for (int c = 0; c != ColCount; ++c)
+									ro.cells[c].selected = true;
+							}
 							++start;
 						}
 					}
 				}
 				else
 				{
-					foreach (var row in Rows)
-						row.selected = false;
+					foreach (var ro in Rows)
+						ro.selected = false;
 
-					Rows[r].selected = select;
+					row.selected = select;
 				}
 
 				if (select)
 					EnsureDisplayedRow(r);
 
 				for (int c = 0; c != ColCount; ++c)
-					_cells[r,c].selected = select;
+					row.cells[c].selected = select;
 
 				Refresh();
 			}
@@ -2225,7 +2278,7 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int r = 0; r != RowCount; ++r)
-					if (!_cells[r,c].selected)
+					if (!Rows[r].cells[c].selected)
 					{
 						select = true;
 						break;
@@ -2258,8 +2311,8 @@ namespace yata
 						while (start != stop + 1)
 						{
 							if (start != c) // done below
-							for (int row = 0; row != RowCount; ++row)
-								_cells[row, start].selected = true;
+							for (int r = 0; r != RowCount; ++r)
+								Rows[r].cells[start].selected = true;
 
 							++start;
 						}
@@ -2277,7 +2330,7 @@ namespace yata
 					EnsureDisplayedCol(c);
 
 				for (int r = 0; r != RowCount; ++r)
-					_cells[r,c].selected = select;
+					Rows[r].cells[c].selected = select;
 
 				Refresh();
 			}
@@ -2358,34 +2411,30 @@ namespace yata
 
 		/// <summary>
 		/// Inserts/deletes a row into the table.
-		/// NOTE: 'Rows' and '_cells' are two entirely separate entities.
 		/// </summary>
 		/// <param name="id">row</param>
 		/// <param name="list">null to delete the row</param>
 		internal void Insert(int id, IList<string> list)
 		{
-			//logfile.Log("Insert() r= " + r);
+			//logfile.Log("Insert() id= " + id);
 
 			DrawingControl.SuspendDrawing(this);
 
 			if (list != null)
 			{
-				Rows.Insert(id, new Row(id, Brushes.Created));
+				Rows.Insert(id, new Row(id, ColCount, Brushes.Created));
 				++RowCount;
 
-				GrowArray(ref _cells, id);
+//				GrowArray(ref _cells, id);
 
 				for (int c = 0; c != ColCount; ++c)
-					_cells[id,c] = new Cell(id,c, list[c]);
+					Rows[id].cells[c] = new Cell(id,c, list[c]);
 
 				for (int r = id + 1; r != RowCount; ++r)
 				{
 					++Rows[r]._id;
 					for (int c = 0; c != ColCount; ++c)
-					{
-						//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
-						++_cells[r,c].y;
-					}
+						++Rows[r].cells[c].y;
 				}
 			}
 			else // delete 'r'
@@ -2393,16 +2442,13 @@ namespace yata
 				Rows.Remove(Rows[id]);
 				--RowCount;
 
-				ShrinkArray<Cell>(ref _cells, id);
+//				ShrinkArray<Cell>(ref _cells, id);
 
 				for (int r = id; r != RowCount; ++r)
 				{
 					--Rows[r]._id;
 					for (int c = 0; c != ColCount; ++c)
-					{
-						//logfile.Log("r= " + row + " c= " + col + " text= " + _cells[row,col].text);
-						--_cells[r,c].y;
-					}
+						--Rows[r].cells[c].y;
 				}
 			}
 
@@ -2415,7 +2461,7 @@ namespace yata
 		}
 
 
-		/// <summary>
+/*		/// <summary>
 		/// ... witchcraft ...
 		/// </summary>
 		/// <param name="cells"></param>
@@ -2450,9 +2496,9 @@ namespace yata
 			}
 
 			cells = array;
-		}
+		} */
 
-		/// <summary>
+/*		/// <summary>
 		/// ... witchcraft ...
 		/// </summary>
 		/// <param name="cells"></param>
@@ -2487,7 +2533,7 @@ namespace yata
 			}
 
 			cells = array;
-		}
+		} */
 
 
 		#region Sort
@@ -2505,9 +2551,9 @@ namespace yata
 			_sortcol = c;
 
 			bool stop, changed = false;
-			var cellT = new Cell[ColCount];
-			Row rowT; // NOTE: Cells are NOT properties of Rows; they act independently.
-			Cell cell;
+//			var cellT = new Cell[ColCount];
+			Row rowT, row; // NOTE: Cells are NOT properties of Rows; they act independently.
+//			Cell cell;
 
 			if (_sortdir == 1)
 			{
@@ -2522,22 +2568,32 @@ namespace yata
 							changed = true;
 
 							rowT = Rows[r];
-							for (int i = 0; i != ColCount; ++i)
-								cellT[i] = _cells[r,i];
+//							for (int i = 0; i != ColCount; ++i)
+//								cellT[i] = _cells[r,i];
 
-							Rows[r] = Rows[r+1];
-							for (int i = 0; i != ColCount; ++i)
-							{
-								cell = (_cells[r,i] = _cells[r+1,i]);
-								cell.y -= 1;
-							}
+							row = (Rows[r] = Rows[r+1]);
+							row._id = r+1;
 
-							Rows[r+1] = rowT;
-							for (int i = 0; i != ColCount; ++i)
-							{
-								cell = (_cells[r+1,i] = cellT[i]);
-								cell.y += 1;
-							}
+							foreach (var cell in row.cells)
+								cell.y = r+1;
+
+//							for (int i = 0; i != ColCount; ++i)
+//							{
+//								cell = (_cells[r,i] = _cells[r+1,i]);
+//								cell.y -= 1;
+//							}
+
+							row = (Rows[r+1] = rowT);
+							row._id = r;
+
+							foreach (var cell in row.cells)
+								cell.y = r;
+
+//							for (int i = 0; i != ColCount; ++i)
+//							{
+//								cell = (_cells[r+1,i] = cellT[i]);
+//								cell.y += 1;
+//							}
 						}
 					}
 					if (stop) break;
@@ -2556,22 +2612,32 @@ namespace yata
 							changed = true;
 
 							rowT = Rows[r];
-							for (int i = 0; i != ColCount; ++i)
-								cellT[i] = _cells[r,i];
+//							for (int i = 0; i != ColCount; ++i)
+//								cellT[i] = _cells[r,i];
 
-							Rows[r] = Rows[r+1];
-							for (int i = 0; i != ColCount; ++i)
-							{
-								cell = (_cells[r,i] = _cells[r+1,i]);
-								cell.y -= 1;
-							}
+							row = (Rows[r] = Rows[r+1]);
+							row._id = r+1;
+
+							foreach (var cell in row.cells)
+								cell.y = r+1;
+
+//							for (int i = 0; i != ColCount; ++i)
+//							{
+//								cell = (_cells[r,i] = _cells[r+1,i]);
+//								cell.y -= 1;
+//							}
 
 							Rows[r+1] = rowT;
-							for (int i = 0; i != ColCount; ++i)
-							{
-								cell = (_cells[r+1,i] = cellT[i]);
-								cell.y += 1;
-							}
+							row._id = r;
+
+							foreach (var cell in row.cells)
+								cell.y = r;
+
+//							for (int i = 0; i != ColCount; ++i)
+//							{
+//								cell = (_cells[r+1,i] = cellT[i]);
+//								cell.y += 1;
+//							}
 						}
 					}
 					if (stop) break;
@@ -2596,8 +2662,8 @@ namespace yata
 		///           1 first is second, second is first</returns>
 		int Sort(int r, int c)
 		{
-			_a = _cells[r  ,c].text;
-			_b = _cells[r+1,c].text;
+			_a = Rows[r]  .cells[c].text;
+			_b = Rows[r+1].cells[c].text;
 
 			int result;
 
@@ -2615,8 +2681,8 @@ namespace yata
 				result = String.CompareOrdinal(_a,_b);	// else do string comparison
 
 			if (result == 0 && c != 0					// secondary sort on id if primary sort matches
-				&& Int32.TryParse(_cells[r  ,0].text, out _ai)
-				&& Int32.TryParse(_cells[r+1,0].text, out _bi))
+			    && Int32.TryParse(Rows[r]  .cells[0].text, out _ai)
+			    && Int32.TryParse(Rows[r+1].cells[0].text, out _bi))
 			{
 				return _ai.CompareTo(_bi);
 			}

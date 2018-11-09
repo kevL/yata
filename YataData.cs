@@ -42,12 +42,24 @@ namespace yata
 	{
 		internal int _id;
 
+		internal Cell[] cells;
+		/// <summary>
+		/// Gets the cell at pos [c].
+		/// </summary>
+		internal Cell this[int c]
+		{
+			get { return cells[c]; }
+			set { cells[c] = value; }
+		}
+
 		internal Brush _brush;
 		internal bool selected;
 
-		internal Row(int id, Brush brush)
+		internal Row(int id, int cols, Brush brush)
 		{
 			_id = id;
+			cells = new Cell[cols];
+
 			_brush = brush;
 		}
 	}
