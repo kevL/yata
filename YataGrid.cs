@@ -164,7 +164,7 @@ namespace yata
 		static bool _init;
 
 		int _sortcol;
-		int _sortdir;
+		int _sortdir =  1;
 
 		/// <summary>
 		/// cTor.
@@ -567,12 +567,6 @@ namespace yata
 					{
 						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, Colors.Text, _flags);
 
-//						if (SortedColumn == null) // draw an asc-arrow on the ID col-header when table loads
-//						{
-//							if (col == 0)
-//								sort = Resources.asc_16px;
-//						}
-//						else
 						if (_sortdir != 0 && c == _sortcol)
 						{
 							Bitmap sort;
@@ -626,7 +620,13 @@ namespace yata
 
 			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 
-			if (_sortdir != 0 && _sortcol == 0)
+			if (_sortcol == -1) // draw an asc-arrow on the ID col-header when the table loads
+			{
+				graphics_.DrawImage(Resources.asc_16px,
+									rect.X               - _offsetHoriSort, // + rect.Width
+									rect.Y + rect.Height - _offsetVertSort);
+			}
+			else if (_sortcol == 0)// && _sortdir != 0)
 			{
 				Bitmap sort;
 				if (_sortdir == 1)			// asc
@@ -635,7 +635,7 @@ namespace yata
 					sort = Resources.des_16px;
 
 				graphics_.DrawImage(sort,
-									rect.X + rect.Width  - _offsetHoriSort,
+									rect.X               - _offsetHoriSort, // + rect.Width
 									rect.Y + rect.Height - _offsetVertSort);
 			}
 		}
@@ -1091,7 +1091,7 @@ namespace yata
 			int h; c = 0;
 			foreach (string head in Fields)
 			{
-				++c;
+				++c; // start at col 1 - skip id col
 
 				if (!calibrate)
 					Cols[c].text = head;
@@ -1139,14 +1139,15 @@ namespace yata
 			for (int c = 0; c != ColCount; ++c)
 			{
 				w = 20; // cellwidth.
-				foreach (var row in Rows)
+				for (int r = 0; r != RowCount; ++r)
 				{
-					size = TextRenderer.MeasureText(_graphics, row[c].text, Font, _size, _flags);
+					size = TextRenderer.MeasureText(_graphics, Rows[r].cells[c].text, Font, _size, _flags);
 
 					hT = size.Height + _padVert * 2;
 					if (hT > HeightRow) HeightRow = hT;
 
 					wT = size.Width + _padHori * 2;
+//					if (r == 0) wT += _padHoriSort;
 					if (wT > w) w = wT;
 				}
 				Cols[c].width(w);
@@ -1261,17 +1262,19 @@ namespace yata
 		{
 			if (table.ColCount != 0)
 			{
+				int w0 = table.Cols[0].width();
 				table._labelid.Location = new Point(0,0);
-				table._labelid.Size = new Size(WidthRowhead + table.Cols[0].width(), HeightColhead - 1);
+				table._labelid.Size = new Size(WidthRowhead + w0, HeightColhead - 1);
 
 				if (table.ColCount > 1)
 				{
-					table._labelfirst.Location = new Point(WidthRowhead + table.Cols[0].width(), 0);
-					table._labelfirst.Size = new Size(table.Cols[1].width(), HeightColhead - 1);
+					int w1 = table.Cols[1].width();
+					table._labelfirst.Location = new Point(WidthRowhead + w0, 0);
+					table._labelfirst.Size = new Size(w1, HeightColhead - 1);
 
 					if (table.ColCount > 2)
 					{
-						table._labelsecond.Location = new Point(WidthRowhead + table.Cols[0].width() + table.Cols[1].width(), 0);
+						table._labelsecond.Location = new Point(WidthRowhead + w0 + w1, 0);
 						table._labelsecond.Size = new Size(table.Cols[2].width(), HeightColhead - 1);
 					}
 				}
