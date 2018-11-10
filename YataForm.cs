@@ -656,14 +656,13 @@ namespace yata
 			_r = (e.Y + Table.offsetVert) / Table.HeightRow;
 
 			Table._editor.Visible = false;
-			Table.ClearCellSelects();
+
+			Table.ClearSelects();
+
+			Table.Rows[_r].selected = true;
 			for (int c = 0; c != Table.ColCount; ++c)
 				Table[_r,c].selected = true;
 
-			foreach (var row in Table.Rows)
-				row.selected = false;
-
-			Table.Rows[_r].selected = true;
 			Table.EnsureDisplayedRow(_r);
 			Table.Refresh();
 

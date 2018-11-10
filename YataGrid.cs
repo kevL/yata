@@ -1403,9 +1403,10 @@ namespace yata
 				case Keys.Home:
 					if (selr > 0)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						Rows[0].selected = true;
 						for (int c = 0; c != ColCount; ++c)
@@ -1448,9 +1449,10 @@ namespace yata
 				case Keys.End:
 					if (selr != -1 && selr != RowCount - 1)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						Rows[RowCount - 1].selected = true;
 						for (int c = 0; c != ColCount; ++c)
@@ -1494,9 +1496,10 @@ namespace yata
 				case Keys.PageUp:
 					if (selr > 0)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 
@@ -1541,9 +1544,10 @@ namespace yata
 				case Keys.PageDown:
 					if (selr != -1 && selr != RowCount - 1)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
 
@@ -1588,9 +1592,10 @@ namespace yata
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
 					if (selr > 0)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						Rows[selr - 1].selected = true;
 						for (int c = 0; c != ColCount; ++c)
@@ -1624,9 +1629,10 @@ namespace yata
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
 					if (selr != -1 && selr != RowCount - 1)
 					{
-						Rows[selr].selected = false;
-						for (int c = 0; c != ColCount; ++c)
-							Rows[selr].cells[c].selected = false;
+//						Rows[selr].selected = false;
+//						for (int c = 0; c != ColCount; ++c)
+//							Rows[selr].cells[c].selected = false;
+						ClearSelects();
 
 						Rows[selr + 1].selected = true;
 						for (int c = 0; c != ColCount; ++c)
@@ -1697,7 +1703,7 @@ namespace yata
 					break;
 
 				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
-					ClearCellSelects();
+					ClearSelects();
 					break;
 			}
 
@@ -1891,62 +1897,65 @@ namespace yata
 				foreach (var row in Rows)
 					row.selected = false;
 
-				int x = e.X + offsetHori;
 				int y = e.Y + offsetVert;
-
-				int left = getLeft();
-
-				if (   x > left          && x < WidthTable
-					&& y > HeightColhead && y < HeightTable)
+				if (y > HeightColhead && y < HeightTable)
 				{
-					var cords = getCords(x,y, left);
-					var cell = Rows[cords.Y].cells[cords.X];
-
-					EnsureDisplayed(cell);
-
-					if ((ModifierKeys & Keys.Control) == Keys.Control)
+					int x = e.X + offsetHori;
+					if (x < WidthTable)
 					{
-						if (_editor.Visible)
+						int left = getLeft();
+						if (x > left)
 						{
-							ApplyTextEdit();
-							_editor.Visible = false;
-							Select();
-						}
+							var cords = getCords(x,y, left);
+							var cell = Rows[cords.Y].cells[cords.X];
 
-						cell.selected = !cell.selected;
-					}
-					else if (cell.selected)
-					{
-						if (_editor.Visible && cell != _editcell)
-						{
-							ApplyTextEdit();
-							_editor.Visible = false;
-							Select();
-						}
-						else
-						{
-							if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+							EnsureDisplayed(cell);
+
+							if ((ModifierKeys & Keys.Control) == Keys.Control)
 							{
-								_editcell = cell;
-								EditCell();
+								if (_editor.Visible)
+								{
+									ApplyTextEdit();
+									_editor.Visible = false;
+									Select();
+								}
+
+								cell.selected = !cell.selected;
 							}
-							_editor.Focus();
+							else if (cell.selected)
+							{
+								if (_editor.Visible && cell != _editcell)
+								{
+									ApplyTextEdit();
+									_editor.Visible = false;
+									Select();
+								}
+								else
+								{
+									if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
+									{
+										_editcell = cell;
+										EditCell();
+									}
+									_editor.Focus();
+								}
+							}
+							else
+							{
+								if (_editor.Visible)
+								{
+									ApplyTextEdit();
+									_editor.Visible = false;
+									Select();
+								}
+
+								ClearCellSelects();
+								cell.selected = true;
+							}
+
+							Refresh();
 						}
 					}
-					else
-					{
-						if (_editor.Visible)
-						{
-							ApplyTextEdit();
-							_editor.Visible = false;
-							Select();
-						}
-
-						ClearCellSelects();
-						cell.selected = true;
-					}
-
-					Refresh();
 				}
 			}
 
@@ -1980,6 +1989,16 @@ namespace yata
 		{
 			foreach (var row in Rows)
 			{
+				for (int c = 0; c != ColCount; ++c)
+					row.cells[c].selected = false;
+			}
+		}
+
+		internal void ClearSelects()
+		{
+			foreach (var row in Rows)
+			{
+				row.selected = false;
 				for (int c = 0; c != ColCount; ++c)
 					row.cells[c].selected = false;
 			}
@@ -2552,6 +2571,8 @@ namespace yata
 		/// <param name="col">the col id to sort by</param>
 		void ColSort(int col)
 		{
+			Changed = true; // TODO: do Changed only if rows are swapped/order is changed.
+
 			if (_sortdir != 1 || _sortcol != col)
 				_sortdir = 1;
 			else
