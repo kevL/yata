@@ -18,7 +18,6 @@
 		private System.Windows.Forms.ToolStripMenuItem it_Close;
 		private System.Windows.Forms.ToolStripSeparator separator_2;
 		private System.Windows.Forms.ToolStripMenuItem it_Quit;
-		private System.Windows.Forms.ToolStripMenuItem it_Create;
 		private System.Windows.Forms.ToolStripSeparator separator_1;
 		private System.Windows.Forms.ContextMenuStrip contextEditor;
 		private System.Windows.Forms.ToolStripMenuItem context_it_Cut;
@@ -65,7 +64,6 @@
 		private System.Windows.Forms.ToolStripMenuItem it_Folders;
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpFeats2da;
 		private System.Windows.Forms.ToolStripSeparator separator_6;
-		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 		private System.Windows.Forms.Panel panel_ColorFill;
 		private System.Windows.Forms.ContextMenuStrip tabMenu;
 		private System.Windows.Forms.ToolStripMenuItem it_tabClose;
@@ -113,7 +111,6 @@
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Folders = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -131,7 +128,6 @@
 			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -186,13 +182,13 @@
 			this.tabControl.ContextMenuStrip = this.tabMenu;
 			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-			this.tabControl.Location = new System.Drawing.Point(0, 27);
+			this.tabControl.Location = new System.Drawing.Point(0, 24);
 			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControl.Multiline = true;
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(842, 405);
+			this.tabControl.Size = new System.Drawing.Size(842, 408);
 			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
@@ -237,17 +233,17 @@
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(842, 27);
+			this.menubar.Size = new System.Drawing.Size(842, 24);
 			this.menubar.TabIndex = 0;
 			this.menubar.Text = "menuStrip1";
 			// 
 			// it_MenuFile
 			// 
+			this.it_MenuFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Open,
 			this.it_Reload,
 			this.it_Folders,
-			this.it_Create,
 			this.separator_1,
 			this.it_Save,
 			this.it_SaveAs,
@@ -256,7 +252,7 @@
 			this.separator_2,
 			this.it_Quit});
 			this.it_MenuFile.Name = "it_MenuFile";
-			this.it_MenuFile.Size = new System.Drawing.Size(37, 23);
+			this.it_MenuFile.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuFile.Text = "File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening_FolderPresets);
 			// 
@@ -282,14 +278,6 @@
 			this.it_Folders.Size = new System.Drawing.Size(160, 22);
 			this.it_Folders.Text = "Folders";
 			this.it_Folders.Visible = false;
-			// 
-			// it_Create
-			// 
-			this.it_Create.Name = "it_Create";
-			this.it_Create.Size = new System.Drawing.Size(160, 22);
-			this.it_Create.Text = "Create ...";
-			this.it_Create.Visible = false;
-			this.it_Create.Click += new System.EventHandler(this.fileclick_Create);
 			// 
 			// separator_1
 			// 
@@ -341,11 +329,12 @@
 			// 
 			// it_MenuEdit
 			// 
+			this.it_MenuEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Search,
 			this.it_Findnext});
 			this.it_MenuEdit.Name = "it_MenuEdit";
-			this.it_MenuEdit.Size = new System.Drawing.Size(37, 23);
+			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
 			// 
 			// it_Search
@@ -369,7 +358,7 @@
 			this.tb_Search.AutoSize = false;
 			this.tb_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Search.Name = "tb_Search";
-			this.tb_Search.Size = new System.Drawing.Size(125, 23);
+			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
 			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
 			// 
@@ -384,18 +373,18 @@
 			// 
 			// it_MenuOptions
 			// 
+			this.it_MenuOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_CheckRows,
 			this.it_RenumberRows,
 			this.toolStripSeparator1,
 			this.it_RecolorRows,
-			this.it_AutoCols,
 			this.toolStripSeparator2,
 			this.it_freeze1,
 			this.it_freeze2});
 			this.it_MenuOptions.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
 			this.it_MenuOptions.Name = "it_MenuOptions";
-			this.it_MenuOptions.Size = new System.Drawing.Size(52, 23);
+			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
 			this.it_MenuOptions.Text = "2da Ops";
 			// 
 			// it_CheckRows
@@ -424,14 +413,6 @@
 			this.it_RecolorRows.Text = "recolor rows";
 			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
-			// it_AutoCols
-			// 
-			this.it_AutoCols.Name = "it_AutoCols";
-			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
-			this.it_AutoCols.Text = "autosize cols";
-			this.it_AutoCols.Visible = false;
-			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
-			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -455,12 +436,13 @@
 			// 
 			// fontToolStripMenuItem
 			// 
+			this.fontToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Font,
 			this.it_CurrentFont,
 			this.it_FontDefault});
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 23);
+			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fontToolStripMenuItem.Text = "Font";
 			// 
 			// it_Font
@@ -486,6 +468,7 @@
 			// 
 			// it_MenuPaths
 			// 
+			this.it_MenuPaths.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuPaths.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_PathAll,
 			this.separator_5,
@@ -754,9 +737,9 @@
 			// 
 			this.panel_ColorFill.BackColor = System.Drawing.Color.LightSeaGreen;
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_ColorFill.Location = new System.Drawing.Point(0, 27);
+			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(842, 405);
+			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
 			// YataForm

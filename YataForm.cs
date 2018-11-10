@@ -481,9 +481,12 @@ namespace yata
 			// TODO: Show an error if file no longer exists.
 		}
 
-		// nb. the Create option is disabled in the designer
-		void fileclick_Create(object sender, EventArgs e)
-		{}
+		// 'it_Create'
+		// "Create ..."
+		// NOTE: If an item is disabled w/ Visible=false then keypress
+		// navigation arrows cause unexpected behavior.
+/*		void fileclick_Create(object sender, EventArgs e)
+		{} */
 
 
 		/// <summary>
@@ -1051,11 +1054,15 @@ namespace yata
 			}
 		}
 
-		internal void opsclick_AutosizeCols(object sender, EventArgs e) // NOTE: Disabled in designer w/ Visible=false
+		// 'it_AutoCols'
+		// "autosize cols"
+		// NOTE: If an item is disabled w/ Visible=false then keypress
+		// navigation arrows cause unexpected behavior.
+/*		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 //			if (Table != null)
 //				Table.AutoResizeColumns();
-		}
+		} */
 
 
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
