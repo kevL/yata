@@ -160,10 +160,9 @@ namespace yata
 					sel.selected    = false;
 
 					if (ColCount > FrozenCount - 1)
-					{
 						Rows[sel.y].cells[FrozenCount].selected = true;
-						Refresh();
-					}
+
+					Refresh();
 				}
 			}
 		}
