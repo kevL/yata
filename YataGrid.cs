@@ -223,6 +223,7 @@ namespace yata
 			_editor.BackColor = Colors.Edit;
 			_editor.Visible = false;
 			_editor.BorderStyle = BorderStyle.None;
+			_editor.KeyDown += keydown_Editor;
 
 			Controls.Add(_editor);
 		}
@@ -1368,8 +1369,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Disables navigation etc. keys to allow table scrolling on certain
-		/// key-events.
+		/// Disables textbox navigation etc. keys to allow table scrolling on
+		/// certain key-events.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -1709,6 +1710,20 @@ namespace yata
 
 
 		/// <summary>
+		/// Handles keydown events in the cell-editor.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void keydown_Editor(object sender, KeyEventArgs e)
+		{
+			if (e.Alt || e.Control) // stop dweeby .NET behavior.
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
+		}
+
+		/// <summary>
 		/// Handles ending editing a cell by pressing Enter or Tab - this fires
 		/// during edit.
 		/// </summary>
@@ -1721,7 +1736,7 @@ namespace yata
 				case Keys.Enter:
 					if (_editor.Visible)
 					{
-						ApplyEditorText();
+						ApplyTextEdit();
 						goto case Keys.Escape;
 					}
 
@@ -1743,40 +1758,21 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 
-
-		/// <summary>
-		/// Checks if only one cell is currently selected.
-		/// </summary>
-		/// <returns>the only cell selected</returns>
-		internal Cell GetOnlySelectedCell()
-		{
-			Cell cell0 = null;
-
-			Cell cell;
-			foreach (var row in Rows)
-			{
-				for (int c = 0; c != ColCount; ++c)
-				{
-					if ((cell = row.cells[c]).selected)
-					{
-						if (cell0 != null)
-							return null;
-
-						cell0 = cell;
-					}
-				}
-			}
-			return cell0;
-		}
-
 		/// <summary>
 		/// Sets an edited cell's text and recalculates col-width.
 		/// </summary>
-		void ApplyEditorText()
+		void ApplyTextEdit()
 		{
 			if (_editor.Text != _editcell.text)
 			{
 				Changed = true;
+
+				if (CheckTextEdit())
+					MessageBox.Show("The text that was submitted has been altered.",
+									"burp",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Exclamation,
+									MessageBoxDefaultButton.Button1);
 
 				_editcell.text = _editor.Text;
 
@@ -1806,6 +1802,75 @@ namespace yata
 					Refresh(); // is required - and yet another Refresh() will follow ....
 				}
 			}
+		}
+
+		/// <summary>
+		/// Checks the text that user tries to commit to a cell.
+		/// </summary>
+		/// <returns>true if text is changed/fixed/corrected</returns>
+		bool CheckTextEdit()
+		{
+			bool changed = false;
+
+			string field = _editor.Text.Trim();
+
+			if (String.IsNullOrEmpty(field))
+			{
+				_editor.Text = Constants.Stars;
+				return true;
+			}
+
+			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+			if (quoteFirst && quoteLast)
+			{
+				if (   field.Length < 3
+					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
+				{
+					_editor.Text = Constants.Stars;
+					return true;
+				}
+			}
+			else if (( quoteFirst && !quoteLast)
+				||   (!quoteFirst &&  quoteLast))
+			{
+				if (quoteFirst)
+					field = field + "\"";
+				else
+					field = "\"" + field;
+
+				if (field.Length == 2)
+				{
+					_editor.Text = Constants.Stars;
+					return true;
+				}
+
+				_editor.Text = field;
+				changed = true;
+			}
+
+			if (field.Length > 2) // lol but it works ->
+			{
+				string first = field.Substring(0, 1);
+				string last  = field.Substring(field.Length - 1, 1);
+
+				string test  = field.Substring(1, field.Length - 2);
+
+				while (test.Contains("\""))
+				{
+					changed = true;
+					test = test.Remove(test.IndexOf('"'), 1);
+					_editor.Text = first + test + last;
+				}
+
+				if (test == Constants.Stars)
+				{
+					_editor.Text = Constants.Stars;
+					changed = true;
+				}
+			}
+
+			return changed;
 		}
 
 
@@ -1843,7 +1908,7 @@ namespace yata
 					{
 						if (_editor.Visible)
 						{
-							ApplyEditorText();
+							ApplyTextEdit();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1854,7 +1919,7 @@ namespace yata
 					{
 						if (_editor.Visible && cell != _editcell)
 						{
-							ApplyEditorText();
+							ApplyTextEdit();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1872,7 +1937,7 @@ namespace yata
 					{
 						if (_editor.Visible)
 						{
-							ApplyEditorText();
+							ApplyTextEdit();
 							_editor.Visible = false;
 							Select();
 						}
@@ -1959,6 +2024,31 @@ namespace yata
 			}
 		}
 
+
+		/// <summary>
+		/// Checks if only one cell is currently selected.
+		/// </summary>
+		/// <returns>the only cell selected</returns>
+		internal Cell GetOnlySelectedCell()
+		{
+			Cell cell0 = null;
+
+			Cell cell;
+			foreach (var row in Rows)
+			{
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if ((cell = row.cells[c]).selected)
+					{
+						if (cell0 != null)
+							return null;
+
+						cell0 = cell;
+					}
+				}
+			}
+			return cell0;
+		}
 
 		Point getCords(int x, int y, int left)
 		{
