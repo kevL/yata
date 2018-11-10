@@ -164,7 +164,7 @@ namespace yata
 		static bool _init;
 
 		int _sortcol;
-		int _sortdir =  1;
+		int _sortdir = 1;
 
 		/// <summary>
 		/// cTor.
@@ -473,7 +473,8 @@ namespace yata
 				Row row;
 
 				rect.Height = HeightRow;
-				int left = WidthRowhead - offsetHori + _padHori;
+				int left = WidthRowhead - offsetHori + _padHori - 1; // NOTE: -1 is a padding tweak.
+
 				int yOffset = HeightColhead - offsetVert;
 				for (r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
@@ -620,13 +621,13 @@ namespace yata
 
 			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 
-			if (_sortcol == -1) // draw an asc-arrow on the ID col-header when the table loads
+			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
 			{
 				graphics_.DrawImage(Resources.asc_16px,
 									rect.X               - _offsetHoriSort, // + rect.Width
 									rect.Y + rect.Height - _offsetVertSort);
 			}
-			else if (_sortcol == 0)// && _sortdir != 0)
+			else if (_sortcol == 0)
 			{
 				Bitmap sort;
 				if (_sortdir == 1)			// asc
