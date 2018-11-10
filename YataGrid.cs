@@ -1394,23 +1394,36 @@ namespace yata
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			Cell sel = GetOnlySelectedCell();
+			int selr = getSelectedRow();
 
-			bool display = false;
+			// TODO: change selected col
 
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
-					if ((e.Modifiers & Keys.Control) == Keys.Control)
+					if (selr > 0)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						Rows[0].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[0].cells[c].selected = true;
+
+						EnsureDisplayedRow(0);
+					}
+					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
 						if (sel != null)
 						{
 							if (sel.x != FrozenCount || sel.y != 0)
 							{
-								display = true;
-
 								sel.selected = false;
 								sel = Rows[0].cells[FrozenCount];
 								sel.selected = true;
+
+								EnsureDisplayed(sel);
 							}
 						}
 						else if (_scrollVert.Visible)
@@ -1420,11 +1433,11 @@ namespace yata
 					{
 						if (sel.x != FrozenCount)
 						{
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y].cells[FrozenCount];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1433,17 +1446,29 @@ namespace yata
 					break;
 
 				case Keys.End:
-					if ((e.Modifiers & Keys.Control) == Keys.Control)
+					if (selr != -1 && selr != RowCount - 1)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						Rows[RowCount - 1].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[RowCount - 1].cells[c].selected = true;
+
+						EnsureDisplayedRow(RowCount - 1);
+					}
+					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
 						if (sel != null)
 						{
 							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
 							{
-								display = true;
-
 								sel.selected = false;
 								sel = Rows[RowCount - 1].cells[ColCount - 1];
 								sel.selected = true;
+
+								EnsureDisplayed(sel);
 							}
 						}
 						else if (_scrollVert.Visible)
@@ -1453,11 +1478,11 @@ namespace yata
 					{
 						if (sel.x != ColCount - 1)
 						{
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y].cells[ColCount - 1];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1467,21 +1492,39 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
-					if (sel != null)
+					if (selr > 0)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+
+						int r;
+						if (selr < rows) r = 0;
+						else             r = selr - rows;
+
+						Rows[r].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[r].cells[c].selected = true;
+
+						EnsureDisplayedRow(r);
+					}
+					else if (sel != null)
 					{
 						if (sel.y != 0)
 						{
-							display = true;
-
 							sel.selected = false;
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
-							logfile.Log("rows= " + rows);
-							if (sel.y < rows)
-								sel = Rows[0].cells[sel.x];
-							else
-								sel = Rows[sel.y - rows].cells[sel.x];
 
+							int r;
+							if (sel.y < rows) r = 0;
+							else              r = sel.y - rows;
+
+							sel = Rows[r].cells[sel.x];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollVert.Visible)
@@ -1496,21 +1539,39 @@ namespace yata
 					break;
 
 				case Keys.PageDown:
-					if (sel != null)
+					if (selr != -1 && selr != RowCount - 1)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+
+						int r;
+						if (selr > RowCount - 1 - rows) r = RowCount - 1;
+						else                            r = selr + rows;
+
+						Rows[r].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[r].cells[c].selected = true;
+
+						EnsureDisplayedRow(r);
+					}
+					else if (sel != null)
 					{
 						if (sel.y != RowCount - 1)
 						{
-							display = true;
-
 							sel.selected = false;
 							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
-							logfile.Log("rows= " + rows);
-							if (sel.y > RowCount - 1 - rows)
-								sel = Rows[RowCount - 1].cells[sel.x];
-							else
-								sel = Rows[sel.y + rows].cells[sel.x];
 
+							int r;
+							if (sel.y > RowCount - 1 - rows) r = RowCount - 1;
+							else                             r = sel.y + rows;
+
+							sel = Rows[r].cells[sel.x];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollVert.Visible)
@@ -1525,18 +1586,30 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
-					if (sel != null) // selection to the cell above
+					if (selr > 0)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						Rows[selr - 1].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr - 1].cells[c].selected = true;
+
+						EnsureDisplayedRow(selr - 1);
+					}
+					else if (sel != null) // selection to the cell above
 					{
 						if (sel.y != 0)
 						{
 							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
 
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y - 1].cells[sel.x];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollVert.Visible)
@@ -1549,15 +1622,27 @@ namespace yata
 					break;
 
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
-					if (sel != null) // selection to the cell below
+					if (selr != -1 && selr != RowCount - 1)
+					{
+						Rows[selr].selected = false;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr].cells[c].selected = false;
+
+						Rows[selr + 1].selected = true;
+						for (int c = 0; c != ColCount; ++c)
+							Rows[selr + 1].cells[c].selected = true;
+
+						EnsureDisplayedRow(selr + 1);
+					}
+					else if (sel != null) // selection to the cell below
 					{
 						if (sel.y != RowCount - 1)
 						{
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y + 1].cells[sel.x];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollVert.Visible) // scroll the table
@@ -1574,11 +1659,11 @@ namespace yata
 					{
 						if (sel.x != FrozenCount)
 						{
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y].cells[sel.x - 1];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1595,11 +1680,11 @@ namespace yata
 					{
 						if (sel.x != ColCount - 1)
 						{
-							display = true;
-
 							sel.selected = false;
 							sel = Rows[sel.y].cells[sel.x + 1];
 							sel.selected = true;
+
+							EnsureDisplayed(sel);
 						}
 					}
 					else if (_scrollHori.Visible)
@@ -1616,7 +1701,6 @@ namespace yata
 					break;
 			}
 
-			if (display) EnsureDisplayed(sel);
 			Refresh();
 
 //			e.Handled = true;
