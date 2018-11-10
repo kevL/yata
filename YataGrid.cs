@@ -152,6 +152,19 @@ namespace yata
 
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
+
+				Cell sel = GetOnlySelectedCell();
+				if (sel != null && sel.x < FrozenCount)
+				{
+					_editor.Visible =
+					sel.selected    = false;
+
+					if (ColCount > FrozenCount - 1)
+					{
+						Rows[sel.y].cells[FrozenCount].selected = true;
+						Refresh();
+					}
+				}
 			}
 		}
 
