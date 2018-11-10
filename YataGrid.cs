@@ -2357,10 +2357,130 @@ namespace yata
 		#region Sort
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
-		/// @note Bubblesort. TODO: Mergesort.
+		/// @note Mergesort.
 		/// </summary>
-		/// <param name="c">the col id to sort by</param>
-		void ColSort(int c)
+		/// <param name="col">the col id to sort by</param>
+		void ColSort(int col)
+		{
+			if (_sortdir != 1 || _sortcol != col)
+				_sortdir = 1;
+			else
+				_sortdir = -1;
+
+			_sortcol = col;
+
+			var rowsT = new List<Row>();
+			TopDownMergeSort(Rows, rowsT, RowCount);
+
+			// straighten out row._id and cell.y
+			Row row;
+			for (int r = 0; r != RowCount; ++r)
+			{
+				(row = Rows[r])._id = r;
+				for (int c = 0; c != ColCount; ++c)
+					row.cells[c].y = r;
+			}
+		}
+
+		/// <summary>
+		/// https://en.wikipedia.org/wiki/Merge_sort#Top-down_implementation
+		/// </summary>
+		/// <param name="rows"></param>
+		/// <param name="rowsT"></param>
+		/// <param name="count"></param>
+		void TopDownMergeSort(List<Row> rows, List<Row> rowsT, int count)
+		{
+			CopyArray(rows, 0, count, rowsT);
+			TopDownSplitMerge(rowsT, 0, count, rows);
+		}
+
+		void CopyArray(IList<Row> rows, int iBegin, int iEnd, ICollection<Row> rowsT)
+		{
+			for (int i = iBegin; i != iEnd; ++i)
+				rowsT.Add(rows[i]);
+		}
+
+		void TopDownSplitMerge(List<Row> rowsT, int iBegin, int iEnd, List<Row> rows)
+		{
+			if (iEnd - iBegin < 2)
+				return;
+
+			int iMiddle = (iEnd + iBegin) / 2;
+
+			TopDownSplitMerge(rows, iBegin,  iMiddle, rowsT);
+			TopDownSplitMerge(rows, iMiddle, iEnd,    rowsT);
+
+			TopDownMerge(rowsT, iBegin, iMiddle, iEnd, rows);
+		}
+
+		void TopDownMerge(IList<Row> rows, int iBegin, int iMiddle, int iEnd, IList<Row> rowsT)
+		{
+			int i = iBegin, j = iMiddle;
+
+			for (int k = iBegin; k != iEnd; ++k)
+			{
+				if (i < iMiddle && (j >= iEnd || Sort(rows[i], rows[j]) == _sortdir))
+				{
+					rowsT[k] = rows[i];
+					++i;
+				}
+				else
+				{
+					rowsT[k] = rows[j];
+					++j;
+				}
+			}
+		}
+
+
+		string _a,  _b;
+		int    _ai, _bi;
+		float  _af, _bf;
+
+		/// <summary>
+		/// Sorts fields as integers iff they convert to integers, or floats as
+		/// floats, else as strings and performs a secondary sort against their
+		/// IDs if applicable.
+		/// </summary>
+		/// <param name="row1">the value of the reference to a 'Row'</param>
+		/// <param name="row2">the value of the reference to a 'Row'</param>
+		/// <returns>-1 first is first, second is second
+		///           0 identical
+		///           1 first is second, second is first</returns>
+		int Sort(Row row1, Row row2)
+		{
+			_a = row1.cells[_sortcol].text;
+			_b = row2.cells[_sortcol].text;
+
+			int result;
+
+			if (   Int32.TryParse(_a, out _ai)			// try int comparision first
+				&& Int32.TryParse(_b, out _bi))
+			{
+				result = _ai.CompareTo(_bi);
+			}
+			else if (float.TryParse(_a, out _af)		// try float comparison next
+				  && float.TryParse(_b, out _bf))
+			{
+				result = _af.CompareTo(_bf);
+			}
+			else
+				result = String.CompareOrdinal(_a,_b);	// else do string comparison
+
+			if (result == 0 && _sortcol != 0			// secondary sort on id if primary sort matches
+				&& Int32.TryParse(row1.cells[0].text, out _ai)
+				&& Int32.TryParse(row2.cells[0].text, out _bi))
+			{
+				result = _ai.CompareTo(_bi);
+			}
+
+			if (result < 0) return  1; // NOTE: These vals are reversed for Mergesort.
+			if (result > 0) return -1;
+
+			return 0;
+		}
+
+/*		void ColSort(int c) // Bubblesort -> hint: don't bother
 		{
 			if (_sortdir != 1 || _sortcol != c)
 				_sortdir = 1;
@@ -2429,51 +2549,7 @@ namespace yata
 				}
 			}
 			Changed = changed;
-		}
-
-		string _a,  _b;
-		int    _ai, _bi;
-		float  _af, _bf;
-
-		/// <summary>
-		/// Sorts fields as integers iff they convert to integers, or floats as
-		/// floats, else as strings and performs a secondary sort against their
-		/// IDs if applicable.
-		/// </summary>
-		/// <param name="row0">the value of the reference to a 'Row'</param>
-		/// <param name="row1">the value of the reference to a 'Row'</param>
-		/// <param name="c">col</param>
-		/// <returns>-1 first is first, second is second
-		///           0 identical
-		///           1 first is second, second is first</returns>
-		int Sort(Row row0, Row row1, int c)
-		{
-			_a = row0.cells[c].text;
-			_b = row1.cells[c].text;
-
-			int result;
-
-			if (   Int32.TryParse(_a, out _ai)			// try int comparision first
-				&& Int32.TryParse(_b, out _bi))
-			{
-				result = _ai.CompareTo(_bi);
-			}
-			else if (float.TryParse(_a, out _af)		// try float comparison next
-				  && float.TryParse(_b, out _bf))
-			{
-				result = _af.CompareTo(_bf);
-			}
-			else
-				result = String.CompareOrdinal(_a,_b);	// else do string comparison
-
-			if (result == 0 && c != 0					// secondary sort on id if primary sort matches
-			    && Int32.TryParse(row0.cells[0].text, out _ai)
-			    && Int32.TryParse(row1.cells[0].text, out _bi))
-			{
-				return _ai.CompareTo(_bi);
-			}
-			return result;								// else return result.
-		}
+		} */
 		#endregion Sort
 	}
 }
