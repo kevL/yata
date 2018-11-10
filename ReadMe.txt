@@ -67,6 +67,13 @@ Left/Right/Up/Down arrows - scrolls table in the direction
 Ctrl+Home - scrolls table to top
 Ctrl+End - scrolls table to bottom
 
+- w/ row selected
+Home - selects the top row
+End - selects the bottom row
+PageUp - selects the row a page above
+PageDown - selects the row a page below
+Up/Down arrows - selects the row in the direction
+
 Escape - deselects any selected cells if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
 
