@@ -98,7 +98,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DrawingControl.cs" />
-    <Compile Include="YataDataGridView.cs" />
     <Compile Include="YataGrid.cs" />
     <Compile Include="YataPanels.cs" />
   </ItemGroup>
