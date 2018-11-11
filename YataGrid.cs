@@ -430,34 +430,33 @@ namespace yata
 
 			bool ignoreErrors = false;
 
-			int quotes =  0;
-			int id     = -1;
-			int lineId = -1;
+			int id = -1;
 
 			string[] lines = File.ReadAllLines(Fullpath);
+			string line = String.Empty;
 
-			// TODO: Test for an even quantity of double-quotes on each line.
-			// ie. Account for the fact that ParseLine() needs to ASSUME that quotes are fairly accurate.
-
-			foreach (string line in lines)
+			for (int i = 0; i != lines.Length; ++i)
 			{
-				if (++lineId > LABELS)
+				line = lines[i].Trim();
+				logfile.Log(i + ": " + line);
+
+				if (i > LABELS)
 				{
-					string[] row = Parse2daRow(line.Trim());
-					if (row.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
+					string[] cells = Parse2daRow(line);
+					if (cells.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 					{
 						++id; // test for well-formed, consistent IDs
 
 						if (!ignoreErrors)
 						{
 							int result;
-							if (!Int32.TryParse(row[0], out result) || result != id)
+							if (!Int32.TryParse(cells[0], out result) || result != id)
 							{
 								string error = "The 2da-file contains an ID that is not an integer or is out of order."
 											 + Environment.NewLine + Environment.NewLine
 											 + Fullpath
 											 + Environment.NewLine + Environment.NewLine
-											 + id + " / " + row[0];
+											 + id + " / " + cells[0];
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
@@ -472,7 +471,7 @@ namespace yata
 						}
 
 						// test for matching fields under columns
-						if (!ignoreErrors && row.Length != Fields.Length + 1)
+						if (!ignoreErrors && cells.Length != Fields.Length + 1)
 						{
 							string error = "The 2da-file contains fields that do not align with its cols."
 										 + Environment.NewLine + Environment.NewLine
@@ -494,6 +493,7 @@ namespace yata
 						// test for an odd quantity of double-quote characters
 						if (!ignoreErrors)
 						{
+							int quotes = 0;
 							foreach (char character in line)
 							{
 								if (character == '"')
@@ -525,11 +525,11 @@ namespace yata
 						{
 							bool quoteFirst, quoteLast;
 							int col = -1;
-							foreach (string field in row)
+							foreach (string cell in cells)
 							{
 								++col;
-								quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-								quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+								quoteFirst = cell.StartsWith("\"", StringComparison.InvariantCulture);
+								quoteLast  = cell.EndsWith(  "\"", StringComparison.InvariantCulture);
 								if (   ( quoteFirst && !quoteLast)
 									|| (!quoteFirst &&  quoteLast))
 								{
@@ -550,7 +550,7 @@ namespace yata
 									}
 								}
 								else if (quoteFirst && quoteLast
-									&& field.Length == 1)
+									&& cell.Length == 1)
 								{
 									string error = "Found an isolated double-quote character."
 												 + Environment.NewLine + Environment.NewLine
@@ -571,10 +571,10 @@ namespace yata
 							}
 						}
 
-						_rows.Add(row);
+						_rows.Add(cells);
 					}
 				}
-				else if (lineId == LABELS)
+				else if (i == LABELS)
 				{
 					foreach (char character in line)
 					{
@@ -597,28 +597,30 @@ namespace yata
 					}
 					Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 				}
-				else if (lineId == VALUETYPE && !ignoreErrors && !String.IsNullOrEmpty(line)) // test for blank 2nd line
+				else if (i == VALUETYPE)
 				{
-					string error = "The 2nd line in the 2da should be blank."
-								 + Environment.NewLine
-								 + "This editor does not support default value-types."
-								 + Environment.NewLine + Environment.NewLine
-								 + Fullpath;
-					switch (ShowLoadError(error))
+					if (!ignoreErrors && !String.IsNullOrEmpty(line)) // test for blank 2nd line
 					{
-						case DialogResult.Abort:
-							return false;
-						case DialogResult.Retry:
-							break;
-						case DialogResult.Ignore:
-							ignoreErrors = true;
-							break;
+						string error = "The 2nd line in the 2da should be blank."
+									 + Environment.NewLine
+									 + "This editor does not support default value-types."
+									 + Environment.NewLine + Environment.NewLine
+									 + Fullpath;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return false;
+							case DialogResult.Retry:
+								break;
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
 					}
 				}
 				else //if (lineId == HEADERS) // test version header
 				{
-					string st = line.Trim();
-					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					if (line != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
 					{
 						string error = "The 2da-file contains an incorrect version header."
 									 + Environment.NewLine
