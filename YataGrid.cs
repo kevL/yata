@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-
-using yata.Properties;
 
 
 namespace yata
 {
-	sealed class YataGrid
+	/// <summary>
+	/// Loads, formats, and handles 2da-data as a table or grid on YataForm's
+	/// tab-pages.
+	/// </summary>
+	sealed partial class YataGrid
 		:
 			Control
 	{
@@ -413,304 +414,9 @@ namespace yata
 		}
 
 
-		/// <summary>
-		/// Handles the paint event.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			//logfile.Log("OnPaint()");
-
-//			if (ColCount != 0 && RowCount != 0 && _cells != null)
-
-			if (!_init)
-			{
-				graphics = e.Graphics;
-				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-//				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
-
-
-				int r,c;
-
-				// NOTE: Paint backgrounds full-height/width of table ->
-
-				// rows background - scrollable
-				var rect = new Rectangle(Left, HeightColhead - offsetVert, WidthTable, HeightRow);
-
-				for (r = 0; r != RowCount; ++r)
-				{
-					graphics.FillRectangle(Rows[r]._brush, rect);
-					rect.Y += HeightRow;
-				}
-
-				// cell text - scrollable
-				Row row;
-
-				rect.Height = HeightRow;
-				int left = WidthRowhead - offsetHori + _padHori - 1; // NOTE: -1 is a padding tweak.
-
-				int yOffset = HeightColhead - offsetVert;
-				for (r = offsetVert / HeightRow; r != RowCount; ++r)
-				{
-					if ((rect.Y = HeightRow * r + yOffset) > Bottom)
-						break;
-
-					rect.X = left;
-
-					row = Rows[r];
-					for (c = 0; c != ColCount; ++c)
-					{
-						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
-						{
-							var cell = row.cells[c];
-							if (cell.selected)
-							{
-								rect.X -= _padHori;
-
-								if (_editor.Visible && _editcell == cell)
-									graphics.FillRectangle(Brushes.Editor, rect);
-								else
-									graphics.FillRectangle(Brushes.CellSel, rect);
-
-								rect.X += _padHori;
-							}
-
-							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
-//							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
-						}
-
-						if ((rect.X += rect.Width) > Right)
-							break;
-					}
-				}
-
-
-//				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
-//				if (_piColhead != null) graphics_.DrawImage(_piColhead, 0,0);
-
-//				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
-//				if (_piRowhead != null) graphics_.DrawImage(_piRowhead, 0,0);
-
-
-				// NOTE: Paint horizontal lines full-width of table.
-
-				// row lines - scrollable
-				int y;
-				for (r = 1; r != RowCount + 1; ++r)
-				{
-					if ((y = HeightRow * r + yOffset) > Bottom)
-						break;
-
-					if (y > HeightColhead)
-						graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
-				}
-
-
-				// NOTE: Paint vertical lines full-height of table.
-
-				// col lines - scrollable
-				int x = WidthRowhead - offsetHori;
-				for (c = 0; c != ColCount; ++c)
-				{
-					if ((x += Cols[c].width()) > Right)
-						break;
-
-					if (x > WidthRowhead)
-						graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
-				}
-			}
-
-//			base.OnPaint(e);
-		}
-
-		/// <summary>
-		/// Labels the colheads.
-		/// @note Called by OnPaint of the top-panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
-		/// </summary>
-		internal void LabelColheads()
-		{
-			//logfile.Log("LabelColheads()");
-
-			if (ColCount != 0) // safety.
-			{
-				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
-
-				for (int c = 0; c != ColCount; ++c)
-				{
-					if (rect.X + (rect.Width = Cols[c].width()) > Left)
-					{
-						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-						if (_sortdir != 0 && c == _sortcol)
-						{
-							Bitmap sort;
-							if (_sortdir == 1) // asc
-								sort = Resources.asc_16px;
-							else //if (_sortdir == -1) // des
-								sort = Resources.des_16px;
-
-							graphics.DrawImage(sort,
-												rect.X + rect.Width  - _offsetHoriSort,
-												rect.Y + rect.Height - _offsetVertSort);
-						}
-					}
-
-					if ((rect.X += rect.Width) > Right)
-						break;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Labels the rowheads when inserting/deleting/sorting rows.
-		/// @note Called by OnPaint of the left-panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
-		/// </summary>
-		internal void LabelRowheads()
-		{
-			//logfile.Log("LabelRowheads()");
-
-			if (RowCount != 0) // safety - ought be checked in calling funct.
-			{
-				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead, HeightRow); // NOTE: -1 is a padding tweak.
-
-				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
-				{
-					if ((rect.Y = HeightRow * r - offsetVert) > Height)
-						break;
-
-					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-				}
-			}
-		}
-
-		void labelid_Paint(object sender, PaintEventArgs e)
-		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
-
-			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
-			{
-				graphics.DrawImage(Resources.asc_16px,
-									rect.X               - _offsetHoriSort, // + rect.Width
-									rect.Y + rect.Height - _offsetVertSort);
-			}
-			else if (_sortcol == 0)
-			{
-				Bitmap sort;
-				if (_sortdir == 1)			// asc
-					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
-					sort = Resources.des_16px;
-
-				graphics.DrawImage(sort,
-									rect.X               - _offsetHoriSort, // + rect.Width
-									rect.Y + rect.Height - _offsetVertSort);
-			}
-		}
-
-		void labelfirst_Paint(object sender, PaintEventArgs e)
-		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
-
-			if (_sortdir != 0 && _sortcol == 1)
-			{
-				Bitmap sort;
-				if (_sortdir == 1)			// asc
-					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
-					sort = Resources.des_16px;
-
-				graphics.DrawImage(sort,
-									rect.X + rect.Width  - _offsetHoriSort,
-									rect.Y + rect.Height - _offsetVertSort);
-			}
-		}
-
-		void labelsecond_Paint(object sender, PaintEventArgs e)
-		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
-
-			if (_sortdir != 0 && _sortcol == 2)
-			{
-				Bitmap sort;
-				if (_sortdir == 1)			// asc
-					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
-					sort = Resources.des_16px;
-
-				graphics.DrawImage(sort,
-									rect.X + rect.Width  - _offsetHoriSort,
-									rect.Y + rect.Height - _offsetVertSort);
-			}
-		}
-
-		/// <summary>
-		/// Labels the frozen cols.
-		/// @note Called by OnPaint of the frozen panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
-		/// </summary>
-		internal void PaintFrozenPanel()
-		{
-			//logfile.Log("LabelFrozen()");
-
-			if (RowCount != 0) // safety.
-			{
-				int x = 0;
-				int c = 0;
-				for (; c != FrozenCount; ++c)
-				{
-					x += Cols[c].width();
-					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
-				}
-//				graphics_.DrawLine(Pens.DarkLine, x - 1, 0, x - 1, Height);
-
-				var rect = new Rectangle(0,0, 0, HeightRow);
-
-				Row row;
-				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
-				{
-					if ((rect.Y = HeightRow * r - offsetVert) > Height)
-						break;
-
-					rect.X = _padHori - 1; // NOTE: -1 is a padding tweak.
-
-					row = Rows[r];
-					for (c = 0; c != FrozenCount; ++c)
-					{
-						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics, row.cells[c].text, Font, rect, Colors.Text, YataGraphics.flags);
-
-						rect.X += rect.Width;
-					}
-
-					graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
-				}
-			}
-		}
-
-
-		const int LABELS = 2;
+//		const int HEADERS   = 0;
+		const int VALUETYPE = 1;
+		const int LABELS    = 2;
 
 		/// <summary>
 		/// Tries to load a 2da file.
@@ -724,73 +430,23 @@ namespace yata
 
 			bool ignoreErrors = false;
 
-			string[] lines = File.ReadAllLines(Fullpath);
-
-			Fields = lines[LABELS].Split(new char[0], StringSplitOptions.RemoveEmptyEntries); // TODO: test for double-quotes
-
 			int quotes =  0;
 			int id     = -1;
 			int lineId = -1;
+
+			string[] lines = File.ReadAllLines(Fullpath);
 
 			// TODO: Test for an even quantity of double-quotes on each line.
 			// ie. Account for the fact that ParseLine() needs to ASSUME that quotes are fairly accurate.
 
 			foreach (string line in lines)
 			{
-				// test version header
-				if (++lineId == 0)
+				if (++lineId > LABELS)
 				{
-					string st = line.Trim();
-					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					string[] row = Parse2daRow(line.Trim());
+					if (row.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 					{
-						string error = "The 2da-file contains a malformed version header."
-									 + Environment.NewLine + Environment.NewLine
-									 + Fullpath;
-						switch (ShowLoadError(error))
-						{
-							case DialogResult.Abort:
-								return false;
-
-							case DialogResult.Retry:
-								break;
-
-							case DialogResult.Ignore:
-								ignoreErrors = true;
-								break;
-						}
-					}
-				}
-
-				// test for blank 2nd line
-				if (!ignoreErrors && lineId == 1 && !String.IsNullOrEmpty(line)) // .Trim() // uh yeah ... right.
-				{
-					string error = "The 2nd line in the 2da should be blank."
-								 + " This editor does not support default value-types."
-								 + Environment.NewLine + Environment.NewLine
-								 + Fullpath;
-					switch (ShowLoadError(error))
-					{
-						case DialogResult.Abort:
-							return false;
-
-						case DialogResult.Retry:
-							break;
-
-						case DialogResult.Ignore:
-							ignoreErrors = true;
-							break;
-					}
-				}
-
-				if (lineId > LABELS)
-				{
-					string[] row = Parse2daRow(line);
-
-					// allow blank lines on load - they will be removed if/when file is saved.
-					if (row.Length != 0)
-					{
-						// test for well-formed, consistent IDs
-						++id;
+						++id; // test for well-formed, consistent IDs
 
 						if (!ignoreErrors)
 						{
@@ -806,10 +462,8 @@ namespace yata
 								{
 									case DialogResult.Abort:
 										return false;
-
 									case DialogResult.Retry:
 										break;
-
 									case DialogResult.Ignore:
 										ignoreErrors = true;
 										break;
@@ -829,13 +483,40 @@ namespace yata
 							{
 								case DialogResult.Abort:
 									return false;
-
 								case DialogResult.Retry:
 									break;
-
 								case DialogResult.Ignore:
 									ignoreErrors = true;
 									break;
+							}
+						}
+
+						// test for an odd quantity of double-quote characters
+						if (!ignoreErrors)
+						{
+							foreach (char character in line)
+							{
+								if (character == '"')
+									++quotes;
+							}
+
+							if (quotes % 2 == 1)
+							{
+								string error = "A row contains an odd quantity of double-quote characters."
+											 + Environment.NewLine + Environment.NewLine
+											 + Fullpath
+											 + Environment.NewLine + Environment.NewLine
+											 + "id " + id;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										return false;
+									case DialogResult.Retry:
+										break;
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
 							}
 						}
 
@@ -861,10 +542,8 @@ namespace yata
 									{
 										case DialogResult.Abort:
 											return false;
-
 										case DialogResult.Retry:
 											break;
-
 										case DialogResult.Ignore:
 											ignoreErrors = true;
 											break;
@@ -882,10 +561,8 @@ namespace yata
 									{
 										case DialogResult.Abort:
 											return false;
-
 										case DialogResult.Retry:
 											break;
-
 										case DialogResult.Ignore:
 											ignoreErrors = true;
 											break;
@@ -897,36 +574,143 @@ namespace yata
 						_rows.Add(row);
 					}
 				}
-
-				// also test for an odd quantity of double-quote characters
-				foreach (char character in line)
+				else if (lineId == LABELS)
 				{
-					if (character == '"')
-						++quotes;
+					foreach (char character in line)
+					{
+						if (character == '"') // TODO: exactly what chars are allowed in the Headers
+						{
+							string error = "The headers should not contain double-quotes."
+										 + Environment.NewLine + Environment.NewLine
+										 + Fullpath;
+							switch (ShowLoadError(error))
+							{
+								case DialogResult.Abort:
+									return false;
+								case DialogResult.Retry:
+									break;
+								case DialogResult.Ignore:
+									ignoreErrors = true;
+									break;
+							}
+						}
+					}
+					Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 				}
-			}
-
-			// safety test for double-quotes (ought be caught above)
-			if (quotes % 2 == 1)
-			{
-				string error = "The 2da-file contains an odd quantity of double-quote characters."
-							 + Environment.NewLine + Environment.NewLine
-							 + Fullpath;
-				switch (ShowLoadError(error))
+				else if (lineId == VALUETYPE && !ignoreErrors && !String.IsNullOrEmpty(line)) // test for blank 2nd line
 				{
-					case DialogResult.Abort:
-						return false;
-
-					case DialogResult.Retry:
-						break;
-
-					case DialogResult.Ignore:
-						ignoreErrors = true;
-						break;
+					string error = "The 2nd line in the 2da should be blank."
+								 + Environment.NewLine
+								 + "This editor does not support default value-types."
+								 + Environment.NewLine + Environment.NewLine
+								 + Fullpath;
+					switch (ShowLoadError(error))
+					{
+						case DialogResult.Abort:
+							return false;
+						case DialogResult.Retry:
+							break;
+						case DialogResult.Ignore:
+							ignoreErrors = true;
+							break;
+					}
+				}
+				else //if (lineId == HEADERS) // test version header
+				{
+					string st = line.Trim();
+					if (st != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					{
+						string error = "The 2da-file contains an incorrect version header."
+									 + Environment.NewLine
+									 + "It will be replaced by the standard header if the file is saved."
+									 + Environment.NewLine + Environment.NewLine
+									 + Fullpath;
+						switch (ShowLoadError(error))
+						{
+							case DialogResult.Abort:
+								return false;
+							case DialogResult.Retry:
+								break;
+							case DialogResult.Ignore:
+								ignoreErrors = true;
+								break;
+						}
+					}
 				}
 			}
 
 			return true;
+		}
+
+		/// <summary>
+		/// A generic error-box if something goes wrong while loading a 2da file.
+		/// </summary>
+		/// <param name="error"></param>
+		static DialogResult ShowLoadError(string error)
+		{
+			error += Environment.NewLine + Environment.NewLine
+				   + "abort\t- stop loading"         + Environment.NewLine
+				   + "retry\t- check for next error" + Environment.NewLine
+				   + "ignore\t- just load the file";
+
+			return MessageBox.Show(error,
+								   "burp",
+								   MessageBoxButtons.AbortRetryIgnore,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
+		}
+
+		/// <summary>
+		/// Parses a single row of text out to its fields.
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
+		static string[] Parse2daRow(string line)
+		{
+			var list  = new List<string>();
+			var field = new List<char>();
+
+			bool add      = false;
+			bool inQuotes = false;
+
+			char c;
+
+			int posLast = line.Length + 1;					// include an extra iteration to get the last field
+			for (int pos = 0; pos != posLast; ++pos)
+			{
+				if (pos == line.Length)						// hit lineend -> add the last field
+				{
+					if (add)
+					{
+						list.Add(new string(field.ToArray()));
+					}
+				}
+				else
+				{
+					c = line[pos];
+
+					if (c == '"' || inQuotes)				// start or continue quotation
+					{
+						inQuotes = (!inQuotes || c != '"');	// end quotation
+
+						add = true;
+						field.Add(c);
+					}
+					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
+					{
+						add = true;
+						field.Add(c);
+					}
+					else if (add)							// hit a space or tab
+					{
+						add = false;
+						list.Add(new string(field.ToArray()));
+
+						field.Clear();
+					}
+				}
+			}
+			return list.ToArray();
 		}
 
 
@@ -1259,78 +1043,6 @@ namespace yata
 					}
 				}
 			}
-		}
-
-
-		/// <summary>
-		/// A generic error-box if something goes wrong while loading a 2da file.
-		/// </summary>
-		/// <param name="error"></param>
-		DialogResult ShowLoadError(string error)
-		{
-			error += Environment.NewLine + Environment.NewLine
-				   + "abort\t- stop loading"         + Environment.NewLine
-				   + "retry\t- check for next error" + Environment.NewLine
-				   + "ignore\t- just load the file";
-
-			return MessageBox.Show(error,
-								   "burp",
-								   MessageBoxButtons.AbortRetryIgnore,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
-		}
-
-		/// <summary>
-		/// Parses a single row of text out to its fields.
-		/// </summary>
-		/// <param name="line"></param>
-		/// <returns></returns>
-		static string[] Parse2daRow(string line)
-		{
-			var list  = new List<string>();
-			var field = new List<char>();
-
-			bool add      = false;
-			bool inQuotes = false;
-
-			char c;
-
-			int posLast = line.Length + 1; // include an extra iteration to get the last field (that has no whitespace after it)
-			for (int pos = 0; pos != posLast; ++pos)
-			{
-				if (pos == line.Length)	// hit lineend -> add the last field
-				{						// if there's no whitespace after it (last fields
-					if (add)			// w/ trailing whitespace are dealt with below)
-					{
-						list.Add(new string(field.ToArray()));
-					}
-				}
-				else
-				{
-					c = line[pos];
-
-					if (c == '"' || inQuotes)				// start or continue quotation
-					{
-						inQuotes = (!inQuotes || c != '"');	// end quotation
-
-						add = true;
-						field.Add(c);
-					}
-					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
-					{
-						add = true;
-						field.Add(c);
-					}
-					else if (add)							// hit a space or tab
-					{
-						add = false;
-						list.Add(new string(field.ToArray()));
-
-						field.Clear();
-					}
-				}
-			}
-			return list.ToArray();
 		}
 
 

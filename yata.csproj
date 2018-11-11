@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CraftInfo.cs" />
     <Compile Include="YataGraphics.cs" />
+    <Compile Include="YataPaint.cs" />
     <Compile Include="YataTabs.cs" />
     <Compile Include="FontPickerForm.cs" />
     <Compile Include="FontPickerForm.Designer.cs">

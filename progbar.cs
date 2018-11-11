@@ -27,7 +27,7 @@ namespace yata
 		/// </summary>
 		internal ProgBar(YataForm f)
 		{
-			Size            = new Size(300, 20);
+			Size            = new Size(300, 30);
 			ControlBox      = false;
 			FormBorderStyle = FormBorderStyle.FixedToolWindow;
 			MaximizeBox     = false;

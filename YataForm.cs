@@ -329,7 +329,7 @@ namespace yata
 			else
 			{
 				style = getStyleStandard(Font.FontFamily);
-				y = 1;
+				y = 2;
 			}
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
