@@ -610,7 +610,7 @@
 			this.separator_10,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(176, 248);
+			this.contextEditor.Size = new System.Drawing.Size(176, 270);
 			// 
 			// context_it_Header
 			// 

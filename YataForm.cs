@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
 
 namespace yata
 {
-	static class Constants
-	{
-		internal const string Stars = "****";
-	}
-
-
 	/// <summary>
 	/// Yata ....
 	/// </summary>
@@ -27,7 +22,7 @@ namespace yata
 
 		List<string> _copy = new List<string>();
 
-		List<ToolStripItem> _presets = new List<ToolStripItem>();
+		List<ToolStripItem> _presets = new List<ToolStripItem>(); // folder presets for the Open ... dialog
 		string _initialDir = String.Empty;
 
 		internal TabControl Tabs
@@ -35,11 +30,13 @@ namespace yata
 
 		Font FontDefault
 		{ get; set; }
-		#endregion Fields & Properties
 
 		internal Font FontAccent;
 
 		internal bool _search;
+
+		static Graphics graphics;
+		#endregion Fields & Properties
 
 
 		#region cTor
@@ -51,10 +48,12 @@ namespace yata
 			InitializeComponent();
 
 			// IMPORTANT: The Client-area apart from the Menubar and Statusbar
-			// has both a TabControl and a Panel that *overlap* each other and
-			// fill the area. The Panel is on top and is used only to color the
-			// Client-area (else TabControl is pure white) - it is shown when
-			// there are no TabPages and hides when there are.
+			// has both a TabControl and a solid-colored Panel that *overlay*
+			// each other and fill the area. The Panel is on top and is used
+			// only to color the Client-area (else TabControl is pure white) -
+			// it is shown when there are no TabPages and hides when there are.
+			// It also appears when loading a 2da in an attempt to hide
+			// unsightly graphical glitches.
 
 			logfile.CreateLog(); // NOTE: The logfile works in debug-builds only.
 			// To write a line to the logfile:
@@ -62,6 +61,8 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
+
+			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
 			FontDefault = Font;
 
@@ -89,15 +90,15 @@ namespace yata
 				statusbar_label_Info.Font = new Font(Settings._font2.FontFamily,
 													 Settings._font2.SizeInPoints + 1.5f);
 
-				int hBar = TextRenderer.MeasureText("X", statusbar_label_Info.Font).Height + 2;
+				int hBar = YataGraphics.MeasureHeight("X", statusbar_label_Info.Font) + 2;
 
 				statusbar             .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
 				statusbar_label_Coords.Height =
 				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
 
-				int wCoords0 = statusbar_label_Coords.Width;
-				int wCoords = TextRenderer.MeasureText("id= 99999 col= 99", statusbar_label_Info.Font).Width + 10;
-				statusbar_label_Coords.Width = (wCoords < wCoords0) ? wCoords0 : wCoords;
+				int wCords0 = statusbar_label_Coords.Width;
+				int wCords = YataGraphics.MeasureWidth("id= 99999 col= 99", statusbar_label_Info.Font) + 10;
+				statusbar_label_Coords.Width = (wCords < wCords0) ? wCords0 : wCords;
 
 
 				context_it_Header.Font.Dispose();
@@ -159,7 +160,7 @@ namespace yata
 
 
 		#region Methods (static)
-		internal static FontStyle getStyleAccented(FontFamily ff)
+		static FontStyle getStyleAccented(FontFamily ff)
 		{
 			FontStyle style;
 			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
@@ -253,30 +254,6 @@ namespace yata
 
 
 		/// <summary>
-		/// Sets the width of the tabs on the TabControl.
-		/// </summary>
-		void SetTabSize()
-		{
-			if (Tabs != null && Tabs.TabCount != 0)
-			{
-				Size size;
-				int w = 25, wT, h = 10, hT;
-				for (int tab = 0; tab != Tabs.TabCount; ++tab)
-				{
-					size = TextRenderer.MeasureText(Tabs.TabPages[tab].Text, FontAccent);
-					if ((wT = size.Width) > w)
-						w = wT;
-
-					if ((hT = size.Height) > h)
-						h = hT;
-				}
-				Tabs.ItemSize = new Size(w + 8, h + 4);
-				Tabs.Refresh(); // prevent text-drawing glitches ...
-			}
-		}
-
-
-		/// <summary>
 		/// Handles tab-selection/deselection.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -310,6 +287,29 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Sets the width of the tabs on the TabControl.
+		/// </summary>
+		void SetTabSize()
+		{
+			if (Tabs != null && Tabs.TabCount != 0)
+			{
+				Size size;
+				int w = 25, wT, h = 10, hT;
+				for (int tab = 0; tab != Tabs.TabCount; ++tab)
+				{
+					size = YataGraphics.MeasureSize(Tabs.TabPages[tab].Text, FontAccent);
+					if ((wT = size.Width) > w)
+						w = wT;
+
+					if ((hT = size.Height) > h)
+						h = hT;
+				}
+				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
+				Tabs.Refresh(); // prevent text-drawing glitches ...
+			}
+		}
+
+		/// <summary>
 		/// Draws the tab-text in Bold iff selected.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -324,28 +324,30 @@ namespace yata
 			if (tab == Tabs.SelectedTab)
 			{
 				style = getStyleAccented(Font.FontFamily);
-				y = 5;
+				y = 0;
 			}
 			else
 			{
 				style = getStyleStandard(Font.FontFamily);
-				y = 2;
+				y = 1;
 			}
 
 			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
 
 			// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
-			int w = TextRenderer.MeasureText(tab.Text, font).Width;
+			int w = YataGraphics.MeasureWidth(tab.Text, font);
 			var rect = e.Bounds;
 			rect.X   = e.Bounds.X + (e.Bounds.Width - w) / 2;
-			rect.Y   = e.Bounds.Y + y;
+			rect.Y   = e.Bounds.Y + y; // NOTE: 'y' is a padding tweak.
 
-			TextRenderer.DrawText(e.Graphics,
+			graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			TextRenderer.DrawText(graphics,
 								  tab.Text,
 								  font,
 								  rect,
-								  SystemColors.ControlText,
-								  TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix);
+								  Colors.Text,
+								  YataGraphics.flags);
 		}
 
 		void fileclick_Close(object sender, EventArgs e)
@@ -1033,13 +1035,6 @@ namespace yata
 
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
-//			YataGrid table; // debug->
-//			for (int tab = 0; tab != Tabs.TabCount; ++tab)
-//			{
-//				table = Tabs.TabPages[tab].Tag as YataGrid;
-//				logfile.Log(Path.GetFileNameWithoutExtension(table.Pfe) + " Height= " + Height);
-//			} // end debug.
-
 			if (Table != null && Table.RowCount != 0)
 			{
 				Brush brush;
@@ -1707,5 +1702,11 @@ namespace yata
 //			base.OnMouseWheel(e);
 		}
 		#endregion Events (override)
+	}
+
+
+	static class Constants
+	{
+		internal const string Stars = "****";
 	}
 }

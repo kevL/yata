@@ -16,6 +16,12 @@ namespace yata
 
 		/// <summary>
 		/// Sets the width.
+		/// @note When loading a 2da width is set to the colhead first, but then
+		/// can be replaced by the widest cell-width under it. The col's width
+		/// is thus allowed to only increase when loading a 2da. When a cell's
+		/// text changes however the col-width should be allowed to decrease if
+		/// it's less wide than the current width (but not if it's less wide
+		/// than the colhead's width). Hence the 'force' par.
 		/// </summary>
 		/// <param name="w">the width in pixels</param>
 		/// <param name="force">true to allow decreasing the width</param>
@@ -43,14 +49,14 @@ namespace yata
 		internal int _id;
 
 		internal Cell[] cells;
-		/// <summary>
-		/// Gets the cell at pos [c].
-		/// </summary>
-		internal Cell this[int c]
-		{
-			get { return cells[c]; }
-			set { cells[c] = value; }
-		}
+//		/// <summary>
+//		/// Gets/sets the cell at pos [c].
+//		/// </summary>
+//		internal Cell this[int c]
+//		{
+//			get { return cells[c]; }
+//			set { cells[c] = value; }
+//		}
 
 		internal Brush _brush;
 		internal bool selected;
@@ -67,7 +73,6 @@ namespace yata
 	/// <summary>
 	/// Contains data about a cell.
 	/// </summary>
-//	[SerializableAttribute]
 	sealed class Cell
 	{
 		internal string text; // the cell's text

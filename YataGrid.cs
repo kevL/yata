@@ -10,35 +10,6 @@ using yata.Properties;
 
 namespace yata
 {
-	static class Pens
-	{
-		internal static readonly Pen DarkLine = new Pen(SystemColors.ControlDark);
-	}
-
-	static class Brushes
-	{
-		internal static readonly Brush Alice   = new SolidBrush(Color.AliceBlue);
-		internal static readonly Brush Blanche = new SolidBrush(Color.BlanchedAlmond);
-		internal static readonly Brush Created = new SolidBrush(SystemColors.ControlLight);
-
-		internal static readonly Brush CellSel = new SolidBrush(Color.PaleGreen);
-		internal static readonly Brush Edit    = new SolidBrush(Colors.Edit);
-	}
-
-	static class Colors
-	{
-		internal static readonly Color ColheadPanel = Color.Thistle;
-		internal static readonly Color RowheadPanel = Color.Azure;
-
-		internal static readonly Color FrozenHead  = Color.Moccasin;
-		internal static readonly Color FrozenPanel = Color.OldLace;
-
-		internal static readonly Color Edit = Color.Crimson;
-
-		internal static readonly Color Text = SystemColors.ControlText;
-	}
-
-
 	sealed class YataGrid
 		:
 			Control
@@ -79,8 +50,7 @@ namespace yata
 		}
 
 
-		internal static Graphics graphics_;	// is used to paint/draw crap.
-		static Graphics _graphics;			// is used only for MeasureText()
+		internal static Graphics graphics;
 
 //		Bitmap _bluePi = Resources.bluepixel;
 //		Bitmap _piColhead;
@@ -94,13 +64,6 @@ namespace yata
 
 		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
 		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
-
-		TextFormatFlags _flags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix
-															| TextFormatFlags.NoPadding
-															| TextFormatFlags.Left
-															| TextFormatFlags.VerticalCenter
-															| TextFormatFlags.SingleLine;
-		Size _size = new Size(int.MaxValue, int.MaxValue);
 
 
 		internal bool Craft
@@ -196,7 +159,6 @@ namespace yata
 				   | ControlStyles.ResizeRedraw, true);
 
 			_f = f;
-			_graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
 			Fullpath = pfe;
 			_init = true;
@@ -220,8 +182,8 @@ namespace yata
 			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
 			_t1.Tick += t1_Tick;
 
-			_editor.BackColor = Colors.Edit;
 			_editor.Visible = false;
+			_editor.BackColor = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
 			_editor.KeyDown += keydown_Editor;
 
@@ -463,8 +425,8 @@ namespace yata
 
 			if (!_init)
 			{
-				graphics_ = e.Graphics;
-				graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 //				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
 
@@ -478,7 +440,7 @@ namespace yata
 
 				for (r = 0; r != RowCount; ++r)
 				{
-					graphics_.FillRectangle(Rows[r]._brush, rect);
+					graphics.FillRectangle(Rows[r]._brush, rect);
 					rect.Y += HeightRow;
 				}
 
@@ -507,14 +469,14 @@ namespace yata
 								rect.X -= _padHori;
 
 								if (_editor.Visible && _editcell == cell)
-									graphics_.FillRectangle(Brushes.Edit, rect);
+									graphics.FillRectangle(Brushes.Editor, rect);
 								else
-									graphics_.FillRectangle(Brushes.CellSel, rect);
+									graphics.FillRectangle(Brushes.CellSel, rect);
 
 								rect.X += _padHori;
 							}
 
-							TextRenderer.DrawText(graphics_, cell.text, Font, rect, Colors.Text, _flags);
+							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
 //							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
 						}
 
@@ -541,7 +503,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics_.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
+						graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
 				}
 
 
@@ -555,7 +517,7 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						graphics_.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
+						graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
 				}
 			}
 
@@ -579,7 +541,7 @@ namespace yata
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
 					{
-						TextRenderer.DrawText(graphics_, Cols[c].text, _f.FontAccent, rect, Colors.Text, _flags);
+						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
 						if (_sortdir != 0 && c == _sortcol)
 						{
@@ -589,7 +551,7 @@ namespace yata
 							else //if (_sortdir == -1) // des
 								sort = Resources.des_16px;
 
-							graphics_.DrawImage(sort,
+							graphics.DrawImage(sort,
 												rect.X + rect.Width  - _offsetHoriSort,
 												rect.Y + rect.Height - _offsetVertSort);
 						}
@@ -619,24 +581,24 @@ namespace yata
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					TextRenderer.DrawText(graphics_, r.ToString(), _f.FontAccent, rect, Colors.Text, _flags);
+					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 				}
 			}
 		}
 
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
-			graphics_ = e.Graphics;
-			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, "id", _f.FontAccent, rect, Colors.Text, _flags);
+			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
-			graphics_.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 
 			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
 			{
-				graphics_.DrawImage(Resources.asc_16px,
+				graphics.DrawImage(Resources.asc_16px,
 									rect.X               - _offsetHoriSort, // + rect.Width
 									rect.Y + rect.Height - _offsetVertSort);
 			}
@@ -648,7 +610,7 @@ namespace yata
 				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
-				graphics_.DrawImage(sort,
+				graphics.DrawImage(sort,
 									rect.X               - _offsetHoriSort, // + rect.Width
 									rect.Y + rect.Height - _offsetVertSort);
 			}
@@ -656,13 +618,13 @@ namespace yata
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
-			graphics_ = e.Graphics;
-			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, Cols[1].text, _f.FontAccent, rect, Colors.Text, _flags);
+			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
-			graphics_.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
+			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 
 			if (_sortdir != 0 && _sortcol == 1)
 			{
@@ -672,7 +634,7 @@ namespace yata
 				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
-				graphics_.DrawImage(sort,
+				graphics.DrawImage(sort,
 									rect.X + rect.Width  - _offsetHoriSort,
 									rect.Y + rect.Height - _offsetVertSort);
 			}
@@ -680,13 +642,13 @@ namespace yata
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
-			graphics_ = e.Graphics;
-			graphics_.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(graphics_, Cols[2].text, _f.FontAccent, rect, Colors.Text, _flags);
+			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
-			graphics_.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 
 			if (_sortdir != 0 && _sortcol == 2)
 			{
@@ -696,7 +658,7 @@ namespace yata
 				else //if (_sortdir == -1)	// des
 					sort = Resources.des_16px;
 
-				graphics_.DrawImage(sort,
+				graphics.DrawImage(sort,
 									rect.X + rect.Width  - _offsetHoriSort,
 									rect.Y + rect.Height - _offsetVertSort);
 			}
@@ -718,7 +680,7 @@ namespace yata
 				for (; c != FrozenCount; ++c)
 				{
 					x += Cols[c].width();
-					graphics_.DrawLine(Pens.DarkLine, x, 0, x, Height);
+					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
 				}
 //				graphics_.DrawLine(Pens.DarkLine, x - 1, 0, x - 1, Height);
 
@@ -736,12 +698,12 @@ namespace yata
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
-						TextRenderer.DrawText(graphics_, row.cells[c].text, Font, rect, Colors.Text, _flags);
+						TextRenderer.DrawText(graphics, row.cells[c].text, Font, rect, Colors.Text, YataGraphics.flags);
 
 						rect.X += rect.Width;
 					}
 
-					graphics_.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
+					graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
 				}
 			}
 		}
@@ -1110,7 +1072,7 @@ namespace yata
 				if (!calibrate)
 					Cols[c].text = head;
 
-				size = TextRenderer.MeasureText(_graphics, head, _f.FontAccent, _size, _flags);
+				size = YataGraphics.MeasureSize(head, _f.FontAccent);
 				Cols[c].width(size.Width + _padHori * 2 + _padHoriSort, calibrate);
 
 				h = size.Height + _padVert * 2;
@@ -1155,7 +1117,7 @@ namespace yata
 				w = 20; // cellwidth.
 				for (int r = 0; r != RowCount; ++r)
 				{
-					size = TextRenderer.MeasureText(_graphics, Rows[r].cells[c].text, Font, _size, _flags);
+					size = YataGraphics.MeasureSize(Rows[r].cells[c].text, Font);
 
 					hT = size.Height + _padVert * 2;
 					if (hT > HeightRow) HeightRow = hT;
@@ -1231,8 +1193,8 @@ namespace yata
 
 			YataGrid table;
 
-			int heightColhead = 10;				// col-headers' height stays uniform across all tabpages
-			int widthRowhead  = 20, testWidth;	// row-headers' width stays uniform across all tabpages
+			int heightColhead = 10; // col-headers' height stays uniform across all tabpages
+			int rows = 0, rowsTest; // row-headers' width stays uniform across all tabpages
 
 			int tabs = _f.Tabs.TabCount;
 			int tab = 0;
@@ -1242,20 +1204,20 @@ namespace yata
 				if (table._panelCols.Height > heightColhead)
 					heightColhead = table._panelCols.Height;
 
-				if ((testWidth = table.RowCount - 1) > widthRowhead)
-					widthRowhead = testWidth;
+				if ((rowsTest = table.RowCount - 1) > rows)
+					rows = rowsTest;
 			}
 
 			string text = "9";
 			int w = 1;
-			while ((widthRowhead /= 10) != 0)
+			while ((rows /= 10) != 0)
 			{
 				++w;
 				text += "9";
 			}
 
 			HeightColhead = heightColhead;
-			WidthRowhead = TextRenderer.MeasureText(_graphics, text, _f.FontAccent, _size, _flags).Width + _padHoriRowhead * 2;
+			WidthRowhead = YataGraphics.MeasureWidth(text, _f.FontAccent) + _padHoriRowhead * 2;
 
 			for (tab = 0; tab != tabs; ++tab)
 			{
@@ -1315,7 +1277,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Parses a single row of text out to its fields.
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
@@ -1385,6 +1347,8 @@ namespace yata
 					e.IsInputKey = true;
 					break;
 			}
+
+//			base.OnPreviewKeyDown(e);
 		}
 
 		/// <summary>
@@ -1403,9 +1367,6 @@ namespace yata
 				case Keys.Home:
 					if (selr > 0)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						Rows[0].selected = true;
@@ -1449,9 +1410,6 @@ namespace yata
 				case Keys.End:
 					if (selr != -1 && selr != RowCount - 1)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						Rows[RowCount - 1].selected = true;
@@ -1496,9 +1454,6 @@ namespace yata
 				case Keys.PageUp:
 					if (selr > 0)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
@@ -1544,9 +1499,6 @@ namespace yata
 				case Keys.PageDown:
 					if (selr != -1 && selr != RowCount - 1)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
@@ -1592,9 +1544,6 @@ namespace yata
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
 					if (selr > 0)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						Rows[selr - 1].selected = true;
@@ -1629,9 +1578,6 @@ namespace yata
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
 					if (selr != -1 && selr != RowCount - 1)
 					{
-//						Rows[selr].selected = false;
-//						for (int c = 0; c != ColCount; ++c)
-//							Rows[selr].cells[c].selected = false;
 						ClearSelects();
 
 						Rows[selr + 1].selected = true;
@@ -1785,24 +1731,24 @@ namespace yata
 				int c = _editcell.x;
 				int pre = Cols[c].width();
 
-				int w = TextRenderer.MeasureText(_graphics, _editcell.text, Font, _size, _flags).Width + _padHori * 2;
+				int w = YataGraphics.MeasureWidth(_editcell.text, Font) + _padHori * 2;
 				if (w > pre)
 				{
 					Cols[c].width(w);
 				}
 				else if (w < pre) // recalc width on the entire col
 				{
-					w = TextRenderer.MeasureText(_graphics, Cols[c].text, _f.FontAccent, _size, _flags).Width + _padHori * 2 + _padHoriSort; // cellwidth.
+					w = YataGraphics.MeasureWidth(Cols[c].text, _f.FontAccent) + _padHori * 2 + _padHoriSort;
 					int wT;
 					for (int r = 0; r != RowCount; ++r)
 					{
-						wT = TextRenderer.MeasureText(_graphics, Rows[r].cells[c].text, Font, _size, _flags).Width + _padHori * 2;
+						wT = YataGraphics.MeasureWidth(Rows[r].cells[c].text, Font) + _padHori * 2;
 						if (wT > w) w = wT;
 					}
 					Cols[c].width(w, true);
 				}
 
-				if (Cols[c].width() != pre)
+				if (w != pre)
 				{
 					InitScrollers();
 					Refresh(); // is required - and yet another Refresh() will follow ....
@@ -2541,7 +2487,7 @@ namespace yata
 						++Rows[r].cells[c].y;
 				}
 			}
-			else // delete 'r'
+			else // delete 'id'
 			{
 				Rows.Remove(Rows[id]);
 				--RowCount;
@@ -2655,7 +2601,7 @@ namespace yata
 		/// </summary>
 		/// <param name="row1">the value of the reference to a 'Row'</param>
 		/// <param name="row2">the value of the reference to a 'Row'</param>
-		/// <returns>-1 first is first, second is second
+		/// <returns>-1 first is first, second is second // TODO: figure that out ...
 		///           0 identical
 		///           1 first is second, second is first</returns>
 		int Sort(Row row1, Row row2)
