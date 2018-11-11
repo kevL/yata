@@ -141,6 +141,7 @@ namespace yata
 		int _sortcol;
 		int _sortdir = 1;
 
+
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -943,6 +944,9 @@ namespace yata
 
 				_scrollVert.Value =
 				_scrollHori.Value = 0;
+
+				_sortcol = 0;
+				_sortdir = 1;
 
 				FrozenCount = YataGrid.FreezeId;
 
