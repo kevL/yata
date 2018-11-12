@@ -529,6 +529,11 @@ namespace yata
 					if (rows != 0)
 					{
 						Table.Changed = false;
+						foreach (var row in Table.Rows)
+						{
+							for (int c = 0; c != Table.ColCount; ++c)
+								row.cells[c].loadchanged = false;
+						}
 
 						using (var sw = new StreamWriter(pfe))
 						{
@@ -793,7 +798,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Performs a search when the Enter-key is released and focus is on
+		/// Performs a search when the Enter-key is pressed and focus is on
 		/// either the search-box or the search-option dropdown.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -826,39 +831,37 @@ namespace yata
 			{
 				search = search.ToLower();
 
-				int startRow;
-				int startCol;
+				int row, r,c;
 
 				Cell sel = Table.GetOnlySelectedCell();
 				if (sel != null)
 				{
-					startRow = sel.y;
-					startCol = sel.x;
+					c   = sel.x;
+					row = sel.y;
 				}
 				else
 				{
-					startRow =  0;
-					startCol = -1;
+					c   = -1;
+					row =  0;
 				}
 
 
 				string val;
-				int r,c;
 
 				bool start = true;
 				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
 
 				string field;
 
-				for (r = startRow; r != Table.RowCount; ++r)
+				for (r = row; r != Table.RowCount; ++r)
 				{
 					if (start)
 					{
 						start = false;
-						if (startCol == -1)
+						if (c == -1)
 							c = 0;
 						else
-							c = startCol + 1;
+							++c;
 
 						if (c == Table.ColCount)		// if starting on the last cell of a row
 						{
@@ -889,6 +892,7 @@ namespace yata
 								Table[r,c].selected = true;
 								Table.EnsureDisplayed(Table[r,c]);
 								Table.Refresh();
+
 								return;
 							}
 						}
@@ -896,7 +900,7 @@ namespace yata
 				}
 
 				// TODO: tighten exact start/end-cells
-				for (r = 0; r != startRow + 1; ++r) // quick and dirty wrap ->
+				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
 				{
 					for (c = 0; c != Table.ColCount; ++c)
 					{
@@ -912,6 +916,7 @@ namespace yata
 								Table[r,c].selected = true;
 								Table.EnsureDisplayed(Table[r,c]);
 								Table.Refresh();
+
 								return;
 							}
 						}
@@ -927,7 +932,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Performs a goto when the Enter-key is released and focus is on the
+		/// Performs a goto when the Enter-key is pressed and focus is on the
 		/// goto-box.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -941,6 +946,7 @@ namespace yata
 				if (Int32.TryParse(tb_Goto.Text, out r)
 					&& r > -1 && r < Table.RowCount)
 				{
+					Table._editor.Visible = false;
 					Table.ClearSelects();
 
 					Row row = Table.Rows[r];
@@ -950,6 +956,123 @@ namespace yata
 
 					Table.EnsureDisplayedRow(r);
 					Table.Refresh();
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Handles opening the EditMenu, determines if GotoLoadchanged ought
+		/// be enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void edit_dropdownopening_GotoLoadchanged(object sender, EventArgs e)
+		{
+			bool vis = false;
+			if (Table != null && Table.RowCount != 0)
+			{
+				foreach (var row in Table.Rows)
+				{
+					for (int c = 0; c != Table.ColCount; ++c)
+					{
+						if (row.cells[c].loadchanged)
+						{
+							vis = true;
+							break;
+						}
+					}
+				}
+			}
+			it_GotoLoadchanged.Enabled = vis;
+		}
+
+		/// <summary>
+		/// Selects the next LoadChanged cell.
+		/// @note This is fired only from the EditMenu and its item is enabled
+		/// only if there actually IS a load-changed cell available. TODO: If
+		/// this is given a hotkey then the item would have to be enabled when a
+		/// load-changed flag(s) is set and disabled/validity-checks need to
+		/// happen here or so.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_GotoLoadchanged(object sender, EventArgs e)
+		{
+//			if (Table != null && Table.RowCount != 0)
+			{
+				Table._editor.Visible = false;
+				Table.Select();
+
+				Cell sel = Table.GetOnlySelectedCell();
+				Table.ClearSelects();
+
+				int row, r,c;
+				if (sel != null)
+				{
+					c   = sel.x;
+					row = sel.y;
+				}
+				else
+				{
+					c   = -1;
+					row =  0;
+				}
+
+				bool start = true;
+
+				for (r = row; r != Table.RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						if (c == -1)
+							c = 0;
+						else
+							++c;
+
+						if (c == Table.ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+							{
+								++r;
+							}
+							else						// or to the top of the table if on the last row(s)
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						{
+							sel.selected = true;
+							Table.EnsureDisplayed(sel);
+							Table.Refresh();
+
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				{
+					for (c = 0; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						{
+							sel.selected = true;
+							Table.EnsureDisplayed(sel);
+							Table.Refresh();
+
+							return;
+						}
+					}
 				}
 			}
 		}
@@ -1061,7 +1184,7 @@ namespace yata
 					pb.Step();
 				}
 
-				Table.Changed = changed;
+				Table.Changed |= changed;
 
 //				DrawingControl.ResumeDrawing(Table);
 			}

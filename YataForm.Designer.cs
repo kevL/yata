@@ -80,6 +80,7 @@
 		private System.Windows.Forms.ToolStripTextBox tb_Goto;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem it_Goto;
+		private System.Windows.Forms.ToolStripMenuItem it_GotoLoadchanged;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -126,12 +127,13 @@
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
 			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -341,16 +343,18 @@
 			this.it_Search,
 			this.it_Findnext,
 			this.toolStripSeparator3,
-			this.it_Goto});
+			this.it_Goto,
+			this.it_GotoLoadchanged});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
+			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening_GotoLoadchanged);
 			// 
 			// it_Search
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(130, 22);
+			this.it_Search.Size = new System.Drawing.Size(152, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -358,22 +362,30 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(130, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(152, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(127, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(130, 22);
+			this.it_Goto.Size = new System.Drawing.Size(152, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
+			// 
+			// it_GotoLoadchanged
+			// 
+			this.it_GotoLoadchanged.Enabled = false;
+			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(152, 22);
+			this.it_GotoLoadchanged.Text = "Goto loadchanged";
+			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// tb_Goto
 			// 
@@ -407,8 +419,8 @@
 			// 
 			this.it_MenuOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_CheckRows,
 			this.it_RenumberRows,
+			this.it_CheckRows,
 			this.toolStripSeparator1,
 			this.it_RecolorRows,
 			this.toolStripSeparator2,
@@ -419,19 +431,19 @@
 			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
 			this.it_MenuOptions.Text = "2da Ops";
 			// 
-			// it_CheckRows
-			// 
-			this.it_CheckRows.Name = "it_CheckRows";
-			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
-			this.it_CheckRows.Text = "test row order";
-			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
-			// 
 			// it_RenumberRows
 			// 
 			this.it_RenumberRows.Name = "it_RenumberRows";
 			this.it_RenumberRows.Size = new System.Drawing.Size(155, 22);
 			this.it_RenumberRows.Text = "order row ids";
 			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
+			// 
+			// it_CheckRows
+			// 
+			this.it_CheckRows.Name = "it_CheckRows";
+			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
+			this.it_CheckRows.Text = "test row order";
+			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
 			// toolStripSeparator1
 			// 

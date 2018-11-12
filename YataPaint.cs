@@ -305,6 +305,16 @@ namespace yata
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
+
+						if (row.cells[c].loadchanged)
+						{
+							rect.X     -= _padHori - 1;
+							rect.Width -= 1;
+							graphics.FillRectangle(Brushes.LoadChanged, rect);
+							rect.X     += _padHori - 1;
+							rect.Width += 1;
+						}
+
 						TextRenderer.DrawText(graphics, row.cells[c].text, Font, rect, Colors.Text, YataGraphics.flags);
 
 						rect.X += rect.Width;
