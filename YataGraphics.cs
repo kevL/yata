@@ -88,6 +88,8 @@ namespace yata
 
 		internal static readonly Brush CellSel = new SolidBrush(Color.PaleGreen);
 		internal static readonly Brush Editor  = new SolidBrush(Colors.Editor);
+
+		internal static readonly Brush LoadChanged = new SolidBrush(Color.Pink);
 	}
 
 	static class Colors

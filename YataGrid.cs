@@ -438,7 +438,7 @@ namespace yata
 			for (int i = 0; i != lines.Length; ++i)
 			{
 				line = lines[i].Trim();
-				logfile.Log(i + ": " + line);
+				//logfile.Log(i + ": " + line);
 
 				if (i > LABELS)
 				{
@@ -521,7 +521,9 @@ namespace yata
 						}
 
 						// test for matching double-quote characters on the fly
-						if (!ignoreErrors)
+						// NOTE: Do this after the table loads so that any cells
+						// that are affected can be flagged as 'loadchanged'.
+/*						if (!ignoreErrors)
 						{
 							bool quoteFirst, quoteLast;
 							int col = -1;
@@ -569,7 +571,7 @@ namespace yata
 									}
 								}
 							}
-						}
+						} */
 
 						_rows.Add(cells);
 					}
@@ -781,6 +783,8 @@ namespace yata
 
 			Select();
 
+			CheckCellTexts();
+
 			_init = false;
 		}
 
@@ -883,7 +887,11 @@ namespace yata
 			{
 				RowCount = _rows.Count;
 
+				Cell cell;
+				string text = String.Empty;
 				Brush brush;
+				bool stars;
+
 				for (int r = 0; r != RowCount; ++r)
 				{
 					brush = (r % 2 == 0) ? Brushes.Alice
@@ -891,7 +899,25 @@ namespace yata
 
 					Rows.Add(new Row(r, ColCount, brush));
 					for (int c = 0; c != ColCount; ++c)
-						Rows[r].cells[c] = new Cell(r,c, _rows[r][c]);
+					{
+						if (c < _rows[r].Length)
+						{
+							text = _rows[r][c];
+							stars = false;
+						}
+						else
+						{
+							text = Constants.Stars;
+							stars = true;
+						}
+
+						cell = (Rows[r].cells[c] = new Cell(r,c, text));
+						if (stars)
+						{
+							cell.loadchanged = true;
+							Changed = true;
+						}
+					}
 				}
 			}
 			else
@@ -1437,6 +1463,8 @@ namespace yata
 			{
 				Changed = true;
 
+				_editcell.loadchanged = false;
+
 				if (CheckTextEdit())
 					MessageBox.Show("The text that was submitted has been altered.",
 									"burp",
@@ -1536,6 +1564,97 @@ namespace yata
 				if (test == Constants.Stars)
 				{
 					_editor.Text = Constants.Stars;
+					changed = true;
+				}
+			}
+
+			return changed;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void CheckCellTexts()
+		{
+			Cell cell;
+			foreach (var row in Rows)
+			{
+				for (int c = 0; c != ColCount; ++c)
+				{
+					string text = (cell = row.cells[c]).text;
+					if (CheckCellText(ref text))
+					{
+						cell.text = text;
+						cell.loadchanged = true;
+						Changed = true;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Checks the text in a cell.
+		/// </summary>
+		/// <param name="text">ref to a text-string</param>
+		/// <returns>true if text is changed/fixed/corrected</returns>
+		bool CheckCellText(ref string text)
+		{
+			bool changed = false;
+
+			string field = text.Trim();
+
+			if (String.IsNullOrEmpty(field))
+			{
+				text = Constants.Stars;
+				return true;
+			}
+
+			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
+			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+			if (quoteFirst && quoteLast)
+			{
+				if (   field.Length < 3
+					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
+				{
+					text = Constants.Stars;
+					return true;
+				}
+			}
+			else if (( quoteFirst && !quoteLast)
+				||   (!quoteFirst &&  quoteLast))
+			{
+				if (quoteFirst)
+					field = field + "\"";
+				else
+					field = "\"" + field;
+
+				if (field.Length == 2)
+				{
+					text = Constants.Stars;
+					return true;
+				}
+
+				text = field;
+				changed = true;
+			}
+
+			if (field.Length > 2) // lol but it works ->
+			{
+				string first = field.Substring(0, 1);
+				string last  = field.Substring(field.Length - 1, 1);
+
+				string test  = field.Substring(1, field.Length - 2);
+
+				while (test.Contains("\""))
+				{
+					changed = true;
+					test = test.Remove(test.IndexOf('"'), 1);
+					text = first + test + last;
+				}
+
+				if (test == Constants.Stars)
+				{
+					text = Constants.Stars;
 					changed = true;
 				}
 			}

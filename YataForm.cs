@@ -1037,12 +1037,18 @@ namespace yata
 		{
 			if (Table != null && Table.RowCount != 0)
 			{
+				Row row;
 				Brush brush;
+
 				for (int id = 0; id != Table.RowCount; ++id)
 				{
 					brush = (id % 2 == 0) ? Brushes.Alice
 										  : Brushes.Blanche;
-					Table.Rows[id]._brush = brush;
+
+					(row = Table.Rows[id])._brush = brush;
+
+					for (int c = 0; c != Table.ColCount; ++c)
+						row.cells[c].loadchanged = false;
 				}
 				Table.Refresh();
 			}

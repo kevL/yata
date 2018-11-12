@@ -76,7 +76,9 @@ namespace yata
 	sealed class Cell
 	{
 		internal string text; // the cell's text
+
 		internal bool selected;
+		internal bool loadchanged;
 
 		internal int x;
 		internal int y;

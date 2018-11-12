@@ -76,6 +76,12 @@ namespace yata
 
 								rect.X += _padHori;
 							}
+							else if (cell.loadchanged)
+							{
+								rect.X -= _padHori;
+								graphics.FillRectangle(Brushes.LoadChanged, rect);
+								rect.X += _padHori;
+							}
 
 							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
 //							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
