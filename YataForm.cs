@@ -949,6 +949,8 @@ namespace yata
 					Table._editor.Visible = false;
 					Table.ClearSelects();
 
+					Table.Select();
+
 					Row row = Table.Rows[r];
 					row.selected = true;
 					for (int c = 0; c != Table.ColCount; ++c)

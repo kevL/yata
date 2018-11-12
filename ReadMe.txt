@@ -27,6 +27,8 @@ Edit
 - Goto : Ctrl+g (focuses the Goto box)
 - Goto loadchanged (See note on Load below)
 
+Goto box (type a row ID and press Enter)
+
 Search box (type a string to search for)
 Search options dropdown (substring or wholeword)
 
