@@ -24,6 +24,9 @@ Edit
 - Find		: Ctrl+f (focuses the Search box)
 - Find next	: F3
 
+- Goto : Ctrl+g (focuses the Goto box)
+- Goto loadchanged (See note on Load below)
+
 Search box (type a string to search for)
 Search options dropdown (substring or wholeword)
 
@@ -136,3 +139,23 @@ show the Open ... dialog at your frequently used directory(s).
 The pathall directories are for gathering Crafting.2da info that will appear
 when mouseovering cells of Crafting.2da. (Yata was designed with Crafting in
 mind and can show stuff like Encoded IPs as readable strings on the statusbar.)
+
+
+Appendix A: note on Load
+
+Yata is pretty strict when loading a 2da file. If it detects anything awkward it
+lets the user know and it will try to automatically fix cell-fields. Such cells
+ought appear highlighted with pink - these are called "loadchanged" cells, since
+they were changed when the 2da loaded. An option under the Editmenu can cycle
+through these cells if there are any, for your review and or manual corrections.
+
+Double-quote marks that are out of place can play havoc with loading a 2da. Yata
+is pretty strict with them when either loading a 2da or editing a cell. For
+example it will go so far as to replace two adjacent double-quotes with "****"
+(without quotes). If you find issues that Yata doesn't deal well with it's
+suggested that you close the file in Yata and try to fix it in a text-editor (or
+a different 2da-editor).
+
+Further, the only way to edit the ID col is with 2da Ops "order row ids". And if
+you've chosen to Freeze the 1st or 2nd col, those cells can't be edited until
+Freeze is turned back off.
