@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+//using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -142,6 +143,9 @@ namespace yata
 		int _sortcol;
 		int _sortdir = 1;
 
+//		BackgroundWorker _bgw = new BackgroundWorker();
+//		ProgBar _pb;
+
 
 		/// <summary>
 		/// cTor.
@@ -191,6 +195,15 @@ namespace yata
 			_editor.Leave   += leave_Editor;
 
 			Controls.Add(_editor);
+
+
+//			_bgw.DoWork             += bgw_DoWork;
+//			_bgw.ProgressChanged    += bgw_ProgressChanged;
+//			_bgw.RunWorkerCompleted += bgw_RunWorkerCompleted;
+//			_bgw.WorkerReportsProgress = true;
+//			_bgw.WorkerSupportsCancellation = true;
+
+//			_pb = new ProgBar(_f);
 		}
 
 
@@ -926,6 +939,12 @@ namespace yata
 
 			_rows.Clear(); // done w/ '_rows'
 
+
+//			_bgw.RunWorkerAsync();
+//			_pb.ValTop = ColCount * RowCount;
+//			_pb.Show();
+//			_pb.Refresh();
+
 			Size size;
 			int w, wT, hT;
 
@@ -942,10 +961,73 @@ namespace yata
 					wT = size.Width + _padHori * 2;
 //					if (r == 0) wT += _padHoriSort;
 					if (wT > w) w = wT;
+
+//					_pb.Step();
 				}
 				Cols[c].width(w);
 			}
+
+//			_pb.Hide();
+//			_f.TopMost = true;
+//			_f.TopMost = false;
 		}
+
+/*		void bgw_DoWork(object sender, DoWorkEventArgs e)
+		{
+			logfile.Log("bgw_DoWork()");
+
+			var worker = sender as BackgroundWorker;
+
+			Size size;
+			int w, wT, hT;
+
+			for (int c = 0; c != ColCount; ++c)
+			{
+				logfile.Log(". c= " + c);
+
+				System.Threading.Thread.Sleep(100);
+				w = 20; // cellwidth.
+				for (int r = 0; r != RowCount; ++r)
+				{
+					logfile.Log(". . r= " + r);
+
+					size = YataGraphics.MeasureSize(Rows[r].cells[c].text, Font);
+
+					hT = size.Height + _padVert * 2;
+					if (hT > HeightRow) HeightRow = hT;
+
+					wT = size.Width + _padHori * 2;
+//					if (r == 0) wT += _padHoriSort;
+					if (wT > w) w = wT;
+				}
+				Cols[c].width(w);
+
+				//logfile.Log(". call ReportProgress");
+//				worker.ReportProgress((c + 1) * 100 / ColCount, c);
+
+				logfile.Log(". pb.Step");
+				_pb.Step();
+			}
+			logfile.Log("bgw_DoWork() END");
+		}
+		void bgw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			logfile.Log("");
+			logfile.Log("percent= " + e.ProgressPercentage);
+			logfile.Log("state= " + e.UserState);
+
+			//logfile.Log(". call pb.Step");
+//			_pb.Step();
+			logfile.Log("");
+		}
+		void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			logfile.Log("");
+			logfile.Log("COMPLETED");
+
+			_pb.Hide(); // jic.
+		} */
+
 
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.

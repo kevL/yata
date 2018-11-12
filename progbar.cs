@@ -42,7 +42,7 @@ namespace yata
 			Top  = f.Top  + (f.Height - Height) / 2 - 15;
 
 			_graphics = CreateGraphics();
-			_rect = new Rectangle(0, 0, 0, Height);
+			_rect = new Rectangle(0,0, 0, Height);
 		}
 
 
@@ -52,6 +52,8 @@ namespace yata
 			{
 				_rect.Width = Width * ValCur / ValTop;
 				_graphics.FillRectangle(Brushes.CellSel, _rect);
+
+//				Refresh();
 			}
 			else
 				Hide();

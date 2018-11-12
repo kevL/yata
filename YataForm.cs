@@ -1165,9 +1165,9 @@ namespace yata
 			{
 //				DrawingControl.SuspendDrawing(Table); // bongo
 
-				var pb = new ProgBar(this);
-				pb.ValTop = Table.RowCount;
-				pb.Show();
+//				var pb = new ProgBar(this);
+//				pb.ValTop = Table.RowCount;
+//				pb.Show();
 
 				bool changed = false;
 
@@ -1183,7 +1183,7 @@ namespace yata
 						Table[id,0].text = id.ToString();
 						changed = true;
 					}
-					pb.Step();
+//					pb.Step();
 				}
 
 				Table.Changed |= changed;
