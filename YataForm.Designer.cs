@@ -269,7 +269,7 @@
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(160, 22);
+			this.it_Open.Size = new System.Drawing.Size(152, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -277,62 +277,61 @@
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(160, 22);
+			this.it_Reload.Size = new System.Drawing.Size(152, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// it_Folders
 			// 
 			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(160, 22);
+			this.it_Folders.Size = new System.Drawing.Size(152, 22);
 			this.it_Folders.Text = "Folders";
 			this.it_Folders.Visible = false;
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(157, 6);
+			this.separator_1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(160, 22);
+			this.it_Save.Size = new System.Drawing.Size(152, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.it_SaveAs.Size = new System.Drawing.Size(160, 22);
+			this.it_SaveAs.Size = new System.Drawing.Size(152, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(160, 22);
+			this.it_Close.Size = new System.Drawing.Size(152, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_Close);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(160, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(152, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAll);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(157, 6);
+			this.separator_2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(160, 22);
+			this.it_Quit.Size = new System.Drawing.Size(152, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
@@ -354,7 +353,7 @@
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(152, 22);
+			this.it_Search.Size = new System.Drawing.Size(150, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -362,20 +361,20 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(152, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(150, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(152, 22);
+			this.it_Goto.Size = new System.Drawing.Size(150, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -383,7 +382,7 @@
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(152, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(150, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 

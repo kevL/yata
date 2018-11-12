@@ -188,6 +188,7 @@ namespace yata
 			_editor.BackColor = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
 			_editor.KeyDown += keydown_Editor;
+			_editor.Leave   += leave_Editor;
 
 			Controls.Add(_editor);
 		}
@@ -1407,16 +1408,30 @@ namespace yata
 
 		/// <summary>
 		/// Handles keydown events in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Alt is pressed.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
-			if (e.Alt || e.Control) // stop dweeby .NET behavior.
+			if (e.Alt)
 			{
 				_editor.Visible = false;
 				Refresh();
 			}
+		}
+
+		/// <summary>
+		/// Handles leave event in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
+		/// pressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void leave_Editor(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			Refresh();
 		}
 
 		/// <summary>

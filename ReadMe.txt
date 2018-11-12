@@ -14,7 +14,7 @@ File
   been set)
 
 - Save			: Ctrl+s
-- Save As ...	: Ctrl+a
+- Save As ...
 - Close
 - Close all (this is a multi-tabbed application)
 
