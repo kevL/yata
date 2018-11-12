@@ -77,6 +77,9 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAll;
 		private System.Windows.Forms.ToolStripMenuItem it_CloseAll;
+		private System.Windows.Forms.ToolStripTextBox tb_Goto;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripMenuItem it_Goto;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -121,6 +124,9 @@
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
+			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
 			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -225,6 +231,7 @@
 			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
+			this.tb_Goto,
 			this.tb_Search,
 			this.cb_SearchOption,
 			this.it_MenuOptions,
@@ -332,7 +339,9 @@
 			this.it_MenuEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Search,
-			this.it_Findnext});
+			this.it_Findnext,
+			this.toolStripSeparator3,
+			this.it_Goto});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
@@ -353,6 +362,29 @@
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(127, 6);
+			// 
+			// it_Goto
+			// 
+			this.it_Goto.Name = "it_Goto";
+			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.it_Goto.Size = new System.Drawing.Size(130, 22);
+			this.it_Goto.Text = "Goto";
+			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
+			// 
+			// tb_Goto
+			// 
+			this.tb_Goto.AutoSize = false;
+			this.tb_Goto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_Goto.Margin = new System.Windows.Forms.Padding(1, 0, 6, 0);
+			this.tb_Goto.Name = "tb_Goto";
+			this.tb_Goto.Size = new System.Drawing.Size(35, 18);
+			this.tb_Goto.Text = "goto";
+			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GotoKeyPress);
+			// 
 			// tb_Search
 			// 
 			this.tb_Search.AutoSize = false;
@@ -360,7 +392,7 @@
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
-			this.tb_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
+			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
 			// 
 			// cb_SearchOption
 			// 
@@ -369,7 +401,7 @@
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
 			this.cb_SearchOption.Size = new System.Drawing.Size(95, 18);
-			this.cb_SearchOption.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchKeyUp);
+			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
 			// 
 			// it_MenuOptions
 			// 
@@ -610,7 +642,7 @@
 			this.separator_10,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(176, 270);
+			this.contextEditor.Size = new System.Drawing.Size(176, 248);
 			// 
 			// context_it_Header
 			// 

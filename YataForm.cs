@@ -798,9 +798,9 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void SearchKeyUp(object sender, KeyEventArgs e)
+		void SearchKeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter
+			if (e.KeyChar == (char)Keys.Enter
 				&& Table != null && Table.RowCount != 0)
 			{
 				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
@@ -916,6 +916,40 @@ namespace yata
 							}
 						}
 					}
+				}
+			}
+		}
+
+
+		void editclick_Goto(object sender, EventArgs e)
+		{
+			tb_Goto.Focus();
+		}
+
+		/// <summary>
+		/// Performs a goto when the Enter-key is released and focus is on the
+		/// goto-box.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void GotoKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Enter
+				&& Table != null && Table.RowCount != 0)
+			{
+				int r;
+				if (Int32.TryParse(tb_Goto.Text, out r)
+					&& r > -1 && r < Table.RowCount)
+				{
+					Table.ClearSelects();
+
+					Row row = Table.Rows[r];
+					row.selected = true;
+					for (int c = 0; c != Table.ColCount; ++c)
+						row.cells[c].selected = true;
+
+					Table.EnsureDisplayedRow(r);
+					Table.Refresh();
 				}
 			}
 		}
