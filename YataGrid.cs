@@ -390,7 +390,7 @@ namespace yata
 		{
 			if (!_editor.Visible)
 			{
-				if (_scrollVert.Visible)
+				if (_visVert)
 				{
 					if (e.Delta > 0)
 					{
@@ -407,7 +407,7 @@ namespace yata
 							_scrollVert.Value += _scrollVert.LargeChange;
 					}
 				}
-				else if (_scrollHori.Visible)
+				else if (_visHori)
 				{
 					if (e.Delta > 0)
 					{
@@ -1213,7 +1213,7 @@ namespace yata
 								EnsureDisplayed(sel);
 							}
 						}
-						else if (_scrollVert.Visible)
+						else if (_visVert)
 							_scrollVert.Value = 0;
 					}
 					else if (sel != null)
@@ -1227,7 +1227,7 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollHori.Visible)
+					else if (_visHori)
 						_scrollHori.Value = 0;
 
 					break;
@@ -1256,8 +1256,8 @@ namespace yata
 								EnsureDisplayed(sel);
 							}
 						}
-						else if (_scrollVert.Visible)
-							_scrollVert.Value = HeightTable - Height + ((_scrollHori.Visible) ? _scrollHori.Height : 0);
+						else if (_visVert)
+							_scrollVert.Value = HeightTable - Height + ((_visHori) ? _scrollHori.Height : 0);
 					}
 					else if (sel != null)
 					{
@@ -1270,9 +1270,9 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollHori.Visible)
+					else if (_visHori)
 					{
-						_scrollHori.Value = WidthTable - Width + ((_scrollVert.Visible) ? _scrollVert.Width : 0);
+						_scrollHori.Value = WidthTable - Width + ((_visVert) ? _scrollVert.Width : 0);
 					}
 					break;
 
@@ -1281,7 +1281,7 @@ namespace yata
 					{
 						ClearSelects();
 
-						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+						int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
 						int r;
 						if (selr < rows) r = 0;
@@ -1298,7 +1298,7 @@ namespace yata
 						if (sel.y != 0)
 						{
 							sel.selected = false;
-							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
 							int r;
 							if (sel.y < rows) r = 0;
@@ -1310,9 +1310,9 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollVert.Visible)
+					else if (_visVert)
 					{
-						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
+						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 
 						if (_scrollVert.Value - h < 0)
 							_scrollVert.Value = 0;
@@ -1326,7 +1326,7 @@ namespace yata
 					{
 						ClearSelects();
 
-						int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+						int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
 						int r;
 						if (selr > RowCount - 1 - rows) r = RowCount - 1;
@@ -1343,7 +1343,7 @@ namespace yata
 						if (sel.y != RowCount - 1)
 						{
 							sel.selected = false;
-							int rows = (Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0)) / HeightRow;
+							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
 							int r;
 							if (sel.y > RowCount - 1 - rows) r = RowCount - 1;
@@ -1355,9 +1355,9 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollVert.Visible)
+					else if (_visVert)
 					{
-						int h = Height - HeightColhead - (_scrollHori.Visible ? _scrollHori.Height : 0);
+						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 
 						if (_scrollVert.Value + h + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
 							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
@@ -1391,7 +1391,7 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollVert.Visible)
+					else if (_visVert)
 					{
 						if (_scrollVert.Value - _scrollVert.LargeChange < 0)
 							_scrollVert.Value = 0;
@@ -1422,7 +1422,7 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollVert.Visible) // scroll the table
+					else if (_visVert) // scroll the table
 					{
 						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum) // what is this witchcraft
 							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
@@ -1443,7 +1443,7 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollHori.Visible)
+					else if (_visHori)
 					{
 						if (_scrollHori.Value - _scrollHori.LargeChange < 0)
 							_scrollHori.Value = 0;
@@ -1464,7 +1464,7 @@ namespace yata
 							EnsureDisplayed(sel);
 						}
 					}
-					else if (_scrollHori.Visible)
+					else if (_visHori)
 					{
 						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum) // what is this witchcraft
 							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
@@ -2087,7 +2087,7 @@ namespace yata
 
 			if (bounds.X != left)
 			{
-				int bar = _scrollVert.Visible ? _scrollVert.Width : 0;
+				int bar = _visVert ? _scrollVert.Width : 0;
 				int right = Width - bar;
 
 				int width = bounds.Y - bounds.X;
