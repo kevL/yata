@@ -2136,12 +2136,13 @@ namespace yata
 			}
 
 			for (int r = 0; r != RowCount; ++r)
-			if (Rows[r].selected)
 			{
-				EnsureDisplayedRow(r);
-				return true;
+				if (Rows[r].selected)
+				{
+					EnsureDisplayedRow(r);
+					return true;
+				}
 			}
-
 			return false;
 		}
 
@@ -2167,10 +2168,12 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int c = 0; c != ColCount; ++c)
-					if (!row.cells[c].selected)
 					{
-						select = true;
-						break;
+						if (!row.cells[c].selected)
+						{
+							select = true;
+							break;
+						}
 					}
 				}
 				else
@@ -2267,10 +2270,12 @@ namespace yata
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
 				{
 					for (int r = 0; r != RowCount; ++r)
-					if (!Rows[r].cells[c].selected)
 					{
-						select = true;
-						break;
+						if (!Rows[r].cells[c].selected)
+						{
+							select = true;
+							break;
+						}
 					}
 				}
 				else
@@ -2399,8 +2404,59 @@ namespace yata
 		/// Inserts/deletes a row into the table.
 		/// </summary>
 		/// <param name="id">row</param>
-		/// <param name="list">null to delete the row</param>
-		internal void Insert(int id, IList<string> list)
+		/// <param name="fields">null to delete the row</param>
+		internal void Insert(int id, string[] fields)
+		{
+			DrawingControl.SuspendDrawing(this);
+
+			Row row;
+
+			if (fields != null)
+			{
+				row = new Row(id, ColCount, Brushes.Created);
+
+				string field;
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if (c < fields.Length)
+						field = fields[c];
+					else
+						field = Constants.Stars;
+
+					row.cells[c] = new Cell(id, c, field);
+				}
+
+				Rows.Insert(id, row);
+				++RowCount;
+
+				for (int r = id + 1; r != RowCount; ++r)
+				{
+					++(row = Rows[r])._id;
+					for (int c = 0; c != ColCount; ++c)
+						++row.cells[c].y;
+				}
+			}
+			else // delete 'id'
+			{
+				Rows.Remove(Rows[id]);
+				--RowCount;
+
+				for (int r = id; r != RowCount; ++r)
+				{
+					--(row = Rows[r])._id;
+					for (int c = 0; c != ColCount; ++c)
+						--row.cells[c].y;
+				}
+			}
+
+			InitScrollers();
+
+			if (id < RowCount)
+				EnsureDisplayedRow(id);
+
+			DrawingControl.ResumeDrawing(this);
+		}
+/*		internal void Insert(int id, IList<string> list)
 		{
 			DrawingControl.SuspendDrawing(this);
 
@@ -2438,7 +2494,7 @@ namespace yata
 				EnsureDisplayedRow(id);
 
 			DrawingControl.ResumeDrawing(this);
-		}
+		} */
 
 
 		#region Sort

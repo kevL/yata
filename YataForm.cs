@@ -20,7 +20,7 @@ namespace yata
 		YataGrid Table
 		{ get; set; }
 
-		List<string> _copy = new List<string>();
+		List<string[]> _copy = new List<string[]>();
 
 		List<ToolStripItem> _presets = new List<ToolStripItem>(); // folder presets for the Open ... dialog
 		string _initialDir = String.Empty;
@@ -666,9 +666,10 @@ namespace yata
 
 			Table.ClearSelects();
 
-			Table.Rows[_r].selected = true;
+			Row row = Table.Rows[_r];
+			row.selected = true;
 			for (int c = 0; c != Table.ColCount; ++c)
-				Table[_r,c].selected = true;
+				row.cells[c].selected = true;
 
 			Table.EnsureDisplayedRow(_r);
 			Table.Refresh();
@@ -677,7 +678,7 @@ namespace yata
 
 			context_it_PasteAbove.Enabled =
 			context_it_Paste     .Enabled =
-			context_it_PasteBelow.Enabled = (Table.ColCount == _copy.Count);
+			context_it_PasteBelow.Enabled = (_copy.Count != 0);
 
 			contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
 												YataGrid.HeightColhead));
@@ -687,58 +688,57 @@ namespace yata
 		{
 			_copy.Clear();
 
+			var fields = new string[Table.ColCount];
 			for (int c = 0; c != Table.ColCount; ++c)
-				_copy.Add(Table[_r,c].text);
+				fields[c] = Table[_r,c].text;
+
+			_copy.Add(fields);
 		}
 
 		void contextclick_EditCut(object sender, EventArgs e)
 		{
-			contextclick_EditCopy(null, EventArgs.Empty);
+			contextclick_EditCopy(  null, EventArgs.Empty);
 			contextclick_EditDelete(null, EventArgs.Empty);
 		}
 
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
-			if (_copy.Count == Table.ColCount)
-			{
-				Table.Changed = true;
-				Table.Insert(_r, _copy);
-				Table.Refresh();
-			}
+			Table.Changed = true;
+			Table.Insert(_r, _copy[0]);
+			Table.Refresh();
 		}
 
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
-			int cols = Table.ColCount;
-			if (_copy.Count == cols)
+			Table.Changed = true;
+			Row row = Table.Rows[_r];
+			string field;
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				Table.Changed = true;
-				for (int c = 0; c != cols; ++c)
-				{
-					Table[_r,c].text = _copy[c];
-				}
-				Table.Rows[_r]._brush = Brushes.Created;
-				Table.Refresh();
+				if (c < _copy[0].Length)
+					field = _copy[0][c];
+				else
+					field = Constants.Stars;
+
+				row.cells[c].text = field;
 			}
+			row._brush = Brushes.Created;
+			Table.Refresh();
 		}
 
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
-			if (_copy.Count == Table.ColCount)
-			{
-				Table.Changed = true;
-				Table.Insert(_r + 1, _copy);
-				Table.Refresh();
-			}
+			Table.Changed = true;
+			Table.Insert(_r + 1, _copy[0]);
+			Table.Refresh();
 		}
 
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
 			Table.Changed = true;
-			int cols = Table.ColCount;
-			var fields = new string[cols];
+			var fields = new string[Table.ColCount];
 			fields[0] = _r.ToString();
-			for (int c = 1; c != cols; ++c)
+			for (int c = 1; c != Table.ColCount; ++c)
 			{
 				fields[c] = Constants.Stars;
 			}
@@ -749,8 +749,7 @@ namespace yata
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
 			Table.Changed = true;
-			int cols = Table.ColCount;
-			for (int c = 1; c != cols; ++c)
+			for (int c = 1; c != Table.ColCount; ++c)
 			{
 				Table[_r,c].text = Constants.Stars;
 			}
@@ -761,10 +760,9 @@ namespace yata
 		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
 			Table.Changed = true;
-			int cols = Table.ColCount;
-			var fields = new string[cols];
+			var fields = new string[Table.ColCount];
 			fields[0] = (_r + 1).ToString();
-			for (int c = 1; c != cols; ++c)
+			for (int c = 1; c != Table.ColCount; ++c)
 			{
 				fields[c] = Constants.Stars;
 			}
@@ -775,7 +773,6 @@ namespace yata
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
 			Table.Changed = true;
-
 			Table.Insert(_r, null);
 			Table.Refresh();
 		}
