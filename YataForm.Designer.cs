@@ -723,16 +723,16 @@
 			this.separator_10,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(176, 248);
+			this.contextEditor.Size = new System.Drawing.Size(176, 270);
 			// 
 			// context_it_Header
 			// 
-			this.context_it_Header.Enabled = false;
 			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7F, System.Drawing.FontStyle.Bold);
 			this.context_it_Header.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.context_it_Header.Name = "context_it_Header";
 			this.context_it_Header.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Header.Text = "_row @ 16";
+			this.context_it_Header.Click += new System.EventHandler(this.contextclick_Header);
 			// 
 			// separator_7
 			// 

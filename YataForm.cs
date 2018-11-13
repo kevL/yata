@@ -690,6 +690,11 @@ namespace yata
 												YataGrid.HeightColhead));
 		}
 
+		void contextclick_Header(object sender, EventArgs e)
+		{
+			contextEditor.Hide();
+		}
+
 		void contextclick_EditCopy(object sender, EventArgs e)
 		{
 			_copy.Clear();
