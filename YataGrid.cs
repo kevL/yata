@@ -2105,86 +2105,98 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_RowPanel(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left)
+			int r = (e.Y + offsetVert) / HeightRow;
+			if (r < RowCount)
 			{
-				_editor.Visible = false;
-				Select();
-
-				int r = (e.Y + offsetVert) / HeightRow;
-				var row = Rows[r];
-
-				bool select;
-
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
+				if (e.Button == MouseButtons.Left)
 				{
-					select = false;
-					for (int c = 0; c != ColCount; ++c)
+					_editor.Visible = false;
+					Select();
+
+					var row = Rows[r];
+
+					bool select;
+
+					if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
 					{
-						if (!row.cells[c].selected)
+						select = false;
+						for (int c = 0; c != ColCount; ++c)
 						{
-							select = true;
-							break;
-						}
-					}
-				}
-				else
-					select = true;
-
-
-				if ((ModifierKeys & Keys.Control) != Keys.Control)
-					ClearCellSelects();
-
-				if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-				{
-					int sel = getSelectedRow();
-					if (sel != -1)
-					{
-						_f._range = (r - sel);
-
-						int start, stop;
-						if (sel < r)
-						{
-							start = sel;
-							stop  = r;
-						}
-						else
-						{
-							start = r;
-							stop  = sel;
-						}
-
-						Row ro;
-						while (start != stop + 1)
-						{
-							if (start != r) // done below
+							if (!row.cells[c].selected)
 							{
-								ro = Rows[start];
-								for (int c = 0; c != ColCount; ++c)
-									ro.cells[c].selected = true;
+								select = true;
+								break;
 							}
-							++start;
 						}
 					}
+					else
+						select = true;
+
+
+					if ((ModifierKeys & Keys.Control) != Keys.Control)
+						ClearCellSelects();
+
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+					{
+						int selr = getSelectedRow();
+						if (selr != -1)
+						{
+							_f._range = (r - selr);
+
+							int start, stop;
+							if (selr < r)
+							{
+								start = selr;
+								stop  = r;
+							}
+							else
+							{
+								start = r;
+								stop  = selr;
+							}
+
+							Row ro;
+							while (start != stop + 1)
+							{
+								if (start != r) // done below
+								{
+									ro = Rows[start];
+									for (int c = 0; c != ColCount; ++c)
+										ro.cells[c].selected = true;
+								}
+								++start;
+							}
+						}
+					}
+					else
+					{
+						foreach (var ro in Rows)
+							ro.selected = false;
+
+						row.selected = select;
+					}
+
+					if (select)
+						EnsureDisplayedRow(r);
+
+					for (int c = 0; c != ColCount; ++c)
+						row.cells[c].selected = select;
+
+					Refresh();
 				}
-				else
+				else if (e.Button == MouseButtons.Right)
 				{
-					foreach (var ro in Rows)
-						ro.selected = false;
-
-					row.selected = select;
+					_f.context_(r);
 				}
-
-				if (select)
-					EnsureDisplayedRow(r);
-
-				for (int c = 0; c != ColCount; ++c)
-					row.cells[c].selected = select;
-
-				Refresh();
 			}
-			else if (e.Button == MouseButtons.Right)
+			else
 			{
-				_f.context_(sender, e);
+				int selr = getSelectedRow();
+				if (selr != -1)
+				{
+					Rows[selr].selected = false;
+					Refresh();
+				}
 			}
 		}
 
@@ -2212,11 +2224,11 @@ namespace yata
 				Select();
 
 				int x = e.X + offsetHori;
+
 				int left = getLeft();
 				int c = FrozenCount - 1;
-				do { ++c; }
+				do { if (++c == ColCount) return; }
 				while ((left += Cols[c].width()) < x);
-
 
 				bool select = false;
 
@@ -2292,9 +2304,8 @@ namespace yata
 					int x = e.X + offsetHori;
 	
 					int left = getLeft();
-	
 					int c = FrozenCount - 1;
-					do { ++c; }
+					do { if (++c == ColCount) return; }
 					while ((left += Cols[c].width()) < x);
 
 					ColSort(c);

@@ -664,32 +664,30 @@ namespace yata
 		int _r;
 		internal int _range;
 
-		internal void context_(object sender, MouseEventArgs e)
+		internal void context_(int r)
 		{
-			_r = (e.Y + Table.offsetVert) / Table.HeightRow;
-			if (_r < Table.RowCount)
-			{
-				Table._editor.Visible = false;
+			_r = r;
 
-				Table.ClearSelects();
+			Table._editor.Visible = false;
 
-				Row row = Table.Rows[_r];
-				row.selected = true;
-				for (int c = 0; c != Table.ColCount; ++c)
-					row.cells[c].selected = true;
+			Table.ClearSelects();
 
-				Table.EnsureDisplayedRow(_r);
-				Table.Refresh();
+			Row row = Table.Rows[_r];
+			row.selected = true;
+			for (int c = 0; c != Table.ColCount; ++c)
+				row.cells[c].selected = true;
 
-				context_it_Header.Text = "_row @ id " + _r;
+			Table.EnsureDisplayedRow(_r);
+			Table.Refresh();
 
-				context_it_PasteAbove.Enabled =
-				context_it_Paste     .Enabled =
-				context_it_PasteBelow.Enabled = (_copy.Count != 0);
+			context_it_Header.Text = "_row @ id " + _r;
 
-				contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
-													YataGrid.HeightColhead));
-			}
+			context_it_PasteAbove.Enabled =
+			context_it_Paste     .Enabled =
+			context_it_PasteBelow.Enabled = (_copy.Count != 0);
+
+			contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
+												YataGrid.HeightColhead));
 		}
 
 		void contextclick_EditCopy(object sender, EventArgs e)
@@ -1951,6 +1949,7 @@ namespace yata
 			fileclick_CloseAll(null, EventArgs.Empty);
 		}
 
+		// TODO: Close all others
 		// TODO: Reload
 		// TODO: Quit
 		// TODO: FreezeFirst/Second
