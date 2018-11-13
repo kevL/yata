@@ -774,9 +774,7 @@ namespace yata
 													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
 
 			_panelCols = new YataPanelCols(this);
-			_panelCols.MouseClick += click_ColPanel;
 			_panelRows = new YataPanelRows(this);
-			_panelRows.MouseClick += click_RowPanel;
 
 			CreateCols();
 			CreateRows();
@@ -818,9 +816,7 @@ namespace yata
 			Controls.Remove(_panelFrozen);
 
 			_panelCols = new YataPanelCols(this);
-			_panelCols.MouseClick += click_ColPanel;
 			_panelRows = new YataPanelRows(this);
-			_panelRows.MouseClick += click_RowPanel;
 
 			CreateCols(true);
 			CreateRows(true);
@@ -1187,6 +1183,8 @@ namespace yata
 			Cell sel = GetOnlySelectedCell();
 			int selr = getSelectedRow();
 
+			Row row;
+
 			// TODO: change selected col
 
 			switch (e.KeyCode)
@@ -1196,9 +1194,9 @@ namespace yata
 					{
 						ClearSelects();
 
-						Rows[0].selected = true;
+						(row = Rows[0]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[0].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(0);
 					}
@@ -1239,9 +1237,9 @@ namespace yata
 					{
 						ClearSelects();
 
-						Rows[RowCount - 1].selected = true;
+						(row = Rows[RowCount - 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[RowCount - 1].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(RowCount - 1);
 					}
@@ -1289,9 +1287,9 @@ namespace yata
 						if (selr < rows) r = 0;
 						else             r = selr - rows;
 
-						Rows[r].selected = true;
+						(row = Rows[r]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[r].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(r);
 					}
@@ -1334,9 +1332,9 @@ namespace yata
 						if (selr > RowCount - 1 - rows) r = RowCount - 1;
 						else                            r = selr + rows;
 
-						Rows[r].selected = true;
+						(row = Rows[r]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[r].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(r);
 					}
@@ -1373,9 +1371,9 @@ namespace yata
 					{
 						ClearSelects();
 
-						Rows[selr - 1].selected = true;
+						(row = Rows[selr - 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[selr - 1].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(selr - 1);
 					}
@@ -1407,9 +1405,9 @@ namespace yata
 					{
 						ClearSelects();
 
-						Rows[selr + 1].selected = true;
+						(row = Rows[selr + 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							Rows[selr + 1].cells[c].selected = true;
+							row.cells[c].selected = true;
 
 						EnsureDisplayedRow(selr + 1);
 					}
@@ -2154,7 +2152,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_RowPanel(object sender, MouseEventArgs e)
+		internal void click_RowPanel(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -2250,7 +2248,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_ColPanel(object sender, MouseEventArgs e)
+		internal void click_ColPanel(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{

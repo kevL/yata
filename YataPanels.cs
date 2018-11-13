@@ -16,7 +16,7 @@ namespace yata
 
 		internal YataPanelCols(YataGrid grid)
 		{
-			DoubleBuffered = true;
+			DrawingControl.SetDoubleBuffered(this);
 
 			_grid = grid;
 
@@ -24,6 +24,8 @@ namespace yata
 			BackColor = Colors.ColheadPanel;
 
 			Height = 10;
+
+			MouseClick += _grid.click_ColPanel;
 		}
 
 		/// <summary>
@@ -54,12 +56,14 @@ namespace yata
 
 		internal YataPanelRows(YataGrid grid)
 		{
-			DoubleBuffered = true;
+			DrawingControl.SetDoubleBuffered(this);
 
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
 			BackColor = Colors.RowheadPanel;
+
+			MouseClick += _grid.click_RowPanel;
 		}
 
 		/// <summary>
@@ -91,7 +95,7 @@ namespace yata
 
 		internal YataPanelFrozen(YataGrid grid, int w)
 		{
-			DoubleBuffered = true;
+			DrawingControl.SetDoubleBuffered(this);
 
 			_grid = grid;
 
