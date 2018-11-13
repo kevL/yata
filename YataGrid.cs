@@ -285,7 +285,7 @@ namespace yata
 		/// Initializes the vertical and horizontal scrollbars OnResize (which
 		/// also happens auto after load).
 		/// </summary>
-		void InitScrollers()
+		internal void InitScrollers()
 		{
 			//logfile.Log("InitScrollers() " + Path.GetFileNameWithoutExtension(Pfe));
 			//logfile.Log(". Height= " + Height);
@@ -2409,9 +2409,11 @@ namespace yata
 		/// </summary>
 		/// <param name="id">row</param>
 		/// <param name="fields">null to delete the row</param>
-		internal void Insert(int id, string[] fields)
+		/// <param name="range">true if inserting a range of rows</param>
+		internal void Insert(int id, string[] fields, bool range = false)
 		{
-			DrawingControl.SuspendDrawing(this);
+			if (!range)
+				DrawingControl.SuspendDrawing(this);
 
 			Row row;
 
@@ -2453,12 +2455,15 @@ namespace yata
 				}
 			}
 
-			InitScrollers();
+			if (!range)
+			{
+				InitScrollers();
 
-			if (id < RowCount)
-				EnsureDisplayedRow(id);
+				if (id < RowCount)
+					EnsureDisplayedRow(id);
 
-			DrawingControl.ResumeDrawing(this);
+				DrawingControl.ResumeDrawing(this);
+			}
 		}
 
 

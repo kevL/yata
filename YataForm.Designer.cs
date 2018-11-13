@@ -136,6 +136,8 @@
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -186,8 +188,6 @@
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -421,6 +421,19 @@
 			this.it_PasteRange.Size = new System.Drawing.Size(155, 22);
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
+			// 
+			// it_CopyToClipboard
+			// 
+			this.it_CopyToClipboard.Enabled = false;
+			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(155, 22);
+			this.it_CopyToClipboard.Text = "copy to clipboard";
+			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_OutputCopy);
 			// 
 			// tb_Goto
 			// 
@@ -820,18 +833,6 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
-			// 
-			// it_CopyToClipboard
-			// 
-			this.it_CopyToClipboard.Enabled = false;
-			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(155, 22);
-			this.it_CopyToClipboard.Text = "copy to clipboard";
-			// 
-			// toolStripSeparator5
-			// 
-			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
 			// 
 			// YataForm
 			// 

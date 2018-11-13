@@ -1121,6 +1121,8 @@ namespace yata
 
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
+			DrawingControl.SuspendDrawing(Table);
+
 			Table.Changed = true;
 
 			int sel = Table.getSelectedRow();
@@ -1128,7 +1130,12 @@ namespace yata
 				sel = Table.RowCount;
 
 			for (int i = 0; i != _copy.Count; ++i)
-				Table.Insert(sel++, _copy[i]);
+				Table.Insert(sel++, _copy[i], true);
+
+			Table.InitScrollers();
+			Table.EnsureDisplayedRow(sel - 1);
+
+			DrawingControl.ResumeDrawing(Table);
 		}
 
 		void editclick_OutputCopy(object sender, EventArgs e)
