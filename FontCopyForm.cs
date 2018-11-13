@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class FontCopyForm
+	sealed partial class FontCopyForm
 		:
 			Form
 	{

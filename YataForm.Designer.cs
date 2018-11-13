@@ -87,6 +87,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
+		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -140,6 +141,7 @@
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -361,7 +363,8 @@
 			this.it_PasteRange,
 			this.toolStripSeparator5,
 			this.it_CopyToClipboard,
-			this.it_CopyFromClipboard});
+			this.it_CopyFromClipboard,
+			this.it_ViewClipboardContents});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
@@ -445,6 +448,13 @@
 			this.it_CopyFromClipboard.Size = new System.Drawing.Size(190, 22);
 			this.it_CopyFromClipboard.Text = "import clipboard to copy";
 			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
+			// 
+			// it_ViewClipboardContents
+			// 
+			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
+			this.it_ViewClipboardContents.Size = new System.Drawing.Size(190, 22);
+			this.it_ViewClipboardContents.Text = "view clipboard contents";
+			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
 			// 
 			// tb_Goto
 			// 

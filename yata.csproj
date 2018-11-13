@@ -69,6 +69,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClipboardEditor.cs" />
+    <Compile Include="ClipboardEditor.Designer.cs">
+      <DependentUpon>ClipboardEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="CraftInfo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
@@ -103,6 +107,9 @@
     <Compile Include="YataPanels.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ClipboardEditor.resx">
+      <DependentUpon>ClipboardEditor.Designer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FontPickerForm.resx">
       <DependentUpon>FontPickerForm.Designer.cs</DependentUpon>
     </EmbeddedResource>

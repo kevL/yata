@@ -999,7 +999,7 @@ namespace yata
 			}
 
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
-			it_CopyFromClipboard.Enabled = (Clipboard.ContainsText(TextDataFormat.Text));
+			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
 		}
 
 		/// <summary>
@@ -1160,7 +1160,7 @@ namespace yata
 				if (i != _copy.Count - 1)
 					clip += Environment.NewLine;
 			}
-			Clipboard.SetText(clip);
+			ClipboardHelper.SetText(clip);
 		}
 
 		/// <summary>
@@ -1173,12 +1173,27 @@ namespace yata
 			_copy.Clear();
 
 			string clip = Clipboard.GetText(TextDataFormat.Text);
-			string[] lines = clip.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-			for (int i = 0; i != lines.Length; ++i)
+			if (!String.IsNullOrEmpty(clip))
 			{
-				string[] fields = YataGrid.Parse2daRow(lines[i]);
-				_copy.Add(fields);
+				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
+				for (int i = 0; i != lines.Length; ++i)
+				{
+					string[] fields = YataGrid.Parse2daRow(lines[i]);
+					_copy.Add(fields);
+				}
 			}
+		}
+
+		/// <summary>
+		/// Displays contents of the clipboard (if text) in an editable
+		/// output-box.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_ViewClipboard(object sender, EventArgs e)
+		{
+			var f = new ClipboardEditor(this);
+			f.Show();
 		}
 		#endregion Edit menu
 
