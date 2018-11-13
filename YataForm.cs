@@ -17,6 +17,9 @@ namespace yata
 			Form
 	{
 		#region Fields & Properties
+		internal static YataForm Instant
+		{ get; private set; }
+
 		YataGrid Table
 		{ get; set; }
 
@@ -61,6 +64,8 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
+
+			Instant = this;
 
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
@@ -657,31 +662,34 @@ namespace yata
 
 		#region Context menu
 		int _r;
+		internal int _range;
 
 		internal void context_(object sender, MouseEventArgs e)
 		{
 			_r = (e.Y + Table.offsetVert) / Table.HeightRow;
+			if (_r < Table.RowCount)
+			{
+				Table._editor.Visible = false;
 
-			Table._editor.Visible = false;
+				Table.ClearSelects();
 
-			Table.ClearSelects();
+				Row row = Table.Rows[_r];
+				row.selected = true;
+				for (int c = 0; c != Table.ColCount; ++c)
+					row.cells[c].selected = true;
 
-			Row row = Table.Rows[_r];
-			row.selected = true;
-			for (int c = 0; c != Table.ColCount; ++c)
-				row.cells[c].selected = true;
+				Table.EnsureDisplayedRow(_r);
+				Table.Refresh();
 
-			Table.EnsureDisplayedRow(_r);
-			Table.Refresh();
+				context_it_Header.Text = "_row @ id " + _r;
 
-			context_it_Header.Text = "_row @ id " + _r;
+				context_it_PasteAbove.Enabled =
+				context_it_Paste     .Enabled =
+				context_it_PasteBelow.Enabled = (_copy.Count != 0);
 
-			context_it_PasteAbove.Enabled =
-			context_it_Paste     .Enabled =
-			context_it_PasteBelow.Enabled = (_copy.Count != 0);
-
-			contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
-												YataGrid.HeightColhead));
+				contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
+													YataGrid.HeightColhead));
+			}
 		}
 
 		void contextclick_EditCopy(object sender, EventArgs e)
@@ -968,7 +976,10 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening_GotoLoadchanged(object sender, EventArgs e)
 		{
-			bool vis = false;
+			it_GotoLoadchanged.Enabled =
+			it_CopyRange      .Enabled =
+			it_PasteRange     .Enabled = false;
+
 			if (Table != null && Table.RowCount != 0)
 			{
 				foreach (var row in Table.Rows)
@@ -977,13 +988,15 @@ namespace yata
 					{
 						if (row.cells[c].loadchanged)
 						{
-							vis = true;
+							it_GotoLoadchanged.Enabled = true;
 							break;
 						}
 					}
 				}
+
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && _range != 0);
+				it_PasteRange.Enabled = (_copy.Count > 1);
 			}
-			it_GotoLoadchanged.Enabled = vis;
 		}
 
 		/// <summary>
@@ -1074,6 +1087,52 @@ namespace yata
 					}
 				}
 			}
+		}
+
+		void editclick_CopyRange(object sender, EventArgs e)
+		{
+			_copy.Clear();
+
+			int sel = Table.getSelectedRow();
+
+			int r, stop;
+			if (_range > 0)
+			{
+				r = sel;
+				stop = sel + _range;
+			}
+			else
+			{
+				r = sel + _range;
+				stop = sel;
+			}
+
+			string[] fields;
+			while (r <= stop)
+			{
+				fields = new string[Table.ColCount];
+				for (int c = 0; c != Table.ColCount; ++c)
+					fields[c] = Table[r,c].text;
+
+				_copy.Add(fields);
+				++r;
+			}
+		}
+
+		void editclick_PasteRange(object sender, EventArgs e)
+		{
+			Table.Changed = true;
+
+			int sel = Table.getSelectedRow();
+			if (sel == -1)
+				sel = Table.RowCount;
+
+			for (int i = 0; i != _copy.Count; ++i)
+				Table.Insert(sel++, _copy[i]);
+		}
+
+		void editclick_OutputCopy(object sender, EventArgs e)
+		{
 		}
 		#endregion Edit menu
 

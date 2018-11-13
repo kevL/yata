@@ -59,7 +59,17 @@ namespace yata
 //		}
 
 		internal Brush _brush;
-		internal bool selected;
+
+		bool _selected;
+		internal bool selected
+		{
+			get { return _selected; }
+			set
+			{
+				_selected = value;
+				YataForm.Instant._range = 0;
+			}
+		}
 
 		internal Row(int id, int cols, Brush brush)
 		{

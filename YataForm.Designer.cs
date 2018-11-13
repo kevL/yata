@@ -81,6 +81,11 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem it_Goto;
 		private System.Windows.Forms.ToolStripMenuItem it_GotoLoadchanged;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripMenuItem it_CopyRange;
+		private System.Windows.Forms.ToolStripMenuItem it_PasteRange;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -128,6 +133,9 @@
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -178,6 +186,8 @@
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -269,7 +279,7 @@
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(152, 22);
+			this.it_Open.Size = new System.Drawing.Size(145, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -277,61 +287,61 @@
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(152, 22);
+			this.it_Reload.Size = new System.Drawing.Size(145, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// it_Folders
 			// 
 			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(152, 22);
+			this.it_Folders.Size = new System.Drawing.Size(145, 22);
 			this.it_Folders.Text = "Folders";
 			this.it_Folders.Visible = false;
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(149, 6);
+			this.separator_1.Size = new System.Drawing.Size(142, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(152, 22);
+			this.it_Save.Size = new System.Drawing.Size(145, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(152, 22);
+			this.it_SaveAs.Size = new System.Drawing.Size(145, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(152, 22);
+			this.it_Close.Size = new System.Drawing.Size(145, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_Close);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(145, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAll);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(149, 6);
+			this.separator_2.Size = new System.Drawing.Size(142, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(152, 22);
+			this.it_Quit.Size = new System.Drawing.Size(145, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
@@ -343,7 +353,12 @@
 			this.it_Findnext,
 			this.toolStripSeparator3,
 			this.it_Goto,
-			this.it_GotoLoadchanged});
+			this.it_GotoLoadchanged,
+			this.toolStripSeparator4,
+			this.it_CopyRange,
+			this.it_PasteRange,
+			this.toolStripSeparator5,
+			this.it_CopyToClipboard});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
@@ -353,7 +368,7 @@
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(150, 22);
+			this.it_Search.Size = new System.Drawing.Size(155, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -361,20 +376,20 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(150, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(155, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(152, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(150, 22);
+			this.it_Goto.Size = new System.Drawing.Size(155, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -382,9 +397,30 @@
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(150, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(155, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(152, 6);
+			// 
+			// it_CopyRange
+			// 
+			this.it_CopyRange.Enabled = false;
+			this.it_CopyRange.Name = "it_CopyRange";
+			this.it_CopyRange.Size = new System.Drawing.Size(155, 22);
+			this.it_CopyRange.Text = "copy range";
+			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
+			// 
+			// it_PasteRange
+			// 
+			this.it_PasteRange.Enabled = false;
+			this.it_PasteRange.Name = "it_PasteRange";
+			this.it_PasteRange.Size = new System.Drawing.Size(155, 22);
+			this.it_PasteRange.Text = "paste range";
+			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
 			// tb_Goto
 			// 
@@ -784,6 +820,18 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
+			// 
+			// it_CopyToClipboard
+			// 
+			this.it_CopyToClipboard.Enabled = false;
+			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(155, 22);
+			this.it_CopyToClipboard.Text = "copy to clipboard";
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
 			// 
 			// YataForm
 			// 

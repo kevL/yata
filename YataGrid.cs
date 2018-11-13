@@ -2163,10 +2163,11 @@ namespace yata
 				int r = (e.Y + offsetVert) / HeightRow;
 				var row = Rows[r];
 
-				bool select = false;
+				bool select;
 
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
 				{
+					select = false;
 					for (int c = 0; c != ColCount; ++c)
 					{
 						if (!row.cells[c].selected)
@@ -2188,6 +2189,8 @@ namespace yata
 					int sel = getSelectedRow();
 					if (sel != -1)
 					{
+						_f._range = (r - sel);
+
 						int start, stop;
 						if (sel < r)
 						{
@@ -2203,9 +2206,9 @@ namespace yata
 						Row ro;
 						while (start != stop + 1)
 						{
-							ro = Rows[start];
 							if (start != r) // done below
 							{
+								ro = Rows[start];
 								for (int c = 0; c != ColCount; ++c)
 									ro.cells[c].selected = true;
 							}
@@ -2235,7 +2238,7 @@ namespace yata
 			}
 		}
 
-		int getSelectedRow()
+		internal int getSelectedRow()
 		{
 			for (int r = 0; r != RowCount; ++r)
 			{
@@ -2305,9 +2308,10 @@ namespace yata
 						while (start != stop + 1)
 						{
 							if (start != c) // done below
-							for (int r = 0; r != RowCount; ++r)
-								Rows[r].cells[start].selected = true;
-
+							{
+								for (int r = 0; r != RowCount; ++r)
+									Rows[r].cells[start].selected = true;
+							}
 							++start;
 						}
 					}
@@ -2456,45 +2460,6 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(this);
 		}
-/*		internal void Insert(int id, IList<string> list)
-		{
-			DrawingControl.SuspendDrawing(this);
-
-			if (list != null)
-			{
-				Rows.Insert(id, new Row(id, ColCount, Brushes.Created));
-				++RowCount;
-
-				for (int c = 0; c != ColCount; ++c)
-					Rows[id].cells[c] = new Cell(id,c, list[c]);
-
-				for (int r = id + 1; r != RowCount; ++r)
-				{
-					++Rows[r]._id;
-					for (int c = 0; c != ColCount; ++c)
-						++Rows[r].cells[c].y;
-				}
-			}
-			else // delete 'id'
-			{
-				Rows.Remove(Rows[id]);
-				--RowCount;
-
-				for (int r = id; r != RowCount; ++r)
-				{
-					--Rows[r]._id;
-					for (int c = 0; c != ColCount; ++c)
-						--Rows[r].cells[c].y;
-				}
-			}
-
-			InitScrollers();
-
-			if (id < RowCount)
-				EnsureDisplayedRow(id);
-
-			DrawingControl.ResumeDrawing(this);
-		} */
 
 
 		#region Sort

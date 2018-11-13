@@ -181,12 +181,22 @@ namespace yata
 
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
-				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead, HeightRow); // NOTE: -1 is a padding tweak.
-
+				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
+																								//       (w)-1 accounts for the double vertical line
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
+
+					if (Rows[r].selected)
+					{
+						rect.X -= _padHoriRowhead;
+						graphics.FillRectangle(Brushes.CellSel, rect);
+						rect.X += _padHoriRowhead;
+
+						graphics.DrawLine(Pens.DarkLine, 0, rect.Y, WidthRowhead, rect.Y);
+						graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, WidthRowhead, rect.Y + HeightRow);
+					}
 
 					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 				}
