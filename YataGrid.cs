@@ -683,7 +683,7 @@ namespace yata
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
-		static string[] Parse2daRow(string line)
+		internal static string[] Parse2daRow(string line)
 		{
 			var list  = new List<string>();
 			var field = new List<char>();

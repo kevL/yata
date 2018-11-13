@@ -8,12 +8,12 @@ kevL's
 ver 2.1.0.0
 
 File
-- Open ...	: Ctrl+o
-- Reload	: Ctrl+r
+- Open ... : Ctrl+o
+- Reload   : Ctrl+r
 - Folders (presets for the Open ... dialog - does not appear if no presets have
   been set)
 
-- Save			: Ctrl+s
+- Save : Ctrl+s
 - Save As ...
 - Close
 - Close all (this is a multi-tabbed application)
@@ -21,11 +21,20 @@ File
 - Quit : Ctrl+q
 
 Edit
-- Find		: Ctrl+f (focuses the Search box)
-- Find next	: F3
+- Find      : Ctrl+f (focuses the Search box)
+- Find next : F3
 
 - Goto : Ctrl+g (focuses the Goto box)
 - Goto loadchanged (See note on Load below)
+
+- copy range (copies a range of selected rows)
+- paste range (pastes a range of selected rows)
+
+- export copy to clipboard (exports the current copy-list to the clipboard)
+- import clipboard to copy (imports any clipboard-text to the current copy-list
+                            WARNING: No validity test is done on the clipboard
+                            text; importing assumes that the text on your
+                            clipboard contains valid 2da-row data)
 
 Goto box (type a row ID and press Enter)
 
@@ -42,9 +51,9 @@ Search options dropdown (substring or wholeword)
 
 - freeze 1st col : F5 (causes the first col after the ID to remain stationary)
 - freeze 2nd col : F6 (causes the first and second cols after the ID to remain
-				   stationary) One of those two cols typically contains the
-				   row's label - so by freezing it you can scroll to the right
-				   and still read what it is.
+                   stationary) One of those two cols typically contains the
+                   row's label - so by freezing it you can scroll to the right
+                   and still read what it is.
 
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
@@ -91,7 +100,7 @@ Enter - starts editing a cell if the table has focus and only one cell is
 mouse:
 wheel - scrolls up/down if the vertical scrollbar is visible
       - scrolls left/right if the horizontal scrollbar is visible but the
-		vertical bar is not
+        vertical bar is not
 
 on the colheads or rowheads
 LMB - selects the col or row
@@ -117,23 +126,23 @@ Settings.Cfg file
 
 the following variables ought be respected:
 
-font=		a .NET string that represents the desired table-font (see 2da
-			Ops->current font string)
-font2=		a .NET string that represents a desired (usually smaller) font for
-			menus
-pathall=	a path without quotes to a valid directory to grope for 2da info
-			for Crafting.2da
-pathall=	another path for Crafting info
-pathall=	etc. (the first pathall has lowest priority and any info found will
-			be replaced by any info found in subsequent pathall directories;
-			there can be as many or as few pathall directories as you like)
-dirpreset=	a path without quotes to a valid directory for the Open ... dialog
-dirpreset=	another path for the Open ... dialog
-dirpreset=	etc. (there can be as many or as few dirpresets as you like)
-x=			(integer) the desired x-position to start the app on your monitor
-y=			(integer) the desired y-position to start the app on your monitor
-w=			(integer) the desired starting width of the app on your monitor
-h=			(integer) the desired starting height of the app on your monitor
+font=      a .NET string that represents the desired table-font (see 2da
+           Ops->current font string)
+font2=     a .NET string that represents a desired (usually smaller) font for
+           menus
+pathall=   a path without quotes to a valid directory to grope for 2da info
+           for Crafting.2da
+pathall=   another path for Crafting info
+pathall=   etc. (the first pathall has lowest priority and any info found will
+           be replaced by any info found in subsequent pathall directories;
+           there can be as many or as few pathall directories as you like)
+dirpreset= a path without quotes to a valid directory for the Open ... dialog
+dirpreset= another path for the Open ... dialog
+dirpreset= etc. (there can be as many or as few dirpresets as you like)
+x=         (integer) the desired x-position to start the app on your monitor
+y=         (integer) the desired y-position to start the app on your monitor
+w=         (integer) the desired starting width of the app on your monitor
+h=         (integer) the desired starting height of the app on your monitor
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).
@@ -146,18 +155,33 @@ mind and can show stuff like Encoded IPs as readable strings on the statusbar.)
 Appendix A: note on Load
 
 Yata is pretty strict when loading a 2da file. If it detects anything awkward it
-lets the user know and it will try to automatically fix cell-fields. Such cells
-ought appear highlighted with pink - these are called "loadchanged" cells, since
-they were changed when the 2da loaded. An option under the Editmenu can cycle
-through these cells if there are any, for your review and or manual corrections.
+lets the user know and will try to automatically fix cell-fields. Such cells
+should then appear highlighted with pink - these are called "loadchanged" cells,
+since they were changed when the 2da was loaded. An option under the Editmenu
+can cycle through these cells if there are any, for your review and or manual
+corrections.
 
 Double-quote marks that are out of place can play havoc with loading a 2da. Yata
-is pretty strict with them when either loading a 2da or editing a cell. For
-example it will go so far as to replace two adjacent double-quotes with "****"
-(without quotes). If you find issues that Yata doesn't deal well with it's
-suggested that you close the file in Yata and try to fix it in a text-editor (or
-a different 2da-editor).
+is pretty strict with double-quotes when either loading a 2da or editing a cell.
+For example it will go so far as to replace two adjacent double-quotes with
+"****" (without quotes). If you find issues that Yata doesn't deal well with
+it's suggested that you close the file in Yata and try to fix it in a
+text-editor (or a different 2da-editor).
 
 Further, the only way to edit the ID col is with 2da Ops "order row ids". And if
 you've chosen to Freeze the 1st or 2nd col, those cells can't be edited until
 Freeze is turned back off.
+
+
+Appendix B: copy/paste range
+
+To copy a range of rows there first has to be a selected row (as indicated with
+a green field at the far left of a row) and then the Shift key must be used to
+select a range of rows. (Using the Control key to select multiple rows does not
+work for this.)
+
+A range of copied rows can be pasted/inserted at a currently selected row (as
+indicated with a green field at the far left of a row) or to the end of the
+table if there is not a currently selected row. Pasting a range does not
+overwrite any currently selected row(s) - it rather inserts the copy-range,
+starting at a selected row.

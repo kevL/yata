@@ -86,6 +86,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PasteRange;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
+		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -138,6 +139,7 @@
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -358,17 +360,18 @@
 			this.it_CopyRange,
 			this.it_PasteRange,
 			this.toolStripSeparator5,
-			this.it_CopyToClipboard});
+			this.it_CopyToClipboard,
+			this.it_CopyFromClipboard});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
-			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening_GotoLoadchanged);
+			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening_EnableItems);
 			// 
 			// it_Search
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(155, 22);
+			this.it_Search.Size = new System.Drawing.Size(190, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -376,20 +379,20 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(155, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(190, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(152, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(155, 22);
+			this.it_Goto.Size = new System.Drawing.Size(190, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -397,20 +400,20 @@
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(155, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(190, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(152, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_CopyRange
 			// 
 			this.it_CopyRange.Enabled = false;
 			this.it_CopyRange.Name = "it_CopyRange";
-			this.it_CopyRange.Size = new System.Drawing.Size(155, 22);
+			this.it_CopyRange.Size = new System.Drawing.Size(190, 22);
 			this.it_CopyRange.Text = "copy range";
 			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
 			// 
@@ -418,22 +421,30 @@
 			// 
 			this.it_PasteRange.Enabled = false;
 			this.it_PasteRange.Name = "it_PasteRange";
-			this.it_PasteRange.Size = new System.Drawing.Size(155, 22);
+			this.it_PasteRange.Size = new System.Drawing.Size(190, 22);
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_CopyToClipboard
 			// 
 			this.it_CopyToClipboard.Enabled = false;
 			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(155, 22);
-			this.it_CopyToClipboard.Text = "copy to clipboard";
-			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_OutputCopy);
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(190, 22);
+			this.it_CopyToClipboard.Text = "export copy to clipboard";
+			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
+			// 
+			// it_CopyFromClipboard
+			// 
+			this.it_CopyFromClipboard.Enabled = false;
+			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
+			this.it_CopyFromClipboard.Size = new System.Drawing.Size(190, 22);
+			this.it_CopyFromClipboard.Text = "import clipboard to copy";
+			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
 			// 
 			// tb_Goto
 			// 

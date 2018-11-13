@@ -969,12 +969,12 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles opening the EditMenu, determines if GotoLoadchanged ought
-		/// be enabled.
+		/// Handles opening the EditMenu, determines if various items ought be
+		/// enabled.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void edit_dropdownopening_GotoLoadchanged(object sender, EventArgs e)
+		void edit_dropdownopening_EnableItems(object sender, EventArgs e)
 		{
 			it_GotoLoadchanged.Enabled =
 			it_CopyRange      .Enabled =
@@ -997,6 +997,9 @@ namespace yata
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && _range != 0);
 				it_PasteRange.Enabled = (_copy.Count > 1);
 			}
+
+			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
+			it_CopyFromClipboard.Enabled = (Clipboard.ContainsText(TextDataFormat.Text));
 		}
 
 		/// <summary>
@@ -1138,8 +1141,44 @@ namespace yata
 			DrawingControl.ResumeDrawing(Table);
 		}
 
-		void editclick_OutputCopy(object sender, EventArgs e)
+		/// <summary>
+		/// Outputs the current contents of '_copy' to the Windows clipboard.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_ExportCopy(object sender, EventArgs e)
 		{
+			string clip = String.Empty;
+			for (int i = 0; i != _copy.Count; ++i)
+			{
+				for (int j = 0; j != _copy[i].Length; ++j)
+				{
+					if (j != 0) clip += " ";
+					clip += _copy[i][j];
+				}
+
+				if (i != _copy.Count - 1)
+					clip += Environment.NewLine;
+			}
+			Clipboard.SetText(clip);
+		}
+
+		/// <summary>
+		/// Imports the current contents of the Windows clipboard to '_copy'.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_ImportCopy(object sender, EventArgs e)
+		{
+			_copy.Clear();
+
+			string clip = Clipboard.GetText(TextDataFormat.Text);
+			string[] lines = clip.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+			for (int i = 0; i != lines.Length; ++i)
+			{
+				string[] fields = YataGrid.Parse2daRow(lines[i]);
+				_copy.Add(fields);
+			}
 		}
 		#endregion Edit menu
 
