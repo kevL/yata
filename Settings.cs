@@ -21,6 +21,8 @@ namespace yata
 		internal static int _w = -1;
 		internal static int _h = -1;
 
+		internal static bool _strict;
+
 
 		internal static void ScanSettings()
 		{
@@ -118,6 +120,11 @@ namespace yata
 							{
 								_h = result;
 							}
+						}
+						else if (line.StartsWith("strict=", StringComparison.InvariantCulture))
+						{
+							_strict = (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
+								   && line == "true");
 						}
 					}
 				}

@@ -534,58 +534,8 @@ namespace yata
 							}
 						}
 
-						// test for matching double-quote characters on the fly
-						// NOTE: Do this after the table loads so that any cells
-						// that are affected can be flagged as 'loadchanged'.
-/*						if (!ignoreErrors)
-						{
-							bool quoteFirst, quoteLast;
-							int col = -1;
-							foreach (string cell in cells)
-							{
-								++col;
-								quoteFirst = cell.StartsWith("\"", StringComparison.InvariantCulture);
-								quoteLast  = cell.EndsWith(  "\"", StringComparison.InvariantCulture);
-								if (   ( quoteFirst && !quoteLast)
-									|| (!quoteFirst &&  quoteLast))
-								{
-									string error = "Found a missing double-quote character."
-												 + Environment.NewLine + Environment.NewLine
-												 + Fullpath
-												 + Environment.NewLine + Environment.NewLine
-												 + "id " + id + " / col " + col;
-									switch (ShowLoadError(error))
-									{
-										case DialogResult.Abort:
-											return false;
-										case DialogResult.Retry:
-											break;
-										case DialogResult.Ignore:
-											ignoreErrors = true;
-											break;
-									}
-								}
-								else if (quoteFirst && quoteLast
-									&& cell.Length == 1)
-								{
-									string error = "Found an isolated double-quote character."
-												 + Environment.NewLine + Environment.NewLine
-												 + Fullpath
-												 + Environment.NewLine + Environment.NewLine
-												 + "id " + id + " / col " + col;
-									switch (ShowLoadError(error))
-									{
-										case DialogResult.Abort:
-											return false;
-										case DialogResult.Retry:
-											break;
-										case DialogResult.Ignore:
-											ignoreErrors = true;
-											break;
-									}
-								}
-							}
-						} */
+						// NOTE: Tests for well-formed fields will be done later so that their
+						// respective cells can be flagged as 'loadchanged' (if applicable).
 
 						_rows.Add(cells);
 					}
@@ -615,7 +565,7 @@ namespace yata
 				}
 				else if (i == VALUETYPE)
 				{
-					if (!ignoreErrors && !String.IsNullOrEmpty(line)) // test for blank 2nd line
+					if (!ignoreErrors && Settings._strict && !String.IsNullOrEmpty(line)) // test for blank 2nd line
 					{
 						string error = "The 2nd line in the 2da should be blank."
 									 + Environment.NewLine
@@ -636,7 +586,7 @@ namespace yata
 				}
 				else //if (lineId == HEADERS) // test version header
 				{
-					if (line != "2DA V2.0") // && st != "2DA	V2.0") // 2DA	V2.0 <- uh yeah right
+					if (line != "2DA V2.0" && (Settings._strict || line != "2DA\tV2.0"))
 					{
 						string error = "The 2da-file contains an incorrect version header."
 									 + Environment.NewLine
@@ -1257,7 +1207,7 @@ namespace yata
 							}
 						}
 						else if (_visVert)
-							_scrollVert.Value = HeightTable - Height + ((_visHori) ? _scrollHori.Height : 0);
+							_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
 					}
 					else if (sel != null)
 					{
@@ -1272,7 +1222,7 @@ namespace yata
 					}
 					else if (_visHori)
 					{
-						_scrollHori.Value = WidthTable - Width + ((_visVert) ? _scrollVert.Width : 0);
+						_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
 					}
 					break;
 

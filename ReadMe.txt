@@ -143,6 +143,7 @@ x=         (integer) the desired x-position to start the app on your monitor
 y=         (integer) the desired y-position to start the app on your monitor
 w=         (integer) the desired starting width of the app on your monitor
 h=         (integer) the desired starting height of the app on your monitor
+strict=    "true" to show extra warnings when loading a 2da file
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).

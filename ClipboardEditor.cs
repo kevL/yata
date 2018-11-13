@@ -15,6 +15,7 @@ namespace yata
 		{
 			InitializeComponent();
 
+			Font.Dispose();
 			Font = f.Font;
 
 			Left = f.Left + 20;
