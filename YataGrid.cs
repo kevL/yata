@@ -2227,12 +2227,24 @@ namespace yata
 
 				int left = getLeft();
 				int c = FrozenCount - 1;
-				do { if (++c == ColCount) return; }
+				do
+				{
+					if (++c == ColCount)
+					{
+						// NOTE: Clearing the selected col is confusing
+						// without clearing all cells in the col also.
+//						int selc = getSelectedCol();
+//						if (selc != -1)
+//							Cols[selc].selected = false;
+
+						return;
+					}
+				}
 				while ((left += Cols[c].width()) < x);
 
 				bool select = false;
 
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // Shift always selects
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
 				{
 					for (int r = 0; r != RowCount; ++r)
 					{
@@ -2252,19 +2264,19 @@ namespace yata
 
 				if ((ModifierKeys & Keys.Shift) == Keys.Shift)
 				{
-					int sel = getSelectedCol();
-					if (sel != -1)
+					int selc = getSelectedCol();
+					if (selc != -1)
 					{
 						int start, stop;
-						if (sel < c)
+						if (selc < c)
 						{
-							start = sel;
+							start = selc;
 							stop  = c;
 						}
 						else
 						{
 							start = c;
-							stop  = sel;
+							stop  = selc;
 						}
 
 						while (start != stop + 1)
@@ -2305,7 +2317,19 @@ namespace yata
 	
 					int left = getLeft();
 					int c = FrozenCount - 1;
-					do { if (++c == ColCount) return; }
+					do
+					{
+						if (++c == ColCount)
+						{
+							// NOTE: Clearing the selected col is confusing
+							// without clearing all cells in the col also.
+//							int selc = getSelectedCol();
+//							if (selc != -1)
+//								Cols[selc].selected = false;
+
+							return;
+						}
+					}
 					while ((left += Cols[c].width()) < x);
 
 					ColSort(c);
