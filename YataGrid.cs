@@ -1501,8 +1501,11 @@ namespace yata
 		/// <param name="e"></param>
 		void leave_Editor(object sender, EventArgs e)
 		{
-			_editor.Visible = false;
-			Refresh();
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
 		}
 
 		/// <summary>
@@ -1650,7 +1653,7 @@ namespace yata
 				if (test == Constants.Stars)
 				{
 					_editor.Text = Constants.Stars;
-					changed = true;
+					return true;
 				}
 			}
 
@@ -1836,7 +1839,7 @@ namespace yata
 		/// </summary>
 		void EditCell()
 		{
-			var rect = getCellRectangle(_editcell);
+			var rect = getCellRectangle(_editcell); // align the editbox over the text ->
 			_editor.Left   = rect.X + 6;
 			_editor.Top    = rect.Y + 4;
 			_editor.Width  = rect.Width - 7;
@@ -1854,6 +1857,9 @@ namespace yata
 				_editor.SelectionStart = _editor.Text.Length;
 		}
 
+		/// <summary>
+		/// Clears all cells that are currently selected.
+		/// </summary>
 		internal void ClearCellSelects()
 		{
 			foreach (var row in Rows)
@@ -1863,6 +1869,9 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Clears all rows and cells that are currently selected.
+		/// </summary>
 		internal void ClearSelects()
 		{
 			foreach (var row in Rows)
@@ -1874,6 +1883,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Handles mouse-movement over the grid - prints coordinates and info
+		/// to the statusbar.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			if (!_init)
@@ -1897,6 +1911,12 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Handles timer ticks - clears statusbar coordinates and info when the
+		/// mouse-cursor leaves the grid. (MouseLeave is unreliable.)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void t1_Tick(object sender, EventArgs e)
 		{
 			if (!_init && _f.Tabs.TabCount != 0 && _f.Tabs.SelectedTab.Tag == this) // required for CloseAll ...

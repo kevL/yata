@@ -369,7 +369,7 @@ namespace yata
 								  YataGraphics.flags);
 		}
 
-		void fileclick_Close(object sender, EventArgs e)
+		void fileclick_CloseTab(object sender, EventArgs e)
 		{
 			if (Table != null
 				&& (!Table.Changed
@@ -389,7 +389,7 @@ namespace yata
 			}
 		}
 
-		void fileclick_CloseAll(object sender, EventArgs e)
+		void fileclick_CloseAllTabs(object sender, EventArgs e)
 		{
 			bool close = true;
 
@@ -433,7 +433,8 @@ namespace yata
 		{
 			if (Tabs.TabPages.Count == 1)
 			{
-				e.Cancel = MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+				e.Cancel = Table.Changed
+						&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 										   "warning",
 										   MessageBoxButtons.YesNo,
 										   MessageBoxIcon.Warning,
@@ -505,7 +506,7 @@ namespace yata
 					Table.Init(true);
 				}
 				else
-					fileclick_Close(null, EventArgs.Empty);
+					fileclick_CloseTab(null, EventArgs.Empty);
 
 				if (Tabs.TabCount != 0)
 					ShowColorPanel(false);
@@ -1978,15 +1979,15 @@ namespace yata
 		/// <param name="e"></param>
 		void tabclick_Close(object sender, EventArgs e)
 		{
-			fileclick_Close(null, EventArgs.Empty);
+			fileclick_CloseTab(null, EventArgs.Empty);
 		}
 
 		void tabclick_CloseAll(object sender, EventArgs e)
 		{
-			fileclick_CloseAll(null, EventArgs.Empty);
+			fileclick_CloseAllTabs(null, EventArgs.Empty);
 		}
 
-		void tabclick_CloseAllOthers(object sender, EventArgs e)
+		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
 		{
 			bool close = true;
 

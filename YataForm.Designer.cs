@@ -330,14 +330,14 @@
 			this.it_Close.Name = "it_Close";
 			this.it_Close.Size = new System.Drawing.Size(145, 22);
 			this.it_Close.Text = "Close";
-			this.it_Close.Click += new System.EventHandler(this.fileclick_Close);
+			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
 			this.it_CloseAll.Size = new System.Drawing.Size(145, 22);
 			this.it_CloseAll.Text = "Close all";
-			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAll);
+			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
 			// 
@@ -864,7 +864,7 @@
 			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(152, 22);
 			this.it_tabCloseAllOthers.Text = "Close all others";
 			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOthers);
+			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
 			// 
 			// YataForm
 			// 
