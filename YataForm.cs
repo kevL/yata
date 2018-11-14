@@ -50,6 +50,14 @@ namespace yata
 		{
 			InitializeComponent();
 
+//			DrawingControl.SetDoubleBuffered(this);
+//			DoubleBuffered = true;
+
+//			SetStyle(ControlStyles.OptimizedDoubleBuffer
+//				   | ControlStyles.AllPaintingInWmPaint
+//				   | ControlStyles.UserPaint
+//				   | ControlStyles.ResizeRedraw, true);
+
 			// IMPORTANT: The Client-area apart from the Menubar and Statusbar
 			// has both a TabControl and a solid-colored Panel that *overlay*
 			// each other and fill the area. The Panel is on top and is used
@@ -201,6 +209,15 @@ namespace yata
 		#endregion Methods (static)
 
 
+		internal void ShowColorPanel(bool vis = true)
+		{
+			if (vis)
+				panel_ColorFill.Show();
+			else
+				panel_ColorFill.Hide();
+		}
+
+
 		#region File menu
 		void fileclick_Open(object sender, EventArgs e)
 		{
@@ -217,7 +234,6 @@ namespace yata
 			}
 		}
 
-
 		/// <summary>
 		/// IMPORTANT: Assumes 'pfe' is VALID.
 		/// </summary>
@@ -226,15 +242,15 @@ namespace yata
 		{
 			//logfile.Log("CreateTabPage()");
 
-			panel_ColorFill.Show();
-
-			Enabled = false;
+			ShowColorPanel();
 
 			var table = new YataGrid(this, pfe);
 
 			if (table.Load2da())
 			{
 				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+
+				DrawingControl.SuspendDrawing(Table);
 
 				var tab = new TabPage();
 				Tabs.TabPages.Add(tab);
@@ -249,10 +265,8 @@ namespace yata
 
 				Table.Init();
 
-				//DrawingControl.ResumeDrawing(table);
+				DrawingControl.ResumeDrawing(Table);
 			}
-
-			Enabled = true;
 
 			tab_SelectedIndexChanged(null, EventArgs.Empty);
 		}
@@ -271,7 +285,7 @@ namespace yata
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
-				panel_ColorFill.Hide();
+				ShowColorPanel(false);
 
 				it_MenuPaths.Visible = Table.Craft;
 
@@ -280,7 +294,7 @@ namespace yata
 			}
 			else
 			{
-				panel_ColorFill.Show();
+				ShowColorPanel();
 
 				it_MenuPaths.Visible = false;
 
@@ -468,7 +482,8 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				panel_ColorFill.Show();
+				ShowColorPanel();
+				DrawingControl.SuspendDrawing(Table);
 
 				if (Table.Load2da())
 				{
@@ -476,14 +491,14 @@ namespace yata
 					it_freeze2.Checked = false;
 
 					Table.Init(true);
-
-//					DrawingControl.ResumeDrawing(Table);
 				}
 				else
 					fileclick_Close(null, EventArgs.Empty);
 
 				if (Tabs.TabCount != 0)
-					panel_ColorFill.Hide();
+					ShowColorPanel(false);
+
+				DrawingControl.ResumeDrawing(Table);
 			}
 			// TODO: Show an error if file no longer exists.
 		}
@@ -1099,48 +1114,50 @@ namespace yata
 		{
 			_copy.Clear();
 
-			int sel = Table.getSelectedRow();
+			int selr = Table.getSelectedRow();
 
-			int r, stop;
+			int top, bot;
 			if (_range > 0)
 			{
-				r = sel;
-				stop = sel + _range;
+				top = selr;
+				bot = selr + _range;
 			}
 			else
 			{
-				r = sel + _range;
-				stop = sel;
+				top = selr + _range;
+				bot = selr;
 			}
 
 			string[] fields;
-			while (r <= stop)
+			while (top <= bot)
 			{
 				fields = new string[Table.ColCount];
 				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = Table[r,c].text;
+					fields[c] = Table[top,c].text;
 
 				_copy.Add(fields);
-				++r;
+				++top;
 			}
 		}
 
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
+			ShowColorPanel();
 			DrawingControl.SuspendDrawing(Table);
 
 			Table.Changed = true;
 
-			int sel = Table.getSelectedRow();
-			if (sel == -1)
-				sel = Table.RowCount;
+			int selr = Table.getSelectedRow();
+			if (selr == -1)
+				selr = Table.RowCount;
 
 			for (int i = 0; i != _copy.Count; ++i)
-				Table.Insert(sel++, _copy[i], true);
+				Table.Insert(selr++, _copy[i], true);
 
 			Table.InitScrollers();
-			Table.EnsureDisplayedRow(sel - 1);
+			Table.EnsureDisplayedRow(selr - 1);
 
+			ShowColorPanel(false);
 			DrawingControl.ResumeDrawing(Table);
 		}
 
@@ -1438,7 +1455,7 @@ namespace yata
 		/// <param name="font"></param>
 		internal void doFont(Font font)
 		{
-			DrawingControl.SuspendDrawing(this);
+			ShowColorPanel();
 
 			// NOTE: Cf f.AutoScaleMode (None,Font,DPI,Inherit)
 			// Since I'm doing all the necessary scaling due to font-changes
@@ -1454,6 +1471,8 @@ namespace yata
 
 			if (Table != null)
 			{
+				DrawingControl.SuspendDrawing(Table);
+
 				SetTabSize();
 
 				YataGrid table;
@@ -1483,9 +1502,11 @@ namespace yata
 					if (table.EnsureDisplayedCellOrRow())
 						table.Refresh(); // for big tables ...
 				}
+
+				DrawingControl.ResumeDrawing(Table);
 			}
 
-			DrawingControl.ResumeDrawing(this);
+			ShowColorPanel(false);
 		}
 		#endregion Font menu
 
@@ -1964,7 +1985,7 @@ namespace yata
 
 		internal void TableChanged(bool changed)
 		{
-			DrawingControl.SuspendDrawing(this);
+			DrawingControl.SuspendDrawing(this); // stops tab-flickering on Sort
 
 			string asterisk = changed ? " *"
 									  : "";

@@ -720,9 +720,6 @@ namespace yata
 			}
 
 
-//			DrawingControl.SuspendDrawing(this);	// NOTE: Drawing resumes after autosize in either
-													// YataForm.CreateTabPage() or YataForm.ReloadToolStripMenuItemClick().
-
 			_panelCols = new YataPanelCols(this);
 			_panelRows = new YataPanelRows(this);
 
@@ -1130,6 +1127,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			//logfile.Log("OnKeyDown()");
+
 			Cell sel = GetOnlySelectedCell();
 			int selr = getSelectedRow();
 
@@ -1426,6 +1425,10 @@ namespace yata
 				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
 					ClearSelects();
 					break;
+
+				case Keys.Delete:
+					Delete();
+					break;
 			}
 
 			Refresh();
@@ -1433,6 +1436,41 @@ namespace yata
 //			e.Handled = true;
 //			base.OnKeyDown(e);
 //			Input.SetFlag(e.KeyCode);
+		}
+
+		void Delete()
+		{
+			int selr = getSelectedRow();
+			if (selr != -1)
+			{
+				_f.ShowColorPanel();
+				DrawingControl.SuspendDrawing(this);
+
+				Changed = true;
+
+				int bot,top;
+				if (_f._range > 0)
+				{
+					top = selr;
+					bot = selr + _f._range;
+				}
+				else
+				{
+					top = selr + _f._range;
+					bot = selr;
+				}
+
+				while (bot >= top)
+					Insert(bot--, null, true);
+
+				InitScrollers();
+
+				if (selr < RowCount)
+					EnsureDisplayedRow(selr);
+
+				_f.ShowColorPanel(false);
+				DrawingControl.ResumeDrawing(this);
+			}
 		}
 
 
@@ -1466,7 +1504,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles ending editing a cell by pressing Enter or Tab - this fires
-		/// during edit.
+		/// during edit or so.
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
