@@ -88,6 +88,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
+		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -192,6 +193,7 @@
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -220,15 +222,16 @@
 			// 
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_tabClose,
-			this.it_tabCloseAll});
+			this.it_tabCloseAll,
+			this.it_tabCloseAllOthers});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(116, 48);
+			this.tabMenu.Size = new System.Drawing.Size(153, 92);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(115, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -236,7 +239,7 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(115, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
@@ -854,6 +857,14 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
+			// 
+			// it_tabCloseAllOthers
+			// 
+			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
+			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAllOthers.Text = "Close all others";
+			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOthers);
 			// 
 			// YataForm
 			// 

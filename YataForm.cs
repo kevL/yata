@@ -455,20 +455,21 @@ namespace yata
 		/// <summary>
 		/// Returns a list of currently loaded tables that have been modified.
 		/// </summary>
+		/// <param name="excludecurrent">true to exclude the current Table</param>
 		/// <returns></returns>
-		List<string> GetChangedTables()
+		List<string> GetChangedTables(bool excludecurrent = true)
 		{
-			var changed = new List<string>();
+			var tables = new List<string>();
 
 			foreach (TabPage page in Tabs.TabPages)
 			{
 				var table = page.Tag as YataGrid;
-				if (table != null && table.Changed)
+				if (table.Changed && (!excludecurrent || table != Table))
 				{
-					changed.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
+					tables.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
 				}
 			}
-			return changed;
+			return tables;
 		}
 
 
@@ -1974,7 +1975,47 @@ namespace yata
 			fileclick_CloseAll(null, EventArgs.Empty);
 		}
 
-		// TODO: Close all others
+		void tabclick_CloseAllOthers(object sender, EventArgs e)
+		{
+			bool close = true;
+
+			var tables = GetChangedTables(true);
+			if (tables.Count != 0)
+			{
+				string info = String.Empty;
+				foreach (string table in tables)
+				{
+					info += table + Environment.NewLine;
+				}
+
+				close = MessageBox.Show("Data has changed."
+										+ Environment.NewLine + Environment.NewLine
+										+ info
+										+ Environment.NewLine
+										+ "Okay to exit ...",
+										"warning",
+										MessageBoxButtons.YesNo,
+										MessageBoxIcon.Warning,
+										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+			}
+
+			if (close)
+			{
+				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
+
+				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+				{
+					if (tab != Tabs.SelectedIndex)
+						Tabs.TabPages.Remove(Tabs.TabPages[tab]);
+				}
+
+				SetTabSize();
+				SetTitlebarText();
+
+				DrawingControl.ResumeDrawing(this);
+			}
+		}
+
 		// TODO: Reload
 		// TODO: Quit
 		// TODO: FreezeFirst/Second
