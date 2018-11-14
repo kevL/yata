@@ -893,13 +893,14 @@ namespace yata
 
 			Size size;
 			int w, wT, hT;
+			int wId = YataGraphics.MeasureWidth(Cols[0].text, _f.FontAccent) + _padHoriRowhead * 2; // min width per col/cell is "id"
 
 			for (int c = 0; c != ColCount; ++c)
 			{
-				w = 20; // cellwidth.
+				w = wId;
 				for (int r = 0; r != RowCount; ++r)
 				{
-					size = YataGraphics.MeasureSize(Rows[r].cells[c].text, Font);
+					size = YataGraphics.MeasureSize(this[r,c].text, Font);
 
 					hT = size.Height + _padVert * 2;
 					if (hT > HeightRow) HeightRow = hT;
