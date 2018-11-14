@@ -426,29 +426,40 @@ namespace yata
 
 		void fileclick_Quit(object sender, EventArgs e)
 		{
-			Close(); // let MainFormFormClosing() handle it ...
+			Close(); // let yata_Closing() handle it ...
 		}
 
 		void yata_Closing(object sender, CancelEventArgs e)
 		{
-			var tables = GetChangedTables();
-			if (tables.Count != 0)
+			if (Tabs.TabPages.Count == 1)
 			{
-				string info = String.Empty;
-				foreach (string table in tables)
-				{
-					info += table + Environment.NewLine;
-				}
-
-				e.Cancel = MessageBox.Show("Data has changed."
-										   + Environment.NewLine + Environment.NewLine
-										   + info
-										   + Environment.NewLine
-										   + "Okay to exit ...",
+				e.Cancel = MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
 										   "warning",
 										   MessageBoxButtons.YesNo,
 										   MessageBoxIcon.Warning,
 										   MessageBoxDefaultButton.Button2) == DialogResult.No;
+			}
+			else if (Tabs.TabPages.Count > 1)
+			{
+				var tables = GetChangedTables();
+				if (tables.Count != 0)
+				{
+					string info = String.Empty;
+					foreach (string table in tables)
+					{
+						info += table + Environment.NewLine;
+					}
+
+					e.Cancel = MessageBox.Show("Data has changed."
+											   + Environment.NewLine + Environment.NewLine
+											   + info
+											   + Environment.NewLine
+											   + "Okay to exit ...",
+											   "warning",
+											   MessageBoxButtons.YesNo,
+											   MessageBoxIcon.Warning,
+											   MessageBoxDefaultButton.Button2) == DialogResult.No;
+				}
 			}
 		}
 
@@ -457,7 +468,7 @@ namespace yata
 		/// </summary>
 		/// <param name="excludecurrent">true to exclude the current Table</param>
 		/// <returns></returns>
-		List<string> GetChangedTables(bool excludecurrent = true)
+		List<string> GetChangedTables(bool excludecurrent = false)
 		{
 			var tables = new List<string>();
 
