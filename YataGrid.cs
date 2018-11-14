@@ -143,6 +143,9 @@ namespace yata
 		int _sortcol;
 		int _sortdir = 1;
 
+		internal int RangeSelect
+		{ get; set; }
+
 //		BackgroundWorker _bgw = new BackgroundWorker();
 //		ProgBar _pb;
 
@@ -854,7 +857,7 @@ namespace yata
 					brush = (r % 2 == 0) ? Brushes.Alice
 										 : Brushes.Blanche;
 
-					Rows.Add(new Row(r, ColCount, brush));
+					Rows.Add(new Row(r, ColCount, brush, this));
 					for (int c = 0; c != ColCount; ++c)
 					{
 						if (c < _rows[r].Length)
@@ -1449,14 +1452,14 @@ namespace yata
 				Changed = true;
 
 				int bot,top;
-				if (_f._range > 0)
+				if (RangeSelect > 0)
 				{
 					top = selr;
-					bot = selr + _f._range;
+					bot = selr + RangeSelect;
 				}
 				else
 				{
-					top = selr + _f._range;
+					top = selr + RangeSelect;
 					bot = selr;
 				}
 
@@ -2179,7 +2182,7 @@ namespace yata
 						int selr = getSelectedRow();
 						if (selr != -1)
 						{
-							_f._range = (r - selr);
+							RangeSelect = (r - selr);
 
 							int start, stop;
 							if (selr < r)
@@ -2442,7 +2445,7 @@ namespace yata
 
 			if (fields != null)
 			{
-				row = new Row(id, ColCount, Brushes.Created);
+				row = new Row(id, ColCount, Brushes.Created, this);
 
 				string field;
 				for (int c = 0; c != ColCount; ++c)

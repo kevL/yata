@@ -48,6 +48,8 @@ namespace yata
 	{
 		internal int _id;
 
+		readonly YataGrid _grid;
+
 		internal Cell[] cells;
 //		/// <summary>
 //		/// Gets/sets the cell at pos [c].
@@ -67,14 +69,16 @@ namespace yata
 			set
 			{
 				_selected = value;
-				YataForm.Instant._range = 0;
+				_grid.RangeSelect = 0;
 			}
 		}
 
-		internal Row(int id, int cols, Brush brush)
+		internal Row(int id, int cols, Brush brush, YataGrid grid)
 		{
 			_id = id;
 			cells = new Cell[cols];
+
+			_grid = grid;
 
 			_brush = brush;
 		}

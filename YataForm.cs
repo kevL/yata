@@ -17,8 +17,8 @@ namespace yata
 			Form
 	{
 		#region Fields & Properties
-		internal static YataForm Instant
-		{ get; private set; }
+//		internal static YataForm Instant
+//		{ get; private set; }
 
 		YataGrid Table
 		{ get; set; }
@@ -73,7 +73,7 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
-			Instant = this;
+//			Instant = this;
 
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
@@ -677,7 +677,6 @@ namespace yata
 
 		#region Context menu
 		int _r;
-		internal int _range;
 
 		internal void context_(int r)
 		{
@@ -1012,7 +1011,7 @@ namespace yata
 					}
 				}
 
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && _range != 0);
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
 				it_PasteRange.Enabled = (_copy.Count > 1);
 			}
 
@@ -1116,15 +1115,15 @@ namespace yata
 
 			int selr = Table.getSelectedRow();
 
-			int top, bot;
-			if (_range > 0)
+			int top,bot;
+			if (Table.RangeSelect > 0)
 			{
 				top = selr;
-				bot = selr + _range;
+				bot = selr + Table.RangeSelect;
 			}
 			else
 			{
-				top = selr + _range;
+				top = selr + Table.RangeSelect;
 				bot = selr;
 			}
 
