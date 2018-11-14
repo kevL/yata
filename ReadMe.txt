@@ -96,6 +96,10 @@ Enter - starts editing a cell if the table has focus and only one cell is
       - commits an edit if the editor box has focus
       - performs search if the Search box or Search Options dropdown has focus
 
+Delete - when a row is selected (as indicated with a green field at the far left
+of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
+or below the selected row, to select a range of rows to delete.
+
 
 mouse:
 wheel - scrolls up/down if the vertical scrollbar is visible
