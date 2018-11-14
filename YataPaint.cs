@@ -24,7 +24,7 @@ namespace yata
 
 //			if (ColCount != 0 && RowCount != 0 && _cells != null)
 
-			if (!_init)
+			if (!_init && RowCount != 0)
 			{
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
