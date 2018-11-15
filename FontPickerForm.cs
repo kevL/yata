@@ -34,6 +34,8 @@ namespace yata
 
 		static int _x = -1;
 		static int _y = -1;
+		static int _w = -1;
+		static int _h = -1;
 
 
 			/// <summary>
@@ -52,6 +54,9 @@ namespace yata
 
 			Left = _x;
 			Top  = _y;
+
+			if (_w != -1) Width  = _w;
+			if (_h != -1) Height = _h;
 
 
 			int fontStart  = -1; // for showing the start-font's characteristics
@@ -179,6 +184,8 @@ namespace yata
 
 			_x = Left;
 			_y = Top;
+			_w = Width;
+			_h = Height;
 
 			if (lbl_Example.Font != null)
 				lbl_Example.Font.Dispose();

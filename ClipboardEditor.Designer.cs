@@ -88,6 +88,7 @@
 			this.Name = "ClipboardEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Yata - Clipboard editor";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 

@@ -8,6 +8,12 @@ namespace yata
 		:
 			Form
 	{
+		static int _x = -1;
+		static int _y = -1;
+		static int _w = -1;
+		static int _h = -1;
+
+
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -20,8 +26,14 @@ namespace yata
 			// TODO: controls are not resizing per Font correctly.
 			// See FontCopyForm ... vid. AutoScaleMode=
 
-			Left = f.Left + 20;
-			Top  = f.Top  + 20;
+			if (_x == -1) _x = f.Left + 20;
+			if (_y == -1) _y = f.Top  + 20;
+
+			Left = _x;
+			Top  = _y;
+
+			if (_w != -1) Width  = _w;
+			if (_h != -1) Height = _h;
 
 			click_Get(null, EventArgs.Empty);
 		}
@@ -37,6 +49,15 @@ namespace yata
 		void click_Set(object sender, EventArgs e)
 		{
 			ClipboardHelper.SetText(rtb_Text.Text.Replace("\n", Environment.NewLine).Trim());
+		}
+
+
+		void OnClosing(object sender, FormClosingEventArgs e)
+		{
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
 		}
 	}
 
