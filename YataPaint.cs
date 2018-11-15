@@ -171,7 +171,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Labels the rowheads when inserting/deleting/sorting rows.
+		/// Labels the rowheads.
 		/// @note Called by OnPaint of the left-panel.
 		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
@@ -183,19 +183,36 @@ namespace yata
 			{
 				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
 																								//       (w)-1 accounts for the double vertical line
+
+				int selr = getSelectedRow();
+				Brush brush;
+
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					if (Rows[r].selected)
+					if (selr != -1)
 					{
-						rect.X -= _padHoriRowhead;
-						graphics.FillRectangle(Brushes.CellSel, rect);
-						rect.X += _padHoriRowhead;
+						brush = null;
 
-						graphics.DrawLine(Pens.DarkLine, 0, rect.Y, WidthRowhead, rect.Y);
-						graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, WidthRowhead, rect.Y + HeightRow);
+						if (r == selr)
+							brush = Brushes.CellSel;
+						else if ((r < selr && r >= selr + RangeSelect)
+							||   (r > selr && r <= selr + RangeSelect))
+						{
+							brush = Brushes.RowFlag;
+						}
+
+						if (brush != null)
+						{
+							rect.X -= _padHoriRowhead;
+							graphics.FillRectangle(brush, rect);
+							rect.X += _padHoriRowhead;
+
+							graphics.DrawLine(Pens.DarkLine, 0, rect.Y, WidthRowhead, rect.Y);
+							graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, WidthRowhead, rect.Y + HeightRow);
+						}
 					}
 
 					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, Colors.Text, YataGraphics.flags);

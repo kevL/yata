@@ -20,7 +20,7 @@ namespace yata
 //		internal static YataForm Instant
 //		{ get; private set; }
 
-		YataGrid Table
+		static YataGrid Table // there can be only 1 Table.
 		{ get; set; }
 
 		List<string[]> _copy = new List<string[]>();

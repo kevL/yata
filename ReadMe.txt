@@ -35,6 +35,9 @@ Edit
                             WARNING: No validity test is done on the clipboard
                             text; importing assumes that the text on your
                             clipboard contains valid 2da-row data)
+- view clipboard contents  (accesses the Windows Clipboard for viewing or
+                            editing)
+
 
 Goto box (type a row ID and press Enter)
 
@@ -190,3 +193,43 @@ indicated with a green field at the far left of a row) or to the end of the
 table if there is not a currently selected row. Pasting a range does not
 overwrite any currently selected row(s) - it rather inserts the copy-range,
 starting at a selected row.
+
+
+Appendix C: edit operations on rows
+
+Since editing by row(s) is not intuitive I should say a few words here.
+
+Edits that involve only one row ought be straightforward; right-click on the
+row at the far left and a popup will appear, and that row will be selected. All
+edit-operations that are possible on a single row are shown on the popup.
+
+Edits that involve more than one row are more complicated. First you need to get
+familiar with these facts: (a) only one row can ever be currently selected (as
+indicated with a green field at the far left of that row), (b) to flag multiple
+rows for copying (or deleting w/ the Delete key) hold down Shift and click at
+the far left of another row (Control will not work for this, although such
+row(s)'s cells would appear to be selected; a row of selected cells is *not*
+necessarily a selected or flagged row!), (c) to copy a range of rows (a selected
+row along with its flagged rows) choose "copy range" on the Edit menu.
+
+Currently flagged rows are indicated with a pale green field at the far left of
+their rows.
+
+Copying rows does not use the Windows Clipboard. The copy of such data is
+instead maintained internally by Yata. If you want this data on the Clipboard
+for whatever reason choose "export copy to clipboard" on the Edit menu. To get
+data that's on the Clipboard back into Yata's internal format choose "import
+clipboard to copy" on the Edit menu - but be warned that such data from the
+Clipboard is not checked and could be garbage as far as a 2da is concerned, so
+it's up to you to decide whether or not to proceed at that point. The contents
+of the Clipboard can be viewed and edited by choosing "view clipboard contents"
+on the Edit menu.
+
+Once a range of rows has been copied it can be pasted into a table by choosing
+"paste range" on the Edit menu. Its first row will be pasted at the currently
+selected row, pushing that row along with all following rows down such that they
+appear beneath the range that is pasted. Note that pasting rows never replaces
+any row(s). To replace rows with a copied range of rows, use paste, re-select,
+then delete or vice versa. And to paste rows after the last row, choose "paste
+range" without having a currently selected row - pressing the Escape key will
+clear all selections of rows and cells.
