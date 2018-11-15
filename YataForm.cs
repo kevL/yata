@@ -1467,7 +1467,8 @@ namespace yata
 		/// <param name="font"></param>
 		internal void doFont(Font font)
 		{
-			ShowColorPanel();
+			if (Table != null)
+				ShowColorPanel();
 
 			// NOTE: Cf f.AutoScaleMode (None,Font,DPI,Inherit)
 			// Since I'm doing all the necessary scaling due to font-changes
@@ -1518,7 +1519,8 @@ namespace yata
 				DrawingControl.ResumeDrawing(Table);
 			}
 
-			ShowColorPanel(false);
+			if (Table != null)
+				ShowColorPanel(false);
 		}
 		#endregion Font menu
 

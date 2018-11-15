@@ -15,11 +15,15 @@ namespace yata
 		{
 			InitializeComponent();
 
-			Font.Dispose();
-			Font = f.Font;
+			Font = f.Font; // NOTE: font is *not* inherited from YataForm. Cf FontCopyForm ...
+
+			// TODO: controls are not resizing per Font correctly.
+			// See FontCopyForm ... vid. AutoScaleMode=
 
 			Left = f.Left + 20;
 			Top  = f.Top  + 20;
+
+			click_Get(null, EventArgs.Empty);
 		}
 
 
