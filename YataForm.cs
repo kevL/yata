@@ -217,6 +217,15 @@ namespace yata
 				panel_ColorFill.Hide();
 		}
 
+		void dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				Table._editor.Visible = false;
+				Refresh();
+			}
+		}
+
 
 		#region File menu
 		void fileclick_Open(object sender, EventArgs e)
@@ -638,6 +647,9 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening_FolderPresets(object sender, EventArgs e)
 		{
+			if (Table != null)
+				Table._editor.Visible = false;
+
 			if (_presets.Count != 0)
 			{
 				var itDelete = new List<ToolStripItem>();
@@ -1006,6 +1018,9 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening_EnableItems(object sender, EventArgs e)
 		{
+			if (Table != null)
+				Table._editor.Visible = false;
+
 			it_GotoLoadchanged.Enabled =
 			it_CopyRange      .Enabled =
 			it_PasteRange     .Enabled = false;
@@ -1491,14 +1506,14 @@ namespace yata
 			{
 				DrawingControl.SuspendDrawing(Table);
 
+				YataGrid.SetMinCellWidth(FontAccent);
+
 				SetTabSize();
 
 				YataGrid table;
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
-					//logfile.Log(Path.GetFileNameWithoutExtension(table.Pfe));
-
 					table.Calibrate();
 
 					// TODO: This is effed because the Height (at least) of each

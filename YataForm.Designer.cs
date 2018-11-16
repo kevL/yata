@@ -513,6 +513,7 @@
 			this.it_MenuOptions.Name = "it_MenuOptions";
 			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
 			this.it_MenuOptions.Text = "2da Ops";
+			this.it_MenuOptions.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_RenumberRows
 			// 
@@ -578,6 +579,7 @@
 			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
 			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fontToolStripMenuItem.Text = "Font";
+			this.fontToolStripMenuItem.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_Font
 			// 
@@ -623,6 +625,7 @@
 			this.it_MenuPaths.Size = new System.Drawing.Size(42, 20);
 			this.it_MenuPaths.Text = "Paths";
 			this.it_MenuPaths.Visible = false;
+			this.it_MenuPaths.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_PathAll
 			// 

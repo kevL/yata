@@ -67,6 +67,8 @@ namespace yata
 		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
 		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
 
+		static int _wid; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
+
 
 		internal bool Craft
 		{ get; set; }
@@ -199,6 +201,10 @@ namespace yata
 
 			Controls.Add(_editor);
 
+			Leave += leave_Grid;
+
+
+			SetMinCellWidth(_f.FontAccent);
 
 //			_bgw.DoWork             += bgw_DoWork;
 //			_bgw.ProgressChanged    += bgw_ProgressChanged;
@@ -209,6 +215,11 @@ namespace yata
 //			_pb = new ProgBar(_f);
 		}
 
+
+		internal static void SetMinCellWidth(Font font)
+		{
+			_wid = YataGraphics.MeasureWidth("id", font) + _padHoriRowhead * 2;
+		}
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
@@ -819,7 +830,7 @@ namespace yata
 
 			Size size;
 			int h; c = 0;
-			foreach (string head in Fields)
+			foreach (string head in Fields) // colheads only.
 			{
 				++c; // start at col 1 - skip id col
 
@@ -895,11 +906,10 @@ namespace yata
 
 			Size size;
 			int w, wT, hT;
-			int wId = YataGraphics.MeasureWidth(Cols[0].text, _f.FontAccent) + _padHoriRowhead * 2;	// min width per col/cell is "id"
-																									// NOTE: That is *not* the rowhead.
+
 			for (int c = 0; c != ColCount; ++c)
 			{
-				w = wId;
+				w = _wid;
 				for (int r = 0; r != RowCount; ++r)
 				{
 					size = YataGraphics.MeasureSize(this[r,c].text, Font);
@@ -909,7 +919,6 @@ namespace yata
 					if (hT > HeightRow) HeightRow = hT;
 
 					wT = size.Width + _padHori * 2;
-//					if (r == 0) wT += _padHoriSort;
 					if (wT > w) w = wT;
 
 //					_pb.Step();
@@ -1513,6 +1522,12 @@ namespace yata
 			}
 		}
 
+		void leave_Grid(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			Refresh();
+		}
+
 		/// <summary>
 		/// Handles ending editing a cell by pressing Enter or Tab - this fires
 		/// during edit or so.
@@ -1589,17 +1604,23 @@ namespace yata
 				this[r,c]._widthtext = wT;
 				if (wT > w) w = wT;
 			}
+			w += _padHori * 2;
 
 			int width = Cols[c].width();
-
-			w += _padHori * 2;
 			if (w > width)
 			{
 				Cols[c].width(w);
 			}
 			else if (w < width) // recalc width on the entire col
 			{
-				w = Cols[c]._widthtext + _padHori * 2 + _padHoriSort;
+				if (c == 0)
+					w = _wid;
+				else
+				{
+					w = Cols[c]._widthtext + _padHori * 2 + _padHoriSort;
+					if (_wid > w) w = _wid;
+				}
+
 				for (r = 0; r != RowCount; ++r)
 				{
 					wT = this[r,c]._widthtext + _padHori * 2;
