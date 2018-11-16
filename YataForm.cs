@@ -1166,7 +1166,8 @@ namespace yata
 			for (int i = 0; i != _copy.Count; ++i)
 				Table.Insert(selr++, _copy[i], true);
 
-			Table.InitScrollers();
+//			Table.InitScrollers();
+			Table.Calibrate();
 			Table.EnsureDisplayedRow(selr - 1);
 
 			ShowColorPanel(false);
@@ -1362,15 +1363,19 @@ namespace yata
 			}
 		}
 
-		// 'it_AutoCols'
-		// "autosize cols"
-		// NOTE: If an item is disabled w/ Visible=false then keypress
-		// navigation arrows cause unexpected behavior.
-/*		internal void opsclick_AutosizeCols(object sender, EventArgs e)
+		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
-//			if (Table != null)
-//				Table.AutoResizeColumns();
-		} */
+			if (Table != null)
+			{
+				ShowColorPanel();
+				DrawingControl.SuspendDrawing(Table);
+
+				Table.Calibrate();
+
+				ShowColorPanel(false);
+				DrawingControl.ResumeDrawing(Table);
+			}
+		}
 
 
 		void opsclick_Freeze1stCol(object sender, EventArgs e)

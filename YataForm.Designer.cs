@@ -89,6 +89,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
+		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -118,6 +119,7 @@
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,6 +153,7 @@
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -193,7 +196,6 @@
 			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -225,13 +227,13 @@
 			this.it_tabCloseAll,
 			this.it_tabCloseAllOthers});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(153, 92);
+			this.tabMenu.Size = new System.Drawing.Size(151, 70);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(150, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -239,10 +241,18 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(150, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
+			// 
+			// it_tabCloseAllOthers
+			// 
+			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
+			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(150, 22);
+			this.it_tabCloseAllOthers.Text = "Close all others";
+			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
 			// 
 			// menubar
 			// 
@@ -495,6 +505,7 @@
 			this.it_CheckRows,
 			this.toolStripSeparator1,
 			this.it_RecolorRows,
+			this.it_AutoCols,
 			this.toolStripSeparator2,
 			this.it_freeze1,
 			this.it_freeze2});
@@ -528,6 +539,13 @@
 			this.it_RecolorRows.Size = new System.Drawing.Size(155, 22);
 			this.it_RecolorRows.Text = "recolor rows";
 			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
+			// 
+			// it_AutoCols
+			// 
+			this.it_AutoCols.Name = "it_AutoCols";
+			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
+			this.it_AutoCols.Text = "autosize cols";
+			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// toolStripSeparator2
 			// 
@@ -857,14 +875,6 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
-			// 
-			// it_tabCloseAllOthers
-			// 
-			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
-			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(152, 22);
-			this.it_tabCloseAllOthers.Text = "Close all others";
-			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
 			// 
 			// YataForm
 			// 

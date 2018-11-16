@@ -1467,7 +1467,8 @@ namespace yata
 				while (bot >= top)
 					Insert(bot--, null, true);
 
-				InitScrollers();
+//				InitScrollers();
+				Calibrate();
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
@@ -2513,7 +2514,8 @@ namespace yata
 
 			if (!range)
 			{
-				InitScrollers();
+//				InitScrollers();
+				Calibrate();
 
 				if (id < RowCount)
 					EnsureDisplayedRow(id);

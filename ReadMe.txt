@@ -51,6 +51,7 @@ Search options dropdown (substring or wholeword)
 - recolor rows (tables show with alternating row-colors. When rows are inserted/
   deleted or sorted the colors go out of sync. to aid understanding of what just
   happened. The "recolor rows" operation makes row-colors alternate as usual)
+- autosize cols (recalculates width of all cols)
 
 - freeze 1st col : F5 (causes the first col after the ID to remain stationary)
 - freeze 2nd col : F6 (causes the first and second cols after the ID to remain
@@ -150,7 +151,7 @@ x=         (integer) the desired x-position to start the app on your monitor
 y=         (integer) the desired y-position to start the app on your monitor
 w=         (integer) the desired starting width of the app on your monitor
 h=         (integer) the desired starting height of the app on your monitor
-strict=    "true" to show extra warnings when loading a 2da file
+strict=    "true" to show extra warnings when loading a 2da file (default false)
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).
