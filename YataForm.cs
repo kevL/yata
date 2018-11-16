@@ -648,7 +648,10 @@ namespace yata
 		void file_dropdownopening_FolderPresets(object sender, EventArgs e)
 		{
 			if (Table != null)
+			{
 				Table._editor.Visible = false;
+				Refresh();
+			}
 
 			if (_presets.Count != 0)
 			{
@@ -1019,7 +1022,10 @@ namespace yata
 		void edit_dropdownopening_EnableItems(object sender, EventArgs e)
 		{
 			if (Table != null)
+			{
 				Table._editor.Visible = false;
+				Refresh();
+			}
 
 			it_GotoLoadchanged.Enabled =
 			it_CopyRange      .Enabled =
@@ -1179,10 +1185,9 @@ namespace yata
 				selr = Table.RowCount;
 
 			for (int i = 0; i != _copy.Count; ++i)
-				Table.Insert(selr++, _copy[i], true);
+				Table.Insert(selr++, _copy[i], false);
 
-//			Table.InitScrollers();
-			Table.Calibrate();
+			Table.Calibrate(selr, _copy.Count - 1); // paste range
 			Table.EnsureDisplayedRow(selr - 1);
 
 			ShowColorPanel(false);
@@ -1385,7 +1390,7 @@ namespace yata
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
-				Table.Calibrate();
+				Table.Calibrate(0, Table.RowCount - 1); // autosize
 
 				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
@@ -1514,7 +1519,7 @@ namespace yata
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
-					table.Calibrate();
+					table.Calibrate(0, Table.RowCount - 1); // font
 
 					// TODO: This is effed because the Height (at least) of each
 					// table is not well-defined by .NET - OnResize() for the

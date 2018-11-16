@@ -126,8 +126,8 @@ namespace yata
 					_editor.Visible =
 					sel.selected    = false;
 
-					if (ColCount > FrozenCount - 1)
-						Rows[sel.y].cells[FrozenCount].selected = true;
+					if (ColCount >= FrozenCount)
+						this[sel.y, FrozenCount].selected = true;
 
 					Refresh();
 				}
@@ -762,9 +762,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Redimensions everything when Font changes.
+		/// Re-layouts the table when Font changes or on Autosize cols or when
+		/// row(s) are inserted/deleted.
 		/// </summary>
-		internal void Calibrate()
+		/// <param name="r">first row to consider as changed</param>
+		/// <param name="range">range of rows to consider as changed (default 0
+		/// for single row)</param>
+		internal void Calibrate(int r, int range = 0)
 		{
 			//logfile.Log("Calibrate()");
 
@@ -772,25 +776,12 @@ namespace yata
 
 			_editor.Visible = false;
 
-			Controls.Remove(_panelCols);
-			Controls.Remove(_panelRows);
-			Controls.Remove(_panelFrozen);
+			for (int c = 0; c != ColCount; ++c)
+				colRewidth(c, r, range);
 
-			_panelCols = new YataPanelCols(this);
-			_panelRows = new YataPanelRows(this);
-
-			CreateCols(true);
-			CreateRows(true);
-
-			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
 			FrozenCount = FrozenCount; // refresh the Frozen panel
-			FrozenLabelsInit();
 
 			SetStaticHeads();
-
-			Controls.Add(_panelFrozen);
-			Controls.Add(_panelRows);
-			Controls.Add(_panelCols);
 
 
 			_scrollVert.LargeChange =
@@ -1454,6 +1445,9 @@ namespace yata
 //			Input.SetFlag(e.KeyCode);
 		}
 
+		/// <summary>
+		/// Deletes a single or multiple rows on keypress Delete.
+		/// </summary>
 		void Delete()
 		{
 			int selr = getSelectedRow();
@@ -1476,11 +1470,11 @@ namespace yata
 					bot = selr;
 				}
 
-				while (bot >= top)
-					Insert(bot--, null, true);
+				int iter = bot;
+				while (iter >= top)
+					Insert(iter--, null, false);
 
-//				InitScrollers();
-				Calibrate();
+				Calibrate(top, bot - top); // delete key
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
@@ -1591,8 +1585,9 @@ namespace yata
 		/// Resets the width of col based on the cells in rows r to r + range.
 		/// </summary>
 		/// <param name="c">col</param>
-		/// <param name="r">first row to consider</param>
-		/// <param name="range">range of rows to consider (default 0 for single row)</param>
+		/// <param name="r">first row to consider as changed</param>
+		/// <param name="range">range of rows to consider as changed (default 0
+		/// for single row)</param>
 		void colRewidth(int c, int r, int range = 0)
 		{
 			int w = 0, wT;
@@ -1629,7 +1624,7 @@ namespace yata
 				Cols[c].width(w, true);
 			}
 
-			if (w != width)
+			if (range == 0 && w != width) // if range >0 let Calibrate() handle multiple cols
 			{
 				InitScrollers();
 				Refresh(); // is required - and yet another Refresh() will follow ....
@@ -2509,10 +2504,10 @@ namespace yata
 		/// </summary>
 		/// <param name="id">row</param>
 		/// <param name="fields">null to delete the row</param>
-		/// <param name="range">true if inserting a range of rows</param>
-		internal void Insert(int id, string[] fields, bool range = false)
+		/// <param name="calibrate">true to re-layout the grid</param>
+		internal void Insert(int id, string[] fields, bool calibrate = true)
 		{
-			if (!range)
+			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
 
 			Row row;
@@ -2555,10 +2550,9 @@ namespace yata
 				}
 			}
 
-			if (!range)
+			if (calibrate) // is only 1 row (no range)
 			{
-//				InitScrollers();
-				Calibrate();
+				Calibrate(id); // insert()
 
 				if (id < RowCount)
 					EnsureDisplayedRow(id);
