@@ -1572,12 +1572,25 @@ namespace yata
 			}
 		}
 
-		void colRewidth(int c, int r1, int r2 = -1)
+		/// <summary>
+		/// Resets the width of col based on the cells in rows r to r + range.
+		/// </summary>
+		/// <param name="c">col</param>
+		/// <param name="r">first row to consider</param>
+		/// <param name="range">range of rows to consider (default 0 for single row)</param>
+		void colRewidth(int c, int r, int range = 0)
 		{
-			int width = Cols[c].width();
+			int w = 0, wT;
 
-			int w = YataGraphics.MeasureWidth(this[r1,c].text, Font);
-			this[r1,c]._widthtext = w;
+			int r1 = r + range;
+			for (; r <= r1; ++r)
+			{
+				wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+				this[r,c]._widthtext = wT;
+				if (wT > w) w = wT;
+			}
+
+			int width = Cols[c].width();
 
 			w += _padHori * 2;
 			if (w > width)
@@ -1587,8 +1600,7 @@ namespace yata
 			else if (w < width) // recalc width on the entire col
 			{
 				w = Cols[c]._widthtext + _padHori * 2 + _padHoriSort;
-				int wT;
-				for (int r = 0; r != RowCount; ++r)
+				for (r = 0; r != RowCount; ++r)
 				{
 					wT = this[r,c]._widthtext + _padHori * 2;
 					if (wT > w) w = wT;
