@@ -827,6 +827,8 @@ namespace yata
 					Cols[c].text = head;
 
 				size = YataGraphics.MeasureSize(head, _f.FontAccent);
+				Cols[c]._widthtext = size.Width;
+
 				Cols[c].width(size.Width + _padHori * 2 + _padHoriSort, calibrate);
 
 				h = size.Height + _padVert * 2;
@@ -871,7 +873,7 @@ namespace yata
 							stars = true;
 						}
 
-						cell = (Rows[r].cells[c] = new Cell(r,c, text));
+						cell = (this[r,c] = new Cell(r,c, text));
 						if (stars)
 						{
 							cell.loadchanged = true;
@@ -893,14 +895,15 @@ namespace yata
 
 			Size size;
 			int w, wT, hT;
-			int wId = YataGraphics.MeasureWidth(Cols[0].text, _f.FontAccent) + _padHoriRowhead * 2; // min width per col/cell is "id"
-
+			int wId = YataGraphics.MeasureWidth(Cols[0].text, _f.FontAccent) + _padHoriRowhead * 2;	// min width per col/cell is "id"
+																									// NOTE: That is *not* the rowhead.
 			for (int c = 0; c != ColCount; ++c)
 			{
 				w = wId;
 				for (int r = 0; r != RowCount; ++r)
 				{
 					size = YataGraphics.MeasureSize(this[r,c].text, Font);
+					this[r,c]._widthtext = size.Width;
 
 					hT = size.Height + _padVert * 2;
 					if (hT > HeightRow) HeightRow = hT;
@@ -1565,31 +1568,38 @@ namespace yata
 
 				_editcell.text = _editor.Text;
 
-				int c = _editcell.x;
-				int pre = Cols[c].width();
+				colRewidth(_editcell.x, _editcell.y);
+			}
+		}
 
-				int w = YataGraphics.MeasureWidth(_editcell.text, Font) + _padHori * 2;
-				if (w > pre)
-				{
-					Cols[c].width(w);
-				}
-				else if (w < pre) // recalc width on the entire col
-				{
-					w = YataGraphics.MeasureWidth(Cols[c].text, _f.FontAccent) + _padHori * 2 + _padHoriSort;
-					int wT;
-					for (int r = 0; r != RowCount; ++r)
-					{
-						wT = YataGraphics.MeasureWidth(Rows[r].cells[c].text, Font) + _padHori * 2;
-						if (wT > w) w = wT;
-					}
-					Cols[c].width(w, true);
-				}
+		void colRewidth(int c, int r1, int r2 = -1)
+		{
+			int width = Cols[c].width();
 
-				if (w != pre)
+			int w = YataGraphics.MeasureWidth(this[r1,c].text, Font);
+			this[r1,c]._widthtext = w;
+
+			w += _padHori * 2;
+			if (w > width)
+			{
+				Cols[c].width(w);
+			}
+			else if (w < width) // recalc width on the entire col
+			{
+				w = Cols[c]._widthtext + _padHori * 2 + _padHoriSort;
+				int wT;
+				for (int r = 0; r != RowCount; ++r)
 				{
-					InitScrollers();
-					Refresh(); // is required - and yet another Refresh() will follow ....
+					wT = this[r,c]._widthtext + _padHori * 2;
+					if (wT > w) w = wT;
 				}
+				Cols[c].width(w, true);
+			}
+
+			if (w != width)
+			{
+				InitScrollers();
+				Refresh(); // is required - and yet another Refresh() will follow ....
 			}
 		}
 

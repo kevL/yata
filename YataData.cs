@@ -13,6 +13,7 @@ namespace yata
 		internal bool selected;
 
 		int _width;
+		internal int _widthtext;
 
 		/// <summary>
 		/// Sets the width.
@@ -96,6 +97,8 @@ namespace yata
 
 		internal int x;
 		internal int y;
+
+		internal int _widthtext;
 
 		internal Cell(int r, int c, string field)
 		{
