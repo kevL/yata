@@ -90,6 +90,8 @@
 		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+		private System.Windows.Forms.ToolStripMenuItem it_tabReload;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -120,6 +122,8 @@
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -225,15 +229,17 @@
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_tabClose,
 			this.it_tabCloseAll,
-			this.it_tabCloseAllOthers});
+			this.it_tabCloseAllOthers,
+			this.toolStripSeparator6,
+			this.it_tabReload});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(151, 70);
+			this.tabMenu.Size = new System.Drawing.Size(153, 120);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(150, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -241,7 +247,7 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(150, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
@@ -249,10 +255,22 @@
 			// it_tabCloseAllOthers
 			// 
 			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
-			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(150, 22);
+			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(152, 22);
 			this.it_tabCloseAllOthers.Text = "Close all others";
 			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
+			// 
+			// toolStripSeparator6
+			// 
+			this.toolStripSeparator6.Name = "toolStripSeparator6";
+			this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+			// 
+			// it_tabReload
+			// 
+			this.it_tabReload.Name = "it_tabReload";
+			this.it_tabReload.Size = new System.Drawing.Size(152, 22);
+			this.it_tabReload.Text = "Reload";
+			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
 			// 
 			// menubar
 			// 

@@ -2055,7 +2055,11 @@ namespace yata
 			}
 		}
 
-		// TODO: Reload
+		void tabclick_Reload(object sender, EventArgs e)
+		{
+			fileclick_Reload(null, EventArgs.Empty);
+		}
+
 		// TODO: Quit
 		// TODO: FreezeFirst/Second
 		// TODO: etc ...
