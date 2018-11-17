@@ -510,10 +510,14 @@ namespace yata
 				else
 					fileclick_CloseTab(null, EventArgs.Empty);
 
-				if (Tabs.TabCount != 0)
-					ShowColorPanel(false);
+//				if (Tabs.TabCount != 0)
+//					ShowColorPanel(false);
 
-				DrawingControl.ResumeDrawing(Table);
+				if (Table != null)
+				{
+					ShowColorPanel(false);
+					DrawingControl.ResumeDrawing(Table);
+				}
 			}
 			// TODO: Show an error if file no longer exists.
 		}
@@ -1262,7 +1266,10 @@ namespace yata
 				}
 
 				Table.Changed |= changed;
-				// TODO: resize Rowhead panel's width
+				Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
+				Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
+				Table.FrozenLabelsSet(Table);
+				Table.InitScrollers();
 			}
 		}
 

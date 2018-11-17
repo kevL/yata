@@ -1081,6 +1081,7 @@ namespace yata
 		void SetStaticHeads()
 		{
 			//logfile.Log("SetStaticHeads()");
+			//logfile.Log(". WidthRowhead= " + WidthRowhead);
 
 			YataGrid table;
 
@@ -1104,6 +1105,7 @@ namespace yata
 			}
 
 			WidthRowhead = YataGraphics.MeasureWidth(text, _f.FontAccent) + _padHoriRowhead * 2;
+			//logfile.Log(". WidthRowhead= " + WidthRowhead);
 
 			for (tab = 0; tab != tabs; ++tab)
 			{
@@ -1113,14 +1115,14 @@ namespace yata
 				for (int c = 0; c != table.ColCount; ++c)
 					table.WidthTable += table.Cols[c].width();
 
-				table._panelCols.Height = HeightColhead;
 				table._panelRows.Width  = WidthRowhead;
+				table._panelCols.Height = HeightColhead;
 
 				FrozenLabelsSet(table);
 			}
 		}
 
-		void FrozenLabelsSet(YataGrid table)
+		internal void FrozenLabelsSet(YataGrid table)
 		{
 			if (table.ColCount != 0)
 			{
@@ -1630,7 +1632,7 @@ namespace yata
 		/// deleting rows)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
-		void colRewidth(int c, int r = -1, int range = 0)
+		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
 			//logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
 			int w = 0, wT;
