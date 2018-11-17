@@ -476,9 +476,16 @@ namespace yata
 			string[] lines = File.ReadAllLines(Fullpath);
 			string line = String.Empty;
 
-			for (int i = 0; i != lines.Length; ++i)
+			int total = lines.Length;
+			if (total < LABELS + 1) total = LABELS + 1;
+
+			for (int i = 0; i != total; ++i)
 			{
-				line = lines[i].Trim();
+				if (i < lines.Length)
+					line = lines[i].Trim();
+				else
+					line = String.Empty;
+
 				//logfile.Log(i + ": " + line);
 
 				if (i > LABELS)
@@ -501,6 +508,7 @@ namespace yata
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
+										_init = false;
 										return false;
 									case DialogResult.Retry:
 										break;
@@ -522,6 +530,7 @@ namespace yata
 							switch (ShowLoadError(error))
 							{
 								case DialogResult.Abort:
+									_init = false;
 									return false;
 								case DialogResult.Retry:
 									break;
@@ -551,6 +560,7 @@ namespace yata
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
+										_init = false;
 										return false;
 									case DialogResult.Retry:
 										break;
@@ -569,6 +579,19 @@ namespace yata
 				}
 				else if (i == LABELS)
 				{
+					if (String.IsNullOrEmpty(line))
+					{
+						MessageBox.Show("The 2da-file does not have any fields."
+										+ Environment.NewLine
+										+ "Yata requires that a file has at least one field on its 3rd line.",
+										"burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Error,
+										MessageBoxDefaultButton.Button1);
+						_init = false;
+						return false;
+					}
+
 					foreach (char character in line)
 					{
 						if (character == '"') // TODO: exactly what chars are allowed in the Headers
@@ -579,6 +602,7 @@ namespace yata
 							switch (ShowLoadError(error))
 							{
 								case DialogResult.Abort:
+									_init = false;
 									return false;
 								case DialogResult.Retry:
 									break;
@@ -602,6 +626,7 @@ namespace yata
 						switch (ShowLoadError(error))
 						{
 							case DialogResult.Abort:
+								_init = false;
 								return false;
 							case DialogResult.Retry:
 								break;
@@ -611,8 +636,21 @@ namespace yata
 						}
 					}
 				}
-				else //if (lineId == HEADERS) // test version header
+				else //if (i == HEADERS) // test version header
 				{
+					if (String.IsNullOrEmpty(line))
+					{
+						MessageBox.Show("The 2da-file does not have a header on its first line."
+										+ Environment.NewLine + Environment.NewLine
+										+ "2DA V2.0",
+										"burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Error,
+										MessageBoxDefaultButton.Button1);
+						_init = false;
+						return false;
+					}
+
 					if (line != "2DA V2.0" && (Settings._strict || line != "2DA\tV2.0"))
 					{
 						string error = "The 2da-file contains an incorrect version header."
@@ -623,6 +661,7 @@ namespace yata
 						switch (ShowLoadError(error))
 						{
 							case DialogResult.Abort:
+								_init = false;
 								return false;
 							case DialogResult.Retry:
 								break;
@@ -632,6 +671,15 @@ namespace yata
 						}
 					}
 				}
+			}
+
+			if (_rows.Count == 0) // add a row of stars if grid is blank ->
+			{
+				var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
+				for (int c = 0; c <= Fields.Length; ++c)
+					cells[c] = Constants.Stars;
+
+				_rows.Add(cells);
 			}
 
 			return true;
