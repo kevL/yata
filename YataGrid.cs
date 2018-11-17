@@ -32,7 +32,7 @@ namespace yata
 		internal static int HeightColhead;
 		internal static int WidthRowhead;
 
-		internal int HeightRow;
+		internal static int HeightRow;
 
 		internal int ColCount;
 		internal int RowCount;
@@ -162,8 +162,6 @@ namespace yata
 			//logfile.Log("YataGrid() cTor");
 
 //			DrawingControl.SetDoubleBuffered(this);
-//			DoubleBuffered = true;
-
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
 				   | ControlStyles.UserPaint
@@ -177,8 +175,16 @@ namespace yata
 			Dock = DockStyle.Fill;
 			BackColor = SystemColors.ControlDark;
 
+//			this.ProcessCmdKey();
+//			this.PreProcessMessage();
+//			this.ProcessDialogChar();
+//			this.ProcessDialogKey();
+//			this.ProcessKeyEventArgs();
+//			this.ProcessKeyMessage();
+//			this.PreProcessControlMessage();
 //			this.ProcessKeyPreview();
 //			this.OnPreviewKeyDown();
+			// and that's why .NET is fucko'd
 
 			_scrollVert.Dock = DockStyle.Right;
 			_scrollVert.ValueChanged += OnVertScrollValueChanged;
@@ -204,8 +210,6 @@ namespace yata
 			Leave += leave_Grid;
 
 
-			SetMinCellWidth(_f.FontAccent);
-
 //			_bgw.DoWork             += bgw_DoWork;
 //			_bgw.ProgressChanged    += bgw_ProgressChanged;
 //			_bgw.RunWorkerCompleted += bgw_RunWorkerCompleted;
@@ -216,10 +220,19 @@ namespace yata
 		}
 
 
-		internal static void SetMinCellWidth(Font font)
+		/// <summary>
+		/// Sets standard HeightColhead, HeightRow, and minimum cell width.
+		/// These values are the same for all loaded tables.
+		/// </summary>
+		/// <param name="f"></param>
+		internal static void SetStaticMetrics(YataForm f)
 		{
-			_wid = YataGraphics.MeasureWidth("id", font) + _padHoriRowhead * 2;
+			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.TEST, f.FontAccent) + _padVert * 2;
+			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.TEST, f.Font)       + _padVert * 2;
+
+			_wid = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
 		}
+
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
@@ -766,7 +779,7 @@ namespace yata
 		/// row(s) are inserted/deleted.
 		/// </summary>
 		/// <param name="r">first row to consider as changed (default -1 if
-		/// deleting rows)</param>
+		/// deleting rows or no row has been changed, ie. Font change)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
 		internal void Calibrate(int r = -1, int range = 0)
@@ -798,7 +811,7 @@ namespace yata
 		/// Creates the cols and caches the 2da's colhead data.
 		/// </summary>
 		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
-		void CreateCols(bool calibrate = false)
+		internal void CreateCols(bool calibrate = false)
 		{
 			//logfile.Log("CreateCols()");
 
@@ -814,14 +827,8 @@ namespace yata
 
 				Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
 			}
-			else
-			{
-				_panelCols.Height = 10; // reset
-				Cols[0].width(0, true); // reset
-			}
 
-			Size size;
-			int h; c = 0;
+			int w; c = 0;
 			foreach (string head in Fields) // colheads only.
 			{
 				++c; // start at col 1 - skip id col
@@ -829,64 +836,54 @@ namespace yata
 				if (!calibrate)
 					Cols[c].text = head;
 
-				size = YataGraphics.MeasureSize(head, _f.FontAccent);
-				Cols[c]._widthtext = size.Width;
+				w = YataGraphics.MeasureWidth(head, _f.FontAccent);
+				Cols[c]._widthtext = w;
 
-				Cols[c].width(size.Width + _padHori * 2 + _padHoriSort, calibrate);
-
-				h = size.Height + _padVert * 2;
-				if (h > _panelCols.Height)
-					_panelCols.Height = h;
+				Cols[c].width(w + _padHori * 2 + _padHoriSort, calibrate);
 			}
 		}
 
 		/// <summary>
 		/// Creates the rows and adds cells to each row.
 		/// </summary>
-		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
-		void CreateRows(bool calibrate = false)
+		void CreateRows()
 		{
 			//logfile.Log("CreateRows()");
 
-			if (!calibrate)
+			RowCount = _rows.Count;
+
+			Cell cell;
+			string text = String.Empty;
+			Brush brush;
+			bool stars;
+
+			for (int r = 0; r != RowCount; ++r)
 			{
-				RowCount = _rows.Count;
+				brush = (r % 2 == 0) ? Brushes.Alice
+									 : Brushes.Blanche;
 
-				Cell cell;
-				string text = String.Empty;
-				Brush brush;
-				bool stars;
-
-				for (int r = 0; r != RowCount; ++r)
+				Rows.Add(new Row(r, ColCount, brush, this));
+				for (int c = 0; c != ColCount; ++c)
 				{
-					brush = (r % 2 == 0) ? Brushes.Alice
-										 : Brushes.Blanche;
-
-					Rows.Add(new Row(r, ColCount, brush, this));
-					for (int c = 0; c != ColCount; ++c)
+					if (c < _rows[r].Length)
 					{
-						if (c < _rows[r].Length)
-						{
-							text = _rows[r][c];
-							stars = false;
-						}
-						else
-						{
-							text = Constants.Stars;
-							stars = true;
-						}
+						text = _rows[r][c];
+						stars = false;
+					}
+					else
+					{
+						text = Constants.Stars;
+						stars = true;
+					}
 
-						cell = (this[r,c] = new Cell(r,c, text));
-						if (stars)
-						{
-							cell.loadchanged = true;
-							Changed = true;
-						}
+					cell = (this[r,c] = new Cell(r,c, text));
+					if (stars)
+					{
+						cell.loadchanged = true;
+						Changed = true;
 					}
 				}
 			}
-			else
-				HeightRow = 0; // reset
 
 			_rows.Clear(); // done w/ '_rows'
 
@@ -896,21 +893,17 @@ namespace yata
 //			_pb.Show();
 //			_pb.Refresh();
 
-			Size size;
-			int w, wT, hT;
+			int w, wT;
 
 			for (int c = 0; c != ColCount; ++c)
 			{
 				w = _wid;
 				for (int r = 0; r != RowCount; ++r)
 				{
-					size = YataGraphics.MeasureSize(this[r,c].text, Font);
-					this[r,c]._widthtext = size.Width;
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					this[r,c]._widthtext = wT;
 
-					hT = size.Height + _padVert * 2;
-					if (hT > HeightRow) HeightRow = hT;
-
-					wT = size.Width + _padHori * 2;
+					wT += _padHori * 2;
 					if (wT > w) w = wT;
 
 //					_pb.Step();
@@ -1043,7 +1036,6 @@ namespace yata
 
 			YataGrid table;
 
-			int heightColhead = 10; // col-headers' height stays uniform across all tabpages
 			int rows = 0, rowsTest; // row-headers' width stays uniform across all tabpages
 
 			int tabs = _f.Tabs.TabCount;
@@ -1051,9 +1043,6 @@ namespace yata
 			for (; tab != tabs; ++tab)
 			{
 				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-				if (table._panelCols.Height > heightColhead)
-					heightColhead = table._panelCols.Height;
-
 				if ((rowsTest = table.RowCount - 1) > rows)
 					rows = rowsTest;
 			}
@@ -1066,7 +1055,6 @@ namespace yata
 				text += "9";
 			}
 
-			HeightColhead = heightColhead;
 			WidthRowhead = YataGraphics.MeasureWidth(text, _f.FontAccent) + _padHoriRowhead * 2;
 
 			for (tab = 0; tab != tabs; ++tab)
@@ -1884,7 +1872,7 @@ namespace yata
 		void EditCell()
 		{
 			var rect = getCellRectangle(_editcell); // align the editbox over the text ->
-			_editor.Left   = rect.X + 6;
+			_editor.Left   = rect.X + 5;
 			_editor.Top    = rect.Y + 4;
 			_editor.Width  = rect.Width - 7;
 			_editor.Height = rect.Height;

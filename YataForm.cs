@@ -17,8 +17,6 @@ namespace yata
 			Form
 	{
 		#region Fields & Properties
-//		internal static YataForm Instant
-//		{ get; private set; }
 
 		static YataGrid Table // there can be only 1 Table.
 		{ get; set; }
@@ -51,12 +49,10 @@ namespace yata
 			InitializeComponent();
 
 //			DrawingControl.SetDoubleBuffered(this);
-//			DoubleBuffered = true;
-
-//			SetStyle(ControlStyles.OptimizedDoubleBuffer
-//				   | ControlStyles.AllPaintingInWmPaint
-//				   | ControlStyles.UserPaint
-//				   | ControlStyles.ResizeRedraw, true);
+			SetStyle(ControlStyles.OptimizedDoubleBuffer
+				   | ControlStyles.AllPaintingInWmPaint
+				   | ControlStyles.UserPaint
+				   | ControlStyles.ResizeRedraw, true);
 
 			// IMPORTANT: The Client-area apart from the Menubar and Statusbar
 			// has both a TabControl and a solid-colored Panel that *overlay*
@@ -72,8 +68,6 @@ namespace yata
 			//
 			// The logfile ought appear in the directory with the executable.
 
-
-//			Instant = this;
 
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 
@@ -166,8 +160,7 @@ namespace yata
 			cb_SearchOption.SelectedIndex = 0;
 
 
-			// debug ->
-//			CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\baseitems.2da");
+			YataGrid.SetStaticMetrics(this);
 		}
 		#endregion cTor
 
@@ -1028,8 +1021,7 @@ namespace yata
 			}
 
 			it_GotoLoadchanged.Enabled =
-			it_CopyRange      .Enabled =
-			it_PasteRange     .Enabled = false;
+			it_CopyRange      .Enabled = false;
 
 			if (Table != null && Table.RowCount != 0)
 			{
@@ -1046,8 +1038,9 @@ namespace yata
 				}
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
-				it_PasteRange.Enabled = (_copy.Count > 1);
 			}
+
+			it_PasteRange.Enabled = (_copy.Count > 1);
 
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
@@ -1060,84 +1053,82 @@ namespace yata
 		/// this is given a hotkey then the item would have to be enabled when a
 		/// load-changed flag(s) is set and disabled/validity-checks need to
 		/// happen here or so.
+		/// @note Assumes Table is valid and that there are loadchanged cells.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-//			if (Table != null && Table.RowCount != 0)
+			Table._editor.Visible = false;
+			Table.Select();
+
+			Cell sel = Table.GetOnlySelectedCell();
+			Table.ClearSelects();
+
+			int row, r,c;
+			if (sel != null)
 			{
-				Table._editor.Visible = false;
-				Table.Select();
+				c   = sel.x;
+				row = sel.y;
+			}
+			else
+			{
+				c   = -1;
+				row =  0;
+			}
 
-				Cell sel = Table.GetOnlySelectedCell();
-				Table.ClearSelects();
+			bool start = true;
 
-				int row, r,c;
-				if (sel != null)
+			for (r = row; r != Table.RowCount; ++r)
+			{
+				if (start)
 				{
-					c   = sel.x;
-					row = sel.y;
-				}
-				else
-				{
-					c   = -1;
-					row =  0;
-				}
-
-				bool start = true;
-
-				for (r = row; r != Table.RowCount; ++r)
-				{
-					if (start)
-					{
-						start = false;
-						if (c == -1)
-							c = 0;
-						else
-							++c;
-
-						if (c == Table.ColCount)		// if starting on the last cell of a row
-						{
-							c = 0;
-
-							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-							{
-								++r;
-							}
-							else						// or to the top of the table if on the last row(s)
-								r = 0;
-						}
-					}
+					start = false;
+					if (c == -1)
+						c = 0;
 					else
+						++c;
+
+					if (c == Table.ColCount)		// if starting on the last cell of a row
+					{
 						c = 0;
 
-					for (; c != Table.ColCount; ++c)
-					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						if (r < Table.RowCount - 1)	// jump to the first cell of the next row
 						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Refresh();
-
-							return;
+							++r;
 						}
+						else						// or to the top of the table if on the last row(s)
+							r = 0;
 					}
 				}
+				else
+					c = 0;
 
-				// TODO: tighten exact start/end-cells
-				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				for (; c != Table.ColCount; ++c)
 				{
-					for (c = 0; c != Table.ColCount; ++c)
+					if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
-						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Refresh();
+						sel.selected = true;
+						Table.EnsureDisplayed(sel);
+						Table.Refresh();
 
-							return;
-						}
+						return;
+					}
+				}
+			}
+
+			// TODO: tighten exact start/end-cells
+			for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+			{
+				for (c = 0; c != Table.ColCount; ++c)
+				{
+					if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+					{
+						sel.selected = true;
+						Table.EnsureDisplayed(sel);
+						Table.Refresh();
+
+						return;
 					}
 				}
 			}
@@ -1253,6 +1244,30 @@ namespace yata
 
 
 		#region 2da Ops menu
+		void opsclick_Reorder(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0)
+			{
+				bool changed = false;
+
+				string val;
+				int result;
+
+				for (int r = 0; r != Table.RowCount; ++r)
+				{
+					if (String.IsNullOrEmpty(val = Table[r,0].text)
+						|| !Int32.TryParse(val, out result)
+						|| result != r)
+					{
+						Table[r,0].text = r.ToString();
+						changed = true;
+					}
+				}
+
+				Table.Changed |= changed;
+			}
+		}
+
 		void opsclick_CheckRowOrder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -1268,7 +1283,7 @@ namespace yata
 				{
 					if (String.IsNullOrEmpty(val = Table[id,0].text))
 					{
-						if (list.Count == 20) // stop this Madness
+						if (list.Count == 16) // stop this Madness
 						{
 							stop = true;
 							break;
@@ -1277,7 +1292,7 @@ namespace yata
 					}
 					else if (!Int32.TryParse(val, out result))
 					{
-						if (list.Count == 20)
+						if (list.Count == 16)
 						{
 							stop = true;
 							break;
@@ -1286,7 +1301,7 @@ namespace yata
 					}
 					else if (result != id)
 					{
-						if (list.Count == 20)
+						if (list.Count == 16)
 						{
 							stop = true;
 							break;
@@ -1306,7 +1321,7 @@ namespace yata
 					if (stop)
 					{
 						info += Environment.NewLine
-							  + "The check has been stopped at 20 borks.";
+							  + "The check has been stopped at 16 borks.";
 					}
 
 					info += Environment.NewLine + Environment.NewLine
@@ -1327,39 +1342,6 @@ namespace yata
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Information,
 									MessageBoxDefaultButton.Button1);
-			}
-		}
-
-		void opsclick_Reorder(object sender, EventArgs e)
-		{
-			if (Table != null && Table.RowCount != 0)
-			{
-//				DrawingControl.SuspendDrawing(Table); // bongo
-
-//				var pb = new ProgBar(this);
-//				pb.ValTop = Table.RowCount;
-//				pb.Show();
-
-				bool changed = false;
-
-				string val;
-				int result;
-
-				for (int id = 0; id != Table.RowCount; ++id)
-				{
-					if (String.IsNullOrEmpty(val = Table[id,0].text)
-						|| !Int32.TryParse(val, out result)
-						|| result != id)
-					{
-						Table[id,0].text = id.ToString();
-						changed = true;
-					}
-//					pb.Step();
-				}
-
-				Table.Changed |= changed;
-
-//				DrawingControl.ResumeDrawing(Table);
 			}
 		}
 
@@ -1493,9 +1475,6 @@ namespace yata
 		/// <param name="font"></param>
 		internal void doFont(Font font)
 		{
-			if (Table != null)
-				ShowColorPanel();
-
 			// NOTE: Cf f.AutoScaleMode (None,Font,DPI,Inherit)
 			// Since I'm doing all the necessary scaling due to font-changes
 			// w/ code the AutoScaleMode should not be set to default "Font".
@@ -1508,11 +1487,12 @@ namespace yata
 			Font = font; // rely on GC here
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
+			YataGrid.SetStaticMetrics(this);
+
 			if (Table != null)
 			{
+				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
-
-				YataGrid.SetMinCellWidth(FontAccent);
 
 				SetTabSize();
 
@@ -1520,7 +1500,8 @@ namespace yata
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
-					table.Calibrate(0, Table.RowCount - 1); // font
+					table.CreateCols();
+					table.Calibrate(0, table.RowCount - 1); // font
 
 					// TODO: This is effed because the Height (at least) of each
 					// table is not well-defined by .NET - OnResize() for the
@@ -1542,11 +1523,9 @@ namespace yata
 						table.Refresh(); // for big tables ...
 				}
 
+				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
-
-			if (Table != null)
-				ShowColorPanel(false);
 		}
 		#endregion Font menu
 

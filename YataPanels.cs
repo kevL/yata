@@ -23,7 +23,7 @@ namespace yata
 			Dock      = DockStyle.Top;
 			BackColor = Colors.ColheadPanel;
 
-			Height = 10;
+			Height = YataGrid.HeightColhead;
 
 			MouseClick += _grid.click_ColPanel;
 		}

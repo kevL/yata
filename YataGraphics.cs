@@ -7,6 +7,8 @@ namespace yata
 {
 	static class YataGraphics
 	{
+		internal const String TEST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+
 		/// <summary>
 		/// An IDeviceContext used for measuring texts.
 		/// @note Is defined in the YataForm cTor.

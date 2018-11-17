@@ -83,10 +83,7 @@ namespace yata
 								rect.X += _padHori;
 							}
 
-							if (!_editor.Visible || cell != _editcell) // else a pixel of this underlying text shows from beneath the right edge of the editbox
-								TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
-
-//							graphics_.DrawRectangle(new Pen(Color.Crimson), rect); // DEBUG
+							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
 						}
 
 						if ((rect.X += rect.Width) > Right)
