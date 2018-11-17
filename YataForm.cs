@@ -215,7 +215,7 @@ namespace yata
 			if (Table != null)
 			{
 				Table._editor.Visible = false;
-				Refresh();
+				Table.Refresh();
 			}
 		}
 
@@ -643,7 +643,7 @@ namespace yata
 			if (Table != null)
 			{
 				Table._editor.Visible = false;
-				Refresh();
+				Table.Refresh();
 			}
 
 			if (_presets.Count != 0)
@@ -1019,7 +1019,7 @@ namespace yata
 			if (Table != null && Table.RowCount != 0)
 			{
 				Table._editor.Visible = false;
-				Refresh();
+				Table.Refresh();
 
 				foreach (var row in Table.Rows)
 				{
@@ -1497,7 +1497,7 @@ namespace yata
 				for (int tab = 0; tab != Tabs.TabCount; ++tab)
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
-					table.CreateCols();
+					table.CreateCols(true);
 					table.Calibrate(0, table.RowCount - 1); // font
 
 					// TODO: This is effed because the Height (at least) of each
@@ -1935,17 +1935,17 @@ namespace yata
 								  it_PathIprpFeats2da,
 								  2);
 
+			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_onhitspell.2da"),
+								  CraftInfo.iphitspellLabels,
+								  it_PathIprpOnHitSpell2da,
+								  1);
+
 			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
 								  CraftInfo.ipspellsLabels,
 								  it_PathIprpSpells2da,
 								  1, // label
 								  3, // level
 								  CraftInfo.ipspellsLevels);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_onhitspell.2da"),
-								  CraftInfo.iphitspellLabels,
-								  it_PathIprpOnHitSpell2da,
-								  1);
 
 			CraftInfo.GropeLabels(Path.Combine(directory, "racialtypes.2da"),
 								  CraftInfo.raceLabels,
@@ -1964,6 +1964,9 @@ namespace yata
 		/// <param name="e"></param>
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
+			Table._editor.Visible = false;
+			Table.Refresh();
+
 			var pt = Tabs.PointToClient(Cursor.Position);
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
 			{
