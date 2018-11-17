@@ -765,10 +765,11 @@ namespace yata
 		/// Re-layouts the table when Font changes or on Autosize cols or when
 		/// row(s) are inserted/deleted.
 		/// </summary>
-		/// <param name="r">first row to consider as changed</param>
+		/// <param name="r">first row to consider as changed (default -1 if
+		/// deleting rows)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
-		internal void Calibrate(int r, int range = 0)
+		internal void Calibrate(int r = -1, int range = 0)
 		{
 			//logfile.Log("Calibrate()");
 
@@ -1453,7 +1454,7 @@ namespace yata
 			int selr = getSelectedRow();
 			if (selr != -1)
 			{
-				_f.ShowColorPanel();
+//				_f.ShowColorPanel();
 				DrawingControl.SuspendDrawing(this);
 
 				Changed = true;
@@ -1470,16 +1471,15 @@ namespace yata
 					bot = selr;
 				}
 
-				int iter = bot;
-				while (iter >= top)
-					Insert(iter--, null, false);
+				while (bot >= top)
+					Insert(bot--, null, false);
 
-				Calibrate(top, bot - top); // delete key
+				Calibrate(); // delete key
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
 
-				_f.ShowColorPanel(false);
+//				_f.ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(this);
 			}
 		}
@@ -1585,19 +1585,23 @@ namespace yata
 		/// Resets the width of col based on the cells in rows r to r + range.
 		/// </summary>
 		/// <param name="c">col</param>
-		/// <param name="r">first row to consider as changed</param>
+		/// <param name="r">first row to consider as changed (default -1 if
+		/// deleting rows)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
-		void colRewidth(int c, int r, int range = 0)
+		void colRewidth(int c, int r = -1, int range = 0)
 		{
 			int w = 0, wT;
 
-			int r1 = r + range;
-			for (; r <= r1; ++r)
+			if (r != -1)
 			{
-				wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
-				this[r,c]._widthtext = wT;
-				if (wT > w) w = wT;
+				int r1 = r + range;
+				for (; r <= r1; ++r)
+				{
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					this[r,c]._widthtext = wT;
+					if (wT > w) w = wT;
+				}
 			}
 			w += _padHori * 2;
 
@@ -2552,7 +2556,8 @@ namespace yata
 
 			if (calibrate) // is only 1 row (no range)
 			{
-				Calibrate(id); // insert()
+				int r = (fields != null) ? id : -1;
+				Calibrate(r); // insert()
 
 				if (id < RowCount)
 					EnsureDisplayedRow(id);

@@ -1175,7 +1175,7 @@ namespace yata
 
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
-			ShowColorPanel();
+//			ShowColorPanel();
 			DrawingControl.SuspendDrawing(Table);
 
 			Table.Changed = true;
@@ -1184,13 +1184,14 @@ namespace yata
 			if (selr == -1)
 				selr = Table.RowCount;
 
+			int r = selr;
 			for (int i = 0; i != _copy.Count; ++i)
-				Table.Insert(selr++, _copy[i], false);
+				Table.Insert(r++, _copy[i], false);
 
 			Table.Calibrate(selr, _copy.Count - 1); // paste range
 			Table.EnsureDisplayedRow(selr - 1);
 
-			ShowColorPanel(false);
+//			ShowColorPanel(false);
 			DrawingControl.ResumeDrawing(Table);
 		}
 
@@ -1387,12 +1388,12 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				ShowColorPanel();
+//				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
 				Table.Calibrate(0, Table.RowCount - 1); // autosize
 
-				ShowColorPanel(false);
+//				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
 		}
@@ -2060,9 +2061,7 @@ namespace yata
 			fileclick_Reload(null, EventArgs.Empty);
 		}
 
-		// TODO: Quit
 		// TODO: FreezeFirst/Second
-		// TODO: etc ...
 		#endregion Tabmenu
 
 
