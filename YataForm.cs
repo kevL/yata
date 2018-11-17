@@ -1262,6 +1262,7 @@ namespace yata
 				}
 
 				Table.Changed |= changed;
+				// TODO: resize Rowhead panel's width
 			}
 		}
 

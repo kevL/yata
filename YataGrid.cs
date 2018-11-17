@@ -673,7 +673,7 @@ namespace yata
 				}
 			}
 
-			if (_rows.Count == 0) // add a row of stars if grid is blank ->
+			if (_rows.Count == 0) // add a row of stars so grid is not left blank ->
 			{
 				var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 				for (int c = 0; c <= Fields.Length; ++c)
@@ -1510,7 +1510,12 @@ namespace yata
 				while (bot >= top)
 					Insert(bot--, null, false);
 
-				Calibrate(); // delete key
+				if (RowCount == 1 && bot == -1) // ie. if grid was blanked.
+					bot =  0;
+				else
+					bot = -1;
+
+				Calibrate(bot); // delete key
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
@@ -1627,6 +1632,7 @@ namespace yata
 		/// for single row)</param>
 		void colRewidth(int c, int r = -1, int range = 0)
 		{
+			logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
 			int w = 0, wT;
 
 			if (r != -1)
@@ -1634,6 +1640,7 @@ namespace yata
 				int r1 = r + range;
 				for (; r <= r1; ++r)
 				{
+					logfile.Log("r= " + r + " c= " + c);
 					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
 					this[r,c]._widthtext = wT;
 					if (wT > w) w = wT;
@@ -2588,9 +2595,28 @@ namespace yata
 					for (int c = 0; c != ColCount; ++c)
 						--row.cells[c].y;
 				}
+
+				if (RowCount == 0) // add a row of stars so grid is not left blank ->
+				{
+					++RowCount;
+
+					row = new Row(id, ColCount, Brushes.Created, this);
+					for (int c = 0; c != ColCount; ++c)
+						row.cells[c] = new Cell(id, c, Constants.Stars);
+
+					Rows.Add(row);
+
+					if (calibrate)
+					{
+						Calibrate(0);
+						DrawingControl.ResumeDrawing(this);
+
+						return;
+					}
+				}
 			}
 
-			if (calibrate) // is only 1 row (no range)
+			if (calibrate) // is only 1 row (no range) via context single-row edit
 			{
 				int r = (fields != null) ? id : -1;
 				Calibrate(r); // insert()
