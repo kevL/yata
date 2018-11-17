@@ -1454,7 +1454,7 @@ namespace yata
 			int selr = getSelectedRow();
 			if (selr != -1)
 			{
-//				_f.ShowColorPanel();
+				_f.ShowColorPanel();
 				DrawingControl.SuspendDrawing(this);
 
 				Changed = true;
@@ -1479,7 +1479,7 @@ namespace yata
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
 
-//				_f.ShowColorPanel(false);
+				_f.ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(this);
 			}
 		}

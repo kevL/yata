@@ -1175,7 +1175,7 @@ namespace yata
 
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
-//			ShowColorPanel();
+			ShowColorPanel();
 			DrawingControl.SuspendDrawing(Table);
 
 			Table.Changed = true;
@@ -1191,7 +1191,7 @@ namespace yata
 			Table.Calibrate(selr, _copy.Count - 1); // paste range
 			Table.EnsureDisplayedRow(selr - 1);
 
-//			ShowColorPanel(false);
+			ShowColorPanel(false);
 			DrawingControl.ResumeDrawing(Table);
 		}
 
@@ -1388,12 +1388,12 @@ namespace yata
 		{
 			if (Table != null)
 			{
-//				ShowColorPanel();
+				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
 				Table.Calibrate(0, Table.RowCount - 1); // autosize
 
-//				ShowColorPanel(false);
+				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
 		}
