@@ -41,7 +41,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FontPickerForm));
 			this.list_Font = new System.Windows.Forms.ListBox();
 			this.btn_Ok = new System.Windows.Forms.Button();
 			this.btn_Apply = new System.Windows.Forms.Button();
@@ -219,7 +218,7 @@
 			this.Controls.Add(this.lbl_Style);
 			this.Controls.Add(this.lbl_Font);
 			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.Name = "FontPickerForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

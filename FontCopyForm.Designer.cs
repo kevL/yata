@@ -46,7 +46,7 @@
 			this.textBox1.Location = new System.Drawing.Point(0, 50);
 			this.textBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(530, 20);
+			this.textBox1.Size = new System.Drawing.Size(526, 20);
 			this.textBox1.TabIndex = 0;
 			// 
 			// label1
@@ -55,7 +55,7 @@
 			this.label1.Location = new System.Drawing.Point(0, 0);
 			this.label1.Margin = new System.Windows.Forms.Padding(0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(530, 50);
+			this.label1.Size = new System.Drawing.Size(526, 50);
 			this.label1.TabIndex = 1;
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -75,7 +75,7 @@
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-			this.button2.Location = new System.Drawing.Point(377, 0);
+			this.button2.Location = new System.Drawing.Point(373, 0);
 			this.button2.Margin = new System.Windows.Forms.Padding(0);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(150, 37);
@@ -89,10 +89,10 @@
 			this.panel1.Controls.Add(this.button1);
 			this.panel1.Controls.Add(this.button2);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 75);
+			this.panel1.Location = new System.Drawing.Point(0, 71);
 			this.panel1.Name = "panel1";
 			this.panel1.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel1.Size = new System.Drawing.Size(530, 40);
+			this.panel1.Size = new System.Drawing.Size(526, 40);
 			this.panel1.TabIndex = 4;
 			// 
 			// FontCopyForm
@@ -100,12 +100,13 @@
 			this.AcceptButton = this.button1;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(530, 115);
+			this.ClientSize = new System.Drawing.Size(526, 111);
 			this.ControlBox = false;
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FontCopyForm";

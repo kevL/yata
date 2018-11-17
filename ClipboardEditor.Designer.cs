@@ -31,7 +31,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClipboardEditor));
 			this.rtb_Text = new System.Windows.Forms.RichTextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btn_Set = new System.Windows.Forms.Button();
@@ -84,7 +83,7 @@
 			this.ClientSize = new System.Drawing.Size(542, 124);
 			this.Controls.Add(this.rtb_Text);
 			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "ClipboardEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Yata - Clipboard editor";

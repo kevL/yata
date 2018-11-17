@@ -116,7 +116,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YataForm));
 			this.tabControl = new yata.YataTabs();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -233,13 +232,13 @@
 			this.toolStripSeparator6,
 			this.it_tabReload});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(153, 120);
+			this.tabMenu.Size = new System.Drawing.Size(151, 98);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(152, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(150, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -247,7 +246,7 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(150, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
@@ -255,7 +254,7 @@
 			// it_tabCloseAllOthers
 			// 
 			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
-			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(152, 22);
+			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(150, 22);
 			this.it_tabCloseAllOthers.Text = "Close all others";
 			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
@@ -263,12 +262,12 @@
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(147, 6);
 			// 
 			// it_tabReload
 			// 
 			this.it_tabReload.Name = "it_tabReload";
-			this.it_tabReload.Size = new System.Drawing.Size(152, 22);
+			this.it_tabReload.Size = new System.Drawing.Size(150, 22);
 			this.it_tabReload.Text = "Reload";
 			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
 			// 
@@ -906,7 +905,7 @@
 			this.Controls.Add(this.menubar);
 			this.Controls.Add(this.statusbar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MainMenuStrip = this.menubar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";

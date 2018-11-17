@@ -1632,7 +1632,7 @@ namespace yata
 		/// for single row)</param>
 		void colRewidth(int c, int r = -1, int range = 0)
 		{
-			logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
+			//logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
 			int w = 0, wT;
 
 			if (r != -1)
@@ -1640,7 +1640,7 @@ namespace yata
 				int r1 = r + range;
 				for (; r <= r1; ++r)
 				{
-					logfile.Log("r= " + r + " c= " + c);
+					//logfile.Log("r= " + r + " c= " + c);
 					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
 					this[r,c]._widthtext = wT;
 					if (wT > w) w = wT;
