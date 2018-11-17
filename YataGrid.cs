@@ -779,7 +779,7 @@ namespace yata
 		/// row(s) are inserted/deleted.
 		/// </summary>
 		/// <param name="r">first row to consider as changed (default -1 if
-		/// deleting rows or no row has been changed, ie. Font change)</param>
+		/// deleting rows)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
 		internal void Calibrate(int r = -1, int range = 0)

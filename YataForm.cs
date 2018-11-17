@@ -1014,17 +1014,13 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening_EnableItems(object sender, EventArgs e)
 		{
-			if (Table != null)
-			{
-				Table._editor.Visible = false;
-				Refresh();
-			}
-
-			it_GotoLoadchanged.Enabled =
-			it_CopyRange      .Enabled = false;
+			it_GotoLoadchanged.Enabled = false;
 
 			if (Table != null && Table.RowCount != 0)
 			{
+				Table._editor.Visible = false;
+				Refresh();
+
 				foreach (var row in Table.Rows)
 				{
 					for (int c = 0; c != Table.ColCount; ++c)
@@ -1037,10 +1033,12 @@ namespace yata
 					}
 				}
 
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
+				it_CopyRange.Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
 			}
+			else
+				it_CopyRange.Enabled = false;
 
-			it_PasteRange.Enabled = (_copy.Count > 1);
+			it_PasteRange.Enabled = (_copy.Count > 1); // TODO: fix empty tables .......
 
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
@@ -1059,7 +1057,6 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			Table._editor.Visible = false;
 			Table.Select();
 
 			Cell sel = Table.GetOnlySelectedCell();
