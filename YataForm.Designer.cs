@@ -47,7 +47,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathBaseItems2da;
 		private System.Windows.Forms.ToolStripTextBox tb_Search;
 		private System.Windows.Forms.ToolStripComboBox cb_SearchOption;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuOptions;
+		private System.Windows.Forms.ToolStripMenuItem it_Menu2daOps;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSkills2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathAll;
 		private System.Windows.Forms.ToolStripMenuItem it_PathRaces2da;
@@ -69,7 +69,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_tabClose;
 		private System.Windows.Forms.ToolStripMenuItem it_Search;
 		private System.Windows.Forms.ToolStripMenuItem it_Findnext;
-		private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem it_MenuFont;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
@@ -92,7 +92,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		private System.Windows.Forms.ToolStripMenuItem it_tabReload;
-		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem it_MenuHelp;
 		private System.Windows.Forms.ToolStripMenuItem it_ReadMe;
 		private System.Windows.Forms.ToolStripMenuItem it_About;
 
@@ -154,7 +154,7 @@
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
-			this.it_MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -163,7 +163,7 @@
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
@@ -183,7 +183,7 @@
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -286,10 +286,10 @@
 			this.tb_Goto,
 			this.tb_Search,
 			this.cb_SearchOption,
-			this.it_MenuOptions,
-			this.fontToolStripMenuItem,
+			this.it_Menu2daOps,
+			this.it_MenuFont,
 			this.it_MenuPaths,
-			this.helpToolStripMenuItem});
+			this.it_MenuHelp});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
@@ -320,7 +320,7 @@
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(145, 22);
+			this.it_Open.Size = new System.Drawing.Size(152, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -328,61 +328,61 @@
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(145, 22);
+			this.it_Reload.Size = new System.Drawing.Size(152, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// it_Folders
 			// 
 			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(145, 22);
+			this.it_Folders.Size = new System.Drawing.Size(152, 22);
 			this.it_Folders.Text = "Folders";
 			this.it_Folders.Visible = false;
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(142, 6);
+			this.separator_1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(145, 22);
+			this.it_Save.Size = new System.Drawing.Size(152, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(145, 22);
+			this.it_SaveAs.Size = new System.Drawing.Size(152, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(145, 22);
+			this.it_Close.Size = new System.Drawing.Size(152, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(145, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(152, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(142, 6);
+			this.separator_2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(145, 22);
+			this.it_Quit.Size = new System.Drawing.Size(152, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
@@ -521,10 +521,10 @@
 			this.cb_SearchOption.Size = new System.Drawing.Size(95, 18);
 			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
 			// 
-			// it_MenuOptions
+			// it_Menu2daOps
 			// 
-			this.it_MenuOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.it_MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_Menu2daOps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_Menu2daOps.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_RenumberRows,
 			this.it_CheckRows,
 			this.toolStripSeparator1,
@@ -533,11 +533,11 @@
 			this.toolStripSeparator2,
 			this.it_freeze1,
 			this.it_freeze2});
-			this.it_MenuOptions.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-			this.it_MenuOptions.Name = "it_MenuOptions";
-			this.it_MenuOptions.Size = new System.Drawing.Size(52, 20);
-			this.it_MenuOptions.Text = "2da Ops";
-			this.it_MenuOptions.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
+			this.it_Menu2daOps.Name = "it_Menu2daOps";
+			this.it_Menu2daOps.Size = new System.Drawing.Size(52, 20);
+			this.it_Menu2daOps.Text = "2da Ops";
+			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_RenumberRows
 			// 
@@ -593,17 +593,17 @@
 			this.it_freeze2.Text = "freeze 2nd col";
 			this.it_freeze2.Click += new System.EventHandler(this.opsclick_Freeze2ndCol);
 			// 
-			// fontToolStripMenuItem
+			// it_MenuFont
 			// 
-			this.fontToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.fontToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_MenuFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuFont.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Font,
 			this.it_CurrentFont,
 			this.it_FontDefault});
-			this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-			this.fontToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.fontToolStripMenuItem.Text = "Font";
-			this.fontToolStripMenuItem.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_MenuFont.Name = "it_MenuFont";
+			this.it_MenuFont.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuFont.Text = "Font";
+			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_Font
 			// 
@@ -752,16 +752,16 @@
 			this.it_PathRaces2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
 			// 
-			// helpToolStripMenuItem
+			// it_MenuHelp
 			// 
-			this.helpToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_MenuHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_ReadMe,
 			this.it_About});
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.helpToolStripMenuItem.Text = "Help";
-			this.helpToolStripMenuItem.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_MenuHelp.Name = "it_MenuHelp";
+			this.it_MenuHelp.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuHelp.Text = "Help";
+			this.it_MenuHelp.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_ReadMe
 			// 
