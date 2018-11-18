@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 
@@ -1961,6 +1963,42 @@ namespace yata
 								  1);
 		}
 		#endregion Crafting info
+
+
+		#region Help menu
+		void helpclick_Help(object sender, EventArgs e)
+		{
+			string path = Path.Combine(Application.StartupPath, "ReadMe.txt");
+			if (File.Exists(path))
+				Process.Start(path);
+			else
+				MessageBox.Show("ReadMe.txt was not found in the application directory.",
+								"burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Error,
+								MessageBoxDefaultButton.Button1);
+		}
+
+		void helpclick_About(object sender, EventArgs e)
+		{
+			var an = Assembly.GetExecutingAssembly().GetName();
+			string ver = "Ver "
+					   + an.Version.Major + "."
+					   + an.Version.Minor + "."
+					   + an.Version.Build + "."
+					   + an.Version.Revision;
+#if DEBUG
+			ver += " - debug";
+#else
+			ver += " - release";
+#endif
+			MessageBox.Show(ver,
+							"Version info",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Information,
+							MessageBoxDefaultButton.Button1);
+		}
+		#endregion Help menu
 
 
 		#region Tabmenu

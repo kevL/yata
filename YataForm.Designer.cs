@@ -92,6 +92,9 @@
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		private System.Windows.Forms.ToolStripMenuItem it_tabReload;
+		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem it_ReadMe;
+		private System.Windows.Forms.ToolStripMenuItem it_About;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -180,6 +183,9 @@
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.context_it_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
@@ -282,7 +288,8 @@
 			this.cb_SearchOption,
 			this.it_MenuOptions,
 			this.fontToolStripMenuItem,
-			this.it_MenuPaths});
+			this.it_MenuPaths,
+			this.helpToolStripMenuItem});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
@@ -744,6 +751,31 @@
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
 			this.it_PathRaces2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
+			// 
+			// helpToolStripMenuItem
+			// 
+			this.helpToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_ReadMe,
+			this.it_About});
+			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.helpToolStripMenuItem.Text = "Help";
+			this.helpToolStripMenuItem.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			// 
+			// it_ReadMe
+			// 
+			this.it_ReadMe.Name = "it_ReadMe";
+			this.it_ReadMe.Size = new System.Drawing.Size(152, 22);
+			this.it_ReadMe.Text = "ReadMe.txt";
+			this.it_ReadMe.Click += new System.EventHandler(this.helpclick_Help);
+			// 
+			// it_About
+			// 
+			this.it_About.Name = "it_About";
+			this.it_About.Size = new System.Drawing.Size(152, 22);
+			this.it_About.Text = "About";
+			this.it_About.Click += new System.EventHandler(this.helpclick_About);
 			// 
 			// contextEditor
 			// 
