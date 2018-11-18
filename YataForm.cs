@@ -1270,6 +1270,7 @@ namespace yata
 				Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
 				Table.FrozenLabelsSet(Table);
 				Table.InitScrollers();
+				Table.Refresh();
 			}
 		}
 
