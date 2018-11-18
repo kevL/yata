@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 nov 8
+2018 nov 18
 kevL's
-ver 2.1.0.0
+ver 2.2.0.0
 
 File
 - Open ... : Ctrl+o
@@ -45,19 +45,21 @@ Search box (type a string to search for)
 Search options dropdown (substring or wholeword)
 
 2da Ops
+- order row ids (auto-orders the IDs of the currently displayed 2da)
 - test row order (investigates the row-order of the currently displayed 2da)
-- order row ids (auto-orders the rows of the currently displayed 2da)
 
 - recolor rows (tables show with alternating row-colors. When rows are inserted/
-  deleted or sorted the colors go out of sync. to aid understanding of what just
-  happened. The "recolor rows" operation makes row-colors alternate as usual)
-- autosize cols (recalculates width of all cols)
+  deleted (or sorted) the colors go out of sync to aid understanding of what
+  just happened. The "recolor rows" operation makes row-colors alternate as
+  usual)
+- autosize cols (recalculates the display-width of all cols)
 
-- freeze 1st col : F5 (causes the first col after the ID to remain stationary)
-- freeze 2nd col : F6 (causes the first and second cols after the ID to remain
-                   stationary) One of those two cols typically contains the
-                   row's label - so by freezing it you can scroll to the right
-                   and still read what it is.
+- freeze 1st col : F5 (causes the first col after the ID-col to remain
+                   stationary)
+- freeze 2nd col : F6 (causes the first and second cols after the ID-col to
+                   remain stationary) One of those two cols typically contains
+                   the row's "label" - so by freezing it you can scroll to the
+                   right and still read what it is.
 
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
@@ -68,31 +70,32 @@ Font
 
 keys:
 - w/ only 1 cell selected
-Home - selects cell at start of the row
-End - selects cell at the end of the row
-PageUp - selects cell a page above
-PageDown - selects cell a page below
-Ctrl+Home - selects first cell in the table
-Ctrl+End - selects last cell in the table
+Home                      - selects cell at start of the row
+End                       - selects cell at the end of the row
+PageUp                    - selects cell a page above
+PageDown                  - selects cell a page below
+Ctrl+Home                 - selects first cell in the table
+Ctrl+End                  - selects last cell in the table
 Left/Right/Up/Down arrows - selects next cell in the direction
 
 - w/out 1 cell selected (or more than one cell is selected)
-Home - scrolls table all the way left
-End - scrolls table all the way right
-PageUp - scrolls table a page up
-PageDown - scrolls table a page down
+Home                      - scrolls table all the way left
+End                       - scrolls table all the way right
+PageUp                    - scrolls table a page up
+PageDown                  - scrolls table a page down
+Ctrl+Home                 - scrolls table to top
+Ctrl+End                  - scrolls table to bottom
 Left/Right/Up/Down arrows - scrolls table in the direction
-Ctrl+Home - scrolls table to top
-Ctrl+End - scrolls table to bottom
 
 - w/ row selected
-Home - selects the top row
-End - selects the bottom row
-PageUp - selects the row a page above
-PageDown - selects the row a page below
-Up/Down arrows - selects the row in the direction
+Home              - selects the top row
+End               - selects the bottom row
+PageUp            - selects the row a page above
+PageDown          - selects the row a page below
+Up/Down arrows    - selects the row in the direction
+Left/Right arrows - scrolls table in the direction
 
-Escape - deselects any selected cells if not currently editing a cell
+Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
 
 Enter - starts editing a cell if the table has focus and only one cell is
@@ -102,7 +105,8 @@ Enter - starts editing a cell if the table has focus and only one cell is
 
 Delete - when a row is selected (as indicated with a green field at the far left
 of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
-or below the selected row, to select a range of rows to delete.
+or below the selected row, to select a range of rows to delete. If all rows of a
+table are deleted a single default row will be created.
 
 
 mouse:
@@ -110,20 +114,30 @@ wheel - scrolls up/down if the vertical scrollbar is visible
       - scrolls left/right if the horizontal scrollbar is visible but the
         vertical bar is not
 
-on the colheads or rowheads
-LMB - selects the col or row
-LMB+Ctrl - adds or subtracts a col/row from the currently selected cells
-LMB+Shift - selects a range of cols/rows if a col/row is already selected
+click on the colheads or rowheads
+LMB            - selects the col or row
+LMB+Ctrl       - adds or subtracts a col/row from the currently selected cells
+LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
 
-on the colheads
+click on the colheads
 RMB+Shift - sorts the table by the col either ascending or descending
 
-on a table-cell
-LMB - selects a cell or if already selected then starts the cell-editor
+click on a table-cell
+LMB      - selects a cell or if already selected then starts the cell-editor
 LMB+Ctrl - adds or subtracts a cell from the currently selected cells
 
-Note that frozen-col cells cannot be selected or edited.
+Note that frozen-col cells cannot be selected or edited. Also note that clicking
+on a colhead will clear any selected row(s), although not its cells if Ctrl is
+pressed; and clicking on a rowhead will clear any selected col, although not its
+cells if Ctrl is pressed. Additionally, note that pressing Shift when clicking
+on a colhead or rowhead never selects a col or row; instead, Shift-clicking on
+a colhead or rowhead always selects the cells in that col or row, and will
+select a range of cols or rows if there is already another selected col or row.
+Pressing Ctrl, or Ctrl+Shift, when clicking a colhead or rowhead lends yet more
+permutations. But it's really not that complicated: just start clicking with or
+without Ctrl and Shift ... technically you're dealing with three items: cells,
+rows, and cols.
 
 OPERATIONS THAT REFORMAT LARGE TABLES (tens of thousands of Rows) TAKE TIME.
 Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
@@ -151,7 +165,8 @@ x=         (integer) the desired x-position to start the app on your monitor
 y=         (integer) the desired y-position to start the app on your monitor
 w=         (integer) the desired starting width of the app on your monitor
 h=         (integer) the desired starting height of the app on your monitor
-strict=    "true" to show extra warnings when loading a 2da file (default false)
+strict=    "true" (without quotes) to show extra warnings when loading a
+           2da-file (default false)
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).
@@ -210,8 +225,9 @@ indicated with a green field at the far left of that row), (b) to flag multiple
 rows for copying (or deleting w/ the Delete key) hold down Shift and click at
 the far left of another row (Control will not work for this, although such
 row(s)'s cells would appear to be selected; a row of selected cells is *not*
-necessarily a selected or flagged row!), (c) to copy a range of rows (a selected
-row along with its flagged rows) choose "copy range" on the Edit menu.
+necessarily/technically a selected or flagged row!), (c) to copy a range of rows
+(a selected row along with its flagged rows) choose "copy range" on the Edit
+menu.
 
 Currently flagged rows are indicated with a pale green field at the far left of
 their rows.

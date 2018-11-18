@@ -1969,6 +1969,9 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 					row.cells[c].selected = false;
 			}
+
+			foreach (var col in Cols)
+				col.selected = false;
 		}
 
 
@@ -2285,6 +2288,9 @@ namespace yata
 							select = true;
 
 
+						foreach (var col in Cols) // always clear col-selects
+							col.selected = false;
+
 						if ((ModifierKeys & Keys.Control) != Keys.Control)
 							ClearCellSelects();
 
@@ -2403,7 +2409,7 @@ namespace yata
 					{
 						for (int r = 0; r != RowCount; ++r)
 						{
-							if (!Rows[r].cells[c].selected)
+							if (!this[r,c].selected)
 							{
 								select = true;
 								break;
@@ -2413,6 +2419,9 @@ namespace yata
 					else
 						select = true;
 
+
+					foreach (var row in Rows) // always clear row-selects
+						row.selected = false;
 
 					if ((ModifierKeys & Keys.Control) != Keys.Control)
 						ClearCellSelects();
@@ -2439,7 +2448,7 @@ namespace yata
 								if (start != c) // done below
 								{
 									for (int r = 0; r != RowCount; ++r)
-										Rows[r].cells[start].selected = true;
+										this[r,start].selected = true;
 								}
 								++start;
 							}
@@ -2457,7 +2466,7 @@ namespace yata
 						EnsureDisplayedCol(c);
 
 					for (int r = 0; r != RowCount; ++r)
-						Rows[r].cells[c].selected = select;
+						this[r,c].selected = select;
 
 					Refresh();
 				}
@@ -2490,6 +2499,7 @@ namespace yata
 						ColSort(c);
 						EnsureDisplayedCellOrRow();
 					}
+					// TODO: else autosize col
 				}
 			}
 		}
