@@ -1449,8 +1449,7 @@ namespace yata
 		/// <param name="e"></param>
 		void fontclick_CurrentFont(object sender, EventArgs e)
 		{
-			var f = new FontCopyForm();
-			f.Font = Font;
+			var f = new FontCopyForm(this);
 
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 			f.SetText("font=" + tc.ConvertToString(Font));

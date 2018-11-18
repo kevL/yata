@@ -21,7 +21,7 @@ namespace yata
 		{
 			InitializeComponent();
 
-			Font = f.Font; // NOTE: font is *not* inherited from YataForm. Cf FontCopyForm ...
+			Font = f.Font;
 
 			// TODO: controls are not resizing per Font correctly.
 			// See FontCopyForm ... vid. AutoScaleMode=

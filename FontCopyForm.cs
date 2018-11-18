@@ -11,7 +11,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal FontCopyForm()
+		internal FontCopyForm(YataForm f)
 		{
 			InitializeComponent();
 
@@ -20,7 +20,7 @@ namespace yata
 
 			const string text = "This string can be used in Settings.Cfg to override Yata's default font.";
 
-//			Font = f.Font; // NOTE: font is inherited from YataForm. Cf ClipboardEditor ...
+			Font = f.Font;
 
 			var size = YataGraphics.MeasureSize(text, Font);
 
@@ -33,11 +33,9 @@ namespace yata
 				   +  size.Height + padVert * 3
 				   +  5;
 
-			label1.Height = (size.Height + padVert * 2) * 3;
-
-			textBox1.Height = size.Height + padVert * 2;
-
-			panel1.Height = size.Height + padVert * 3;
+			label1  .Height = (size.Height + padVert * 2) * 3;
+			textBox1.Height =  size.Height + padVert * 2;
+			panel1  .Height =  size.Height + padVert * 3;
 
 			size = YataGraphics.MeasureSize("Cancel", Font);
 			button1.Width  =
