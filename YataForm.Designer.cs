@@ -302,8 +302,8 @@
 			this.it_MenuFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Open,
-			this.it_Reload,
 			this.it_Folders,
+			this.it_Reload,
 			this.separator_1,
 			this.it_Save,
 			this.it_SaveAs,
@@ -766,14 +766,14 @@
 			// it_ReadMe
 			// 
 			this.it_ReadMe.Name = "it_ReadMe";
-			this.it_ReadMe.Size = new System.Drawing.Size(152, 22);
+			this.it_ReadMe.Size = new System.Drawing.Size(120, 22);
 			this.it_ReadMe.Text = "ReadMe.txt";
 			this.it_ReadMe.Click += new System.EventHandler(this.helpclick_Help);
 			// 
 			// it_About
 			// 
 			this.it_About.Name = "it_About";
-			this.it_About.Size = new System.Drawing.Size(152, 22);
+			this.it_About.Size = new System.Drawing.Size(120, 22);
 			this.it_About.Text = "About";
 			this.it_About.Click += new System.EventHandler(this.helpclick_About);
 			// 

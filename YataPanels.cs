@@ -78,6 +78,7 @@ namespace yata
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
+			_grid._editor.Visible = false;
 			_grab = (Cursor == Cursors.VSplit);
 
 //			base.OnMouseDown(e);

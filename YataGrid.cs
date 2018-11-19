@@ -1635,7 +1635,8 @@ namespace yata
 		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
 			//logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
-			int w = 0, wT;
+			int w = Cols[c]._widthtext + _padHoriSort;
+			int wT;
 
 			if (r != -1)
 			{
@@ -1657,13 +1658,8 @@ namespace yata
 			}
 			else if (w < width) // recalc width on the entire col
 			{
-				if (c == 0)
+				if (c == 0 || _wid > w)
 					w = _wid;
-				else
-				{
-					w = Cols[c]._widthtext + _padHori * 2 + _padHoriSort;
-					if (_wid > w) w = _wid;
-				}
 
 				for (r = 0; r != RowCount; ++r)
 				{

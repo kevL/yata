@@ -22,7 +22,7 @@ namespace yata
 											 | TextFormatFlags.NoPadding
 											 | TextFormatFlags.Left
 											 | TextFormatFlags.VerticalCenter
-											 | TextFormatFlags.SingleLine; /*TextFormatFlags.NoClipping |*/
+											 | TextFormatFlags.SingleLine; // TextFormatFlags.NoClipping
 
 		/// <summary>
 		/// Max.

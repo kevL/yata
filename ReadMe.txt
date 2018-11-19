@@ -9,9 +9,9 @@ ver 2.2.0.0
 
 File
 - Open ... : Ctrl+o
-- Reload   : Ctrl+r
 - Folders (presets for the Open ... dialog - does not appear if no presets have
   been set)
+- Reload   : Ctrl+r
 
 - Save : Ctrl+s
 - Save As ...
@@ -121,6 +121,7 @@ LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
 
 click on the colheads
+LMB       - click-drag col-boundary to re-width a col
 RMB+Shift - sorts the table by the col either ascending or descending
 
 click on a table-cell
