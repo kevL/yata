@@ -43,6 +43,60 @@ namespace yata
 
 //			DrawingControl.ResumeDrawing(this);
 		}
+
+
+		internal bool _grab;
+		internal int  _grabCol;
+		internal int  _grabStart;
+
+		/// <summary>
+		/// Changes cursor to a vertical splitter near the right edge of each
+		/// unfrozen colhead.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseMove(MouseEventArgs e)
+		{
+			if (!_grab)
+			{
+				int x = YataGrid.WidthRowhead;
+				for (int c = 0; c != _grid.ColCount; ++c)
+				{
+					x += _grid.Cols[c].width();
+					if (e.X > x - 5 && e.X < x)
+					{
+						Cursor = Cursors.VSplit;
+						_grabCol = c;
+						_grabStart = e.X;
+						return;
+					}
+				}
+				Cursor = Cursors.Default;
+			}
+
+//			base.OnMouseMove(e);
+		}
+
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			_grab = (Cursor == Cursors.VSplit);
+
+//			base.OnMouseDown(e);
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e)
+		{
+			if (_grab)
+			{
+				_grab = false;
+				Cursor = Cursors.Default;
+
+				int grabStop = (e.X - _grabStart);
+				_grid.Cols[_grabCol].width(_grid.Cols[_grabCol].width() + grabStop, true);
+				_grid.Refresh();
+			}
+
+//			base.OnMouseUp(e);
+		}
 	}
 
 	/// <summary>
