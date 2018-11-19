@@ -78,10 +78,10 @@ namespace yata
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left)
+			if ((_grab = (Cursor == Cursors.VSplit))
+				&& e.Button == MouseButtons.Left)
 			{
 				_grid._editor.Visible = false;
-				_grab = (Cursor == Cursors.VSplit);
 			}
 
 //			base.OnMouseDown(e);
@@ -89,9 +89,9 @@ namespace yata
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left)
+			if (_grab)
 			{
-				if (_grab)
+				if (e.Button == MouseButtons.Left)
 				{
 					_grab = false;
 					Cursor = Cursors.Default;
@@ -100,22 +100,25 @@ namespace yata
 					col.UserSized = true;
 
 					int w = col.width() + e.X - _grabStart;
-					if (w < 16) w = 16;
+					if (w < 17) w = 17;
 
 					col.width(w, true);
 					_grid.InitScrollers();
 					_grid.Refresh();
 				}
-			}
-			else if (e.Button == MouseButtons.Right)
-			{
-				var col = _grid.Cols[_grabCol];
-				if (col.UserSized)
+				else if (e.Button == MouseButtons.Right)
 				{
-					col.UserSized = false;
-					_grid.colRewidth(_grabCol, 0, _grid.RowCount - 1);
-					_grid.InitScrollers();
-					_grid.Refresh();
+					_grab = false;
+					Cursor = Cursors.Default;
+
+					var col = _grid.Cols[_grabCol];
+					if (col.UserSized)
+					{
+						col.UserSized = false;
+						_grid.colRewidth(_grabCol, 0, _grid.RowCount - 1);
+						_grid.InitScrollers();
+						_grid.Refresh();
+					}
 				}
 			}
 
