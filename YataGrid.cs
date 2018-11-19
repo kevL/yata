@@ -81,7 +81,7 @@ namespace yata
 		bool _visHori;
 
 		internal int offsetVert;
-		int offsetHori;
+		internal int offsetHori;
 
 		int HeightTable;
 		int WidthTable;

@@ -83,7 +83,9 @@ namespace yata
 								rect.X += _padHori;
 							}
 
+							rect.Width -= _padHori;
 							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
+							rect.Width += _padHori;
 						}
 
 						if ((rect.X += rect.Width) > Right)
@@ -143,12 +145,12 @@ namespace yata
 			{
 				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
 
+				int clip;
+
 				for (int c = 0; c != ColCount; ++c)
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
 					{
-						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
 						if (_sortdir != 0 && c == _sortcol)
 						{
 							Bitmap sort;
@@ -158,9 +160,17 @@ namespace yata
 								sort = Resources.des_16px;
 
 							graphics.DrawImage(sort,
-												rect.X + rect.Width  - _offsetHoriSort,
-												rect.Y + rect.Height - _offsetVertSort);
+											   rect.X + rect.Width  - _offsetHoriSort,
+											   rect.Y + rect.Height - _offsetVertSort);
+
+							clip = _offsetHoriSort - 3;
 						}
+						else
+							clip = 8;
+
+						rect.Width -= clip;
+						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+						rect.Width += clip;
 					}
 
 					if ((rect.X += rect.Width) > Right)

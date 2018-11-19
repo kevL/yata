@@ -18,12 +18,11 @@ namespace yata
 		/// <summary>
 		/// Flags used when measuring texts.
 		/// </summary>
-		internal const TextFormatFlags flags = TextFormatFlags.NoClipping
-											 | TextFormatFlags.NoPrefix
+		internal const TextFormatFlags flags = TextFormatFlags.NoPrefix
 											 | TextFormatFlags.NoPadding
 											 | TextFormatFlags.Left
 											 | TextFormatFlags.VerticalCenter
-											 | TextFormatFlags.SingleLine;
+											 | TextFormatFlags.SingleLine; /*TextFormatFlags.NoClipping |*/
 
 		/// <summary>
 		/// Max.

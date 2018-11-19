@@ -58,7 +58,7 @@ namespace yata
 		{
 			if (!_grab)
 			{
-				int x = YataGrid.WidthRowhead;
+				int x = YataGrid.WidthRowhead - _grid.offsetHori;
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
 					x += _grid.Cols[c].width();
@@ -90,8 +90,13 @@ namespace yata
 				_grab = false;
 				Cursor = Cursors.Default;
 
-				int grabStop = (e.X - _grabStart);
-				_grid.Cols[_grabCol].width(_grid.Cols[_grabCol].width() + grabStop, true);
+				var col = _grid.Cols[_grabCol];
+
+				int w = col.width() + e.X - _grabStart;
+				if (w < 16) w = 16;
+
+				col.width(w, true);
+				_grid.InitScrollers();
 				_grid.Refresh();
 			}
 
