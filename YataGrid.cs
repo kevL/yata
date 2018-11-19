@@ -1634,8 +1634,11 @@ namespace yata
 		/// for single row)</param>
 		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
-			//logfile.Log("colRewidth() ColCount= " + ColCount + " RowCount= " + RowCount);
-			int w = Cols[c]._widthtext + _padHoriSort;
+			var col = Cols[c];
+
+			col.UserSized = false;
+
+			int w = col._widthtext + _padHoriSort;
 			int wT;
 
 			if (r != -1)
@@ -1643,7 +1646,6 @@ namespace yata
 				int r1 = r + range;
 				for (; r <= r1; ++r)
 				{
-					//logfile.Log("r= " + r + " c= " + c);
 					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
 					this[r,c]._widthtext = wT;
 					if (wT > w) w = wT;
@@ -1651,10 +1653,10 @@ namespace yata
 			}
 			w += _padHori * 2;
 
-			int width = Cols[c].width();
+			int width = col.width();
 			if (w > width)
 			{
-				Cols[c].width(w);
+				col.width(w);
 			}
 			else if (w < width) // recalc width on the entire col
 			{
@@ -1666,7 +1668,7 @@ namespace yata
 					wT = this[r,c]._widthtext + _padHori * 2;
 					if (wT > w) w = wT;
 				}
-				Cols[c].width(w, true);
+				col.width(w, true);
 			}
 
 			if (range == 0 && w != width) // if range >0 let Calibrate() handle multiple cols
@@ -2505,7 +2507,6 @@ namespace yata
 							ColSort(c);
 							EnsureDisplayedCellOrRow();
 						}
-						// TODO: else autosize col
 					}
 				}
 			}

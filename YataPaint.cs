@@ -146,6 +146,7 @@ namespace yata
 				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
 
 				int clip;
+				Color color;
 
 				for (int c = 0; c != ColCount; ++c)
 				{
@@ -163,13 +164,18 @@ namespace yata
 											   rect.X + rect.Width  - _offsetHoriSort,
 											   rect.Y + rect.Height - _offsetVertSort);
 
-							clip = _offsetHoriSort - 3;
+							clip = _offsetHoriSort - 1;
 						}
 						else
-							clip = 8;
+							clip = 7;
+
+						if (Cols[c].UserSized)
+							color = Colors.TextUserSized;
+						else
+							color = Colors.Text;
 
 						rect.Width -= clip;
-						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, color, YataGraphics.flags);
 						rect.Width += clip;
 					}
 

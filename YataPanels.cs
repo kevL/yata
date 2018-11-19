@@ -78,27 +78,45 @@ namespace yata
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			_grid._editor.Visible = false;
-			_grab = (Cursor == Cursors.VSplit);
+			if (e.Button == MouseButtons.Left)
+			{
+				_grid._editor.Visible = false;
+				_grab = (Cursor == Cursors.VSplit);
+			}
 
 //			base.OnMouseDown(e);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			if (_grab)
+			if (e.Button == MouseButtons.Left)
 			{
-				_grab = false;
-				Cursor = Cursors.Default;
+				if (_grab)
+				{
+					_grab = false;
+					Cursor = Cursors.Default;
 
+					var col = _grid.Cols[_grabCol];
+					col.UserSized = true;
+
+					int w = col.width() + e.X - _grabStart;
+					if (w < 16) w = 16;
+
+					col.width(w, true);
+					_grid.InitScrollers();
+					_grid.Refresh();
+				}
+			}
+			else if (e.Button == MouseButtons.Right)
+			{
 				var col = _grid.Cols[_grabCol];
-
-				int w = col.width() + e.X - _grabStart;
-				if (w < 16) w = 16;
-
-				col.width(w, true);
-				_grid.InitScrollers();
-				_grid.Refresh();
+				if (col.UserSized)
+				{
+					col.UserSized = false;
+					_grid.colRewidth(_grabCol, 0, _grid.RowCount - 1);
+					_grid.InitScrollers();
+					_grid.Refresh();
+				}
 			}
 
 //			base.OnMouseUp(e);

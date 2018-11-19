@@ -15,6 +15,9 @@ namespace yata
 		int _width;
 		internal int _widthtext;
 
+		internal bool UserSized
+		{ get; set; }
+
 		/// <summary>
 		/// Sets the width.
 		/// @note When loading a 2da width is set to the colhead first, but then

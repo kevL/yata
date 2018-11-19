@@ -122,6 +122,7 @@ LMB+Ctrl+Shift - you get the idea ...
 
 click on the colheads
 LMB       - click-drag col-boundary to re-width a col
+RMB       - click a col-boundary to auto-width a col
 RMB+Shift - sorts the table by the col either ascending or descending
 
 click on a table-cell
