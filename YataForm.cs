@@ -214,7 +214,7 @@ namespace yata
 
 		void dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
 				Table.Refresh();
@@ -236,7 +236,7 @@ namespace yata
 			it_Close   .Enabled =
 			it_CloseAll.Enabled = (Table != null);
 
-			if (Table != null)
+			if (Table != null && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
 				Table.Refresh();
@@ -852,8 +852,11 @@ namespace yata
 
 			if (Table != null && Table.RowCount != 0)
 			{
-				Table._editor.Visible = false;
-				Table.Refresh();
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Refresh();
+				}
 
 				foreach (var row in Table.Rows)
 				{
@@ -917,7 +920,11 @@ namespace yata
 		/// </summary>
 		void Search()
 		{
-			Table._editor.Visible = false;
+			if (Table._editor.Visible)
+			{
+				Table._editor.Visible = false;
+				Table.Refresh();
+			}
 
 			// TODO: Allow frozen col(s) to be searched through also.
 			// TODO: option to invert the search direction (or at least back to
@@ -1072,6 +1079,12 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
+			if (Table._editor.Visible)
+			{
+				Table._editor.Visible = false;
+				Table.Refresh();
+			}
+
 			Table.Select();
 
 			Cell sel = Table.GetOnlySelectedCell();
