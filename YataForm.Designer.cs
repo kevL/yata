@@ -454,6 +454,7 @@
 			// 
 			this.it_CopyRange.Enabled = false;
 			this.it_CopyRange.Name = "it_CopyRange";
+			this.it_CopyRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.it_CopyRange.Size = new System.Drawing.Size(190, 22);
 			this.it_CopyRange.Text = "copy range";
 			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
@@ -462,6 +463,7 @@
 			// 
 			this.it_PasteRange.Enabled = false;
 			this.it_PasteRange.Name = "it_PasteRange";
+			this.it_PasteRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.it_PasteRange.Size = new System.Drawing.Size(190, 22);
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);

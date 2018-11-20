@@ -27,8 +27,8 @@ Edit
 - Goto : Ctrl+g (focuses the Goto box)
 - Goto loadchanged (See note on Load below)
 
-- copy range (copies a range of selected rows)
-- paste range (pastes a range of selected rows)
+- copy range  : Ctrl+c (copies a range of selected rows)
+- paste range : Ctrl+v (pastes a range of selected rows)
 
 - export copy to clipboard (exports the current copy-list to the clipboard)
 - import clipboard to copy (imports any clipboard-text to the current copy-list

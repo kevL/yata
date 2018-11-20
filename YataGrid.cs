@@ -19,7 +19,7 @@ namespace yata
 		internal string Fullpath // Path-File-Extension
 		{ get; set; }
 
-		readonly YataForm _f;
+		internal readonly YataForm _f;
 		YataGrid _table; // for cycling through all tables
 
 		bool _changed;
@@ -2859,5 +2859,31 @@ namespace yata
 			Changed = changed;
 		} */
 		#endregion Sort
+
+
+		#region Edit keypresses
+/*		protected override void OnKeyPress(KeyPressEventArgs e)
+		{
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				switch (e.KeyChar)
+				{
+					case (char)Keys.C:
+						logfile.Log("Ctrl+c");
+						break;
+
+					case (char)Keys.X:
+						logfile.Log("Ctrl+x");
+						break;
+
+					case (char)Keys.V:
+						logfile.Log("Ctrl+v");
+						break;
+				}
+			}
+
+//			base.OnKeyPress(e);
+		} */
+		#endregion Edit keypresses
 	}
 }

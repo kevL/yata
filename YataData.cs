@@ -74,6 +74,8 @@ namespace yata
 			{
 				_selected = value;
 				_grid.RangeSelect = 0;
+
+				_grid._f.EnableCopyRange(_selected); // NOTE to Self: I should code in C since encapsulation is shot.
 			}
 		}
 

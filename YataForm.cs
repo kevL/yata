@@ -875,8 +875,8 @@ namespace yata
 					}
 				}
 
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
-				it_PasteRange.Enabled = (_copy.Count > 1);
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);// && Table.RangeSelect != 0);
+				it_PasteRange.Enabled = (_copy.Count != 0);// (_copy.Count > 1);
 			}
 			else
 			{
@@ -1192,6 +1192,12 @@ namespace yata
 				_copy.Add(fields);
 				++top;
 			}
+			it_PasteRange.Enabled = true;
+		}
+
+		internal void EnableCopyRange(bool enabled)
+		{
+			it_CopyRange.Enabled = enabled;
 		}
 
 		void editclick_PasteRange(object sender, EventArgs e)
