@@ -114,6 +114,9 @@ namespace yata
 				context_it_Header.Font = new Font(Settings._font2.FontFamily,
 												  Settings._font2.SizeInPoints + 1.0f,
 												  getStyleAccented(Settings._font2.FontFamily));
+
+				tabMenu.Font.Dispose();
+				tabMenu.Font = Settings._font2;
 			}
 
 			if (Settings._dirpreset.Count != 0)

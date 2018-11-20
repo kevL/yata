@@ -70,27 +70,27 @@
 		private System.Windows.Forms.ToolStripMenuItem it_Search;
 		private System.Windows.Forms.ToolStripMenuItem it_Findnext;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuFont;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripSeparator separator_11;
+		private System.Windows.Forms.ToolStripSeparator separator_12;
 		private System.Windows.Forms.ToolStripMenuItem it_Font;
 		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
 		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAll;
 		private System.Windows.Forms.ToolStripMenuItem it_CloseAll;
 		private System.Windows.Forms.ToolStripTextBox tb_Goto;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripSeparator separator_3;
 		private System.Windows.Forms.ToolStripMenuItem it_Goto;
 		private System.Windows.Forms.ToolStripMenuItem it_GotoLoadchanged;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripSeparator separator_4;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyRange;
 		private System.Windows.Forms.ToolStripMenuItem it_PasteRange;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+		private System.Windows.Forms.ToolStripSeparator separator_13;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+		private System.Windows.Forms.ToolStripSeparator separator_14;
 		private System.Windows.Forms.ToolStripMenuItem it_tabReload;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuHelp;
 		private System.Windows.Forms.ToolStripMenuItem it_ReadMe;
@@ -124,7 +124,7 @@
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,13 +141,13 @@
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,10 +157,10 @@
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.separator_12 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
@@ -231,11 +231,12 @@
 			// 
 			// tabMenu
 			// 
+			this.tabMenu.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_tabClose,
 			this.it_tabCloseAll,
 			this.it_tabCloseAllOthers,
-			this.toolStripSeparator6,
+			this.separator_14,
 			this.it_tabReload});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.Size = new System.Drawing.Size(151, 98);
@@ -265,10 +266,10 @@
 			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
 			// 
-			// toolStripSeparator6
+			// separator_14
 			// 
-			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(147, 6);
+			this.separator_14.Name = "separator_14";
+			this.separator_14.Size = new System.Drawing.Size(147, 6);
 			// 
 			// it_tabReload
 			// 
@@ -319,7 +320,7 @@
 			// it_Folders
 			// 
 			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(152, 22);
+			this.it_Folders.Size = new System.Drawing.Size(145, 22);
 			this.it_Folders.Text = "Folders (open)";
 			this.it_Folders.Visible = false;
 			// 
@@ -327,7 +328,7 @@
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(152, 22);
+			this.it_Open.Size = new System.Drawing.Size(145, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -335,54 +336,54 @@
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(152, 22);
+			this.it_Reload.Size = new System.Drawing.Size(145, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(149, 6);
+			this.separator_1.Size = new System.Drawing.Size(142, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(152, 22);
+			this.it_Save.Size = new System.Drawing.Size(145, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(152, 22);
+			this.it_SaveAs.Size = new System.Drawing.Size(145, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(152, 22);
+			this.it_Close.Size = new System.Drawing.Size(145, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(152, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(145, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(149, 6);
+			this.separator_2.Size = new System.Drawing.Size(142, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(152, 22);
+			this.it_Quit.Size = new System.Drawing.Size(145, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
@@ -392,13 +393,13 @@
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Search,
 			this.it_Findnext,
-			this.toolStripSeparator3,
+			this.separator_3,
 			this.it_Goto,
 			this.it_GotoLoadchanged,
-			this.toolStripSeparator4,
+			this.separator_4,
 			this.it_CopyRange,
 			this.it_PasteRange,
-			this.toolStripSeparator5,
+			this.separator_13,
 			this.it_CopyToClipboard,
 			this.it_CopyFromClipboard,
 			this.it_ViewClipboardContents});
@@ -423,10 +424,10 @@
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
-			// toolStripSeparator3
+			// separator_3
 			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
+			this.separator_3.Name = "separator_3";
+			this.separator_3.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_Goto
 			// 
@@ -444,10 +445,10 @@
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
-			// toolStripSeparator4
+			// separator_4
 			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
+			this.separator_4.Name = "separator_4";
+			this.separator_4.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_CopyRange
 			// 
@@ -465,10 +466,10 @@
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
-			// toolStripSeparator5
+			// separator_13
 			// 
-			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(187, 6);
+			this.separator_13.Name = "separator_13";
+			this.separator_13.Size = new System.Drawing.Size(187, 6);
 			// 
 			// it_CopyToClipboard
 			// 
@@ -527,10 +528,10 @@
 			this.it_Menu2daOps.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_RenumberRows,
 			this.it_CheckRows,
-			this.toolStripSeparator1,
+			this.separator_11,
 			this.it_RecolorRows,
 			this.it_AutoCols,
-			this.toolStripSeparator2,
+			this.separator_12,
 			this.it_freeze1,
 			this.it_freeze2});
 			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -553,10 +554,10 @@
 			this.it_CheckRows.Text = "test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
-			// toolStripSeparator1
+			// separator_11
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+			this.separator_11.Name = "separator_11";
+			this.separator_11.Size = new System.Drawing.Size(152, 6);
 			// 
 			// it_RecolorRows
 			// 
@@ -572,10 +573,10 @@
 			this.it_AutoCols.Text = "autosize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
-			// toolStripSeparator2
+			// separator_12
 			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(152, 6);
+			this.separator_12.Name = "separator_12";
+			this.separator_12.Size = new System.Drawing.Size(152, 6);
 			// 
 			// it_freeze1
 			// 
@@ -800,8 +801,7 @@
 			// 
 			// context_it_Header
 			// 
-			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7F, System.Drawing.FontStyle.Bold);
-			this.context_it_Header.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7.5F, System.Drawing.FontStyle.Bold);
 			this.context_it_Header.Name = "context_it_Header";
 			this.context_it_Header.Size = new System.Drawing.Size(175, 22);
 			this.context_it_Header.Text = "_row @ 16";
@@ -900,7 +900,6 @@
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(842, 22);
 			this.statusbar.TabIndex = 2;
-			this.statusbar.Text = "statusStrip1";
 			// 
 			// statusbar_label_Coords
 			// 
