@@ -1021,6 +1021,8 @@ namespace yata
 		} */
 
 
+		bool _initFrozenLabels = true;
+
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
 		/// </summary>
@@ -1034,12 +1036,15 @@ namespace yata
 			{
 				_labelid.Visible = true;
 
-				DrawingControl.SetDoubleBuffered(_labelid);
-				_labelid.BackColor = Colors.FrozenHead;
+				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated or updated on Reload better.
+				{
+					DrawingControl.SetDoubleBuffered(_labelid);
+					_labelid.BackColor = Colors.FrozenHead;
 
-				_labelid.Paint += labelid_Paint;
-				_labelid.MouseClick += click_IdLabel;
-				_labelid.MouseClick += (sender, e) => Select();
+					_labelid.Paint += labelid_Paint;
+					_labelid.MouseClick += click_IdLabel;
+					_labelid.MouseClick += (sender, e) => Select();
+				}
 
 				_panelCols.Controls.Add(_labelid);
 
@@ -1047,12 +1052,15 @@ namespace yata
 				{
 					_labelfirst.Visible = (_frozenCount > FreezeId); // required after Font calibration
 
-					DrawingControl.SetDoubleBuffered(_labelfirst);
-					_labelfirst.BackColor = Colors.FrozenHead;
+					if (_initFrozenLabels)
+					{
+						DrawingControl.SetDoubleBuffered(_labelfirst);
+						_labelfirst.BackColor = Colors.FrozenHead;
 
-					_labelfirst.Paint += labelfirst_Paint;
-					_labelfirst.MouseClick += click_FirstLabel;
-					_labelfirst.MouseClick += (sender, e) => Select();
+						_labelfirst.Paint += labelfirst_Paint;
+						_labelfirst.MouseClick += click_FirstLabel;
+						_labelfirst.MouseClick += (sender, e) => Select();
+					}
 
 					_panelCols.Controls.Add(_labelfirst);
 
@@ -1060,17 +1068,21 @@ namespace yata
 					{
 						_labelsecond.Visible = ((_frozenCount > FreezeFirst)); // required after Font calibration
 
-						DrawingControl.SetDoubleBuffered(_labelsecond);
-						_labelsecond.BackColor = Colors.FrozenHead;
+						if (_initFrozenLabels)
+						{
+							DrawingControl.SetDoubleBuffered(_labelsecond);
+							_labelsecond.BackColor = Colors.FrozenHead;
 
-						_labelsecond.Paint += labelsecond_Paint;
-						_labelsecond.MouseClick += click_SecondLabel;
-						_labelsecond.MouseClick += (sender, e) => Select();
+							_labelsecond.Paint += labelsecond_Paint;
+							_labelsecond.MouseClick += click_SecondLabel;
+							_labelsecond.MouseClick += (sender, e) => Select();
+						}
 
 						_panelCols.Controls.Add(_labelsecond);
 					}
 				}
 			}
+			_initFrozenLabels = false;
 		}
 
 
