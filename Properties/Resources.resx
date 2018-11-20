@@ -121,15 +121,15 @@
   <data name="asc_16px" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAABRSURBVDhPYxgFtAVcQHwIikFsksEyIP4PxctBAqSAPiCGaYbhfiAmCqQBMbpmGE4HYrzAGYj/
-        ATE2zSAMknMBYpzgNRBj04iMQWpGAfUAAwMAoAMjD5LsLrQAAAAASUVORK5CYII=
+        YQUAAABcSURBVDhPYxgFNARJSYe5gPgQFHNBhYkHQE3LgPg/FC+HChMHgBr6kDTDcD9UGj8AKkxD04iM
+        06HKsAOgAmcg/oekAR2D5FygyjEBUPI1kmJc+DVU+SigDmBgAABShGM1CbGcWAAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="des_16px" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAABOSURBVDhPYxgF1Aevgfg/AQxSgxO4APE/IMamEYRBcs5AjBekAzE2zSCcBsREgX4gRtfcC8Qk
-        geVADNO8FCRAKuAC4kNQDGKPAtoABgYAbJsjDf7PTOUAAAAASUVORK5CYII=
+        YQUAAABaSURBVDhPYxgFVAaH0rJfA/F/Avg1VDkmAEq6APE/JMXoGCTnDFWOHQAVpCNpQMdpUGX4AVBh
+        P5pGEO6FShMHgBqWI2leChUmHgA1cQHxISjmggqPAuoDBgYA72tlK9yE0L4AAAAASUVORK5CYII=
 </value>
   </data>
   <data name="bluepixel" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
