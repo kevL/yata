@@ -305,6 +305,8 @@ namespace yata
 			//logfile.Log("CreateTabPage()");
 
 			ShowColorPanel();
+			Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
+						// but a refresh turns the client area gray at least instead of glitchy.
 
 			var table = new YataGrid(this, pfe);
 
