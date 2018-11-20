@@ -128,8 +128,8 @@
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Folders = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
@@ -314,7 +314,14 @@
 			this.it_MenuFile.Name = "it_MenuFile";
 			this.it_MenuFile.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuFile.Text = "File";
-			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening_FolderPresets);
+			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
+			// 
+			// it_Folders
+			// 
+			this.it_Folders.Name = "it_Folders";
+			this.it_Folders.Size = new System.Drawing.Size(152, 22);
+			this.it_Folders.Text = "Folders (open)";
+			this.it_Folders.Visible = false;
 			// 
 			// it_Open
 			// 
@@ -323,13 +330,6 @@
 			this.it_Open.Size = new System.Drawing.Size(152, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
-			// 
-			// it_Folders
-			// 
-			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(152, 22);
-			this.it_Folders.Text = "Folders";
-			this.it_Folders.Visible = false;
 			// 
 			// it_Reload
 			// 
@@ -405,7 +405,7 @@
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
 			this.it_MenuEdit.Text = "Edit";
-			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening_EnableItems);
+			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
 			// 
 			// it_Search
 			// 
@@ -537,7 +537,7 @@
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
 			this.it_Menu2daOps.Size = new System.Drawing.Size(52, 20);
 			this.it_Menu2daOps.Text = "2da Ops";
-			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
 			// it_RenumberRows
 			// 

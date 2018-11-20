@@ -223,6 +223,61 @@ namespace yata
 
 
 		#region File menu
+		/// <summary>
+		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void file_dropdownopening(object sender, EventArgs e)
+		{
+			it_Reload  .Enabled =
+			it_Save    .Enabled =
+			it_SaveAs  .Enabled =
+			it_Close   .Enabled =
+			it_CloseAll.Enabled = (Table != null);
+
+			if (Table != null)
+			{
+				Table._editor.Visible = false;
+				Table.Refresh();
+			}
+
+			if (_presets.Count != 0)
+			{
+				var itDelete = new List<ToolStripItem>();
+
+				foreach (var it in _presets)
+				{
+					if (it.Text == "clear current")
+					{
+						it.Visible = !String.IsNullOrEmpty(_initialDir);
+					}
+					else if (!Directory.Exists(it.Text))
+					{
+						itDelete.Add(it);
+					}
+				}
+
+				if (itDelete.Count != 0)
+				{
+					foreach (var it in itDelete)
+					{
+						it_Folders.DropDownItems.Remove(it);
+						_presets.Remove(it);
+					}
+				}
+
+				if (_presets.Count < 2) // ie. no presets or only "clear current" left
+				{
+					_initialDir = String.Empty;
+					it_Folders.Visible = false;
+
+					it_Folders.DropDownItems.Clear();
+					_presets.Clear();
+				}
+			}
+		}
+
 		void fileclick_Open(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
@@ -640,55 +695,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void file_dropdownopening_FolderPresets(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				Table._editor.Visible = false;
-				Table.Refresh();
-			}
-
-			if (_presets.Count != 0)
-			{
-				var itDelete = new List<ToolStripItem>();
-
-				foreach (var it in _presets)
-				{
-					if (it.Text == "clear current")
-					{
-						it.Visible = !String.IsNullOrEmpty(_initialDir);
-					}
-					else if (!Directory.Exists(it.Text))
-					{
-						itDelete.Add(it);
-					}
-				}
-
-				if (itDelete.Count != 0)
-				{
-					foreach (var it in itDelete)
-					{
-						it_Folders.DropDownItems.Remove(it);
-						_presets.Remove(it);
-					}
-				}
-
-				if (_presets.Count < 2) // ie. no presets or only "clear current" left
-				{
-					_initialDir = String.Empty;
-					it_Folders.Visible = false;
-
-					it_Folders.DropDownItems.Clear();
-					_presets.Clear();
-				}
-			}
-		}
-
-		/// <summary>
 		/// Sets a directory as the initial directory for the FileOpen dialog.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -832,6 +838,48 @@ namespace yata
 
 
 		#region Edit menu
+		/// <summary>
+		/// Handles opening the EditMenu, determines if various items ought be
+		/// enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void edit_dropdownopening(object sender, EventArgs e)
+		{
+			it_Findnext.Enabled = (Table != null);
+
+			it_GotoLoadchanged.Enabled = false;
+
+			if (Table != null && Table.RowCount != 0)
+			{
+				Table._editor.Visible = false;
+				Table.Refresh();
+
+				foreach (var row in Table.Rows)
+				{
+					for (int c = 0; c != Table.ColCount; ++c)
+					{
+						if (row.cells[c].loadchanged)
+						{
+							it_GotoLoadchanged.Enabled = true;
+							break;
+						}
+					}
+				}
+
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
+				it_PasteRange.Enabled = (_copy.Count > 1);
+			}
+			else
+			{
+				it_CopyRange .Enabled =
+				it_PasteRange.Enabled = false;
+			}
+
+			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
+			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
+		}
+
 		void editclick_Search(object sender, EventArgs e)
 		{
 			tb_Search.Focus();
@@ -1009,45 +1057,6 @@ namespace yata
 					Table.Refresh();
 				}
 			}
-		}
-
-
-		/// <summary>
-		/// Handles opening the EditMenu, determines if various items ought be
-		/// enabled.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void edit_dropdownopening_EnableItems(object sender, EventArgs e)
-		{
-			it_GotoLoadchanged.Enabled = false;
-
-			if (Table != null && Table.RowCount != 0)
-			{
-				Table._editor.Visible = false;
-				Table.Refresh();
-
-				foreach (var row in Table.Rows)
-				{
-					for (int c = 0; c != Table.ColCount; ++c)
-					{
-						if (row.cells[c].loadchanged)
-						{
-							it_GotoLoadchanged.Enabled = true;
-							break;
-						}
-					}
-				}
-
-				it_CopyRange.Enabled = (Table.getSelectedRow() != -1 && Table.RangeSelect != 0);
-			}
-			else
-				it_CopyRange.Enabled = false;
-
-			it_PasteRange.Enabled = (_copy.Count > 1); // TODO: fix empty tables .......
-
-			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
-			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
 		}
 
 		/// <summary>
@@ -1247,6 +1256,22 @@ namespace yata
 
 
 		#region 2da Ops menu
+		void ops_dropdownopening(object sender, EventArgs e)
+		{
+			it_RenumberRows.Enabled =
+			it_CheckRows   .Enabled =
+			it_RecolorRows .Enabled =
+			it_AutoCols    .Enabled =
+			it_freeze1     .Enabled =
+			it_freeze2     .Enabled = (Table != null);
+
+			if (Table != null)
+			{
+				Table._editor.Visible = false;
+				Table.Refresh();
+			}
+		}
+
 		void opsclick_Reorder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
