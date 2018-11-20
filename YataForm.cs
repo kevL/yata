@@ -1183,7 +1183,7 @@ namespace yata
 				Table.Insert(r++, _copy[i], false);
 
 			Table.Calibrate(selr, _copy.Count - 1); // paste range
-			Table.EnsureDisplayedRow(selr - 1);
+			Table.EnsureDisplayedRow(selr);
 
 			ShowColorPanel(false);
 			DrawingControl.ResumeDrawing(Table);

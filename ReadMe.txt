@@ -8,9 +8,9 @@ kevL's
 ver 2.2.0.0
 
 File
-- Open ... : Ctrl+o
 - Folders (presets for the Open ... dialog - does not appear if no presets have
   been set)
+- Open ... : Ctrl+o
 - Reload   : Ctrl+r
 
 - Save : Ctrl+s

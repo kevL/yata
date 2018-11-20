@@ -129,8 +129,8 @@
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Folders = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -301,8 +301,8 @@
 			// 
 			this.it_MenuFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_Open,
 			this.it_Folders,
+			this.it_Open,
 			this.it_Reload,
 			this.separator_1,
 			this.it_Save,
@@ -324,6 +324,13 @@
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
+			// it_Folders
+			// 
+			this.it_Folders.Name = "it_Folders";
+			this.it_Folders.Size = new System.Drawing.Size(152, 22);
+			this.it_Folders.Text = "Folders";
+			this.it_Folders.Visible = false;
+			// 
 			// it_Reload
 			// 
 			this.it_Reload.Name = "it_Reload";
@@ -331,13 +338,6 @@
 			this.it_Reload.Size = new System.Drawing.Size(152, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
-			// 
-			// it_Folders
-			// 
-			this.it_Folders.Name = "it_Folders";
-			this.it_Folders.Size = new System.Drawing.Size(152, 22);
-			this.it_Folders.Text = "Folders";
-			this.it_Folders.Visible = false;
 			// 
 			// separator_1
 			// 

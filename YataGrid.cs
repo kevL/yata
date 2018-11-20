@@ -2650,8 +2650,7 @@ namespace yata
 
 			if (calibrate) // is only 1 row (no range) via context single-row edit
 			{
-				int r = (fields != null) ? id : -1;
-				Calibrate(r); // insert()
+				Calibrate((fields != null) ? id : -1); // insert()
 
 				if (id < RowCount)
 					EnsureDisplayedRow(id);
