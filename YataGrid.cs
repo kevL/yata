@@ -238,13 +238,19 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-			if (!_table._editor.Visible)
+/*			if (!_table._editor.Visible)
 			{
 				_table.offsetVert = _table._scrollVert.Value;
 				_table.Refresh();
 			}
 			else
-				_table._scrollVert.Value = _table.offsetVert;
+				_table._scrollVert.Value = _table.offsetVert; */
+
+			_table._editor.Visible = false;
+
+			_table.offsetVert = _table._scrollVert.Value;
+			_table.Refresh();
+
 
 			if (!_f._search)
 				Select(); // workaround: refocus the table (bar has to move > 0px)
@@ -258,13 +264,18 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-			if (!_table._editor.Visible)
+/*			if (!_table._editor.Visible)
 			{
 				_table.offsetHori = _table._scrollHori.Value;
 				_table.Refresh();
 			}
 			else
-				_table._scrollHori.Value = _table.offsetHori;
+				_table._scrollHori.Value = _table.offsetHori; */
+
+			_table._editor.Visible = false;
+
+			_table.offsetHori = _table._scrollHori.Value;
+			_table.Refresh();
 
 			if (!_f._search)
 				Select(); // workaround: refocus the table (bar has to move > 0px)
@@ -1938,6 +1949,8 @@ namespace yata
 		/// </summary>
 		void EditCell()
 		{
+			EnsureDisplayed(_editcell);
+
 			var rect = getCellRectangle(_editcell); // align the editbox over the text ->
 			_editor.Left   = rect.X + 5;
 			_editor.Top    = rect.Y + 4;
