@@ -2775,20 +2775,49 @@ namespace yata
 
 			int result;
 
-			if (   Int32.TryParse(_a, out _ai)			// try int comparision first
-				&& Int32.TryParse(_b, out _bi))
+			bool a_isStars = (_a == Constants.Stars);
+			bool b_isStars = (_b == Constants.Stars);
+
+			if (a_isStars && b_isStars) // sort stars last.
 			{
-				result = _ai.CompareTo(_bi);
+				result = 0;
 			}
-			else if (float.TryParse(_a, out _af)		// try float comparison next
-				  && float.TryParse(_b, out _bf))
+			else if (a_isStars && !b_isStars)
 			{
-				result = _af.CompareTo(_bf);
+				result = 1;
+			}
+			else if (!a_isStars && b_isStars)
+			{
+				result = -1;
 			}
 			else
-				result = String.CompareOrdinal(_a,_b);	// else do string comparison
+			{
+				bool a_isInt = Int32.TryParse(_a, out _ai);
+				bool b_isInt = Int32.TryParse(_b, out _bi);
 
-			if (result == 0 && _sortcol != 0			// secondary sort on id if primary sort matches
+				if (a_isInt && !b_isInt) // sort ints before floats/strings
+				{
+					result = -1;
+				}
+				else if (!a_isInt && b_isInt) // sort ints before floats/strings
+				{
+					result = 1;
+				}
+				else if (a_isInt && b_isInt) // try int comparision
+				{
+					result = _ai.CompareTo(_bi);
+				}
+				else if (!_a.Contains(",") && !_b.Contains(",") // NOTE: ... how any library can convert (eg) "1,8,0,0,0" into "18000" and "0,3,10,0,0" to "31000" ...
+					&& float.TryParse(_a, out _af) // try float comparison
+					&& float.TryParse(_b, out _bf))
+				{
+					result = _af.CompareTo(_bf);
+				}
+				else
+					result = String.CompareOrdinal(_a,_b); // else do string comparison
+			}
+
+			if (result == 0 && _sortcol != 0 // secondary sort on id if primary sort matches
 				&& Int32.TryParse(row1.cells[0].text, out _ai)
 				&& Int32.TryParse(row2.cells[0].text, out _bi))
 			{
@@ -2872,31 +2901,5 @@ namespace yata
 			Changed = changed;
 		} */
 		#endregion Sort
-
-
-		#region Edit keypresses
-/*		protected override void OnKeyPress(KeyPressEventArgs e)
-		{
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
-			{
-				switch (e.KeyChar)
-				{
-					case (char)Keys.C:
-						logfile.Log("Ctrl+c");
-						break;
-
-					case (char)Keys.X:
-						logfile.Log("Ctrl+x");
-						break;
-
-					case (char)Keys.V:
-						logfile.Log("Ctrl+v");
-						break;
-				}
-			}
-
-//			base.OnKeyPress(e);
-		} */
-		#endregion Edit keypresses
 	}
 }
