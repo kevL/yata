@@ -284,7 +284,8 @@ namespace yata
 					if (_table._panelRows   != null) _table._panelRows  .Height = Height;
 					if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
 
-					_table.Refresh(); // _table-drawing can tear without that.
+					if (!_table.EnsureDisplayedCellOrRow())
+						_table.Refresh(); // _table-drawing can tear without that.
 				}
 				_table = null;
 
@@ -402,12 +403,8 @@ namespace yata
 		/// </summary>
 		internal void SetProHori()
 		{
-			if (WidthTable == Width
-							+ offsetHori
-							- (_visVert ? _scrollVert.Width : 0))
-			{
+			if (WidthTable == Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
 				proHori = 1;
-			}
 		}
 
 		/// <summary>
@@ -2165,7 +2162,7 @@ namespace yata
 		}
 
 
-		internal void EnsureDisplayed(Cell cell)
+		internal bool EnsureDisplayed(Cell cell)
 		{
 			var rect = getCellRectangle(cell);
 
@@ -2182,10 +2179,13 @@ namespace yata
 						&& (rect.X > right || rect.X + left > (right - left) / 2)))
 				{
 					_scrollHori.Value -= left - rect.X;
+					return true;
 				}
-				else if (rect.X + rect.Width > right && rect.Width < right - left)
+
+				if (rect.X + rect.Width > right && rect.Width < right - left)
 				{
 					_scrollHori.Value += rect.X + rect.Width + bar - Width;
+					return true;
 				}
 			}
 
@@ -2194,16 +2194,18 @@ namespace yata
 				if (rect.Y < HeightColhead)
 				{
 					_scrollVert.Value -= HeightColhead - rect.Y;
+					return true;
 				}
-				else
+
+				bar = _visHori ? _scrollHori.Height : 0;
+				if (rect.Y + rect.Height + bar > Height)
 				{
-					bar = _visHori ? _scrollHori.Height : 0;
-					if (rect.Y + rect.Height + bar > Height)
-					{
-						_scrollVert.Value += rect.Y + rect.Height + bar - Height;
-					}
+					_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+					return true;
 				}
 			}
+
+			return false;
 		}
 
 		void EnsureDisplayedCol(int c)
@@ -2232,7 +2234,7 @@ namespace yata
 			}
 		}
 
-		internal void EnsureDisplayedRow(int r)
+		internal bool EnsureDisplayedRow(int r)
 		{
 			var bounds = getRowEdges(r);
 
@@ -2241,34 +2243,29 @@ namespace yata
 				if (bounds.X < HeightColhead)
 				{
 					_scrollVert.Value -= HeightColhead - bounds.X;
+					return true;
 				}
-				else
+
+				int bar = _visHori ? _scrollHori.Height : 0;
+				if (bounds.Y + bar > Height)
 				{
-					int bar = _visHori ? _scrollHori.Height : 0;
-					if (bounds.Y + bar > Height)
-					{
-						_scrollVert.Value += bounds.Y + bar - Height;
-					}
+					_scrollVert.Value += bounds.Y + bar - Height;
+					return true;
 				}
 			}
+			return false;
 		}
 
 		internal bool EnsureDisplayedCellOrRow()
 		{
 			var cell = GetOnlySelectedCell();
 			if (cell != null)
-			{
-				EnsureDisplayed(cell);
-				return true;
-			}
+				return EnsureDisplayed(cell);
 
 			for (int r = 0; r != RowCount; ++r)
 			{
 				if (Rows[r].selected)
-				{
-					EnsureDisplayedRow(r);
-					return true;
-				}
+					return EnsureDisplayedRow(r);
 			}
 			return false;
 		}

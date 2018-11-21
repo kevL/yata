@@ -1556,7 +1556,7 @@ namespace yata
 					// turn out even almost correct.
 					// NOTE: Height of any table should NOT be changing at all.
 
-					if (table.EnsureDisplayedCellOrRow())
+					if (!table.EnsureDisplayedCellOrRow())
 						table.Refresh(); // for big tables ...
 				}
 
