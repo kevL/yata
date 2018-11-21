@@ -3,12 +3,12 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 nov 20
+2018 nov 21
 kevL's
-ver 2.2.2.0
+ver 2.2.3.0
 
 File
-- Folders (presets for the Open ... dialog - does not appear if no presets have
+- Open ... @ folder (presets for the Open ... dialog - does not appear if no presets have
   been set)
 - Open ... : Ctrl+o
 - Reload   : Ctrl+r

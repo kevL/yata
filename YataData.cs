@@ -9,7 +9,7 @@ namespace yata
 	/// </summary>
 	sealed class Col
 	{
-		internal string text; // the header text
+		internal string text; // the colhead text
 		internal bool selected;
 
 		int _width;
