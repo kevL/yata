@@ -252,3 +252,9 @@ any row(s). To replace rows with a copied range of rows, use paste, re-select,
 then delete or vice versa. And to paste rows after the last row, choose "paste
 range" without having a currently selected row - pressing the Escape key will
 clear all selections of rows and cells.
+
+
+Appendix D: output
+
+Yata outputs 2da-files as text. It uses a single space for the delimiter. It
+does not align cols.
