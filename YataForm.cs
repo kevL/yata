@@ -25,8 +25,7 @@ namespace yata
 
 		List<string[]> _copy = new List<string[]>();
 
-		List<ToolStripItem> _presets = new List<ToolStripItem>(); // folder presets for the Open ... dialog
-		string _initialDir = String.Empty;
+		string _preset = String.Empty;
 
 		internal TabControl Tabs
 		{ get { return tabControl; } }
@@ -117,25 +116,6 @@ namespace yata
 
 				tabMenu.Font.Dispose();
 				tabMenu.Font = Settings._font2;
-			}
-
-			if (Settings._dirpreset.Count != 0)
-			{
-				it_Folders.Visible = true;
-
-				var clear = it_Folders.DropDownItems.Add("clear current");
-				_presets.Add(clear);
-
-				clear.Visible = false;
-				clear.Click += PresetClick;
-
-				foreach (var dir in Settings._dirpreset)
-				{
-					var preset = it_Folders.DropDownItems.Add(dir);
-					_presets.Add(preset);
-
-					preset.Click += PresetClick;
-				}
 			}
 
 			int
@@ -245,40 +225,17 @@ namespace yata
 				Table.Refresh();
 			}
 
-			if (_presets.Count != 0)
+			_preset = String.Empty;
+			it_OpenFolder.DropDownItems.Clear();
+			foreach (var dir in Settings._dirpreset)
 			{
-				var itDelete = new List<ToolStripItem>();
-
-				foreach (var it in _presets)
+				if (Directory.Exists(dir))
 				{
-					if (it.Text == "clear current")
-					{
-						it.Visible = !String.IsNullOrEmpty(_initialDir);
-					}
-					else if (!Directory.Exists(it.Text))
-					{
-						itDelete.Add(it);
-					}
-				}
-
-				if (itDelete.Count != 0)
-				{
-					foreach (var it in itDelete)
-					{
-						it_Folders.DropDownItems.Remove(it);
-						_presets.Remove(it);
-					}
-				}
-
-				if (_presets.Count < 2) // ie. no presets or only "clear current" left
-				{
-					_initialDir = String.Empty;
-					it_Folders.Visible = false;
-
-					it_Folders.DropDownItems.Clear();
-					_presets.Clear();
+					var preset = it_OpenFolder.DropDownItems.Add(dir);
+					preset.Click += fileclick_OpenFolder;
 				}
 			}
+			it_OpenFolder.Visible = (it_OpenFolder.DropDownItems.Count != 0);
 		}
 
 		void fileclick_Open(object sender, EventArgs e)
@@ -287,13 +244,21 @@ namespace yata
 			{
 				ofd.Title            = "Select a 2da file";
 				ofd.Filter           = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-				ofd.InitialDirectory = _initialDir;
+				ofd.InitialDirectory = _preset;
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
 					CreateTabPage(ofd.FileName);
 				}
 			}
+		}
+
+		void fileclick_OpenFolder(object sender, EventArgs e)
+		{
+			var it = sender as ToolStripMenuItem;
+			_preset = it.Text;
+
+			fileclick_Open(null, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -343,8 +308,6 @@ namespace yata
 		/// <param name="e"></param>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//logfile.Log("tab_SelectedIndexChanged id= " + Tabs.SelectedIndex);
-
 			if (Tabs.SelectedIndex != -1)
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
@@ -572,9 +535,6 @@ namespace yata
 				else
 					fileclick_CloseTab(null, EventArgs.Empty);
 
-//				if (Tabs.TabCount != 0)
-//					ShowColorPanel(false);
-
 				if (Table != null)
 				{
 					ShowColorPanel(false);
@@ -697,18 +657,6 @@ namespace yata
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Sets a directory as the initial directory for the FileOpen dialog.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void PresetClick(object sender, EventArgs e)
-		{
-			var it = sender as ToolStripItem;
-			if ((_initialDir = it.Text) == "clear current")
-				_initialDir = String.Empty;
 		}
 		#endregion File menu
 
