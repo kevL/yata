@@ -96,16 +96,16 @@ namespace yata
 
 				statusbar_label_Info.Font.Dispose();
 				statusbar_label_Info.Font = new Font(Settings._font2.FontFamily,
-													 Settings._font2.SizeInPoints + 1.5f);
+													 Settings._font2.SizeInPoints + 1.25f);
 
-				int hBar = YataGraphics.MeasureHeight("X", statusbar_label_Info.Font) + 2;
+				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statusbar_label_Info.Font) + 2;
 
 				statusbar             .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
 				statusbar_label_Coords.Height =
 				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
 
 				int wCords0 = statusbar_label_Coords.Width;
-				int wCords = YataGraphics.MeasureWidth("id= 99999 col= 99", statusbar_label_Info.Font) + 10;
+				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statusbar_label_Info.Font) + 10;
 				statusbar_label_Coords.Width = (wCords < wCords0) ? wCords0 : wCords;
 
 
@@ -799,7 +799,7 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			it_Findnext.Enabled = (Table != null);
+			it_Findnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
 			it_GotoLoadchanged.Enabled = false;
 
@@ -834,6 +834,11 @@ namespace yata
 
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
+		}
+
+		void textchanged_Search(object sender, EventArgs e)
+		{
+			it_Findnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 		}
 
 		void editclick_Search(object sender, EventArgs e)

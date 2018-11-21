@@ -128,8 +128,8 @@
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
@@ -317,13 +317,6 @@
 			this.it_MenuFile.Text = "File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
 			// 
-			// it_OpenFolder
-			// 
-			this.it_OpenFolder.Name = "it_OpenFolder";
-			this.it_OpenFolder.Size = new System.Drawing.Size(155, 22);
-			this.it_OpenFolder.Text = "Open @ folder ...";
-			this.it_OpenFolder.Visible = false;
-			// 
 			// it_Open
 			// 
 			this.it_Open.Name = "it_Open";
@@ -331,6 +324,13 @@
 			this.it_Open.Size = new System.Drawing.Size(155, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
+			// 
+			// it_OpenFolder
+			// 
+			this.it_OpenFolder.Name = "it_OpenFolder";
+			this.it_OpenFolder.Size = new System.Drawing.Size(155, 22);
+			this.it_OpenFolder.Text = "Open ... @ folder";
+			this.it_OpenFolder.Visible = false;
 			// 
 			// it_Reload
 			// 
@@ -514,6 +514,7 @@
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
 			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
+			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Search);
 			// 
 			// cb_SearchOption
 			// 
@@ -770,14 +771,14 @@
 			// 
 			this.it_ReadMe.Name = "it_ReadMe";
 			this.it_ReadMe.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.it_ReadMe.Size = new System.Drawing.Size(152, 22);
+			this.it_ReadMe.Size = new System.Drawing.Size(135, 22);
 			this.it_ReadMe.Text = "ReadMe.txt";
 			this.it_ReadMe.Click += new System.EventHandler(this.helpclick_Help);
 			// 
 			// it_About
 			// 
 			this.it_About.Name = "it_About";
-			this.it_About.Size = new System.Drawing.Size(152, 22);
+			this.it_About.Size = new System.Drawing.Size(135, 22);
 			this.it_About.Text = "About";
 			this.it_About.Click += new System.EventHandler(this.helpclick_About);
 			// 
@@ -915,7 +916,7 @@
 			// statusbar_label_Info
 			// 
 			this.statusbar_label_Info.AutoSize = false;
-			this.statusbar_label_Info.Font = new System.Drawing.Font("Consolas", 8F);
+			this.statusbar_label_Info.Font = new System.Drawing.Font("Consolas", 7.75F);
 			this.statusbar_label_Info.Name = "statusbar_label_Info";
 			this.statusbar_label_Info.Size = new System.Drawing.Size(667, 17);
 			this.statusbar_label_Info.Spring = true;

@@ -227,8 +227,8 @@ namespace yata
 		/// <param name="f"></param>
 		internal static void SetStaticMetrics(YataForm f)
 		{
-			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.TEST, f.FontAccent) + _padVert * 2;
-			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.TEST, f.Font)       + _padVert * 2;
+			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
+			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
 
 			_wid = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
 		}
