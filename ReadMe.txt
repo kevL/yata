@@ -121,7 +121,8 @@ LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
 
 click on the colheads
-LMB       - click-drag col-boundary to re-width a col
+LMB       - click-drag col-boundary to re-width a col (The text of a colhead
+            ought appear slightly grayed if its col has been user-sized.)
 RMB       - click a col-boundary to auto-width a col
 RMB+Shift - sorts the table by the col either ascending or descending
 

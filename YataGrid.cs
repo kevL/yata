@@ -238,14 +238,6 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-/*			if (!_table._editor.Visible)
-			{
-				_table.offsetVert = _table._scrollVert.Value;
-				_table.Refresh();
-			}
-			else
-				_table._scrollVert.Value = _table.offsetVert; */
-
 			_table._editor.Visible = false;
 
 			_table.offsetVert = _table._scrollVert.Value;
@@ -264,18 +256,11 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-/*			if (!_table._editor.Visible)
-			{
-				_table.offsetHori = _table._scrollHori.Value;
-				_table.Refresh();
-			}
-			else
-				_table._scrollHori.Value = _table.offsetHori; */
-
 			_table._editor.Visible = false;
 
 			_table.offsetHori = _table._scrollHori.Value;
 			_table.Refresh();
+
 
 			if (!_f._search)
 				Select(); // workaround: refocus the table (bar has to move > 0px)
@@ -287,15 +272,11 @@ namespace yata
 
 		protected override void OnResize(EventArgs e)
 		{
-			//logfile.Log("OnResize()");
 			if (!_init)
 			{
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
 					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-
-					//logfile.Log(". " + Path.GetFileNameWithoutExtension(_table.Pfe));
-
 					_table.InitScrollers();
 
 					// NOTE: The panels can be null during the load sequence.
@@ -313,7 +294,6 @@ namespace yata
 //				if (_piRowhead != null) _piRowhead.Dispose();
 //				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 			}
-			//else logfile.Log(". bypass");
 
 //			base.OnResize(e);
 		}
@@ -325,19 +305,14 @@ namespace yata
 		/// </summary>
 		internal void InitScrollers()
 		{
-			//logfile.Log("InitScrollers() " + Path.GetFileNameWithoutExtension(Pfe));
-			//logfile.Log(". Height= " + Height);
-
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
 			WidthTable = WidthRowhead;
 			for (int c = 0; c != ColCount; ++c)
 				WidthTable += Cols[c].width();
 
-			//logfile.Log("Width/Height= " + WidthTable + "/" + HeightTable);
-
 			// NOTE: Height/Width *includes* the height/width of the relevant
-			// scrollbar and panel.
+			// scrollbar(s) and panel(s).
 
 			bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
 			bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
@@ -385,7 +360,7 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the bottom of the table snuggled against the bottom of the visible area
-				if (HeightTable - offsetVert < Height - (_visHori ? _scrollHori.Height : 0))
+				if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
 				{
 					_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
 				}
@@ -408,13 +383,31 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the right of the table snuggled against the right of the visible area
-				if (WidthTable - offsetHori < Width - (_visVert ? _scrollVert.Width : 0))
+				if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
 				{
-					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
+					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0) + proHori;
 				}
 			}
 			else
 				_scrollHori.Value = 0;
+		}
+
+		internal int proHori;
+
+		/// <summary>
+		/// The table scrolls 1 pixel left if refreshing a table when scroll is
+		/// far right. This funct checks if the table is scrolled far right and
+		/// sets and additional 1 pixel offset for InitScrollers() to consider
+		/// during row insertions and deletions.
+		/// </summary>
+		internal void SetProHori()
+		{
+			if (WidthTable == Width
+							+ offsetHori
+							- (_visVert ? _scrollVert.Width : 0))
+			{
+				proHori = 1;
+			}
 		}
 
 		/// <summary>
@@ -1496,15 +1489,15 @@ namespace yata
 					break;
 
 				case Keys.Delete:
+					SetProHori();
 					Delete();
+					proHori = 0;
 					break;
 			}
 
 			Refresh();
 
-//			e.Handled = true;
 //			base.OnKeyDown(e);
-//			Input.SetFlag(e.KeyCode);
 		}
 
 		/// <summary>

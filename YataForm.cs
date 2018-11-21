@@ -714,13 +714,19 @@ namespace yata
 
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			Table.Insert(_r, _copy[0]);
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			Row row = Table.Rows[_r];
 			string field;
@@ -734,18 +740,26 @@ namespace yata
 				row.cells[c].text = field;
 			}
 			row._brush = Brushes.Created;
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			Table.Insert(_r + 1, _copy[0]);
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			var fields = new string[Table.ColCount];
 			fields[0] = _r.ToString();
@@ -754,22 +768,30 @@ namespace yata
 				fields[c] = Constants.Stars;
 			}
 			Table.Insert(_r, fields);
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			for (int c = 1; c != Table.ColCount; ++c)
 			{
 				Table[_r,c].text = Constants.Stars;
 			}
 			Table.Rows[_r]._brush = Brushes.Created;
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			var fields = new string[Table.ColCount];
 			fields[0] = (_r + 1).ToString();
@@ -778,14 +800,20 @@ namespace yata
 				fields[c] = Constants.Stars;
 			}
 			Table.Insert(_r + 1, fields);
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
+			Table.SetProHori();
+
 			Table.Changed = true;
 			Table.Insert(_r, null);
+
 			Table.Refresh();
+			Table.proHori = 0;
 		}
 		#endregion Context menu
 
