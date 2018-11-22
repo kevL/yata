@@ -67,6 +67,12 @@ Font
 - current font string (a .NET string representing the current table font)
 - default (sets the table-font to Yata's hardcoded default font)
 
+Paths (see Appendix E: how to use Crafting paths)
+
+Help
+- ReadMe.txt : F1 (opens this document in a text-editor)
+- About      : displays the version/build-type of the executable
+
 
 keys:
 - w/ only 1 cell selected
@@ -102,6 +108,7 @@ Enter - starts editing a cell if the table has focus and only one cell is
         currently selected
       - commits an edit if the editor box has focus
       - performs search if the Search box or Search Options dropdown has focus
+      - perform goto if the Goto box has focus
 
 Delete - when a row is selected (as indicated with a green field at the far left
 of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
@@ -259,3 +266,64 @@ Appendix D: output
 
 Yata outputs 2da-files as text. It uses a single space for the delimiter. It
 does not align cols.
+
+
+Appendix E: how to use Crafting paths
+
+Yata is capable of displaying readable info about fields in Crafting.2da. Paths
+to various other 2da-files need to be set first, then info ought be displayed on
+the statusbar when the mouse-cursor is moved over the cells of certain cols like
+"CATEGORY" (displays the title of the trigger-spell) or "EFFECTS" (displays the
+recipe's itemproperty in a readable way). Note that pathing to 2da-files can
+also be termed, groping ... that is, when a 2da-file is pathed it will be groped
+for relevant info.
+
+There are two ways to get such info: (a) Using the Paths menu when Crafting.2da
+is loaded, (b) Using "pathall=" entries in Settings.Cfg.
+
+(a) Using the Paths menu
+
+Paths appears on the menubar only when Crafting.2da is loaded - the filename
+without extension needs to be "crafting" (case-insensitive). The items under
+Paths are divided into three sections:
+
+Path all ...             : this item opens a folder browser dialog to search for
+                           any/all applicable 2da-file(s). It can be used more
+                           than once and if so, each time another folder is
+                           selected any applicable 2da-file(s) will be
+                           additionally groped for info. In case of two files
+                           with the same filename in two different directories
+                           info from the latest groping will be used.
+--
+path BaseItems.2da       : these items open a file browser dialog. Use them to
+path Feat.2da              path to a specific 2da-file. A check will appear next
+path ItemPropDef.2da       to the entry on the menu; selecting the item a second
+path Skills.2da            time would clear the info.
+path Spells.2da
+--
+path Classes.2da         : these items merely show whether or not a respective
+path Disease.2da           2da has been groped. A check will appear next to the
+path Iprp_AmmoCost.2da     entry on the menu if relevant info from the file has
+path Iprp_Feats.2da        been found.
+path Iprp_OnHitSpell.2da
+path Iprp_Spells.2da
+path RacialTypes.2da
+
+The items in the third section above are not as versatile as the other items
+because firstly they contain sub-info for itemproperties only and by then I
+realized what a hassle all that is from both a coding and a user perspective.
+And that's when "Path all ..." began. But even that became a bother so I put it
+in Settings.Cfg:
+
+(b) Using "pathall=" entries in Settings.Cfg
+
+You can specify one (or more) "pathall=" directories in Settings.Cfg (without
+quotes), and each will operate just like "Path all ..." does under the menubar.
+
+Please note that the path-feature in Yata does not look inside zipped archives.
+This is to say that the 2da-files that are part of the stock installation are
+invalid targets; the files first need to be copied out of the /Data folder to a
+different directory (ie, as unarchived/uncompressed files).
+
+If you have custom versions of those files they should be groped *after* the
+stock files.
