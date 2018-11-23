@@ -20,6 +20,8 @@ namespace yata
 	{
 		#region Fields & Properties
 
+		internal static string pfe_load; // cl arg
+
 		static YataGrid Table // there can be only 1 Table.
 		{ get; set; }
 
@@ -146,6 +148,13 @@ namespace yata
 
 
 			YataGrid.SetStaticMetrics(this);
+
+			if (!String.IsNullOrEmpty(pfe_load)
+				&& File.Exists(pfe_load))
+			{
+				CreateTabPage(pfe_load);
+				pfe_load = null;
+			}
 		}
 		#endregion cTor
 
@@ -190,9 +199,15 @@ namespace yata
 		internal void ShowColorPanel(bool vis = true)
 		{
 			if (vis)
-				panel_ColorFill.Show();
+			{
+//				panel_ColorFill.Show();
+				panel_ColorFill.BringToFront();
+			}
 			else
-				panel_ColorFill.Hide();
+			{
+//				panel_ColorFill.Hide();
+				panel_ColorFill.SendToBack();
+			}
 		}
 
 		void dropdownopening(object sender, EventArgs e)
@@ -308,10 +323,13 @@ namespace yata
 		/// <param name="e"></param>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			//logfile.Log("tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
+
 			if (Tabs.SelectedIndex != -1)
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
+				//logfile.Log(". hide color panel");
 				ShowColorPanel(false);
 
 				it_MenuPaths.Visible = Table.Craft;
@@ -321,6 +339,7 @@ namespace yata
 			}
 			else
 			{
+				//logfile.Log(". show color panel");
 				ShowColorPanel();
 
 				it_MenuPaths.Visible = false;
