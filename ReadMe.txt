@@ -327,3 +327,37 @@ different directory (ie, as unarchived/uncompressed files).
 
 If you have custom versions of those files they should be groped *after* the
 stock files.
+
+
+Appendix F: creating a 2da-file
+
+Yata cannot be used to create a new 2da-file from scratch. Nor is it able to
+change the quantity of cols or the col labels. It is able to edit only rows and
+cell-fields. So if you want a brand new 2da, at a minimum you should use a text-
+editor to specify the 2da version header, followed by a blank line, followed by
+a line with the col labels (preceeded by a space) - look at the top of any valid
+2da, in a text-editor, to see what those first three lines should look like.
+Yata should then be able to open the 2da and assign a first blank row with
+default cell-values.
+
+
+Appendix G: Drag & Drop to load a 2da-file
+
+Yata will load files that are dragged and dropped onto its titlebar, menubar, or
+statubar.
+
+
+Appendix H: a note on associating file extensions in Windows Explorer
+
+Yata can be associated to open files that have a file-extension aka file-type in
+Windows Explorer. Yata doesn't do that automatically; it's for the user to set
+it up if he/she wants to.
+
+Appendix I: opening 2da-files when the app starts
+
+Yata allows multiple instances of itself to run at the same time. However if a
+file is double-clicked in Windows Explorer, and Yata is associated with its
+file-type, and an instance of Yata is already running, the file will be opened
+as a new tab in the instance of Yata that is already running. If you want a
+second instance of Yata to run alongside the first, the executable needs to be
+run directly.

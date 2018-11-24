@@ -74,6 +74,7 @@
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="CraftInfo.cs" />
+    <Compile Include="Crap.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
     <Compile Include="YataTabs.cs" />

@@ -20,10 +20,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			//logfile.Log("OnPaint()");
-
-//			if (ColCount != 0 && RowCount != 0 && _cells != null)
-
 			if (!_init && RowCount != 0)
 			{
 				graphics = e.Graphics;
@@ -139,8 +135,6 @@ namespace yata
 		/// </summary>
 		internal void LabelColheads()
 		{
-			//logfile.Log("LabelColheads()");
-
 			if (ColCount != 0) // safety.
 			{
 				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
@@ -155,9 +149,9 @@ namespace yata
 						if (_sortdir != 0 && c == _sortcol)
 						{
 							Bitmap sort;
-							if (_sortdir == 1) // asc
+							if (_sortdir == 1)			// asc
 								sort = Resources.asc_16px;
-							else //if (_sortdir == -1) // des
+							else //if (_sortdir == -1)	// des
 								sort = Resources.des_16px;
 
 							graphics.DrawImage(sort,
@@ -192,8 +186,6 @@ namespace yata
 		/// </summary>
 		internal void LabelRowheads()
 		{
-			//logfile.Log("LabelRowheads()");
-
 			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
 				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
@@ -320,8 +312,6 @@ namespace yata
 		/// </summary>
 		internal void PaintFrozenPanel()
 		{
-			//logfile.Log("LabelFrozen()");
-
 			if (RowCount != 0) // safety.
 			{
 				int x = 0;
@@ -331,7 +321,6 @@ namespace yata
 					x += Cols[c].width();
 					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
 				}
-//				graphics_.DrawLine(Pens.DarkLine, x - 1, 0, x - 1, Height);
 
 				var rect = new Rectangle(0,0, 0, HeightRow);
 

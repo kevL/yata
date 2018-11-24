@@ -159,8 +159,6 @@ namespace yata
 		/// <param name="pfe"></param>
 		internal YataGrid(YataForm f, string pfe)
 		{
-			//logfile.Log("YataGrid() cTor");
-
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
@@ -466,8 +464,6 @@ namespace yata
 		/// <returns>true if 2da loaded successfully perhaps</returns>
 		internal bool Load2da()
 		{
-			//logfile.Log("Load2da()");
-
 			Text = "Yata";
 
 			bool ignoreErrors = false;
@@ -486,8 +482,6 @@ namespace yata
 					line = lines[i].Trim();
 				else
 					line = String.Empty;
-
-				//logfile.Log(i + ": " + line);
 
 				if (i > LABELS)
 				{
@@ -760,8 +754,6 @@ namespace yata
 
 		internal void Init(bool reload = false)
 		{
-			//logfile.Log("Init()");
-
 			if (reload)
 			{
 				_init = true;
@@ -833,8 +825,6 @@ namespace yata
 		/// for single row)</param>
 		internal void Calibrate(int r = -1, int range = 0)
 		{
-			//logfile.Log("Calibrate()");
-
 			_init = true;
 
 			_editor.Visible = false;
@@ -862,8 +852,6 @@ namespace yata
 		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
 		internal void CreateCols(bool calibrate = false)
 		{
-			//logfile.Log("CreateCols()");
-
 			int c = 0;
 			if (!calibrate)
 			{
@@ -897,8 +885,6 @@ namespace yata
 		/// </summary>
 		void CreateRows()
 		{
-			//logfile.Log("CreateRows()");
-
 			RowCount = _rows.Count;
 
 			Cell cell;
@@ -1093,9 +1079,6 @@ namespace yata
 		/// </summary>
 		void SetStaticHeads()
 		{
-			//logfile.Log("SetStaticHeads()");
-			//logfile.Log(". WidthRowhead= " + WidthRowhead);
-
 			YataGrid table;
 
 			int rows = 0, rowsTest; // row-headers' width stays uniform across all tabpages
@@ -1118,7 +1101,6 @@ namespace yata
 			}
 
 			WidthRowhead = YataGraphics.MeasureWidth(text, _f.FontAccent) + _padHoriRowhead * 2;
-			//logfile.Log(". WidthRowhead= " + WidthRowhead);
 
 			for (tab = 0; tab != tabs; ++tab)
 			{
