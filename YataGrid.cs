@@ -207,6 +207,9 @@ namespace yata
 
 			Leave += leave_Grid;
 
+			AllowDrop = true;
+			DragEnter += grid_DragEnter;
+			DragDrop  += grid_DragDrop;
 
 //			_bgw.DoWork             += bgw_DoWork;
 //			_bgw.ProgressChanged    += bgw_ProgressChanged;
@@ -2873,5 +2876,18 @@ namespace yata
 			Changed = changed;
 		} */
 		#endregion Sort
+
+
+		#region DragDrop file(s)
+		void grid_DragEnter(object sender, DragEventArgs e)
+		{
+			_f.yata_DragEnter(sender, e);
+		}
+
+		void grid_DragDrop(object sender, DragEventArgs e)
+		{
+			_f.yata_DragDrop(sender, e);
+		}
+		#endregion DragDrop file(s)
 	}
 }

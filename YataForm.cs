@@ -2196,13 +2196,13 @@ namespace yata
 
 
 		#region DragDrop file(s)
-		void yata_DragEnter(object sender, DragEventArgs e)
+		internal void yata_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				e.Effect = DragDropEffects.Copy;
 		}
-	
-		void yata_DragDrop(object sender, DragEventArgs e)
+
+		internal void yata_DragDrop(object sender, DragEventArgs e)
 		{
 			var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 			foreach (string file in files)

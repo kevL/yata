@@ -343,8 +343,7 @@ default cell-values.
 
 Appendix G: Drag & Drop to load a 2da-file
 
-Yata will load files that are dragged and dropped onto its titlebar, menubar, or
-statubar.
+Yata will load files that are dragged and dropped onto it.
 
 
 Appendix H: a note on associating file extensions in Windows Explorer
