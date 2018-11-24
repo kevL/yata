@@ -933,6 +933,7 @@
 			// 
 			// YataForm
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(842, 454);
 			this.Controls.Add(this.panel_ColorFill);
@@ -947,6 +948,8 @@
 			this.Text = "Yata";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.yata_Closing);
 			this.Load += new System.EventHandler(this.yata_Load);
+			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.yata_DragDrop);
+			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.yata_DragEnter);
 			this.tabMenu.ResumeLayout(false);
 			this.menubar.ResumeLayout(false);
 			this.menubar.PerformLayout();
