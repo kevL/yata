@@ -37,7 +37,7 @@ namespace yata
 				var supercalafragelisticexpialadoshus = new System.Threading.Mutex(true, "YataMutex", out first);
 				if (first) // if not running start Yata with the arg
 				{
-					logfile.Log("first");
+					//logfile.Log("first");
 					YataForm.pfe_load = args[0];
 
 					Application.EnableVisualStyles();
@@ -47,10 +47,8 @@ namespace yata
 				}
 				else // if Yata is running pass the arg to that instance
 				{
-					logfile.Log("NOT first");
-
-					YataForm.pfe_load = args[0];
-					logfile.Log("YataForm.pfe_load= " + YataForm.pfe_load);
+					//logfile.Log("NOT first");
+					//logfile.Log("arg= " + args[0]);
 
 					var current = Process.GetCurrentProcess();
 					int id = current.Id;					
@@ -58,16 +56,16 @@ namespace yata
 					Process[] processes = Process.GetProcesses();
 					foreach (var process in processes)
 					{
-						logfile.Log(". process= " + process.Id + " : " + process.ProcessName);
+						//logfile.Log(". process= " + process.Id + " : " + process.ProcessName);
 						if (process.Id != id && process.ProcessName == "yata")
 						{
-							logfile.Log(". . process found");
+							//logfile.Log(". . process found");
 
 							// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 							IntPtr ptrCopyData = IntPtr.Zero;
 							try
 							{
-								logfile.Log(". . try...");
+								//logfile.Log(". . try...");
 
 								string arg = args[0];
 
@@ -83,13 +81,13 @@ namespace yata
 
 								// send the message
 								IntPtr ptrWnd = process.MainWindowHandle;
-								logfile.Log(". . ptrWnd= " + ptrWnd);
+								//logfile.Log(". . ptrWnd= " + ptrWnd);
 
 								Crap.SendMessage(ptrWnd, Crap.WM_COPYDATA, IntPtr.Zero, ptrCopyData);
 							}
 							catch (Exception ex)
 							{
-								logfile.Log(". . catch...");
+								//logfile.Log(". . catch...");
 
 								MessageBox.Show(ex.ToString(),
 												"Yata",
@@ -98,7 +96,7 @@ namespace yata
 							}
 							finally
 							{
-								logfile.Log(". . finally...");
+								//logfile.Log(". . finally...");
 
 								// free the allocated memory after the control has been returned
 								if (ptrCopyData != IntPtr.Zero)

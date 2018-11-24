@@ -946,6 +946,7 @@
 			this.Name = "YataForm";
 			this.Text = "Yata";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.yata_Closing);
+			this.Load += new System.EventHandler(this.yata_Load);
 			this.tabMenu.ResumeLayout(false);
 			this.menubar.ResumeLayout(false);
 			this.menubar.PerformLayout();

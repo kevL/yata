@@ -155,31 +155,53 @@ namespace yata
 		#endregion cTor
 
 
-		// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
+		/// <summary>
+		/// Disables message-blocking in Vista and post 64-bit systems.
+		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void yata_Load(object sender, EventArgs e)
+		{
+			var filter = new Crap.CHANGEFILTERSTRUCT();
+			filter.size = (uint)Marshal.SizeOf(filter);
+			filter.info = 0;
+			if (!Crap.ChangeWindowMessageFilterEx(Handle,
+												  Crap.WM_COPYDATA,
+												  Crap.ChangeWindowMessageFilterExAction.Allow,
+												  ref filter))
+			{
+				int error = Marshal.GetLastWin32Error();
+				MessageBox.Show(String.Format("An error occurred: {0}", error));
+			}
+		}
+
+		/// <summary>
+		/// Receives data via WM_COPYDATA from other applications/processes.
+		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
+		/// </summary>
+		/// <param name="m"></param>
 		protected override void WndProc(ref Message m)
 		{
-			logfile.Log("WndProc()");
+			//logfile.Log("WndProc()");
 
 			if (m.Msg == Crap.WM_COPYDATA)
 			{
-				logfile.Log(". is WM_COPYDATA");
+				//logfile.Log(". is WM_COPYDATA");
 
 				// Extract the file name
 				var copyData = (Crap.COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, typeof(Crap.COPYDATASTRUCT));
 				int dataType = (int)copyData.dwData;
 				if (dataType == 2)
 				{
-					logfile.Log(". . is dataType 2");
+					//logfile.Log(". . is dataType 2");
 					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
-					logfile.Log(". . pfe_load= " + pfe_load);
-
-					logfile.Log(". . is null or blank= " + String.IsNullOrEmpty(pfe_load));
-					logfile.Log(". . file exists= " + File.Exists(pfe_load));
+					//logfile.Log(". . pfe_load= " + pfe_load);
 
 					if (!String.IsNullOrEmpty(pfe_load)
 						&& File.Exists(pfe_load))
 					{
-						logfile.Log(". . . YataForm call CreateTabPage()");
+						//logfile.Log(". . . YataForm call CreateTabPage()");
 						CreateTabPage(pfe_load);
 					}
 				}
@@ -319,7 +341,7 @@ namespace yata
 		/// <param name="pfe"></param>
 		void CreateTabPage(string pfe)
 		{
-			logfile.Log("CreateTabPage()");
+			//logfile.Log("CreateTabPage()");
 
 			ShowColorPanel();
 			Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
@@ -2275,7 +2297,7 @@ namespace yata
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 
-/*		/// <summary>
+		/// <summary>
 		/// Values used in the struct CHANGEFILTERSTRUCT
 		/// </summary>
 		public enum MessageFilterInfo
@@ -2311,9 +2333,9 @@ namespace yata
 			/// Applies to MSGFLT_DISALLOW.
 			/// </summary>
 			AllowedHigher = 3
-		} */
+		}
 
-/*		/// <summary>
+		/// <summary>
 		/// Values used by ChangeWindowMessageFilterEx
 		/// </summary>
 		public enum ChangeWindowMessageFilterExAction
@@ -2342,9 +2364,9 @@ namespace yata
 			/// globally.
 			/// </summary>
 			DisAllow = 2
-		} */
+		}
 
-/*		/// <summary>
+		/// <summary>
 		/// Contains extended result information obtained by calling the
 		/// ChangeWindowMessageFilterEx function.
 		/// </summary>
@@ -2363,9 +2385,9 @@ namespace yata
 			/// following values <see cref="MessageFilterInfo"/>
 			/// </summary>
 			public MessageFilterInfo info;
-		} */
+		}
 
-/*		/// <summary>
+		/// <summary>
 		/// Modifies the UserInterfacePrivilegeIsolation (UIPI) message-filter
 		/// for a specified window.
 		/// </summary>
@@ -2378,7 +2400,7 @@ namespace yata
 		public static extern bool ChangeWindowMessageFilterEx(IntPtr hWnd,
 															  uint msg,
 															  ChangeWindowMessageFilterExAction action,
-															  ref CHANGEFILTERSTRUCT changeInfo); */
+															  ref CHANGEFILTERSTRUCT changeInfo);
 	}
 
 }
