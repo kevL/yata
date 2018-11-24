@@ -348,6 +348,12 @@ namespace yata
 
 				Table.Init();
 
+				if (WindowState == FormWindowState.Minimized)
+					WindowState = FormWindowState.Normal;
+
+				TopMost = true;
+				TopMost = false;
+
 				DrawingControl.ResumeDrawing(Table);
 			}
 
