@@ -357,6 +357,6 @@ Appendix I: opening 2da-files when the app starts
 Yata allows multiple instances of itself to run at the same time. However if a
 file is double-clicked in Windows Explorer, and Yata is associated with its
 file-type, and an instance of Yata is already running, the file will be opened
-as a new tab in the instance of Yata that is already running. If you want a
-second instance of Yata to run alongside the first, the executable needs to be
-run directly.
+as a new tab in the earliest instance of Yata that is already running. If you
+want a second (third, etc.) instance of Yata to run alongside the first, the
+executable needs to be run directly (without passing in any file arguments).

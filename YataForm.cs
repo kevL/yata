@@ -154,7 +154,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Disables message-blocking in Vista and post 64-bit systems.
+		/// Disables message-blocking in Vista+ 64-bit systems.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 		/// </summary>
 		/// <param name="sender"></param>
@@ -183,10 +183,12 @@ namespace yata
 		{
 			if (m.Msg == Crap.WM_COPYDATA)
 			{
+				//logfile.Log("MESSAGE RECEIVED");
+
 				// extract the file-string from COPYDATASTRUCT
 				var copyData = (Crap.COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, typeof(Crap.COPYDATASTRUCT));
 				int dataType = (int)copyData.dwData;
-				if (dataType == 2)
+				if (dataType == Crap.CopyDataStructType)
 				{
 					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
 					if (!String.IsNullOrEmpty(pfe_load)
@@ -195,13 +197,11 @@ namespace yata
 						CreateTabPage(pfe_load);
 					}
 				}
-				else
-				{
-					MessageBox.Show(String.Format("Unrecognized data type = {0}.", dataType),
-									"Yata",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Error);
-				}
+//				else
+//					MessageBox.Show(String.Format("Unrecognized data type: {0}.", dataType),
+//									"Yata",
+//									MessageBoxButtons.OK,
+//									MessageBoxIcon.Error);
 			}
 			else
 				base.WndProc(ref m);

@@ -30,6 +30,8 @@ namespace yata
 		/// </summary>
 		public static uint WM_COPYDATA = 0x004A;
 
+		public static int CopyDataStructType = 2; // just a number to identify the datatype
+
 		/// <summary>
 		/// Contains data to be passed to another application by the
 		/// WM_COPYDATA message.

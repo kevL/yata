@@ -49,6 +49,8 @@ namespace yata
 			_font = _f.Font;
 			_load = true;
 
+			Owner = _f;
+
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;
 
@@ -115,6 +117,7 @@ namespace yata
 
 			_f.ToggleFontDefaultEnabled();
 		}
+
 
 		/// <summary>
 		/// Gets the first available style in a given FontFamily.

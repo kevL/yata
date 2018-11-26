@@ -23,6 +23,8 @@ namespace yata
 
 			Font = f.Font;
 
+			Owner = f;
+
 			// TODO: controls are not resizing per Font correctly.
 			// See FontCopyForm ... vid. AutoScaleMode=
 
