@@ -17,7 +17,8 @@ namespace yata
 		{
 #if DEBUG
 			using (var sw = new StreamWriter(File.Open( // clean the old logfile if it exists
-													Logfile,
+													"logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt",
+//													Logfile,
 													FileMode.Create,
 													FileAccess.Write,
 													FileShare.None)))
@@ -33,7 +34,8 @@ namespace yata
 		{
 #if DEBUG
 			using (var sw = new StreamWriter(File.Open(
-													Logfile,
+													"logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt",
+//													Logfile,
 													FileMode.Append,
 													FileAccess.Write,
 													FileShare.None)))

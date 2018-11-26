@@ -24,75 +24,104 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
-			if (args.Length == 0) // always start a new instance of Yata
+			string st = String.Empty;
+			foreach (var arg in args)
+				st += Environment.NewLine + arg;
+			logfile.Log("Main() args= " + st);
+
+			Process proc = null;
+
+			if (args.Length != 0) // else always start a new instance of Yata
 			{
+				var current = Process.GetCurrentProcess();
+				int id       = current.Id;
+				string label = current.ProcessName;
+
+				logfile.Log(". current process= " + current.Id + " : " + current.ProcessName + " h= " + current.Handle);
+
+				DateTime dt = DateTime.Now, dtTest;
+				logfile.Log(". dt= " + dt.Minute + ":" + dt.Second + ":" + dt.Millisecond);
+
+				Process[] processes = Process.GetProcesses();
+				logfile.Log(". qty processes= " + processes.Length);
+
+				foreach (var process in processes)
+				{
+					logfile.Log(". . process= " + process.Id + "\t: " + process.ProcessName);
+
+					if (process.MainWindowHandle != IntPtr.Zero // NOTE: 'current' won't have a MainWindow (ie. bypass current proc.)
+						&& process.ProcessName == label)
+					{
+						logfile.Log(". . . found other Yata process");
+						logfile.Log(". . . h= " + process.Handle + " MainWindowHandle= " + process.MainWindowHandle);
+
+						// find longest-running instance -> use it
+						dtTest = process.StartTime;
+						logfile.Log(". . . dtTest= " + dtTest.Minute + ":" + dtTest.Second + ":" + dtTest.Millisecond);
+						if (dtTest < dt)
+						{
+							logfile.Log(". . . . is less");
+							dt = dtTest;
+							proc = process;
+						}
+						logfile.Log(". . . dt= " + dt);
+						logfile.Log(". . . proc h= " + proc.MainWindowHandle);
+					}
+				}
+			}
+
+			if (proc != null)
+			{
+				logfile.Log(". proc = " + proc.Id + " : " + proc.ProcessName);
+
+				// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
+				IntPtr ptrCopyData = IntPtr.Zero;
+				try
+				{
+					string arg = args[0];
+
+					// create the data structure and fill with data
+					var copyData = new Crap.COPYDATASTRUCT();
+					copyData.dwData = new IntPtr(2);	// just a number to identify the data type
+					copyData.cbData = arg.Length + 1;	// one extra byte for the \0 character
+					copyData.lpData = Marshal.StringToHGlobalAnsi(arg);
+
+					// allocate memory for the data and copy
+					ptrCopyData = Marshal.AllocCoTaskMem(Marshal.SizeOf(copyData));
+					Marshal.StructureToPtr(copyData, ptrCopyData, false);
+
+					// send the message
+					IntPtr ptrWnd = proc.MainWindowHandle;
+					Crap.SendMessage(ptrWnd, Crap.WM_COPYDATA, IntPtr.Zero, ptrCopyData);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.ToString(),
+									"Yata",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Error);
+				}
+				finally
+				{
+					// free the allocated memory after the control has been returned
+					if (ptrCopyData != IntPtr.Zero)
+						Marshal.FreeCoTaskMem(ptrCopyData);
+				}
+			}
+			else
+			{
+				if (args.Length != 0)
+				{
+					logfile.Log(". pass arg to new instance");
+					YataForm.pfe_load = args[0];
+				}
+				else logfile.Log(". no args - start new instance");
+
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);	// ie, use GDI aka TextRenderer class. (perhaps, read:
 																		// perhaps depends on the Control that's being drawn)
 				Application.Run(new YataForm());
-			}
-			else
-			{
-				bool first;
-				var supercalafragelisticexpialadoshus = new System.Threading.Mutex(true, "YataMutex", out first);
-				if (first) // if not running start Yata with the arg
-				{
-					YataForm.pfe_load = args[0];
 
-					Application.EnableVisualStyles();
-					Application.SetCompatibleTextRenderingDefault(false);	// ie, use GDI aka TextRenderer class. (perhaps, read:
-																			// perhaps depends on the Control that's being drawn)
-					Application.Run(new YataForm());
-				}
-				else // if Yata is running pass the arg to that instance
-				{
-					var current = Process.GetCurrentProcess();
-					int id = current.Id;					
-
-					Process[] processes = Process.GetProcesses();
-					foreach (var process in processes)
-					{
-						if (process.Id != id && process.ProcessName == "yata")
-						{
-							// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
-							IntPtr ptrCopyData = IntPtr.Zero;
-							try
-							{
-								string arg = args[0];
-
-								// create the data structure and fill with data
-								var copyData = new Crap.COPYDATASTRUCT();
-								copyData.dwData = new IntPtr(2);	// just a number to identify the data type
-								copyData.cbData = arg.Length + 1;	// one extra byte for the \0 character
-								copyData.lpData = Marshal.StringToHGlobalAnsi(arg);
-
-								// allocate memory for the data and copy
-								ptrCopyData = Marshal.AllocCoTaskMem(Marshal.SizeOf(copyData));
-								Marshal.StructureToPtr(copyData, ptrCopyData, false);
-
-								// send the message
-								IntPtr ptrWnd = process.MainWindowHandle;
-								Crap.SendMessage(ptrWnd, Crap.WM_COPYDATA, IntPtr.Zero, ptrCopyData);
-							}
-							catch (Exception ex)
-							{
-								MessageBox.Show(ex.ToString(),
-												"Yata",
-												MessageBoxButtons.OK,
-												MessageBoxIcon.Error);
-							}
-							finally
-							{
-								// free the allocated memory after the control has been returned
-								if (ptrCopyData != IntPtr.Zero)
-									Marshal.FreeCoTaskMem(ptrCopyData);
-							}
-
-							break;
-						}
-					}
-					Application.Exit();
-				}
 				YataForm.pfe_load = null;
 			}
 		}
