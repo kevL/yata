@@ -24,10 +24,11 @@ namespace yata
 			// The logfile ought appear in the directory with the executable.
 
 
-			//string st = String.Empty;
+			//string st = String.Empty; // debug ->
 			//foreach (var arg in args)
 			//	st += Environment.NewLine + arg;
 			//logfile.Log("Main() args= " + st);
+
 
 			Process proc = null;
 

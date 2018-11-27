@@ -153,6 +153,7 @@ namespace yata
 		#endregion cTor
 
 
+		#region Receive Message (pfe)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
@@ -206,6 +207,7 @@ namespace yata
 			else
 				base.WndProc(ref m);
 		}
+		#endregion Receive Message (pfe)
 
 
 		#region Methods (static)
