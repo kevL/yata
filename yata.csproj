@@ -91,16 +91,11 @@
     </Compile>
     <Compile Include="logger.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="WaitForm.cs" />
-    <Compile Include="WaitForm.Designer.cs">
-      <DependentUpon>WaitForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="YataData.cs" />
     <Compile Include="YataForm.cs" />
     <Compile Include="YataForm.Designer.cs">
       <DependentUpon>YataForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="progbar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DrawingControl.cs" />
@@ -120,9 +115,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FontCopyForm.resx">
       <DependentUpon>FontCopyForm.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WaitForm.resx">
-      <DependentUpon>WaitForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>

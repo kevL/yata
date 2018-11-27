@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -124,13 +123,13 @@ namespace yata
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
 				Cell sel = GetOnlySelectedCell();
-				if (sel != null && sel.x < FrozenCount)
+				if (sel != null && sel.x < _frozenCount)
 				{
 					_editor.Visible =
 					sel.selected = false;
 
-					if (ColCount > FrozenCount)
-						this[sel.y, FrozenCount].selected = true;
+					if (ColCount > _frozenCount)
+						this[sel.y, _frozenCount].selected = true;
 
 					Refresh();
 				}
@@ -150,9 +149,6 @@ namespace yata
 
 		internal int RangeSelect
 		{ get; set; }
-
-//		BackgroundWorker _bgw = new BackgroundWorker();
-//		ProgBar _pb;
 
 
 		/// <summary>
@@ -177,17 +173,6 @@ namespace yata
 
 			Dock = DockStyle.Fill;
 			BackColor = SystemColors.ControlDark;
-
-//			this.ProcessCmdKey();
-//			this.PreProcessMessage();
-//			this.ProcessDialogChar();
-//			this.ProcessDialogKey();
-//			this.ProcessKeyEventArgs();
-//			this.ProcessKeyMessage();
-//			this.PreProcessControlMessage();
-//			this.ProcessKeyPreview();
-//			this.OnPreviewKeyDown();
-			// and that's why .NET is fucko'd
 
 			_scrollVert.Dock = DockStyle.Right;
 			_scrollVert.ValueChanged += OnVertScrollValueChanged;
@@ -215,14 +200,6 @@ namespace yata
 			AllowDrop = true;
 			DragEnter += grid_DragEnter;
 			DragDrop  += grid_DragDrop;
-
-//			_bgw.DoWork             += bgw_DoWork;
-//			_bgw.ProgressChanged    += bgw_ProgressChanged;
-//			_bgw.RunWorkerCompleted += bgw_RunWorkerCompleted;
-//			_bgw.WorkerReportsProgress = true;
-//			_bgw.WorkerSupportsCancellation = true;
-
-//			_pb = new ProgBar(_f);
 		}
 
 
@@ -392,14 +369,14 @@ namespace yata
 				// keep the right of the table snuggled against the right of the visible area
 				if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
 				{
-					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0) + proHori;
+					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0) + _proHori;
 				}
 			}
 			else
 				_scrollHori.Value = 0;
 		}
 
-		internal int proHori;
+		internal int _proHori;
 
 		/// <summary>
 		/// The table scrolls 1 pixel left if refreshing a table when scroll is
@@ -410,7 +387,7 @@ namespace yata
 		internal void SetProHori()
 		{
 			if (WidthTable == Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
-				proHori = 1;
+				_proHori = 1;
 		}
 
 		/// <summary>
@@ -941,11 +918,6 @@ namespace yata
 			_rows.Clear(); // done w/ '_rows'
 
 
-//			_bgw.RunWorkerAsync();
-//			_pb.ValTop = ColCount * RowCount;
-//			_pb.Show();
-//			_pb.Refresh();
-
 			int w, wT;
 
 			for (int c = 0; c != ColCount; ++c)
@@ -958,72 +930,10 @@ namespace yata
 
 					wT += _padHori * 2;
 					if (wT > w) w = wT;
-
-//					_pb.Step();
 				}
 				Cols[c].width(w);
 			}
-
-//			_pb.Hide();
-//			_f.TopMost = true;
-//			_f.TopMost = false;
 		}
-
-/*		void bgw_DoWork(object sender, DoWorkEventArgs e)
-		{
-			logfile.Log("bgw_DoWork()");
-
-			var worker = sender as BackgroundWorker;
-
-			Size size;
-			int w, wT, hT;
-
-			for (int c = 0; c != ColCount; ++c)
-			{
-				logfile.Log(". c= " + c);
-
-				System.Threading.Thread.Sleep(100);
-				w = 20; // cellwidth.
-				for (int r = 0; r != RowCount; ++r)
-				{
-					logfile.Log(". . r= " + r);
-
-					size = YataGraphics.MeasureSize(Rows[r].cells[c].text, Font);
-
-					hT = size.Height + _padVert * 2;
-					if (hT > HeightRow) HeightRow = hT;
-
-					wT = size.Width + _padHori * 2;
-//					if (r == 0) wT += _padHoriSort;
-					if (wT > w) w = wT;
-				}
-				Cols[c].width(w);
-
-				//logfile.Log(". call ReportProgress");
-//				worker.ReportProgress((c + 1) * 100 / ColCount, c);
-
-				logfile.Log(". pb.Step");
-				_pb.Step();
-			}
-			logfile.Log("bgw_DoWork() END");
-		}
-		void bgw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			logfile.Log("");
-			logfile.Log("percent= " + e.ProgressPercentage);
-			logfile.Log("state= " + e.UserState);
-
-			//logfile.Log(". call pb.Step");
-//			_pb.Step();
-			logfile.Log("");
-		}
-		void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			logfile.Log("");
-			logfile.Log("COMPLETED");
-
-			_pb.Hide(); // jic.
-		} */
 
 
 		bool _initFrozenLabels = true;
@@ -1041,7 +951,7 @@ namespace yata
 			{
 				_labelid.Visible = true;
 
-				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated or updated on Reload better.
+				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated / updated-on-Reload better.
 				{
 					DrawingControl.SetDoubleBuffered(_labelid);
 					_labelid.BackColor = Colors.FrozenHead;
@@ -1055,7 +965,7 @@ namespace yata
 
 				if (ColCount > 1)
 				{
-					_labelfirst.Visible = (_frozenCount > FreezeId); // required after Font calibration
+					_labelfirst.Visible = (FrozenCount > FreezeId); // required after Font calibration
 
 					if (_initFrozenLabels)
 					{
@@ -1071,7 +981,7 @@ namespace yata
 
 					if (ColCount > 2)
 					{
-						_labelsecond.Visible = ((_frozenCount > FreezeFirst)); // required after Font calibration
+						_labelsecond.Visible = (FrozenCount > FreezeFirst); // required after Font calibration
 
 						if (_initFrozenLabels)
 						{
@@ -1488,7 +1398,7 @@ namespace yata
 				case Keys.Delete:
 					SetProHori();
 					Delete();
-					proHori = 0;
+					_proHori = 0;
 					break;
 			}
 
@@ -2538,11 +2448,16 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Shift+RMB = sort by id
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_IdLabel(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by id
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
 			{
 				_editor.Visible = false;
 				Select();
@@ -2552,11 +2467,16 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Shift+RMB = sort by 1st col
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_FirstLabel(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 1st col
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
 			{
 				_editor.Visible = false;
 				Select();
@@ -2566,11 +2486,16 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Shift+RMB = sort by 2nd col
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_SecondLabel(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by 2nd col
+				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
 			{
 				_editor.Visible = false;
 				Select();
@@ -2683,9 +2608,8 @@ namespace yata
 			var rowsT = new List<Row>();
 			TopDownMergeSort(Rows, rowsT, RowCount);
 
-			// straighten out row._id and cell.y
 			Row row;
-			for (int r = 0; r != RowCount; ++r)
+			for (int r = 0; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
 				(row = Rows[r])._id = r;
 				for (int c = 0; c != ColCount; ++c)
