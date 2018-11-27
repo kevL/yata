@@ -466,11 +466,15 @@ namespace yata
 		const int VALUETYPE = 1;
 		const int LABELS    = 2;
 
+		internal const int LOADRESULT_FALSE   = 0;
+		internal const int LOADRESULT_TRUE    = 1;
+		internal const int LOADRESULT_CHANGED = 2;
+
 		/// <summary>
 		/// Tries to load a 2da file.
 		/// </summary>
 		/// <returns>true if 2da loaded successfully perhaps</returns>
-		internal bool Load2da()
+		internal int Load2da()
 		{
 			Text = "Yata";
 
@@ -500,10 +504,17 @@ namespace yata
 
 						if (!ignoreErrors)
 						{
+							string info = String.Empty;
+
 							int result;
-							if (!Int32.TryParse(cells[0], out result) || result != id)
+							if (!Int32.TryParse(cells[0], out result))
+								info = "The 2da-file contains an ID that is not an integer.";
+							else if (result != id)
+								info = "The 2da-file contains an ID that is out of order.";
+
+							if (!String.IsNullOrEmpty(info))
 							{
-								string error = "The 2da-file contains an ID that is not an integer or is out of order."
+								string error = info
 											 + Environment.NewLine + Environment.NewLine
 											 + Fullpath
 											 + Environment.NewLine + Environment.NewLine
@@ -512,7 +523,7 @@ namespace yata
 								{
 									case DialogResult.Abort:
 										_init = false;
-										return false;
+										return LOADRESULT_FALSE;
 									case DialogResult.Retry:
 										break;
 									case DialogResult.Ignore:
@@ -534,7 +545,7 @@ namespace yata
 							{
 								case DialogResult.Abort:
 									_init = false;
-									return false;
+									return LOADRESULT_FALSE;
 								case DialogResult.Retry:
 									break;
 								case DialogResult.Ignore:
@@ -564,7 +575,7 @@ namespace yata
 								{
 									case DialogResult.Abort:
 										_init = false;
-										return false;
+										return LOADRESULT_FALSE;
 									case DialogResult.Retry:
 										break;
 									case DialogResult.Ignore:
@@ -592,7 +603,7 @@ namespace yata
 										MessageBoxIcon.Error,
 										MessageBoxDefaultButton.Button1);
 						_init = false;
-						return false;
+						return LOADRESULT_FALSE;
 					}
 
 					foreach (char character in line)
@@ -606,7 +617,7 @@ namespace yata
 							{
 								case DialogResult.Abort:
 									_init = false;
-									return false;
+									return LOADRESULT_FALSE;
 								case DialogResult.Retry:
 									break;
 								case DialogResult.Ignore:
@@ -630,7 +641,7 @@ namespace yata
 						{
 							case DialogResult.Abort:
 								_init = false;
-								return false;
+								return LOADRESULT_FALSE;
 							case DialogResult.Retry:
 								break;
 							case DialogResult.Ignore:
@@ -651,7 +662,7 @@ namespace yata
 										MessageBoxIcon.Error,
 										MessageBoxDefaultButton.Button1);
 						_init = false;
-						return false;
+						return LOADRESULT_FALSE;
 					}
 
 					if (line != "2DA V2.0" && (Settings._strict || line != "2DA\tV2.0"))
@@ -665,7 +676,7 @@ namespace yata
 						{
 							case DialogResult.Abort:
 								_init = false;
-								return false;
+								return LOADRESULT_FALSE;
 							case DialogResult.Retry:
 								break;
 							case DialogResult.Ignore:
@@ -683,9 +694,10 @@ namespace yata
 					cells[c] = Constants.Stars;
 
 				_rows.Add(cells);
+				return LOADRESULT_CHANGED; // used to flag the Table as changed.
 			}
 
-			return true;
+			return LOADRESULT_TRUE;
 		}
 
 		/// <summary>
@@ -760,14 +772,11 @@ namespace yata
 		}
 
 
-		internal void Init(bool reload = false)
+		internal void Init(bool changed, bool reload = false)
 		{
 			if (reload)
 			{
 				_init = true;
-
-				Changed = false;
-
 				_editor.Visible = false;
 
 				_scrollVert.Value =
@@ -795,6 +804,7 @@ namespace yata
 					_f.GropeLabels(dir);
 			}
 
+			Changed = changed;
 
 			_panelCols = new YataPanelCols(this);
 			_panelRows = new YataPanelRows(this);

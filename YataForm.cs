@@ -338,7 +338,8 @@ namespace yata
 
 			var table = new YataGrid(this, pfe, read);
 
-			if (table.Load2da())
+			int result = table.Load2da();
+			if (result != YataGrid.LOADRESULT_FALSE)
 			{
 				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
 
@@ -355,7 +356,7 @@ namespace yata
 				tab.Controls.Add(Table);
 				Tabs.SelectedTab = tab;
 
-				Table.Init();
+				Table.Init(result == YataGrid.LOADRESULT_CHANGED);
 
 				if (WindowState == FormWindowState.Minimized)
 					WindowState = FormWindowState.Normal;
@@ -439,7 +440,7 @@ namespace yata
 			if (tab == Tabs.SelectedTab)
 			{
 				style = getStyleAccented(Font.FontFamily);
-				y = 0;
+				y = 1;
 			}
 			else
 			{
@@ -601,12 +602,13 @@ namespace yata
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
-				if (Table.Load2da())
+				int result = Table.Load2da();
+				if (result != YataGrid.LOADRESULT_FALSE)
 				{
 					it_freeze1.Checked =
 					it_freeze2.Checked = false;
 
-					Table.Init(true);
+					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
 				}
 				else
 					fileclick_CloseTab(null, EventArgs.Empty);
