@@ -226,6 +226,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Choose Font ... be patient";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
+			this.Load += new System.EventHandler(this.OnLoad);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

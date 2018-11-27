@@ -1333,8 +1333,14 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_ViewClipboard(object sender, EventArgs e)
 		{
-			var f = new ClipboardEditor(this);
-			f.Show();
+			var f = Application.OpenForms["ClipboardEditor"];
+			if (f == null)
+			{
+				f = new ClipboardEditor(this);
+				f.Show();
+			}
+			else
+				f.BringToFront();
 		}
 		#endregion Edit menu
 

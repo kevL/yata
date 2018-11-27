@@ -120,6 +120,21 @@ namespace yata
 
 
 		/// <summary>
+		/// Handles the load-event. This ought ensure that the FontPicker
+		/// appears on top. If a user has a lot of fonts installed on their
+		/// system the FontPicker takes a while to load ... and if so it tends
+		/// to get hidden beneath main.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void OnLoad(object sender, EventArgs e)
+		{
+			TopMost = true;
+			TopMost = false;
+		}
+
+
+		/// <summary>
 		/// Gets the first available style in a given FontFamily.
 		/// </summary>
 		/// <param name="ff">a FontFamily</param>
@@ -177,7 +192,8 @@ namespace yata
 		/// <summary>
 		/// Handles the form-closing event.
 		/// NOTE: This is not the same as Cancel/Revert - this will not revert
-		/// the table-font if a different font has been Applied.
+		/// the table-font if a different font has been Applied. Rather it
+		/// closes the FontPicker and leaves things as they are.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -211,7 +227,7 @@ namespace yata
 									  font.Name,
 									  font,
 									  e.Bounds,
-									  SystemColors.ControlText,
+									  Colors.Text,
 									  TextFormatFlags.NoPrefix);
 			}
 		}
@@ -309,7 +325,7 @@ namespace yata
 									  list_Size.Items[e.Index].ToString(),
 									  Font,
 									  e.Bounds,
-									  SystemColors.ControlText,
+									  Colors.Text,
 									  TextFormatFlags.NoPrefix);
 			}
 		}
