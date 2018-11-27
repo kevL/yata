@@ -300,13 +300,19 @@ namespace yata
 		{
 			using (var ofd = new OpenFileDialog())
 			{
-				ofd.Title            = "Select a 2da file";
-				ofd.Filter           = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
 				ofd.InitialDirectory = _preset;
+
+				ofd.Title  = "Select a 2da file";
+				ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+				ofd.ShowReadOnly =
+				ofd.Multiselect  = true;
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
-					CreateTabPage(ofd.FileName);
+					bool read = ofd.ReadOnlyChecked;
+					foreach (var pfe in ofd.FileNames)
+						CreateTabPage(pfe, read);
 				}
 			}
 		}
@@ -322,14 +328,15 @@ namespace yata
 		/// <summary>
 		/// IMPORTANT: Assumes 'pfe' is VALID.
 		/// </summary>
-		/// <param name="pfe"></param>
-		void CreateTabPage(string pfe)
+		/// <param name="pfe">path_file_extension</param>
+		/// <param name="read">readonly (default false)</param>
+		void CreateTabPage(string pfe, bool read = false)
 		{
 			ShowColorPanel();
 			Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
 						// but a refresh turns the client area gray at least instead of glitchy.
 
-			var table = new YataGrid(this, pfe);
+			var table = new YataGrid(this, pfe, read);
 
 			if (table.Load2da())
 			{
@@ -450,11 +457,18 @@ namespace yata
 
 			graphics = e.Graphics;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			Color color;
+			if (((YataGrid)tab.Tag).Readonly)
+				color = Colors.TextReadonly;
+			else
+				color = Colors.Text;
+
 			TextRenderer.DrawText(graphics,
 								  tab.Text,
 								  font,
 								  rect,
-								  Colors.Text,
+								  color,
 								  YataGraphics.flags);
 		}
 
@@ -637,57 +651,66 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				string pfe = Table.Fullpath;
-
-				if (!String.IsNullOrEmpty(pfe))
+				if (!Table.Readonly)
 				{
-					int rows = Table.RowCount;
-					if (rows != 0)
+					string pfe = Table.Fullpath;
+
+					if (!String.IsNullOrEmpty(pfe))
 					{
-						Table.Changed = false;
-						foreach (var row in Table.Rows)
+						int rows = Table.RowCount;
+						if (rows != 0)
 						{
-							for (int c = 0; c != Table.ColCount; ++c)
-								row.cells[c].loadchanged = false;
-						}
-
-						using (var sw = new StreamWriter(pfe))
-						{
-							sw.WriteLine("2DA V2.0");
-							sw.WriteLine("");
-
-							string line = String.Empty;
-							foreach (string field in Table.Fields)
+							Table.Changed = false;
+							foreach (var row in Table.Rows)
 							{
-								line += " " + field;
+								for (int c = 0; c != Table.ColCount; ++c)
+									row.cells[c].loadchanged = false;
 							}
-							sw.WriteLine(line);
 
-
-							string val;
-
-							int cols = Table.ColCount;
-
-							for (int r = 0; r != rows; ++r)
+							using (var sw = new StreamWriter(pfe))
 							{
-								line = String.Empty;
+								sw.WriteLine("2DA V2.0");
+								sw.WriteLine("");
 
-								for (int c = 0; c != cols; ++c)
+								string line = String.Empty;
+								foreach (string field in Table.Fields)
 								{
-									if (c != 0)
-										line += " ";
-
-									if (!String.IsNullOrEmpty(val = Table[r,c].text))
-										line += val;
-									else
-										line += Constants.Stars;
+									line += " " + field;
 								}
-
 								sw.WriteLine(line);
+
+
+								string val;
+
+								int cols = Table.ColCount;
+
+								for (int r = 0; r != rows; ++r)
+								{
+									line = String.Empty;
+
+									for (int c = 0; c != cols; ++c)
+									{
+										if (c != 0)
+											line += " ";
+
+										if (!String.IsNullOrEmpty(val = Table[r,c].text))
+											line += val;
+										else
+											line += Constants.Stars;
+									}
+
+									sw.WriteLine(line);
+								}
 							}
 						}
 					}
 				}
+				else
+					MessageBox.Show("The 2da-file was opened as readonly and can be saved only by using Save As ...",
+									"burp",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Hand,
+									MessageBoxDefaultButton.Button1);
 			}
 		}
 
@@ -704,6 +727,7 @@ namespace yata
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
 						Table.Fullpath = sfd.FileName;
+						Table.Readonly = false;
 						Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
 
 						SetTitlebarText();

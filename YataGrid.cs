@@ -19,6 +19,9 @@ namespace yata
 		internal string Fullpath // Path-File-Extension
 		{ get; set; }
 
+		internal bool Readonly
+		{ get; set; }
+
 		internal readonly YataForm _f;
 		YataGrid _table; // for cycling through all tables
 
@@ -155,9 +158,10 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f"></param>
-		/// <param name="pfe"></param>
-		internal YataGrid(YataForm f, string pfe)
+		/// <param name="f">parent</param>
+		/// <param name="pfe">path_file_extension</param>
+		/// <param name="read">readonly</param>
+		internal YataGrid(YataForm f, string pfe, bool read)
 		{
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -168,6 +172,7 @@ namespace yata
 			_f = f;
 
 			Fullpath = pfe;
+			Readonly = read;
 			_init = true;
 
 			Dock = DockStyle.Fill;

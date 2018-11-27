@@ -164,7 +164,7 @@ namespace yata
 							clip = 7;
 
 						if (Cols[c].UserSized)
-							color = Colors.TextUserSized;
+							color = Colors.TextColSized;
 						else
 							color = Colors.Text;
 
