@@ -35,7 +35,7 @@
 		private System.Windows.Forms.ToolStripSeparator separator_9;
 		private System.Windows.Forms.ToolStripSeparator separator_10;
 		private System.Windows.Forms.StatusStrip statusbar;
-		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Coords;
+		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Cords;
 		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Info;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuPaths;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSpells2da;
@@ -92,6 +92,8 @@
 		private System.Windows.Forms.ToolStripMenuItem it_MenuHelp;
 		private System.Windows.Forms.ToolStripMenuItem it_ReadMe;
 		private System.Windows.Forms.ToolStripMenuItem it_About;
+		private System.Windows.Forms.ToolStripSeparator separator_15;
+		private System.Windows.Forms.ToolStripMenuItem it_PathRanges2da;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -178,6 +180,8 @@
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_15 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -197,7 +201,7 @@
 			this.separator_10 = new System.Windows.Forms.ToolStripSeparator();
 			this.context_it_DeleteRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
-			this.statusbar_label_Coords = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.tabMenu.SuspendLayout();
@@ -643,7 +647,9 @@
 			this.it_PathIprpFeats2da,
 			this.it_PathIprpOnHitSpell2da,
 			this.it_PathIprpSpells2da,
-			this.it_PathRaces2da});
+			this.it_PathRaces2da,
+			this.separator_15,
+			this.it_PathRanges2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Size = new System.Drawing.Size(42, 20);
 			this.it_MenuPaths.Text = "Paths";
@@ -750,6 +756,18 @@
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
 			this.it_PathRaces2da.Size = new System.Drawing.Size(190, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
+			// 
+			// separator_15
+			// 
+			this.separator_15.Name = "separator_15";
+			this.separator_15.Size = new System.Drawing.Size(187, 6);
+			// 
+			// it_PathRanges2da
+			// 
+			this.it_PathRanges2da.Name = "it_PathRanges2da";
+			this.it_PathRanges2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathRanges2da.Text = "path Ranges.2da";
+			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
 			// 
 			// it_MenuHelp
 			// 
@@ -893,20 +911,20 @@
 			// 
 			this.statusbar.Font = new System.Drawing.Font("Consolas", 6.5F);
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.statusbar_label_Coords,
+			this.statusbar_label_Cords,
 			this.statusbar_label_Info});
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(842, 22);
 			this.statusbar.TabIndex = 2;
 			// 
-			// statusbar_label_Coords
+			// statusbar_label_Cords
 			// 
-			this.statusbar_label_Coords.AutoSize = false;
-			this.statusbar_label_Coords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statusbar_label_Coords.Name = "statusbar_label_Coords";
-			this.statusbar_label_Coords.Size = new System.Drawing.Size(160, 17);
-			this.statusbar_label_Coords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statusbar_label_Cords.AutoSize = false;
+			this.statusbar_label_Cords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statusbar_label_Cords.Name = "statusbar_label_Cords";
+			this.statusbar_label_Cords.Size = new System.Drawing.Size(160, 17);
+			this.statusbar_label_Cords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// statusbar_label_Info
 			// 

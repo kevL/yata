@@ -6,8 +6,9 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	static class CraftInfo
+	static class Info
 	{
+		#region Crafting caches
 		/// <summary>
 		/// A list that holds labels for spells in Spells.2da.
 		/// - optional
@@ -85,6 +86,22 @@ namespace yata
 		/// - optional
 		/// </summary>
 		internal static List<string> ipammoLabels = new List<string>();
+		#endregion Crafting caches
+
+
+		#region Spells caches
+		/// <summary>
+		/// A list that holds labels for spell-ranges in Ranges.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> rangeLabels = new List<string>();
+
+		/// <summary>
+		/// A list that holds ranges for spell-ranges in Ranges.2da.
+		/// - optional
+		/// </summary>
+		internal static List<int> rangeRanges = new List<int>();
+		#endregion Spells caches
 
 
 		/// <summary>
@@ -3011,11 +3028,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Gets a par-value as an int out of a comma-delimited string of pars.
 		/// </summary>
-		/// <param name="pars"></param>
-		/// <param name="par"></param>
-		/// <returns></returns>
+		/// <param name="pars">comma-delimited string of pars</param>
+		/// <param name="par">position of the par-value to retrieve</param>
+		/// <returns>the par-value as an int; -1 if it didn't parse</returns>
 		static int GetPar(string pars, int par)
 		{
 			string[] ips = pars.Split(',');
@@ -3024,9 +3041,7 @@ namespace yata
 			{
 				int result;
 				if (Int32.TryParse(ips[par], out result))
-				{
 					return result;
-				}
 			}
 			return -1;
 		}

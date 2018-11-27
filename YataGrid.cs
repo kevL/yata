@@ -15,6 +15,14 @@ namespace yata
 		:
 			Control
 	{
+		internal enum InfoType
+		{
+			INFO_NONE,	// 0
+			INFO_CRAFT,	// 1
+			INFO_SPELL	// 2
+		}
+
+
 		internal string Fullpath // Path-File-Extension
 		{ get; set; }
 
@@ -72,7 +80,7 @@ namespace yata
 		static int _wid; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
 
 
-		internal bool Craft
+		internal InfoType Info
 		{ get; set; }
 
 
@@ -775,10 +783,23 @@ namespace yata
 //				_panelRows  .Dispose();
 //				_panelFrozen.Dispose();
 			}
-			else if (Craft = (Path.GetFileNameWithoutExtension(Fullpath).ToLower() == "crafting"))
+			else
 			{
-				foreach (var dir in Settings._pathall)
-					_f.GropeLabels(dir);
+				switch (Path.GetFileNameWithoutExtension(Fullpath).ToLower())
+				{
+					case "crafting":
+						Info = InfoType.INFO_CRAFT;
+						goto case "";
+
+					case "spells":
+						Info = InfoType.INFO_SPELL;
+						goto case "";
+
+					case "":									// NOTE: YataForm.CreateTabPage() does not allow a blank
+						foreach (var dir in Settings._pathall)	// filename to load so this should be (reasonably) safe.
+							_f.GropeLabels(dir);
+						break;
+				}
 			}
 
 			Changed = changed;
@@ -1920,14 +1941,14 @@ namespace yata
 							if (x > left)
 							{
 								var cords = getCords(x, y, left);
-								_f.PrintInfo(cords.Y, cords.X);
+								_f.PrintInfo(new Point(cords.X, cords.Y));
 
 								return;
 							}
 						}
 					}
 				}
-				_f.PrintInfo(-1);
+				_f.PrintInfo(); // clear
 			}
 
 //			base.OnMouseMove(e);
@@ -1951,7 +1972,7 @@ namespace yata
 										 Height - HeightColhead - (_visHori ? _scrollHori.Height : 0));
 
 				if (!rect.Contains(PointToClient(Cursor.Position)))
-					_f.PrintInfo(-1);
+					_f.PrintInfo(); // clear
 			}
 		}
 
@@ -2074,6 +2095,8 @@ namespace yata
 
 		internal bool EnsureDisplayed(Cell cell)
 		{
+			bool ret = false;
+
 			var rect = getCellRectangle(cell);
 
 			int left = getLeft();
@@ -2089,13 +2112,12 @@ namespace yata
 						&& (rect.X > right || rect.X + left > (right - left) / 2)))
 				{
 					_scrollHori.Value -= left - rect.X;
-					return true;
+					ret = true;
 				}
-
-				if (rect.X + rect.Width > right && rect.Width < right - left)
+				else if (rect.X + rect.Width > right && rect.Width < right - left)
 				{
 					_scrollHori.Value += rect.X + rect.Width + bar - Width;
-					return true;
+					ret = true;
 				}
 			}
 
@@ -2104,18 +2126,20 @@ namespace yata
 				if (rect.Y < HeightColhead)
 				{
 					_scrollVert.Value -= HeightColhead - rect.Y;
-					return true;
+					ret = true;
 				}
-
-				bar = _visHori ? _scrollHori.Height : 0;
-				if (rect.Y + rect.Height + bar > Height)
+				else
 				{
-					_scrollVert.Value += rect.Y + rect.Height + bar - Height;
-					return true;
+					bar = _visHori ? _scrollHori.Height : 0;
+					if (rect.Y + rect.Height + bar > Height)
+					{
+						_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+						ret = true;
+					}
 				}
 			}
 
-			return false;
+			return ret;
 		}
 
 		void EnsureDisplayedCol(int c)

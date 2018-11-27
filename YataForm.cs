@@ -98,12 +98,12 @@ namespace yata
 				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statusbar_label_Info.Font) + 2;
 
 				statusbar             .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
-				statusbar_label_Coords.Height =
+				statusbar_label_Cords.Height =
 				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
 
-				int wCords0 = statusbar_label_Coords.Width;
+				int wCords0 = statusbar_label_Cords.Width;
 				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statusbar_label_Info.Font) + 10;
-				statusbar_label_Coords.Width = (wCords < wCords0) ? wCords0 : wCords;
+				statusbar_label_Cords.Width = (wCords < wCords0) ? wCords0 : wCords;
 
 
 				context_it_Header.Font.Dispose();
@@ -326,48 +326,54 @@ namespace yata
 		}
 
 		/// <summary>
-		/// IMPORTANT: Assumes 'pfe' is VALID.
+		/// Creates a tab-page and instantiates a table-grid for it.
+		/// @note The filename w/out extension must not be blank since
+		/// YataGrid.Init() is going to use blank as a fallthrough while
+		/// determining the grid's 'InfoType' to call GropeLabels().
 		/// </summary>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly (default false)</param>
 		void CreateTabPage(string pfe, bool read = false)
 		{
-			ShowColorPanel();
-			Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
-						// but a refresh turns the client area gray at least instead of glitchy.
-
-			var table = new YataGrid(this, pfe, read);
-
-			int result = table.Load2da();
-			if (result != YataGrid.LOADRESULT_FALSE)
+			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
-				Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+				ShowColorPanel();
+				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
+							// but a refresh turns the client area gray at least instead of glitchy.
 
-				DrawingControl.SuspendDrawing(Table);
+				var table = new YataGrid(this, pfe, read);
 
-				var tab = new TabPage();
-				Tabs.TabPages.Add(tab);
+				int result = table.Load2da();
+				if (result != YataGrid.LOADRESULT_FALSE)
+				{
+					Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
 
-				tab.Tag = Table;
+					DrawingControl.SuspendDrawing(Table);
 
-				tab.Text = Path.GetFileNameWithoutExtension(pfe);
-				SetTabSize();
+					var tab = new TabPage();
+					Tabs.TabPages.Add(tab);
 
-				tab.Controls.Add(Table);
-				Tabs.SelectedTab = tab;
+					tab.Tag = Table;
 
-				Table.Init(result == YataGrid.LOADRESULT_CHANGED);
+					tab.Text = Path.GetFileNameWithoutExtension(pfe);
+					SetTabSize();
 
-				if (WindowState == FormWindowState.Minimized)
-					WindowState = FormWindowState.Normal;
+					tab.Controls.Add(Table);
+					Tabs.SelectedTab = tab;
 
-				TopMost = true;
-				TopMost = false;
+					Table.Init(result == YataGrid.LOADRESULT_CHANGED);
 
-				DrawingControl.ResumeDrawing(Table);
+					if (WindowState == FormWindowState.Minimized)
+						WindowState = FormWindowState.Normal;
+
+					TopMost = true;
+					TopMost = false;
+
+					DrawingControl.ResumeDrawing(Table);
+				}
+
+				tab_SelectedIndexChanged(null, EventArgs.Empty);
 			}
-
-			tab_SelectedIndexChanged(null, EventArgs.Empty);
 		}
 
 
@@ -384,7 +390,7 @@ namespace yata
 
 				ShowColorPanel(false);
 
-				it_MenuPaths.Visible = Table.Craft;
+				it_MenuPaths.Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
 
 				it_freeze1.Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
 				it_freeze2.Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
@@ -953,6 +959,7 @@ namespace yata
 		void editclick_Search(object sender, EventArgs e)
 		{
 			tb_Search.Focus();
+			tb_Search.SelectAll();
 		}
 
 		void editclick_SearchNext(object sender, EventArgs e)
@@ -1654,434 +1661,6 @@ namespace yata
 		#endregion Font menu
 
 
-		#region Crafting info
-		/// <summary>
-		/// Mouseover datacells prints info to the statusbar if Crafting.2da is
-		/// loaded.
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="col"></param>
-		internal void PrintInfo(int id, int col = -1)
-		{
-			string st = String.Empty;
-
-			if (id != -1 && Table != null) // else CloseAll can throw on invalid object.
-			{
-				statusbar_label_Coords.Text = "id= " + id + " col= " + col;
-
-				if (Table.Craft && id < Table.RowCount && col < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
-					statusbar_label_Info.Text = getCraftInfo(id, col);
-				else
-					statusbar_label_Info.Text = st;
-			}
-			else
-			{
-				statusbar_label_Coords.Text =
-				statusbar_label_Info  .Text = st;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="col"></param>
-		/// <returns></returns>
-		string getCraftInfo(int id, int col)
-		{
-			string info = "n/a";
-
-			string val;
-			int result;
-
-			switch (col)
-			{
-//				case -1: // row-header
-//				case  0: // id
-
-				case  1: // "CATEGORY"
-					if (it_PathSpells2da.Checked)
-					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& Int32.TryParse(val, out result)
-							&& result < CraftInfo.spellLabels.Count)
-						{
-							info = Table.Cols[col].text + ": "
-								 + CraftInfo.spellLabels[result];
-						}
-					}
-					break;
-
-//				case  2: // "REAGENTS"
-
-				case  3: // "TAGS"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						if (val.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
-						{
-							if (it_PathBaseItems2da.Checked)
-							{
-								info = Table.Cols[col].text + ": (base) ";
-
-								string[] array = val.Substring(1).Split(','); // lose the "B"
-								for (int tag = 0; tag != array.Length; ++tag)
-								{
-									if (Int32.TryParse(array[tag], out result)
-										&& result < CraftInfo.tagLabels.Count)
-									{
-										info += CraftInfo.tagLabels[result];
-
-										if (tag != array.Length - 1)
-											info += ", ";
-									}
-								}
-							}
-						}
-						else // is a TCC item-type
-						{
-							info = Table.Cols[col].text + ": (tcc) ";
-
-							if (val == Constants.Stars)
-							{
-								info += CraftInfo.GetTccType(0); // TCC_TYPE_NONE
-							}
-							else
-							{
-								string[] array = val.Split(',');
-								for (int tag = 0; tag != array.Length; ++tag)
-								{
-									if (Int32.TryParse(array[tag], out result))
-									{
-										info += CraftInfo.GetTccType(result);
-
-										if (tag != array.Length - 1)
-											info += ", ";
-									}
-								}
-							}
-						}
-					}
-					break;
-
-				case  4: // "EFFECTS"
-					if (it_PathItemPropDef2da.Checked)
-					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text))
-						{
-							if (val != Constants.Stars)
-							{
-								info = Table.Cols[col].text + ": ";
-
-								string par = String.Empty;
-								int pos;
-
-								string[] ips = val.Split(';');
-								for (int ip = 0; ip != ips.Length; ++ip)
-								{
-									par = ips[ip];
-									if ((pos = par.IndexOf(',')) != -1)
-									{
-										if (Int32.TryParse(par.Substring(0, pos), out result)
-											&& result < CraftInfo.ipLabels.Count)
-										{
-											info += CraftInfo.ipLabels[result]
-												  + CraftInfo.GetEncodedParsDescription(par);
-
-											if (ip != ips.Length - 1)
-												info += ", ";
-										}
-									}
-									else // is a PropertySet preparation val.
-									{
-										info += "PropertySet val=" + par; // TODO: description for par.
-									}
-								}
-							}
-						}
-					}
-					break;
-
-//				case  5: // "OUTPUT"
-
-				case  6: // "SKILL"
-					if (it_PathFeat2da.Checked)
-					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& Int32.TryParse(val, out result))
-						{
-							string cat = Table[id,1].text;
-							if (!String.IsNullOrEmpty(cat))
-							{
-								int result2;
-								if (Int32.TryParse(cat, out result2)) // is triggered by spell id
-								{
-									if (result < CraftInfo.featsLabels.Count)
-									{
-										info = Table.Cols[col].text + ": "
-											 + CraftInfo.featsLabels[result];
-									}
-								}
-								else // is triggered NOT by spell - but by mold-tag, or is Alchemy or Distillation
-								{
-									if (result < CraftInfo.skillLabels.Count)
-									{
-										info = Table.Cols[col].text + ": "
-											 + CraftInfo.skillLabels[result];
-									}
-								}
-							}
-						}
-					}
-					break;
-
-//				case  7: // "LEVEL"
-//				case  8: // "EXCLUDE"
-//				case  9: // "XP"
-//				case 10: // "GP"
-//				case 11: // "DISABLE"
-			}
-			return info;
-		}
-
-		/// <summary>
-		/// Handles clicking the PathSpells menuitem.
-		/// Intended to add labels from Spells.2da to the 'spellLabels' list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathSpells2da(object sender, EventArgs e)
-		{
-			if (!it_PathSpells2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select Spells.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						CraftInfo.GropeLabels(ofd.FileName,
-											  CraftInfo.spellLabels,
-											  it_PathSpells2da,
-											  1);
-					}
-				}
-			}
-			else
-			{
-				it_PathSpells2da.Checked = false;
-				CraftInfo.spellLabels.Clear();
-			}
-		}
-
-		/// <summary>
-		/// Handles clicking the PathFeat menuitem.
-		/// Intended to add labels from Feat.2da to the 'featsLabels' list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathFeat2da(object sender, EventArgs e)
-		{
-			if (!it_PathFeat2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select Feat.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						CraftInfo.GropeLabels(ofd.FileName,
-											  CraftInfo.featsLabels,
-											  it_PathFeat2da,
-											  1);
-					}
-				}
-			}
-			else
-			{
-				it_PathFeat2da.Checked = false;
-				CraftInfo.featsLabels.Clear();
-			}
-		}
-
-		/// <summary>
-		/// Handles clicking the PathItemPropDef menuitem.
-		/// Intended to add labels from ItemPropDef.2da to the 'ipLabels' list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathItemPropDef2da(object sender, EventArgs e)
-		{
-			if (!it_PathItemPropDef2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select ItemPropDef.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						CraftInfo.GropeLabels(ofd.FileName,
-											  CraftInfo.ipLabels,
-											  it_PathItemPropDef2da,
-											  2);
-					}
-				}
-			}
-			else
-			{
-				it_PathItemPropDef2da.Checked = false;
-				CraftInfo.ipLabels.Clear();
-			}
-		}
-
-		/// <summary>
-		/// Handles clicking the PathBaseItems menuitem.
-		/// Intended to add labels from BaseItems.2da to the 'tagLabels' list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathBaseItems2da(object sender, EventArgs e)
-		{
-			if (!it_PathBaseItems2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select BaseItems.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						CraftInfo.GropeLabels(ofd.FileName,
-											  CraftInfo.tagLabels,
-											  it_PathBaseItems2da,
-											  2);
-					}
-				}
-			}
-			else
-			{
-				it_PathBaseItems2da.Checked = false;
-				CraftInfo.tagLabels.Clear();
-			}
-		}
-
-		/// <summary>
-		/// Handles clicking the PathSkills menuitem.
-		/// Intended to add labels from Skills.2da to the 'skillLabels' list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathSkills2da(object sender, EventArgs e)
-		{
-			if (!it_PathSkills2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select Skills.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						CraftInfo.GropeLabels(ofd.FileName,
-											  CraftInfo.skillLabels,
-											  it_PathSkills2da,
-											  1);
-					}
-				}
-			}
-			else
-			{
-				it_PathSkills2da.Checked = false;
-				CraftInfo.skillLabels.Clear();
-			}
-		}
-
-		void itclick_PathAll(object sender, EventArgs e)
-		{
-			using (var fbd = new FolderBrowserDialog())
-			{
-				fbd.ShowNewFolderButton = false;
-				fbd.Description = "Find a folder to search through 2da-files for"
-								+ " extra information about Crafting.2da";
-
-				if (fbd.ShowDialog() == DialogResult.OK)
-				{
-					GropeLabels(fbd.SelectedPath);
-				}
-			}
-		}
-
-		internal void GropeLabels(string directory)
-		{
-			CraftInfo.GropeLabels(Path.Combine(directory, "baseitems.2da"),
-								  CraftInfo.tagLabels,
-								  it_PathBaseItems2da,
-								  2);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "feat.2da"),
-								  CraftInfo.featsLabels,
-								  it_PathFeat2da,
-								  1);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "itempropdef.2da"),
-								  CraftInfo.ipLabels,
-								  it_PathItemPropDef2da,
-								  2);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "skills.2da"),
-								  CraftInfo.skillLabels,
-								  it_PathSkills2da,
-								  1);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "spells.2da"),
-								  CraftInfo.spellLabels,
-								  it_PathSpells2da,
-								  1);
-
-
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "classes.2da"),
-								  CraftInfo.classLabels,
-								  it_PathClasses2da,
-								  1);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "disease.2da"),
-								  CraftInfo.diseaseLabels,
-								  it_PathDisease2da,
-								  1);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_ammocost.2da"),
-								  CraftInfo.ipammoLabels,
-								  it_PathIprpAmmoCost2da,
-								  2);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
-								  CraftInfo.ipfeatsLabels,
-								  it_PathIprpFeats2da,
-								  2);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_onhitspell.2da"),
-								  CraftInfo.iphitspellLabels,
-								  it_PathIprpOnHitSpell2da,
-								  1);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
-								  CraftInfo.ipspellsLabels,
-								  it_PathIprpSpells2da,
-								  1, // label
-								  3, // level
-								  CraftInfo.ipspellsLevels);
-
-			CraftInfo.GropeLabels(Path.Combine(directory, "racialtypes.2da"),
-								  CraftInfo.raceLabels,
-								  it_PathRaces2da,
-								  1);
-		}
-		#endregion Crafting info
-
-
 		#region Help menu
 		void helpclick_Help(object sender, EventArgs e)
 		{
@@ -2207,17 +1786,53 @@ namespace yata
 		#endregion Tabmenu
 
 
-		internal void TableChanged(bool changed)
+		#region Statusbar
+		/// <summary>
+		/// Mouseover datacells prints table-cords plus info to the statusbar if
+		/// Crafting.2da is loaded.
+		/// </summary>
+		/// <param name="cords">null to clear statusbar-cords</param>
+		internal void PrintInfo(Point? cords = null)
 		{
-			DrawingControl.SuspendDrawing(this); // stops tab-flickering on Sort
+			string st = String.Empty;
 
-			string asterisk = changed ? " *"
-									  : "";
-			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath) + asterisk;
-			SetTabSize();
+			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
+			{
+				var pt = (Point)cords;
+				int id  = pt.Y;
+				int col = pt.X;
 
-			DrawingControl.ResumeDrawing(this);
+				if (id < Table.RowCount && col < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
+				{
+					statusbar_label_Cords.Text = "id= " + id + " col= " + col;
+
+					switch (Table.Info)
+					{
+						case YataGrid.InfoType.INFO_CRAFT:
+							statusbar_label_Info.Text = getCraftInfo(id, col);
+							break;
+						case YataGrid.InfoType.INFO_SPELL:
+							statusbar_label_Info.Text = getSpellInfo(id, col);
+							break;
+
+						default:
+							statusbar_label_Info.Text = st;
+							break;
+					}
+				}
+				else
+				{
+					statusbar_label_Cords.Text =
+					statusbar_label_Info .Text = st;
+				}
+			}
+			else
+			{
+				statusbar_label_Cords.Text =
+				statusbar_label_Info .Text = st;
+			}
 		}
+		#endregion Statusbar
 
 
 		#region Events (override)
@@ -2249,6 +1864,19 @@ namespace yata
 				CreateTabPage(file);
 		}
 		#endregion DragDrop file(s)
+
+
+		internal void TableChanged(bool changed)
+		{
+			DrawingControl.SuspendDrawing(this); // stops tab-flickering on Sort
+
+			string asterisk = changed ? " *"
+									  : "";
+			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath) + asterisk;
+			SetTabSize();
+
+			DrawingControl.ResumeDrawing(this);
+		}
 	}
 
 
