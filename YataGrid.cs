@@ -129,7 +129,6 @@ namespace yata
 					_editor.Visible =
 					sel.selected = false;
 
-					logfile.Log("ColCount= " + ColCount + " FrozenCount= " + FrozenCount);
 					if (ColCount > FrozenCount)
 						this[sel.y, FrozenCount].selected = true;
 
