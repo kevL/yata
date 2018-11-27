@@ -127,9 +127,10 @@ namespace yata
 				if (sel != null && sel.x < FrozenCount)
 				{
 					_editor.Visible =
-					sel.selected    = false;
+					sel.selected = false;
 
-					if (ColCount >= FrozenCount)
+					logfile.Log("ColCount= " + ColCount + " FrozenCount= " + FrozenCount);
+					if (ColCount > FrozenCount)
 						this[sel.y, FrozenCount].selected = true;
 
 					Refresh();
