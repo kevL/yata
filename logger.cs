@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 
 namespace yata
@@ -7,21 +8,21 @@ namespace yata
 	public static class logfile
 	{
 #if DEBUG
-		private const string Logfile = "logfile.txt";
+		const string Logfile = "logfile.txt";
 #endif
 
 		/// <summary>
-		/// Creates a logfile (or cleans the old one if it exists).
+		/// Creates a logfile (overwrites the previous logfile if it exists).
 		/// </summary>
 		public static void CreateLog()
 		{
 #if DEBUG
-			using (var sw = new StreamWriter(File.Open( // clean the old logfile if it exists
-													"logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt",
-//													Logfile,
-													FileMode.Create,
-													FileAccess.Write,
-													FileShare.None)))
+			string pfe = Path.Combine(Application.StartupPath, Logfile);
+//			string pfe = Path.Combine(Application.StartupPath, "logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt");
+			using (var sw = new StreamWriter(File.Open(pfe,
+													   FileMode.Create,
+													   FileAccess.Write,
+													   FileShare.None)))
 			{}
 #endif
 		}
@@ -33,12 +34,12 @@ namespace yata
 		public static void Log(string line)
 		{
 #if DEBUG
-			using (var sw = new StreamWriter(File.Open(
-													"logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt",
-//													Logfile,
-													FileMode.Append,
-													FileAccess.Write,
-													FileShare.None)))
+			string pfe = Path.Combine(Application.StartupPath, Logfile);
+//			string pfe = Path.Combine(Application.StartupPath, "logfile" + System.Diagnostics.Process.GetCurrentProcess().Id + ".txt");
+			using (var sw = new StreamWriter(File.Open(pfe,
+													   FileMode.Append,
+													   FileAccess.Write,
+													   FileShare.None)))
 			{
 				sw.WriteLine(line);
 			}
