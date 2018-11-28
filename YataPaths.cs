@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -23,7 +24,7 @@ namespace yata
 
 			switch (col)
 			{
-//				case -1: // row-header
+//				case -1: // rowhead
 //				case  0: // id
 
 				case  1: // "CATEGORY"
@@ -340,11 +341,17 @@ namespace yata
 			string info = "n/a";
 
 			string val;
-//			int result;
+			int result;
 
 			switch (col)
 			{
-				case 4: // "School" (also SpellSchools.2da)
+//				case -1: // rowhead
+//				case  0: // id
+//				case  1: // "Label"
+//				case  2: // "Name"
+//				case  3: // "IconResRef"
+
+				case  4: // "School" (also SpellSchools.2da)
 					if (!String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
@@ -366,12 +373,12 @@ namespace yata
 					}
 					break;
 
-				case 5: // "Range" (Ranges.2da)
+				case  5: // "Range" (Ranges.2da)
 					if (!String.IsNullOrEmpty(val = Table[id,col].text))
 					{
-						int r = -1;
-
 						info = Table.Cols[col].text + ": ";
+
+						int r = -1;
 						switch (val.ToUpper())
 						{
 							case "P": info += "Personal"; r =  0; break; // NOTE: 'rangeLabels' could be used but
@@ -392,10 +399,230 @@ namespace yata
 						}
 					}
 					break;
+
+//				case  6: // "VS"
+
+				case  7: // "MetaMagic"
+					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val.Substring(2),
+										   NumberStyles.AllowHexSpecifier,
+										   CultureInfo.InvariantCulture,
+										   out result))
+						{
+							switch (result)
+							{
+								case META_NONE:
+									info += "none";
+									break;
+								case META_ANY:
+									info += "ANY";
+									break;
+								case META_I_ALL:
+									info += "All Blast Shapes and Eldritch Essences";
+									break;
+								case META_I_SHAPES:
+									info += "All Blast Shapes";
+									break;
+								case META_I_ESSENCES:
+									info += "All Eldritch Essences";
+									break;
+
+								default:
+								{
+									bool space = false;
+									if ((result & META_EMPOWER) != 0)
+									{
+										info += "(1)Empower";
+										space = true;
+									}
+									if ((result & META_EXTEND) != 0)
+									{
+										if (space) info += " ";
+										info += "(2)Extend";
+										space = true;
+									}
+									if ((result & META_MAXIMIZE) != 0)
+									{
+										if (space) info += " ";
+										info += "(4)Maximize";
+										space = true;
+									}
+									if ((result & META_QUICKEN) != 0)
+									{
+										if (space) info += " ";
+										info += "(8)Quicken";
+										space = true;
+									}
+									if ((result & META_SILENT) != 0)
+									{
+										if (space) info += " ";
+										info += "(16)Silent";
+										space = true;
+									}
+									if ((result & META_STILL) != 0)
+									{
+										if (space) info += " ";
+										info += "(32)Still";
+										space = true;
+									}
+									if ((result & META_PERSISTENT) != 0)
+									{
+										if (space) info += " ";
+										info += "(64)Persistent";
+										space = true;
+									}
+									if ((result & META_PERMANENT) != 0)
+									{
+										if (space) info += " ";
+										info += "(128)Permanent";
+										space = true;
+									}
+
+									if ((result & META_I_DRAINING_BLAST) != 0) // Invocation Shapes and Essences ->
+									{
+										if (space) info += " - "; // that should never happen.
+										info += "Draining Blast"; //(256)
+										space = true;
+									}
+									if ((result & META_I_ELDRITCH_SPEAR) != 0)
+									{
+										if (space) info += ", ";
+										info += "Eldritch Spear"; //(512)
+										space = true;
+									}
+									if ((result & META_I_FRIGHTFUL_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Frightful Blast"; //(1024)
+										space = true;
+									}
+									if ((result & META_I_HIDEOUS_BLOW) != 0)
+									{
+										if (space) info += ", ";
+										info += "Hideous Blow"; //(2048)
+										space = true;
+									}
+									if ((result & META_I_BESHADOWED_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Beshadowed Blast"; //(4096)
+										space = true;
+									}
+									if ((result & META_I_BRIMSTONE_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Brimstone Blast"; //(8192)
+										space = true;
+									}
+									if ((result & META_I_ELDRITCH_CHAIN) != 0)
+									{
+										if (space) info += ", ";
+										info += "Eldritch Chain"; //(16384)
+										space = true;
+									}
+									if ((result & META_I_HELLRIME_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Hellrime Blast"; //(32768)
+										space = true;
+									}
+									if ((result & META_I_BEWITCHING_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Bewitching Blast"; //(65536)
+										space = true;
+									}
+									if ((result & META_I_ELDRITCH_CONE) != 0)
+									{
+										if (space) info += ", ";
+										info += "Eldritch Cone"; //(131072)
+										space = true;
+									}
+									if ((result & META_I_NOXIOUS_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Noxious Blast"; //(262144)
+										space = true;
+									}
+									if ((result & META_I_VITRIOLIC_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Vitriolic Blast"; //(524288)
+										space = true;
+									}
+									if ((result & META_I_ELDRITCH_DOOM) != 0)
+									{
+										if (space) info += ", ";
+										info += "Eldritch Doom"; //(1048576)
+										space = true;
+									}
+									if ((result & META_I_UTTERDARK_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Utterdark Blast"; //(2097152)
+										space = true;
+									}
+									if ((result & META_I_HINDERING_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Hindering Blast"; //(4194304)
+										space = true;
+									}
+									if ((result & META_I_BINDING_BLAST) != 0)
+									{
+										if (space) info += ", ";
+										info += "Binding Blast"; //(8388608)
+									}
+									break;
+								}
+							}
+						}
+						else if (val == Constants.Stars)
+							info += "none";
+						else
+							info += "bork";
+					}
+					break;
 			}
 
 			return info;
 		}
+
+		const int META_NONE               = 0x00000000; //       0
+		const int META_EMPOWER            = 0x00000001; //       1
+		const int META_EXTEND             = 0x00000002; //       2
+		const int META_MAXIMIZE           = 0x00000004; //       4
+		const int META_QUICKEN            = 0x00000008; //       8
+		const int META_SILENT             = 0x00000010; //      16
+		const int META_STILL              = 0x00000020; //      32
+		const int META_PERSISTENT         = 0x00000040; //      64
+		const int META_PERMANENT          = 0x00000080; //     128
+
+		const int META_I_DRAINING_BLAST   = 0x00000100; //     256
+		const int META_I_ELDRITCH_SPEAR   = 0x00000200; //     512
+		const int META_I_FRIGHTFUL_BLAST  = 0x00000400; //    1024
+		const int META_I_HIDEOUS_BLOW     = 0x00000800; //    2048
+		const int META_I_BESHADOWED_BLAST = 0x00001000; //    4096
+		const int META_I_BRIMSTONE_BLAST  = 0x00002000; //    8192
+		const int META_I_ELDRITCH_CHAIN   = 0x00004000; //   16384
+		const int META_I_HELLRIME_BLAST   = 0x00008000; //   32768
+		const int META_I_BEWITCHING_BLAST = 0x00010000; //   65536
+		const int META_I_ELDRITCH_CONE    = 0x00020000; //  131072
+		const int META_I_NOXIOUS_BLAST    = 0x00040000; //  262144
+		const int META_I_VITRIOLIC_BLAST  = 0x00080000; //  524288
+		const int META_I_ELDRITCH_DOOM    = 0x00100000; // 1048576
+		const int META_I_UTTERDARK_BLAST  = 0x00200000; // 2097152
+		const int META_I_HINDERING_BLAST  = 0x00400000; // 4194304
+		const int META_I_BINDING_BLAST    = 0x00800000; // 8388608
+
+		const int META_I_SHAPES           = 0x00124A00; //  1198592 - all blast shapes
+		const int META_I_ESSENCES         = 0x00EDB500; // 15578368 - all eldritch essences
+		const int META_I_ALL              = 0x00FFFF00; // 16776960 - all shapes and essences
+
+		const int META_ANY                = unchecked((int)0xFFFFFFFF); // 4294967295 - the kitchen sink (not).
 
 
 		/// <summary>

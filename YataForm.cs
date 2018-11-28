@@ -97,9 +97,9 @@ namespace yata
 
 				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statusbar_label_Info.Font) + 2;
 
-				statusbar             .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
+				statusbar            .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
 				statusbar_label_Cords.Height =
-				statusbar_label_Info  .Height = (hBar     < 17) ? 17 : hBar;
+				statusbar_label_Info .Height = (hBar     < 17) ? 17 : hBar;
 
 				int wCords0 = statusbar_label_Cords.Width;
 				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statusbar_label_Info.Font) + 10;
@@ -1789,9 +1789,9 @@ namespace yata
 		#region Statusbar
 		/// <summary>
 		/// Mouseover datacells prints table-cords plus info to the statusbar if
-		/// Crafting.2da is loaded.
+		/// a relevant 2da (eg. Crafting, Spells) is loaded.
 		/// </summary>
-		/// <param name="cords">null to clear statusbar-cords</param>
+		/// <param name="cords">null to clear statusbar-cords and -info</param>
 		internal void PrintInfo(Point? cords = null)
 		{
 			string st = String.Empty;
