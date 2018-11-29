@@ -773,8 +773,16 @@ namespace yata
 			context_it_Paste     .Enabled =
 			context_it_PasteBelow.Enabled = (_copy.Count != 0);
 
-			contextEditor.Show(Table, new Point(YataGrid.WidthRowhead,
-												YataGrid.HeightColhead));
+			Point loc;
+			if (Settings._context)							// static location
+			{
+				loc = new Point(YataGrid.WidthRowhead,
+								YataGrid.HeightColhead);
+			}
+			else											// vanilla location
+				loc = Table.PointToClient(Cursor.Position);
+
+			contextEditor.Show(Table, loc);
 		}
 
 		void contextclick_Header(object sender, EventArgs e)

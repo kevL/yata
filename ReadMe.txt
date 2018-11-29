@@ -133,9 +133,16 @@ LMB       - click-drag col-boundary to re-width a col (The text of a colhead
 RMB       - click a col-boundary to auto-width a col
 RMB+Shift - sorts the table by the col either ascending or descending
 
+click on the rowheads
+RMB - opens the contextmenu for single-row editing
+
 click on a table-cell
-LMB      - selects a cell or if already selected then starts the cell-editor
+LMB      - selects a cell or if already selected then starts the cell-editor, or
+           if editing a cell then a left-click on a different part of the table
+           accepts the edit
 LMB+Ctrl - adds or subtracts a cell from the currently selected cells
+RMB      - if editing a cell then a right-click on a different part of the table
+           cancels the edit
 
 Note that frozen-col cells cannot be selected or edited. Also note that clicking
 on a colhead will clear any selected row(s), although not its cells if Ctrl is
@@ -177,6 +184,10 @@ w=         (integer) the desired starting width of the app on your monitor
 h=         (integer) the desired starting height of the app on your monitor
 strict=    "true" (without quotes) to show extra warnings when loading a
            2da-file (default false)
+context=   a right-click on a rowhead displays the contextmenu at the mouse-
+           cursor's location by default. It can be displayed in a static
+           location at the topleft corner of the table instead of at the mouse-
+           cursor by giving this variable a value of "static" (without quotes).
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).

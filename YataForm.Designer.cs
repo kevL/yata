@@ -230,7 +230,7 @@
 			// 
 			// tabMenu
 			// 
-			this.tabMenu.Font = new System.Drawing.Font("Consolas", 6.5F);
+			this.tabMenu.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_tabClose,
 			this.it_tabCloseAll,
@@ -238,13 +238,13 @@
 			this.separator_14,
 			this.it_tabReload});
 			this.tabMenu.Name = "tabMenu";
-			this.tabMenu.Size = new System.Drawing.Size(151, 98);
+			this.tabMenu.Size = new System.Drawing.Size(164, 98);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
 			// 
 			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(150, 22);
+			this.it_tabClose.Size = new System.Drawing.Size(163, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
@@ -252,7 +252,7 @@
 			// it_tabCloseAll
 			// 
 			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(150, 22);
+			this.it_tabCloseAll.Size = new System.Drawing.Size(163, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
@@ -260,7 +260,7 @@
 			// it_tabCloseAllOthers
 			// 
 			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
-			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(150, 22);
+			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(163, 22);
 			this.it_tabCloseAllOthers.Text = "Close all others";
 			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
@@ -268,18 +268,18 @@
 			// separator_14
 			// 
 			this.separator_14.Name = "separator_14";
-			this.separator_14.Size = new System.Drawing.Size(147, 6);
+			this.separator_14.Size = new System.Drawing.Size(160, 6);
 			// 
 			// it_tabReload
 			// 
 			this.it_tabReload.Name = "it_tabReload";
-			this.it_tabReload.Size = new System.Drawing.Size(150, 22);
+			this.it_tabReload.Size = new System.Drawing.Size(163, 22);
 			this.it_tabReload.Text = "Reload";
 			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
 			// 
 			// menubar
 			// 
-			this.menubar.Font = new System.Drawing.Font("Consolas", 6.5F);
+			this.menubar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
@@ -311,14 +311,14 @@
 			this.separator_2,
 			this.it_Quit});
 			this.it_MenuFile.Name = "it_MenuFile";
-			this.it_MenuFile.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuFile.Size = new System.Drawing.Size(38, 20);
 			this.it_MenuFile.Text = "File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
 			// 
 			// it_OpenFolder
 			// 
 			this.it_OpenFolder.Name = "it_OpenFolder";
-			this.it_OpenFolder.Size = new System.Drawing.Size(155, 22);
+			this.it_OpenFolder.Size = new System.Drawing.Size(171, 22);
 			this.it_OpenFolder.Text = "Open ... @ folder";
 			this.it_OpenFolder.Visible = false;
 			// 
@@ -326,7 +326,7 @@
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(155, 22);
+			this.it_Open.Size = new System.Drawing.Size(171, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -334,54 +334,54 @@
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(155, 22);
+			this.it_Reload.Size = new System.Drawing.Size(171, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(152, 6);
+			this.separator_1.Size = new System.Drawing.Size(168, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(155, 22);
+			this.it_Save.Size = new System.Drawing.Size(171, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(155, 22);
+			this.it_SaveAs.Size = new System.Drawing.Size(171, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(155, 22);
+			this.it_Close.Size = new System.Drawing.Size(171, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(155, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(171, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(152, 6);
+			this.separator_2.Size = new System.Drawing.Size(168, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(155, 22);
+			this.it_Quit.Size = new System.Drawing.Size(171, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
@@ -402,7 +402,7 @@
 			this.it_CopyFromClipboard,
 			this.it_ViewClipboardContents});
 			this.it_MenuEdit.Name = "it_MenuEdit";
-			this.it_MenuEdit.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuEdit.Size = new System.Drawing.Size(40, 20);
 			this.it_MenuEdit.Text = "Edit";
 			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
 			// 
@@ -410,7 +410,7 @@
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(190, 22);
+			this.it_Search.Size = new System.Drawing.Size(213, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -418,20 +418,20 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(190, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(213, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
-			this.separator_3.Size = new System.Drawing.Size(187, 6);
+			this.separator_3.Size = new System.Drawing.Size(210, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(190, 22);
+			this.it_Goto.Size = new System.Drawing.Size(213, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -439,21 +439,21 @@
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(190, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(213, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// separator_4
 			// 
 			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(187, 6);
+			this.separator_4.Size = new System.Drawing.Size(210, 6);
 			// 
 			// it_CopyRange
 			// 
 			this.it_CopyRange.Enabled = false;
 			this.it_CopyRange.Name = "it_CopyRange";
 			this.it_CopyRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.it_CopyRange.Size = new System.Drawing.Size(190, 22);
+			this.it_CopyRange.Size = new System.Drawing.Size(213, 22);
 			this.it_CopyRange.Text = "copy range";
 			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
 			// 
@@ -462,20 +462,20 @@
 			this.it_PasteRange.Enabled = false;
 			this.it_PasteRange.Name = "it_PasteRange";
 			this.it_PasteRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.it_PasteRange.Size = new System.Drawing.Size(190, 22);
+			this.it_PasteRange.Size = new System.Drawing.Size(213, 22);
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
 			// separator_13
 			// 
 			this.separator_13.Name = "separator_13";
-			this.separator_13.Size = new System.Drawing.Size(187, 6);
+			this.separator_13.Size = new System.Drawing.Size(210, 6);
 			// 
 			// it_CopyToClipboard
 			// 
 			this.it_CopyToClipboard.Enabled = false;
 			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(190, 22);
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(213, 22);
 			this.it_CopyToClipboard.Text = "export copy to clipboard";
 			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
 			// 
@@ -483,14 +483,14 @@
 			// 
 			this.it_CopyFromClipboard.Enabled = false;
 			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
-			this.it_CopyFromClipboard.Size = new System.Drawing.Size(190, 22);
+			this.it_CopyFromClipboard.Size = new System.Drawing.Size(213, 22);
 			this.it_CopyFromClipboard.Text = "import clipboard to copy";
 			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
 			// 
 			// it_ViewClipboardContents
 			// 
 			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
-			this.it_ViewClipboardContents.Size = new System.Drawing.Size(190, 22);
+			this.it_ViewClipboardContents.Size = new System.Drawing.Size(213, 22);
 			this.it_ViewClipboardContents.Text = "edit clipboard contents";
 			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
 			// 
@@ -498,9 +498,9 @@
 			// 
 			this.tb_Goto.AutoSize = false;
 			this.tb_Goto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_Goto.Margin = new System.Windows.Forms.Padding(1, 0, 6, 0);
+			this.tb_Goto.Margin = new System.Windows.Forms.Padding(1, 0, 5, 0);
 			this.tb_Goto.Name = "tb_Goto";
-			this.tb_Goto.Size = new System.Drawing.Size(35, 18);
+			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
 			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GotoKeyPress);
 			// 
@@ -520,7 +520,7 @@
 			this.cb_SearchOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
-			this.cb_SearchOption.Size = new System.Drawing.Size(95, 18);
+			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
 			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
 			// 
 			// it_Menu2daOps
@@ -535,55 +535,55 @@
 			this.separator_12,
 			this.it_freeze1,
 			this.it_freeze2});
-			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
+			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
-			this.it_Menu2daOps.Size = new System.Drawing.Size(52, 20);
+			this.it_Menu2daOps.Size = new System.Drawing.Size(66, 20);
 			this.it_Menu2daOps.Text = "2da Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
 			// it_RenumberRows
 			// 
 			this.it_RenumberRows.Name = "it_RenumberRows";
-			this.it_RenumberRows.Size = new System.Drawing.Size(155, 22);
+			this.it_RenumberRows.Size = new System.Drawing.Size(175, 22);
 			this.it_RenumberRows.Text = "order row ids";
 			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
 			// 
 			// it_CheckRows
 			// 
 			this.it_CheckRows.Name = "it_CheckRows";
-			this.it_CheckRows.Size = new System.Drawing.Size(155, 22);
+			this.it_CheckRows.Size = new System.Drawing.Size(175, 22);
 			this.it_CheckRows.Text = "test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
 			// separator_11
 			// 
 			this.separator_11.Name = "separator_11";
-			this.separator_11.Size = new System.Drawing.Size(152, 6);
+			this.separator_11.Size = new System.Drawing.Size(172, 6);
 			// 
 			// it_RecolorRows
 			// 
 			this.it_RecolorRows.Name = "it_RecolorRows";
-			this.it_RecolorRows.Size = new System.Drawing.Size(155, 22);
+			this.it_RecolorRows.Size = new System.Drawing.Size(175, 22);
 			this.it_RecolorRows.Text = "recolor rows";
 			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// it_AutoCols
 			// 
 			this.it_AutoCols.Name = "it_AutoCols";
-			this.it_AutoCols.Size = new System.Drawing.Size(155, 22);
+			this.it_AutoCols.Size = new System.Drawing.Size(175, 22);
 			this.it_AutoCols.Text = "autosize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// separator_12
 			// 
 			this.separator_12.Name = "separator_12";
-			this.separator_12.Size = new System.Drawing.Size(152, 6);
+			this.separator_12.Size = new System.Drawing.Size(172, 6);
 			// 
 			// it_freeze1
 			// 
 			this.it_freeze1.Name = "it_freeze1";
 			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.it_freeze1.Size = new System.Drawing.Size(155, 22);
+			this.it_freeze1.Size = new System.Drawing.Size(175, 22);
 			this.it_freeze1.Text = "freeze 1st col";
 			this.it_freeze1.Click += new System.EventHandler(this.opsclick_Freeze1stCol);
 			// 
@@ -591,7 +591,7 @@
 			// 
 			this.it_freeze2.Name = "it_freeze2";
 			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.it_freeze2.Size = new System.Drawing.Size(155, 22);
+			this.it_freeze2.Size = new System.Drawing.Size(175, 22);
 			this.it_freeze2.Text = "freeze 2nd col";
 			this.it_freeze2.Click += new System.EventHandler(this.opsclick_Freeze2ndCol);
 			// 
@@ -603,28 +603,28 @@
 			this.it_CurrentFont,
 			this.it_FontDefault});
 			this.it_MenuFont.Name = "it_MenuFont";
-			this.it_MenuFont.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuFont.Size = new System.Drawing.Size(43, 20);
 			this.it_MenuFont.Text = "Font";
 			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_Font
 			// 
 			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(165, 22);
+			this.it_Font.Size = new System.Drawing.Size(177, 22);
 			this.it_Font.Text = "Font ... be patient";
 			this.it_Font.Click += new System.EventHandler(this.fontclick_Font);
 			// 
 			// it_CurrentFont
 			// 
 			this.it_CurrentFont.Name = "it_CurrentFont";
-			this.it_CurrentFont.Size = new System.Drawing.Size(165, 22);
+			this.it_CurrentFont.Size = new System.Drawing.Size(177, 22);
 			this.it_CurrentFont.Text = "current font string";
 			this.it_CurrentFont.Click += new System.EventHandler(this.fontclick_CurrentFont);
 			// 
 			// it_FontDefault
 			// 
 			this.it_FontDefault.Name = "it_FontDefault";
-			this.it_FontDefault.Size = new System.Drawing.Size(165, 22);
+			this.it_FontDefault.Size = new System.Drawing.Size(177, 22);
 			this.it_FontDefault.Text = "default";
 			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
 			// 
@@ -650,7 +650,7 @@
 			this.separator_15,
 			this.it_PathRanges2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
-			this.it_MenuPaths.Size = new System.Drawing.Size(42, 20);
+			this.it_MenuPaths.Size = new System.Drawing.Size(50, 20);
 			this.it_MenuPaths.Text = "Paths";
 			this.it_MenuPaths.Visible = false;
 			this.it_MenuPaths.DropDownOpening += new System.EventHandler(this.dropdownopening);
@@ -658,113 +658,113 @@
 			// it_PathAll
 			// 
 			this.it_PathAll.Name = "it_PathAll";
-			this.it_PathAll.Size = new System.Drawing.Size(190, 22);
+			this.it_PathAll.Size = new System.Drawing.Size(222, 22);
 			this.it_PathAll.Text = "Path all ...";
 			this.it_PathAll.Click += new System.EventHandler(this.itclick_PathAll);
 			// 
 			// separator_5
 			// 
 			this.separator_5.Name = "separator_5";
-			this.separator_5.Size = new System.Drawing.Size(187, 6);
+			this.separator_5.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_PathBaseItems2da
 			// 
 			this.it_PathBaseItems2da.Name = "it_PathBaseItems2da";
-			this.it_PathBaseItems2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathBaseItems2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathBaseItems2da.Text = "path BaseItems.2da";
 			this.it_PathBaseItems2da.Click += new System.EventHandler(this.itclick_PathBaseItems2da);
 			// 
 			// it_PathFeat2da
 			// 
 			this.it_PathFeat2da.Name = "it_PathFeat2da";
-			this.it_PathFeat2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathFeat2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathFeat2da.Text = "path Feat.2da";
 			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
 			// 
 			// it_PathItemPropDef2da
 			// 
 			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
-			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathItemPropDef2da.Text = "path ItemPropDef.2da";
 			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
 			// 
 			// it_PathSkills2da
 			// 
 			this.it_PathSkills2da.Name = "it_PathSkills2da";
-			this.it_PathSkills2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathSkills2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSkills2da.Text = "path Skills.2da";
 			this.it_PathSkills2da.Click += new System.EventHandler(this.itclick_PathSkills2da);
 			// 
 			// it_PathSpells2da
 			// 
 			this.it_PathSpells2da.Name = "it_PathSpells2da";
-			this.it_PathSpells2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathSpells2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSpells2da.Text = "path Spells.2da";
 			this.it_PathSpells2da.Click += new System.EventHandler(this.itclick_PathSpells2da);
 			// 
 			// separator_6
 			// 
 			this.separator_6.Name = "separator_6";
-			this.separator_6.Size = new System.Drawing.Size(187, 6);
+			this.separator_6.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_PathClasses2da
 			// 
 			this.it_PathClasses2da.Enabled = false;
 			this.it_PathClasses2da.Name = "it_PathClasses2da";
-			this.it_PathClasses2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathClasses2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathClasses2da.Text = "path Classes.2da";
 			// 
 			// it_PathDisease2da
 			// 
 			this.it_PathDisease2da.Enabled = false;
 			this.it_PathDisease2da.Name = "it_PathDisease2da";
-			this.it_PathDisease2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathDisease2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathDisease2da.Text = "path Disease.2da";
 			// 
 			// it_PathIprpAmmoCost2da
 			// 
 			this.it_PathIprpAmmoCost2da.Enabled = false;
 			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
-			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpAmmoCost2da.Text = "path Iprp_AmmoCost.2da";
 			// 
 			// it_PathIprpFeats2da
 			// 
 			this.it_PathIprpFeats2da.Enabled = false;
 			this.it_PathIprpFeats2da.Name = "it_PathIprpFeats2da";
-			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpFeats2da.Text = "path Iprp_Feats.2da";
 			// 
 			// it_PathIprpOnHitSpell2da
 			// 
 			this.it_PathIprpOnHitSpell2da.Enabled = false;
 			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
-			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_OnHitSpell.2da";
 			// 
 			// it_PathIprpSpells2da
 			// 
 			this.it_PathIprpSpells2da.Enabled = false;
 			this.it_PathIprpSpells2da.Name = "it_PathIprpSpells2da";
-			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpSpells2da.Text = "path Iprp_Spells.2da";
 			// 
 			// it_PathRaces2da
 			// 
 			this.it_PathRaces2da.Enabled = false;
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
-			this.it_PathRaces2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathRaces2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
 			// 
 			// separator_15
 			// 
 			this.separator_15.Name = "separator_15";
-			this.separator_15.Size = new System.Drawing.Size(187, 6);
+			this.separator_15.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_PathRanges2da
 			// 
 			this.it_PathRanges2da.Name = "it_PathRanges2da";
-			this.it_PathRanges2da.Size = new System.Drawing.Size(190, 22);
+			this.it_PathRanges2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathRanges2da.Text = "path Ranges.2da";
 			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
 			// 
@@ -775,7 +775,7 @@
 			this.it_ReadMe,
 			this.it_About});
 			this.it_MenuHelp.Name = "it_MenuHelp";
-			this.it_MenuHelp.Size = new System.Drawing.Size(37, 20);
+			this.it_MenuHelp.Size = new System.Drawing.Size(44, 20);
 			this.it_MenuHelp.Text = "Help";
 			this.it_MenuHelp.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
@@ -783,20 +783,20 @@
 			// 
 			this.it_ReadMe.Name = "it_ReadMe";
 			this.it_ReadMe.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.it_ReadMe.Size = new System.Drawing.Size(135, 22);
+			this.it_ReadMe.Size = new System.Drawing.Size(158, 22);
 			this.it_ReadMe.Text = "ReadMe.txt";
 			this.it_ReadMe.Click += new System.EventHandler(this.helpclick_Help);
 			// 
 			// it_About
 			// 
 			this.it_About.Name = "it_About";
-			this.it_About.Size = new System.Drawing.Size(135, 22);
+			this.it_About.Size = new System.Drawing.Size(158, 22);
 			this.it_About.Text = "About";
 			this.it_About.Click += new System.EventHandler(this.helpclick_About);
 			// 
 			// contextEditor
 			// 
-			this.contextEditor.Font = new System.Drawing.Font("Consolas", 6.5F);
+			this.contextEditor.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.contextEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.context_it_Header,
 			this.separator_7,
@@ -813,102 +813,102 @@
 			this.separator_10,
 			this.context_it_DeleteRow});
 			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.Size = new System.Drawing.Size(176, 248);
+			this.contextEditor.Size = new System.Drawing.Size(202, 248);
 			// 
 			// context_it_Header
 			// 
-			this.context_it_Header.Font = new System.Drawing.Font("Consolas", 7.5F, System.Drawing.FontStyle.Bold);
+			this.context_it_Header.Font = new System.Drawing.Font("Verdana", 8.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.context_it_Header.Name = "context_it_Header";
-			this.context_it_Header.Size = new System.Drawing.Size(175, 22);
+			this.context_it_Header.Size = new System.Drawing.Size(201, 22);
 			this.context_it_Header.Text = "_row @ 16";
 			this.context_it_Header.Click += new System.EventHandler(this.contextclick_Header);
 			// 
 			// separator_7
 			// 
 			this.separator_7.Name = "separator_7";
-			this.separator_7.Size = new System.Drawing.Size(172, 6);
+			this.separator_7.Size = new System.Drawing.Size(198, 6);
 			// 
 			// context_it_Copy
 			// 
 			this.context_it_Copy.Name = "context_it_Copy";
-			this.context_it_Copy.Size = new System.Drawing.Size(175, 22);
+			this.context_it_Copy.Size = new System.Drawing.Size(201, 22);
 			this.context_it_Copy.Text = "Copy row @ id";
 			this.context_it_Copy.Click += new System.EventHandler(this.contextclick_EditCopy);
 			// 
 			// context_it_Cut
 			// 
 			this.context_it_Cut.Name = "context_it_Cut";
-			this.context_it_Cut.Size = new System.Drawing.Size(175, 22);
+			this.context_it_Cut.Size = new System.Drawing.Size(201, 22);
 			this.context_it_Cut.Text = "Cut row @ id";
 			this.context_it_Cut.Click += new System.EventHandler(this.contextclick_EditCut);
 			// 
 			// separator_8
 			// 
 			this.separator_8.Name = "separator_8";
-			this.separator_8.Size = new System.Drawing.Size(172, 6);
+			this.separator_8.Size = new System.Drawing.Size(198, 6);
 			// 
 			// context_it_PasteAbove
 			// 
 			this.context_it_PasteAbove.Name = "context_it_PasteAbove";
-			this.context_it_PasteAbove.Size = new System.Drawing.Size(175, 22);
+			this.context_it_PasteAbove.Size = new System.Drawing.Size(201, 22);
 			this.context_it_PasteAbove.Text = "Paste clip above id";
 			this.context_it_PasteAbove.Click += new System.EventHandler(this.contextclick_EditPasteAbove);
 			// 
 			// context_it_Paste
 			// 
 			this.context_it_Paste.Name = "context_it_Paste";
-			this.context_it_Paste.Size = new System.Drawing.Size(175, 22);
+			this.context_it_Paste.Size = new System.Drawing.Size(201, 22);
 			this.context_it_Paste.Text = "Paste clip @ id";
 			this.context_it_Paste.Click += new System.EventHandler(this.contextclick_EditPaste);
 			// 
 			// context_it_PasteBelow
 			// 
 			this.context_it_PasteBelow.Name = "context_it_PasteBelow";
-			this.context_it_PasteBelow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_PasteBelow.Size = new System.Drawing.Size(201, 22);
 			this.context_it_PasteBelow.Text = "Paste clip below id";
 			this.context_it_PasteBelow.Click += new System.EventHandler(this.contextclick_EditPasteBelow);
 			// 
 			// separator_9
 			// 
 			this.separator_9.Name = "separator_9";
-			this.separator_9.Size = new System.Drawing.Size(172, 6);
+			this.separator_9.Size = new System.Drawing.Size(198, 6);
 			// 
 			// context_it_CreateAbove
 			// 
 			this.context_it_CreateAbove.Name = "context_it_CreateAbove";
-			this.context_it_CreateAbove.Size = new System.Drawing.Size(175, 22);
+			this.context_it_CreateAbove.Size = new System.Drawing.Size(201, 22);
 			this.context_it_CreateAbove.Text = "Create blank above id";
 			this.context_it_CreateAbove.Click += new System.EventHandler(this.contextclick_EditCreateAbove);
 			// 
 			// context_it_ClearRow
 			// 
 			this.context_it_ClearRow.Name = "context_it_ClearRow";
-			this.context_it_ClearRow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_ClearRow.Size = new System.Drawing.Size(201, 22);
 			this.context_it_ClearRow.Text = "Clear fields @ id";
 			this.context_it_ClearRow.Click += new System.EventHandler(this.contextclick_EditClear);
 			// 
 			// context_it_CreateBelow
 			// 
 			this.context_it_CreateBelow.Name = "context_it_CreateBelow";
-			this.context_it_CreateBelow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_CreateBelow.Size = new System.Drawing.Size(201, 22);
 			this.context_it_CreateBelow.Text = "Create blank below id";
 			this.context_it_CreateBelow.Click += new System.EventHandler(this.contextclick_EditCreateBelow);
 			// 
 			// separator_10
 			// 
 			this.separator_10.Name = "separator_10";
-			this.separator_10.Size = new System.Drawing.Size(172, 6);
+			this.separator_10.Size = new System.Drawing.Size(198, 6);
 			// 
 			// context_it_DeleteRow
 			// 
 			this.context_it_DeleteRow.Name = "context_it_DeleteRow";
-			this.context_it_DeleteRow.Size = new System.Drawing.Size(175, 22);
+			this.context_it_DeleteRow.Size = new System.Drawing.Size(201, 22);
 			this.context_it_DeleteRow.Text = "Delete @ id";
 			this.context_it_DeleteRow.Click += new System.EventHandler(this.contextclick_EditDelete);
 			// 
 			// statusbar
 			// 
-			this.statusbar.Font = new System.Drawing.Font("Consolas", 6.5F);
+			this.statusbar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.statusbar_label_Cords,
 			this.statusbar_label_Info});
@@ -921,6 +921,7 @@
 			// 
 			this.statusbar_label_Cords.AutoSize = false;
 			this.statusbar_label_Cords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statusbar_label_Cords.Font = new System.Drawing.Font("Verdana", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar_label_Cords.Name = "statusbar_label_Cords";
 			this.statusbar_label_Cords.Size = new System.Drawing.Size(160, 17);
 			this.statusbar_label_Cords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -928,11 +929,11 @@
 			// statusbar_label_Info
 			// 
 			this.statusbar_label_Info.AutoSize = false;
-			this.statusbar_label_Info.Font = new System.Drawing.Font("Consolas", 7.75F);
+			this.statusbar_label_Info.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar_label_Info.Name = "statusbar_label_Info";
 			this.statusbar_label_Info.Size = new System.Drawing.Size(667, 17);
 			this.statusbar_label_Info.Spring = true;
-			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill
 			// 

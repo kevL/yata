@@ -22,6 +22,7 @@ namespace yata
 		internal static int _h = -1;
 
 		internal static bool _strict;
+		internal static bool _context;
 
 
 		internal static void ScanSettings()
@@ -125,6 +126,11 @@ namespace yata
 						{
 							_strict = (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
 								   && line == "true");
+						}
+						else if (line.StartsWith("context=", StringComparison.InvariantCulture))
+						{
+							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
+								   && line == "static");
 						}
 					}
 				}

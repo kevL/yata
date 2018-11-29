@@ -659,6 +659,22 @@ namespace yata
 							info += "bork";
 					}
 					break;
+
+				case 47: // "SubRadSpell1"
+					break;
+
+				case 48: // "SubRadSpell2"
+					break;
+
+				case 49: // "SubRadSpell3"
+					break;
+
+				case 50: // "SubRadSpell4"
+					break;
+
+				case 51: // "SubRadSpell5"
+					break;
+
 			}
 
 			return info;
