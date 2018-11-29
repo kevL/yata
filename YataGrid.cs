@@ -1498,8 +1498,8 @@ namespace yata
 		{
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
 			{
-				_editor.Visible = false;
-				Refresh();
+				if (_editor.Visible)
+					_editor.Focus(); // ie. don't leave editor.
 			}
 		}
 
@@ -1793,7 +1793,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			//logfile.Log("YataGrid.OnMouseClick()");
+			Select();
 
 			if (_editor.Visible
 				&& e.X > WidthTable || e.Y > HeightTable)
@@ -1804,8 +1804,6 @@ namespace yata
 
 			if (e.Button == MouseButtons.Left)
 			{
-				Select();
-
 				foreach (var col in Cols)
 					col.selected = false;
 
@@ -1824,62 +1822,36 @@ namespace yata
 							var cords = getCords(x,y, left);
 							var cell = this[cords.Y, cords.X];
 
-							if (!_editor.Visible)
-								EnsureDisplayed(cell);
 
-							if ((ModifierKeys & Keys.Control) == Keys.Control) // uh, editor is never Vis here. because leave_Editor() fires
+							if (!_editor.Visible)
 							{
-								//logfile.Log("Ctrl");
-								if (_editor.Visible)
+								if ((ModifierKeys & Keys.Control) == Keys.Control)
 								{
-									//logfile.Log(". editor Vis");
-									ApplyTextEdit();
-									_editor.Visible = false;
-									Select();
+									if (cell.selected = !cell.selected)
+										EnsureDisplayed(cell);
 								}
-								else
+								else if (!cell.selected)
 								{
-									//logfile.Log(". editor NOT Vis - toggle select");
-									cell.selected = !cell.selected;
+									ClearCellSelects();
+									cell.selected = true;
+									EnsureDisplayed(cell);
 								}
-							}
-							else if (cell.selected)
-							{
-								//logfile.Log("cell Selected");
-								if (_editor.Visible && _editcell != cell)
+								else // cell is selected
 								{
-									//logfile.Log(". editor Vis && is NOT Editcell");
-									ApplyTextEdit();
-									_editor.Visible = false;
-									Select();
-								}
-								else
-								{
-									//logfile.Log(". editor NOT Vis || is Editcell");
-									if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
-									{
-										_editcell = cell;
-										EditCell();
-									}
+									_editcell = cell;
+									EditCell();
 									_editor.Focus();
 								}
 							}
-							else
+							else // editor is Vis
 							{
-								//logfile.Log("cell is NOT Selected");
-								if (_editor.Visible)
+								if (cell != _editcell)
 								{
-									//logfile.Log(". editor Vis");
 									ApplyTextEdit();
 									_editor.Visible = false;
-									Select();
 								}
-								else
-								{
-									//logfile.Log(". editor NOT Vis - select cell");
-									ClearCellSelects();
-									cell.selected = true;
-								}
+								else // NOTE: There's a clickable fringe around the editor.
+									_editor.Focus();
 							}
 
 							Refresh();
