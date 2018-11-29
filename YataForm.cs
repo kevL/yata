@@ -1011,7 +1011,7 @@ namespace yata
 
 				int row, r,c;
 
-				Cell sel = Table.GetOnlySelectedCell();
+				Cell sel = Table.GetSelectedCell();
 				if (sel != null)
 				{
 					c   = sel.x;
@@ -1161,7 +1161,7 @@ namespace yata
 
 			Table.Select();
 
-			Cell sel = Table.GetOnlySelectedCell();
+			Cell sel = Table.GetSelectedCell();
 			Table.ClearSelects();
 
 			int row, r,c;

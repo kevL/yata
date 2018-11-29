@@ -130,7 +130,7 @@ namespace yata
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
-				Cell sel = GetOnlySelectedCell();
+				Cell sel = GetSelectedCell();
 				if (sel != null && sel.x < _frozenCount)
 				{
 					_editor.Visible =
@@ -461,8 +461,6 @@ namespace yata
 		/// <returns>true if 2da loaded successfully perhaps</returns>
 		internal int Load2da()
 		{
-			Text = "Yata";
-
 			bool ignoreErrors = false;
 
 			int id = -1;
@@ -846,7 +844,7 @@ namespace yata
 			_editor.Visible = false;
 
 			for (int c = 0; c != ColCount; ++c)
-				colRewidth(c, r, range);
+				colRewidth(c,r, range);
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
@@ -1034,14 +1032,14 @@ namespace yata
 
 			int tabs = _f.Tabs.TabCount;
 			int tab = 0;
-			for (; tab != tabs; ++tab)
+			for (; tab != tabs; ++tab) // find the table w/ most rows ->
 			{
 				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
 				if ((rowsTest = table.RowCount - 1) > rows)
 					rows = rowsTest;
 			}
 
-			string text = "9";
+			string text = "9"; // determine how many nines need to be measured ->
 			int w = 1;
 			while ((rows /= 10) != 0)
 			{
@@ -1072,8 +1070,8 @@ namespace yata
 			{
 				int w0 = table.Cols[0].width();
 				table._labelid.Location = new Point(0,0);
-				table._labelid.Size = new Size(WidthRowhead + w0, HeightColhead - 1);
-
+				table._labelid.Size = new Size(WidthRowhead + w0, HeightColhead - 1);	// -1 so these don't cover the long
+																						// horizontal line under the colhead.
 				if (table.ColCount > 1)
 				{
 					int w1 = table.Cols[1].width();
@@ -1092,7 +1090,7 @@ namespace yata
 
 		/// <summary>
 		/// Disables textbox navigation etc. keys to allow table scrolling on
-		/// certain key-events.
+		/// certain key-events (iff the editbox is not focused).
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -1112,14 +1110,16 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles navigation by keyboard around the table. Also handles the
+		/// delete-key for selected row(s) as well as the escape-key to clear
+		/// all selections.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			//logfile.Log("OnKeyDown()");
 
-			Cell sel = GetOnlySelectedCell();
+			Cell sel = GetSelectedCell();
 			int selr = getSelectedRow();
 
 			Row row;
@@ -1526,7 +1526,7 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					if ((_editcell = GetOnlySelectedCell()) != null)
+					if ((_editcell = GetSelectedCell()) != null)
 					{
 						EditCell();
 						_editor.Focus();
@@ -1623,7 +1623,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Checks the text that user tries to commit to a cell.
+		/// Checks the text that user submits to a cell.
+		/// Cf CheckCellText().
 		/// </summary>
 		/// <returns>true if text is changed/fixed/corrected</returns>
 		bool CheckTextEdit()
@@ -1692,7 +1693,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Checks the texts in all cells. Used only when loading or re-loading
+		/// a 2da - it can flag a cell's 'loadchanged' variable.
 		/// </summary>
 		void CheckCellTexts()
 		{
@@ -1714,6 +1716,7 @@ namespace yata
 
 		/// <summary>
 		/// Checks the text in a cell.
+		/// Cf CheckTextEdit().
 		/// </summary>
 		/// <param name="text">ref to a text-string</param>
 		/// <returns>true if text is changed/fixed/corrected</returns>
@@ -1810,7 +1813,7 @@ namespace yata
 						if (x > left)
 						{
 							var cords = getCords(x,y, left);
-							var cell = Rows[cords.Y].cells[cords.X];
+							var cell = this[cords.Y, cords.X];
 
 							EnsureDisplayed(cell);
 
@@ -1978,10 +1981,11 @@ namespace yata
 
 
 		/// <summary>
-		/// Checks if only one cell is currently selected.
+		/// Checks if only one cell is currently selected and returns it if so.
 		/// </summary>
-		/// <returns>the only cell selected</returns>
-		internal Cell GetOnlySelectedCell()
+		/// <returns>the only cell selected, null if none or more than one cell
+		/// is currently selected</returns>
+		internal Cell GetSelectedCell()
 		{
 			Cell cell0 = null;
 
@@ -2002,6 +2006,15 @@ namespace yata
 			return cell0;
 		}
 
+		/// <summary>
+		/// Gets the col/row coordinates of a cell based on the current mouse-
+		/// position.
+		/// </summary>
+		/// <param name="x">mouse x-pos within the table</param>
+		/// <param name="y">mouse y-pos within the table</param>
+		/// <param name="left">the x-pos of the right edge of the frozen-panel;
+		/// ie, the left edge of the visible area of the table</param>
+		/// <returns></returns>
 		Point getCords(int x, int y, int left)
 		{
 			var cords = new Point();
@@ -2020,7 +2033,11 @@ namespace yata
 			return cords;
 		}
 
-
+		/// <summary>
+		/// Gets the cell-rectangle for a given cell.
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
 		Rectangle getCellRectangle(Cell cell)
 		{
 			var rect = new Rectangle();
@@ -2071,6 +2088,11 @@ namespace yata
 			return bounds;
 		}
 
+		/// <summary>
+		/// Gets the x-pos of the right edge of the frozen-panel; ie, the left
+		/// edge of the visible/editable area of the table
+		/// </summary>
+		/// <returns></returns>
 		int getLeft()
 		{
 			int left = WidthRowhead;
@@ -2093,6 +2115,12 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Scrolls the table so that a given cell is (more or less) completely
+		/// displayed.
+		/// </summary>
+		/// <param name="cell">the cell to display</param>
+		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayed(Cell cell)
 		{
 			bool ret = false;
@@ -2142,6 +2170,11 @@ namespace yata
 			return ret;
 		}
 
+		/// <summary>
+		/// Scrolls the table so that a given col is (more or less) completely
+		/// displayed.
+		/// </summary>
+		/// <param name="c">the col to display</param>
 		void EnsureDisplayedCol(int c)
 		{
 			var bounds = getColEdges(c);
@@ -2168,6 +2201,12 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Scrolls the table so that a given row is (more or less) completely
+		/// displayed.
+		/// </summary>
+		/// <param name="r">the row-id display</param>
+		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayedRow(int r)
 		{
 			var bounds = getRowEdges(r);
@@ -2190,9 +2229,14 @@ namespace yata
 			return false;
 		}
 
+		/// <summary>
+		/// Scrolls the table so that the currently selected cell or row is
+		/// (more or less) completely displayed.
+		/// </summary>
+		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayedCellOrRow()
 		{
-			var cell = GetOnlySelectedCell();
+			var cell = GetSelectedCell();
 			if (cell != null)
 				return EnsureDisplayed(cell);
 
@@ -2314,6 +2358,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Gets the row-id of the currently selected row.
+		/// </summary>
+		/// <returns>the currently selected row-id</returns>
 		internal int getSelectedRow()
 		{
 			for (int r = 0; r != RowCount; ++r)
@@ -2461,6 +2509,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Gets the col-id of the currently selected col.
+		/// </summary>
+		/// <returns>the currently selected col-id</returns>
 		int getSelectedCol()
 		{
 			for (int c = 0; c != ColCount; ++c)
@@ -2533,7 +2585,7 @@ namespace yata
 		/// <summary>
 		/// Inserts/deletes a row into the table.
 		/// </summary>
-		/// <param name="id">row</param>
+		/// <param name="id">row-id to insert at or to delete</param>
 		/// <param name="fields">null to delete the row</param>
 		/// <param name="calibrate">true to re-layout the grid</param>
 		internal void Insert(int id, string[] fields, bool calibrate = true)
@@ -2617,7 +2669,7 @@ namespace yata
 		/// Sorts rows by a col either ascending or descending.
 		/// @note Mergesort.
 		/// </summary>
-		/// <param name="col">the col id to sort by</param>
+		/// <param name="col">the col-id to sort by</param>
 		void ColSort(int col)
 		{
 			Changed = true; // TODO: do Changed only if rows are swapped/order is changed.

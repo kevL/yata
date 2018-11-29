@@ -38,7 +38,7 @@ namespace yata
 		static int _h = -1;
 
 
-			/// <summary>
+		/// <summary>
 		/// cTor.
 		/// </summary>
 		internal FontPickerForm(YataForm f)

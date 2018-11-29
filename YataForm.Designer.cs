@@ -125,8 +125,8 @@
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
@@ -295,14 +295,13 @@
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
 			this.menubar.Size = new System.Drawing.Size(842, 24);
 			this.menubar.TabIndex = 0;
-			this.menubar.Text = "menuStrip1";
 			// 
 			// it_MenuFile
 			// 
 			this.it_MenuFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_Open,
 			this.it_OpenFolder,
+			this.it_Open,
 			this.it_Reload,
 			this.separator_1,
 			this.it_Save,
@@ -316,6 +315,13 @@
 			this.it_MenuFile.Text = "File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
 			// 
+			// it_OpenFolder
+			// 
+			this.it_OpenFolder.Name = "it_OpenFolder";
+			this.it_OpenFolder.Size = new System.Drawing.Size(155, 22);
+			this.it_OpenFolder.Text = "Open ... @ folder";
+			this.it_OpenFolder.Visible = false;
+			// 
 			// it_Open
 			// 
 			this.it_Open.Name = "it_Open";
@@ -323,13 +329,6 @@
 			this.it_Open.Size = new System.Drawing.Size(155, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
-			// 
-			// it_OpenFolder
-			// 
-			this.it_OpenFolder.Name = "it_OpenFolder";
-			this.it_OpenFolder.Size = new System.Drawing.Size(155, 22);
-			this.it_OpenFolder.Text = "Open ... @ folder";
-			this.it_OpenFolder.Visible = false;
 			// 
 			// it_Reload
 			// 
@@ -492,7 +491,7 @@
 			// 
 			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
 			this.it_ViewClipboardContents.Size = new System.Drawing.Size(190, 22);
-			this.it_ViewClipboardContents.Text = "view clipboard contents";
+			this.it_ViewClipboardContents.Text = "edit clipboard contents";
 			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
 			// 
 			// tb_Goto
@@ -933,7 +932,7 @@
 			this.statusbar_label_Info.Name = "statusbar_label_Info";
 			this.statusbar_label_Info.Size = new System.Drawing.Size(667, 17);
 			this.statusbar_label_Info.Spring = true;
-			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// panel_ColorFill
 			// 
