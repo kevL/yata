@@ -182,7 +182,6 @@ namespace yata
 
 			Dock      = DockStyle.Left;
 			BackColor = Colors.FrozenPanel;
-			MouseClick += (sender, e) => grid.Select();
 
 			Width = w;
 		}
@@ -200,6 +199,20 @@ namespace yata
 			_grid.PaintFrozenPanel();
 
 //			DrawingControl.ResumeDrawing(this);
+		}
+
+		/// <summary>
+		/// Handles a mouseclick on the frozen-panel.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			if (_grid._editor.Visible)
+				_grid._editor.Focus();
+			else
+				_grid.Select();
+
+//			base.OnMouseClick(e);
 		}
 	}
 }

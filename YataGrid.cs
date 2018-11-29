@@ -1793,6 +1793,15 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+			//logfile.Log("YataGrid.OnMouseClick()");
+
+			if (_editor.Visible
+				&& e.X > WidthTable || e.Y > HeightTable)
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
+
 			if (e.Button == MouseButtons.Left)
 			{
 				Select();
@@ -1815,29 +1824,38 @@ namespace yata
 							var cords = getCords(x,y, left);
 							var cell = this[cords.Y, cords.X];
 
-							EnsureDisplayed(cell);
+							if (!_editor.Visible)
+								EnsureDisplayed(cell);
 
-							if ((ModifierKeys & Keys.Control) == Keys.Control)
+							if ((ModifierKeys & Keys.Control) == Keys.Control) // uh, editor is never Vis here. because leave_Editor() fires
 							{
+								//logfile.Log("Ctrl");
 								if (_editor.Visible)
 								{
-									ApplyTextEdit();
-									_editor.Visible = false;
-									Select();
-								}
-
-								cell.selected = !cell.selected;
-							}
-							else if (cell.selected)
-							{
-								if (_editor.Visible && cell != _editcell)
-								{
+									//logfile.Log(". editor Vis");
 									ApplyTextEdit();
 									_editor.Visible = false;
 									Select();
 								}
 								else
 								{
+									//logfile.Log(". editor NOT Vis - toggle select");
+									cell.selected = !cell.selected;
+								}
+							}
+							else if (cell.selected)
+							{
+								//logfile.Log("cell Selected");
+								if (_editor.Visible && _editcell != cell)
+								{
+									//logfile.Log(". editor Vis && is NOT Editcell");
+									ApplyTextEdit();
+									_editor.Visible = false;
+									Select();
+								}
+								else
+								{
+									//logfile.Log(". editor NOT Vis || is Editcell");
 									if (!_editor.Visible) // safety. There's a pseudo-clickable fringe around the textbox.
 									{
 										_editcell = cell;
@@ -1848,15 +1866,20 @@ namespace yata
 							}
 							else
 							{
+								//logfile.Log("cell is NOT Selected");
 								if (_editor.Visible)
 								{
+									//logfile.Log(". editor Vis");
 									ApplyTextEdit();
 									_editor.Visible = false;
 									Select();
 								}
-
-								ClearCellSelects();
-								cell.selected = true;
+								else
+								{
+									//logfile.Log(". editor NOT Vis - select cell");
+									ClearCellSelects();
+									cell.selected = true;
+								}
 							}
 
 							Refresh();
