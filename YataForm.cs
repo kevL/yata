@@ -1392,7 +1392,7 @@ namespace yata
 				}
 
 				Table.Changed |= changed;
-				Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
+				Table.colRewidth(0,0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
 				Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
 				Table.FrozenLabelsSet(Table);
 				Table.InitScrollers();
@@ -1457,7 +1457,7 @@ namespace yata
 					}
 
 					info += Environment.NewLine + Environment.NewLine
-						  + "Do you want to auto-sequence the ID fields?";
+						  + "Do you want to auto-order the ID fields?";
 
 					if (MessageBox.Show(info,
 										"burp",
