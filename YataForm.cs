@@ -1360,9 +1360,9 @@ namespace yata
 			it_RenumberRows.Enabled =
 			it_CheckRows   .Enabled =
 			it_RecolorRows .Enabled =
-			it_AutoCols    .Enabled =
-			it_freeze1     .Enabled =
-			it_freeze2     .Enabled = (Table != null);
+			it_AutoCols    .Enabled = (Table != null);
+			it_freeze1     .Enabled = (Table != null && Table.Cols.Count > 1);
+			it_freeze2     .Enabled = (Table != null && Table.Cols.Count > 2);
 
 			if (Table != null)
 			{
