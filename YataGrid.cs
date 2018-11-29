@@ -1796,7 +1796,7 @@ namespace yata
 			Select();
 
 			if (_editor.Visible // click to the right or below the table-area
-				&& e.X > WidthTable || e.Y > HeightTable)
+			    && (e.X > WidthTable || e.Y > HeightTable))
 			{
 				if (e.Button == MouseButtons.Left) // apply edit only on LMB.
 					ApplyTextEdit();
