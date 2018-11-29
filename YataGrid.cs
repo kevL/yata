@@ -1795,14 +1795,16 @@ namespace yata
 		{
 			Select();
 
-			if (_editor.Visible
+			if (_editor.Visible // click to the right or below the table-area
 				&& e.X > WidthTable || e.Y > HeightTable)
 			{
+				if (e.Button == MouseButtons.Left) // apply edit only on LMB.
+					ApplyTextEdit();
+
 				_editor.Visible = false;
 				Refresh();
 			}
-
-			if (e.Button == MouseButtons.Left)
+			else if (e.Button == MouseButtons.Left)
 			{
 				foreach (var col in Cols)
 					col.selected = false;
