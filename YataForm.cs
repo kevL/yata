@@ -81,6 +81,13 @@ namespace yata
 
 			if (Settings._font2 != null)
 			{
+				// Relative Font-sizes (as defined in the Designer):
+				//
+				// menubar, contextEditor, statusbar, tabMenu = unity.
+				// context_it_Header     = +0.5
+				// statusbar_label_Cords = -0.5
+				// statusbar_label_Info  = +1.0
+
 				menubar.Font.Dispose();
 				menubar.Font = Settings._font2;
 
@@ -90,9 +97,13 @@ namespace yata
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
 
+				statusbar_label_Cords.Font.Dispose();
+				statusbar_label_Cords.Font = new Font(Settings._font2.FontFamily,
+													  Settings._font2.SizeInPoints - 0.5f);
+
 				statusbar_label_Info.Font.Dispose();
 				statusbar_label_Info.Font = new Font(Settings._font2.FontFamily,
-													 Settings._font2.SizeInPoints + 1.25f);
+													 Settings._font2.SizeInPoints + 1.0f);
 
 				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statusbar_label_Info.Font) + 2;
 
@@ -107,7 +118,7 @@ namespace yata
 
 				context_it_Header.Font.Dispose();
 				context_it_Header.Font = new Font(Settings._font2.FontFamily,
-												  Settings._font2.SizeInPoints + 1.0f,
+												  Settings._font2.SizeInPoints + 0.5f,
 												  getStyleAccented(Settings._font2.FontFamily));
 
 				tabMenu.Font.Dispose();
