@@ -232,6 +232,13 @@ namespace yata
 			graphics = e.Graphics;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
+			Color color;
+			if (_sortcol == 0 && _sortdir == 1)
+				color = Colors.FrozenHead;
+			else
+				color = Colors.LabelSorted;
+			_labelid.BackColor = color;
+
 			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
 			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 

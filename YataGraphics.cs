@@ -103,6 +103,8 @@ namespace yata
 		internal static readonly Color FrozenHead   = Color.Moccasin;
 		internal static readonly Color FrozenPanel  = Color.OldLace;
 
+		internal static readonly Color LabelSorted  = Color.Violet;
+
 		internal static readonly Color Editor       = Color.Crimson;
 
 		internal static readonly Color Text         = SystemColors.ControlText;
