@@ -1579,46 +1579,48 @@ namespace yata
 		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
 			var col = Cols[c];
-
-			col.UserSized = false;
-
-			int w = col._widthtext + _padHoriSort;
-			int wT;
-
-			if (r != -1)
+			if (!col.UserSized) // ie. don't resize a col that user has adjusted.
 			{
-				int r1 = r + range;
-				for (; r <= r1; ++r)
+				col.UserSized = false;
+
+				int w = col._widthtext + _padHoriSort;
+				int wT;
+
+				if (r != -1)
 				{
-					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
-					this[r,c]._widthtext = wT;
-					if (wT > w) w = wT;
+					int r1 = r + range;
+					for (; r <= r1; ++r)
+					{
+						wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+						this[r,c]._widthtext = wT;
+						if (wT > w) w = wT;
+					}
 				}
-			}
-			w += _padHori * 2;
+				w += _padHori * 2;
 
-			int width = col.width();
-			if (w > width)
-			{
-				col.width(w);
-			}
-			else if (w < width) // recalc width on the entire col
-			{
-				if (c == 0 || _wid > w)
-					w = _wid;
-
-				for (r = 0; r != RowCount; ++r)
+				int width = col.width();
+				if (w > width)
 				{
-					wT = this[r,c]._widthtext + _padHori * 2;
-					if (wT > w) w = wT;
+					col.width(w);
 				}
-				col.width(w, true);
-			}
+				else if (w < width) // recalc width on the entire col
+				{
+					if (c == 0 || _wid > w)
+						w = _wid;
 
-			if (range == 0 && w != width) // if range >0 let Calibrate() handle multiple cols
-			{
-				InitScrollers();
-				Refresh(); // is required - and yet another Refresh() will follow ....
+					for (r = 0; r != RowCount; ++r)
+					{
+						wT = this[r,c]._widthtext + _padHori * 2;
+						if (wT > w) w = wT;
+					}
+					col.width(w, true);
+				}
+
+				if (range == 0 && w != width) // if range >0 let Calibrate() handle multiple cols
+				{
+					InitScrollers();
+					Refresh(); // is required - and yet another Refresh() will follow ....
+				}
 			}
 		}
 
