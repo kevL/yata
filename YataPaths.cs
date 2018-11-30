@@ -345,16 +345,11 @@ namespace yata
 
 			switch (col)
 			{
-//				case -1: // rowhead
-//				case  0: // id
-//				case  1: // "Label"
-//				case  2: // "Name"
-//				case  3: // "IconResRef"
-
 				case  4: // "School" (also SpellSchools.2da)
 					if (!String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
+
 						switch (val.ToUpper())
 						{
 							case "A": info += "Abjuration";    break;
@@ -395,12 +390,10 @@ namespace yata
 
 						if (r != -1 && r < Info.rangeRanges.Count && it_PathRanges2da.Checked)
 						{
-							info += " " + Info.rangeRanges[r];
+							info += " " + Info.rangeRanges[r] + "m";
 						}
 					}
 					break;
-
-//				case  6: // "VS"
 
 				case  7: // "MetaMagic"
 					if (!String.IsNullOrEmpty(val = Table[id,col].text))
@@ -660,25 +653,240 @@ namespace yata
 					}
 					break;
 
-				case 47: // "SubRadSpell1"
-					break;
-
+				case 47: // "SubRadSpell1" (Spells.2da)
 				case 48: // "SubRadSpell2"
-					break;
-
 				case 49: // "SubRadSpell3"
-					break;
-
 				case 50: // "SubRadSpell4"
-					break;
-
 				case 51: // "SubRadSpell5"
+				case 53: // "Master"
+					if (it_PathSpells2da.Checked
+					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.spellLabels.Count)
+								{
+									info += Info.spellLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == Constants.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
 					break;
 
+				case 52: // "Category" (Categories.2da)
+					if (it_PathCategories2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result) && result > -1)
+						{
+							if (result < Info.categoryLabels.Count)
+							{
+								info += Info.categoryLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += "bork";
+					}
+					break;
+
+				case 54: // "UserType"
+					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							switch (result)
+							{
+								case 1: info += "Spell";           break;
+								case 2: info += "Special Ability"; break;
+								case 3: info += "Feat";            break;
+								case 4: info += "Item Power";      break;
+
+								default:
+									info += "bork";
+									break;
+							}
+						}
+						else
+							info += "bork";
+					}
+					break;
+
+				case 58: // "SpontCastClassReq" (Classes.2da)
+					if (it_PathClasses2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.classLabels.Count)
+								{
+									switch (result)
+									{
+										case 0:				// NOTE: Although #0 Barbarian is valid it's used for n/a here.
+											info += "n/a";	// The 2da-field ought be "****" instead ofc.
+											break;
+
+										default:
+											info += Info.classLabels[result];
+											break;
+									}
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == Constants.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+
+				case 61: // "FeatID"
+					if (it_PathFeat2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								int feat, dividend, right;
+								if (result < FEATSPELL_MASTER)
+								{
+									feat     = result;
+									dividend = -1;
+									right    = -1;
+								}
+								else
+								{
+									feat     = (result % FEATSPELL_MASTER);
+									dividend = (result / FEATSPELL_MASTER);
+									right    = (result & FEATSPELL_FEATS);
+								}
+
+								if (feat < Info.featsLabels.Count)
+								{
+									info += Info.featsLabels[feat];
+									if (dividend != -1)
+									{
+										info += " (d=" + dividend + ")";
+										info += " (r=" + right    + ")";
+									}
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == Constants.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+
+				case 65: // "AsMetaMagic"
+					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val.Substring(2),
+										   NumberStyles.AllowHexSpecifier,
+										   CultureInfo.InvariantCulture,
+										   out result))
+						{
+							switch (result)
+							{
+								case META_I_DRAINING_BLAST:   info += "Draining Blast";   break;
+								case META_I_ELDRITCH_SPEAR:   info += "Eldritch Spear";   break;
+								case META_I_FRIGHTFUL_BLAST:  info += "Frightful Blast";  break;
+								case META_I_HIDEOUS_BLOW:     info += "Hideous Blow";     break;
+								case META_I_BESHADOWED_BLAST: info += "Beshadowed Blast"; break;
+								case META_I_BRIMSTONE_BLAST:  info += "Brimstone Blast";  break;
+								case META_I_ELDRITCH_CHAIN:   info += "Eldritch Chain";   break;
+								case META_I_HELLRIME_BLAST:   info += "Hellrime Blast";   break;
+								case META_I_BEWITCHING_BLAST: info += "Bewitching Blast"; break;
+								case META_I_ELDRITCH_CONE:    info += "Eldritch Cone";    break;
+								case META_I_NOXIOUS_BLAST:    info += "Noxious Blast";    break;
+								case META_I_VITRIOLIC_BLAST:  info += "Vitriolic Blast";  break;
+								case META_I_ELDRITCH_DOOM:    info += "Eldritch Doom";    break;
+								case META_I_UTTERDARK_BLAST:  info += "Utterdark Blast";  break;
+								case META_I_HINDERING_BLAST:  info += "Hindering Blast";  break;
+								case META_I_BINDING_BLAST:    info += "Binding Blast";    break;
+
+								default:
+									info += "bork";
+									break;
+							}
+						}
+						else if (val == Constants.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+
+				case 66: // "TargetingUI"
+					if (it_PathSpellTarget2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.targetLabels.Count)
+								{
+									info += Info.targetLabels[result];
+									// TODO: parse floats out of SpellTarget.2da "Width"/"Length" ...
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == Constants.Stars)
+							info += "point"; // id #0 (shouldn't do that though)
+						else
+							info += "bork";
+					}
+					break;
 			}
 
 			return info;
 		}
+
+		// FeatSpells
+		const int FEATSPELL_MASTER = 0x00010000;
+		const int FEATSPELL_FEATS  = 0x00001111;
 
 		// MetaMagic
 		const int META_NONE               = 0x00000000; //        0
@@ -759,6 +967,70 @@ namespace yata
 				Info.rangeRanges.Clear();
 			}
 		}
+
+		/// <summary>
+		/// Handles clicking the PathCategories menuitem.
+		/// Intended to add labels from Categories.2da to the 'categoryLabels'
+		/// list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathCategories2da(object sender, EventArgs e)
+		{
+			if (!it_PathCategories2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Categories.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.categoryLabels,
+										 it_PathCategories2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathCategories2da.Checked = false;
+				Info.categoryLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathSpellTarget menuitem.
+		/// Intended to add labels from SpellTarget.2da to the 'targetLabels'
+		/// list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathSpellTarget2da(object sender, EventArgs e)
+		{
+			if (!it_PathSpellTarget2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select SpellTarget.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.targetLabels,
+										 it_PathSpellTarget2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathSpellTarget2da.Checked = false;
+				Info.targetLabels.Clear();
+			}
+		}
 		#endregion Spells info
 
 
@@ -805,7 +1077,6 @@ namespace yata
 							 1);
 
 
-
 			Info.GropeLabels(Path.Combine(directory, "classes.2da"),
 							 Info.classLabels,
 							 it_PathClasses2da,
@@ -845,12 +1116,22 @@ namespace yata
 
 
 			// Spells info ->
+			Info.GropeLabels(Path.Combine(directory, "categories.2da"),
+							 Info.categoryLabels,
+							 it_PathCategories2da,
+							 1);
+
 			Info.GropeLabels(Path.Combine(directory, "ranges.2da"),
 							 Info.rangeLabels,
 							 it_PathRanges2da,
 							 1, // label
 							 2, // range
 							 Info.rangeRanges);
+
+			Info.GropeLabels(Path.Combine(directory, "spelltarget.2da"),
+							 Info.targetLabels,
+							 it_PathSpellTarget2da,
+							 1);
 		}
 	}
 }

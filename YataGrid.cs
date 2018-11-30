@@ -1903,7 +1903,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Clears all rows and cells and cols that are currently selected.
+		/// Clears all rows, cells and cols that are currently selected.
 		/// </summary>
 		internal void ClearSelects()
 		{

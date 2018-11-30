@@ -20,7 +20,6 @@ namespace yata
 			Form
 	{
 		#region Fields & Properties
-
 		internal static string pfe_load; // cl arg
 
 		static YataGrid Table // there can be only 1 Table.
@@ -149,6 +148,8 @@ namespace yata
 			{
 				CreateTabPage(pfe_load);
 			}
+			//else // DEBUG ->
+			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
 		}
 		#endregion cTor
 
@@ -1030,6 +1031,7 @@ namespace yata
 					c   = -1;
 					row =  0;
 				}
+				Table.ClearSelects();
 
 
 				string val;
@@ -1072,8 +1074,8 @@ namespace yata
 							if (field == search
 								|| (substring && field.Contains(search)))
 							{
-								if (sel != null)
-									sel.selected = false;
+//								if (sel != null)
+//									sel.selected = false;
 
 								Table[r,c].selected = true;
 								Table.EnsureDisplayed(Table[r,c]);
@@ -1096,8 +1098,8 @@ namespace yata
 							if (field == search
 								|| (substring && field.Contains(search)))
 							{
-								if (sel != null)
-									sel.selected = false;
+//								if (sel != null)
+//									sel.selected = false;
 
 								Table[r,c].selected = true;
 								Table.EnsureDisplayed(Table[r,c]);

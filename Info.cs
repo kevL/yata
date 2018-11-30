@@ -90,6 +90,10 @@ namespace yata
 
 
 		#region Spells caches
+		// NOTE: Also uses Spells.2da for master and child spell-labels.
+		// NOTE: Also uses Classes.2da for spontaneous cast class-labels.
+		// NOTE: Also uses Feat.2da for feat-id feat-labels.
+
 		/// <summary>
 		/// A list that holds labels for spell-ranges in Ranges.2da.
 		/// - optional
@@ -101,6 +105,18 @@ namespace yata
 		/// - optional
 		/// </summary>
 		internal static List<int> rangeRanges = new List<int>();
+
+		/// <summary>
+		/// A list that holds labels for categories in Categories.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> categoryLabels = new List<string>();
+
+		/// <summary>
+		/// A list that holds labels for spell-targets in SpellTarget.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> targetLabels = new List<string>();
 		#endregion Spells caches
 
 

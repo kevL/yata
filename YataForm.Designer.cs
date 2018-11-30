@@ -94,6 +94,8 @@
 		private System.Windows.Forms.ToolStripMenuItem it_About;
 		private System.Windows.Forms.ToolStripSeparator separator_15;
 		private System.Windows.Forms.ToolStripMenuItem it_PathRanges2da;
+		private System.Windows.Forms.ToolStripMenuItem it_PathCategories2da;
+		private System.Windows.Forms.ToolStripMenuItem it_PathSpellTarget2da;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -182,6 +184,7 @@
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_15 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -204,6 +207,7 @@
 			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -648,7 +652,9 @@
 			this.it_PathIprpSpells2da,
 			this.it_PathRaces2da,
 			this.separator_15,
-			this.it_PathRanges2da});
+			this.it_PathCategories2da,
+			this.it_PathRanges2da,
+			this.it_PathSpellTarget2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Size = new System.Drawing.Size(50, 20);
 			this.it_MenuPaths.Text = "Paths";
@@ -767,6 +773,13 @@
 			this.it_PathRanges2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathRanges2da.Text = "path Ranges.2da";
 			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
+			// 
+			// it_PathCategories2da
+			// 
+			this.it_PathCategories2da.Name = "it_PathCategories2da";
+			this.it_PathCategories2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathCategories2da.Text = "path Categories.2da";
+			this.it_PathCategories2da.Click += new System.EventHandler(this.itclick_PathCategories2da);
 			// 
 			// it_MenuHelp
 			// 
@@ -943,6 +956,13 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
+			// 
+			// it_PathSpellTarget2da
+			// 
+			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
+			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
+			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
 			// 
 			// YataForm
 			// 
