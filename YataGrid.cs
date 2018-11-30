@@ -589,23 +589,31 @@ namespace yata
 						return LOADRESULT_FALSE;
 					}
 
-					foreach (char character in line)
+					if (!ignoreErrors)
 					{
-						if (!char.IsLetterOrDigit(character) && character != '_')
+						foreach (char character in line)
 						{
-							string error = "Only alphanumeric characters and underscores are allowed in column headers."
-										 + Environment.NewLine + Environment.NewLine
-										 + Fullpath;
-							switch (ShowLoadError(error))
+							if (character == '"' // <- always bork on a double-quote
+								|| (Settings._strict
+									&& !char.IsWhiteSpace(character)
+									&& !char.IsLetterOrDigit(character)
+									&& character != '_'))
 							{
-								case DialogResult.Abort:
-									_init = false;
-									return LOADRESULT_FALSE;
-								case DialogResult.Retry:
-									break;
-								case DialogResult.Ignore:
-									ignoreErrors = true;
-									break;
+								string error = "Column headers should contain only alphanumeric characters and underscores."
+											 + Environment.NewLine + Environment.NewLine
+											 + Fullpath;
+								switch (ShowLoadError(error))
+								{
+									case DialogResult.Abort:
+										_init = false;
+										return LOADRESULT_FALSE;
+									case DialogResult.Retry:
+										break;
+									case DialogResult.Ignore:
+										ignoreErrors = true;
+										break;
+								}
+								break;
 							}
 						}
 					}
