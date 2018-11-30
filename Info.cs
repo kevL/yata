@@ -115,8 +115,15 @@ namespace yata
 		/// <summary>
 		/// A list that holds labels for spell-targets in SpellTarget.2da.
 		/// - optional
+		/// @note Groping SpellTarget.2da does NOT use the regular grope-
+		/// routines. It has 2 fields that are float-values (instead of only 1
+		/// optional int-value). So GropeSpellTarget() will be used instead of
+		/// the regular GropeLabels() and it needs to be called by the general
+		/// YataForm.GropeLabels() function as well as the path-item.
 		/// </summary>
-		internal static List<string> targetLabels = new List<string>();
+		internal static List<string> targetLabels  = new List<string>();
+		internal static List<float>  targetWidths  = new List<float>();
+		internal static List<float>  targetLengths = new List<float>();
 		#endregion Spells caches
 
 
@@ -127,14 +134,14 @@ namespace yata
 		/// <param name="labels"></param>
 		/// <param name="it"></param>
 		/// <param name="col">col in the 2da of the label</param>
-		/// <param name="col2">col in the 2da of an int (default -1)</param>
+		/// <param name="col1">col in the 2da of an int (default -1)</param>
 		/// <param name="ints">a collection MUST be passed in if col2 is not -1</param>
-		/// <returns></returns>
+		/// TODO: Check that the given 2da really has the required cols.
 		internal static void GropeLabels(string pfe2da,
 										 ICollection<string> labels,
 										 ToolStripMenuItem it,
 										 int col,
-										 int col2 = -1,
+										 int col1 = -1,
 										 ICollection<int> ints = null)
 		{
 			if (File.Exists(pfe2da))
@@ -181,14 +188,106 @@ namespace yata
 						{
 							labels.Add(cols[col]); // and hope for the best.
 
-							if (col2 != -1)
+							if (col1 != -1)
 							{
 								int result;
-								if (!Int32.TryParse(cols[col2], out result))
+								if (!Int32.TryParse(cols[col1], out result))
 								{
 									result = -1; // always add an int to keep sync w/ the ids
 								}
 								ints.Add(result);
+							}
+						}
+					}
+				}
+
+				it.Checked = (labels.Count != 0);
+			}
+		}
+
+		/// <summary>
+		/// Gets the label-strings plus width/height values from SpellTarget.2da.
+		/// </summary>
+		/// <param name="pfe2da">path_file_extension to the 2da</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
+		/// <param name="col">col in the 2da of the label</param>
+		/// <param name="col1">col in the 2da of a float (default -1)</param>
+		/// <param name="col2">col in the 2da of a float (default -1)</param>
+		/// <param name="floats1">a collection MUST be passed in if col1 is not -1</param>
+		/// <param name="floats2">a collection MUST be passed in if col2 is not -1</param>
+		/// TODO: Check that the given 2da really has the required cols.
+		internal static void GropeSpellTarget(string pfe2da,
+											  ICollection<string> labels,
+											  ToolStripMenuItem it,
+											  int col,
+											  int col1 = -1,
+											  int col2 = -1,
+											  ICollection<float> floats1 = null,
+											  ICollection<float> floats2 = null)
+		{
+			if (File.Exists(pfe2da))
+			{
+				string[] lines = File.ReadAllLines(pfe2da);
+
+				// WARNING: This does *not* handle quotation marks around 2da fields.
+				foreach (string line in lines) // test for double-quote character and exit if found.
+				{
+					foreach (char c in line)
+					{
+						if (c == '"')
+						{
+							const string info = "The 2da-file contains double-quotes. Although that can be"
+											  + " valid in a 2da-file this function is not coded to cope."
+											  + " Format the 2da-file to not use double-quotes if you want"
+											  + " to access it here.";
+							MessageBox.Show(info,
+											"burp",
+											MessageBoxButtons.OK,
+											MessageBoxIcon.Error,
+											MessageBoxDefaultButton.Button1);
+							return;
+						}
+					}
+				}
+
+
+				labels.Clear();
+				if (floats1 != null) floats1.Clear();
+				if (floats2 != null) floats2.Clear();
+
+				string line0;
+				string[] fields;
+
+				for (int i = 0; i != lines.Length; ++i)
+				{
+					if (!String.IsNullOrEmpty(line0 = lines[i].Trim()))
+					{
+						fields = line0.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+						int id;
+						if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+						{
+							labels.Add(fields[col]); // and hope for the best.
+
+							float result;
+
+							if (col1 != -1)
+							{
+								if (!float.TryParse(fields[col1], out result))
+								{
+									result = 0.0F; // always add a float to keep sync w/ the labels
+								}
+								floats1.Add(result);
+							}
+
+							if (col2 != -1)
+							{
+								if (!float.TryParse(fields[col2], out result))
+								{
+									result = 0.0F; // always add a float to keep sync w/ the labels
+								}
+								floats2.Add(result);
 							}
 						}
 					}

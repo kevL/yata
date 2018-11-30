@@ -865,7 +865,25 @@ namespace yata
 								if (result < Info.targetLabels.Count)
 								{
 									info += Info.targetLabels[result];
-									// TODO: parse floats out of SpellTarget.2da "Width"/"Length" ...
+
+									bool b = false;
+
+									float f = Info.targetWidths[result];
+									if (Math.Abs(0.0F - f) > 0.00001F)
+									{
+										info += " (" + f;
+										b = true;
+									}
+
+									f = Info.targetLengths[result];
+									if (Math.Abs(0.0F - f) > 0.00001F)
+									{
+										if (!b) info += " (_";
+										info += " x " + f;
+										b = true;
+									}
+
+									if (b) info += ")";
 								}
 								else
 									info += val;
@@ -1018,10 +1036,14 @@ namespace yata
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
-						Info.GropeLabels(ofd.FileName,
-										 Info.targetLabels,
-										 it_PathSpellTarget2da,
-										 1);
+						Info.GropeSpellTarget(ofd.FileName,
+											  Info.targetLabels,
+											  it_PathSpellTarget2da,
+											  1,
+											  3,
+											  4,
+											  Info.targetWidths,
+											  Info.targetLengths);
 					}
 				}
 			}
@@ -1128,10 +1150,14 @@ namespace yata
 							 2, // range
 							 Info.rangeRanges);
 
-			Info.GropeLabels(Path.Combine(directory, "spelltarget.2da"),
-							 Info.targetLabels,
-							 it_PathSpellTarget2da,
-							 1);
+			Info.GropeSpellTarget(Path.Combine(directory, "spelltarget.2da"),
+								  Info.targetLabels,
+								  it_PathSpellTarget2da,
+								  1,
+								  3,
+								  4,
+								  Info.targetWidths,
+								  Info.targetLengths);
 		}
 	}
 }
