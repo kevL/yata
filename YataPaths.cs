@@ -871,16 +871,19 @@ namespace yata
 									float f = Info.targetWidths[result];
 									if (Math.Abs(0.0F - f) > 0.00001F)
 									{
-										info += " (" + f;
 										b = true;
+										info += " (" + f;
 									}
 
 									f = Info.targetLengths[result];
 									if (Math.Abs(0.0F - f) > 0.00001F)
 									{
-										if (!b) info += " (_";
+										if (!b)
+										{
+											b = true;
+											info += " (_";
+										}
 										info += " x " + f;
-										b = true;
 									}
 
 									if (b) info += ")";

@@ -171,8 +171,7 @@ namespace yata
 
 
 				labels.Clear();
-				if (ints != null)
-					ints.Clear();
+				if (ints != null) ints.Clear();
 
 				string line;
 				string[] cols;
@@ -183,19 +182,22 @@ namespace yata
 					{
 						cols = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-						int id;
-						if (Int32.TryParse(cols[0], out id)) // is a valid 2da row
+						if (cols.Length > col && cols.Length > col1)
 						{
-							labels.Add(cols[col]); // and hope for the best.
-
-							if (col1 != -1)
+							int id;
+							if (Int32.TryParse(cols[0], out id)) // is a valid 2da row
 							{
-								int result;
-								if (!Int32.TryParse(cols[col1], out result))
+								labels.Add(cols[col]); // and hope for the best.
+
+								if (col1 != -1)
 								{
-									result = -1; // always add an int to keep sync w/ the ids
+									int result;
+									if (!Int32.TryParse(cols[col1], out result))
+									{
+										result = -1; // always add an int to keep sync w/ the labels
+									}
+									ints.Add(result);
 								}
-								ints.Add(result);
 							}
 						}
 					}
@@ -265,29 +267,32 @@ namespace yata
 					{
 						fields = line0.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-						int id;
-						if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+						if (fields.Length > col && fields.Length > col1 && fields.Length > col2)
 						{
-							labels.Add(fields[col]); // and hope for the best.
-
-							float result;
-
-							if (col1 != -1)
+							int id;
+							if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
 							{
-								if (!float.TryParse(fields[col1], out result))
-								{
-									result = 0.0F; // always add a float to keep sync w/ the labels
-								}
-								floats1.Add(result);
-							}
+								labels.Add(fields[col]); // and hope for the best.
 
-							if (col2 != -1)
-							{
-								if (!float.TryParse(fields[col2], out result))
+								float result;
+
+								if (col1 != -1)
 								{
-									result = 0.0F; // always add a float to keep sync w/ the labels
+									if (!float.TryParse(fields[col1], out result))
+									{
+										result = 0.0F; // always add a float to keep sync w/ the labels
+									}
+									floats1.Add(result);
 								}
-								floats2.Add(result);
+
+								if (col2 != -1)
+								{
+									if (!float.TryParse(fields[col2], out result))
+									{
+										result = 0.0F; // always add a float to keep sync w/ the labels
+									}
+									floats2.Add(result);
+								}
 							}
 						}
 					}
