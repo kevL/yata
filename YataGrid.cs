@@ -591,9 +591,9 @@ namespace yata
 
 					foreach (char character in line)
 					{
-						if (character == '"') // TODO: exactly what chars are allowed in the Headers
+						if (!char.IsLetterOrDigit(character) && character != '_')
 						{
-							string error = "The headers should not contain double-quotes."
+							string error = "Only alphanumeric characters and underscores are allowed in column headers."
 										 + Environment.NewLine + Environment.NewLine
 										 + Fullpath;
 							switch (ShowLoadError(error))
