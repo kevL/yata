@@ -183,8 +183,9 @@
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_15 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -207,7 +208,6 @@
 			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -414,7 +414,7 @@
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(213, 22);
+			this.it_Search.Size = new System.Drawing.Size(216, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -422,20 +422,20 @@
 			// 
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(213, 22);
+			this.it_Findnext.Size = new System.Drawing.Size(216, 22);
 			this.it_Findnext.Text = "Find next";
 			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
-			this.separator_3.Size = new System.Drawing.Size(210, 6);
+			this.separator_3.Size = new System.Drawing.Size(213, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(213, 22);
+			this.it_Goto.Size = new System.Drawing.Size(216, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -443,21 +443,21 @@
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(213, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(216, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// separator_4
 			// 
 			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(210, 6);
+			this.separator_4.Size = new System.Drawing.Size(213, 6);
 			// 
 			// it_CopyRange
 			// 
 			this.it_CopyRange.Enabled = false;
 			this.it_CopyRange.Name = "it_CopyRange";
 			this.it_CopyRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.it_CopyRange.Size = new System.Drawing.Size(213, 22);
+			this.it_CopyRange.Size = new System.Drawing.Size(216, 22);
 			this.it_CopyRange.Text = "copy range";
 			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
 			// 
@@ -466,36 +466,36 @@
 			this.it_PasteRange.Enabled = false;
 			this.it_PasteRange.Name = "it_PasteRange";
 			this.it_PasteRange.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.it_PasteRange.Size = new System.Drawing.Size(213, 22);
+			this.it_PasteRange.Size = new System.Drawing.Size(216, 22);
 			this.it_PasteRange.Text = "paste range";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
 			// separator_13
 			// 
 			this.separator_13.Name = "separator_13";
-			this.separator_13.Size = new System.Drawing.Size(210, 6);
+			this.separator_13.Size = new System.Drawing.Size(213, 6);
 			// 
 			// it_CopyToClipboard
 			// 
 			this.it_CopyToClipboard.Enabled = false;
 			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(213, 22);
-			this.it_CopyToClipboard.Text = "export copy to clipboard";
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(216, 22);
+			this.it_CopyToClipboard.Text = "export copy to Clipboard";
 			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
 			// 
 			// it_CopyFromClipboard
 			// 
 			this.it_CopyFromClipboard.Enabled = false;
 			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
-			this.it_CopyFromClipboard.Size = new System.Drawing.Size(213, 22);
-			this.it_CopyFromClipboard.Text = "import clipboard to copy";
+			this.it_CopyFromClipboard.Size = new System.Drawing.Size(216, 22);
+			this.it_CopyFromClipboard.Text = "import Clipboard to copy";
 			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
 			// 
 			// it_ViewClipboardContents
 			// 
 			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
-			this.it_ViewClipboardContents.Size = new System.Drawing.Size(213, 22);
-			this.it_ViewClipboardContents.Text = "edit clipboard contents";
+			this.it_ViewClipboardContents.Size = new System.Drawing.Size(216, 22);
+			this.it_ViewClipboardContents.Text = "open Clipboard editor";
 			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
 			// 
 			// tb_Goto
@@ -715,57 +715,64 @@
 			// 
 			// it_PathClasses2da
 			// 
-			this.it_PathClasses2da.Enabled = false;
 			this.it_PathClasses2da.Name = "it_PathClasses2da";
 			this.it_PathClasses2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathClasses2da.Text = "path Classes.2da";
+			this.it_PathClasses2da.Click += new System.EventHandler(this.itclick_PathClasses2da);
 			// 
 			// it_PathDisease2da
 			// 
-			this.it_PathDisease2da.Enabled = false;
 			this.it_PathDisease2da.Name = "it_PathDisease2da";
 			this.it_PathDisease2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathDisease2da.Text = "path Disease.2da";
+			this.it_PathDisease2da.Click += new System.EventHandler(this.itclick_PathDisease2da);
 			// 
 			// it_PathIprpAmmoCost2da
 			// 
-			this.it_PathIprpAmmoCost2da.Enabled = false;
 			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
 			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpAmmoCost2da.Text = "path Iprp_AmmoCost.2da";
+			this.it_PathIprpAmmoCost2da.Click += new System.EventHandler(this.itclick_PathIprpAmmoCost2da);
 			// 
 			// it_PathIprpFeats2da
 			// 
-			this.it_PathIprpFeats2da.Enabled = false;
 			this.it_PathIprpFeats2da.Name = "it_PathIprpFeats2da";
 			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpFeats2da.Text = "path Iprp_Feats.2da";
+			this.it_PathIprpFeats2da.Click += new System.EventHandler(this.itclick_PathIprpFeats2da);
 			// 
 			// it_PathIprpOnHitSpell2da
 			// 
-			this.it_PathIprpOnHitSpell2da.Enabled = false;
 			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
 			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_OnHitSpell.2da";
+			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpells2da);
 			// 
 			// it_PathIprpSpells2da
 			// 
-			this.it_PathIprpSpells2da.Enabled = false;
 			this.it_PathIprpSpells2da.Name = "it_PathIprpSpells2da";
 			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpSpells2da.Text = "path Iprp_Spells.2da";
+			this.it_PathIprpSpells2da.Click += new System.EventHandler(this.itclick_PathIprpSpells2da);
 			// 
 			// it_PathRaces2da
 			// 
-			this.it_PathRaces2da.Enabled = false;
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
 			this.it_PathRaces2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
+			this.it_PathRaces2da.Click += new System.EventHandler(this.itclick_PathRaces2da);
 			// 
 			// separator_15
 			// 
 			this.separator_15.Name = "separator_15";
 			this.separator_15.Size = new System.Drawing.Size(219, 6);
+			// 
+			// it_PathCategories2da
+			// 
+			this.it_PathCategories2da.Name = "it_PathCategories2da";
+			this.it_PathCategories2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathCategories2da.Text = "path Categories.2da";
+			this.it_PathCategories2da.Click += new System.EventHandler(this.itclick_PathCategories2da);
 			// 
 			// it_PathRanges2da
 			// 
@@ -774,12 +781,12 @@
 			this.it_PathRanges2da.Text = "path Ranges.2da";
 			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
 			// 
-			// it_PathCategories2da
+			// it_PathSpellTarget2da
 			// 
-			this.it_PathCategories2da.Name = "it_PathCategories2da";
-			this.it_PathCategories2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathCategories2da.Text = "path Categories.2da";
-			this.it_PathCategories2da.Click += new System.EventHandler(this.itclick_PathCategories2da);
+			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
+			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
+			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
 			// 
 			// it_MenuHelp
 			// 
@@ -956,13 +963,6 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
-			// 
-			// it_PathSpellTarget2da
-			// 
-			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
-			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
-			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
 			// 
 			// YataForm
 			// 

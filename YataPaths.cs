@@ -326,6 +326,231 @@ namespace yata
 				Info.spellLabels.Clear();
 			}
 		}
+
+
+		// sub-info (for EncodedIPs only) ->
+
+		/// <summary>
+		/// Handles clicking the PathClasses menuitem.
+		/// Intended to add labels from Classes.2da to the 'classLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathClasses2da(object sender, EventArgs e)
+		{
+			if (!it_PathClasses2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Classes.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.classLabels,
+										 it_PathClasses2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathClasses2da.Checked = false;
+				Info.classLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathDisease menuitem.
+		/// Intended to add labels from Disease.2da to the 'diseaseLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathDisease2da(object sender, EventArgs e)
+		{
+			if (!it_PathDisease2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Disease.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.diseaseLabels,
+										 it_PathDisease2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathDisease2da.Checked = false;
+				Info.diseaseLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathIprpAmmoCost menuitem.
+		/// Intended to add labels from Iprp_AmmoCost.2da to the 'ipammoLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathIprpAmmoCost2da(object sender, EventArgs e)
+		{
+			if (!it_PathIprpAmmoCost2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Iprp_AmmoCost.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.ipammoLabels,
+										 it_PathIprpAmmoCost2da,
+										 2);
+					}
+				}
+			}
+			else
+			{
+				it_PathIprpAmmoCost2da.Checked = false;
+				Info.ipammoLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathIprpFeats menuitem.
+		/// Intended to add labels from Iprp_Feats.2da to the 'ipfeatsLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathIprpFeats2da(object sender, EventArgs e)
+		{
+			if (!it_PathIprpFeats2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Iprp_Feats.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.ipfeatsLabels,
+										 it_PathIprpFeats2da,
+										 2);
+					}
+				}
+			}
+			else
+			{
+				it_PathIprpFeats2da.Checked = false;
+				Info.ipfeatsLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathIprpOnHitSpells menuitem.
+		/// Intended to add labels from Iprp_OnHitSpells.2da to the
+		/// 'iphitspellsLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathIprpOnHitSpells2da(object sender, EventArgs e)
+		{
+			if (!it_PathIprpOnHitSpell2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Iprp_OnHitSpells.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.iphitspellLabels,
+										 it_PathIprpOnHitSpell2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathIprpOnHitSpell2da.Checked = false;
+				Info.iphitspellLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathIprpSpells menuitem.
+		/// Intended to add labels and levels from Iprp_Spells.2da to the
+		/// 'ipspellsLabels' and 'ipspellsLevels' lists.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathIprpSpells2da(object sender, EventArgs e)
+		{
+			if (!it_PathIprpSpells2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Iprp_Spells.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.ipspellsLabels,
+										 it_PathIprpSpells2da,
+										 1, // label
+										 3, // level
+										 Info.ipspellsLevels);
+					}
+				}
+			}
+			else
+			{
+				it_PathIprpSpells2da.Checked = false;
+				Info.ipspellsLabels.Clear();
+				Info.ipspellsLevels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathRaces menuitem.
+		/// Intended to add labels from RacialTypes.2da to the 'raceLabels' list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathRaces2da(object sender, EventArgs e)
+		{
+			if (!it_PathRaces2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select RacialTypes.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.raceLabels,
+										 it_PathRaces2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathRaces2da.Checked = false;
+				Info.raceLabels.Clear();
+			}
+		}
 		#endregion Crafting info
 
 

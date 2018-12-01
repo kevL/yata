@@ -30,13 +30,12 @@ Edit
 - copy range  : Ctrl+c (copies a range of selected rows)
 - paste range : Ctrl+v (pastes a range of selected rows)
 
-- export copy to clipboard (exports the current copy-list to the clipboard)
-- import clipboard to copy (imports any clipboard-text to the current copy-list
+- export copy to Clipboard (exports the current copy-list to the clipboard)
+- import Clipboard to copy (imports any clipboard-text to the current copy-list
                             WARNING: No validity test is done on the clipboard
                             text; importing assumes that the text on your
                             clipboard contains valid 2da-row data)
-- view clipboard contents  (accesses the Windows Clipboard for viewing or
-                            editing)
+- open Clipboard editor (accesses the Windows Clipboard for viewing/editing)
 
 
 Goto box (type a row ID and press Enter)
