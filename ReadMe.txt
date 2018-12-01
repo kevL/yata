@@ -144,7 +144,7 @@ RMB+Shift - sorts the table by the col either ascending or descending (Note that
             that the table is not ordered correctly. Before sorting by cols, it
             is strongly suggested to check the row-IDs under 2da Ops->test row
             order, since re-sorting by row-IDs is the best way to get your table
-            back to its correct order. Tables are saved in the order that they
+            back into its correct order. Tables are saved in the order that they
             are sorted.)
 
 click on the rowheads

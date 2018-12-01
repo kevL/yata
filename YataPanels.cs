@@ -62,7 +62,8 @@ namespace yata
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
 					x += _grid.Cols[c].width();
-					if (e.X > x - 5 && e.X < x)
+					if (c > _grid.FrozenCount - 1
+						&& e.X > x - 5 && e.X < x)
 					{
 						Cursor = Cursors.VSplit;
 						_grabCol = c;
