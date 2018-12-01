@@ -115,7 +115,7 @@ Enter - starts editing a cell if the table has focus and only one cell is
         currently selected
       - commits an edit if the editor box has focus
       - performs search if the Search box or Search Options dropdown has focus
-      - perform goto if the Goto box has focus
+      - performs goto if the Goto box has focus
 
 Delete - when a row is selected (as indicated with a green field at the far left
 of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
@@ -137,8 +137,15 @@ LMB+Ctrl+Shift - you get the idea ...
 click on the colheads
 LMB       - click-drag col-boundary to re-width a col (The text of a colhead
             ought appear slightly grayed if its col has been user-sized.)
-RMB       - click a col-boundary to auto-width a col
-RMB+Shift - sorts the table by the col either ascending or descending
+RMB       - click a col-boundary to auto-width a col (Note that frozen cols
+            can't be re-sized.)
+RMB+Shift - sorts the table by the col either ascending or descending (Note that
+            the ID-header changes to a violet color as a warning to indicate
+            that the table is not ordered correctly. Before sorting by cols, it
+            is strongly suggested to check the row-IDs under 2da Ops->test row
+            order, since re-sorting by row-IDs is the best way to get your table
+            back to its correct order. Tables are saved in the order that they
+            are sorted.)
 
 click on the rowheads
 RMB - opens the contextmenu for single-row editing
@@ -168,14 +175,18 @@ Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
 takes about 15 seconds on my decently fast computer.
 
 
-Settings.Cfg file
+Settings.Cfg file (do not use double-quotes)
 
 the following variables ought be respected:
 
 font=      a .NET string that represents the desired table-font (see 2da
            Ops->current font string)
 font2=     a .NET string that represents a desired (usually smaller) font for
-           menus
+           menus (To get a correct .NET font-string for menus, choose the font
+           for the table and copy its string with 2da Ops->current font string,
+           then change the table-font back to what you like and paste the copied
+           string into Settings.Cfg "font2=". Yata must be reloaded before it
+           will display with a changed menu-font.)
 pathall=   a path without quotes to a valid directory to grope for 2da info
            for Crafting.2da or Spells.2da
 pathall=   another path for Crafting or Spells info
@@ -237,7 +248,7 @@ A range of copied rows can be pasted/inserted at a currently selected row (as
 indicated with a green field at the far left of a row) or to the end of the
 table if there is not a currently selected row. Pasting a range does not
 overwrite any currently selected row(s) - it rather inserts the copy-range,
-starting at a selected row.
+starting at the selected row.
 
 
 Appendix C: edit operations on rows
@@ -254,21 +265,21 @@ indicated with a green field at the far left of that row), (b) to flag multiple
 rows for copying (or deleting w/ the Delete key) hold down Shift and click at
 the far left of another row (Control will not work for this, although such
 row(s)'s cells would appear to be selected; a row of selected cells is *not*
-necessarily/technically a selected or flagged row!), (c) to copy a range of rows
-(a selected row along with its flagged rows) choose "copy range" on the Edit
-menu.
+necessarily/technically a selected or flagged row itself!), (c) to copy a range
+of rows (a selected row along with its flagged rows) choose "copy range" on the
+Edit menu.
 
 Currently flagged rows are indicated with a pale green field at the far left of
 their rows.
 
 Copying rows does not use the Windows Clipboard. The copy of such data is
 instead maintained internally by Yata. If you want this data on the Clipboard
-for whatever reason choose "export copy to clipboard" on the Edit menu. To get
+for whatever reason choose "export copy to Clipboard" on the Edit menu. To get
 data that's on the Clipboard back into Yata's internal format choose "import
-clipboard to copy" on the Edit menu - but be warned that such data from the
+Clipboard to copy" on the Edit menu - but be warned that such data from the
 Clipboard is not checked and could be garbage as far as a 2da is concerned, so
 it's up to you to decide whether or not to proceed at that point. The contents
-of the Clipboard can be viewed and edited by choosing "view clipboard contents"
+of the Clipboard can be viewed and edited by choosing "edit Clipboard contents"
 on the Edit menu.
 
 Once a range of rows has been copied it can be pasted into a table by choosing
@@ -290,7 +301,7 @@ does not align cols.
 Appendix E: how to use Info paths
 
 Yata is capable of displaying readable info about fields in Crafting.2da and
-Spell.2da. Paths to various other 2da-files need to be set first, then info
+Spells.2da. Paths to various other 2da-files need to be set first, then info
 ought be displayed on the statusbar when the mouse-cursor is moved over the
 cells of certain cols like "CATEGORY" (displays the title of the trigger-spell)
 or "EFFECTS" (displays the recipe's itemproperty in a readable way), etc. Note
@@ -380,7 +391,8 @@ Note that when opening multiple files from Windows Explorer either by selecting
 and pressing Enter or with right-click and Open on the contextmenu that appears,
 the files will open in separate instances of Yata if there is not a running
 instance of Yata. If there is a running instance of Yata they will open in the
-earliest instance like opening a single file from Explorer does.
+earliest instance like opening a single file from Explorer does. This is a
+.NET <-> Windows Explorer/OS limitation.
 
 
 Appendix I: a note on associating file extensions in Windows Explorer
