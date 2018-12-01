@@ -283,8 +283,8 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
+			it_Save    .Enabled = (Table != null && !Table.Readonly);
 			it_Reload  .Enabled =
-			it_Save    .Enabled =
 			it_SaveAs  .Enabled =
 			it_Close   .Enabled =
 			it_CloseAll.Enabled = (Table != null);
@@ -669,68 +669,61 @@ namespace yata
 
 		void fileclick_Save(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null && !String.IsNullOrEmpty(Table.Fullpath))
 			{
-				if (!Table.Readonly)
+				if (!Table.Readonly || (ToolStripMenuItem)sender == it_SaveAs)
 				{
-					string pfe = Table.Fullpath;
+					Table.Readonly = false;
 
-					if (!String.IsNullOrEmpty(pfe))
+					int rows = Table.RowCount;
+					if (rows != 0)
 					{
-						int rows = Table.RowCount;
-						if (rows != 0)
+						Table.Changed = false;
+						foreach (var row in Table.Rows)
 						{
-							Table.Changed = false;
-							foreach (var row in Table.Rows)
+							for (int c = 0; c != Table.ColCount; ++c)
+								row.cells[c].loadchanged = false;
+						}
+
+						using (var sw = new StreamWriter(Table.Fullpath))
+						{
+							sw.WriteLine("2DA V2.0");
+							sw.WriteLine("");
+
+							string line = String.Empty;
+							foreach (string field in Table.Fields)
 							{
-								for (int c = 0; c != Table.ColCount; ++c)
-									row.cells[c].loadchanged = false;
+								line += " " + field;
 							}
+							sw.WriteLine(line);
 
-							using (var sw = new StreamWriter(pfe))
+
+							string val;
+
+							int cols = Table.ColCount;
+
+							for (int r = 0; r != rows; ++r)
 							{
-								sw.WriteLine("2DA V2.0");
-								sw.WriteLine("");
+								line = String.Empty;
 
-								string line = String.Empty;
-								foreach (string field in Table.Fields)
+								for (int c = 0; c != cols; ++c)
 								{
-									line += " " + field;
+									if (c != 0)
+										line += " ";
+
+									if (!String.IsNullOrEmpty(val = Table[r,c].text))
+										line += val;
+									else
+										line += Constants.Stars;
 								}
+
 								sw.WriteLine(line);
-
-
-								string val;
-
-								int cols = Table.ColCount;
-
-								for (int r = 0; r != rows; ++r)
-								{
-									line = String.Empty;
-
-									for (int c = 0; c != cols; ++c)
-									{
-										if (c != 0)
-											line += " ";
-
-										if (!String.IsNullOrEmpty(val = Table[r,c].text))
-											line += val;
-										else
-											line += Constants.Stars;
-									}
-
-									sw.WriteLine(line);
-								}
 							}
 						}
 					}
 				}
 				else
-					MessageBox.Show("The 2da-file was opened as readonly and can be saved only by using Save As ...",
-									"burp",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Hand,
-									MessageBoxDefaultButton.Button1);
+					ReadonlyError();
 			}
 		}
 
@@ -747,17 +740,26 @@ namespace yata
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
 						Table.Fullpath = sfd.FileName;
-						Table.Readonly = false;
 						Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
 
 						SetTitlebarText();
 
-						fileclick_Save(null, EventArgs.Empty);
+						fileclick_Save(sender, e);
 					}
 				}
 			}
 		}
 		#endregion File menu
+
+
+		internal void ReadonlyError()
+		{
+			MessageBox.Show("The 2da-file is opened as readonly.",
+							"burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Hand,
+							MessageBoxDefaultButton.Button1);
+		}
 
 
 		#region Context menu
@@ -815,112 +817,152 @@ namespace yata
 
 		void contextclick_EditCut(object sender, EventArgs e)
 		{
-			contextclick_EditCopy(  null, EventArgs.Empty);
-			contextclick_EditDelete(null, EventArgs.Empty);
+			if (!Table.Readonly)
+			{
+				contextclick_EditCopy(  null, EventArgs.Empty);
+				contextclick_EditDelete(null, EventArgs.Empty);
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
-			Table.SetProHori();
+			if (!Table.Readonly)
+			{
+				Table.SetProHori();
 
-			Table.Changed = true;
-			Table.Insert(_r, _copy[0]);
+				Table.Changed = true;
+				Table.Insert(_r, _copy[0]);
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
-			Table.SetProHori();
-
-			Table.Changed = true;
-			Row row = Table.Rows[_r];
-			string field;
-			for (int c = 0; c != Table.ColCount; ++c)
+			if (!Table.Readonly)
 			{
-				if (c < _copy[0].Length)
-					field = _copy[0][c];
-				else
-					field = Constants.Stars;
+				Table.SetProHori();
 
-				row.cells[c].text = field;
+				Table.Changed = true;
+				Row row = Table.Rows[_r];
+				string field;
+				for (int c = 0; c != Table.ColCount; ++c)
+				{
+					if (c < _copy[0].Length)
+						field = _copy[0][c];
+					else
+						field = Constants.Stars;
+
+					row.cells[c].text = field;
+				}
+				row._brush = Brushes.Created;
+	
+				Table.Refresh();
+				Table._proHori = 0;
 			}
-			row._brush = Brushes.Created;
-
-			Table.Refresh();
-			Table._proHori = 0;
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
-			Table.SetProHori();
+			if (!Table.Readonly)
+			{
+				Table.SetProHori();
 
-			Table.Changed = true;
-			Table.Insert(_r + 1, _copy[0]);
+				Table.Changed = true;
+				Table.Insert(_r + 1, _copy[0]);
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
-			Table.SetProHori();
-
-			Table.Changed = true;
-			var fields = new string[Table.ColCount];
-			fields[0] = _r.ToString();
-			for (int c = 1; c != Table.ColCount; ++c)
+			if (!Table.Readonly)
 			{
-				fields[c] = Constants.Stars;
-			}
-			Table.Insert(_r, fields);
+				Table.SetProHori();
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Changed = true;
+				var fields = new string[Table.ColCount];
+				fields[0] = _r.ToString();
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					fields[c] = Constants.Stars;
+				}
+				Table.Insert(_r, fields);
+
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
-			Table.SetProHori();
-
-			Table.Changed = true;
-			for (int c = 1; c != Table.ColCount; ++c)
+			if (!Table.Readonly)
 			{
-				Table[_r,c].text = Constants.Stars;
-			}
-			Table.Rows[_r]._brush = Brushes.Created;
+				Table.SetProHori();
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Changed = true;
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					Table[_r,c].text = Constants.Stars;
+				}
+				Table.Rows[_r]._brush = Brushes.Created;
+
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
-			Table.SetProHori();
-
-			Table.Changed = true;
-			var fields = new string[Table.ColCount];
-			fields[0] = (_r + 1).ToString();
-			for (int c = 1; c != Table.ColCount; ++c)
+			if (!Table.Readonly)
 			{
-				fields[c] = Constants.Stars;
-			}
-			Table.Insert(_r + 1, fields);
+				Table.SetProHori();
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Changed = true;
+				var fields = new string[Table.ColCount];
+				fields[0] = (_r + 1).ToString();
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					fields[c] = Constants.Stars;
+				}
+				Table.Insert(_r + 1, fields);
+
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
-			Table.SetProHori();
+			if (!Table.Readonly)
+			{
+				Table.SetProHori();
 
-			Table.Changed = true;
-			Table.Insert(_r, null);
+				Table.Changed = true;
+				Table.Insert(_r, null);
 
-			Table.Refresh();
-			Table._proHori = 0;
+				Table.Refresh();
+				Table._proHori = 0;
+			}
+			else
+				ReadonlyError();
 		}
 		#endregion Context menu
 
@@ -1292,24 +1334,29 @@ namespace yata
 
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
-			ShowColorPanel();
-			DrawingControl.SuspendDrawing(Table);
-
-			Table.Changed = true;
-
-			int selr = Table.getSelectedRow();
-			if (selr == -1)
-				selr = Table.RowCount;
-
-			int r = selr;
-			for (int i = 0; i != _copy.Count; ++i)
-				Table.Insert(r++, _copy[i], false);
-
-			Table.Calibrate(selr, _copy.Count - 1); // paste range
-			Table.EnsureDisplayedRow(selr);
-
-			ShowColorPanel(false);
-			DrawingControl.ResumeDrawing(Table);
+			if (!Table.Readonly)
+			{
+				ShowColorPanel();
+				DrawingControl.SuspendDrawing(Table);
+	
+				Table.Changed = true;
+	
+				int selr = Table.getSelectedRow();
+				if (selr == -1)
+					selr = Table.RowCount;
+	
+				int r = selr;
+				for (int i = 0; i != _copy.Count; ++i)
+					Table.Insert(r++, _copy[i], false);
+	
+				Table.Calibrate(selr, _copy.Count - 1); // paste range
+				Table.EnsureDisplayedRow(selr);
+	
+				ShowColorPanel(false);
+				DrawingControl.ResumeDrawing(Table);
+			}
+			else
+				ReadonlyError();
 		}
 
 		/// <summary>
@@ -1396,28 +1443,33 @@ namespace yata
 		{
 			if (Table != null && Table.RowCount != 0)
 			{
-				bool changed = false;
-
-				string val;
-				int result;
-
-				for (int r = 0; r != Table.RowCount; ++r)
+				if (!Table.Readonly)
 				{
-					if (String.IsNullOrEmpty(val = Table[r,0].text)
-						|| !Int32.TryParse(val, out result)
-						|| result != r)
-					{
-						Table[r,0].text = r.ToString();
-						changed = true;
-					}
-				}
+					bool changed = false;
 
-				Table.Changed |= changed;
-				Table.colRewidth(0,0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
-				Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
-				Table.FrozenLabelsSet(Table);
-				Table.InitScrollers();
-				Table.Refresh();
+					string val;
+					int result;
+
+					for (int r = 0; r != Table.RowCount; ++r)
+					{
+						if (String.IsNullOrEmpty(val = Table[r,0].text)
+							|| !Int32.TryParse(val, out result)
+							|| result != r)
+						{
+							Table[r,0].text = r.ToString();
+							changed = true;
+						}
+					}
+
+					Table.Changed |= changed;
+					Table.colRewidth(0,0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
+					Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
+					Table.FrozenLabelsSet(Table);
+					Table.InitScrollers();
+					Table.Refresh();
+				}
+				else
+					ReadonlyError();
 			}
 		}
 
@@ -1477,17 +1529,26 @@ namespace yata
 							  + "The check has been stopped at 16 borks.";
 					}
 
-					info += Environment.NewLine + Environment.NewLine
-						  + "Do you want to auto-order the ID fields?";
-
-					if (MessageBox.Show(info,
-										"burp",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Exclamation,
-										MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+					if (!Table.Readonly)
 					{
-						opsclick_Reorder(null, EventArgs.Empty);
+						info += Environment.NewLine + Environment.NewLine
+							  + "Do you want to auto-order the ID fields?";
+
+						if (MessageBox.Show(info,
+											"burp",
+											MessageBoxButtons.YesNo,
+											MessageBoxIcon.Exclamation,
+											MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+						{
+							opsclick_Reorder(null, EventArgs.Empty);
+						}
 					}
+					else
+						MessageBox.Show(info,
+										"burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Exclamation,
+										MessageBoxDefaultButton.Button1);
 				}
 				else
 					MessageBox.Show("Row order is Okay.",

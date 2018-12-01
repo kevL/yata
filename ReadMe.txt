@@ -3,9 +3,10 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 nov 26
+2018 nov 30
 kevL's
-ver 2.3.0.3
+ver 2.3.8.0
+
 
 File
 - Open ... @ folder (presets for the Open ... dialog - does not appear if no presets have
@@ -19,6 +20,7 @@ File
 - Close all (this is a multi-tabbed application)
 
 - Quit : Ctrl+q
+
 
 Edit
 - Find      : Ctrl+f (focuses the Search box)
@@ -40,8 +42,10 @@ Edit
 
 Goto box (type a row ID and press Enter)
 
+
 Search box (type a string to search for)
 Search options dropdown (substring or wholeword)
+
 
 2da Ops
 - order row ids (auto-orders the IDs of the currently displayed 2da)
@@ -60,17 +64,21 @@ Search options dropdown (substring or wholeword)
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
 
+
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
   display the table-data with)
 - current font string (a .NET string representing the current table font)
 - default (sets the table-font to Yata's hardcoded default font)
 
-Paths (see Appendix E: how to use Crafting paths)
+
+Paths (see Appendix E: how to use Info paths)
+
 
 Help
 - ReadMe.txt : F1 (opens this document in a text-editor)
 - About      : displays the version/build-type of the executable
+
 
 
 keys:
@@ -169,8 +177,8 @@ font=      a .NET string that represents the desired table-font (see 2da
 font2=     a .NET string that represents a desired (usually smaller) font for
            menus
 pathall=   a path without quotes to a valid directory to grope for 2da info
-           for Crafting.2da
-pathall=   another path for Crafting info
+           for Crafting.2da or Spells.2da
+pathall=   another path for Crafting or Spells info
 pathall=   etc. (the first pathall has lowest priority and any info found will
            be replaced by any info found in subsequent pathall directories;
            there can be as many or as few pathall directories as you like)
@@ -191,9 +199,10 @@ context=   a right-click on a rowhead displays the contextmenu at the mouse-
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).
 
-The pathall directories are for gathering Crafting.2da info that will appear
-when mouseovering cells of Crafting.2da. (Yata was designed with Crafting in
-mind and can show stuff like Encoded IPs as readable strings on the statusbar.)
+The pathall directories are for gathering Info that will appear if Crafting.2da
+or Spells.2da are loaded as the cursor is moved over their cells. (Yata was
+designed with Crafting in mind and can show stuff like Encoded IPs as readable
+strings on the statusbar, eg.)
 
 
 Appendix A: note on Load
@@ -213,8 +222,8 @@ it's suggested that you close the file in Yata and try to fix it in a
 text-editor (or a different 2da-editor).
 
 Further, the only way to edit the ID col is with 2da Ops "order row ids". And if
-you've chosen to Freeze the 1st or 2nd col, those cells can't be edited until
-Freeze is turned back off.
+you've chosen to Freeze the 1st or 2nd col, those cells can't be edited (or
+searched) until Freeze is turned back off.
 
 
 Appendix B: copy/paste range
@@ -278,24 +287,24 @@ Yata outputs 2da-files as text. It uses a single space for the delimiter. It
 does not align cols.
 
 
-Appendix E: how to use Crafting paths
+Appendix E: how to use Info paths
 
-Yata is capable of displaying readable info about fields in Crafting.2da. Paths
-to various other 2da-files need to be set first, then info ought be displayed on
-the statusbar when the mouse-cursor is moved over the cells of certain cols like
-"CATEGORY" (displays the title of the trigger-spell) or "EFFECTS" (displays the
-recipe's itemproperty in a readable way). Note that pathing to 2da-files can
-also be termed, groping ... that is, when a 2da-file is pathed it will be groped
-for relevant info.
+Yata is capable of displaying readable info about fields in Crafting.2da and
+Spell.2da. Paths to various other 2da-files need to be set first, then info
+ought be displayed on the statusbar when the mouse-cursor is moved over the
+cells of certain cols like "CATEGORY" (displays the title of the trigger-spell)
+or "EFFECTS" (displays the recipe's itemproperty in a readable way), etc. Note
+that pathing to 2da-files can also be termed, groping ... that is, when a 2da-
+file is pathed it will be groped for relevant info.
 
 There are two ways to get such info: (a) Using the Paths menu when Crafting.2da
-is loaded, (b) Using "pathall=" entries in Settings.Cfg.
+or Spells.2da is loaded, (b) Using "pathall=" entries in Settings.Cfg.
 
 (a) Using the Paths menu
 
-Paths appears on the menubar only when Crafting.2da is loaded - the filename
-without extension needs to be "crafting" (case-insensitive). The items under
-Paths are divided into three sections:
+Paths appears on the menubar only when Crafting.2da or Spells.2da are loaded -
+the filename without extension needs to be "crafting" or "spells" (case-
+insensitive). The items under Paths are divided into four sections:
 
 Path all ...             : this item opens a folder browser dialog to search for
                            any/all applicable 2da-file(s). It can be used more
@@ -308,22 +317,24 @@ Path all ...             : this item opens a folder browser dialog to search for
 path BaseItems.2da       : these items open a file browser dialog. Use them to
 path Feat.2da              path to a specific 2da-file. A check will appear next
 path ItemPropDef.2da       to the entry on the menu; selecting the item a second
-path Skills.2da            time would clear the info.
-path Spells.2da
+path Skills.2da            time would clear the info. These are used by
+path Spells.2da            Crafting.2da
 --
-path Classes.2da         : these items merely show whether or not a respective
-path Disease.2da           2da has been groped. A check will appear next to the
-path Iprp_AmmoCost.2da     entry on the menu if relevant info from the file has
-path Iprp_Feats.2da        been found.
-path Iprp_OnHitSpell.2da
+path Classes.2da         : these items open a file browser dialog. Use them to
+path Disease.2da           path to a specific 2da-file. A check will appear next
+path Iprp_AmmoCost.2da     to the entry on the menu; selecting the item a second
+path Iprp_Feats.2da        time would clear the info. These are used to
+path Iprp_OnHitSpell.2da   interpret EncodedIPs in Crafting.2da
 path Iprp_Spells.2da
 path RacialTypes.2da
-
-The items in the third section above are not as versatile as the other items
-because firstly they contain sub-info for itemproperties only and by then I
-realized what a hassle all that is from both a coding and a user perspective.
-And that's when "Path all ..." began. But even that became a bother so I put it
-in Settings.Cfg:
+--
+path Categories.2da      : these items open a file browser dialog. Use them to
+path Ranges.2da            path to a specific 2da-file. A check will appear next
+path SpellTarget.2da       to the entry on the menu; selecting the item a second
+                           time would clear the info. These are used by
+                           Spells.2da - note that Info for Spells.2da can also
+                           make use of data that's groped from Spells.2da,
+                           Feat.2da, and Classes.2da above.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

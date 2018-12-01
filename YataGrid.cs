@@ -36,7 +36,11 @@ namespace yata
 		internal bool Changed
 		{
 			get { return _changed; }
-			set { _f.TableChanged(_changed = value); }
+			set
+			{
+				if (!Readonly)
+					_f.TableChanged(_changed = value);
+			}
 		}
 
 		internal static int HeightColhead;
@@ -1425,9 +1429,12 @@ namespace yata
 					break;
 
 				case Keys.Delete:
-					SetProHori();
-					Delete();
-					_proHori = 0;
+					if (!Readonly)
+					{
+						SetProHori();
+						Delete();
+						_proHori = 0;
+					}
 					break;
 			}
 
@@ -1534,7 +1541,7 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					if ((_editcell = GetSelectedCell()) != null)
+					if (!Readonly && (_editcell = GetSelectedCell()) != null)
 					{
 						EditCell();
 						_editor.Focus();
@@ -1848,7 +1855,7 @@ namespace yata
 									cell.selected = true;
 									EnsureDisplayed(cell);
 								}
-								else // cell is selected
+								else if (!Readonly) // cell is selected
 								{
 									_editcell = cell;
 									EditCell();

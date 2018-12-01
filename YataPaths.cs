@@ -507,8 +507,8 @@ namespace yata
 						Info.GropeLabels(ofd.FileName,
 										 Info.ipspellsLabels,
 										 it_PathIprpSpells2da,
-										 1, // label
-										 3, // level
+										 1,
+										 3,
 										 Info.ipspellsLevels);
 					}
 				}
