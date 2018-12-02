@@ -117,9 +117,7 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						_grid.colRewidth(_grabCol, 0, _grid.RowCount - 1);
-						_grid.InitScrollers();
-						_grid.Refresh();
+						_grid.colRewidth(_grabCol);
 					}
 				}
 			}

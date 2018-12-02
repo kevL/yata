@@ -1588,7 +1588,8 @@ namespace yata
 		/// </summary>
 		/// <param name="c">col</param>
 		/// <param name="r">first row to consider as changed (default -1 if
-		/// deleting rows)</param>
+		/// deleting rows and/or no extant text-widths have changed; ie, no
+		/// text-widths need to be re-measured)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
 		internal void colRewidth(int c, int r = -1, int range = 0)
@@ -1631,8 +1632,8 @@ namespace yata
 					col.width(w, true);
 				}
 
-				if (range == 0 && w != width) // if range >0 let Calibrate() handle multiple cols
-				{
+				if (range == 0 && w != width)	// if range >0 let Calibrate() handle multiple
+				{								// cols or at least Scrollers and Refresh
 					InitScrollers();
 					Refresh(); // is required - and yet another Refresh() will follow ....
 				}

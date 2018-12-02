@@ -10,7 +10,7 @@ ver 2.3.9.0
 
 File
 - Open ... @ folder (presets for the Open ... dialog - does not appear if no presets have
-  been set)
+                     been set)
 - Open ... : Ctrl+o
 - Reload   : Ctrl+r
 

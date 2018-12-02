@@ -1462,11 +1462,17 @@ namespace yata
 					}
 
 					Table.Changed |= changed;
-					Table.colRewidth(0,0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
-					Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
-					Table.FrozenLabelsSet(Table);
-					Table.InitScrollers();
-					Table.Refresh();
+
+					if (changed)
+					{
+						Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
+
+						Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
+						Table.FrozenLabelsSet(Table);
+
+						Table.InitScrollers();
+						Table.Refresh();
+					}
 				}
 				else
 					ReadonlyError();
@@ -1608,6 +1614,12 @@ namespace yata
 
 				if (it_freeze1.Checked = !it_freeze1.Checked)
 				{
+					var col = Table.Cols[1];
+					if (col.UserSized)
+					{
+						col.UserSized = false;
+						Table.colRewidth(1);
+					}
 					Table.FrozenCount = YataGrid.FreezeFirst;
 				}
 				else
@@ -1625,6 +1637,20 @@ namespace yata
 
 				if (it_freeze2.Checked = !it_freeze2.Checked)
 				{
+					var col = Table.Cols[1];
+					if (col.UserSized)
+					{
+						col.UserSized = false;
+						Table.colRewidth(1);
+					}
+
+					col = Table.Cols[2];
+					if (col.UserSized)
+					{
+						col.UserSized = false;
+						Table.colRewidth(2);
+					}
+
 					Table.FrozenCount = YataGrid.FreezeSecond;
 				}
 				else
