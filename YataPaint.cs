@@ -232,14 +232,27 @@ namespace yata
 			graphics = e.Graphics;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
+			var rect = new Rectangle();
+
 			Color color;
 			if (_sortcol == 0 && _sortdir == 1)
 				color = Colors.FrozenHead;
 			else
+			{
 				color = Colors.LabelSorted;
+
+				rect.X      = _labelid.Left  + 1;
+				rect.Y      = _labelid.Top   + 1;
+				rect.Width  = _labelid.Width - 2;
+				rect.Height = _labelid.Height;
+				graphics.DrawRectangle(Pens.LabelSortedBorder, rect);
+			}
 			_labelid.BackColor = color;
 
-			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
+			rect.X      = WidthRowhead + _padHori;
+			rect.Y      = Top;
+			rect.Width  = Cols[0].width();
+			rect.Height = HeightColhead;
 			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
 			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
@@ -247,8 +260,8 @@ namespace yata
 			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
 			{
 				graphics.DrawImage(Resources.asc_16px,
-									rect.X               - _offsetHoriSort, // + rect.Width
-									rect.Y + rect.Height - _offsetVertSort);
+								   rect.X               - _offsetHoriSort, // + rect.Width
+								   rect.Y + rect.Height - _offsetVertSort);
 			}
 			else if (_sortcol == 0)
 			{
@@ -259,8 +272,8 @@ namespace yata
 					sort = Resources.des_16px;
 
 				graphics.DrawImage(sort,
-									rect.X               - _offsetHoriSort, // + rect.Width
-									rect.Y + rect.Height - _offsetVertSort);
+								   rect.X               - _offsetHoriSort, // + rect.Width
+								   rect.Y + rect.Height - _offsetVertSort);
 			}
 		}
 

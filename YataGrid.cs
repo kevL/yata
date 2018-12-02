@@ -2678,6 +2678,8 @@ namespace yata
 		}
 
 
+		ToolTip TooltipSort = new ToolTip(); // warns when table isn't sorted by ID-asc.
+
 		#region Sort
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
@@ -2694,6 +2696,14 @@ namespace yata
 				_sortdir = -1;
 
 			_sortcol = col;
+
+			if (!Settings._strict) // ASSUME people that use strict settings know what they're doing.
+			{
+				if (_sortcol == 0 && _sortdir == 1)
+					TooltipSort.SetToolTip(_labelid, "");
+				else
+					TooltipSort.SetToolTip(_labelid, "warn : Table is not sorted by ascending ID");
+			}
 
 			var rowsT = new List<Row>();
 			TopDownMergeSort(Rows, rowsT, RowCount);
