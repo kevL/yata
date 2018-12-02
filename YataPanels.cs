@@ -38,6 +38,7 @@ namespace yata
 
 			YataGrid.graphics = e.Graphics;
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+//			YataGrid.graphics.DrawLine(Pens.DarkLine, 0, 1, Width, 1);
 			YataGrid.graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
 			_grid.LabelColheads();
 

@@ -1587,6 +1587,9 @@ namespace yata
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
+				foreach (var c in Table.Cols)
+					c.UserSized = false;
+
 				Table.Calibrate(0, Table.RowCount - 1); // autosize
 
 				ShowColorPanel(false);

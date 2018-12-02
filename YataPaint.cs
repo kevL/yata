@@ -232,7 +232,7 @@ namespace yata
 			graphics = e.Graphics;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-			var rect = new Rectangle();
+//			var rect = new Rectangle();
 
 			Color color;
 			if (_sortcol == 0 && _sortdir == 1)
@@ -241,20 +241,24 @@ namespace yata
 			{
 				color = Colors.LabelSorted;
 
-				rect.X      = _labelid.Left  + 1;
-				rect.Y      = _labelid.Top   + 1;
-				rect.Width  = _labelid.Width - 2;
-				rect.Height = _labelid.Height;
-				graphics.DrawRectangle(Pens.LabelSortedBorder, rect);
+//				rect.X      = _labelid.Left  + 1;
+//				rect.Y      = _labelid.Top   + 1;
+//				rect.Width  = _labelid.Width - 2;
+//				rect.Height = _labelid.Height;
+//				graphics.DrawRectangle(Pens.LabelSortedBorder, rect);
+
+//				graphics.DrawLine(Pens.LabelSortedBorder, _labelid.Left, _labelid.Top + 1, _labelid.Width, _labelid.Top + 1);
 			}
 			_labelid.BackColor = color;
 
-			rect.X      = WidthRowhead + _padHori;
-			rect.Y      = Top;
-			rect.Width  = Cols[0].width();
-			rect.Height = HeightColhead;
+//			rect.X      = WidthRowhead + _padHori;
+//			rect.Y      = Top;
+//			rect.Width  = Cols[0].width();
+//			rect.Height = HeightColhead;
+			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
 			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
+//			graphics.DrawLine(Pens.DarkLine, _labelid.Left + 1, _labelid.Top + 1, _labelid.Width - 1, _labelid.Top + 1);
 			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
 
 			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
@@ -285,6 +289,7 @@ namespace yata
 			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
 			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
+//			graphics.DrawLine(Pens.DarkLine, _labelfirst.Left + 1, _labelfirst.Top + 1, _labelfirst.Width - 1, _labelfirst.Top + 1);
 			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 
 			if (_sortdir != 0 && _sortcol == 1)
@@ -309,6 +314,7 @@ namespace yata
 			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
 			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
 
+//			graphics.DrawLine(Pens.DarkLine, _labelsecond.Left + 1, _labelsecond.Top + 1, _labelsecond.Width - 1, _labelsecond.Top + 1);
 			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 
 			if (_sortdir != 0 && _sortcol == 2)
