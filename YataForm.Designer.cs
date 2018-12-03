@@ -96,6 +96,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathRanges2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathCategories2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSpellTarget2da;
+		private System.Windows.Forms.Button btn_PropertyPanel;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -208,6 +209,7 @@
 			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
+			this.btn_PropertyPanel = new System.Windows.Forms.Button();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -949,10 +951,10 @@
 			// statusbar_label_Info
 			// 
 			this.statusbar_label_Info.AutoSize = false;
+			this.statusbar_label_Info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statusbar_label_Info.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar_label_Info.Name = "statusbar_label_Info";
-			this.statusbar_label_Info.Size = new System.Drawing.Size(667, 17);
-			this.statusbar_label_Info.Spring = true;
+			this.statusbar_label_Info.Size = new System.Drawing.Size(640, 17);
 			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill
@@ -964,11 +966,23 @@
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
 			// 
+			// btn_PropertyPanel
+			// 
+			this.btn_PropertyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_PropertyPanel.Location = new System.Drawing.Point(823, 0);
+			this.btn_PropertyPanel.Name = "btn_PropertyPanel";
+			this.btn_PropertyPanel.Size = new System.Drawing.Size(20, 20);
+			this.btn_PropertyPanel.TabIndex = 4;
+			this.btn_PropertyPanel.UseVisualStyleBackColor = true;
+			this.btn_PropertyPanel.Visible = false;
+			this.btn_PropertyPanel.Click += new System.EventHandler(this.click_PropertyPanel);
+			// 
 			// YataForm
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(842, 454);
+			this.Controls.Add(this.btn_PropertyPanel);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.menubar);

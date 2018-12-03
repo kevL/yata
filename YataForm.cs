@@ -406,6 +406,8 @@ namespace yata
 
 				it_freeze1.Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
 				it_freeze2.Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
+
+				btn_PropertyPanel.Visible = true;
 			}
 			else
 			{
@@ -415,6 +417,8 @@ namespace yata
 
 				it_freeze1.Checked =
 				it_freeze2.Checked = false;
+
+				btn_PropertyPanel.Visible = false;
 			}
 
 			SetTitlebarText();
@@ -1988,6 +1992,31 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(this);
 		}
+
+
+		#region PropertyPanel
+		/// <summary>
+		/// Handler for clicking the PropertyPanel button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_PropertyPanel(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				if (Table._prop = !Table._prop)
+				{
+					if (Table._props == null)
+						Table._props = new PropertyPanel(Table);
+
+					Table._props.Show();
+					Table._props.BringToFront();
+				}
+				else
+					Table._props.Hide();
+			}
+		}
+		#endregion PropertyPanel
 	}
 
 

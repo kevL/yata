@@ -88,11 +88,11 @@ namespace yata
 		{ get; set; }
 
 
-		readonly VScrollBar _scrollVert = new VScrollBar();
-		readonly HScrollBar _scrollHori = new HScrollBar();
+		internal readonly VScrollBar _scrollVert = new VScrollBar();
+		internal readonly HScrollBar _scrollHori = new HScrollBar();
 
-		bool _visVert; // Be happy. happy happy
-		bool _visHori;
+		internal bool _visVert; // Be happy. happy happy
+		internal bool _visHori;
 
 		internal int offsetVert;
 		internal int offsetHori;
@@ -161,6 +161,10 @@ namespace yata
 
 		internal int RangeSelect
 		{ get; set; }
+
+		internal PropertyPanel _props;
+		internal bool _prop;
+
 
 
 		/// <summary>
