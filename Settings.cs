@@ -12,6 +12,7 @@ namespace yata
 	{
 		internal static Font _font;
 		internal static Font _font2;
+		internal static Font _font3;
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
@@ -71,6 +72,24 @@ namespace yata
 								{
 									_font2.Dispose(); // NOTE: Fail silently.
 									_font2 = null;
+								}
+							}
+						}
+						else if (line.StartsWith("font3=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							{
+								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+								_font3 = tc.ConvertFromInvariantString(line) as Font;
+
+								int pos = line.IndexOf(',');
+								if (pos == -1)
+									pos = line.Length;
+
+								if (line.Substring(0, pos) != _font3.Name)
+								{
+									_font3.Dispose(); // NOTE: Fail silently.
+									_font3 = null;
 								}
 							}
 						}

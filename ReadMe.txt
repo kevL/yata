@@ -187,6 +187,8 @@ font2=     a .NET string that represents a desired (usually smaller) font for
            then change the table-font back to what you like and paste the copied
            string into Settings.Cfg "font2=". Yata must be reloaded before it
            will display with a changed menu-font.)
+font3=     a .NET string that represents a desired font for the PropertyPanel
+           (see notes at font2)
 pathall=   a path without quotes to a valid directory to grope for 2da info
            for Crafting.2da or Spells.2da
 pathall=   another path for Crafting or Spells info
@@ -400,3 +402,11 @@ Appendix I: a note on associating file extensions in Windows Explorer
 Yata can be associated to open files that have a file-extension aka file-type in
 Windows Explorer. Yata doesn't do that automatically; it's for the user to set
 it up if he/she wants to.
+
+
+Appendix J: the Property Panel
+
+Yata can display the content of a selected row, vertically, in a panel that
+appears at the right. Click the innocent looking button that's beneath the close
+button on the title bar. Large tables will take a few seconds to initialize the
+panel.

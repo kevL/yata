@@ -37,13 +37,13 @@ namespace yata
 			BackColor = Color.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
-			if (Settings._font2 != null)
+			if (Settings._font3 != null)
 			{
-//				Font.Dispose();
+//				Font.Dispose(); // NOTE: Don't dispose that; it will be needed when another PropertyPanel instantiates.
 				Font = Settings._font2;
 			}
 			else
-				Font = new System.Drawing.Font("Verdana", 8.0F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+				Font = new System.Drawing.Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
 			if (_heightr == 0)
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
@@ -96,7 +96,7 @@ namespace yata
 			// draw lines ->
 			graphics.DrawLine(Pens.Black,			// vertical left line
 							  1, 0,
-							  1, HeightProps - offset - 1);
+							  1, HeightProps - offset);
 			graphics.DrawLine(Pens.DarkLine,		// vertical center line
 							  _widthVars, 1,
 							  _widthVars, HeightProps - offset - 1);
@@ -141,7 +141,7 @@ namespace yata
 		{
 			if (init)
 			{
-				HeightProps = _grid.ColCount * _heightr + 1;
+				HeightProps = _grid.ColCount * _heightr;
 			}
 			else // resize event - see YataGrid.OnResize()
 			{

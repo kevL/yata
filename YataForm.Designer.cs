@@ -970,6 +970,7 @@
 			// 
 			this.btn_PropertyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_PropertyPanel.Location = new System.Drawing.Point(823, 0);
+			this.btn_PropertyPanel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_PropertyPanel.Name = "btn_PropertyPanel";
 			this.btn_PropertyPanel.Size = new System.Drawing.Size(20, 20);
 			this.btn_PropertyPanel.TabIndex = 4;
