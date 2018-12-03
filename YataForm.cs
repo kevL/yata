@@ -633,9 +633,16 @@ namespace yata
 					it_freeze2.Checked = false;
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
+
+					Table._prop = false;
+					Table._props.Hide();
+					Table._props = null;
 				}
 				else
-					fileclick_CloseTab(null, EventArgs.Empty);
+				{
+					Table.Changed = false; // bypass the close-tab warning.
+					fileclick_CloseTab(sender, e);
+				}
 
 				if (Table != null)
 				{

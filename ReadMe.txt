@@ -408,5 +408,4 @@ Appendix J: the Property Panel
 
 Yata can display the content of a selected row, vertically, in a panel that
 appears at the right. Click the innocent looking button that's beneath the close
-button on the title bar. Large tables will take a few seconds to initialize the
-panel.
+button on the title bar.

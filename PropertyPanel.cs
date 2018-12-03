@@ -40,7 +40,7 @@ namespace yata
 			if (Settings._font3 != null)
 			{
 //				Font.Dispose(); // NOTE: Don't dispose that; it will be needed when another PropertyPanel instantiates.
-				Font = Settings._font2;
+				Font = Settings._font3;
 			}
 			else
 				Font = new System.Drawing.Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
@@ -59,16 +59,31 @@ namespace yata
 			}
 			_widthVars += _padHori * 2 + 1;
 
+//			for (int r = 0; r != _grid.RowCount; ++r)
+//			{
+//				for (int c = 0; c != _grid.ColCount; ++c)
+//				{
+//					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
+//					if (wT > _widthVals)
+//						_widthVals = wT;
+//				}
+//			}
+//			_widthVals += _padHori * 2;
+			int rT = 0, cT = 0;
 			for (int r = 0; r != _grid.RowCount; ++r)
 			{
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
-					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
-					if (wT > _widthVals)
+					wT = _grid[r,c]._widthtext;	// ASSUME: That the widest text in the table-font
+					if (wT > _widthVals)		// will be widest text in the proppanel font. Much faster.
+					{
 						_widthVals = wT;
+						rT = r;
+						cT = c;
+					}
 				}
 			}
-			_widthVals += _padHori * 2;
+			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
 
 			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - _widthVars - _widthVals;
 			Top    = _grid.Top;
