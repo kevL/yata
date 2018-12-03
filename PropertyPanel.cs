@@ -19,7 +19,7 @@ namespace yata
 		int _widthVars;
 		int _widthVals;
 
-		int _height;
+		static int _heightr;
 
 		const int _padHori = 5; // horizontal text padding
 		const int _padVert = 2; // vertical text padding
@@ -37,9 +37,16 @@ namespace yata
 			BackColor = Color.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
-			Font = new System.Drawing.Font("Verdana", 8.0F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+			if (Settings._font2 != null)
+			{
+//				Font.Dispose();
+				Font = Settings._font2;
+			}
+			else
+				Font = new System.Drawing.Font("Verdana", 8.0F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
-			_height = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
+			if (_heightr == 0)
+				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
 
@@ -51,9 +58,19 @@ namespace yata
 					_widthVars = wT;
 			}
 			_widthVars += _padHori * 2 + 1;
-			_widthVals = _widthVars;
 
-			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - _widthVals - _widthVars;
+			for (int r = 0; r != _grid.RowCount; ++r)
+			{
+				for (int c = 0; c != _grid.ColCount; ++c)
+				{
+					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
+					if (wT > _widthVals)
+						_widthVals = wT;
+				}
+			}
+			_widthVals += _padHori * 2;
+
+			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - _widthVars - _widthVals;
 			Top    = _grid.Top;
 			Width  = _widthVars + _widthVals;
 			Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
@@ -81,37 +98,39 @@ namespace yata
 							  1, 0,
 							  1, HeightProps - offset - 1);
 			graphics.DrawLine(Pens.DarkLine,		// vertical center line
-							  _widthVals, 1,
-							  _widthVals, HeightProps - offset - 1);
+							  _widthVars, 1,
+							  _widthVars, HeightProps - offset - 1);
 			graphics.DrawLine(Pens.Black,			// horizontal top line
 							  1,     1,
 							  Width, 1);
 			graphics.DrawLine(Pens.Black,			// horizontal bot line
-							  1,     _height * _grid.ColCount - offset,
-							  Width, _height * _grid.ColCount - offset);
+							  1,     _heightr * _grid.ColCount - offset,
+							  Width, _heightr * _grid.ColCount - offset);
 
 			for (c = 1; c != _grid.ColCount; ++c)	// horizontal row lines
 			{
 				graphics.DrawLine(Pens.DarkLine,
-								  0,     _height * c - offset + 1,
-								  Width, _height * c - offset + 1);
+								  0,     _heightr * c - offset + 1,
+								  Width, _heightr * c - offset + 1);
 			}
 
 			// draw text ->
 			var rect = new Rectangle(_padHori, 0,
-									 _widthVals, _height);
+									 _widthVars, _heightr);
 
 			int r = _grid.getSelectedRow();
 			for (c = 0; c != _grid.ColCount; ++c)
 			{
-				rect.Y = _height * c - offset;// + 1;
+				rect.Y = _heightr * c - offset;// + 1;
 				TextRenderer.DrawText(graphics, _grid.Cols[c].text, Font, rect, Colors.Text, YataGraphics.flags);
 
 				if (r != -1)
 				{
-					rect.X += _widthVars;
+					rect.X    += _widthVars;
+					rect.Width = _widthVals;
 					TextRenderer.DrawText(graphics, _grid[r,c].text, Font, rect, Colors.Text, YataGraphics.flags);
-					rect.X -= _widthVars;
+					rect.X    -= _widthVars;
+					rect.Width = _widthVars;
 				}
 			}
 
@@ -122,11 +141,12 @@ namespace yata
 		{
 			if (init)
 			{
-				HeightProps = _grid.ColCount * _height + 1;
+				HeightProps = _grid.ColCount * _heightr + 1;
 			}
 			else // resize event - see YataGrid.OnResize()
 			{
-				Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - _widthVals - _widthVars;
+				// TODO: _widthVars // so re-opening the panel will adjust to any changed texts
+				Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - _widthVars - _widthVals;
 				Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
 			}
 
