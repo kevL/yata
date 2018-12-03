@@ -22,6 +22,7 @@ namespace yata
 		int _height;
 
 		const int _padHori = 5; // horizontal text padding
+		const int _padVert = 2; // vertical text padding
 
 
 		/// <summary>
@@ -38,7 +39,7 @@ namespace yata
 
 			Font = new System.Drawing.Font("Verdana", 8.0F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
-			_height = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + 1;
+			_height = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
 
@@ -73,7 +74,7 @@ namespace yata
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			int offset = _scroll.Value;
-			int r;
+			int c;
 
 			// draw lines ->
 			graphics.DrawLine(Pens.Black,			// vertical left line
@@ -89,21 +90,29 @@ namespace yata
 							  1,     _height * _grid.ColCount - offset,
 							  Width, _height * _grid.ColCount - offset);
 
-			for (r = 1; r != _grid.ColCount; ++r)	// horizontal row lines
+			for (c = 1; c != _grid.ColCount; ++c)	// horizontal row lines
 			{
 				graphics.DrawLine(Pens.DarkLine,
-								  0,     _height * r - offset + 1,
-								  Width, _height * r - offset + 1);
+								  0,     _height * c - offset + 1,
+								  Width, _height * c - offset + 1);
 			}
 
 			// draw text ->
 			var rect = new Rectangle(_padHori, 0,
 									 _widthVals, _height);
 
-			for (r = 0; r != _grid.ColCount; ++r)
+			int r = _grid.getSelectedRow();
+			for (c = 0; c != _grid.ColCount; ++c)
 			{
-				rect.Y = _height * r - offset + 1;
-				TextRenderer.DrawText(graphics, _grid.Cols[r].text, Font, rect, Colors.Text, YataGraphics.flags);
+				rect.Y = _height * c - offset;// + 1;
+				TextRenderer.DrawText(graphics, _grid.Cols[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+
+				if (r != -1)
+				{
+					rect.X += _widthVars;
+					TextRenderer.DrawText(graphics, _grid[r,c].text, Font, rect, Colors.Text, YataGraphics.flags);
+					rect.X -= _widthVars;
+				}
 			}
 
 //			base.OnPaint(e);
