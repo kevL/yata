@@ -285,6 +285,10 @@ namespace yata
 
 					if (!_table.EnsureDisplayedCellOrRow())
 						_table.Refresh(); // _table-drawing can tear without that.
+
+
+					if (_table._prop)
+						_table._props.InitScroll();
 				}
 				_table = null;
 

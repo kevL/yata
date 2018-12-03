@@ -154,6 +154,8 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
+			btn_PropertyPanel.Top = -1;
+
 			if (!String.IsNullOrEmpty(pfe_load)
 				&& File.Exists(pfe_load))
 			{
