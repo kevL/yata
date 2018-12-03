@@ -364,6 +364,7 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the bottom of the table snuggled against the bottom of the visible area
+				// when resize enlarges the area
 				if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
 				{
 					_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
@@ -387,6 +388,7 @@ namespace yata
 
 				// handle .NET OnResize anomaly ->
 				// keep the right of the table snuggled against the right of the visible area
+				// when resize enlarges the area
 				if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
 				{
 					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0) + _proHori;
@@ -419,7 +421,12 @@ namespace yata
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (!_editor.Visible)
+			if (_prop && _props._scroll.Visible
+				&& e.X > _props.Location.X && e.X < _props.Location.X + _props.Width)
+			{
+				_props.Scroll(e);
+			}
+			else if (!_editor.Visible)
 			{
 				if (_visVert)
 				{

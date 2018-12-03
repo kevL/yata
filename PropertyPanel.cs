@@ -12,16 +12,16 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
-		readonly ScrollBar _scroll = new VScrollBar();
+		internal readonly ScrollBar _scroll = new VScrollBar();
 
 		int HeightProps;
 
 		int _widthVars;
 		int _widthVals;
 
-		const int _height = 20;
+		int _height;
 
-		const int _padHori =  5; // horizontal text padding
+		const int _padHori = 5; // horizontal text padding
 
 
 		/// <summary>
@@ -33,10 +33,12 @@ namespace yata
 
 			DoubleBuffered = true;
 
-			BackColor = Color.LightBlue;// SystemColors.ControlDark;
+			BackColor = Color.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
 			Font = new System.Drawing.Font("Verdana", 8.0F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+
+			_height = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + 1;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
 
@@ -111,7 +113,7 @@ namespace yata
 		{
 			if (init)
 			{
-				HeightProps = _grid.ColCount * 20 + 1;
+				HeightProps = _grid.ColCount * _height + 1;
 			}
 			else // resize event - see YataGrid.OnResize()
 			{
@@ -132,6 +134,14 @@ namespace yata
 
 				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding
 										// whether or not max < 0. 'Cause it fucks everything up. bingo.
+
+				// handle .NET OnResize anomaly ->
+				// keep the bottom of the table snuggled against the bottom of the visible area
+				// when resize enlarges the area
+				if (HeightProps < Height + _scroll.Value)
+				{
+					_scroll.Value = HeightProps - Height;
+				}
 			}
 			else
 			{
@@ -143,6 +153,24 @@ namespace yata
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
 			Refresh();
+		}
+
+		internal void Scroll(MouseEventArgs e)
+		{
+			if (e.Delta > 0)
+			{
+				if (_scroll.Value - _scroll.LargeChange < 0)
+					_scroll.Value = 0;
+				else
+					_scroll.Value -= _scroll.LargeChange;
+			}
+			else if (e.Delta < 0)
+			{
+				if (_scroll.Value + _scroll.LargeChange + (_scroll.LargeChange - 1) > _scroll.Maximum)
+					_scroll.Value = _scroll.Maximum - (_scroll.LargeChange - 1);
+				else
+					_scroll.Value += _scroll.LargeChange;
+			}
 		}
 	}
 }

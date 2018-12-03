@@ -2010,6 +2010,8 @@ namespace yata
 				{
 					if (Table._props == null)
 						Table._props = new PropertyPanel(Table);
+					else
+						Table._props.InitScroll();
 
 					Table._props.Show();
 					Table._props.BringToFront();
