@@ -59,17 +59,23 @@ namespace yata
 		{
 			if (!_grab)
 			{
-				int x = YataGrid.WidthRowhead - _grid.offsetHori;
-				for (int c = 0; c != _grid.ColCount; ++c)
+				int labels = YataGrid.WidthRowhead;
+				for (int f = 0; f != _grid.FrozenCount; ++f)
+					labels += _grid.Cols[f].width();
+
+				if (e.X > labels)
 				{
-					x += _grid.Cols[c].width();
-					if (c > _grid.FrozenCount - 1
-						&& e.X > x - 5 && e.X < x)
+					int x = YataGrid.WidthRowhead - _grid.offsetHori;
+					for (int c = 0; c != _grid.ColCount; ++c)
 					{
-						Cursor = Cursors.VSplit;
-						_grabCol = c;
-						_grabStart = e.X;
-						return;
+						x += _grid.Cols[c].width();
+						if (e.X > x - 5 && e.X < x) // && c >= _grid.FrozenCount
+						{
+							Cursor = Cursors.VSplit;
+							_grabCol = c;
+							_grabStart = e.X;
+							return;
+						}
 					}
 				}
 				Cursor = Cursors.Default;

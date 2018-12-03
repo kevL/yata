@@ -634,9 +634,13 @@ namespace yata
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
 
-					Table._prop = false;
-					Table._props.Hide();
-					Table._props = null;
+					if (Table._props != null)
+					{
+						Table._prop = false;
+						Table._props.Hide();
+						Table.Controls.Remove(Table._props);
+						Table._props = null;
+					}
 				}
 				else
 				{
