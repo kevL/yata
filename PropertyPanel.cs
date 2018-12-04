@@ -139,7 +139,13 @@ namespace yata
 			var rect = new Rectangle(_padHori, 0,
 									 _widthVars, _heightr);
 
-			int r = _grid.getSelectedRow();
+			int r;
+			Cell cell = _grid.GetSelectedCell();
+			if (cell != null)
+				r = cell.y;
+			else
+				r = _grid.getSelectedRow();
+
 			for (c = 0; c != _grid.ColCount; ++c)
 			{
 				rect.Y = _heightr * c - offset;// + 1;

@@ -1828,22 +1828,34 @@ namespace yata
 		{
 			Select();
 
-			if (_editor.Visible // click to the right or below the table-area
-				&& (e.X > WidthTable || e.Y > HeightTable))
+			if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
 			{
-				if (e.Button == MouseButtons.Left) // apply edit only on LMB.
+				if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
+				{
+//					if (e.Button == MouseButtons.Left) // apply edit only on LMB.
 					ApplyTextEdit();
 
-				_editor.Visible = false;
-				Refresh();
+					_editor.Visible = false;
+					Refresh();
+				}
+/*				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
+				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
+					foreach (var col in Cols)				// the intent however to catch the editor above OR clear all selects here.
+						col.selected = false;
+
+					foreach (var row in Rows)
+						row.selected = false;
+
+					ClearCellSelects();
+					Refresh();
+				} */
 			}
 			else if (e.Button == MouseButtons.Left)
 			{
+				logfile.Log(". LMB");
+
 				foreach (var col in Cols)
 					col.selected = false;
-
-				foreach (var row in Rows)
-					row.selected = false;
 
 				int y = e.Y + offsetVert;
 				if (y > HeightColhead && y < HeightTable)
@@ -1867,6 +1879,9 @@ namespace yata
 								}
 								else if (!cell.selected)
 								{
+									foreach (var row in Rows)
+										row.selected = false;
+
 									ClearCellSelects();
 									cell.selected = true;
 									EnsureDisplayed(cell);
@@ -2455,11 +2470,12 @@ namespace yata
 							select = true;
 
 
-						foreach (var row in Rows) // always clear row-selects
-							row.selected = false;
-
 						if ((ModifierKeys & Keys.Control) != Keys.Control)
+						{
 							ClearCellSelects();
+							foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
+								row.selected = false;
+						}
 
 						if ((ModifierKeys & Keys.Shift) == Keys.Shift)
 						{

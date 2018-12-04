@@ -153,22 +153,19 @@ RMB - opens the contextmenu for single-row editing
 click on a table-cell
 LMB      - selects a cell or if already selected then starts the cell-editor, or
            if editing a cell then a left-click on a different part of the table
-           accepts the edit
+           (either inside or outside the grid) accepts the edit
 LMB+Ctrl - adds or subtracts a cell from the currently selected cells
 RMB      - if editing a cell then a right-click on a different part of the table
-           cancels the edit
+           (either inside or outside the grid) cancels the edit
 
-Note that frozen-col cells cannot be selected or edited. Also note that clicking
-on a colhead will clear any selected row(s), although not its cells if Ctrl is
-pressed; and clicking on a rowhead will clear any selected col, although not its
-cells if Ctrl is pressed. Additionally, note that pressing Shift when clicking
-on a colhead or rowhead never selects a col or row; instead, Shift-clicking on
-a colhead or rowhead always selects the cells in that col or row, and will
-select a range of cols or rows if there is already another selected col or row.
-Pressing Ctrl, or Ctrl+Shift, when clicking a colhead or rowhead lends yet more
-permutations. But it's really not that complicated: just start clicking with or
-without Ctrl and Shift ... technically you're dealing with three items: cells,
-rows, and cols.
+Note that frozen-col cells cannot be selected or edited. Additionally, note that
+pressing Shift when clicking on a colhead or rowhead never selects a col or row;
+instead, Shift-clicking on a colhead or rowhead always selects the cells in that
+col or row, and will select a range of cols or rows if there is already another
+selected col or row. Pressing Ctrl, or Ctrl+Shift, when clicking a colhead or
+rowhead lends yet more permutations. But it's really not that complicated: just
+start clicking with or without Ctrl and Shift ... technically you're dealing
+with three items: cells, rows, and cols.
 
 OPERATIONS THAT REFORMAT LARGE TABLES (tens of thousands of Rows) TAKE TIME.
 Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
