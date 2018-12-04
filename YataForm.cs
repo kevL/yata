@@ -2017,6 +2017,8 @@ namespace yata
 		{
 			if (Table != null)
 			{
+				Table.Select();
+
 				if (Table._prop = !Table._prop)
 				{
 					if (Table._props == null)

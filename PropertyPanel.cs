@@ -59,16 +59,6 @@ namespace yata
 			}
 			_widthVars += _padHori * 2 + 1;
 
-//			for (int r = 0; r != _grid.RowCount; ++r)
-//			{
-//				for (int c = 0; c != _grid.ColCount; ++c)
-//				{
-//					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
-//					if (wT > _widthVals)
-//						_widthVals = wT;
-//				}
-//			}
-//			_widthVals += _padHori * 2;
 			Init();
 
 			_scroll.Dock = DockStyle.Right;
@@ -83,6 +73,17 @@ namespace yata
 
 		internal void Init()
 		{
+//			for (int r = 0; r != _grid.RowCount; ++r)
+//			{
+//				for (int c = 0; c != _grid.ColCount; ++c)
+//				{
+//					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
+//					if (wT > _widthVals)
+//						_widthVals = wT;
+//				}
+//			}
+//			_widthVals += _padHori * 2;
+
 			int wT, rT = 0, cT = 0;
 			for (int r = 0; r != _grid.RowCount; ++r)
 			{
