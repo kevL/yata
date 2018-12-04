@@ -69,7 +69,21 @@ namespace yata
 //				}
 //			}
 //			_widthVals += _padHori * 2;
-			int rT = 0, cT = 0;
+			Init();
+
+			_scroll.Dock = DockStyle.Right;
+			_scroll.ValueChanged += OnScrollValueChanged;
+
+			Controls.Add(_scroll);
+			InitScroll(true);
+
+			_grid.Controls.Add(this);
+		}
+
+
+		internal void Init()
+		{
+			int wT, rT = 0, cT = 0;
 			for (int r = 0; r != _grid.RowCount; ++r)
 			{
 				for (int c = 0; c != _grid.ColCount; ++c)
@@ -89,16 +103,7 @@ namespace yata
 			Top    = _grid.Top;
 			Width  = _widthVars + _widthVals;
 			Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
-
-			_scroll.Dock = DockStyle.Right;
-			_scroll.ValueChanged += OnScrollValueChanged;
-
-			Controls.Add(_scroll);
-			InitScroll(true);
-
-			_grid.Controls.Add(this);
 		}
-
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -160,7 +165,6 @@ namespace yata
 			}
 			else // resize event - see YataGrid.OnResize()
 			{
-				// TODO: _widthVars // so re-opening the panel will adjust to any changed texts
 				Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - _widthVars - _widthVals;
 				Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
 			}

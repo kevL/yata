@@ -59,7 +59,7 @@ namespace yata
 		{
 			if (!_grab)
 			{
-				int labels = YataGrid.WidthRowhead;
+				int labels = YataGrid.WidthRowhead; // TODO: This value should be cached instead.
 				for (int f = 0; f != _grid.FrozenCount; ++f)
 					labels += _grid.Cols[f].width();
 
