@@ -14,7 +14,7 @@ namespace yata
 
 		internal readonly ScrollBar _scroll = new VScrollBar();
 
-		int HeightProps;
+		int HeightProps; // height of the entire panel (incl/ non-displayed top & bot)
 
 		int _widthVars;
 		int _widthVals;
@@ -37,6 +37,8 @@ namespace yata
 			BackColor = Color.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
+			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
+
 			if (Settings._font3 != null)
 			{
 //				Font.Dispose(); // NOTE: Don't dispose that; it will be needed when another PropertyPanel instantiates.
@@ -48,7 +50,7 @@ namespace yata
 			if (_heightr == 0)
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
 
-			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
+			HeightProps = _grid.ColCount * _heightr;
 
 			int wT;
 			for (int c = 0; c != _grid.ColCount; ++c)
@@ -59,19 +61,20 @@ namespace yata
 			}
 			_widthVars += _padHori * 2 + 1;
 
-			Init();
+			calcValueWidth();
+			setLeftHeight();
 
 			_scroll.Dock = DockStyle.Right;
 			_scroll.ValueChanged += OnScrollValueChanged;
 
-			Controls.Add(_scroll);
-			InitScroll(true);
+			InitScroll();
 
+			Controls.Add(_scroll);
 			_grid.Controls.Add(this);
 		}
 
 
-		internal void Init()
+		internal void calcValueWidth()
 		{
 //			for (int r = 0; r != _grid.RowCount; ++r)
 //			{
@@ -90,7 +93,7 @@ namespace yata
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
 					wT = _grid[r,c]._widthtext;	// ASSUME: That the widest text in the table-font
-					if (wT > _widthVals)		// will be widest text in the proppanel font. Much faster.
+					if (wT > _widthVals)		// will be widest text in the propanel font. Much faster.
 					{
 						_widthVals = wT;
 						rT = r;
@@ -99,12 +102,100 @@ namespace yata
 				}
 			}
 			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
+		}
 
-			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - _widthVars - _widthVals;
-			Top    = _grid.Top;
-			Width  = _widthVars + _widthVals;
+		internal void setLeftHeight()
+		{
+			Width = _widthVars + _widthVals;
+
+			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - Width;
 			Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
 		}
+
+		internal void InitScroll()
+		{
+			if (Height < HeightProps)
+			{
+				_scroll.Visible = true;
+
+				Left  -= _scroll.Width;
+				Width += _scroll.Width;
+
+				int vert = HeightProps
+						 + _scroll.LargeChange - 1
+						 - Height;
+
+				if (vert < _scroll.LargeChange) vert = 0;
+
+				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding
+										// whether or not max < 0. 'Cause it fucks everything up. bingo.
+
+				// handle .NET OnResize anomaly ->
+				// keep the bottom of the table snuggled against the bottom of the visible area
+				// when resize enlarges the area
+				if (HeightProps < Height + _scroll.Value)
+				{
+					_scroll.Value = HeightProps - Height;
+				}
+			}
+			else
+			{
+				_scroll.Value = 0;
+				_scroll.Visible = false;
+			}
+		}
+
+		void OnScrollValueChanged(object sender, EventArgs e)
+		{
+			Refresh();
+		}
+
+		internal void Scroll(MouseEventArgs e)
+		{
+			if (e.Delta > 0)
+			{
+				if (_scroll.Value - _scroll.LargeChange < 0)
+					_scroll.Value = 0;
+				else
+					_scroll.Value -= _scroll.LargeChange;
+			}
+			else if (e.Delta < 0)
+			{
+				if (_scroll.Value + _scroll.LargeChange + (_scroll.LargeChange - 1) > _scroll.Maximum)
+					_scroll.Value = _scroll.Maximum - (_scroll.LargeChange - 1);
+				else
+					_scroll.Value += _scroll.LargeChange;
+			}
+		}
+
+
+		Rectangle? getValueRectangle(Point pt)
+		{
+			Rectangle? rect = null;
+
+//			if ()
+			{
+				rect = new Rectangle();
+
+			}
+
+
+			return rect;
+		}
+
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			logfile.Log("e.X= " + e.X + " e.Y= " + e.Y);
+
+			if (e.X > _widthVals && e.Y < HeightProps - _scroll.Value)
+			{
+				logfile.Log(". in Val");
+			}
+
+
+//			base.OnMouseClick(e);
+		}
+
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -162,70 +253,6 @@ namespace yata
 			}
 
 //			base.OnPaint(e);
-		}
-
-		internal void InitScroll(bool init = false)
-		{
-			if (init)
-			{
-				HeightProps = _grid.ColCount * _heightr;
-			}
-			else // resize event - see YataGrid.OnResize()
-			{
-				Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - _widthVars - _widthVals;
-				Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
-			}
-
-			if (Height < HeightProps)
-			{
-				_scroll.Visible = true;
-
-				int vert = HeightProps
-						 + _scroll.LargeChange
-						 - Height
-						 - 1;
-
-				if (vert < _scroll.LargeChange) vert = 0;
-
-				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding
-										// whether or not max < 0. 'Cause it fucks everything up. bingo.
-
-				// handle .NET OnResize anomaly ->
-				// keep the bottom of the table snuggled against the bottom of the visible area
-				// when resize enlarges the area
-				if (HeightProps < Height + _scroll.Value)
-				{
-					_scroll.Value = HeightProps - Height;
-				}
-			}
-			else
-			{
-				_scroll.Value = 0;
-				_scroll.Visible = false;
-			}
-		}
-
-		void OnScrollValueChanged(object sender, EventArgs e)
-		{
-			Refresh();
-		}
-
-		internal void Scroll(MouseEventArgs e)
-		{
-			if (e.Delta > 0)
-			{
-				if (_scroll.Value - _scroll.LargeChange < 0)
-					_scroll.Value = 0;
-				else
-					_scroll.Value -= _scroll.LargeChange;
-			}
-			else if (e.Delta < 0)
-			{
-				if (_scroll.Value + _scroll.LargeChange + (_scroll.LargeChange - 1) > _scroll.Maximum)
-					_scroll.Value = _scroll.Maximum - (_scroll.LargeChange - 1);
-				else
-					_scroll.Value += _scroll.LargeChange;
-			}
 		}
 	}
 }

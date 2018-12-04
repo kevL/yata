@@ -288,7 +288,10 @@ namespace yata
 
 
 					if (_table._prop)
+					{
+						_table._props.setLeftHeight();
 						_table._props.InitScroll();
+					}
 				}
 				_table = null;
 
@@ -1840,7 +1843,7 @@ namespace yata
 				}
 /*				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
 				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
-					foreach (var col in Cols)				// the intent however to catch the editor above OR clear all selects here.
+					foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
 						col.selected = false;
 
 					foreach (var row in Rows)
@@ -1852,8 +1855,6 @@ namespace yata
 			}
 			else if (e.Button == MouseButtons.Left)
 			{
-				logfile.Log(". LMB");
-
 				foreach (var col in Cols)
 					col.selected = false;
 
@@ -1868,7 +1869,6 @@ namespace yata
 						{
 							var cords = getCords(x,y, left);
 							var cell = this[cords.Y, cords.X];
-
 
 							if (!_editor.Visible)
 							{

@@ -2025,7 +2025,8 @@ namespace yata
 						Table._props = new PropertyPanel(Table);
 					else
 					{
-						Table._props.Init();
+						Table._props.calcValueWidth();
+						Table._props.setLeftHeight();
 						Table._props.InitScroll();
 					}
 
