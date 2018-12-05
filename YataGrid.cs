@@ -1612,6 +1612,8 @@ namespace yata
 		/// for single row)</param>
 		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
+			bool propanel = false;
+
 			var col = Cols[c];
 			if (!col.UserSized) // ie. don't resize a col that user has adjusted.
 			{
@@ -1654,7 +1656,16 @@ namespace yata
 				{								// cols or at least Scrollers and Refresh
 					InitScrollers();
 					Refresh(); // is required - and yet another Refresh() will follow ....
+
+					propanel = _prop;
 				}
+			}
+
+			if (propanel)
+			{
+				_props.calcValueWidth(); // TODO: Re-calc the 'c' col only.
+				_props.setLeftHeight();
+				_props.InitScroll();
 			}
 		}
 
