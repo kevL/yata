@@ -162,9 +162,7 @@ namespace yata
 		internal int RangeSelect
 		{ get; set; }
 
-		internal PropertyPanel _props;
-		internal bool _prop;
-
+		internal PropertyPanel _propanel;
 
 
 		/// <summary>
@@ -287,10 +285,10 @@ namespace yata
 						_table.Refresh(); // _table-drawing can tear without that.
 
 
-					if (_table._prop)
+					if (_table._propanel != null && _table._propanel.Visible)
 					{
-						_table._props.setLeftHeight();
-						_table._props.InitScroll();
+						_table._propanel.setLeftHeight();
+						_table._propanel.InitScroll();
 					}
 				}
 				_table = null;
@@ -424,10 +422,10 @@ namespace yata
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (_prop && _props._scroll.Visible
-				&& e.X > _props.Location.X && e.X < _props.Location.X + _props.Width)
+			if (_propanel != null && _propanel.Visible && _propanel._scroll.Visible
+				&& e.X > _propanel.Location.X && e.X < _propanel.Location.X + _propanel.Width)
 			{
-				_props.Scroll(e);
+				_propanel.Scroll(e);
 			}
 			else if (!_editor.Visible)
 			{
@@ -1612,26 +1610,24 @@ namespace yata
 		/// for single row)</param>
 		internal void colRewidth(int c, int r = -1, int range = 0)
 		{
-			bool propanel = false;
-
 			var col = Cols[c];
-			if (!col.UserSized) // ie. don't resize a col that user has adjusted.
+
+			int w = col._widthtext + _padHoriSort;
+			int wT;
+
+			if (r != -1) // NOTE: re-calc '_widthtext' regardless of what happens below ->
 			{
-				col.UserSized = false;
-
-				int w = col._widthtext + _padHoriSort;
-				int wT;
-
-				if (r != -1)
+				int r1 = r + range;
+				for (; r <= r1; ++r)
 				{
-					int r1 = r + range;
-					for (; r <= r1; ++r)
-					{
-						wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
-						this[r,c]._widthtext = wT;
-						if (wT > w) w = wT;
-					}
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					this[r,c]._widthtext = wT;
+					if (wT > w) w = wT;
 				}
+			}
+
+			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
+			{					// be forced (eg. on reload) unflag UserSized on all cols first.
 				w += _padHori * 2;
 
 				int width = col.width();
@@ -1656,16 +1652,14 @@ namespace yata
 				{								// cols or at least Scrollers and Refresh
 					InitScrollers();
 					Refresh(); // is required - and yet another Refresh() will follow ....
-
-					propanel = _prop;
 				}
 			}
 
-			if (propanel)
+			if (_propanel != null && _propanel.Visible)
 			{
-				_props.calcValueWidth(); // TODO: Re-calc the 'c' col only.
-				_props.setLeftHeight();
-				_props.InitScroll();
+				_propanel.calcValueWidth(); // TODO: Re-calc the 'c' col only.
+				_propanel.setLeftHeight();
+				_propanel.InitScroll();
 			}
 		}
 
@@ -1934,7 +1928,7 @@ namespace yata
 			var rect = getCellRectangle(_editcell); // align the editbox over the text ->
 			_editor.Left   = rect.X + 5;
 			_editor.Top    = rect.Y + 4;
-			_editor.Width  = rect.Width - 7;
+			_editor.Width  = rect.Width - 6;
 			_editor.Height = rect.Height;
 
 			_editor.Visible = true;

@@ -634,12 +634,10 @@ namespace yata
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
 
-					if (Table._props != null)
+					if (Table._propanel != null)
 					{
-						Table._prop = false;
-						Table._props.Hide();
-						Table.Controls.Remove(Table._props);
-						Table._props = null;
+						Table.Controls.Remove(Table._propanel);
+						Table._propanel = null;
 					}
 				}
 				else
@@ -2019,22 +2017,23 @@ namespace yata
 			{
 				Table.Select();
 
-				if (Table._prop = !Table._prop)
+				if (Table._propanel == null
+					|| (Table._propanel.Visible = !Table._propanel.Visible))
 				{
-					if (Table._props == null)
-						Table._props = new PropertyPanel(Table);
+					if (Table._propanel == null)
+						Table._propanel = new PropertyPanel(Table);
 					else
 					{
-						Table._props.calcValueWidth();
-						Table._props.setLeftHeight();
-						Table._props.InitScroll();
+						Table._propanel.calcValueWidth();
+						Table._propanel.setLeftHeight();
+						Table._propanel.InitScroll();
 					}
 
-					Table._props.Show();
-					Table._props.BringToFront();
+					Table._propanel.Show();
+					Table._propanel.BringToFront();
 				}
 				else
-					Table._props.Hide();
+					Table._propanel.Hide();
 			}
 		}
 		#endregion PropertyPanel

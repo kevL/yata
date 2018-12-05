@@ -90,6 +90,7 @@ namespace yata
 				&& e.Button == MouseButtons.Left)
 			{
 				_grid._editor.Visible = false;
+				_grid.Refresh();
 			}
 
 //			base.OnMouseDown(e);

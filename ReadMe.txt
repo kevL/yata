@@ -416,5 +416,5 @@ cancels your current edit.
 Advanced: Note that it is possible to change the ID-value of a row in the
 Property Panel. It is recommended however to use 2da Ops->order row ids instead,
 unless you have special reason not to. The value of a currently frozen col's
-cell can also be changed this way (note that such a value could be changed by
-unfreezing the col and editing the cell directly).
+cell can also be changed this way (further, note that such a value could be
+changed by unfreezing the col and editing the cell directly).
