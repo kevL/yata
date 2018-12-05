@@ -1543,8 +1543,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles ending editing a cell by pressing Enter or Tab - this fires
-		/// during edit or so.
+		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
+		/// fires during edit or so.
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
@@ -1588,7 +1588,7 @@ namespace yata
 
 				_editcell.loadchanged = false;
 
-				if (CheckTextEdit())
+				if (CheckTextEdit(_editor))
 					MessageBox.Show("The text that was submitted has been altered.",
 									"burp",
 									MessageBoxButtons.OK,
@@ -1663,15 +1663,15 @@ namespace yata
 		/// Cf CheckCellText().
 		/// </summary>
 		/// <returns>true if text is changed/fixed/corrected</returns>
-		bool CheckTextEdit()
+		internal static bool CheckTextEdit(Control tb)
 		{
 			bool changed = false;
 
-			string field = _editor.Text.Trim();
+			string field = tb.Text.Trim();
 
 			if (String.IsNullOrEmpty(field))
 			{
-				_editor.Text = Constants.Stars;
+				tb.Text = Constants.Stars;
 				return true;
 			}
 
@@ -1682,7 +1682,7 @@ namespace yata
 				if (   field.Length < 3
 					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
 				{
-					_editor.Text = Constants.Stars;
+					tb.Text = Constants.Stars;
 					return true;
 				}
 			}
@@ -1696,11 +1696,11 @@ namespace yata
 
 				if (field.Length == 2)
 				{
-					_editor.Text = Constants.Stars;
+					tb.Text = Constants.Stars;
 					return true;
 				}
 
-				_editor.Text = field;
+				tb.Text = field;
 				changed = true;
 			}
 
@@ -1715,12 +1715,12 @@ namespace yata
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					_editor.Text = first + test + last;
+					tb.Text = first + test + last;
 				}
 
 				if (test == Constants.Stars)
 				{
-					_editor.Text = Constants.Stars;
+					tb.Text = Constants.Stars;
 					return true;
 				}
 			}

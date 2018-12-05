@@ -14,15 +14,18 @@ namespace yata
 
 		internal readonly ScrollBar _scroll = new VScrollBar();
 
-		int HeightProps; // height of the entire panel (incl/ non-displayed top & bot)
+		readonly int HeightProps; // height of the entire panel (incl/ non-displayed top & bot)
 
-		int _widthVars;
-		int _widthVals;
+		readonly int _widthVars;	// left col
+		int _widthVals;				// right col
 
 		static int _heightr;
 
 		const int _padHori = 5; // horizontal text padding
 		const int _padVert = 2; // vertical text padding
+
+		readonly TextBox _editor = new TextBox();
+		Rectangle _editRect;
 
 
 		/// <summary>
@@ -68,9 +71,19 @@ namespace yata
 			_scroll.ValueChanged += OnScrollValueChanged;
 
 			InitScroll();
-
 			Controls.Add(_scroll);
+
 			_grid.Controls.Add(this);
+
+			_editor.Visible = false;
+			_editor.BackColor = Colors.Editor;
+			_editor.BorderStyle = BorderStyle.None;
+			_editor.Height = _heightr;
+			_editor.LostFocus += lostfocus_Editor;
+			_editor.KeyDown   += keydown_Editor;
+			_editor.Leave     += leave_Editor;
+
+			Controls.Add(_editor);
 		}
 
 
@@ -102,6 +115,8 @@ namespace yata
 				}
 			}
 			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
+
+			_editor.Width  = _widthVals;
 		}
 
 		internal void setLeftHeight()
@@ -147,53 +162,199 @@ namespace yata
 
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
+			_editor.Visible = false;
 			Refresh();
 		}
 
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (e.Delta > 0)
+			if (!_editor.Visible)
 			{
-				if (_scroll.Value - _scroll.LargeChange < 0)
-					_scroll.Value = 0;
-				else
-					_scroll.Value -= _scroll.LargeChange;
-			}
-			else if (e.Delta < 0)
-			{
-				if (_scroll.Value + _scroll.LargeChange + (_scroll.LargeChange - 1) > _scroll.Maximum)
-					_scroll.Value = _scroll.Maximum - (_scroll.LargeChange - 1);
-				else
-					_scroll.Value += _scroll.LargeChange;
+				if (e.Delta > 0)
+				{
+					if (_scroll.Value - _scroll.LargeChange < 0)
+						_scroll.Value = 0;
+					else
+						_scroll.Value -= _scroll.LargeChange;
+				}
+				else if (e.Delta < 0)
+				{
+					if (_scroll.Value + _scroll.LargeChange + (_scroll.LargeChange - 1) > _scroll.Maximum)
+						_scroll.Value = _scroll.Maximum - (_scroll.LargeChange - 1);
+					else
+						_scroll.Value += _scroll.LargeChange;
+				}
 			}
 		}
 
 
-		Rectangle? getValueRectangle(Point pt)
-		{
-			Rectangle? rect = null;
-
-//			if ()
-			{
-				rect = new Rectangle();
-
-			}
-
-
-			return rect;
-		}
+		int _r;
+		int _c; // -> the row in the panel, the col in the table.
 
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			logfile.Log("e.X= " + e.X + " e.Y= " + e.Y);
-
-			if (e.X > _widthVals && e.Y < HeightProps - _scroll.Value)
+			if (!_grid.Readonly)
 			{
-				logfile.Log(". in Val");
+				if (!_editor.Visible)
+				{
+					if (e.X > _widthVars)
+					{
+						int y = e.Y + _scroll.Value;
+						if (e.Y < HeightProps - _scroll.Value)
+						{
+							Cell cell = _grid.GetSelectedCell();
+							if (cell != null)
+								_r = cell.y;
+							else
+								_r = _grid.getSelectedRow();
+	
+							if (_r != -1)
+							{
+								Focus(); // snap
+	
+								_c = y / _heightr;
+	
+								_editRect.X      = _widthVars;
+								_editRect.Y      = _c * _heightr + 1;
+								_editRect.Width  = _widthVals;
+								_editRect.Height = _heightr - 1;
+	
+								_editor.Left = _editRect.X + 5;
+								_editor.Top  = _editRect.Y + 1 - _scroll.Value;
+								_editor.Text = _grid[_r,_c].text;
+	
+								_editor.Visible = true;
+								_editor.Focus();
+	
+								_editor.SelectionStart = 0; // because .NET
+								if (_editor.Text == Constants.Stars)
+								{
+									_editor.SelectionLength = _editor.Text.Length;
+								}
+								else
+									_editor.SelectionStart = _editor.Text.Length;
+	
+								Refresh();
+							}
+						}
+					}
+				}
+				else if (e.Button == MouseButtons.Left) // accept edit
+				{
+					ApplyTextEdit();
+					_editor.Visible = false;
+					_grid.Select();
+					_grid.Refresh();
+				}
+				else if (e.Button == MouseButtons.Right) // cancel edit
+				{
+					_editor.Visible = false;
+					_grid.Select();
+					_grid.Refresh();
+				}
 			}
 
-
 //			base.OnMouseClick(e);
+		}
+
+		protected override void OnLostFocus(EventArgs e)
+		{
+			if (!_editor.ContainsFocus)
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
+
+//			base.OnLostFocus(e);
+		}
+
+		void lostfocus_Editor(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			Refresh();
+		}
+
+		/// <summary>
+		/// Handles keydown events in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Alt is pressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void keydown_Editor(object sender, KeyEventArgs e)
+		{
+			if (e.Alt)
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
+		}
+
+		/// <summary>
+		/// Handles leave event in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
+		/// pressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void leave_Editor(object sender, EventArgs e)
+		{
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				if (_editor.Visible)
+					_editor.Focus(); // ie. don't leave editor.
+			}
+		}
+
+		/// <summary>
+		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
+		/// fires during edit or so.
+		/// </summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if (_editor.Visible)
+			{
+				switch (keyData)
+				{
+					case Keys.Enter:
+						ApplyTextEdit();
+						goto case Keys.Escape;
+
+					case Keys.Escape:
+					case Keys.Tab:
+						_editor.Visible = false;
+						_grid.Select();
+						_grid.Refresh();
+						return true;
+				}
+			}
+			return base.ProcessDialogKey(keyData);
+		}
+
+		/// <summary>
+		/// Sets an edited cell's text and recalculates col-width.
+		/// Cf YataGrid.ApplyTextEdit().
+		/// </summary>
+		void ApplyTextEdit()
+		{
+			if (_editor.Text != _grid[_r,_c].text)
+			{
+				_grid.Changed = true;
+
+				_grid[_r,_c].loadchanged = false;
+
+				if (YataGrid.CheckTextEdit(_editor))
+					MessageBox.Show("The text that was submitted has been altered.",
+									"burp",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Exclamation,
+									MessageBoxDefaultButton.Button1);
+
+				_grid[_r,_c].text = _editor.Text;
+
+				_grid.colRewidth(_c, _r);
+			}
 		}
 
 
@@ -203,6 +364,20 @@ namespace yata
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			int offset = _scroll.Value;
+
+			Rectangle rect;
+
+			// fill selected val-rect ->
+			if (_editor.Visible)
+			{
+				rect = new Rectangle();
+				rect = _editRect;
+				rect.Y -= offset;
+
+				graphics.FillRectangle(Brushes.Editor, rect);
+			}
+
+
 			int c;
 
 			// draw lines ->
@@ -226,9 +401,9 @@ namespace yata
 								  Width, _heightr * c - offset + 1);
 			}
 
-			// draw text ->
-			var rect = new Rectangle(_padHori, 0,
-									 _widthVars, _heightr);
+
+			rect = new Rectangle(_padHori, 0,
+								 _widthVars, _heightr);
 
 			int r;
 			Cell cell = _grid.GetSelectedCell();
@@ -237,6 +412,7 @@ namespace yata
 			else
 				r = _grid.getSelectedRow();
 
+			// draw texts ->
 			for (c = 0; c != _grid.ColCount; ++c)
 			{
 				rect.Y = _heightr * c - offset;// + 1;
