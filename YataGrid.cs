@@ -871,7 +871,7 @@ namespace yata
 			_editor.Visible = false;
 
 			for (int c = 0; c != ColCount; ++c)
-				colRewidth(c,r, range);
+				colRewidth(c, r, range);
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
@@ -1595,6 +1595,14 @@ namespace yata
 				_editcell.text = _editor.Text;
 
 				colRewidth(_editcell.x, _editcell.y);
+
+				if (_editcell.x < YataGrid.FreezeSecond)
+				{
+					FrozenLabelsSet(this);
+
+					if (_editcell.x < FrozenCount)
+						FrozenCount = FrozenCount; // re-width the Frozen panel
+				}
 			}
 		}
 

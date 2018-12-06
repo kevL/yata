@@ -244,6 +244,7 @@ namespace yata
 				else if (e.Button == MouseButtons.Left) // accept edit
 				{
 					ApplyTextEdit();
+
 					_editor.Visible = false;
 					_grid.Select();
 					_grid.Refresh();
@@ -357,10 +358,12 @@ namespace yata
 
 				_grid.colRewidth(_c, _r);
 
-				if (_c < _grid.FrozenCount)
+				if (_c < YataGrid.FreezeSecond)
 				{
-					_grid.FrozenCount = _grid.FrozenCount; // re-width the Frozen panel
 					_grid.FrozenLabelsSet(_grid);
+
+					if (_c < _grid.FrozenCount)
+						_grid.FrozenCount = _grid.FrozenCount; // re-width the Frozen panel
 				}
 			}
 		}

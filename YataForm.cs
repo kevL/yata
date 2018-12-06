@@ -1348,6 +1348,14 @@ namespace yata
 							cell.loadchanged = false;
 
 							Table.colRewidth(cell.x, cell.y);
+
+							if (cell.x < YataGrid.FreezeSecond)
+							{
+								Table.FrozenLabelsSet(Table);
+			
+								if (cell.x < Table.FrozenCount)
+									Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
+							}
 						}
 					}
 					else
@@ -1539,8 +1547,8 @@ namespace yata
 					{
 						Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
 
-						Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
 						Table.FrozenLabelsSet(Table);
+						Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
 
 						Table.InitScrollers();
 						Table.Refresh();
