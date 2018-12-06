@@ -100,6 +100,8 @@ namespace yata
 //			}
 //			_widthVals += _padHori * 2;
 
+			_widthVals = 0;
+
 			int wT, rT = 0, cT = 0;
 			for (int r = 0; r != _grid.RowCount; ++r)
 			{
@@ -116,7 +118,7 @@ namespace yata
 			}
 			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
 
-			_editor.Width  = _widthVals;
+			_editor.Width = _widthVals;
 		}
 
 		internal void setLeftHeight()
@@ -354,6 +356,12 @@ namespace yata
 				_grid[_r,_c].text = _editor.Text;
 
 				_grid.colRewidth(_c, _r);
+
+				if (_c < _grid.FrozenCount)
+				{
+					_grid.FrozenCount = _grid.FrozenCount; // re-width the Frozen panel
+					_grid.FrozenLabelsSet(_grid);
+				}
 			}
 		}
 

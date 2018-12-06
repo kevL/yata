@@ -1539,7 +1539,7 @@ namespace yata
 					{
 						Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
 
-						Table.FrozenCount = Table.FrozenCount; // refresh the Frozen panel
+						Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
 						Table.FrozenLabelsSet(Table);
 
 						Table.InitScrollers();

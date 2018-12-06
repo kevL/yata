@@ -124,9 +124,8 @@ namespace yata
 
 				int w = 0;
 				for (int c = 0; c != _frozenCount; ++c)
-				{
 					w += Cols[c].width();
-				}
+
 				_panelFrozen.Width = w;
 
 				_panelFrozen.Refresh();

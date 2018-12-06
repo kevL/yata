@@ -407,7 +407,7 @@ Appendix J: the Property Panel
 
 Yata can display the content of a selected row, or of the row of a single
 selected cell, vertically in a panel that appears at the right. Click the small
-unlabeled button that's just beneath the close button on the title bar to open
+unlabeled button that's just beneath the Close button on the title bar to open
 and close the Property Panel.
 
 Cell-values can be edited by left-click. To accept an edit, press Enter or left-
@@ -415,7 +415,7 @@ click on the panel; to cancel an edit, press Escape or right-click on the panel.
 Note that clicking elsewhere on the app will cause the panel to lose focus and
 cancel your current edit.
 
-Advanced: Note that it is possible to change the ID-value of a row in the
+Advanced: Note that it's possible to change the ID-value of a row in the
 Property Panel. It is recommended however to use 2da Ops->order row ids instead,
 unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (further, note that such a value could be
