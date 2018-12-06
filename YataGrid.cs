@@ -1835,7 +1835,8 @@ namespace yata
 
 
 		/// <summary>
-		/// LMB selects a cell or enables/disables the editbox.
+		/// LMB selects a cell or enables/disables the editbox. RMB opens a
+		/// cell's context-menu.
 		/// @note MouseClick does not register on any of the top or left panels.
 		/// </summary>
 		/// <param name="e"></param>
@@ -1870,59 +1871,80 @@ namespace yata
 				foreach (var col in Cols)
 					col.selected = false;
 
-				int y = e.Y + offsetVert;
-				if (y > HeightColhead && y < HeightTable)
+				Cell cell = getClickedCell(e.X, e.Y);
+				if (cell != null) // safety.
 				{
-					int x = e.X + offsetHori;
-					if (x < WidthTable)
+					if (!_editor.Visible)
 					{
-						int left = getLeft();
-						if (x > left)
+						if ((ModifierKeys & Keys.Control) == Keys.Control)
 						{
-							var cords = getCords(x,y, left);
-							var cell = this[cords.Y, cords.X];
+							if (cell.selected = !cell.selected)
+								EnsureDisplayed(cell);
+						}
+						else if (!cell.selected)
+						{
+							foreach (var row in Rows)
+								row.selected = false;
 
-							if (!_editor.Visible)
-							{
-								if ((ModifierKeys & Keys.Control) == Keys.Control)
-								{
-									if (cell.selected = !cell.selected)
-										EnsureDisplayed(cell);
-								}
-								else if (!cell.selected)
-								{
-									foreach (var row in Rows)
-										row.selected = false;
-
-									ClearCellSelects();
-									cell.selected = true;
-									EnsureDisplayed(cell);
-								}
-								else if (!Readonly) // cell is selected
-								{
-									_editcell = cell;
-									EditCell();
-									_editor.Focus();
-								}
-							}
-							else // editor is Vis
-							{
-								if (cell != _editcell)
-								{
-									ApplyTextEdit();
-									_editor.Visible = false;
-								}
-								else // NOTE: There's a clickable fringe around the editor.
-									_editor.Focus();
-							}
-
-							Refresh();
+							ClearCellSelects();
+							cell.selected = true;
+							EnsureDisplayed(cell);
+						}
+						else if (!Readonly) // cell is selected
+						{
+							_editcell = cell;
+							EditCell();
+							_editor.Focus();
 						}
 					}
+					else // editor is Vis
+					{
+						if (cell != _editcell)
+						{
+							ApplyTextEdit();
+							_editor.Visible = false;
+						}
+						else // NOTE: There's a clickable fringe around the editor.
+							_editor.Focus();
+					}
+
+					Refresh();
+				}
+			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				ClearSelects();
+
+				Cell cell = getClickedCell(e.X, e.Y);
+				if (cell != null) // safety.
+				{
+					cell.selected = true;
+					Refresh();
+
+					_f.ShowCellMenu();
 				}
 			}
 
 //			base.OnMouseClick(e);
+		}
+
+		Cell getClickedCell(int x, int y)
+		{
+			y += offsetVert;
+			if (y > HeightColhead && y < HeightTable)
+			{
+				x += offsetHori;
+				if (x < WidthTable)
+				{
+					int left = getLeft();
+					if (x > left)
+					{
+						var cords = getCords(x,y, left);
+						return this[cords.Y, cords.X];
+					}
+				}
+			}
+			return null;
 		}
 
 		/// <summary>

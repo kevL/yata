@@ -84,7 +84,7 @@ namespace yata
 			{
 				// Relative Font-sizes (as defined in the Designer):
 				//
-				// menubar, contextEditor, statusbar, tabMenu = unity.
+				// menubar, contextEditor, statusbar, tabMenu, cellMenu = unity.
 				// context_it_Header     = +0.5
 				// statusbar_label_Cords = -0.5
 				// statusbar_label_Info  = +1.0
@@ -124,6 +124,9 @@ namespace yata
 
 				tabMenu.Font.Dispose();
 				tabMenu.Font = Settings._font2;
+
+				cellMenu.Font.Dispose();
+				cellMenu.Font = Settings._font2;
 			}
 
 			int
@@ -1324,7 +1327,6 @@ namespace yata
 				if (cell != null)
 				{
 					_copycell = cell.text;
-//					it_PasteCell.Enabled = true;
 				}
 				else
 					CopyPasteCellError();
@@ -2102,6 +2104,57 @@ namespace yata
 			}
 		}
 		#endregion PropertyPanel
+
+
+		#region Cell menu
+		internal void ShowCellMenu()
+		{
+			Point loc = Table.PointToClient(Cursor.Position);
+			cellMenu.Show(Table, loc);
+		}
+
+		void cellclick_Copy(object sender, EventArgs e)
+		{
+			editclick_CopyCell(sender, e);
+		}
+
+		void cellclick_Paste(object sender, EventArgs e)
+		{
+			editclick_PasteCell(sender, e);
+		}
+
+		void cellclick_Stars(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				Cell cell = Table.GetSelectedCell();
+				if (cell != null)
+				{
+					if (cell.text != Constants.Stars)
+					{
+						cell.text = Constants.Stars;
+
+						Table.Changed = true;
+						cell.loadchanged = false;
+
+						Table.colRewidth(cell.x, cell.y);
+
+						if (cell.x < YataGrid.FreezeSecond)
+						{
+							Table.FrozenLabelsSet(Table);
+		
+							if (cell.x < Table.FrozenCount)
+								Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
+						}
+					}
+				}
+				else
+					CopyPasteCellError();
+			}
+			else
+				ReadonlyError();
+		}
+		#endregion Cell menu
 	}
 
 
