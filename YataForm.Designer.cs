@@ -1032,14 +1032,14 @@
 			this.it_cellCopy.Name = "it_cellCopy";
 			this.it_cellCopy.Size = new System.Drawing.Size(127, 22);
 			this.it_cellCopy.Text = "Copy";
-			this.it_cellCopy.Click += new System.EventHandler(this.cellclick_Copy);
+			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
 			this.it_cellPaste.Size = new System.Drawing.Size(127, 22);
 			this.it_cellPaste.Text = "Paste";
-			this.it_cellPaste.Click += new System.EventHandler(this.cellclick_Paste);
+			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 

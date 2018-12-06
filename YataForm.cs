@@ -2113,16 +2113,6 @@ namespace yata
 			cellMenu.Show(Table, loc);
 		}
 
-		void cellclick_Copy(object sender, EventArgs e)
-		{
-			editclick_CopyCell(sender, e);
-		}
-
-		void cellclick_Paste(object sender, EventArgs e)
-		{
-			editclick_PasteCell(sender, e);
-		}
-
 		void cellclick_Stars(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
