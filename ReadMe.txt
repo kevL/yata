@@ -29,8 +29,10 @@ Edit
 - Goto : Ctrl+g (focuses the Goto box)
 - Goto loadchanged (See note on Load below)
 
-- copy range  : Ctrl+c (copies a range of selected rows)
-- paste range : Ctrl+v (pastes a range of selected rows)
+- copy cell   : Ctrl+c (copies a single cell)
+- paste cell  : Ctrl+v (pastes a single cell)
+- copy range  : Ctrl+Shift+c (copies a selected row or range of rows)
+- paste range : Ctrl+Shift+v (pastes a selected row or range of rows)
 
 - export copy to Clipboard (exports the current copy-list to the clipboard)
 - import Clipboard to copy (imports any clipboard-text to the current copy-list
@@ -411,7 +413,7 @@ and close the Property Panel.
 Cell-values can be edited by left-click. To accept an edit, press Enter or left-
 click on the panel; to cancel an edit, press Escape or right-click on the panel.
 Note that clicking elsewhere on the app will cause the panel to lose focus and
-cancels your current edit.
+cancel your current edit.
 
 Advanced: Note that it is possible to change the ID-value of a row in the
 Property Panel. It is recommended however to use 2da Ops->order row ids instead,

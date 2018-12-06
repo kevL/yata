@@ -26,6 +26,7 @@ namespace yata
 		{ get; set; }
 
 		List<string[]> _copy = new List<string[]>();
+		string _copycell = String.Empty;
 
 		string _preset = String.Empty;
 
@@ -1017,6 +1018,9 @@ namespace yata
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
 				it_PasteRange.Enabled = (_copy.Count != 0);
+
+//				it_CopyCell .Enabled = (Table.GetSelectedCell() != null);
+//				it_PasteCell.Enabled = !String.IsNullOrEmpty(_copycell);
 			}
 			else
 			{
@@ -1310,6 +1314,59 @@ namespace yata
 				}
 			}
 		}
+
+
+		void editclick_CopyCell(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				Cell cell = Table.GetSelectedCell();
+				if (cell != null)
+				{
+					_copycell = cell.text;
+//					it_PasteCell.Enabled = true;
+				}
+				else
+					CopyPasteCellError();
+			}
+		}
+
+		void editclick_PasteCell(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				if (!Table.Readonly)
+				{
+					Cell cell = Table.GetSelectedCell();
+					if (cell != null)
+					{
+						if (cell.text != _copycell)
+						{
+							cell.text = _copycell;
+
+							Table.Changed = true;
+							cell.loadchanged = false;
+
+							Table.colRewidth(cell.x, cell.y);
+						}
+					}
+					else
+						CopyPasteCellError();
+				}
+				else
+					ReadonlyError();
+			}
+		}
+
+		void CopyPasteCellError()
+		{
+			MessageBox.Show("Select one (1) cell.",
+							"burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation,
+							MessageBoxDefaultButton.Button1);
+		}
+
 
 		void editclick_CopyRange(object sender, EventArgs e)
 		{

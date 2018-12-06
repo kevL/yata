@@ -1677,7 +1677,7 @@ namespace yata
 			if (String.IsNullOrEmpty(field))
 			{
 				tb.Text = Constants.Stars;
-				return true;
+				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
 			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
