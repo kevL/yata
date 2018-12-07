@@ -216,20 +216,6 @@ namespace yata
 		}
 
 
-		/// <summary>
-		/// Sets standard HeightColhead, HeightRow, and minimum cell width.
-		/// These values are the same for all loaded tables.
-		/// </summary>
-		/// <param name="f"></param>
-		internal static void SetStaticMetrics(YataForm f)
-		{
-			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
-			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
-
-			_wid = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
-		}
-
-
 		void OnVertScrollValueChanged(object sender, EventArgs e)
 		{
 			if (_table == null) _table = this;
@@ -1048,6 +1034,19 @@ namespace yata
 
 
 		/// <summary>
+		/// Sets standard HeightColhead, HeightRow, and minimum cell width.
+		/// These values are the same for all loaded tables.
+		/// </summary>
+		/// <param name="f"></param>
+		internal static void SetStaticMetrics(YataForm f)
+		{
+			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
+			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
+
+			_wid = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
+		}
+
+		/// <summary>
 		/// Calculates and maintains rowhead width wrt/ current Font across all
 		/// tabs/tables.
 		/// </summary>
@@ -1113,6 +1112,21 @@ namespace yata
 						table._labelsecond.Size = new Size(table.Cols[2].width(), HeightColhead - 1);
 					}
 				}
+			}
+		}
+
+		/// <summary>
+		/// Re-widths any frozen-labels and the frozen-panel if they need it.
+		/// </summary>
+		/// <param name="c">col that changed its width</param>
+		internal void UpdateFrozenControls(int c)
+		{
+			if (c < FreezeSecond)
+			{
+				FrozenLabelsSet(); // re-width the frozen-labels on the colhead
+
+				if (c < FrozenCount)
+					FrozenCount = FrozenCount; // re-width the frozen-panel
 			}
 		}
 
@@ -1597,14 +1611,7 @@ namespace yata
 				_editcell.text = _editor.Text;
 
 				colRewidth(_editcell.x, _editcell.y);
-
-				if (_editcell.x < YataGrid.FreezeSecond)
-				{
-					FrozenLabelsSet();
-
-					if (_editcell.x < FrozenCount)
-						FrozenCount = FrozenCount; // re-width the Frozen panel
-				}
+				UpdateFrozenControls(_editcell.x);
 			}
 		}
 

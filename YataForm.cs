@@ -1350,14 +1350,7 @@ namespace yata
 							cell.loadchanged = false;
 
 							Table.colRewidth(cell.x, cell.y);
-
-							if (cell.x < YataGrid.FreezeSecond)
-							{
-								Table.FrozenLabelsSet();
-			
-								if (cell.x < Table.FrozenCount)
-									Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
-							}
+							Table.UpdateFrozenControls(cell.x);
 						}
 					}
 					else
@@ -1547,10 +1540,8 @@ namespace yata
 
 					if (changed)
 					{
-						Table.colRewidth(0, 0, Table.RowCount - 1); // TODO: eliminate a bit of overkill here ->
-
-						Table.FrozenLabelsSet();
-						Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
+						Table.colRewidth(0, 0, Table.RowCount - 1);
+						Table.UpdateFrozenControls(0);
 
 						Table.InitScrollers();
 						Table.Refresh();
@@ -2128,14 +2119,7 @@ namespace yata
 						cell.loadchanged = false;
 
 						Table.colRewidth(cell.x, cell.y);
-
-						if (cell.x < YataGrid.FreezeSecond)
-						{
-							Table.FrozenLabelsSet();
-		
-							if (cell.x < Table.FrozenCount)
-								Table.FrozenCount = Table.FrozenCount; // re-width the Frozen panel
-						}
+						Table.UpdateFrozenControls(cell.x);
 					}
 				}
 				else

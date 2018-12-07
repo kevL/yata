@@ -357,14 +357,7 @@ namespace yata
 				_grid[_r,_c].text = _editor.Text;
 
 				_grid.colRewidth(_c, _r);
-
-				if (_c < YataGrid.FreezeSecond)
-				{
-					_grid.FrozenLabelsSet();
-
-					if (_c < _grid.FrozenCount)
-						_grid.FrozenCount = _grid.FrozenCount; // re-width the Frozen panel
-				}
+				_grid.UpdateFrozenControls(_c);
 			}
 		}
 
