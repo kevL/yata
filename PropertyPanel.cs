@@ -415,6 +415,14 @@ namespace yata
 			rect = new Rectangle(_padHori, 0,
 								 _widthVars, _heightr);
 
+			// draw var-texts ->
+			for (c = 0; c != _grid.ColCount; ++c)
+			{
+				rect.Y = _heightr * c - offset;
+				TextRenderer.DrawText(graphics, _grid.Cols[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+			}
+
+			// draw val-texts ->
 			int r;
 			Cell cell = _grid.GetSelectedCell();
 			if (cell != null)
@@ -422,22 +430,17 @@ namespace yata
 			else
 				r = _grid.getSelectedRow();
 
-			// draw texts ->
-			for (c = 0; c != _grid.ColCount; ++c)
+			if (r != -1)
 			{
-				rect.Y = _heightr * c - offset;// + 1;
-				TextRenderer.DrawText(graphics, _grid.Cols[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+				rect.X    += _widthVars;
+				rect.Width = _widthVals;
 
-				if (r != -1)
+				for (c = 0; c != _grid.ColCount; ++c)
 				{
-					rect.X    += _widthVars;
-					rect.Width = _widthVals;
+					rect.Y = _heightr * c - offset;
 					TextRenderer.DrawText(graphics, _grid[r,c].text, Font, rect, Colors.Text, YataGraphics.flags);
-					rect.X    -= _widthVars;
-					rect.Width = _widthVars;
 				}
 			}
-
 //			base.OnPaint(e);
 		}
 	}
