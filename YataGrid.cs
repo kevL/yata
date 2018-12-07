@@ -2772,7 +2772,7 @@ namespace yata
 
 			_sortcol = col;
 
-			if (!Settings._strict) // ASSUME people that use strict settings know what they're doing.
+			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
 			{
 				if (_sortcol == 0 && _sortdir == 1)
 					TooltipSort.SetToolTip(_labelid, "");

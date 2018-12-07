@@ -19,7 +19,7 @@ namespace yata
 		readonly int _widthVars;	// left col
 		int _widthVals;				// right col
 
-		static int _heightr;
+		static int _heightr; // height of a row is the same for all propanels
 
 		const int _padHori = 5; // horizontal text padding
 		const int _padVert = 2; // vertical text padding
@@ -125,8 +125,14 @@ namespace yata
 		{
 			Width = _widthVars + _widthVals;
 
-			Left   = _grid.Left   - (_grid._visVert ? _grid._scrollVert.Width  : 0) + _grid.Width - Width;
-			Height = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
+			Left = _grid.Left - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - Width;
+
+			int h = _grid.ColCount * _heightr;
+			int hGrid = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
+			if (h > hGrid)
+				Height = hGrid;
+			else
+				Height = h;
 		}
 
 		internal void InitScroll()
