@@ -1091,8 +1091,10 @@ namespace yata
 			}
 		}
 
-		internal void FrozenLabelsSet(YataGrid table)
+		internal void FrozenLabelsSet(YataGrid table = null)
 		{
+			if (table == null) table = this;
+
 			if (table.ColCount != 0)
 			{
 				int w0 = table.Cols[0].width();
@@ -1598,7 +1600,7 @@ namespace yata
 
 				if (_editcell.x < YataGrid.FreezeSecond)
 				{
-					FrozenLabelsSet(this);
+					FrozenLabelsSet();
 
 					if (_editcell.x < FrozenCount)
 						FrozenCount = FrozenCount; // re-width the Frozen panel

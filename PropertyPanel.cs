@@ -360,7 +360,7 @@ namespace yata
 
 				if (_c < YataGrid.FreezeSecond)
 				{
-					_grid.FrozenLabelsSet(_grid);
+					_grid.FrozenLabelsSet();
 
 					if (_c < _grid.FrozenCount)
 						_grid.FrozenCount = _grid.FrozenCount; // re-width the Frozen panel
