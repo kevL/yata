@@ -202,7 +202,17 @@ y=         (integer) the desired y-position to start the app on your monitor
 w=         (integer) the desired starting width of the app on your monitor
 h=         (integer) the desired starting height of the app on your monitor
 strict=    "true" (without quotes) to show extra warnings when loading a
-           2da-file (default false)
+           2da-file (default false). Strict is intended for users who want to
+           notice stuff that is by and large safe to disregard: (1) non alpha-
+           numeric characters (other than underscore) in col headers [note that
+           double-quotes are disallowed in col headers regardless] (2) a
+           character on the 2nd line of a 2da [the 2nd line should be blank as
+           far as Yata goes] (3) a tab-character in the version header instead
+           of a space-character (4) and Strict also suppresses the tooltip that
+           appears when a col is sorted by anything other than ID-ascending
+           ("warn : Table is not sorted by ascending ID") - ie, persons who use
+           Strict don't get a tooltip although the ID-header still turns to a
+           violet color regardless of this setting.
 context=   a right-click on a rowhead displays the contextmenu at the mouse-
            cursor's location by default. It can be displayed in a static
            location at the topleft corner of the table instead of at the mouse-
