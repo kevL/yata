@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 dec 6
+2018 dec 7
 kevL's
-ver 2.5.6.0
+ver 2.5.7.0
 
 
 File
@@ -430,3 +430,8 @@ Property Panel. It is recommended however to use 2da Ops->order row ids instead,
 unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (further, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
+
+A right-click on the Property Panel button will switch the panel's docked
+position from the topright of the grid to the bottomright of the grid, or vice
+versa. (This is noticeable only if the height of the panel is less than the
+height of the grid.)
