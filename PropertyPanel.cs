@@ -34,8 +34,6 @@ namespace yata
 		/// <param name="pevent"></param>
 		protected override void OnPaint(PaintEventArgs pevent)
 		{
-			base.OnPaint(pevent);
-
 			if (Depressed)
 			{
 				var graphics = pevent.Graphics;
@@ -58,6 +56,8 @@ namespace yata
 				graphics.DrawLine(pen1, Width - 1, 2, Width - 1, Height - 2);	// vert right
 				graphics.DrawLine(pen2, Width - 2, 2, Width - 2, Height - 2);
 			}
+			else
+				base.OnPaint(pevent);
 		}
 	}
 
