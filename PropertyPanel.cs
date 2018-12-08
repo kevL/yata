@@ -15,7 +15,12 @@ namespace yata
 
 		internal PropertyPanelButton()
 		{
-			FillRect = new Rectangle(3, 3, Width - 8, Height - 8);
+			// NOTE: .NET is using the default vals for button's Width/Height
+			// here. So set it explicitly.
+			Width  =
+			Height = 20;
+
+			FillRect = new Rectangle(3, 3, Width - 6, Height - 6);
 			Fill = new LinearGradientBrush(new Point(0,0), new Point(0, Height), Color.Lavender, Color.DarkOrchid);
 		}
 

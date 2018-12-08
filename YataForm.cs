@@ -158,7 +158,7 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
-			btn_PropertyPanel.Top = -1;
+			btn_PropertyPanel.Top = -1; // NOTE: This won't work in PP's cTor. So do it here.
 
 			if (!String.IsNullOrEmpty(pfe_load)
 				&& File.Exists(pfe_load))
