@@ -2065,11 +2065,30 @@ namespace yata
 
 		#region PropertyPanel
 		/// <summary>
-		/// Handler for clicking the PropertyPanel button.
+		/// Handler for MouseDown on the PropertyPanel button.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_PropertyPanel(object sender, MouseEventArgs e)
+		void mousedown_btnPropertyPanel(object sender, MouseEventArgs e)
+		{
+			if (Table != null)
+			{
+				if (e.Button == MouseButtons.Left
+					|| (e.Button == MouseButtons.Right
+						&& Table._propanel != null && Table._propanel.Visible))
+				{
+					btn_PropertyPanel.Depressed = true;
+					btn_PropertyPanel.Refresh();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handler for MouseUp on the PropertyPanel button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
 		{
 			if (Table != null)
 			{
@@ -2077,6 +2096,9 @@ namespace yata
 
 				if (e.Button == MouseButtons.Left)
 				{
+					btn_PropertyPanel.Depressed = false;
+					btn_PropertyPanel.Refresh();
+
 					if (Table._propanel == null
 						|| (Table._propanel.Visible = !Table._propanel.Visible))
 					{
@@ -2098,6 +2120,9 @@ namespace yata
 				else if (e.Button == MouseButtons.Right
 					&& Table._propanel != null && Table._propanel.Visible)
 				{
+					btn_PropertyPanel.Depressed = false;
+					btn_PropertyPanel.Refresh();
+
 					Table._propanel.DockBot = !Table._propanel.DockBot;
 				}
 			}

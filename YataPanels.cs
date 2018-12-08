@@ -34,15 +34,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-//			DrawingControl.SuspendDrawing(this);
-
 			YataGrid.graphics = e.Graphics;
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-//			YataGrid.graphics.DrawLine(Pens.DarkLine, 0, 1, Width, 1);
 			YataGrid.graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
 			_grid.LabelColheads();
 
-//			DrawingControl.ResumeDrawing(this);
+//			base.OnPaint(e);
 		}
 
 
@@ -160,15 +157,13 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-//			DrawingControl.SuspendDrawing(this);
-
 			YataGrid.graphics = e.Graphics;
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			YataGrid.graphics.DrawLine(Pens.DarkLine, Width,     0, Width,     Height);
 			YataGrid.graphics.DrawLine(Pens.DarkLine, Width - 1, 0, Width - 1, Height);
 			_grid.LabelRowheads();
 
-//			DrawingControl.ResumeDrawing(this);
+//			base.OnPaint(e);
 		}
 	}
 
@@ -199,13 +194,11 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-//			DrawingControl.SuspendDrawing(this);
-
 			YataGrid.graphics = e.Graphics;
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			_grid.PaintFrozenPanel();
 
-//			DrawingControl.ResumeDrawing(this);
+//			base.OnPaint(e);
 		}
 
 		/// <summary>

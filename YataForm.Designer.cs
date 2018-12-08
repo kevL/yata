@@ -7,6 +7,7 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 		private yata.YataTabs tabControl;
+		private PropertyPanelButton btn_PropertyPanel;
 		private System.Windows.Forms.MenuStrip menubar;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuFile;
 		private System.Windows.Forms.ToolStripMenuItem it_Open;
@@ -96,7 +97,6 @@
 		private System.Windows.Forms.ToolStripMenuItem it_PathRanges2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathCategories2da;
 		private System.Windows.Forms.ToolStripMenuItem it_PathSpellTarget2da;
-		private System.Windows.Forms.Button btn_PropertyPanel;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyCell;
 		private System.Windows.Forms.ToolStripMenuItem it_PasteCell;
 		private System.Windows.Forms.ContextMenuStrip cellMenu;
@@ -133,6 +133,7 @@
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_PropertyPanel = new yata.PropertyPanelButton();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -218,7 +219,6 @@
 			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.btn_PropertyPanel = new System.Windows.Forms.Button();
 			this.cellMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_cellCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellPaste = new System.Windows.Forms.ToolStripMenuItem();
@@ -298,6 +298,19 @@
 			this.it_tabReload.Size = new System.Drawing.Size(138, 22);
 			this.it_tabReload.Text = "Reload";
 			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
+			// 
+			// btn_PropertyPanel
+			// 
+			this.btn_PropertyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_PropertyPanel.Location = new System.Drawing.Point(823, 0);
+			this.btn_PropertyPanel.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_PropertyPanel.Name = "btn_PropertyPanel";
+			this.btn_PropertyPanel.Size = new System.Drawing.Size(20, 20);
+			this.btn_PropertyPanel.TabIndex = 4;
+			this.btn_PropertyPanel.UseVisualStyleBackColor = true;
+			this.btn_PropertyPanel.Visible = false;
+			this.btn_PropertyPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_btnPropertyPanel);
+			this.btn_PropertyPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseup_btnPropertyPanel);
 			// 
 			// menubar
 			// 
@@ -1002,18 +1015,6 @@
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
 			this.panel_ColorFill.TabIndex = 3;
-			// 
-			// btn_PropertyPanel
-			// 
-			this.btn_PropertyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_PropertyPanel.Location = new System.Drawing.Point(823, 0);
-			this.btn_PropertyPanel.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_PropertyPanel.Name = "btn_PropertyPanel";
-			this.btn_PropertyPanel.Size = new System.Drawing.Size(20, 20);
-			this.btn_PropertyPanel.TabIndex = 4;
-			this.btn_PropertyPanel.UseVisualStyleBackColor = true;
-			this.btn_PropertyPanel.Visible = false;
-			this.btn_PropertyPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.click_PropertyPanel);
 			// 
 			// cellMenu
 			// 

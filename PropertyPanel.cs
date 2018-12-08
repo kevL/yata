@@ -6,6 +6,57 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	sealed class PropertyPanelButton
+		:
+			Button
+	{
+		readonly Brush Fill;
+		readonly Rectangle FillRect;
+
+		internal PropertyPanelButton()
+		{
+			FillRect = new Rectangle(3, 3, Width - 8, Height - 8);
+			Fill = new LinearGradientBrush(new Point(0,0), new Point(0, Height), Color.Lavender, Color.DarkOrchid);
+		}
+
+
+		internal bool Depressed
+		{ get; set; }
+
+		/// <summary>
+		/// Since right-click on a button does not visually depress it do this.
+		/// </summary>
+		/// <param name="pevent"></param>
+		protected override void OnPaint(PaintEventArgs pevent)
+		{
+			base.OnPaint(pevent);
+
+			if (Depressed)
+			{
+				var graphics = pevent.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+				graphics.FillRectangle(Fill, FillRect);
+
+				var pen1 = Pens.Black;
+				var pen2 = Pens.DarkLine;
+
+				graphics.DrawLine(pen1, 2, 2, Width - 2, 2);					// hori top
+				graphics.DrawLine(pen2, 2, 3, Width - 2, 3);
+
+				graphics.DrawLine(pen1, 2, Height - 1, Width - 2, Height - 1);	// hori bot
+				graphics.DrawLine(pen2, 2, Height - 2, Width - 3, Height - 2);
+
+				graphics.DrawLine(pen1, 2, 2, 2, Height - 2);					// vert left
+				graphics.DrawLine(pen2, 3, 2, 3, Height - 2);
+
+				graphics.DrawLine(pen1, Width - 1, 2, Width - 1, Height - 2);	// vert right
+				graphics.DrawLine(pen2, Width - 2, 2, Width - 2, Height - 2);
+			}
+		}
+	}
+
+
 	sealed class PropertyPanel
 		:
 			Control
@@ -241,8 +292,8 @@ namespace yata
 									_grid[_r,_c].selected = true;
 								}
 
-								if (_grid.EnsureDisplayedCellOrRow())
-									_grid.Refresh();
+								_grid.EnsureDisplayedCellOrRow();
+								_grid.Refresh();
 
 
 								_editRect.X      = _widthVars;
