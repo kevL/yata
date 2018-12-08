@@ -252,8 +252,14 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 		}
 
+		/// <summary>
+		/// @note This fires whenever a fly sneezes.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
+			logfile.Log("YataGrid.OnResize()");
+
 			if (!_init)
 			{
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
@@ -266,10 +272,6 @@ namespace yata
 					if (_table._panelRows   != null) _table._panelRows  .Height = Height;
 					if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
 
-					if (!_table.EnsureDisplayedCellOrRow())
-						_table.Refresh(); // _table-drawing can tear without that.
-
-
 					if (_table._propanel != null && _table._propanel.Visible)
 					{
 						_table._propanel.setLeftHeight();
@@ -277,6 +279,9 @@ namespace yata
 
 						_table._propanel.DockBot = _table._propanel.DockBot; // update Top of propanel
 					}
+
+					if (_table.EnsureDisplayedCellOrRow())
+						_table.Refresh(); // _table-drawing can tear without that.
 				}
 				_table = null;
 
