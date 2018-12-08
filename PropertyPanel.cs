@@ -265,6 +265,18 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Clears cords on the statusbar when the mouse enters the control.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseEnter(EventArgs e)
+		{
+			_grid._f.PrintInfo(); // clear
+
+//			base.OnMouseEnter(e);
+		}
+
+
 		int _r; // -> the row in the table.
 		int _c; // -> the col in the table, the row in the panel.
 
@@ -503,9 +515,9 @@ namespace yata
 
 			// draw val-texts ->
 			int r;
-			Cell cell = _grid.GetSelectedCell();
-			if (cell != null)
-				r = cell.y;
+			Cell sel = _grid.GetSelectedCell();
+			if (sel != null)
+				r = sel.y;
 			else
 				r = _grid.getSelectedRow();
 
@@ -520,6 +532,7 @@ namespace yata
 					TextRenderer.DrawText(graphics, _grid[r,c].text, Font, rect, Colors.Text, YataGraphics.flags);
 				}
 			}
+
 //			base.OnPaint(e);
 		}
 	}
