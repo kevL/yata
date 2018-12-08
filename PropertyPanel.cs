@@ -27,6 +27,19 @@ namespace yata
 		readonly TextBox _editor = new TextBox();
 		Rectangle _editRect;
 
+		bool _dockBot;
+		internal bool DockBot
+		{
+			get { return _dockBot; }
+			set
+			{
+				if (_dockBot = value)
+					Top = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0) - Height;
+				else
+					Top = 0;
+			}
+		}
+
 
 		/// <summary>
 		/// cTor.

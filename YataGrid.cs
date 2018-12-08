@@ -274,6 +274,8 @@ namespace yata
 					{
 						_table._propanel.setLeftHeight();
 						_table._propanel.InitScroll();
+
+						_table._propanel.DockBot = _table._propanel.DockBot; // update Top of propanel
 					}
 				}
 				_table = null;

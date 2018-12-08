@@ -2069,29 +2069,37 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_PropertyPanel(object sender, EventArgs e)
+		void click_PropertyPanel(object sender, MouseEventArgs e)
 		{
 			if (Table != null)
 			{
 				Table.Select();
 
-				if (Table._propanel == null
-					|| (Table._propanel.Visible = !Table._propanel.Visible))
+				if (e.Button == MouseButtons.Left)
 				{
-					if (Table._propanel == null)
-						Table._propanel = new PropertyPanel(Table);
-					else
+					if (Table._propanel == null
+						|| (Table._propanel.Visible = !Table._propanel.Visible))
 					{
-						Table._propanel.calcValueWidth();
-						Table._propanel.setLeftHeight();
-						Table._propanel.InitScroll();
-					}
+						if (Table._propanel == null)
+							Table._propanel = new PropertyPanel(Table);
+						else
+						{
+							Table._propanel.calcValueWidth();
+							Table._propanel.setLeftHeight();
+							Table._propanel.InitScroll();
+						}
 
-					Table._propanel.Show();
-					Table._propanel.BringToFront();
+						Table._propanel.Show();
+						Table._propanel.BringToFront();
+					}
+					else
+						Table._propanel.Hide();
 				}
-				else
-					Table._propanel.Hide();
+				else if (e.Button == MouseButtons.Right
+					&& Table._propanel != null && Table._propanel.Visible)
+				{
+					Table._propanel.DockBot = !Table._propanel.DockBot;
+				}
 			}
 		}
 		#endregion PropertyPanel

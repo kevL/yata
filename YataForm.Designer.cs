@@ -1013,7 +1013,7 @@
 			this.btn_PropertyPanel.TabIndex = 4;
 			this.btn_PropertyPanel.UseVisualStyleBackColor = true;
 			this.btn_PropertyPanel.Visible = false;
-			this.btn_PropertyPanel.Click += new System.EventHandler(this.click_PropertyPanel);
+			this.btn_PropertyPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.click_PropertyPanel);
 			// 
 			// cellMenu
 			// 
@@ -1025,31 +1025,31 @@
 			this.it_cellStars});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(128, 98);
+			this.cellMenu.Size = new System.Drawing.Size(81, 76);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(127, 22);
+			this.it_cellCopy.Size = new System.Drawing.Size(80, 22);
 			this.it_cellCopy.Text = "Copy";
 			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(127, 22);
+			this.it_cellPaste.Size = new System.Drawing.Size(80, 22);
 			this.it_cellPaste.Text = "Paste";
 			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(124, 6);
+			this.separator_16.Size = new System.Drawing.Size(77, 6);
 			// 
 			// it_cellStars
 			// 
 			this.it_cellStars.Name = "it_cellStars";
-			this.it_cellStars.Size = new System.Drawing.Size(127, 22);
+			this.it_cellStars.Size = new System.Drawing.Size(80, 22);
 			this.it_cellStars.Text = "stars";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
 			// 
