@@ -258,8 +258,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
-			logfile.Log("YataGrid.OnResize()");
-
 			if (!_init)
 			{
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
@@ -2266,37 +2264,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Scrolls the table so that a given col is (more or less) completely
-		/// displayed.
-		/// </summary>
-		/// <param name="c">the col to display</param>
-		void EnsureDisplayedCol(int c)
-		{
-			var bounds = getColEdges(c);
-
-			int left = getLeft();
-
-			if (bounds.X != left)
-			{
-				int bar = _visVert ? _scrollVert.Width : 0;
-				int right = Width - bar;
-
-				int width = bounds.Y - bounds.X;
-
-				if (bounds.X < left
-					|| (width > right - left
-						&& (bounds.X > right || bounds.X + left > (right - left) / 2)))
-				{
-					_scrollHori.Value -= left - bounds.X;
-				}
-				else if (bounds.Y > right && width < right - left)
-				{
-					_scrollHori.Value += bounds.X + width + bar - Width;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Scrolls the table so that a given row is (more or less) completely
 		/// displayed.
 		/// </summary>
@@ -2341,6 +2308,37 @@ namespace yata
 					return EnsureDisplayedRow(r);
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Scrolls the table so that a given col is (more or less) completely
+		/// displayed.
+		/// </summary>
+		/// <param name="c">the col to display</param>
+		void EnsureDisplayedCol(int c)
+		{
+			var bounds = getColEdges(c);
+
+			int left = getLeft();
+
+			if (bounds.X != left)
+			{
+				int bar = _visVert ? _scrollVert.Width : 0;
+				int right = Width - bar;
+
+				int width = bounds.Y - bounds.X;
+
+				if (bounds.X < left
+					|| (width > right - left
+						&& (bounds.X > right || bounds.X + left > (right - left) / 2)))
+				{
+					_scrollHori.Value -= left - bounds.X;
+				}
+				else if (bounds.Y > right && width < right - left)
+				{
+					_scrollHori.Value += bounds.X + width + bar - Width;
+				}
+			}
 		}
 
 

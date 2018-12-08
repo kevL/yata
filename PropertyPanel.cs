@@ -209,8 +209,8 @@ namespace yata
 		}
 
 
-		int _r;
-		int _c; // -> the row in the panel, the col in the table.
+		int _r; // -> the row in the table.
+		int _c; // -> the col in the table, the row in the panel.
 
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
@@ -223,30 +223,40 @@ namespace yata
 						int y = e.Y + _scroll.Value;
 						if (e.Y < HeightProps - _scroll.Value)
 						{
-							Cell cell = _grid.GetSelectedCell();
-							if (cell != null)
-								_r = cell.y;
+							Cell sel = _grid.GetSelectedCell();
+							if (sel != null)
+								_r = sel.y;
 							else
 								_r = _grid.getSelectedRow();
-	
+
 							if (_r != -1)
 							{
 								Focus(); // snap
-	
+
 								_c = y / _heightr;
-	
+
+								if (sel != null && _c >= _grid.FrozenCount)
+								{
+									sel.selected = false;
+									_grid[_r,_c].selected = true;
+								}
+
+								if (_grid.EnsureDisplayedCellOrRow())
+									_grid.Refresh();
+
+
 								_editRect.X      = _widthVars;
 								_editRect.Y      = _c * _heightr + 1;
 								_editRect.Width  = _widthVals;
 								_editRect.Height = _heightr - 1;
-	
+
 								_editor.Left = _editRect.X + 5;
 								_editor.Top  = _editRect.Y + 1 - _scroll.Value;
 								_editor.Text = _grid[_r,_c].text;
-	
+
 								_editor.Visible = true;
 								_editor.Focus();
-	
+
 								_editor.SelectionStart = 0; // because .NET
 								if (_editor.Text == Constants.Stars)
 								{
@@ -254,7 +264,7 @@ namespace yata
 								}
 								else
 									_editor.SelectionStart = _editor.Text.Length;
-	
+
 								Refresh();
 							}
 						}
