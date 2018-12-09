@@ -693,17 +693,29 @@ namespace yata
 		/// </summary>
 		string _pfeT = String.Empty;
 
-		// TODO: Disallow readonly files to be overwritten by using SaveAs (perhaps).
+		/// <summary>
+		/// A flag that prevents a Readonly warning/error from showing twice.
+		/// </summary>
+		bool _warned;
+
 		void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
+				bool force;
 				if (String.IsNullOrEmpty(_pfeT))
+				{
 					_pfeT = Table.Fullpath;
+					force = false;
+				}
+				else
+					force = (_pfeT == Table.Fullpath);
 
 				if (!String.IsNullOrEmpty(_pfeT))
 				{
-					if (!Table.Readonly || (ToolStripMenuItem)sender == it_SaveAs)
+					_warned = false;
+
+					if (!Table.Readonly || (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
 					{
 						if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
 							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
@@ -768,7 +780,7 @@ namespace yata
 							}
 						}
 					}
-					else
+					else if (!_warned)
 						ReadonlyError();
 				}
 			}
@@ -796,6 +808,7 @@ namespace yata
 
 		DialogResult SaveWarning(string info)
 		{
+			_warned = true;
 			return MessageBox.Show(info
 								   + Environment.NewLine + Environment.NewLine
 								   + "Save anyway ...",
