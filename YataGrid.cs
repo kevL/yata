@@ -930,6 +930,8 @@ namespace yata
 
 			for (int r = 0; r != RowCount; ++r)
 			{
+				Changed |= (_rows[r].Length > ColCount); // flag Changed if field(s) get cut off.
+
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
 
