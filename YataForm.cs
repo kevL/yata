@@ -2122,10 +2122,9 @@ namespace yata
 
 		internal void TableChanged(bool changed)
 		{
-			DrawingControl.SuspendDrawing(this); // stops tab-flickering on Sort
+			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
-			string asterisk = changed ? " *"
-									  : "";
+			string asterisk = changed ? " *" : "";
 			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath) + asterisk;
 			SetTabSize();
 

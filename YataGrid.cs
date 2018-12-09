@@ -926,11 +926,11 @@ namespace yata
 			Cell cell;
 			string text = String.Empty;
 			Brush brush;
-			bool stars;
+			bool stars, changed = false;
 
 			for (int r = 0; r != RowCount; ++r)
 			{
-				Changed |= (_rows[r].Length > ColCount); // flag Changed if field(s) get cut off.
+				changed = changed || (_rows[r].Length > ColCount); // flag Changed if any field(s) get cut off.
 
 				brush = (r % 2 == 0) ? Brushes.Alice
 									 : Brushes.Blanche;
@@ -953,10 +953,11 @@ namespace yata
 					if (stars)
 					{
 						cell.loadchanged = true;
-						Changed = true;
+						changed = true;
 					}
 				}
 			}
+			Changed |= changed;
 
 			_rows.Clear(); // done w/ '_rows'
 
@@ -1766,6 +1767,8 @@ namespace yata
 		/// </summary>
 		void CheckCellTexts()
 		{
+			bool changed = false;
+
 			Cell cell;
 			foreach (var row in Rows)
 			{
@@ -1776,10 +1779,11 @@ namespace yata
 					{
 						cell.text = text;
 						cell.loadchanged = true;
-						Changed = true;
+						changed = true;
 					}
 				}
 			}
+			Changed |= changed;
 		}
 
 		/// <summary>
