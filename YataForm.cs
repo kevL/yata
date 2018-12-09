@@ -693,8 +693,7 @@ namespace yata
 		/// </summary>
 		string _pfeT = String.Empty;
 
-		// TODO: Disallow readonly files to be overwritten by using SaveAs.
-		// TODO: Warn if IDs are not ordered.
+		// TODO: Disallow readonly files to be overwritten by using SaveAs (perhaps).
 		void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -707,65 +706,63 @@ namespace yata
 					if (!Table.Readonly || (ToolStripMenuItem)sender == it_SaveAs)
 					{
 						if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
-							|| MessageBox.Show("The 2da is not sorted by ascending ID."
-											   + Environment.NewLine + Environment.NewLine
-											   + "Save anyway ...",
-											   "burp",
-											   MessageBoxButtons.YesNo,
-											   MessageBoxIcon.Exclamation,
-											   MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
 						{
-							Table.Fullpath = _pfeT;
-
-							Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
-							SetTitlebarText();
-
-							Table.Readonly = false;
-
-							int rows = Table.RowCount;
-							if (rows != 0)
+							if (CheckRowOrder()
+								|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
 							{
-								Table.Changed = false;
-								foreach (var row in Table.Rows)
-								{
-									for (int c = 0; c != Table.ColCount; ++c)
-										row.cells[c].loadchanged = false;
-								}
-								Table.Refresh();
+								Table.Fullpath = _pfeT;
 
-								using (var sw = new StreamWriter(Table.Fullpath))
-								{
-									sw.WriteLine("2DA V2.0");
-									sw.WriteLine("");
+								Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
+								SetTitlebarText();
 
-									string line = String.Empty;
-									foreach (string field in Table.Fields)
+								Table.Readonly = false;
+
+								int rows = Table.RowCount;
+								if (rows != 0)
+								{
+									Table.Changed = false;
+									foreach (var row in Table.Rows)
 									{
-										line += " " + field;
+										for (int c = 0; c != Table.ColCount; ++c)
+											row.cells[c].loadchanged = false;
 									}
-									sw.WriteLine(line);
+									Table.Refresh();
 
-
-									string val;
-
-									int cols = Table.ColCount;
-
-									for (int r = 0; r != rows; ++r)
+									using (var sw = new StreamWriter(Table.Fullpath))
 									{
-										line = String.Empty;
+										sw.WriteLine("2DA V2.0");
+										sw.WriteLine("");
 
-										for (int c = 0; c != cols; ++c)
+										string line = String.Empty;
+										foreach (string field in Table.Fields)
 										{
-											if (c != 0)
-												line += " ";
-
-											if (!String.IsNullOrEmpty(val = Table[r,c].text))
-												line += val;
-											else
-												line += Constants.Stars;
+											line += " " + field;
 										}
-
 										sw.WriteLine(line);
+
+
+										string val;
+
+										int cols = Table.ColCount;
+
+										for (int r = 0; r != rows; ++r)
+										{
+											line = String.Empty;
+
+											for (int c = 0; c != cols; ++c)
+											{
+												if (c != 0)
+													line += " ";
+
+												if (!String.IsNullOrEmpty(val = Table[r,c].text))
+													line += val;
+												else
+													line += Constants.Stars;
+											}
+
+											sw.WriteLine(line);
+										}
 									}
 								}
 							}
@@ -795,6 +792,38 @@ namespace yata
 					}
 				}
 			}
+		}
+
+		DialogResult SaveWarning(string info)
+		{
+			return MessageBox.Show(info
+								   + Environment.NewLine + Environment.NewLine
+								   + "Save anyway ...",
+								   "burp",
+								   MessageBoxButtons.YesNo,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
+		}
+
+		/// <summary>
+		/// Checks the row-order before save.
+		/// </summary>
+		/// <returns>true if row-order is okay</returns>
+		bool CheckRowOrder()
+		{
+			string val;
+			int result;
+
+			for (int id = 0; id != Table.RowCount; ++id)
+			{
+				if (String.IsNullOrEmpty(val = Table[id,0].text)
+					|| !Int32.TryParse(val, out result)
+					|| result != id)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 		#endregion File menu
 
