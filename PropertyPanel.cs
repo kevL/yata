@@ -10,19 +10,23 @@ namespace yata
 		:
 			Button
 	{
-		readonly Brush _brushGrad;
+		readonly Rectangle _rectBG;
 		readonly Rectangle _rectGrad;
+		readonly Brush _brushGrad;
 
 		internal PropertyPanelButton()
 		{
+			DrawingControl.SetDoubleBuffered(this);
+
 			// NOTE: .NET is using the default vals for button's Width/Height
 			// here. So set it explicitly.
 			Width  =
 			Height = 20;
 
-			_rectGrad  = new Rectangle(3, 3, Width - 6, Height - 6);
+			_rectBG    = new Rectangle(0,0, Width, Height);
+			_rectGrad  = new Rectangle(3,3, Width - 6, Height - 6);
 			_brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-												Color.Lavender, Color.MediumOrchid); //.DarkOrchid
+												 Color.Lavender, Color.MediumOrchid);
 		}
 
 
@@ -35,11 +39,14 @@ namespace yata
 		/// <param name="pevent"></param>
 		protected override void OnPaint(PaintEventArgs pevent)
 		{
+			YataGrid.graphics = pevent.Graphics;
+			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+			// and you know it don't come easy - Ringo
+			YataGrid.graphics.FillRectangle(Brushes.Control, _rectBG);
+
 			if (Depressed)
 			{
-				YataGrid.graphics = pevent.Graphics;
-				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
 				YataGrid.graphics.FillRectangle(_brushGrad, _rectGrad);
 
 				var pen1 = Pens.Black;

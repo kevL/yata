@@ -41,7 +41,7 @@ namespace yata
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 				var FillBrush = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-														Color.Lavender, Color.MediumOrchid); //.DarkOrchid
+														Color.Lavender, Color.MediumOrchid);
 				var FillRect  = new Rectangle(0, 0, Width, Height);
 				YataGrid.graphics.FillRectangle(FillBrush, FillRect);
 
