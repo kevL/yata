@@ -717,68 +717,68 @@ namespace yata
 
 					if (!Table.Readonly || (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
 					{
-						if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
-							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
+//						if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
+//							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
+//						{
+						if (CheckRowOrder()
+							|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
 						{
-							if (CheckRowOrder()
-								|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
+							Table.Fullpath = _pfeT;
+
+							Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
+							SetTitlebarText();
+
+							Table.Readonly = false;
+
+							int rows = Table.RowCount;
+							if (rows != 0)
 							{
-								Table.Fullpath = _pfeT;
-
-								Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
-								SetTitlebarText();
-
-								Table.Readonly = false;
-
-								int rows = Table.RowCount;
-								if (rows != 0)
+								Table.Changed = false;
+								foreach (var row in Table.Rows)
 								{
-									Table.Changed = false;
-									foreach (var row in Table.Rows)
+									for (int c = 0; c != Table.ColCount; ++c)
+										row.cells[c].loadchanged = false;
+								}
+								Table.Refresh();
+
+								using (var sw = new StreamWriter(Table.Fullpath))
+								{
+									sw.WriteLine("2DA V2.0");
+									sw.WriteLine("");
+
+									string line = String.Empty;
+									foreach (string field in Table.Fields)
 									{
-										for (int c = 0; c != Table.ColCount; ++c)
-											row.cells[c].loadchanged = false;
+										line += " " + field;
 									}
-									Table.Refresh();
+									sw.WriteLine(line);
 
-									using (var sw = new StreamWriter(Table.Fullpath))
+
+									string val;
+
+									int cols = Table.ColCount;
+
+									for (int r = 0; r != rows; ++r)
 									{
-										sw.WriteLine("2DA V2.0");
-										sw.WriteLine("");
+										line = String.Empty;
 
-										string line = String.Empty;
-										foreach (string field in Table.Fields)
+										for (int c = 0; c != cols; ++c)
 										{
-											line += " " + field;
+											if (c != 0)
+												line += " ";
+
+											if (!String.IsNullOrEmpty(val = Table[r,c].text))
+												line += val;
+											else
+												line += Constants.Stars;
 										}
+
 										sw.WriteLine(line);
-
-
-										string val;
-
-										int cols = Table.ColCount;
-
-										for (int r = 0; r != rows; ++r)
-										{
-											line = String.Empty;
-
-											for (int c = 0; c != cols; ++c)
-											{
-												if (c != 0)
-													line += " ";
-
-												if (!String.IsNullOrEmpty(val = Table[r,c].text))
-													line += val;
-												else
-													line += Constants.Stars;
-											}
-
-											sw.WriteLine(line);
-										}
 									}
 								}
 							}
 						}
+//						}
 					}
 					else if (!_warned)
 						ReadonlyError();
