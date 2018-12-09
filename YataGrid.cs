@@ -157,7 +157,7 @@ namespace yata
 		internal readonly TextBox _editor = new TextBox();
 		Cell _editcell;
 
-		static bool _init;
+		internal static bool _init;
 
 		internal int _sortcol;
 		internal int _sortdir = SORT_ASC;

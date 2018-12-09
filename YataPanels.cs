@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -34,10 +35,24 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			YataGrid.graphics = e.Graphics;
-			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			YataGrid.graphics.DrawLine(Pens.DarkLine, 0, Height, Width, Height);
-			_grid.LabelColheads();
+			if (!YataGrid._init)
+			{
+				YataGrid.graphics = e.Graphics;
+				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+				var FillBrush = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
+														Color.Lavender, Color.MediumOrchid); //.DarkOrchid
+				var FillRect  = new Rectangle(0, 0, Width, Height);
+				YataGrid.graphics.FillRectangle(FillBrush, FillRect);
+
+				YataGrid.graphics.DrawLine(Pens.DarkLine,
+										   0,     Height,
+										   Width, Height);
+				YataGrid.graphics.DrawLine(Pens.DarkLine,
+										   Width, 0,
+										   Width, Height);
+				_grid.LabelColheads();
+			}
 
 //			base.OnPaint(e);
 		}
@@ -157,11 +172,18 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			YataGrid.graphics = e.Graphics;
-			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			YataGrid.graphics.DrawLine(Pens.DarkLine, Width,     0, Width,     Height);
-			YataGrid.graphics.DrawLine(Pens.DarkLine, Width - 1, 0, Width - 1, Height);
-			_grid.LabelRowheads();
+			if (!YataGrid._init)
+			{
+				YataGrid.graphics = e.Graphics;
+				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				YataGrid.graphics.DrawLine(Pens.DarkLine,
+										   Width, 0,
+										   Width, Height);
+				YataGrid.graphics.DrawLine(Pens.DarkLine,
+										   Width - 1, 0,
+										   Width - 1, Height);
+				_grid.LabelRowheads();
+			}
 
 //			base.OnPaint(e);
 		}
@@ -194,9 +216,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			YataGrid.graphics = e.Graphics;
-			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			_grid.PaintFrozenPanel();
+			if (!YataGrid._init)
+			{
+				YataGrid.graphics = e.Graphics;
+				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				_grid.PaintFrozenPanel();
+			}
 
 //			base.OnPaint(e);
 		}

@@ -10,8 +10,8 @@ namespace yata
 		:
 			Button
 	{
-		readonly Brush Fill;
-		readonly Rectangle FillRect;
+		readonly Brush _brushGrad;
+		readonly Rectangle _rectGrad;
 
 		internal PropertyPanelButton()
 		{
@@ -20,8 +20,9 @@ namespace yata
 			Width  =
 			Height = 20;
 
-			FillRect = new Rectangle(3, 3, Width - 6, Height - 6);
-			Fill = new LinearGradientBrush(new Point(0,0), new Point(0, Height), Color.Lavender, Color.DarkOrchid);
+			_rectGrad  = new Rectangle(3, 3, Width - 6, Height - 6);
+			_brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
+												Color.Lavender, Color.MediumOrchid); //.DarkOrchid
 		}
 
 
@@ -36,25 +37,25 @@ namespace yata
 		{
 			if (Depressed)
 			{
-				var graphics = pevent.Graphics;
-				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				YataGrid.graphics = pevent.Graphics;
+				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				graphics.FillRectangle(Fill, FillRect);
+				YataGrid.graphics.FillRectangle(_brushGrad, _rectGrad);
 
 				var pen1 = Pens.Black;
 				var pen2 = Pens.DarkLine;
 
-				graphics.DrawLine(pen1, 2, 2, Width - 2, 2);					// hori top
-				graphics.DrawLine(pen2, 2, 3, Width - 2, 3);
+				YataGrid.graphics.DrawLine(pen1, 2, 2, Width - 2, 2);					// hori top
+				YataGrid.graphics.DrawLine(pen2, 2, 3, Width - 2, 3);
 
-				graphics.DrawLine(pen1, 2, Height - 1, Width - 2, Height - 1);	// hori bot
-				graphics.DrawLine(pen2, 2, Height - 2, Width - 3, Height - 2);
+				YataGrid.graphics.DrawLine(pen1, 2, Height - 1, Width - 2, Height - 1);	// hori bot
+				YataGrid.graphics.DrawLine(pen2, 2, Height - 2, Width - 3, Height - 2);
 
-				graphics.DrawLine(pen1, 2, 2, 2, Height - 2);					// vert left
-				graphics.DrawLine(pen2, 3, 2, 3, Height - 2);
+				YataGrid.graphics.DrawLine(pen1, 2, 2, 2, Height - 2);					// vert left
+				YataGrid.graphics.DrawLine(pen2, 3, 2, 3, Height - 2);
 
-				graphics.DrawLine(pen1, Width - 1, 2, Width - 1, Height - 2);	// vert right
-				graphics.DrawLine(pen2, Width - 2, 2, Width - 2, Height - 2);
+				YataGrid.graphics.DrawLine(pen1, Width - 1, 2, Width - 1, Height - 2);	// vert right
+				YataGrid.graphics.DrawLine(pen2, Width - 2, 2, Width - 2, Height - 2);
 			}
 			else
 				base.OnPaint(pevent);
@@ -106,7 +107,7 @@ namespace yata
 
 			DoubleBuffered = true;
 
-			BackColor = Color.LightBlue;
+			BackColor = Color.SkyBlue; //.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);

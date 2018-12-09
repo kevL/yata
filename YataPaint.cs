@@ -14,8 +14,7 @@ namespace yata
 	sealed partial class YataGrid
 	{
 		/// <summary>
-		/// Handles the paint event.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
+		/// Handles the Paint event for the table itself.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -25,8 +24,7 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-//				ControlPaint.DrawBorder3D(_graphics, ClientRectangle, Border3DStyle.Etched);
-
+//				ControlPaint.DrawBorder3D(graphics, ClientRectangle, Border3DStyle.Etched);
 
 				int r,c;
 
@@ -107,7 +105,9 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics.DrawLine(Pens.DarkLine, Left, y, WidthTable, y);
+						graphics.DrawLine(Pens.DarkLine,
+										  Left,       y,
+										  WidthTable, y);
 				}
 
 
@@ -121,7 +121,9 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						graphics.DrawLine(Pens.DarkLine, x, Top, x, Bottom);
+						graphics.DrawLine(Pens.DarkLine,
+										  x, Top,
+										  x, Bottom);
 				}
 			}
 
@@ -229,105 +231,117 @@ namespace yata
 
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-//			var rect = new Rectangle();
-
-			Color color;
-			if (_sortcol == 0 && _sortdir == SORT_ASC)
-				color = Colors.FrozenHead;
-			else
+			if (!YataGrid._init)
 			{
-				color = Colors.LabelSorted;
+				graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-//				rect.X      = _labelid.Left  + 1;
-//				rect.Y      = _labelid.Top   + 1;
-//				rect.Width  = _labelid.Width - 2;
-//				rect.Height = _labelid.Height;
-//				graphics.DrawRectangle(Pens.LabelSortedBorder, rect);
-
-//				graphics.DrawLine(Pens.LabelSortedBorder, _labelid.Left, _labelid.Top + 1, _labelid.Width, _labelid.Top + 1);
-			}
-			_labelid.BackColor = color;
-
-//			rect.X      = WidthRowhead + _padHori;
-//			rect.Y      = Top;
-//			rect.Width  = Cols[0].width();
-//			rect.Height = HeightColhead;
-			var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-//			graphics.DrawLine(Pens.DarkLine, _labelid.Left + 1, _labelid.Top + 1, _labelid.Width - 1, _labelid.Top + 1);
-			graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
-
-			if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
-			{
-				graphics.DrawImage(Resources.asc_16px,
-								   rect.X               - _offsetHoriSort, // + rect.Width
-								   rect.Y + rect.Height - _offsetVertSort);
-			}
-			else if (_sortcol == 0)
-			{
-				Bitmap sort;
-				if (_sortdir == SORT_ASC)
-					sort = Resources.asc_16px;
+				Color color1, color2;
+				if (_sortcol == 0 && _sortdir == SORT_ASC)
+				{
+					color1 = Color.Cornsilk;
+					color2 = Color.BurlyWood;
+				}
 				else
-					sort = Resources.des_16px;
+				{
+					color1 = Color.Lavender;
+					color2 = Color.Orchid;
+				}
 
-				graphics.DrawImage(sort,
-								   rect.X               - _offsetHoriSort, // + rect.Width
-								   rect.Y + rect.Height - _offsetVertSort);
+				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+														color1, color2);
+				var rectGrad  = new Rectangle(0,0, _labelid.Width, _labelid.Height);
+				graphics.FillRectangle(brushGrad, rectGrad);
+
+				var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
+				TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+
+				graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+
+				if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
+				{
+					graphics.DrawImage(Resources.asc_16px,
+									   rect.X               - _offsetHoriSort,
+									   rect.Y + rect.Height - _offsetVertSort);
+				}
+				else if (_sortcol == 0)
+				{
+					Bitmap sort;
+					if (_sortdir == SORT_ASC)
+						sort = Resources.asc_16px;
+					else
+						sort = Resources.des_16px;
+
+					graphics.DrawImage(sort,
+									   rect.X               - _offsetHoriSort,
+									   rect.Y + rect.Height - _offsetVertSort);
+				}
 			}
 		}
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-//			graphics.DrawLine(Pens.DarkLine, _labelfirst.Left + 1, _labelfirst.Top + 1, _labelfirst.Width - 1, _labelfirst.Top + 1);
-			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
-
-			if (_sortdir != SORT_NOT && _sortcol == 1)
+			if (!YataGrid._init)
 			{
-				Bitmap sort;
-				if (_sortdir == SORT_ASC)
-					sort = Resources.asc_16px;
-				else
-					sort = Resources.des_16px;
+				graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				graphics.DrawImage(sort,
-									rect.X + rect.Width  - _offsetHoriSort,
-									rect.Y + rect.Height - _offsetVertSort);
+				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+														Color.Cornsilk, Color.BurlyWood);
+				var rectGrad  = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
+				graphics.FillRectangle(brushGrad, rectGrad);
+
+				var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
+				TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+
+				graphics.DrawLine(Pens.DarkLine,
+								  _labelfirst.Width, _labelfirst.Top,
+								  _labelfirst.Width, _labelfirst.Bottom);
+
+				if (_sortdir != SORT_NOT && _sortcol == 1)
+				{
+					Bitmap sort;
+					if (_sortdir == SORT_ASC)
+						sort = Resources.asc_16px;
+					else
+						sort = Resources.des_16px;
+
+					graphics.DrawImage(sort,
+									   rect.X + rect.Width  - _offsetHoriSort,
+									   rect.Y + rect.Height - _offsetVertSort);
+				}
 			}
 		}
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-			TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
-
-//			graphics.DrawLine(Pens.DarkLine, _labelsecond.Left + 1, _labelsecond.Top + 1, _labelsecond.Width - 1, _labelsecond.Top + 1);
-			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
-
-			if (_sortdir != SORT_NOT && _sortcol == 2)
+			if (!YataGrid._init)
 			{
-				Bitmap sort;
-				if (_sortdir == SORT_ASC)
-					sort = Resources.asc_16px;
-				else
-					sort = Resources.des_16px;
+				graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				graphics.DrawImage(sort,
-									rect.X + rect.Width  - _offsetHoriSort,
-									rect.Y + rect.Height - _offsetVertSort);
+				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+														Color.Cornsilk, Color.BurlyWood);
+				var rectGrad  = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
+				graphics.FillRectangle(brushGrad, rectGrad);
+
+				var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
+				TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+
+				graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+
+				if (_sortdir != SORT_NOT && _sortcol == 2)
+				{
+					Bitmap sort;
+					if (_sortdir == SORT_ASC)
+						sort = Resources.asc_16px;
+					else
+						sort = Resources.des_16px;
+
+					graphics.DrawImage(sort,
+									   rect.X + rect.Width  - _offsetHoriSort,
+									   rect.Y + rect.Height - _offsetVertSort);
+				}
 			}
 		}
 
@@ -345,7 +359,9 @@ namespace yata
 				for (; c != FrozenCount; ++c)
 				{
 					x += Cols[c].width();
-					graphics.DrawLine(Pens.DarkLine, x, 0, x, Height);
+					graphics.DrawLine(Pens.DarkLine,
+									  x, 0,
+									  x, Height);
 				}
 
 				var rect = new Rectangle(0,0, 0, HeightRow);
@@ -377,7 +393,9 @@ namespace yata
 						rect.X += rect.Width;
 					}
 
-					graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, rect.X + rect.Width, rect.Y + HeightRow);
+					graphics.DrawLine(Pens.DarkLine,
+									  0,                   rect.Y + HeightRow,
+									  rect.X + rect.Width, rect.Y + HeightRow);
 				}
 			}
 		}
