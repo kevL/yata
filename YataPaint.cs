@@ -146,12 +146,12 @@ namespace yata
 				{
 					if (rect.X + (rect.Width = Cols[c].width()) > Left)
 					{
-						if (_sortdir != 0 && c == _sortcol)
+						if (_sortdir != SORT_NOT && c == _sortcol)
 						{
 							Bitmap sort;
-							if (_sortdir == 1)			// asc
+							if (_sortdir == SORT_ASC)
 								sort = Resources.asc_16px;
-							else //if (_sortdir == -1)	// des
+							else
 								sort = Resources.des_16px;
 
 							graphics.DrawImage(sort,
@@ -235,7 +235,7 @@ namespace yata
 //			var rect = new Rectangle();
 
 			Color color;
-			if (_sortcol == 0 && _sortdir == 1)
+			if (_sortcol == 0 && _sortdir == SORT_ASC)
 				color = Colors.FrozenHead;
 			else
 			{
@@ -270,9 +270,9 @@ namespace yata
 			else if (_sortcol == 0)
 			{
 				Bitmap sort;
-				if (_sortdir == 1)			// asc
+				if (_sortdir == SORT_ASC)
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
+				else
 					sort = Resources.des_16px;
 
 				graphics.DrawImage(sort,
@@ -292,12 +292,12 @@ namespace yata
 //			graphics.DrawLine(Pens.DarkLine, _labelfirst.Left + 1, _labelfirst.Top + 1, _labelfirst.Width - 1, _labelfirst.Top + 1);
 			graphics.DrawLine(Pens.DarkLine, _labelfirst.Width, _labelfirst.Top, _labelfirst.Width, _labelfirst.Bottom);
 
-			if (_sortdir != 0 && _sortcol == 1)
+			if (_sortdir != SORT_NOT && _sortcol == 1)
 			{
 				Bitmap sort;
-				if (_sortdir == 1)			// asc
+				if (_sortdir == SORT_ASC)
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
+				else
 					sort = Resources.des_16px;
 
 				graphics.DrawImage(sort,
@@ -317,12 +317,12 @@ namespace yata
 //			graphics.DrawLine(Pens.DarkLine, _labelsecond.Left + 1, _labelsecond.Top + 1, _labelsecond.Width - 1, _labelsecond.Top + 1);
 			graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
 
-			if (_sortdir != 0 && _sortcol == 2)
+			if (_sortdir != SORT_NOT && _sortcol == 2)
 			{
 				Bitmap sort;
-				if (_sortdir == 1)			// asc
+				if (_sortdir == SORT_ASC)
 					sort = Resources.asc_16px;
-				else //if (_sortdir == -1)	// des
+				else
 					sort = Resources.des_16px;
 
 				graphics.DrawImage(sort,

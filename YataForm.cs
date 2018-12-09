@@ -686,57 +686,68 @@ namespace yata
 		}
 
 
+		// TODO: Disallow readonly files to be overwritten by using SaveAs.
 		void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null && !String.IsNullOrEmpty(Table.Fullpath))
 			{
 				if (!Table.Readonly || (ToolStripMenuItem)sender == it_SaveAs)
 				{
-					Table.Readonly = false;
-
-					int rows = Table.RowCount;
-					if (rows != 0)
+					if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
+						|| MessageBox.Show("The 2da is not sorted by ascending ID."
+										   + Environment.NewLine + Environment.NewLine
+										   + "Save anyway ...",
+										   "burp",
+										   MessageBoxButtons.YesNo,
+										   MessageBoxIcon.Exclamation,
+										   MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 					{
-						Table.Changed = false;
-						foreach (var row in Table.Rows)
-						{
-							for (int c = 0; c != Table.ColCount; ++c)
-								row.cells[c].loadchanged = false;
-						}
+						Table.Readonly = false;
 
-						using (var sw = new StreamWriter(Table.Fullpath))
+						int rows = Table.RowCount;
+						if (rows != 0)
 						{
-							sw.WriteLine("2DA V2.0");
-							sw.WriteLine("");
-
-							string line = String.Empty;
-							foreach (string field in Table.Fields)
+							Table.Changed = false;
+							foreach (var row in Table.Rows)
 							{
-								line += " " + field;
+								for (int c = 0; c != Table.ColCount; ++c)
+									row.cells[c].loadchanged = false;
 							}
-							sw.WriteLine(line);
 
-
-							string val;
-
-							int cols = Table.ColCount;
-
-							for (int r = 0; r != rows; ++r)
+							using (var sw = new StreamWriter(Table.Fullpath))
 							{
-								line = String.Empty;
+								sw.WriteLine("2DA V2.0");
+								sw.WriteLine("");
 
-								for (int c = 0; c != cols; ++c)
+								string line = String.Empty;
+								foreach (string field in Table.Fields)
 								{
-									if (c != 0)
-										line += " ";
-
-									if (!String.IsNullOrEmpty(val = Table[r,c].text))
-										line += val;
-									else
-										line += Constants.Stars;
+									line += " " + field;
 								}
-
 								sw.WriteLine(line);
+
+
+								string val;
+
+								int cols = Table.ColCount;
+
+								for (int r = 0; r != rows; ++r)
+								{
+									line = String.Empty;
+
+									for (int c = 0; c != cols; ++c)
+									{
+										if (c != 0)
+											line += " ";
+
+										if (!String.IsNullOrEmpty(val = Table[r,c].text))
+											line += val;
+										else
+											line += Constants.Stars;
+									}
+
+									sw.WriteLine(line);
+								}
 							}
 						}
 					}

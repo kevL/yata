@@ -22,6 +22,10 @@ namespace yata
 			INFO_SPELL	// 2
 		}
 
+		internal const int SORT_DES = -1;
+		internal const int SORT_NOT =  0;
+		internal const int SORT_ASC =  1;
+
 
 		internal string Fullpath // Path-File-Extension
 		{ get; set; }
@@ -155,8 +159,8 @@ namespace yata
 
 		static bool _init;
 
-		int _sortcol;
-		int _sortdir = 1;
+		internal int _sortcol;
+		internal int _sortdir = SORT_ASC;
 
 		internal int RangeSelect
 		{ get; set; }
@@ -784,7 +788,7 @@ namespace yata
 				_scrollHori.Value = 0;
 
 				_sortcol = 0;
-				_sortdir = 1;
+				_sortdir = SORT_ASC;
 
 				FrozenCount = YataGrid.FreezeId;
 
@@ -2770,16 +2774,16 @@ namespace yata
 		{
 			Changed = true; // TODO: do Changed only if rows are swapped/order is changed.
 
-			if (_sortdir != 1 || _sortcol != col)
-				_sortdir = 1;
+			if (_sortdir != SORT_ASC || _sortcol != col)
+				_sortdir = SORT_ASC;
 			else
-				_sortdir = -1;
+				_sortdir = SORT_DES;
 
 			_sortcol = col;
 
 			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
 			{
-				if (_sortcol == 0 && _sortdir == 1)
+				if (_sortcol == 0 && _sortdir == SORT_ASC)
 					TooltipSort.SetToolTip(_labelid, "");
 				else
 					TooltipSort.SetToolTip(_labelid, "warn : Table is not sorted by ascending ID");
