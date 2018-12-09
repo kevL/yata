@@ -236,22 +236,35 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				Color color1, color2;
-				if (_sortcol == 0 && _sortdir == SORT_ASC)
+				if (Settings._gradient)
 				{
-					color1 = Color.Cornsilk;
-					color2 = Color.BurlyWood;
+					Color color1, color2;
+					if (_sortcol == 0 && _sortdir == SORT_ASC)
+					{
+						color1 = Color.Cornsilk;
+						color2 = Color.BurlyWood;
+					}
+					else
+					{
+						color1 = Color.Lavender;
+						color2 = Color.Orchid;
+					}
+
+					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+															color1, color2);
+					var rectGrad  = new Rectangle(0,0, _labelid.Width, _labelid.Height);
+					graphics.FillRectangle(brushGrad, rectGrad);
 				}
 				else
 				{
-					color1 = Color.Lavender;
-					color2 = Color.Orchid;
-				}
+					Color color;
+					if (_sortcol == 0 && _sortdir == SORT_ASC)
+						color = Colors.FrozenHead;
+					else
+						color = Colors.LabelSorted;
 
-				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
-														color1, color2);
-				var rectGrad  = new Rectangle(0,0, _labelid.Width, _labelid.Height);
-				graphics.FillRectangle(brushGrad, rectGrad);
+					_labelid.BackColor = color;
+				}
 
 				var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
 				TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
@@ -286,10 +299,13 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
-														Color.Cornsilk, Color.BurlyWood);
-				var rectGrad  = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
-				graphics.FillRectangle(brushGrad, rectGrad);
+				if (Settings._gradient)
+				{
+					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+															Color.Cornsilk, Color.BurlyWood);
+					var rectGrad  = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
+					graphics.FillRectangle(brushGrad, rectGrad);
+				}
 
 				var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
 				TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
@@ -320,10 +336,13 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
-														Color.Cornsilk, Color.BurlyWood);
-				var rectGrad  = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
-				graphics.FillRectangle(brushGrad, rectGrad);
+				if (Settings._gradient)
+				{
+					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+															Color.Cornsilk, Color.BurlyWood);
+					var rectGrad  = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
+					graphics.FillRectangle(brushGrad, rectGrad);
+				}
 
 				var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
 				TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);

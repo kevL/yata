@@ -7,7 +7,7 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 		private yata.YataTabs tabControl;
-		private PropertyPanelButton btn_PropertyPanel;
+		private yata.PropertyPanelButton btn_PropertyPanel;
 		private System.Windows.Forms.MenuStrip menubar;
 		private System.Windows.Forms.ToolStripMenuItem it_MenuFile;
 		private System.Windows.Forms.ToolStripMenuItem it_Open;
@@ -104,6 +104,9 @@
 		private System.Windows.Forms.ToolStripMenuItem it_cellPaste;
 		private System.Windows.Forms.ToolStripSeparator separator_16;
 		private System.Windows.Forms.ToolStripMenuItem it_cellStars;
+		private System.Windows.Forms.ToolStripSeparator separator_17;
+		private System.Windows.Forms.ToolStripMenuItem it_ppOnOff;
+		private System.Windows.Forms.ToolStripMenuItem it_ppTopBot;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -117,6 +120,13 @@
 			base.Dispose(disposing);
 		}
 
+		/*
+		 * The designer is going to delete these, add them to the top of
+		 * InitializeComponent() if/when it does.
+
+			this.tabControl = new yata.YataTabs();
+			this.btn_PropertyPanel = new yata.PropertyPanelButton();
+		*/
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The
@@ -125,15 +135,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.tabControl = new yata.YataTabs();
+			this.btn_PropertyPanel = new yata.PropertyPanelButton();
+			this.components = new System.ComponentModel.Container();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_PropertyPanel = new yata.PropertyPanelButton();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,6 +183,9 @@
 			this.separator_12 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_17 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_ppOnOff = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ppTopBot = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
@@ -589,7 +602,10 @@
 			this.it_AutoCols,
 			this.separator_12,
 			this.it_freeze1,
-			this.it_freeze2});
+			this.it_freeze2,
+			this.separator_17,
+			this.it_ppOnOff,
+			this.it_ppTopBot});
 			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
 			this.it_Menu2daOps.Size = new System.Drawing.Size(66, 20);
@@ -599,46 +615,46 @@
 			// it_RenumberRows
 			// 
 			this.it_RenumberRows.Name = "it_RenumberRows";
-			this.it_RenumberRows.Size = new System.Drawing.Size(175, 22);
+			this.it_RenumberRows.Size = new System.Drawing.Size(241, 22);
 			this.it_RenumberRows.Text = "order row ids";
 			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
 			// 
 			// it_CheckRows
 			// 
 			this.it_CheckRows.Name = "it_CheckRows";
-			this.it_CheckRows.Size = new System.Drawing.Size(175, 22);
+			this.it_CheckRows.Size = new System.Drawing.Size(241, 22);
 			this.it_CheckRows.Text = "test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
 			// separator_11
 			// 
 			this.separator_11.Name = "separator_11";
-			this.separator_11.Size = new System.Drawing.Size(172, 6);
+			this.separator_11.Size = new System.Drawing.Size(238, 6);
 			// 
 			// it_RecolorRows
 			// 
 			this.it_RecolorRows.Name = "it_RecolorRows";
-			this.it_RecolorRows.Size = new System.Drawing.Size(175, 22);
+			this.it_RecolorRows.Size = new System.Drawing.Size(241, 22);
 			this.it_RecolorRows.Text = "recolor rows";
 			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// it_AutoCols
 			// 
 			this.it_AutoCols.Name = "it_AutoCols";
-			this.it_AutoCols.Size = new System.Drawing.Size(175, 22);
+			this.it_AutoCols.Size = new System.Drawing.Size(241, 22);
 			this.it_AutoCols.Text = "autosize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// separator_12
 			// 
 			this.separator_12.Name = "separator_12";
-			this.separator_12.Size = new System.Drawing.Size(172, 6);
+			this.separator_12.Size = new System.Drawing.Size(238, 6);
 			// 
 			// it_freeze1
 			// 
 			this.it_freeze1.Name = "it_freeze1";
 			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.it_freeze1.Size = new System.Drawing.Size(175, 22);
+			this.it_freeze1.Size = new System.Drawing.Size(241, 22);
 			this.it_freeze1.Text = "freeze 1st col";
 			this.it_freeze1.Click += new System.EventHandler(this.opsclick_Freeze1stCol);
 			// 
@@ -646,9 +662,28 @@
 			// 
 			this.it_freeze2.Name = "it_freeze2";
 			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.it_freeze2.Size = new System.Drawing.Size(175, 22);
+			this.it_freeze2.Size = new System.Drawing.Size(241, 22);
 			this.it_freeze2.Text = "freeze 2nd col";
 			this.it_freeze2.Click += new System.EventHandler(this.opsclick_Freeze2ndCol);
+			// 
+			// separator_17
+			// 
+			this.separator_17.Name = "separator_17";
+			this.separator_17.Size = new System.Drawing.Size(238, 6);
+			// 
+			// it_ppOnOff
+			// 
+			this.it_ppOnOff.Name = "it_ppOnOff";
+			this.it_ppOnOff.ShortcutKeys = System.Windows.Forms.Keys.F7;
+			this.it_ppOnOff.Size = new System.Drawing.Size(241, 22);
+			this.it_ppOnOff.Text = "PropertyPanel on/off";
+			// 
+			// it_ppTopBot
+			// 
+			this.it_ppTopBot.Name = "it_ppTopBot";
+			this.it_ppTopBot.ShortcutKeys = System.Windows.Forms.Keys.F8;
+			this.it_ppTopBot.Size = new System.Drawing.Size(241, 22);
+			this.it_ppTopBot.Text = "PropertyPanel top/bottom";
 			// 
 			// it_MenuFont
 			// 

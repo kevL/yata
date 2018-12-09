@@ -212,11 +212,12 @@ strict=    "true" (without quotes) to show extra warnings when loading a
            appears when a col is sorted by anything other than ID-ascending
            ("warn : Table is not sorted by ascending ID") - ie, persons who use
            Strict don't get a tooltip although the ID-header still turns to a
-           violet color regardless of this setting.
+           violet color regardless of this setting
 context=   a right-click on a rowhead displays the contextmenu at the mouse-
            cursor's location by default. It can be displayed in a static
            location at the topleft corner of the table instead of at the mouse-
-           cursor by giving this variable a value of "static" (without quotes).
+           cursor by giving this variable a value of "static" (without quotes)
+gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).

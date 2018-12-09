@@ -40,10 +40,13 @@ namespace yata
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				var FillBrush = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-														Color.Lavender, Color.MediumOrchid);
-				var FillRect  = new Rectangle(0, 0, Width, Height);
-				YataGrid.graphics.FillRectangle(FillBrush, FillRect);
+				if (Settings._gradient)
+				{
+					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
+															Color.Lavender, Color.MediumOrchid);
+					var rectGrad  = new Rectangle(0, 0, Width, Height);
+					YataGrid.graphics.FillRectangle(brushGrad, rectGrad);
+				}
 
 				YataGrid.graphics.DrawLine(Pens.DarkLine,
 										   0,     Height,

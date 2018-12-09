@@ -24,6 +24,7 @@ namespace yata
 
 		internal static bool _strict;
 		internal static bool _context;
+		internal static bool _gradient;
 
 
 		internal static void ScanSettings()
@@ -149,7 +150,12 @@ namespace yata
 						else if (line.StartsWith("context=", StringComparison.InvariantCulture))
 						{
 							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
-								   && line == "static");
+									&& line == "static");
+						}
+						else if (line.StartsWith("gradient=", StringComparison.InvariantCulture))
+						{
+							_gradient = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && line == "true");
 						}
 					}
 				}

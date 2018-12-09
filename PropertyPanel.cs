@@ -110,11 +110,15 @@ namespace yata
 		/// </summary>
 		internal PropertyPanel(YataGrid grid)
 		{
+			DrawingControl.SetDoubleBuffered(this);
+
 			_grid = grid;
 
-			DoubleBuffered = true;
+			if (Settings._gradient)
+				BackColor = Color.SkyBlue;
+			else
+				BackColor = Color.LightBlue;
 
-			BackColor = Color.SkyBlue; //.LightBlue;
 			ForeColor = SystemColors.ControlText;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
