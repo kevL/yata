@@ -1967,12 +1967,6 @@ namespace yata
 					if (x > left)
 					{
 						var cords = getCords(x,y, left);
-
-						if (_propanel != null && _propanel.Visible) // TODO: allow propanel's field to be selected when it's not open.
-						{
-							_propanel.Refresh();
-						}
-
 						return this[cords.Y, cords.X];
 					}
 				}
