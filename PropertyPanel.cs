@@ -485,7 +485,7 @@ namespace yata
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(Brushes.Created, rect);
+				YataGrid.graphics.FillRectangle(Brushes.PropSelected, rect);
 			}
 
 			// fill the editor's val-rect ->
