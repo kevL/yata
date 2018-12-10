@@ -570,7 +570,7 @@
 			this.tb_Goto.Name = "tb_Goto";
 			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
-			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GotoKeyPress);
+			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Goto);
 			// 
 			// tb_Search
 			// 
@@ -579,7 +579,7 @@
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
-			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
+			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
 			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Search);
 			// 
 			// cb_SearchOption
@@ -589,7 +589,7 @@
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
 			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
-			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchKeyPress);
+			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
 			// 
 			// it_Menu2daOps
 			// 

@@ -1131,7 +1131,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void SearchKeyPress(object sender, KeyPressEventArgs e)
+		void keypress_Search(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter
 				&& Table != null && Table.RowCount != 0)
@@ -1262,6 +1262,7 @@ namespace yata
 		void editclick_Goto(object sender, EventArgs e)
 		{
 			tb_Goto.Focus();
+			tb_Goto.SelectAll();
 		}
 
 		/// <summary>
@@ -1270,7 +1271,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void GotoKeyPress(object sender, KeyPressEventArgs e)
+		void keypress_Goto(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter
 				&& Table != null && Table.RowCount != 0)
