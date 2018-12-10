@@ -26,7 +26,7 @@ namespace yata
 			_rectBG    = new Rectangle(0,0, Width, Height);
 			_rectGrad  = new Rectangle(3,3, Width - 6, Height - 6);
 			_brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-												 Color.Lavender, Color.MediumOrchid);
+												 Color.PaleGreen, Color.Olive);
 		}
 
 
