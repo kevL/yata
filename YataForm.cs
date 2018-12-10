@@ -1573,7 +1573,10 @@ namespace yata
 			it_RenumberRows.Enabled =
 			it_CheckRows   .Enabled =
 			it_RecolorRows .Enabled =
-			it_AutoCols    .Enabled = (Table != null);
+			it_AutoCols    .Enabled =
+			it_ppOnOff     .Enabled = (Table != null);
+			it_ppTopBot    .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+
 			it_freeze1     .Enabled = (Table != null && Table.Cols.Count > 1);
 			it_freeze2     .Enabled = (Table != null && Table.Cols.Count > 2);
 
@@ -1802,7 +1805,13 @@ namespace yata
 		}
 
 
-		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
+	/// <summary>
+	/// Handler for the PropertyPanel's visibility.
+	/// Cf mouseup_btnPropertyPanel()
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -1820,12 +1829,23 @@ namespace yata
 
 					Table._propanel.Show();
 					Table._propanel.BringToFront();
+
+					it_ppTopBot.Enabled = true;
 				}
 				else
+				{
 					Table._propanel.Hide();
+					it_ppTopBot.Enabled = false;
+				}
 			}
 		}
 
+	/// <summary>
+	/// Handler for the PropertyPanel's position.
+	/// Cf mouseup_btnPropertyPanel()
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 		void opsclick_PropertyPanelTopBot(object sender, EventArgs e)
 		{
 			if (Table != null && Table._propanel != null && Table._propanel.Visible)
@@ -2185,6 +2205,8 @@ namespace yata
 
 		/// <summary>
 		/// Handler for MouseUp on the PropertyPanel button.
+		/// Cf opsclick_PropertyPanelOnOff()
+		/// Cf opsclick_PropertyPanelTopBot()
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2213,9 +2235,14 @@ namespace yata
 
 						Table._propanel.Show();
 						Table._propanel.BringToFront();
+
+						it_ppTopBot.Enabled = true;
 					}
 					else
+					{
 						Table._propanel.Hide();
+						it_ppTopBot.Enabled = false;
+					}
 				}
 				else if (e.Button == MouseButtons.Right
 					&& Table._propanel != null && Table._propanel.Visible)
