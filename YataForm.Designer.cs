@@ -570,7 +570,9 @@
 			this.tb_Goto.Name = "tb_Goto";
 			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
+			this.tb_Goto.Enter += new System.EventHandler(this.enter_Goto);
 			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Goto);
+			this.tb_Goto.Click += new System.EventHandler(this.click_Goto);
 			// 
 			// tb_Search
 			// 
@@ -579,7 +581,9 @@
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
+			this.tb_Search.Enter += new System.EventHandler(this.enter_Search);
 			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
+			this.tb_Search.Click += new System.EventHandler(this.click_Search);
 			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Search);
 			// 
 			// cb_SearchOption

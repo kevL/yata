@@ -39,6 +39,7 @@ namespace yata
 		internal Font FontAccent;
 
 		internal bool _search;
+		bool _firstclick; // preps the Search or Goto textboxes to select all text
 
 		static Graphics graphics;
 		#endregion Fields & Properties
@@ -1116,6 +1117,20 @@ namespace yata
 			tb_Search.SelectAll();
 		}
 
+		void enter_Search(object sender, EventArgs e)
+		{
+			_firstclick = true;
+		}
+
+		void click_Search(object sender, EventArgs e)
+		{
+			if (_firstclick)
+			{
+				_firstclick = false;
+				tb_Search.SelectAll();
+			}
+		}
+
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -1263,6 +1278,20 @@ namespace yata
 		{
 			tb_Goto.Focus();
 			tb_Goto.SelectAll();
+		}
+
+		void enter_Goto(object sender, EventArgs e)
+		{
+			_firstclick = true;
+		}
+
+		void click_Goto(object sender, EventArgs e)
+		{
+			if (_firstclick)
+			{
+				_firstclick = false;
+				tb_Goto.SelectAll();
+			}
 		}
 
 		/// <summary>
