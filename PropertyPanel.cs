@@ -338,12 +338,12 @@ namespace yata
 								_editor.Focus();
 
 								_editor.SelectionStart = 0; // because .NET
-								if (_editor.Text == Constants.Stars)
-								{
-									_editor.SelectionLength = _editor.Text.Length;
-								}
-								else
-									_editor.SelectionStart = _editor.Text.Length;
+//								if (_editor.Text == Constants.Stars)
+//								{
+								_editor.SelectionLength = _editor.Text.Length;
+//								}
+//								else
+//									_editor.SelectionStart = _editor.Text.Length;
 
 								Refresh();
 							}
@@ -485,7 +485,7 @@ namespace yata
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(Brushes.PropSelected, rect);
+				YataGrid.graphics.FillRectangle(Brushes.Selected, rect);
 			}
 
 			// fill the editor's val-rect ->

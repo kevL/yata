@@ -66,7 +66,7 @@ namespace yata
 								if (_editor.Visible && _editcell == cell)
 									graphics.FillRectangle(Brushes.Editor, rect);
 								else
-									graphics.FillRectangle(Brushes.CellSel, rect);
+									graphics.FillRectangle(Brushes.Selected, rect);
 
 								rect.X += _padHori;
 							}
@@ -206,11 +206,11 @@ namespace yata
 						brush = null;
 
 						if (r == selr)
-							brush = Brushes.CellSel;
+							brush = Brushes.Selected;
 						else if ((r < selr && r >= selr + RangeSelect)
 							||   (r > selr && r <= selr + RangeSelect))
 						{
-							brush = Brushes.RowFlag;
+							brush = Brushes.SubSelected;
 						}
 
 						if (brush != null)

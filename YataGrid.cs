@@ -616,7 +616,7 @@ namespace yata
 									&& !char.IsLetterOrDigit(character)
 									&& character != '_'))
 							{
-								string error = "Column headers should contain only alphanumeric characters and underscores."
+								string error = "Column headers should contain only alpha-numeric characters and underscores."
 											 + Environment.NewLine + Environment.NewLine
 											 + Fullpath;
 								switch (ShowLoadError(error))
@@ -1991,12 +1991,12 @@ namespace yata
 			_editor.Text = _editcell.text;
 
 			_editor.SelectionStart = 0; // because .NET
-			if (_editor.Text == Constants.Stars)
-			{
-				_editor.SelectionLength = _editor.Text.Length;
-			}
-			else
-				_editor.SelectionStart = _editor.Text.Length;
+//			if (_editor.Text == Constants.Stars)
+//			{
+			_editor.SelectionLength = _editor.Text.Length;
+//			}
+//			else
+//				_editor.SelectionStart = _editor.Text.Length;
 		}
 
 		/// <summary>

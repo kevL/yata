@@ -87,21 +87,18 @@ namespace yata
 	static class Brushes
 	{
 		// table
-		internal static readonly Brush Alice        = new SolidBrush(Color.AliceBlue);
-		internal static readonly Brush Blanche      = new SolidBrush(Color.BlanchedAlmond);
-		internal static readonly Brush Created      = new SolidBrush(SystemColors.ControlLight);
+		internal static readonly Brush Alice       = new SolidBrush(Color.AliceBlue);
+		internal static readonly Brush Blanche     = new SolidBrush(Color.BlanchedAlmond);
+		internal static readonly Brush Created     = new SolidBrush(SystemColors.ControlLight);
 
-		internal static readonly Brush CellSel      = new SolidBrush(Color.PaleGreen);
-		internal static readonly Brush RowFlag      = new SolidBrush(Color.Honeydew);
-		internal static readonly Brush Editor       = new SolidBrush(Colors.Editor);
+		internal static readonly Brush Selected    = new SolidBrush(Color.PaleGreen);
+		internal static readonly Brush SubSelected = new SolidBrush(Color.Honeydew);
+		internal static readonly Brush Editor      = new SolidBrush(Colors.Editor);
 
-		internal static readonly Brush LoadChanged  = new SolidBrush(Color.Pink);
+		internal static readonly Brush LoadChanged = new SolidBrush(Color.Pink);
 
 		// propanel btn bg
-		internal static readonly Brush Control      = new SolidBrush(SystemColors.Control);
-
-		// propanel
-		internal static readonly Brush PropSelected = new SolidBrush(Color.PowderBlue);
+		internal static readonly Brush Control     = new SolidBrush(SystemColors.Control);
 	}
 
 	static class Colors
