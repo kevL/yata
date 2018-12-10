@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 dec 8
+2018 dec 9
 kevL's
-ver 2.5.8.0
+ver 2.5.9.0
 
 
 File
@@ -65,6 +65,9 @@ Search options dropdown (substring or wholeword)
                    remain stationary) One of those two cols typically contains
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
+
+- PropertyPanel on/off  : F7 (toggles the PropertyPanel on/off)
+- PropertyPanel top/bot : F8 (toggles the panel's position top/bottom)
 
 
 Font

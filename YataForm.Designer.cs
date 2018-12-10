@@ -135,9 +135,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tabControl = new yata.YataTabs();
 			this.btn_PropertyPanel = new yata.PropertyPanelButton();
-			this.components = new System.ComponentModel.Container();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -677,6 +677,7 @@
 			this.it_ppOnOff.ShortcutKeys = System.Windows.Forms.Keys.F7;
 			this.it_ppOnOff.Size = new System.Drawing.Size(241, 22);
 			this.it_ppOnOff.Text = "PropertyPanel on/off";
+			this.it_ppOnOff.Click += new System.EventHandler(this.opsclick_PropertyPanelOnOff);
 			// 
 			// it_ppTopBot
 			// 
@@ -684,6 +685,7 @@
 			this.it_ppTopBot.ShortcutKeys = System.Windows.Forms.Keys.F8;
 			this.it_ppTopBot.Size = new System.Drawing.Size(241, 22);
 			this.it_ppTopBot.Text = "PropertyPanel top/bottom";
+			this.it_ppTopBot.Click += new System.EventHandler(this.opsclick_PropertyPanelTopBot);
 			// 
 			// it_MenuFont
 			// 

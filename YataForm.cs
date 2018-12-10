@@ -1800,6 +1800,37 @@ namespace yata
 					Table.FrozenCount = YataGrid.FreezeId;
 			}
 		}
+
+
+		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				if (Table._propanel == null
+					|| (Table._propanel.Visible = !Table._propanel.Visible))
+				{
+					if (Table._propanel == null)
+						Table._propanel = new PropertyPanel(Table);
+					else
+					{
+						Table._propanel.calcValueWidth();
+						Table._propanel.setLeftHeight();
+						Table._propanel.InitScroll();
+					}
+
+					Table._propanel.Show();
+					Table._propanel.BringToFront();
+				}
+				else
+					Table._propanel.Hide();
+			}
+		}
+
+		void opsclick_PropertyPanelTopBot(object sender, EventArgs e)
+		{
+			if (Table != null && Table._propanel != null && Table._propanel.Visible)
+				Table._propanel.DockBot = !Table._propanel.DockBot;
+		}
 		#endregion 2da Ops menu
 
 
