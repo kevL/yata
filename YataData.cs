@@ -111,5 +111,10 @@ namespace yata
 			x = c;
 			text = field;
 		}
+
+//		struct Restorable
+//		{
+//			string text;
+//		}
 	}
 }

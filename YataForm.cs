@@ -1,4 +1,5 @@
 ﻿using System;
+//using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace yata
 	/// <summary>
 	/// Yata ....
 	/// </summary>
-	public partial class YataForm
+	public partial class YataForm //<T> where T : object
 		:
 			Form
 	{
@@ -2322,6 +2323,8 @@ namespace yata
 
 
 		#region UndoRedo
+		UndoRedo _urHandler = new UndoRedo();
+
 		/// <summary>
 		/// Handles the KeyDown event on the form.
 		/// @note Requires the form's KeyPreview property flagged true in order
@@ -2339,10 +2342,14 @@ namespace yata
 				{
 					case Keys.Z:
 						logfile.Log(". Ctrl+z UNDO");
+
+						_urHandler.Undo();
 						break;
 
 					case Keys.Y:
 						logfile.Log(". Ctrl+y REDO");
+
+						_urHandler.Redo();
 						break;
 				}
 			}

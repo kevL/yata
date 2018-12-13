@@ -12,7 +12,8 @@ namespace yata
 	public delegate void RedoHappened(object sender, UndoRedoEventArgs e);
 
 
-	public class UndoRedo<T>
+//	public class UndoRedo<T>
+	public class UndoRedo
 		:
 			INotifyPropertyChanged
 	{
@@ -21,17 +22,19 @@ namespace yata
 		
 		public void RaisePropertyChangedEvent(string property)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(property));
+			PropertyChangedEventHandler handler = PropertyChanged;
+			if (handler != null)
+				handler(this, new PropertyChangedEventArgs(property));
 		}
 		#endregion INotifyPropertyChanged requirements
 
 
 		#region Fields
-		readonly Stack UndoStack = new Stack();
-		readonly Stack RedoStack = new Stack();
+		readonly Stack UndoActions = new Stack();
+		readonly Stack RedoActions = new Stack();
 
-		public T Current;
+//		public T Current;
+		public object Current;
 
 		public event UndoHappened OnUndo;
 		public event RedoHappened OnRedo;
@@ -41,12 +44,12 @@ namespace yata
 		#region Properties
 		public bool CanUndo
 		{
-			get { return (UndoStack.Count != 0); }
+			get { return (UndoActions.Count != 0); }
 		}
 
 		public bool CanRedo
 		{
-			get { return (RedoStack.Count != 0); }
+			get { return (RedoActions.Count != 0); }
 		}
 		#endregion Properties
 
@@ -57,8 +60,8 @@ namespace yata
 		/// </summary>
 		public UndoRedo()
 		{
-			UndoStack = new Stack();
-			RedoStack = new Stack();
+			UndoActions = new Stack();
+			RedoActions = new Stack();
 		} */
 		#endregion cTor
 
@@ -66,20 +69,24 @@ namespace yata
 		#region Methods
 		public void Clear()
 		{
-			UndoStack.Clear();
-			RedoStack.Clear();
+			UndoActions.Clear();
+			RedoActions.Clear();
 
-			Current = default(T);
+//			Current = default(T);
+			Current = default(object);
 
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
 		}
 
 
-		public void Add(T it)
+//		public void Add(T it)
+		public void Add(object it)
 		{
-			if (!EqualityComparer<T>.Default.Equals(Current, default(T)))
-				UndoStack.Push((T)Current);
+//			if (!EqualityComparer<T>.Default.Equals(Current, default(T)))
+//				UndoStack.Push((T)Current);
+			if (!EqualityComparer<object>.Default.Equals(Current, default(object)))
+				UndoActions.Push((object)Current);
 
 			Current = it;
 
@@ -90,9 +97,11 @@ namespace yata
 
 		public void Undo()
 		{
-			RedoStack.Push((T)Current);
+//			RedoStack.Push((T)Current);
+			RedoActions.Push((object)Current);
 
-			Current = (T)UndoStack.Pop();
+//			Current = (T)UndoStack.Pop();
+			Current = (object)UndoActions.Pop();
 
 			if (OnUndo != null)
 				OnUndo(this, new UndoRedoEventArgs(Current));
@@ -103,9 +112,11 @@ namespace yata
 
 		public void Redo()
 		{
-			UndoStack.Push((T)Current);
+//			UndoStack.Push((T)Current);
+			UndoActions.Push((object)Current);
 
-			Current = (T)RedoStack.Pop();
+//			Current = (T)RedoStack.Pop();
+			Current = (object)RedoActions.Pop();
 			if (OnRedo != null)
 				OnRedo(this, new UndoRedoEventArgs(Current));
 
@@ -114,19 +125,25 @@ namespace yata
 		}
 
 
-		public List<T> UndoItems()
+//		public List<T> UndoItems()
+		public List<object> UndoItems()
 		{
-			var list = new List<T>();
-			foreach (T it in UndoStack)
+//			var list = new List<T>();
+//			foreach (T it in UndoStack)
+			var list = new List<object>();
+			foreach (object it in UndoActions)
 				list.Add(it);
 
 			return list;
 		}
 
-		public List<T> RedoItems()
+//		public List<T> RedoItems()
+		public List<object> RedoItems()
 		{
-			var list = new List<T>();
-			foreach (T it in RedoStack)
+//			var list = new List<T>();
+//			foreach (T it in RedoStack)
+			var list = new List<object>();
+			foreach (object it in RedoActions)
 				list.Add(it);
 
 			return list;
