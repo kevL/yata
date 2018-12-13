@@ -76,6 +76,7 @@
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="PropertyPanel.cs" />
+    <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
     <Compile Include="YataPaths.cs" />
