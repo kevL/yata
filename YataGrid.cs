@@ -75,7 +75,7 @@ namespace yata
 		/// </summary>
 		internal static Graphics graphics;
 
-//		Bitmap _bluePi = Resources.bluepixel;
+//		Bitmap _bluePi = Resources.bluepixel; // NOTE: Image drawing introduces a noticeable latency.
 //		Bitmap _piColhead;
 //		Bitmap _piRowhead;
 
@@ -155,16 +155,42 @@ namespace yata
 		}
 
 
-		static Timer _t1 = new Timer(); // hides info on the statusbar when mouse leaves the table-area
+		/// <summary>
+		/// Hides any info that's currently displayed on the statusbar when the
+		/// cursor leaves the table-area. (The OnLeave event is unreliable.)
+		/// </summary>
+		static Timer _t1 = new Timer();
 
+		/// <summary>
+		/// The text-edit box. Note there is only one (1) editor that floats to
+		/// wherever it's required.
+		/// </summary>
 		internal readonly TextBox _editor = new TextBox();
+
+		/// <summary>
+		/// The cell that's currently under the editbox.
+		/// </summary>
 		Cell _editcell;
 
+		/// <summary>
+		/// A flag that stops presumptive .NET events from firing ~50 billion.
+		/// </summary>
 		internal static bool _init;
 
+		/// <summary>
+		/// The currently sorted col. Default is #0 "id" col.
+		/// </summary>
 		internal int _sortcol;
+
+		/// <summary>
+		/// The current sort direction. Default is sorted ascending.
+		/// </summary>
 		internal int _sortdir = SORT_ASC;
 
+		/// <summary>
+		/// The quantity of rows that are flagged for an operation excluding the
+		/// currently selected row.
+		/// </summary>
 		internal int RangeSelect
 		{ get; set; }
 
@@ -1534,8 +1560,9 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles keydown events in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Alt is pressed.
+		/// Handles KeyDown events in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Alt is pressed while
+		/// editing.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1549,9 +1576,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles leave event in the cell-editor.
+		/// Handles the Leave event in the cell-editor.
 		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
-		/// pressed.
+		/// pressed while editing.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1559,15 +1586,23 @@ namespace yata
 		{
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
 			{
-				if (_editor.Visible)
-					_editor.Focus(); // ie. don't leave editor.
+				_editor.Focus(); // ie. don't leave editor.
 			}
 		}
 
+		/// <summary>
+		/// Handles the Leave event for the grid: hides the editbox if it is
+		/// visible.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void leave_Grid(object sender, EventArgs e)
 		{
-			_editor.Visible = false;
-			Refresh();
+			if (_editor.Visible)
+			{
+				_editor.Visible = false;
+				Refresh();
+			}
 		}
 
 		/// <summary>

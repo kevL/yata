@@ -1107,6 +1107,7 @@
 			this.Controls.Add(this.statusbar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.MainMenuStrip = this.menubar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";

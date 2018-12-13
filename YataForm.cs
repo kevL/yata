@@ -2319,6 +2319,37 @@ namespace yata
 				ReadonlyError();
 		}
 		#endregion Cell menu
+
+
+		#region UndoRedo
+		/// <summary>
+		/// Handles the KeyDown event on the form.
+		/// @note Requires the form's KeyPreview property flagged true in order
+		/// to handle the event if a control is focused.
+		/// @note Fires repeatedly if a key is held depressed.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			logfile.Log("OnKeyDown()");
+
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				switch (e.KeyCode)
+				{
+					case Keys.Z:
+						logfile.Log(". Ctrl+z UNDO");
+						break;
+
+					case Keys.Y:
+						logfile.Log(". Ctrl+y REDO");
+						break;
+				}
+			}
+
+//			base.OnKeyDown(e);
+		}
+		#endregion UndoRedo
 	}
 
 
