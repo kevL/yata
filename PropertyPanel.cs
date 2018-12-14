@@ -300,53 +300,49 @@ namespace yata
 				{
 					if (e.X > _widthVars)
 					{
-						int y = e.Y + _scroll.Value;
-						if (e.Y < HeightProps - _scroll.Value)
+						Cell sel = _grid.GetSelectedCell();
+						if (sel != null)
+							_r = sel.y;
+						else
+							_r = _grid.getSelectedRow();
+
+						if (_r != -1)
 						{
-							Cell sel = _grid.GetSelectedCell();
-							if (sel != null)
-								_r = sel.y;
-							else
-								_r = _grid.getSelectedRow();
+							Focus(); // snap
 
-							if (_r != -1)
+							_c = (e.Y + _scroll.Value) / _heightr;
+
+							if (sel != null && _c >= _grid.FrozenCount)
 							{
-								Focus(); // snap
-
-								_c = y / _heightr;
-
-								if (sel != null && _c >= _grid.FrozenCount)
-								{
-									sel.selected = false;
-									_grid[_r,_c].selected = true;
-								}
-
-								_grid.EnsureDisplayedCellOrRow();
-								_grid.Refresh();
-
-
-								_editRect.X      = _widthVars;
-								_editRect.Y      = _c * _heightr + 1;
-								_editRect.Width  = _widthVals;
-								_editRect.Height = _heightr - 1;
-
-								_editor.Left = _editRect.X + 5;
-								_editor.Top  = _editRect.Y + 1 - _scroll.Value;
-								_editor.Text = _grid[_r,_c].text;
-
-								_editor.Visible = true;
-								_editor.Focus();
-
-								_editor.SelectionStart = 0; // because .NET
-//								if (_editor.Text == Constants.Stars)
-//								{
-								_editor.SelectionLength = _editor.Text.Length;
-//								}
-//								else
-//									_editor.SelectionStart = _editor.Text.Length;
-
-								Refresh();
+								sel.selected = false;
+								_grid[_r,_c].selected = true;
 							}
+
+							_grid.EnsureDisplayedCellOrRow();
+							_grid.Refresh();
+
+
+							_editRect.X      = _widthVars;
+							_editRect.Y      = _c * _heightr + 1;
+							_editRect.Width  = _widthVals;
+							_editRect.Height = _heightr - 1;
+
+							_editor.Left = _editRect.X + 5;
+							_editor.Top  = _editRect.Y + 1 - _scroll.Value;
+							_editor.Text = _grid[_r,_c].text;
+
+							_editor.Visible = true;
+							_editor.Focus();
+
+							_editor.SelectionStart = 0; // because .NET
+//							if (_editor.Text == Constants.Stars)
+//							{
+							_editor.SelectionLength = _editor.Text.Length;
+//							}
+//							else
+//								_editor.SelectionStart = _editor.Text.Length;
+
+							Refresh();
 						}
 					}
 				}
