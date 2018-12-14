@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+//using System.Collections.Generic;
+//using System.ComponentModel;
 
 
 namespace yata
 {
 	// https://pradeep1210.wordpress.com/2011/04/09/add-undoredo-or-backforward-functionality-to-your-application/
 
-	public delegate void UndoHappened(object sender, UndoRedoEventArgs e);
-	public delegate void RedoHappened(object sender, UndoRedoEventArgs e);
+//	public delegate void UndoHappened(object sender, UndoRedoEventArgs e);
+//	public delegate void RedoHappened(object sender, UndoRedoEventArgs e);
 
 
 	struct Restorable
@@ -23,49 +23,51 @@ namespace yata
 
 //	public class UndoRedo<T>
 	class UndoRedo
-		:
-			INotifyPropertyChanged
+//		:
+//			INotifyPropertyChanged
 	{
 		internal const int RestoreType_None = 0;
 		internal const int RestoreType_Cell = 1;
 		internal const int RestoreType_Row  = 2;
 
-		YataGrid _grid;
+		readonly YataGrid _grid;
 
 
 		#region INotifyPropertyChanged requirements
-		public event PropertyChangedEventHandler PropertyChanged;
+/*		public event PropertyChangedEventHandler PropertyChanged;
 		
 		public void RaisePropertyChangedEvent(string property)
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
 			if (handler != null)
 				handler(this, new PropertyChangedEventArgs(property));
-		}
+		} */
 		#endregion INotifyPropertyChanged requirements
 
 
 		#region Fields
-		readonly Stack UndoActions = new Stack();
-		readonly Stack RedoActions = new Stack();
+		readonly Stack Undoables = new Stack();
+		readonly Stack Redoables = new Stack();
 
 //		public T Current;
-		public object Current;
+//		public object Current;
+		public Restorable _it;
+		public Restorable _latest;
 
 //		public event UndoHappened OnUndo;
-		public event RedoHappened OnRedo;
+//		public event RedoHappened OnRedo;
 		#endregion Fields
 
 
 		#region Properties
 		public bool CanUndo
 		{
-			get { return (UndoActions.Count != 0); }
+			get { return (Undoables.Count != 0); }
 		}
 
 		public bool CanRedo
 		{
-			get { return (RedoActions.Count != 0); }
+			get { return (Redoables.Count != 0); }
 		}
 		#endregion Properties
 
@@ -77,15 +79,12 @@ namespace yata
 		internal UndoRedo(YataGrid grid)
 		{
 			_grid = grid;
-
-			UndoActions = new Stack();
-			RedoActions = new Stack();
 		}
 		#endregion cTor
 
 
 		#region Methods
-		public void Clear()
+/*		public void Clear()
 		{
 			UndoActions.Clear();
 			RedoActions.Clear();
@@ -95,7 +94,7 @@ namespace yata
 
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
-		}
+		} */
 
 
 //		public void Add(T it)
@@ -111,9 +110,16 @@ namespace yata
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
 		} */
+
 		internal void Add(object it)
 		{
-			UndoActions.Push(it);
+			_it = (Restorable)it;
+			Undoables.Push(_it);
+		}
+
+		internal void setLatest(Restorable it)
+		{
+			_latest = it;
 		}
 
 
@@ -133,18 +139,17 @@ namespace yata
 		} */
 		internal void Undo()
 		{
-			var it = (Restorable)UndoActions.Pop();
+			if (Redoables.Count != 0)
+				Redoables.Push(_it);
+			else
+				Redoables.Push(_latest);
 
-			switch (it.RestoreType)
+			_it = (Restorable)Undoables.Pop();
+
+			switch (_it.RestoreType)
 			{
 				case RestoreType_Cell:
-					_grid.Changed &= it.Changed;
-					_grid[it.cell.y, it.cell.x] = it.cell;
-
-					_grid.colRewidth(it.cell.x, it.cell.y);
-					_grid.UpdateFrozenControls(it.cell.x);
-
-					_grid._f.Refresh();
+					RestoreCell();
 					break;
 
 				default:
@@ -152,7 +157,7 @@ namespace yata
 			}
 		}
 
-		public void Redo()
+/*		public void Redo()
 		{
 //			UndoStack.Push((T)Current);
 			UndoActions.Push((object)Current);
@@ -164,11 +169,41 @@ namespace yata
 
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
+		} */
+		public void Redo()
+		{
+			Undoables.Push(_it);
+
+			if (Redoables.Count != 0)
+				_it = (Restorable)Redoables.Pop();
+			else
+				_it = _latest;
+
+			switch (_it.RestoreType)
+			{
+				case RestoreType_Cell:
+					RestoreCell();
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		void RestoreCell()
+		{
+			_grid.Changed &= _it.Changed;
+			_grid[_it.cell.y, _it.cell.x] = _it.cell;
+
+			_grid.colRewidth(_it.cell.x, _it.cell.y);
+			_grid.UpdateFrozenControls(_it.cell.x);
+
+			_grid._f.Refresh();
 		}
 
 
 //		public List<T> UndoItems()
-		public List<object> UndoItems()
+/*		public List<object> UndoItems()
 		{
 //			var list = new List<T>();
 //			foreach (T it in UndoStack)
@@ -177,10 +212,9 @@ namespace yata
 				list.Add(it);
 
 			return list;
-		}
-
+		} */
 //		public List<T> RedoItems()
-		public List<object> RedoItems()
+/*		public List<object> RedoItems()
 		{
 //			var list = new List<T>();
 //			foreach (T it in RedoStack)
@@ -189,13 +223,13 @@ namespace yata
 				list.Add(it);
 
 			return list;
-		}
+		} */
 		#endregion Methods
 	}
 
 
 	#region EventArgs
-	public class UndoRedoEventArgs
+/*	public class UndoRedoEventArgs
 		:
 			EventArgs
 	{
@@ -209,6 +243,6 @@ namespace yata
 		{
 			_current = current;
 		}
-	}
+	} */
 	#endregion EventArgs
 }

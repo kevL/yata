@@ -1674,6 +1674,13 @@ namespace yata
 
 				colRewidth(_editcell.x, _editcell.y);
 				UpdateFrozenControls(_editcell.x);
+
+
+				it = new Restorable();
+				it.RestoreType = UndoRedo.RestoreType_Cell;
+				it.Changed = true;
+				it.cell = this[_editcell.y, _editcell.x].Clone() as Cell;
+				_ur.setLatest(it);
 			}
 		}
 

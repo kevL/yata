@@ -49,6 +49,8 @@ namespace yata
 	/// Contains data about a row.
 	/// </summary>
 	sealed class Row
+		:
+			ICloneable
 	{
 		internal int _id;
 
@@ -88,6 +90,13 @@ namespace yata
 
 			_brush = brush;
 		}
+
+		#region ICloneable requirements
+		public object Clone()
+		{
+			return MemberwiseClone();
+		}
+		#endregion ICloneable requirements
 	}
 
 	/// <summary>
