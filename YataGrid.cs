@@ -196,9 +196,7 @@ namespace yata
 
 		internal PropertyPanel _propanel;
 
-		#region UndoRedo
 		internal UndoRedo _ur;
-		#endregion UndoRedo
 
 
 		/// <summary>

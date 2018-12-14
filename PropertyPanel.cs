@@ -456,14 +456,14 @@ namespace yata
 				var it = new Restorable();
 				it.RestoreType = UndoRedo.RestoreType_Cell;
 				it.Changed = _grid.Changed;
-				it.cell = _grid[cell.y, cell.x].Clone() as Cell;
+				it.cell = cell.Clone() as Cell;
 				_grid._ur.Add(it);
 
 				_grid._f.EnableUndo(true);
 
 
 				_grid.Changed = true;
-				_grid[_r,_c].loadchanged = false;
+				cell.loadchanged = false;
 
 				if (YataGrid.CheckTextEdit(_editor))
 					MessageBox.Show("The text that was submitted has been altered.",
@@ -472,7 +472,7 @@ namespace yata
 									MessageBoxIcon.Exclamation,
 									MessageBoxDefaultButton.Button1);
 
-				_grid[_r,_c].text = _editor.Text;
+				cell.text = _editor.Text;
 
 				_grid.colRewidth(_c, _r);
 				_grid.UpdateFrozenControls(_c);

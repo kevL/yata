@@ -133,7 +133,7 @@ namespace yata
 		} */
 		internal void Undo()
 		{
-			var it = ((Restorable)UndoActions.Pop());
+			var it = (Restorable)UndoActions.Pop();
 
 			switch (it.RestoreType)
 			{

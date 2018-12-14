@@ -1119,8 +1119,6 @@ namespace yata
 
 		void editclick_Undo(object sender, EventArgs e)
 		{
-			logfile.Log(". Ctrl+z UNDO");
-
 			if (Table != null)
 			{
 				Table._ur.Undo();
@@ -1130,8 +1128,6 @@ namespace yata
 
 		void editclick_Redo(object sender, EventArgs e)
 		{
-			logfile.Log(". Ctrl+y REDO");
-
 			if (Table != null)
 			{
 				Table._ur.Redo();
