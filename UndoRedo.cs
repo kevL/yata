@@ -84,17 +84,20 @@ namespace yata
 
 
 		#region Methods
-/*		public void Clear()
+		internal void Clear()
 		{
-			UndoActions.Clear();
-			RedoActions.Clear();
+			Undoables.Clear();
+			Redoables.Clear();
+
+//			_it = null;
+//			_latest = null;
 
 //			Current = default(T);
-			Current = default(object);
+//			Current = default(object);
 
-			RaisePropertyChangedEvent("CanUndo");
-			RaisePropertyChangedEvent("CanRedo");
-		} */
+//			RaisePropertyChangedEvent("CanUndo");
+//			RaisePropertyChangedEvent("CanRedo");
+		}
 
 
 //		public void Add(T it)

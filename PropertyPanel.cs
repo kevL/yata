@@ -472,6 +472,13 @@ namespace yata
 
 				_grid.colRewidth(_c, _r);
 				_grid.UpdateFrozenControls(_c);
+
+
+				it = new Restorable();
+				it.RestoreType = UndoRedo.RestoreType_Cell;
+				it.Changed = true;
+				it.cell = cell.Clone() as Cell;
+				_grid._ur.setLatest(it);
 			}
 		}
 

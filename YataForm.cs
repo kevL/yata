@@ -641,6 +641,11 @@ namespace yata
 				int result = Table.Load2da();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
+					Table._ur.Clear();
+
+					it_Undo.Enabled =
+					it_Redo.Enabled = false;
+
 					it_freeze1.Checked =
 					it_freeze2.Checked = false;
 
@@ -1073,8 +1078,8 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			it_Undo.Enabled = (Table != null && Table._ur.CanUndo);
-			it_Redo.Enabled = (Table != null && Table._ur.CanRedo);
+//			it_Undo.Enabled = (Table != null && Table._ur.CanUndo);
+//			it_Redo.Enabled = (Table != null && Table._ur.CanRedo);
 
 			it_Findnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
@@ -1123,6 +1128,7 @@ namespace yata
 			{
 				Table._ur.Undo();
 				it_Undo.Enabled = Table._ur.CanUndo;
+				it_Redo.Enabled = true;
 			}
 		}
 
