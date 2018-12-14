@@ -410,6 +410,9 @@ namespace yata
 
 				ShowColorPanel(false);
 
+				it_Undo.Enabled = Table._ur.CanUndo;
+				it_Redo.Enabled = Table._ur.CanRedo;
+
 				it_MenuPaths.Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
 
 				it_freeze1.Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
@@ -420,6 +423,9 @@ namespace yata
 			else
 			{
 				ShowColorPanel();
+
+				it_Undo.Enabled =
+				it_Redo.Enabled = false;
 
 				it_MenuPaths.Visible = false;
 
@@ -1067,6 +1073,9 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
+			it_Undo.Enabled = (Table != null && Table._ur.CanUndo);
+			it_Redo.Enabled = (Table != null && Table._ur.CanRedo);
+
 			it_Findnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
 			it_GotoLoadchanged.Enabled = false;
@@ -1106,6 +1115,40 @@ namespace yata
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
 		}
+
+
+		void editclick_Undo(object sender, EventArgs e)
+		{
+			logfile.Log(". Ctrl+z UNDO");
+
+			if (Table != null)
+			{
+				Table._ur.Undo();
+				it_Undo.Enabled = Table._ur.CanUndo;
+			}
+		}
+
+		void editclick_Redo(object sender, EventArgs e)
+		{
+			logfile.Log(". Ctrl+y REDO");
+
+			if (Table != null)
+			{
+				Table._ur.Redo();
+				it_Redo.Enabled = Table._ur.CanRedo;
+			}
+		}
+
+		internal void EnableUndo(bool enable)
+		{
+			it_Undo.Enabled = enable;
+		}
+
+		internal void EnableRedo(bool enable)
+		{
+			it_Redo.Enabled = enable;
+		}
+
 
 		void textchanged_Search(object sender, EventArgs e)
 		{
@@ -2322,10 +2365,7 @@ namespace yata
 		#endregion Cell menu
 
 
-		#region UndoRedo
-		UndoRedo _urHandler = new UndoRedo();
-
-		/// <summary>
+/*		/// <summary>
 		/// Handles the KeyDown event on the form.
 		/// @note Requires the form's KeyPreview property flagged true in order
 		/// to handle the event if a control is focused.
@@ -2343,20 +2383,19 @@ namespace yata
 					case Keys.Z:
 						logfile.Log(". Ctrl+z UNDO");
 
-						_urHandler.Undo();
+						_ur.Undo();
 						break;
 
 					case Keys.Y:
 						logfile.Log(". Ctrl+y REDO");
 
-						_urHandler.Redo();
+						_ur.Redo();
 						break;
 				}
 			}
 
 //			base.OnKeyDown(e);
-		}
-		#endregion UndoRedo
+		} */
 	}
 
 

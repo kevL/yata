@@ -107,6 +107,9 @@
 		private System.Windows.Forms.ToolStripSeparator separator_17;
 		private System.Windows.Forms.ToolStripMenuItem it_ppOnOff;
 		private System.Windows.Forms.ToolStripMenuItem it_ppTopBot;
+		private System.Windows.Forms.ToolStripMenuItem it_Undo;
+		private System.Windows.Forms.ToolStripMenuItem it_Redo;
+		private System.Windows.Forms.ToolStripSeparator separator_18;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -157,6 +160,9 @@
 			this.separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Quit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Undo = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Redo = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -437,6 +443,9 @@
 			// 
 			this.it_MenuEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_Undo,
+			this.it_Redo,
+			this.separator_18,
 			this.it_Search,
 			this.it_Findnext,
 			this.separator_3,
@@ -455,6 +464,29 @@
 			this.it_MenuEdit.Size = new System.Drawing.Size(40, 20);
 			this.it_MenuEdit.Text = "Edit";
 			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
+			// 
+			// it_Undo
+			// 
+			this.it_Undo.Enabled = false;
+			this.it_Undo.Name = "it_Undo";
+			this.it_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+			this.it_Undo.Size = new System.Drawing.Size(222, 22);
+			this.it_Undo.Text = "Undo";
+			this.it_Undo.Click += new System.EventHandler(this.editclick_Undo);
+			// 
+			// it_Redo
+			// 
+			this.it_Redo.Enabled = false;
+			this.it_Redo.Name = "it_Redo";
+			this.it_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+			this.it_Redo.Size = new System.Drawing.Size(222, 22);
+			this.it_Redo.Text = "Redo";
+			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
+			// 
+			// separator_18
+			// 
+			this.separator_18.Name = "separator_18";
+			this.separator_18.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_Search
 			// 
@@ -619,6 +651,7 @@
 			// it_RenumberRows
 			// 
 			this.it_RenumberRows.Name = "it_RenumberRows";
+			this.it_RenumberRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.it_RenumberRows.Size = new System.Drawing.Size(241, 22);
 			this.it_RenumberRows.Text = "order row ids";
 			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
@@ -626,6 +659,7 @@
 			// it_CheckRows
 			// 
 			this.it_CheckRows.Name = "it_CheckRows";
+			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
 			this.it_CheckRows.Size = new System.Drawing.Size(241, 22);
 			this.it_CheckRows.Text = "test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
@@ -638,6 +672,7 @@
 			// it_RecolorRows
 			// 
 			this.it_RecolorRows.Name = "it_RecolorRows";
+			this.it_RecolorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.it_RecolorRows.Size = new System.Drawing.Size(241, 22);
 			this.it_RecolorRows.Text = "recolor rows";
 			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
@@ -645,6 +680,7 @@
 			// it_AutoCols
 			// 
 			this.it_AutoCols.Name = "it_AutoCols";
+			this.it_AutoCols.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
 			this.it_AutoCols.Size = new System.Drawing.Size(241, 22);
 			this.it_AutoCols.Text = "autosize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
@@ -1107,7 +1143,6 @@
 			this.Controls.Add(this.statusbar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = global::yata.Properties.Resources.yata_icon;
-			this.KeyPreview = true;
 			this.MainMenuStrip = this.menubar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";

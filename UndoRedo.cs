@@ -12,11 +12,27 @@ namespace yata
 	public delegate void RedoHappened(object sender, UndoRedoEventArgs e);
 
 
+	struct Restorable
+	{
+		internal int RestoreType;
+		internal bool Changed;
+
+		internal Cell cell;
+	}
+
+
 //	public class UndoRedo<T>
-	public class UndoRedo
+	class UndoRedo
 		:
 			INotifyPropertyChanged
 	{
+		internal const int RestoreType_None = 0;
+		internal const int RestoreType_Cell = 1;
+		internal const int RestoreType_Row  = 2;
+
+		YataGrid _grid;
+
+
 		#region INotifyPropertyChanged requirements
 		public event PropertyChangedEventHandler PropertyChanged;
 		
@@ -36,7 +52,7 @@ namespace yata
 //		public T Current;
 		public object Current;
 
-		public event UndoHappened OnUndo;
+//		public event UndoHappened OnUndo;
 		public event RedoHappened OnRedo;
 		#endregion Fields
 
@@ -55,14 +71,16 @@ namespace yata
 
 
 		#region cTor
-/*		/// <summary>
+		/// <summary>
 		/// cTor.
 		/// </summary>
-		public UndoRedo()
+		internal UndoRedo(YataGrid grid)
 		{
+			_grid = grid;
+
 			UndoActions = new Stack();
 			RedoActions = new Stack();
-		} */
+		}
 		#endregion cTor
 
 
@@ -81,7 +99,7 @@ namespace yata
 
 
 //		public void Add(T it)
-		public void Add(object it)
+/*		public void Add(object it)
 		{
 //			if (!EqualityComparer<T>.Default.Equals(Current, default(T)))
 //				UndoStack.Push((T)Current);
@@ -92,10 +110,14 @@ namespace yata
 
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
+		} */
+		internal void Add(object it)
+		{
+			UndoActions.Push(it);
 		}
 
 
-		public void Undo()
+/*		public void Undo()
 		{
 //			RedoStack.Push((T)Current);
 			RedoActions.Push((object)Current);
@@ -108,6 +130,26 @@ namespace yata
 
 			RaisePropertyChangedEvent("CanUndo");
 			RaisePropertyChangedEvent("CanRedo");
+		} */
+		internal void Undo()
+		{
+			var it = ((Restorable)UndoActions.Pop());
+
+			switch (it.RestoreType)
+			{
+				case RestoreType_Cell:
+					_grid.Changed &= it.Changed;
+					_grid[it.cell.y, it.cell.x] = it.cell;
+
+					_grid.colRewidth(it.cell.x, it.cell.y);
+					_grid.UpdateFrozenControls(it.cell.x);
+
+					_grid._f.Refresh();
+					break;
+
+				default:
+					break;
+			}
 		}
 
 		public void Redo()

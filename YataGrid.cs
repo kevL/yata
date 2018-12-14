@@ -196,6 +196,10 @@ namespace yata
 
 		internal PropertyPanel _propanel;
 
+		#region UndoRedo
+		internal UndoRedo _ur;
+		#endregion UndoRedo
+
 
 		/// <summary>
 		/// cTor.
@@ -246,6 +250,8 @@ namespace yata
 			AllowDrop = true;
 			DragEnter += grid_DragEnter;
 			DragDrop  += grid_DragDrop;
+
+			_ur = new UndoRedo(this);
 		}
 
 
@@ -1647,8 +1653,16 @@ namespace yata
 		{
 			if (_editor.Text != _editcell.text)
 			{
-				Changed = true;
+				var it = new Restorable();
+				it.RestoreType = UndoRedo.RestoreType_Cell;
+				it.Changed = Changed;
+				it.cell = this[_editcell.y, _editcell.x].Clone() as Cell;
+				_ur.Add(it);
 
+				_f.EnableUndo(true);
+
+
+				Changed = true;
 				_editcell.loadchanged = false;
 
 				if (CheckTextEdit(_editor))

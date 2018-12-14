@@ -450,10 +450,19 @@ namespace yata
 		/// </summary>
 		void ApplyTextEdit()
 		{
-			if (_editor.Text != _grid[_r,_c].text)
+			var cell = _grid[_r,_c];
+			if (_editor.Text != cell.text)
 			{
-				_grid.Changed = true;
+				var it = new Restorable();
+				it.RestoreType = UndoRedo.RestoreType_Cell;
+				it.Changed = _grid.Changed;
+				it.cell = _grid[cell.y, cell.x].Clone() as Cell;
+				_grid._ur.Add(it);
 
+				_grid._f.EnableUndo(true);
+
+
+				_grid.Changed = true;
 				_grid[_r,_c].loadchanged = false;
 
 				if (YataGrid.CheckTextEdit(_editor))

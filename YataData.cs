@@ -94,6 +94,8 @@ namespace yata
 	/// Contains data about a cell.
 	/// </summary>
 	sealed class Cell
+		:
+			ICloneable
 	{
 		internal string text; // the cell's text
 
@@ -112,9 +114,11 @@ namespace yata
 			text = field;
 		}
 
-//		struct Restorable
-//		{
-//			string text;
-//		}
+		#region ICloneable requirements
+		public object Clone()
+		{
+			return MemberwiseClone();
+		}
+		#endregion ICloneable requirements
 	}
 }
