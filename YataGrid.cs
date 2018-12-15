@@ -1651,12 +1651,7 @@ namespace yata
 		{
 			if (_editor.Text != _editcell.text)
 			{
-				var it = new Restorable();
-				it.RestoreType = UndoRedo.RestoreType_Cell;
-				it.Changed = Changed;
-				it.cell = this[_editcell.y, _editcell.x].Clone() as Cell;
-				_ur.Add(it);
-
+				_ur.Push(_ur.createRestorableCell(_editcell));
 				_f.EnableUndo(true);
 
 
@@ -1676,11 +1671,7 @@ namespace yata
 				UpdateFrozenControls(_editcell.x);
 
 
-				it = new Restorable();
-				it.RestoreType = UndoRedo.RestoreType_Cell;
-				it.Changed = true;
-				it.cell = this[_editcell.y, _editcell.x].Clone() as Cell;
-				_ur.setLatest(it);
+				_ur.State = _ur.createRestorableCell(_editcell);
 			}
 		}
 

@@ -449,12 +449,7 @@ namespace yata
 			var cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
 			{
-				var it = new Restorable();
-				it.RestoreType = UndoRedo.RestoreType_Cell;
-				it.Changed = _grid.Changed;
-				it.cell = cell.Clone() as Cell;
-				_grid._ur.Add(it);
-
+				_grid._ur.Push(_grid._ur.createRestorableCell(cell));
 				_grid._f.EnableUndo(true);
 
 
@@ -474,11 +469,7 @@ namespace yata
 				_grid.UpdateFrozenControls(_c);
 
 
-				it = new Restorable();
-				it.RestoreType = UndoRedo.RestoreType_Cell;
-				it.Changed = true;
-				it.cell = cell.Clone() as Cell;
-				_grid._ur.setLatest(it);
+				_grid._ur.State = _grid._ur.createRestorableCell(cell);
 			}
 		}
 

@@ -129,5 +129,24 @@ namespace yata
 			return MemberwiseClone();
 		}
 		#endregion ICloneable requirements
+
+
+		public override string ToString()
+		{
+			return String.Format("Cell:{0}"
+							   + ". text= {1}{0}"
+							   + ". y= {2}{0}"
+							   + ". x= {3}{0}"
+							   + ". selected= {4}{0}"
+							   + ". loadchanged= {5}{0}"
+							   + ". _widthtext {6}",
+								 Environment.NewLine,
+								 text,
+								 y,
+								 x,
+								 selected,
+								 loadchanged,
+								 _widthtext);
+		}
 	}
 }

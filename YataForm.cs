@@ -1138,6 +1138,7 @@ namespace yata
 			{
 				Table._ur.Redo();
 				it_Redo.Enabled = Table._ur.CanRedo;
+				it_Undo.Enabled = true;
 			}
 		}
 
@@ -2349,6 +2350,10 @@ namespace yata
 				{
 					if (cell.text != Constants.Stars)
 					{
+						Table._ur.Push(Table._ur.createRestorableCell(cell));
+						Table._f.EnableUndo(true);
+
+
 						cell.text = Constants.Stars;
 
 						Table.Changed = true;
@@ -2356,6 +2361,9 @@ namespace yata
 
 						Table.colRewidth(cell.x, cell.y);
 						Table.UpdateFrozenControls(cell.x);
+
+
+						Table._ur.State = Table._ur.createRestorableCell(cell);
 					}
 				}
 				else
