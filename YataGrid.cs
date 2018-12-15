@@ -1645,35 +1645,47 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets an edited cell's text and recalculates col-width.
+		/// @note Warper for ChangeCellText().
 		/// </summary>
 		void ApplyTextEdit()
 		{
-			if (_editor.Text != _editcell.text)
-			{
-				_ur.Push(_ur.createRestorableCell(_editcell));
-				_f.EnableUndo(true);
-
-
-				Changed = true;
-				_editcell.loadchanged = false;
-
-				if (CheckTextEdit(_editor))
-					MessageBox.Show("The text that was submitted has been altered.",
-									"burp",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Exclamation,
-									MessageBoxDefaultButton.Button1);
-
-				_editcell.text = _editor.Text;
-
-				colRewidth(_editcell.x, _editcell.y);
-				UpdateFrozenControls(_editcell.x);
-
-
-				_ur.State = _ur.createRestorableCell(_editcell);
-			}
+			string text = _editor.Text;
+			if (text != _editcell.text)
+				ChangeCellText(_editcell, text, _editor);
 		}
+
+		/// <summary>
+		/// Changes a cell's text and recalculates col-width.
+		/// </summary>
+		/// <param name="cell">a Cell</param>
+		/// <param name="text">the text to change to</param>
+		/// <param name="editor">the editor's textbox whose text to check for
+		/// validity (default null to bypass the text-check)</param>
+		internal void ChangeCellText(Cell cell, string text, Control editor = null)
+		{
+			_ur.Push(_ur.createRestorableCell(cell));
+			_f.EnableUndo(true);
+
+
+			Changed = true;
+			cell.loadchanged = false;
+
+			if (editor != null && CheckTextEdit(editor))
+				MessageBox.Show("The text that was submitted has been altered.",
+								"burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation,
+								MessageBoxDefaultButton.Button1);
+
+			cell.text = text;
+
+			colRewidth(cell.x, cell.y);
+			UpdateFrozenControls(cell.x);
+
+
+			_ur.State = _ur.createRestorableCell(cell);
+		}
+
 
 		/// <summary>
 		/// Resets the width of col based on the cells in rows r to r + range.

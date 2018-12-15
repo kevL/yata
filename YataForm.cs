@@ -1490,22 +1490,7 @@ namespace yata
 					if (cell != null)
 					{
 						if (cell.text != _copytext)
-						{
-							Table._ur.Push(Table._ur.createRestorableCell(cell));
-							Table._f.EnableUndo(true);
-
-
-							cell.text = _copytext;
-
-							Table.Changed = true;
-							cell.loadchanged = false;
-
-							Table.colRewidth(cell.x, cell.y);
-							Table.UpdateFrozenControls(cell.x);
-
-
-							Table._ur.State = Table._ur.createRestorableCell(cell);
-						}
+							Table.ChangeCellText(cell, _copytext);
 					}
 					else
 						CopyPasteCellError();
@@ -2356,22 +2341,7 @@ namespace yata
 				if (cell != null)
 				{
 					if (cell.text != Constants.Stars)
-					{
-						Table._ur.Push(Table._ur.createRestorableCell(cell));
-						Table._f.EnableUndo(true);
-
-
-						cell.text = Constants.Stars;
-
-						Table.Changed = true;
-						cell.loadchanged = false;
-
-						Table.colRewidth(cell.x, cell.y);
-						Table.UpdateFrozenControls(cell.x);
-
-
-						Table._ur.State = Table._ur.createRestorableCell(cell);
-					}
+						Table.ChangeCellText(cell, Constants.Stars);
 				}
 				else
 					CopyPasteCellError();

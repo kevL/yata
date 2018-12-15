@@ -442,35 +442,13 @@ namespace yata
 
 		/// <summary>
 		/// Sets an edited cell's text and recalculates col-width.
-		/// Cf YataGrid.ApplyTextEdit().
 		/// </summary>
 		void ApplyTextEdit()
 		{
 			var cell = _grid[_r,_c];
-			if (_editor.Text != cell.text)
-			{
-				_grid._ur.Push(_grid._ur.createRestorableCell(cell));
-				_grid._f.EnableUndo(true);
-
-
-				_grid.Changed = true;
-				cell.loadchanged = false;
-
-				if (YataGrid.CheckTextEdit(_editor))
-					MessageBox.Show("The text that was submitted has been altered.",
-									"burp",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Exclamation,
-									MessageBoxDefaultButton.Button1);
-
-				cell.text = _editor.Text;
-
-				_grid.colRewidth(_c, _r);
-				_grid.UpdateFrozenControls(_c);
-
-
-				_grid._ur.State = _grid._ur.createRestorableCell(cell);
-			}
+			string text = _editor.Text;
+			if (text != cell.text)
+				_grid.ChangeCellText(cell, text, _editor);
 		}
 
 
