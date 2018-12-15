@@ -25,25 +25,25 @@ namespace yata
 		#region Fields
 		readonly YataGrid _grid;
 
-		readonly Stack Undoables = new Stack(); // state that can be Undone to
-		readonly Stack Redoables = new Stack(); // state that can be Redone to
+		readonly Stack Undoables = new Stack(); // states that can be Undone to
+		readonly Stack Redoables = new Stack(); // states that can be Redone to
 
 		/// <summary>
 		/// '_it' is the state that the user has most recently invoked by either
 		/// Undo() or Redo().
 		/// </summary>
 		Restorable _it;
+		#endregion Fields
 
+
+		#region Properties
 		/// <summary>
 		/// State of a Cell as user sees it. It will not be pushed onto either
 		/// stack unless user invokes Undo() or Redo().
 		/// </summary>
 		internal Restorable State
 		{ private get; set; }
-		#endregion Fields
 
-
-		#region Properties
 		internal bool CanUndo
 		{
 			get { return (Undoables.Count != 0); }
