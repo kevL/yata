@@ -110,6 +110,7 @@
 		private System.Windows.Forms.ToolStripMenuItem it_Undo;
 		private System.Windows.Forms.ToolStripMenuItem it_Redo;
 		private System.Windows.Forms.ToolStripSeparator separator_18;
+		private System.Windows.Forms.ToolStripMenuItem it_ClearUndoRedo;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -162,6 +163,7 @@
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Undo = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Redo = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClearUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
@@ -445,6 +447,7 @@
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Undo,
 			this.it_Redo,
+			this.it_ClearUndoRedo,
 			this.separator_18,
 			this.it_Search,
 			this.it_Findnext,
@@ -482,6 +485,13 @@
 			this.it_Redo.Size = new System.Drawing.Size(222, 22);
 			this.it_Redo.Text = "Redo";
 			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
+			// 
+			// it_ClearUndoRedo
+			// 
+			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
+			this.it_ClearUndoRedo.Size = new System.Drawing.Size(222, 22);
+			this.it_ClearUndoRedo.Text = "clear undo/redo";
+			this.it_ClearUndoRedo.Click += new System.EventHandler(this.editclick_ClearUndoRedo);
 			// 
 			// separator_18
 			// 

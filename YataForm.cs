@@ -1080,6 +1080,8 @@ namespace yata
 		{
 //			it_Undo.Enabled = (Table != null && Table._ur.CanUndo);
 //			it_Redo.Enabled = (Table != null && Table._ur.CanRedo);
+			it_ClearUndoRedo.Enabled = Table != null
+									&& (Table._ur.CanUndo || Table._ur.CanRedo);
 
 			it_Findnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
@@ -1150,6 +1152,20 @@ namespace yata
 		internal void EnableRedo(bool enable)
 		{
 			it_Redo.Enabled = enable;
+		}
+
+		void editclick_ClearUndoRedo(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				Table._ur.Clear();
+				it_Undo.Enabled =
+				it_Redo.Enabled = false;
+
+//				it_ClearUndoRedo.Enabled = false; // not needed since there isn't a hotkey.
+
+				// TODO: force GC
+			}
 		}
 
 

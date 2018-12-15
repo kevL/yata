@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 dec 10
+2018 dec 14
 kevL's
-ver 2.6.0.0
+ver 2.7.2.0
 
 
 File
@@ -23,6 +23,11 @@ File
 
 
 Edit
+- Undo : Ctrl+z
+- Redo : Ctrl+y
+- clear undo/redo (the undo/redo stacks can stack up over a long session; if so
+                   clear this when you're running low on RAM)
+
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3
 
