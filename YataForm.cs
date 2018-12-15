@@ -27,7 +27,7 @@ namespace yata
 		{ get; set; }
 
 		List<string[]> _copy = new List<string[]>();
-		string _copycell = String.Empty;
+		string _copytext = String.Empty;
 
 		string _preset = String.Empty;
 
@@ -1473,7 +1473,7 @@ namespace yata
 				Cell cell = Table.GetSelectedCell();
 				if (cell != null)
 				{
-					_copycell = cell.text;
+					_copytext = cell.text;
 				}
 				else
 					CopyPasteCellError();
@@ -1489,15 +1489,22 @@ namespace yata
 					Cell cell = Table.GetSelectedCell();
 					if (cell != null)
 					{
-						if (cell.text != _copycell)
+						if (cell.text != _copytext)
 						{
-							cell.text = _copycell;
+							Table._ur.Push(Table._ur.createRestorableCell(cell));
+							Table._f.EnableUndo(true);
+
+
+							cell.text = _copytext;
 
 							Table.Changed = true;
 							cell.loadchanged = false;
 
 							Table.colRewidth(cell.x, cell.y);
 							Table.UpdateFrozenControls(cell.x);
+
+
+							Table._ur.State = Table._ur.createRestorableCell(cell);
 						}
 					}
 					else
