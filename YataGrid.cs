@@ -1645,7 +1645,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// @note Warper for ChangeCellText().
+		/// Calls ChangeCellText().
 		/// </summary>
 		void ApplyTextEdit()
 		{
@@ -1655,7 +1655,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Changes a cell's text and recalculates col-width.
+		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="text">the text to change to</param>

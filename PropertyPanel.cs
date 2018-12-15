@@ -441,7 +441,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets an edited cell's text and recalculates col-width.
+		/// Calls YataGrid.ChangeCellText().
 		/// </summary>
 		void ApplyTextEdit()
 		{
