@@ -10,16 +10,19 @@ namespace yata
 		internal bool Changed;
 
 		internal Cell cell;
-		internal Row row;
+
+		internal Row rInsert;
+		internal int rDelete;
 	}
 
 
 	class UndoRedo
 	{
 		#region Fields (static)
-		internal const int RestoreType_None = 0;
-		internal const int RestoreType_Cell = 1;
-		internal const int RestoreType_Row  = 2;
+		internal const int RestoreType_None       = 0;
+		internal const int RestoreType_Cell       = 1;
+		internal const int RestoreType_RowInsert  = 2;
+		internal const int RestoreType_RowDelete  = 3;
 		#endregion Fields (static)
 
 
@@ -78,27 +81,42 @@ namespace yata
 
 		internal Restorable createRestorableCell(ICloneable cell)
 		{
-			//logfile.Log("\ncreateRestorableCell() u= " + Undoables.Count + " r= " + Redoables.Count);
-
 			Restorable it;
 			it.RestoreType = UndoRedo.RestoreType_Cell;
 			it.Changed = _grid.Changed;
-			it.cell = cell.Clone() as Cell;
-			it.row = null;
 
-			//logfile.Log(". it.Changed= " + it.Changed);
-			//logfile.Log(it.cell.ToString());
+			it.cell = cell.Clone() as Cell;
+
+			it.rInsert = null;
+			it.rDelete = -1;
 
 			return it;
 		}
 
-		internal Restorable createRestorableRow(ICloneable row)
+		internal Restorable createRestorableRowInsert(ICloneable row)
 		{
 			Restorable it;
-			it.RestoreType = UndoRedo.RestoreType_Row;
+			it.RestoreType = UndoRedo.RestoreType_RowInsert;
 			it.Changed = _grid.Changed;
-			it.row = row.Clone() as Row;
+
+			it.rInsert = row.Clone() as Row;
+
 			it.cell = null;
+			it.rDelete = -1;
+
+			return it;
+		}
+
+		internal Restorable createRestorableRowDelete(int r)
+		{
+			Restorable it;
+			it.RestoreType = UndoRedo.RestoreType_RowDelete;
+			it.Changed = _grid.Changed;
+
+			it.rDelete = r;
+
+			it.cell = null;
+			it.rInsert = null;
 
 			return it;
 		}
@@ -113,15 +131,24 @@ namespace yata
 
 		internal void Undo()
 		{
-			//logfile.Log("\nUndo()");
-
 			_it = (Restorable)Undoables.Pop();
+
+			_grid.Changed &= _it.Changed;
 
 			switch (_it.RestoreType)
 			{
 				case RestoreType_Cell:
-					_grid.Changed &= _it.Changed;
 					RestoreCell();
+					break;
+
+				case RestoreType_RowInsert:
+					InsertRow();
+
+					break;
+
+				case RestoreType_RowDelete:
+					DeleteRow();
+
 					break;
 
 				default:
@@ -134,15 +161,24 @@ namespace yata
 
 		public void Redo()
 		{
-			//logfile.Log("\nRedo()");
-
 			_it = (Restorable)Redoables.Pop();
+
+			_grid.Changed |= _it.Changed;
 
 			switch (_it.RestoreType)
 			{
 				case RestoreType_Cell:
-					_grid.Changed |= _it.Changed;
 					RestoreCell();
+					break;
+
+				case RestoreType_RowInsert:
+					InsertRow();
+
+					break;
+
+				case RestoreType_RowDelete:
+					DeleteRow();
+
 					break;
 
 				default:
@@ -161,6 +197,30 @@ namespace yata
 			_grid.UpdateFrozenControls(_it.cell.x);
 
 			_grid._f.Refresh();
+		}
+
+		void InsertRow()
+		{
+				_grid.SetProHori();
+
+				var fields = new string[_grid.ColCount];
+				for (int i = 0; i != _grid.ColCount; ++i)
+					fields[i] = _it.rInsert[i].text;
+
+				_grid.Insert(_it.rInsert._id, fields);
+
+				_grid.Refresh();
+				_grid._proHori = 0;
+		}
+
+		void DeleteRow()
+		{
+			_grid.SetProHori();
+
+			_grid.Insert(_it.rDelete, null);
+
+			_grid.Refresh();
+			_grid._proHori = 0;
 		}
 		#endregion Methods
 	}

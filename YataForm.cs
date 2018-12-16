@@ -932,8 +932,8 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-//				Table._ur.Push(Table._ur.createRestorableRow(row));
-//				Table._f.EnableUndo(true);
+				Table._ur.Push(Table._ur.createRestorableRowDelete(_r));
+				Table._f.EnableUndo(true);
 
 
 				Table.SetProHori();
@@ -945,7 +945,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-//				Table._ur.State = Table._ur.createRestorableCell(cell);
+				Table._ur.State = Table._ur.createRestorableRowInsert(Table.Rows[_r]);
 			}
 			else
 				ReadonlyError();
@@ -1524,7 +1524,10 @@ namespace yata
 					if (cell != null)
 					{
 						if (cell.text != _copytext)
+						{
 							Table.ChangeCellText(cell, _copytext);
+							Table.Refresh();
+						}
 					}
 					else
 						CopyPasteCellError();
