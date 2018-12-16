@@ -441,14 +441,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Calls YataGrid.ChangeCellText().
+		/// Applies a text-edit via the editbox.
 		/// </summary>
 		void ApplyTextEdit()
 		{
 			var cell = _grid[_r,_c];
 			string text = _editor.Text;
 			if (text != cell.text)
-				_grid.ChangeCellText(cell, text, _editor);
+				_grid.ChangeCellText(cell, _editor);
 		}
 
 

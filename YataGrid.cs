@@ -1645,23 +1645,21 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Calls ChangeCellText().
+		/// Applies a text-edit via the editbox.
 		/// </summary>
 		void ApplyTextEdit()
 		{
 			string text = _editor.Text;
 			if (text != _editcell.text)
-				ChangeCellText(_editcell, text, _editor);
+				ChangeCellText(_editcell, _editor);
 		}
 
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
-		/// <param name="text">the text to change to</param>
-		/// <param name="tb">the editor's textbox whose text to check for
-		/// validity (default null to bypass the text-check)</param>
-		internal void ChangeCellText(Cell cell, string text, Control tb = null)
+		/// <param name="tb">the editor's textbox whose text to check for validity</param>
+		internal void ChangeCellText(Cell cell, Control tb)
 		{
 			_ur.Push(_ur.createRestorableCell(cell));
 			_f.EnableUndo(true);
@@ -1670,18 +1668,34 @@ namespace yata
 			Changed = true;
 			cell.loadchanged = false;
 
-			if (tb != null)
-			{
-				if (CheckTextEdit(tb))
-				{
-					MessageBox.Show("The text that was submitted has been altered.",
-									"burp",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Exclamation,
-									MessageBoxDefaultButton.Button1);
-				}
-				text = tb.Text;
-			}
+			if (CheckTextEdit(tb))
+				MessageBox.Show("The text that was submitted has been altered.",
+								"burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation,
+								MessageBoxDefaultButton.Button1);
+
+			cell.text = tb.Text;
+
+			colRewidth(cell.x, cell.y);
+			UpdateFrozenControls(cell.x);
+
+
+			_ur.State = _ur.createRestorableCell(cell);
+		}
+		/// <summary>
+		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
+		/// </summary>
+		/// <param name="cell">a Cell</param>
+		/// <param name="text">the text to change to</param>
+		internal void ChangeCellText(Cell cell, string text)
+		{
+			_ur.Push(_ur.createRestorableCell(cell));
+			_f.EnableUndo(true);
+
+
+			Changed = true;
+			cell.loadchanged = false;
 
 			cell.text = text;
 
