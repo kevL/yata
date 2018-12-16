@@ -1659,9 +1659,9 @@ namespace yata
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="text">the text to change to</param>
-		/// <param name="editor">the editor's textbox whose text to check for
+		/// <param name="tb">the editor's textbox whose text to check for
 		/// validity (default null to bypass the text-check)</param>
-		internal void ChangeCellText(Cell cell, string text, Control editor = null)
+		internal void ChangeCellText(Cell cell, string text, Control tb = null)
 		{
 			_ur.Push(_ur.createRestorableCell(cell));
 			_f.EnableUndo(true);
@@ -1670,12 +1670,18 @@ namespace yata
 			Changed = true;
 			cell.loadchanged = false;
 
-			if (editor != null && CheckTextEdit(editor))
-				MessageBox.Show("The text that was submitted has been altered.",
-								"burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation,
-								MessageBoxDefaultButton.Button1);
+			if (tb != null)
+			{
+				if (CheckTextEdit(tb))
+				{
+					MessageBox.Show("The text that was submitted has been altered.",
+									"burp",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Exclamation,
+									MessageBoxDefaultButton.Button1);
+				}
+				text = tb.Text;
+			}
 
 			cell.text = text;
 
@@ -1755,6 +1761,7 @@ namespace yata
 		/// Checks the text that user submits to a cell.
 		/// Cf CheckCellText().
 		/// </summary>
+		/// <param name="tb"></param>
 		/// <returns>true if text is changed/fixed/corrected</returns>
 		internal static bool CheckTextEdit(Control tb)
 		{

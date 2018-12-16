@@ -26,7 +26,8 @@ Edit
 - Undo : Ctrl+z
 - Redo : Ctrl+y
 - clear undo/redo (the undo/redo stacks can stack up over a long session; if so
-                   clear this when you're running low on RAM)
+                   clear this when you're running low on RAM - note that each
+                   tabpage has its own undo/redo stacks)
 
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3

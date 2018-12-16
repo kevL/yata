@@ -1164,7 +1164,18 @@ namespace yata
 
 //				it_ClearUndoRedo.Enabled = false; // not needed since there isn't a hotkey.
 
-				// TODO: force GC
+				// force GC
+				long b = GC.GetTotalMemory(false);
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+
+				b -= GC.GetTotalMemory(true);
+
+				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", b) + " bytes",
+								"burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information,
+								MessageBoxDefaultButton.Button1);
 			}
 		}
 
