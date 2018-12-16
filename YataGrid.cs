@@ -65,8 +65,8 @@ namespace yata
 
 		internal Cell this[int r, int c]
 		{
-			get { return Rows[r].cells[c]; }
-			set { Rows[r].cells[c] = value; }
+			get { return Rows[r][c]; }
+			set { Rows[r][c] = value; }
 		}
 
 
@@ -1223,7 +1223,7 @@ namespace yata
 
 						(row = Rows[0]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(0);
 					}
@@ -1234,7 +1234,7 @@ namespace yata
 							if (sel.x != FrozenCount || sel.y != 0)
 							{
 								sel.selected = false;
-								sel = Rows[0].cells[FrozenCount];
+								sel = Rows[0][FrozenCount];
 								sel.selected = true;
 
 								EnsureDisplayed(sel);
@@ -1248,7 +1248,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y].cells[FrozenCount];
+							sel = Rows[sel.y][FrozenCount];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1266,7 +1266,7 @@ namespace yata
 
 						(row = Rows[RowCount - 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(RowCount - 1);
 					}
@@ -1277,7 +1277,7 @@ namespace yata
 							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
 							{
 								sel.selected = false;
-								sel = Rows[RowCount - 1].cells[ColCount - 1];
+								sel = Rows[RowCount - 1][ColCount - 1];
 								sel.selected = true;
 
 								EnsureDisplayed(sel);
@@ -1291,7 +1291,7 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y].cells[ColCount - 1];
+							sel = Rows[sel.y][ColCount - 1];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1316,7 +1316,7 @@ namespace yata
 
 						(row = Rows[r]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(r);
 					}
@@ -1331,7 +1331,7 @@ namespace yata
 							if (sel.y < rows) r = 0;
 							else              r = sel.y - rows;
 
-							sel = Rows[r].cells[sel.x];
+							sel = Rows[r][sel.x];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1361,7 +1361,7 @@ namespace yata
 
 						(row = Rows[r]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(r);
 					}
@@ -1376,7 +1376,7 @@ namespace yata
 							if (sel.y > RowCount - 1 - rows) r = RowCount - 1;
 							else                             r = sel.y + rows;
 
-							sel = Rows[r].cells[sel.x];
+							sel = Rows[r][sel.x];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1400,7 +1400,7 @@ namespace yata
 
 						(row = Rows[selr - 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(selr - 1);
 					}
@@ -1412,7 +1412,7 @@ namespace yata
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
 
 							sel.selected = false;
-							sel = Rows[sel.y - 1].cells[sel.x];
+							sel = Rows[sel.y - 1][sel.x];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1434,7 +1434,7 @@ namespace yata
 
 						(row = Rows[selr + 1]).selected = true;
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = true;
+							row[c].selected = true;
 
 						EnsureDisplayedRow(selr + 1);
 					}
@@ -1443,7 +1443,7 @@ namespace yata
 						if (sel.y != RowCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y + 1].cells[sel.x];
+							sel = Rows[sel.y + 1][sel.x];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1464,7 +1464,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y].cells[sel.x - 1];
+							sel = Rows[sel.y][sel.x - 1];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1485,7 +1485,7 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y].cells[sel.x + 1];
+							sel = Rows[sel.y][sel.x + 1];
 							sel.selected = true;
 
 							EnsureDisplayed(sel);
@@ -1855,7 +1855,7 @@ namespace yata
 			{
 				for (int c = 0; c != ColCount; ++c)
 				{
-					string text = (cell = row.cells[c]).text;
+					string text = (cell = row[c]).text;
 					if (CheckCellText(ref text))
 					{
 						cell.text = text;
@@ -2085,7 +2085,7 @@ namespace yata
 			foreach (var row in Rows)
 			{
 				for (int c = 0; c != ColCount; ++c)
-					row.cells[c].selected = false;
+					row[c].selected = false;
 			}
 		}
 
@@ -2098,7 +2098,7 @@ namespace yata
 			{
 				row.selected = false;
 				for (int c = 0; c != ColCount; ++c)
-					row.cells[c].selected = false;
+					row[c].selected = false;
 			}
 
 			foreach (var col in Cols)
@@ -2178,7 +2178,7 @@ namespace yata
 			{
 				for (int c = 0; c != ColCount; ++c)
 				{
-					if ((cell = row.cells[c]).selected)
+					if ((cell = row[c]).selected)
 					{
 						if (cell0 != null)
 							return null;
@@ -2460,7 +2460,7 @@ namespace yata
 							select = false;
 							for (int c = 0; c != ColCount; ++c)
 							{
-								if (!row.cells[c].selected)
+								if (!row[c].selected)
 								{
 									select = true;
 									break;
@@ -2503,7 +2503,7 @@ namespace yata
 									{
 										ro = Rows[start];
 										for (int c = 0; c != ColCount; ++c)
-											ro.cells[c].selected = true;
+											ro[c].selected = true;
 									}
 									++start;
 								}
@@ -2521,7 +2521,7 @@ namespace yata
 							EnsureDisplayedRow(r);
 
 						for (int c = 0; c != ColCount; ++c)
-							row.cells[c].selected = select;
+							row[c].selected = select;
 
 						Refresh();
 					}
@@ -2792,7 +2792,7 @@ namespace yata
 					else
 						field = Constants.Stars;
 
-					row.cells[c] = new Cell(id, c, field);
+					row[c] = new Cell(id, c, field);
 				}
 
 				Rows.Insert(id, row);
@@ -2802,7 +2802,7 @@ namespace yata
 				{
 					++(row = Rows[r])._id;
 					for (int c = 0; c != ColCount; ++c)
-						++row.cells[c].y;
+						++row[c].y;
 				}
 			}
 			else // delete 'id'
@@ -2814,7 +2814,7 @@ namespace yata
 				{
 					--(row = Rows[r])._id;
 					for (int c = 0; c != ColCount; ++c)
-						--row.cells[c].y;
+						--row[c].y;
 				}
 
 				if (RowCount == 0) // add a row of stars so grid is not left blank ->
@@ -2823,7 +2823,7 @@ namespace yata
 
 					row = new Row(id, ColCount, Brushes.Created, this);
 					for (int c = 0; c != ColCount; ++c)
-						row.cells[c] = new Cell(id, c, Constants.Stars);
+						row[c] = new Cell(id, c, Constants.Stars);
 
 					Rows.Add(row);
 
@@ -2884,7 +2884,7 @@ namespace yata
 			{
 				(row = Rows[r])._id = r;
 				for (int c = 0; c != ColCount; ++c)
-					row.cells[c].y = r;
+					row[c].y = r;
 			}
 		}
 
@@ -2955,8 +2955,8 @@ namespace yata
 		///           1 first is second, second is first</returns>
 		int Sort(Row row1, Row row2)
 		{
-			_a = row1.cells[_sortcol].text;
-			_b = row2.cells[_sortcol].text;
+			_a = row1[_sortcol].text;
+			_b = row2[_sortcol].text;
 
 			int result;
 
@@ -3003,8 +3003,8 @@ namespace yata
 			}
 
 			if (result == 0 && _sortcol != 0 // secondary sort on id if primary sort matches
-				&& Int32.TryParse(row1.cells[0].text, out _ai)
-				&& Int32.TryParse(row2.cells[0].text, out _bi))
+				&& Int32.TryParse(row1[0].text, out _ai)
+				&& Int32.TryParse(row2[0].text, out _bi))
 			{
 				result = _ai.CompareTo(_bi);
 			}

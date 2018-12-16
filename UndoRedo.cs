@@ -10,6 +10,7 @@ namespace yata
 		internal bool Changed;
 
 		internal Cell cell;
+		internal Row row;
 	}
 
 
@@ -83,9 +84,21 @@ namespace yata
 			it.RestoreType = UndoRedo.RestoreType_Cell;
 			it.Changed = _grid.Changed;
 			it.cell = cell.Clone() as Cell;
+			it.row = null;
 
 			//logfile.Log(". it.Changed= " + it.Changed);
 			//logfile.Log(it.cell.ToString());
+
+			return it;
+		}
+
+		internal Restorable createRestorableRow(ICloneable row)
+		{
+			Restorable it;
+			it.RestoreType = UndoRedo.RestoreType_Row;
+			it.Changed = _grid.Changed;
+			it.row = row.Clone() as Row;
+			it.cell = null;
 
 			return it;
 		}

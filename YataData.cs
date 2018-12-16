@@ -52,19 +52,21 @@ namespace yata
 		:
 			ICloneable
 	{
+		#region Fields and Properties
 		internal int _id;
 
 		readonly YataGrid _grid;
 
-		internal Cell[] cells;
-//		/// <summary>
-//		/// Gets/sets the cell at pos [c].
-//		/// </summary>
-//		internal Cell this[int c]
-//		{
-//			get { return cells[c]; }
-//			set { cells[c] = value; }
-//		}
+		readonly Cell[] _cells;
+
+		/// <summary>
+		/// Gets/sets the cell at pos [c].
+		/// </summary>
+		internal Cell this[int c]
+		{
+			get { return _cells[c]; }
+			set { _cells[c] = value; }
+		}
 
 		internal Brush _brush;
 
@@ -80,21 +82,54 @@ namespace yata
 				_grid._f.EnableCopyRange(_selected); // NOTE to Self: I should code in C since encapsulation is shot.
 			}
 		}
+		#endregion Fields and Properties
 
+
+		#region cTors
+		/// <summary>
+		/// cTor[0] - primary.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="cols"></param>
+		/// <param name="brush"></param>
+		/// <param name="grid"></param>
 		internal Row(int id, int cols, Brush brush, YataGrid grid)
 		{
 			_id = id;
-			cells = new Cell[cols];
+			_cells = new Cell[cols];
 
 			_grid = grid;
 
 			_brush = brush;
 		}
 
+		/// <summary>
+		/// cTor[1] - used by Clone().
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="cells"></param>
+		/// <param name="brush"></param>
+		/// <param name="grid"></param>
+		internal Row(int id, Cell[] cells, Brush brush, YataGrid grid)
+		{
+			_id = id;
+			_cells = cells;
+
+			_grid = grid;
+
+			_brush = brush;
+		}
+		#endregion cTors
+
+
 		#region ICloneable requirements
 		public object Clone()
 		{
-			return MemberwiseClone();
+			var cells = new Cell[_cells.Length];
+			for (int i = 0; i != _cells.Length; ++i)
+				cells[i] = (Cell)_cells[i].Clone();
+
+			return new Row(_id, cells, _brush, _grid);
 		}
 		#endregion ICloneable requirements
 	}
@@ -131,7 +166,7 @@ namespace yata
 		#endregion ICloneable requirements
 
 
-		public override string ToString()
+/*		public override string ToString()
 		{
 			return String.Format("Cell:{0}"
 							   + ". text= {1}{0}"
@@ -147,6 +182,6 @@ namespace yata
 								 selected,
 								 loadchanged,
 								 _widthtext);
-		}
+		} */
 	}
 }

@@ -58,7 +58,7 @@ namespace yata
 					{
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
-							var cell = row.cells[c];
+							var cell = row[c];
 							if (cell.selected)
 							{
 								rect.X -= _padHori;
@@ -398,7 +398,7 @@ namespace yata
 					{
 						rect.Width = Cols[c].width();
 
-						if (row.cells[c].loadchanged)
+						if (row[c].loadchanged)
 						{
 							rect.X     -= _padHori - 1;
 							rect.Width -= 1;
@@ -407,7 +407,7 @@ namespace yata
 							rect.Width += 1;
 						}
 
-						TextRenderer.DrawText(graphics, row.cells[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+						TextRenderer.DrawText(graphics, row[c].text, Font, rect, Colors.Text, YataGraphics.flags);
 
 						rect.X += rect.Width;
 					}

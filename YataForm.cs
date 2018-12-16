@@ -750,7 +750,7 @@ namespace yata
 								foreach (var row in Table.Rows)
 								{
 									for (int c = 0; c != Table.ColCount; ++c)
-										row.cells[c].loadchanged = false;
+										row[c].loadchanged = false;
 								}
 								Table.Refresh();
 
@@ -878,7 +878,7 @@ namespace yata
 			Row row = Table.Rows[_r];
 			row.selected = true;
 			for (int c = 0; c != Table.ColCount; ++c)
-				row.cells[c].selected = true;
+				row[c].selected = true;
 
 			Table.EnsureDisplayedRow(_r);
 			Table.Refresh();
@@ -932,6 +932,10 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
+//				Table._ur.Push(Table._ur.createRestorableRow(row));
+//				Table._f.EnableUndo(true);
+
+
 				Table.SetProHori();
 
 				Table.Changed = true;
@@ -939,6 +943,9 @@ namespace yata
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+//				Table._ur.State = Table._ur.createRestorableCell(cell);
 			}
 			else
 				ReadonlyError();
@@ -960,7 +967,7 @@ namespace yata
 					else
 						field = Constants.Stars;
 
-					row.cells[c].text = field;
+					row[c].text = field;
 				}
 				row._brush = Brushes.Created;
 	
@@ -1099,7 +1106,7 @@ namespace yata
 				{
 					for (int c = 0; c != Table.ColCount; ++c)
 					{
-						if (row.cells[c].loadchanged)
+						if (row[c].loadchanged)
 						{
 							it_GotoLoadchanged.Enabled = true;
 							break;
@@ -1391,7 +1398,7 @@ namespace yata
 					Row row = Table.Rows[r];
 					row.selected = true;
 					for (int c = 0; c != Table.ColCount; ++c)
-						row.cells[c].selected = true;
+						row[c].selected = true;
 
 					Table.EnsureDisplayedRow(r);
 					Table.Refresh();
@@ -1822,7 +1829,7 @@ namespace yata
 					(row = Table.Rows[id])._brush = brush;
 
 					for (int c = 0; c != Table.ColCount; ++c)
-						row.cells[c].loadchanged = false;
+						row[c].loadchanged = false;
 				}
 				Table.Refresh();
 			}
