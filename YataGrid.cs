@@ -1661,8 +1661,10 @@ namespace yata
 		/// <param name="tb">the editor's textbox whose text to check for validity</param>
 		internal void ChangeCellText(Cell cell, Control tb)
 		{
-			_ur.Push(_ur.createRestorableCell(cell));
-			_f.EnableUndo(true);
+			Restorable rest = _ur.createCell(cell);
+//			Restorable rest = _ur.createCellRevert(cell);
+//			_ur.Push(_ur.createCellRevert(cell));
+//			_f.EnableUndo(true);
 
 
 			Changed = true;
@@ -1681,7 +1683,13 @@ namespace yata
 			UpdateFrozenControls(cell.x);
 
 
-			_ur.State = _ur.createRestorableCell(cell);
+			rest.postext = cell.text;
+			_ur.Push(rest);
+			_f.EnableUndo(true);
+
+//			_ur.State = _ur.createCellCurrent(cell);
+			_ur.State = _ur.createCell(cell);
+			_ur.PrintRestorables();
 		}
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
@@ -1690,8 +1698,10 @@ namespace yata
 		/// <param name="text">the text to change to</param>
 		internal void ChangeCellText(Cell cell, string text)
 		{
-			_ur.Push(_ur.createRestorableCell(cell));
-			_f.EnableUndo(true);
+			// TODO: sync w/ ChangeCellText() above wrt/ UndoRedo
+
+//			_ur.Push(_ur.createCellCurrent(cell));
+//			_f.EnableUndo(true);
 
 
 			Changed = true;
@@ -1703,7 +1713,8 @@ namespace yata
 			UpdateFrozenControls(cell.x);
 
 
-			_ur.State = _ur.createRestorableCell(cell);
+//			_ur.State = _ur.createCellCurrent(cell);
+//			_ur.PrintRestorables();
 		}
 
 
