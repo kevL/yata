@@ -679,21 +679,6 @@ namespace yata
 					text += " - " + dir;
 				}
 			}
-/*			if (Tabs.SelectedIndex != -1)
-			{
-				var table = Tabs.SelectedTab.Tag as YataGrid;
-				if (table != null)
-				{
-					string pfe = table.Fullpath;
-					text += " - " + Path.GetFileName(pfe);
-
-					string dir = Path.GetDirectoryName(pfe);
-					if (!String.IsNullOrEmpty(dir))
-					{
-						text += " - " + dir;
-					}
-				}
-			} */
 			Text = text;
 		}
 
@@ -716,30 +701,15 @@ namespace yata
 			{
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 
-				if (String.IsNullOrEmpty(_pfeT))
+				if ((ToolStripMenuItem)sender == it_SaveAs)
 				{
-					//logfile.Log("Save");
-
-					_pfeT = Table.Fullpath;
-					force = false;
-				}
-				else
-				{
-					//logfile.Log("SaveAs");
-					force = (_pfeT == Table.Fullpath);
-				}
-/*				if ((ToolStripMenuItem)sender == it_SaveAs)
-				{
-					logfile.Log("sender it_SaveAs");
 					force = (_pfeT == Table.Fullpath);
 				}
 				else
 				{
-					logfile.Log("sender it_Save");
-
 					_pfeT = Table.Fullpath;
 					force = false;
-				} */
+				}
 
 				if (!String.IsNullOrEmpty(_pfeT)) // safety.
 				{
@@ -830,8 +800,6 @@ namespace yata
 					{
 						_pfeT = sfd.FileName;
 						fileclick_Save(sender, e);
-
-						_pfeT = String.Empty; // jic.
 					}
 				}
 			}
