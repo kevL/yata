@@ -161,8 +161,7 @@ namespace yata
 
 			btn_PropertyPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
-			if (!String.IsNullOrEmpty(pfe_load)
-				&& File.Exists(pfe_load))
+			if (!String.IsNullOrEmpty(pfe_load) && File.Exists(pfe_load))
 			{
 				CreateTabPage(pfe_load);
 			}
@@ -606,9 +605,10 @@ namespace yata
 		{
 			var tables = new List<string>();
 
+			YataGrid table;
 			foreach (TabPage page in Tabs.TabPages)
 			{
-				var table = page.Tag as YataGrid;
+				table = page.Tag as YataGrid;
 				if (table.Changed && (!excludecurrent || table != Table))
 				{
 					tables.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
@@ -668,7 +668,18 @@ namespace yata
 		{
 			string text = "Yata";
 
-			if (Tabs.SelectedIndex != -1)
+			if (Table != null)
+			{
+				string pfe = Table.Fullpath;
+				text += " - " + Path.GetFileName(pfe);
+
+				string dir = Path.GetDirectoryName(pfe);
+				if (!String.IsNullOrEmpty(dir))
+				{
+					text += " - " + dir;
+				}
+			}
+/*			if (Tabs.SelectedIndex != -1)
 			{
 				var table = Tabs.SelectedTab.Tag as YataGrid;
 				if (table != null)
@@ -676,13 +687,13 @@ namespace yata
 					string pfe = table.Fullpath;
 					text += " - " + Path.GetFileName(pfe);
 
-					string path = Path.GetDirectoryName(pfe);
-					if (!String.IsNullOrEmpty(path))
+					string dir = Path.GetDirectoryName(pfe);
+					if (!String.IsNullOrEmpty(dir))
 					{
-						text += " - " + path;
+						text += " - " + dir;
 					}
 				}
-			}
+			} */
 			Text = text;
 		}
 
@@ -703,16 +714,34 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				bool force;
+				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
+
 				if (String.IsNullOrEmpty(_pfeT))
 				{
+					//logfile.Log("Save");
+
 					_pfeT = Table.Fullpath;
 					force = false;
 				}
 				else
+				{
+					//logfile.Log("SaveAs");
 					force = (_pfeT == Table.Fullpath);
+				}
+/*				if ((ToolStripMenuItem)sender == it_SaveAs)
+				{
+					logfile.Log("sender it_SaveAs");
+					force = (_pfeT == Table.Fullpath);
+				}
+				else
+				{
+					logfile.Log("sender it_Save");
 
-				if (!String.IsNullOrEmpty(_pfeT))
+					_pfeT = Table.Fullpath;
+					force = false;
+				} */
+
+				if (!String.IsNullOrEmpty(_pfeT)) // safety.
 				{
 					_warned = false;
 
@@ -801,7 +830,8 @@ namespace yata
 					{
 						_pfeT = sfd.FileName;
 						fileclick_Save(sender, e);
-						_pfeT = String.Empty;
+
+						_pfeT = String.Empty; // jic.
 					}
 				}
 			}
