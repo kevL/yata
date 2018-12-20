@@ -1,4 +1,4 @@
-﻿namespace yata
+namespace yata
 {
 	partial class YataForm
 	{
