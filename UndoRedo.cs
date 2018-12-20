@@ -4,6 +4,14 @@ using System.Collections;
 
 namespace yata
 {
+	/// <summary>
+	/// Restorables contain values for the action that's about to be performed
+	/// on Undo/Redo.
+	/// @note Classvar '_it' is the state that is being undone/redone; it is
+	/// used by the action that's invoked.
+	/// @note Classvar 'State' is the current state shown in the table; it is
+	/// assigned to '_it' for either an Undo or Redo action.
+	/// </summary>
 	struct Restorable
 	{
 		internal UndoRedo.UrType RestoreType;
@@ -25,8 +33,6 @@ namespace yata
 		{
 			rt_None,		// 0
 			rt_Cell,		// 1
-//			rt_CellRevert,	// 1
-//			rt_CellCurrent,	// 2
 			rt_RowInsert,	// 2
 			rt_RowDelete,	// 3
 		}
@@ -92,7 +98,7 @@ namespace yata
 			it.Changed = _grid.Changed;
 
 			it.cell = cell.Clone() as Cell;
-			it.pretext = String.Empty;
+			it.pretext = it.cell.text;
 			it.postext = String.Empty;
 
 			it.rInsert = null;
@@ -101,40 +107,6 @@ namespace yata
 
 			return it;
 		}
-
-/*		internal Restorable createCellRevert(ICloneable cell)
-		{
-			Restorable it;
-			it.RestoreType = UrType.rt_CellCurrent;
-			it.Changed = _grid.Changed;
-
-			it.cell = cell.Clone() as Cell;
-			it.pretext = String.Empty;
-			it.postext = String.Empty;
-
-			it.rInsert = null;
-			it.rDelete = -1;
-			it.flipped = false;
-
-			return it;
-		}
-
-		internal Restorable createCellCurrent(ICloneable cell)
-		{
-			Restorable it;
-			it.RestoreType = UrType.rt_CellCurrent;
-			it.Changed = _grid.Changed;
-
-			it.cell = cell.Clone() as Cell;
-			it.pretext = String.Empty;
-			it.postext = String.Empty;
-
-			it.rInsert = null;
-			it.rDelete = -1;
-			it.flipped = false;
-
-			return it;
-		} */
 
 		internal Restorable createRowInsert(ICloneable row)
 		{
@@ -189,15 +161,9 @@ namespace yata
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
+					_it.cell.text = _it.pretext;
 					RestoreCell();
 					break;
-
-/*				case UrType.rt_CellRevert:
-					RestoreCell();
-					break;
-				case UrType.rt_CellCurrent:
-					RestoreCell();
-					break; */
 
 				case UrType.rt_RowInsert:
 					InsertRow();
@@ -208,39 +174,61 @@ namespace yata
 					break;
 			}
 
-			Restorable state = State;
-/*			if (Redoables.Count != 0)
-			{
-				switch (state.RestoreType)
-				{
-					case UrType.rt_Cell:
-						state.pretext = state.cell.text;
-						state.cell.text = state.postext;
 
-						break;
-//					case UrType.rt_CellRevert:
-//						break;
-//					case UrType.rt_CellCurrent:
-//						break;
-				}
-			}
-			else */
-			if (!state.flipped)// && Redoables.Count == 0)
+			Restorable state = State;
+
+			switch (state.RestoreType)
 			{
-				switch (state.RestoreType)
-				{
-					case UrType.rt_RowInsert:
+				case UrType.rt_Cell:
+					if (Redoables.Count == 0)
+					{
+						if (!state.flipped)
+						{
+							state.postext = state.pretext;
+							state.pretext = _grid[state.cell.y, state.cell.x].text;
+							state.flipped = true;
+						}
+						else
+							state.postext = state.cell.text;
+					}
+					else
+					{
+						state.cell.text = state.postext;
+					}
+					break;
+
+				case UrType.rt_RowInsert:
+					if (!state.flipped && Redoables.Count == 0)
+					{
 						state.RestoreType = UrType.rt_RowDelete;
 						state.flipped = true;
-						break;
+					}
+					break;
 
-					case UrType.rt_RowDelete:
+				case UrType.rt_RowDelete:
+					if (!state.flipped && Redoables.Count == 0)
+					{
 						state.RestoreType = UrType.rt_RowInsert;
 						state.flipped = true;
-						break;
-				}
+					}
+					break;
 			}
-			Redoables.Push(state);
+
+
+			// NOTE: when Undo(cell), instead of pushing State into Redoables
+			// push the top Undo into Redoables.
+			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
+			{
+				bool changed = _it.Changed;
+
+				_it.Changed = State.Changed;
+				Redoables.Push(_it);
+
+				_it.Changed = changed;
+			}
+			else
+				Redoables.Push(state);
+
 
 			State = _it;
 			PrintRestorables();
@@ -250,16 +238,6 @@ namespace yata
 		{
 			logfile.Log("Redo()");
 
-			if (State.RestoreType == UrType.rt_Cell)
-			{
-				Restorable state = State;
-				state.pretext = state.cell.text;
-				state.cell.text = state.postext;
-				State = state;
-
-				Redoables.Push(State);
-			}
-
 			_it = (Restorable)Redoables.Pop();
 
 			_grid.Changed |= _it.Changed;
@@ -267,15 +245,9 @@ namespace yata
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
+					_it.cell.text = _it.postext;
 					RestoreCell();
 					break;
-
-/*				case UrType.rt_CellRevert:
-					RestoreCell();
-					break;
-				case UrType.rt_CellCurrent:
-					RestoreCell();
-					break; */
 
 				case UrType.rt_RowInsert:
 					DeleteRow();
@@ -287,19 +259,27 @@ namespace yata
 			}
 
 
-			if (State.RestoreType == UrType.rt_Cell)
+			if (_it.RestoreType == UrType.rt_Cell)
+				_it.cell.text = _it.pretext;
+
+
+			// NOTE: when Redo(cell), instead of pushing State into Undoables
+			// push the top Redo into Undoables.
+			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
 			{
-				Restorable state = State;
-				state.cell.text = state.postext;
-				state.postext = String.Empty;
-				State = state;
+				
+				bool changed = _it.Changed;
 
-				Redoables.Push(State);
+				_it.Changed = State.Changed;
+				Undoables.Push(_it);
+
+				_it.Changed = changed;
 			}
-			Undoables.Push(State);
+			else
+				Undoables.Push(State);
 
-			State = (Restorable)Redoables.Pop();
-//			State = _it;
+
+			State = _it;
 			PrintRestorables();
 		}
 
