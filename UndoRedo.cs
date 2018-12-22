@@ -184,6 +184,7 @@ namespace yata
 			// This next section prepares user's current 'State' to be a valid
 			// Redoable - when Undo() is first invoked after a regular state-
 			// change.
+			// TODO: Refactor against (Redoables.Count == 0) ...
 			switch (state.RestoreType)
 			{
 				case UrType.rt_Cell:
