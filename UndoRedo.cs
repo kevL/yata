@@ -31,10 +31,9 @@ namespace yata
 	{
 		internal enum UrType
 		{
-			rt_None,		// 0
-			rt_Cell,		// 1
-			rt_RowInsert,	// 2
-			rt_RowDelete,	// 3
+			rt_Cell,		// 0
+			rt_RowInsert,	// 1
+			rt_RowDelete,	// 2
 		}
 
 
@@ -84,6 +83,9 @@ namespace yata
 
 
 		#region Methods
+		/// <summary>
+		/// Clears Undoables and Redoables stacks.
+		/// </summary>
 		internal void Clear()
 		{
 			Undoables.Clear();
@@ -91,6 +93,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Instantiates a restorable cell when user changes state.
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
 		internal Restorable createCell(ICloneable cell)
 		{
 			Restorable it;
@@ -108,32 +115,21 @@ namespace yata
 			return it;
 		}
 
-		internal Restorable createRowInsert(ICloneable row)
+		/// <summary>
+		/// Instantiates a restorable row when user changes state.
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		internal Restorable createRow(ICloneable row, UrType type)
 		{
 			Restorable it;
-			it.RestoreType = UrType.rt_RowInsert;
+			it.RestoreType = type;
 			it.Changed = _grid.Changed;
 
-			it.cell = null;
-			it.pretext = String.Empty;
-			it.postext = String.Empty;
-
-			it.rInsert = row.Clone() as Row;
-			it.rDelete = it.rInsert._id;
-			it.flipped = false;
-
-			return it;
-		}
-
-		internal Restorable createRowDelete(ICloneable row)
-		{
-			Restorable it;
-			it.RestoreType = UrType.rt_RowDelete;
-			it.Changed = _grid.Changed;
-
-			it.cell = null;
-			it.pretext = String.Empty;
-			it.postext = String.Empty;
+			it.cell    = null;
+			it.pretext = null;
+			it.postext = null;
 
 			it.rInsert = row.Clone() as Row;
 			it.rDelete = it.rInsert._id;
@@ -143,6 +139,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// User's current state is pushed into Undoables on any regular state-
+		/// change. The stack of Redoables is cleared.
+		/// </summary>
+		/// <param name="it"></param>
 		internal void Push(object it)
 		{
 			Undoables.Push(it);
@@ -150,6 +151,9 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Undo's a cell-text change or a row-insert/delete.
+		/// </summary>
 		internal void Undo()
 		{
 			logfile.Log("Undo()");
@@ -177,6 +181,9 @@ namespace yata
 
 			Restorable state = State;
 
+			// This next section prepares user's current 'State' to be a valid
+			// Redoable - when Undo() is first invoked after a regular state-
+			// change.
 			switch (state.RestoreType)
 			{
 				case UrType.rt_Cell:
@@ -192,9 +199,8 @@ namespace yata
 							state.postext = state.cell.text;
 					}
 					else
-					{
-						state.cell.text = state.postext;
-					}
+						state.cell.text = state.postext; // TODO: Should not be needed; done in Redo().
+
 					break;
 
 				case UrType.rt_RowInsert:
@@ -234,6 +240,9 @@ namespace yata
 			PrintRestorables();
 		}
 
+		/// <summary>
+		/// Redo's a cell-text change or a row-insert/delete.
+		/// </summary>
 		public void Redo()
 		{
 			logfile.Log("Redo()");
@@ -259,7 +268,7 @@ namespace yata
 			}
 
 
-			if (_it.RestoreType == UrType.rt_Cell)
+			if (_it.RestoreType == UrType.rt_Cell) // TODO: Should not be needed; done in Undo().
 				_it.cell.text = _it.pretext;
 
 
@@ -267,7 +276,6 @@ namespace yata
 			// push the top Redo into Undoables.
 			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
 			{
-				
 				bool changed = _it.Changed;
 
 				_it.Changed = State.Changed;
@@ -284,6 +292,9 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Changes cell-text in accord with Undo() or Redo().
+		/// </summary>
 		void RestoreCell()
 		{
 			_grid[_it.cell.y, _it.cell.x] = _it.cell.Clone() as Cell;
@@ -294,6 +305,9 @@ namespace yata
 			_grid._f.Refresh();
 		}
 
+		/// <summary>
+		/// Inserts a row in accord with Undo() or Redo().
+		/// </summary>
 		void InsertRow()
 		{
 			_grid.SetProHori();
@@ -308,6 +322,9 @@ namespace yata
 			_grid._proHori = 0;
 		}
 
+		/// <summary>
+		/// Deletes a row in accord with Undo() or Redo().
+		/// </summary>
 		void DeleteRow()
 		{
 			_grid.SetProHori();

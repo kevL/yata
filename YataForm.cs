@@ -930,7 +930,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table._ur.Push(Table._ur.createRowDelete(Table.Rows[_r]));
+				Table._ur.Push(Table._ur.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete));
 				Table._f.EnableUndo(true);
 
 
@@ -943,7 +943,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-				Table._ur.State = Table._ur.createRowInsert(Table.Rows[_r]);
+				Table._ur.State = Table._ur.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowInsert);
 				Table._ur.PrintRestorables();
 			}
 			else
