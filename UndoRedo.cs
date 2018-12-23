@@ -202,7 +202,7 @@ namespace yata
 						break;
 
 					case UrType.rt_RowInsert:
-						if (!state.flipped && Redoables.Count == 0)
+						if (!state.flipped)
 						{
 							state.RestoreType = UrType.rt_RowDelete;
 							state.flipped = true;
@@ -210,7 +210,7 @@ namespace yata
 						break;
 
 					case UrType.rt_RowDelete:
-						if (!state.flipped && Redoables.Count == 0)
+						if (!state.flipped)
 						{
 							state.RestoreType = UrType.rt_RowInsert;
 							state.flipped = true;
