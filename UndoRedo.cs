@@ -10,7 +10,7 @@ namespace yata
 	/// @note Classvar '_it' is the state that is being undone/redone; it is
 	/// used by the action that's invoked.
 	/// @note Classvar 'State' is the current state shown in the table; it is
-	/// assigned to '_it' for either an Undo or Redo action.
+	/// used only to track the value of Changed i think.
 	/// </summary>
 	struct Restorable
 	{
@@ -54,8 +54,8 @@ namespace yata
 
 		#region Properties
 		/// <summary>
-		/// State of a Cell as user sees it. It will not be pushed onto either
-		/// stack unless user invokes Undo() or Redo().
+		/// State of a Cell as user sees it. It is used only to track the value
+		/// of Changed i believe.
 		/// </summary>
 		internal Restorable State
 		{ private get; set; }
@@ -172,10 +172,12 @@ namespace yata
 
 				case UrType.rt_RowInsert:
 					InsertRow();
+					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
 					DeleteRow();
+					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
@@ -183,7 +185,7 @@ namespace yata
 			Restorable state = State;
 
 			// This next section prepares user's current 'State' to be a valid
-			// Redoable - only when Undo() is first invoked after a regular
+			// Redoable - only once when Undo() is first invoked after a regular
 			// state-change.
 			if (Redoables.Count == 0)
 			{
@@ -199,22 +201,6 @@ namespace yata
 						else
 							state.postext = state.cell.text;
 
-						break;
-
-					case UrType.rt_RowInsert:
-						if (!state.flipped)
-						{
-							state.RestoreType = UrType.rt_RowDelete;
-							state.flipped = true;
-						}
-						break;
-
-					case UrType.rt_RowDelete:
-						if (!state.flipped)
-						{
-							state.RestoreType = UrType.rt_RowInsert;
-							state.flipped = true;
-						}
 						break;
 				}
 			}
@@ -251,11 +237,13 @@ namespace yata
 					break;
 
 				case UrType.rt_RowInsert:
-					DeleteRow();
+					_it.RestoreType = UrType.rt_RowDelete;
+					InsertRow();
 					break;
 
 				case UrType.rt_RowDelete:
-					InsertRow();
+					_it.RestoreType = UrType.rt_RowInsert;
+					DeleteRow();
 					break;
 			}
 
