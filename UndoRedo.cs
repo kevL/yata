@@ -237,13 +237,13 @@ namespace yata
 					break;
 
 				case UrType.rt_RowInsert:
-					_it.RestoreType = UrType.rt_RowDelete;
 					InsertRow();
+					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
-					_it.RestoreType = UrType.rt_RowInsert;
 					DeleteRow();
+					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
