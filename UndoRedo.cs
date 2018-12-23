@@ -23,6 +23,7 @@ namespace yata
 
 		internal Row rInsert;
 		internal int rDelete;
+
 		internal bool flipped;
 	}
 
@@ -182,14 +183,13 @@ namespace yata
 			Restorable state = State;
 
 			// This next section prepares user's current 'State' to be a valid
-			// Redoable - when Undo() is first invoked after a regular state-
-			// change.
-			// TODO: Refactor against (Redoables.Count == 0) ...
-			switch (state.RestoreType)
+			// Redoable - only when Undo() is first invoked after a regular
+			// state-change.
+			if (Redoables.Count == 0)
 			{
-				case UrType.rt_Cell:
-					if (Redoables.Count == 0)
-					{
+				switch (state.RestoreType)
+				{
+					case UrType.rt_Cell:
 						if (!state.flipped)
 						{
 							state.postext = state.pretext;
@@ -198,27 +198,25 @@ namespace yata
 						}
 						else
 							state.postext = state.cell.text;
-					}
-					else
-						state.cell.text = state.postext; // TODO: Should not be needed; done in Redo().
 
-					break;
+						break;
 
-				case UrType.rt_RowInsert:
-					if (!state.flipped && Redoables.Count == 0)
-					{
-						state.RestoreType = UrType.rt_RowDelete;
-						state.flipped = true;
-					}
-					break;
+					case UrType.rt_RowInsert:
+						if (!state.flipped && Redoables.Count == 0)
+						{
+							state.RestoreType = UrType.rt_RowDelete;
+							state.flipped = true;
+						}
+						break;
 
-				case UrType.rt_RowDelete:
-					if (!state.flipped && Redoables.Count == 0)
-					{
-						state.RestoreType = UrType.rt_RowInsert;
-						state.flipped = true;
-					}
-					break;
+					case UrType.rt_RowDelete:
+						if (!state.flipped && Redoables.Count == 0)
+						{
+							state.RestoreType = UrType.rt_RowInsert;
+							state.flipped = true;
+						}
+						break;
+				}
 			}
 
 
@@ -269,10 +267,6 @@ namespace yata
 			}
 
 
-			if (_it.RestoreType == UrType.rt_Cell) // TODO: Should not be needed; done in Undo().
-				_it.cell.text = _it.pretext;
-
-
 			// NOTE: when Redo(cell), instead of pushing State into Undoables
 			// push the top Redo into Undoables.
 			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
@@ -298,10 +292,14 @@ namespace yata
 		/// </summary>
 		void RestoreCell()
 		{
-			_grid[_it.cell.y, _it.cell.x] = _it.cell.Clone() as Cell;
+			int
+				c = _it.cell.x,
+				r = _it.cell.y;
 
-			_grid.colRewidth(_it.cell.x, _it.cell.y);
-			_grid.UpdateFrozenControls(_it.cell.x);
+			_grid[r,c] = _it.cell.Clone() as Cell;
+
+			_grid.colRewidth(c, r);
+			_grid.UpdateFrozenControls(c);
 
 			_grid._f.Refresh();
 		}
@@ -356,11 +354,11 @@ namespace yata
 						break;
 					case UrType.rt_RowInsert:
 						logfile.Log(". type Insert");
-						logfile.Log(". . " + it_.rInsert._id);
+						logfile.Log(". . insertId= " + it_.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
 						logfile.Log(". type Delete");
-						logfile.Log(". . " + it_.rDelete);
+						logfile.Log(". . deleteId= " + it_.rDelete);
 						break;
 				}
 			}
@@ -378,11 +376,11 @@ namespace yata
 						break;
 					case UrType.rt_RowInsert:
 						logfile.Log(". type Insert");
-						logfile.Log(". . " + it_.rInsert._id);
+						logfile.Log(". . insertId= " + it_.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
 						logfile.Log(". type Delete");
-						logfile.Log(". . " + it_.rDelete);
+						logfile.Log(". . deleteId= " + it_.rDelete);
 						break;
 				}
 			}
@@ -397,11 +395,11 @@ namespace yata
 					break;
 				case UrType.rt_RowInsert:
 					logfile.Log(". type Insert");
-					logfile.Log(". . " + State.rInsert._id);
+					logfile.Log(". . insertId= " + State.rInsert._id);
 					break;
 				case UrType.rt_RowDelete:
 					logfile.Log(". type Delete");
-					logfile.Log(". . " + State.rDelete);
+					logfile.Log(". . deleteId= " + State.rDelete);
 					break;
 			}
 
