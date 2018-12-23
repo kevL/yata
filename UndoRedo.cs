@@ -23,8 +23,6 @@ namespace yata
 
 		internal Row rInsert;
 		internal int rDelete;
-
-		internal bool flipped;
 	}
 
 
@@ -97,7 +95,7 @@ namespace yata
 		/// <summary>
 		/// Instantiates a restorable cell when user changes state.
 		/// </summary>
-		/// <param name="cell"></param>
+		/// <param name="cell">a table Cell object</param>
 		/// <returns></returns>
 		internal Restorable createCell(ICloneable cell)
 		{
@@ -111,7 +109,6 @@ namespace yata
 
 			it.rInsert = null;
 			it.rDelete = -1;
-			it.flipped = false;
 
 			return it;
 		}
@@ -119,8 +116,9 @@ namespace yata
 		/// <summary>
 		/// Instantiates a restorable row when user changes state.
 		/// </summary>
-		/// <param name="row"></param>
-		/// <param name="type"></param>
+		/// <param name="row">a table Row object</param>
+		/// <param name="type">'rt_RowDelete' when a row needs to be deleted or
+		/// 'rt_RowInsert' when a row needs to be inserted</param>
 		/// <returns></returns>
 		internal Restorable createRow(ICloneable row, UrType type)
 		{
@@ -134,7 +132,6 @@ namespace yata
 
 			it.rInsert = row.Clone() as Row;
 			it.rDelete = it.rInsert._id;
-			it.flipped = false;
 
 			return it;
 		}
@@ -144,7 +141,7 @@ namespace yata
 		/// User's current state is pushed into Undoables on any regular state-
 		/// change. The stack of Redoables is cleared.
 		/// </summary>
-		/// <param name="it"></param>
+		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(object it)
 		{
 			Undoables.Push(it);
@@ -179,30 +176,6 @@ namespace yata
 					DeleteRow();
 					_it.RestoreType = UrType.rt_RowInsert;
 					break;
-			}
-
-
-			Restorable state = State;
-
-			// This next section prepares user's current 'State' to be a valid
-			// Redoable - only once when Undo() is first invoked after a regular
-			// state-change.
-			if (Redoables.Count == 0)
-			{
-				switch (state.RestoreType)
-				{
-					case UrType.rt_Cell:
-						if (!state.flipped)
-						{
-							state.postext = state.pretext;
-							state.pretext = _grid[state.cell.y, state.cell.x].text;
-							state.flipped = true;
-						}
-						else
-							state.postext = state.cell.text;
-
-						break;
-				}
 			}
 
 
