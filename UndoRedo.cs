@@ -220,19 +220,12 @@ namespace yata
 			}
 
 
-			// NOTE: when Undo(cell), instead of pushing State into Redoables
-			// push the top Undo into Redoables.
-			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
-			{
-				bool changed = _it.Changed;
+			bool changed = _it.Changed;
 
-				_it.Changed = State.Changed;
-				Redoables.Push(_it);
+			_it.Changed = State.Changed;
+			Redoables.Push(_it);
 
-				_it.Changed = changed;
-			}
-			else
-				Redoables.Push(state);
+			_it.Changed = changed;
 
 
 			State = _it;
@@ -267,19 +260,12 @@ namespace yata
 			}
 
 
-			// NOTE: when Redo(cell), instead of pushing State into Undoables
-			// push the top Redo into Undoables.
-			if (_it.RestoreType == UrType.rt_Cell) // TODO: is that '_it' or 'State' that should check the RestoreType
-			{
-				bool changed = _it.Changed;
+			bool changed = _it.Changed;
 
-				_it.Changed = State.Changed;
-				Undoables.Push(_it);
+			_it.Changed = State.Changed;
+			Undoables.Push(_it);
 
-				_it.Changed = changed;
-			}
-			else
-				Undoables.Push(State);
+			_it.Changed = changed;
 
 
 			State = _it;
