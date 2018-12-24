@@ -23,6 +23,7 @@ namespace yata
 
 		internal Row rInsert;
 		internal int rDelete;
+		internal bool flipped;
 	}
 
 
@@ -51,12 +52,20 @@ namespace yata
 
 
 		#region Properties
+		Restorable _state;
 		/// <summary>
 		/// State of a Cell as user sees it. It is used only to track the value
 		/// of Changed i believe.
 		/// </summary>
 		internal Restorable State
-		{ private get; set; }
+		{
+			private get { return _state; }
+			set
+			{
+				logfile.Log("\nset State\n");
+				_state = value;
+			}
+		}
 
 		internal bool CanUndo
 		{
@@ -109,6 +118,7 @@ namespace yata
 
 			it.rInsert = null;
 			it.rDelete = -1;
+			it.flipped = false;
 
 			return it;
 		}
@@ -117,8 +127,8 @@ namespace yata
 		/// Instantiates a restorable row when user changes state.
 		/// </summary>
 		/// <param name="row">a table Row object</param>
-		/// <param name="type">'rt_RowDelete' when a row needs to be deleted or
-		/// 'rt_RowInsert' when a row needs to be inserted</param>
+		/// <param name="type">'rt_RowDelete' for a row to be deleted or
+		/// 'rt_RowInsert' for a row to be inserted</param>
 		/// <returns></returns>
 		internal Restorable createRow(ICloneable row, UrType type)
 		{
@@ -132,6 +142,7 @@ namespace yata
 
 			it.rInsert = row.Clone() as Row;
 			it.rDelete = it.rInsert._id;
+			it.flipped = false;
 
 			return it;
 		}
@@ -144,6 +155,7 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(object it)
 		{
+			logfile.Log("\nPush()");
 			Undoables.Push(it);
 			Redoables.Clear();
 		}
@@ -169,22 +181,42 @@ namespace yata
 
 				case UrType.rt_RowInsert:
 					InsertRow();
-					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
 					DeleteRow();
-					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
 
-			bool changed = _it.Changed;
+			if (_it.RestoreType == UrType.rt_Cell)
+			{
+				bool changed = _it.Changed;
 
-			_it.Changed = State.Changed;
-			Redoables.Push(_it);
+				_it.Changed = State.Changed;
+				Redoables.Push(_it);
 
-			_it.Changed = changed;
+				_it.Changed = changed;
+			}
+			else
+			{
+				Restorable state = State;
+
+				if (!_it.flipped && Redoables.Count != 0)
+				{
+					switch (_it.RestoreType)
+					{
+						case UrType.rt_RowInsert:
+							state.RestoreType = UrType.rt_RowDelete;
+							break;
+
+						case UrType.rt_RowDelete:
+							state.RestoreType = UrType.rt_RowInsert;
+							break;
+					}
+				}
+				Redoables.Push(state);
+			}
 
 
 			State = _it;
@@ -211,22 +243,40 @@ namespace yata
 
 				case UrType.rt_RowInsert:
 					InsertRow();
-					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
 					DeleteRow();
-					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
 
-			bool changed = _it.Changed;
+			if (_it.RestoreType == UrType.rt_Cell)
+			{
+				bool changed = _it.Changed;
 
-			_it.Changed = State.Changed;
-			Undoables.Push(_it);
+				_it.Changed = State.Changed;
+				Undoables.Push(_it);
 
-			_it.Changed = changed;
+				_it.Changed = changed;
+			}
+			else
+			{
+				// TODO: when pushing State onto the opposite stack and Redoables
+				// is NOT empty and State has not been flipped yet, swap
+				// Insert<->Delete
+
+/*				switch (_it.RestoreType)
+				{
+					case UrType.rt_RowInsert:
+						_it.RestoreType = UrType.rt_RowDelete;
+						break;
+					case UrType.rt_RowDelete:
+						_it.RestoreType = UrType.rt_RowInsert;
+						break;
+				} */
+				Undoables.Push(State);
+			}
 
 
 			State = _it;
@@ -258,9 +308,13 @@ namespace yata
 		{
 			_grid.SetProHori();
 
+			logfile.Log("");
 			var fields = new string[_grid.ColCount];
 			for (int i = 0; i != _grid.ColCount; ++i)
+			{
 				fields[i] = _it.rInsert[i].text;
+				logfile.Log("UndoRedo.InsertRow() fields[" + i + "] text= " + fields[i]);
+			}
 
 			_grid.Insert(_it.rInsert._id, fields);
 
@@ -300,12 +354,10 @@ namespace yata
 						logfile.Log(". . postext= " + it_.postext);
 						break;
 					case UrType.rt_RowInsert:
-						logfile.Log(". type Insert");
-						logfile.Log(". . insertId= " + it_.rInsert._id);
+						logfile.Log(". type Insert " + it_.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
-						logfile.Log(". type Delete");
-						logfile.Log(". . deleteId= " + it_.rDelete);
+						logfile.Log(". type Delete " + it_.rDelete);
 						break;
 				}
 			}
@@ -322,12 +374,10 @@ namespace yata
 						logfile.Log(". . postext= " + it_.postext);
 						break;
 					case UrType.rt_RowInsert:
-						logfile.Log(". type Insert");
-						logfile.Log(". . insertId= " + it_.rInsert._id);
+						logfile.Log(". type Insert " + it_.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
-						logfile.Log(". type Delete");
-						logfile.Log(". . deleteId= " + it_.rDelete);
+						logfile.Log(". type Delete " + it_.rDelete);
 						break;
 				}
 			}
@@ -341,12 +391,10 @@ namespace yata
 					logfile.Log(". . postext= " + State.postext);
 					break;
 				case UrType.rt_RowInsert:
-					logfile.Log(". type Insert");
-					logfile.Log(". . insertId= " + State.rInsert._id);
+					logfile.Log(". type Insert " + State.rInsert._id);
 					break;
 				case UrType.rt_RowDelete:
-					logfile.Log(". type Delete");
-					logfile.Log(". . deleteId= " + State.rDelete);
+					logfile.Log(". type Delete " + State.rDelete);
 					break;
 			}
 
