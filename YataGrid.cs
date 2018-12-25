@@ -1685,7 +1685,7 @@ namespace yata
 			_f.EnableUndo(true);
 
 			_ur.State = _ur.createCell(cell);
-			_ur.PrintRestorables();
+			//_ur.PrintRestorables();
 		}
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
@@ -1711,7 +1711,7 @@ namespace yata
 			_f.EnableUndo(true);
 
 			_ur.State = _ur.createCell(cell);
-			_ur.PrintRestorables();
+			//_ur.PrintRestorables();
 		}
 
 

@@ -23,7 +23,6 @@ namespace yata
 
 		internal Row rInsert;
 		internal int rDelete;
-		internal bool flipped;
 	}
 
 
@@ -52,20 +51,22 @@ namespace yata
 
 
 		#region Properties
-		Restorable _state;
 		/// <summary>
 		/// State of a Cell as user sees it. It is used only to track the value
 		/// of Changed i believe.
 		/// </summary>
 		internal Restorable State
+		{ private get; set; }
+/*		Restorable _state;
+		internal Restorable State
 		{
 			private get { return _state; }
 			set
 			{
-				logfile.Log("\nset State\n");
+				//logfile.Log("\nset State\n");
 				_state = value;
 			}
-		}
+		} */
 
 		internal bool CanUndo
 		{
@@ -118,7 +119,6 @@ namespace yata
 
 			it.rInsert = null;
 			it.rDelete = -1;
-			it.flipped = false;
 
 			return it;
 		}
@@ -142,7 +142,6 @@ namespace yata
 
 			it.rInsert = row.Clone() as Row;
 			it.rDelete = it.rInsert._id;
-			it.flipped = false;
 
 			return it;
 		}
@@ -155,7 +154,7 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(object it)
 		{
-			logfile.Log("\nPush()");
+			//logfile.Log("\nPush()");
 			Undoables.Push(it);
 			Redoables.Clear();
 		}
@@ -166,7 +165,7 @@ namespace yata
 		/// </summary>
 		internal void Undo()
 		{
-			logfile.Log("Undo()");
+			//logfile.Log("Undo()");
 
 			_it = (Restorable)Undoables.Pop();
 
@@ -181,46 +180,26 @@ namespace yata
 
 				case UrType.rt_RowInsert:
 					InsertRow();
+					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
 					DeleteRow();
+					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
 
-			if (_it.RestoreType == UrType.rt_Cell)
-			{
-				bool changed = _it.Changed;
+			bool changed = _it.Changed;
 
-				_it.Changed = State.Changed;
-				Redoables.Push(_it);
+			_it.Changed = State.Changed;
+			Redoables.Push(_it);
 
-				_it.Changed = changed;
-			}
-			else
-			{
-				Restorable state = State;
-
-				if (!_it.flipped && Redoables.Count != 0)
-				{
-					switch (_it.RestoreType)
-					{
-						case UrType.rt_RowInsert:
-							state.RestoreType = UrType.rt_RowDelete;
-							break;
-
-						case UrType.rt_RowDelete:
-							state.RestoreType = UrType.rt_RowInsert;
-							break;
-					}
-				}
-				Redoables.Push(state);
-			}
+			_it.Changed = changed;
 
 
 			State = _it;
-			PrintRestorables();
+			//PrintRestorables();
 		}
 
 		/// <summary>
@@ -228,7 +207,7 @@ namespace yata
 		/// </summary>
 		public void Redo()
 		{
-			logfile.Log("Redo()");
+			//logfile.Log("Redo()");
 
 			_it = (Restorable)Redoables.Pop();
 
@@ -243,44 +222,26 @@ namespace yata
 
 				case UrType.rt_RowInsert:
 					InsertRow();
+					_it.RestoreType = UrType.rt_RowDelete;
 					break;
 
 				case UrType.rt_RowDelete:
 					DeleteRow();
+					_it.RestoreType = UrType.rt_RowInsert;
 					break;
 			}
 
 
-			if (_it.RestoreType == UrType.rt_Cell)
-			{
-				bool changed = _it.Changed;
+			bool changed = _it.Changed;
 
-				_it.Changed = State.Changed;
-				Undoables.Push(_it);
+			_it.Changed = State.Changed;
+			Undoables.Push(_it);
 
-				_it.Changed = changed;
-			}
-			else
-			{
-				// TODO: when pushing State onto the opposite stack and Redoables
-				// is NOT empty and State has not been flipped yet, swap
-				// Insert<->Delete
-
-/*				switch (_it.RestoreType)
-				{
-					case UrType.rt_RowInsert:
-						_it.RestoreType = UrType.rt_RowDelete;
-						break;
-					case UrType.rt_RowDelete:
-						_it.RestoreType = UrType.rt_RowInsert;
-						break;
-				} */
-				Undoables.Push(State);
-			}
+			_it.Changed = changed;
 
 
 			State = _it;
-			PrintRestorables();
+			//PrintRestorables();
 		}
 
 
@@ -308,12 +269,12 @@ namespace yata
 		{
 			_grid.SetProHori();
 
-			logfile.Log("");
+			//logfile.Log("");
 			var fields = new string[_grid.ColCount];
 			for (int i = 0; i != _grid.ColCount; ++i)
 			{
 				fields[i] = _it.rInsert[i].text;
-				logfile.Log("UndoRedo.InsertRow() fields[" + i + "] text= " + fields[i]);
+				//logfile.Log("UndoRedo.InsertRow() fields[" + i + "] text= " + fields[i]);
 			}
 
 			_grid.Insert(_it.rInsert._id, fields);
