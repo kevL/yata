@@ -380,10 +380,9 @@ namespace yata
 			if (_visVert)
 			{
 				int vert = HeightTable
-						 + _scrollVert.LargeChange
+						 + _scrollVert.LargeChange - 1
 						 - Height
-						 + (_visHori ? _scrollHori.Height : 0)
-						 - 1;
+						 + (_visHori ? _scrollHori.Height : 0);
 
 				if (vert < _scrollVert.LargeChange) vert = 0;
 
@@ -404,10 +403,9 @@ namespace yata
 			if (_visHori)
 			{
 				int hori = WidthTable
-						 + _scrollHori.LargeChange
+						 + _scrollHori.LargeChange - 1
 						 - Width
-						 + (_visVert ? _scrollVert.Width : 0)
-						 - 1;
+						 + (_visVert ? _scrollVert.Width : 0);
 
 				if (hori < _scrollHori.LargeChange) hori = 0;
 
@@ -1661,10 +1659,16 @@ namespace yata
 		/// <param name="tb">the editor's textbox whose text to check for validity</param>
 		internal void ChangeCellText(Cell cell, Control tb)
 		{
-			Restorable undo = _ur.createCell(cell);
+			Restorable rest = UndoRedo.createCell(cell);
+			if (!Changed)
+			{
+				Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			else
+				rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
-			Changed = true;
 			cell.loadchanged = false;
 
 			if (CheckTextEdit(tb))
@@ -1680,11 +1684,9 @@ namespace yata
 			UpdateFrozenControls(cell.x);
 
 
-			undo.postext = cell.text;
-			_ur.Push(undo);
-			_f.EnableUndo(true);
+			rest.postext = cell.text;
+			_ur.Push(rest);
 
-			_ur.State = _ur.createCell(cell);
 			//_ur.PrintRestorables();
 		}
 		/// <summary>
@@ -1694,10 +1696,16 @@ namespace yata
 		/// <param name="text">the text to change to</param>
 		internal void ChangeCellText(Cell cell, string text)
 		{
-			Restorable undo = _ur.createCell(cell);
+			Restorable rest = UndoRedo.createCell(cell);
+			if (!Changed)
+			{
+				Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			else
+				rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
-			Changed = true;
 			cell.loadchanged = false;
 
 			cell.text = text;
@@ -1706,11 +1714,9 @@ namespace yata
 			UpdateFrozenControls(cell.x);
 
 
-			undo.postext = cell.text;
-			_ur.Push(undo);
-			_f.EnableUndo(true);
+			rest.postext = cell.text;
+			_ur.Push(rest);
 
-			_ur.State = _ur.createCell(cell);
 			//_ur.PrintRestorables();
 		}
 

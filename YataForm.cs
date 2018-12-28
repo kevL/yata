@@ -746,6 +746,8 @@ namespace yata
 							if (rows != 0)
 							{
 								Table.Changed = false;
+								Table._ur.ResetSaved();
+
 								foreach (var row in Table.Rows)
 								{
 									for (int c = 0; c != Table.ColCount; ++c)
@@ -932,17 +934,23 @@ namespace yata
 			{
 				Table.SetProHori();
 
-				Table.Changed = true;
 				Table.Insert(_r, _copy[0]);
 
 				Table.Refresh();
 				Table._proHori = 0;
 
 
-				Table._ur.Push(Table._ur.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete));
-				Table._f.EnableUndo(true);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
 
-				Table._ur.State = Table._ur.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowInsert);
+				Table._ur.Push(rest);
+
 				//Table._ur.PrintRestorables();
 			}
 			else

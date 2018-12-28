@@ -1,21 +1,19 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 
 namespace yata
 {
 	/// <summary>
 	/// Restorables contain values for the action that's about to be performed
-	/// on Undo/Redo.
+	/// on Undo/Redo. Each Restorable contains an Undo-state and a Redo-state;
+	/// they toggle back and forth depending on the action, Undo() or Redo().
 	/// @note Classvar '_it' is the state that is being undone/redone; it is
 	/// used by the action that's invoked.
-	/// @note Classvar 'State' is the current state shown in the table; it is
-	/// used only to track the value of Changed i think.
 	/// </summary>
 	struct Restorable
 	{
 		internal UndoRedo.UrType RestoreType;
-		internal bool Changed;
 
 		internal Cell cell;
 		internal string pretext;
@@ -23,6 +21,8 @@ namespace yata
 
 		internal Row rInsert;
 		internal int rDelete;
+
+		internal UndoRedo.IsSavedType isSaved;
 	}
 
 
@@ -32,15 +32,22 @@ namespace yata
 		{
 			rt_Cell,		// 0
 			rt_RowInsert,	// 1
-			rt_RowDelete,	// 2
+			rt_RowDelete	// 2
+		}
+
+		internal enum IsSavedType
+		{
+			is_None,	// 0 - neither Undo-state nor Redo-state is 2da-saved.
+			is_Undo,	// 1 - the Undo-state has been saved.
+			is_Redo		// 2 - the Redo-state has been saved.
 		}
 
 
 		#region Fields
 		readonly YataGrid _grid;
 
-		readonly Stack Undoables = new Stack(); // states that can be Undone to
-		readonly Stack Redoables = new Stack(); // states that can be Redone to
+		readonly Stack<Restorable> Undoables = new Stack<Restorable>(); // states that can be Undone to
+		readonly Stack<Restorable> Redoables = new Stack<Restorable>(); // states that can be Redone to
 
 		/// <summary>
 		/// '_it' is the state that the user has most recently invoked by either
@@ -51,23 +58,6 @@ namespace yata
 
 
 		#region Properties
-		/// <summary>
-		/// State of a Cell as user sees it. It is used only to track the value
-		/// of Changed i believe.
-		/// </summary>
-		internal Restorable State
-		{ private get; set; }
-/*		Restorable _state;
-		internal Restorable State
-		{
-			private get { return _state; }
-			set
-			{
-				//logfile.Log("\nset State\n");
-				_state = value;
-			}
-		} */
-
 		internal bool CanUndo
 		{
 			get { return (Undoables.Count != 0); }
@@ -91,6 +81,55 @@ namespace yata
 		#endregion cTor
 
 
+		#region Methods (static)
+		/// <summary>
+		/// Instantiates a restorable cell when user changes state.
+		/// </summary>
+		/// <param name="cell">a table Cell object</param>
+		/// <returns></returns>
+		internal static Restorable createCell(ICloneable cell)
+		{
+			Restorable it;
+			it.RestoreType = UrType.rt_Cell;
+
+			it.cell = cell.Clone() as Cell;
+			it.pretext = it.cell.text;
+			it.postext = String.Empty;
+
+			it.rInsert = null;
+			it.rDelete = -1;
+
+			it.isSaved = IsSavedType.is_None;
+
+			return it;
+		}
+
+		/// <summary>
+		/// Instantiates a restorable row when user changes state.
+		/// </summary>
+		/// <param name="row">a table Row object</param>
+		/// <param name="type">'rt_RowDelete' for a row to be deleted or
+		/// 'rt_RowInsert' for a row to be inserted</param>
+		/// <returns></returns>
+		internal static Restorable createRow(ICloneable row, UrType type)
+		{
+			Restorable it;
+			it.RestoreType = type;
+
+			it.cell    = null;
+			it.pretext = null;
+			it.postext = null;
+
+			it.rInsert = row.Clone() as Row;
+			it.rDelete = it.rInsert._id;
+
+			it.isSaved = IsSavedType.is_None;
+
+			return it;
+		}
+		#endregion Methods (static)
+
+
 		#region Methods
 		/// <summary>
 		/// Clears Undoables and Redoables stacks.
@@ -103,60 +142,56 @@ namespace yata
 
 
 		/// <summary>
-		/// Instantiates a restorable cell when user changes state.
-		/// </summary>
-		/// <param name="cell">a table Cell object</param>
-		/// <returns></returns>
-		internal Restorable createCell(ICloneable cell)
-		{
-			Restorable it;
-			it.RestoreType = UrType.rt_Cell;
-			it.Changed = _grid.Changed;
-
-			it.cell = cell.Clone() as Cell;
-			it.pretext = it.cell.text;
-			it.postext = String.Empty;
-
-			it.rInsert = null;
-			it.rDelete = -1;
-
-			return it;
-		}
-
-		/// <summary>
-		/// Instantiates a restorable row when user changes state.
-		/// </summary>
-		/// <param name="row">a table Row object</param>
-		/// <param name="type">'rt_RowDelete' for a row to be deleted or
-		/// 'rt_RowInsert' for a row to be inserted</param>
-		/// <returns></returns>
-		internal Restorable createRow(ICloneable row, UrType type)
-		{
-			Restorable it;
-			it.RestoreType = type;
-			it.Changed = _grid.Changed;
-
-			it.cell    = null;
-			it.pretext = null;
-			it.postext = null;
-
-			it.rInsert = row.Clone() as Row;
-			it.rDelete = it.rInsert._id;
-
-			return it;
-		}
-
-
-		/// <summary>
 		/// User's current state is pushed into Undoables on any regular state-
 		/// change. The stack of Redoables is cleared.
 		/// </summary>
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
-		internal void Push(object it)
+		internal void Push(Restorable it)
 		{
 			//logfile.Log("\nPush()");
+
 			Undoables.Push(it);
 			Redoables.Clear();
+
+			_grid._f.EnableUndo(true);
+		}
+
+
+		/// <summary>
+		/// Re-determines the 'isSaved' var of the Restorables when user saves
+		/// the 2da-file.
+		/// @note It would probably be easier to contain Restorables in Lists
+		/// instead of Stacks.
+		/// </summary>
+		internal void ResetSaved()
+		{
+			if (Undoables.Count != 0)
+			{
+				var u = Undoables.ToArray();
+
+				u[0].isSaved = UndoRedo.IsSavedType.is_Redo;
+
+				for (int i = 1; i != u.Length; ++i)
+					u[i].isSaved = UndoRedo.IsSavedType.is_None;
+
+				Undoables.Clear();
+				for (int i = u.Length - 1; i != -1; --i)
+					Undoables.Push(u[i]);
+			}
+
+			if (Redoables.Count != 0)
+			{
+				var r = Redoables.ToArray();
+
+				r[0].isSaved = UndoRedo.IsSavedType.is_Undo;
+
+				for (int i = 1; i != r.Length; ++i)
+					r[i].isSaved = UndoRedo.IsSavedType.is_None;
+
+				Redoables.Clear();
+				for (int i = r.Length - 1; i != -1; --i)
+					Redoables.Push(r[i]);
+			}
 		}
 
 
@@ -167,9 +202,9 @@ namespace yata
 		{
 			//logfile.Log("Undo()");
 
-			_it = (Restorable)Undoables.Pop();
+			_it = Undoables.Pop();
 
-			_grid.Changed &= _it.Changed;
+			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
 
 			switch (_it.RestoreType)
 			{
@@ -189,16 +224,8 @@ namespace yata
 					break;
 			}
 
-
-			bool changed = _it.Changed;
-
-			_it.Changed = State.Changed;
 			Redoables.Push(_it);
 
-			_it.Changed = changed;
-
-
-			State = _it;
 			//PrintRestorables();
 		}
 
@@ -209,9 +236,9 @@ namespace yata
 		{
 			//logfile.Log("Redo()");
 
-			_it = (Restorable)Redoables.Pop();
+			_it = Redoables.Pop();
 
-			_grid.Changed |= _it.Changed;
+			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
 
 			switch (_it.RestoreType)
 			{
@@ -231,16 +258,8 @@ namespace yata
 					break;
 			}
 
-
-			bool changed = _it.Changed;
-
-			_it.Changed = State.Changed;
 			Undoables.Push(_it);
 
-			_it.Changed = changed;
-
-
-			State = _it;
 			//PrintRestorables();
 		}
 
@@ -301,24 +320,21 @@ namespace yata
 		#region debug
 		internal void PrintRestorables()
 		{
-			Restorable it_;
-
 			logfile.Log("UNDOABLES");
 			foreach (var it in Undoables)
 			{
-				it_ = (Restorable)it;
-				switch (it_.RestoreType)
+				switch (it.RestoreType)
 				{
 					case UrType.rt_Cell:
-						logfile.Log(". type Cell [" + it_.cell.y + "," + it_.cell.x + "] \"" + it_.cell.text + "\"");
-						logfile.Log(". . pretext= " + it_.pretext);
-						logfile.Log(". . postext= " + it_.postext);
+						logfile.Log(". type Cell [" + it.cell.y + "," + it.cell.x + "] \"" + it.cell.text + "\"");
+						logfile.Log(". . pretext= " + it.pretext);
+						logfile.Log(". . postext= " + it.postext);
 						break;
 					case UrType.rt_RowInsert:
-						logfile.Log(". type Insert " + it_.rInsert._id);
+						logfile.Log(". type Insert " + it.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
-						logfile.Log(". type Delete " + it_.rDelete);
+						logfile.Log(". type Delete " + it.rDelete);
 						break;
 				}
 			}
@@ -326,37 +342,20 @@ namespace yata
 			logfile.Log("REDOABLES");
 			foreach (var it in Redoables)
 			{
-				it_ = (Restorable)it;
-				switch (it_.RestoreType)
+				switch (it.RestoreType)
 				{
 					case UrType.rt_Cell:
-						logfile.Log(". type Cell [" + it_.cell.y + "," + it_.cell.x + "] \"" + it_.cell.text + "\"");
-						logfile.Log(". . pretext= " + it_.pretext);
-						logfile.Log(". . postext= " + it_.postext);
+						logfile.Log(". type Cell [" + it.cell.y + "," + it.cell.x + "] \"" + it.cell.text + "\"");
+						logfile.Log(". . pretext= " + it.pretext);
+						logfile.Log(". . postext= " + it.postext);
 						break;
 					case UrType.rt_RowInsert:
-						logfile.Log(". type Insert " + it_.rInsert._id);
+						logfile.Log(". type Insert " + it.rInsert._id);
 						break;
 					case UrType.rt_RowDelete:
-						logfile.Log(". type Delete " + it_.rDelete);
+						logfile.Log(". type Delete " + it.rDelete);
 						break;
 				}
-			}
-
-			logfile.Log("STATE");
-			switch (State.RestoreType)
-			{
-				case UrType.rt_Cell:
-					logfile.Log(". type Cell [" + State.cell.y + "," + State.cell.x + "] \"" + State.cell.text + "\"");
-					logfile.Log(". . pretext= " + State.pretext);
-					logfile.Log(". . postext= " + State.postext);
-					break;
-				case UrType.rt_RowInsert:
-					logfile.Log(". type Insert " + State.rInsert._id);
-					break;
-				case UrType.rt_RowDelete:
-					logfile.Log(". type Delete " + State.rDelete);
-					break;
 			}
 
 			logfile.Log("\n");
