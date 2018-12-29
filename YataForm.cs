@@ -959,7 +959,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				// - assign the row's current state to 'rPre' in the Restorable
+				// - store the row's current state to 'rPre' in the Restorable
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
@@ -978,6 +978,8 @@ namespace yata
 				}
 				row._brush = Brushes.Created;
 
+				// NOTE: bypasses colRewidth() and UpdateFrozenControls()
+
 				Table.Refresh();
 				Table._proHori = 0;
 
@@ -991,7 +993,7 @@ namespace yata
 					rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
-				// - assign the row's changed state to 'rPos' in the Restorable
+				// - store the row's changed state to 'rPos' in the Restorable
 				rest.rPos = Table.Rows[_r].Clone() as Row;
 				Table._ur.Push(rest);
 			}
@@ -1063,7 +1065,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				// - assign the row's current state to 'rPre' in the Restorable
+				// - store the row's current state to 'rPre' in the Restorable
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
@@ -1074,6 +1076,8 @@ namespace yata
 					Table[_r,c].text = Constants.Stars;
 				}
 				Table.Rows[_r]._brush = Brushes.Created;
+
+				// NOTE: bypasses colRewidth() and UpdateFrozenControls()
 
 				Table.Refresh();
 				Table._proHori = 0;
@@ -1088,7 +1092,7 @@ namespace yata
 					rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
-				// - assign the row's changed state to 'rPos' in the Restorable
+				// - store the row's changed state to 'rPos' in the Restorable
 				rest.rPos = Table.Rows[_r].Clone() as Row;
 				Table._ur.Push(rest);
 			}
