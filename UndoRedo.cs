@@ -19,9 +19,6 @@ namespace yata
 		internal string pretext;
 		internal string postext;
 
-		internal Row rInsert;
-		internal int rDelete;
-
 		internal Row r;
 		internal Row rPre;
 		internal Row rPos;
@@ -101,11 +98,8 @@ namespace yata
 			it.pretext = it.cell.text;
 			it.postext = String.Empty;
 
-			it.rInsert = null;
-			it.rDelete = -1;
-
-			it.r    = null;
-			it.rPre = null;
+			it.r    =
+			it.rPre =
 			it.rPos = null;
 
 			it.isSaved = IsSavedType.is_None;
@@ -114,7 +108,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable row when user changes state.
+		/// Instantiates a restorable row when user changes state - ie inserts
+		/// or deletes a row.
 		/// </summary>
 		/// <param name="row">a table Row object</param>
 		/// <param name="type">'rt_RowDelete' for a row to be deleted or
@@ -125,15 +120,13 @@ namespace yata
 			Restorable it;
 			it.RestoreType = type;
 
-			it.cell    = null;
-			it.pretext = null;
+			it.cell = null;
+			it.pretext =
 			it.postext = null;
 
-			it.rInsert = row.Clone() as Row;
-			it.rDelete = it.rInsert._id;
+			it.r = row.Clone() as Row;
 
-			it.r    = null;
-			it.rPre = null;
+			it.rPre =
 			it.rPos = null;
 
 			it.isSaved = IsSavedType.is_None;
@@ -142,7 +135,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable row when user changes state.
+		/// Instantiates a restorable row when user changes state - ie changes
+		/// an existing row.
 		/// </summary>
 		/// <param name="row">a table Row object</param>
 		/// <returns></returns>
@@ -151,14 +145,12 @@ namespace yata
 			Restorable it;
 			it.RestoreType = UrType.rt_Overwrite;
 
-			it.cell    = null;
-			it.pretext = null;
+			it.cell = null;
+			it.pretext =
 			it.postext = null;
 
-			it.rInsert = null;
-			it.rDelete = -1;
+			it.r = null;
 
-			it.r    = null;
 			it.rPre = row.Clone() as Row;
 			it.rPos = null;
 
@@ -331,9 +323,9 @@ namespace yata
 
 			var fields = new string[_grid.ColCount];
 			for (int i = 0; i != _grid.ColCount; ++i)
-				fields[i] = _it.rInsert[i].text;
+				fields[i] = _it.r[i].text;
 
-			_grid.Insert(_it.rInsert._id, fields);
+			_grid.Insert(_it.r._id, fields, true, _it.r._brush);
 
 			_grid.Refresh();
 			_grid._proHori = 0;
@@ -346,7 +338,7 @@ namespace yata
 		{
 			_grid.SetProHori();
 
-			_grid.Insert(_it.rDelete, null);
+			_grid.Insert(_it.r._id, null);
 
 			_grid.Refresh();
 			_grid._proHori = 0;

@@ -2787,7 +2787,8 @@ namespace yata
 		/// <param name="id">row-id to insert at or to delete</param>
 		/// <param name="fields">null to delete the row</param>
 		/// <param name="calibrate">true to re-layout the grid</param>
-		internal void Insert(int id, string[] fields, bool calibrate = true)
+		/// <param name="brush">a brush to use for Undo/Redo</param>
+		internal void Insert(int id, string[] fields, bool calibrate = true, Brush brush = null)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
@@ -2796,7 +2797,10 @@ namespace yata
 
 			if (fields != null)
 			{
-				row = new Row(id, ColCount, Brushes.Created, this);
+				if (brush == null)
+					brush = Brushes.Created;
+
+				row = new Row(id, ColCount, brush, this);
 
 				string field;
 				for (int c = 0; c != ColCount; ++c)
