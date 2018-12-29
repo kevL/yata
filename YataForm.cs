@@ -940,7 +940,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
 				if (!Table.Changed)
 				{
 					Table.Changed = true;
@@ -1013,7 +1013,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_RowDelete);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
 				if (!Table.Changed)
 				{
 					Table.Changed = true;
@@ -1046,7 +1046,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
 				if (!Table.Changed)
 				{
 					Table.Changed = true;
@@ -1118,7 +1118,7 @@ namespace yata
 				Table._proHori = 0;
 
 
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_RowDelete);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
 				if (!Table.Changed)
 				{
 					Table.Changed = true;
@@ -1137,7 +1137,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowInsert);
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
 
 				Table.SetProHori();

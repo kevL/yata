@@ -34,10 +34,10 @@ namespace yata
 	{
 		internal enum UrType
 		{
-			rt_Cell,		// 0
-			rt_RowInsert,	// 1
-			rt_RowDelete,	// 2
-			rt_Row			// 3
+			rt_Cell,		// 0 cell action
+			rt_Insert,		// 1 row actions ->
+			rt_Delete,		// 2
+			rt_Overwrite	// 3
 		}
 
 		internal enum IsSavedType
@@ -149,7 +149,7 @@ namespace yata
 		internal static Restorable createRow(ICloneable row)
 		{
 			Restorable it;
-			it.RestoreType = UrType.rt_Row;
+			it.RestoreType = UrType.rt_Overwrite;
 
 			it.cell    = null;
 			it.pretext = null;
@@ -233,7 +233,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Undo's a cell-text change or a row-insert/delete.
+		/// Undo's a cell-text change or a row-insert/delete/overwrite.
 		/// </summary>
 		internal void Undo()
 		{
@@ -248,25 +248,19 @@ namespace yata
 					RestoreCell();
 					break;
 
-				case UrType.rt_Row:
-					if ((_it.r = _it.rPre) != null)
-					{
-						Overwrite();
-					}
-//					else
-//					{
-//						DeleteRow();
-//					}
-					break;
-
-				case UrType.rt_RowInsert:
+				case UrType.rt_Insert:
 					InsertRow();
-					_it.RestoreType = UrType.rt_RowDelete;
+					_it.RestoreType = UrType.rt_Delete;
 					break;
 
-				case UrType.rt_RowDelete:
+				case UrType.rt_Delete:
 					DeleteRow();
-					_it.RestoreType = UrType.rt_RowInsert;
+					_it.RestoreType = UrType.rt_Insert;
+					break;
+
+				case UrType.rt_Overwrite:
+					_it.r = _it.rPre;
+					Overwrite();
 					break;
 			}
 
@@ -274,7 +268,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Redo's a cell-text change or a row-insert/delete.
+		/// Redo's a cell-text change or a row-insert/delete/overwrite.
 		/// </summary>
 		public void Redo()
 		{
@@ -289,32 +283,28 @@ namespace yata
 					RestoreCell();
 					break;
 
-				case UrType.rt_Row:
-					if ((_it.r = _it.rPos) != null)
-					{
-						Overwrite();
-					}
-//					else
-//					{
-//						DeleteRow();
-//					}
-					break;
-
-				case UrType.rt_RowInsert:
+				case UrType.rt_Insert:
 					InsertRow();
-					_it.RestoreType = UrType.rt_RowDelete;
+					_it.RestoreType = UrType.rt_Delete;
 					break;
 
-				case UrType.rt_RowDelete:
+				case UrType.rt_Delete:
 					DeleteRow();
-					_it.RestoreType = UrType.rt_RowInsert;
+					_it.RestoreType = UrType.rt_Insert;
+					break;
+
+				case UrType.rt_Overwrite:
+					_it.r = _it.rPos;
+					Overwrite();
 					break;
 			}
 
 			Undoables.Push(_it);
 		}
+		#endregion Methods
 
 
+		#region Methods (actions)
 		/// <summary>
 		/// Changes cell-text in accord with Undo() or Redo().
 		/// </summary>
@@ -362,6 +352,9 @@ namespace yata
 			_grid._proHori = 0;
 		}
 
+		/// <summary>
+		/// Overwrites a row in accord with Undo() or Redo().
+		/// </summary>
 		void Overwrite()
 		{
 			_grid.Rows[_it.r._id] = _it.r.Clone() as Row;
@@ -370,10 +363,10 @@ namespace yata
 
 			_grid.Refresh();
 		}
-		#endregion Methods
+		#endregion Methods (actions)
 
 
-		#region debug
+/*		#region debug
 		internal void PrintRestorables()
 		{
 			logfile.Log("UNDOABLES");
@@ -386,10 +379,10 @@ namespace yata
 						logfile.Log(". . pretext= " + it.pretext);
 						logfile.Log(". . postext= " + it.postext);
 						break;
-					case UrType.rt_RowInsert:
+					case UrType.rt_Insert:
 						logfile.Log(". type Insert " + it.rInsert._id);
 						break;
-					case UrType.rt_RowDelete:
+					case UrType.rt_Delete:
 						logfile.Log(". type Delete " + it.rDelete);
 						break;
 				}
@@ -405,10 +398,10 @@ namespace yata
 						logfile.Log(". . pretext= " + it.pretext);
 						logfile.Log(". . postext= " + it.postext);
 						break;
-					case UrType.rt_RowInsert:
+					case UrType.rt_Insert:
 						logfile.Log(". type Insert " + it.rInsert._id);
 						break;
-					case UrType.rt_RowDelete:
+					case UrType.rt_Delete:
 						logfile.Log(". type Delete " + it.rDelete);
 						break;
 				}
@@ -416,6 +409,6 @@ namespace yata
 
 			logfile.Log("\n");
 		}
-		#endregion debug
+		#endregion debug */
 	}
 }
