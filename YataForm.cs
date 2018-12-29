@@ -950,8 +950,6 @@ namespace yata
 					rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 				Table._ur.Push(rest);
-
-				//Table._ur.PrintRestorables();
 			}
 			else
 				ReadonlyError();
@@ -961,9 +959,12 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
+				// - assign the row's current state to 'rPre' in the Restorable
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
 				Table.SetProHori();
 
-				Table.Changed = true;
 				Row row = Table.Rows[_r];
 				string field;
 				for (int c = 0; c != Table.ColCount; ++c)
@@ -976,9 +977,23 @@ namespace yata
 					row[c].text = field;
 				}
 				row._brush = Brushes.Created;
-	
+
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+
+				// - assign the row's changed state to 'rPos' in the Restorable
+				rest.rPos = Table.Rows[_r].Clone() as Row;
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();
@@ -990,11 +1005,22 @@ namespace yata
 			{
 				Table.SetProHori();
 
-				Table.Changed = true;
 				Table.Insert(_r + 1, _copy[0]);
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_RowDelete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();
@@ -1006,7 +1032,6 @@ namespace yata
 			{
 				Table.SetProHori();
 
-				Table.Changed = true;
 				var fields = new string[Table.ColCount];
 				fields[0] = _r.ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
@@ -1017,6 +1042,18 @@ namespace yata
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowDelete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();
@@ -1026,9 +1063,12 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
+				// - assign the row's current state to 'rPre' in the Restorable
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
 				Table.SetProHori();
 
-				Table.Changed = true;
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
 					Table[_r,c].text = Constants.Stars;
@@ -1037,6 +1077,20 @@ namespace yata
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+
+				// - assign the row's changed state to 'rPos' in the Restorable
+				rest.rPos = Table.Rows[_r].Clone() as Row;
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();
@@ -1048,7 +1102,6 @@ namespace yata
 			{
 				Table.SetProHori();
 
-				Table.Changed = true;
 				var fields = new string[Table.ColCount];
 				fields[0] = (_r + 1).ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
@@ -1059,6 +1112,18 @@ namespace yata
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_RowDelete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();
@@ -1068,13 +1133,26 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_RowInsert);
+
+
 				Table.SetProHori();
 
-				Table.Changed = true;
 				Table.Insert(_r, null);
 
 				Table.Refresh();
 				Table._proHori = 0;
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				Table._ur.Push(rest);
 			}
 			else
 				ReadonlyError();

@@ -22,6 +22,10 @@ namespace yata
 		internal Row rInsert;
 		internal int rDelete;
 
+		internal Row r;
+		internal Row rPre;
+		internal Row rPos;
+
 		internal UndoRedo.IsSavedType isSaved;
 	}
 
@@ -32,7 +36,8 @@ namespace yata
 		{
 			rt_Cell,		// 0
 			rt_RowInsert,	// 1
-			rt_RowDelete	// 2
+			rt_RowDelete,	// 2
+			rt_Row			// 3
 		}
 
 		internal enum IsSavedType
@@ -99,6 +104,10 @@ namespace yata
 			it.rInsert = null;
 			it.rDelete = -1;
 
+			it.r    = null;
+			it.rPre = null;
+			it.rPos = null;
+
 			it.isSaved = IsSavedType.is_None;
 
 			return it;
@@ -122,6 +131,36 @@ namespace yata
 
 			it.rInsert = row.Clone() as Row;
 			it.rDelete = it.rInsert._id;
+
+			it.r    = null;
+			it.rPre = null;
+			it.rPos = null;
+
+			it.isSaved = IsSavedType.is_None;
+
+			return it;
+		}
+
+		/// <summary>
+		/// Instantiates a restorable row when user changes state.
+		/// </summary>
+		/// <param name="row">a table Row object</param>
+		/// <returns></returns>
+		internal static Restorable createRow(ICloneable row)
+		{
+			Restorable it;
+			it.RestoreType = UrType.rt_Row;
+
+			it.cell    = null;
+			it.pretext = null;
+			it.postext = null;
+
+			it.rInsert = null;
+			it.rDelete = -1;
+
+			it.r    = null;
+			it.rPre = row.Clone() as Row;
+			it.rPos = null;
 
 			it.isSaved = IsSavedType.is_None;
 
@@ -148,8 +187,6 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(Restorable it)
 		{
-			//logfile.Log("\nPush()");
-
 			Undoables.Push(it);
 			Redoables.Clear();
 
@@ -200,8 +237,6 @@ namespace yata
 		/// </summary>
 		internal void Undo()
 		{
-			//logfile.Log("Undo()");
-
 			_it = Undoables.Pop();
 
 			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
@@ -211,6 +246,17 @@ namespace yata
 				case UrType.rt_Cell:
 					_it.cell.text = _it.pretext;
 					RestoreCell();
+					break;
+
+				case UrType.rt_Row:
+					if ((_it.r = _it.rPre) != null)
+					{
+						Overwrite();
+					}
+//					else
+//					{
+//						DeleteRow();
+//					}
 					break;
 
 				case UrType.rt_RowInsert:
@@ -225,8 +271,6 @@ namespace yata
 			}
 
 			Redoables.Push(_it);
-
-			//PrintRestorables();
 		}
 
 		/// <summary>
@@ -234,8 +278,6 @@ namespace yata
 		/// </summary>
 		public void Redo()
 		{
-			//logfile.Log("Redo()");
-
 			_it = Redoables.Pop();
 
 			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
@@ -245,6 +287,17 @@ namespace yata
 				case UrType.rt_Cell:
 					_it.cell.text = _it.postext;
 					RestoreCell();
+					break;
+
+				case UrType.rt_Row:
+					if ((_it.r = _it.rPos) != null)
+					{
+						Overwrite();
+					}
+//					else
+//					{
+//						DeleteRow();
+//					}
 					break;
 
 				case UrType.rt_RowInsert:
@@ -259,8 +312,6 @@ namespace yata
 			}
 
 			Undoables.Push(_it);
-
-			//PrintRestorables();
 		}
 
 
@@ -288,13 +339,9 @@ namespace yata
 		{
 			_grid.SetProHori();
 
-			//logfile.Log("");
 			var fields = new string[_grid.ColCount];
 			for (int i = 0; i != _grid.ColCount; ++i)
-			{
 				fields[i] = _it.rInsert[i].text;
-				//logfile.Log("UndoRedo.InsertRow() fields[" + i + "] text= " + fields[i]);
-			}
 
 			_grid.Insert(_it.rInsert._id, fields);
 
@@ -313,6 +360,15 @@ namespace yata
 
 			_grid.Refresh();
 			_grid._proHori = 0;
+		}
+
+		void Overwrite()
+		{
+			_grid.Rows[_it.r._id] = _it.r.Clone() as Row;
+
+			// TODO: probably wants a colRewidth() and UpdateFrozenControls() here
+
+			_grid.Refresh();
 		}
 		#endregion Methods
 

@@ -125,13 +125,9 @@ namespace yata
 		#region ICloneable requirements
 		public object Clone()
 		{
-			//logfile.Log("");
 			var cells = new Cell[_cells.Length];
 			for (int i = 0; i != _cells.Length; ++i)
-			{
 				cells[i] = _cells[i].Clone() as Cell;
-				//logfile.Log("Row.Clone() cell[" + i + "] text= " + cells[i].text);
-			}
 
 			return new Row(_id, cells, _brush, _grid);
 		}
@@ -173,14 +169,10 @@ namespace yata
 		#region ICloneable requirements
 		public object Clone()
 		{
-//			return MemberwiseClone();
-
 			var cell = new Cell(y,x, String.Copy(text));
 			cell.selected = selected;
 			cell.loadchanged = loadchanged;
 			cell._widthtext = _widthtext;
-
-			//logfile.Log("Cell.Clone() text= " + cell.text);
 
 			return cell;
 		}
