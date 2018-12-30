@@ -415,10 +415,52 @@ namespace yata
 
 		void InsertArray()
 		{
+			_grid._f.ShowColorPanel();
+			DrawingControl.SuspendDrawing(_grid);
+
+
+			int cols = _it.array[0].CellCount;
+			var fields = new string[cols];
+
+			int r = _it.array[0]._id;
+			for (int i = 0; i != _it.array.Length; ++i, ++r)
+			{
+				for (int j = 0; j != cols; ++j)
+					fields[j] = _it.array[i][j].text;
+
+				_grid.Insert(r, fields, false, _it.array[i]._brush);
+			}
+
+			_grid.Calibrate(_it.array[0]._id, _it.array.Length - 1);
+//			_grid.EnsureDisplayedRow(_it.array[0]._id);
+
+
+			_grid._f.ShowColorPanel(false);
+			DrawingControl.ResumeDrawing(_grid);
 		}
 
 		void DeleteArray()
 		{
+			_grid._f.ShowColorPanel();
+			DrawingControl.SuspendDrawing(_grid);
+
+
+			int rFirst = _it.array[0]._id;
+			int rLast = rFirst + _it.array.Length - 1;
+
+			while (rLast >= rFirst) // reverse delete.
+			{
+				_grid.Insert(rLast--, null, false);
+			}
+
+			_grid.Calibrate();
+
+//			if (rFirst < RowCount)
+//				EnsureDisplayedRow(rFirst);
+
+
+			_grid._f.ShowColorPanel(false);
+			DrawingControl.ResumeDrawing(_grid);
 		}
 		#endregion Methods (actions)
 

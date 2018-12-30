@@ -68,6 +68,9 @@ namespace yata
 			set { _cells[c] = value; }
 		}
 
+		internal int CellCount
+		{ get; private set; }
+
 		internal Brush _brush;
 
 		bool _selected;
@@ -96,11 +99,13 @@ namespace yata
 		internal Row(int id, int cols, Brush brush, YataGrid grid)
 		{
 			_id = id;
+
+			CellCount = cols;
 			_cells = new Cell[cols];
 
-			_grid = grid;
-
 			_brush = brush;
+
+			_grid = grid;
 		}
 
 		/// <summary>
@@ -113,11 +118,13 @@ namespace yata
 		internal Row(int id, Cell[] cells, Brush brush, YataGrid grid)
 		{
 			_id = id;
+
+			CellCount = cells.Length;
 			_cells = cells;
 
-			_grid = grid;
-
 			_brush = brush;
+
+			_grid = grid;
 		}
 		#endregion cTors
 

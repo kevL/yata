@@ -1531,31 +1531,33 @@ namespace yata
 
 				Restorable rest = UndoRedo.createArray(RangeSelect + 1, UndoRedo.UrType.rt_ArrayInsert);
 
-				int bot,top;
+				int rFirst, rLast;
 				if (RangeSelect > 0)
 				{
-					top = selr;
-					bot = selr + RangeSelect;
+					rFirst = selr;
+					rLast = selr + RangeSelect;
 				}
 				else
 				{
-					top = selr + RangeSelect;
-					bot = selr;
+					rFirst = selr + RangeSelect;
+					rLast = selr;
 				}
 
-				int i = (bot - top);
-				while (bot >= top) // reverse delete.
+				int i = RangeSelect;
+				while (rLast >= rFirst) // reverse delete.
 				{
-					rest.array[i] = Rows[bot].Clone() as Row;
-					Insert(bot--, null, false);
+					rest.array[i] = Rows[rLast].Clone() as Row;
+					Insert(rLast, null, false);
+
+					--i; --rLast;
 				}
 
-				if (RowCount == 1 && bot == -1) // ie. if grid was blanked.
-					bot =  0;
+				if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
+					rLast =  0;
 				else
-					bot = -1;
+					rLast = -1; // calibrate all extant rows.
 
-				Calibrate(bot); // delete key
+				Calibrate(rLast); // delete key
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
