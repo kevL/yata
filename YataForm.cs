@@ -1611,6 +1611,8 @@ namespace yata
 					Cell cell = Table.GetSelectedCell();
 					if (cell != null)
 					{
+						// TODO: Undo/Redo action
+
 						if (cell.text != _copytext)
 						{
 							Table.ChangeCellText(cell, _copytext);
@@ -1677,20 +1679,36 @@ namespace yata
 			{
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
-	
-				Table.Changed = true;
-	
+
+
+				Restorable rest = UndoRedo.createArray(_copy.Count, UndoRedo.UrType.rt_ArrayDelete);
+
 				int selr = Table.getSelectedRow();
 				if (selr == -1)
 					selr = Table.RowCount;
-	
+
 				int r = selr;
-				for (int i = 0; i != _copy.Count; ++i)
-					Table.Insert(r++, _copy[i], false);
-	
+				for (int i = 0; i != _copy.Count; ++i, ++r)
+				{
+					Table.Insert(r, _copy[i], false);
+					rest.array[i] = Table.Rows[r].Clone() as Row;
+				}
+
 				Table.Calibrate(selr, _copy.Count - 1); // paste range
 				Table.EnsureDisplayedRow(selr);
-	
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				Table._ur.Push(rest);
+
+
 				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
 			}

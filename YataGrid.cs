@@ -1528,7 +1528,8 @@ namespace yata
 				_f.ShowColorPanel();
 				DrawingControl.SuspendDrawing(this);
 
-				Changed = true;
+
+				Restorable rest = UndoRedo.createArray(RangeSelect + 1, UndoRedo.UrType.rt_ArrayInsert);
 
 				int bot,top;
 				if (RangeSelect > 0)
@@ -1542,8 +1543,12 @@ namespace yata
 					bot = selr;
 				}
 
-				while (bot >= top)
+				int i = (bot - top);
+				while (bot >= top) // reverse delete.
+				{
+					rest.array[i] = Rows[bot].Clone() as Row;
 					Insert(bot--, null, false);
+				}
 
 				if (RowCount == 1 && bot == -1) // ie. if grid was blanked.
 					bot =  0;
@@ -1554,6 +1559,18 @@ namespace yata
 
 				if (selr < RowCount)
 					EnsureDisplayedRow(selr);
+
+
+				if (!Changed)
+				{
+					Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				else
+					rest.isSaved = UndoRedo.IsSavedType.is_None;
+
+				_ur.Push(rest);
+
 
 				_f.ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(this);

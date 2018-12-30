@@ -23,6 +23,8 @@ namespace yata
 		internal Row rPre;
 		internal Row rPos;
 
+		internal Row[] array;
+
 		internal UndoRedo.IsSavedType isSaved;
 	}
 
@@ -32,9 +34,13 @@ namespace yata
 		internal enum UrType
 		{
 			rt_Cell,		// 0 cell action
+
 			rt_Insert,		// 1 row actions ->
 			rt_Delete,		// 2
-			rt_Overwrite	// 3
+			rt_Overwrite,	// 3
+
+			rt_ArrayInsert,	// 4
+			rt_ArrayDelete	// 5
 		}
 
 		internal enum IsSavedType
@@ -94,13 +100,15 @@ namespace yata
 			Restorable it;
 			it.RestoreType = UrType.rt_Cell;
 
-			it.cell = cell.Clone() as Cell;
-			it.pretext = it.cell.text;
-			it.postext = String.Empty;
+			it.cell    = cell.Clone() as Cell;	// is used by current action
+			it.pretext = it.cell.text;			// used by Undo
+			it.postext = String.Empty;			// used by Redo
 
-			it.r    =
-			it.rPre =
-			it.rPos = null;
+			it.r    =							// not used
+			it.rPre =							// not used
+			it.rPos = null;						// not used
+
+			it.array = null;					// not used
 
 			it.isSaved = IsSavedType.is_None;
 
@@ -120,14 +128,16 @@ namespace yata
 			Restorable it;
 			it.RestoreType = type;
 
-			it.cell = null;
-			it.pretext =
-			it.postext = null;
+			it.cell    = null;			// not used
+			it.pretext =				// not used
+			it.postext = null;			// not used
 
-			it.r = row.Clone() as Row;
+			it.r = row.Clone() as Row;	// used by Undo/Redo
 
-			it.rPre =
-			it.rPos = null;
+			it.rPre =					// not used
+			it.rPos = null;				// not used
+
+			it.array = null;			// not used
 
 			it.isSaved = IsSavedType.is_None;
 
@@ -145,14 +155,42 @@ namespace yata
 			Restorable it;
 			it.RestoreType = UrType.rt_Overwrite;
 
-			it.cell = null;
-			it.pretext =
-			it.postext = null;
+			it.cell    = null;				// not used
+			it.pretext =					// not used
+			it.postext = null;				// not used
 
-			it.r = null;
+			it.r    = null;					// is used by current action
+			it.rPre = row.Clone() as Row;	// used by Undo
+			it.rPos = null;					// used by Redo
 
-			it.rPre = row.Clone() as Row;
-			it.rPos = null;
+			it.array = null;				// not used
+
+			it.isSaved = IsSavedType.is_None;
+
+			return it;
+		}
+
+		/// <summary>
+		/// Instantiates a restorable list of rows when user changes state.
+		/// </summary>
+		/// <param name="rows">quantity of rows in the Row-array</param>
+		/// <param name="type">'rt_ArrayDelete' for row(s) to be deleted or
+		/// 'rt_ArrayInsert' for row(s) to be inserted</param>
+		/// <returns></returns>
+		internal static Restorable createArray(int rows, UrType type)
+		{
+			Restorable it;
+			it.RestoreType = type;
+
+			it.cell    = null;			// not used
+			it.pretext =				// not used
+			it.postext = null;			// not used
+
+			it.r    =					// not used
+			it.rPre =					// not used
+			it.rPos = null;				// not used
+
+			it.array = new Row[rows];	// is used by current action
 
 			it.isSaved = IsSavedType.is_None;
 
@@ -254,6 +292,16 @@ namespace yata
 					_it.r = _it.rPre;
 					Overwrite();
 					break;
+
+				case UrType.rt_ArrayInsert:
+					InsertArray();
+					_it.RestoreType = UrType.rt_ArrayDelete;
+					break;
+
+				case UrType.rt_ArrayDelete:
+					DeleteArray();
+					_it.RestoreType = UrType.rt_ArrayInsert;
+					break;
 			}
 
 			Redoables.Push(_it);
@@ -288,6 +336,16 @@ namespace yata
 				case UrType.rt_Overwrite:
 					_it.r = _it.rPos;
 					Overwrite();
+					break;
+
+				case UrType.rt_ArrayInsert:
+					InsertArray();
+					_it.RestoreType = UrType.rt_ArrayDelete;
+					break;
+
+				case UrType.rt_ArrayDelete:
+					DeleteArray();
+					_it.RestoreType = UrType.rt_ArrayInsert;
 					break;
 			}
 
@@ -353,6 +411,14 @@ namespace yata
 			_grid.Calibrate(_it.r._id);
 
 			_grid.Refresh();
+		}
+
+		void InsertArray()
+		{
+		}
+
+		void DeleteArray()
+		{
 		}
 		#endregion Methods (actions)
 
