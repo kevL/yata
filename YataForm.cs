@@ -978,7 +978,7 @@ namespace yata
 				}
 				row._brush = Brushes.Created;
 
-				// NOTE: bypasses Calibrate()
+				Table.Calibrate(_r);
 
 				Table.Refresh();
 				Table._proHori = 0;
@@ -1077,7 +1077,7 @@ namespace yata
 				}
 				Table.Rows[_r]._brush = Brushes.Created;
 
-				// NOTE: bypasses Calibrate()
+				Table.Calibrate(_r);
 
 				Table.Refresh();
 				Table._proHori = 0;
