@@ -350,8 +350,7 @@ namespace yata
 		void Overwrite()
 		{
 			_grid.Rows[_it.r._id] = _it.r.Clone() as Row;
-
-			// TODO: probably wants a colRewidth() and UpdateFrozenControls() here
+			_grid.Calibrate(_it.r._id);
 
 			_grid.Refresh();
 		}
