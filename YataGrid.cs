@@ -1705,9 +1705,8 @@ namespace yata
 
 			rest.postext = cell.text;
 			_ur.Push(rest);
-
-			//_ur.PrintRestorables();
 		}
+
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
@@ -1735,8 +1734,6 @@ namespace yata
 
 			rest.postext = cell.text;
 			_ur.Push(rest);
-
-			//_ur.PrintRestorables();
 		}
 
 
