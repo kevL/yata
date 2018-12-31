@@ -1568,9 +1568,6 @@ namespace yata
 					Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				_ur.Push(rest);
 
 
@@ -1684,8 +1681,6 @@ namespace yata
 				Changed = true;
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-			else
-				rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
 			cell.loadchanged = false;
@@ -1720,8 +1715,6 @@ namespace yata
 				Changed = true;
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-			else
-				rest.isSaved = UndoRedo.IsSavedType.is_None;
 
 
 			cell.loadchanged = false;

@@ -29,7 +29,7 @@ namespace yata
 	}
 
 
-	class UndoRedo
+	sealed class UndoRedo
 	{
 		internal enum UrType
 		{

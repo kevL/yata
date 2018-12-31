@@ -946,9 +946,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 			}
 			else
@@ -989,9 +986,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 
 				// - store the row's changed state to 'rPos' in the Restorable
 				rest.rPos = Table.Rows[_r].Clone() as Row;
@@ -1019,9 +1013,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 			}
 			else
@@ -1052,9 +1043,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 			}
 			else
@@ -1088,9 +1076,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 
 				// - store the row's changed state to 'rPos' in the Restorable
 				rest.rPos = Table.Rows[_r].Clone() as Row;
@@ -1124,9 +1109,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 			}
 			else
@@ -1153,9 +1135,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 			}
 			else
@@ -1701,9 +1680,6 @@ namespace yata
 					Table.Changed = true;
 					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else
-					rest.isSaved = UndoRedo.IsSavedType.is_None;
-
 				Table._ur.Push(rest);
 
 
