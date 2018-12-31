@@ -507,7 +507,12 @@ namespace yata
 			for (c = 0; c != _grid.ColCount; ++c)
 			{
 				rect.Y = _heightr * c - offset;
-				TextRenderer.DrawText(YataGrid.graphics, _grid.Cols[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+				TextRenderer.DrawText(YataGrid.graphics,
+									  _grid.Cols[c].text,
+									  Font,
+									  rect,
+									  Colors.Text,
+									  YataGraphics.flags);
 			}
 
 			// draw val-texts ->
@@ -525,7 +530,12 @@ namespace yata
 				for (c = 0; c != _grid.ColCount; ++c)
 				{
 					rect.Y = _heightr * c - offset;
-					TextRenderer.DrawText(YataGrid.graphics, _grid[r,c].text, Font, rect, Colors.Text, YataGraphics.flags);
+					TextRenderer.DrawText(YataGrid.graphics,
+										  _grid[r,c].text,
+										  Font,
+										  rect,
+										  Colors.Text,
+										  YataGraphics.flags);
 				}
 			}
 

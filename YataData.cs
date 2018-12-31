@@ -100,8 +100,7 @@ namespace yata
 		{
 			_id = id;
 
-			CellCount = cols;
-			_cells = new Cell[cols];
+			_cells = new Cell[CellCount = cols];
 
 			_brush = brush;
 
@@ -119,8 +118,7 @@ namespace yata
 		{
 			_id = id;
 
-			CellCount = cells.Length;
-			_cells = cells;
+			CellCount = (_cells = cells).Length;
 
 			_brush = brush;
 
@@ -132,8 +130,8 @@ namespace yata
 		#region ICloneable requirements
 		public object Clone()
 		{
-			var cells = new Cell[_cells.Length];
-			for (int i = 0; i != _cells.Length; ++i)
+			var cells = new Cell[CellCount];
+			for (int i = 0; i != CellCount; ++i)
 				cells[i] = _cells[i].Clone() as Cell;
 
 			return new Row(_id, cells, _brush, _grid);
@@ -177,9 +175,9 @@ namespace yata
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
-			cell.selected = selected;
+			cell.selected    = selected;
 			cell.loadchanged = loadchanged;
-			cell._widthtext = _widthtext;
+			cell._widthtext  = _widthtext;
 
 			return cell;
 		}

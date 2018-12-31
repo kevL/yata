@@ -381,7 +381,7 @@ namespace yata
 
 			var fields = new string[_grid.ColCount];
 			for (int i = 0; i != _grid.ColCount; ++i)
-				fields[i] = _it.r[i].text;
+				fields[i] = String.Copy(_it.r[i].text);
 
 			_grid.Insert(_it.r._id, fields, true, _it.r._brush);
 
@@ -429,7 +429,7 @@ namespace yata
 			for (int i = 0; i != _it.array.Length; ++i, ++r)
 			{
 				for (int j = 0; j != cols; ++j)
-					fields[j] = _it.array[i][j].text;
+					fields[j] = String.Copy(_it.array[i][j].text);
 
 				_grid.Insert(r, fields, false, _it.array[i]._brush);
 			}

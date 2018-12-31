@@ -1497,10 +1497,10 @@ namespace yata
 		/// <summary>
 		/// Selects the next LoadChanged cell.
 		/// @note This is fired only from the EditMenu and its item is enabled
-		/// only if there actually IS a load-changed cell available. TODO: If
-		/// this is given a hotkey then the item would have to be enabled when a
-		/// load-changed flag(s) is set and disabled/validity-checks need to
-		/// happen here or so.
+		/// only if there actually IS a load-changed cell available.
+		/// TODO: If this is given a hotkey then the item would have to be
+		/// enabled when a load-changed flag(s) is set and disabled/
+		/// validity-checks need to happen here or so.
 		/// @note Assumes Table is valid and that there are loadchanged cells.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -1611,8 +1611,6 @@ namespace yata
 					Cell cell = Table.GetSelectedCell();
 					if (cell != null)
 					{
-						// TODO: Undo/Redo action
-
 						if (cell.text != _copytext)
 						{
 							Table.ChangeCellText(cell, _copytext);
