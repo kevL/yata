@@ -445,3 +445,9 @@ A right-click on the Property Panel button will switch the panel's docked
 position from the topright of the grid to the bottomright of the grid, or vice
 versa. (This is noticeable only if the height of the panel is less than the
 height of the grid.)
+
+
+Appendix K: Undo/Redo
+
+Yata stores the state of cell-text changes and row insertions and deletions for
+Undo and Redo operations.

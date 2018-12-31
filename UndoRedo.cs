@@ -132,7 +132,7 @@ namespace yata
 			it.pretext =				// not used
 			it.postext = null;			// not used
 
-			it.r = row.Clone() as Row;	// used by Undo/Redo
+			it.r = row.Clone() as Row;	// is used by current action
 
 			it.rPre =					// not used
 			it.rPos = null;				// not used
@@ -413,6 +413,9 @@ namespace yata
 			_grid.Refresh();
 		}
 
+		/// <summary>
+		/// Inserts and array of rows in accord with Undo() or Redo().
+		/// </summary>
 		void InsertArray()
 		{
 			_grid._f.ShowColorPanel();
@@ -439,6 +442,9 @@ namespace yata
 			DrawingControl.ResumeDrawing(_grid);
 		}
 
+		/// <summary>
+		/// Deletes and array of rows in accord with Undo() or Redo().
+		/// </summary>
 		void DeleteArray()
 		{
 			_grid._f.ShowColorPanel();
