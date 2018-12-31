@@ -217,7 +217,7 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(Restorable it)
 		{
-			if (_grid.UrEnabled)
+			if (_grid.UrEnabled) // NOTE: This could/should be done before 'it' is instantiated by the caller.
 			{
 				Undoables.Push(it);
 				Redoables.Clear();
