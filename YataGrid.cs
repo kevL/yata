@@ -2825,7 +2825,7 @@ namespace yata
 				Rows.Insert(id, row);
 				++RowCount;
 
-				for (int r = id + 1; r != RowCount; ++r)
+				for (int r = id + 1; r != RowCount; ++r) // straighten out row._id and cell.y ->
 				{
 					++(row = Rows[r])._id;
 					for (int c = 0; c != ColCount; ++c)
@@ -2837,7 +2837,7 @@ namespace yata
 				Rows.Remove(Rows[id]);
 				--RowCount;
 
-				for (int r = id; r != RowCount; ++r)
+				for (int r = id; r != RowCount; ++r) // straighten out row._id and cell.y ->
 				{
 					--(row = Rows[r])._id;
 					for (int c = 0; c != ColCount; ++c)
@@ -2876,9 +2876,11 @@ namespace yata
 		}
 
 
-		ToolTip TooltipSort = new ToolTip(); // warns when table isn't sorted by ID-asc.
-
 		#region Sort
+		ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
+
+		internal bool UrEnabled = true; // disable Undo/Redo when table isn't sorted by ID-asc.
+
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
 		/// @note Mergesort.
@@ -2894,6 +2896,11 @@ namespace yata
 				_sortdir = SORT_DES;
 
 			_sortcol = col;
+
+
+			UrEnabled = (_sortcol == 0 && _sortdir == SORT_ASC);
+			_f.EnableUndo(_ur.CanUndo && UrEnabled);
+			_f.EnableRedo(_ur.CanRedo && UrEnabled);
 
 			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
 			{

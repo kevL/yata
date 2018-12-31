@@ -217,10 +217,14 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(Restorable it)
 		{
-			Undoables.Push(it);
-			Redoables.Clear();
+			if (_grid.UrEnabled)
+			{
+				Undoables.Push(it);
+				Redoables.Clear();
 
-			_grid._f.EnableUndo(true);
+				_grid._f.EnableUndo(true);
+			}
+			// TODO: else invoke UndoRedoWarningBox ... w/ checkbox "I promise to remember when columns are sorted."
 		}
 
 
@@ -267,44 +271,47 @@ namespace yata
 		/// </summary>
 		internal void Undo()
 		{
-			_it = Undoables.Pop();
-
-			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
-
-			switch (_it.RestoreType)
+			if (_grid.UrEnabled) // safety.
 			{
-				case UrType.rt_Cell:
-					_it.cell.text = _it.pretext;
-					RestoreCell();
-					break;
+				_it = Undoables.Pop();
 
-				case UrType.rt_Insert:
-					InsertRow();
-					_it.RestoreType = UrType.rt_Delete;
-					break;
+				_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
 
-				case UrType.rt_Delete:
-					DeleteRow();
-					_it.RestoreType = UrType.rt_Insert;
-					break;
+				switch (_it.RestoreType)
+				{
+					case UrType.rt_Cell:
+						_it.cell.text = _it.pretext;
+						RestoreCell();
+						break;
 
-				case UrType.rt_Overwrite:
-					_it.r = _it.rPre;
-					Overwrite();
-					break;
+					case UrType.rt_Insert:
+						InsertRow();
+						_it.RestoreType = UrType.rt_Delete;
+						break;
 
-				case UrType.rt_ArrayInsert:
-					InsertArray();
-					_it.RestoreType = UrType.rt_ArrayDelete;
-					break;
+					case UrType.rt_Delete:
+						DeleteRow();
+						_it.RestoreType = UrType.rt_Insert;
+						break;
 
-				case UrType.rt_ArrayDelete:
-					DeleteArray();
-					_it.RestoreType = UrType.rt_ArrayInsert;
-					break;
+					case UrType.rt_Overwrite:
+						_it.r = _it.rPre;
+						Overwrite();
+						break;
+
+					case UrType.rt_ArrayInsert:
+						InsertArray();
+						_it.RestoreType = UrType.rt_ArrayDelete;
+						break;
+
+					case UrType.rt_ArrayDelete:
+						DeleteArray();
+						_it.RestoreType = UrType.rt_ArrayInsert;
+						break;
+				}
+
+				Redoables.Push(_it);
 			}
-
-			Redoables.Push(_it);
 		}
 
 		/// <summary>
@@ -312,44 +319,47 @@ namespace yata
 		/// </summary>
 		public void Redo()
 		{
-			_it = Redoables.Pop();
-
-			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
-
-			switch (_it.RestoreType)
+			if (_grid.UrEnabled) // safety.
 			{
-				case UrType.rt_Cell:
-					_it.cell.text = _it.postext;
-					RestoreCell();
-					break;
+				_it = Redoables.Pop();
 
-				case UrType.rt_Insert:
-					InsertRow();
-					_it.RestoreType = UrType.rt_Delete;
-					break;
+				_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
 
-				case UrType.rt_Delete:
-					DeleteRow();
-					_it.RestoreType = UrType.rt_Insert;
-					break;
+				switch (_it.RestoreType)
+				{
+					case UrType.rt_Cell:
+						_it.cell.text = _it.postext;
+						RestoreCell();
+						break;
 
-				case UrType.rt_Overwrite:
-					_it.r = _it.rPos;
-					Overwrite();
-					break;
+					case UrType.rt_Insert:
+						InsertRow();
+						_it.RestoreType = UrType.rt_Delete;
+						break;
 
-				case UrType.rt_ArrayInsert:
-					InsertArray();
-					_it.RestoreType = UrType.rt_ArrayDelete;
-					break;
+					case UrType.rt_Delete:
+						DeleteRow();
+						_it.RestoreType = UrType.rt_Insert;
+						break;
 
-				case UrType.rt_ArrayDelete:
-					DeleteArray();
-					_it.RestoreType = UrType.rt_ArrayInsert;
-					break;
+					case UrType.rt_Overwrite:
+						_it.r = _it.rPos;
+						Overwrite();
+						break;
+
+					case UrType.rt_ArrayInsert:
+						InsertArray();
+						_it.RestoreType = UrType.rt_ArrayDelete;
+						break;
+
+					case UrType.rt_ArrayDelete:
+						DeleteArray();
+						_it.RestoreType = UrType.rt_ArrayInsert;
+						break;
+				}
+
+				Undoables.Push(_it);
 			}
-
-			Undoables.Push(_it);
 		}
 		#endregion Methods
 
@@ -440,7 +450,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Inserts and array of rows in accord with Undo() or Redo().
+		/// Inserts an array of rows in accord with Undo() or Redo().
 		/// </summary>
 		void InsertArray()
 		{
@@ -478,7 +488,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes and array of rows in accord with Undo() or Redo().
+		/// Deletes an array of rows in accord with Undo() or Redo().
 		/// </summary>
 		void DeleteArray()
 		{
