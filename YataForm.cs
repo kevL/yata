@@ -1641,27 +1641,27 @@ namespace yata
 
 			int selr = Table.getSelectedRow();
 
-			int top,bot;
+			int rFirst, rLast;
 			if (Table.RangeSelect > 0)
 			{
-				top = selr;
-				bot = selr + Table.RangeSelect;
+				rFirst = selr;
+				rLast  = selr + Table.RangeSelect;
 			}
 			else
 			{
-				top = selr + Table.RangeSelect;
-				bot = selr;
+				rFirst = selr + Table.RangeSelect;
+				rLast  = selr;
 			}
 
 			string[] fields;
-			while (top <= bot)
+			while (rFirst <= rLast)
 			{
 				fields = new string[Table.ColCount];
 				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = Table[top,c].text;
+					fields[c] = Table[rFirst,c].text;
 
 				_copy.Add(fields);
-				++top;
+				++rFirst;
 			}
 			it_PasteRange.Enabled = true;
 		}

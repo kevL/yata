@@ -1535,12 +1535,12 @@ namespace yata
 				if (RangeSelect > 0)
 				{
 					rFirst = selr;
-					rLast = selr + RangeSelect;
+					rLast  = selr + RangeSelect;
 				}
 				else
 				{
 					rFirst = selr + RangeSelect;
-					rLast = selr;
+					rLast  = selr;
 				}
 
 				int i = RangeSelect;

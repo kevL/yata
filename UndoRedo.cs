@@ -360,14 +360,20 @@ namespace yata
 		/// </summary>
 		void RestoreCell()
 		{
+			var cell = _it.cell.Clone() as Cell;
+
 			int
 				c = _it.cell.x,
 				r = _it.cell.y;
 
-			_grid[r,c] = _it.cell.Clone() as Cell;
+			_grid[r,c] = cell;
 
 			_grid.colRewidth(c, r);
 			_grid.UpdateFrozenControls(c);
+
+			_grid.ClearSelects();
+			cell.selected = true;
+			_grid.EnsureDisplayed(cell);
 
 			_grid._f.Refresh();
 		}
@@ -379,11 +385,18 @@ namespace yata
 		{
 			_grid.SetProHori();
 
-			var fields = new string[_grid.ColCount];
-			for (int i = 0; i != _grid.ColCount; ++i)
-				fields[i] = String.Copy(_it.r[i].text);
+			Row row = _it.r;
 
-			_grid.Insert(_it.r._id, fields, true, _it.r._brush);
+			var fields = new string[row.CellCount];
+			for (int i = 0; i != row.CellCount; ++i)
+				fields[i] = String.Copy(row[i].text);
+
+			int r = row._id;
+			_grid.Insert(r, fields, true, row._brush);
+
+			_grid.ClearSelects();
+			_grid.Rows[r].selected = true;
+			_grid.EnsureDisplayedRow(r);
 
 			_grid.Refresh();
 			_grid._proHori = 0;
@@ -396,7 +409,14 @@ namespace yata
 		{
 			_grid.SetProHori();
 
-			_grid.Insert(_it.r._id, null);
+			int r = _it.r._id;
+
+			_grid.Insert(r, null);
+
+			_grid.ClearSelects();
+			if (r >= _grid.RowCount)
+				r  = _grid.RowCount - 1;
+			_grid.EnsureDisplayedRow(r);
 
 			_grid.Refresh();
 			_grid._proHori = 0;
@@ -407,8 +427,14 @@ namespace yata
 		/// </summary>
 		void Overwrite()
 		{
-			_grid.Rows[_it.r._id] = _it.r.Clone() as Row;
-			_grid.Calibrate(_it.r._id);
+			Row row = _it.r;
+			int r = row._id;
+
+			_grid.Rows[r] = row.Clone() as Row;
+			_grid.Calibrate(r);
+
+			_grid.ClearSelects();
+			_grid.EnsureDisplayedRow(r);
 
 			_grid.Refresh();
 		}
@@ -425,17 +451,26 @@ namespace yata
 			int cols = _it.array[0].CellCount;
 			var fields = new string[cols];
 
+			Row row;
+
 			int r = _it.array[0]._id;
 			for (int i = 0; i != _it.array.Length; ++i, ++r)
 			{
+				row = _it.array[i];
 				for (int j = 0; j != cols; ++j)
-					fields[j] = String.Copy(_it.array[i][j].text);
+					fields[j] = String.Copy(row[j].text);
 
-				_grid.Insert(r, fields, false, _it.array[i]._brush);
+				_grid.Insert(r, fields, false, row._brush);
 			}
 
-			_grid.Calibrate(_it.array[0]._id, _it.array.Length - 1);
-//			_grid.EnsureDisplayedRow(_it.array[0]._id);
+			r = _it.array[0]._id;
+			_grid.Calibrate(r, _it.array.Length - 1);
+
+			_grid.ClearSelects();
+			_grid.Rows[r].selected = true;
+			_grid.RangeSelect = _it.array.Length - 1;
+			_grid.EnsureDisplayedRow(r); // TODO: EnsureDisplayedRows()
+			// NOTE: Does not select cells.
 
 
 			_grid._f.ShowColorPanel(false);
@@ -461,8 +496,10 @@ namespace yata
 
 			_grid.Calibrate();
 
-//			if (rFirst < RowCount)
-//				EnsureDisplayedRow(rFirst);
+			_grid.ClearSelects();
+			if (rFirst >= _grid.RowCount)
+				rFirst  = _grid.RowCount - 1;
+			_grid.EnsureDisplayedRow(rFirst);
 
 
 			_grid._f.ShowColorPanel(false);
