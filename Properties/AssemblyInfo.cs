@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("kevL")]
 [assembly: AssemblyProduct("Yata")]
-[assembly: AssemblyCopyright("\u00A9 2018")]
+[assembly: AssemblyCopyright("\u00A9 2019")]
 [assembly: AssemblyTrademark("zergrush")]
 [assembly: AssemblyCulture("")]
 
