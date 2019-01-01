@@ -493,12 +493,13 @@ namespace yata
 									   1,     _heightr * _grid.ColCount - offset,
 									   Width, _heightr * _grid.ColCount - offset);
 
-			int c;
-			for (c = 1; c != _grid.ColCount; ++c)	// horizontal row lines
+			int c, y;
+			for (c = 1; c != _grid.ColCount; ++c) // horizontal row lines
 			{
+				y = _heightr * c - offset + 1;
 				YataGrid.graphics.DrawLine(Pens.DarkLine,
-										   0,     _heightr * c - offset + 1,
-										   Width, _heightr * c - offset + 1);
+										   0,     y,
+										   Width, y);
 			}
 
 			// draw var-texts ->
