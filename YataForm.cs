@@ -409,8 +409,8 @@ namespace yata
 
 				ShowColorPanel(false);
 
-				it_Undo.Enabled = Table._ur.CanUndo && Table.UrEnabled;
-				it_Redo.Enabled = Table._ur.CanRedo && Table.UrEnabled;
+				it_Undo.Enabled = Table._ur.CanUndo;// && Table.UrEnabled;
+				it_Redo.Enabled = Table._ur.CanRedo;// && Table.UrEnabled;
 
 				it_MenuPaths.Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
 
@@ -1795,7 +1795,11 @@ namespace yata
 						}
 					}
 
-					Table.Changed |= changed;
+					if (changed)
+					{
+						Table.Changed = true;
+						Table._ur.ResetSaved(true);
+					}
 
 					if (changed)
 					{

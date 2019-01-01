@@ -54,6 +54,7 @@ namespace yata
 	{
 		#region Fields and Properties
 		internal int _id;
+		internal int _id_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
 
 		readonly YataGrid _grid;
 
@@ -153,6 +154,7 @@ namespace yata
 
 		internal int x;
 		internal int y;
+		internal int y_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
 
 		internal int _widthtext;
 

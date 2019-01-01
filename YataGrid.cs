@@ -2879,7 +2879,7 @@ namespace yata
 		#region Sort
 		ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
 
-		internal bool UrEnabled = true; // disable Undo/Redo when table isn't sorted by ID-asc.
+//		internal bool UrEnabled = true; // disable Undo/Redo when table isn't sorted by ID-asc.
 
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
@@ -2888,7 +2888,8 @@ namespace yata
 		/// <param name="col">the col-id to sort by</param>
 		void ColSort(int col)
 		{
-			Changed = true; // TODO: do Changed only if rows are swapped/order is changed.
+			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
+			_ur.ResetSaved(true);
 
 			if (_sortdir != SORT_ASC || _sortcol != col)
 				_sortdir = SORT_ASC;
@@ -2898,9 +2899,9 @@ namespace yata
 			_sortcol = col;
 
 
-			UrEnabled = (_sortcol == 0 && _sortdir == SORT_ASC);
-			_f.EnableUndo(_ur.CanUndo && UrEnabled);
-			_f.EnableRedo(_ur.CanRedo && UrEnabled);
+//			UrEnabled = (_sortcol == 0 && _sortdir == SORT_ASC);
+//			_f.EnableUndo(_ur.CanUndo && UrEnabled);
+//			_f.EnableRedo(_ur.CanRedo && UrEnabled);
 
 			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
 			{
@@ -2913,13 +2914,25 @@ namespace yata
 			var rowsT = new List<Row>();
 			TopDownMergeSort(Rows, rowsT, RowCount);
 
-			Row row;
+
+			Row row; Cell cell; int presort;
 			for (int r = 0; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
-				(row = Rows[r])._id = r;
+				row = Rows[r];
+				presort = row._id;
+
+				row._id_presort = presort;
+				row._id = r;
+
 				for (int c = 0; c != ColCount; ++c)
-					row[c].y = r;
+				{
+					cell = row[c];
+
+					cell.y_presort = presort;
+					cell.y = r;
+				}
 			}
+			_ur.ResetY(); // straighten out row._id and cell.y in UndoRedo's Restorables
 		}
 
 		/// <summary>

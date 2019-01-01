@@ -217,7 +217,7 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(Restorable it)
 		{
-			if (_grid.UrEnabled) // NOTE: This could/should be done before 'it' is instantiated by the caller.
+//			if (_grid.UrEnabled) // NOTE: This could/should be done before 'it' is instantiated by the caller.
 			{
 				Undoables.Push(it);
 				Redoables.Clear();
@@ -234,19 +234,22 @@ namespace yata
 		/// @note It would probably be easier to contain Restorables in Lists
 		/// instead of Stacks.
 		/// </summary>
-		internal void ResetSaved()
+		/// <param name="allchanged">sets all Restorables to 'is_None'</param>
+		internal void ResetSaved(bool allchanged = false)
 		{
 			if (Undoables.Count != 0)
 			{
 				var u = Undoables.ToArray();
 
-				u[0].isSaved = UndoRedo.IsSavedType.is_Redo;
+				int i = 0;
+				if (!allchanged)
+					u[i++].isSaved = UndoRedo.IsSavedType.is_Redo;
 
-				for (int i = 1; i != u.Length; ++i)
+				for (; i != u.Length; ++i)
 					u[i].isSaved = UndoRedo.IsSavedType.is_None;
 
 				Undoables.Clear();
-				for (int i = u.Length - 1; i != -1; --i)
+				for (i = u.Length - 1; i != -1; --i)
 					Undoables.Push(u[i]);
 			}
 
@@ -254,15 +257,112 @@ namespace yata
 			{
 				var r = Redoables.ToArray();
 
-				r[0].isSaved = UndoRedo.IsSavedType.is_Undo;
+				int i = 0;
+				if (!allchanged)
+					r[i++].isSaved = UndoRedo.IsSavedType.is_Undo;
 
-				for (int i = 1; i != r.Length; ++i)
+				for (; i != r.Length; ++i)
+					r[i].isSaved = UndoRedo.IsSavedType.is_None;
+
+				Redoables.Clear();
+				for (i = r.Length - 1; i != -1; --i)
+					Redoables.Push(r[i]);
+			}
+		}
+
+		/// <summary>
+		/// Re-determines the y-position (aka row) of the Restorables when user
+		/// sorts cols.
+		/// @note It would probably be easier to contain Restorables in Lists
+		/// instead of Stacks.
+		/// </summary>
+		internal void ResetY()
+		{
+			if (Undoables.Count != 0)
+			{
+				var u = Undoables.ToArray();
+
+				int y;
+
+				Restorable rest;
+				for (int i = 0; i != u.Length; ++i)
+				{
+					rest = u[i];
+
+					switch (rest.RestoreType)
+					{
+						case UrType.rt_Cell: // cell
+						{
+							int c = rest.cell.x;
+
+							y = rest.cell.y;
+
+							for (int r = 0; r != _grid.RowCount; ++r)
+							{
+								if (_grid[r,c].y_presort == y)
+								{
+									rest.cell.y = _grid[r,c].y;	// I think it works ....
+									break;						// NOTE: The preset-vars do not need to be cleared.
+								}
+							}
+							break;
+						}
+
+						case UrType.rt_Insert: // r
+						case UrType.rt_Delete:
+							y = rest.r._id;
+
+							for (int r = 0; r != _grid.RowCount; ++r)
+							{
+								if (_grid.Rows[r]._id_presort == y)
+								{
+									rest.r._id = _grid.Rows[r]._id;
+									break;
+								}
+							}
+							break;
+
+						case UrType.rt_Overwrite: // r,rPre,rPos
+							y = rest.r._id;
+
+							for (int r = 0; r != _grid.RowCount; ++r)
+							{
+								if (_grid.Rows[r]._id_presort == y)
+								{
+									rest.r   ._id =
+									rest.rPre._id =
+									rest.rPos._id = _grid.Rows[r]._id;
+									break;
+								}
+							}
+							break;
+
+						case UrType.rt_ArrayInsert: // array
+						case UrType.rt_ArrayDelete:
+							break;
+					}
+
+
+//					rest.r._id = rest.r._id_presort;
+//					rest.rPre._id = rest.rPre._id_presort;
+				}
+
+				Undoables.Clear();
+				for (int i = u.Length - 1; i != -1; --i)
+					Undoables.Push(u[i]);
+			}
+
+/*			if (Redoables.Count != 0)
+			{
+				var r = Redoables.ToArray();
+
+				for (int i = 0; i != r.Length; ++i)
 					r[i].isSaved = UndoRedo.IsSavedType.is_None;
 
 				Redoables.Clear();
 				for (int i = r.Length - 1; i != -1; --i)
 					Redoables.Push(r[i]);
-			}
+			} */
 		}
 
 
@@ -271,7 +371,7 @@ namespace yata
 		/// </summary>
 		internal void Undo()
 		{
-			if (_grid.UrEnabled) // safety.
+//			if (_grid.UrEnabled) // safety.
 			{
 				_it = Undoables.Pop();
 
@@ -319,7 +419,7 @@ namespace yata
 		/// </summary>
 		public void Redo()
 		{
-			if (_grid.UrEnabled) // safety.
+//			if (_grid.UrEnabled) // safety.
 			{
 				_it = Redoables.Pop();
 
