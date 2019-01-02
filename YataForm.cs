@@ -1121,7 +1121,7 @@ namespace yata
 
 				Table.SetProHori();
 
-				Table.Insert(_r, null);
+				Table.Insert(_r);
 
 				Table.Refresh();
 				Table._proHori = 0;

@@ -277,6 +277,7 @@ namespace yata
 		/// <summary>
 		/// Re-determines the y-position (aka row) of the Restorables when user
 		/// sorts cols.
+		/// @note The preset-vars do not need to be cleared.
 		/// @note It would probably be easier to contain Restorables in Lists
 		/// instead of Stacks.
 		/// </summary>
@@ -286,87 +287,103 @@ namespace yata
 			{
 				var u = Undoables.ToArray();
 
-				int y;
-
-				Restorable rest;
-				for (int i = 0; i != u.Length; ++i)
-				{
-					rest = u[i];
-
-					switch (rest.RestoreType)
-					{
-						case UrType.rt_Cell: // cell
-						{
-							int c = rest.cell.x;
-
-							y = rest.cell.y;
-
-							for (int r = 0; r != _grid.RowCount; ++r)
-							{
-								if (_grid[r,c].y_presort == y)
-								{
-									rest.cell.y = _grid[r,c].y;	// I think it works ....
-									break;						// NOTE: The preset-vars do not need to be cleared.
-								}
-							}
-							break;
-						}
-
-						case UrType.rt_Insert: // r
-						case UrType.rt_Delete:
-							y = rest.r._id;
-
-							for (int r = 0; r != _grid.RowCount; ++r)
-							{
-								if (_grid.Rows[r]._id_presort == y)
-								{
-									rest.r._id = _grid.Rows[r]._id;
-									break;
-								}
-							}
-							break;
-
-						case UrType.rt_Overwrite: // r,rPre,rPos
-							y = rest.rPre._id;
-
-							for (int r = 0; r != _grid.RowCount; ++r)
-							{
-								if (_grid.Rows[r]._id_presort == y)
-								{
-//									rest.r   ._id = // no need don't bother gets reset on each Undo/Redo.
-									rest.rPre._id =
-									rest.rPos._id = _grid.Rows[r]._id;
-									break;
-								}
-							}
-							break;
-
-						case UrType.rt_ArrayInsert: // array
-						case UrType.rt_ArrayDelete:
-							break;
-					}
-
-
-//					rest.r._id = rest.r._id_presort;
-//					rest.rPre._id = rest.rPre._id_presort;
-				}
+				ResetY(ref u);
 
 				Undoables.Clear();
 				for (int i = u.Length - 1; i != -1; --i)
 					Undoables.Push(u[i]);
 			}
 
-/*			if (Redoables.Count != 0)
+			if (Redoables.Count != 0)
 			{
-				var r = Redoables.ToArray();
+				var u = Redoables.ToArray();
 
-				for (int i = 0; i != r.Length; ++i)
-					r[i].isSaved = UndoRedo.IsSavedType.is_None;
+				ResetY(ref u);
 
 				Redoables.Clear();
-				for (int i = r.Length - 1; i != -1; --i)
-					Redoables.Push(r[i]);
-			} */
+				for (int i = u.Length - 1; i != -1; --i)
+					Redoables.Push(u[i]);
+			}
+		}
+
+		void ResetY(ref Restorable[] rests)
+		{
+			int y;
+
+			Restorable rest;
+			for (int i = 0; i != rests.Length; ++i)
+			{
+				rest = rests[i];
+
+				switch (rest.RestoreType)
+				{
+					case UrType.rt_Cell: // cell
+					{
+						int c = rest.cell.x;
+
+						y = rest.cell.y;
+
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid[r,c].y_presort == y)
+							{
+								rest.cell.y = _grid[r,c].y;
+								break;
+							}
+						}
+						break;
+					}
+
+					case UrType.rt_Insert: // r
+					case UrType.rt_Delete:
+						y = rest.r._id;
+
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid.Rows[r]._id_presort == y)
+							{
+								rest.r._id = _grid.Rows[r]._id;
+								break;
+							}
+						}
+						break;
+
+					case UrType.rt_Overwrite: // r,rPre,rPos
+						y = rest.rPre._id;
+
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid.Rows[r]._id_presort == y)
+							{
+//								rest.r   ._id = // no need don't bother gets reset on each Undo/Redo.
+								rest.rPre._id =
+								rest.rPos._id = _grid.Rows[r]._id;
+								break;
+							}
+						}
+						break;
+
+					case UrType.rt_ArrayInsert: // array
+					case UrType.rt_ArrayDelete:
+						for (int a = 0; a != rest.array.Length; ++a)
+						{
+							y = rest.array[a]._id;
+
+							for (int r = 0; r != _grid.RowCount; ++r)
+							{
+								if (_grid.Rows[r]._id_presort == y)
+								{
+									rest.array[a]._id = _grid.Rows[r]._id;
+									break;
+								}
+							}
+						}
+
+						// Sort by id-asc
+						Array.Sort(rest.array, (a,b) => a._id.CompareTo(b._id));
+						break;
+				}
+			}
 		}
 
 
@@ -525,7 +542,7 @@ namespace yata
 
 			int r = _it.r._id;
 
-			_grid.Insert(r, null);
+			_grid.Insert(r);
 
 			_grid.ClearSelects();
 			if (r >= _grid.RowCount)
@@ -566,23 +583,23 @@ namespace yata
 			var fields = new string[cols];
 
 			Row row;
-
-			int r = _it.array[0]._id;
-			for (int i = 0; i != _it.array.Length; ++i, ++r)
+			for (int i = 0; i != _it.array.Length; ++i)
 			{
 				row = _it.array[i];
 				for (int j = 0; j != cols; ++j)
 					fields[j] = String.Copy(row[j].text);
 
-				_grid.Insert(r, fields, false, row._brush);
+				_grid.Insert(row._id, fields, false, row._brush);
 			}
+			_grid.Calibrate(0, _grid.RowCount - 1);
 
-			r = _it.array[0]._id;
-			_grid.Calibrate(r, _it.array.Length - 1);
 
 			_grid.ClearSelects();
+			int r = _it.array[0]._id;
 			_grid.Rows[r].selected = true;
-			_grid.RangeSelect = _it.array.Length - 1;
+//			_grid.RangeSelect = _it.array.Length - 1;	// that's problematic ... wrt/ re-Sorted cols
+														// and since only 1 row shall ever be selected you can't just select them all either.
+
 			_grid.EnsureDisplayedRow(r); // TODO: EnsureDisplayedRows()
 			// NOTE: Does not select cells.
 
@@ -600,17 +617,15 @@ namespace yata
 			DrawingControl.SuspendDrawing(_grid);
 
 
-			int rFirst = _it.array[0]._id;
-			int rLast = rFirst + _it.array.Length - 1;
-
-			while (rLast >= rFirst) // reverse delete.
+			for (int i = _it.array.Length - 1; i != -1; --i) // reverse delete.
 			{
-				_grid.Insert(rLast--, null, false);
+				_grid.Insert(_it.array[i]._id, null, false);
 			}
 
 			_grid.Calibrate();
 
 			_grid.ClearSelects();
+			int rFirst = _it.array[0]._id;
 			if (rFirst >= _grid.RowCount)
 				rFirst  = _grid.RowCount - 1;
 			_grid.EnsureDisplayedRow(rFirst);

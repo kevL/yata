@@ -1549,7 +1549,7 @@ namespace yata
 					rest.array[i] = Rows[rLast].Clone() as Row;
 					Insert(rLast, null, false);
 
-					--i; --rLast;
+					--rLast; --i;
 				}
 
 				if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
@@ -2797,7 +2797,7 @@ namespace yata
 		/// <param name="fields">null to delete the row</param>
 		/// <param name="calibrate">true to re-layout the grid</param>
 		/// <param name="brush">a brush to use for Undo/Redo</param>
-		internal void Insert(int id, string[] fields, bool calibrate = true, Brush brush = null)
+		internal void Insert(int id, string[] fields = null, bool calibrate = true, Brush brush = null)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
