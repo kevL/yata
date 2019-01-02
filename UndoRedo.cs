@@ -207,6 +207,9 @@ namespace yata
 		{
 			Undoables.Clear();
 			Redoables.Clear();
+
+			_grid._f.EnableUndo(false);
+			_grid._f.EnableRedo(false);
 		}
 
 
@@ -223,6 +226,7 @@ namespace yata
 				Redoables.Clear();
 
 				_grid._f.EnableUndo(true);
+				_grid._f.EnableRedo(false);
 			}
 			// TODO: else invoke UndoRedoWarningBox ... w/ checkbox "I promise to remember when columns are sorted."
 		}
@@ -323,13 +327,13 @@ namespace yata
 							break;
 
 						case UrType.rt_Overwrite: // r,rPre,rPos
-							y = rest.r._id;
+							y = rest.rPre._id;
 
 							for (int r = 0; r != _grid.RowCount; ++r)
 							{
 								if (_grid.Rows[r]._id_presort == y)
 								{
-									rest.r   ._id =
+//									rest.r   ._id = // no need don't bother gets reset on each Undo/Redo.
 									rest.rPre._id =
 									rest.rPos._id = _grid.Rows[r]._id;
 									break;

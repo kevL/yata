@@ -643,9 +643,6 @@ namespace yata
 				{
 					Table._ur.Clear();
 
-					it_Undo.Enabled =
-					it_Redo.Enabled = false;
-
 					it_freeze1.Checked =
 					it_freeze2.Checked = false;
 
@@ -1233,19 +1230,16 @@ namespace yata
 			if (Table != null)
 			{
 				Table._ur.Clear();
-				it_Undo.Enabled =
-				it_Redo.Enabled = false;
-
-//				it_ClearUndoRedo.Enabled = false; // not needed since there isn't a hotkey.
+//				it_ClearUndoRedo.Enabled = false; // not needed since there isn't a hotkey and it's done in the dropdown event.
 
 				// force GC
-				long b = GC.GetTotalMemory(false);
+				long bytes = GC.GetTotalMemory(false);
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
 
-				b -= GC.GetTotalMemory(true);
+				bytes -= GC.GetTotalMemory(true);
 
-				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", b) + " bytes",
+				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
 								"burp",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Information,
