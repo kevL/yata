@@ -120,8 +120,8 @@ namespace yata
 		/// or deletes a row.
 		/// </summary>
 		/// <param name="row">a table Row object</param>
-		/// <param name="type">'rt_RowDelete' for a row to be deleted or
-		/// 'rt_RowInsert' for a row to be inserted</param>
+		/// <param name="type">'rt_Delete' for a row to be deleted or
+		/// 'rt_Insert' for a row to be inserted</param>
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row, UrType type)
 		{
@@ -171,7 +171,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable list of rows when user changes state.
+		/// Instantiates a restorable array of rows when user changes state.
 		/// </summary>
 		/// <param name="rows">quantity of rows in the Row-array</param>
 		/// <param name="type">'rt_ArrayDelete' for row(s) to be deleted or
@@ -296,13 +296,13 @@ namespace yata
 
 			if (Redoables.Count != 0)
 			{
-				var u = Redoables.ToArray();
+				var r = Redoables.ToArray();
 
-				ResetY(ref u);
+				ResetY(ref r);
 
 				Redoables.Clear();
-				for (int i = u.Length - 1; i != -1; --i)
-					Redoables.Push(u[i]);
+				for (int i = r.Length - 1; i != -1; --i)
+					Redoables.Push(r[i]);
 			}
 		}
 
