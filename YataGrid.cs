@@ -2009,7 +2009,7 @@ namespace yata
 							if (cell.selected = !cell.selected)
 								EnsureDisplayed(cell);
 						}
-						else if (!cell.selected)
+						else if (!cell.selected || GetSelectedCell() == null)
 						{
 							foreach (var row in Rows)
 								row.selected = false;
