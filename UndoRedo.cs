@@ -271,9 +271,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Re-determines the y-position (aka row) of the Restorables when user
+		/// Re-determines the y-position (aka row) of all Restorables when user
 		/// sorts cols.
-		/// @note The preset-vars do not need to be cleared.
+		/// @note The presort-vars do not need to be cleared.
 		/// @note It would probably be easier to contain Restorables in Lists
 		/// instead of Stacks.
 		/// </summary>
@@ -315,10 +315,9 @@ namespace yata
 				{
 					case UrType.rt_Cell: // cell
 					{
-						int c = rest.cell.x;
-
 						y = rest.cell.y;
 
+						int c = rest.cell.x;
 						for (int r = 0; r != _grid.RowCount; ++r)
 						{
 							if (_grid[r,c].y_presort == y)
@@ -511,8 +510,8 @@ namespace yata
 			Row row = _it.r;
 
 			var fields = new string[row.CellCount];
-			for (int i = 0; i != row.CellCount; ++i)
-				fields[i] = String.Copy(row[i].text);
+			for (int c = 0; c != row.CellCount; ++c)
+				fields[c] = String.Copy(row[c].text);
 
 			int r = row._id;
 			_grid.Insert(r, fields, true, row._brush);
@@ -575,11 +574,11 @@ namespace yata
 			var fields = new string[cols];
 
 			Row row;
-			for (int i = 0; i != _it.array.Length; ++i)
+			for (int a = 0; a != _it.array.Length; ++a)
 			{
-				row = _it.array[i];
-				for (int j = 0; j != cols; ++j)
-					fields[j] = String.Copy(row[j].text);
+				row = _it.array[a];
+				for (int c = 0; c != cols; ++c)
+					fields[c] = String.Copy(row[c].text);
 
 				_grid.Insert(row._id, fields, false, row._brush);
 			}
@@ -609,9 +608,9 @@ namespace yata
 			DrawingControl.SuspendDrawing(_grid);
 
 
-			for (int i = _it.array.Length - 1; i != -1; --i) // reverse delete.
+			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
 			{
-				_grid.Insert(_it.array[i]._id, null, false);
+				_grid.Insert(_it.array[a]._id, null, false);
 			}
 
 			_grid.Calibrate();

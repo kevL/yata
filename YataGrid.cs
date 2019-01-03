@@ -2018,7 +2018,7 @@ namespace yata
 							cell.selected = true;
 							EnsureDisplayed(cell);
 						}
-						else if (!Readonly) // cell is selected
+						else if (!Readonly) // cell is already selected
 						{
 							_editcell = cell;
 							EditCell();
