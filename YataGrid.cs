@@ -2009,7 +2009,7 @@ namespace yata
 							if (cell.selected = !cell.selected)
 								EnsureDisplayed(cell);
 						}
-						else if (!cell.selected || GetSelectedCell() == null)
+						else if (!cell.selected || GetSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
 							foreach (var row in Rows)
 								row.selected = false;
@@ -2601,8 +2601,9 @@ namespace yata
 				{
 					if (e.Button == MouseButtons.Left)
 					{
-						_editor.Visible = false;
 						Select();
+
+						_editor.Visible = false;
 
 						int x = e.X + offsetHori;
 
@@ -2623,9 +2624,11 @@ namespace yata
 						}
 						while ((left += Cols[c].width()) < x);
 
+
+//						int selc = getSelectedCol();
 						bool select = false;
 
-						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
+						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
 						{
 							for (int r = 0; r != RowCount; ++r)
 							{
@@ -2642,6 +2645,19 @@ namespace yata
 
 						if ((ModifierKeys & Keys.Control) != Keys.Control)
 						{
+							if (!select)
+							{
+								for (int i = 0; i != RowCount; ++i) // if other col-cells are currently selected and Ctrl is NOT
+								for (int j = 0; j != ColCount; ++j) // pressed force the col to select after clearing all selects.
+								{
+									if (j != c && this[i,j].selected)
+									{
+										select = true;
+										break;
+									}
+								}
+							}
+
 							ClearCellSelects();
 							foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
 								row.selected = false;
