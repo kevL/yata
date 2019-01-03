@@ -384,7 +384,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Undo's a cell-text change or a row-insert/delete/overwrite.
+		/// Undo's a cell-text change or a row-insert/delete/overwrite or a
+		/// row-array insert/delete.
 		/// </summary>
 		internal void Undo()
 		{
@@ -429,7 +430,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Redo's a cell-text change or a row-insert/delete/overwrite.
+		/// Redo's a cell-text change or a row-insert/delete/overwrite or a
+		/// row-array insert/delete.
 		/// </summary>
 		public void Redo()
 		{
@@ -591,7 +593,7 @@ namespace yata
 														// and since only 1 row shall ever be selected you can't just select them all either.
 
 			_grid.EnsureDisplayedRow(r); // TODO: EnsureDisplayedRows()
-			// NOTE: Does not select cells.
+			// NOTE: Does not select the row's cells.
 
 
 			_grid._f.ShowColorPanel(false);
@@ -615,10 +617,10 @@ namespace yata
 			_grid.Calibrate();
 
 			_grid.ClearSelects();
-			int rFirst = _it.array[0]._id;
-			if (rFirst >= _grid.RowCount)
-				rFirst  = _grid.RowCount - 1;
-			_grid.EnsureDisplayedRow(rFirst);
+			int r = _it.array[0]._id;
+			if (r >= _grid.RowCount)
+				r  = _grid.RowCount - 1;
+			_grid.EnsureDisplayedRow(r);
 
 
 			_grid._f.ShowColorPanel(false);

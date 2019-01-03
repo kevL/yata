@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2018 dec 31
+2019 jan 2
 kevL's
-ver 2.7.8.0
+ver 2.7.9.0
 
 
 File
@@ -451,9 +451,3 @@ Appendix K: Undo/Redo
 
 Yata stores the state of cell-text changes and row insertions and deletions for
 Undo and Redo operations.
-
-IMPORTANT: Undo/Redo operations are disabled when cols are sorted by anything
-other than ID ascending. That is, any changes made while the table is sorted
-will not be stored nor will Undo or Redo work until the table is re-sorted by
-ID ascending. (The reason is because cell and row positions go arbitrary, but
-Undo/Redo relies on absolute positions.)
