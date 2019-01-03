@@ -451,3 +451,9 @@ Appendix K: Undo/Redo
 
 Yata stores the state of cell-text changes and row insertions and deletions for
 Undo and Redo operations.
+
+IMPORTANT: The following operations cannot be Undone/Redone
+- order row ids
+- recolor rows
+- font changes
+- etc.

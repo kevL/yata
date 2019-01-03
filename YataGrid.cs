@@ -2056,6 +2056,14 @@ namespace yata
 //			base.OnMouseClick(e);
 		}
 
+		protected override void OnMouseDoubleClick(MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+				OnMouseClick(e);
+
+//			base.OnMouseDoubleClick(e);
+		}
+
 		Cell getClickedCell(int x, int y)
 		{
 			y += offsetVert;
