@@ -220,15 +220,11 @@ namespace yata
 		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
 		internal void Push(Restorable it)
 		{
-//			if (_grid.UrEnabled) // NOTE: This could/should be done before 'it' is instantiated by the caller.
-			{
-				Undoables.Push(it);
-				Redoables.Clear();
+			Undoables.Push(it);
+			Redoables.Clear();
 
-				_grid._f.EnableUndo(true);
-				_grid._f.EnableRedo(false);
-			}
-			// TODO: else invoke UndoRedoWarningBox ... w/ checkbox "I promise to remember when columns are sorted."
+			_grid._f.EnableUndo(true);
+			_grid._f.EnableRedo(false);
 		}
 
 
@@ -392,47 +388,44 @@ namespace yata
 		/// </summary>
 		internal void Undo()
 		{
-//			if (_grid.UrEnabled) // safety.
+			_it = Undoables.Pop();
+
+			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
+
+			switch (_it.RestoreType)
 			{
-				_it = Undoables.Pop();
+				case UrType.rt_Cell:
+					_it.cell.text = _it.pretext;
+					RestoreCell();
+					break;
 
-				_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
+				case UrType.rt_Insert:
+					InsertRow();
+					_it.RestoreType = UrType.rt_Delete;
+					break;
 
-				switch (_it.RestoreType)
-				{
-					case UrType.rt_Cell:
-						_it.cell.text = _it.pretext;
-						RestoreCell();
-						break;
+				case UrType.rt_Delete:
+					DeleteRow();
+					_it.RestoreType = UrType.rt_Insert;
+					break;
 
-					case UrType.rt_Insert:
-						InsertRow();
-						_it.RestoreType = UrType.rt_Delete;
-						break;
+				case UrType.rt_Overwrite:
+					_it.r = _it.rPre;
+					Overwrite();
+					break;
 
-					case UrType.rt_Delete:
-						DeleteRow();
-						_it.RestoreType = UrType.rt_Insert;
-						break;
+				case UrType.rt_ArrayInsert:
+					InsertArray();
+					_it.RestoreType = UrType.rt_ArrayDelete;
+					break;
 
-					case UrType.rt_Overwrite:
-						_it.r = _it.rPre;
-						Overwrite();
-						break;
-
-					case UrType.rt_ArrayInsert:
-						InsertArray();
-						_it.RestoreType = UrType.rt_ArrayDelete;
-						break;
-
-					case UrType.rt_ArrayDelete:
-						DeleteArray();
-						_it.RestoreType = UrType.rt_ArrayInsert;
-						break;
-				}
-
-				Redoables.Push(_it);
+				case UrType.rt_ArrayDelete:
+					DeleteArray();
+					_it.RestoreType = UrType.rt_ArrayInsert;
+					break;
 			}
+
+			Redoables.Push(_it);
 		}
 
 		/// <summary>
@@ -440,47 +433,44 @@ namespace yata
 		/// </summary>
 		public void Redo()
 		{
-//			if (_grid.UrEnabled) // safety.
+			_it = Redoables.Pop();
+
+			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
+
+			switch (_it.RestoreType)
 			{
-				_it = Redoables.Pop();
+				case UrType.rt_Cell:
+					_it.cell.text = _it.postext;
+					RestoreCell();
+					break;
 
-				_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
+				case UrType.rt_Insert:
+					InsertRow();
+					_it.RestoreType = UrType.rt_Delete;
+					break;
 
-				switch (_it.RestoreType)
-				{
-					case UrType.rt_Cell:
-						_it.cell.text = _it.postext;
-						RestoreCell();
-						break;
+				case UrType.rt_Delete:
+					DeleteRow();
+					_it.RestoreType = UrType.rt_Insert;
+					break;
 
-					case UrType.rt_Insert:
-						InsertRow();
-						_it.RestoreType = UrType.rt_Delete;
-						break;
+				case UrType.rt_Overwrite:
+					_it.r = _it.rPos;
+					Overwrite();
+					break;
 
-					case UrType.rt_Delete:
-						DeleteRow();
-						_it.RestoreType = UrType.rt_Insert;
-						break;
+				case UrType.rt_ArrayInsert:
+					InsertArray();
+					_it.RestoreType = UrType.rt_ArrayDelete;
+					break;
 
-					case UrType.rt_Overwrite:
-						_it.r = _it.rPos;
-						Overwrite();
-						break;
-
-					case UrType.rt_ArrayInsert:
-						InsertArray();
-						_it.RestoreType = UrType.rt_ArrayDelete;
-						break;
-
-					case UrType.rt_ArrayDelete:
-						DeleteArray();
-						_it.RestoreType = UrType.rt_ArrayInsert;
-						break;
-				}
-
-				Undoables.Push(_it);
+				case UrType.rt_ArrayDelete:
+					DeleteArray();
+					_it.RestoreType = UrType.rt_ArrayInsert;
+					break;
 			}
+
+			Undoables.Push(_it);
 		}
 		#endregion Methods
 

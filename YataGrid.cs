@@ -2879,8 +2879,6 @@ namespace yata
 		#region Sort
 		ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
 
-//		internal bool UrEnabled = true; // disable Undo/Redo when table isn't sorted by ID-asc.
-
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
 		/// @note Mergesort.
@@ -2898,10 +2896,6 @@ namespace yata
 
 			_sortcol = col;
 
-
-//			UrEnabled = (_sortcol == 0 && _sortdir == SORT_ASC);
-//			_f.EnableUndo(_ur.CanUndo && UrEnabled);
-//			_f.EnableRedo(_ur.CanRedo && UrEnabled);
 
 			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
 			{
