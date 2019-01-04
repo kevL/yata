@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 jan 2
+2019 jan 4
 kevL's
-ver 2.7.9.0
+ver 2.8.0.0
 
 
 File
@@ -112,10 +112,12 @@ Ctrl+End                  - scrolls table to bottom
 Left/Right/Up/Down arrows - scrolls table in the direction
 
 - w/ row selected
-Home              - selects the top row
-End               - selects the bottom row
+Home              - scrolls table all the way left
+End               - scrolls table all the way right
 PageUp            - selects the row a page above
 PageDown          - selects the row a page below
+Ctrl+Home         - selects the top row
+Ctrl+End          - selects the bottom row
 Up/Down arrows    - selects the row in the direction
 Left/Right arrows - scrolls table in the direction
 
