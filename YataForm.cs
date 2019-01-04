@@ -172,6 +172,64 @@ namespace yata
 		#endregion cTor
 
 
+		#region Events (override)
+		/// <summary>
+		/// Sends (unhandled) mousewheel events on the Form to the table.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			if (Table != null)
+				Table.Scroll(e);
+
+//			base.OnMouseWheel(e);
+		}
+
+
+		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
+
+		protected override void OnResize(EventArgs e)
+		{
+			if (WindowState == FormWindowState.Minimized)
+				IsMin = true;
+
+			base.OnResize(e);
+		}
+
+/*		/// <summary>
+		/// Handles the KeyDown event on the form.
+		/// @note Requires the form's KeyPreview property flagged true in order
+		/// to handle the event if a control is focused.
+		/// @note Fires repeatedly if a key is held depressed.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			logfile.Log("OnKeyDown()");
+
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				switch (e.KeyCode)
+				{
+					case Keys.Z:
+						logfile.Log(". Ctrl+z UNDO");
+
+						_ur.Undo();
+						break;
+
+					case Keys.Y:
+						logfile.Log(". Ctrl+y REDO");
+
+						_ur.Redo();
+						break;
+				}
+			}
+
+//			base.OnKeyDown(e);
+		} */
+		#endregion Events (override)
+
+
 		#region Receive Message (pfe)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
@@ -2324,21 +2382,6 @@ namespace yata
 		#endregion Statusbar
 
 
-		#region Events (override)
-		/// <summary>
-		/// Sends (unhandled) mousewheel events on the Form to the table.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnMouseWheel(MouseEventArgs e)
-		{
-			if (Table != null)
-				Table.Scroll(e);
-
-//			base.OnMouseWheel(e);
-		}
-		#endregion Events (override)
-
-
 		#region DragDrop file(s)
 		internal void yata_DragEnter(object sender, DragEventArgs e)
 		{
@@ -2465,39 +2508,6 @@ namespace yata
 				ReadonlyError();
 		}
 		#endregion Cell menu
-
-
-/*		/// <summary>
-		/// Handles the KeyDown event on the form.
-		/// @note Requires the form's KeyPreview property flagged true in order
-		/// to handle the event if a control is focused.
-		/// @note Fires repeatedly if a key is held depressed.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			logfile.Log("OnKeyDown()");
-
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
-			{
-				switch (e.KeyCode)
-				{
-					case Keys.Z:
-						logfile.Log(". Ctrl+z UNDO");
-
-						_ur.Undo();
-						break;
-
-					case Keys.Y:
-						logfile.Log(". Ctrl+y REDO");
-
-						_ur.Redo();
-						break;
-				}
-			}
-
-//			base.OnKeyDown(e);
-		} */
 	}
 
 

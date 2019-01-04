@@ -82,6 +82,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
+		/// <param name="grid">a YataGrid that this UndoRedo will track changes for</param>
 		internal UndoRedo(YataGrid grid)
 		{
 			_grid = grid;

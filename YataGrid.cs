@@ -312,11 +312,12 @@ namespace yata
 						_table._propanel.setLeftHeight();
 						_table._propanel.InitScroll();
 
-						_table._propanel.DockBot = _table._propanel.DockBot; // update Top of propanel
+						_table._propanel.DockBot = _table._propanel.DockBot; // redeter Top of propanel
 					}
 
-					if (_table.EnsureDisplayedCellOrRow())
-						_table.Refresh(); // _table-drawing can tear without that.
+					if (!_f.IsMin) _table.EnsureDisplayedCellOrRow();
+
+//					_table.Refresh();
 				}
 				_table = null;
 
@@ -326,6 +327,9 @@ namespace yata
 //				if (_piRowhead != null) _piRowhead.Dispose();
 //				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
 			}
+
+			if (_f.WindowState != FormWindowState.Minimized)
+				_f.IsMin = false;
 
 //			base.OnResize(e);
 		}
@@ -2625,7 +2629,6 @@ namespace yata
 						while ((left += Cols[c].width()) < x);
 
 
-//						int selc = getSelectedCol();
 						bool select = false;
 
 						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
