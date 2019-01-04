@@ -1236,8 +1236,7 @@ namespace yata
 							if (sel.x != FrozenCount || sel.y != 0)
 							{
 								sel.selected = false;
-								sel = Rows[0][FrozenCount];
-								sel.selected = true;
+								(sel = this[0, FrozenCount]).selected = true;
 
 								EnsureDisplayed(sel);
 							}
@@ -1250,8 +1249,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y][FrozenCount];
-							sel.selected = true;
+							(sel = this[sel.y, FrozenCount]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1279,8 +1277,7 @@ namespace yata
 							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
 							{
 								sel.selected = false;
-								sel = Rows[RowCount - 1][ColCount - 1];
-								sel.selected = true;
+								(sel = this[RowCount - 1, ColCount - 1]).selected = true;
 
 								EnsureDisplayed(sel);
 							}
@@ -1293,16 +1290,14 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y][ColCount - 1];
-							sel.selected = true;
+							(sel = this[sel.y, ColCount - 1]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
 					}
 					else if (_visHori)
-					{
 						_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
-					}
+
 					break;
 
 				case Keys.PageUp:
@@ -1333,8 +1328,7 @@ namespace yata
 							if (sel.y < rows) r = 0;
 							else              r = sel.y - rows;
 
-							sel = Rows[r][sel.x];
-							sel.selected = true;
+							(sel = this[r, sel.x]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1378,8 +1372,7 @@ namespace yata
 							if (sel.y > RowCount - 1 - rows) r = RowCount - 1;
 							else                             r = sel.y + rows;
 
-							sel = Rows[r][sel.x];
-							sel.selected = true;
+							(sel = this[r, sel.x]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1414,8 +1407,7 @@ namespace yata
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
 
 							sel.selected = false;
-							sel = Rows[sel.y - 1][sel.x];
-							sel.selected = true;
+							(sel = this[sel.y - 1, sel.x]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1445,8 +1437,7 @@ namespace yata
 						if (sel.y != RowCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y + 1][sel.x];
-							sel.selected = true;
+							(sel = this[sel.y + 1, sel.x]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1466,8 +1457,7 @@ namespace yata
 						if (sel.x != FrozenCount)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y][sel.x - 1];
-							sel.selected = true;
+							(sel = this[sel.y, sel.x - 1]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
@@ -1487,8 +1477,7 @@ namespace yata
 						if (sel.x != ColCount - 1)
 						{
 							sel.selected = false;
-							sel = Rows[sel.y][sel.x + 1];
-							sel.selected = true;
+							(sel = this[sel.y, sel.x + 1]).selected = true;
 
 							EnsureDisplayed(sel);
 						}
