@@ -1214,20 +1214,28 @@ namespace yata
 
 			Row row;
 
-			// TODO: change selected col
+			// TODO: change selected col perhaps
 
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
-					if (selr > 0)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if ((e.Modifiers & Keys.Control) == Keys.Control)
+						{
+							if (selr > 0)
+							{
+								ClearSelects();
 
-						(row = Rows[0]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+								(row = Rows[0]).selected = true;
+								for (int c = 0; c != ColCount; ++c)
+									row[c].selected = true;
 
-						EnsureDisplayedRow(0);
+								EnsureDisplayedRow(0);
+							}
+						}
+						else if (_visHori)
+							_scrollHori.Value = 0;
 					}
 					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
@@ -1260,15 +1268,23 @@ namespace yata
 					break;
 
 				case Keys.End:
-					if (selr != -1 && selr != RowCount - 1)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if ((e.Modifiers & Keys.Control) == Keys.Control)
+						{
+							if (selr != RowCount - 1)
+							{
+								ClearSelects();
 
-						(row = Rows[RowCount - 1]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+								(row = Rows[RowCount - 1]).selected = true;
+								for (int c = 0; c != ColCount; ++c)
+									row[c].selected = true;
 
-						EnsureDisplayedRow(RowCount - 1);
+								EnsureDisplayedRow(RowCount - 1);
+							}
+						}
+						else if (_visHori)
+							_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
 					}
 					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
@@ -1301,21 +1317,24 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
-					if (selr > 0)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if (selr > 0)
+						{
+							ClearSelects();
 
-						int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-						int r;
-						if (selr < rows) r = 0;
-						else             r = selr - rows;
+							int r;
+							if (selr < rows) r = 0;
+							else             r = selr - rows;
 
-						(row = Rows[r]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+							(row = Rows[r]).selected = true;
+							for (int c = 0; c != ColCount; ++c)
+								row[c].selected = true;
 
-						EnsureDisplayedRow(r);
+							EnsureDisplayedRow(r);
+						}
 					}
 					else if (sel != null)
 					{
@@ -1345,21 +1364,24 @@ namespace yata
 					break;
 
 				case Keys.PageDown:
-					if (selr != -1 && selr != RowCount - 1)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if (selr != RowCount - 1)
+						{
+							ClearSelects();
 
-						int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-						int r;
-						if (selr > RowCount - 1 - rows) r = RowCount - 1;
-						else                            r = selr + rows;
+							int r;
+							if (selr > RowCount - 1 - rows) r = RowCount - 1;
+							else                            r = selr + rows;
 
-						(row = Rows[r]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+							(row = Rows[r]).selected = true;
+							for (int c = 0; c != ColCount; ++c)
+								row[c].selected = true;
 
-						EnsureDisplayedRow(r);
+							EnsureDisplayedRow(r);
+						}
 					}
 					else if (sel != null)
 					{
@@ -1389,15 +1411,18 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: Needs to bypass KeyPreview
-					if (selr > 0)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if (selr > 0)
+						{
+							ClearSelects();
 
-						(row = Rows[selr - 1]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+							(row = Rows[selr - 1]).selected = true;
+							for (int c = 0; c != ColCount; ++c)
+								row[c].selected = true;
 
-						EnsureDisplayedRow(selr - 1);
+							EnsureDisplayedRow(selr - 1);
+						}
 					}
 					else if (sel != null) // selection to the cell above
 					{
@@ -1422,15 +1447,18 @@ namespace yata
 					break;
 
 				case Keys.Down: // NOTE: Needs to bypass KeyPreview
-					if (selr != -1 && selr != RowCount - 1)
+					if (selr != -1)
 					{
-						ClearSelects();
+						if (selr != RowCount - 1)
+						{
+							ClearSelects();
 
-						(row = Rows[selr + 1]).selected = true;
-						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = true;
+							(row = Rows[selr + 1]).selected = true;
+							for (int c = 0; c != ColCount; ++c)
+								row[c].selected = true;
 
-						EnsureDisplayedRow(selr + 1);
+							EnsureDisplayedRow(selr + 1);
+						}
 					}
 					else if (sel != null) // selection to the cell below
 					{
