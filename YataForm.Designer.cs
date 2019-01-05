@@ -543,6 +543,7 @@ namespace yata
 			// it_CopyCell
 			// 
 			this.it_CopyCell.Name = "it_CopyCell";
+			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.it_CopyCell.Size = new System.Drawing.Size(222, 22);
 			this.it_CopyCell.Text = "copy cell";
 			this.it_CopyCell.Click += new System.EventHandler(this.editclick_CopyCell);
@@ -550,6 +551,7 @@ namespace yata
 			// it_PasteCell
 			// 
 			this.it_PasteCell.Name = "it_PasteCell";
+			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.it_PasteCell.Size = new System.Drawing.Size(222, 22);
 			this.it_PasteCell.Text = "paste cell";
 			this.it_PasteCell.Click += new System.EventHandler(this.editclick_PasteCell);

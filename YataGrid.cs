@@ -1192,7 +1192,7 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
-					e.IsInputKey = true;
+					e.IsInputKey = true; // as opposed to 'IsDialogKey' ... I'd guess, it's really not transparent.
 					break;
 			}
 

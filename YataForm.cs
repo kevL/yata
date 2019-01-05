@@ -162,6 +162,7 @@ namespace yata
 
 			btn_PropertyPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
+
 			if (!String.IsNullOrEmpty(pfe_load) && File.Exists(pfe_load))
 			{
 				CreateTabPage(pfe_load);
@@ -188,6 +189,14 @@ namespace yata
 
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
+		/// <summary>
+		/// Sets 'IsMin' true so that when the form is minimized then restored/
+		/// maximized the ensure-displayed call(s) are bypassed by the tables'
+		/// OnResize() event(s). Because if the user wants to simply minimize
+		/// the window temporarily to check something out in another app you
+		/// don't want the view to be changed.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
 			if (WindowState == FormWindowState.Minimized)
@@ -195,6 +204,26 @@ namespace yata
 
 			base.OnResize(e);
 		}
+
+		/// <summary>
+		/// Bypasses Ctrl+c and Ctrl+v if the editor is visible. That is,
+		/// this bypasses the Edit menuitems and lets the editbox take the
+		/// message if/when it's visible.
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (Table != null && Table._editor.Visible
+				&& (   keyData == (Keys.Control | Keys.C)
+					|| keyData == (Keys.Control | Keys.V)))
+			{
+				return false;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 
 /*		/// <summary>
 		/// Handles the KeyDown event on the form.
