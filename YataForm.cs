@@ -27,7 +27,7 @@ namespace yata
 		{ get; set; }
 
 		List<string[]> _copy = new List<string[]>();
-		string _copytext = String.Empty;
+		string _copytext = Constants.Stars;
 
 		string _preset = String.Empty;
 
