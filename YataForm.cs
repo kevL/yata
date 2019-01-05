@@ -1695,6 +1695,11 @@ namespace yata
 		}
 
 
+		internal void EnableCopyRange(bool enabled)
+		{
+			it_CopyRange.Enabled = enabled;
+		}
+
 		void editclick_CopyRange(object sender, EventArgs e)
 		{
 			_copy.Clear();
@@ -1724,11 +1729,6 @@ namespace yata
 				++rFirst;
 			}
 			it_PasteRange.Enabled = true;
-		}
-
-		internal void EnableCopyRange(bool enabled)
-		{
-			it_CopyRange.Enabled = enabled;
 		}
 
 		void editclick_PasteRange(object sender, EventArgs e)
@@ -2528,7 +2528,10 @@ namespace yata
 				if (cell != null)
 				{
 					if (cell.text != Constants.Stars)
+					{
 						Table.ChangeCellText(cell, Constants.Stars);
+						Table.Refresh();
+					}
 				}
 				else
 					CopyPasteCellError();
