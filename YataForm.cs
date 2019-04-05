@@ -1664,7 +1664,33 @@ namespace yata
 
 		void editclick_PasteCell(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (tb_Goto.Focused)
+			{
+				if (Clipboard.ContainsText(TextDataFormat.Text))
+				{
+					tb_Goto.Text = Clipboard.GetText(TextDataFormat.Text);
+				}
+				else if (_copytext != Constants.Stars)
+				{
+					tb_Goto.Text = _copytext;
+				}
+				else
+					tb_Goto.Text = String.Empty;
+			}
+			else if (tb_Search.Focused)
+			{
+				if (Clipboard.ContainsText(TextDataFormat.Text))
+				{
+					tb_Search.Text = Clipboard.GetText(TextDataFormat.Text);
+				}
+				else if (_copytext != Constants.Stars)
+				{
+					tb_Search.Text = _copytext;
+				}
+				else
+					tb_Search.Text = String.Empty;
+			}
+			else if (Table != null)
 			{
 				if (!Table.Readonly)
 				{
