@@ -1503,6 +1503,16 @@ namespace yata
 		}
 
 
+		void textchanged_Goto(object sender, EventArgs e)
+		{
+			int result;
+			if (!Int32.TryParse(tb_Goto.Text, out result)
+				|| result < 0)
+			{
+				tb_Goto.Text = "0";
+			}
+		}
+
 		void editclick_Goto(object sender, EventArgs e)
 		{
 			tb_Goto.Focus();

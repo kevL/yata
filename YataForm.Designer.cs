@@ -139,9 +139,9 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.tabControl = new yata.YataTabs();
 			this.btn_PropertyPanel = new yata.PropertyPanelButton();
+			this.components = new System.ComponentModel.Container();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -615,6 +615,7 @@ namespace yata
 			this.tb_Goto.Enter += new System.EventHandler(this.enter_Goto);
 			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Goto);
 			this.tb_Goto.Click += new System.EventHandler(this.click_Goto);
+			this.tb_Goto.TextChanged += new System.EventHandler(this.textchanged_Goto);
 			// 
 			// tb_Search
 			// 
