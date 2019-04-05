@@ -1114,32 +1114,32 @@ namespace yata
 			this.it_cellStars});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(81, 76);
+			this.cellMenu.Size = new System.Drawing.Size(104, 76);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(80, 22);
-			this.it_cellCopy.Text = "Copy";
+			this.it_cellCopy.Size = new System.Drawing.Size(103, 22);
+			this.it_cellCopy.Text = "copy cell";
 			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(80, 22);
-			this.it_cellPaste.Text = "Paste";
+			this.it_cellPaste.Size = new System.Drawing.Size(103, 22);
+			this.it_cellPaste.Text = "paste cell";
 			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(77, 6);
+			this.separator_16.Size = new System.Drawing.Size(100, 6);
 			// 
 			// it_cellStars
 			// 
 			this.it_cellStars.Name = "it_cellStars";
-			this.it_cellStars.Size = new System.Drawing.Size(80, 22);
-			this.it_cellStars.Text = "stars";
+			this.it_cellStars.Size = new System.Drawing.Size(103, 22);
+			this.it_cellStars.Text = "****";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
 			// 
 			// YataForm
