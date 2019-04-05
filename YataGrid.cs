@@ -458,7 +458,7 @@ namespace yata
 			}
 			else if (!_editor.Visible)
 			{
-				if (_visVert)
+				if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) != Keys.Control))
 				{
 					if (e.Delta > 0)
 					{
