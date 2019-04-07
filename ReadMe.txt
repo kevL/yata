@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 jan 4
+2019 apr 4
 kevL's
-ver 2.8.0.0
+ver 2.8.1.0
 
 
 File
@@ -137,9 +137,10 @@ table are deleted a single default row will be created.
 
 
 mouse:
-wheel - scrolls up/down if the vertical scrollbar is visible
-      - scrolls left/right if the horizontal scrollbar is visible but the
-        vertical bar is not
+wheel - scrolls up/down if the vertical scrollbar is visible and either of
+        (a) the horizontal bar is disabled or (b) Ctrl is not pressed
+      - scrolls left/right if the horizontal scrollbar is visible and either of
+        (a) the vertical bar is disabled or (b) Ctrl is pressed
 
 click on the colheads or rowheads
 LMB            - selects the col or row
