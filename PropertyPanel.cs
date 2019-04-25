@@ -88,7 +88,7 @@ namespace yata
 		const int _padHori = 5; // horizontal text padding
 		const int _padVert = 2; // vertical text padding
 
-		readonly TextBox _editor = new TextBox();
+		internal readonly TextBox _editor = new TextBox();
 		Rectangle _editRect;
 
 		bool _dockBot;
@@ -298,30 +298,29 @@ namespace yata
 			{
 				if (!_editor.Visible)
 				{
-					if (e.X > _widthVars)
+					Cell sel = _grid.GetSelectedCell();
+					if (sel != null)
+						_r = sel.y;
+					else
+						_r = _grid.getSelectedRow();
+
+					if (_r != -1)
 					{
-						Cell sel = _grid.GetSelectedCell();
-						if (sel != null)
-							_r = sel.y;
-						else
-							_r = _grid.getSelectedRow();
+						Focus(); // snap
 
-						if (_r != -1)
+						_c = (e.Y + _scroll.Value) / _heightr;
+
+						if (sel != null && _c >= _grid.FrozenCount)
 						{
-							Focus(); // snap
+							sel.selected = false;
+							_grid[_r,_c].selected = true;
+						}
 
-							_c = (e.Y + _scroll.Value) / _heightr;
+						_grid.EnsureDisplayedCellOrRow();
+						_grid.Invalidate();
 
-							if (sel != null && _c >= _grid.FrozenCount)
-							{
-								sel.selected = false;
-								_grid[_r,_c].selected = true;
-							}
-
-							_grid.EnsureDisplayedCellOrRow();
-							_grid.Refresh();
-
-
+						if (e.X > _widthVars)
+						{
 							_editRect.X      = _widthVars;
 							_editRect.Y      = _c * _heightr + 1;
 							_editRect.Width  = _widthVals;
@@ -334,28 +333,22 @@ namespace yata
 							_editor.Visible = true;
 							_editor.Focus();
 
-							_editor.SelectionStart = 0; // because .NET
-//							if (_editor.Text == Constants.Stars)
-//							{
+							_editor.SelectionStart  = 0; // because .NET
 							_editor.SelectionLength = _editor.Text.Length;
-//							}
+//							if (_editor.Text == Constants.Stars)
+//								_editor.SelectionLength = _editor.Text.Length;
 //							else
 //								_editor.SelectionStart = _editor.Text.Length;
-
-							Refresh();
 						}
+
+						Invalidate();
 					}
 				}
-				else if (e.Button == MouseButtons.Left) // accept edit
+				else
 				{
-					ApplyTextEdit();
+					if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
+						ApplyTextEdit();
 
-					_editor.Visible = false;
-					_grid.Select();
-					_grid.Refresh();
-				}
-				else if (e.Button == MouseButtons.Right) // cancel edit
-				{
 					_editor.Visible = false;
 					_grid.Select();
 					_grid.Refresh();

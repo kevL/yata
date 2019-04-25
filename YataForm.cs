@@ -215,7 +215,9 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (Table != null && Table._editor.Visible
+			if (Table != null
+				&& (   Table._editor.Visible
+					|| Table._propanel._editor.Visible)
 				&& (   keyData == (Keys.Control | Keys.C)
 					|| keyData == (Keys.Control | Keys.V)))
 			{
