@@ -6,6 +6,7 @@ namespace yata
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
+
 		private yata.YataTabs tabControl;
 		private yata.PropertyPanelButton btn_PropertyPanel;
 		private System.Windows.Forms.MenuStrip menubar;
@@ -86,6 +87,8 @@ namespace yata
 		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
 		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
+		private System.Windows.Forms.ToolStripSeparator separator_19;
+		private System.Windows.Forms.ToolStripMenuItem it_CreateRows;
 		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
 		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
 		private System.Windows.Forms.ToolStripSeparator separator_14;
@@ -179,6 +182,8 @@ namespace yata
 			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -462,7 +467,9 @@ namespace yata
 			this.separator_13,
 			this.it_CopyToClipboard,
 			this.it_CopyFromClipboard,
-			this.it_ViewClipboardContents});
+			this.it_ViewClipboardContents,
+			this.separator_19,
+			this.it_CreateRows});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(40, 20);
 			this.it_MenuEdit.Text = "Edit";
@@ -603,6 +610,19 @@ namespace yata
 			this.it_ViewClipboardContents.Size = new System.Drawing.Size(222, 22);
 			this.it_ViewClipboardContents.Text = "open Clipboard editor";
 			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
+			// 
+			// separator_19
+			// 
+			this.separator_19.Name = "separator_19";
+			this.separator_19.Size = new System.Drawing.Size(219, 6);
+			// 
+			// it_CreateRows
+			// 
+			this.it_CreateRows.Enabled = false;
+			this.it_CreateRows.Name = "it_CreateRows";
+			this.it_CreateRows.Size = new System.Drawing.Size(222, 22);
+			this.it_CreateRows.Text = "Create rows ...";
+			this.it_CreateRows.Click += new System.EventHandler(this.editclick_CreateRows);
 			// 
 			// tb_Goto
 			// 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{4DF26C9F-568D-4463-AA67-52133DE7ACFD}</ProjectGuid>
@@ -76,6 +76,10 @@
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="PropertyPanel.cs" />
+    <Compile Include="RowCreatorForm.cs" />
+    <Compile Include="RowCreatorForm.Designer.cs">
+      <DependentUpon>RowCreatorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FontCopyForm.resx">
       <DependentUpon>FontCopyForm.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RowCreatorForm.resx">
+      <DependentUpon>RowCreatorForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>

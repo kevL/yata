@@ -23,8 +23,8 @@ namespace yata
 		#region Fields & Properties
 		internal static string pfe_load; // cl arg
 
-		static YataGrid Table // there can be only 1 Table.
-		{ get; set; }
+		internal static YataGrid Table // there can be only 1 Table.
+		{ get; private set; }
 
 		List<string[]> _copy = new List<string[]>();
 		string _copytext = Constants.Stars;
@@ -1281,6 +1281,8 @@ namespace yata
 
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
+
+			it_CreateRows.Enabled = (Table != null);
 		}
 
 
@@ -1869,6 +1871,23 @@ namespace yata
 			else
 				f.BringToFront();
 		}
+
+
+		/// <summary>
+		/// Instantiates 'RowCreatorForm' for inserting/creating multiple blank
+		/// rows.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_CreateRows(object sender, EventArgs e)
+		{
+			var f = new RowCreatorForm(this);
+			if (f.ShowDialog() == DialogResult.OK)
+			{
+				logfile.Log("_start= " + _start + " _length= " + _length);
+			}
+		}
+		internal int _start, _length;
 		#endregion Edit menu
 
 
