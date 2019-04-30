@@ -31,6 +31,8 @@ namespace yata
 
 		string _preset = String.Empty;
 
+		internal int _createstart, _createlength;
+
 		internal TabControl Tabs
 		{ get { return tabControl; } }
 
@@ -1881,13 +1883,51 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_CreateRows(object sender, EventArgs e)
 		{
-			var f = new RowCreatorForm(this);
-			if (f.ShowDialog() == DialogResult.OK)
+			if (!Table.Readonly)
 			{
-				logfile.Log("_start= " + _start + " _length= " + _length);
+				var f = new RowCreatorForm(this);
+				if (f.ShowDialog() == DialogResult.OK)
+				{
+					ShowColorPanel();
+					DrawingControl.SuspendDrawing(Table);
+
+
+					Restorable rest = UndoRedo.createArray(_createlength, UndoRedo.UrType.rt_ArrayDelete);
+
+					var cells = new string[Table.ColCount];
+					for (int i = 0; i != Table.ColCount; ++i)
+					{
+						cells[i] = Constants.Stars;
+					}
+
+					int r = _createstart;
+					for (int i = 0; i != _createlength; ++i, ++r)
+					{
+						cells[0] = r.ToString();
+
+						Table.Insert(r, cells, false);
+						rest.array[i] = Table.Rows[r].Clone() as Row;
+					}
+
+					Table.Calibrate(_createstart, _createlength - 1); // insert range
+					Table.EnsureDisplayedRow(_createstart);
+
+
+					if (!Table.Changed)
+					{
+						Table.Changed = true;
+						rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+					}
+					Table._ur.Push(rest);
+
+
+					ShowColorPanel(false);
+					DrawingControl.ResumeDrawing(Table);
+				}
 			}
+			else
+				ReadonlyError();
 		}
-		internal int _start, _length;
 		#endregion Edit menu
 
 
