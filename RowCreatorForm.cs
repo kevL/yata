@@ -11,6 +11,8 @@ namespace yata
 		#region Fields (static)
 		static bool _pad    = true;
 		static bool _length = true;
+
+		static Random _rand = new Random();
 		#endregion Fields (static)
 
 
@@ -59,13 +61,12 @@ namespace yata
 		void click_Cancel(object sender, EventArgs e)
 		{
 			_error = false;
-
 			DialogResult = DialogResult.Cancel;
 		}
 
 		void click_Ok(object sender, EventArgs e)
 		{
-			_error = false;
+			_error = true;
 
 			int result;
 
@@ -73,38 +74,31 @@ namespace yata
 			{
 				if (Int32.TryParse(tb_Pad.Text, out result))
 				{
+					_error = false;
 					_f._createstart  = YataForm.Table.RowCount;
 					_f._createlength = result - _f._createstart + 1;
 				}
-				else
-					_error = true;
 			}
 			else
 			{
 				if (Int32.TryParse(tb_Start.Text, out result))
 				{
+					_error = false;
 					_f._createstart = result;
 				}
-				else
-					_error = true;
 
 				if (rb_Length.Checked)
 				{
 					if (Int32.TryParse(tb_Length.Text, out result))
 					{
+						_error = false;
 						_f._createlength = result;
 					}
-					else
-						_error = true;
 				}
-				else
+				else if (Int32.TryParse(tb_Stop.Text, out result))
 				{
-					if (Int32.TryParse(tb_Stop.Text, out result))
-					{
-						_f._createlength = result - _f._createstart + 1;
-					}
-					else
-						_error = true;
+					_error = false;
+					_f._createlength = result - _f._createstart + 1;
 				}
 			}
 
@@ -151,12 +145,15 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Gets a Darth Vader quote.
+		/// </summary>
+		/// <returns></returns>
 		string GetDarthQuote()
 		{
 			string quote = String.Empty;
 
-			var rand = new Random();
-			switch (rand.Next(37))
+			switch (_rand.Next(37))
 			{
 				case  0: quote = "I find your lack of faith disturbing."; break;
 				case  1: quote = "When I left you I was but the learner."; break;
