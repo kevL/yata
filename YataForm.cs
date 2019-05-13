@@ -20,11 +20,16 @@ namespace yata
 		:
 			Form
 	{
-		#region Fields & Properties
+		#region Fields (static)
 		internal static string pfe_load; // cl arg
 
-		internal static YataGrid Table // there can be only 1 Table.
-		{ get; private set; }
+		static Graphics graphics;
+		#endregion Fields (static)
+
+
+		#region Fields
+		readonly YataTabs tabControl = new YataTabs();
+		readonly PropertyPanelButton btn_PropertyPanel = new PropertyPanelButton();
 
 		List<string[]> _copy = new List<string[]>();
 		string _copytext = Constants.Stars;
@@ -33,19 +38,26 @@ namespace yata
 
 		internal int _startCr, _lengthCr;
 
+		internal Font FontAccent;
+
+		internal bool _search;
+		bool _firstclick; // preps the Search or Goto textboxes to select all text
+		#endregion Fields
+
+
+		#region Properties (static)
+		internal static YataGrid Table // there can be only 1 Table.
+		{ get; private set; }
+		#endregion Properties (static)
+
+
+		#region Properties
 		internal TabControl Tabs
 		{ get { return tabControl; } }
 
 		Font FontDefault
 		{ get; set; }
-
-		internal Font FontAccent;
-
-		internal bool _search;
-		bool _firstclick; // preps the Search or Goto textboxes to select all text
-
-		static Graphics graphics;
-		#endregion Fields & Properties
+		#endregion Properties
 
 
 		#region cTor
@@ -54,7 +66,12 @@ namespace yata
 		/// </summary>
 		internal YataForm()
 		{
+			InitializeTabControl();
+			InitializePropertyPanel();
+
 			InitializeComponent();
+
+			tabControl.ContextMenuStrip = tabMenu;
 
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -169,8 +186,55 @@ namespace yata
 			{
 				CreateTabPage(pfe_load);
 			}
-			//else // DEBUG ->
+			else
+				ShowColorPanel();
+
+			//else // DEBUG instaload ->
 			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
+		}
+
+
+		void InitializeTabControl()
+		{
+			tabControl.Name = "tabControl";
+			tabControl.TabIndex = 0;
+			tabControl.SelectedIndex = 0;
+
+			tabControl.Dock      = DockStyle.Fill;
+			tabControl.Multiline = true;
+			tabControl.AllowDrop = true;
+			tabControl.DrawMode  = TabDrawMode.OwnerDrawFixed;
+			tabControl.SizeMode  = TabSizeMode.Fixed;
+
+			tabControl.Location = new Point(0,24);
+			tabControl.Size     = new Size(842,408);
+			tabControl.Padding  = new Point(0,0);
+			tabControl.Margin   = new Padding(0);
+
+			tabControl.DrawItem             += tab_DrawItem;
+			tabControl.SelectedIndexChanged += tab_SelectedIndexChanged;
+
+			Controls.Add(tabControl);
+		}
+
+		void InitializePropertyPanel()
+		{
+			btn_PropertyPanel.Name = "btn_PropertyPanel";
+			btn_PropertyPanel.TabIndex = 4;
+
+			btn_PropertyPanel.Visible = false;
+
+			btn_PropertyPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btn_PropertyPanel.UseVisualStyleBackColor = true;
+
+			btn_PropertyPanel.Location = new Point(823,0);
+			btn_PropertyPanel.Size     = new Size(20,20);
+			btn_PropertyPanel.Margin   = new Padding(0);
+
+			btn_PropertyPanel.MouseDown += mousedown_btnPropertyPanel;
+			btn_PropertyPanel.MouseUp   += mouseup_btnPropertyPanel;
+
+			Controls.Add(btn_PropertyPanel);
 		}
 		#endregion cTor
 

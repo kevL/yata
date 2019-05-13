@@ -1,119 +1,125 @@
+using System.Windows.Forms;
+
+
 namespace yata
 {
 	partial class YataForm
 	{
+		// okay. Fed up.
+		// YataTabs 'tabControl' and PropertyPanelButton 'btn_PropertyPanel'
+		// have been moved to YataForm.
+
+
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+		System.ComponentModel.IContainer components = null;
 
-		private yata.YataTabs tabControl;
-		private yata.PropertyPanelButton btn_PropertyPanel;
-		private System.Windows.Forms.MenuStrip menubar;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuFile;
-		private System.Windows.Forms.ToolStripMenuItem it_Open;
-		private System.Windows.Forms.ToolStripMenuItem it_Save;
-		private System.Windows.Forms.ToolStripMenuItem it_SaveAs;
-		private System.Windows.Forms.ToolStripMenuItem it_Close;
-		private System.Windows.Forms.ToolStripSeparator separator_2;
-		private System.Windows.Forms.ToolStripMenuItem it_Quit;
-		private System.Windows.Forms.ToolStripSeparator separator_1;
-		private System.Windows.Forms.ContextMenuStrip contextEditor;
-		private System.Windows.Forms.ToolStripMenuItem context_it_Cut;
-		private System.Windows.Forms.ToolStripMenuItem context_it_Copy;
-		private System.Windows.Forms.ToolStripMenuItem context_it_Paste;
-		private System.Windows.Forms.ToolStripMenuItem context_it_DeleteRow;
-		private System.Windows.Forms.ToolStripMenuItem context_it_Header;
-		private System.Windows.Forms.ToolStripMenuItem context_it_ClearRow;
-		private System.Windows.Forms.ToolStripMenuItem context_it_CreateBelow;
-		private System.Windows.Forms.ToolStripMenuItem context_it_PasteBelow;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuEdit;
-		private System.Windows.Forms.ToolStripMenuItem it_RenumberRows;
-		private System.Windows.Forms.ToolStripMenuItem context_it_CreateAbove;
-		private System.Windows.Forms.ToolStripMenuItem context_it_PasteAbove;
-		private System.Windows.Forms.ToolStripMenuItem it_RecolorRows;
-		private System.Windows.Forms.ToolStripSeparator separator_7;
-		private System.Windows.Forms.ToolStripSeparator separator_8;
-		private System.Windows.Forms.ToolStripSeparator separator_9;
-		private System.Windows.Forms.ToolStripSeparator separator_10;
-		private System.Windows.Forms.StatusStrip statusbar;
-		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Cords;
-		private System.Windows.Forms.ToolStripStatusLabel statusbar_label_Info;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuPaths;
-		private System.Windows.Forms.ToolStripMenuItem it_PathSpells2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathFeat2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathItemPropDef2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathBaseItems2da;
-		private System.Windows.Forms.ToolStripTextBox tb_Search;
-		private System.Windows.Forms.ToolStripComboBox cb_SearchOption;
-		private System.Windows.Forms.ToolStripMenuItem it_Menu2daOps;
-		private System.Windows.Forms.ToolStripMenuItem it_PathSkills2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathAll;
-		private System.Windows.Forms.ToolStripMenuItem it_PathRaces2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathClasses2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathIprpSpells2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathDisease2da;
-		private System.Windows.Forms.ToolStripMenuItem it_freeze1;
-		private System.Windows.Forms.ToolStripMenuItem it_freeze2;
-		private System.Windows.Forms.ToolStripSeparator separator_5;
-		private System.Windows.Forms.ToolStripMenuItem it_PathIprpOnHitSpell2da;
-		private System.Windows.Forms.ToolStripMenuItem it_CurrentFont;
-		private System.Windows.Forms.ToolStripMenuItem it_CheckRows;
-		private System.Windows.Forms.ToolStripMenuItem it_Reload;
-		private System.Windows.Forms.ToolStripMenuItem it_OpenFolder;
-		private System.Windows.Forms.ToolStripMenuItem it_PathIprpFeats2da;
-		private System.Windows.Forms.ToolStripSeparator separator_6;
-		private System.Windows.Forms.Panel panel_ColorFill;
-		private System.Windows.Forms.ContextMenuStrip tabMenu;
-		private System.Windows.Forms.ToolStripMenuItem it_tabClose;
-		private System.Windows.Forms.ToolStripMenuItem it_Search;
-		private System.Windows.Forms.ToolStripMenuItem it_Findnext;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuFont;
-		private System.Windows.Forms.ToolStripSeparator separator_11;
-		private System.Windows.Forms.ToolStripSeparator separator_12;
-		private System.Windows.Forms.ToolStripMenuItem it_Font;
-		private System.Windows.Forms.ToolStripMenuItem it_FontDefault;
-		private System.Windows.Forms.ToolStripMenuItem it_PathIprpAmmoCost2da;
-		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAll;
-		private System.Windows.Forms.ToolStripMenuItem it_CloseAll;
-		private System.Windows.Forms.ToolStripTextBox tb_Goto;
-		private System.Windows.Forms.ToolStripSeparator separator_3;
-		private System.Windows.Forms.ToolStripMenuItem it_Goto;
-		private System.Windows.Forms.ToolStripMenuItem it_GotoLoadchanged;
-		private System.Windows.Forms.ToolStripSeparator separator_4;
-		private System.Windows.Forms.ToolStripMenuItem it_CopyRange;
-		private System.Windows.Forms.ToolStripMenuItem it_PasteRange;
-		private System.Windows.Forms.ToolStripSeparator separator_13;
-		private System.Windows.Forms.ToolStripMenuItem it_CopyToClipboard;
-		private System.Windows.Forms.ToolStripMenuItem it_CopyFromClipboard;
-		private System.Windows.Forms.ToolStripMenuItem it_ViewClipboardContents;
-		private System.Windows.Forms.ToolStripSeparator separator_19;
-		private System.Windows.Forms.ToolStripMenuItem it_CreateRows;
-		private System.Windows.Forms.ToolStripMenuItem it_tabCloseAllOthers;
-		private System.Windows.Forms.ToolStripMenuItem it_AutoCols;
-		private System.Windows.Forms.ToolStripSeparator separator_14;
-		private System.Windows.Forms.ToolStripMenuItem it_tabReload;
-		private System.Windows.Forms.ToolStripMenuItem it_MenuHelp;
-		private System.Windows.Forms.ToolStripMenuItem it_ReadMe;
-		private System.Windows.Forms.ToolStripMenuItem it_About;
-		private System.Windows.Forms.ToolStripSeparator separator_15;
-		private System.Windows.Forms.ToolStripMenuItem it_PathRanges2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathCategories2da;
-		private System.Windows.Forms.ToolStripMenuItem it_PathSpellTarget2da;
-		private System.Windows.Forms.ToolStripMenuItem it_CopyCell;
-		private System.Windows.Forms.ToolStripMenuItem it_PasteCell;
-		private System.Windows.Forms.ContextMenuStrip cellMenu;
-		private System.Windows.Forms.ToolStripMenuItem it_cellCopy;
-		private System.Windows.Forms.ToolStripMenuItem it_cellPaste;
-		private System.Windows.Forms.ToolStripSeparator separator_16;
-		private System.Windows.Forms.ToolStripMenuItem it_cellStars;
-		private System.Windows.Forms.ToolStripSeparator separator_17;
-		private System.Windows.Forms.ToolStripMenuItem it_ppOnOff;
-		private System.Windows.Forms.ToolStripMenuItem it_ppTopBot;
-		private System.Windows.Forms.ToolStripMenuItem it_Undo;
-		private System.Windows.Forms.ToolStripMenuItem it_Redo;
-		private System.Windows.Forms.ToolStripSeparator separator_18;
-		private System.Windows.Forms.ToolStripMenuItem it_ClearUndoRedo;
+		MenuStrip menubar;
+		ToolStripMenuItem it_MenuFile;
+		ToolStripMenuItem it_Open;
+		ToolStripMenuItem it_Save;
+		ToolStripMenuItem it_SaveAs;
+		ToolStripMenuItem it_Close;
+		ToolStripSeparator separator_2;
+		ToolStripMenuItem it_Quit;
+		ToolStripSeparator separator_1;
+		ContextMenuStrip contextEditor;
+		ToolStripMenuItem context_it_Cut;
+		ToolStripMenuItem context_it_Copy;
+		ToolStripMenuItem context_it_Paste;
+		ToolStripMenuItem context_it_DeleteRow;
+		ToolStripMenuItem context_it_Header;
+		ToolStripMenuItem context_it_ClearRow;
+		ToolStripMenuItem context_it_CreateBelow;
+		ToolStripMenuItem context_it_PasteBelow;
+		ToolStripMenuItem it_MenuEdit;
+		ToolStripMenuItem it_RenumberRows;
+		ToolStripMenuItem context_it_CreateAbove;
+		ToolStripMenuItem context_it_PasteAbove;
+		ToolStripMenuItem it_RecolorRows;
+		ToolStripSeparator separator_7;
+		ToolStripSeparator separator_8;
+		ToolStripSeparator separator_9;
+		ToolStripSeparator separator_10;
+		StatusStrip statusbar;
+		ToolStripStatusLabel statusbar_label_Cords;
+		ToolStripStatusLabel statusbar_label_Info;
+		ToolStripMenuItem it_MenuPaths;
+		ToolStripMenuItem it_PathSpells2da;
+		ToolStripMenuItem it_PathFeat2da;
+		ToolStripMenuItem it_PathItemPropDef2da;
+		ToolStripMenuItem it_PathBaseItems2da;
+		ToolStripTextBox tb_Search;
+		ToolStripComboBox cb_SearchOption;
+		ToolStripMenuItem it_Menu2daOps;
+		ToolStripMenuItem it_PathSkills2da;
+		ToolStripMenuItem it_PathAll;
+		ToolStripMenuItem it_PathRaces2da;
+		ToolStripMenuItem it_PathClasses2da;
+		ToolStripMenuItem it_PathIprpSpells2da;
+		ToolStripMenuItem it_PathDisease2da;
+		ToolStripMenuItem it_freeze1;
+		ToolStripMenuItem it_freeze2;
+		ToolStripSeparator separator_5;
+		ToolStripMenuItem it_PathIprpOnHitSpell2da;
+		ToolStripMenuItem it_CurrentFont;
+		ToolStripMenuItem it_CheckRows;
+		ToolStripMenuItem it_Reload;
+		ToolStripMenuItem it_OpenFolder;
+		ToolStripMenuItem it_PathIprpFeats2da;
+		ToolStripSeparator separator_6;
+		Panel panel_ColorFill;
+		ContextMenuStrip tabMenu;
+		ToolStripMenuItem it_tabClose;
+		ToolStripMenuItem it_Search;
+		ToolStripMenuItem it_Findnext;
+		ToolStripMenuItem it_MenuFont;
+		ToolStripSeparator separator_11;
+		ToolStripSeparator separator_12;
+		ToolStripMenuItem it_Font;
+		ToolStripMenuItem it_FontDefault;
+		ToolStripMenuItem it_PathIprpAmmoCost2da;
+		ToolStripMenuItem it_tabCloseAll;
+		ToolStripMenuItem it_CloseAll;
+		ToolStripTextBox tb_Goto;
+		ToolStripSeparator separator_3;
+		ToolStripMenuItem it_Goto;
+		ToolStripMenuItem it_GotoLoadchanged;
+		ToolStripSeparator separator_4;
+		ToolStripMenuItem it_CopyRange;
+		ToolStripMenuItem it_PasteRange;
+		ToolStripSeparator separator_13;
+		ToolStripMenuItem it_CopyToClipboard;
+		ToolStripMenuItem it_CopyFromClipboard;
+		ToolStripMenuItem it_ViewClipboardContents;
+		ToolStripSeparator separator_19;
+		ToolStripMenuItem it_CreateRows;
+		ToolStripMenuItem it_tabCloseAllOthers;
+		ToolStripMenuItem it_AutoCols;
+		ToolStripSeparator separator_14;
+		ToolStripMenuItem it_tabReload;
+		ToolStripMenuItem it_MenuHelp;
+		ToolStripMenuItem it_ReadMe;
+		ToolStripMenuItem it_About;
+		ToolStripSeparator separator_15;
+		ToolStripMenuItem it_PathRanges2da;
+		ToolStripMenuItem it_PathCategories2da;
+		ToolStripMenuItem it_PathSpellTarget2da;
+		ToolStripMenuItem it_CopyCell;
+		ToolStripMenuItem it_PasteCell;
+		ContextMenuStrip cellMenu;
+		ToolStripMenuItem it_cellCopy;
+		ToolStripMenuItem it_cellPaste;
+		ToolStripSeparator separator_16;
+		ToolStripMenuItem it_cellStars;
+		ToolStripSeparator separator_17;
+		ToolStripMenuItem it_ppOnOff;
+		ToolStripMenuItem it_ppTopBot;
+		ToolStripMenuItem it_Undo;
+		ToolStripMenuItem it_Redo;
+		ToolStripSeparator separator_18;
+		ToolStripMenuItem it_ClearUndoRedo;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -127,13 +133,6 @@ namespace yata
 			base.Dispose(disposing);
 		}
 
-		/*
-		 * The designer is going to delete these, add them to the top of
-		 * InitializeComponent() if/when it does.
-
-			this.tabControl = new yata.YataTabs();
-			this.btn_PropertyPanel = new yata.PropertyPanelButton();
-		*/
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The
@@ -142,8 +141,6 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.tabControl = new yata.YataTabs();
-			this.btn_PropertyPanel = new yata.PropertyPanelButton();
 			this.components = new System.ComponentModel.Container();
 			this.tabMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -257,24 +254,6 @@ namespace yata
 			this.cellMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// tabControl
-			// 
-			this.tabControl.AllowDrop = true;
-			this.tabControl.ContextMenuStrip = this.tabMenu;
-			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-			this.tabControl.Location = new System.Drawing.Point(0, 24);
-			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
-			this.tabControl.Multiline = true;
-			this.tabControl.Name = "tabControl";
-			this.tabControl.Padding = new System.Drawing.Point(0, 0);
-			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(842, 408);
-			this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-			this.tabControl.TabIndex = 0;
-			this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tab_DrawItem);
-			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tab_SelectedIndexChanged);
-			// 
 			// tabMenu
 			// 
 			this.tabMenu.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -324,19 +303,6 @@ namespace yata
 			this.it_tabReload.Size = new System.Drawing.Size(138, 22);
 			this.it_tabReload.Text = "Reload";
 			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
-			// 
-			// btn_PropertyPanel
-			// 
-			this.btn_PropertyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_PropertyPanel.Location = new System.Drawing.Point(823, 0);
-			this.btn_PropertyPanel.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_PropertyPanel.Name = "btn_PropertyPanel";
-			this.btn_PropertyPanel.Size = new System.Drawing.Size(20, 20);
-			this.btn_PropertyPanel.TabIndex = 4;
-			this.btn_PropertyPanel.UseVisualStyleBackColor = true;
-			this.btn_PropertyPanel.Visible = false;
-			this.btn_PropertyPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_btnPropertyPanel);
-			this.btn_PropertyPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseup_btnPropertyPanel);
 			// 
 			// menubar
 			// 
@@ -393,6 +359,7 @@ namespace yata
 			// 
 			// it_Reload
 			// 
+			this.it_Reload.Enabled = false;
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.it_Reload.Size = new System.Drawing.Size(181, 22);
@@ -406,6 +373,7 @@ namespace yata
 			// 
 			// it_Save
 			// 
+			this.it_Save.Enabled = false;
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.it_Save.Size = new System.Drawing.Size(181, 22);
@@ -414,6 +382,7 @@ namespace yata
 			// 
 			// it_SaveAs
 			// 
+			this.it_SaveAs.Enabled = false;
 			this.it_SaveAs.Name = "it_SaveAs";
 			this.it_SaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
 			this.it_SaveAs.Size = new System.Drawing.Size(181, 22);
@@ -422,6 +391,7 @@ namespace yata
 			// 
 			// it_Close
 			// 
+			this.it_Close.Enabled = false;
 			this.it_Close.Name = "it_Close";
 			this.it_Close.Size = new System.Drawing.Size(181, 22);
 			this.it_Close.Text = "Close";
@@ -429,6 +399,7 @@ namespace yata
 			// 
 			// it_CloseAll
 			// 
+			this.it_CloseAll.Enabled = false;
 			this.it_CloseAll.Name = "it_CloseAll";
 			this.it_CloseAll.Size = new System.Drawing.Size(181, 22);
 			this.it_CloseAll.Text = "Close all";
@@ -496,6 +467,7 @@ namespace yata
 			// 
 			// it_ClearUndoRedo
 			// 
+			this.it_ClearUndoRedo.Enabled = false;
 			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
 			this.it_ClearUndoRedo.Size = new System.Drawing.Size(222, 22);
 			this.it_ClearUndoRedo.Text = "clear undo/redo";
@@ -516,6 +488,7 @@ namespace yata
 			// 
 			// it_Findnext
 			// 
+			this.it_Findnext.Enabled = false;
 			this.it_Findnext.Name = "it_Findnext";
 			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.it_Findnext.Size = new System.Drawing.Size(222, 22);
@@ -550,6 +523,7 @@ namespace yata
 			// 
 			// it_CopyCell
 			// 
+			this.it_CopyCell.Enabled = false;
 			this.it_CopyCell.Name = "it_CopyCell";
 			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.it_CopyCell.Size = new System.Drawing.Size(222, 22);
@@ -558,6 +532,7 @@ namespace yata
 			// 
 			// it_PasteCell
 			// 
+			this.it_PasteCell.Enabled = false;
 			this.it_PasteCell.Name = "it_PasteCell";
 			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.it_PasteCell.Size = new System.Drawing.Size(222, 22);
@@ -682,6 +657,7 @@ namespace yata
 			// 
 			// it_RenumberRows
 			// 
+			this.it_RenumberRows.Enabled = false;
 			this.it_RenumberRows.Name = "it_RenumberRows";
 			this.it_RenumberRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.it_RenumberRows.Size = new System.Drawing.Size(241, 22);
@@ -690,6 +666,7 @@ namespace yata
 			// 
 			// it_CheckRows
 			// 
+			this.it_CheckRows.Enabled = false;
 			this.it_CheckRows.Name = "it_CheckRows";
 			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
 			this.it_CheckRows.Size = new System.Drawing.Size(241, 22);
@@ -703,6 +680,7 @@ namespace yata
 			// 
 			// it_RecolorRows
 			// 
+			this.it_RecolorRows.Enabled = false;
 			this.it_RecolorRows.Name = "it_RecolorRows";
 			this.it_RecolorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.it_RecolorRows.Size = new System.Drawing.Size(241, 22);
@@ -711,6 +689,7 @@ namespace yata
 			// 
 			// it_AutoCols
 			// 
+			this.it_AutoCols.Enabled = false;
 			this.it_AutoCols.Name = "it_AutoCols";
 			this.it_AutoCols.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
 			this.it_AutoCols.Size = new System.Drawing.Size(241, 22);
@@ -724,6 +703,7 @@ namespace yata
 			// 
 			// it_freeze1
 			// 
+			this.it_freeze1.Enabled = false;
 			this.it_freeze1.Name = "it_freeze1";
 			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.it_freeze1.Size = new System.Drawing.Size(241, 22);
@@ -732,6 +712,7 @@ namespace yata
 			// 
 			// it_freeze2
 			// 
+			this.it_freeze2.Enabled = false;
 			this.it_freeze2.Name = "it_freeze2";
 			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
 			this.it_freeze2.Size = new System.Drawing.Size(241, 22);
@@ -745,6 +726,7 @@ namespace yata
 			// 
 			// it_ppOnOff
 			// 
+			this.it_ppOnOff.Enabled = false;
 			this.it_ppOnOff.Name = "it_ppOnOff";
 			this.it_ppOnOff.ShortcutKeys = System.Windows.Forms.Keys.F7;
 			this.it_ppOnOff.Size = new System.Drawing.Size(241, 22);
@@ -753,6 +735,7 @@ namespace yata
 			// 
 			// it_ppTopBot
 			// 
+			this.it_ppTopBot.Enabled = false;
 			this.it_ppTopBot.Name = "it_ppTopBot";
 			this.it_ppTopBot.ShortcutKeys = System.Windows.Forms.Keys.F8;
 			this.it_ppTopBot.Size = new System.Drawing.Size(241, 22);
@@ -1168,9 +1151,7 @@ namespace yata
 			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(842, 454);
-			this.Controls.Add(this.btn_PropertyPanel);
 			this.Controls.Add(this.panel_ColorFill);
-			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.menubar);
 			this.Controls.Add(this.statusbar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
