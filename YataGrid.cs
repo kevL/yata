@@ -630,7 +630,7 @@ namespace yata
 						MessageBox.Show("The 2da-file does not have any fields."
 										+ Environment.NewLine
 										+ "Yata requires that a file has at least one field on its 3rd line.",
-										"burp",
+										" burp",
 										MessageBoxButtons.OK,
 										MessageBoxIcon.Error,
 										MessageBoxDefaultButton.Button1);
@@ -697,7 +697,7 @@ namespace yata
 						MessageBox.Show("The 2da-file does not have a header on its first line."
 										+ Environment.NewLine + Environment.NewLine
 										+ "2DA V2.0",
-										"burp",
+										" burp",
 										MessageBoxButtons.OK,
 										MessageBoxIcon.Error,
 										MessageBoxDefaultButton.Button1);
@@ -752,7 +752,7 @@ namespace yata
 				   + "ignore\t- just load the file";
 
 			return MessageBox.Show(error,
-								   "burp",
+								   " burp",
 								   MessageBoxButtons.AbortRetryIgnore,
 								   MessageBoxIcon.Exclamation,
 								   MessageBoxDefaultButton.Button2);
@@ -1708,7 +1708,7 @@ namespace yata
 
 			if (CheckTextEdit(tb))
 				MessageBox.Show("The text that was submitted has been altered.",
-								"burp",
+								" burp",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Exclamation,
 								MessageBoxDefaultButton.Button1);

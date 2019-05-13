@@ -310,7 +310,7 @@ namespace yata
 				}
 //				else
 //					MessageBox.Show(String.Format("Unrecognized data type: {0}.", dataType),
-//									"Yata",
+//									" Yata",
 //									MessageBoxButtons.OK,
 //									MessageBoxIcon.Error);
 			}
@@ -604,7 +604,7 @@ namespace yata
 			if (Table != null
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-									   "warning",
+									   " warning",
 									   MessageBoxButtons.YesNo,
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
@@ -637,7 +637,7 @@ namespace yata
 										+ info
 										+ Environment.NewLine
 										+ "Okay to exit ...",
-										"warning",
+										" warning",
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Warning,
 										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
@@ -665,7 +665,7 @@ namespace yata
 			{
 				e.Cancel = Table.Changed
 						&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-										   "warning",
+										   " warning",
 										   MessageBoxButtons.YesNo,
 										   MessageBoxIcon.Warning,
 										   MessageBoxDefaultButton.Button2) == DialogResult.No;
@@ -686,7 +686,7 @@ namespace yata
 											   + info
 											   + Environment.NewLine
 											   + "Okay to exit ...",
-											   "warning",
+											   " warning",
 											   MessageBoxButtons.YesNo,
 											   MessageBoxIcon.Warning,
 											   MessageBoxDefaultButton.Button2) == DialogResult.No;
@@ -721,7 +721,7 @@ namespace yata
 			if (Table != null && File.Exists(Table.Fullpath)
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-									   "warning",
+									   " warning",
 									   MessageBoxButtons.YesNo,
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
@@ -913,7 +913,7 @@ namespace yata
 			return MessageBox.Show(info
 								   + Environment.NewLine + Environment.NewLine
 								   + "Save anyway ...",
-								   "burp",
+								   " burp",
 								   MessageBoxButtons.YesNo,
 								   MessageBoxIcon.Exclamation,
 								   MessageBoxDefaultButton.Button2);
@@ -945,7 +945,7 @@ namespace yata
 		internal void ReadonlyError()
 		{
 			MessageBox.Show("The 2da-file is opened as readonly.",
-							"burp",
+							" burp",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Hand,
 							MessageBoxDefaultButton.Button1);
@@ -1333,7 +1333,7 @@ namespace yata
 				bytes -= GC.GetTotalMemory(true);
 
 				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
-								"burp",
+								" burp",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Information,
 								MessageBoxDefaultButton.Button1);
@@ -1730,7 +1730,7 @@ namespace yata
 		void CopyPasteCellError()
 		{
 			MessageBox.Show("Select one (1) cell.",
-							"burp",
+							" burp",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Exclamation,
 							MessageBoxDefaultButton.Button1);
@@ -2055,7 +2055,7 @@ namespace yata
 							  + "Do you want to auto-order the ID fields?";
 
 						if (MessageBox.Show(info,
-											"burp",
+											" burp",
 											MessageBoxButtons.YesNo,
 											MessageBoxIcon.Exclamation,
 											MessageBoxDefaultButton.Button1) == DialogResult.Yes)
@@ -2065,14 +2065,14 @@ namespace yata
 					}
 					else
 						MessageBox.Show(info,
-										"burp",
+										" burp",
 										MessageBoxButtons.OK,
 										MessageBoxIcon.Exclamation,
 										MessageBoxDefaultButton.Button1);
 				}
 				else
 					MessageBox.Show("Row order is Okay.",
-									"burp",
+									" burp",
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Information,
 									MessageBoxDefaultButton.Button1);
@@ -2342,7 +2342,7 @@ namespace yata
 				Process.Start(path);
 			else
 				MessageBox.Show("ReadMe.txt was not found in the application directory.",
-								"burp",
+								" burp",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Error,
 								MessageBoxDefaultButton.Button1);
@@ -2362,7 +2362,7 @@ namespace yata
 			ver += " - release";
 #endif
 			MessageBox.Show(ver,
-							"Version info",
+							" Version info",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Information,
 							MessageBoxDefaultButton.Button1);
@@ -2427,7 +2427,7 @@ namespace yata
 										+ info
 										+ Environment.NewLine
 										+ "Okay to exit ...",
-										"warning",
+										" warning",
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Warning,
 										MessageBoxDefaultButton.Button2) == DialogResult.Yes;

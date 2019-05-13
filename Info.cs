@@ -160,7 +160,7 @@ namespace yata
 											  + " Format the 2da-file to not use double-quotes if you want"
 											  + " to access it here.";
 							MessageBox.Show(info,
-											"burp",
+											" burp",
 											MessageBoxButtons.OK,
 											MessageBoxIcon.Error,
 											MessageBoxDefaultButton.Button1);
@@ -244,7 +244,7 @@ namespace yata
 											  + " Format the 2da-file to not use double-quotes if you want"
 											  + " to access it here.";
 							MessageBox.Show(info,
-											"burp",
+											" burp",
 											MessageBoxButtons.OK,
 											MessageBoxIcon.Error,
 											MessageBoxDefaultButton.Button1);

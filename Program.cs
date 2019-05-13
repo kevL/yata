@@ -98,7 +98,7 @@ namespace yata
 				catch (Exception ex)
 				{
 					MessageBox.Show(ex.ToString(),
-									"Yata",
+									" Yata",
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Error);
 				}
