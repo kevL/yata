@@ -67,7 +67,7 @@ namespace yata
 		internal YataForm()
 		{
 			InitializeTabControl();
-			InitializePropertyPanel();
+			InitializePropertyPanelButton();
 
 			InitializeComponent();
 
@@ -194,10 +194,13 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// Initializes the TabControl.
+		/// </summary>
 		void InitializeTabControl()
 		{
-			tabControl.Name = "tabControl";
-			tabControl.TabIndex = 0;
+			tabControl.Name          = "tabControl";
+			tabControl.TabIndex      = 0;
 			tabControl.SelectedIndex = 0;
 
 			tabControl.Dock      = DockStyle.Fill;
@@ -208,8 +211,8 @@ namespace yata
 
 			tabControl.Location = new Point(0,24);
 			tabControl.Size     = new Size(842,408);
-			tabControl.Padding  = new Point(0,0);
-			tabControl.Margin   = new Padding(0);
+			tabControl.Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
+			tabControl.Margin   = new Padding(0); // right got it.
 
 			tabControl.DrawItem             += tab_DrawItem;
 			tabControl.SelectedIndexChanged += tab_SelectedIndexChanged;
@@ -217,9 +220,12 @@ namespace yata
 			Controls.Add(tabControl);
 		}
 
-		void InitializePropertyPanel()
+		/// <summary>
+		/// Initializes the PropertyPanelButton.
+		/// </summary>
+		void InitializePropertyPanelButton()
 		{
-			btn_PropertyPanel.Name = "btn_PropertyPanel";
+			btn_PropertyPanel.Name     = "btn_PropertyPanel";
 			btn_PropertyPanel.TabIndex = 4;
 
 			btn_PropertyPanel.Visible = false;
