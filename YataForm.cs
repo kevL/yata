@@ -31,7 +31,7 @@ namespace yata
 
 		string _preset = String.Empty;
 
-		internal int _createstart, _createlength;
+		internal int _startCr, _lengthCr;
 
 		internal TabControl Tabs
 		{ get { return tabControl; } }
@@ -1892,7 +1892,7 @@ namespace yata
 					DrawingControl.SuspendDrawing(Table);
 
 
-					Restorable rest = UndoRedo.createArray(_createlength, UndoRedo.UrType.rt_ArrayDelete);
+					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
 
 					var cells = new string[Table.ColCount];
 					for (int i = 0; i != Table.ColCount; ++i)
@@ -1900,8 +1900,8 @@ namespace yata
 						cells[i] = Constants.Stars;
 					}
 
-					int r = _createstart;
-					for (int i = 0; i != _createlength; ++i, ++r)
+					int r = _startCr;
+					for (int i = 0; i != _lengthCr; ++i, ++r)
 					{
 						cells[0] = r.ToString();
 
@@ -1909,8 +1909,8 @@ namespace yata
 						rest.array[i] = Table.Rows[r].Clone() as Row;
 					}
 
-					Table.Calibrate(_createstart, _createlength - 1); // insert range
-					Table.EnsureDisplayedRow(_createstart);
+					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+					Table.EnsureDisplayedRow(_startCr);
 
 
 					if (!Table.Changed)

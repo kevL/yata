@@ -75,8 +75,8 @@ namespace yata
 				if (Int32.TryParse(tb_Pad.Text, out result))
 				{
 					_error = false;
-					_f._createstart  = YataForm.Table.RowCount;
-					_f._createlength = result - _f._createstart + 1;
+					_f._startCr  = YataForm.Table.RowCount;
+					_f._lengthCr = result - _f._startCr + 1;
 				}
 			}
 			else
@@ -84,7 +84,7 @@ namespace yata
 				if (Int32.TryParse(tb_Start.Text, out result))
 				{
 					_error = false;
-					_f._createstart = result;
+					_f._startCr = result;
 				}
 
 				if (rb_Length.Checked)
@@ -92,20 +92,20 @@ namespace yata
 					if (Int32.TryParse(tb_Length.Text, out result))
 					{
 						_error = false;
-						_f._createlength = result;
+						_f._lengthCr = result;
 					}
 				}
 				else if (Int32.TryParse(tb_Stop.Text, out result))
 				{
 					_error = false;
-					_f._createlength = result - _f._createstart + 1;
+					_f._lengthCr = result - _f._startCr + 1;
 				}
 			}
 
 			if (_error
-				|| _f._createstart < 0
-				|| _f._createstart > YataForm.Table.RowCount
-				|| _f._createlength < 1)
+				|| _f._startCr < 0
+				|| _f._startCr > YataForm.Table.RowCount
+				|| _f._lengthCr < 1)
 			{
 				DialogResult = DialogResult.Cancel; // safety.
 				ShowError();
