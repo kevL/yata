@@ -379,7 +379,7 @@ namespace yata
 			// it_OpenFolder
 			// 
 			this.it_OpenFolder.Name = "it_OpenFolder";
-			this.it_OpenFolder.Size = new System.Drawing.Size(171, 22);
+			this.it_OpenFolder.Size = new System.Drawing.Size(181, 22);
 			this.it_OpenFolder.Text = "Open ... @ folder";
 			this.it_OpenFolder.Visible = false;
 			// 
@@ -387,7 +387,7 @@ namespace yata
 			// 
 			this.it_Open.Name = "it_Open";
 			this.it_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_Open.Size = new System.Drawing.Size(171, 22);
+			this.it_Open.Size = new System.Drawing.Size(181, 22);
 			this.it_Open.Text = "Open ...";
 			this.it_Open.Click += new System.EventHandler(this.fileclick_Open);
 			// 
@@ -395,54 +395,55 @@ namespace yata
 			// 
 			this.it_Reload.Name = "it_Reload";
 			this.it_Reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.it_Reload.Size = new System.Drawing.Size(171, 22);
+			this.it_Reload.Size = new System.Drawing.Size(181, 22);
 			this.it_Reload.Text = "Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// separator_1
 			// 
 			this.separator_1.Name = "separator_1";
-			this.separator_1.Size = new System.Drawing.Size(168, 6);
+			this.separator_1.Size = new System.Drawing.Size(178, 6);
 			// 
 			// it_Save
 			// 
 			this.it_Save.Name = "it_Save";
 			this.it_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.it_Save.Size = new System.Drawing.Size(171, 22);
+			this.it_Save.Size = new System.Drawing.Size(181, 22);
 			this.it_Save.Text = "Save";
 			this.it_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// it_SaveAs
 			// 
 			this.it_SaveAs.Name = "it_SaveAs";
-			this.it_SaveAs.Size = new System.Drawing.Size(171, 22);
+			this.it_SaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+			this.it_SaveAs.Size = new System.Drawing.Size(181, 22);
 			this.it_SaveAs.Text = "Save As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
 			// 
 			// it_Close
 			// 
 			this.it_Close.Name = "it_Close";
-			this.it_Close.Size = new System.Drawing.Size(171, 22);
+			this.it_Close.Size = new System.Drawing.Size(181, 22);
 			this.it_Close.Text = "Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_CloseAll
 			// 
 			this.it_CloseAll.Name = "it_CloseAll";
-			this.it_CloseAll.Size = new System.Drawing.Size(171, 22);
+			this.it_CloseAll.Size = new System.Drawing.Size(181, 22);
 			this.it_CloseAll.Text = "Close all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
 			// 
 			this.separator_2.Name = "separator_2";
-			this.separator_2.Size = new System.Drawing.Size(168, 6);
+			this.separator_2.Size = new System.Drawing.Size(178, 6);
 			// 
 			// it_Quit
 			// 
 			this.it_Quit.Name = "it_Quit";
 			this.it_Quit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-			this.it_Quit.Size = new System.Drawing.Size(171, 22);
+			this.it_Quit.Size = new System.Drawing.Size(181, 22);
 			this.it_Quit.Text = "Quit";
 			this.it_Quit.Click += new System.EventHandler(this.fileclick_Quit);
 			// 
