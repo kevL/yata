@@ -2501,6 +2501,9 @@ namespace yata
 			Table._editor.Visible = false;
 			Table.Refresh();
 
+			it_tabCloseAll      .Enabled =
+			it_tabCloseAllOthers.Enabled = Tabs.TabCount != 1;
+
 			var pt = Tabs.PointToClient(Cursor.Position);
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
 			{
