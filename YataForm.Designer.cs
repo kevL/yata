@@ -16,110 +16,129 @@ namespace yata
 		System.ComponentModel.IContainer components = null;
 
 		MenuStrip menubar;
+
 		ToolStripMenuItem it_MenuFile;
+		ToolStripMenuItem it_OpenFolder;
 		ToolStripMenuItem it_Open;
+		ToolStripMenuItem it_Reload;
 		ToolStripMenuItem it_Save;
 		ToolStripMenuItem it_SaveAs;
 		ToolStripMenuItem it_Close;
-		ToolStripSeparator separator_2;
+		ToolStripMenuItem it_CloseAll;
 		ToolStripMenuItem it_Quit;
-		ToolStripSeparator separator_1;
-		ContextMenuStrip contextEditor;
-		ToolStripMenuItem context_it_Cut;
-		ToolStripMenuItem context_it_Copy;
-		ToolStripMenuItem context_it_Paste;
-		ToolStripMenuItem context_it_DeleteRow;
-		ToolStripMenuItem context_it_Header;
-		ToolStripMenuItem context_it_ClearRow;
-		ToolStripMenuItem context_it_CreateBelow;
-		ToolStripMenuItem context_it_PasteBelow;
+
 		ToolStripMenuItem it_MenuEdit;
-		ToolStripMenuItem it_RenumberRows;
-		ToolStripMenuItem context_it_CreateAbove;
-		ToolStripMenuItem context_it_PasteAbove;
+		ToolStripMenuItem it_Undo;
+		ToolStripMenuItem it_Redo;
+		ToolStripMenuItem it_Search;
+		ToolStripMenuItem it_Searchnext;
+		ToolStripMenuItem it_Goto;
+		ToolStripMenuItem it_GotoLoadchanged;
+		internal ToolStripMenuItem it_CopyCell;
+		internal ToolStripMenuItem it_PasteCell;
+		ToolStripMenuItem it_CopyRange;
+		ToolStripMenuItem it_PasteRange;
+		ToolStripMenuItem it_CreateRows;
+
+		ToolStripTextBox tb_Goto;
+
+		ToolStripTextBox tb_Search;
+		ToolStripComboBox cb_SearchOption;
+
+		ToolStripMenuItem it_MenuClipboard;
+		ToolStripMenuItem it_CopyToClipboard;
+		ToolStripMenuItem it_CopyFromClipboard;
+		ToolStripMenuItem it_ViewClipboardContents;
+
+		ToolStripMenuItem it_Menu2daOps;
+		ToolStripMenuItem it_OrderRows;
+		ToolStripMenuItem it_CheckRows;
 		ToolStripMenuItem it_RecolorRows;
+		ToolStripMenuItem it_AutoCols;
+		ToolStripMenuItem it_freeze1;
+		ToolStripMenuItem it_freeze2;
+		ToolStripMenuItem it_ppOnOff;
+		ToolStripMenuItem it_ppTopBot;
+		ToolStripMenuItem it_ClearUndoRedo;
+
+		ToolStripMenuItem it_MenuFont;
+		ToolStripMenuItem it_Font;
+		ToolStripMenuItem it_CurrentFont;
+		ToolStripMenuItem it_FontDefault;
+
+		ToolStripMenuItem it_MenuPaths;
+		ToolStripMenuItem it_PathAll;
+		ToolStripMenuItem it_PathBaseItems2da;
+		ToolStripMenuItem it_PathFeat2da;
+		ToolStripMenuItem it_PathItemPropDef2da;
+		ToolStripMenuItem it_PathSkills2da;
+		ToolStripMenuItem it_PathSpells2da;
+		ToolStripMenuItem it_PathClasses2da;
+		ToolStripMenuItem it_PathDisease2da;
+		ToolStripMenuItem it_PathIprpAmmoCost2da;
+		ToolStripMenuItem it_PathIprpFeats2da;
+		ToolStripMenuItem it_PathIprpOnHitSpell2da;
+		ToolStripMenuItem it_PathIprpSpells2da;
+		ToolStripMenuItem it_PathRaces2da;
+		ToolStripMenuItem it_PathCategories2da;
+		ToolStripMenuItem it_PathRanges2da;
+		ToolStripMenuItem it_PathSpellTarget2da;
+
+		ToolStripMenuItem it_MenuHelp;
+		ToolStripMenuItem it_ReadMe;
+		ToolStripMenuItem it_About;
+
+		ToolStripSeparator separator_1;
+		ToolStripSeparator separator_2;
+		ToolStripSeparator separator_3;
+		ToolStripSeparator separator_4;
+		ToolStripSeparator separator_5;
+		ToolStripSeparator separator_6;
 		ToolStripSeparator separator_7;
 		ToolStripSeparator separator_8;
 		ToolStripSeparator separator_9;
 		ToolStripSeparator separator_10;
-		StatusStrip statusbar;
-		ToolStripStatusLabel statusbar_label_Cords;
-		ToolStripStatusLabel statusbar_label_Info;
-		ToolStripMenuItem it_MenuPaths;
-		ToolStripMenuItem it_PathSpells2da;
-		ToolStripMenuItem it_PathFeat2da;
-		ToolStripMenuItem it_PathItemPropDef2da;
-		ToolStripMenuItem it_PathBaseItems2da;
-		ToolStripTextBox tb_Search;
-		ToolStripComboBox cb_SearchOption;
-		ToolStripMenuItem it_Menu2daOps;
-		ToolStripMenuItem it_PathSkills2da;
-		ToolStripMenuItem it_PathAll;
-		ToolStripMenuItem it_PathRaces2da;
-		ToolStripMenuItem it_PathClasses2da;
-		ToolStripMenuItem it_PathIprpSpells2da;
-		ToolStripMenuItem it_PathDisease2da;
-		ToolStripMenuItem it_freeze1;
-		ToolStripMenuItem it_freeze2;
-		ToolStripSeparator separator_5;
-		ToolStripMenuItem it_PathIprpOnHitSpell2da;
-		ToolStripMenuItem it_CurrentFont;
-		ToolStripMenuItem it_CheckRows;
-		ToolStripMenuItem it_Reload;
-		ToolStripMenuItem it_OpenFolder;
-		ToolStripMenuItem it_PathIprpFeats2da;
-		ToolStripSeparator separator_6;
-		Panel panel_ColorFill;
-		ContextMenuStrip tabMenu;
-		ToolStripMenuItem it_tabClose;
-		ToolStripMenuItem it_Search;
-		ToolStripMenuItem it_Findnext;
-		ToolStripMenuItem it_MenuFont;
 		ToolStripSeparator separator_11;
 		ToolStripSeparator separator_12;
-		ToolStripMenuItem it_Font;
-		ToolStripMenuItem it_FontDefault;
-		ToolStripMenuItem it_PathIprpAmmoCost2da;
-		ToolStripMenuItem it_tabCloseAll;
-		ToolStripMenuItem it_CloseAll;
-		ToolStripTextBox tb_Goto;
-		ToolStripSeparator separator_3;
-		ToolStripMenuItem it_Goto;
-		ToolStripMenuItem it_GotoLoadchanged;
-		ToolStripSeparator separator_4;
-		ToolStripMenuItem it_CopyRange;
-		ToolStripMenuItem it_PasteRange;
 		ToolStripSeparator separator_13;
-		ToolStripMenuItem it_CopyToClipboard;
-		ToolStripMenuItem it_CopyFromClipboard;
-		ToolStripMenuItem it_ViewClipboardContents;
-		ToolStripSeparator separator_19;
-		ToolStripMenuItem it_CreateRows;
-		ToolStripMenuItem it_tabCloseAllOthers;
-		ToolStripMenuItem it_AutoCols;
 		ToolStripSeparator separator_14;
-		ToolStripMenuItem it_tabReload;
-		ToolStripMenuItem it_MenuHelp;
-		ToolStripMenuItem it_ReadMe;
-		ToolStripMenuItem it_About;
 		ToolStripSeparator separator_15;
-		ToolStripMenuItem it_PathRanges2da;
-		ToolStripMenuItem it_PathCategories2da;
-		ToolStripMenuItem it_PathSpellTarget2da;
-		internal ToolStripMenuItem it_CopyCell;
-		internal ToolStripMenuItem it_PasteCell;
+		ToolStripSeparator separator_16;
+		ToolStripSeparator separator_17;
+		ToolStripSeparator separator_18;
+		ToolStripSeparator separator_19;
+		ToolStripSeparator separator_20;
+		ToolStripSeparator separator_21;
+
+		ContextMenuStrip contextEditor;
+		ToolStripMenuItem context_it_Header;
+		ToolStripMenuItem context_it_Copy;
+		ToolStripMenuItem context_it_Cut;
+		ToolStripMenuItem context_it_PasteAbove;
+		ToolStripMenuItem context_it_Paste;
+		ToolStripMenuItem context_it_PasteBelow;
+		ToolStripMenuItem context_it_CreateAbove;
+		ToolStripMenuItem context_it_ClearRow;
+		ToolStripMenuItem context_it_CreateBelow;
+		ToolStripMenuItem context_it_DeleteRow;
+
+		ContextMenuStrip tabMenu;
+		ToolStripMenuItem it_tabClose;
+		ToolStripMenuItem it_tabCloseAll;
+		ToolStripMenuItem it_tabCloseAllOthers;
+		ToolStripMenuItem it_tabReload;
+
 		ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
-		ToolStripSeparator separator_16;
 		ToolStripMenuItem it_cellStars;
-		ToolStripSeparator separator_17;
-		ToolStripMenuItem it_ppOnOff;
-		ToolStripMenuItem it_ppTopBot;
-		ToolStripMenuItem it_Undo;
-		ToolStripMenuItem it_Redo;
-		ToolStripSeparator separator_18;
-		ToolStripMenuItem it_ClearUndoRedo;
+
+		StatusStrip statusbar;
+		ToolStripStatusLabel statusbar_label_Cords;
+		ToolStripStatusLabel statusbar_label_Info;
+
+		Panel panel_ColorFill;
+
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -163,29 +182,30 @@ namespace yata
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Undo = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Redo = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_ClearUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Findnext = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Searchnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCell = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_20 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
+			this.it_MenuClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_RenumberRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,6 +216,8 @@ namespace yata
 			this.separator_17 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ppOnOff = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ppTopBot = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_21 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_ClearUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
@@ -313,6 +335,7 @@ namespace yata
 			this.tb_Goto,
 			this.tb_Search,
 			this.cb_SearchOption,
+			this.it_MenuClipboard,
 			this.it_Menu2daOps,
 			this.it_MenuFont,
 			this.it_MenuPaths,
@@ -424,23 +447,19 @@ namespace yata
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Undo,
 			this.it_Redo,
-			this.it_ClearUndoRedo,
 			this.separator_18,
 			this.it_Search,
-			this.it_Findnext,
+			this.it_Searchnext,
 			this.separator_3,
 			this.it_Goto,
 			this.it_GotoLoadchanged,
 			this.separator_4,
 			this.it_CopyCell,
 			this.it_PasteCell,
+			this.separator_20,
 			this.it_CopyRange,
 			this.it_PasteRange,
 			this.separator_13,
-			this.it_CopyToClipboard,
-			this.it_CopyFromClipboard,
-			this.it_ViewClipboardContents,
-			this.separator_19,
 			this.it_CreateRows});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Size = new System.Drawing.Size(40, 20);
@@ -452,7 +471,7 @@ namespace yata
 			this.it_Undo.Enabled = false;
 			this.it_Undo.Name = "it_Undo";
 			this.it_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.it_Undo.Size = new System.Drawing.Size(222, 22);
+			this.it_Undo.Size = new System.Drawing.Size(226, 22);
 			this.it_Undo.Text = "Undo";
 			this.it_Undo.Click += new System.EventHandler(this.editclick_Undo);
 			// 
@@ -461,50 +480,42 @@ namespace yata
 			this.it_Redo.Enabled = false;
 			this.it_Redo.Name = "it_Redo";
 			this.it_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.it_Redo.Size = new System.Drawing.Size(222, 22);
+			this.it_Redo.Size = new System.Drawing.Size(226, 22);
 			this.it_Redo.Text = "Redo";
 			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
-			// 
-			// it_ClearUndoRedo
-			// 
-			this.it_ClearUndoRedo.Enabled = false;
-			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
-			this.it_ClearUndoRedo.Size = new System.Drawing.Size(222, 22);
-			this.it_ClearUndoRedo.Text = "clear undo/redo";
-			this.it_ClearUndoRedo.Click += new System.EventHandler(this.editclick_ClearUndoRedo);
 			// 
 			// separator_18
 			// 
 			this.separator_18.Name = "separator_18";
-			this.separator_18.Size = new System.Drawing.Size(219, 6);
+			this.separator_18.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_Search
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(222, 22);
+			this.it_Search.Size = new System.Drawing.Size(226, 22);
 			this.it_Search.Text = "Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
-			// it_Findnext
+			// it_Searchnext
 			// 
-			this.it_Findnext.Enabled = false;
-			this.it_Findnext.Name = "it_Findnext";
-			this.it_Findnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Findnext.Size = new System.Drawing.Size(222, 22);
-			this.it_Findnext.Text = "Find next";
-			this.it_Findnext.Click += new System.EventHandler(this.editclick_SearchNext);
+			this.it_Searchnext.Enabled = false;
+			this.it_Searchnext.Name = "it_Searchnext";
+			this.it_Searchnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
+			this.it_Searchnext.Size = new System.Drawing.Size(226, 22);
+			this.it_Searchnext.Text = "Find next";
+			this.it_Searchnext.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
-			this.separator_3.Size = new System.Drawing.Size(219, 6);
+			this.separator_3.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(222, 22);
+			this.it_Goto.Size = new System.Drawing.Size(226, 22);
 			this.it_Goto.Text = "Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
@@ -512,21 +523,21 @@ namespace yata
 			// 
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
 			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(222, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(226, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// separator_4
 			// 
 			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(219, 6);
+			this.separator_4.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_CopyCell
 			// 
 			this.it_CopyCell.Enabled = false;
 			this.it_CopyCell.Name = "it_CopyCell";
 			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.it_CopyCell.Size = new System.Drawing.Size(222, 22);
+			this.it_CopyCell.Size = new System.Drawing.Size(226, 22);
 			this.it_CopyCell.Text = "copy cell";
 			this.it_CopyCell.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
@@ -535,9 +546,14 @@ namespace yata
 			this.it_PasteCell.Enabled = false;
 			this.it_PasteCell.Name = "it_PasteCell";
 			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.it_PasteCell.Size = new System.Drawing.Size(222, 22);
+			this.it_PasteCell.Size = new System.Drawing.Size(226, 22);
 			this.it_PasteCell.Text = "paste cell";
 			this.it_PasteCell.Click += new System.EventHandler(this.editclick_PasteCell);
+			// 
+			// separator_20
+			// 
+			this.separator_20.Name = "separator_20";
+			this.separator_20.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_CopyRange
 			// 
@@ -545,8 +561,8 @@ namespace yata
 			this.it_CopyRange.Name = "it_CopyRange";
 			this.it_CopyRange.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
 			| System.Windows.Forms.Keys.C)));
-			this.it_CopyRange.Size = new System.Drawing.Size(222, 22);
-			this.it_CopyRange.Text = "copy range";
+			this.it_CopyRange.Size = new System.Drawing.Size(226, 22);
+			this.it_CopyRange.Text = "copy row(s)";
 			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
 			// 
 			// it_PasteRange
@@ -555,49 +571,21 @@ namespace yata
 			this.it_PasteRange.Name = "it_PasteRange";
 			this.it_PasteRange.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
 			| System.Windows.Forms.Keys.V)));
-			this.it_PasteRange.Size = new System.Drawing.Size(222, 22);
-			this.it_PasteRange.Text = "paste range";
+			this.it_PasteRange.Size = new System.Drawing.Size(226, 22);
+			this.it_PasteRange.Text = "paste row(s)";
 			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
 			// 
 			// separator_13
 			// 
 			this.separator_13.Name = "separator_13";
-			this.separator_13.Size = new System.Drawing.Size(219, 6);
-			// 
-			// it_CopyToClipboard
-			// 
-			this.it_CopyToClipboard.Enabled = false;
-			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(222, 22);
-			this.it_CopyToClipboard.Text = "export range to Clipboard";
-			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
-			// 
-			// it_CopyFromClipboard
-			// 
-			this.it_CopyFromClipboard.Enabled = false;
-			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
-			this.it_CopyFromClipboard.Size = new System.Drawing.Size(222, 22);
-			this.it_CopyFromClipboard.Text = "import Clipboard to range";
-			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
-			// 
-			// it_ViewClipboardContents
-			// 
-			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
-			this.it_ViewClipboardContents.Size = new System.Drawing.Size(222, 22);
-			this.it_ViewClipboardContents.Text = "open Clipboard editor";
-			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
-			// 
-			// separator_19
-			// 
-			this.separator_19.Name = "separator_19";
-			this.separator_19.Size = new System.Drawing.Size(219, 6);
+			this.separator_13.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_CreateRows
 			// 
 			this.it_CreateRows.Enabled = false;
 			this.it_CreateRows.Name = "it_CreateRows";
-			this.it_CreateRows.Size = new System.Drawing.Size(222, 22);
-			this.it_CreateRows.Text = "Create rows ...";
+			this.it_CreateRows.Size = new System.Drawing.Size(226, 22);
+			this.it_CreateRows.Text = "Create row(s) ...";
 			this.it_CreateRows.Click += new System.EventHandler(this.editclick_CreateRows);
 			// 
 			// tb_Goto
@@ -634,11 +622,49 @@ namespace yata
 			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
 			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
 			// 
+			// it_MenuClipboard
+			// 
+			this.it_MenuClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuClipboard.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_CopyToClipboard,
+			this.it_CopyFromClipboard,
+			this.separator_19,
+			this.it_ViewClipboardContents});
+			this.it_MenuClipboard.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this.it_MenuClipboard.Name = "it_MenuClipboard";
+			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
+			this.it_MenuClipboard.Text = "Clipboard";
+			// 
+			// it_CopyToClipboard
+			// 
+			this.it_CopyToClipboard.Enabled = false;
+			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
+			this.it_CopyToClipboard.Size = new System.Drawing.Size(226, 22);
+			this.it_CopyToClipboard.Text = "export row(s) to Clipboard";
+			// 
+			// it_CopyFromClipboard
+			// 
+			this.it_CopyFromClipboard.Enabled = false;
+			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
+			this.it_CopyFromClipboard.Size = new System.Drawing.Size(226, 22);
+			this.it_CopyFromClipboard.Text = "import Clipboard to row(s)";
+			// 
+			// separator_19
+			// 
+			this.separator_19.Name = "separator_19";
+			this.separator_19.Size = new System.Drawing.Size(223, 6);
+			// 
+			// it_ViewClipboardContents
+			// 
+			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
+			this.it_ViewClipboardContents.Size = new System.Drawing.Size(226, 22);
+			this.it_ViewClipboardContents.Text = "open Clipboard editor";
+			// 
 			// it_Menu2daOps
 			// 
 			this.it_Menu2daOps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_Menu2daOps.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_RenumberRows,
+			this.it_OrderRows,
 			this.it_CheckRows,
 			this.separator_11,
 			this.it_RecolorRows,
@@ -648,21 +674,22 @@ namespace yata
 			this.it_freeze2,
 			this.separator_17,
 			this.it_ppOnOff,
-			this.it_ppTopBot});
-			this.it_Menu2daOps.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this.it_ppTopBot,
+			this.separator_21,
+			this.it_ClearUndoRedo});
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
 			this.it_Menu2daOps.Size = new System.Drawing.Size(66, 20);
 			this.it_Menu2daOps.Text = "2da Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
-			// it_RenumberRows
+			// it_OrderRows
 			// 
-			this.it_RenumberRows.Enabled = false;
-			this.it_RenumberRows.Name = "it_RenumberRows";
-			this.it_RenumberRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.it_RenumberRows.Size = new System.Drawing.Size(241, 22);
-			this.it_RenumberRows.Text = "order row ids";
-			this.it_RenumberRows.Click += new System.EventHandler(this.opsclick_Reorder);
+			this.it_OrderRows.Enabled = false;
+			this.it_OrderRows.Name = "it_OrderRows";
+			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.it_OrderRows.Size = new System.Drawing.Size(241, 22);
+			this.it_OrderRows.Text = "order row ids";
+			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Reorder);
 			// 
 			// it_CheckRows
 			// 
@@ -741,6 +768,18 @@ namespace yata
 			this.it_ppTopBot.Size = new System.Drawing.Size(241, 22);
 			this.it_ppTopBot.Text = "PropertyPanel top/bottom";
 			this.it_ppTopBot.Click += new System.EventHandler(this.opsclick_PropertyPanelTopBot);
+			// 
+			// separator_21
+			// 
+			this.separator_21.Name = "separator_21";
+			this.separator_21.Size = new System.Drawing.Size(238, 6);
+			// 
+			// it_ClearUndoRedo
+			// 
+			this.it_ClearUndoRedo.Enabled = false;
+			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
+			this.it_ClearUndoRedo.Size = new System.Drawing.Size(241, 22);
+			this.it_ClearUndoRedo.Text = "clear undo/redo";
 			// 
 			// it_MenuFont
 			// 
@@ -1079,7 +1118,7 @@ namespace yata
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(842, 22);
-			this.statusbar.TabIndex = 2;
+			this.statusbar.TabIndex = 1;
 			// 
 			// statusbar_label_Cords
 			// 
@@ -1106,7 +1145,7 @@ namespace yata
 			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
 			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
-			this.panel_ColorFill.TabIndex = 3;
+			this.panel_ColorFill.TabIndex = 2;
 			// 
 			// cellMenu
 			// 

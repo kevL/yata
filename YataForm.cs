@@ -206,7 +206,7 @@ namespace yata
 		void InitializeTabControl()
 		{
 			tabControl.Name          = "tabControl";
-			tabControl.TabIndex      = 0;
+			tabControl.TabIndex      = 3;
 			tabControl.SelectedIndex = 0;
 
 			tabControl.Dock      = DockStyle.Fill;
@@ -1339,7 +1339,7 @@ namespace yata
 			it_ClearUndoRedo.Enabled = Table != null
 									&& (Table._ur.CanUndo || Table._ur.CanRedo);
 
-			it_Findnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
+			it_Searchnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
 			it_GotoLoadchanged.Enabled = false;
 
@@ -1440,7 +1440,7 @@ namespace yata
 
 		void textchanged_Search(object sender, EventArgs e)
 		{
-			it_Findnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
+			it_Searchnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 		}
 
 		void editclick_Search(object sender, EventArgs e)
@@ -2053,15 +2053,15 @@ namespace yata
 		#region 2da Ops menu
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			it_RenumberRows.Enabled =
-			it_CheckRows   .Enabled =
-			it_RecolorRows .Enabled =
-			it_AutoCols    .Enabled =
-			it_ppOnOff     .Enabled = (Table != null);
-			it_ppTopBot    .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+			it_OrderRows  .Enabled =
+			it_CheckRows  .Enabled =
+			it_RecolorRows.Enabled =
+			it_AutoCols   .Enabled =
+			it_ppOnOff    .Enabled = (Table != null);
+			it_ppTopBot   .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
 
-			it_freeze1     .Enabled = (Table != null && Table.Cols.Count > 1);
-			it_freeze2     .Enabled = (Table != null && Table.Cols.Count > 2);
+			it_freeze1    .Enabled = (Table != null && Table.Cols.Count > 1);
+			it_freeze2    .Enabled = (Table != null && Table.Cols.Count > 2);
 
 			if (Table != null)
 			{
@@ -2292,13 +2292,13 @@ namespace yata
 		}
 
 
-	/// <summary>
-	/// Handler for the PropertyPanel's visibility.
-	/// Cf mouseup_btnPropertyPanel()
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
+		/// <summary>
+		/// Handler for the PropertyPanel's visibility.
+		/// Cf mouseup_btnPropertyPanel()
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -2327,12 +2327,12 @@ namespace yata
 			}
 		}
 
-	/// <summary>
-	/// Handler for the PropertyPanel's position.
-	/// Cf mouseup_btnPropertyPanel()
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
+		/// <summary>
+		/// Handler for the PropertyPanel's position.
+		/// Cf mouseup_btnPropertyPanel()
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_PropertyPanelTopBot(object sender, EventArgs e)
 		{
 			if (Table != null && Table._propanel != null && Table._propanel.Visible)
