@@ -588,6 +588,9 @@ namespace yata
 
 				it_CopyCell .Enabled = 
 				it_PasteCell.Enabled = (Table.getSelectedCell() != null);
+
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
+				it_PasteRange.Enabled = (_copy.Count != 0);
 			}
 			else
 			{
@@ -611,6 +614,9 @@ namespace yata
 
 				it_CopyCell .Enabled = 
 				it_PasteCell.Enabled = false;
+
+				it_CopyRange .Enabled =
+				it_PasteRange.Enabled = false;
 			}
 
 			SetTitlebarText();
