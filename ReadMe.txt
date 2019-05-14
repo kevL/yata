@@ -3,19 +3,19 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 apr 27
+2019 may 14
 kevL's
-ver 2.8.2.1
+ver 2.9.0.0
 
 
 File
-- Open ... @ folder (presets for the Open ... dialog - does not appear if no presets have
-                     been set)
+- Open ... @ folder (presets for the Open ... dialog - does not appear if no
+                     presets have been set)
 - Open ... : Ctrl+o
 - Reload   : Ctrl+r
 
-- Save : Ctrl+s
-- Save As ...
+- Save        : Ctrl+s
+- Save As ... : Ctrl+e
 - Close
 - Close all (this is a multi-tabbed application)
 
@@ -25,27 +25,20 @@ File
 Edit
 - Undo : Ctrl+z
 - Redo : Ctrl+y
-- clear undo/redo (the undo/redo stacks can stack up over a long session; if so
-                   clear this when you're running low on RAM - note that each
-                   tabpage has its own undo/redo stacks)
 
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3
 
-- Goto : Ctrl+g (focuses the Goto box)
-- Goto loadchanged (See note on Load below)
+- Goto             : Ctrl+g (focuses the Goto box)
+- Goto loadchanged : Ctrl+l (See note on Load below)
 
-- copy cell   : Ctrl+c (copies a single cell)
-- paste cell  : Ctrl+v (pastes a single cell)
-- copy range  : Ctrl+Shift+c (copies a selected row or range of rows)
-- paste range : Ctrl+Shift+v (pastes a selected row or range of rows)
+- Copy cell   : Ctrl+c (copies a single cell if only 1 cell is selected)
+- Paste cell  : Ctrl+v (pastes a single cell if only 1 cell is selected)
 
-- export copy to Clipboard (exports the current copy-list to the clipboard)
-- import Clipboard to copy (imports any clipboard-text to the current copy-list
-                            WARNING: No validity test is done on the clipboard
-                            text; importing assumes that the text on your
-                            clipboard contains valid 2da-row data)
-- open Clipboard editor (accesses the Windows Clipboard for viewing/editing)
+- Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
+- Paste row(s) : Shift+Ctrl+v (pastes a selected row or range of rows)
+
+Create row(s) (opens a dialog that inserts 1 or more blank rows at a given id)
 
 
 Goto box (type a row ID and press Enter)
@@ -55,19 +48,28 @@ Search box (type a string to search for)
 Search options dropdown (substring or wholeword)
 
 
+Clipboard
+- Export copied row(s) (exports the current copy-list to the clipboard)
+- Import copied row(s) (imports any clipboard-text to the current copy-list
+                        WARNING: No validity test is done on the clipboard text;
+                        importing assumes that the text on your clipboard
+                        clipboard contains valid 2da-row data)
+- Open clip editor (accesses the Windows Clipboard for viewing/editing)
+
+
 2da Ops
-- order row ids (auto-orders the IDs of the currently displayed 2da)
-- test row order (investigates the row-order of the currently displayed 2da)
+- Order row ids (auto-orders the IDs of the currently displayed 2da)
+- Test row order (investigates the row-order of the currently displayed 2da)
 
-- recolor rows (tables show with alternating row-colors. When rows are inserted/
-  deleted (or sorted) the colors go out of sync to aid understanding of what
-  just happened. The "recolor rows" operation makes row-colors alternate as
-  usual)
-- autosize cols (recalculates the display-width of all cols)
+- Recolor rows (tables show with alternating row-colors. When rows are inserted/
+                deleted (or sorted) the colors go out of sync to aid
+                understanding of what just happened. The "recolor rows"
+                operation makes row-colors alternate as usual)
+- Autosize cols (recalculates the display-width of all cols)
 
-- freeze 1st col : F5 (causes the first col after the ID-col to remain
+- Freeze 1st col : F5 (causes the first col after the ID-col to remain
                    stationary)
-- freeze 2nd col : F6 (causes the first and second cols after the ID-col to
+- Freeze 2nd col : F6 (causes the first and second cols after the ID-col to
                    remain stationary) One of those two cols typically contains
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
@@ -75,12 +77,16 @@ Search options dropdown (substring or wholeword)
 - PropertyPanel on/off  : F7 (toggles the PropertyPanel on/off)
 - PropertyPanel top/bot : F8 (toggles the panel's position top/bottom)
 
+- Clear undo/redo (the undo/redo stacks can stack up over a long session; if so
+                   clear this when you're running low on RAM - note that each
+                   tabpage has its own undo/redo stacks)
+
 
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
   display the table-data with)
-- current font string (a .NET string representing the current table font)
-- default (sets the table-font to Yata's hardcoded default font)
+- Current font string (a .NET string representing the current table font)
+- Load default font (sets the table-font to Yata's hardcoded default font)
 
 
 Paths (see Appendix E: how to use Info paths)
