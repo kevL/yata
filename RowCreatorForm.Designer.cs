@@ -1,25 +1,30 @@
-﻿namespace yata
+﻿using System.Windows.Forms;
+
+
+namespace yata
 {
 	partial class RowCreatorForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.Button btn_Cancel;
-		private System.Windows.Forms.Button btn_Okay;
-		private System.Windows.Forms.Label lbl_Start;
-		private System.Windows.Forms.Label lbl_Stop;
-		private System.Windows.Forms.TextBox tb_Start;
-		private System.Windows.Forms.TextBox tb_Stop;
-		private System.Windows.Forms.TextBox tb_Length;
-		private System.Windows.Forms.Label lbl_Length;
-		private System.Windows.Forms.RadioButton rb_Stop;
-		private System.Windows.Forms.RadioButton rb_Length;
-		private System.Windows.Forms.Label lbl_Pad;
-		private System.Windows.Forms.CheckBox cb_Pad;
-		private System.Windows.Forms.TextBox tb_Pad;
-		private System.Windows.Forms.GroupBox gb_Insert;
+		System.ComponentModel.IContainer components = null;
+
+		Button btn_Cancel;
+		Button btn_Okay;
+		Label lbl_Start;
+		Label lbl_Stop;
+		TextBox tb_Start;
+		TextBox tb_Stop;
+		TextBox tb_Length;
+		Label lbl_Length;
+		RadioButton rb_Stop;
+		RadioButton rb_Length;
+		Label lbl_Pad;
+		CheckBox cb_Pad;
+		TextBox tb_Pad;
+		GroupBox gb_Insert;
+
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -161,9 +166,9 @@
 			this.lbl_Pad.Location = new System.Drawing.Point(30, 10);
 			this.lbl_Pad.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Pad.Name = "lbl_Pad";
-			this.lbl_Pad.Size = new System.Drawing.Size(70, 15);
+			this.lbl_Pad.Size = new System.Drawing.Size(90, 15);
 			this.lbl_Pad.TabIndex = 1;
-			this.lbl_Pad.Text = "Pad end to";
+			this.lbl_Pad.Text = "Pad end to Id#";
 			// 
 			// cb_Pad
 			// 
@@ -181,7 +186,7 @@
 			// 
 			// tb_Pad
 			// 
-			this.tb_Pad.Location = new System.Drawing.Point(100, 7);
+			this.tb_Pad.Location = new System.Drawing.Point(120, 7);
 			this.tb_Pad.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Pad.Name = "tb_Pad";
 			this.tb_Pad.Size = new System.Drawing.Size(55, 20);
