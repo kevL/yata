@@ -585,6 +585,9 @@ namespace yata
 				it_SaveAs  .Enabled =
 				it_Close   .Enabled =
 				it_CloseAll.Enabled = true;
+
+				it_CopyCell .Enabled = 
+				it_PasteCell.Enabled = (Table.getSelectedCell() != null);
 			}
 			else
 			{
@@ -605,6 +608,9 @@ namespace yata
 				it_SaveAs  .Enabled =
 				it_Close   .Enabled =
 				it_CloseAll.Enabled = false;
+
+				it_CopyCell .Enabled = 
+				it_PasteCell.Enabled = false;
 			}
 
 			SetTitlebarText();
@@ -1359,6 +1365,9 @@ namespace yata
 			}
 			else
 			{
+				it_CopyCell .Enabled = 
+				it_PasteCell.Enabled = false;
+
 				it_CopyRange .Enabled =
 				it_PasteRange.Enabled = false;
 			}
