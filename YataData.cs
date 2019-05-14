@@ -91,7 +91,7 @@ namespace yata
 
 		#region cTors
 		/// <summary>
-		/// cTor[0] - primary.
+		/// cTor[1] - primary.
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="cols"></param>
@@ -109,7 +109,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// cTor[1] - used by Clone().
+		/// cTor[2] - used by Clone().
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="cells"></param>
