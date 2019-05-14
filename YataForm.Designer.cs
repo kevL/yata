@@ -641,6 +641,7 @@ namespace yata
 			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
 			this.it_CopyToClipboard.Size = new System.Drawing.Size(226, 22);
 			this.it_CopyToClipboard.Text = "export row(s) to Clipboard";
+			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
 			// 
 			// it_CopyFromClipboard
 			// 
@@ -648,6 +649,7 @@ namespace yata
 			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
 			this.it_CopyFromClipboard.Size = new System.Drawing.Size(226, 22);
 			this.it_CopyFromClipboard.Text = "import Clipboard to row(s)";
+			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
 			// 
 			// separator_19
 			// 
@@ -659,6 +661,7 @@ namespace yata
 			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
 			this.it_ViewClipboardContents.Size = new System.Drawing.Size(226, 22);
 			this.it_ViewClipboardContents.Text = "open Clipboard editor";
+			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
 			// 
 			// it_Menu2daOps
 			// 
@@ -780,6 +783,7 @@ namespace yata
 			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
 			this.it_ClearUndoRedo.Size = new System.Drawing.Size(241, 22);
 			this.it_ClearUndoRedo.Text = "clear undo/redo";
+			this.it_ClearUndoRedo.Click += new System.EventHandler(this.editclick_ClearUndoRedo);
 			// 
 			// it_MenuFont
 			// 
