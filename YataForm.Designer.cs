@@ -510,8 +510,8 @@ namespace yata
 			// 
 			// it_GotoLoadchanged
 			// 
-			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
+			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.it_GotoLoadchanged.Size = new System.Drawing.Size(222, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadchanged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);

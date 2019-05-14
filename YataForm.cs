@@ -451,12 +451,6 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
-			it_Save    .Enabled = (Table != null && !Table.Readonly);
-			it_Reload  .Enabled =
-			it_SaveAs  .Enabled =
-			it_Close   .Enabled =
-			it_CloseAll.Enabled = (Table != null);
-
 			if (Table != null && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
@@ -526,7 +520,7 @@ namespace yata
 				int result = table.Load2da();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
-					Table = table; // NOTE: Is done also in tab_SelectedIndexChanged()
+					Table = table; // NOTE: Is done in tab_SelectedIndexChanged() also.
 
 					DrawingControl.SuspendDrawing(Table);
 
@@ -579,6 +573,12 @@ namespace yata
 				it_freeze2.Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
 
 				btn_PropertyPanel.Visible = true;
+
+				it_Save    .Enabled = !Table.Readonly;
+				it_Reload  .Enabled =
+				it_SaveAs  .Enabled =
+				it_Close   .Enabled =
+				it_CloseAll.Enabled = true;
 			}
 			else
 			{
@@ -593,6 +593,12 @@ namespace yata
 				it_freeze2.Checked = false;
 
 				btn_PropertyPanel.Visible = false;
+
+				it_Save    .Enabled =
+				it_Reload  .Enabled =
+				it_SaveAs  .Enabled =
+				it_Close   .Enabled =
+				it_CloseAll.Enabled = false;
 			}
 
 			SetTitlebarText();
@@ -1642,92 +1648,114 @@ namespace yata
 
 		/// <summary>
 		/// Selects the next LoadChanged cell.
-		/// @note This is fired only from the EditMenu and its item is enabled
-		/// only if there actually IS a load-changed cell available.
-		/// TODO: If this is given a hotkey then the item would have to be
-		/// enabled when a load-changed flag(s) is set and disabled/
-		/// validity-checks need to happen here or so.
-		/// @note Assumes Table is valid and that there are loadchanged cells.
+		/// @note This is fired only from the EditMenu (click/Ctrl+L) and its
+		/// item is enabled by default. The item/shortcut will be set disabled
+		/// either when the EditMenu opens or when Ctrl+L is keyed iff there are
+		/// no 'loadchanged' cells.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if (Table._editor.Visible)
+			it_GotoLoadchanged.Enabled = false;
+
+			if (Table != null)
 			{
-				Table._editor.Visible = false;
-				Table.Refresh();
-			}
-
-			Table.Select();
-
-			Cell sel = Table.GetSelectedCell();
-			Table.ClearSelects();
-
-			int row, r,c;
-			if (sel != null)
-			{
-				c   = sel.x;
-				row = sel.y;
-			}
-			else
-			{
-				c   = -1;
-				row =  0;
-			}
-
-			bool start = true;
-
-			for (r = row; r != Table.RowCount; ++r)
-			{
-				if (start)
+				foreach (var row in Table.Rows)
 				{
-					start = false;
-					if (c == -1)
-						c = 0;
-					else
-						++c;
-
-					if (c == Table.ColCount)		// if starting on the last cell of a row
+					for (int c = 0; c != Table.ColCount; ++c)
 					{
-						c = 0;
-
-						if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+						if (row[c].loadchanged)
 						{
-							++r;
+							it_GotoLoadchanged.Enabled = true;
+							break;
 						}
-						else						// or to the top of the table if on the last row(s)
-							r = 0;
 					}
+				}
+			}
+
+			if (it_GotoLoadchanged.Enabled)
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Refresh();
+				}
+
+				// TODO: Allow frozen col(s) to be searched through also.
+				// TODO: option to invert the search direction (or at least back to
+				//       previous find)
+
+				Table.Select();
+
+				Cell sel = Table.GetSelectedCell();
+				Table.ClearSelects();
+
+				int row, r,c;
+				if (sel != null)
+				{
+					c   = sel.x;
+					row = sel.y;
 				}
 				else
-					c = 0;
-
-				for (; c != Table.ColCount; ++c)
 				{
-					if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
-					{
-						sel.selected = true;
-						Table.EnsureDisplayed(sel);
-						Table.Refresh();
+					c   = -1;
+					row =  0;
+				}
 
-						return;
+				bool start = true;
+
+				for (r = row; r != Table.RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						if (c == -1)
+							c = 0;
+						else
+							++c;
+
+						if (c == Table.ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+							{
+								++r;
+							}
+							else						// or to the top of the table if on the last row(s)
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != Table.ColCount; ++c)
+					{
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						{
+							sel.selected = true;
+							Table.EnsureDisplayed(sel);
+							Table.Refresh();
+
+							return;
+						}
 					}
 				}
-			}
 
-			// TODO: tighten exact start/end-cells
-			for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
-			{
-				for (c = 0; c != Table.ColCount; ++c)
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
 				{
-					if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+					for (c = 0; c != Table.ColCount; ++c)
 					{
-						sel.selected = true;
-						Table.EnsureDisplayed(sel);
-						Table.Refresh();
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						{
+							sel.selected = true;
+							Table.EnsureDisplayed(sel);
+							Table.Refresh();
 
-						return;
+							return;
+						}
 					}
 				}
 			}
