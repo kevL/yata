@@ -298,7 +298,7 @@ namespace yata
 			{
 				if (!_editor.Visible)
 				{
-					Cell sel = _grid.GetSelectedCell();
+					Cell sel = _grid.getSelectedCell();
 					if (sel != null)
 						_r = sel.y;
 					else
@@ -455,7 +455,7 @@ namespace yata
 			Rectangle rect;
 
 			// fill any selected cell's val-rect ->
-			Cell sel = _grid.GetSelectedCell();
+			Cell sel = _grid.getSelectedCell();
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);

@@ -140,7 +140,7 @@ namespace yata
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
-				Cell sel = GetSelectedCell();
+				Cell sel = getSelectedCell();
 				if (sel != null && sel.x < _frozenCount)
 				{
 					_editor.Visible =
@@ -1209,7 +1209,7 @@ namespace yata
 		{
 			//logfile.Log("OnKeyDown()");
 
-			Cell sel = GetSelectedCell();
+			Cell sel = getSelectedCell();
 			int selr = getSelectedRow();
 
 			Row row;
@@ -1661,7 +1661,7 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					if (!Readonly && (_editcell = GetSelectedCell()) != null)
+					if (!Readonly && (_editcell = getSelectedCell()) != null)
 					{
 						EditCell();
 						_editor.Focus();
@@ -2030,7 +2030,7 @@ namespace yata
 							if (cell.selected = !cell.selected)
 								EnsureDisplayed(cell);
 						}
-						else if (!cell.selected || GetSelectedCell() == null) // cell is not selected or it's not the only selected cell
+						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
 							foreach (var row in Rows)
 								row.selected = false;
@@ -2073,6 +2073,9 @@ namespace yata
 					_f.ShowCellMenu();
 				}
 			}
+
+			_f.it_CopyCell .Enabled =
+			_f.it_PasteCell.Enabled = (getSelectedCell() != null);
 
 //			base.OnMouseClick(e);
 		}
@@ -2139,6 +2142,9 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 					row[c].selected = false;
 			}
+
+			_f.it_CopyCell .Enabled =
+			_f.it_PasteCell.Enabled = false;
 		}
 
 		/// <summary>
@@ -2155,6 +2161,9 @@ namespace yata
 
 			foreach (var col in Cols)
 				col.selected = false;
+
+			_f.it_CopyCell .Enabled =
+			_f.it_PasteCell.Enabled = false;
 		}
 
 
@@ -2221,7 +2230,7 @@ namespace yata
 		/// </summary>
 		/// <returns>the only cell selected, null if none or more than one cell
 		/// is currently selected</returns>
-		internal Cell GetSelectedCell()
+		internal Cell getSelectedCell()
 		{
 			Cell cell0 = null;
 
@@ -2251,7 +2260,7 @@ namespace yata
 		/// <param name="left">the x-pos of the right edge of the frozen-panel;
 		/// ie, the left edge of the visible area of the table</param>
 		/// <returns></returns>
-		Point getCords(int x, int y, int left)
+		Point getCords(int x, int y, int left) // "Parameter is assigned but its value is never used" - bzzt.
 		{
 			var cords = new Point();
 
@@ -2441,7 +2450,7 @@ namespace yata
 		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayedCellOrRow()
 		{
-			var cell = GetSelectedCell();
+			var cell = getSelectedCell();
 			if (cell != null)
 				return EnsureDisplayed(cell);
 
@@ -3065,11 +3074,11 @@ namespace yata
 				bool a_isInt = Int32.TryParse(_a, out _ai);
 				bool b_isInt = Int32.TryParse(_b, out _bi);
 
-				if (a_isInt && !b_isInt) // sort ints before floats/strings
+				if (a_isInt && !b_isInt) // order ints before floats/strings
 				{
 					result = -1;
 				}
-				else if (!a_isInt && b_isInt) // sort ints before floats/strings
+				else if (!a_isInt && b_isInt) // order ints before floats/strings
 				{
 					result = 1;
 				}

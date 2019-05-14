@@ -106,8 +106,8 @@ namespace yata
 		ToolStripMenuItem it_PathRanges2da;
 		ToolStripMenuItem it_PathCategories2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
-		ToolStripMenuItem it_CopyCell;
-		ToolStripMenuItem it_PasteCell;
+		internal ToolStripMenuItem it_CopyCell;
+		internal ToolStripMenuItem it_PasteCell;
 		ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;

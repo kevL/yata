@@ -32,6 +32,12 @@ namespace yata
 		readonly PropertyPanelButton btn_PropertyPanel = new PropertyPanelButton();
 
 		List<string[]> _copy = new List<string[]>();
+
+		/// <summary>
+		/// A string used for Copy/PasteCell.
+		/// @note A cell's text shall never be null or blank, therefore
+		/// '_copytext' shall never be null or blank.
+		/// </summary>
 		string _copytext = Constants.Stars;
 
 		string _preset = String.Empty;
@@ -1345,11 +1351,11 @@ namespace yata
 					}
 				}
 
+				it_CopyCell .Enabled = 
+				it_PasteCell.Enabled = (Table.getSelectedCell() != null);
+
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
 				it_PasteRange.Enabled = (_copy.Count != 0);
-
-//				it_CopyCell .Enabled = (Table.GetSelectedCell() != null);
-//				it_PasteCell.Enabled = !String.IsNullOrEmpty(_copycell);
 			}
 			else
 			{
@@ -1491,7 +1497,7 @@ namespace yata
 
 				int row, r,c;
 
-				Cell sel = Table.GetSelectedCell();
+				Cell sel = Table.getSelectedCell();
 				if (sel != null)
 				{
 					c   = sel.x;
@@ -1688,7 +1694,7 @@ namespace yata
 
 				Table.Select();
 
-				Cell sel = Table.GetSelectedCell();
+				Cell sel = Table.getSelectedCell();
 				Table.ClearSelects();
 
 				int row, r,c;
@@ -1766,8 +1772,8 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				Cell cell = Table.GetSelectedCell();
-				if (cell != null)
+				Cell cell = Table.getSelectedCell();
+				if (cell != null) // safety (believe it or not).
 				{
 					_copytext = cell.text;
 				}
@@ -1780,35 +1786,17 @@ namespace yata
 		{
 			if (tb_Goto.Focused)
 			{
-				if (Clipboard.ContainsText(TextDataFormat.Text))
-				{
-					tb_Goto.Text = Clipboard.GetText(TextDataFormat.Text);
-				}
-				else if (_copytext != Constants.Stars)
-				{
-					tb_Goto.Text = _copytext;
-				}
-				else
-					tb_Goto.Text = String.Empty;
+				SetTextboxText(tb_Goto);
 			}
 			else if (tb_Search.Focused)
 			{
-				if (Clipboard.ContainsText(TextDataFormat.Text))
-				{
-					tb_Search.Text = Clipboard.GetText(TextDataFormat.Text);
-				}
-				else if (_copytext != Constants.Stars)
-				{
-					tb_Search.Text = _copytext;
-				}
-				else
-					tb_Search.Text = String.Empty;
+				SetTextboxText(tb_Search);
 			}
 			else if (Table != null)
 			{
 				if (!Table.Readonly)
 				{
-					Cell cell = Table.GetSelectedCell();
+					Cell cell = Table.getSelectedCell();
 					if (cell != null)
 					{
 						if (cell.text != _copytext)
@@ -1823,6 +1811,24 @@ namespace yata
 				else
 					ReadonlyError();
 			}
+		}
+
+		/// <summary>
+		/// helper for editclick_PasteCell()
+		/// </summary>
+		/// <param name="tb"></param>
+		void SetTextboxText(ToolStripItem tb)
+		{
+			if (Clipboard.ContainsText(TextDataFormat.Text))
+			{
+				tb.Text = Clipboard.GetText(TextDataFormat.Text);
+			}
+			else if (_copytext != Constants.Stars || tb == tb_Search)
+			{
+				tb.Text = _copytext;
+			}
+			else
+				tb.Text = String.Empty;
 		}
 
 		void CopyPasteCellError()
@@ -2719,7 +2725,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Cell cell = Table.GetSelectedCell();
+				Cell cell = Table.getSelectedCell();
 				if (cell != null)
 				{
 					if (cell.text != Constants.Stars)
