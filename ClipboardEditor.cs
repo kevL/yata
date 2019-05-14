@@ -41,6 +41,11 @@ namespace yata
 		}
 
 
+		void click_Done(object sender, EventArgs e)
+		{
+			Close();
+		}
+
 		void click_Get(object sender, EventArgs e)
 		{
 			string clip = Clipboard.GetText(TextDataFormat.Text).Trim();
