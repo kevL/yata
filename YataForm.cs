@@ -2502,7 +2502,7 @@ namespace yata
 			Table.Refresh();
 
 			it_tabCloseAll      .Enabled =
-			it_tabCloseAllOthers.Enabled = Tabs.TabCount != 1;
+			it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
 			var pt = Tabs.PointToClient(Cursor.Position);
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
@@ -2735,6 +2735,9 @@ namespace yata
 		#region Cell menu
 		internal void ShowCellMenu()
 		{
+			Cell cell = Table.getSelectedCell();
+			it_cellStars.Enabled = (cell.text != Constants.Stars);
+
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
 		}
@@ -2746,11 +2749,8 @@ namespace yata
 				Cell cell = Table.getSelectedCell();
 				if (cell != null)
 				{
-					if (cell.text != Constants.Stars)
-					{
-						Table.ChangeCellText(cell, Constants.Stars);
-						Table.Refresh();
-					}
+					Table.ChangeCellText(cell, Constants.Stars);
+					Table.Refresh();
 				}
 				else
 					CopyPasteCellError();
@@ -2759,6 +2759,48 @@ namespace yata
 				ReadonlyError();
 		}
 		#endregion Cell menu
+
+
+		#region Filewatcher
+		static void CreateFileWatcher(string path)
+		{
+			var watcher = new FileSystemWatcher();
+
+			watcher.Path = path;
+
+			watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite 
+															| NotifyFilters.FileName
+															| NotifyFilters.DirectoryName;
+			watcher.Filter = "*.2da";
+		
+			watcher.Changed += OnFileChanged;
+			watcher.Created += OnFileChanged;
+			watcher.Deleted += OnFileChanged;
+			watcher.Renamed += OnFileRenamed;
+
+			watcher.EnableRaisingEvents = true;
+		}
+
+		/// <summary>
+		/// Specifies what is done when a file is changed, created, or deleted.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="e"></param>
+		static void OnFileChanged(object source, FileSystemEventArgs e)
+		{
+			Console.WriteLine("File: " +  e.FullPath + " " + e.ChangeType);
+		}
+
+		/// <summary>
+		/// Specifies what is done when a file is renamed.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="e"></param>
+		static void OnFileRenamed(object source, RenamedEventArgs e)
+		{
+			Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
+		}
+		#endregion Filewatcher
 	}
 
 
