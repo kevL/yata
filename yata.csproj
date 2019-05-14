@@ -134,7 +134,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <PostBuildEvent>copy /y C:\GIT\yata\bin\Release\yata.exe "C:\Program Files\Yata\"
 </PostBuildEvent>
   </PropertyGroup>
