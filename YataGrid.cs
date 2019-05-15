@@ -507,7 +507,7 @@ namespace yata
 		/// <summary>
 		/// Tries to load a 2da file.
 		/// </summary>
-		/// <returns>true if 2da loaded successfully perhaps</returns>
+		/// <returns>a LOADRESULT_* val</returns>
 		internal int Load2da()
 		{
 			bool ignoreErrors = false;

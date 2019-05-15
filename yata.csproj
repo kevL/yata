@@ -76,6 +76,7 @@
     <Compile Include="ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileWatcher.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="PropertyPanel.cs" />
