@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -44,7 +45,9 @@ namespace yata
 			}
 
 			tb_Pfe.Text = pfe;
-			tb_Pfe.SelectionStart = tb_Pfe.Text.Length;
+
+			ClientSize = new Size(TextRenderer.MeasureText(pfe, Font).Width + 15,
+								  ClientSize.Height);
 
 			switch (_fwdType = fwdType)
 			{
@@ -60,6 +63,17 @@ namespace yata
 			}
 		}
 		#endregion cTor
+
+
+		#region Events (override)
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			tb_Pfe.SelectionStart = 0;
+			tb_Pfe.SelectionStart = tb_Pfe.Text.Length;
+		}
+		#endregion Events (override)
 
 
 		#region Events
