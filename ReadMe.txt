@@ -3,7 +3,7 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 may 14
+2019 may 15
 kevL's
 ver 2.9.0.0
 
@@ -58,14 +58,14 @@ Clipboard
 
 
 2da Ops
-- Order row ids (auto-orders the IDs of the currently displayed 2da)
-- Test row order (investigates the row-order of the currently displayed 2da)
+- Order row ids  : Ctrl+d (auto-orders the IDs of the currently displayed 2da)
+- Test row order : Ctrl+t (investigates the row-order of the currently displayed 2da)
 
-- Recolor rows (tables show with alternating row-colors. When rows are inserted/
-                deleted (or sorted) the colors go out of sync to aid
-                understanding of what just happened. The "recolor rows"
-                operation makes row-colors alternate as usual)
-- Autosize cols (recalculates the display-width of all cols)
+- Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are inserted/
+                  deleted (or sorted) the colors go out of sync to aid
+                  understanding of what just happened. The "recolor rows"
+                  operation makes row-colors alternate as usual)
+- Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 
 - Freeze 1st col : F5 (causes the first col after the ID-col to remain
                    stationary)
@@ -94,7 +94,7 @@ Paths (see Appendix E: how to use Info paths)
 
 Help
 - ReadMe.txt : F1 (opens this document in a text-editor)
-- About      : displays the version/build-type of the executable
+- About (displays the version+config of the executable)
 
 
 
