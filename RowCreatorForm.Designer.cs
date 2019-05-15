@@ -231,7 +231,7 @@ namespace yata
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Create rows";
+			this.Text = " yata - Create rows";
 			this.gb_Insert.ResumeLayout(false);
 			this.gb_Insert.PerformLayout();
 			this.ResumeLayout(false);
