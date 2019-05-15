@@ -77,6 +77,10 @@
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="FileWatcherDialog.cs" />
+    <Compile Include="FileWatcherDialog.Designer.cs">
+      <DependentUpon>FileWatcherDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="PropertyPanel.cs" />
@@ -116,6 +120,9 @@
   <ItemGroup>
     <EmbeddedResource Include="ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileWatcherDialog.resx">
+      <DependentUpon>FileWatcherDialog.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FontPickerForm.resx">
       <DependentUpon>FontPickerForm.Designer.cs</DependentUpon>

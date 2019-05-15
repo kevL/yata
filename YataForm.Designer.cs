@@ -53,7 +53,7 @@ namespace yata
 		ToolStripMenuItem it_Menu2daOps;
 		ToolStripMenuItem it_OrderRows;
 		ToolStripMenuItem it_CheckRows;
-		ToolStripMenuItem it_RecolorRows;
+		ToolStripMenuItem it_ColorRows;
 		ToolStripMenuItem it_AutoCols;
 		ToolStripMenuItem it_freeze1;
 		ToolStripMenuItem it_freeze2;
@@ -208,7 +208,7 @@ namespace yata
 			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_RecolorRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ColorRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_12 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -670,7 +670,7 @@ namespace yata
 			this.it_OrderRows,
 			this.it_CheckRows,
 			this.separator_11,
-			this.it_RecolorRows,
+			this.it_ColorRows,
 			this.it_AutoCols,
 			this.separator_12,
 			this.it_freeze1,
@@ -689,9 +689,9 @@ namespace yata
 			// 
 			this.it_OrderRows.Enabled = false;
 			this.it_OrderRows.Name = "it_OrderRows";
-			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.it_OrderRows.Size = new System.Drawing.Size(241, 22);
-			this.it_OrderRows.Text = "&Order row ids";
+			this.it_OrderRows.Text = "Or&der row ids";
 			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Reorder);
 			// 
 			// it_CheckRows
@@ -708,14 +708,14 @@ namespace yata
 			this.separator_11.Name = "separator_11";
 			this.separator_11.Size = new System.Drawing.Size(238, 6);
 			// 
-			// it_RecolorRows
+			// it_ColorRows
 			// 
-			this.it_RecolorRows.Enabled = false;
-			this.it_RecolorRows.Name = "it_RecolorRows";
-			this.it_RecolorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-			this.it_RecolorRows.Size = new System.Drawing.Size(241, 22);
-			this.it_RecolorRows.Text = "Reco&lor rows";
-			this.it_RecolorRows.Click += new System.EventHandler(this.opsclick_Recolor);
+			this.it_ColorRows.Enabled = false;
+			this.it_ColorRows.Name = "it_ColorRows";
+			this.it_ColorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+			this.it_ColorRows.Size = new System.Drawing.Size(241, 22);
+			this.it_ColorRows.Text = "Reco&lor rows";
+			this.it_ColorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// it_AutoCols
 			// 
@@ -1161,31 +1161,31 @@ namespace yata
 			this.it_cellStars});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(128, 98);
+			this.cellMenu.Size = new System.Drawing.Size(104, 76);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(127, 22);
+			this.it_cellCopy.Size = new System.Drawing.Size(103, 22);
 			this.it_cellCopy.Text = "copy cell";
 			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(127, 22);
+			this.it_cellPaste.Size = new System.Drawing.Size(103, 22);
 			this.it_cellPaste.Text = "paste cell";
 			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(124, 6);
+			this.separator_16.Size = new System.Drawing.Size(100, 6);
 			// 
 			// it_cellStars
 			// 
 			this.it_cellStars.Name = "it_cellStars";
-			this.it_cellStars.Size = new System.Drawing.Size(127, 22);
+			this.it_cellStars.Size = new System.Drawing.Size(103, 22);
 			this.it_cellStars.Text = "****";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
 			// 
@@ -1202,7 +1202,7 @@ namespace yata
 			this.MainMenuStrip = this.menubar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";
-			this.Text = "Yata";
+			this.Text = " Yata";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.yata_Closing);
 			this.Load += new System.EventHandler(this.yata_Load);
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.yata_DragDrop);

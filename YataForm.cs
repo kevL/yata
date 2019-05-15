@@ -21,6 +21,8 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
+		const string TITLE = " Yata";
+
 		internal static string pfe_load; // cl arg
 
 		static Graphics graphics;
@@ -29,7 +31,7 @@ namespace yata
 
 		#region Fields
 		readonly YataTabs tabControl = new YataTabs();
-		readonly PropertyPanelButton btn_PropertyPanel = new PropertyPanelButton();
+		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
 
 		List<string[]> _copy = new List<string[]>();
 
@@ -185,7 +187,7 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
-			btn_PropertyPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
+			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
 			if (!String.IsNullOrEmpty(pfe_load) && File.Exists(pfe_load))
@@ -231,22 +233,22 @@ namespace yata
 		/// </summary>
 		void InitializePropertyPanelButton()
 		{
-			btn_PropertyPanel.Name     = "btn_PropertyPanel";
-			btn_PropertyPanel.TabIndex = 4;
+			btn_ProPanel.Name     = "btn_PropertyPanel";
+			btn_ProPanel.TabIndex = 4;
 
-			btn_PropertyPanel.Visible = false;
+			btn_ProPanel.Visible = false;
 
-			btn_PropertyPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btn_PropertyPanel.UseVisualStyleBackColor = true;
+			btn_ProPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			btn_ProPanel.UseVisualStyleBackColor = true;
 
-			btn_PropertyPanel.Location = new Point(823,0);
-			btn_PropertyPanel.Size     = new Size(20,20);
-			btn_PropertyPanel.Margin   = new Padding(0);
+			btn_ProPanel.Location = new Point(823,0);
+			btn_ProPanel.Size     = new Size(20,20);
+			btn_ProPanel.Margin   = new Padding(0);
 
-			btn_PropertyPanel.MouseDown += mousedown_btnPropertyPanel;
-			btn_PropertyPanel.MouseUp   += mouseup_btnPropertyPanel;
+			btn_ProPanel.MouseDown += mousedown_btnPropertyPanel;
+			btn_ProPanel.MouseUp   += mouseup_btnPropertyPanel;
 
-			Controls.Add(btn_PropertyPanel);
+			Controls.Add(btn_ProPanel);
 		}
 		#endregion cTor
 
@@ -474,6 +476,8 @@ namespace yata
 				}
 			}
 			it_OpenFolder.Visible = (it_OpenFolder.DropDownItems.Count != 0);
+
+			it_Reload.Enabled = (Table != null && File.Exists(Table.Fullpath));
 		}
 
 		void fileclick_Open(object sender, EventArgs e)
@@ -570,53 +574,72 @@ namespace yata
 
 				ShowColorPanel(false);
 
-				it_Undo.Enabled = Table._ur.CanUndo;
-				it_Redo.Enabled = Table._ur.CanRedo;
+				btn_ProPanel .Visible = true;
 
-				it_MenuPaths.Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
+				it_MenuPaths .Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
 
-				it_freeze1.Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
-				it_freeze2.Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
+				it_freeze1   .Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
+				it_freeze2   .Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
 
-				btn_PropertyPanel.Visible = true;
+				it_Undo      .Enabled = Table._ur.CanUndo;
+				it_Redo      .Enabled = Table._ur.CanRedo;
 
-				it_Save    .Enabled = !Table.Readonly;
-				it_Reload  .Enabled =
-				it_SaveAs  .Enabled =
-				it_Close   .Enabled =
-				it_CloseAll.Enabled = true;
+				it_Reload    .Enabled = File.Exists(Table.Fullpath);
+				it_Save      .Enabled = !Table.Readonly;
+				it_SaveAs    .Enabled =
+				it_Close     .Enabled =
+				it_CloseAll  .Enabled = true;
 
-				it_CopyCell .Enabled = 
-				it_PasteCell.Enabled = (Table.getSelectedCell() != null);
+				it_CopyCell  .Enabled = 
+				it_PasteCell .Enabled = (Table.getSelectedCell() != null);
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
 				it_PasteRange.Enabled = (_copy.Count != 0);
+
+				it_OrderRows .Enabled =
+				it_CheckRows .Enabled =
+				it_ColorRows .Enabled =
+				it_AutoCols  .Enabled =
+				it_ppOnOff   .Enabled = (Table != null);
+				it_ppTopBot  .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+
+				it_freeze1   .Enabled = (Table != null && Table.Cols.Count > 1);
+				it_freeze2   .Enabled = (Table != null && Table.Cols.Count > 2);
 			}
 			else
 			{
 				ShowColorPanel();
 
-				it_Undo.Enabled =
-				it_Redo.Enabled = false;
+				btn_ProPanel .Visible =
+				it_MenuPaths .Visible =
 
-				it_MenuPaths.Visible = false;
+				it_freeze1   .Checked =
+				it_freeze2   .Checked =
 
-				it_freeze1.Checked =
-				it_freeze2.Checked = false;
+				it_Undo      .Enabled =
+				it_Redo      .Enabled =
 
-				btn_PropertyPanel.Visible = false;
+				it_Reload    .Enabled =
+				it_Save      .Enabled =
+				it_SaveAs    .Enabled =
+				it_Close     .Enabled =
+				it_CloseAll  .Enabled =
 
-				it_Save    .Enabled =
-				it_Reload  .Enabled =
-				it_SaveAs  .Enabled =
-				it_Close   .Enabled =
-				it_CloseAll.Enabled = false;
-
-				it_CopyCell .Enabled = 
-				it_PasteCell.Enabled = false;
+				it_CopyCell  .Enabled = 
+				it_PasteCell .Enabled =
 
 				it_CopyRange .Enabled =
-				it_PasteRange.Enabled = false;
+				it_PasteRange.Enabled =
+
+				it_OrderRows .Enabled =
+				it_CheckRows .Enabled =
+				it_ColorRows .Enabled =
+				it_AutoCols  .Enabled =
+				it_ppOnOff   .Enabled =
+				it_ppTopBot  .Enabled =
+
+				it_freeze1   .Enabled =
+				it_freeze2   .Enabled = false;
 			}
 
 			SetTitlebarText();
@@ -693,7 +716,7 @@ namespace yata
 								  YataGraphics.flags);
 		}
 
-		void fileclick_CloseTab(object sender, EventArgs e)
+		internal void fileclick_CloseTab(object sender, EventArgs e)
 		{
 			if (Table != null
 				&& (!Table.Changed
@@ -810,7 +833,7 @@ namespace yata
 		}
 
 
-		void fileclick_Reload(object sender, EventArgs e)
+		internal void fileclick_Reload(object sender, EventArgs e)
 		{
 			if (Table != null && File.Exists(Table.Fullpath)
 				&& (!Table.Changed
@@ -849,9 +872,10 @@ namespace yata
 				{
 					ShowColorPanel(false);
 					DrawingControl.ResumeDrawing(Table);
+
+					Table.Watcher.BypassFileChanged = true;
 				}
 			}
-			// TODO: Show an error if file no longer exists.
 		}
 
 
@@ -860,7 +884,7 @@ namespace yata
 		/// </summary>
 		void SetTitlebarText()
 		{
-			string text = "Yata";
+			string text = TITLE;
 
 			if (Table != null)
 			{
@@ -889,7 +913,7 @@ namespace yata
 		/// </summary>
 		bool _warned;
 
-		void fileclick_Save(object sender, EventArgs e)
+		internal void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -971,6 +995,10 @@ namespace yata
 
 										sw.WriteLine(line);
 									}
+
+									Table.Watcher.Pfe = Table.Fullpath;
+									Table.Watcher.BypassFileDeleted = false;
+									Table.Watcher.BypassFileChanged = true;
 								}
 							}
 						}
@@ -1817,7 +1845,6 @@ namespace yata
 						if (cell.text != _copytext)
 						{
 							Table.ChangeCellText(cell, _copytext);
-							Table.Refresh();
 						}
 					}
 					else
@@ -2053,15 +2080,15 @@ namespace yata
 		#region 2da Ops menu
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			it_OrderRows  .Enabled =
-			it_CheckRows  .Enabled =
-			it_RecolorRows.Enabled =
-			it_AutoCols   .Enabled =
-			it_ppOnOff    .Enabled = (Table != null);
-			it_ppTopBot   .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+			it_OrderRows.Enabled =
+			it_CheckRows.Enabled =
+			it_ColorRows.Enabled =
+			it_AutoCols .Enabled =
+			it_ppOnOff  .Enabled = (Table != null);
+			it_ppTopBot .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
 
-			it_freeze1    .Enabled = (Table != null && Table.Cols.Count > 1);
-			it_freeze2    .Enabled = (Table != null && Table.Cols.Count > 2);
+			it_freeze1  .Enabled = (Table != null && Table.Cols.Count > 1);
+			it_freeze2  .Enabled = (Table != null && Table.Cols.Count > 2);
 
 			if (Table != null)
 			{
@@ -2672,8 +2699,8 @@ namespace yata
 					|| (e.Button == MouseButtons.Right
 						&& Table._propanel != null && Table._propanel.Visible))
 				{
-					btn_PropertyPanel.Depressed = true;
-					btn_PropertyPanel.Refresh();
+					btn_ProPanel.Depressed = true;
+					btn_ProPanel.Refresh();
 				}
 			}
 		}
@@ -2693,8 +2720,8 @@ namespace yata
 
 				if (e.Button == MouseButtons.Left)
 				{
-					btn_PropertyPanel.Depressed = false;
-					btn_PropertyPanel.Refresh();
+					btn_ProPanel.Depressed = false;
+					btn_ProPanel.Refresh();
 
 					if (Table._propanel == null
 						|| (Table._propanel.Visible = !Table._propanel.Visible))
@@ -2722,8 +2749,8 @@ namespace yata
 				else if (e.Button == MouseButtons.Right
 					&& Table._propanel != null && Table._propanel.Visible)
 				{
-					btn_PropertyPanel.Depressed = false;
-					btn_PropertyPanel.Refresh();
+					btn_ProPanel.Depressed = false;
+					btn_ProPanel.Refresh();
 
 					Table._propanel.DockBot = !Table._propanel.DockBot;
 				}
@@ -2736,7 +2763,7 @@ namespace yata
 		internal void ShowCellMenu()
 		{
 			Cell cell = Table.getSelectedCell();
-			it_cellStars.Enabled = (cell.text != Constants.Stars);
+			it_cellStars.Enabled = cell.text != Constants.Stars || cell.loadchanged;
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -2750,7 +2777,6 @@ namespace yata
 				if (cell != null)
 				{
 					Table.ChangeCellText(cell, Constants.Stars);
-					Table.Refresh();
 				}
 				else
 					CopyPasteCellError();

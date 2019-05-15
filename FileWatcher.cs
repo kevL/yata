@@ -1,57 +1,87 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 
 
 namespace yata
 {
 	/// <summary>
-	/// Creates a 'FileSystemWatcher' and handles its events.
+	/// Creates an object that watches for external/disk file-changed events.
 	/// </summary>
-	static class FileWatcher
+	sealed class FileWatcher
+		:
+			Timer
 	{
-		static FileSystemWatcher CreateFileWatcher(string path)
-		{
-			var watcher = new FileSystemWatcher();
+		#region Fields
+		readonly YataGrid _grid;
+		DateTime _last;
 
-			watcher.Path         = path;
-			watcher.Filter       = "*.2da";
-			watcher.NotifyFilter = NotifyFilters.LastAccess
-								 | NotifyFilters.LastWrite
-								 | NotifyFilters.DirectoryName
-								 | NotifyFilters.FileName;
+		#endregion Fields
 
-			watcher.Changed += OnFileChanged;
-			watcher.Created += OnFileChanged;
-			watcher.Deleted += OnFileChanged;
-			watcher.Renamed += OnFileRenamed;
 
-			watcher.EnableRaisingEvents = true;
+		#region Properties
+		internal string Pfe
+		{ private get; set; }
 
-			return watcher;
-		}
+		internal bool BypassFileChanged
+		{ private get; set; }
 
+		internal bool BypassFileDeleted
+		{ private get; set; }
+		#endregion Properties
+
+
+		#region cTor
 		/// <summary>
-		/// Specifies what is done when a file is changed, created, or deleted.
+		/// cTor.
 		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="e"></param>
-		static void OnFileChanged(object source, FileSystemEventArgs e)
+		/// <param name="grid"></param>
+		internal FileWatcher(YataGrid grid)
 		{
-			logfile.Log("OnFileChanged() source= " + source);
-			logfile.Log(". e.ChangeType= " + e.ChangeType);
-			logfile.Log(". e.FullPath= " + e.FullPath);
-		}
+			_grid = grid;
+			Pfe = _grid.Fullpath;
+			_last = File.GetLastWriteTime(Pfe);
 
-		/// <summary>
-		/// Specifies what is done when a file is renamed.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="e"></param>
-		static void OnFileRenamed(object source, RenamedEventArgs e)
-		{
-			logfile.Log("OnFileRenamed() source= " + source);
-			logfile.Log(". e.ChangeType= " + e.ChangeType);
-			logfile.Log(". e.OldFullPath= " + e.OldFullPath + " -> " + e.FullPath);
+			Interval = 225;
+			Start();
 		}
+		#endregion cTor
+
+
+		#region Events (override)
+		protected override void OnTick(EventArgs e)
+		{
+			if (!BypassFileDeleted)
+			{
+				if (!File.Exists(Pfe))
+				{
+					BypassFileDeleted = true;
+
+					var fwd = new FileWatcherDialog(_grid,
+													FileWatcherDialog.FILE_DEL,
+													Pfe);
+					fwd.ShowDialog(_grid._f);
+				}
+				else if (!BypassFileChanged)
+				{
+					if (File.GetLastWriteTime(Pfe) != _last)
+					{
+						_last = File.GetLastWriteTime(Pfe);
+
+						var fwd = new FileWatcherDialog(_grid,
+														FileWatcherDialog.FILE_WSC,
+														Pfe);
+						fwd.ShowDialog(_grid._f);
+					}
+				}
+			}
+
+			if (BypassFileChanged)
+			{
+				BypassFileChanged = false;
+				_last = File.GetLastWriteTime(Pfe);
+			}
+		}
+		#endregion Events (override)
 	}
 }

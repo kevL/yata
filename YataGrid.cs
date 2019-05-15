@@ -198,6 +198,9 @@ namespace yata
 
 		internal UndoRedo _ur;
 
+		internal FileWatcher Watcher
+		{ get; private set; }
+
 
 		/// <summary>
 		/// cTor.
@@ -250,6 +253,8 @@ namespace yata
 			DragDrop  += grid_DragDrop;
 
 			_ur = new UndoRedo(this);
+
+			Watcher = new FileWatcher(this);
 		}
 
 
@@ -1744,6 +1749,8 @@ namespace yata
 
 			colRewidth(cell.x, cell.y);
 			UpdateFrozenControls(cell.x);
+
+			Refresh();
 
 
 			rest.postext = cell.text;
