@@ -15,70 +15,30 @@ namespace yata
 		:
 			Control
 	{
+		#region Enums
 		internal enum InfoType
 		{
 			INFO_NONE,	// 0
 			INFO_CRAFT,	// 1
 			INFO_SPELL	// 2
 		}
+		#endregion Enums
 
+
+		#region Fields (static)
 		internal const int SORT_DES = -1;
 		internal const int SORT_NOT =  0;
 		internal const int SORT_ASC =  1;
-
-
-		internal string Fullpath // Path-File-Extension
-		{ get; set; }
-
-		internal bool Readonly
-		{ get; set; }
-
-		internal readonly YataForm _f;
-		YataGrid _table; // for cycling through all tables
-
-		bool _changed;
-		internal bool Changed
-		{
-			get { return _changed; }
-			set
-			{
-				if (!Readonly)
-					_f.TableChanged(_changed = value);
-			}
-		}
 
 		internal static int HeightColhead;
 		internal static int WidthRowhead;
 
 		internal static int HeightRow;
 
-		internal int ColCount;
-		internal int RowCount;
-
-		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
-		{ get; set; }
-
-		readonly List<string[]> _rows = new List<string[]>();
-
-		internal readonly List<Col> Cols = new List<Col>();
-		internal readonly List<Row> Rows = new List<Row>();
-
-		internal Cell this[int r, int c]
-		{
-			get { return Rows[r][c]; }
-			set { Rows[r][c] = value; }
-		}
-
-
 		/// <summary>
 		/// Is used only for painting in all the various OnPaint events.
 		/// </summary>
 		internal static Graphics graphics;
-
-//		Bitmap _bluePi = Resources.bluepixel; // NOTE: Image drawing introduces a noticeable latency.
-//		Bitmap _piColhead;
-//		Bitmap _piRowhead;
-
 
 		const int _padHori        =  6; // horizontal text padding in the table
 		const int _padVert        =  4; // vertical text padding in the table and col/rowheads
@@ -90,10 +50,34 @@ namespace yata
 
 		static int _wid; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
 
+		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
+		internal const int FreezeFirst  = 2;
+		internal const int FreezeSecond = 3;
 
-		internal InfoType Info
-		{ get; set; }
+		/// <summary>
+		/// Hides any info that's currently displayed on the statusbar when the
+		/// cursor leaves the table-area. (The OnLeave event is unreliable.)
+		/// </summary>
+		static Timer _t1 = new Timer();
 
+		/// <summary>
+		/// A flag that stops presumptive .NET events from firing ~50 billion.
+		/// </summary>
+		internal static bool _init;
+		#endregion Fields (static)
+
+
+		#region Fields
+		internal readonly YataForm _f;
+		YataGrid _table; // for cycling through all tables
+
+		internal int ColCount;
+		internal int RowCount;
+
+		readonly List<string[]> _rows = new List<string[]>();
+
+		internal readonly List<Col> Cols = new List<Col>();
+		internal readonly List<Row> Rows = new List<Row>();
 
 		internal readonly VScrollBar _scrollVert = new VScrollBar();
 		internal readonly HScrollBar _scrollHori = new HScrollBar();
@@ -107,7 +91,6 @@ namespace yata
 		int HeightTable;
 		int WidthTable;
 
-
 		YataPanelCols _panelCols;
 		YataPanelRows _panelRows;
 
@@ -117,9 +100,69 @@ namespace yata
 		Label _labelfirst  = new Label();
 		Label _labelsecond = new Label();
 
-		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
-		internal const int FreezeFirst  = 2;
-		internal const int FreezeSecond = 3;
+		/// <summary>
+		/// The text-edit box. Note there is only one (1) editor that floats to
+		/// wherever it's required.
+		/// </summary>
+		internal readonly TextBox _editor = new TextBox();
+
+		/// <summary>
+		/// The cell that's currently under the editbox.
+		/// </summary>
+		Cell _editcell;
+
+		/// <summary>
+		/// The currently sorted col. Default is #0 "id" col.
+		/// </summary>
+		internal int _sortcol;
+
+		/// <summary>
+		/// The current sort direction. Default is sorted ascending.
+		/// </summary>
+		internal int _sortdir = SORT_ASC;
+
+		internal PropertyPanel _propanel;
+
+		internal UndoRedo _ur;
+
+//		Bitmap _bluePi = Resources.bluepixel; // NOTE: Image drawing introduces a noticeable latency.
+//		Bitmap _piColhead;
+//		Bitmap _piRowhead;
+		#endregion Fields
+
+
+		#region Properties
+		internal string Fullpath // Path-File-Extension
+		{ get; set; }
+
+		internal bool Readonly
+		{ get; set; }
+
+		bool _changed;
+		internal bool Changed
+		{
+			get { return _changed; }
+			set
+			{
+//				if (!Readonly)
+//					_f.ResetTabText(_changed = value, this);
+
+				_changed = value;
+				_f.ResetTabText(this);
+			}
+		}
+
+		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
+		{ get; set; }
+
+		internal Cell this[int r, int c]
+		{
+			get { return Rows[r][c]; }
+			set { Rows[r][c] = value; }
+		}
+
+		internal InfoType Info
+		{ get; set; }
 
 		int _frozenCount = FreezeId; // starts out w/ id-col only.
 		internal int FrozenCount
@@ -154,39 +197,6 @@ namespace yata
 			}
 		}
 
-
-		/// <summary>
-		/// Hides any info that's currently displayed on the statusbar when the
-		/// cursor leaves the table-area. (The OnLeave event is unreliable.)
-		/// </summary>
-		static Timer _t1 = new Timer();
-
-		/// <summary>
-		/// The text-edit box. Note there is only one (1) editor that floats to
-		/// wherever it's required.
-		/// </summary>
-		internal readonly TextBox _editor = new TextBox();
-
-		/// <summary>
-		/// The cell that's currently under the editbox.
-		/// </summary>
-		Cell _editcell;
-
-		/// <summary>
-		/// A flag that stops presumptive .NET events from firing ~50 billion.
-		/// </summary>
-		internal static bool _init;
-
-		/// <summary>
-		/// The currently sorted col. Default is #0 "id" col.
-		/// </summary>
-		internal int _sortcol;
-
-		/// <summary>
-		/// The current sort direction. Default is sorted ascending.
-		/// </summary>
-		internal int _sortdir = SORT_ASC;
-
 		/// <summary>
 		/// The quantity of rows that are flagged for an operation excluding the
 		/// currently selected row.
@@ -194,14 +204,12 @@ namespace yata
 		internal int RangeSelect
 		{ get; set; }
 
-		internal PropertyPanel _propanel;
-
-		internal UndoRedo _ur;
-
 		internal FileWatcher Watcher
 		{ get; private set; }
+		#endregion Properties
 
 
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -256,6 +264,7 @@ namespace yata
 
 			Watcher = new FileWatcher(this);
 		}
+		#endregion cTor
 
 
 		void OnVertScrollValueChanged(object sender, EventArgs e)
