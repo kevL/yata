@@ -424,7 +424,7 @@ namespace yata
 			this.it_SaveAll.Name = "it_SaveAll";
 			this.it_SaveAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.it_SaveAll.Size = new System.Drawing.Size(181, 22);
-			this.it_SaveAll.Text = "Save &All ...";
+			this.it_SaveAll.Text = "Save &All";
 			this.it_SaveAll.Click += new System.EventHandler(this.fileclick_SaveAll);
 			// 
 			// separator_22
