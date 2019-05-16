@@ -294,65 +294,62 @@ namespace yata
 
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			if (!_grid.Readonly)
+			if (!_editor.Visible)
 			{
-				if (!_editor.Visible)
-				{
-					Cell sel = _grid.getSelectedCell();
-					if (sel != null)
-						_r = sel.y;
-					else
-						_r = _grid.getSelectedRow();
-
-					if (_r != -1)
-					{
-						Focus(); // snap
-
-						_c = (e.Y + _scroll.Value) / _heightr;
-
-						if (sel != null && _c >= _grid.FrozenCount)
-						{
-							sel.selected = false;
-							_grid[_r,_c].selected = true;
-						}
-
-						_grid.EnsureDisplayedCellOrRow();
-						_grid.Invalidate();
-
-						if (e.X > _widthVars)
-						{
-							_editRect.X      = _widthVars;
-							_editRect.Y      = _c * _heightr + 1;
-							_editRect.Width  = _widthVals;
-							_editRect.Height = _heightr - 1;
-
-							_editor.Left = _editRect.X + 5;
-							_editor.Top  = _editRect.Y + 1 - _scroll.Value;
-							_editor.Text = _grid[_r,_c].text;
-
-							_editor.Visible = true;
-							_editor.Focus();
-
-							_editor.SelectionStart  = 0; // because .NET
-							_editor.SelectionLength = _editor.Text.Length;
-//							if (_editor.Text == Constants.Stars)
-//								_editor.SelectionLength = _editor.Text.Length;
-//							else
-//								_editor.SelectionStart = _editor.Text.Length;
-						}
-
-						Invalidate();
-					}
-				}
+				Cell sel = _grid.getSelectedCell();
+				if (sel != null)
+					_r = sel.y;
 				else
-				{
-					if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
-						ApplyTextEdit();
+					_r = _grid.getSelectedRow();
 
-					_editor.Visible = false;
-					_grid.Select();
-					_grid.Refresh();
+				if (_r != -1)
+				{
+					Focus(); // snap
+
+					_c = (e.Y + _scroll.Value) / _heightr;
+
+					if (sel != null && _c >= _grid.FrozenCount)
+					{
+						sel.selected = false;
+						_grid[_r,_c].selected = true;
+					}
+
+					_grid.EnsureDisplayedCellOrRow();
+					_grid.Invalidate();
+
+					if (!_grid.Readonly && e.X > _widthVars)
+					{
+						_editRect.X      = _widthVars;
+						_editRect.Y      = _c * _heightr + 1;
+						_editRect.Width  = _widthVals;
+						_editRect.Height = _heightr - 1;
+
+						_editor.Left = _editRect.X + 5;
+						_editor.Top  = _editRect.Y + 1 - _scroll.Value;
+						_editor.Text = _grid[_r,_c].text;
+
+						_editor.Visible = true;
+						_editor.Focus();
+
+						_editor.SelectionStart  = 0; // because .NET
+						_editor.SelectionLength = _editor.Text.Length;
+//						if (_editor.Text == Constants.Stars)
+//							_editor.SelectionLength = _editor.Text.Length;
+//						else
+//							_editor.SelectionStart = _editor.Text.Length;
+					}
+
+					Invalidate();
 				}
+			}
+			else
+			{
+				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
+					ApplyTextEdit();
+
+				_editor.Visible = false;
+				_grid.Select();
+				_grid.Refresh();
 			}
 
 //			base.OnMouseClick(e);
