@@ -955,30 +955,39 @@ namespace yata
 			if (Table != null) // safety I believe.
 			{
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
+				bool bypassReadonly;
 
 				if ((ToolStripMenuItem)sender == it_SaveAs)
 				{
 					_table = Table;
 					// '_pfeT' is set by caller
 					force = (_pfeT == _table.Fullpath);
+					bypassReadonly = false;
 				}
 				else if ((ToolStripMenuItem)sender == it_SaveAll)
 				{
 					// '_pfeT' and '_table' are set by caller
 					force = false;
+					bypassReadonly = false;
 				}
 				else // is rego-save or 'FileWatcherDialog' save
 				{
 					_table = Table;
 					_pfeT = _table.Fullpath;
 					force = false;
+
+					if ((ToolStripMenuItem)sender == it_Save)
+						bypassReadonly = false;
+					else
+						bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
 				}
 
 				if (!String.IsNullOrEmpty(_pfeT)) // safety.
 				{
 					_warned = false;
 
-					if (!_table.Readonly || (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
+					if (!_table.Readonly || bypassReadonly
+						|| (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
 					{
 //						if ((_table._sortcol == 0 && _table._sortdir == YataGrid.SORT_ASC)
 //							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
@@ -990,8 +999,9 @@ namespace yata
 
 							SetTitlebarText();
 
-							_table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved as itself
-														//               it loses its Readonly flag.
+							if ((ToolStripMenuItem)sender == it_SaveAs)
+								_table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
+															//               *as itself* it loses its Readonly flag.
 							int rows = _table.RowCount;
 							if (rows != 0) // rowcount should never be zero ...
 							{

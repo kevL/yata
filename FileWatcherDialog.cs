@@ -49,18 +49,24 @@ namespace yata
 			ClientSize = new Size(TextRenderer.MeasureText(pfe, Font).Width + 15,
 								  ClientSize.Height);
 
+			string text = String.Empty;
 			switch (_fwdType = fwdType)
 			{
 				case FILE_DEL:
-					lbl_Info  .Text = "The file cannot be found on disk.";
+					text = "The file cannot be found on disk.";
 					btn_Action.Text = "Resave file";
 					break;
 
 				case FILE_WSC:
-					lbl_Info  .Text = "The file on disk has changed.";
+					text = "The file on disk has changed.";
 					btn_Action.Text = "Reload file";
 					break;
 			}
+
+			if (_grid.Readonly)
+				text += " CANCEL DISABLES THE READONLY FLAG.";
+
+			lbl_Info.Text = text;
 		}
 		#endregion cTor
 
@@ -73,42 +79,40 @@ namespace yata
 			tb_Pfe.SelectionStart = 0;
 			tb_Pfe.SelectionStart = tb_Pfe.Text.Length;
 		}
-		#endregion Events (override)
 
-
-		#region Events
-		void click_Cancel(object sender, EventArgs e)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_grid.Changed = true;
-
-			// DialogResult.Cancel
-		}
-
-		void click_Close2da(object sender, EventArgs e)
-		{
-			_grid.Changed = false;
-			_grid._f.fileclick_CloseTab(sender, e);
-
-			// DialogResult.Abort
-		}
-
-		void click_Action(object sender, EventArgs e)
-		{
-			_grid.Changed = false;
-
-			switch (_fwdType)
+			switch (DialogResult)
 			{
-				case FILE_DEL:
-					_grid._f.fileclick_Save(sender, e);
+				default:
+				case DialogResult.Cancel:
+					_grid.Changed = true;
+					_grid.Readonly = false;
 					break;
 
-				case FILE_WSC:
-					_grid._f.fileclick_Reload(sender, e);
+				case DialogResult.Abort:
+					_grid.Changed = false;
+					_grid._f.fileclick_CloseTab(null, EventArgs.Empty);
+					break;
+
+				case DialogResult.Yes:
+					_grid.Changed = false;
+
+					switch (_fwdType)
+					{
+						case FILE_DEL:
+							_grid._f.fileclick_Save(null, EventArgs.Empty);
+							break;
+
+						case FILE_WSC:
+							_grid._f.fileclick_Reload(null, EventArgs.Empty);
+							break;
+					}
 					break;
 			}
 
-			// DialogResult.Yes
+			base.OnFormClosing(e);
 		}
-		#endregion Events
+		#endregion Events (override)
 	}
 }

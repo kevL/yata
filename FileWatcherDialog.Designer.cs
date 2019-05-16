@@ -62,7 +62,6 @@ namespace yata
 			this.btn_Cancel.TabIndex = 2;
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
-			this.btn_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// btn_Action
 			// 
@@ -75,7 +74,6 @@ namespace yata
 			this.btn_Action.Size = new System.Drawing.Size(100, 30);
 			this.btn_Action.TabIndex = 0;
 			this.btn_Action.UseVisualStyleBackColor = true;
-			this.btn_Action.Click += new System.EventHandler(this.click_Action);
 			// 
 			// lbl_Info
 			// 
@@ -101,7 +99,6 @@ namespace yata
 			this.btn_Close2da.TabIndex = 1;
 			this.btn_Close2da.Text = "Close 2da";
 			this.btn_Close2da.UseVisualStyleBackColor = true;
-			this.btn_Close2da.Click += new System.EventHandler(this.click_Close2da);
 			// 
 			// tb_Pfe
 			// 

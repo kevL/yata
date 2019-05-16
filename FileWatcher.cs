@@ -42,15 +42,22 @@ namespace yata
 			Pfe = _grid.Fullpath;
 			_last = File.GetLastWriteTime(Pfe);
 
+			_id = ++_sid;
+
 			Interval = 225;
 			Start();
 		}
 		#endregion cTor
 
 
+		static int _sid = -1;
+		readonly int _id;
+
 		#region Events (override)
 		protected override void OnTick(EventArgs e)
 		{
+			logfile.Log(_id.ToString());
+
 			if (!BypassFileDeleted)
 			{
 				if (!File.Exists(Pfe))
