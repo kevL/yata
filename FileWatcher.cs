@@ -65,9 +65,7 @@ namespace yata
 					{
 						BypassFileDeleted = true;
 
-						var fwd = new FileWatcherDialog(_grid,
-														FileWatcherDialog.FILE_DEL,
-														Pfe);
+						var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL);
 						fwd.ShowDialog(_grid._f);
 					}
 					else if (!BypassFileChanged)
@@ -76,9 +74,7 @@ namespace yata
 						{
 							_last = File.GetLastWriteTime(Pfe);
 
-							var fwd = new FileWatcherDialog(_grid,
-															FileWatcherDialog.FILE_WSC,
-															Pfe);
+							var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC);
 							fwd.ShowDialog(_grid._f);
 						}
 					}

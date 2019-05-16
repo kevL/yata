@@ -759,6 +759,7 @@ namespace yata
 			table = null;
 		}
 
+
 		internal void fileclick_CloseTab(object sender, EventArgs e)
 		{
 			if (Table != null

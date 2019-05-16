@@ -78,7 +78,7 @@ namespace yata
 			// lbl_Info
 			// 
 			this.lbl_Info.Dock = System.Windows.Forms.DockStyle.Top;
-			this.lbl_Info.ForeColor = System.Drawing.Color.Crimson;
+			this.lbl_Info.ForeColor = System.Drawing.Color.Firebrick;
 			this.lbl_Info.Location = new System.Drawing.Point(0, 0);
 			this.lbl_Info.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Info.Name = "lbl_Info";

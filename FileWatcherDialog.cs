@@ -25,8 +25,7 @@ namespace yata
 		#region cTor
 		internal FileWatcherDialog(
 				YataGrid grid,
-				int fwdType,
-				string pfe)
+				int fwdType)
 		{
 			InitializeComponent();
 
@@ -44,9 +43,9 @@ namespace yata
 				}
 			}
 
-			tb_Pfe.Text = pfe;
+			tb_Pfe.Text = _grid.Fullpath;
 
-			ClientSize = new Size(TextRenderer.MeasureText(pfe, Font).Width + 15,
+			ClientSize = new Size(TextRenderer.MeasureText(tb_Pfe.Text, Font).Width + 15,
 								  ClientSize.Height);
 
 			string text = String.Empty;
@@ -67,6 +66,8 @@ namespace yata
 				text += " CANCEL DISABLES THE READONLY FLAG.";
 
 			lbl_Info.Text = text;
+
+			btn_Action.Select();
 		}
 		#endregion cTor
 
@@ -85,17 +86,17 @@ namespace yata
 			switch (DialogResult)
 			{
 				default:
-				case DialogResult.Cancel:
-					_grid.Changed = true;
+				case DialogResult.Cancel:	// btn_Cancel
 					_grid.Readonly = false;
+					_grid.Changed = true;
 					break;
 
-				case DialogResult.Abort:
+				case DialogResult.Abort:	// btn_Close2da
 					_grid.Changed = false;
 					_grid._f.fileclick_CloseTab(null, EventArgs.Empty);
 					break;
 
-				case DialogResult.Yes:
+				case DialogResult.Yes:		// btn_Action
 					_grid.Changed = false;
 
 					switch (_fwdType)

@@ -144,9 +144,6 @@ namespace yata
 			get { return _changed; }
 			set
 			{
-//				if (!Readonly)
-//					_f.ResetTabText(_changed = value, this);
-
 				_changed = value;
 				_f.ResetTabText(this);
 			}
