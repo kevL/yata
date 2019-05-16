@@ -745,6 +745,20 @@ namespace yata
 								  YataGraphics.flags);
 		}
 
+		/// <summary>
+		/// Disposes a tab's table's 'FileWatcher' before a specified tab-page
+		/// is removed from the tab-collection.
+		/// </summary>
+		/// <param name="page">the tab-page with which to deal</param>
+		private void CloseTabpage(TabPage page)
+		{
+			var table = page.Tag as YataGrid;
+			table.Watcher.Dispose();
+
+			Tabs.TabPages.Remove(page);
+			table = null;
+		}
+
 		internal void fileclick_CloseTab(object sender, EventArgs e)
 		{
 			if (Table != null
@@ -755,7 +769,7 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				Tabs.TabPages.Remove(Tabs.SelectedTab);
+				CloseTabpage(Tabs.SelectedTab);
 
 				if (Tabs.TabCount == 0)
 					Table = null;
@@ -794,7 +808,7 @@ namespace yata
 				Table = null;
 
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-					Tabs.TabPages.Remove(Tabs.TabPages[tab]);
+					CloseTabpage(Tabs.TabPages[tab]);
 
 				SetTitlebarText();
 			}
@@ -2608,7 +2622,7 @@ namespace yata
 		#region Tabmenu
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
-		/// a context.
+		/// the context.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2678,7 +2692,7 @@ namespace yata
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 				{
 					if (tab != Tabs.SelectedIndex)
-						Tabs.TabPages.Remove(Tabs.TabPages[tab]);
+						CloseTabpage(Tabs.TabPages[tab]);
 				}
 
 				SetTabSize();

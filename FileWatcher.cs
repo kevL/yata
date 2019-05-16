@@ -42,51 +42,53 @@ namespace yata
 			Pfe = _grid.Fullpath;
 			_last = File.GetLastWriteTime(Pfe);
 
-			_id = ++_sid;
-
 			Interval = 225;
 			Start();
 		}
 		#endregion cTor
 
 
-		static int _sid = -1;
-		readonly int _id;
-
 		#region Events (override)
+		/// <summary>
+		/// Handels this FileWatcher's tick event.
+		/// @note Check for a valid YataGrid since disposal of this watcher
+		/// could be delayed. See CloseTabpage() where the grid is nulled.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnTick(EventArgs e)
 		{
-			logfile.Log(_id.ToString());
-
-			if (!BypassFileDeleted)
+			if (_grid != null) // ~safety.
 			{
-				if (!File.Exists(Pfe))
+				if (!BypassFileDeleted)
 				{
-					BypassFileDeleted = true;
-
-					var fwd = new FileWatcherDialog(_grid,
-													FileWatcherDialog.FILE_DEL,
-													Pfe);
-					fwd.ShowDialog(_grid._f);
-				}
-				else if (!BypassFileChanged)
-				{
-					if (File.GetLastWriteTime(Pfe) != _last)
+					if (!File.Exists(Pfe))
 					{
-						_last = File.GetLastWriteTime(Pfe);
+						BypassFileDeleted = true;
 
 						var fwd = new FileWatcherDialog(_grid,
-														FileWatcherDialog.FILE_WSC,
+														FileWatcherDialog.FILE_DEL,
 														Pfe);
 						fwd.ShowDialog(_grid._f);
 					}
-				}
-			}
+					else if (!BypassFileChanged)
+					{
+						if (File.GetLastWriteTime(Pfe) != _last)
+						{
+							_last = File.GetLastWriteTime(Pfe);
 
-			if (BypassFileChanged)
-			{
-				BypassFileChanged = false;
-				_last = File.GetLastWriteTime(Pfe);
+							var fwd = new FileWatcherDialog(_grid,
+															FileWatcherDialog.FILE_WSC,
+															Pfe);
+							fwd.ShowDialog(_grid._f);
+						}
+					}
+				}
+
+				if (BypassFileChanged)
+				{
+					BypassFileChanged = false;
+					_last = File.GetLastWriteTime(Pfe);
+				}
 			}
 		}
 		#endregion Events (override)
