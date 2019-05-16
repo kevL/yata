@@ -459,10 +459,31 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null && Table._editor.Visible)
+			if (Table != null)
 			{
-				Table._editor.Visible = false;
-				Table.Refresh();
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Refresh();
+				}
+
+				int saveOthers = 0;
+				for (int i = 0; i != Tabs.TabCount; ++i)
+				{
+					_table = Tabs.TabPages[i].Tag as YataGrid;
+					if (_table != Table && !_table.Readonly && _table.Changed)
+						++saveOthers;
+				}
+
+				it_Reload .Enabled = File.Exists(Table.Fullpath);
+				it_SaveAll.Enabled = (saveOthers != 0);
+				it_Save   .Enabled = !Table.Readonly;
+			}
+			else
+			{
+				it_Reload .Enabled =
+				it_SaveAll.Enabled =
+				it_Save   .Enabled = false;
 			}
 
 			_preset = String.Empty;
@@ -476,8 +497,6 @@ namespace yata
 				}
 			}
 			it_OpenFolder.Visible = (it_OpenFolder.DropDownItems.Count != 0);
-
-			it_Reload.Enabled = (Table != null && File.Exists(Table.Fullpath));
 		}
 
 		void fileclick_Open(object sender, EventArgs e)
@@ -574,6 +593,14 @@ namespace yata
 
 				ShowColorPanel(false);
 
+				int saveOthers = 0;
+				for (int i = 0; i != Tabs.TabCount; ++i)
+				{
+					_table = Tabs.TabPages[i].Tag as YataGrid;
+					if (_table != Table && !_table.Readonly && _table.Changed)
+						++saveOthers;
+				}
+
 				btn_ProPanel .Visible = true;
 
 				it_MenuPaths .Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
@@ -585,6 +612,7 @@ namespace yata
 				it_Redo      .Enabled = Table._ur.CanRedo;
 
 				it_Reload    .Enabled = File.Exists(Table.Fullpath);
+				it_SaveAll   .Enabled = (saveOthers != 0);
 				it_Save      .Enabled = !Table.Readonly;
 				it_SaveAs    .Enabled =
 				it_Close     .Enabled =
@@ -620,6 +648,7 @@ namespace yata
 				it_Redo      .Enabled =
 
 				it_Reload    .Enabled =
+				it_SaveAll   .Enabled =
 				it_Save      .Enabled =
 				it_SaveAs    .Enabled =
 				it_Close     .Enabled =
@@ -909,23 +938,39 @@ namespace yata
 		string _pfeT = String.Empty;
 
 		/// <summary>
+		/// A pointer to a 'YataGrid' table that will be used during the save-
+		/// routine. Is required because it can't be assumed that the current
+		/// 'Table' is the table being saved; that is, the SaveAll operation
+		/// needs to cycle through all tables: See fileclick_SaveAll().
+		/// </summary>
+		YataGrid _table;
+
+		/// <summary>
 		/// A flag that prevents a Readonly warning/error from showing twice.
 		/// </summary>
 		bool _warned;
 
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety I believe.
 			{
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 
 				if ((ToolStripMenuItem)sender == it_SaveAs)
 				{
-					force = (_pfeT == Table.Fullpath);
+					_table = Table;
+					// '_pfeT' is set by caller
+					force = (_pfeT == _table.Fullpath);
 				}
-				else
+				else if ((ToolStripMenuItem)sender == it_SaveAll)
 				{
-					_pfeT = Table.Fullpath;
+					// '_pfeT' and '_table' are set by caller
+					force = false;
+				}
+				else // is rego-save or 'FileWatcherDialog' save
+				{
+					_table = Table;
+					_pfeT = _table.Fullpath;
 					force = false;
 				}
 
@@ -933,41 +978,40 @@ namespace yata
 				{
 					_warned = false;
 
-					if (!Table.Readonly || (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
+					if (!_table.Readonly || (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
 					{
-//						if ((Table._sortcol == 0 && Table._sortdir == YataGrid.SORT_ASC)
+//						if ((_table._sortcol == 0 && _table._sortdir == YataGrid.SORT_ASC)
 //							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
 //						{
 						if (CheckRowOrder()
 							|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
 						{
-							Table.Fullpath = _pfeT;
+							_table.Fullpath = _pfeT;
 
-							Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
 							SetTitlebarText();
 
-							Table.Readonly = false;
-
-							int rows = Table.RowCount;
-							if (rows != 0)
+							_table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved as itself
+														//               it loses its Readonly flag.
+							int rows = _table.RowCount;
+							if (rows != 0) // rowcount should never be zero ...
 							{
-								Table.Changed = false;
-								Table._ur.ResetSaved();
+								_table.Changed = false;
+								_table._ur.ResetSaved();
 
-								foreach (var row in Table.Rows)
+								foreach (var row in _table.Rows)
 								{
-									for (int c = 0; c != Table.ColCount; ++c)
+									for (int c = 0; c != _table.ColCount; ++c)
 										row[c].loadchanged = false;
 								}
-								Table.Refresh();
+								_table.Refresh();
 
-								using (var sw = new StreamWriter(Table.Fullpath))
+								using (var sw = new StreamWriter(_table.Fullpath))
 								{
-									sw.WriteLine("2DA V2.0");
+									sw.WriteLine("2DA V2.0");					// header ->
 									sw.WriteLine("");
 
 									string line = String.Empty;
-									foreach (string field in Table.Fields)
+									foreach (string field in _table.Fields)		// col-fields ->
 									{
 										line += " " + field;
 									}
@@ -976,9 +1020,9 @@ namespace yata
 
 									string val;
 
-									int cols = Table.ColCount;
+									int cols = _table.ColCount;
 
-									for (int r = 0; r != rows; ++r)
+									for (int r = 0; r != rows; ++r)				// row-cells ->
 									{
 										line = String.Empty;
 
@@ -987,7 +1031,7 @@ namespace yata
 											if (c != 0)
 												line += " ";
 
-											if (!String.IsNullOrEmpty(val = Table[r,c].text))
+											if (!String.IsNullOrEmpty(val = _table[r,c].text))
 												line += val;
 											else
 												line += Constants.Stars;
@@ -996,9 +1040,9 @@ namespace yata
 										sw.WriteLine(line);
 									}
 
-									Table.Watcher.Pfe = Table.Fullpath;
-									Table.Watcher.BypassFileDeleted = false;
-									Table.Watcher.BypassFileChanged = true;
+									_table.Watcher.Pfe = _table.Fullpath;
+									_table.Watcher.BypassFileDeleted = false;
+									_table.Watcher.BypassFileChanged = true;
 								}
 							}
 						}
@@ -1012,7 +1056,7 @@ namespace yata
 
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0)
+			if (Table != null && Table.RowCount != 0) // rowcount should never be zero ...
 			{
 				using (var sfd = new SaveFileDialog())
 				{
@@ -1029,6 +1073,21 @@ namespace yata
 			}
 		}
 
+		void fileclick_SaveAll(object sender, EventArgs e)
+		{
+			for (int i = 0; i != Tabs.TabCount; ++i)
+			{
+				_table = Tabs.TabPages[i].Tag as YataGrid;
+				if (!_table.Readonly && _table.Changed)
+				{
+					_pfeT = _table.Fullpath;
+					_table.Watcher.Enabled = false;
+					fileclick_Save(sender, e);
+					_table.Watcher.Enabled = true;
+				}
+			}
+		}
+
 		DialogResult SaveWarning(string info)
 		{
 			_warned = true;
@@ -1040,6 +1099,26 @@ namespace yata
 								   MessageBoxIcon.Exclamation,
 								   MessageBoxDefaultButton.Button2);
 		}
+
+		internal void ResetTabText(YataGrid table)
+		{
+			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+
+			string asterisk = table.Changed ? " *" : "";
+
+			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
+			{										//       - the 'Changed' mechanism should be bypassed such that all
+				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
+				{
+					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
+					break;
+				}
+			}
+			SetTabSize();
+
+			DrawingControl.ResumeDrawing(this);
+		}
+
 
 		/// <summary>
 		/// Checks the row-order before save.
@@ -2671,18 +2750,6 @@ namespace yata
 				CreateTabPage(file);
 		}
 		#endregion DragDrop file(s)
-
-
-		internal void TableChanged(bool changed)
-		{
-			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
-
-			string asterisk = changed ? " *" : "";
-			Tabs.TabPages[Tabs.SelectedIndex].Text = Path.GetFileNameWithoutExtension(Table.Fullpath) + asterisk;
-			SetTabSize();
-
-			DrawingControl.ResumeDrawing(this);
-		}
 
 
 		#region PropertyPanel

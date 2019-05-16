@@ -23,6 +23,7 @@ namespace yata
 		ToolStripMenuItem it_Reload;
 		ToolStripMenuItem it_Save;
 		ToolStripMenuItem it_SaveAs;
+		ToolStripMenuItem it_SaveAll;
 		ToolStripMenuItem it_Close;
 		ToolStripMenuItem it_CloseAll;
 		ToolStripMenuItem it_Quit;
@@ -109,6 +110,7 @@ namespace yata
 		ToolStripSeparator separator_19;
 		ToolStripSeparator separator_20;
 		ToolStripSeparator separator_21;
+		ToolStripSeparator separator_22;
 
 		ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -175,6 +177,8 @@ namespace yata
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_SaveAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_22 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Close = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_2 = new System.Windows.Forms.ToolStripSeparator();
@@ -356,6 +360,8 @@ namespace yata
 			this.separator_1,
 			this.it_Save,
 			this.it_SaveAs,
+			this.it_SaveAll,
+			this.separator_22,
 			this.it_Close,
 			this.it_CloseAll,
 			this.separator_2,
@@ -411,6 +417,20 @@ namespace yata
 			this.it_SaveAs.Size = new System.Drawing.Size(181, 22);
 			this.it_SaveAs.Text = "Sav&e As ...";
 			this.it_SaveAs.Click += new System.EventHandler(this.fileclick_SaveAs);
+			// 
+			// it_SaveAll
+			// 
+			this.it_SaveAll.Enabled = false;
+			this.it_SaveAll.Name = "it_SaveAll";
+			this.it_SaveAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.it_SaveAll.Size = new System.Drawing.Size(181, 22);
+			this.it_SaveAll.Text = "Save &All ...";
+			this.it_SaveAll.Click += new System.EventHandler(this.fileclick_SaveAll);
+			// 
+			// separator_22
+			// 
+			this.separator_22.Name = "separator_22";
+			this.separator_22.Size = new System.Drawing.Size(178, 6);
 			// 
 			// it_Close
 			// 
