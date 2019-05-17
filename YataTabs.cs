@@ -7,12 +7,12 @@ namespace yata
 	/// <summary>
 	/// Theirs was fucked so I figured it out. Tks
 	/// </summary>
-	class YataTabs
+	sealed class YataTabs
 		:
 			TabControl
 	{
 		// DoDragDrop/OnDragEnter/OnDragOver/OnDragDrop/OnDragLeave
-		// NOTE: The MouseUp event does NOT fire when a drag-drop is underway.
+		// NOTE: The MouseUp event does NOT fire when a drag-drop is released.
 
 		#region Fields
 		TabPage _tabDrag, _tabOver;

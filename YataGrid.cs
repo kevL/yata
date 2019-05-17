@@ -1196,6 +1196,9 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
+			//logfile.Log("");
+			//logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
+
 			switch (e.KeyCode)
 			{
 				case Keys.Up:
@@ -1218,7 +1221,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			//logfile.Log("OnKeyDown()");
+			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			Cell sel = getSelectedCell();
 			int selr = getSelectedRow();
@@ -1491,7 +1494,25 @@ namespace yata
 					break;
 
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
-					if (sel != null) // selection to the cell left
+					if ((e.Modifiers & Keys.Control) == Keys.Control) // shift grid 1 page left
+					{
+						if (_visHori)
+						{
+							int widthScrollable = WidthRowhead;
+							for (int c = 0; c != FrozenCount; ++c)
+								widthScrollable += Cols[c].width();
+
+							widthScrollable = Width - widthScrollable - (_visVert ? _scrollVert.Width : 0);
+							if (widthScrollable > 0)
+							{
+								if (_scrollHori.Value - widthScrollable < 0)
+									_scrollHori.Value = 0;
+								else
+									_scrollHori.Value -= widthScrollable;
+							}
+						}
+					}
+					else if (sel != null) // selection to the cell left
 					{
 						if (sel.x != FrozenCount)
 						{
@@ -1511,7 +1532,22 @@ namespace yata
 					break;
 
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
-					if (sel != null) // selection to the cell right
+					if ((e.Modifiers & Keys.Control) == Keys.Control) // shift grid 1 page right
+					{
+						if (_visHori)
+						{
+							int widthScrollable = WidthRowhead;
+							for (int c = 0; c != FrozenCount; ++c)
+								widthScrollable += Cols[c].width();
+
+							widthScrollable = Width - widthScrollable - (_visVert ? _scrollVert.Width : 0);
+							if (_scrollHori.Value + widthScrollable > _scrollHori.Maximum)
+								_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+							else
+								_scrollHori.Value += widthScrollable;
+						}
+					}
+					else if (sel != null) // selection to the cell right
 					{
 						if (sel.x != ColCount - 1)
 						{
@@ -1618,6 +1654,8 @@ namespace yata
 		/// <param name="e"></param>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
+			//logfile.Log("YataGrid.keydown_Editor() e.KeyData= " + e.KeyData);
+
 			if (e.Alt)
 			{
 				_editor.Visible = false;
@@ -1643,10 +1681,13 @@ namespace yata
 		/// <summary>
 		/// Handles the Leave event for the grid: hides the editbox if it is
 		/// visible.
+		/// @note But it doesn't fire if the tabpage changes w/ key
+		/// Ctrl+PageUp/PageDown. Lovely /explode - is fixed in
+		/// YataForm.tab_SelectedIndexChanged().
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void leave_Grid(object sender, EventArgs e)
+		internal void leave_Grid(object sender, EventArgs e)
 		{
 			if (_editor.Visible)
 			{
@@ -1663,6 +1704,8 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
+			//logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
+
 			switch (keyData)
 			{
 				case Keys.Enter:

@@ -295,6 +295,8 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			//logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
+
 			if (Table != null
 				&& (    Table._editor.Visible
 					|| (Table._propanel != null && Table._propanel._editor.Visible))
@@ -316,7 +318,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			logfile.Log("OnKeyDown()");
+			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
 			{
@@ -324,19 +326,17 @@ namespace yata
 				{
 					case Keys.Z:
 						logfile.Log(". Ctrl+z UNDO");
-
 						_ur.Undo();
 						break;
 
 					case Keys.Y:
 						logfile.Log(". Ctrl+y REDO");
-
 						_ur.Redo();
 						break;
 				}
 			}
 
-//			base.OnKeyDown(e);
+			base.OnKeyDown(e);
 		} */
 		#endregion Events (override)
 
@@ -599,6 +599,8 @@ namespace yata
 					_table = Tabs.TabPages[i].Tag as YataGrid;
 					if (_table != Table && !_table.Readonly && _table.Changed)
 						++saveOthers;
+
+					_table.leave_Grid(null, EventArgs.Empty);
 				}
 
 				btn_ProPanel .Visible = true;
