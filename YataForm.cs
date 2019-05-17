@@ -20,6 +20,11 @@ namespace yata
 		:
 			Form
 	{
+		#region Events
+		internal event DontBeepEventHandler DontBeepEvent;
+		#endregion
+
+
 		#region Fields (static)
 		const string TITLE = " Yata";
 
@@ -50,6 +55,11 @@ namespace yata
 
 		internal bool _search;
 		bool _firstclick; // preps the Search or Goto textboxes to select all text
+
+		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
+		const int DONTBEEP_DEFAULT = 0;
+		const int DONTBEEP_GOTO    = 1;
+		const int DONTBEEP_SEARCH  = 2;
 		#endregion Fields
 
 
@@ -199,6 +209,8 @@ namespace yata
 
 			//else // DEBUG instaload ->
 			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
+
+			DontBeepEvent += HandleDontBeepEvent;
 		}
 
 
@@ -309,7 +321,7 @@ namespace yata
 		}
 
 
-/*		/// <summary>
+		/// <summary>
 		/// Handles the KeyDown event on the form.
 		/// @note Requires the form's KeyPreview property flagged true in order
 		/// to handle the event if a control is focused.
@@ -320,24 +332,44 @@ namespace yata
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			if (e.KeyCode == Keys.Enter // do this here to get rid of the beep.
+				&& Table != null && Table.RowCount != 0)
 			{
-				switch (e.KeyCode)
-				{
-					case Keys.Z:
-						logfile.Log(". Ctrl+z UNDO");
-						_ur.Undo();
-						break;
+				_dontbeep = DONTBEEP_DEFAULT;
 
-					case Keys.Y:
-						logfile.Log(". Ctrl+y REDO");
-						_ur.Redo();
-						break;
+				if (tb_Search.Focused || cb_SearchOption.Focused)
+					_dontbeep = DONTBEEP_SEARCH;
+				else if (tb_Goto.Focused)
+					_dontbeep = DONTBEEP_GOTO;
+
+				if (_dontbeep != DONTBEEP_DEFAULT)
+				{
+					e.SuppressKeyPress = true;
+					BeginInvoke(DontBeepEvent);
 				}
 			}
-
 			base.OnKeyDown(e);
-		} */
+		}
+
+		/// <summary>
+		/// Forwards a keydown [Enter] event to an appropriate funct.
+		/// @note Is basically just a convoluted handler for the OnKeyDown()
+		/// handler to stop the *beep* if [Enter] is keyed when a textbox has
+		/// focus.
+		/// </summary>
+		void HandleDontBeepEvent()
+		{
+			switch (_dontbeep)
+			{
+				case DONTBEEP_SEARCH:
+					doSearch();
+					break;
+
+				case DONTBEEP_GOTO:
+					doGoto();
+					break;
+			}
+		}
 		#endregion Events (override)
 
 
@@ -1610,7 +1642,13 @@ namespace yata
 		/// Performs a search when the Enter-key is pressed and focus is on
 		/// either the search-box or the search-option dropdown.
 		/// </summary>
-		/// <param name="sender"></param>
+		void doSearch()
+		{
+			_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
+			Search();
+			_search = false;
+		}
+/*		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void keypress_Search(object sender, KeyPressEventArgs e)
 		{
@@ -1621,7 +1659,7 @@ namespace yata
 				Search();
 				_search = false;
 			}
-		}
+		} */
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
@@ -1774,7 +1812,27 @@ namespace yata
 		/// Performs a goto when the Enter-key is pressed and focus is on the
 		/// goto-box.
 		/// </summary>
-		/// <param name="sender"></param>
+		void doGoto()
+		{
+			int r;
+			if (Int32.TryParse(tb_Goto.Text, out r)
+				&& r > -1 && r < Table.RowCount)
+			{
+				Table._editor.Visible = false;
+				Table.ClearSelects();
+
+				Table.Select();
+
+				Row row = Table.Rows[r];
+				row.selected = true;
+				for (int c = 0; c != Table.ColCount; ++c)
+					row[c].selected = true;
+
+				Table.EnsureDisplayedRow(r);
+				Table.Refresh();
+			}
+		}
+/*		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void keypress_Goto(object sender, KeyPressEventArgs e)
 		{
@@ -1799,7 +1857,7 @@ namespace yata
 					Table.Refresh();
 				}
 			}
-		}
+		} */
 
 		/// <summary>
 		/// Selects the next LoadChanged cell.
@@ -2886,4 +2944,12 @@ namespace yata
 	{
 		internal const string Stars = "****";
 	}
+
+
+	#region Delegates
+	/// <summary>
+	/// Good fuckin Lord I just wrote a "DontBeep" delegate.
+	/// </summary>
+	internal delegate void DontBeepEventHandler();
+	#endregion
 }

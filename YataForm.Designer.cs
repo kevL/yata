@@ -617,7 +617,6 @@ namespace yata
 			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
 			this.tb_Goto.Enter += new System.EventHandler(this.enter_Goto);
-			this.tb_Goto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Goto);
 			this.tb_Goto.Click += new System.EventHandler(this.click_Goto);
 			this.tb_Goto.TextChanged += new System.EventHandler(this.textchanged_Goto);
 			// 
@@ -629,7 +628,6 @@ namespace yata
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
 			this.tb_Search.Enter += new System.EventHandler(this.enter_Search);
-			this.tb_Search.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
 			this.tb_Search.Click += new System.EventHandler(this.click_Search);
 			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Search);
 			// 
@@ -640,7 +638,6 @@ namespace yata
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Name = "cb_SearchOption";
 			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
-			this.cb_SearchOption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypress_Search);
 			// 
 			// it_MenuClipboard
 			// 
@@ -1219,6 +1216,7 @@ namespace yata
 			this.Controls.Add(this.statusbar);
 			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.MainMenuStrip = this.menubar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";
