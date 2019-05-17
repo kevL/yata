@@ -3,7 +3,7 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 may 16
+2019 may 17
 kevL's
 ver 2.9.0.0
 
@@ -98,7 +98,7 @@ Help
 
 
 
-keys:
+KEYBOARD:
 - w/ only 1 cell selected
 Home                      - selects cell at start of the row
 End                       - selects cell at the end of the row
@@ -145,7 +145,7 @@ Ctrl+Left  - shifts table left by visible width (if not editing text)
 Ctrl+Right - shifts table right by visible width (if not editing text)
 
 
-mouse:
+MOUSE:
 wheel - scrolls up/down if the vertical scrollbar is visible and either of
         (a) the horizontal bar is disabled or (b) Ctrl is not pressed
       - scrolls left/right if the horizontal scrollbar is visible and either of
