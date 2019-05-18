@@ -2297,7 +2297,7 @@ namespace yata
 						Table.colRewidth(0, 0, Table.RowCount - 1);
 						Table.UpdateFrozenControls(0);
 
-						Table.InitScrollers();
+						Table.InitScroll();
 						Table.Refresh();
 					}
 				}
@@ -2831,8 +2831,6 @@ namespace yata
 		{
 			// set scrollbar values (vert/hori) of the current grid to those of the other grid
 
-//			if (_diff1 != null && _diff2 != null) // safety.
-//			{
 			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			int w1, w2;
 
@@ -2841,15 +2839,21 @@ namespace yata
 				w1 = _diff1.Cols[c].width();
 				w2 = _diff2.Cols[c].width();
 
-				if (w1 > w2)
-					_diff2.Cols[c].width(w1, true);
-				else if (w2 > w1)
-					_diff1.Cols[c].width(w2, true);
+				if      (w1 > w2) _diff2.Cols[c].width(w1, true);
+				else if (w2 > w1) _diff1.Cols[c].width(w2, true);
 			}
 
-			_diff1.Refresh();
-			_diff2.Refresh();
-//			}
+			for (int c = 0; c != _diff1.ColCount; ++c)
+				_diff1.UpdateFrozenControls(c);
+
+			for (int c = 0; c != _diff2.ColCount; ++c)
+				_diff2.UpdateFrozenControls(c);
+
+			_diff1.InitScroll();
+			_diff2.InitScroll();
+
+			_diff1.Invalidate();
+			_diff2.Invalidate();
 		}
 
 		void doDiff()
@@ -2876,7 +2880,6 @@ namespace yata
 				{
 					logfile.Log("RowCount differs");
 				}
-
 
 				int cols = Math.Min(cols1, cols2);
 				int rows = Math.Min(rows1, rows2);

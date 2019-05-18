@@ -311,7 +311,7 @@ namespace yata
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
 					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-					_table.InitScrollers();
+					_table.InitScroll();
 
 					// NOTE: The panels can be null during the load sequence.
 					if (_table._panelCols   != null) _table._panelCols  .Width  = Width;
@@ -350,7 +350,7 @@ namespace yata
 		/// Initializes the vertical and horizontal scrollbars OnResize (which
 		/// also happens auto after load).
 		/// </summary>
-		internal void InitScrollers()
+		internal void InitScroll()
 		{
 			HeightTable = HeightColhead + HeightRow * RowCount;
 
@@ -888,7 +888,7 @@ namespace yata
 
 			_scrollVert.LargeChange =
 			_scrollHori.LargeChange = HeightRow;
-			InitScrollers();
+			InitScroll();
 
 			Select();
 
@@ -921,7 +921,7 @@ namespace yata
 
 			_scrollVert.LargeChange =
 			_scrollHori.LargeChange = HeightRow;
-			InitScrollers();
+			InitScroll();
 
 			Select();
 
@@ -1858,7 +1858,7 @@ namespace yata
 
 				if (range == 0 && w != width)	// if range >0 let Calibrate() handle multiple
 				{								// cols or at least Scrollers and Refresh
-					InitScrollers();
+					InitScroll();
 					Refresh(); // is required - and yet another Refresh() will follow ....
 				}
 			}

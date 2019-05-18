@@ -127,7 +127,7 @@ namespace yata
 					if (w < 17) w = 17;
 
 					col.width(w, true);
-					_grid.InitScrollers();
+					_grid.InitScroll();
 					_grid.Refresh();
 				}
 				else if (e.Button == MouseButtons.Right)
