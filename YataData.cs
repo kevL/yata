@@ -100,11 +100,8 @@ namespace yata
 		internal Row(int id, int cols, Brush brush, YataGrid grid)
 		{
 			_id = id;
-
 			_cells = new Cell[CellCount = cols];
-
 			_brush = brush;
-
 			_grid = grid;
 		}
 
@@ -118,11 +115,8 @@ namespace yata
 		internal Row(int id, Cell[] cells, Brush brush, YataGrid grid)
 		{
 			_id = id;
-
 			CellCount = (_cells = cells).Length;
-
 			_brush = brush;
-
 			_grid = grid;
 		}
 		#endregion cTors

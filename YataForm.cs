@@ -2695,14 +2695,7 @@ namespace yata
 			Table._editor.Visible = false;
 			Table.Refresh();
 
-			it_tabCloseAll      .Enabled =
-			it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
-
-			// NOTE: 'it_tabDiff1' is always enabled.
-			it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
-			it_tabDiffClear.Enabled = (_diff1 != null || _diff2 != null); // (_diff1 == Table || _diff2 == Table) if you want to clear the current page's Table only.
-			it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null);
-
+			bool found = false;
 
 			var pt = Tabs.PointToClient(Cursor.Position); // select the Tab itself ->
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
@@ -2710,10 +2703,23 @@ namespace yata
 				if (Tabs.GetTabRect(tab).Contains(pt))
 				{
 					Tabs.SelectedIndex = tab;
-					return;
+					found = true;
+					break;
 				}
 			}
-			e.Cancel = true;
+
+			if (found)
+			{
+				it_tabCloseAll      .Enabled =
+				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
+
+				// NOTE: 'it_tabDiff1' is always enabled.
+				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
+				it_tabDiffClear.Enabled = (_diff1 != null || _diff2 != null); // (_diff1 == Table || _diff2 == Table) if you want to clear the current page's Table only.
+				it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null);
+			}
+			else
+				e.Cancel = true;
 		}
 
 		/// <summary>
@@ -2824,13 +2830,35 @@ namespace yata
 		void tabclick_DiffAlign(object sender, EventArgs e)
 		{
 			// set scrollbar values (vert/hori) of the current grid to those of the other grid
-			// set all colwidths to the higher value of both grids
+
+//			if (_diff1 != null && _diff2 != null) // safety.
+//			{
+			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
+			int w1, w2;
+
+			for (int c = 0; c != cols; ++c)
+			{
+				w1 = _diff1.Cols[c].width();
+				w2 = _diff2.Cols[c].width();
+
+				if (w1 > w2)
+					_diff2.Cols[c].width(w1, true);
+				else if (w2 > w1)
+					_diff1.Cols[c].width(w2, true);
+			}
+
+			_diff1.Refresh();
+			_diff2.Refresh();
+//			}
 		}
 
 		void doDiff()
 		{
 			if (_diff1 != null && _diff2 != null) // safety.
 			{
+				_diff1.ClearSelects();
+				_diff2.ClearSelects();
+
 				int cols1 = _diff1.ColCount;
 				int cols2 = _diff2.ColCount;
 
@@ -2862,10 +2890,10 @@ namespace yata
 						_diff2[r,c].diff = true;
 					}
 				}
-			}
 
-			_diff1.Invalidate();
-			_diff2.Invalidate();
+				_diff1.Invalidate();
+				_diff2.Invalidate();
+			}
 		}
 		#endregion Tabmenu
 
