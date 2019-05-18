@@ -2786,15 +2786,15 @@ namespace yata
 			_diff1 = Table;
 			_diff2 = null;
 
-			it_tabDiff2.Enabled = true;
+//			it_tabDiff2.Enabled = true;
 		}
 
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
 			_diff2 = Table;
 
-			it_tabDiffClear.Enabled =
-			it_tabDiffAlign.Enabled = true;
+//			it_tabDiffClear.Enabled =
+//			it_tabDiffAlign.Enabled = true;
 
 			doDiff();
 		}
@@ -2803,6 +2803,8 @@ namespace yata
 		{
 			_diff1 =
 			_diff2 = null;
+
+			// clear all diff'd cells
 		}
 
 		void tabclick_DiffAlign(object sender, EventArgs e)

@@ -147,18 +147,44 @@ namespace yata
 		:
 			ICloneable
 	{
+		internal enum CellState
+		{
+			Default,
+			Selected,
+			LoadChanged,
+			Diff
+		}
+		internal CellState state; // is used by YataGrid.OnPaint()
+
+
 		internal string text; // the cell's text
 
-		internal bool selected;
-		internal bool loadchanged;
+		bool _sel;
+		internal bool selected
+		{
+			get { return _sel; }
+			set { _sel = value; SetState(); }
+		}
+
+		bool _load;
+		internal bool loadchanged
+		{
+			get { return _load; }
+			set { _load = value; SetState(); }
+		}
+
+		bool _diff;
+		internal bool diff
+		{
+			get { return _diff; }
+			set { _diff = value; SetState(); }
+		}
 
 		internal int x;
 		internal int y;
 		internal int y_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
 
 		internal int _widthtext;
-
-		bool diff;
 
 
 		/// <summary>
@@ -173,6 +199,22 @@ namespace yata
 			x = c;
 			text = field;
 		}
+
+
+		#region Methods
+		/// <summary>
+		/// State is used only for priority of color by YataGrid.OnPaint().
+		/// TODO: Replace the bools (ergo state also) w/ a bitwise enumeration
+		/// and add bool/state: 'edit' if cell is being edited.
+		/// </summary>
+		void SetState()
+		{
+			if      (selected)    state = CellState.Selected;
+			else if (diff)        state = CellState.Diff;
+			else if (loadchanged) state = CellState.LoadChanged;
+			else                  state = CellState.Default;
+		}
+		#endregion Methods
 
 
 		#region ICloneable requirements

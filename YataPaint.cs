@@ -59,21 +59,31 @@ namespace yata
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
 							var cell = row[c];
-							if (cell.selected)
+							if (cell.state != Cell.CellState.Default)
 							{
 								rect.X -= _padHori;
 
-								if (_editor.Visible && _editcell == cell)
-									graphics.FillRectangle(Brushes.Editor, rect);
-								else
-									graphics.FillRectangle(Brushes.Selected, rect);
+								Brush brush;
+								switch (cell.state)
+								{
+									default:
+									case Cell.CellState.Selected:
+										if (_editor.Visible && _editcell == cell)
+											brush = Brushes.Editor;
+										else
+											brush = Brushes.Selected;
+										break;
 
-								rect.X += _padHori;
-							}
-							else if (cell.loadchanged)
-							{
-								rect.X -= _padHori;
-								graphics.FillRectangle(Brushes.LoadChanged, rect);
+									case Cell.CellState.Diff:
+										brush = Brushes.Diff;
+										break;
+
+									case Cell.CellState.LoadChanged:
+										brush = Brushes.LoadChanged;
+										break;
+								}
+								graphics.FillRectangle(brush, rect);
+
 								rect.X += _padHori;
 							}
 
