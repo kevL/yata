@@ -789,6 +789,9 @@ namespace yata
 			var table = page.Tag as YataGrid;
 			table.Watcher.Dispose();
 
+			if      (table == _diff1) _diff1 = null;
+			else if (table == _diff2) _diff2 = null;
+
 			Tabs.TabPages.Remove(page);
 			table = null;
 		}
@@ -2695,15 +2698,13 @@ namespace yata
 			it_tabCloseAll      .Enabled =
 			it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
-
-//			it_tabDiff1; // always enabled.
+			// NOTE: 'it_tabDiff1' is always enabled.
 			it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
-			it_tabDiffClear.Enabled =
-			it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null); // TODO: <- refine those
+			it_tabDiffClear.Enabled = (_diff1 != null || _diff2 != null); // (_diff1 == Table || _diff2 == Table) if you want to clear the current page's Table only.
+			it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null);
 
 
-
-			var pt = Tabs.PointToClient(Cursor.Position);
+			var pt = Tabs.PointToClient(Cursor.Position); // select the Tab itself ->
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
 			{
 				if (Tabs.GetTabRect(tab).Contains(pt))
@@ -2785,36 +2786,86 @@ namespace yata
 		{
 			_diff1 = Table;
 			_diff2 = null;
-
-//			it_tabDiff2.Enabled = true;
 		}
 
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
 			_diff2 = Table;
-
-//			it_tabDiffClear.Enabled =
-//			it_tabDiffAlign.Enabled = true;
-
 			doDiff();
 		}
 
 		void tabclick_DiffClear(object sender, EventArgs e)
 		{
+			if (_diff1 != null)
+			{
+				for (int r = 0; r != _diff1.RowCount; ++r)
+				for (int c = 0; c != _diff1.ColCount; ++c)
+				{
+					_diff1[r,c].diff = false;
+				}
+			}
+
+			if (_diff2 != null)
+			{
+				for (int r = 0; r != _diff2.RowCount; ++r)
+				for (int c = 0; c != _diff2.ColCount; ++c)
+				{
+					_diff2[r,c].diff = false;
+				}
+			}
+
+			_diff1.Invalidate();
+			_diff2.Invalidate();
+
 			_diff1 =
 			_diff2 = null;
-
-			// clear all diff'd cells
 		}
 
 		void tabclick_DiffAlign(object sender, EventArgs e)
 		{
 			// set scrollbar values (vert/hori) of the current grid to those of the other grid
+			// set all colwidths to the higher value of both grids
 		}
 
 		void doDiff()
 		{
-			
+			if (_diff1 != null && _diff2 != null) // safety.
+			{
+				int cols1 = _diff1.ColCount;
+				int cols2 = _diff2.ColCount;
+
+				int rows1 = _diff1.RowCount;
+				int rows2 = _diff2.RowCount;
+
+				if (cols1 != cols2)
+				{
+					logfile.Log("ColCount differs");
+				}
+
+				// TODO: test col-fields texts
+
+				if (rows1 != rows2)
+				{
+					logfile.Log("RowCount differs");
+				}
+
+
+				int cols = Math.Min(cols1, cols2);
+				int rows = Math.Min(rows1, rows2);
+
+				for (int r = 0; r != rows; ++r)
+				for (int c = 0; c != cols; ++c)
+				{
+					if (_diff1[r,c].text != _diff2[r,c].text)
+					{
+						_diff1[r,c].diff =
+						_diff2[r,c].diff = true;
+					}
+				}
+			}
+
+			_diff1.Invalidate();
+			_diff2.Invalidate();
 		}
 		#endregion Tabmenu
 
