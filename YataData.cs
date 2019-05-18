@@ -158,6 +158,8 @@ namespace yata
 
 		internal int _widthtext;
 
+		bool diff;
+
 
 		/// <summary>
 		/// cTor.

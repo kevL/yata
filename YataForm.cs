@@ -784,7 +784,7 @@ namespace yata
 		/// is removed from the tab-collection.
 		/// </summary>
 		/// <param name="page">the tab-page with which to deal</param>
-		private void CloseTabpage(TabPage page)
+		void CloseTabpage(TabPage page)
 		{
 			var table = page.Tag as YataGrid;
 			table.Watcher.Dispose();
@@ -2695,6 +2695,14 @@ namespace yata
 			it_tabCloseAll      .Enabled =
 			it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
+
+//			it_tabDiff1; // always enabled.
+			it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
+			it_tabDiffClear.Enabled =
+			it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null); // TODO: <- refine those
+
+
+
 			var pt = Tabs.PointToClient(Cursor.Position);
 			for (int tab = 0; tab != Tabs.TabCount; ++tab)
 			{
@@ -2769,6 +2777,43 @@ namespace yata
 		}
 
 		// TODO: FreezeFirst/Second
+
+
+		YataGrid _diff1, _diff2;
+
+		void tabclick_Diff1(object sender, EventArgs e)
+		{
+			_diff1 = Table;
+			_diff2 = null;
+
+			it_tabDiff2.Enabled = true;
+		}
+
+		void tabclick_Diff2(object sender, EventArgs e)
+		{
+			_diff2 = Table;
+
+			it_tabDiffClear.Enabled =
+			it_tabDiffAlign.Enabled = true;
+
+			doDiff();
+		}
+
+		void tabclick_DiffClear(object sender, EventArgs e)
+		{
+			_diff1 =
+			_diff2 = null;
+		}
+
+		void tabclick_DiffAlign(object sender, EventArgs e)
+		{
+			// set scrollbar values (vert/hori) of the current grid to those of the other grid
+		}
+
+		void doDiff()
+		{
+			
+		}
 		#endregion Tabmenu
 
 

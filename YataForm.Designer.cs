@@ -111,6 +111,7 @@ namespace yata
 		ToolStripSeparator separator_20;
 		ToolStripSeparator separator_21;
 		ToolStripSeparator separator_22;
+		ToolStripSeparator separator_23;
 
 		ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -140,6 +141,10 @@ namespace yata
 		ToolStripStatusLabel statusbar_label_Info;
 
 		Panel panel_ColorFill;
+		private System.Windows.Forms.ToolStripMenuItem it_tabDiff1;
+		private System.Windows.Forms.ToolStripMenuItem it_tabDiff2;
+		private System.Windows.Forms.ToolStripMenuItem it_tabDiffClear;
+		private System.Windows.Forms.ToolStripMenuItem it_tabDiffAlign;
 
 
 		/// <summary>
@@ -169,6 +174,11 @@ namespace yata
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_23 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_tabDiff1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiff2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiffClear = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiffAlign = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -288,10 +298,15 @@ namespace yata
 			this.it_tabCloseAll,
 			this.it_tabCloseAllOthers,
 			this.separator_14,
-			this.it_tabReload});
+			this.it_tabReload,
+			this.separator_23,
+			this.it_tabDiff1,
+			this.it_tabDiff2,
+			this.it_tabDiffClear,
+			this.it_tabDiffAlign});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 98);
+			this.tabMenu.Size = new System.Drawing.Size(139, 214);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -329,6 +344,42 @@ namespace yata
 			this.it_tabReload.Size = new System.Drawing.Size(138, 22);
 			this.it_tabReload.Text = "Reload";
 			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
+			// 
+			// separator_23
+			// 
+			this.separator_23.Name = "separator_23";
+			this.separator_23.Size = new System.Drawing.Size(135, 6);
+			// 
+			// it_tabDiff1
+			// 
+			this.it_tabDiff1.Name = "it_tabDiff1";
+			this.it_tabDiff1.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiff1.Text = "Select diff1";
+			this.it_tabDiff1.Click += new System.EventHandler(this.tabclick_Diff1);
+			// 
+			// it_tabDiff2
+			// 
+			this.it_tabDiff2.Enabled = false;
+			this.it_tabDiff2.Name = "it_tabDiff2";
+			this.it_tabDiff2.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiff2.Text = "Select diff2";
+			this.it_tabDiff2.Click += new System.EventHandler(this.tabclick_Diff2);
+			// 
+			// it_tabDiffClear
+			// 
+			this.it_tabDiffClear.Enabled = false;
+			this.it_tabDiffClear.Name = "it_tabDiffClear";
+			this.it_tabDiffClear.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiffClear.Text = "Clear diffs";
+			this.it_tabDiffClear.Click += new System.EventHandler(this.tabclick_DiffClear);
+			// 
+			// it_tabDiffAlign
+			// 
+			this.it_tabDiffAlign.Enabled = false;
+			this.it_tabDiffAlign.Name = "it_tabDiffAlign";
+			this.it_tabDiffAlign.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiffAlign.Text = "Align tables";
+			this.it_tabDiffAlign.Click += new System.EventHandler(this.tabclick_DiffAlign);
 			// 
 			// menubar
 			// 
