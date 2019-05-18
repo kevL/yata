@@ -2863,27 +2863,39 @@ namespace yata
 				_diff1.ClearSelects();
 				_diff2.ClearSelects();
 
-				int cols1 = _diff1.ColCount;
+
+				int fields1 = _diff1.Fields.Length;				// check field count ->
+				int fields2 = _diff2.Fields.Length;
+				if (fields1 != fields2)
+				{
+					logfile.Log("Field count differs");
+				}
+
+				int fields = Math.Min(fields1, fields2);		// diff fields ->
+				for (int f = 0; f != fields; ++f)
+				{
+					if (_diff1.Fields[f] != _diff2.Fields[f])
+					{
+						logfile.Log("Field #" + f + " differs");
+					}
+				}
+
+				int cols1 = _diff1.ColCount;					// check col count ->
 				int cols2 = _diff2.ColCount;
-
-				int rows1 = _diff1.RowCount;
-				int rows2 = _diff2.RowCount;
-
 				if (cols1 != cols2)
 				{
 					logfile.Log("ColCount differs");
 				}
 
-				// TODO: test col-fields texts
-
+				int rows1 = _diff1.RowCount;					// check row count ->
+				int rows2 = _diff2.RowCount;
 				if (rows1 != rows2)
 				{
 					logfile.Log("RowCount differs");
 				}
 
-				int cols = Math.Min(cols1, cols2);
+				int cols = Math.Min(cols1, cols2);				// diff cells ->
 				int rows = Math.Min(rows1, rows2);
-
 				for (int r = 0; r != rows; ++r)
 				for (int c = 0; c != cols; ++c)
 				{
@@ -2893,6 +2905,41 @@ namespace yata
 						_diff2[r,c].diff = true;
 					}
 				}
+
+				if (cols1 > cols2)								// diff cols of the wider table ->
+				{
+					for (int c = cols2; c != cols1; ++c)
+					for (int r = 0;     r != rows1; ++r)
+					{
+						_diff1[r,c].diff = true;
+					}
+				}
+				else if (cols2 > cols1)
+				{
+					for (int c = cols1; c != cols2; ++c)
+					for (int r = 0;     r != rows2; ++r)
+					{
+						_diff2[r,c].diff = true;
+					}
+				}
+
+				if (rows1 > rows2)								// diff rows of the longer table ->
+				{
+					for (int c = 0;     c != cols1; ++c)
+					for (int r = rows2; r != rows1; ++r)
+					{
+						_diff1[r,c].diff = true;
+					}
+				}
+				else if (rows2 > rows1)
+				{
+					for (int c = 0;     c != cols2; ++c)
+					for (int r = rows1; r != rows2; ++r)
+					{
+						_diff2[r,c].diff = true;
+					}
+				}
+
 
 				_diff1.Invalidate();
 				_diff2.Invalidate();

@@ -150,7 +150,7 @@ namespace yata
 		}
 
 		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +1)
-		{ get; set; }
+		{ get; private set; }
 
 		internal Cell this[int r, int c]
 		{
