@@ -789,8 +789,8 @@ namespace yata
 			var table = page.Tag as YataGrid;
 			table.Watcher.Dispose();
 
-			if      (table == _diff1) _diff1 = null;
-			else if (table == _diff2) _diff2 = null;
+			if      (table == _diff1) { _diff1 = null; _difd = false; }
+			else if (table == _diff2) { _diff2 = null; _difd = false; }
 
 			Tabs.TabPages.Remove(page);
 			table = null;
@@ -2786,42 +2786,31 @@ namespace yata
 		// TODO: FreezeFirst/Second
 
 
-		YataGrid _diff1, _diff2;
+
+		internal YataGrid _diff1, _diff2;
+		internal bool _difd; // true if diff is in progress (cells are highlighted)
 
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
+			ClearDiffs();
+
 			_diff1 = Table;
 			_diff2 = null;
 		}
 
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
+			_difd = true;
+
 			_diff2 = Table;
 			doDiff();
 		}
 
 		void tabclick_DiffClear(object sender, EventArgs e)
 		{
-			if (_diff1 != null)
-			{
-				for (int r = 0; r != _diff1.RowCount; ++r)
-				for (int c = 0; c != _diff1.ColCount; ++c)
-				{
-					_diff1[r,c].diff = false;
-				}
-			}
+			_difd = false;
 
-			if (_diff2 != null)
-			{
-				for (int r = 0; r != _diff2.RowCount; ++r)
-				for (int c = 0; c != _diff2.ColCount; ++c)
-				{
-					_diff2[r,c].diff = false;
-				}
-			}
-
-			_diff1.Invalidate();
-			_diff2.Invalidate();
+			ClearDiffs();
 
 			_diff1 =
 			_diff2 = null;
@@ -2858,90 +2847,114 @@ namespace yata
 
 		void doDiff()
 		{
-			if (_diff1 != null && _diff2 != null) // safety.
+//			if (_diff1 != null && _diff2 != null) // safety.
+//			{
+			_diff1.ClearSelects();
+			_diff2.ClearSelects();
+
+
+			int fields1 = _diff1.Fields.Length;				// check field count ->
+			int fields2 = _diff2.Fields.Length;
+			if (fields1 != fields2)
 			{
-				_diff1.ClearSelects();
-				_diff2.ClearSelects();
+				logfile.Log("Field count differs");
+			}
 
-
-				int fields1 = _diff1.Fields.Length;				// check field count ->
-				int fields2 = _diff2.Fields.Length;
-				if (fields1 != fields2)
+			int fields = Math.Min(fields1, fields2);		// diff fields ->
+			for (int f = 0; f != fields; ++f)
+			{
+				if (_diff1.Fields[f] != _diff2.Fields[f])
 				{
-					logfile.Log("Field count differs");
+					logfile.Log("Field #" + f + " differs");
 				}
+			}
 
-				int fields = Math.Min(fields1, fields2);		// diff fields ->
-				for (int f = 0; f != fields; ++f)
-				{
-					if (_diff1.Fields[f] != _diff2.Fields[f])
-					{
-						logfile.Log("Field #" + f + " differs");
-					}
-				}
+			int cols1 = _diff1.ColCount;					// check col count ->
+			int cols2 = _diff2.ColCount;
+			if (cols1 != cols2)
+			{
+				logfile.Log("ColCount differs");
+			}
 
-				int cols1 = _diff1.ColCount;					// check col count ->
-				int cols2 = _diff2.ColCount;
-				if (cols1 != cols2)
-				{
-					logfile.Log("ColCount differs");
-				}
+			int rows1 = _diff1.RowCount;					// check row count ->
+			int rows2 = _diff2.RowCount;
+			if (rows1 != rows2)
+			{
+				logfile.Log("RowCount differs");
+			}
 
-				int rows1 = _diff1.RowCount;					// check row count ->
-				int rows2 = _diff2.RowCount;
-				if (rows1 != rows2)
+			int cols = Math.Min(cols1, cols2);				// diff cells ->
+			int rows = Math.Min(rows1, rows2);
+			for (int r = 0; r != rows; ++r)
+			for (int c = 0; c != cols; ++c)
+			{
+				if (_diff1[r,c].text != _diff2[r,c].text)
 				{
-					logfile.Log("RowCount differs");
+					_diff1[r,c].diff =
+					_diff2[r,c].diff = true;
 				}
+			}
 
-				int cols = Math.Min(cols1, cols2);				// diff cells ->
-				int rows = Math.Min(rows1, rows2);
-				for (int r = 0; r != rows; ++r)
-				for (int c = 0; c != cols; ++c)
+			if (cols1 > cols2)								// diff cols of the wider table ->
+			{
+				for (int c = cols2; c != cols1; ++c)
+				for (int r = 0;     r != rows1; ++r)
 				{
-					if (_diff1[r,c].text != _diff2[r,c].text)
-					{
-						_diff1[r,c].diff =
-						_diff2[r,c].diff = true;
-					}
+					_diff1[r,c].diff = true;
 				}
+			}
+			else if (cols2 > cols1)
+			{
+				for (int c = cols1; c != cols2; ++c)
+				for (int r = 0;     r != rows2; ++r)
+				{
+					_diff2[r,c].diff = true;
+				}
+			}
 
-				if (cols1 > cols2)								// diff cols of the wider table ->
+			if (rows1 > rows2)								// diff rows of the longer table ->
+			{
+				for (int c = 0;     c != cols1; ++c)
+				for (int r = rows2; r != rows1; ++r)
 				{
-					for (int c = cols2; c != cols1; ++c)
-					for (int r = 0;     r != rows1; ++r)
-					{
-						_diff1[r,c].diff = true;
-					}
+					_diff1[r,c].diff = true;
 				}
-				else if (cols2 > cols1)
+			}
+			else if (rows2 > rows1)
+			{
+				for (int c = 0;     c != cols2; ++c)
+				for (int r = rows1; r != rows2; ++r)
 				{
-					for (int c = cols1; c != cols2; ++c)
-					for (int r = 0;     r != rows2; ++r)
-					{
-						_diff2[r,c].diff = true;
-					}
+					_diff2[r,c].diff = true;
 				}
-
-				if (rows1 > rows2)								// diff rows of the longer table ->
-				{
-					for (int c = 0;     c != cols1; ++c)
-					for (int r = rows2; r != rows1; ++r)
-					{
-						_diff1[r,c].diff = true;
-					}
-				}
-				else if (rows2 > rows1)
-				{
-					for (int c = 0;     c != cols2; ++c)
-					for (int r = rows1; r != rows2; ++r)
-					{
-						_diff2[r,c].diff = true;
-					}
-				}
+			}
 
 
+			_diff1.Invalidate();
+			_diff2.Invalidate();
+//			}
+		}
+
+		void ClearDiffs()
+		{
+			if (_diff1 != null)
+			{
+				for (int r = 0; r != _diff1.RowCount; ++r)
+				for (int c = 0; c != _diff1.ColCount; ++c)
+				{
+					_diff1[r,c].diff = false;
+				}
 				_diff1.Invalidate();
+				_diff1 = null;
+			}
+
+			if (_diff2 != null)
+			{
+				for (int r = 0; r != _diff2.RowCount; ++r)
+				for (int c = 0; c != _diff2.ColCount; ++c)
+				{
+					_diff2[r,c].diff = false;
+				}
 				_diff2.Invalidate();
 			}
 		}

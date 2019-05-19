@@ -280,6 +280,35 @@ namespace yata
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
+
+
+			if (_f._difd // scroll 2 diffed tables simultaneously if '_difd'
+				&& _f._diff1 != null && _f._diff2 != null)
+			{
+				VScrollBar vert = null;
+
+				if      (_f._diff1 == this) vert = _f._diff2._scrollVert;
+				else if (_f._diff2 == this) vert = _f._diff1._scrollVert;
+
+				if (vert != null && vert.Maximum != 0)
+				{
+					if (_scrollVert.Value < vert.Maximum - vert.LargeChange)
+					{
+						vert.Value = _scrollVert.Value;
+					}
+					else
+						vert.Value = vert.Maximum - (vert.LargeChange - 1);
+
+					Select();
+
+					// NOTE: An interesting effect occurs if this is the wider table.
+					// When [End] is keyed and the other table fires this funct it
+					// causes this table to bounce back to the other table's Max value.
+					// It's a convenient stop-mechanism to indicate that the other
+					// table is not as wide as this one; fortunately a second key
+					// [End] allows this table to continue to its final destination.
+				}
+			}
 		}
 
 		void OnHoriScrollValueChanged(object sender, EventArgs e)
@@ -298,6 +327,35 @@ namespace yata
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
+
+
+			if (_f._difd // scroll 2 diffed tables simultaneously if '_difd'
+				&& _f._diff1 != null && _f._diff2 != null)
+			{
+				HScrollBar hori = null;
+
+				if      (_f._diff1 == this) hori = _f._diff2._scrollHori;
+				else if (_f._diff2 == this) hori = _f._diff1._scrollHori;
+
+				if (hori != null && hori.Maximum != 0)
+				{
+					if (_scrollHori.Value < hori.Maximum - hori.LargeChange)
+					{
+						hori.Value = _scrollHori.Value;
+					}
+					else
+						hori.Value = hori.Maximum - (hori.LargeChange - 1);
+
+					Select();
+
+					// NOTE: An interesting effect occurs if this is the longer table.
+					// When [Ctrl+End] is keyed and the other table fires this funct it
+					// causes this table to bounce back to the other table's Max value.
+					// It's a convenient stop-mechanism to indicate that the other
+					// table is not as long as this one; fortunately a second key
+					// [Ctrl+End] allows this table to continue to its final destination.
+				}
+			}
 		}
 
 		/// <summary>
@@ -413,7 +471,10 @@ namespace yata
 				}
 			}
 			else
-				_scrollVert.Value = 0;
+			{
+				_scrollVert.Value =
+				_scrollVert.Maximum = 0;
+			}
 
 			if (_visHori)
 			{
@@ -436,7 +497,10 @@ namespace yata
 				}
 			}
 			else
-				_scrollHori.Value = 0;
+			{
+				_scrollHori.Value =
+				_scrollHori.Maximum = 0;
+			}
 		}
 
 		internal int _proHori;
