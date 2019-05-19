@@ -2570,9 +2570,9 @@ namespace yata
 		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayedCellOrRow()
 		{
-			var cell = getSelectedCell();
-			if (cell != null)
-				return EnsureDisplayed(cell);
+			Cell sel = getSelectedCell();
+			if (sel != null)
+				return EnsureDisplayed(sel);
 
 			for (int r = 0; r != RowCount; ++r)
 			{

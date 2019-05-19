@@ -1982,10 +1982,10 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				Cell cell = Table.getSelectedCell();
-				if (cell != null) // safety (believe it or not).
+				Cell sel = Table.getSelectedCell();
+				if (sel != null) // safety (believe it or not).
 				{
-					_copytext = cell.text;
+					_copytext = sel.text;
 				}
 				else
 					CopyPasteCellError();
@@ -2006,12 +2006,12 @@ namespace yata
 			{
 				if (!Table.Readonly)
 				{
-					Cell cell = Table.getSelectedCell();
-					if (cell != null)
+					Cell sel = Table.getSelectedCell();
+					if (sel != null)
 					{
-						if (cell.text != _copytext)
+						if (sel.text != _copytext)
 						{
-							Table.ChangeCellText(cell, _copytext);
+							Table.ChangeCellText(sel, _copytext);
 						}
 					}
 					else
@@ -3134,10 +3134,10 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Cell cell = Table.getSelectedCell();
-				if (cell != null)
+				Cell sel = Table.getSelectedCell();
+				if (sel != null)
 				{
-					Table.ChangeCellText(cell, Constants.Stars);
+					Table.ChangeCellText(sel, Constants.Stars);
 				}
 				else
 					CopyPasteCellError();
@@ -3154,8 +3154,8 @@ namespace yata
 
 			if (destTable != null) // safety.
 			{
-				Cell cell = Table.getSelectedCell();
-				destTable[cell.y, cell.x].text = cell.text;
+				Cell sel = Table.getSelectedCell();
+				destTable[sel.y, sel.x].text = sel.text;
 
 				// re-width col
 				// create undo/redo object
