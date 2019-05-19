@@ -3059,6 +3059,8 @@ namespace yata
 		/// <param name="col">the col-id to sort by</param>
 		void ColSort(int col)
 		{
+			_f.tabclick_DiffClear(null, EventArgs.Empty);
+
 			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
 			_ur.ResetSaved(true);
 

@@ -2806,7 +2806,7 @@ namespace yata
 			doDiff();
 		}
 
-		void tabclick_DiffClear(object sender, EventArgs e)
+		internal void tabclick_DiffClear(object sender, EventArgs e)
 		{
 			_difd = false;
 
@@ -3103,11 +3103,31 @@ namespace yata
 		#region Cell menu
 		internal void ShowCellMenu()
 		{
-			Cell cell = Table.getSelectedCell();
-			it_cellStars.Enabled = cell.text != Constants.Stars || cell.loadchanged;
+			Cell sel = Table.getSelectedCell();
+
+			it_cellStars.Enabled = (sel.text != Constants.Stars || sel.loadchanged);
+			it_cellMerge.Enabled = sel.diff
+								&& _diff1 != null && _diff2 != null
+								&& isMergeEnabled(sel);
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
+		}
+
+		/// <summary>
+		/// Helper for ShowCellMenu().
+		/// </summary>
+		/// <param name="sel"></param>
+		/// <returns>true if Merge can be enabled</returns>
+		bool isMergeEnabled(Cell sel)
+		{
+			YataGrid destTable = null;
+			if      (Table == _diff1) destTable = _diff2;
+			else if (Table == _diff2) destTable = _diff1;
+
+			return (destTable != null && !destTable.Readonly
+				 && destTable.ColCount > sel.x
+				 && destTable.RowCount > sel.y);
 		}
 
 		void cellclick_Stars(object sender, EventArgs e)
@@ -3124,6 +3144,23 @@ namespace yata
 			}
 			else
 				ReadonlyError();
+		}
+
+		void cellclick_Merge(object sender, EventArgs e)
+		{
+			YataGrid destTable = null;
+			if      (Table == _diff1) destTable = _diff2;
+			else if (Table == _diff2) destTable = _diff1;
+
+			if (destTable != null) // safety.
+			{
+				Cell cell = Table.getSelectedCell();
+				destTable[cell.y, cell.x].text = cell.text;
+
+				// re-width col
+				// create undo/redo object
+				// Changed
+			}
 		}
 		#endregion Cell menu
 	}
