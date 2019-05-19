@@ -197,6 +197,8 @@ namespace yata
 		/// <summary>
 		/// The quantity of rows that are flagged for an operation excluding the
 		/// currently selected row.
+		/// @note The value will be negative if the range of subselected rows
+		/// is above the currently selected row - else positive.
 		/// </summary>
 		internal int RangeSelect
 		{ get; set; }
@@ -1661,7 +1663,8 @@ namespace yata
 				DrawingControl.SuspendDrawing(this);
 
 
-				Restorable rest = UndoRedo.createArray(RangeSelect + 1, UndoRedo.UrType.rt_ArrayInsert);
+				int range = Math.Abs(RangeSelect);
+				Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
 
 				int rFirst, rLast;
 				if (RangeSelect > 0)
@@ -1675,17 +1678,16 @@ namespace yata
 					rLast  = selr;
 				}
 
-				int i = RangeSelect;
 				while (rLast >= rFirst) // reverse delete.
 				{
-					rest.array[i] = Rows[rLast].Clone() as Row;
+					rest.array[range--] = Rows[rLast].Clone() as Row;
 					Insert(rLast, null, false);
 
-					--rLast; --i;
+					--rLast;
 				}
 
 				if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
-					rLast =  0;
+					rLast = 0;
 				else
 					rLast = -1; // calibrate all extant rows.
 

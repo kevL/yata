@@ -155,7 +155,7 @@ namespace yata
 
 			/// <summary>
 			/// If the function succeeds this field contains one of the
-			/// following values <see cref="MessageFilterInfo"/>
+			/// following values <see cref="MessageFilterInfo" />.
 			/// </summary>
 			public MessageFilterInfo info;
 		}
