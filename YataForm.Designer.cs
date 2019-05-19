@@ -146,7 +146,7 @@ namespace yata
 		ToolStripMenuItem it_tabDiff2;
 		ToolStripMenuItem it_tabDiffClear;
 		ToolStripMenuItem it_tabDiffAlign;
-		private System.Windows.Forms.ToolStripMenuItem it_cellMerge;
+		ToolStripMenuItem it_cellMerge;
 
 
 		/// <summary>

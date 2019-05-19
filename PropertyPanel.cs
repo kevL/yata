@@ -435,7 +435,7 @@ namespace yata
 		/// </summary>
 		void ApplyTextEdit()
 		{
-			var cell = _grid[_r,_c];
+			Cell cell = _grid[_r,_c];
 			string text = _editor.Text;
 			if (text != cell.text)
 				_grid.ChangeCellText(cell, _editor);

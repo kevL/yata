@@ -1824,7 +1824,8 @@ namespace yata
 			}
 
 
-			cell.loadchanged = false;
+			cell.loadchanged =
+			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			if (CheckTextEdit(tb))
 				MessageBox.Show("The text that was submitted has been altered.",
@@ -1858,7 +1859,8 @@ namespace yata
 			}
 
 
-			cell.loadchanged = false;
+			cell.loadchanged =
+			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			cell.text = text;
 

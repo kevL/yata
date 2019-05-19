@@ -3146,6 +3146,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// Handles a single-cell merge operation.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void cellclick_Merge(object sender, EventArgs e)
 		{
 			YataGrid destTable = null;
