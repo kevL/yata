@@ -3154,12 +3154,15 @@ namespace yata
 
 			if (destTable != null) // safety.
 			{
-				Cell sel = Table.getSelectedCell();
-				destTable[sel.y, sel.x].text = sel.text;
+				Cell src = Table.getSelectedCell();
+				int r = src.y;
+				int c = src.x;
 
-				// re-width col
-				// create undo/redo object
-				// Changed
+				Cell dst = destTable[r,c];
+				destTable.ChangeCellText(dst, src.text);
+
+				_diff1[r,c].diff =
+				_diff2[r,c].diff = false;
 			}
 		}
 		#endregion Cell menu
