@@ -30,8 +30,8 @@ namespace yata
 		internal const int SORT_NOT =  0;
 		internal const int SORT_ASC =  1;
 
-		internal static int HeightColhead;
 		internal static int WidthRowhead;
+		internal static int HeightColhead;
 
 		internal static int HeightRow;
 
@@ -284,8 +284,7 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 
 
-			if (_f._difd // scroll 2 diffed tables simultaneously if '_difd'
-				&& _f._diff1 != null && _f._diff2 != null)
+			if (_f._diff1 != null && _f._diff2 != null)
 			{
 				VScrollBar vert = null;
 
@@ -331,8 +330,7 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 
 
-			if (_f._difd // scroll 2 diffed tables simultaneously if '_difd'
-				&& _f._diff1 != null && _f._diff2 != null)
+			if (_f._diff1 != null && _f._diff2 != null)
 			{
 				HScrollBar hori = null;
 

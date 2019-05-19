@@ -789,8 +789,8 @@ namespace yata
 			var table = page.Tag as YataGrid;
 			table.Watcher.Dispose();
 
-			if      (table == _diff1) { _diff1 = null; _difd = false; }
-			else if (table == _diff2) { _diff2 = null; _difd = false; }
+			if      (table == _diff1) _diff1 = null;
+			else if (table == _diff2) _diff2 = null;
 
 			Tabs.TabPages.Remove(page);
 			table = null;
@@ -2683,7 +2683,7 @@ namespace yata
 		#endregion Help menu
 
 
-		#region Tabmenu
+		#region Tab menu
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
 		/// the context.
@@ -2788,7 +2788,6 @@ namespace yata
 
 
 		internal YataGrid _diff1, _diff2;
-		internal bool _difd; // true if diff is in progress (cells are highlighted)
 
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
@@ -2800,16 +2799,13 @@ namespace yata
 
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
-			_difd = true;
-
 			_diff2 = Table;
 			doDiff();
+			tabclick_DiffAlign(null, EventArgs.Empty);
 		}
 
 		internal void tabclick_DiffClear(object sender, EventArgs e)
 		{
-			_difd = false;
-
 			ClearDiffs();
 
 			_diff1 =
@@ -2847,17 +2843,17 @@ namespace yata
 
 		void doDiff()
 		{
-//			if (_diff1 != null && _diff2 != null) // safety.
-//			{
 			_diff1.ClearSelects();
 			_diff2.ClearSelects();
 
+
+			string copyable = String.Empty;
 
 			int fields1 = _diff1.Fields.Length;				// check field count ->
 			int fields2 = _diff2.Fields.Length;
 			if (fields1 != fields2)
 			{
-				logfile.Log("Field count differs");
+				copyable += "Head count differs: (a) " + fields1 + "  (b) " + fields2;
 			}
 
 			int fields = Math.Min(fields1, fields2);		// diff fields ->
@@ -2865,7 +2861,10 @@ namespace yata
 			{
 				if (_diff1.Fields[f] != _diff2.Fields[f])
 				{
-					logfile.Log("Field #" + f + " differs");
+					if (!String.IsNullOrEmpty(copyable))
+						copyable += Environment.NewLine;
+
+					copyable += "Head #" + f + " differs: (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
 				}
 			}
 
@@ -2873,15 +2872,24 @@ namespace yata
 			int cols2 = _diff2.ColCount;
 			if (cols1 != cols2)
 			{
-				logfile.Log("ColCount differs");
+				if (!String.IsNullOrEmpty(copyable))
+					copyable += Environment.NewLine;
+
+				copyable += "Col count differs: (a) " + cols1 + "  (b) " + cols2;
 			}
 
 			int rows1 = _diff1.RowCount;					// check row count ->
 			int rows2 = _diff2.RowCount;
 			if (rows1 != rows2)
 			{
-				logfile.Log("RowCount differs");
+				if (!String.IsNullOrEmpty(copyable))
+					copyable += Environment.NewLine;
+
+				copyable += "Row count differs: (a) " + rows1 + "  (b) " + rows2;
 			}
+
+
+			int celldiffs = 0;
 
 			int cols = Math.Min(cols1, cols2);				// diff cells ->
 			int rows = Math.Min(rows1, rows2);
@@ -2890,16 +2898,29 @@ namespace yata
 			{
 				if (_diff1[r,c].text != _diff2[r,c].text)
 				{
+					++celldiffs;
+
 					_diff1[r,c].diff =
 					_diff2[r,c].diff = true;
 				}
 			}
+
+			if (celldiffs != 0)
+			{
+				if (!String.IsNullOrEmpty(copyable))
+					copyable += Environment.NewLine;
+
+				copyable += "Cell text differs: " + celldiffs + " (inclusive)";
+			}
+
+			celldiffs = 0;
 
 			if (cols1 > cols2)								// diff cols of the wider table ->
 			{
 				for (int c = cols2; c != cols1; ++c)
 				for (int r = 0;     r != rows1; ++r)
 				{
+					++celldiffs;
 					_diff1[r,c].diff = true;
 				}
 			}
@@ -2908,31 +2929,67 @@ namespace yata
 				for (int c = cols1; c != cols2; ++c)
 				for (int r = 0;     r != rows2; ++r)
 				{
+					++celldiffs;
 					_diff2[r,c].diff = true;
 				}
 			}
 
 			if (rows1 > rows2)								// diff rows of the longer table ->
 			{
-				for (int c = 0;     c != cols1; ++c)
+				for (int c = 0;     c != cols;  ++c)
 				for (int r = rows2; r != rows1; ++r)
 				{
+					++celldiffs;
 					_diff1[r,c].diff = true;
 				}
 			}
 			else if (rows2 > rows1)
 			{
-				for (int c = 0;     c != cols2; ++c)
+				for (int c = 0;     c != cols;  ++c)
 				for (int r = rows1; r != rows2; ++r)
 				{
+					++celldiffs;
 					_diff2[r,c].diff = true;
 				}
+			}
+
+			if (celldiffs != 0)
+			{
+				if (!String.IsNullOrEmpty(copyable))
+					copyable += Environment.NewLine;
+
+				copyable += "Cell text differs: " + celldiffs + " (exclusive)";
 			}
 
 
 			_diff1.Invalidate();
 			_diff2.Invalidate();
-//			}
+
+
+			string label;
+			Color color;
+			if (String.IsNullOrEmpty(copyable))
+			{
+				label = "Tables are identical.";
+				color = SystemColors.ControlText;
+			}
+			else
+			{
+				label = "Tables are different.";
+				color = Color.Firebrick;
+			}
+
+			string title = "diff (a) "
+						 + Path.GetFileNameWithoutExtension(_diff1.Fullpath)
+						 + " - (b) "
+						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
+
+			var ib = new InfoBox(title,
+								 label,
+								 copyable,
+								 this);
+			ib.SetLabelColor(color);
+			ib.Show();
 		}
 
 		void ClearDiffs()
@@ -2956,9 +3013,10 @@ namespace yata
 					_diff2[r,c].diff = false;
 				}
 				_diff2.Invalidate();
+				_diff1 = null;
 			}
 		}
-		#endregion Tabmenu
+		#endregion Tab menu
 
 
 		#region Statusbar
