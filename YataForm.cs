@@ -1521,8 +1521,7 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			it_Searchnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
-
+			it_Searchnext     .Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 			it_GotoLoadchanged.Enabled = false;
 
 			if (Table != null && Table.RowCount != 0)
@@ -1664,20 +1663,21 @@ namespace yata
 			{
 				search = search.ToLower();
 
-				int row, r,c;
+				int rStart, r,c;
 
 				Cell sel = Table.getSelectedCell();
+				Table.ClearSelects();
+
 				if (sel != null)
 				{
-					c   = sel.x;
-					row = sel.y;
+					c      = sel.x;
+					rStart = sel.y;
 				}
 				else
 				{
-					c   = -1;
-					row =  0;
+					c      = -1;
+					rStart =  0;
 				}
-				Table.ClearSelects();
 
 
 				string val;
@@ -1687,7 +1687,7 @@ namespace yata
 
 				string field;
 
-				for (r = row; r != Table.RowCount; ++r)
+				for (r = rStart; r != Table.RowCount; ++r)
 				{
 					if (start)
 					{
@@ -1734,7 +1734,7 @@ namespace yata
 				}
 
 				// TODO: tighten exact start/end-cells
-				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
 				{
 					for (c = 0; c != Table.ColCount; ++c)
 					{
@@ -1854,21 +1854,21 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				Table.ClearSelects();
 
-				int row, r,c;
+				int rStart, r,c;
 				if (sel != null)
 				{
-					c   = sel.x;
-					row = sel.y;
+					c      = sel.x;
+					rStart = sel.y;
 				}
 				else
 				{
-					c   = -1;
-					row =  0;
+					c      = -1;
+					rStart =  0;
 				}
 
 				bool start = true;
 
-				for (r = row; r != Table.RowCount; ++r)
+				for (r = rStart; r != Table.RowCount; ++r)
 				{
 					if (start)
 					{
@@ -1907,7 +1907,7 @@ namespace yata
 				}
 
 				// TODO: tighten exact start/end-cells
-				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
 				{
 					for (c = 0; c != Table.ColCount; ++c)
 					{
@@ -3090,21 +3090,21 @@ namespace yata
 				if (table != null)
 					table.ClearSelects();
 
-				int row, r,c;
+				int rStart, r,c;
 				if (sel != null)
 				{
-					c   = sel.x;
-					row = sel.y;
+					c      = sel.x;
+					rStart = sel.y;
 				}
 				else
 				{
-					c   = -1;
-					row =  0;
+					c      = -1;
+					rStart =  0;
 				}
 
 				bool start = true;
 
-				for (r = row; r != Table.RowCount; ++r)
+				for (r = rStart; r != Table.RowCount; ++r)
 				{
 					if (start)
 					{
@@ -3151,7 +3151,7 @@ namespace yata
 				}
 
 				// TODO: tighten exact start/end-cells
-				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
 				{
 					for (c = 0; c != Table.ColCount; ++c)
 					{
