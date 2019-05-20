@@ -311,13 +311,17 @@ namespace yata
 		{
 			//logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 
-			if (Table != null
-				&& (    Table._editor.Visible
-					|| (Table._propanel != null && Table._propanel._editor.Visible))
-				&& (   keyData == (Keys.Control | Keys.C)
-					|| keyData == (Keys.Control | Keys.V)))
+			switch (keyData)
 			{
-				return false;
+				case Keys.Control | Keys.C:
+				case Keys.Control | Keys.V:
+					if (Table != null
+						&& (Table._editor.Visible
+							|| (Table._propanel != null && Table._propanel._editor.Visible)))
+					{
+						return false;
+					}
+					break;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -334,21 +338,33 @@ namespace yata
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			if (e.KeyCode == Keys.Enter // do this here to get rid of the beep.
-				&& Table != null && Table.RowCount != 0)
+			switch (e.KeyCode)
 			{
-				_dontbeep = DONTBEEP_DEFAULT;
+				case Keys.Enter: // do this here to get rid of the beep.
+					if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
+					{
+						_dontbeep = DONTBEEP_DEFAULT;
 
-				if (tb_Search.Focused || cb_SearchOption.Focused)
-					_dontbeep = DONTBEEP_SEARCH;
-				else if (tb_Goto.Focused)
-					_dontbeep = DONTBEEP_GOTO;
+						if (tb_Search.Focused || cb_SearchOption.Focused)
+							_dontbeep = DONTBEEP_SEARCH;
+						else if (tb_Goto.Focused)
+							_dontbeep = DONTBEEP_GOTO;
 
-				if (_dontbeep != DONTBEEP_DEFAULT)
-				{
-					e.SuppressKeyPress = true;
-					BeginInvoke(DontBeepEvent);
-				}
+						if (_dontbeep != DONTBEEP_DEFAULT)
+						{
+							e.SuppressKeyPress = true;
+							BeginInvoke(DontBeepEvent);
+						}
+					}
+					break;
+
+				case Keys.Escape:
+					if (Table != null && Tabs.Focused)
+					{
+						e.SuppressKeyPress = true;
+						Table.Select();
+					}
+					break;
 			}
 			base.OnKeyDown(e);
 		}
