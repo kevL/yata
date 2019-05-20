@@ -1879,24 +1879,18 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			it_GotoLoadchanged.Enabled = false;
-
+			bool found = false;
 			if (Table != null)
 			{
-				foreach (var row in Table.Rows)
+				for (int r = 0; r != Table.RowCount && !found; ++r)
+				for (int c = 0; c != Table.ColCount && !found; ++c)
 				{
-					for (int c = 0; c != Table.ColCount; ++c)
-					{
-						if (row[c].loadchanged)
-						{
-							it_GotoLoadchanged.Enabled = true;
-							break;
-						}
-					}
+					if (Table[r,c].loadchanged)
+						found = true;
 				}
 			}
 
-			if (it_GotoLoadchanged.Enabled)
+			if (it_GotoLoadchanged.Enabled = found)
 			{
 				if (Table._editor.Visible)
 				{
@@ -2889,7 +2883,7 @@ namespace yata
 			int fields2 = _diff2.Fields.Length;
 			if (fields1 != fields2)
 			{
-				copyable += "Head count differs: (a) " + fields1 + "  (b) " + fields2;
+				copyable = "Head count differs: (a) " + fields1 + "  (b) " + fields2;
 			}
 
 			int fields = Math.Min(fields1, fields2);		// diff fields ->
@@ -3004,15 +2998,18 @@ namespace yata
 
 			string label;
 			Color color;
+			bool @goto;
 			if (String.IsNullOrEmpty(copyable))
 			{
 				label = "Tables are identical.";
 				color = SystemColors.ControlText;
+				@goto = false;
 			}
 			else
 			{
 				label = "Tables are different.";
 				color = Color.Firebrick;
+				@goto = true;
 			}
 
 			string title = "diff (a) "
@@ -3020,12 +3017,136 @@ namespace yata
 						 + " - (b) "
 						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
 
-			var ib = new InfoBox(title,
+			var ib = new DifferDialog(title,
 								 label,
 								 copyable,
 								 this);
 			ib.SetLabelColor(color);
+			if (@goto) ib.ShowGotoButton();
 			ib.Show();
+		}
+
+
+		internal void GotoDiffCell()
+		{
+			if (Table != null
+				&& (_diff1 != null  || _diff2 != null)
+				&& (Table == _diff1 || Table == _diff2))
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidate();
+				}
+
+				// TODO: Allow frozen col(s) to be searched through also.
+				// TODO: option to invert the search direction (or at least back to
+				//       previous find)
+
+//				Table.Select();
+
+				YataGrid thisTable, thatTable;
+				if (Table == _diff1)
+				{
+					thisTable = _diff1;
+					thatTable = _diff2;
+				}
+				else //if (Table == _diff2)
+				{
+					thisTable = _diff2;
+					thatTable = _diff1;
+				}
+
+				Cell sel = thisTable.getSelectedCell();
+				thisTable.ClearSelects();
+
+				if (thatTable != null)
+					thatTable.ClearSelects();
+
+				int row, r,c;
+				if (sel != null)
+				{
+					c   = sel.x;
+					row = sel.y;
+				}
+				else
+				{
+					c   = -1;
+					row =  0;
+				}
+
+				bool start = true;
+
+				for (r = row; r != thisTable.RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						if (c == -1)
+							c = 0;
+						else
+							++c;
+
+						if (c == thisTable.ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < thisTable.RowCount - 1)	// jump to the first cell of the next row
+							{
+								++r;
+							}
+							else						// or to the top of the table if on the last row(s)
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != thisTable.ColCount; ++c)
+					{
+						if (c >= thisTable.FrozenCount && (sel = thisTable[r,c]).diff)
+						{
+							sel.selected = true;
+							thisTable.EnsureDisplayed(sel);
+							thisTable.Invalidate();
+
+							if (thatTable != null
+								&& sel.x < thatTable.ColCount
+								&& sel.y < thatTable.RowCount)
+							{
+								thatTable[sel.y, sel.x].selected = true;
+								thatTable.EnsureDisplayed(thatTable[sel.y, sel.x]);
+								thatTable.Invalidate();
+							}
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
+				{
+					for (c = 0; c != thisTable.ColCount; ++c)
+					{
+						if (c >= thisTable.FrozenCount && (sel = thisTable[r,c]).diff)
+						{
+							sel.selected = true;
+							thisTable.EnsureDisplayed(sel);
+							thisTable.Invalidate();
+
+							if (thatTable != null
+								&& sel.x < thatTable.ColCount
+								&& sel.y < thatTable.RowCount)
+							{
+								thatTable[sel.y, sel.x].selected = true;
+								thatTable.EnsureDisplayed(thatTable[sel.y, sel.x]);
+								thatTable.Invalidate();
+							}
+							return;
+						}
+					}
+				}
+			}
 		}
 		#endregion Tab menu
 

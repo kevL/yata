@@ -83,7 +83,7 @@
     </Compile>
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
-    <Compile Include="InfoBox.cs" />
+    <Compile Include="DifferDialog.cs" />
     <Compile Include="PropertyPanel.cs" />
     <Compile Include="RowCreatorForm.cs" />
     <Compile Include="RowCreatorForm.Designer.cs">
@@ -128,8 +128,8 @@
     <EmbeddedResource Include="FontPickerForm.resx">
       <DependentUpon>FontPickerForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoBox.resx">
-      <DependentUpon>InfoBox.cs</DependentUpon>
+    <EmbeddedResource Include="DifferDialog.resx">
+      <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
