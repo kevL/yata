@@ -2744,11 +2744,22 @@ namespace yata
 			fileclick_CloseTab(null, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Closes all tables when a tab's context-closeall item is clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_CloseAll(object sender, EventArgs e)
 		{
 			fileclick_CloseAllTabs(null, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Closes all other tables when a tab's context-closeall item is
+		/// clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
 		{
 			bool close = true;
@@ -2790,6 +2801,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Reloads a table when a tab's context-reload item is clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_Reload(object sender, EventArgs e)
 		{
 			fileclick_Reload(null, EventArgs.Empty);
@@ -2797,16 +2813,25 @@ namespace yata
 
 
 		// TODO: FreezeFirst/Second
+		// TODO: Save / SaveAs / SaveAll.
 
 
+		/// <summary>
+		/// Selects '_diff1'.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
 			tabclick_DiffReset(null, EventArgs.Empty);
-
 			_diff1 = Table;
-			_diff2 = null;
 		}
 
+		/// <summary>
+		/// Selects '_diff2'.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
 			_diff2 = Table;
@@ -2814,6 +2839,11 @@ namespace yata
 			tabclick_DiffJustify(null, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Clears all diffed cells and nulls any pointers to diffed tables.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
 			if (_diff1 != null)
@@ -2835,14 +2865,17 @@ namespace yata
 					_diff2[r,c].diff = false;
 				}
 				_diff2.Invalidate();
-				_diff1 = null;
+				_diff2 = null;
 			}
 		}
 
+		/// <summary>
+		/// Aligns the two diffed tables for easy switching back and forth.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void tabclick_DiffJustify(object sender, EventArgs e)
 		{
-			// set scrollbar values (vert/hori) of the current grid to those of the other grid
-
 			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			int w1, w2;
 
@@ -2868,6 +2901,9 @@ namespace yata
 			_diff2.Invalidate();
 		}
 
+		/// <summary>
+		/// The yata-diff routine.
+		/// </summary>
 		void doDiff()
 		{
 			_diff1.ClearSelects();
@@ -3023,7 +3059,10 @@ namespace yata
 			ib.Show();
 		}
 
-
+		/// <summary>
+		/// Selects the next diffed cell in the table (or both tables if both
+		/// are valid).
+		/// </summary>
 		internal void GotoDiffCell()
 		{
 			if (Table != null
