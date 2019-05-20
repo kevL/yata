@@ -3,9 +3,9 @@ Yata - yet another 2da editor for Neverwinter Nights 2
 This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files.
 
-2019 may 17
+2019 may 20
 kevL's
-ver 2.9.0.0
+ver 3.0.0.0
 
 
 File
@@ -38,7 +38,7 @@ Edit
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a selected row or range of rows)
 
-Create row(s) (opens a dialog that inserts 1 or more blank rows at a given id)
+- Create row(s) (opens a dialog that inserts 1 or more blank rows at a given id)
 
 
 Goto box (type a row ID and press Enter)
@@ -59,10 +59,11 @@ Clipboard
 
 2da Ops
 - Order row ids  : Ctrl+d (auto-orders the IDs of the currently displayed 2da)
-- Test row order : Ctrl+t (investigates the row-order of the currently displayed 2da)
+- Test row order : Ctrl+t (investigates the row-order of the currently displayed
+                   2da)
 
-- Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are inserted/
-                  deleted (or sorted) the colors go out of sync to aid
+- Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are
+                  inserted/ deleted (or sorted) the colors go out of sync to aid
                   understanding of what just happened. The "recolor rows"
                   operation makes row-colors alternate as usual)
 - Autosize cols : Ctrl+i (recalculates the display-width of all cols)
@@ -76,6 +77,9 @@ Clipboard
 
 - PropertyPanel on/off  : F7 (toggles the PropertyPanel on/off)
 - PropertyPanel top/bot : F8 (toggles the panel's position top/bottom)
+
+- External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
+                         files open. See Appendix L: WinMerge)
 
 - Clear undo/redo (the undo/redo stacks can stack up over a long session; if so
                    clear this when you're running low on RAM - note that each
@@ -239,6 +243,8 @@ context=   a right-click on a rowhead displays the contextmenu at the mouse-
            location at the topleft corner of the table instead of at the mouse-
            cursor by giving this variable a value of "static" (without quotes)
 gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
+diff=      a path without quotes to your WinMerge executable for diffing and
+           merging two 2da files (if desired). See Appendix L: WinMerge
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show the Open ... dialog at your frequently used directory(s).
@@ -469,3 +475,20 @@ IMPORTANT: The following operations cannot be Undone/Redone
 - recolor rows
 - font changes
 - etc.
+
+
+Appendix L: WinMerge
+
+The operation under 2daOps|External diff/merger will be enabled if the path to
+the WinMerge executable is specified in your Settings.Cfg by the variable diff=
+
+- eg
+diff=C:\Program Files (x86)\WinMerge\WinMergeU.exe
+
+If you are doing a diff in Yata and that operation is selected, WinMerge ought
+to start with the two diffed files loaded. A diff is done in Yata from its Tab
+menu.
+
+Note that if you're not doing a diff in Yata and select the operation, WinMerge
+ought to start and ask what file you'd like to diff against the currently
+displayed 2da.
