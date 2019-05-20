@@ -491,4 +491,12 @@ menu.
 
 Note that if you're not doing a diff in Yata and select the operation, WinMerge
 ought to start and ask what file you'd like to diff against the currently
-displayed 2da.
+displayed 2da. Also note that kdiff3 accepts the same commandline arguments as
+WinMerge, so the path to its executable could be used if preferred for whatever
+reason.
+
+WinMerge can be downloaded at
+http://winmerge.org/
+
+kdiff3 (which is overkill for 2da files) can be downloaded at
+http://kdiff3.sourceforge.net/
