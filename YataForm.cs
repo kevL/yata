@@ -670,6 +670,10 @@ namespace yata
 
 				it_freeze1   .Enabled = (Table.Cols.Count > 1);
 				it_freeze2   .Enabled = (Table.Cols.Count > 2);
+
+
+				if (DifferDialog.that != null) // be careful w/ 'that'
+					DifferDialog.that.EnableGotoButton(true);
 			}
 			else
 			{
@@ -707,6 +711,8 @@ namespace yata
 
 				it_freeze1   .Enabled =
 				it_freeze2   .Enabled = false;
+
+				DifferDialog.that = null; // be careful w/ 'that'
 			}
 
 			SetTitlebarText();
@@ -3174,6 +3180,7 @@ namespace yata
 					}
 				}
 			}
+			DifferDialog.that.EnableGotoButton(false); // be careful w/ 'that'
 		}
 		#endregion Tab menu
 

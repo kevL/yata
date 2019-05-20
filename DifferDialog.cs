@@ -13,6 +13,11 @@ namespace yata
 		:
 			Form
 	{
+		#region Fields (static)
+		internal static DifferDialog that; // be careful w/ 'that'
+		#endregion Fields (static)
+
+
 		#region Fields
 		YataForm _f;
 		#endregion Fields
@@ -44,6 +49,7 @@ namespace yata
 			Text = title;
 
 			_f = f;
+			that = this;
 
 			bool
 				bLabel = !String.IsNullOrEmpty(label),
@@ -152,6 +158,11 @@ namespace yata
 		{
 			btn_Goto.Visible = true;
 		}
+
+		internal void EnableGotoButton(bool enabled)
+		{
+			btn_Goto.Enabled = enabled;
+		}
 		#endregion
 
 
@@ -165,6 +176,8 @@ namespace yata
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			that = null;
+
 			this.Dispose(true);
 			base.OnFormClosing(e);
 		}
