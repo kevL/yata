@@ -26,6 +26,8 @@ namespace yata
 		internal static bool _context;
 		internal static bool _gradient;
 
+		internal static string _diff;
+
 
 		internal static void ScanSettings()
 		{
@@ -156,6 +158,13 @@ namespace yata
 						{
 							_gradient = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
+						}
+						else if (line.StartsWith("diff=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
+							{
+								_diff = line;
+							}
 						}
 					}
 				}
