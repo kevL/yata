@@ -142,13 +142,14 @@ namespace yata
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
-		ToolStripMenuItem it_cellMerge;
+		ToolStripMenuItem it_cellMergeCe;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statusbar_label_Cords;
 		ToolStripStatusLabel statusbar_label_Info;
 
 		Panel panel_ColorFill;
+		private System.Windows.Forms.ToolStripMenuItem it_cellMergeRo;
 
 
 		/// <summary>
@@ -290,7 +291,8 @@ namespace yata
 			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellStars = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_24 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_cellMerge = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -1252,48 +1254,56 @@ namespace yata
 			this.separator_16,
 			this.it_cellStars,
 			this.separator_24,
-			this.it_cellMerge});
+			this.it_cellMergeCe,
+			this.it_cellMergeRo});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(104, 104);
+			this.cellMenu.Size = new System.Drawing.Size(165, 148);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(103, 22);
+			this.it_cellCopy.Size = new System.Drawing.Size(164, 22);
 			this.it_cellCopy.Text = "copy cell";
 			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(103, 22);
+			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
 			this.it_cellPaste.Text = "paste cell";
 			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(100, 6);
+			this.separator_16.Size = new System.Drawing.Size(161, 6);
 			// 
 			// it_cellStars
 			// 
 			this.it_cellStars.Name = "it_cellStars";
-			this.it_cellStars.Size = new System.Drawing.Size(103, 22);
+			this.it_cellStars.Size = new System.Drawing.Size(164, 22);
 			this.it_cellStars.Text = "****";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
 			// 
 			// separator_24
 			// 
 			this.separator_24.Name = "separator_24";
-			this.separator_24.Size = new System.Drawing.Size(100, 6);
+			this.separator_24.Size = new System.Drawing.Size(161, 6);
 			// 
-			// it_cellMerge
+			// it_cellMergeCe
 			// 
-			this.it_cellMerge.Name = "it_cellMerge";
-			this.it_cellMerge.Size = new System.Drawing.Size(103, 22);
-			this.it_cellMerge.Text = "merge";
-			this.it_cellMerge.Click += new System.EventHandler(this.cellclick_Merge);
+			this.it_cellMergeCe.Name = "it_cellMergeCe";
+			this.it_cellMergeCe.Size = new System.Drawing.Size(164, 22);
+			this.it_cellMergeCe.Text = "merge to other - Ce";
+			this.it_cellMergeCe.Click += new System.EventHandler(this.cellclick_MergeCe);
+			// 
+			// it_cellMergeRo
+			// 
+			this.it_cellMergeRo.Name = "it_cellMergeRo";
+			this.it_cellMergeRo.Size = new System.Drawing.Size(164, 22);
+			this.it_cellMergeRo.Text = "merge to other - Ro";
+			this.it_cellMergeRo.Click += new System.EventHandler(this.cellclick_MergeRo);
 			// 
 			// YataForm
 			// 

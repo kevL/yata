@@ -3329,10 +3329,11 @@ namespace yata
 		{
 			Cell sel = Table.getSelectedCell();
 
-			it_cellStars.Enabled = (sel.text != Constants.Stars || sel.loadchanged);
-			it_cellMerge.Enabled = sel.diff
-								&& _diff1 != null && _diff2 != null
-								&& isMergeEnabled(sel);
+			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged);
+			it_cellMergeCe.Enabled = 
+			it_cellMergeRo.Enabled = sel.diff
+								  && _diff1 != null && _diff2 != null
+								  && isMergeEnabled(sel);
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -3375,7 +3376,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Merge(object sender, EventArgs e)
+		void cellclick_MergeCe(object sender, EventArgs e)
 		{
 			YataGrid destTable = null;
 			if      (Table == _diff1) destTable = _diff2;
@@ -3392,6 +3393,62 @@ namespace yata
 
 				_diff1[r,c].diff =
 				_diff2[r,c].diff = false;
+			}
+		}
+
+		/// <summary>
+		/// Handles a single-row merge operation.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_MergeRo(object sender, EventArgs e)
+		{
+			YataGrid destTable = null;
+			if      (Table == _diff1) destTable = _diff2;
+			else if (Table == _diff2) destTable = _diff1;
+
+			if (destTable != null) // safety.
+			{
+				int r = Table.getSelectedCell().y;
+
+				// - store the row's current state to 'rPre' in the Restorable
+				Restorable rest = UndoRedo.createRow(destTable.Rows[r]);
+
+				int c = 0;
+				for (; c != destTable.ColCount && c != Table.ColCount; ++c)
+				{
+					destTable[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
+					destTable[r,c].diff = false;
+
+					Table[r,c].diff = false;
+				}
+
+				if (destTable.ColCount > Table.ColCount)
+				{
+					for (; c != destTable.ColCount; ++c)
+					{
+						destTable[r,c].text = Constants.Stars;
+						destTable[r,c].diff = false;
+					}
+				}
+				else if (destTable.ColCount < Table.ColCount)
+				{
+					for (; c != Table.ColCount; ++c)
+						Table[r,c].diff = false;
+				}
+
+				destTable.Invalidate();
+				Table    .Invalidate();
+
+				if (!destTable.Changed)
+				{
+					destTable.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+
+				// - store the row's changed state to 'rPos' in the Restorable
+				rest.rPos = destTable.Rows[r].Clone() as Row;
+				destTable._ur.Push(rest);
 			}
 		}
 		#endregion Cell menu
