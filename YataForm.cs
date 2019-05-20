@@ -60,6 +60,8 @@ namespace yata
 		const int DONTBEEP_DEFAULT = 0;
 		const int DONTBEEP_GOTO    = 1;
 		const int DONTBEEP_SEARCH  = 2;
+
+		internal YataGrid _diff1, _diff2;
 		#endregion Fields
 
 
@@ -662,11 +664,12 @@ namespace yata
 				it_CheckRows .Enabled =
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
-				it_ppOnOff   .Enabled = (Table != null);
-				it_ppTopBot  .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+				it_ppOnOff   .Enabled = true;
+				it_ppTopBot  .Enabled = (Table._propanel != null && Table._propanel.Visible);
+				it_ExternDiff.Enabled = File.Exists(Settings._diff);
 
-				it_freeze1   .Enabled = (Table != null && Table.Cols.Count > 1);
-				it_freeze2   .Enabled = (Table != null && Table.Cols.Count > 2);
+				it_freeze1   .Enabled = (Table.Cols.Count > 1);
+				it_freeze2   .Enabled = (Table.Cols.Count > 2);
 			}
 			else
 			{
@@ -700,6 +703,7 @@ namespace yata
 				it_AutoCols  .Enabled =
 				it_ppOnOff   .Enabled =
 				it_ppTopBot  .Enabled =
+				it_ExternDiff.Enabled =
 
 				it_freeze1   .Enabled =
 				it_freeze2   .Enabled = false;
@@ -1509,11 +1513,6 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-//			it_Undo.Enabled = (Table != null && Table._ur.CanUndo);
-//			it_Redo.Enabled = (Table != null && Table._ur.CanRedo);
-			it_ClearUndoRedo.Enabled = Table != null
-									&& (Table._ur.CanUndo || Table._ur.CanRedo);
-
 			it_Searchnext.Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 
 			it_GotoLoadchanged.Enabled = false;
@@ -1590,28 +1589,6 @@ namespace yata
 			it_Redo.Enabled = enable;
 		}
 
-		void editclick_ClearUndoRedo(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				Table._ur.Clear();
-//				it_ClearUndoRedo.Enabled = false; // not needed since there isn't a hotkey and it's done in the dropdown event.
-
-				// force GC
-				long bytes = GC.GetTotalMemory(false);
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-
-				bytes -= GC.GetTotalMemory(true);
-
-				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1);
-			}
-		}
-
 
 		void textchanged_Search(object sender, EventArgs e)
 		{
@@ -1657,18 +1634,6 @@ namespace yata
 			Search();
 			_search = false;
 		}
-/*		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void keypress_Search(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == (char)Keys.Enter
-				&& Table != null && Table.RowCount != 0)
-			{
-				_search = true; // Enter shall keep focus on the tb/cbx, F3 shall focus the table.
-				Search();
-				_search = false;
-			}
-		} */
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
@@ -1841,32 +1806,6 @@ namespace yata
 				Table.Refresh();
 			}
 		}
-/*		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void keypress_Goto(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == (char)Keys.Enter
-				&& Table != null && Table.RowCount != 0)
-			{
-				int r;
-				if (Int32.TryParse(tb_Goto.Text, out r)
-					&& r > -1 && r < Table.RowCount)
-				{
-					Table._editor.Visible = false;
-					Table.ClearSelects();
-
-					Table.Select();
-
-					Row row = Table.Rows[r];
-					row.selected = true;
-					for (int c = 0; c != Table.ColCount; ++c)
-						row[c].selected = true;
-
-					Table.EnsureDisplayedRow(r);
-					Table.Refresh();
-				}
-			}
-		} */
 
 		/// <summary>
 		/// Selects the next LoadChanged cell.
@@ -2247,17 +2186,22 @@ namespace yata
 		#region 2da Ops menu
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			it_OrderRows.Enabled =
-			it_CheckRows.Enabled =
-			it_ColorRows.Enabled =
-			it_AutoCols .Enabled =
-			it_ppOnOff  .Enabled = (Table != null);
-			it_ppTopBot .Enabled = (Table != null && Table._propanel != null && Table._propanel.Visible);
+			bool valid = (Table != null);
 
-			it_freeze1  .Enabled = (Table != null && Table.Cols.Count > 1);
-			it_freeze2  .Enabled = (Table != null && Table.Cols.Count > 2);
+			it_OrderRows .Enabled =
+			it_CheckRows .Enabled =
+			it_ColorRows .Enabled =
+			it_AutoCols  .Enabled =
+			it_ppOnOff   .Enabled = valid;
+			it_ppTopBot  .Enabled = valid && Table._propanel != null && Table._propanel.Visible;
 
-			if (Table != null)
+			it_freeze1   .Enabled = valid && Table.Cols.Count > 1;
+			it_freeze2   .Enabled = valid && Table.Cols.Count > 2;
+
+			it_ExternDiff.Enabled = valid && File.Exists(Settings._diff);
+			it_ClearUr   .Enabled = valid && (Table._ur.CanUndo || Table._ur.CanRedo);
+
+			if (valid)
 			{
 				Table._editor.Visible = false;
 				Table.Refresh();
@@ -2535,6 +2479,53 @@ namespace yata
 			if (Table != null && Table._propanel != null && Table._propanel.Visible)
 				Table._propanel.DockBot = !Table._propanel.DockBot;
 		}
+
+		/// <summary>
+		/// Starts an external diff/merger program with the two diffed files
+		/// opened. Usually WinMerge.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void opsclick_ExternalDiff(object sender, EventArgs e)
+		{
+			if (File.Exists(Settings._diff))
+			{
+				var diff = new Process();
+				diff.StartInfo.FileName = Settings._diff;
+
+				if (_diff1 != null && _diff2 != null
+					&& File.Exists(_diff1.Fullpath)
+					&& File.Exists(_diff2.Fullpath))
+				{
+					diff.StartInfo.Arguments = " \"" + _diff1.Fullpath + "\" \"" + _diff2.Fullpath + "\"";
+				}
+				else
+					diff.StartInfo.Arguments = " \"" + Table.Fullpath + "\"";
+
+				diff.Start();
+			}
+		}
+
+		void opsclick_ClearUr(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				Table._ur.Clear();
+
+				// force GC
+				long bytes = GC.GetTotalMemory(false);
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+
+				bytes -= GC.GetTotalMemory(true);
+
+				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
+								" burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information,
+								MessageBoxDefaultButton.Button1);
+			}
+		}
 		#endregion 2da Ops menu
 
 
@@ -2796,11 +2787,9 @@ namespace yata
 			fileclick_Reload(null, EventArgs.Empty);
 		}
 
+
 		// TODO: FreezeFirst/Second
 
-
-
-		internal YataGrid _diff1, _diff2;
 
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
@@ -3043,25 +3032,16 @@ namespace yata
 				// TODO: option to invert the search direction (or at least back to
 				//       previous find)
 
-//				Table.Select();
+				YataGrid table; // the other table - can be null.
 
-				YataGrid thisTable, thatTable;
-				if (Table == _diff1)
-				{
-					thisTable = _diff1;
-					thatTable = _diff2;
-				}
-				else //if (Table == _diff2)
-				{
-					thisTable = _diff2;
-					thatTable = _diff1;
-				}
+				if (Table == _diff1) table = _diff2;
+				else                 table = _diff1;
 
-				Cell sel = thisTable.getSelectedCell();
-				thisTable.ClearSelects();
+				Cell sel = Table.getSelectedCell();
+				Table.ClearSelects();
 
-				if (thatTable != null)
-					thatTable.ClearSelects();
+				if (table != null)
+					table.ClearSelects();
 
 				int row, r,c;
 				if (sel != null)
@@ -3077,7 +3057,7 @@ namespace yata
 
 				bool start = true;
 
-				for (r = row; r != thisTable.RowCount; ++r)
+				for (r = row; r != Table.RowCount; ++r)
 				{
 					if (start)
 					{
@@ -3087,11 +3067,11 @@ namespace yata
 						else
 							++c;
 
-						if (c == thisTable.ColCount)		// if starting on the last cell of a row
+						if (c == Table.ColCount)		// if starting on the last cell of a row
 						{
 							c = 0;
 
-							if (r < thisTable.RowCount - 1)	// jump to the first cell of the next row
+							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
 							{
 								++r;
 							}
@@ -3102,21 +3082,21 @@ namespace yata
 					else
 						c = 0;
 
-					for (; c != thisTable.ColCount; ++c)
+					for (; c != Table.ColCount; ++c)
 					{
-						if (c >= thisTable.FrozenCount && (sel = thisTable[r,c]).diff)
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
 						{
 							sel.selected = true;
-							thisTable.EnsureDisplayed(sel);
-							thisTable.Invalidate();
+							Table.EnsureDisplayed(sel);
+							Table.Invalidate();
 
-							if (thatTable != null
-								&& sel.x < thatTable.ColCount
-								&& sel.y < thatTable.RowCount)
+							if (table != null
+								&& sel.x < table.ColCount
+								&& sel.y < table.RowCount)
 							{
-								thatTable[sel.y, sel.x].selected = true;
-								thatTable.EnsureDisplayed(thatTable[sel.y, sel.x]);
-								thatTable.Invalidate();
+								table[sel.y, sel.x].selected = true;
+								table.EnsureDisplayed(table[sel.y, sel.x]);
+								table.Invalidate();
 							}
 							return;
 						}
@@ -3126,21 +3106,21 @@ namespace yata
 				// TODO: tighten exact start/end-cells
 				for (r = 0; r != row + 1; ++r) // quick and dirty wrap ->
 				{
-					for (c = 0; c != thisTable.ColCount; ++c)
+					for (c = 0; c != Table.ColCount; ++c)
 					{
-						if (c >= thisTable.FrozenCount && (sel = thisTable[r,c]).diff)
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
 						{
 							sel.selected = true;
-							thisTable.EnsureDisplayed(sel);
-							thisTable.Invalidate();
+							Table.EnsureDisplayed(sel);
+							Table.Invalidate();
 
-							if (thatTable != null
-								&& sel.x < thatTable.ColCount
-								&& sel.y < thatTable.RowCount)
+							if (table != null
+								&& sel.x < table.ColCount
+								&& sel.y < table.RowCount)
 							{
-								thatTable[sel.y, sel.x].selected = true;
-								thatTable.EnsureDisplayed(thatTable[sel.y, sel.x]);
-								thatTable.Invalidate();
+								table[sel.y, sel.x].selected = true;
+								table.EnsureDisplayed(table[sel.y, sel.x]);
+								table.Invalidate();
 							}
 							return;
 						}

@@ -60,7 +60,8 @@ namespace yata
 		ToolStripMenuItem it_freeze2;
 		ToolStripMenuItem it_ppOnOff;
 		ToolStripMenuItem it_ppTopBot;
-		ToolStripMenuItem it_ClearUndoRedo;
+		ToolStripMenuItem it_ExternDiff;
+		ToolStripMenuItem it_ClearUr;
 
 		ToolStripMenuItem it_MenuFont;
 		ToolStripMenuItem it_Font;
@@ -113,6 +114,7 @@ namespace yata
 		ToolStripSeparator separator_22;
 		ToolStripSeparator separator_23;
 		ToolStripSeparator separator_24;
+		ToolStripSeparator separator_25;
 
 		ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -131,22 +133,22 @@ namespace yata
 		ToolStripMenuItem it_tabCloseAll;
 		ToolStripMenuItem it_tabCloseAllOthers;
 		ToolStripMenuItem it_tabReload;
+		ToolStripMenuItem it_tabDiff1;
+		ToolStripMenuItem it_tabDiff2;
+		ToolStripMenuItem it_tabDiffReset;
+		ToolStripMenuItem it_tabDiffJustify;
 
 		ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
+		ToolStripMenuItem it_cellMerge;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statusbar_label_Cords;
 		ToolStripStatusLabel statusbar_label_Info;
 
 		Panel panel_ColorFill;
-		ToolStripMenuItem it_tabDiff1;
-		ToolStripMenuItem it_tabDiff2;
-		ToolStripMenuItem it_tabDiffReset;
-		ToolStripMenuItem it_tabDiffJustify;
-		ToolStripMenuItem it_cellMerge;
 
 
 		/// <summary>
@@ -232,8 +234,10 @@ namespace yata
 			this.separator_17 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ppOnOff = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ppTopBot = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_25 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_ExternDiff = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_21 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_ClearUndoRedo = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClearUr = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
@@ -310,7 +314,7 @@ namespace yata
 			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 214);
+			this.tabMenu.Size = new System.Drawing.Size(139, 192);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -750,8 +754,10 @@ namespace yata
 			this.separator_17,
 			this.it_ppOnOff,
 			this.it_ppTopBot,
+			this.separator_25,
+			this.it_ExternDiff,
 			this.separator_21,
-			this.it_ClearUndoRedo});
+			this.it_ClearUr});
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
 			this.it_Menu2daOps.Size = new System.Drawing.Size(66, 20);
 			this.it_Menu2daOps.Text = "2&da Ops";
@@ -844,18 +850,32 @@ namespace yata
 			this.it_ppTopBot.Text = "PropertyPanel top/&bottom";
 			this.it_ppTopBot.Click += new System.EventHandler(this.opsclick_PropertyPanelTopBot);
 			// 
+			// separator_25
+			// 
+			this.separator_25.Name = "separator_25";
+			this.separator_25.Size = new System.Drawing.Size(238, 6);
+			// 
+			// it_ExternDiff
+			// 
+			this.it_ExternDiff.Enabled = false;
+			this.it_ExternDiff.Name = "it_ExternDiff";
+			this.it_ExternDiff.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+			this.it_ExternDiff.Size = new System.Drawing.Size(241, 22);
+			this.it_ExternDiff.Text = "External diff/&merger";
+			this.it_ExternDiff.Click += new System.EventHandler(this.opsclick_ExternalDiff);
+			// 
 			// separator_21
 			// 
 			this.separator_21.Name = "separator_21";
 			this.separator_21.Size = new System.Drawing.Size(238, 6);
 			// 
-			// it_ClearUndoRedo
+			// it_ClearUr
 			// 
-			this.it_ClearUndoRedo.Enabled = false;
-			this.it_ClearUndoRedo.Name = "it_ClearUndoRedo";
-			this.it_ClearUndoRedo.Size = new System.Drawing.Size(241, 22);
-			this.it_ClearUndoRedo.Text = "&Clear undo/redo";
-			this.it_ClearUndoRedo.Click += new System.EventHandler(this.editclick_ClearUndoRedo);
+			this.it_ClearUr.Enabled = false;
+			this.it_ClearUr.Name = "it_ClearUr";
+			this.it_ClearUr.Size = new System.Drawing.Size(241, 22);
+			this.it_ClearUr.Text = "&Clear undo/redo";
+			this.it_ClearUr.Click += new System.EventHandler(this.opsclick_ClearUr);
 			// 
 			// it_MenuFont
 			// 
