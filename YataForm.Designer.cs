@@ -712,6 +712,7 @@ namespace yata
 			this.it_MenuClipboard.Name = "it_MenuClipboard";
 			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
 			this.it_MenuClipboard.Text = "&Clipboard";
+			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_CopyToClipboard
 			// 
@@ -1258,7 +1259,7 @@ namespace yata
 			this.it_cellMergeRo});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 148);
+			this.cellMenu.Size = new System.Drawing.Size(165, 126);
 			// 
 			// it_cellCopy
 			// 
