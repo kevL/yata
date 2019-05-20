@@ -433,15 +433,15 @@ namespace yata
 
 
 		#region Methods (static)
-		static FontStyle getStyleAccented(FontFamily ff)
+		static FontStyle getStyleStandard(FontFamily ff)
 		{
 			FontStyle style;
-			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
-			if (!ff.IsStyleAvailable(style = FontStyle.Underline))
+			if (!ff.IsStyleAvailable(style = FontStyle.Regular))
 			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
-			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
+			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle)))
 			{
-				if (ff.IsStyleAvailable(styleTest))
+				if (ff.IsStyleAvailable(styleTest)) // determine first available style (any) of Family ->
 				{
 					style = styleTest;
 					break;
@@ -450,15 +450,15 @@ namespace yata
 			return style;
 		}
 
-		static FontStyle getStyleStandard(FontFamily ff)
+		static FontStyle getStyleAccented(FontFamily ff)
 		{
 			FontStyle style;
-			if (!ff.IsStyleAvailable(style = FontStyle.Regular))
-			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
 			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
-			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle))) // determine first available style of Family ->
+			if (!ff.IsStyleAvailable(style = FontStyle.Underline))
+			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
+			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle)))
 			{
-				if (ff.IsStyleAvailable(styleTest))
+				if (ff.IsStyleAvailable(styleTest)) // determine first available style (any) of Family ->
 				{
 					style = styleTest;
 					break;
@@ -781,6 +781,14 @@ namespace yata
 								  rect,
 								  color,
 								  YataGraphics.flags);
+
+			if (y == 1 && Tabs.Focused)
+			{
+				y = rect.Y + rect.Height - 5;
+				graphics.DrawLine(Pens.LightLine,
+								  rect.X,     y,
+								  rect.X + w, y);
+			}
 		}
 
 		/// <summary>

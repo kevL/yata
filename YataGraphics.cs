@@ -79,9 +79,9 @@ namespace yata
 
 	static class Pens
 	{
-		internal static readonly Pen DarkLine          = new Pen(SystemColors.ControlDark);
-		internal static readonly Pen Black             = new Pen(Color.Black);
-		internal static readonly Pen LabelSortedBorder = new Pen(Color.Firebrick);
+		internal static readonly Pen DarkLine  = SystemPens.ControlDark;
+		internal static readonly Pen LightLine = SystemPens.ControlLightLight;
+		internal static readonly Pen Black     = System.Drawing.Pens.Black;
 	}
 
 	static class Brushes
