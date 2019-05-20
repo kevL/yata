@@ -144,8 +144,8 @@ namespace yata
 		Panel panel_ColorFill;
 		ToolStripMenuItem it_tabDiff1;
 		ToolStripMenuItem it_tabDiff2;
-		ToolStripMenuItem it_tabDiffClear;
-		ToolStripMenuItem it_tabDiffAlign;
+		ToolStripMenuItem it_tabDiffReset;
+		ToolStripMenuItem it_tabDiffJustify;
 		ToolStripMenuItem it_cellMerge;
 
 
@@ -179,8 +179,8 @@ namespace yata
 			this.separator_23 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabDiff1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabDiff2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiffClear = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiffAlign = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiffReset = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiffJustify = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -306,11 +306,11 @@ namespace yata
 			this.separator_23,
 			this.it_tabDiff1,
 			this.it_tabDiff2,
-			this.it_tabDiffClear,
-			this.it_tabDiffAlign});
+			this.it_tabDiffReset,
+			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 192);
+			this.tabMenu.Size = new System.Drawing.Size(139, 214);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -369,21 +369,21 @@ namespace yata
 			this.it_tabDiff2.Text = "Select diff2";
 			this.it_tabDiff2.Click += new System.EventHandler(this.tabclick_Diff2);
 			// 
-			// it_tabDiffClear
+			// it_tabDiffReset
 			// 
-			this.it_tabDiffClear.Enabled = false;
-			this.it_tabDiffClear.Name = "it_tabDiffClear";
-			this.it_tabDiffClear.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiffClear.Text = "Clear diffs";
-			this.it_tabDiffClear.Click += new System.EventHandler(this.tabclick_DiffClear);
+			this.it_tabDiffReset.Enabled = false;
+			this.it_tabDiffReset.Name = "it_tabDiffReset";
+			this.it_tabDiffReset.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiffReset.Text = "Reset diffs";
+			this.it_tabDiffReset.Click += new System.EventHandler(this.tabclick_DiffReset);
 			// 
-			// it_tabDiffAlign
+			// it_tabDiffJustify
 			// 
-			this.it_tabDiffAlign.Enabled = false;
-			this.it_tabDiffAlign.Name = "it_tabDiffAlign";
-			this.it_tabDiffAlign.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiffAlign.Text = "Align tables";
-			this.it_tabDiffAlign.Click += new System.EventHandler(this.tabclick_DiffAlign);
+			this.it_tabDiffJustify.Enabled = false;
+			this.it_tabDiffJustify.Name = "it_tabDiffJustify";
+			this.it_tabDiffJustify.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiffJustify.Text = "Justify tables";
+			this.it_tabDiffJustify.Click += new System.EventHandler(this.tabclick_DiffJustify);
 			// 
 			// menubar
 			// 
@@ -1235,43 +1235,43 @@ namespace yata
 			this.it_cellMerge});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(128, 126);
+			this.cellMenu.Size = new System.Drawing.Size(104, 104);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(127, 22);
+			this.it_cellCopy.Size = new System.Drawing.Size(103, 22);
 			this.it_cellCopy.Text = "copy cell";
 			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(127, 22);
+			this.it_cellPaste.Size = new System.Drawing.Size(103, 22);
 			this.it_cellPaste.Text = "paste cell";
 			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(124, 6);
+			this.separator_16.Size = new System.Drawing.Size(100, 6);
 			// 
 			// it_cellStars
 			// 
 			this.it_cellStars.Name = "it_cellStars";
-			this.it_cellStars.Size = new System.Drawing.Size(127, 22);
+			this.it_cellStars.Size = new System.Drawing.Size(103, 22);
 			this.it_cellStars.Text = "****";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
 			// 
 			// separator_24
 			// 
 			this.separator_24.Name = "separator_24";
-			this.separator_24.Size = new System.Drawing.Size(124, 6);
+			this.separator_24.Size = new System.Drawing.Size(100, 6);
 			// 
 			// it_cellMerge
 			// 
 			this.it_cellMerge.Name = "it_cellMerge";
-			this.it_cellMerge.Size = new System.Drawing.Size(127, 22);
+			this.it_cellMerge.Size = new System.Drawing.Size(103, 22);
 			this.it_cellMerge.Text = "merge";
 			this.it_cellMerge.Click += new System.EventHandler(this.cellclick_Merge);
 			// 

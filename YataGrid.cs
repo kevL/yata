@@ -302,12 +302,12 @@ namespace yata
 
 					Select();
 
-					// NOTE: An interesting effect occurs if this is the wider table.
-					// When [End] is keyed and the other table fires this funct it
+					// NOTE: An interesting effect occurs if this is the longer table.
+					// When [Ctrl+End] is keyed and the other table fires this funct it
 					// causes this table to bounce back to the other table's Max value.
 					// It's a convenient stop-mechanism to indicate that the other
-					// table is not as wide as this one; fortunately a second key
-					// [End] allows this table to continue to its final destination.
+					// table is not as long as this one; fortunately a second key
+					// [Ctrl+End] allows this table to continue to its final destination.
 				}
 			}
 		}
@@ -348,12 +348,12 @@ namespace yata
 
 					Select();
 
-					// NOTE: An interesting effect occurs if this is the longer table.
-					// When [Ctrl+End] is keyed and the other table fires this funct it
+					// NOTE: An interesting effect occurs if this is the wider table.
+					// When [End] is keyed and the other table fires this funct it
 					// causes this table to bounce back to the other table's Max value.
 					// It's a convenient stop-mechanism to indicate that the other
-					// table is not as long as this one; fortunately a second key
-					// [Ctrl+End] allows this table to continue to its final destination.
+					// table is not as wide as this one; fortunately a second key
+					// [End] allows this table to continue to its final destination.
 				}
 			}
 		}
@@ -3061,7 +3061,7 @@ namespace yata
 		/// <param name="col">the col-id to sort by</param>
 		void ColSort(int col)
 		{
-			_f.tabclick_DiffClear(null, EventArgs.Empty);
+			_f.tabclick_DiffReset(null, EventArgs.Empty);
 
 			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
 			_ur.ResetSaved(true);

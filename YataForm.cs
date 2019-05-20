@@ -927,6 +927,10 @@ namespace yata
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
+				if      (Table == _diff1) _diff1 = null;
+				else if (Table == _diff2) _diff2 = null;
+
+
 				int result = Table.Load2da();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
@@ -1323,6 +1327,7 @@ namespace yata
 						field = Constants.Stars;
 
 					row[c].text = field;
+					row[c].diff = false;
 				}
 				row._brush = Brushes.Created;
 
@@ -1413,6 +1418,7 @@ namespace yata
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
 					Table[_r,c].text = Constants.Stars;
+					Table[_r,c].diff = false;
 				}
 				Table.Rows[_r]._brush = Brushes.Created;
 
@@ -2294,6 +2300,9 @@ namespace yata
 
 					if (changed)
 					{
+						if      (Table == _diff1) _diff1 = null;
+						else if (Table == _diff2) _diff2 = null;
+
 						Table.colRewidth(0, 0, Table.RowCount - 1);
 						Table.UpdateFrozenControls(0);
 
@@ -2714,9 +2723,19 @@ namespace yata
 				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
 				// NOTE: 'it_tabDiff1' is always enabled.
-				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
-				it_tabDiffClear.Enabled = (_diff1 != null || _diff2 != null); // (_diff1 == Table || _diff2 == Table) if you want to clear the current page's Table only.
-				it_tabDiffAlign.Enabled = (_diff1 != null && _diff2 != null);
+				it_tabDiff2      .Enabled = (_diff1 != null && _diff1 != Table);
+				it_tabDiffReset  .Enabled = (_diff1 != null || _diff2 != null);
+				it_tabDiffJustify.Enabled = (_diff1 != null && _diff2 != null);
+
+				if (_diff1 != null)
+					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
+				else
+					it_tabDiff1.Text = "Select diff1";
+
+				if (_diff2 != null)
+					it_tabDiff2.Text = "diff2 - " + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
+				else
+					it_tabDiff2.Text = "Select diff2";
 			}
 			else
 				e.Cancel = true;
@@ -2791,7 +2810,7 @@ namespace yata
 
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
-			ClearDiffs();
+			tabclick_DiffReset(null, EventArgs.Empty);
 
 			_diff1 = Table;
 			_diff2 = null;
@@ -2801,18 +2820,35 @@ namespace yata
 		{
 			_diff2 = Table;
 			doDiff();
-			tabclick_DiffAlign(null, EventArgs.Empty);
+			tabclick_DiffJustify(null, EventArgs.Empty);
 		}
 
-		internal void tabclick_DiffClear(object sender, EventArgs e)
+		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
-			ClearDiffs();
+			if (_diff1 != null)
+			{
+				for (int r = 0; r != _diff1.RowCount; ++r)
+				for (int c = 0; c != _diff1.ColCount; ++c)
+				{
+					_diff1[r,c].diff = false;
+				}
+				_diff1.Invalidate();
+				_diff1 = null;
+			}
 
-			_diff1 =
-			_diff2 = null;
+			if (_diff2 != null)
+			{
+				for (int r = 0; r != _diff2.RowCount; ++r)
+				for (int c = 0; c != _diff2.ColCount; ++c)
+				{
+					_diff2[r,c].diff = false;
+				}
+				_diff2.Invalidate();
+				_diff1 = null;
+			}
 		}
 
-		void tabclick_DiffAlign(object sender, EventArgs e)
+		void tabclick_DiffJustify(object sender, EventArgs e)
 		{
 			// set scrollbar values (vert/hori) of the current grid to those of the other grid
 
@@ -2990,31 +3026,6 @@ namespace yata
 								 this);
 			ib.SetLabelColor(color);
 			ib.Show();
-		}
-
-		void ClearDiffs()
-		{
-			if (_diff1 != null)
-			{
-				for (int r = 0; r != _diff1.RowCount; ++r)
-				for (int c = 0; c != _diff1.ColCount; ++c)
-				{
-					_diff1[r,c].diff = false;
-				}
-				_diff1.Invalidate();
-				_diff1 = null;
-			}
-
-			if (_diff2 != null)
-			{
-				for (int r = 0; r != _diff2.RowCount; ++r)
-				for (int c = 0; c != _diff2.ColCount; ++c)
-				{
-					_diff2[r,c].diff = false;
-				}
-				_diff2.Invalidate();
-				_diff1 = null;
-			}
 		}
 		#endregion Tab menu
 
