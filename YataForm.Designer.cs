@@ -143,13 +143,13 @@ namespace yata
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
 		ToolStripMenuItem it_cellMergeCe;
+		ToolStripMenuItem it_cellMergeRo;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statusbar_label_Cords;
 		ToolStripStatusLabel statusbar_label_Info;
 
 		Panel panel_ColorFill;
-		private System.Windows.Forms.ToolStripMenuItem it_cellMergeRo;
 
 
 		/// <summary>
@@ -224,11 +224,11 @@ namespace yata
 			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_ColorRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ColorRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_12 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -766,15 +766,6 @@ namespace yata
 			this.it_Menu2daOps.Text = "2&da Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
-			// it_OrderRows
-			// 
-			this.it_OrderRows.Enabled = false;
-			this.it_OrderRows.Name = "it_OrderRows";
-			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-			this.it_OrderRows.Size = new System.Drawing.Size(241, 22);
-			this.it_OrderRows.Text = "Or&der row ids";
-			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Reorder);
-			// 
 			// it_CheckRows
 			// 
 			this.it_CheckRows.Enabled = false;
@@ -784,19 +775,19 @@ namespace yata
 			this.it_CheckRows.Text = "&Test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
 			// 
+			// it_OrderRows
+			// 
+			this.it_OrderRows.Enabled = false;
+			this.it_OrderRows.Name = "it_OrderRows";
+			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+			this.it_OrderRows.Size = new System.Drawing.Size(241, 22);
+			this.it_OrderRows.Text = "Or&der row ids";
+			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Reorder);
+			// 
 			// separator_11
 			// 
 			this.separator_11.Name = "separator_11";
 			this.separator_11.Size = new System.Drawing.Size(238, 6);
-			// 
-			// it_ColorRows
-			// 
-			this.it_ColorRows.Enabled = false;
-			this.it_ColorRows.Name = "it_ColorRows";
-			this.it_ColorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-			this.it_ColorRows.Size = new System.Drawing.Size(241, 22);
-			this.it_ColorRows.Text = "Reco&lor rows";
-			this.it_ColorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// it_AutoCols
 			// 
@@ -806,6 +797,15 @@ namespace yata
 			this.it_AutoCols.Size = new System.Drawing.Size(241, 22);
 			this.it_AutoCols.Text = "Autos&ize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
+			// 
+			// it_ColorRows
+			// 
+			this.it_ColorRows.Enabled = false;
+			this.it_ColorRows.Name = "it_ColorRows";
+			this.it_ColorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+			this.it_ColorRows.Size = new System.Drawing.Size(241, 22);
+			this.it_ColorRows.Text = "Reco&lor rows";
+			this.it_ColorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
 			// separator_12
 			// 
