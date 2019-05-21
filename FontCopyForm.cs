@@ -8,6 +8,7 @@ namespace yata
 		:
 			Form
 	{
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -48,12 +49,18 @@ namespace yata
 						+ Environment.NewLine + Environment.NewLine
 						+ text;
 		}
+		#endregion cTor
 
+
+		#region Methods
 		internal void SetText(string text)
 		{
 			textBox1.Text = text;
 		}
+		#endregion Methods
 
+
+		#region Events
 		void Button2Click(object sender, EventArgs e)
 		{
 			Close();
@@ -64,5 +71,6 @@ namespace yata
 			Clipboard.SetText(textBox1.Text);
 			Close();
 		}
+		#endregion Events
 	}
 }

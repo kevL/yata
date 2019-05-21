@@ -45,8 +45,7 @@ namespace yata
 
 			tb_Pfe.Text = _grid.Fullpath;
 
-			ClientSize = new Size(TextRenderer.MeasureText(tb_Pfe.Text, Font).Width + 15,
-								  ClientSize.Height);
+			Width = TextRenderer.MeasureText(tb_Pfe.Text, Font).Width + 15;
 
 			string text = String.Empty;
 			switch (_fwdType = fwdType)

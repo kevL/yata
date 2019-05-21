@@ -8,12 +8,15 @@ namespace yata
 		:
 			Form
 	{
+		#region Fields (static)
 		static int _x = -1;
 		static int _y = -1;
 		static int _w = -1;
 		static int _h = -1;
+		#endregion Fields (static)
 
 
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -39,8 +42,10 @@ namespace yata
 
 			click_Get(null, EventArgs.Empty);
 		}
+		#endregion cTor
 
 
+		#region Events
 		void click_Done(object sender, EventArgs e)
 		{
 			Close();
@@ -55,7 +60,7 @@ namespace yata
 
 		void click_Set(object sender, EventArgs e)
 		{
-			ClipboardHelper.SetText(rtb_Text.Text.Replace("\n", Environment.NewLine).Trim());
+			ClipboardAssistant.SetText(rtb_Text.Text.Replace("\n", Environment.NewLine).Trim());
 		}
 
 
@@ -66,13 +71,15 @@ namespace yata
 			_w = Width;
 			_h = Height;
 		}
+		#endregion Events
 	}
 
 
+	#region Clipboard
 	/// <summary>
 	/// https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879
 	/// </summary>
-	static class ClipboardHelper
+	static class ClipboardAssistant
 	{
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		static extern IntPtr GetOpenClipboardWindow();
@@ -83,10 +90,7 @@ namespace yata
 		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
 		static extern bool CloseClipboard();
 
-//		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-//		static extern bool ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext);
-
-		public static void SetText(string text)
+		internal static void SetText(string text)
 		{
 			if (GetOpenClipboardWindow() != IntPtr.Zero)
 			{
@@ -100,4 +104,5 @@ namespace yata
 				Clipboard.Clear();
 		}
 	}
+	#endregion Clipboard
 }

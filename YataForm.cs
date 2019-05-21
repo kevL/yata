@@ -2114,7 +2114,7 @@ namespace yata
 				if (i != _copy.Count - 1)
 					clip += Environment.NewLine;
 			}
-			ClipboardHelper.SetText(clip);
+			ClipboardAssistant.SetText(clip);
 		}
 
 		/// <summary>
@@ -2168,7 +2168,7 @@ namespace yata
 			if (!Table.Readonly)
 			{
 				var f = new RowCreatorForm(this);
-				if (f.ShowDialog() == DialogResult.OK)
+				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					ShowColorPanel();
 					DrawingControl.SuspendDrawing(Table);
@@ -2578,8 +2578,9 @@ namespace yata
 			var f = Application.OpenForms["FontPickerForm"];
 			if (f == null)
 			{
+				it_Font.Checked = true;
 				f = new FontPickerForm(this);
-				f.Show();
+				f.Show(this);
 			}
 			else
 				f.BringToFront();
@@ -2611,6 +2612,11 @@ namespace yata
 		{
 			if (!Font.Equals(FontDefault))
 				doFont(FontDefault);
+		}
+
+		internal void DecheckFontIt()
+		{
+			it_Font.Checked = false;
 		}
 
 		internal void ToggleFontDefaultEnabled()

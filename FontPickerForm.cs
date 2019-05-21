@@ -10,6 +10,7 @@ namespace yata
 		:
 			Form
 	{
+		#region Fields (static)
 		/* FontStyle
 		Regular   0 - Normal text.
 		Bold      1 - Bold text.
@@ -21,23 +22,29 @@ namespace yata
 							  + "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
-		List<FontFamily> _ffs   = new List<FontFamily>();
-		List<Font>       _fonts = new List<Font>(); // fonts will be disposed below
-
-		YataForm _f;
-		Font _font;
-		bool
-			_load,
-			_dirty, // ie. displayed font and its characteristics have changed
-			_applied,
-			_bypassStyleChanged;
-
 		static int _x = -1;
 		static int _y = -1;
 		static int _w = -1;
 		static int _h = -1;
+		#endregion Fields (static)
 
 
+		#region Fields
+		readonly List<FontFamily> _ffs   = new List<FontFamily>();
+		readonly List<Font>       _fonts = new List<Font>(); // fonts will be disposed below
+
+		readonly YataForm _f;
+		readonly Font _font;
+		readonly bool _load;
+
+		bool
+			_dirty, // ie. displayed font and its characteristics have changed
+			_applied,
+			_bypassStyleChanged;
+		#endregion Fields
+
+
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -117,8 +124,10 @@ namespace yata
 
 			_f.ToggleFontDefaultEnabled();
 		}
+		#endregion cTor
 
 
+		#region Events
 		/// <summary>
 		/// Handles the load-event. This ought ensure that the FontPicker
 		/// appears on top. If a user has a lot of fonts installed on their
@@ -133,25 +142,28 @@ namespace yata
 			TopMost = false;
 		}
 
-
 		/// <summary>
-		/// Gets the first available style in a given FontFamily.
+		/// Handles the form-closing event.
+		/// NOTE: This is not the same as Cancel/Revert - this will not revert
+		/// the table-font if a different font has been Applied. Rather it
+		/// closes the FontPicker and leaves things as they are.
 		/// </summary>
-		/// <param name="ff">a FontFamily</param>
-		/// <returns>a nullable FontStyle</returns>
-		FontStyle? getFirstStyle(FontFamily ff)
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void OnClosing(object sender, FormClosingEventArgs e)
 		{
-			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
-			{
-				if (ff.IsStyleAvailable(style)
-					&& style != FontStyle.Underline
-					&& style != FontStyle.Strikeout)
-				{
-					return style;
-				}
-			}
-			return null;
+			_f.DecheckFontIt();
+			_f.ToggleFontDefaultEnabled();
+
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
+
+			if (lbl_Example.Font != null)
+				lbl_Example.Font.Dispose();
 		}
+		#endregion Events
 
 
 		#region Button handlers
@@ -187,27 +199,6 @@ namespace yata
 			lbl_Example.Font = null;
 
 			Close();
-		}
-
-		/// <summary>
-		/// Handles the form-closing event.
-		/// NOTE: This is not the same as Cancel/Revert - this will not revert
-		/// the table-font if a different font has been Applied. Rather it
-		/// closes the FontPicker and leaves things as they are.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void OnClosing(object sender, FormClosingEventArgs e)
-		{
-			_f.ToggleFontDefaultEnabled();
-
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
-
-			if (lbl_Example.Font != null)
-				lbl_Example.Font.Dispose();
 		}
 		#endregion Button handlers
 
@@ -343,6 +334,26 @@ namespace yata
 		#endregion FontSize
 
 
+		#region Methods
+		/// <summary>
+		/// Gets the first available style in a given FontFamily.
+		/// </summary>
+		/// <param name="ff">a FontFamily</param>
+		/// <returns>a nullable FontStyle</returns>
+		FontStyle? getFirstStyle(FontFamily ff)
+		{
+			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
+			{
+				if (ff.IsStyleAvailable(style)
+					&& style != FontStyle.Underline
+					&& style != FontStyle.Strikeout)
+				{
+					return style;
+				}
+			}
+			return null;
+		}
+
 		void SetSampleFont()
 		{
 			if (list_Font.SelectedIndex != -1)
@@ -375,5 +386,6 @@ namespace yata
 			foreach (var font in _fonts)
 				font.Dispose();
 		}
+		#endregion Methods
 	}
 }

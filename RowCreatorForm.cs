@@ -12,7 +12,7 @@ namespace yata
 		static bool _pad    = true;
 		static bool _length = true;
 
-		static Random _rand = new Random();
+		readonly static Random _rand = new Random();
 		#endregion Fields (static)
 
 

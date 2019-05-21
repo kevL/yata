@@ -15,6 +15,9 @@ namespace yata
 	{
 		#region Fields (static)
 		internal static DifferDialog that; // be careful w/ 'that'
+
+		static int _x = -1;
+		static int _y = -1;
 		#endregion Fields (static)
 
 
@@ -102,7 +105,12 @@ namespace yata
 			lbl_Info.Text = label;
 			rtb_Info.Text = copyable;
 
-			Location = new Point(f.Location.X + 50, f.Location.Y + 50);
+
+			if (_x == -1) _x = _f.Left + 50;
+			if (_y == -1) _y = _f.Top  + 50;
+
+			Left = _x;
+			Top  = _y;
 		}
 
 		int GetHeight(string text, Size size)
@@ -176,6 +184,9 @@ namespace yata
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			_x = Left;
+			_y = Top;
+
 			that = null;
 
 			this.Dispose(true);
