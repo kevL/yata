@@ -496,7 +496,7 @@ namespace yata
 			if (Table != null && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
-				Table.Refresh();
+				Table.Invalidate();
 			}
 		}
 
@@ -514,7 +514,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Refresh();
+					Table.Invalidate();
 				}
 
 				int saveOthers = 0;
@@ -1546,12 +1546,12 @@ namespace yata
 			it_Searchnext     .Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 			it_GotoLoadchanged.Enabled = false;
 
-			if (Table != null && Table.RowCount != 0)
+			if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
 			{
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Refresh();
+					Table.Invalidate();
 				}
 
 				foreach (var row in Table.Rows)
@@ -1673,7 +1673,7 @@ namespace yata
 			if (Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
-				Table.Refresh();
+				Table.Invalidate();
 			}
 
 			// TODO: Allow frozen col(s) to be searched through also.
@@ -1864,7 +1864,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Refresh();
+					Table.Invalidate();
 				}
 
 				// TODO: Allow frozen col(s) to be searched through also.
@@ -2234,7 +2234,7 @@ namespace yata
 			if (valid)
 			{
 				Table._editor.Visible = false;
-				Table.Refresh();
+				Table.Invalidate();
 			}
 		}
 
@@ -2717,7 +2717,7 @@ namespace yata
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
 			Table._editor.Visible = false;
-			Table.Refresh();
+			Table.Invalidate();
 
 			bool found = false;
 
