@@ -746,11 +746,11 @@ namespace yata
 			// 
 			this.it_Menu2daOps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_Menu2daOps.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_OrderRows,
 			this.it_CheckRows,
+			this.it_OrderRows,
 			this.separator_11,
-			this.it_ColorRows,
 			this.it_AutoCols,
+			this.it_ColorRows,
 			this.separator_12,
 			this.it_freeze1,
 			this.it_freeze2,

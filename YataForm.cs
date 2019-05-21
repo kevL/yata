@@ -2238,51 +2238,6 @@ namespace yata
 			}
 		}
 
-		void opsclick_Reorder(object sender, EventArgs e)
-		{
-			if (Table != null && Table.RowCount != 0)
-			{
-				if (!Table.Readonly)
-				{
-					bool changed = false;
-
-					string val;
-					int result;
-
-					for (int r = 0; r != Table.RowCount; ++r)
-					{
-						if (String.IsNullOrEmpty(val = Table[r,0].text)
-							|| !Int32.TryParse(val, out result)
-							|| result != r)
-						{
-							Table[r,0].text = r.ToString();
-							changed = true;
-						}
-					}
-
-					if (changed)
-					{
-						Table.Changed = true;
-						Table._ur.ResetSaved(true);
-					}
-
-					if (changed)
-					{
-						if      (Table == _diff1) _diff1 = null;
-						else if (Table == _diff2) _diff2 = null;
-
-						Table.colRewidth(0, 0, Table.RowCount - 1);
-						Table.UpdateFrozenControls(0);
-
-						Table.InitScroll();
-						Table.Refresh();
-					}
-				}
-				else
-					ReadonlyError();
-			}
-		}
-
 		void opsclick_CheckRowOrder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -2369,6 +2324,69 @@ namespace yata
 			}
 		}
 
+		void opsclick_Reorder(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0)
+			{
+				if (!Table.Readonly)
+				{
+					bool changed = false;
+
+					string val;
+					int result;
+
+					for (int r = 0; r != Table.RowCount; ++r)
+					{
+						if (String.IsNullOrEmpty(val = Table[r,0].text)
+							|| !Int32.TryParse(val, out result)
+							|| result != r)
+						{
+							Table[r,0].text = r.ToString();
+							changed = true;
+						}
+					}
+
+					if (changed)
+					{
+						Table.Changed = true;
+						Table._ur.ResetSaved(true);
+					}
+
+					if (changed)
+					{
+						if      (Table == _diff1) _diff1 = null;
+						else if (Table == _diff2) _diff2 = null;
+
+						Table.colRewidth(0, 0, Table.RowCount - 1);
+						Table.UpdateFrozenControls(0);
+
+						Table.InitScroll();
+						Table.Refresh();
+					}
+				}
+				else
+					ReadonlyError();
+			}
+		}
+
+
+		internal void opsclick_AutosizeCols(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				ShowColorPanel();
+				DrawingControl.SuspendDrawing(Table);
+
+				foreach (var c in Table.Cols)
+					c.UserSized = false;
+
+				Table.Calibrate(0, Table.RowCount - 1); // autosize
+
+				ShowColorPanel(false);
+				DrawingControl.ResumeDrawing(Table);
+			}
+		}
+
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -2387,23 +2405,6 @@ namespace yata
 						row[c].loadchanged = false;
 				}
 				Table.Refresh();
-			}
-		}
-
-		internal void opsclick_AutosizeCols(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				ShowColorPanel();
-				DrawingControl.SuspendDrawing(Table);
-
-				foreach (var c in Table.Cols)
-					c.UserSized = false;
-
-				Table.Calibrate(0, Table.RowCount - 1); // autosize
-
-				ShowColorPanel(false);
-				DrawingControl.ResumeDrawing(Table);
 			}
 		}
 
@@ -2510,6 +2511,7 @@ namespace yata
 				Table._propanel.DockBot = !Table._propanel.DockBot;
 		}
 
+
 		/// <summary>
 		/// Starts an external diff/merger program with the two diffed files
 		/// opened. Usually WinMerge.
@@ -2536,6 +2538,12 @@ namespace yata
 			}
 		}
 
+
+		/// <summary>
+		/// Clears the Undo/Redo stacks.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_ClearUr(object sender, EventArgs e)
 		{
 			if (Table != null)
