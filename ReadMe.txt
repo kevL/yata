@@ -1,9 +1,10 @@
 Yata - yet another 2da editor for Neverwinter Nights 2
 
 This app does not write to the Registry, nor does it write any files that you
-don't tell it to. It can write 2da files.
+don't tell it to. It can write 2da files. Various settings for Yata can be
+changed in the Settings.Cfg textfile.
 
-2019 may 20
+2019 may 21
 kevL's
 ver 3.0.0.0
 
@@ -30,7 +31,7 @@ Edit
 - Find next : F3
 
 - Goto             : Ctrl+g (focuses the Goto box)
-- Goto loadchanged : Ctrl+l (See note on Load below)
+- Goto loadchanged : Ctrl+n (see Appendix A: note on Load)
 
 - Copy cell   : Ctrl+c (copies a single cell if only 1 cell is selected)
 - Paste cell  : Ctrl+v (pastes a single cell if only 1 cell is selected)
@@ -44,13 +45,14 @@ Edit
 Goto box (type a row ID and press Enter)
 
 
-Search box (type a string to search for)
+Search box (type a string to search for and press Enter or F3. Note that Enter
+            keeps the searchbox focused while F3 switches focus to the table)
 Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) (exports the current copy-list to the clipboard)
-- Import copied row(s) (imports any clipboard-text to the current copy-list
+- Export copied row(s) (exports the internal copy-list to the clipboard)
+- Import copied row(s) (imports any clipboard-text to the internal copy-list
                         WARNING: No validity test is done on the clipboard text;
                         importing assumes that the text on your clipboard
                         clipboard contains valid 2da-row data)
@@ -58,15 +60,14 @@ Clipboard
 
 
 2da Ops
+- Test row order : Ctrl+t (tests the row-order of the currently displayed 2da)
 - Order row ids  : Ctrl+d (auto-orders the IDs of the currently displayed 2da)
-- Test row order : Ctrl+t (investigates the row-order of the currently displayed
-                   2da)
 
+- Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 - Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are
-                  inserted/ deleted (or sorted) the colors go out of sync to aid
+                  inserted/deleted (or sorted) the colors go out of sync to aid
                   understanding of what just happened. The "recolor rows"
                   operation makes row-colors alternate as usual)
-- Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 
 - Freeze 1st col : F5 (causes the first col after the ID-col to remain
                    stationary)
@@ -83,7 +84,7 @@ Clipboard
 
 - Clear undo/redo (the undo/redo stacks can stack up over a long session; if so
                    clear this when you're running low on RAM - note that each
-                   tabpage has its own undo/redo stacks)
+                   table has its own undo/redo stacks)
 
 
 Font
@@ -169,7 +170,7 @@ RMB       - click a col-boundary to auto-width a col (Note that frozen cols
 RMB+Shift - sorts the table by the col either ascending or descending (Note that
             the ID-header changes to a violet color as a warning to indicate
             that the table is not ordered correctly. Before sorting by cols, it
-            is strongly suggested to check the row-IDs under 2da Ops->test row
+            is strongly suggested to check the row-IDs under 2da Ops->Test row
             order, since re-sorting by row-IDs is the best way to get your table
             back into its correct order. Tables are saved in the order that they
             are sorted.)
@@ -203,11 +204,11 @@ Settings.Cfg file (do not use double-quotes)
 
 the following variables ought be respected:
 
-font=      a .NET string that represents the desired table-font (see 2da
-           Ops->current font string)
+font=      a .NET string that represents the desired table-font (see Font->
+           Current font string)
 font2=     a .NET string that represents a desired (usually smaller) font for
            menus (To get a correct .NET font-string for menus, choose the font
-           for the table and copy its string with 2da Ops->current font string,
+           for the table and copy its string with Font->Current font string,
            then change the table-font back to what you like and paste the copied
            string into Settings.Cfg "font2=". Yata must be reloaded before it
            will display with a changed menu-font.)
@@ -219,8 +220,9 @@ pathall=   another path for Crafting or Spells info
 pathall=   etc. (the first pathall has lowest priority and any info found will
            be replaced by any info found in subsequent pathall directories;
            there can be as many or as few pathall directories as you like)
-dirpreset= a path without quotes to a valid directory for the Open ... dialog
-dirpreset= another path for the Open ... dialog
+dirpreset= a path without quotes to a valid directory for the Open ... @ folder
+           dialog
+dirpreset= another path for the Open ... @ folder dialog
 dirpreset= etc. (there can be as many or as few dirpresets as you like)
 x=         (integer) the desired x-position to start the app on your monitor
 y=         (integer) the desired y-position to start the app on your monitor
@@ -247,7 +249,7 @@ diff=      a path without quotes to your WinMerge executable for diffing and
            merging two 2da files (if desired). See Appendix L: WinMerge
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
-show the Open ... dialog at your frequently used directory(s).
+show an open-file-dialog at your frequently used directory(s).
 
 The pathall directories are for gathering Info that will appear if Crafting.2da
 or Spells.2da are loaded as the cursor is moved over their cells. (Yata was
@@ -260,7 +262,7 @@ Appendix A: note on Load
 Yata is pretty strict when loading a 2da file. If it detects anything awkward it
 lets the user know and will try to automatically fix cell-fields. Such cells
 should then appear highlighted with pink - these are called "loadchanged" cells,
-since they were changed when the 2da was loaded. An option under the Editmenu
+since they were changed when the 2da was loaded. An option under the Edit menu
 can cycle through these cells if there are any, for your review and or manual
 corrections.
 
@@ -313,21 +315,21 @@ their rows.
 
 Copying rows does not use the Windows Clipboard. The copy of such data is
 instead maintained internally by Yata. If you want this data on the Clipboard
-for whatever reason choose "export copy to Clipboard" on the Edit menu. To get
-data that's on the Clipboard back into Yata's internal format choose "import
-Clipboard to copy" on the Edit menu - but be warned that such data from the
+for whatever reason choose "Export copied row(s)" on the Clipboard menu. To get
+data that's on the Clipboard back into Yata's internal format choose "Import
+copied row(s)" on the Clipboard menu - but be warned that such data from the
 Clipboard is not checked and could be garbage as far as a 2da is concerned, so
 it's up to you to decide whether or not to proceed at that point. The contents
-of the Clipboard can be viewed and edited by choosing "edit Clipboard contents"
-on the Edit menu.
+of the Clipboard can be viewed and edited by choosing "Open clip editor" on the
+Clipboard menu.
 
 Once a range of rows has been copied it can be pasted into a table by choosing
-"paste range" on the Edit menu. Its first row will be pasted at the currently
+"Paste row(s)" on the Edit menu. Its first row will be pasted at the currently
 selected row, pushing that row along with all following rows down such that they
 appear beneath the range that is pasted. Note that pasting rows never replaces
 any row(s). To replace rows with a copied range of rows, use paste, re-select,
-then delete or vice versa. And to paste rows after the last row, choose "paste
-range" without having a currently selected row - pressing the Escape key will
+then delete or vice versa. And to paste rows after the last row, choose "Paste
+row(s)" without having a currently selected row - pressing the Escape key will
 clear all selections of rows and cells.
 
 
@@ -417,7 +419,7 @@ Appendix G: Drag & Drop to open 2da-file(s)
 Yata will open 2da-files that are dragged and dropped onto it.
 
 
-Appendix H: opening 2da-files when the app starts
+Appendix H: opening 2da-files as the app starts
 
 Yata allows multiple instances of itself to run at the same time. However if a
 file is double-clicked in Windows Explorer, and Yata is associated with its
@@ -454,7 +456,7 @@ Note that clicking elsewhere on the app will cause the panel to lose focus and
 cancel your current edit.
 
 Advanced: Note that it's possible to change the ID-value of a row in the
-Property Panel. It is recommended however to use 2da Ops->order row ids instead,
+Property Panel. It is recommended however to use 2da Ops->Order row ids instead,
 unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (further, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
@@ -477,23 +479,67 @@ IMPORTANT: The following operations cannot be Undone/Redone
 - etc.
 
 
-Appendix L: WinMerge
+Appendix L: Yata diff
 
-The operation under 2daOps|External diff/merger will be enabled if the path to
-the WinMerge executable is specified in your Settings.Cfg by the variable diff=
+Yata version 3+ has an internal differ. A right-click on a table's tab shows a
+popup with several operations including these four:
+
+- Select diff1 (selects the currently displayed table as diff1)
+- Select diff2 (selects the currently displayed table as diff2)
+- Reset diffs (clears tables of their diff flags)
+- Justify tables (re-widths the cols of the two diffed tables so they are
+                  visually aligned)
+
+Notes: diff1 must be selected before diff2. Diff2 can be re-selected, but
+re-selecting diff1 causes diff2 to be cleared; diff2 must be selected *after*
+diff1. Reloading a 2da causes its diff to be cleared.
+
+Select diff2 causes four noticable things to happen:
+1. cells with texts that differ will be rendered with a teal background color
+2. the tables' cols will be justified automatically
+3. the tables will scroll in unison if possible
+4. the DifferDialog will appear. It lists any differences between col headers
+and row counts. Additionally a Goto button in the lower left corner of the
+dialog can be used to cycle (forward only) through cell texts that are different
+in the two tables. Note that the count of cell differences includes the ID cols
+but their backgrounds will not be colored teal (since the ID col is a frozen
+col).
+
+A right-click on a diffed cell shows a popup with several operations including
+these two:
+
+- merge to other - Ce (copies the text in the selected cell to the other table)
+- merge to other - Ro (copies the texts of the row of the selected cell to the
+                       other table)
+
+The selected cell's position (x/y) must be present in both tables. Rows do not
+have to be the same length; any cells that overflow will be filled with "****".
+
+Merges of multiple cells or rows is not allowed. That's what Appendix M:
+WinMerge is for ...
+
+
+Appendix M: WinMerge
+
+The operation under 2da Ops->External diff/merger will be enabled if the path to
+your WinMerge executable is specified in Settings.Cfg by the variable "diff="
 
 - eg
 diff=C:\Program Files (x86)\WinMerge\WinMergeU.exe
 
-If you are doing a diff in Yata and that operation is selected, WinMerge ought
-to start with the two diffed files loaded. A diff is done in Yata from its Tab
-menu.
+A diff is performed in Yata from its Tab menu (see Appendix L: Yata diff). If
+you are doing a diff and the External diff/merger is invoked, WinMerge should
+start with the two diffed files loaded.
 
 Note that if you're not doing a diff in Yata and select the operation, WinMerge
-ought to start and ask what file you'd like to diff against the currently
-displayed 2da. Also note that kdiff3 accepts the same commandline arguments as
-WinMerge, so the path to its executable could be used if preferred for whatever
-reason.
+should start with a dialog asking what file you'd like to diff against the
+currently displayed 2da.
+
+Also note that kdiff3 accepts the same commandline file arguments as WinMerge,
+so the path to its executable can be assigned in Settings.Cfg if preferred.
+
+If a file is saved in the external differ, Yata's file monitor should pop up
+asking what to do (Reload file, Close 2da, or Cancel).
 
 WinMerge can be downloaded at
 http://winmerge.org/
