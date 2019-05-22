@@ -1599,7 +1599,7 @@ namespace yata
 					}
 					else if (_visVert) // scroll the table
 					{
-						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum) // what is this witchcraft
+						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
 							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
 						else
 							_scrollVert.Value += _scrollVert.LargeChange;
@@ -1672,7 +1672,7 @@ namespace yata
 					}
 					else if (_visHori)
 					{
-						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum) // what is this witchcraft
+						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
 							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
 						else
 							_scrollHori.Value += _scrollHori.LargeChange;
