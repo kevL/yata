@@ -316,7 +316,7 @@ namespace yata
 			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 192);
+			this.tabMenu.Size = new System.Drawing.Size(139, 214);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -325,7 +325,7 @@ namespace yata
 			this.it_tabClose.Size = new System.Drawing.Size(138, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabClose.Click += new System.EventHandler(this.tabclick_Close);
+			this.it_tabClose.Click += new System.EventHandler(this.fileclick_CloseTab);
 			// 
 			// it_tabCloseAll
 			// 
@@ -333,7 +333,7 @@ namespace yata
 			this.it_tabCloseAll.Size = new System.Drawing.Size(138, 22);
 			this.it_tabCloseAll.Text = "Close all";
 			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabCloseAll.Click += new System.EventHandler(this.tabclick_CloseAll);
+			this.it_tabCloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// it_tabCloseAllOthers
 			// 
@@ -353,7 +353,7 @@ namespace yata
 			this.it_tabReload.Name = "it_tabReload";
 			this.it_tabReload.Size = new System.Drawing.Size(138, 22);
 			this.it_tabReload.Text = "Reload";
-			this.it_tabReload.Click += new System.EventHandler(this.tabclick_Reload);
+			this.it_tabReload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// separator_23
 			// 
@@ -603,9 +603,9 @@ namespace yata
 			// it_GotoLoadchanged
 			// 
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
-			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.it_GotoLoadchanged.Size = new System.Drawing.Size(226, 22);
-			this.it_GotoLoadchanged.Text = "Goto &loadchanged";
+			this.it_GotoLoadchanged.Text = "Goto loadcha&nged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// separator_4

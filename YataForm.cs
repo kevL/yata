@@ -984,7 +984,7 @@ namespace yata
 				else
 				{
 					Table.Changed = false; // bypass the close-tab warning.
-					fileclick_CloseTab(sender, e);
+					fileclick_CloseTab(null, EventArgs.Empty);
 				}
 
 				if (Table != null)
@@ -2377,14 +2377,19 @@ namespace yata
 				ShowColorPanel();
 				DrawingControl.SuspendDrawing(Table);
 
-				foreach (var c in Table.Cols)
-					c.UserSized = false;
-
-				Table.Calibrate(0, Table.RowCount - 1); // autosize
+				AutosizeCols(Table);
 
 				ShowColorPanel(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
+		}
+
+		void AutosizeCols(YataGrid table)
+		{
+			foreach (var c in table.Cols)
+				c.UserSized = false;
+
+			table.Calibrate(0, table.RowCount - 1); // autosize
 		}
 
 		void opsclick_Recolor(object sender, EventArgs e)
@@ -2751,10 +2756,12 @@ namespace yata
 				it_tabCloseAll      .Enabled =
 				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
+				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
+
 				// NOTE: 'it_tabDiff1' is always enabled.
-				it_tabDiff2      .Enabled = (_diff1 != null && _diff1 != Table);
-				it_tabDiffReset  .Enabled = (_diff1 != null || _diff2 != null);
-				it_tabDiffJustify.Enabled = (_diff1 != null && _diff2 != null);
+				it_tabDiff2         .Enabled = (_diff1 != null && _diff1 != Table);
+				it_tabDiffReset     .Enabled = (_diff1 != null || _diff2 != null);
+				it_tabDiffJustify   .Enabled = (_diff1 != null && _diff2 != null);
 
 				if (_diff1 != null)
 					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
@@ -2768,26 +2775,6 @@ namespace yata
 			}
 			else
 				e.Cancel = true;
-		}
-
-		/// <summary>
-		/// Closes a table when a tab's context-close item is clicked.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_Close(object sender, EventArgs e)
-		{
-			fileclick_CloseTab(null, EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Closes all tables when a tab's context-closeall item is clicked.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_CloseAll(object sender, EventArgs e)
-		{
-			fileclick_CloseAllTabs(null, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -2837,16 +2824,6 @@ namespace yata
 			}
 		}
 
-		/// <summary>
-		/// Reloads a table when a tab's context-reload item is clicked.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_Reload(object sender, EventArgs e)
-		{
-			fileclick_Reload(null, EventArgs.Empty);
-		}
-
 
 		// TODO: FreezeFirst/Second
 		// TODO: Save / SaveAs / SaveAll.
@@ -2889,8 +2866,16 @@ namespace yata
 				{
 					_diff1[r,c].diff = false;
 				}
+
+				if (_diff1 == Table)
+					opsclick_AutosizeCols(null, EventArgs.Empty);
+				else
+					AutosizeCols(_diff1);
+
 				_diff1.Invalidate();
 				_diff1 = null;
+
+				Table.Select();
 			}
 
 			if (_diff2 != null)
@@ -2900,8 +2885,16 @@ namespace yata
 				{
 					_diff2[r,c].diff = false;
 				}
+
+				if (_diff2 == Table)
+					opsclick_AutosizeCols(null, EventArgs.Empty);
+				else
+					AutosizeCols(_diff2);
+
 				_diff2.Invalidate();
 				_diff2 = null;
+
+				Table.Select();
 			}
 		}
 
@@ -3004,12 +2997,17 @@ namespace yata
 				}
 			}
 
+			bool blanklinedone = false;
+
 			if (celldiffs != 0)
 			{
 				if (!String.IsNullOrEmpty(copyable))
-					copyable += Environment.NewLine;
+				{
+					copyable += Environment.NewLine + Environment.NewLine;
+					blanklinedone = true;
+				}
 
-				copyable += "Cell text differs: " + celldiffs + " (inclusive)";
+				copyable += "Cell texts differ: " + celldiffs + " (inclusive)";
 			}
 
 			celldiffs = 0;
@@ -3055,9 +3053,13 @@ namespace yata
 			if (celldiffs != 0)
 			{
 				if (!String.IsNullOrEmpty(copyable))
+				{
 					copyable += Environment.NewLine;
+					if (!blanklinedone)
+						copyable += Environment.NewLine;
+				}
 
-				copyable += "Cell text differs: " + celldiffs + " (exclusive)";
+				copyable += "Cell texts differ: " + celldiffs + " (exclusive)";
 			}
 
 
