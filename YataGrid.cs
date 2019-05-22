@@ -535,36 +535,85 @@ namespace yata
 			{
 				if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) != Keys.Control))
 				{
-					if (e.Delta > 0)
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid vertically 1 visible-height per delta
 					{
-						if (_scrollVert.Value - _scrollVert.LargeChange < 0)
-							_scrollVert.Value = 0;
-						else
-							_scrollVert.Value -= _scrollVert.LargeChange;
+						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+						if (e.Delta > 0)
+						{
+							if (_scrollVert.Value - h < 0)
+								_scrollVert.Value = 0;
+							else
+								_scrollVert.Value -= h;
+						}
+						else if (e.Delta < 0)
+						{
+							if (_scrollVert.Value + h + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+								_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+							else
+								_scrollVert.Value += h;
+						}
 					}
-					else if (e.Delta < 0)
+					else
 					{
-						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
-						else
-							_scrollVert.Value += _scrollVert.LargeChange;
+						if (e.Delta > 0)
+						{
+							if (_scrollVert.Value - _scrollVert.LargeChange < 0)
+								_scrollVert.Value = 0;
+							else
+								_scrollVert.Value -= _scrollVert.LargeChange;
+						}
+						else if (e.Delta < 0)
+						{
+							if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
+								_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+							else
+								_scrollVert.Value += _scrollVert.LargeChange;
+						}
 					}
 				}
 				else if (_visHori)
 				{
-					if (e.Delta > 0)
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid horizontally 1 visible-width per delta
 					{
-						if (_scrollHori.Value - _scrollHori.LargeChange < 0)
-							_scrollHori.Value = 0;
-						else
-							_scrollHori.Value -= _scrollHori.LargeChange;
+						int w = WidthRowhead;
+						for (int c = 0; c != FrozenCount; ++c)
+							w += Cols[c].width();
+
+						w = Width - w - (_visVert ? _scrollVert.Width : 0);
+						if (w > 0) // TODO: not sure if <- needed
+						{
+							if (e.Delta > 0)
+							{
+								if (_scrollHori.Value - w < 0)
+									_scrollHori.Value = 0;
+								else
+									_scrollHori.Value -= w;
+							}
+							else if (e.Delta < 0)
+							{
+								if (_scrollHori.Value + w > _scrollHori.Maximum)
+									_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+								else
+									_scrollHori.Value += w;
+							}
+						}
 					}
-					else if (e.Delta < 0)
+					else
 					{
-						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
-							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
-						else
-							_scrollHori.Value += _scrollHori.LargeChange;
+						if (e.Delta > 0)
+						{
+							if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+								_scrollHori.Value = 0;
+							else
+								_scrollHori.Value -= _scrollHori.LargeChange;
+						}
+						else if (e.Delta < 0)
+						{
+							if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
+								_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+							else
+								_scrollHori.Value += _scrollHori.LargeChange;
+						}
 					}
 				}
 			}
@@ -1558,21 +1607,21 @@ namespace yata
 					break;
 
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
-					if ((e.Modifiers & Keys.Control) == Keys.Control) // shift grid 1 page left
+					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page left
 					{
 						if (_visHori)
 						{
-							int widthScrollable = WidthRowhead;
+							int w = WidthRowhead;
 							for (int c = 0; c != FrozenCount; ++c)
-								widthScrollable += Cols[c].width();
+								w += Cols[c].width();
 
-							widthScrollable = Width - widthScrollable - (_visVert ? _scrollVert.Width : 0);
-							if (widthScrollable > 0)
+							w = Width - w - (_visVert ? _scrollVert.Width : 0);
+							if (w > 0)
 							{
-								if (_scrollHori.Value - widthScrollable < 0)
+								if (_scrollHori.Value - w < 0)
 									_scrollHori.Value = 0;
 								else
-									_scrollHori.Value -= widthScrollable;
+									_scrollHori.Value -= w;
 							}
 						}
 					}
@@ -1596,19 +1645,19 @@ namespace yata
 					break;
 
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
-					if ((e.Modifiers & Keys.Control) == Keys.Control) // shift grid 1 page right
+					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
 					{
 						if (_visHori)
 						{
-							int widthScrollable = WidthRowhead;
+							int w = WidthRowhead;
 							for (int c = 0; c != FrozenCount; ++c)
-								widthScrollable += Cols[c].width();
+								w += Cols[c].width();
 
-							widthScrollable = Width - widthScrollable - (_visVert ? _scrollVert.Width : 0);
-							if (_scrollHori.Value + widthScrollable > _scrollHori.Maximum)
+							w = Width - w - (_visVert ? _scrollVert.Width : 0);
+							if (_scrollHori.Value + w > _scrollHori.Maximum)
 								_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
 							else
-								_scrollHori.Value += widthScrollable;
+								_scrollHori.Value += w;
 						}
 					}
 					else if (sel != null) // selection to the cell right
@@ -2202,6 +2251,10 @@ namespace yata
 //			base.OnMouseClick(e);
 		}
 
+		/// <summary>
+		/// Because sometimes I'm a stupid and double-click to start textedit.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)

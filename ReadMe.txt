@@ -146,8 +146,8 @@ of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
 or below the selected row, to select a range of rows to delete. If all rows of a
 table are deleted a single default row will be created.
 
-Ctrl+Left  - shifts table left by visible width (if not editing text)
-Ctrl+Right - shifts table right by visible width (if not editing text)
+Shift+Left  - shifts table left by visible width (if not editing text)
+Shift+Right - shifts table right by visible width (if not editing text)
 
 
 MOUSE:
@@ -155,6 +155,8 @@ wheel - scrolls up/down if the vertical scrollbar is visible and either of
         (a) the horizontal bar is disabled or (b) Ctrl is not pressed
       - scrolls left/right if the horizontal scrollbar is visible and either of
         (a) the vertical bar is disabled or (b) Ctrl is pressed
+Shift+wheel - scrolls the table by its visible height/width if applicable; the
+              Ctrl-key is also respected
 
 click on the colheads or rowheads
 LMB            - selects the col or row
