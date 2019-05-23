@@ -335,6 +335,13 @@ namespace yata
 				lostfocus_Editor(null, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Handles the editor losing focus.
+		/// @note This funct is a partial catchall for other places where the
+		/// editor needs to hide.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
 			_editor.Visible = false;
@@ -480,7 +487,6 @@ namespace yata
 
 		/// <summary>
 		/// Paints this property panel.
-		/// TODO: Paint any frozen cols a lighter blue.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -492,7 +498,15 @@ namespace yata
 
 			Rectangle rect;
 
-			// fill any selected cell's val-rect ->
+			// fill the frozen-field(s) var/val-rect ->
+			int c;
+			for (c = 0; c != _grid.FrozenCount; ++c)
+			{
+				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
+				YataGrid.graphics.FillRectangle(new SolidBrush(Color.PaleGoldenrod), rect);
+			}
+
+			// fill any selected cell's var/val-rect ->
 			Cell sel = _grid.getSelectedCell();
 			if (sel != null)
 			{
@@ -500,7 +514,7 @@ namespace yata
 				YataGrid.graphics.FillRectangle(Brushes.Selected, rect);
 			}
 
-			// fill the editor's val-rect ->
+			// fill the editor's val-rect if visible ->
 			if (_editor.Visible)
 			{
 				rect = new Rectangle();
@@ -510,7 +524,7 @@ namespace yata
 				YataGrid.graphics.FillRectangle(Brushes.Editor, rect);
 			}
 
-			// draw lines ->
+			// draw vertical lines ->
 			YataGrid.graphics.DrawLine(Pens.Black,									// vertical left line
 									   1, 0,
 									   1, HeightProps - offset);
@@ -524,8 +538,9 @@ namespace yata
 									   1,     _heightr * _grid.ColCount - offset,
 									   Width, _heightr * _grid.ColCount - offset);
 
-			int c, y;
-			for (c = 1; c != _grid.ColCount; ++c) // horizontal row lines
+			// draw horizontal lines ->
+			int y;
+			for (c = 1; c != _grid.ColCount; ++c)
 			{
 				y = _heightr * c - offset + 1;
 				YataGrid.graphics.DrawLine(Pens.DarkLine,
