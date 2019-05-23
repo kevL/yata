@@ -77,11 +77,11 @@ namespace yata
 		}
 	}
 
-	static class Pens
+
+	static class Pencils
 	{
 		internal static readonly Pen DarkLine  = SystemPens.ControlDark;
 		internal static readonly Pen LightLine = SystemPens.ControlLightLight;
-		internal static readonly Pen Black     = System.Drawing.Pens.Black;
 	}
 
 	static class Brushes
@@ -98,8 +98,9 @@ namespace yata
 		internal static readonly Brush LoadChanged = new SolidBrush(Color.Pink);
 		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
 
-		// propanel btn bg
-		internal static readonly Brush Control     = new SolidBrush(SystemColors.Control);
+		// propanel
+		internal static readonly Brush ProPanelButton = new SolidBrush(SystemColors.Control);
+		internal static readonly Brush ProPanelFrozen = new SolidBrush(Color.PaleGoldenrod);
 	}
 
 	static class Colors

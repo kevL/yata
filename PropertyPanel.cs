@@ -52,14 +52,14 @@ namespace yata
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			// and you know it don't come easy - Ringo
-			YataGrid.graphics.FillRectangle(Brushes.Control, _rectBG);
+			YataGrid.graphics.FillRectangle(Brushes.ProPanelButton, _rectBG);
 
 			if (Depressed)
 			{
 				YataGrid.graphics.FillRectangle(_brushGrad, _rectGrad);
 
 				var pen1 = Pens.Black;
-				var pen2 = Pens.DarkLine;
+				var pen2 = Pencils.DarkLine;
 
 				YataGrid.graphics.DrawLine(pen1, 2, 2, Width - 2, 2);					// hori top
 				YataGrid.graphics.DrawLine(pen2, 2, 3, Width - 2, 3);
@@ -138,7 +138,7 @@ namespace yata
 			else
 				BackColor = Color.LightBlue;
 
-			ForeColor = SystemColors.ControlText;
+			ForeColor = Colors.Text;
 
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
 
@@ -503,7 +503,7 @@ namespace yata
 			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(new SolidBrush(Color.PaleGoldenrod), rect);
+				YataGrid.graphics.FillRectangle(Brushes.ProPanelFrozen, rect);
 			}
 
 			// fill any selected cell's var/val-rect ->
@@ -528,7 +528,7 @@ namespace yata
 			YataGrid.graphics.DrawLine(Pens.Black,									// vertical left line
 									   1, 0,
 									   1, HeightProps - offset);
-			YataGrid.graphics.DrawLine(Pens.DarkLine,								// vertical center line
+			YataGrid.graphics.DrawLine(Pencils.DarkLine,							// vertical center line
 									   _widthVars, 1,
 									   _widthVars, HeightProps - offset - 1);
 			YataGrid.graphics.DrawLine(Pens.Black,									// horizontal top line
@@ -543,7 +543,7 @@ namespace yata
 			for (c = 1; c != _grid.ColCount; ++c)
 			{
 				y = _heightr * c - offset + 1;
-				YataGrid.graphics.DrawLine(Pens.DarkLine,
+				YataGrid.graphics.DrawLine(Pencils.DarkLine,
 										   0,     y,
 										   Width, y);
 			}

@@ -88,7 +88,12 @@ namespace yata
 							}
 
 							rect.Width -= _padHori;
-							TextRenderer.DrawText(graphics, cell.text, Font, rect, Colors.Text, YataGraphics.flags);
+							TextRenderer.DrawText(graphics,
+												  cell.text,
+												  Font,
+												  rect,
+												  Colors.Text,
+												  YataGraphics.flags);
 							rect.Width += _padHori;
 						}
 
@@ -115,7 +120,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics.DrawLine(Pens.DarkLine,
+						graphics.DrawLine(Pencils.DarkLine,
 										  Left,       y,
 										  WidthTable, y);
 				}
@@ -131,7 +136,7 @@ namespace yata
 						break;
 
 					if (x > WidthRowhead)
-						graphics.DrawLine(Pens.DarkLine,
+						graphics.DrawLine(Pencils.DarkLine,
 										  x, Top,
 										  x, Bottom);
 				}
@@ -181,7 +186,12 @@ namespace yata
 							color = Colors.Text;
 
 						rect.Width -= clip;
-						TextRenderer.DrawText(graphics, Cols[c].text, _f.FontAccent, rect, color, YataGraphics.flags);
+						TextRenderer.DrawText(graphics,
+											  Cols[c].text,
+											  _f.FontAccent,
+											  rect,
+											  color,
+											  YataGraphics.flags);
 						rect.Width += clip;
 					}
 
@@ -229,12 +239,21 @@ namespace yata
 							graphics.FillRectangle(brush, rect);
 							rect.X += _padHoriRowhead;
 
-							graphics.DrawLine(Pens.DarkLine, 0, rect.Y, WidthRowhead, rect.Y);
-							graphics.DrawLine(Pens.DarkLine, 0, rect.Y + HeightRow, WidthRowhead, rect.Y + HeightRow);
+							graphics.DrawLine(Pencils.DarkLine,
+											  0,            rect.Y,
+											  WidthRowhead, rect.Y);
+							graphics.DrawLine(Pencils.DarkLine,
+											  0,            rect.Y + HeightRow,
+											  WidthRowhead, rect.Y + HeightRow);
 						}
 					}
 
-					TextRenderer.DrawText(graphics, r.ToString(), _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+					TextRenderer.DrawText(graphics,
+										  r.ToString(),
+										  _f.FontAccent,
+										  rect,
+										  Colors.Text,
+										  YataGraphics.flags);
 				}
 			}
 		}
@@ -260,7 +279,8 @@ namespace yata
 						color2 = Color.Orchid;
 					}
 
-					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+					var brushGrad = new LinearGradientBrush(new Point(0, 0),
+															new Point(0, HeightColhead),
 															color1, color2);
 					var rectGrad  = new Rectangle(0,0, _labelid.Width, _labelid.Height);
 					graphics.FillRectangle(brushGrad, rectGrad);
@@ -277,9 +297,16 @@ namespace yata
 				}
 
 				var rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
-				TextRenderer.DrawText(graphics, "id", _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+				TextRenderer.DrawText(graphics,
+									  "id",
+									  _f.FontAccent,
+									  rect,
+									  Colors.Text,
+									  YataGraphics.flags);
 
-				graphics.DrawLine(Pens.DarkLine, _labelid.Width, _labelid.Top, _labelid.Width, _labelid.Bottom);
+				graphics.DrawLine(Pencils.DarkLine,
+								  _labelid.Width, _labelid.Top,
+								  _labelid.Width, _labelid.Bottom);
 
 				if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
 				{
@@ -311,16 +338,22 @@ namespace yata
 
 				if (Settings._gradient)
 				{
-					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+					var brushGrad = new LinearGradientBrush(new Point(0, 0),
+															new Point(0, HeightColhead),
 															Color.Cornsilk, Color.BurlyWood);
 					var rectGrad  = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
 					graphics.FillRectangle(brushGrad, rectGrad);
 				}
 
 				var rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-				TextRenderer.DrawText(graphics, Cols[1].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+				TextRenderer.DrawText(graphics,
+									  Cols[1].text,
+									  _f.FontAccent,
+									  rect,
+									  Colors.Text,
+									  YataGraphics.flags);
 
-				graphics.DrawLine(Pens.DarkLine,
+				graphics.DrawLine(Pencils.DarkLine,
 								  _labelfirst.Width, _labelfirst.Top,
 								  _labelfirst.Width, _labelfirst.Bottom);
 
@@ -348,16 +381,24 @@ namespace yata
 
 				if (Settings._gradient)
 				{
-					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, HeightColhead),
+					var brushGrad = new LinearGradientBrush(new Point(0, 0),
+															new Point(0, HeightColhead),
 															Color.Cornsilk, Color.BurlyWood);
 					var rectGrad  = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
 					graphics.FillRectangle(brushGrad, rectGrad);
 				}
 
 				var rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-				TextRenderer.DrawText(graphics, Cols[2].text, _f.FontAccent, rect, Colors.Text, YataGraphics.flags);
+				TextRenderer.DrawText(graphics,
+									  Cols[2].text,
+									  _f.FontAccent,
+									  rect,
+									  Colors.Text,
+									  YataGraphics.flags);
 
-				graphics.DrawLine(Pens.DarkLine, _labelsecond.Width, _labelsecond.Top, _labelsecond.Width, _labelsecond.Bottom);
+				graphics.DrawLine(Pencils.DarkLine,
+								  _labelsecond.Width, _labelsecond.Top,
+								  _labelsecond.Width, _labelsecond.Bottom);
 
 				if (_sortdir != SORT_NOT && _sortcol == 2)
 				{
@@ -388,7 +429,7 @@ namespace yata
 				for (; c != FrozenCount; ++c)
 				{
 					x += Cols[c].width();
-					graphics.DrawLine(Pens.DarkLine,
+					graphics.DrawLine(Pencils.DarkLine,
 									  x, 0,
 									  x, Height);
 				}
@@ -417,12 +458,17 @@ namespace yata
 							rect.Width += 1;
 						}
 
-						TextRenderer.DrawText(graphics, row[c].text, Font, rect, Colors.Text, YataGraphics.flags);
+						TextRenderer.DrawText(graphics,
+											  row[c].text,
+											  Font,
+											  rect,
+											  Colors.Text,
+											  YataGraphics.flags);
 
 						rect.X += rect.Width;
 					}
 
-					graphics.DrawLine(Pens.DarkLine,
+					graphics.DrawLine(Pencils.DarkLine,
 									  0,                   rect.Y + HeightRow,
 									  rect.X + rect.Width, rect.Y + HeightRow);
 				}

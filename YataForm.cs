@@ -807,7 +807,7 @@ namespace yata
 			if (y == 1 && Tabs.Focused)
 			{
 				y = rect.Y + rect.Height - 5;
-				graphics.DrawLine(Pens.LightLine,
+				graphics.DrawLine(Pencils.LightLine,
 								  rect.X,     y,
 								  rect.X + w, y);
 			}
@@ -3073,7 +3073,7 @@ namespace yata
 			if (String.IsNullOrEmpty(copyable))
 			{
 				label = "Tables are identical.";
-				color = SystemColors.ControlText;
+				color = Colors.Text;
 				@goto = false;
 			}
 			else
