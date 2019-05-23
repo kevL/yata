@@ -2545,51 +2545,54 @@ namespace yata
 		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayed(Cell cell)
 		{
-			bool ret = false;
+			bool refresh = false;
 
-			var rect = getCellRectangle(cell);
-
-			int left = getLeft();
-			int bar;
-
-			if (rect.X != left)
+			if (cell.x >= FrozenCount)
 			{
-				bar = _visVert ? _scrollVert.Width : 0;
-				int right = Width - bar;
+				var rect = getCellRectangle(cell);
 
-				if (rect.X < left
-					|| (rect.Width > right - left
-						&& (rect.X > right || rect.X + left > (right - left) / 2)))
-				{
-					_scrollHori.Value -= left - rect.X;
-					ret = true;
-				}
-				else if (rect.X + rect.Width > right && rect.Width < right - left)
-				{
-					_scrollHori.Value += rect.X + rect.Width + bar - Width;
-					ret = true;
-				}
-			}
+				int left = getLeft();
+				int bar;
 
-			if (rect.Y != HeightColhead)
-			{
-				if (rect.Y < HeightColhead)
+				if (rect.X != left)
 				{
-					_scrollVert.Value -= HeightColhead - rect.Y;
-					ret = true;
-				}
-				else
-				{
-					bar = _visHori ? _scrollHori.Height : 0;
-					if (rect.Y + rect.Height + bar > Height)
+					bar = (_visVert ? _scrollVert.Width : 0);
+					int right = Width - bar;
+
+					if (rect.X < left
+						|| (rect.Width > right - left
+							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
+					{																	//    than the table's visible width.
+						_scrollHori.Value -= left - rect.X;
+						refresh = true;
+					}
+					else if (rect.X + rect.Width > right && rect.Width < right - left)
 					{
-						_scrollVert.Value += rect.Y + rect.Height + bar - Height;
-						ret = true;
+						_scrollHori.Value += rect.X + rect.Width + bar - Width;
+						refresh = true;
+					}
+				}
+
+				if (rect.Y != HeightColhead)
+				{
+					if (rect.Y < HeightColhead)
+					{
+						_scrollVert.Value -= HeightColhead - rect.Y;
+						refresh = true;
+					}
+					else
+					{
+						bar = (_visHori ? _scrollHori.Height : 0);
+						if (rect.Y + rect.Height + bar > Height)
+						{
+							_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+							refresh = true;
+						}
 					}
 				}
 			}
 
-			return ret;
+			return refresh;
 		}
 
 		/// <summary>
