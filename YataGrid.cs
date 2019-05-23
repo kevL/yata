@@ -526,7 +526,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (_propanel != null && _propanel.Visible && _propanel._scroll.Visible
+			if (_propanel != null && _propanel._scroll.Visible
 				&& e.X > _propanel.Location.X && e.X < _propanel.Location.X + _propanel.Width)
 			{
 				_propanel.Scroll(e);
