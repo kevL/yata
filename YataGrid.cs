@@ -192,8 +192,8 @@ namespace yata
 					Refresh();
 				}
 
-				if (_propanel != null)
-					_propanel.Refresh(); // update bg-color of PP fields
+				if (_propanel != null) // update bg-color of PP fields
+					_propanel.Refresh();
 			}
 		}
 
