@@ -360,8 +360,8 @@ namespace yata
 					break;
 
 				case Keys.Escape:
-					if ((Table != null && Tabs.Focused)
-						|| btn_ProPanel.Focused) // jic.
+					if (Table != null
+						&& (Tabs.Focused || btn_ProPanel.Focused)) // btn -> jic.
 					{
 						e.SuppressKeyPress = true;
 						Table.Select();
