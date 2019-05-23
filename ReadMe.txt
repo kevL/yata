@@ -80,7 +80,7 @@ Clipboard
 - PropertyPanel top/bot : F8 (toggles the panel's position top/bottom)
 
 - External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
-                         files open. See Appendix L: WinMerge)
+                         files open. See Appendix M: WinMerge)
 
 - Clear undo/redo (the undo/redo stacks can stack up over a long session; if so
                    clear this when you're running low on RAM - note that each
@@ -218,8 +218,9 @@ font2=     a .NET string that represents a desired (usually smaller) font for
 font3=     a .NET string that represents a desired font for the PropertyPanel
            (see notes at font2)
 pathall=   a path without quotes to a valid directory to grope for 2da info
-           for Crafting.2da or Spells.2da
-pathall=   another path for Crafting or Spells info
+           for Crafting.2da or Spells.2da (see Appendix E: how to use Info
+           paths)
+pathall=   another path for Crafting and Spells info
 pathall=   etc. (the first pathall has lowest priority and any info found will
            be replaced by any info found in subsequent pathall directories;
            there can be as many or as few pathall directories as you like)
@@ -276,7 +277,7 @@ For example it will go so far as to replace two adjacent double-quotes with
 it's suggested that you close the file in Yata and try to fix it in a
 text-editor (or a different 2da-editor).
 
-Further, the only way to edit the ID col is with 2da Ops "order row ids". And if
+Further, the only way to edit the ID-col is with 2da Ops->Order row ids. And if
 you've chosen to Freeze the 1st or 2nd col, those cells can't be edited (or
 searched) until Freeze is turned back off.
 
@@ -443,7 +444,8 @@ Appendix I: a note on associating file extensions in Windows Explorer
 
 Yata can be associated to open files that have a file-extension aka file-type in
 Windows Explorer. Yata doesn't do that automatically; it's for the user to set
-it up if he/she wants to.
+it up if he/she wants to. Note that associating file-types will change your
+Windows Registry.
 
 
 Appendix J: the Property Panel
@@ -504,8 +506,8 @@ Select diff2 causes four noticable things to happen:
 4. the DifferDialog will appear. It lists any differences between col headers
 and row counts. Additionally a Goto button in the lower left corner of the
 dialog can be used to cycle (forward only) through cell texts that are different
-in the two tables. Note that the count of cell differences includes the ID cols
-but their backgrounds will not be colored teal (since the ID col is a frozen
+in the two tables. Note that the count of cell differences includes the ID-cols
+but their backgrounds will not be colored teal (since the ID-col is a frozen
 col).
 
 A right-click on a diffed cell shows a popup with several operations including
