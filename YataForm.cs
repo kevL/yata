@@ -249,6 +249,7 @@ namespace yata
 		{
 			btn_ProPanel.Name     = "btn_PropertyPanel";
 			btn_ProPanel.TabIndex = 4;
+			btn_ProPanel.TabStop  = false;
 
 			btn_ProPanel.Visible = false;
 
@@ -359,7 +360,8 @@ namespace yata
 					break;
 
 				case Keys.Escape:
-					if (Table != null && Tabs.Focused)
+					if ((Table != null && Tabs.Focused)
+						|| btn_ProPanel.Focused) // jic.
 					{
 						e.SuppressKeyPress = true;
 						Table.Select();
