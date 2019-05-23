@@ -2486,8 +2486,8 @@ namespace yata
 						Table._propanel = new PropertyPanel(Table);
 					else
 					{
-						Table._propanel.calcValueWidth();
-						Table._propanel.setLeftHeight();
+						Table._propanel.deterValfieldWidth();
+						Table._propanel.deterTelemetric();
 						Table._propanel.InitScroll();
 					}
 
@@ -3327,8 +3327,8 @@ namespace yata
 							Table._propanel = new PropertyPanel(Table);
 						else
 						{
-							Table._propanel.calcValueWidth();
-							Table._propanel.setLeftHeight();
+							Table._propanel.deterValfieldWidth();
+							Table._propanel.deterTelemetric();
 							Table._propanel.InitScroll();
 						}
 

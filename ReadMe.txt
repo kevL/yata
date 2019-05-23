@@ -6,7 +6,7 @@ changed in the Settings.Cfg textfile.
 
 2019 may 22
 kevL's
-ver 3.0.0.0
+ver 3.0.0.1
 
 
 File
@@ -134,6 +134,7 @@ Left/Right arrows - scrolls table in the direction
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
+       - if the tabcontrol is focused it switches focus to the table
 
 Enter - starts editing a cell if the table has focus and only one cell is
         currently selected

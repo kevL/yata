@@ -10,10 +10,20 @@ namespace yata
 		:
 			Button
 	{
+		#region Fields
 		readonly Rectangle _rectBG;
 		readonly Rectangle _rectGrad;
 		readonly Brush _brushGrad;
+		#endregion Fields
 
+
+		#region Properties
+		internal bool Depressed
+		{ get; set; }
+		#endregion Properties
+
+
+		#region cTor
 		internal PropertyPanelButton()
 		{
 			DrawingControl.SetDoubleBuffered(this);
@@ -28,11 +38,10 @@ namespace yata
 			_brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
 												 Color.PaleGreen, Color.Olive);
 		}
+		#endregion cTor
 
 
-		internal bool Depressed
-		{ get; set; }
-
+		#region Events (override)
 		/// <summary>
 		/// Since right-click on a button does not visually depress it do this.
 		/// </summary>
@@ -67,6 +76,7 @@ namespace yata
 			else
 				base.OnPaint(pevent);
 		}
+		#endregion Events (override)
 	}
 
 
@@ -74,23 +84,30 @@ namespace yata
 		:
 			Control
 	{
+		#region Fields (static)
+		static int _heightr = -1; // height of a row is the same for all propanels
+
+		const int _padHori = 5; // horizontal text padding
+		const int _padVert = 2; // vertical text padding
+		#endregion Fields (static)
+
+
+		#region Fields
 		readonly YataGrid _grid;
 
 		internal readonly ScrollBar _scroll = new VScrollBar();
+		internal readonly TextBox   _editor = new TextBox();
 
 		readonly int HeightProps; // height of the entire panel (incl/ non-displayed top & bot)
 
 		readonly int _widthVars;	// left col
 		int _widthVals;				// right col
 
-		static int _heightr; // height of a row is the same for all propanels
-
-		const int _padHori = 5; // horizontal text padding
-		const int _padVert = 2; // vertical text padding
-
-		internal readonly TextBox _editor = new TextBox();
 		Rectangle _editRect;
+		#endregion Fields
 
+
+		#region Properties
 		bool _dockBot;
 		internal bool DockBot
 		{
@@ -103,8 +120,10 @@ namespace yata
 					Top = 0;
 			}
 		}
+		#endregion Properties
 
 
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -131,7 +150,7 @@ namespace yata
 			else
 				Font = new System.Drawing.Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
-			if (_heightr == 0)
+			if (_heightr == -1)
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
 
 			HeightProps = _grid.ColCount * _heightr;
@@ -145,8 +164,8 @@ namespace yata
 			}
 			_widthVars += _padHori * 2 + 1;
 
-			calcValueWidth();
-			setLeftHeight();
+			deterValfieldWidth();
+			deterTelemetric();
 
 			_scroll.Dock = DockStyle.Right;
 			_scroll.ValueChanged += OnScrollValueChanged;
@@ -166,9 +185,11 @@ namespace yata
 
 			Controls.Add(_editor);
 		}
+		#endregion cTor
 
 
-		internal void calcValueWidth()
+		#region Methods
+		internal void deterValfieldWidth()
 		{
 //			for (int r = 0; r != _grid.RowCount; ++r)
 //			{
@@ -202,7 +223,10 @@ namespace yata
 			_editor.Width = _widthVals;
 		}
 
-		internal void setLeftHeight()
+		/// <summary>
+		/// Sets the 'Width', 'Left', and 'Height' values of this property panel.
+		/// </summary>
+		internal void deterTelemetric()
 		{
 			Width = _widthVars + _widthVals;
 
@@ -216,6 +240,9 @@ namespace yata
 				Height = h;
 		}
 
+		/// <summary>
+		/// Calculates scrollbar values.
+		/// </summary>
 		internal void InitScroll()
 		{
 			if (Height < HeightProps)
@@ -249,12 +276,10 @@ namespace yata
 			}
 		}
 
-		void OnScrollValueChanged(object sender, EventArgs e)
-		{
-			_editor.Visible = false;
-			Refresh();
-		}
-
+		/// <summary>
+		/// Scrolls this property panel (vertical only).
+		/// </summary>
+		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
 			if (!_editor.Visible)
@@ -276,6 +301,99 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Applies a text-edit via the editbox.
+		/// </summary>
+		void ApplyTextEdit()
+		{
+			Cell cell = _grid[_r,_c];
+			string text = _editor.Text;
+			if (text != cell.text)
+				_grid.ChangeCellText(cell, _editor);
+		}
+		#endregion Methods
+
+
+		#region Events (scroll)
+		void OnScrollValueChanged(object sender, EventArgs e)
+		{
+			lostfocus_Editor(null, EventArgs.Empty);
+		}
+		#endregion Events (scroll)
+
+
+		#region Events (editor)
+		/// <summary>
+		/// Handles keydown events in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Alt is pressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void keydown_Editor(object sender, KeyEventArgs e)
+		{
+			if (e.Alt)
+				lostfocus_Editor(null, EventArgs.Empty);
+		}
+
+		void lostfocus_Editor(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			Refresh();
+		}
+
+		/// <summary>
+		/// Handles leave event in the cell-editor.
+		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
+		/// pressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void leave_Editor(object sender, EventArgs e)
+		{
+			if ((ModifierKeys & Keys.Control) == Keys.Control
+				&& _editor.Visible)
+			{
+				_editor.Focus(); // ie. don't leave editor.
+			}
+		}
+		#endregion Events (editor)
+
+
+		#region Events (override)
+		/// <summary>
+		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
+		/// fires during edit or so.
+		/// </summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if (_editor.Visible)
+			{
+				switch (keyData)
+				{
+					case Keys.Enter:
+						ApplyTextEdit();
+						goto case Keys.Escape;
+
+					case Keys.Escape:
+					case Keys.Tab:
+						_editor.Visible = false;
+						_grid.Refresh();
+						_grid.Select();
+						return true;
+				}
+			}
+			return base.ProcessDialogKey(keyData);
+		}
+
+		protected override void OnLostFocus(EventArgs e)
+		{
+			if (!_editor.ContainsFocus)
+				lostfocus_Editor(null, EventArgs.Empty);
+
+//			base.OnLostFocus(e);
+		}
 
 		/// <summary>
 		/// Clears cords on the statusbar when the mouse enters the control.
@@ -292,6 +410,11 @@ namespace yata
 		int _r; // -> the row in the table.
 		int _c; // -> the col in the table, the row in the panel.
 
+		/// <summary>
+		/// Handles a mouse-click event. Selects the row clicked, starts or
+		/// applies/cancels edit.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
 			if (!_editor.Visible)
@@ -348,100 +471,18 @@ namespace yata
 					ApplyTextEdit();
 
 				_editor.Visible = false;
-				_grid.Select();
 				_grid.Refresh();
+				_grid.Select();
 			}
 
 //			base.OnMouseClick(e);
 		}
 
-		protected override void OnLostFocus(EventArgs e)
-		{
-			if (!_editor.ContainsFocus)
-			{
-				_editor.Visible = false;
-				Refresh();
-			}
-
-//			base.OnLostFocus(e);
-		}
-
-		void lostfocus_Editor(object sender, EventArgs e)
-		{
-			_editor.Visible = false;
-			Refresh();
-		}
-
 		/// <summary>
-		/// Handles keydown events in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Alt is pressed.
+		/// Paints this property panel.
+		/// TODO: Paint any frozen cols a lighter blue.
 		/// </summary>
-		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void keydown_Editor(object sender, KeyEventArgs e)
-		{
-			if (e.Alt)
-			{
-				_editor.Visible = false;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// Handles leave event in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
-		/// pressed.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void leave_Editor(object sender, EventArgs e)
-		{
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
-			{
-				if (_editor.Visible)
-					_editor.Focus(); // ie. don't leave editor.
-			}
-		}
-
-		/// <summary>
-		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
-		/// fires during edit or so.
-		/// </summary>
-		/// <param name="keyData"></param>
-		/// <returns></returns>
-		protected override bool ProcessDialogKey(Keys keyData)
-		{
-			if (_editor.Visible)
-			{
-				switch (keyData)
-				{
-					case Keys.Enter:
-						ApplyTextEdit();
-						goto case Keys.Escape;
-
-					case Keys.Escape:
-					case Keys.Tab:
-						_editor.Visible = false;
-						_grid.Select();
-						_grid.Refresh();
-						return true;
-				}
-			}
-			return base.ProcessDialogKey(keyData);
-		}
-
-		/// <summary>
-		/// Applies a text-edit via the editbox.
-		/// </summary>
-		void ApplyTextEdit()
-		{
-			Cell cell = _grid[_r,_c];
-			string text = _editor.Text;
-			if (text != cell.text)
-				_grid.ChangeCellText(cell, _editor);
-		}
-
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			YataGrid.graphics = e.Graphics;
@@ -532,5 +573,6 @@ namespace yata
 
 //			base.OnPaint(e);
 		}
+		#endregion Events (override)
 	}
 }

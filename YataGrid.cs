@@ -378,7 +378,7 @@ namespace yata
 
 					if (_table._propanel != null && _table._propanel.Visible)
 					{
-						_table._propanel.setLeftHeight();
+						_table._propanel.deterTelemetric();
 						_table._propanel.InitScroll();
 
 						_table._propanel.DockBot = _table._propanel.DockBot; // redeter Top of propanel
@@ -1980,8 +1980,8 @@ namespace yata
 
 			if (_propanel != null && _propanel.Visible)
 			{
-				_propanel.calcValueWidth(); // TODO: Re-calc the 'c' col only.
-				_propanel.setLeftHeight();
+				_propanel.deterValfieldWidth(); // TODO: Re-calc the 'c' col only.
+				_propanel.deterTelemetric();
 				_propanel.InitScroll();
 			}
 		}
