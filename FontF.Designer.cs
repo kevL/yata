@@ -22,8 +22,6 @@ namespace yata
 		CheckBox cb_Bold;
 		CheckBox cb_Italic;
 		TextBox tb_NetString;
-		Button btn_Copy;
-		ToolTip toolTip;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -47,7 +45,6 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.list_Font = new System.Windows.Forms.ListBox();
 			this.btn_Ok = new System.Windows.Forms.Button();
 			this.btn_Apply = new System.Windows.Forms.Button();
@@ -60,8 +57,6 @@ namespace yata
 			this.cb_Bold = new System.Windows.Forms.CheckBox();
 			this.cb_Italic = new System.Windows.Forms.CheckBox();
 			this.tb_NetString = new System.Windows.Forms.TextBox();
-			this.btn_Copy = new System.Windows.Forms.Button();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -208,31 +203,9 @@ namespace yata
 			this.tb_NetString.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_NetString.Name = "tb_NetString";
 			this.tb_NetString.ReadOnly = true;
-			this.tb_NetString.Size = new System.Drawing.Size(405, 22);
+			this.tb_NetString.Size = new System.Drawing.Size(460, 22);
 			this.tb_NetString.TabIndex = 10;
-			this.toolTip.SetToolTip(this.tb_NetString, ".NET font-string can be used in Settings.Cfg to override default fonts");
 			this.tb_NetString.WordWrap = false;
-			// 
-			// btn_Copy
-			// 
-			this.btn_Copy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Copy.Location = new System.Drawing.Point(415, 357);
-			this.btn_Copy.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Copy.Name = "btn_Copy";
-			this.btn_Copy.Size = new System.Drawing.Size(45, 23);
-			this.btn_Copy.TabIndex = 11;
-			this.btn_Copy.Text = "Copy";
-			this.toolTip.SetToolTip(this.btn_Copy, ".NET font-string can be used in Settings.Cfg to override default fonts");
-			this.btn_Copy.UseVisualStyleBackColor = true;
-			this.btn_Copy.Click += new System.EventHandler(this.btnCopy_click);
-			// 
-			// toolTip
-			// 
-			this.toolTip.AutoPopDelay = 30000;
-			this.toolTip.InitialDelay = 50;
-			this.toolTip.ReshowDelay = 50;
-			this.toolTip.UseAnimation = false;
-			this.toolTip.UseFading = false;
 			// 
 			// FontF
 			// 
@@ -241,7 +214,6 @@ namespace yata
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(467, 384);
-			this.Controls.Add(this.btn_Copy);
 			this.Controls.Add(this.tb_NetString);
 			this.Controls.Add(this.cb_Italic);
 			this.Controls.Add(this.cb_Bold);

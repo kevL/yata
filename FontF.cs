@@ -201,17 +201,6 @@ namespace yata
 
 			Close();
 		}
-
-		/// <summary>
-		/// Copies the .NET font-string to the Windows Clipboard.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void btnCopy_click(object sender, EventArgs e)
-		{
-			if (!String.IsNullOrEmpty(tb_NetString.Text))
-				Clipboard.SetText(tb_NetString.Text);
-		}
 		#endregion Button handlers
 
 
