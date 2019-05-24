@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
 
 namespace yata
 {
-	sealed partial class FontPickerForm
+	sealed partial class FontF
 		:
 			Form
 	{
@@ -48,7 +49,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal FontPickerForm(YataForm f)
+		internal FontF(YataForm f)
 		{
 			InitializeComponent();
 
@@ -106,8 +107,8 @@ namespace yata
 
 			list_Size.Items.AddRange(new object[]
 			{
-				 "6", "7", "8", "9","10","11","12",
-				"13","14","15","16","17","18"
+				 "6", "7", "8", "9","10","11","12","13",
+				"14","15","16","17","18","19","20","21"
 			});
 
 			if (fontStart != -1)
@@ -199,6 +200,17 @@ namespace yata
 			lbl_Example.Font = null;
 
 			Close();
+		}
+
+		/// <summary>
+		/// Copies the .NET font-string to the Windows Clipboard.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void btnCopy_click(object sender, EventArgs e)
+		{
+			if (!String.IsNullOrEmpty(tb_NetString.Text))
+				Clipboard.SetText(tb_NetString.Text);
 		}
 		#endregion Button handlers
 
@@ -354,6 +366,9 @@ namespace yata
 			return null;
 		}
 
+		/// <summary>
+		/// Prints text in the chosen font.
+		/// </summary>
 		void SetSampleFont()
 		{
 			if (list_Font.SelectedIndex != -1)
@@ -372,8 +387,21 @@ namespace yata
 
 					lbl_Example.Font = new Font(_ffs[list_Font.SelectedIndex].Name, // rely on GC here
 												size, style);
+
+					SetNetString();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Prints the .NET font-string of the currently chosen font (for use by
+		/// Settings.Cfg).
+		/// </summary>
+		void SetNetString()
+		{
+			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+			tb_NetString.Text = tc.ConvertToString(lbl_Example.Font);
+			tb_NetString.SelectionStart = tb_NetString.Text.Length;
 		}
 
 

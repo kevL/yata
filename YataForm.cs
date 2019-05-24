@@ -2160,7 +2160,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Instantiates 'RowCreatorForm' for inserting/creating multiple blank
+		/// Instantiates 'RowCreatorF' for inserting/creating multiple blank
 		/// rows.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -2169,7 +2169,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				var f = new RowCreatorForm(this);
+				var f = new RowCreatorF(this);
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					ShowColorPanel();
@@ -2582,11 +2582,11 @@ namespace yata
 		/// <param name="e"></param>
 		void fontclick_Font(object sender, EventArgs e)
 		{
-			var f = Application.OpenForms["FontPickerForm"];
+			var f = Application.OpenForms["FontF"];
 			if (f == null)
 			{
 				it_Font.Checked = true;
-				f = new FontPickerForm(this);
+				f = new FontF(this);
 				f.Show(this);
 			}
 			else
@@ -2594,24 +2594,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens an output-box with the current table-font as a string for
-		/// copying to Settings.Cfg if desired.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void fontclick_CurrentFont(object sender, EventArgs e)
-		{
-			var f = new FontCopyForm(this);
-
-			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			f.SetText("font=" + tc.ConvertToString(Font));
-
-			f.ShowDialog();
-		}
-
-		/// <summary>
 		/// Sets the form's font to the default Font.
-		/// See also: FontPickerForm.doFont()
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

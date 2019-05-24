@@ -65,7 +65,6 @@ namespace yata
 
 		ToolStripMenuItem it_MenuFont;
 		ToolStripMenuItem it_Font;
-		ToolStripMenuItem it_CurrentFont;
 		ToolStripMenuItem it_FontDefault;
 
 		ToolStripMenuItem it_MenuPaths;
@@ -241,7 +240,6 @@ namespace yata
 			this.it_ClearUr = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CurrentFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -316,7 +314,7 @@ namespace yata
 			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 214);
+			this.tabMenu.Size = new System.Drawing.Size(139, 192);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -885,7 +883,6 @@ namespace yata
 			this.it_MenuFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFont.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Font,
-			this.it_CurrentFont,
 			this.it_FontDefault});
 			this.it_MenuFont.Name = "it_MenuFont";
 			this.it_MenuFont.Size = new System.Drawing.Size(43, 20);
@@ -895,21 +892,14 @@ namespace yata
 			// it_Font
 			// 
 			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(180, 22);
+			this.it_Font.Size = new System.Drawing.Size(175, 22);
 			this.it_Font.Text = "Font ... &be patient";
 			this.it_Font.Click += new System.EventHandler(this.fontclick_Font);
-			// 
-			// it_CurrentFont
-			// 
-			this.it_CurrentFont.Name = "it_CurrentFont";
-			this.it_CurrentFont.Size = new System.Drawing.Size(180, 22);
-			this.it_CurrentFont.Text = "&Current font string";
-			this.it_CurrentFont.Click += new System.EventHandler(this.fontclick_CurrentFont);
 			// 
 			// it_FontDefault
 			// 
 			this.it_FontDefault.Name = "it_FontDefault";
-			this.it_FontDefault.Size = new System.Drawing.Size(180, 22);
+			this.it_FontDefault.Size = new System.Drawing.Size(175, 22);
 			this.it_FontDefault.Text = "&Load default font";
 			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
 			// 

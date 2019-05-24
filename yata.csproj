@@ -85,25 +85,21 @@
     <Compile Include="Crap.cs" />
     <Compile Include="DifferDialog.cs" />
     <Compile Include="PropertyPanel.cs" />
-    <Compile Include="RowCreatorForm.cs" />
-    <Compile Include="RowCreatorForm.Designer.cs">
-      <DependentUpon>RowCreatorForm.cs</DependentUpon>
+    <Compile Include="RowCreatorF.cs" />
+    <Compile Include="RowCreatorF.Designer.cs">
+      <DependentUpon>RowCreatorF.cs</DependentUpon>
     </Compile>
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
     <Compile Include="YataPaths.cs" />
     <Compile Include="YataTabs.cs" />
-    <Compile Include="FontPickerForm.cs" />
-    <Compile Include="FontPickerForm.Designer.cs">
-      <DependentUpon>FontPickerForm.cs</DependentUpon>
+    <Compile Include="FontF.cs" />
+    <Compile Include="FontF.Designer.cs">
+      <DependentUpon>FontF.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="FontCopyForm.cs" />
-    <Compile Include="FontCopyForm.Designer.cs">
-      <DependentUpon>FontCopyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="logger.cs" />
     <Compile Include="Settings.cs" />
@@ -125,8 +121,8 @@
     <EmbeddedResource Include="FileWatcherDialog.resx">
       <DependentUpon>FileWatcherDialog.Designer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FontPickerForm.resx">
-      <DependentUpon>FontPickerForm.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="FontF.resx">
+      <DependentUpon>FontF.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>
@@ -135,11 +131,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="FontCopyForm.resx">
-      <DependentUpon>FontCopyForm.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RowCreatorForm.resx">
-      <DependentUpon>RowCreatorForm.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="RowCreatorF.resx">
+      <DependentUpon>RowCreatorF.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>
