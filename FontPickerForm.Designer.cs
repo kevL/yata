@@ -1,24 +1,28 @@
+using System.Windows.Forms;
+
+
 namespace yata
 {
-	partial class FontPickerForm
+	sealed partial class FontPickerForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.ListBox list_Font;
-		private System.Windows.Forms.Button btn_Ok;
-		private System.Windows.Forms.Button btn_Apply;
-		private System.Windows.Forms.Button btn_Cancel;
-		private System.Windows.Forms.Label lbl_Font;
-		private System.Windows.Forms.Label lbl_Style;
-		private System.Windows.Forms.Label lbl_Size;
-		private System.Windows.Forms.ListBox list_Size;
-		private System.Windows.Forms.Label lbl_Example;
-		private System.Windows.Forms.TextBox tb_Size;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox cb_Bold;
-		private System.Windows.Forms.CheckBox cb_Italic;
+		System.ComponentModel.IContainer components = null;
+
+		ListBox list_Font;
+		Button btn_Ok;
+		Button btn_Apply;
+		Button btn_Cancel;
+		Label lbl_Font;
+		Label lbl_Style;
+		Label lbl_Size;
+		ListBox list_Size;
+		Label lbl_Example;
+		TextBox tb_Size;
+		GroupBox groupBox1;
+		CheckBox cb_Bold;
+		CheckBox cb_Italic;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -73,6 +77,8 @@ namespace yata
 			// 
 			// btn_Ok
 			// 
+			this.btn_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Ok.Location = new System.Drawing.Point(290, 125);
 			this.btn_Ok.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.btn_Ok.Name = "btn_Ok";
@@ -84,6 +90,8 @@ namespace yata
 			// 
 			// btn_Apply
 			// 
+			this.btn_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Apply.Location = new System.Drawing.Point(290, 170);
 			this.btn_Apply.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.btn_Apply.Name = "btn_Apply";
@@ -95,6 +103,8 @@ namespace yata
 			// 
 			// btn_Cancel
 			// 
+			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_Cancel.Location = new System.Drawing.Point(290, 215);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

@@ -374,8 +374,8 @@ namespace yata
 		/// <summary>
 		/// Forwards a keydown [Enter] event to an appropriate funct.
 		/// @note Is basically just a convoluted handler for the OnKeyDown()
-		/// handler to stop the *beep* if [Enter] is keyed when a textbox has
-		/// focus.
+		/// handler to stop the *beep* if [Enter] is keyed when a textbox is
+		/// focused.
 		/// </summary>
 		void HandleDontBeepEvent()
 		{
@@ -2621,12 +2621,12 @@ namespace yata
 				doFont(FontDefault);
 		}
 
-		internal void DecheckFontIt()
+		internal void FontItem_uncheck()
 		{
 			it_Font.Checked = false;
 		}
 
-		internal void ToggleFontDefaultEnabled()
+		internal void DefaultFontItem_toggleenabled()
 		{
 			it_FontDefault.Enabled = !it_FontDefault.Enabled;
 		}

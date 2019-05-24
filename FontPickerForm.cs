@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class FontPickerForm
+	sealed partial class FontPickerForm
 		:
 			Form
 	{
@@ -122,7 +122,7 @@ namespace yata
 
 			lbl_Example.Text = EXAMPLE;
 
-			_f.ToggleFontDefaultEnabled();
+			_f.DefaultFontItem_toggleenabled();
 		}
 		#endregion cTor
 
@@ -152,8 +152,8 @@ namespace yata
 		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
-			_f.DecheckFontIt();
-			_f.ToggleFontDefaultEnabled();
+			_f.FontItem_uncheck();
+			_f.DefaultFontItem_toggleenabled();
 
 			_x = Left;
 			_y = Top;
