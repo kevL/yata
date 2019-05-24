@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 may 22
+2019 may 23
 kevL's
-ver 3.0.0.1
+ver 3.0.1.1
 
 
 File
@@ -89,12 +89,15 @@ Clipboard
 
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
-  display the table-data with)
-- Current font string (a .NET string representing the current table font)
+  display the table-data. THE CHOICE OF FONT WILL NOT BE SAVED. But note that
+  along the bottom of the dialog is a .NET font-string that can be copy/pasted
+  to Settings.Cfg for any of the "font=" variables. See the section below about
+  the Settings.Cfg file)
 - Load default font (sets the table-font to Yata's hardcoded default font)
 
 
-Paths (see Appendix E: how to use Info paths)
+Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
+       Appendix E: how to use Info paths)
 
 
 Help
@@ -208,15 +211,13 @@ Settings.Cfg file (do not use double-quotes)
 the following variables ought be respected:
 
 font=      a .NET string that represents the desired table-font (see Font->
-           Current font string)
+           Font ... be patient)
 font2=     a .NET string that represents a desired (usually smaller) font for
-           menus (To get a correct .NET font-string for menus, choose the font
-           for the table and copy its string with Font->Current font string,
-           then change the table-font back to what you like and paste the copied
-           string into Settings.Cfg "font2=". Yata must be reloaded before it
-           will display with a changed menu-font.)
+           menus (Yata needs to be reloaded before it will display with a
+           changed menu-font)
 font3=     a .NET string that represents a desired font for the PropertyPanel
-           (see notes at font2)
+           (Yata needs to be reloaded before it will display with a changed
+           PropertyPanel font)
 pathall=   a path without quotes to a valid directory to grope for 2da info
            for Crafting.2da or Spells.2da (see Appendix E: how to use Info
            paths)
