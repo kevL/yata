@@ -80,7 +80,7 @@ namespace yata
 			this.btn_Ok.Location = new System.Drawing.Point(275, 115);
 			this.btn_Ok.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Ok.Name = "btn_Ok";
-			this.btn_Ok.Size = new System.Drawing.Size(190, 40);
+			this.btn_Ok.Size = new System.Drawing.Size(185, 40);
 			this.btn_Ok.TabIndex = 6;
 			this.btn_Ok.Text = "— ok —";
 			this.btn_Ok.UseVisualStyleBackColor = true;
@@ -93,7 +93,7 @@ namespace yata
 			this.btn_Apply.Location = new System.Drawing.Point(275, 160);
 			this.btn_Apply.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Apply.Name = "btn_Apply";
-			this.btn_Apply.Size = new System.Drawing.Size(190, 40);
+			this.btn_Apply.Size = new System.Drawing.Size(185, 40);
 			this.btn_Apply.TabIndex = 7;
 			this.btn_Apply.Text = "— apply —";
 			this.btn_Apply.UseVisualStyleBackColor = true;
@@ -107,7 +107,7 @@ namespace yata
 			this.btn_Cancel.Location = new System.Drawing.Point(275, 205);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(190, 40);
+			this.btn_Cancel.Size = new System.Drawing.Size(185, 40);
 			this.btn_Cancel.TabIndex = 8;
 			this.btn_Cancel.Text = "— cancel —";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -115,12 +115,13 @@ namespace yata
 			// 
 			// lbl_Size
 			// 
-			this.lbl_Size.Location = new System.Drawing.Point(320, 10);
+			this.lbl_Size.Location = new System.Drawing.Point(315, 10);
 			this.lbl_Size.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Size = new System.Drawing.Size(20, 15);
+			this.lbl_Size.Size = new System.Drawing.Size(20, 20);
 			this.lbl_Size.TabIndex = 3;
 			this.lbl_Size.Text = "pt";
+			this.lbl_Size.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// list_Size
 			// 
@@ -143,7 +144,7 @@ namespace yata
 			this.lbl_Example.Location = new System.Drawing.Point(5, 12);
 			this.lbl_Example.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Example.Name = "lbl_Example";
-			this.lbl_Example.Size = new System.Drawing.Size(450, 88);
+			this.lbl_Example.Size = new System.Drawing.Size(445, 88);
 			this.lbl_Example.TabIndex = 0;
 			// 
 			// tb_Size
@@ -165,7 +166,7 @@ namespace yata
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Padding = new System.Windows.Forms.Padding(0);
-			this.groupBox1.Size = new System.Drawing.Size(460, 105);
+			this.groupBox1.Size = new System.Drawing.Size(455, 105);
 			this.groupBox1.TabIndex = 9;
 			this.groupBox1.TabStop = false;
 			// 
@@ -203,7 +204,7 @@ namespace yata
 			this.tb_NetString.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_NetString.Name = "tb_NetString";
 			this.tb_NetString.ReadOnly = true;
-			this.tb_NetString.Size = new System.Drawing.Size(460, 22);
+			this.tb_NetString.Size = new System.Drawing.Size(455, 22);
 			this.tb_NetString.TabIndex = 10;
 			this.tb_NetString.WordWrap = false;
 			// 
@@ -213,7 +214,7 @@ namespace yata
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(467, 384);
+			this.ClientSize = new System.Drawing.Size(465, 384);
 			this.Controls.Add(this.tb_NetString);
 			this.Controls.Add(this.cb_Italic);
 			this.Controls.Add(this.cb_Bold);

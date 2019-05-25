@@ -32,14 +32,14 @@ namespace yata
 
 		#region Fields
 		readonly List<FontFamily> _ffs   = new List<FontFamily>();
-		readonly List<Font>       _fonts = new List<Font>(); // fonts will be disposed below
+		readonly List<Font>       _fonts = new List<Font>(); // fonts will be disposed
 
 		readonly YataForm _f;
 		readonly Font _font;
 		readonly bool _load;
 
 		bool
-			_dirty, // ie. displayed font and its characteristics have changed
+			_dirty, // ie. displayed font and/or its style have changed
 			_applied,
 			_bypassStyleChanged;
 		#endregion Fields
@@ -56,8 +56,6 @@ namespace yata
 			_f = f;
 			_font = _f.Font;
 			_load = true;
-
-			Owner = _f;
 
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;
