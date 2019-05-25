@@ -672,13 +672,13 @@ namespace yata
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
 
-				it_CopyCell  .Enabled = 
-				it_PasteCell .Enabled = (Table.getSelectedCell() != null);
+				it_CopyCell  .Enabled = (Table.getSelectedCell() != null);
+				it_PasteCell .Enabled = (it_CopyCell.Enabled && !Table.Readonly);
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange.Enabled = (_copy.Count != 0);
+				it_PasteRange.Enabled = (_copy.Count != 0 && !Table.Readonly);
 
-				it_OrderRows .Enabled =
+				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
@@ -1245,6 +1245,10 @@ namespace yata
 		#endregion File menu
 
 
+		/// <summary>
+		/// TODO: This funct is obsolete; tables that are Readonly shall not
+		/// fire events that can change the table at all.
+		/// </summary>
 		internal void ReadonlyError()
 		{
 			MessageBox.Show("The 2da-file is opened as readonly.",
@@ -1278,7 +1282,13 @@ namespace yata
 
 			context_it_PasteAbove.Enabled =
 			context_it_Paste     .Enabled =
-			context_it_PasteBelow.Enabled = (_copy.Count != 0);
+			context_it_PasteBelow.Enabled = (_copy.Count != 0 && !Table.Readonly);
+
+			context_it_Cut        .Enabled =
+			context_it_CreateAbove.Enabled =
+			context_it_ClearRow   .Enabled =
+			context_it_CreateBelow.Enabled =
+			context_it_DeleteRow  .Enabled = !Table.Readonly;
 
 			Point loc;
 			if (Settings._context)							// static location
@@ -1568,16 +1578,16 @@ namespace yata
 					}
 				}
 
-				it_CopyCell .Enabled = 
-				it_PasteCell.Enabled = (Table.getSelectedCell() != null);
+				it_CopyCell  .Enabled = (Table.getSelectedCell() != null);
+				it_PasteCell .Enabled = (it_CopyCell.Enabled && !Table.Readonly);
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange.Enabled = (_copy.Count != 0);
+				it_PasteRange.Enabled = (_copy.Count != 0 && !Table.Readonly);
 			}
 			else
 			{
-				it_CopyCell .Enabled = 
-				it_PasteCell.Enabled = false;
+				it_CopyCell  .Enabled = 
+				it_PasteCell .Enabled =
 
 				it_CopyRange .Enabled =
 				it_PasteRange.Enabled = false;
@@ -1586,7 +1596,7 @@ namespace yata
 			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
 			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
 
-			it_CreateRows.Enabled = (Table != null);
+			it_CreateRows.Enabled = (Table != null && !Table.Readonly);
 		}
 
 
@@ -2054,7 +2064,9 @@ namespace yata
 				_copy.Add(fields);
 				++rFirst;
 			}
-			it_PasteRange.Enabled = true;
+
+			if (!Table.Readonly)
+				it_PasteRange.Enabled = true;
 		}
 
 		void editclick_PasteRange(object sender, EventArgs e)
@@ -2220,7 +2232,7 @@ namespace yata
 		{
 			bool valid = (Table != null);
 
-			it_OrderRows .Enabled =
+			it_OrderRows .Enabled = valid && !Table.Readonly;
 			it_CheckRows .Enabled =
 			it_ColorRows .Enabled =
 			it_AutoCols  .Enabled =
@@ -3351,6 +3363,8 @@ namespace yata
 			it_cellMergeRo.Enabled = sel.diff
 								  && _diff1 != null && _diff2 != null
 								  && isMergeEnabled(sel);
+
+			it_cellPaste.Enabled = !Table.Readonly;
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);

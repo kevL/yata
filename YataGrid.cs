@@ -2248,8 +2248,8 @@ namespace yata
 				}
 			}
 
-			_f.it_CopyCell .Enabled =
-			_f.it_PasteCell.Enabled = (getSelectedCell() != null);
+			_f.it_CopyCell .Enabled = (getSelectedCell() != null);
+			_f.it_PasteCell.Enabled = (_f.it_CopyCell.Enabled && !Readonly);
 
 //			base.OnMouseClick(e);
 		}
