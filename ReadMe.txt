@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 may 23
+2019 may 25
 kevL's
-ver 3.0.1.1
+ver 3.0.3.0
 
 
 File
@@ -28,10 +28,11 @@ Edit
 - Redo : Ctrl+y
 
 - Find      : Ctrl+f (focuses the Search box)
-- Find next : F3
+- Find next : F3 (key Shift to find previous)
 
 - Goto             : Ctrl+g (focuses the Goto box)
-- Goto loadchanged : Ctrl+n (see Appendix A: note on Load)
+- Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
+                             Load)
 
 - Copy cell   : Ctrl+c (copies a single cell if only 1 cell is selected)
 - Paste cell  : Ctrl+v (pastes a single cell if only 1 cell is selected)
@@ -506,10 +507,10 @@ Select diff2 causes four noticable things to happen:
 3. the tables will scroll in unison if possible
 4. the DifferDialog will appear. It lists any differences between col headers
 and row counts. Additionally a Goto button in the lower left corner of the
-dialog can be used to cycle (forward only) through cell texts that are different
-in the two tables. Note that the count of cell differences includes the ID-cols
-but their backgrounds will not be colored teal (since the ID-col is a frozen
-col).
+dialog can be used to cycle through cell texts that are different in the two
+tables (key Shift to goto previous). Note that the count of cell differences
+includes the ID-cols but their backgrounds will not be colored teal (since the
+ID-col is a frozen col).
 
 A right-click on a diffed cell shows a popup with several operations including
 these two:

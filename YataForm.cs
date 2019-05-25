@@ -1683,6 +1683,7 @@ namespace yata
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
 		/// NOTE: Ensure that 'Table' is valid before call.
+		/// TODO: Allow frozen cols
 		/// </summary>
 		void Search()
 		{
@@ -1692,10 +1693,6 @@ namespace yata
 				Table.Invalidate();
 			}
 
-			// TODO: Allow frozen col(s) to be searched through also.
-			// TODO: option to invert the search direction (or at least back to
-			//       previous find)
-
 			string search = tb_Search.Text;
 			if (!String.IsNullOrEmpty(search))
 			{
@@ -1704,14 +1701,14 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				Table.ClearSelects();
 
-				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholeword search.
 				bool start = true;
 
 				string text;
 
 				int rStart, r,c;
 
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward search
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward search ->
 				{
 					if (sel != null)
 					{
@@ -1737,7 +1734,7 @@ namespace yata
 								{
 									++r;
 								}
-								else						// or to the top of the table if on the last row(s)
+								else						// or to the top of the table if on the last row
 									r = 0;
 							}
 						}
@@ -1746,42 +1743,36 @@ namespace yata
 
 						for (; c != Table.ColCount; ++c)
 						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(text = Table[r,c].text))
+							if (c >= Table.FrozenCount
+								&& !String.IsNullOrEmpty(text = Table[r,c].text)
+								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 							{
-								if ((text = text.ToLower()) == search
-									|| (substring && text.Contains(search)))
-								{
-									Table[r,c].selected = true;
-									Table.EnsureDisplayed(Table[r,c]);
-									Table.Invalidate();
+								Table[r,c].selected = true;
+								Table.EnsureDisplayed(Table[r,c]);
+								Table.Invalidate();
 
-									return;
-								}
+								return;
 							}
 						}
 					}
 
 					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
+					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+					for (c = 0; c != Table.ColCount; ++c)
 					{
-						for (c = 0; c != Table.ColCount; ++c)
+						if (c >= Table.FrozenCount
+							&& !String.IsNullOrEmpty(text = Table[r,c].text)
+							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(text = Table[r,c].text))
-							{
-								if ((text = text.ToLower()) == search
-									|| (substring && text.Contains(search)))
-								{
-									Table[r,c].selected = true;
-									Table.EnsureDisplayed(Table[r,c]);
-									Table.Invalidate();
+							Table[r,c].selected = true;
+							Table.EnsureDisplayed(Table[r,c]);
+							Table.Invalidate();
 
-									return;
-								}
-							}
+							return;
 						}
 					}
 				}
-				else // backward search
+				else // backward search ->
 				{
 					if (sel != null)
 					{
@@ -1816,38 +1807,32 @@ namespace yata
 
 						for (; c != -1; --c)
 						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(text = Table[r,c].text))
+							if (c >= Table.FrozenCount
+								&& !String.IsNullOrEmpty(text = Table[r,c].text)
+								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 							{
-								if ((text = text.ToLower()) == search
-									|| (substring && text.Contains(search)))
-								{
-									Table[r,c].selected = true;
-									Table.EnsureDisplayed(Table[r,c]);
-									Table.Invalidate();
+								Table[r,c].selected = true;
+								Table.EnsureDisplayed(Table[r,c]);
+								Table.Invalidate();
 
-									return;
-								}
+								return;
 							}
 						}
 					}
 
 					// TODO: tighten exact start/end-cells
 					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;         --c)
 					{
-						for (c = Table.ColCount - 1; c != -1; --c)
+						if (c >= Table.FrozenCount
+							&& !String.IsNullOrEmpty(text = Table[r,c].text)
+							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 						{
-							if (c >= Table.FrozenCount && !String.IsNullOrEmpty(text = Table[r,c].text))
-							{
-								if ((text = text.ToLower()) == search
-									|| (substring && text.Contains(search)))
-								{
-									Table[r,c].selected = true;
-									Table.EnsureDisplayed(Table[r,c]);
-									Table.Invalidate();
+							Table[r,c].selected = true;
+							Table.EnsureDisplayed(Table[r,c]);
+							Table.Invalidate();
 
-									return;
-								}
-							}
+							return;
 						}
 					}
 				}
@@ -1912,10 +1897,11 @@ namespace yata
 
 		/// <summary>
 		/// Selects the next LoadChanged cell.
-		/// @note This is fired only from the EditMenu (click/Ctrl+L) and its
+		/// @note This is fired only from the EditMenu (click/Ctrl+N) and its
 		/// item is enabled by default. The item/shortcut will be set disabled
-		/// either when the EditMenu opens or when Ctrl+L is keyed iff there are
+		/// either when the EditMenu opens or when Ctrl+N is keyed iff there are
 		/// no 'loadchanged' cells.
+		/// TODO: Allow frozen cols
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1940,10 +1926,6 @@ namespace yata
 					Table.Invalidate();
 				}
 
-				// TODO: Allow frozen col(s) to be searched through also.
-				// TODO: option to invert the search direction (or at least back to
-				//       previous find)
-
 				Table.Select();
 
 				Cell sel = Table.getSelectedCell();
@@ -1953,60 +1935,121 @@ namespace yata
 
 				bool start = true;
 
-				if (sel != null)
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
 				{
-					c      = sel.x;
-					rStart = sel.y;
-				}
-				else
-				{
-					c      = -1;
-					rStart =  0;
-				}
-
-				for (r = rStart; r != Table.RowCount; ++r)
-				{
-					if (start)
+					if (sel != null)
 					{
-						start = false;
-						if (++c == Table.ColCount)		// if starting on the last cell of a row
-						{
-							c = 0;
-
-							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-							{
-								++r;
-							}
-							else						// or to the top of the table if on the last row(s)
-								r = 0;
-						}
+						c      = sel.x;
+						rStart = sel.y;
 					}
 					else
-						c = 0;
-
-					for (; c != Table.ColCount; ++c)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
-						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Refresh();
+						c      = -1;
+						rStart =  0;
+					}
 
-							return;
+					for (r = rStart; r != Table.RowCount; ++r)
+					{
+						if (start)
+						{
+							start = false;
+							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							{
+								c = 0;
+
+								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+								{
+									++r;
+								}
+								else						// or to the top of the table if on the last row
+									r = 0;
+							}
+						}
+						else
+							c = 0;
+
+						for (; c != Table.ColCount; ++c)
+						{
+							if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+							{
+								sel.selected = true;
+								Table.EnsureDisplayed(sel);
+								Table.Invalidate();
+
+								return;
+							}
 						}
 					}
-				}
 
-				// TODO: tighten exact start/end-cells
-				for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
-				{
+					// TODO: tighten exact start/end-cells
+					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
 					for (c = 0; c != Table.ColCount; ++c)
 					{
 						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
 						{
 							sel.selected = true;
 							Table.EnsureDisplayed(sel);
-							Table.Refresh();
+							Table.Invalidate();
+
+							return;
+						}
+					}
+				}
+				else // backward goto ->
+				{
+					if (sel != null)
+					{
+						c      = sel.x;
+						rStart = sel.y;
+					}
+					else
+					{
+						c      = Table.ColCount;
+						rStart = Table.RowCount - 1;
+					}
+
+					for (r = rStart; r != -1; --r)
+					{
+						if (start)
+						{
+							start = false;
+							if (--c == -1)	// if starting on the first cell of a row
+							{
+								c = Table.ColCount - 1;
+
+								if (r > 0)	// jump to the last cell of the previous row
+								{
+									--r;
+								}
+								else		// or to the bottom of the table if on the first row
+									r = Table.RowCount - 1;
+							}
+						}
+						else
+							c = Table.ColCount - 1;
+
+						for (; c != -1; --c)
+						{
+							if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+							{
+								sel.selected = true;
+								Table.EnsureDisplayed(sel);
+								Table.Invalidate();
+
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;         --c)
+					{
+						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						{
+							sel.selected = true;
+							Table.EnsureDisplayed(sel);
+							Table.Invalidate();
 
 							return;
 						}
@@ -3154,6 +3197,7 @@ namespace yata
 		/// <summary>
 		/// Selects the next diffed cell in the table (or both tables if both
 		/// are valid).
+		/// TODO: Allow frozen cols
 		/// </summary>
 		internal void GotoDiffCell()
 		{
@@ -3166,10 +3210,6 @@ namespace yata
 					Table._editor.Visible = false;
 					Table.Invalidate();
 				}
-
-				// TODO: Allow frozen col(s) to be searched through also.
-				// TODO: option to invert the search direction (or at least back to
-				//       previous find)
 
 				YataGrid table; // the other table - can be null.
 
@@ -3186,38 +3226,63 @@ namespace yata
 
 				bool start = true;
 
-				if (sel != null)
+				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
 				{
-					c      = sel.x;
-					rStart = sel.y;
-				}
-				else
-				{
-					c      = -1;
-					rStart =  0;
-				}
-
-				for (r = rStart; r != Table.RowCount; ++r)
-				{
-					if (start)
+					if (sel != null)
 					{
-						start = false;
-						if (++c == Table.ColCount)		// if starting on the last cell of a row
-						{
-							c = 0;
-
-							if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-							{
-								++r;
-							}
-							else						// or to the top of the table if on the last row(s)
-								r = 0;
-						}
+						c      = sel.x;
+						rStart = sel.y;
 					}
 					else
-						c = 0;
+					{
+						c      = -1;
+						rStart =  0;
+					}
 
-					for (; c != Table.ColCount; ++c)
+					for (r = rStart; r != Table.RowCount; ++r)
+					{
+						if (start)
+						{
+							start = false;
+							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							{
+								c = 0;
+
+								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+								{
+									++r;
+								}
+								else						// or to the top of the table if on the last row
+									r = 0;
+							}
+						}
+						else
+							c = 0;
+
+						for (; c != Table.ColCount; ++c)
+						{
+							if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+							{
+								sel.selected = true;
+								Table.EnsureDisplayed(sel);
+								Table.Invalidate();
+
+								if (table != null
+									&& sel.x < table.ColCount
+									&& sel.y < table.RowCount)
+								{
+									table[sel.y, sel.x].selected = true;
+									table.EnsureDisplayed(table[sel.y, sel.x]);
+									table.Invalidate();
+								}
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+					for (c = 0; c != Table.ColCount; ++c)
 					{
 						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
 						{
@@ -3237,11 +3302,63 @@ namespace yata
 						}
 					}
 				}
-
-				// TODO: tighten exact start/end-cells
-				for (r = 0; r != rStart + 1; ++r) // quick and dirty wrap ->
+				else // backward goto ->
 				{
-					for (c = 0; c != Table.ColCount; ++c)
+					if (sel != null)
+					{
+						c      = sel.x;
+						rStart = sel.y;
+					}
+					else
+					{
+						c      = Table.ColCount;
+						rStart = Table.RowCount - 1;
+					}
+
+					for (r = rStart; r != -1; --r)
+					{
+						if (start)
+						{
+							start = false;
+							if (--c == -1)	// if starting on the first cell of a row
+							{
+								c = Table.ColCount - 1;
+
+								if (r > 0)	// jump to the last cell of the previous row
+								{
+									--r;
+								}
+								else		// or to the bottom of the table if on the first row
+									r = Table.RowCount - 1;
+							}
+						}
+						else
+							c = Table.ColCount - 1;
+
+						for (; c != -1; --c)
+						{
+							if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+							{
+								sel.selected = true;
+								Table.EnsureDisplayed(sel);
+								Table.Invalidate();
+
+								if (table != null
+									&& sel.x < table.ColCount
+									&& sel.y < table.RowCount)
+								{
+									table[sel.y, sel.x].selected = true;
+									table.EnsureDisplayed(table[sel.y, sel.x]);
+									table.Invalidate();
+								}
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;         --c)
 					{
 						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
 						{
