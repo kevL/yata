@@ -2957,42 +2957,34 @@ namespace yata
 		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
 			if (_diff1 != null)
-			{
-				for (int r = 0; r != _diff1.RowCount; ++r)
-				for (int c = 0; c != _diff1.ColCount; ++c)
-				{
-					_diff1[r,c].diff = false;
-				}
-
-				if (_diff1 == Table)
-					opsclick_AutosizeCols(null, EventArgs.Empty);
-				else
-					AutosizeCols(_diff1);
-
-				_diff1.Invalidate();
-				_diff1 = null;
-
-				Table.Select();
-			}
+				DiffReset(_diff1);
 
 			if (_diff2 != null)
+				DiffReset(_diff2);
+
+			Table.Select();
+		}
+
+		/// <summary>
+		/// Helper for tabclick_DiffReset().
+		/// @note Check that 'table' is not null before call.
+		/// </summary>
+		/// <param name="table"></param>
+		void DiffReset(YataGrid table)
+		{
+			for (int r = 0; r != table.RowCount; ++r)
+			for (int c = 0; c != table.ColCount; ++c)
 			{
-				for (int r = 0; r != _diff2.RowCount; ++r)
-				for (int c = 0; c != _diff2.ColCount; ++c)
-				{
-					_diff2[r,c].diff = false;
-				}
-
-				if (_diff2 == Table)
-					opsclick_AutosizeCols(null, EventArgs.Empty);
-				else
-					AutosizeCols(_diff2);
-
-				_diff2.Invalidate();
-				_diff2 = null;
-
-				Table.Select();
+				table[r,c].diff = false;
 			}
+
+			if (table == Table)
+				opsclick_AutosizeCols(null, EventArgs.Empty);
+			else
+				AutosizeCols(table);
+
+			table.Invalidate();
+			table = null;
 		}
 
 		/// <summary>
