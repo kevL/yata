@@ -1053,26 +1053,28 @@ namespace yata
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 				bool bypassReadonly;
 
-				if ((ToolStripMenuItem)sender == it_SaveAs)
+				var it = sender as ToolStripMenuItem;
+
+				if (it == it_SaveAs)
 				{
 					_table = Table;
 					// '_pfeT' is set by caller
 					force = (_pfeT == _table.Fullpath);
 					bypassReadonly = false;
 				}
-				else if ((ToolStripMenuItem)sender == it_SaveAll)
+				else if (it == it_SaveAll)
 				{
 					// '_pfeT' and '_table' are set by caller
 					force = false;
 					bypassReadonly = false;
 				}
-				else // is rego-save or 'FileWatcherDialog' save
+				else // is rego-save or tab-save or 'FileWatcherDialog' save
 				{
 					_table = Table;
 					_pfeT = _table.Fullpath;
 					force = false;
 
-					if ((ToolStripMenuItem)sender == it_Save)
+					if (it == it_Save || it == it_tabSave)
 						bypassReadonly = false;
 					else
 						bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
@@ -1095,7 +1097,7 @@ namespace yata
 
 							SetTitlebarText();
 
-							if ((ToolStripMenuItem)sender == it_SaveAs)
+							if (force)
 								_table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
 															//               *as itself* it loses its Readonly flag.
 							int rows = _table.RowCount;
@@ -2852,6 +2854,8 @@ namespace yata
 			{
 				it_tabCloseAll      .Enabled =
 				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
+
+				it_tabSave          .Enabled = !Table.Readonly;
 
 				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
 

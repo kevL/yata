@@ -114,6 +114,7 @@ namespace yata
 		ToolStripSeparator separator_23;
 		ToolStripSeparator separator_24;
 		ToolStripSeparator separator_25;
+		ToolStripSeparator separator_26;
 
 		ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -131,6 +132,7 @@ namespace yata
 		ToolStripMenuItem it_tabClose;
 		ToolStripMenuItem it_tabCloseAll;
 		ToolStripMenuItem it_tabCloseAllOthers;
+		ToolStripMenuItem it_tabSave;
 		ToolStripMenuItem it_tabReload;
 		ToolStripMenuItem it_tabDiff1;
 		ToolStripMenuItem it_tabDiff2;
@@ -177,6 +179,8 @@ namespace yata
 			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_tabSave = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_26 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_23 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_tabDiff1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -306,6 +310,8 @@ namespace yata
 			this.it_tabCloseAll,
 			this.it_tabCloseAllOthers,
 			this.separator_14,
+			this.it_tabSave,
+			this.separator_26,
 			this.it_tabReload,
 			this.separator_23,
 			this.it_tabDiff1,
@@ -314,7 +320,7 @@ namespace yata
 			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 192);
+			this.tabMenu.Size = new System.Drawing.Size(139, 242);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -345,6 +351,18 @@ namespace yata
 			// 
 			this.separator_14.Name = "separator_14";
 			this.separator_14.Size = new System.Drawing.Size(135, 6);
+			// 
+			// it_tabSave
+			// 
+			this.it_tabSave.Name = "it_tabSave";
+			this.it_tabSave.Size = new System.Drawing.Size(138, 22);
+			this.it_tabSave.Text = "Save";
+			this.it_tabSave.Click += new System.EventHandler(this.fileclick_Save);
+			// 
+			// separator_26
+			// 
+			this.separator_26.Name = "separator_26";
+			this.separator_26.Size = new System.Drawing.Size(135, 6);
 			// 
 			// it_tabReload
 			// 
