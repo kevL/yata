@@ -3,7 +3,7 @@
 
 namespace yata
 {
-	sealed partial class RowCreatorF
+	sealed partial class RowCreatorDialog
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -212,7 +212,7 @@ namespace yata
 			this.gb_Insert.TabStop = false;
 			this.gb_Insert.Text = " or Insert (inclusive) ";
 			// 
-			// RowCreatorF
+			// RowCreatorDialog
 			// 
 			this.AcceptButton = this.btn_Okay;
 			this.CancelButton = this.btn_Cancel;
@@ -227,7 +227,7 @@ namespace yata
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "RowCreatorF";
+			this.Name = "RowCreatorDialog";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

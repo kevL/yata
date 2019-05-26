@@ -1701,7 +1701,7 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				Table.ClearSelects();
 
-				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholeword search.
+				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
 				bool start = true;
 
 				string text;
@@ -2272,7 +2272,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Instantiates 'RowCreatorF' for inserting/creating multiple blank
+		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple blank
 		/// rows.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -2281,7 +2281,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				var f = new RowCreatorF(this);
+				var f = new RowCreatorDialog(this);
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					ShowColorPanel();

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class RowCreatorF
+	sealed partial class RowCreatorDialog
 		:
 			Form
 	{
@@ -23,7 +23,7 @@ namespace yata
 
 
 		#region cTor
-		internal RowCreatorF(YataForm f)
+		internal RowCreatorDialog(YataForm f)
 		{
 			InitializeComponent();
 

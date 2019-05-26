@@ -85,9 +85,9 @@
     <Compile Include="Crap.cs" />
     <Compile Include="DifferDialog.cs" />
     <Compile Include="PropertyPanel.cs" />
-    <Compile Include="RowCreatorF.cs" />
-    <Compile Include="RowCreatorF.Designer.cs">
-      <DependentUpon>RowCreatorF.cs</DependentUpon>
+    <Compile Include="RowCreatorDialog.cs" />
+    <Compile Include="RowCreatorDialog.Designer.cs">
+      <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
@@ -131,8 +131,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RowCreatorF.resx">
-      <DependentUpon>RowCreatorF.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="RowCreatorDialog.resx">
+      <DependentUpon>RowCreatorDialog.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>
