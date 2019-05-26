@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
@@ -1162,8 +1163,9 @@ namespace yata
 					DrawingControl.SetDoubleBuffered(_labelid);
 					_labelid.BackColor = Colors.FrozenHead;
 
-					_labelid.Paint += labelid_Paint;
-					_labelid.MouseClick += click_IdLabel;
+					_labelid.Resize     += label_Resize;
+					_labelid.Paint      += labelid_Paint;
+					_labelid.MouseClick += labelid_MouseClick;
 					_labelid.MouseClick += (sender, e) => Select();
 				}
 
@@ -1178,8 +1180,9 @@ namespace yata
 						DrawingControl.SetDoubleBuffered(_labelfirst);
 						_labelfirst.BackColor = Colors.FrozenHead;
 
-						_labelfirst.Paint += labelfirst_Paint;
-						_labelfirst.MouseClick += click_FirstLabel;
+						_labelfirst.Resize     += label_Resize;
+						_labelfirst.Paint      += labelfirst_Paint;
+						_labelfirst.MouseClick += labelfirst_MouseClick;
 						_labelfirst.MouseClick += (sender, e) => Select();
 					}
 
@@ -1194,8 +1197,9 @@ namespace yata
 							DrawingControl.SetDoubleBuffered(_labelsecond);
 							_labelsecond.BackColor = Colors.FrozenHead;
 
-							_labelsecond.Paint += labelsecond_Paint;
-							_labelsecond.MouseClick += click_SecondLabel;
+							_labelsecond.Resize     += label_Resize;
+							_labelsecond.Paint      += labelsecond_Paint;
+							_labelsecond.MouseClick += labelsecond_MouseClick;
 							_labelsecond.MouseClick += (sender, e) => Select();
 						}
 
@@ -2973,12 +2977,27 @@ namespace yata
 		}
 
 
+		static int _heightColheadCached;
+		void label_Resize(object sender, EventArgs e)
+		{
+			if (_heightColheadCached != HeightColhead)
+			{
+				_heightColheadCached = HeightColhead;
+				Gradients.FrozenLabel = new LinearGradientBrush(new Point(0, 0),
+																new Point(0, HeightColhead),
+																Color.Cornsilk, Color.BurlyWood);
+				Gradients.Disordered  = new LinearGradientBrush(new Point(0, 0),
+																new Point(0, HeightColhead),
+																Color.LightCoral, Color.Lavender);
+			}
+		}
+
 		/// <summary>
 		/// Shift+RMB = sort by id
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_IdLabel(object sender, MouseEventArgs e)
+		void labelid_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right
@@ -2997,7 +3016,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_FirstLabel(object sender, MouseEventArgs e)
+		void labelfirst_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right
@@ -3016,7 +3035,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_SecondLabel(object sender, MouseEventArgs e)
+		void labelsecond_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0
 				&& e.Button == MouseButtons.Right

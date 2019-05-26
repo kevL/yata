@@ -54,11 +54,11 @@ namespace yata
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			// and you know it don't come easy - Ringo
-			YataGrid.graphics.FillRectangle(Brushes.ProPanelButton, _rectBg);
+			YataGrid.graphics.FillRectangle(Brushes.PropanelButton, _rectBg);
 
 			if (Depressed)
 			{
-				YataGrid.graphics.FillRectangle(Gradients.GradPropanelButton, _rectGr);
+				YataGrid.graphics.FillRectangle(Gradients.PropanelButton, _rectGr);
 
 				var pen1 = Pens.Black;
 				var pen2 = Pencils.DarkLine;
@@ -505,7 +505,7 @@ namespace yata
 			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(Brushes.ProPanelFrozen, rect);
+				YataGrid.graphics.FillRectangle(Brushes.PropanelFrozen, rect);
 			}
 
 			// fill any selected cell's var/val-rect ->

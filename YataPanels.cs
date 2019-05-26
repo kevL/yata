@@ -29,6 +29,15 @@ namespace yata
 			MouseClick += _grid.click_ColPanel;
 		}
 
+		protected override void OnResize(EventArgs eventargs)
+		{
+			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
+															 new Point(0, Height),
+															 Color.Lavender, Color.MediumOrchid);
+
+//			base.OnResize(eventargs);
+		}
+
 		/// <summary>
 		/// Handles the paint event.
 		/// </summary>
@@ -42,10 +51,8 @@ namespace yata
 
 				if (Settings._gradient)
 				{
-					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-															Color.Lavender, Color.MediumOrchid);
-					var rectGrad  = new Rectangle(0,0, Width, Height);
-					YataGrid.graphics.FillRectangle(brushGrad, rectGrad);
+					var rect = new Rectangle(0,0, Width, Height);
+					YataGrid.graphics.FillRectangle(Gradients.ColheadPanel, rect);
 				}
 
 				YataGrid.graphics.DrawLine(Pencils.DarkLine,

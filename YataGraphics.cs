@@ -100,8 +100,8 @@ namespace yata
 		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
 
 		// propanel
-		internal static readonly Brush ProPanelButton = new SolidBrush(SystemColors.Control);
-		internal static readonly Brush ProPanelFrozen = new SolidBrush(Color.LightGray);
+		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
+		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
 	}
 
 	static class Colors
@@ -112,7 +112,7 @@ namespace yata
 		internal static readonly Color FrozenHead   = Color.Moccasin;
 		internal static readonly Color FrozenPanel  = Color.OldLace;
 
-		internal static readonly Color LabelSorted  = Color.Violet;
+		internal static readonly Color LabelSorted  = Color.LightCoral;
 
 		internal static readonly Color Editor       = Color.Crimson;
 
@@ -123,8 +123,10 @@ namespace yata
 
 	static class Gradients
 	{
-		internal static readonly LinearGradientBrush GradPropanelButton = new LinearGradientBrush(new Point(0, 0),
-																								  new Point(0, PropertyPanelButton.HEIGHT),
-																								  Color.PaleGreen, Color.Olive);
+		internal static LinearGradientBrush ColheadPanel, FrozenLabel, Disordered;
+
+		internal static readonly LinearGradientBrush PropanelButton = new LinearGradientBrush(new Point(0, 0),
+																							  new Point(0, PropertyPanelButton.HEIGHT),
+																							  Color.PaleGreen, Color.Olive);
 	}
 }
