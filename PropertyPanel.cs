@@ -10,10 +10,14 @@ namespace yata
 		:
 			Button
 	{
+		#region Fields (static)
+		internal static int HEIGHT = 20;
+		#endregion Fields (static)
+
+
 		#region Fields
-		readonly Rectangle _rectBG;
-		readonly Rectangle _rectGrad;
-		readonly Brush _brushGrad;
+		readonly Rectangle _rectBg;
+		readonly Rectangle _rectGr;
 		#endregion Fields
 
 
@@ -31,12 +35,10 @@ namespace yata
 			// NOTE: .NET is using the default vals for button's Width/Height
 			// here. So set it explicitly.
 			Width  =
-			Height = 20;
+			Height = HEIGHT;
 
-			_rectBG    = new Rectangle(0,0, Width, Height);
-			_rectGrad  = new Rectangle(3,3, Width - 6, Height - 6);
-			_brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
-												 Color.PaleGreen, Color.Olive);
+			_rectBg = new Rectangle(0,0, Width, Height);
+			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);
 		}
 		#endregion cTor
 
@@ -52,26 +54,26 @@ namespace yata
 			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			// and you know it don't come easy - Ringo
-			YataGrid.graphics.FillRectangle(Brushes.ProPanelButton, _rectBG);
+			YataGrid.graphics.FillRectangle(Brushes.ProPanelButton, _rectBg);
 
 			if (Depressed)
 			{
-				YataGrid.graphics.FillRectangle(_brushGrad, _rectGrad);
+				YataGrid.graphics.FillRectangle(Gradients.GradPropanelButton, _rectGr);
 
 				var pen1 = Pens.Black;
 				var pen2 = Pencils.DarkLine;
 
-				YataGrid.graphics.DrawLine(pen1, 2, 2, Width - 2, 2);					// hori top
-				YataGrid.graphics.DrawLine(pen2, 2, 3, Width - 2, 3);
+				YataGrid.graphics.DrawLine(pen1, 2, 2,          Width - 2, 2);			// hori top
+				YataGrid.graphics.DrawLine(pen2, 2, 3,          Width - 2, 3);
 
 				YataGrid.graphics.DrawLine(pen1, 2, Height - 1, Width - 2, Height - 1);	// hori bot
 				YataGrid.graphics.DrawLine(pen2, 2, Height - 2, Width - 3, Height - 2);
 
-				YataGrid.graphics.DrawLine(pen1, 2, 2, 2, Height - 2);					// vert left
-				YataGrid.graphics.DrawLine(pen2, 3, 2, 3, Height - 2);
+				YataGrid.graphics.DrawLine(pen1, 2, 2,          2, Height - 2);			// vert left
+				YataGrid.graphics.DrawLine(pen2, 3, 2,          3, Height - 2);
 
-				YataGrid.graphics.DrawLine(pen1, Width - 1, 2, Width - 1, Height - 2);	// vert right
-				YataGrid.graphics.DrawLine(pen2, Width - 2, 2, Width - 2, Height - 2);
+				YataGrid.graphics.DrawLine(pen1, Width - 1, 2,  Width - 1, Height - 2);	// vert right
+				YataGrid.graphics.DrawLine(pen2, Width - 2, 2,  Width - 2, Height - 2);
 			}
 			else
 				base.OnPaint(pevent);

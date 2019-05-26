@@ -44,7 +44,7 @@ namespace yata
 				{
 					var brushGrad = new LinearGradientBrush(new Point(0,0), new Point(0, Height),
 															Color.Lavender, Color.MediumOrchid);
-					var rectGrad  = new Rectangle(0, 0, Width, Height);
+					var rectGrad  = new Rectangle(0,0, Width, Height);
 					YataGrid.graphics.FillRectangle(brushGrad, rectGrad);
 				}
 
@@ -89,6 +89,7 @@ namespace yata
 							Cursor = Cursors.VSplit;
 							_grabCol = c;
 							_grabStart = e.X;
+
 							return;
 						}
 					}
