@@ -3530,9 +3530,7 @@ namespace yata
 
 			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged);
 			it_cellMergeCe.Enabled = 
-			it_cellMergeRo.Enabled = sel.diff
-								  && _diff1 != null && _diff2 != null
-								  && isMergeEnabled(sel);
+			it_cellMergeRo.Enabled = isMergeEnabled(sel);
 
 			it_cellPaste.Enabled = !Table.Readonly;
 
@@ -3544,16 +3542,20 @@ namespace yata
 		/// Helper for ShowCellMenu().
 		/// </summary>
 		/// <param name="sel"></param>
-		/// <returns>true if Merge can be enabled</returns>
+		/// <returns>true if Merge (cell or row) will be enabled</returns>
 		bool isMergeEnabled(Cell sel)
 		{
-			YataGrid destTable = null;
-			if      (Table == _diff1) destTable = _diff2;
-			else if (Table == _diff2) destTable = _diff1;
+			if (sel.diff && _diff1 != null && _diff2 != null)
+			{
+				YataGrid destTable = null;
+				if      (Table == _diff1) destTable = _diff2;
+				else if (Table == _diff2) destTable = _diff1;
 
-			return (destTable != null && !destTable.Readonly
-				 && destTable.ColCount > sel.x
-				 && destTable.RowCount > sel.y);
+				return (destTable != null && !destTable.Readonly
+					 && destTable.ColCount > sel.x
+					 && destTable.RowCount > sel.y);
+			}
+			return false;
 		}
 
 		void cellclick_Stars(object sender, EventArgs e)
@@ -3656,10 +3658,15 @@ namespace yata
 	}
 
 
+	#region Constants
+	/// <summary>
+	/// Global constant.
+	/// </summary>
 	static class Constants
 	{
 		internal const string Stars = "****";
 	}
+	#endregion Constants
 
 
 	#region Delegates
@@ -3667,5 +3674,5 @@ namespace yata
 	/// Good fuckin Lord I just wrote a "DontBeep" delegate.
 	/// </summary>
 	internal delegate void DontBeepEventHandler();
-	#endregion
+	#endregion Delegates
 }
