@@ -26,7 +26,7 @@ namespace yata
 
 			Height = YataGrid.HeightColhead;
 
-			MouseClick += _grid.click_ColPanel;
+			MouseClick += _grid.click_ColheadPanel;
 		}
 
 		protected override void OnResize(EventArgs eventargs)
@@ -174,7 +174,7 @@ namespace yata
 			Dock      = DockStyle.Left;
 			BackColor = Colors.RowheadPanel;
 
-			MouseClick += _grid.click_RowPanel;
+			MouseClick += _grid.click_RowheadPanel;
 		}
 
 		/// <summary>

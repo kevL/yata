@@ -2692,7 +2692,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		internal void click_RowPanel(object sender, MouseEventArgs e)
+		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
 			if (RowCount != 0)
 			{
@@ -2706,22 +2706,22 @@ namespace yata
 
 						var row = Rows[r];
 
-						bool select;
+						bool @select;
 
 						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
 						{
-							select = false;
+							@select = false;
 							for (int c = 0; c != ColCount; ++c)
 							{
 								if (!row[c].selected)
 								{
-									select = true;
+									@select = true;
 									break;
 								}
 							}
 						}
 						else
-							select = true;
+							@select = true;
 
 
 						foreach (var col in Cols) // always clear col-selects
@@ -2767,14 +2767,14 @@ namespace yata
 							foreach (var ro in Rows)
 								ro.selected = false;
 
-							row.selected = select;
+							row.selected = @select;
 						}
 
-						if (select)
+						if (@select)
 							EnsureDisplayedRow(r);
 
 						for (int c = 0; c != ColCount; ++c)
-							row[c].selected = select;
+							row[c].selected = @select;
 
 						Refresh();
 					}
@@ -2815,7 +2815,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		internal void click_ColPanel(object sender, MouseEventArgs e)
+		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
 			if (!_panelCols._grab)
 			{
@@ -2847,7 +2847,7 @@ namespace yata
 						while ((left += Cols[c].width()) < x);
 
 
-						bool select = false;
+						bool @select = false;
 
 						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
 						{
@@ -2855,25 +2855,25 @@ namespace yata
 							{
 								if (!this[r,c].selected)
 								{
-									select = true;
+									@select = true;
 									break;
 								}
 							}
 						}
 						else
-							select = true;
+							@select = true;
 
 
 						if ((ModifierKeys & Keys.Control) != Keys.Control)
 						{
-							if (!select)
+							if (!@select)
 							{
 								for (int i = 0; i != RowCount; ++i) // if other col-cells are currently selected and Ctrl is NOT
 								for (int j = 0; j != ColCount; ++j) // pressed force the col to select after clearing all selects.
 								{
 									if (j != c && this[i,j].selected)
 									{
-										select = true;
+										@select = true;
 										break;
 									}
 								}
@@ -2917,14 +2917,14 @@ namespace yata
 							foreach (var col in Cols)
 								col.selected = false;
 
-							Cols[c].selected = select;
+							Cols[c].selected = @select;
 						}
 
-						if (select)
+						if (@select)
 							EnsureDisplayedCol(c);
 
 						for (int r = 0; r != RowCount; ++r)
-							this[r,c].selected = select;
+							this[r,c].selected = @select;
 
 						Refresh();
 					}
