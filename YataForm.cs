@@ -3178,9 +3178,9 @@ namespace yata
 						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
 
 			var ib = new DifferDialog(title,
-								 label,
-								 copyable,
-								 this);
+									  label,
+									  copyable,
+									  this);
 			ib.SetLabelColor(color);
 			if (@goto) ib.ShowGotoButton();
 			ib.Show();

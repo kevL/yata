@@ -2438,14 +2438,21 @@ namespace yata
 		/// <param name="left">the x-pos of the right edge of the frozen-panel;
 		/// ie, the left edge of the visible area of the table</param>
 		/// <returns></returns>
-		Point getCords(int x, int y, int left) // "Parameter is assigned but its value is never used" - bzzt.
+		Point getCords(int x, int y, int left)
 		{
+			int l = left;	// NOTE: That's only to get rid of the erroneous "Parameter
+							// is assigned but its value is never used" warning. Notice,
+							// however, that now 'l' is never used but ... no warning.
+							// Thank god these guys didn't write the code that got to the Moon.
+							// ps. My theory is that Stanley Kubrick wanted people to believe
+							// that he faked the landings; that's right, he ** faked the fake **
+							// Moon landings!
+
 			var cords = new Point();
 
-			cords.X = FrozenCount - 1;
-			do { ++cords.X; }
-			while ((left += Cols[cords.X].width()) < x);
-
+			cords.X = FrozenCount;
+			while ((left += Cols[cords.X].width()) < x)
+				++cords.X;
 
 			int top = HeightColhead;
 
