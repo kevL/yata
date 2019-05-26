@@ -3151,6 +3151,8 @@ namespace yata
 			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
 			_ur.ResetSaved(true);
 
+			RangeSelect = 0;
+
 			if (_sortdir != SORT_ASC || _sortcol != col)
 				_sortdir = SORT_ASC;
 			else
