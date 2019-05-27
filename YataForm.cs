@@ -2718,12 +2718,12 @@ namespace yata
 				doFont(FontDefault);
 		}
 
-		internal void FontItem_uncheck()
+		internal void Font_uncheck()
 		{
 			it_Font.Checked = false;
 		}
 
-		internal void DefaultFontItem_toggleenabled()
+		internal void DefaultFont_toggleenabled()
 		{
 			it_FontDefault.Enabled = !it_FontDefault.Enabled;
 		}
