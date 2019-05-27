@@ -83,10 +83,13 @@ namespace yata
 		internal readonly VScrollBar _scrollVert = new VScrollBar();
 		internal readonly HScrollBar _scrollHori = new HScrollBar();
 
+		int MaxVert; // Since a .NET scrollbar's Maximum value is not
+		int MaxHori; // its maximum value calculate and store these. sic
+
 		internal bool _visVert; // Be happy. happy happy
 		internal bool _visHori;
 
-		internal int offsetVert;
+		internal int offsetVert; // TODO: these are redundant w/ the scrollbars' Value ->
 		internal int offsetHori;
 
 		int HeightTable;
@@ -237,10 +240,10 @@ namespace yata
 			BackColor = SystemColors.ControlDark;
 
 			_scrollVert.Dock = DockStyle.Right;
-			_scrollVert.ValueChanged += OnVertScrollValueChanged;
+			_scrollVert.ValueChanged += OnScrollValueChanged_vert;
 
 			_scrollHori.Dock = DockStyle.Bottom;
-			_scrollHori.ValueChanged += OnHoriScrollValueChanged;
+			_scrollHori.ValueChanged += OnScrollValueChanged_hori;
 
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
@@ -270,14 +273,14 @@ namespace yata
 		#endregion cTor
 
 
-		void OnVertScrollValueChanged(object sender, EventArgs e)
+		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
 			if (_table == null) _table = this;
 
 			_table._editor.Visible = false;
 
 			_table.offsetVert = _table._scrollVert.Value;
-			_table.Refresh();
+			_table.Refresh(); // req'd to keep rowhead and frozen-cols in synch.
 
 
 			if (!_f._search)
@@ -316,14 +319,14 @@ namespace yata
 			}
 		}
 
-		void OnHoriScrollValueChanged(object sender, EventArgs e)
+		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
 			if (_table == null) _table = this;
 
 			_table._editor.Visible = false;
 
 			_table.offsetHori = _table._scrollHori.Value;
-			_table.Refresh();
+			_table.Invalidate();
 
 
 			if (!_f._search)
@@ -456,55 +459,47 @@ namespace yata
 
 			if (_visVert)
 			{
-				int vert = HeightTable
-						 + _scrollVert.LargeChange - 1
-						 - Height
+				// NOTE: Do not set Maximum until after deciding whether
+				// or not max < 0. 'Cause it fucks everything up. bingo.
+				int vert = HeightTable - Height
+						 + (_scrollVert.LargeChange - 1)
 						 + (_visHori ? _scrollHori.Height : 0);
 
-				if (vert < _scrollVert.LargeChange) vert = 0;
-
-				_scrollVert.Maximum = vert;	// NOTE: Do not set this until after deciding
-											// whether or not max < 0. 'Cause it fucks everything up. bingo.
+				if (vert < _scrollVert.LargeChange)
+					_scrollVert.Maximum = MaxVert = 0;
+				else
+					MaxVert = (_scrollVert.Maximum = vert) - (_scrollVert.LargeChange - 1);
 
 				// handle .NET OnResize anomaly ->
-				// keep the bottom of the table snuggled against the bottom of the visible area
-				// when resize enlarges the area
+				// keep the bottom of the table snuggled against the bottom of
+				// the visible area when resize enlarges the area
 				if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
-				{
-					_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
-				}
+					_scrollVert.Value = MaxVert;
 			}
 			else
-			{
-				_scrollVert.Value =
-				_scrollVert.Maximum = 0;
-			}
+				_scrollVert.Value = _scrollVert.Maximum = MaxVert = 0;
 
 			if (_visHori)
 			{
-				int hori = WidthTable
-						 + _scrollHori.LargeChange - 1
-						 - Width
+				// NOTE: Do not set Maximum until after deciding whether
+				// or not max < 0. 'Cause it fucks everything up. bingo.
+				int hori = WidthTable - Width
+						 + (_scrollHori.LargeChange - 1)
 						 + (_visVert ? _scrollVert.Width : 0);
 
-				if (hori < _scrollHori.LargeChange) hori = 0;
-
-				_scrollHori.Maximum = hori;	// NOTE: Do not set this until after deciding
-											// whether or not max < 0. 'Cause it fucks everything up. bingo.
+				if (hori < _scrollHori.LargeChange)
+					_scrollHori.Maximum = MaxHori = 0;
+				else
+					MaxHori = (_scrollHori.Maximum = hori) - (_scrollHori.LargeChange - 1);
 
 				// handle .NET OnResize anomaly ->
-				// keep the right of the table snuggled against the right of the visible area
-				// when resize enlarges the area
+				// keep the right of the table snuggled against the right of the
+				// visible area when resize enlarges the area
 				if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
-				{
-					_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0) + _proHori;
-				}
+					_scrollHori.Value = MaxHori;
 			}
 			else
-			{
-				_scrollHori.Value =
-				_scrollHori.Maximum = 0;
-			}
+				_scrollHori.Value = _scrollHori.Maximum = MaxHori = 0;
 		}
 
 		internal int _proHori;
@@ -531,7 +526,7 @@ namespace yata
 		internal void Scroll(MouseEventArgs e)
 		{
 			if (_propanel != null && _propanel._scroll.Visible
-				&& e.X > _propanel.Location.X && e.X < _propanel.Location.X + _propanel.Width)
+				&& e.X > _propanel.Left && e.X < _propanel.Left + _propanel.Width)
 			{
 				_propanel.Scroll(e);
 			}
@@ -539,85 +534,52 @@ namespace yata
 			{
 				if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) != Keys.Control))
 				{
+					int h;
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid vertically 1 visible-height per delta
 					{
-						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-						if (e.Delta > 0)
-						{
-							if (_scrollVert.Value - h < 0)
-								_scrollVert.Value = 0;
-							else
-								_scrollVert.Value -= h;
-						}
-						else if (e.Delta < 0)
-						{
-							if (_scrollVert.Value + h + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-								_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
-							else
-								_scrollVert.Value += h;
-						}
+						h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 					}
 					else
+						h = _scrollVert.LargeChange;
+
+					if (e.Delta > 0)
 					{
-						if (e.Delta > 0)
-						{
-							if (_scrollVert.Value - _scrollVert.LargeChange < 0)
-								_scrollVert.Value = 0;
-							else
-								_scrollVert.Value -= _scrollVert.LargeChange;
-						}
-						else if (e.Delta < 0)
-						{
-							if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-								_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
-							else
-								_scrollVert.Value += _scrollVert.LargeChange;
-						}
+						if (_scrollVert.Value - h < 0)
+							_scrollVert.Value = 0;
+						else
+							_scrollVert.Value -= h;
+					}
+					else if (e.Delta < 0)
+					{
+						if (_scrollVert.Value + h > MaxVert)
+							_scrollVert.Value = MaxVert;
+						else
+							_scrollVert.Value += h;
 					}
 				}
 				else if (_visHori)
 				{
+					int w;
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid horizontally 1 visible-width per delta
 					{
-						int w = WidthRowhead;
-						for (int c = 0; c != FrozenCount; ++c)
-							w += Cols[c].width();
-
-						w = Width - w - (_visVert ? _scrollVert.Width : 0);
-						if (w > 0) // TODO: not sure if <- needed
-						{
-							if (e.Delta > 0)
-							{
-								if (_scrollHori.Value - w < 0)
-									_scrollHori.Value = 0;
-								else
-									_scrollHori.Value -= w;
-							}
-							else if (e.Delta < 0)
-							{
-								if (_scrollHori.Value + w > _scrollHori.Maximum)
-									_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
-								else
-									_scrollHori.Value += w;
-							}
-						}
+						w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 					}
 					else
+						w = _scrollHori.LargeChange;
+
+					if (e.Delta > 0)
 					{
-						if (e.Delta > 0)
-						{
-							if (_scrollHori.Value - _scrollHori.LargeChange < 0)
-								_scrollHori.Value = 0;
-							else
-								_scrollHori.Value -= _scrollHori.LargeChange;
-						}
-						else if (e.Delta < 0)
-						{
-							if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
-								_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
-							else
-								_scrollHori.Value += _scrollHori.LargeChange;
-						}
+						if (_scrollHori.Value - w < 0)
+							_scrollHori.Value = 0;
+						else
+							_scrollHori.Value -= w;
+					}
+					else if (e.Delta < 0)
+					{
+						if (_scrollHori.Value + w > MaxHori)
+							_scrollHori.Value = MaxHori;
+						else
+							_scrollHori.Value += w;
 					}
 				}
 			}
@@ -952,6 +914,8 @@ namespace yata
 
 				_sortcol = 0;
 				_sortdir = SORT_ASC;
+
+				RangeSelect = 0;
 
 				FrozenCount = YataGrid.FreezeId;
 
@@ -1418,7 +1382,7 @@ namespace yata
 							}
 						}
 						else if (_visHori)
-							_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
+							_scrollHori.Value = MaxHori;
 					}
 					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
@@ -1433,7 +1397,7 @@ namespace yata
 							}
 						}
 						else if (_visVert)
-							_scrollVert.Value = HeightTable - Height + (_visHori ? _scrollHori.Height : 0);
+							_scrollVert.Value = MaxVert;
 					}
 					else if (sel != null)
 					{
@@ -1446,7 +1410,7 @@ namespace yata
 						}
 					}
 					else if (_visHori)
-						_scrollHori.Value = WidthTable - Width + (_visVert ? _scrollVert.Width : 0);
+						_scrollHori.Value = MaxHori;
 
 					break;
 
@@ -1537,8 +1501,8 @@ namespace yata
 					{
 						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 
-						if (_scrollVert.Value + h + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+						if (_scrollVert.Value + h > MaxVert)
+							_scrollVert.Value = MaxVert;
 						else
 							_scrollVert.Value += h;
 					}
@@ -1606,8 +1570,8 @@ namespace yata
 					}
 					else if (_visVert) // scroll the table
 					{
-						if (_scrollVert.Value + _scrollVert.LargeChange + (_scrollVert.LargeChange - 1) > _scrollVert.Maximum)
-							_scrollVert.Value = _scrollVert.Maximum - (_scrollVert.LargeChange - 1);
+						if (_scrollVert.Value + _scrollVert.LargeChange > MaxVert)
+							_scrollVert.Value = MaxVert;
 						else
 							_scrollVert.Value += _scrollVert.LargeChange;
 					}
@@ -1618,18 +1582,12 @@ namespace yata
 					{
 						if (_visHori)
 						{
-							int w = WidthRowhead;
-							for (int c = 0; c != FrozenCount; ++c)
-								w += Cols[c].width();
+							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 
-							w = Width - w - (_visVert ? _scrollVert.Width : 0);
-							if (w > 0)
-							{
-								if (_scrollHori.Value - w < 0)
-									_scrollHori.Value = 0;
-								else
-									_scrollHori.Value -= w;
-							}
+							if (_scrollHori.Value - w < 0)
+								_scrollHori.Value = 0;
+							else
+								_scrollHori.Value -= w;
 						}
 					}
 					else if (sel != null) // selection to the cell left
@@ -1656,13 +1614,10 @@ namespace yata
 					{
 						if (_visHori)
 						{
-							int w = WidthRowhead;
-							for (int c = 0; c != FrozenCount; ++c)
-								w += Cols[c].width();
+							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 
-							w = Width - w - (_visVert ? _scrollVert.Width : 0);
-							if (_scrollHori.Value + w > _scrollHori.Maximum)
-								_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+							if (_scrollHori.Value + w > MaxHori)
+								_scrollHori.Value = MaxHori;
 							else
 								_scrollHori.Value += w;
 						}
@@ -1679,8 +1634,8 @@ namespace yata
 					}
 					else if (_visHori)
 					{
-						if (_scrollHori.Value + _scrollHori.LargeChange + (_scrollHori.LargeChange - 1) > _scrollHori.Maximum)
-							_scrollHori.Value = _scrollHori.Maximum - (_scrollHori.LargeChange - 1);
+						if (_scrollHori.Value + _scrollHori.LargeChange > MaxHori)
+							_scrollHori.Value = MaxHori;
 						else
 							_scrollHori.Value += _scrollHori.LargeChange;
 					}
@@ -1921,7 +1876,7 @@ namespace yata
 			colRewidth(cell.x, cell.y);
 			UpdateFrozenControls(cell.x);
 
-			Refresh();
+			Refresh(); // req'd by table and propanel both.
 
 
 			rest.postext = cell.text;
@@ -2625,7 +2580,7 @@ namespace yata
 					return true;
 				}
 
-				int bar = _visHori ? _scrollHori.Height : 0;
+				int bar = (_visHori ? _scrollHori.Height : 0);
 				if (bounds.Y + bar > Height)
 				{
 					_scrollVert.Value += bounds.Y + bar - Height;
@@ -2667,7 +2622,7 @@ namespace yata
 
 			if (bounds.X != left)
 			{
-				int bar = _visVert ? _scrollVert.Width : 0;
+				int bar = (_visVert ? _scrollVert.Width : 0);
 				int right = Width - bar;
 
 				int width = bounds.Y - bounds.X;
