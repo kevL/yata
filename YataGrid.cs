@@ -466,15 +466,17 @@ namespace yata
 						 + (_visHori ? _scrollHori.Height : 0);
 
 				if (vert < _scrollVert.LargeChange)
-					_scrollVert.Maximum = MaxVert = 0;
+					_scrollVert.Maximum = MaxVert = 0; // TODO: Perhaps that should zero the Value and recurse.
 				else
+				{
 					MaxVert = (_scrollVert.Maximum = vert) - (_scrollVert.LargeChange - 1);
 
-				// handle .NET OnResize anomaly ->
-				// keep the bottom of the table snuggled against the bottom of
-				// the visible area when resize enlarges the area
-				if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
-					_scrollVert.Value = MaxVert;
+					// handle .NET OnResize anomaly ->
+					// keep the bottom of the table snuggled against the bottom of
+					// the visible area when resize enlarges the area
+					if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
+						_scrollVert.Value = MaxVert;
+				}
 			}
 			else
 				_scrollVert.Value = _scrollVert.Maximum = MaxVert = 0;
@@ -488,15 +490,17 @@ namespace yata
 						 + (_visVert ? _scrollVert.Width : 0);
 
 				if (hori < _scrollHori.LargeChange)
-					_scrollHori.Maximum = MaxHori = 0;
+					_scrollHori.Maximum = MaxHori = 0; // TODO: Perhaps that should zero the Value and recurse.
 				else
+				{
 					MaxHori = (_scrollHori.Maximum = hori) - (_scrollHori.LargeChange - 1);
 
-				// handle .NET OnResize anomaly ->
-				// keep the right of the table snuggled against the right of the
-				// visible area when resize enlarges the area
-				if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
-					_scrollHori.Value = MaxHori;
+					// handle .NET OnResize anomaly ->
+					// keep the right of the table snuggled against the right of the
+					// visible area when resize enlarges the area
+					if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
+						_scrollHori.Value = MaxHori;
+				}
 			}
 			else
 				_scrollHori.Value = _scrollHori.Maximum = MaxHori = 0;
