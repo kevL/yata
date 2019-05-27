@@ -318,7 +318,7 @@ namespace yata
 			this.Controls.Add(this.btn_Okay);
 			this.Controls.Add(this.pnl_Info);
 			this.Controls.Add(this.lbl_Info);
-			this.Font = new System.Drawing.Font("Verdana", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MaximizeBox = false;
 			this.Name = "DifferDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
