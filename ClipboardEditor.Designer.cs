@@ -3,14 +3,14 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class ClipboardEditor
+	sealed partial class ClipboardEditor
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		System.ComponentModel.IContainer components = null;
 
-		RichTextBox rtb_Text;
+		RichTextBox rtb_Clip;
 		Panel panel1;
 		Button btn_Set;
 		Button btn_Get;
@@ -37,7 +37,7 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.rtb_Text = new System.Windows.Forms.RichTextBox();
+			this.rtb_Clip = new System.Windows.Forms.RichTextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btn_Done = new System.Windows.Forms.Button();
 			this.btn_Set = new System.Windows.Forms.Button();
@@ -45,16 +45,17 @@ namespace yata
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// rtb_Text
+			// rtb_Clip
 			// 
-			this.rtb_Text.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rtb_Text.Location = new System.Drawing.Point(0, 0);
-			this.rtb_Text.Margin = new System.Windows.Forms.Padding(0);
-			this.rtb_Text.Name = "rtb_Text";
-			this.rtb_Text.Size = new System.Drawing.Size(542, 94);
-			this.rtb_Text.TabIndex = 0;
-			this.rtb_Text.Text = "";
-			this.rtb_Text.WordWrap = false;
+			this.rtb_Clip.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rtb_Clip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rtb_Clip.Location = new System.Drawing.Point(0, 0);
+			this.rtb_Clip.Margin = new System.Windows.Forms.Padding(0);
+			this.rtb_Clip.Name = "rtb_Clip";
+			this.rtb_Clip.Size = new System.Drawing.Size(542, 94);
+			this.rtb_Clip.TabIndex = 0;
+			this.rtb_Clip.Text = "";
+			this.rtb_Clip.WordWrap = false;
 			// 
 			// panel1
 			// 
@@ -109,7 +110,7 @@ namespace yata
 			// 
 			this.CancelButton = this.btn_Done;
 			this.ClientSize = new System.Drawing.Size(542, 124);
-			this.Controls.Add(this.rtb_Text);
+			this.Controls.Add(this.rtb_Clip);
 			this.Controls.Add(this.panel1);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MinimumSize = new System.Drawing.Size(230, 0);

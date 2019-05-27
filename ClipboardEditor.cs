@@ -29,7 +29,7 @@ namespace yata
 			Owner = f;
 
 			// TODO: controls are not resizing per Font correctly.
-			// See FontCopyForm ... vid. AutoScaleMode=
+			// vid. AutoScaleMode=
 
 			if (_x == -1) _x = f.Left + 20;
 			if (_y == -1) _y = f.Top  + 20;
@@ -55,12 +55,14 @@ namespace yata
 		{
 			string clip = Clipboard.GetText(TextDataFormat.Text).Trim();
 			if (!String.IsNullOrEmpty(clip))
-				rtb_Text.Text = clip;
+				rtb_Clip.Text = clip;
+			else
+				rtb_Clip.Text = String.Empty;
 		}
 
 		void click_Set(object sender, EventArgs e)
 		{
-			ClipboardAssistant.SetText(rtb_Text.Text.Replace("\n", Environment.NewLine).Trim());
+			ClipboardAssistant.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
 		}
 
 
