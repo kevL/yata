@@ -72,9 +72,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClipboardEditor.cs" />
-    <Compile Include="ClipboardEditor.Designer.cs">
-      <DependentUpon>ClipboardEditor.cs</DependentUpon>
+    <Compile Include="ClipboardF.cs" />
+    <Compile Include="ClipboardF.Designer.cs">
+      <DependentUpon>ClipboardF.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="FileWatcherDialog.cs" />
@@ -115,8 +115,8 @@
     <Compile Include="YataPanels.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClipboardEditor.resx">
-      <DependentUpon>ClipboardEditor.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="ClipboardF.resx">
+      <DependentUpon>ClipboardF.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileWatcherDialog.resx">
       <DependentUpon>FileWatcherDialog.Designer.cs</DependentUpon>

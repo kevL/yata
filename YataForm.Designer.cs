@@ -49,7 +49,7 @@ namespace yata
 		ToolStripMenuItem it_MenuClipboard;
 		ToolStripMenuItem it_CopyToClipboard;
 		ToolStripMenuItem it_CopyFromClipboard;
-		ToolStripMenuItem it_ViewClipboardContents;
+		ToolStripMenuItem it_OpenClipEditor;
 
 		ToolStripMenuItem it_Menu2daOps;
 		ToolStripMenuItem it_OrderRows;
@@ -225,7 +225,7 @@ namespace yata
 			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_ViewClipboardContents = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_OpenClipEditor = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
@@ -320,7 +320,7 @@ namespace yata
 			this.it_tabDiffJustify});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
-			this.tabMenu.Size = new System.Drawing.Size(139, 242);
+			this.tabMenu.Size = new System.Drawing.Size(139, 220);
 			this.tabMenu.Opening += new System.ComponentModel.CancelEventHandler(this.tabMenu_Opening);
 			// 
 			// it_tabClose
@@ -723,7 +723,7 @@ namespace yata
 			this.it_CopyToClipboard,
 			this.it_CopyFromClipboard,
 			this.separator_19,
-			this.it_ViewClipboardContents});
+			this.it_OpenClipEditor});
 			this.it_MenuClipboard.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.it_MenuClipboard.Name = "it_MenuClipboard";
 			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
@@ -736,7 +736,7 @@ namespace yata
 			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
 			this.it_CopyToClipboard.Size = new System.Drawing.Size(195, 22);
 			this.it_CopyToClipboard.Text = "&Export copied row(s)";
-			this.it_CopyToClipboard.Click += new System.EventHandler(this.editclick_ExportCopy);
+			this.it_CopyToClipboard.Click += new System.EventHandler(this.clipclick_ExportCopy);
 			// 
 			// it_CopyFromClipboard
 			// 
@@ -744,19 +744,19 @@ namespace yata
 			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
 			this.it_CopyFromClipboard.Size = new System.Drawing.Size(195, 22);
 			this.it_CopyFromClipboard.Text = "&Import copied row(s)";
-			this.it_CopyFromClipboard.Click += new System.EventHandler(this.editclick_ImportCopy);
+			this.it_CopyFromClipboard.Click += new System.EventHandler(this.clipclick_ImportCopy);
 			// 
 			// separator_19
 			// 
 			this.separator_19.Name = "separator_19";
 			this.separator_19.Size = new System.Drawing.Size(192, 6);
 			// 
-			// it_ViewClipboardContents
+			// it_OpenClipEditor
 			// 
-			this.it_ViewClipboardContents.Name = "it_ViewClipboardContents";
-			this.it_ViewClipboardContents.Size = new System.Drawing.Size(195, 22);
-			this.it_ViewClipboardContents.Text = "&Open clip editor";
-			this.it_ViewClipboardContents.Click += new System.EventHandler(this.editclick_ViewClipboard);
+			this.it_OpenClipEditor.Name = "it_OpenClipEditor";
+			this.it_OpenClipEditor.Size = new System.Drawing.Size(195, 22);
+			this.it_OpenClipEditor.Text = "&Open clip editor";
+			this.it_OpenClipEditor.Click += new System.EventHandler(this.clipclick_ViewClipboard);
 			// 
 			// it_Menu2daOps
 			// 

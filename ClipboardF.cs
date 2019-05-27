@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ClipboardEditor
+	sealed partial class ClipboardF
 		:
 			Form
 	{
@@ -16,23 +16,27 @@ namespace yata
 		#endregion Fields (static)
 
 
+		#region Fields
+		readonly YataForm _f;
+		#endregion Fields
+
+
 		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal ClipboardEditor(YataForm f)
+		internal ClipboardF(YataForm f)
 		{
 			InitializeComponent();
 
-			Font = f.Font;
-
-			Owner = f;
+			_f = f;
+			Font = _f.Font;
 
 			// TODO: controls are not resizing per Font correctly.
 			// vid. AutoScaleMode=
 
-			if (_x == -1) _x = f.Left + 20;
-			if (_y == -1) _y = f.Top  + 20;
+			if (_x == -1) _x = _f.Left + 20;
+			if (_y == -1) _y = _f.Top  + 20;
 
 			Left = _x;
 			Top  = _y;
@@ -68,6 +72,8 @@ namespace yata
 
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
+			_f.Clip_uncheck();
+
 			_x = Left;
 			_y = Top;
 			_w = Width;

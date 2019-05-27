@@ -2211,67 +2211,6 @@ namespace yata
 				ReadonlyError();
 		}
 
-		/// <summary>
-		/// Outputs the current contents of '_copy' to the Windows clipboard.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void editclick_ExportCopy(object sender, EventArgs e)
-		{
-			string clip = String.Empty;
-			for (int i = 0; i != _copy.Count; ++i)
-			{
-				for (int j = 0; j != _copy[i].Length; ++j)
-				{
-					if (j != 0) clip += " ";
-					clip += _copy[i][j];
-				}
-
-				if (i != _copy.Count - 1)
-					clip += Environment.NewLine;
-			}
-			ClipboardAssistant.SetText(clip);
-		}
-
-		/// <summary>
-		/// Imports the current contents of the Windows clipboard to '_copy'.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void editclick_ImportCopy(object sender, EventArgs e)
-		{
-			_copy.Clear();
-
-			string clip = Clipboard.GetText(TextDataFormat.Text);
-			if (!String.IsNullOrEmpty(clip))
-			{
-				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
-				for (int i = 0; i != lines.Length; ++i)
-				{
-					string[] fields = YataGrid.Parse2daRow(lines[i]);
-					_copy.Add(fields);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Displays contents of the clipboard (if text) in an editable
-		/// output-box.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void editclick_ViewClipboard(object sender, EventArgs e)
-		{
-			var f = Application.OpenForms["ClipboardEditor"];
-			if (f == null)
-			{
-				f = new ClipboardEditor(this);
-				f.Show();
-			}
-			else
-				f.BringToFront();
-		}
-
 
 		/// <summary>
 		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple blank
@@ -2327,6 +2266,76 @@ namespace yata
 				ReadonlyError();
 		}
 		#endregion Edit menu
+
+
+		#region Clipboard menu
+		/// <summary>
+		/// Outputs the current contents of '_copy' to the Windows clipboard.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void clipclick_ExportCopy(object sender, EventArgs e)
+		{
+			string clip = String.Empty;
+			for (int i = 0; i != _copy.Count; ++i)
+			{
+				for (int j = 0; j != _copy[i].Length; ++j)
+				{
+					if (j != 0) clip += " ";
+					clip += _copy[i][j];
+				}
+
+				if (i != _copy.Count - 1)
+					clip += Environment.NewLine;
+			}
+			ClipboardAssistant.SetText(clip);
+		}
+
+		/// <summary>
+		/// Imports the current contents of the Windows clipboard to '_copy'.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void clipclick_ImportCopy(object sender, EventArgs e)
+		{
+			_copy.Clear();
+
+			string clip = Clipboard.GetText(TextDataFormat.Text);
+			if (!String.IsNullOrEmpty(clip))
+			{
+				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
+				for (int i = 0; i != lines.Length; ++i)
+				{
+					string[] fields = YataGrid.Parse2daRow(lines[i]);
+					_copy.Add(fields);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Displays contents of the clipboard (if text) in an editable
+		/// output-box.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void clipclick_ViewClipboard(object sender, EventArgs e)
+		{
+			var f = Application.OpenForms["ClipboardF"];
+			if (f == null)
+			{
+				it_OpenClipEditor.Checked = true;
+				f = new ClipboardF(this);
+				f.Show(this);
+			}
+			else
+				f.BringToFront();
+		}
+
+		internal void Clip_uncheck()
+		{
+			it_OpenClipEditor.Checked = false;
+		}
+		#endregion Clipboard menu
 
 
 		#region 2da Ops menu

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ClipboardEditor
+	sealed partial class ClipboardF
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -106,7 +106,7 @@ namespace yata
 			this.btn_Get.UseVisualStyleBackColor = true;
 			this.btn_Get.Click += new System.EventHandler(this.click_Get);
 			// 
-			// ClipboardEditor
+			// ClipboardF
 			// 
 			this.CancelButton = this.btn_Done;
 			this.ClientSize = new System.Drawing.Size(542, 124);
@@ -114,7 +114,7 @@ namespace yata
 			this.Controls.Add(this.panel1);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MinimumSize = new System.Drawing.Size(230, 0);
-			this.Name = "ClipboardEditor";
+			this.Name = "ClipboardF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
