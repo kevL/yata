@@ -2776,15 +2776,121 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
-			if (!_panelCols._grab)
+			if (!_panelCols._grab && RowCount != 0)
 			{
-				if (RowCount != 0)
+				if (e.Button == MouseButtons.Left)
 				{
-					if (e.Button == MouseButtons.Left)
-					{
-						Select();
+					Select();
 
+					_editor.Visible = false;
+
+					int x = e.X + offsetHori;
+
+					int left = getLeft();
+					int c = FrozenCount - 1;
+					do
+					{
+						if (++c == ColCount)
+						{
+							// NOTE: Clearing the selected col is confusing
+							// without clearing all cells in the col also.
+//							int selc = getSelectedCol();
+//							if (selc != -1)
+//								Cols[selc].selected = false;
+
+							return;
+						}
+					}
+					while ((left += Cols[c].width()) < x);
+
+
+					bool @select = false;
+
+					if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
+					{
+						for (int r = 0; r != RowCount; ++r)
+						{
+							if (!this[r,c].selected)
+							{
+								@select = true;
+								break;
+							}
+						}
+					}
+					else
+						@select = true;
+
+
+					if ((ModifierKeys & Keys.Control) != Keys.Control)
+					{
+						if (!@select)
+						{
+							for (int i = 0; i != RowCount; ++i) // if other col-cells are currently selected and Ctrl is NOT
+							for (int j = 0; j != ColCount; ++j) // pressed force the col to select after clearing all selects.
+							{
+								if (j != c && this[i,j].selected)
+								{
+									@select = true;
+									break;
+								}
+							}
+						}
+
+						ClearCellSelects();
+						foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
+							row.selected = false;
+					}
+
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+					{
+						int selc = getSelectedCol();
+						if (selc != -1)
+						{
+							int start, stop;
+							if (selc < c)
+							{
+								start = selc;
+								stop  = c;
+							}
+							else
+							{
+								start = c;
+								stop  = selc;
+							}
+
+							while (start != stop + 1)
+							{
+								if (start != c) // done below
+								{
+									for (int r = 0; r != RowCount; ++r)
+										this[r,start].selected = true;
+								}
+								++start;
+							}
+						}
+					}
+					else
+					{
+						foreach (var col in Cols)
+							col.selected = false;
+
+						Cols[c].selected = @select;
+					}
+
+					if (@select)
+						EnsureDisplayedCol(c);
+
+					for (int r = 0; r != RowCount; ++r)
+						this[r,c].selected = @select;
+
+					Refresh();
+				}
+				else if (e.Button == MouseButtons.Right)
+				{
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
+					{
 						_editor.Visible = false;
+						Select();
 
 						int x = e.X + offsetHori;
 
@@ -2805,117 +2911,8 @@ namespace yata
 						}
 						while ((left += Cols[c].width()) < x);
 
-
-						bool @select = false;
-
-						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
-						{
-							for (int r = 0; r != RowCount; ++r)
-							{
-								if (!this[r,c].selected)
-								{
-									@select = true;
-									break;
-								}
-							}
-						}
-						else
-							@select = true;
-
-
-						if ((ModifierKeys & Keys.Control) != Keys.Control)
-						{
-							if (!@select)
-							{
-								for (int i = 0; i != RowCount; ++i) // if other col-cells are currently selected and Ctrl is NOT
-								for (int j = 0; j != ColCount; ++j) // pressed force the col to select after clearing all selects.
-								{
-									if (j != c && this[i,j].selected)
-									{
-										@select = true;
-										break;
-									}
-								}
-							}
-
-							ClearCellSelects();
-							foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
-								row.selected = false;
-						}
-
-						if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-						{
-							int selc = getSelectedCol();
-							if (selc != -1)
-							{
-								int start, stop;
-								if (selc < c)
-								{
-									start = selc;
-									stop  = c;
-								}
-								else
-								{
-									start = c;
-									stop  = selc;
-								}
-
-								while (start != stop + 1)
-								{
-									if (start != c) // done below
-									{
-										for (int r = 0; r != RowCount; ++r)
-											this[r,start].selected = true;
-									}
-									++start;
-								}
-							}
-						}
-						else
-						{
-							foreach (var col in Cols)
-								col.selected = false;
-
-							Cols[c].selected = @select;
-						}
-
-						if (@select)
-							EnsureDisplayedCol(c);
-
-						for (int r = 0; r != RowCount; ++r)
-							this[r,c].selected = @select;
-
-						Refresh();
-					}
-					else if (e.Button == MouseButtons.Right)
-					{
-						if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
-						{
-							_editor.Visible = false;
-							Select();
-
-							int x = e.X + offsetHori;
-
-							int left = getLeft();
-							int c = FrozenCount - 1;
-							do
-							{
-								if (++c == ColCount)
-								{
-									// NOTE: Clearing the selected col is confusing
-									// without clearing all cells in the col also.
-//									int selc = getSelectedCol();
-//									if (selc != -1)
-//										Cols[selc].selected = false;
-
-									return;
-								}
-							}
-							while ((left += Cols[c].width()) < x);
-
-							ColSort(c);
-							EnsureDisplayedCellOrRow();
-						}
+						ColSort(c);
+						EnsureDisplayedCellOrRow();
 					}
 				}
 			}
