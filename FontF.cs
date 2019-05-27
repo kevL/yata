@@ -57,6 +57,12 @@ namespace yata
 			_font = _f.Font;
 			_load = true;
 
+			if (Settings._fontf != null)
+			{
+				tb_NetString.Font.Dispose();
+				tb_NetString.Font = Settings._fontf;
+			}
+
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;
 

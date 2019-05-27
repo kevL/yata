@@ -43,16 +43,23 @@ namespace yata
 		{
 			InitializeComponent();
 
+			_f = f;
+			that = this;
+
 			if (Settings._font2 != null)
 			{
-				Font.Dispose();
 				Font = Settings._font2;
+			}
+			else
+				Font = _f.Font;
+
+			if (Settings._fontf != null)
+			{
+				rtb_Info.Font.Dispose();
+				rtb_Info.Font = Settings._fontf;
 			}
 
 			Text = title;
-
-			_f = f;
-			that = this;
 
 			bool
 				bLabel = !String.IsNullOrEmpty(label),
@@ -91,16 +98,14 @@ namespace yata
 			if (bCopya)
 			{
 				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
-				int height = TextRenderer.MeasureText(
-													copyable,
-													rtb_Info.Font,
-													size).Height;
+				int height = TextRenderer.MeasureText(copyable,
+													  rtb_Info.Font,
+													  size).Height;
 				pnl_Info.Height = height + 20; // panel's pad top+bot + 5
 			}
 
-			ClientSize = new Size(
-								width + 25, // +25 for pad real and imagined.
-								lbl_Info.Height + rtb_Info.Height + btn_Okay.Height + 20);
+			ClientSize = new Size(width + 25, // +25 for pad real and imagined.
+								  lbl_Info.Height + rtb_Info.Height + btn_Okay.Height + 20);
 
 			lbl_Info.Text = label;
 			rtb_Info.Text = copyable;
@@ -115,9 +120,8 @@ namespace yata
 
 		int GetHeight(string text, Size size)
 		{
-			string[] lines = text.Split(
-									new[]{ "\r\n", "\r", "\n" },
-									StringSplitOptions.None);
+			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
+										StringSplitOptions.None);
 
 			float heightF;
 			int
@@ -143,9 +147,8 @@ namespace yata
 
 		int GetWidth(string text)
 		{
-			string[] lines = text.Split(
-									new[]{ "\r\n", "\r", "\n" },
-									StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
+										StringSplitOptions.RemoveEmptyEntries);
 
 			int width = 0, test;
 			foreach (var line in lines)
@@ -318,7 +321,6 @@ namespace yata
 			this.Controls.Add(this.btn_Okay);
 			this.Controls.Add(this.pnl_Info);
 			this.Controls.Add(this.lbl_Info);
-			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MaximizeBox = false;
 			this.Name = "DifferDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

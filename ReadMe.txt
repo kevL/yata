@@ -214,11 +214,13 @@ the following variables ought be respected:
 font=      a .NET string that represents the desired table-font (see Font->
            Font ... be patient)
 font2=     a .NET string that represents a desired (usually smaller) font for
-           menus (Yata needs to be reloaded before it will display with a
-           changed menu-font)
+           menus (Yata needs to be reloaded before it will display a changed
+           menu-font)
 font3=     a .NET string that represents a desired font for the PropertyPanel
-           (Yata needs to be reloaded before it will display with a changed
+           (Yata needs to be reloaded before it will display a changed
            PropertyPanel font)
+fontf=     a .NET string that represents a desired fixed-width font (Yata needs
+           to be reloaded before it will display a changed fixed-width font)
 pathall=   a path without quotes to a valid directory to grope for 2da info
            for Crafting.2da or Spells.2da (see Appendix E: how to use Info
            paths)
@@ -246,11 +248,11 @@ strict=    "true" (without quotes) to show extra warnings when loading a
            ("warn : Table is not sorted by ascending ID") - ie, persons who use
            Strict don't get a tooltip although the ID-header still turns to a
            violet color regardless of this setting
+gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
 context=   a right-click on a rowhead displays the contextmenu at the mouse-
            cursor's location by default. It can be displayed in a static
            location at the topleft corner of the table instead of at the mouse-
            cursor by giving this variable a value of "static" (without quotes)
-gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
 diff=      a path without quotes to your WinMerge executable for diffing and
            merging two 2da files (if desired). See Appendix L: WinMerge
 

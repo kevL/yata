@@ -13,6 +13,7 @@ namespace yata
 		internal static Font _font;
 		internal static Font _font2;
 		internal static Font _font3;
+		internal static Font _fontf;
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
@@ -23,8 +24,8 @@ namespace yata
 		internal static int _h = -1;
 
 		internal static bool _strict;
-		internal static bool _context;
 		internal static bool _gradient;
+		internal static bool _context;
 
 		internal static string _diff;
 
@@ -33,10 +34,10 @@ namespace yata
 		{
 			int result;
 
-			string pathCfg = Path.Combine(Application.StartupPath, "settings.cfg");
-			if (File.Exists(pathCfg))
+			string pfe = Path.Combine(Application.StartupPath, "settings.cfg");
+			if (File.Exists(pfe))
 			{
-				using (var fs = File.OpenRead(pathCfg))
+				using (var fs = File.OpenRead(pfe))
 				using (var sr = new StreamReader(fs))
 				{
 					string line;
@@ -96,6 +97,24 @@ namespace yata
 								}
 							}
 						}
+						else if (line.StartsWith("fontf=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							{
+								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+								_fontf = tc.ConvertFromInvariantString(line) as Font;
+
+								int pos = line.IndexOf(',');
+								if (pos == -1)
+									pos = line.Length;
+
+								if (line.Substring(0, pos) != _fontf.Name)
+								{
+									_fontf.Dispose(); // NOTE: Fail silently.
+									_fontf = null;
+								}
+							}
+						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
@@ -149,15 +168,15 @@ namespace yata
 							_strict = (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
 								   && line == "true");
 						}
-						else if (line.StartsWith("context=", StringComparison.InvariantCulture))
-						{
-							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
-									&& line == "static");
-						}
 						else if (line.StartsWith("gradient=", StringComparison.InvariantCulture))
 						{
 							_gradient = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
+						}
+						else if (line.StartsWith("context=", StringComparison.InvariantCulture))
+						{
+							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
+									&& line == "static");
 						}
 						else if (line.StartsWith("diff=", StringComparison.InvariantCulture))
 						{
