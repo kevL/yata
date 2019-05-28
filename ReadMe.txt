@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 may 27
+2019 may 28
 kevL's
-ver 3.1.0.0
+ver 3.1.1.0
 
 
 File
@@ -116,6 +116,8 @@ PageDown                  - selects cell a page below
 Ctrl+Home                 - selects first cell in the table
 Ctrl+End                  - selects last cell in the table
 Left/Right/Up/Down arrows - selects next cell in the direction
+Shift+Left                - selects cell left by visible width
+Shift+Right               - selects cell right by visible width
 
 - w/out 1 cell selected (or more than one cell is selected)
 Home                      - scrolls table all the way left
@@ -125,6 +127,8 @@ PageDown                  - scrolls table a page down
 Ctrl+Home                 - scrolls table to top
 Ctrl+End                  - scrolls table to bottom
 Left/Right/Up/Down arrows - scrolls table in the direction
+Shift+Left                - scrolls table left by visible width
+Shift+Right               - scrolls table right by visible width
 
 - w/ row selected
 Home              - scrolls table all the way left
@@ -135,6 +139,8 @@ Ctrl+Home         - selects the top row
 Ctrl+End          - selects the bottom row
 Up/Down arrows    - selects the row in the direction
 Left/Right arrows - scrolls table in the direction
+Shift+Left        - scrolls table left by visible width
+Shift+Right       - scrolls table right by visible width
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
@@ -150,9 +156,6 @@ Delete - when a row is selected (as indicated with a green field at the far left
 of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
 or below the selected row, to select a range of rows to delete. If all rows of a
 table are deleted a single default row will be created.
-
-Shift+Left  - shifts table left by visible width (if not editing text)
-Shift+Right - shifts table right by visible width (if not editing text)
 
 
 MOUSE:
@@ -247,7 +250,7 @@ strict=    "true" (without quotes) to show extra warnings when loading a
            appears when a col is sorted by anything other than ID-ascending
            ("warn : Table is not sorted by ascending ID") - ie, persons who use
            Strict don't get a tooltip although the ID-header still turns to a
-           violet color regardless of this setting
+           red color regardless of this setting
 gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
 context=   a right-click on a rowhead displays the contextmenu at the mouse-
            cursor's location by default. It can be displayed in a static
