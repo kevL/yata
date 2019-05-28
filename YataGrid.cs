@@ -1314,8 +1314,6 @@ namespace yata
 			Cell sel = getSelectedCell();
 			int selr = getSelectedRow();
 
-			Row row;
-
 			// TODO: change selected col perhaps
 
 			switch (e.KeyCode)
@@ -1328,16 +1326,11 @@ namespace yata
 							if (selr > 0)
 							{
 								ClearSelects();
-
-								(row = Rows[0]).selected = true;
-								for (int c = 0; c != ColCount; ++c)
-									row[c].selected = true;
-
-								EnsureDisplayedRow(0);
+								SelectRow(0);
 							}
+							EnsureDisplayedRow(0);
 						}
-						else if (_visHori)
-							_scrollHori.Value = 0;
+						else if (_visHori) _scrollHori.Value = 0;
 					}
 					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
@@ -1347,12 +1340,10 @@ namespace yata
 							{
 								sel.selected = false;
 								(sel = this[0, FrozenCount]).selected = true;
-
-								EnsureDisplayed(sel);
 							}
+							EnsureDisplayed(sel);
 						}
-						else if (_visVert)
-							_scrollVert.Value = 0;
+						else if (_visVert) _scrollVert.Value = 0;
 					}
 					else if (sel != null)
 					{
@@ -1360,12 +1351,10 @@ namespace yata
 						{
 							sel.selected = false;
 							(sel = this[sel.y, FrozenCount]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
-					else if (_visHori)
-						_scrollHori.Value = 0;
+					else if (_visHori) _scrollHori.Value = 0;
 
 					break;
 
@@ -1377,16 +1366,11 @@ namespace yata
 							if (selr != RowCount - 1)
 							{
 								ClearSelects();
-
-								(row = Rows[RowCount - 1]).selected = true;
-								for (int c = 0; c != ColCount; ++c)
-									row[c].selected = true;
-
-								EnsureDisplayedRow(RowCount - 1);
+								SelectRow(RowCount - 1);
 							}
+							EnsureDisplayedRow(RowCount - 1);
 						}
-						else if (_visHori)
-							_scrollHori.Value = MaxHori;
+						else if (_visHori) _scrollHori.Value = MaxHori;
 					}
 					else if ((e.Modifiers & Keys.Control) == Keys.Control)
 					{
@@ -1396,12 +1380,10 @@ namespace yata
 							{
 								sel.selected = false;
 								(sel = this[RowCount - 1, ColCount - 1]).selected = true;
-
-								EnsureDisplayed(sel);
 							}
+							EnsureDisplayed(sel);
 						}
-						else if (_visVert)
-							_scrollVert.Value = MaxVert;
+						else if (_visVert) _scrollVert.Value = MaxVert;
 					}
 					else if (sel != null)
 					{
@@ -1409,12 +1391,10 @@ namespace yata
 						{
 							sel.selected = false;
 							(sel = this[sel.y, ColCount - 1]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
-					else if (_visHori)
-						_scrollHori.Value = MaxHori;
+					else if (_visHori) _scrollHori.Value = MaxHori;
 
 					break;
 
@@ -1425,34 +1405,29 @@ namespace yata
 						{
 							ClearSelects();
 
-							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							int r;
-							if (selr < rows) r = 0;
-							else             r = selr - rows;
+							if (selr < shift) selr  = 0;
+							else              selr -= shift;
 
-							(row = Rows[r]).selected = true;
-							for (int c = 0; c != ColCount; ++c)
-								row[c].selected = true;
-
-							EnsureDisplayedRow(r);
+							SelectRow(selr);
 						}
+						EnsureDisplayedRow(selr);
 					}
 					else if (sel != null)
 					{
 						if (sel.y != 0)
 						{
 							sel.selected = false;
-							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							int r;
-							if (sel.y < rows) r = 0;
-							else              r = sel.y - rows;
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							(sel = this[r, sel.x]).selected = true;
+							if (sel.y < shift) selr = 0;
+							else               selr = sel.y - shift;
 
-							EnsureDisplayed(sel);
+							(sel = this[selr, sel.x]).selected = true;
 						}
+						EnsureDisplayed(sel);
 					}
 					else if (_visVert)
 					{
@@ -1472,34 +1447,29 @@ namespace yata
 						{
 							ClearSelects();
 
-							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							int r;
-							if (selr > RowCount - 1 - rows) r = RowCount - 1;
-							else                            r = selr + rows;
+							if (selr > RowCount - 1 - shift) selr  = RowCount - 1;
+							else                             selr += shift;
 
-							(row = Rows[r]).selected = true;
-							for (int c = 0; c != ColCount; ++c)
-								row[c].selected = true;
-
-							EnsureDisplayedRow(r);
+							SelectRow(selr);
 						}
+						EnsureDisplayedRow(selr);
 					}
 					else if (sel != null)
 					{
 						if (sel.y != RowCount - 1)
 						{
 							sel.selected = false;
-							int rows = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							int r;
-							if (sel.y > RowCount - 1 - rows) r = RowCount - 1;
-							else                             r = sel.y + rows;
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 
-							(sel = this[r, sel.x]).selected = true;
+							if (sel.y > RowCount - 1 - shift) selr = RowCount - 1;
+							else                              selr = sel.y + shift;
 
-							EnsureDisplayed(sel);
+							(sel = this[selr, sel.x]).selected = true;
 						}
+						EnsureDisplayed(sel);
 					}
 					else if (_visVert)
 					{
@@ -1518,13 +1488,9 @@ namespace yata
 						if (selr > 0)
 						{
 							ClearSelects();
-
-							(row = Rows[selr - 1]).selected = true;
-							for (int c = 0; c != ColCount; ++c)
-								row[c].selected = true;
-
-							EnsureDisplayedRow(selr - 1);
+							SelectRow(--selr);
 						}
+						EnsureDisplayedRow(selr);
 					}
 					else if (sel != null) // selection to the cell above
 					{
@@ -1535,9 +1501,8 @@ namespace yata
 
 							sel.selected = false;
 							(sel = this[sel.y - 1, sel.x]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
 					else if (_visVert)
 					{
@@ -1554,13 +1519,9 @@ namespace yata
 						if (selr != RowCount - 1)
 						{
 							ClearSelects();
-
-							(row = Rows[selr + 1]).selected = true;
-							for (int c = 0; c != ColCount; ++c)
-								row[c].selected = true;
-
-							EnsureDisplayedRow(selr + 1);
+							SelectRow(++selr);
 						}
+						EnsureDisplayedRow(selr);
 					}
 					else if (sel != null) // selection to the cell below
 					{
@@ -1568,11 +1529,10 @@ namespace yata
 						{
 							sel.selected = false;
 							(sel = this[sel.y + 1, sel.x]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
-					else if (_visVert) // scroll the table
+					else if (_visVert)
 					{
 						if (_scrollVert.Value + _scrollVert.LargeChange > MaxVert)
 							_scrollVert.Value = MaxVert;
@@ -1584,6 +1544,7 @@ namespace yata
 				case Keys.Left: // NOTE: Needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page left
 					{
+						// TODO: Re-select a cell if a cell is selected.
 						if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
@@ -1600,9 +1561,8 @@ namespace yata
 						{
 							sel.selected = false;
 							(sel = this[sel.y, sel.x - 1]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
 					else if (_visHori)
 					{
@@ -1616,6 +1576,7 @@ namespace yata
 				case Keys.Right: // NOTE: Needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
 					{
+						// TODO: Re-select a cell if a cell is selected.
 						if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
@@ -1632,9 +1593,8 @@ namespace yata
 						{
 							sel.selected = false;
 							(sel = this[sel.y, sel.x + 1]).selected = true;
-
-							EnsureDisplayed(sel);
 						}
+						EnsureDisplayed(sel);
 					}
 					else if (_visHori)
 					{
@@ -1662,6 +1622,19 @@ namespace yata
 			Refresh();
 
 //			base.OnKeyDown(e);
+		}
+
+		/// <summary>
+		/// Selects a specified row by Id and flags its cells selected.
+		/// @note Check that 'r' doesn't over/underflow 'Rows' before call.
+		/// </summary>
+		/// <param name="r">row-id</param>
+		void SelectRow(int r)
+		{
+			Row row = Rows[r];
+			row.selected = true;
+			for (int c = 0; c != ColCount; ++c)
+				row[c].selected = true;
 		}
 
 		/// <summary>
@@ -2914,6 +2887,12 @@ namespace yata
 						ColSort(c);
 						EnsureDisplayedCellOrRow();
 					}
+/*					else // popup colhead context
+					{
+						// change colhead text
+						// insert col
+						// fill col-cells w/ text (req. inputbox)
+					} */
 				}
 			}
 		}
