@@ -280,7 +280,9 @@ namespace yata
 			_table._editor.Visible = false;
 
 			_table.offsetVert = _table._scrollVert.Value;
-			_table.Refresh(); // req'd to keep rowhead and frozen-cols in synch.
+			_table      .Invalidate();
+			_panelRows  .Invalidate();
+			_panelFrozen.Invalidate();
 
 
 			if (!_f._search)
@@ -326,7 +328,8 @@ namespace yata
 			_table._editor.Visible = false;
 
 			_table.offsetHori = _table._scrollHori.Value;
-			_table.Invalidate();
+			_table    .Invalidate();
+			_panelCols.Invalidate();
 
 
 			if (!_f._search)
@@ -1482,7 +1485,7 @@ namespace yata
 					}
 					break;
 
-				case Keys.Up: // NOTE: Needs to bypass KeyPreview
+				case Keys.Up: // NOTE: needs to bypass KeyPreview
 					if (selr != -1)
 					{
 						if (selr > 0)
@@ -1513,7 +1516,7 @@ namespace yata
 					}
 					break;
 
-				case Keys.Down: // NOTE: Needs to bypass KeyPreview
+				case Keys.Down: // NOTE: needs to bypass KeyPreview
 					if (selr != -1)
 					{
 						if (selr != RowCount - 1)
@@ -1541,11 +1544,35 @@ namespace yata
 					}
 					break;
 
-				case Keys.Left: // NOTE: Needs to bypass KeyPreview
+				case Keys.Left: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page left
 					{
-						// TODO: Re-select a cell if a cell is selected.
-						if (_visHori)
+						if (sel != null)
+						{
+							if (sel.x != FrozenCount)
+							{
+								sel.selected = false;
+
+								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+
+								var pt = getColBounds(sel.x);
+								pt.X += offsetHori - w;
+
+								int c = -1, tally = 0;
+								while ((tally += Cols[++c].width()) < pt.X)
+								{}
+
+								if (++c >= sel.x)
+									c = sel.x - 1;
+
+								if (c < FrozenCount)
+									c = FrozenCount;
+
+								(sel = this[sel.y, c]).selected = true;
+							}
+							EnsureDisplayed(sel);
+						}
+						else if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 
@@ -1573,11 +1600,35 @@ namespace yata
 					}
 					break;
 
-				case Keys.Right: // NOTE: Needs to bypass KeyPreview
+				case Keys.Right: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
 					{
-						// TODO: Re-select a cell if a cell is selected.
-						if (_visHori)
+						if (sel != null)
+						{
+							if (sel.x != ColCount - 1)
+							{
+								sel.selected = false;
+
+								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+
+								var pt = getColBounds(sel.x);
+								pt.X += offsetHori + w;
+
+								int c = -1, tally = 0;
+								while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
+								{}
+
+								if (--c <= sel.x)
+									c = sel.x + 1;
+
+								if (c > ColCount - 1)
+									c = ColCount - 1;
+
+								(sel = this[sel.y, c]).selected = true;
+							}
+							EnsureDisplayed(sel);
+						}
+						else if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 
@@ -1605,7 +1656,7 @@ namespace yata
 					}
 					break;
 
-				case Keys.Escape: // NOTE: Needs to bypass KeyPreview
+				case Keys.Escape: // NOTE: needs to bypass KeyPreview
 					ClearSelects();
 					break;
 
@@ -2202,6 +2253,12 @@ namespace yata
 //			base.OnMouseDoubleClick(e);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		Cell getClickedCell(int x, int y)
 		{
 			y += offsetVert;
@@ -2427,7 +2484,7 @@ namespace yata
 		/// </summary>
 		/// <param name="c"></param>
 		/// <returns></returns>
-		Point getColEdges(int c)
+		Point getColBounds(int c)
 		{
 			var bounds = new Point();
 
@@ -2445,7 +2502,7 @@ namespace yata
 		/// </summary>
 		/// <param name="r"></param>
 		/// <returns></returns>
-		Point getRowEdges(int r)
+		Point getRowBounds(int r)
 		{
 			var bounds = new Point();
 			bounds.X = HeightColhead + HeightRow * r - offsetVert;
@@ -2547,7 +2604,7 @@ namespace yata
 		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
 		internal bool EnsureDisplayedRow(int r)
 		{
-			var bounds = getRowEdges(r);
+			var bounds = getRowBounds(r);
 
 			if (bounds.X != HeightColhead)
 			{
@@ -2593,7 +2650,7 @@ namespace yata
 		/// <param name="c">the col to display</param>
 		void EnsureDisplayedCol(int c)
 		{
-			var bounds = getColEdges(c);
+			var bounds = getColBounds(c);
 
 			int left = getLeft();
 
