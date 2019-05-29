@@ -1496,7 +1496,7 @@ namespace yata
 					}
 					else if (sel != null) // selection to the cell above
 					{
-						if (sel.y != 0)
+						if (sel.y != 0 && sel.x >= FrozenCount)
 						{
 							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
 //							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
@@ -1527,7 +1527,7 @@ namespace yata
 					}
 					else if (sel != null) // selection to the cell below
 					{
-						if (sel.y != RowCount - 1)
+						if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
 						{
 							sel.selected = false;
 							(sel = this[sel.y + 1, sel.x]).selected = true;
@@ -1548,7 +1548,7 @@ namespace yata
 					{
 						if (sel != null)
 						{
-							if (sel.x != FrozenCount)
+							if (sel.x > FrozenCount)
 							{
 								sel.selected = false;
 
@@ -1583,7 +1583,7 @@ namespace yata
 					}
 					else if (sel != null) // selection to the cell left
 					{
-						if (sel.x != FrozenCount)
+						if (sel.x > FrozenCount)
 						{
 							sel.selected = false;
 							(sel = this[sel.y, sel.x - 1]).selected = true;
