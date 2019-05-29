@@ -301,9 +301,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Bypasses Ctrl+c and Ctrl+v if the editor is visible. That is,
-		/// this bypasses the Edit menuitems and lets the editbox take the
-		/// message if/when it's visible.
+		/// Processes so-called commandkey combinations.
 		/// </summary>
 		/// <param name="msg"></param>
 		/// <param name="keyData"></param>
@@ -314,9 +312,9 @@ namespace yata
 
 			switch (keyData)
 			{
-				case Keys.Control | Keys.C:
-				case Keys.Control | Keys.V:
-					if (Table != null
+				case Keys.Control | Keys.C:					// bypass Ctrl+c and Ctrl+v if the editor is visible.
+				case Keys.Control | Keys.V:					// this bypasses the Edit menuitems and lets the editbox
+					if (Table != null						// take the message if/when the editbox is visible.
 						&& (Table._editor.Visible
 							|| (Table._propanel != null && Table._propanel._editor.Visible)))
 					{
@@ -324,8 +322,12 @@ namespace yata
 					}
 					break;
 
-				case Keys.Shift | Keys.F3:
+				case Keys.Shift | Keys.F3:					// backwards search
 					editclick_SearchNext(null, EventArgs.Empty);
+					return true;
+
+				case Keys.Shift | Keys.Control | Keys.N:	// backwards gotoloadchanged
+					editclick_GotoLoadchanged(null, EventArgs.Empty);
 					return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
@@ -1937,12 +1939,9 @@ namespace yata
 
 						for (; c != Table.ColCount; ++c)
 						{
-							if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+							if ((sel = Table[r,c]).loadchanged)
 							{
-								sel.selected = true;
-								Table.EnsureDisplayed(sel);
-								Table.Invalidate();
-
+								gotoloadchanged(sel);
 								return;
 							}
 						}
@@ -1952,12 +1951,9 @@ namespace yata
 					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
 					for (c = 0; c != Table.ColCount; ++c)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						if ((sel = Table[r,c]).loadchanged)
 						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Invalidate();
-
+							gotoloadchanged(sel);
 							return;
 						}
 					}
@@ -1997,12 +1993,9 @@ namespace yata
 
 						for (; c != -1; --c)
 						{
-							if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+							if ((sel = Table[r,c]).loadchanged)
 							{
-								sel.selected = true;
-								Table.EnsureDisplayed(sel);
-								Table.Invalidate();
-
+								gotoloadchanged(sel);
 								return;
 							}
 						}
@@ -2012,17 +2005,21 @@ namespace yata
 					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
 					for (c = Table.ColCount - 1; c != -1;         --c)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).loadchanged)
+						if ((sel = Table[r,c]).loadchanged)
 						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Invalidate();
-
+							gotoloadchanged(sel);
 							return;
 						}
 					}
 				}
 			}
+		}
+
+		void gotoloadchanged(Cell sel)
+		{
+			sel.selected = true;
+			Table.EnsureDisplayed(sel);
+			Table.Invalidate();
 		}
 
 
