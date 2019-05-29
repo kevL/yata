@@ -1817,7 +1817,9 @@ namespace yata
 						goto case Keys.Escape;
 					}
 
-					if (!Readonly && (_editcell = getSelectedCell()) != null)
+					if (!Readonly
+						&& (_editcell = getSelectedCell()) != null
+						&& _editcell.x >= FrozenCount)
 					{
 						EditCell();
 						_editor.Focus();
@@ -1828,8 +1830,8 @@ namespace yata
 				case Keys.Escape:
 				case Keys.Tab:
 					_editor.Visible = false;
-					Select();
 					Refresh();
+					Select();
 					return true;
 			}
 			return base.ProcessDialogKey(keyData);

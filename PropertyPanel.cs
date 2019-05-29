@@ -117,7 +117,7 @@ namespace yata
 			set
 			{
 				if (_dockBot = value)
-					Top = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0) - Height;
+					Top = _grid.Height - Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
 				else
 					Top = 0;
 			}
@@ -435,13 +435,17 @@ namespace yata
 
 					_c = (e.Y + _scroll.Value) / _heightr;
 
-					if (sel != null && _c >= _grid.FrozenCount)
+					if (sel != null)
 					{
 						sel.selected = false;
 						_grid[_r,_c].selected = true;
 					}
 
-					_grid.EnsureDisplayedCellOrRow();
+					if (_c >= _grid.FrozenCount)
+						_grid.EnsureDisplayedCellOrRow();
+					else
+						_grid.EnsureDisplayedRow(_r);
+
 					_grid.Invalidate();
 					_grid.FrozenPanel.Invalidate();
 
