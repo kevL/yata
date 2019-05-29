@@ -254,22 +254,17 @@ namespace yata
 				Left  -= _scroll.Width;
 				Width += _scroll.Width;
 
-				int vert = HeightProps
-						 + _scroll.LargeChange - 1
-						 - Height;
-
+				int vert = HeightProps - Height + (_scroll.LargeChange - 1);
 				if (vert < _scroll.LargeChange) vert = 0;
 
 				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding
 										// whether or not max < 0. 'Cause it fucks everything up. bingo.
 
 				// handle .NET OnResize anomaly ->
-				// keep the bottom of the table snuggled against the bottom of the visible area
-				// when resize enlarges the area
+				// keep the bottom of the table snuggled against the bottom of
+				// the visible area when resize enlarges the area
 				if (HeightProps < Height + _scroll.Value)
-				{
 					_scroll.Value = HeightProps - Height;
-				}
 			}
 			else
 			{
@@ -448,6 +443,7 @@ namespace yata
 
 					_grid.EnsureDisplayedCellOrRow();
 					_grid.Invalidate();
+					_grid.FrozenPanel.Invalidate();
 
 					if (!_grid.Readonly && e.X > _widthVars)
 					{

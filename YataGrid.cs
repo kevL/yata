@@ -98,7 +98,7 @@ namespace yata
 		YataPanelCols _panelCols;
 		YataPanelRows _panelRows;
 
-		YataPanelFrozen _panelFrozen;
+		internal YataPanelFrozen FrozenPanel;
 
 		Label _labelid     = new Label();
 		Label _labelfirst  = new Label();
@@ -177,9 +177,8 @@ namespace yata
 				for (int c = 0; c != _frozenCount; ++c)
 					w += Cols[c].width();
 
-				_panelFrozen.Width = w;
-
-				_panelFrozen.Refresh();
+				FrozenPanel.Width = w;
+				FrozenPanel.Refresh();
 
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
@@ -280,9 +279,9 @@ namespace yata
 			_table._editor.Visible = false;
 
 			_table.offsetVert = _table._scrollVert.Value;
-			_table      .Invalidate();
-			_panelRows  .Invalidate();
-			_panelFrozen.Invalidate();
+			_table     .Invalidate();
+			_panelRows .Invalidate();
+			FrozenPanel.Invalidate();
 
 
 			if (!_f._search)
@@ -382,9 +381,9 @@ namespace yata
 					_table.InitScroll();
 
 					// NOTE: The panels can be null during the load sequence.
-					if (_table._panelCols   != null) _table._panelCols  .Width  = Width;
-					if (_table._panelRows   != null) _table._panelRows  .Height = Height;
-					if (_table._panelFrozen != null) _table._panelFrozen.Height = Height;
+					if (_table._panelCols  != null) _table._panelCols .Width  = Width;
+					if (_table._panelRows  != null) _table._panelRows .Height = Height;
+					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
 
 					if (_table._propanel != null && _table._propanel.Visible)
 					{
@@ -931,7 +930,7 @@ namespace yata
 
 				Controls.Remove(_panelCols);
 				Controls.Remove(_panelRows);
-				Controls.Remove(_panelFrozen);
+				Controls.Remove(FrozenPanel);
 
 //				_panelCols  .Dispose(); // breaks the frozen-labels
 //				_panelRows  .Dispose();
@@ -964,12 +963,12 @@ namespace yata
 			CreateCols();
 			CreateRows();
 
-			_panelFrozen = new YataPanelFrozen(this, Cols[0].width());
+			FrozenPanel = new YataPanelFrozen(this, Cols[0].width());
 			FrozenLabelsInit();
 
 			SetStaticHeads();
 
-			Controls.Add(_panelFrozen);
+			Controls.Add(FrozenPanel);
 			Controls.Add(_panelRows);
 			Controls.Add(_panelCols);
 

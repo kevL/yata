@@ -3266,20 +3266,9 @@ namespace yata
 
 						for (; c != Table.ColCount; ++c)
 						{
-							if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+							if ((sel = Table[r,c]).diff)
 							{
-								sel.selected = true;
-								Table.EnsureDisplayed(sel);
-								Table.Invalidate();
-
-								if (table != null
-									&& sel.x < table.ColCount
-									&& sel.y < table.RowCount)
-								{
-									table[sel.y, sel.x].selected = true;
-									table.EnsureDisplayed(table[sel.y, sel.x]);
-									table.Invalidate();
-								}
+								gotodiff(sel, table);
 								return;
 							}
 						}
@@ -3289,20 +3278,9 @@ namespace yata
 					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
 					for (c = 0; c != Table.ColCount; ++c)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+						if ((sel = Table[r,c]).diff)
 						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Invalidate();
-
-							if (table != null
-								&& sel.x < table.ColCount
-								&& sel.y < table.RowCount)
-							{
-								table[sel.y, sel.x].selected = true;
-								table.EnsureDisplayed(table[sel.y, sel.x]);
-								table.Invalidate();
-							}
+							gotodiff(sel, table);
 							return;
 						}
 					}
@@ -3342,20 +3320,9 @@ namespace yata
 
 						for (; c != -1; --c)
 						{
-							if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+							if ((sel = Table[r,c]).diff)
 							{
-								sel.selected = true;
-								Table.EnsureDisplayed(sel);
-								Table.Invalidate();
-
-								if (table != null
-									&& sel.x < table.ColCount
-									&& sel.y < table.RowCount)
-								{
-									table[sel.y, sel.x].selected = true;
-									table.EnsureDisplayed(table[sel.y, sel.x]);
-									table.Invalidate();
-								}
+								gotodiff(sel, table);
 								return;
 							}
 						}
@@ -3365,26 +3332,44 @@ namespace yata
 					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
 					for (c = Table.ColCount - 1; c != -1;         --c)
 					{
-						if (c >= Table.FrozenCount && (sel = Table[r,c]).diff)
+						if ((sel = Table[r,c]).diff)
 						{
-							sel.selected = true;
-							Table.EnsureDisplayed(sel);
-							Table.Invalidate();
-
-							if (table != null
-								&& sel.x < table.ColCount
-								&& sel.y < table.RowCount)
-							{
-								table[sel.y, sel.x].selected = true;
-								table.EnsureDisplayed(table[sel.y, sel.x]);
-								table.Invalidate();
-							}
+							gotodiff(sel, table);
 							return;
 						}
 					}
 				}
 			}
 			DifferDialog.that.EnableGotoButton(false); // be careful w/ 'that'
+		}
+
+		/// <summary>
+		/// Helper for GotoDiffCell().
+		/// </summary>
+		/// <param name="sel">cell in the current table</param>
+		/// <param name="table">the other table</param>
+		void gotodiff(Cell sel, YataGrid table)
+		{
+			sel.selected = true;
+			Table.EnsureDisplayed(sel);
+			Table.Invalidate();
+			Table.FrozenPanel.Invalidate();
+
+			if (Table._propanel != null && Table._propanel.Visible)
+				Table._propanel.Invalidate();
+
+			if (table != null
+				&& sel.x < table.ColCount
+				&& sel.y < table.RowCount)
+			{
+				table[sel.y, sel.x].selected = true;
+				table.EnsureDisplayed(table[sel.y, sel.x]);
+				table.Invalidate();
+				table.FrozenPanel.Invalidate();
+
+				if (table._propanel != null && table._propanel.Visible)
+					table._propanel.Invalidate();
+			}
 		}
 		#endregion Tab menu
 
