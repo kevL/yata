@@ -3352,9 +3352,9 @@ namespace yata
 		{
 			sel.selected = true;
 			Table.EnsureDisplayed(sel);
+
 			Table.Invalidate();
 			Table.FrozenPanel.Invalidate();
-
 			if (Table._propanel != null && Table._propanel.Visible)
 				Table._propanel.Invalidate();
 
@@ -3363,12 +3363,6 @@ namespace yata
 				&& sel.y < table.RowCount)
 			{
 				table[sel.y, sel.x].selected = true;
-				table.EnsureDisplayed(table[sel.y, sel.x]);
-				table.Invalidate();
-				table.FrozenPanel.Invalidate();
-
-				if (table._propanel != null && table._propanel.Visible)
-					table._propanel.Invalidate();
 			}
 		}
 		#endregion Tab menu
