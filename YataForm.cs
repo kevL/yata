@@ -202,7 +202,7 @@ namespace yata
 			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
-			if (!String.IsNullOrEmpty(pfe_load) && File.Exists(pfe_load))
+			if (File.Exists(pfe_load))
 			{
 				CreateTabPage(pfe_load);
 			}
@@ -390,7 +390,7 @@ namespace yata
 					break;
 
 				case DONTBEEP_GOTO:
-					doGoto();
+					Table.doGoto(tb_Goto.Text);
 					break;
 			}
 		}
@@ -414,8 +414,7 @@ namespace yata
 												  Crap.ChangeWindowMessageFilterExAction.Allow,
 												  ref filter))
 			{
-				int error = Marshal.GetLastWin32Error();
-				MessageBox.Show(String.Format("An error occurred: {0}", error));
+				MessageBox.Show(String.Format("An error occurred: {0}", Marshal.GetLastWin32Error()));
 			}
 		}
 
@@ -428,25 +427,16 @@ namespace yata
 		{
 			if (m.Msg == Crap.WM_COPYDATA)
 			{
-				//logfile.Log("MESSAGE RECEIVED");
-
-				// extract the file-string from COPYDATASTRUCT
 				var copyData = (Crap.COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, typeof(Crap.COPYDATASTRUCT));
 				int dataType = (int)copyData.dwData;
-				if (dataType == Crap.CopyDataStructType)
+				if (dataType == Crap.CopyDataStructType) // extract the file-string ->
 				{
 					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
-					if (!String.IsNullOrEmpty(pfe_load)
-						&& File.Exists(pfe_load))
+					if (File.Exists(pfe_load))
 					{
 						CreateTabPage(pfe_load);
 					}
 				}
-//				else
-//					MessageBox.Show(String.Format("Unrecognized data type: {0}.", dataType),
-//									" Yata",
-//									MessageBoxButtons.OK,
-//									MessageBoxIcon.Error);
 			}
 			else
 				base.WndProc(ref m);
@@ -1869,31 +1859,6 @@ namespace yata
 			{
 				_firstclick = false;
 				tb_Goto.SelectAll();
-			}
-		}
-
-		/// <summary>
-		/// Performs a goto when the Enter-key is pressed and focus is on the
-		/// goto-box.
-		/// </summary>
-		void doGoto()
-		{
-			int r;
-			if (Int32.TryParse(tb_Goto.Text, out r)
-				&& r > -1 && r < Table.RowCount)
-			{
-				Table._editor.Visible = false;
-				Table.ClearSelects();
-
-				Table.Select();
-
-				Row row = Table.Rows[r];
-				row.selected = true;
-				for (int c = 0; c != Table.ColCount; ++c)
-					row[c].selected = true;
-
-				Table.EnsureDisplayedRow(r);
-				Table.Refresh();
 			}
 		}
 

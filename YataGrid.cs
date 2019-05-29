@@ -2675,6 +2675,35 @@ namespace yata
 
 
 		/// <summary>
+		/// Performs a goto when the Enter-key is pressed and focus is on the
+		/// goto-box.
+		/// </summary>
+		/// <param name="text"></param>
+		internal void doGoto(string text)
+		{
+			int r;
+			if (Int32.TryParse(text, out r)
+				&& r > -1 && r < RowCount)
+			{
+				_editor.Visible = false;
+				ClearSelects();
+
+				SelectRow(r);
+				EnsureDisplayedRow(r);
+
+				Invalidate();
+				_panelRows .Invalidate();
+				FrozenPanel.Invalidate();
+				
+				if (_propanel != null && _propanel.Visible)
+					_propanel.Invalidate();
+
+				Select();
+			}
+		}
+
+
+		/// <summary>
 		/// Handles a mouseclick on the rowhead. Selects or deselects row(s).
 		/// Fires only on the rowhead panel.
 		/// </summary>
