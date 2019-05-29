@@ -58,32 +58,11 @@ namespace yata
 					{
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
-							var cell = row[c];
+							Cell cell = row[c];
 							if (cell.state != Cell.CellState.Default)
 							{
 								rect.X -= _padHori;
-
-								Brush brush;
-								switch (cell.state)
-								{
-									default:
-									case Cell.CellState.Selected:
-										if (_editor.Visible && _editcell == cell)
-											brush = Brushes.Editor;
-										else
-											brush = Brushes.Selected;
-										break;
-
-									case Cell.CellState.Diff:
-										brush = Brushes.Diff;
-										break;
-
-									case Cell.CellState.LoadChanged:
-										brush = Brushes.LoadChanged;
-										break;
-								}
-								graphics.FillRectangle(brush, rect);
-
+								graphics.FillRectangle(cell.getBrush(_editor.Visible && _editcell == cell), rect);
 								rect.X += _padHori;
 							}
 
@@ -440,17 +419,18 @@ namespace yata
 					{
 						rect.Width = Cols[c].width();
 
-						if (row[c].loadchanged)
+						Cell cell = row[c];
+						if (cell.state != Cell.CellState.Default)
 						{
 							rect.X     -= _padHori - 1;
 							rect.Width -= 1;
-							graphics.FillRectangle(Brushes.LoadChanged, rect);
+							graphics.FillRectangle(cell.getBrush(), rect);
 							rect.X     += _padHori - 1;
 							rect.Width += 1;
 						}
 
 						TextRenderer.DrawText(graphics,
-											  row[c].text,
+											  cell.text,
 											  Font,
 											  rect,
 											  Colors.Text,

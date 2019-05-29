@@ -208,6 +208,31 @@ namespace yata
 			else if (loadchanged) state = CellState.LoadChanged;
 			else                  state = CellState.Default;
 		}
+
+		/// <summary>
+		/// Gets a brush for the background color of this Cell.
+		/// @note Check that 'state' is not Default before call.
+		/// </summary>
+		/// <param name="edit">true if in edit</param>
+		/// <returns></returns>
+		internal Brush getBrush(bool edit = false)
+		{
+			switch (state)
+			{
+				default:
+				case Cell.CellState.Selected:
+					if (edit)
+						return Brushes.Editor;
+
+					return Brushes.Selected;
+
+				case Cell.CellState.Diff:
+					return Brushes.Diff;
+
+				case Cell.CellState.LoadChanged:
+					return Brushes.LoadChanged;
+			}
+		}
 		#endregion Methods
 
 
