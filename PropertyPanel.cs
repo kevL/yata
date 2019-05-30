@@ -166,13 +166,12 @@ namespace yata
 			}
 			_widthVars += _padHori * 2 + 1;
 
-			deterValfieldWidth();
-			deterTelemetric();
-
 			_scroll.Dock = DockStyle.Right;
+			_scroll.LargeChange = _heightr;
 			_scroll.ValueChanged += OnScrollValueChanged;
 
-			InitScroll();
+			rewidthValfield();
+
 			Controls.Add(_scroll);
 
 			_grid.Controls.Add(this);
@@ -191,7 +190,10 @@ namespace yata
 
 
 		#region Methods
-		internal void deterValfieldWidth()
+		/// <summary>
+		/// Determines required width for the value-fields.
+		/// </summary>
+		internal void rewidthValfield()
 		{
 //			for (int r = 0; r != _grid.RowCount; ++r)
 //			{
@@ -208,27 +210,27 @@ namespace yata
 
 			int wT, rT = 0, cT = 0;
 			for (int r = 0; r != _grid.RowCount; ++r)
+			for (int c = 0; c != _grid.ColCount; ++c)
 			{
-				for (int c = 0; c != _grid.ColCount; ++c)
+				wT = _grid[r,c]._widthtext;	// ASSUME: That the widest text in the table-font
+				if (wT > _widthVals)		// will be widest text in the propanel font. Much faster.
 				{
-					wT = _grid[r,c]._widthtext;	// ASSUME: That the widest text in the table-font
-					if (wT > _widthVals)		// will be widest text in the propanel font. Much faster.
-					{
-						_widthVals = wT;
-						rT = r;
-						cT = c;
-					}
+					_widthVals = wT;
+					rT = r;
+					cT = c;
 				}
 			}
+
+			_editor.Width =
 			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
 
-			_editor.Width = _widthVals;
+			telemetric();
 		}
 
 		/// <summary>
 		/// Sets the 'Width', 'Left', and 'Height' values of this property panel.
 		/// </summary>
-		internal void deterTelemetric()
+		internal void telemetric()
 		{
 			Width = _widthVars + _widthVals;
 
@@ -240,12 +242,14 @@ namespace yata
 				Height = hGrid;
 			else
 				Height = h;
+
+			InitScroll();
 		}
 
 		/// <summary>
-		/// Calculates scrollbar values.
+		/// Initializes scrollbar values.
 		/// </summary>
-		internal void InitScroll()
+		void InitScroll()
 		{
 			if (Height < HeightProps)
 			{
@@ -257,8 +261,8 @@ namespace yata
 				int vert = HeightProps - Height + (_scroll.LargeChange - 1);
 				if (vert < _scroll.LargeChange) vert = 0;
 
-				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding
-										// whether or not max < 0. 'Cause it fucks everything up. bingo.
+				_scroll.Maximum = vert;	// NOTE: Do not set this until after deciding whether
+										// or not max < 0. 'Cause it fucks everything up. bingo.
 
 				// handle .NET OnResize anomaly ->
 				// keep the bottom of the table snuggled against the bottom of
@@ -299,19 +303,44 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Ensures that a selected field is displayed within this panel's
+		/// visible height.
+		/// <param name="c">the col in the table, the row in the panel</param>
+		/// </summary>
+		internal void EnsureDisplayed(int c)
+		{
+			if (_scroll.Visible)
+			{
+				int y = c * _heightr;
+				if (y - _scroll.Value < 0)
+				{
+					_scroll.Value = y;
+				}
+				else if ((y += _heightr) - _scroll.Value > Height)
+				{
+					_scroll.Value = y - Height;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Applies a text-edit via the editbox.
 		/// </summary>
 		void ApplyTextEdit()
 		{
 			Cell cell = _grid[_r,_c];
-			string text = _editor.Text;
-			if (text != cell.text)
+			if (_editor.Text != cell.text)
 				_grid.ChangeCellText(cell, _editor);
 		}
 		#endregion Methods
 
 
 		#region Events (scroll)
+		/// <summary>
+		/// Hides the editor when this panel is scrolled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
 			lostfocus_Editor(null, EventArgs.Empty);
@@ -391,6 +420,10 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 
+		/// <summary>
+		/// Hides the editor when this panel loses focus.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnLostFocus(EventArgs e)
 		{
 			if (!_editor.ContainsFocus)
@@ -446,6 +479,8 @@ namespace yata
 					else
 						_grid.EnsureDisplayedRow(_r);
 
+					EnsureDisplayed(_c);
+
 					_grid.Invalidate();
 					_grid.FrozenPanel.Invalidate();
 
@@ -486,6 +521,7 @@ namespace yata
 
 //			base.OnMouseClick(e);
 		}
+
 
 		/// <summary>
 		/// Paints this property panel.

@@ -240,8 +240,9 @@ namespace yata
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
-			cell.selected    = selected;
-			cell.loadchanged = loadchanged;
+//			cell.selected    = selected;
+//			cell.loadchanged = loadchanged;
+//			cell.diff        = diff;
 			cell._widthtext  = _widthtext;
 
 			return cell;

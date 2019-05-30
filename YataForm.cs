@@ -2572,11 +2572,7 @@ namespace yata
 					if (Table._propanel == null)
 						Table._propanel = new PropertyPanel(Table);
 					else
-					{
-						Table._propanel.deterValfieldWidth();
-						Table._propanel.deterTelemetric();
-						Table._propanel.InitScroll();
-					}
+						Table._propanel.rewidthValfield();
 
 					Table._propanel.Show();
 					Table._propanel.BringToFront();
@@ -3439,11 +3435,7 @@ namespace yata
 						if (Table._propanel == null)
 							Table._propanel = new PropertyPanel(Table);
 						else
-						{
-							Table._propanel.deterValfieldWidth();
-							Table._propanel.deterTelemetric();
-							Table._propanel.InitScroll();
-						}
+							Table._propanel.rewidthValfield();
 
 						Table._propanel.Show();
 						Table._propanel.BringToFront();

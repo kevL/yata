@@ -387,15 +387,11 @@ namespace yata
 
 					if (_table._propanel != null && _table._propanel.Visible)
 					{
-						_table._propanel.deterTelemetric();
-						_table._propanel.InitScroll();
-
+						_table._propanel.telemetric();
 						_table._propanel.DockBot = _table._propanel.DockBot; // redeter Top of propanel
 					}
 
 					if (!_f.IsMin) _table.EnsureDisplayedCellOrRow();
-
-//					_table.Refresh();
 				}
 				_table = null;
 
@@ -1318,6 +1314,8 @@ namespace yata
 
 			// TODO: change selected col perhaps
 
+			bool display = false;
+
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
@@ -1343,7 +1341,7 @@ namespace yata
 								sel.selected = false;
 								(sel = this[0, FrozenCount]).selected = true;
 							}
-							EnsureDisplayed(sel);
+							display = true;
 						}
 						else if (_visVert) _scrollVert.Value = 0;
 					}
@@ -1354,7 +1352,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y, FrozenCount]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visHori) _scrollHori.Value = 0;
 
@@ -1383,7 +1381,7 @@ namespace yata
 								sel.selected = false;
 								(sel = this[RowCount - 1, ColCount - 1]).selected = true;
 							}
-							EnsureDisplayed(sel);
+							display = true;
 						}
 						else if (_visVert) _scrollVert.Value = MaxVert;
 					}
@@ -1394,7 +1392,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y, ColCount - 1]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visHori) _scrollHori.Value = MaxHori;
 
@@ -1418,7 +1416,7 @@ namespace yata
 					}
 					else if (sel != null)
 					{
-						if (sel.y != 0)
+						if (sel.y != 0 && sel.x >= FrozenCount)
 						{
 							sel.selected = false;
 
@@ -1429,7 +1427,7 @@ namespace yata
 
 							(sel = this[selr, sel.x]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visVert)
 					{
@@ -1460,7 +1458,7 @@ namespace yata
 					}
 					else if (sel != null)
 					{
-						if (sel.y != RowCount - 1)
+						if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
 						{
 							sel.selected = false;
 
@@ -1471,7 +1469,7 @@ namespace yata
 
 							(sel = this[selr, sel.x]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visVert)
 					{
@@ -1504,7 +1502,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y - 1, sel.x]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visVert)
 					{
@@ -1532,7 +1530,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y + 1, sel.x]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visVert)
 					{
@@ -1569,7 +1567,7 @@ namespace yata
 
 								(sel = this[sel.y, c]).selected = true;
 							}
-							EnsureDisplayed(sel);
+							display = true;
 						}
 						else if (_visHori)
 						{
@@ -1588,7 +1586,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y, sel.x - 1]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visHori)
 					{
@@ -1625,7 +1623,7 @@ namespace yata
 
 								(sel = this[sel.y, c]).selected = true;
 							}
-							EnsureDisplayed(sel);
+							display = true;
 						}
 						else if (_visHori)
 						{
@@ -1644,7 +1642,7 @@ namespace yata
 							sel.selected = false;
 							(sel = this[sel.y, sel.x + 1]).selected = true;
 						}
-						EnsureDisplayed(sel);
+						display = true;
 					}
 					else if (_visHori)
 					{
@@ -1669,7 +1667,14 @@ namespace yata
 					break;
 			}
 
-			Refresh();
+			if (display)
+			{
+				EnsureDisplayed(sel);
+				if (_propanel != null)
+					_propanel.EnsureDisplayed(sel.x);
+			}
+
+			Refresh(); // draw grid, propanel, frozenpanel, etc.
 
 //			base.OnKeyDown(e);
 		}
@@ -1842,8 +1847,7 @@ namespace yata
 		/// </summary>
 		void ApplyTextEdit()
 		{
-			string text = _editor.Text;
-			if (text != _editcell.text)
+			if (_editor.Text != _editcell.text)
 				ChangeCellText(_editcell, _editor);
 		}
 
@@ -1970,11 +1974,7 @@ namespace yata
 			}
 
 			if (_propanel != null && _propanel.Visible)
-			{
-				_propanel.deterValfieldWidth(); // TODO: Re-calc the 'c' col only.
-				_propanel.deterTelemetric();
-				_propanel.InitScroll();
-			}
+				_propanel.rewidthValfield(); // TODO: Re-calc the 'c' col only.
 		}
 
 		/// <summary>
@@ -2163,7 +2163,7 @@ namespace yata
 					ApplyTextEdit();
 
 					_editor.Visible = false;
-					Refresh();
+					Invalidate();
 				}
 /*				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
 				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
@@ -2190,7 +2190,11 @@ namespace yata
 						if ((ModifierKeys & Keys.Control) == Keys.Control)
 						{
 							if (cell.selected = !cell.selected)
+							{
 								EnsureDisplayed(cell);
+								if (_propanel != null)
+									_propanel.EnsureDisplayed(cell.x);
+							}
 						}
 						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
@@ -2199,7 +2203,10 @@ namespace yata
 
 							ClearCellSelects();
 							cell.selected = true;
+
 							EnsureDisplayed(cell);
+							if (_propanel != null)
+								_propanel.EnsureDisplayed(cell.x);
 						}
 						else if (!Readonly) // cell is already selected
 						{
@@ -2219,18 +2226,22 @@ namespace yata
 							_editor.Focus();
 					}
 
-					Refresh();
+					Refresh(); // draw grid, propanel, frozenpanel, etc.
 				}
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
-				ClearSelects();
-
 				Cell cell = getClickedCell(e.X, e.Y);
 				if (cell != null) // safety.
 				{
+					ClearSelects();
 					cell.selected = true;
-					Refresh();
+
+					EnsureDisplayed(cell);
+					if (_propanel != null)
+						_propanel.EnsureDisplayed(cell.x);
+
+					Refresh(); // draw grid, propanel, frozenpanel, etc.
 
 					_f.ShowCellMenu();
 				}
