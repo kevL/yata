@@ -1741,10 +1741,7 @@ namespace yata
 								&& !String.IsNullOrEmpty(text = Table[r,c].text)
 								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 							{
-								Table[r,c].selected = true;
-								Table.EnsureDisplayed(Table[r,c]);
-								Table.Invalidate();
-
+								Table.SelectCell(r,c);
 								return;
 							}
 						}
@@ -1758,10 +1755,7 @@ namespace yata
 							&& !String.IsNullOrEmpty(text = Table[r,c].text)
 							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 						{
-							Table[r,c].selected = true;
-							Table.EnsureDisplayed(Table[r,c]);
-							Table.Invalidate();
-
+							Table.SelectCell(r,c);
 							return;
 						}
 					}
@@ -1805,10 +1799,7 @@ namespace yata
 								&& !String.IsNullOrEmpty(text = Table[r,c].text)
 								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 							{
-								Table[r,c].selected = true;
-								Table.EnsureDisplayed(Table[r,c]);
-								Table.Invalidate();
-
+								Table.SelectCell(r,c);
 								return;
 							}
 						}
@@ -1822,10 +1813,7 @@ namespace yata
 							&& !String.IsNullOrEmpty(text = Table[r,c].text)
 							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
 						{
-							Table[r,c].selected = true;
-							Table.EnsureDisplayed(Table[r,c]);
-							Table.Invalidate();
-
+							Table.SelectCell(r,c);
 							return;
 						}
 					}
@@ -1941,7 +1929,7 @@ namespace yata
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
-								gotoloadchanged(sel);
+								Table.SelectCell(sel);
 								return;
 							}
 						}
@@ -1953,7 +1941,7 @@ namespace yata
 					{
 						if ((sel = Table[r,c]).loadchanged)
 						{
-							gotoloadchanged(sel);
+							Table.SelectCell(sel);
 							return;
 						}
 					}
@@ -1995,7 +1983,7 @@ namespace yata
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
-								gotoloadchanged(sel);
+								Table.SelectCell(sel);
 								return;
 							}
 						}
@@ -2007,19 +1995,12 @@ namespace yata
 					{
 						if ((sel = Table[r,c]).loadchanged)
 						{
-							gotoloadchanged(sel);
+							Table.SelectCell(sel);
 							return;
 						}
 					}
 				}
 			}
-		}
-
-		void gotoloadchanged(Cell sel)
-		{
-			sel.selected = true;
-			Table.EnsureDisplayed(sel);
-			Table.Invalidate();
 		}
 
 
@@ -2893,8 +2874,7 @@ namespace yata
 		}
 
 
-		// TODO: FreezeFirst/Second
-		// TODO: Save / SaveAs / SaveAll.
+		// TODO: FreezeFirst/Second, gotoloadchanged, etc.
 
 
 		/// <summary>
@@ -3309,18 +3289,25 @@ namespace yata
 		void gotodiff(Cell sel, YataGrid table)
 		{
 			sel.selected = true;
-			Table.EnsureDisplayed(sel);
 
+			Table.EnsureDisplayed(sel);
 			Table.Invalidate();
 			Table.FrozenPanel.Invalidate();
+
 			if (Table._propanel != null && Table._propanel.Visible)
+			{
+				Table._propanel.EnsureDisplayed(sel.x);
 				Table._propanel.Invalidate();
+			}
 
 			if (table != null
 				&& sel.x < table.ColCount
 				&& sel.y < table.RowCount)
 			{
 				table[sel.y, sel.x].selected = true;
+
+//				if (table._propanel != null && table._propanel.Visible)	// TODO: propanel is NOT visible
+//					table._propanel.EnsureDisplayed(sel.x);				// TODO: scrollbar is NOT visible either
 			}
 		}
 		#endregion Tab menu

@@ -1670,7 +1670,7 @@ namespace yata
 			if (display)
 			{
 				EnsureDisplayed(sel);
-				if (_propanel != null)
+				if (_propanel != null && _propanel.Visible)
 					_propanel.EnsureDisplayed(sel.x);
 			}
 
@@ -1690,6 +1690,29 @@ namespace yata
 			row.selected = true;
 			for (int c = 0; c != ColCount; ++c)
 				row[c].selected = true;
+		}
+
+		internal void SelectCell(int r, int c)
+		{
+			Cell cell = this[r,c];
+			cell.selected = true;
+
+			EnsureDisplayed(cell);
+			if (_propanel != null && _propanel.Visible)
+				_propanel.EnsureDisplayed(c);
+
+			Invalidate();
+		}
+
+		internal void SelectCell(Cell cell)
+		{
+			cell.selected = true;
+
+			EnsureDisplayed(cell);
+			if (_propanel != null && _propanel.Visible)
+				_propanel.EnsureDisplayed(cell.x);
+
+			Invalidate();
 		}
 
 		/// <summary>
@@ -2192,7 +2215,7 @@ namespace yata
 							if (cell.selected = !cell.selected)
 							{
 								EnsureDisplayed(cell);
-								if (_propanel != null)
+								if (_propanel != null && _propanel.Visible)
 									_propanel.EnsureDisplayed(cell.x);
 							}
 						}
@@ -2205,7 +2228,7 @@ namespace yata
 							cell.selected = true;
 
 							EnsureDisplayed(cell);
-							if (_propanel != null)
+							if (_propanel != null && _propanel.Visible)
 								_propanel.EnsureDisplayed(cell.x);
 						}
 						else if (!Readonly) // cell is already selected
@@ -2238,7 +2261,7 @@ namespace yata
 					cell.selected = true;
 
 					EnsureDisplayed(cell);
-					if (_propanel != null)
+					if (_propanel != null && _propanel.Visible)
 						_propanel.EnsureDisplayed(cell.x);
 
 					Refresh(); // draw grid, propanel, frozenpanel, etc.
