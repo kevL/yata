@@ -53,7 +53,7 @@ namespace yata
 
 		internal Font FontAccent;
 
-		internal bool _search;
+		internal bool isSearch;
 		bool _firstclick; // preps the Search or Goto textboxes to select all text
 
 		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
@@ -1715,9 +1715,9 @@ namespace yata
 		/// </summary>
 		void doSearch()
 		{
-			_search = true; // [Enter] shall keep focus on the tb/cbx, [F3] shall focus the table.
+			isSearch = true; // [Enter] shall keep focus on the tb/cbx, [F3] shall focus the table.
 			Search();
-			_search = false;
+			isSearch = false;
 		}
 
 		/// <summary>

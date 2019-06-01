@@ -332,16 +332,16 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-			_table._editor.Visible = false;
+			if (_table == YataForm.Table)
+			{
+				_table._editor.Visible = false;
+				_table.Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+			}
 
 			_table.offsetVert = _table._scrollVert.Value;
-			_table     .Invalidate();
-			_panelRows .Invalidate();
-			FrozenPanel.Invalidate();
 
-
-			if (!_f._search)
-				Select(); // workaround: refocus the table (bar has to move > 0px)
+			if (!_f.isSearch)	// <- if not Search by [Enter]
+				Select();		// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -380,15 +380,16 @@ namespace yata
 		{
 			if (_table == null) _table = this;
 
-			_table._editor.Visible = false;
+			if (_table == YataForm.Table)
+			{
+				_table._editor.Visible = false;
+				_table.Invalidator(INVALID_GRID | INVALID_COLS);
+			}
 
 			_table.offsetHori = _table._scrollHori.Value;
-			_table    .Invalidate();
-			_panelCols.Invalidate();
 
-
-			if (!_f._search)
-				Select(); // workaround: refocus the table (bar has to move > 0px)
+			if (!_f.isSearch)	// <- if not Search by [Enter]
+				Select();		// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
