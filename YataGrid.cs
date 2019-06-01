@@ -287,9 +287,6 @@ namespace yata
 		internal const int INVALID_ROWS = 0x08; // the rowhead panel
 		internal const int INVALID_COLS = 0x10; // the colhead panel
 		internal const int INVALID_LBLS = 0x20; // the static labels that head the frozen panel
-//		internal const int INVALID_LBL0 = 0x20;
-//		internal const int INVALID_LBL1 = 0x40;
-//		internal const int INVALID_LBL2 = 0x80;
 
 		/// <summary>
 		/// Flags various controls of this grid for UI-update.
@@ -319,12 +316,6 @@ namespace yata
 				_labelfirst .Invalidate();
 				_labelsecond.Invalidate();
 			}
-//			if ((invalid & INVALID_LBL0) == INVALID_LBL0)
-//				_labelid.Invalidate();
-//			if ((invalid & INVALID_LBL1) == INVALID_LBL1)
-//				_labelfirst.Invalidate();
-//			if ((invalid & INVALID_LBL2) == INVALID_LBL2)
-//				_labelsecond.Invalidate();
 		}
 
 
