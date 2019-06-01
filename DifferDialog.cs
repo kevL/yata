@@ -14,8 +14,6 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		internal static DifferDialog that; // be careful w/ 'that'
-
 		static int _x = -1;
 		static int _y = -1;
 		#endregion Fields (static)
@@ -44,7 +42,6 @@ namespace yata
 			InitializeComponent();
 
 			_f = f;
-			that = this;
 
 			if (Settings._font2 != null)
 			{
@@ -190,7 +187,7 @@ namespace yata
 			_x = Left;
 			_y = Top;
 
-			that = null;
+			_f._fdiffer = null;
 
 			this.Dispose(true);
 			base.OnFormClosing(e);

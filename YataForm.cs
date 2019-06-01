@@ -696,8 +696,8 @@ namespace yata
 						Table.Propanel.EnsureDisplayed(sel.x);
 				}
 
-				if (DifferDialog.that != null) // be careful w/ 'that'
-					DifferDialog.that.EnableGotoButton(true);
+				if (_fdiffer != null)
+					_fdiffer.EnableGotoButton(true);
 			}
 			else
 			{
@@ -736,7 +736,7 @@ namespace yata
 				it_freeze1   .Enabled =
 				it_freeze2   .Enabled = false;
 
-				DifferDialog.that = null; // be careful w/ 'that'
+				_fdiffer = null;
 			}
 
 			SetTitlebarText();
@@ -2955,6 +2955,8 @@ namespace yata
 		/// <param name="e"></param>
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
+			if (_fdiffer != null) _fdiffer.Close();
+
 			_diff2 = Table;
 			doDiff();
 			tabclick_DiffJustify(null, EventArgs.Empty);
@@ -2967,6 +2969,8 @@ namespace yata
 		/// <param name="e"></param>
 		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
+			if (_fdiffer != null) _fdiffer.Close();
+
 			if (_diff1 != null)
 			{
 				DiffReset(_diff1);
@@ -3192,14 +3196,15 @@ namespace yata
 						 + " - (b) "
 						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
 
-			var ib = new DifferDialog(title,
-									  label,
-									  copyable,
-									  this);
-			ib.SetLabelColor(color);
-			if (@goto) ib.ShowGotoButton();
-			ib.Show();
+			_fdiffer = new DifferDialog(title,
+										label,
+										copyable,
+										this);
+			_fdiffer.SetLabelColor(color);
+			if (@goto) _fdiffer.ShowGotoButton();
+			_fdiffer.Show(); // is not owned.
 		}
+		internal DifferDialog _fdiffer;
 
 		/// <summary>
 		/// Selects the next diffed cell in the table (or both tables if both
@@ -3208,6 +3213,9 @@ namespace yata
 		/// </summary>
 		internal void GotoDiffCell()
 		{
+			if (WindowState == FormWindowState.Minimized)
+				WindowState = FormWindowState.Normal;
+
 			if (Table != null
 				&& (_diff1 != null  || _diff2 != null)
 				&& (Table == _diff1 || Table == _diff2))
@@ -3342,7 +3350,7 @@ namespace yata
 					}
 				}
 			}
-			DifferDialog.that.EnableGotoButton(false); // be careful w/ 'that'
+			_fdiffer.EnableGotoButton(false);
 		}
 
 		/// <summary>
