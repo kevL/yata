@@ -2345,7 +2345,11 @@ namespace yata
 			{
 				Table._editor.Visible = false;
 				Table.Invalidator(YataGrid.INVALID_GRID);
+
+				it_ppOnOff.Checked = Table.Propanel != null && Table.Propanel.Visible;
 			}
+			else
+				it_ppOnOff.Checked = false;
 		}
 
 		void opsclick_CheckRowOrder(object sender, EventArgs e)
