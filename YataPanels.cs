@@ -69,8 +69,8 @@ namespace yata
 
 
 		internal bool _grab;
-		internal int  _grabCol;
-		internal int  _grabStart;
+		int _grabCol;
+		int _grabStart;
 
 		/// <summary>
 		/// Changes cursor to a vertical splitter near the right edge of each
@@ -109,12 +109,17 @@ namespace yata
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			if ((_grab = (Cursor == Cursors.VSplit))
-				&& e.Button == MouseButtons.Left)
+			_grid._editor.Visible = false;
+			int invalid = YataGrid.INVALID_GRID;
+
+			if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
-				_grid._editor.Visible = false;
-				_grid.Refresh();
+				_grid.Propanel._editor.Visible = false;
+				invalid |= YataGrid.INVALID_PROP;
 			}
+			_grid.Invalidator(invalid);
+
+			_grab = (Cursor == Cursors.VSplit);
 
 //			base.OnMouseDown(e);
 		}
@@ -123,20 +128,23 @@ namespace yata
 		{
 			if (_grab)
 			{
+				_grab = false;
+				Cursor = Cursors.Default;
+
 				if (e.Button == MouseButtons.Left)
 				{
-					_grab = false;
-					Cursor = Cursors.Default;
+					if (e.X != _grabStart)
+					{
+						var col = _grid.Cols[_grabCol];
+						col.UserSized = true;
 
-					var col = _grid.Cols[_grabCol];
-					col.UserSized = true;
+						int w = col.width() + e.X - _grabStart;
+						if (w < 17) w = 17;
 
-					int w = col.width() + e.X - _grabStart;
-					if (w < 17) w = 17;
-
-					col.width(w, true);
-					_grid.InitScroll();
-					_grid.Refresh();
+						col.width(w, true);
+						_grid.InitScroll();
+						_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
+					}
 				}
 				else if (e.Button == MouseButtons.Right)
 				{
@@ -148,6 +156,7 @@ namespace yata
 					{
 						col.UserSized = false;
 						_grid.colRewidth(_grabCol);
+						_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
 					}
 				}
 			}

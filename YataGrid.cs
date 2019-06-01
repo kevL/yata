@@ -257,11 +257,13 @@ namespace yata
 			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
 			_t1.Tick += t1_Tick;
 
-			_editor.Visible = false;
-			_editor.BackColor = Colors.Editor;
+			_editor.Visible     = false;
+			_editor.BackColor   = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
-			_editor.KeyDown += keydown_Editor;
-			_editor.Leave   += leave_Editor;
+//			_editor.Height      = cf. the PropertyPanel editor
+			_editor.LostFocus  += lostfocus_Editor;
+			_editor.KeyDown    += keydown_Editor;
+			_editor.Leave      += leave_Editor;
 
 			Controls.Add(_editor);
 
@@ -1832,6 +1834,19 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Handles the editor losing focus.
+		/// @note This funct is a partial catchall for other places where the
+		/// editor needs to hide.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void lostfocus_Editor(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			Invalidator(INVALID_GRID);
+		}
+
+		/// <summary>
 		/// Handles the Leave event in the cell-editor.
 		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/PageDown is
 		/// pressed while editing.
@@ -2285,8 +2300,8 @@ namespace yata
 							_editor.Visible = false;
 							Invalidator(INVALID_GRID);
 						}
-						else // NOTE: There's a clickable fringe around the editor.
-							_editor.Focus();
+						else					// NOTE: There's a clickable fringe around the editor.
+							_editor.Focus();	// so just refocus the editor if the fringe is clicked
 					}
 				}
 			}

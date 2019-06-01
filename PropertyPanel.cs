@@ -176,13 +176,13 @@ namespace yata
 
 			_grid.Controls.Add(this);
 
-			_editor.Visible = false;
-			_editor.BackColor = Colors.Editor;
+			_editor.Visible     = false;
+			_editor.BackColor   = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
-			_editor.Height = _heightr;
-			_editor.LostFocus += lostfocus_Editor;
-			_editor.KeyDown   += keydown_Editor;
-			_editor.Leave     += leave_Editor;
+			_editor.Height      = _heightr;
+			_editor.LostFocus  += lostfocus_Editor;
+			_editor.KeyDown    += keydown_Editor;
+			_editor.Leave      += leave_Editor;
 
 			Controls.Add(_editor);
 		}
@@ -357,8 +357,7 @@ namespace yata
 		/// <param name="e"></param>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
-			if (e.Alt)
-				lostfocus_Editor(null, EventArgs.Empty);
+			if (e.Alt) lostfocus_Editor(null, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -371,7 +370,7 @@ namespace yata
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
 			_editor.Visible = false;
-			Refresh();
+			Invalidate();
 		}
 
 		/// <summary>
@@ -383,8 +382,8 @@ namespace yata
 		/// <param name="e"></param>
 		void leave_Editor(object sender, EventArgs e)
 		{
-			if ((ModifierKeys & Keys.Control) == Keys.Control
-				&& _editor.Visible)
+			if (_editor.Visible
+				&& (ModifierKeys & Keys.Control) == Keys.Control)
 			{
 				_editor.Focus(); // ie. don't leave editor.
 			}
@@ -411,8 +410,7 @@ namespace yata
 
 					case Keys.Escape:
 					case Keys.Tab:
-						_editor.Visible = false;
-						_grid.Refresh();
+						lostfocus_Editor(null, EventArgs.Empty);
 						_grid.Select();
 						return true;
 				}
@@ -420,17 +418,24 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 
-		/// <summary>
+/*		/// <summary>
 		/// Hides the editor when this panel loses focus.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLostFocus(EventArgs e)
 		{
-			if (!_editor.ContainsFocus)
+			if (_editor.Visible)
+			{
 				lostfocus_Editor(null, EventArgs.Empty);
+//				_editor.Visible = false;
+//				Invalidate();
+//				_grid.Invalidator(YataGrid.INVALID_GRID);
+			}
+//			if (!_editor.ContainsFocus)
+//				lostfocus_Editor(null, EventArgs.Empty);
 
 //			base.OnLostFocus(e);
-		}
+		} */
 
 		/// <summary>
 		/// Clears cords on the statusbar when the mouse enters the control.
@@ -456,6 +461,8 @@ namespace yata
 		{
 			if (!_editor.Visible)
 			{
+				Select(); // snap.
+
 				Cell sel = _grid.getSelectedCell();
 				if (sel != null)
 					_r = sel.y;
@@ -500,7 +507,6 @@ namespace yata
 					}
 
 					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_PROP);
-					Select();
 				}
 			}
 			else // is edit
@@ -508,8 +514,7 @@ namespace yata
 				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
 					ApplyCellEdit();
 
-				_editor.Visible = false;
-				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+				lostfocus_Editor(null, EventArgs.Empty);
 				_grid.Select();
 			}
 
