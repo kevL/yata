@@ -160,6 +160,7 @@ namespace yata
 					}
 				}
 			}
+			_grid.Select();
 
 //			base.OnMouseUp(e);
 		}
@@ -253,9 +254,11 @@ namespace yata
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
 			if (_grid._editor.Visible)
-				_grid._editor.Focus();
-			else
-				_grid.Select();
+			{
+				_grid._editor.Visible = false;
+				_grid.Invalidator(YataGrid.INVALID_GRID);
+			}
+			_grid.Select();
 
 //			base.OnMouseClick(e);
 		}

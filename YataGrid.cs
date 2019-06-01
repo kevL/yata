@@ -1921,7 +1921,12 @@ namespace yata
 		void ApplyCellEdit()
 		{
 			if (_editor.Text != _editcell.text)
+			{
 				ChangeCellText(_editcell, _editor);
+
+				if (Propanel != null && Propanel.Visible)
+					Invalidator(INVALID_PROP);
+			}
 		}
 
 		/// <summary>
@@ -2230,8 +2235,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			Select();
-
 			if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
 			{
 				if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
@@ -2242,6 +2245,8 @@ namespace yata
 					_editor.Visible = false;
 					Invalidator(INVALID_GRID);
 				}
+				Select();
+
 //				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
 //				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
 //					foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
@@ -2274,6 +2279,7 @@ namespace yata
 								invalid |= INVALID_PROP;
 
 							Invalidator(invalid);
+							Select();
 						}
 						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
@@ -2284,6 +2290,7 @@ namespace yata
 							cell.selected = true;
 
 							Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
+							Select();
 						}
 						else if (!Readonly) // cell is already selected
 						{
@@ -2299,11 +2306,14 @@ namespace yata
 							ApplyCellEdit();
 							_editor.Visible = false;
 							Invalidator(INVALID_GRID);
+							Select();
 						}
 						else					// NOTE: There's a clickable fringe around the editor.
 							_editor.Focus();	// so just refocus the editor if the fringe is clicked
 					}
 				}
+				else
+					Select();
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
@@ -2314,9 +2324,10 @@ namespace yata
 					cell.selected = true;
 
 					Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
-
 					_f.ShowCellMenu();
 				}
+				else
+					Select();
 			}
 
 			_f.it_CopyCell .Enabled = (getSelectedCell() != null);

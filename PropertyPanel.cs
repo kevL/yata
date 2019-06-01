@@ -330,7 +330,10 @@ namespace yata
 		{
 			Cell cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
+			{
 				_grid.ChangeCellText(cell, _editor);
+				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			}
 		}
 		#endregion Methods
 
@@ -370,7 +373,7 @@ namespace yata
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
 			_editor.Visible = false;
-			Invalidate();
+			_grid.Invalidator(YataGrid.INVALID_PROP);
 		}
 
 		/// <summary>
@@ -418,24 +421,6 @@ namespace yata
 			return base.ProcessDialogKey(keyData);
 		}
 
-/*		/// <summary>
-		/// Hides the editor when this panel loses focus.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnLostFocus(EventArgs e)
-		{
-			if (_editor.Visible)
-			{
-				lostfocus_Editor(null, EventArgs.Empty);
-//				_editor.Visible = false;
-//				Invalidate();
-//				_grid.Invalidator(YataGrid.INVALID_GRID);
-			}
-//			if (!_editor.ContainsFocus)
-//				lostfocus_Editor(null, EventArgs.Empty);
-
-//			base.OnLostFocus(e);
-		} */
 
 		/// <summary>
 		/// Clears cords on the statusbar when the mouse enters the control.
@@ -461,8 +446,6 @@ namespace yata
 		{
 			if (!_editor.Visible)
 			{
-				Select(); // snap.
-
 				Cell sel = _grid.getSelectedCell();
 				if (sel != null)
 					_r = sel.y;
@@ -505,9 +488,13 @@ namespace yata
 						_editor.Visible = true;
 						_editor.Focus();
 					}
+					else
+						_grid.Select();
 
 					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_PROP);
 				}
+				else
+					_grid.Select();
 			}
 			else // is edit
 			{
