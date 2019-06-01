@@ -128,7 +128,7 @@ namespace yata
 		ToolStripMenuItem context_it_CreateBelow;
 		ToolStripMenuItem context_it_DeleteRow;
 
-		ContextMenuStrip tabMenu;
+		internal ContextMenuStrip tabMenu;
 		ToolStripMenuItem it_tabClose;
 		ToolStripMenuItem it_tabCloseAll;
 		ToolStripMenuItem it_tabCloseAllOthers;
@@ -139,7 +139,7 @@ namespace yata
 		ToolStripMenuItem it_tabDiffReset;
 		ToolStripMenuItem it_tabDiffJustify;
 
-		ContextMenuStrip cellMenu;
+		internal ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
@@ -1267,7 +1267,7 @@ namespace yata
 			this.it_cellMergeRo});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 126);
+			this.cellMenu.Size = new System.Drawing.Size(165, 148);
 			// 
 			// it_cellCopy
 			// 
