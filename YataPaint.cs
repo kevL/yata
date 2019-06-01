@@ -133,7 +133,8 @@ namespace yata
 		{
 			if (ColCount != 0) // safety.
 			{
-				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0, 0, HeightColhead);
+				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0,
+										 0, HeightColhead);
 
 				int clip;
 				Color color;
@@ -146,9 +147,15 @@ namespace yata
 						{
 							Bitmap sort;
 							if (_sortdir == SORT_ASC)
-								sort = Resources.asc_16px;
+							{
+								color = Colors.TextColSorted_asc;
+								sort  = Resources.asc_16px;
+							}
 							else
-								sort = Resources.des_16px;
+							{
+								color = Colors.TextColSorted_des;
+								sort  = Resources.des_16px;
+							}
 
 							graphics.DrawImage(sort,
 											   rect.X + rect.Width  - _offsetHoriSort,
@@ -157,12 +164,14 @@ namespace yata
 							clip = _offsetHoriSort - 1;
 						}
 						else
-							clip = 7;
+						{
+							if (Cols[c].UserSized)
+								color = Colors.TextColSized;
+							else
+								color = Colors.Text;
 
-						if (Cols[c].UserSized)
-							color = Colors.TextColSized;
-						else
-							color = Colors.Text;
+							clip = 7;
+						}
 
 						rect.Width -= clip;
 						TextRenderer.DrawText(graphics,
@@ -316,30 +325,39 @@ namespace yata
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
 				}
 
+				Color color;
 				rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
-				TextRenderer.DrawText(graphics,
-									  Cols[1].text,
-									  _f.FontAccent,
-									  rect,
-									  Colors.Text,
-									  YataGraphics.flags);
-
-				graphics.DrawLine(Pencils.DarkLine,
-								  _labelfirst.Width, _labelfirst.Top,
-								  _labelfirst.Width, _labelfirst.Bottom);
 
 				if (_sortdir != SORT_NOT && _sortcol == 1)
 				{
 					Bitmap sort;
 					if (_sortdir == SORT_ASC)
-						sort = Resources.asc_16px;
+					{
+						color = Colors.TextColSorted_asc;
+						sort  = Resources.asc_16px;
+					}
 					else
-						sort = Resources.des_16px;
-
+					{
+						color = Colors.TextColSorted_des;
+						sort  = Resources.des_16px;
+					}
 					graphics.DrawImage(sort,
 									   rect.X + rect.Width  - _offsetHoriSort,
 									   rect.Y + rect.Height - _offsetVertSort);
 				}
+				else
+					color = Colors.Text;
+
+				TextRenderer.DrawText(graphics,
+									  Cols[1].text,
+									  _f.FontAccent,
+									  rect,
+									  color,
+									  YataGraphics.flags);
+
+				graphics.DrawLine(Pencils.DarkLine,
+								  _labelfirst.Width, _labelfirst.Top,
+								  _labelfirst.Width, _labelfirst.Bottom);
 			}
 		}
 
@@ -358,30 +376,40 @@ namespace yata
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
 				}
 
+				Color color;
 				rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
-				TextRenderer.DrawText(graphics,
-									  Cols[2].text,
-									  _f.FontAccent,
-									  rect,
-									  Colors.Text,
-									  YataGraphics.flags);
-
-				graphics.DrawLine(Pencils.DarkLine,
-								  _labelsecond.Width, _labelsecond.Top,
-								  _labelsecond.Width, _labelsecond.Bottom);
 
 				if (_sortdir != SORT_NOT && _sortcol == 2)
 				{
 					Bitmap sort;
 					if (_sortdir == SORT_ASC)
-						sort = Resources.asc_16px;
+					{
+						color = Colors.TextColSorted_asc;
+						sort  = Resources.asc_16px;
+					}
 					else
-						sort = Resources.des_16px;
+					{
+						color = Colors.TextColSorted_des;
+						sort  = Resources.des_16px;
+					}
 
 					graphics.DrawImage(sort,
 									   rect.X + rect.Width  - _offsetHoriSort,
 									   rect.Y + rect.Height - _offsetVertSort);
 				}
+				else
+					color = Colors.Text;
+
+				TextRenderer.DrawText(graphics,
+									  Cols[2].text,
+									  _f.FontAccent,
+									  rect,
+									  color,
+									  YataGraphics.flags);
+
+				graphics.DrawLine(Pencils.DarkLine,
+								  _labelsecond.Width, _labelsecond.Top,
+								  _labelsecond.Width, _labelsecond.Bottom);
 			}
 		}
 

@@ -106,19 +106,22 @@ namespace yata
 
 	static class Colors
 	{
-		internal static readonly Color ColheadPanel = Color.Thistle;
-		internal static readonly Color RowheadPanel = Color.Azure;
+		internal static readonly Color ColheadPanel      = Color.Thistle;
+		internal static readonly Color RowheadPanel      = Color.Azure;
 
-		internal static readonly Color FrozenHead   = Color.Moccasin;
-		internal static readonly Color FrozenPanel  = Color.OldLace;
+		internal static readonly Color FrozenHead        = Color.Moccasin;
+		internal static readonly Color FrozenPanel       = Color.OldLace;
 
-		internal static readonly Color LabelSorted  = Color.LightCoral;
+		internal static readonly Color LabelSorted       = Color.LightCoral;
 
-		internal static readonly Color Editor       = Color.Crimson;
+		internal static readonly Color Editor            = Color.Crimson;
 
-		internal static readonly Color Text         = SystemColors.ControlText;
-		internal static readonly Color TextColSized = Color.Olive;
-		internal static readonly Color TextReadonly = Color.Firebrick;
+		internal static readonly Color Text              = SystemColors.ControlText;
+		internal static readonly Color TextReadonly      = Color.Firebrick;
+
+		internal static readonly Color TextColSized      = Color.Olive;
+		internal static readonly Color TextColSorted_asc = Color.CadetBlue;
+		internal static readonly Color TextColSorted_des = Color.RosyBrown;
 	}
 
 	static class Gradients
