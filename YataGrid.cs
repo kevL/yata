@@ -49,7 +49,7 @@ namespace yata
 		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
 		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
 
-		static int _wid; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
+		static int _wId; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
 
 		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
 		internal const int FreezeFirst  = 2;
@@ -125,7 +125,7 @@ namespace yata
 		/// </summary>
 		internal int _sortdir = SORT_ASC;
 
-		internal PropertyPanel _propanel;
+		internal PropertyPanel Propanel;
 
 		internal UndoRedo _ur;
 
@@ -178,25 +178,31 @@ namespace yata
 					w += Cols[c].width();
 
 				FrozenPanel.Width = w;
-				FrozenPanel.Refresh();
 
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
+				int invalid = INVALID_FROZ;
+
 				Cell sel = getSelectedCell();
 				if (sel != null && sel.x < _frozenCount)
 				{
-					_editor.Visible =
-					sel.selected = false;
+					sel.selected =
+					_editor.Visible = false;
 
 					if (ColCount > _frozenCount)
-						this[sel.y, _frozenCount].selected = true;
-
-					Refresh();
+					{
+						sel = this[sel.y, _frozenCount];
+						sel.selected = true;
+						EnsureDisplayed(sel);
+						invalid |= INVALID_GRID;
+					}
 				}
 
-				if (_propanel != null) // update bg-color of PP fields
-					_propanel.Refresh();
+				if (Propanel != null && Propanel.Visible) // update bg-color of PP fields
+					invalid |= INVALID_PROP;
+
+				Invalidator(invalid);
 			}
 		}
 
@@ -270,6 +276,54 @@ namespace yata
 			Watcher = new FileWatcher(this);
 		}
 		#endregion cTor
+
+
+		internal const int INVALID_NONE = 0x00;
+		internal const int INVALID_GRID = 0x01; // this table
+		internal const int INVALID_PROP = 0x02; // the PropertyPanel
+		internal const int INVALID_FROZ = 0x04; // the frozen panel (id,1st,2nd)
+		internal const int INVALID_ROWS = 0x08; // the rowhead panel
+		internal const int INVALID_COLS = 0x10; // the colhead panel
+		internal const int INVALID_LBLS = 0x20; // the static labels that head the frozen panel
+//		internal const int INVALID_LBL0 = 0x20;
+//		internal const int INVALID_LBL1 = 0x40;
+//		internal const int INVALID_LBL2 = 0x80;
+
+		/// <summary>
+		/// Flags various controls of this grid for UI-update.
+		/// @note Check that 'Propanel' is valid before a call w/ 'INVALID_PROP'.
+		/// </summary>
+		/// <param name="invalid"></param>
+		internal void Invalidator(int invalid)
+		{
+			if ((invalid & INVALID_GRID) != 0)
+				Invalidate();
+
+			if ((invalid & INVALID_PROP) != 0)
+				Propanel.Invalidate();
+
+			if ((invalid & INVALID_FROZ) != 0)
+				FrozenPanel.Invalidate();
+
+			if ((invalid & INVALID_ROWS) != 0)
+				_panelRows.Invalidate();
+
+			if ((invalid & INVALID_COLS) != 0)
+				_panelCols.Invalidate();
+
+			if ((invalid & INVALID_LBLS) != 0)
+			{
+				_labelid    .Invalidate();
+				_labelfirst .Invalidate();
+				_labelsecond.Invalidate();
+			}
+//			if ((invalid & INVALID_LBL0) == INVALID_LBL0)
+//				_labelid.Invalidate();
+//			if ((invalid & INVALID_LBL1) == INVALID_LBL1)
+//				_labelfirst.Invalidate();
+//			if ((invalid & INVALID_LBL2) == INVALID_LBL2)
+//				_labelsecond.Invalidate();
+		}
 
 
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
@@ -385,10 +439,10 @@ namespace yata
 					if (_table._panelRows  != null) _table._panelRows .Height = Height;
 					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
 
-					if (_table._propanel != null && _table._propanel.Visible)
+					if (_table.Propanel != null && _table.Propanel.Visible)
 					{
-						_table._propanel.telemetric();
-						_table._propanel.DockBot = _table._propanel.DockBot; // redeter Top of propanel
+						_table.Propanel.telemetric();
+						_table.Propanel.DockBot = _table.Propanel.DockBot; // redeter Top of propanel
 					}
 
 					if (!_f.IsMin) _table.EnsureDisplayedCellOrRow();
@@ -527,10 +581,10 @@ namespace yata
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (_propanel != null && _propanel._scroll.Visible
-				&& e.X > _propanel.Left && e.X < _propanel.Left + _propanel.Width)
+			if (Propanel != null && Propanel._scroll.Visible
+				&& e.X > Propanel.Left && e.X < Propanel.Left + Propanel.Width)
 			{
-				_propanel.Scroll(e);
+				Propanel.Scroll(e);
 			}
 			else if (!_editor.Visible)
 			{
@@ -588,9 +642,9 @@ namespace yata
 		}
 
 
-//		const int HEADERS   = 0;
-		const int VALUETYPE = 1;
-		const int LABELS    = 2;
+//		const int LINE_HEADER   = 0;
+		const int LINE_VALTYPE  = 1;
+		const int LINE_COLHEADS = 2;
 
 		internal const int LOADRESULT_FALSE   = 0;
 		internal const int LOADRESULT_TRUE    = 1;
@@ -610,7 +664,7 @@ namespace yata
 			string line = String.Empty;
 
 			int total = lines.Length;
-			if (total < LABELS + 1) total = LABELS + 1;
+			if (total < LINE_COLHEADS + 1) total = LINE_COLHEADS + 1;
 
 			for (int i = 0; i != total; ++i)
 			{
@@ -619,10 +673,10 @@ namespace yata
 				else
 					line = String.Empty;
 
-				if (i > LABELS)
+				if (i > LINE_COLHEADS)
 				{
-					string[] cells = Parse2daRow(line);
-					if (cells.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
+					string[] fields = Parse2daRow(line);
+					if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 					{
 						++id; // test for well-formed, consistent IDs
 
@@ -631,7 +685,7 @@ namespace yata
 							string info = String.Empty;
 
 							int result;
-							if (!Int32.TryParse(cells[0], out result))
+							if (!Int32.TryParse(fields[0], out result))
 								info = "The 2da-file contains an ID that is not an integer.";
 							else if (result != id)
 								info = "The 2da-file contains an ID that is out of order.";
@@ -642,7 +696,7 @@ namespace yata
 											 + Environment.NewLine + Environment.NewLine
 											 + Fullpath
 											 + Environment.NewLine + Environment.NewLine
-											 + id + " / " + cells[0];
+											 + id + " / " + fields[0];
 								switch (ShowLoadError(error))
 								{
 									case DialogResult.Abort:
@@ -658,7 +712,7 @@ namespace yata
 						}
 
 						// test for matching fields under columns
-						if (!ignoreErrors && cells.Length != Fields.Length + 1)
+						if (!ignoreErrors && fields.Length != Fields.Length + 1)
 						{
 							string error = "The 2da-file contains fields that do not align with its cols."
 										 + Environment.NewLine + Environment.NewLine
@@ -712,10 +766,10 @@ namespace yata
 						// NOTE: Tests for well-formed fields will be done later so that their
 						// respective cells can be flagged as 'loadchanged' (if applicable).
 
-						_rows.Add(cells);
+						_rows.Add(fields);
 					}
 				}
-				else if (i == LABELS)
+				else if (i == LINE_COLHEADS)
 				{
 					if (String.IsNullOrEmpty(line))
 					{
@@ -760,7 +814,7 @@ namespace yata
 					}
 					Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 				}
-				else if (i == VALUETYPE)
+				else if (i == LINE_VALTYPE)
 				{
 					if (!ignoreErrors && Settings._strict && !String.IsNullOrEmpty(line)) // test for blank 2nd line
 					{
@@ -782,7 +836,7 @@ namespace yata
 						}
 					}
 				}
-				else //if (i == HEADERS) // test version header
+				else //if (i == LINE_HEADER) // test version header
 				{
 					if (String.IsNullOrEmpty(line))
 					{
@@ -1095,7 +1149,7 @@ namespace yata
 
 			for (int c = 0; c != ColCount; ++c)
 			{
-				w = _wid;
+				w = _wId;
 				for (int r = 0; r != RowCount; ++r)
 				{
 					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
@@ -1187,7 +1241,7 @@ namespace yata
 			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
 			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
 
-			_wid = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
+			_wId = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
 		}
 
 		/// <summary>
@@ -1314,6 +1368,7 @@ namespace yata
 
 			// TODO: change selected col perhaps
 
+			int invalid = INVALID_NONE;
 			bool display = false;
 
 			switch (e.KeyCode)
@@ -1329,6 +1384,7 @@ namespace yata
 								SelectRow(0);
 							}
 							EnsureDisplayedRow(0);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
 						else if (_visHori) _scrollHori.Value = 0;
 					}
@@ -1355,7 +1411,6 @@ namespace yata
 						display = true;
 					}
 					else if (_visHori) _scrollHori.Value = 0;
-
 					break;
 
 				case Keys.End:
@@ -1369,6 +1424,7 @@ namespace yata
 								SelectRow(RowCount - 1);
 							}
 							EnsureDisplayedRow(RowCount - 1);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
 						else if (_visHori) _scrollHori.Value = MaxHori;
 					}
@@ -1395,7 +1451,6 @@ namespace yata
 						display = true;
 					}
 					else if (_visHori) _scrollHori.Value = MaxHori;
-
 					break;
 
 				case Keys.PageUp:
@@ -1406,13 +1461,13 @@ namespace yata
 							ClearSelects();
 
 							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
 							if (selr < shift) selr  = 0;
 							else              selr -= shift;
 
 							SelectRow(selr);
 						}
 						EnsureDisplayedRow(selr);
+						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
 					else if (sel != null)
 					{
@@ -1421,7 +1476,6 @@ namespace yata
 							sel.selected = false;
 
 							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
 							if (sel.y < shift) selr = 0;
 							else               selr = sel.y - shift;
 
@@ -1432,7 +1486,6 @@ namespace yata
 					else if (_visVert)
 					{
 						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-
 						if (_scrollVert.Value - h < 0)
 							_scrollVert.Value = 0;
 						else
@@ -1448,13 +1501,13 @@ namespace yata
 							ClearSelects();
 
 							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
 							if (selr > RowCount - 1 - shift) selr  = RowCount - 1;
 							else                             selr += shift;
 
 							SelectRow(selr);
 						}
 						EnsureDisplayedRow(selr);
+						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
 					else if (sel != null)
 					{
@@ -1463,7 +1516,6 @@ namespace yata
 							sel.selected = false;
 
 							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
 							if (sel.y > RowCount - 1 - shift) selr = RowCount - 1;
 							else                              selr = sel.y + shift;
 
@@ -1474,7 +1526,6 @@ namespace yata
 					else if (_visVert)
 					{
 						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-
 						if (_scrollVert.Value + h > MaxVert)
 							_scrollVert.Value = MaxVert;
 						else
@@ -1485,12 +1536,13 @@ namespace yata
 				case Keys.Up: // NOTE: needs to bypass KeyPreview
 					if (selr != -1)
 					{
-						if (selr > 0)
+						if (selr != 0)
 						{
 							ClearSelects();
 							SelectRow(--selr);
 						}
 						EnsureDisplayedRow(selr);
+						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
 					else if (sel != null) // selection to the cell above
 					{
@@ -1522,6 +1574,7 @@ namespace yata
 							SelectRow(++selr);
 						}
 						EnsureDisplayedRow(selr);
+						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
 					else if (sel != null) // selection to the cell below
 					{
@@ -1551,7 +1604,6 @@ namespace yata
 								sel.selected = false;
 
 								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-
 								var pt = getColBounds(sel.x);
 								pt.X += offsetHori - w;
 
@@ -1572,7 +1624,6 @@ namespace yata
 						else if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-
 							if (_scrollHori.Value - w < 0)
 								_scrollHori.Value = 0;
 							else
@@ -1607,7 +1658,6 @@ namespace yata
 								sel.selected = false;
 
 								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-
 								var pt = getColBounds(sel.x);
 								pt.X += offsetHori + w;
 
@@ -1628,7 +1678,6 @@ namespace yata
 						else if (_visHori)
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-
 							if (_scrollHori.Value + w > MaxHori)
 								_scrollHori.Value = MaxHori;
 							else
@@ -1655,6 +1704,7 @@ namespace yata
 
 				case Keys.Escape: // NOTE: needs to bypass KeyPreview
 					ClearSelects();
+					invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					break;
 
 				case Keys.Delete:
@@ -1667,14 +1717,17 @@ namespace yata
 					break;
 			}
 
-			if (display)
+			if (invalid != INVALID_NONE)	// -> is a Row operation or ClearSelects()
 			{
-				EnsureDisplayed(sel);
-				if (_propanel != null && _propanel.Visible)
-					_propanel.EnsureDisplayed(sel.x);
-			}
+				if (Propanel != null && Propanel.Visible)
+					invalid |= INVALID_PROP;
 
-			Refresh(); // draw grid, propanel, frozenpanel, etc.
+				Invalidator(invalid);
+			}
+			else if (display)				// -> is a Cell operation
+			{
+				Invalidator(INVALID_GRID | INVALID_FROZ | EnsureDisplayed(sel));
+			}
 
 //			base.OnKeyDown(e);
 		}
@@ -1692,27 +1745,16 @@ namespace yata
 				row[c].selected = true;
 		}
 
-		internal void SelectCell(int r, int c)
-		{
-			Cell cell = this[r,c];
-			cell.selected = true;
-
-			EnsureDisplayed(cell);
-			if (_propanel != null && _propanel.Visible)
-				_propanel.EnsureDisplayed(c);
-
-			Invalidate();
-		}
-
+		/// <summary>
+		/// Selects a specified cell and invalidates stuff.
+		/// @note Called by YataForm.Search() and
+		/// YataForm.editclick_GotoLoadchanged().
+		/// </summary>
+		/// <param name="cell"></param>
 		internal void SelectCell(Cell cell)
 		{
 			cell.selected = true;
-
-			EnsureDisplayed(cell);
-			if (_propanel != null && _propanel.Visible)
-				_propanel.EnsureDisplayed(cell.x);
-
-			Invalidate();
+			Invalidator(INVALID_GRID | INVALID_FROZ | EnsureDisplayed(cell));
 		}
 
 		/// <summary>
@@ -1786,16 +1828,12 @@ namespace yata
 		{
 			//logfile.Log("YataGrid.keydown_Editor() e.KeyData= " + e.KeyData);
 
-			if (e.Alt)
-			{
-				_editor.Visible = false;
-				Refresh();
-			}
+			if (e.Alt) _editor.Visible = false;
 		}
 
 		/// <summary>
 		/// Handles the Leave event in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
+		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/PageDown is
 		/// pressed while editing.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -1803,9 +1841,7 @@ namespace yata
 		void leave_Editor(object sender, EventArgs e)
 		{
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
-			{
 				_editor.Focus(); // ie. don't leave editor.
-			}
 		}
 
 		/// <summary>
@@ -1822,7 +1858,7 @@ namespace yata
 			if (_editor.Visible)
 			{
 				_editor.Visible = false;
-				Refresh();
+				Invalidator(INVALID_GRID);
 			}
 		}
 
@@ -1841,7 +1877,7 @@ namespace yata
 				case Keys.Enter:
 					if (_editor.Visible)
 					{
-						ApplyTextEdit();
+						ApplyCellEdit();
 						goto case Keys.Escape;
 					}
 
@@ -1850,15 +1886,14 @@ namespace yata
 						&& _editcell.x >= FrozenCount)
 					{
 						EditCell();
-						_editor.Focus();
-						Refresh();
+						Invalidator(INVALID_GRID);
 					}
 					return true;
 
 				case Keys.Escape:
 				case Keys.Tab:
 					_editor.Visible = false;
-					Refresh();
+					Invalidator(INVALID_GRID);
 					Select();
 					return true;
 			}
@@ -1866,9 +1901,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Applies a text-edit via the editbox.
+		/// Applies a cell-edit via the editbox.
 		/// </summary>
-		void ApplyTextEdit()
+		void ApplyCellEdit()
 		{
 			if (_editor.Text != _editcell.text)
 				ChangeCellText(_editcell, _editor);
@@ -1932,7 +1967,11 @@ namespace yata
 			colRewidth(cell.x, cell.y);
 			UpdateFrozenControls(cell.x);
 
-			Refresh(); // req'd by table and propanel both.
+			int invalid = INVALID_GRID;
+			if (Propanel != null && Propanel.Visible)
+				invalid |= INVALID_PROP;
+
+			Invalidator(invalid);
 
 
 			rest.postext = cell.text;
@@ -1978,8 +2017,8 @@ namespace yata
 				}
 				else if (w < width) // recalc width on the entire col
 				{
-					if (c == 0 || _wid > w)
-						w = _wid;
+					if (c == 0 || _wId > w)
+						w = _wId;
 
 					for (r = 0; r != RowCount; ++r)
 					{
@@ -1990,14 +2029,14 @@ namespace yata
 				}
 
 				if (range == 0 && w != width)	// if range >0 let Calibrate() handle multiple
-				{								// cols or at least Scrollers and Refresh
+				{								// cols or at least the scrollers and do the UI-update
 					InitScroll();
-					Refresh(); // is required - and yet another Refresh() will follow ....
+					Invalidator(INVALID_GRID);
 				}
 			}
 
-			if (_propanel != null && _propanel.Visible)
-				_propanel.rewidthValfield(); // TODO: Re-calc the 'c' col only.
+			if (Propanel != null && Propanel.Visible)
+				Propanel.rewidthValfield(); // TODO: Re-calc the 'c' col only.
 		}
 
 		/// <summary>
@@ -2183,41 +2222,43 @@ namespace yata
 				if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
 				{
 //					if (e.Button == MouseButtons.Left) // apply edit only on LMB.
-					ApplyTextEdit();
+					ApplyCellEdit();
 
 					_editor.Visible = false;
-					Invalidate();
+					Invalidator(INVALID_GRID);
 				}
-/*				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
-				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
-					foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
-						col.selected = false;
-
-					foreach (var row in Rows)
-						row.selected = false;
-
-					ClearCellSelects();
-					Refresh();
-				} */
+//				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
+//				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
+//					foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
+//						col.selected = false;
+//
+//					foreach (var row in Rows)
+//						row.selected = false;
+//
+//					ClearCellSelects();
+//					Invalidator();
+//				}
 			}
 			else if (e.Button == MouseButtons.Left)
 			{
-				foreach (var col in Cols)
-					col.selected = false;
-
 				Cell cell = getClickedCell(e.X, e.Y);
 				if (cell != null) // safety.
 				{
+					foreach (var col in Cols)
+						col.selected = false;
+
 					if (!_editor.Visible)
 					{
 						if ((ModifierKeys & Keys.Control) == Keys.Control)
 						{
 							if (cell.selected = !cell.selected)
-							{
-								EnsureDisplayed(cell);
-								if (_propanel != null && _propanel.Visible)
-									_propanel.EnsureDisplayed(cell.x);
-							}
+								EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+																					// selectedcell is not the only selected cell
+							int invalid = INVALID_GRID;
+							if (Propanel != null && Propanel.Visible)
+								invalid |= INVALID_PROP;
+
+							Invalidator(invalid);
 						}
 						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
@@ -2227,29 +2268,26 @@ namespace yata
 							ClearCellSelects();
 							cell.selected = true;
 
-							EnsureDisplayed(cell);
-							if (_propanel != null && _propanel.Visible)
-								_propanel.EnsureDisplayed(cell.x);
+							Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
 						}
 						else if (!Readonly) // cell is already selected
 						{
 							_editcell = cell;
 							EditCell();
-							_editor.Focus();
+							Invalidator(INVALID_GRID);
 						}
 					}
 					else // editor is Vis
 					{
 						if (cell != _editcell)
 						{
-							ApplyTextEdit();
+							ApplyCellEdit();
 							_editor.Visible = false;
+							Invalidator(INVALID_GRID);
 						}
 						else // NOTE: There's a clickable fringe around the editor.
 							_editor.Focus();
 					}
-
-					Refresh(); // draw grid, propanel, frozenpanel, etc.
 				}
 			}
 			else if (e.Button == MouseButtons.Right)
@@ -2260,11 +2298,7 @@ namespace yata
 					ClearSelects();
 					cell.selected = true;
 
-					EnsureDisplayed(cell);
-					if (_propanel != null && _propanel.Visible)
-						_propanel.EnsureDisplayed(cell.x);
-
-					Refresh(); // draw grid, propanel, frozenpanel, etc.
+					Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
 
 					_f.ShowCellMenu();
 				}
@@ -2326,16 +2360,13 @@ namespace yata
 			_editor.Width  = rect.Width - 6;
 			_editor.Height = rect.Height;
 
-			_editor.Visible = true;
 			_editor.Text = _editcell.text;
 
-			_editor.SelectionStart = 0; // because .NET
-//			if (_editor.Text == Constants.Stars)
-//			{
+			_editor.SelectionStart = 0;
 			_editor.SelectionLength = _editor.Text.Length;
-//			}
-//			else
-//				_editor.SelectionStart = _editor.Text.Length;
+
+			_editor.Visible = true;
+			_editor.Focus();
 		}
 
 		/// <summary>
@@ -2554,20 +2585,8 @@ namespace yata
 		int getLeft()
 		{
 			int left = WidthRowhead;
-			switch (FrozenCount)
-			{
-				case FreezeSecond:
-					left += Cols[2].width();
-					goto case FreezeFirst;
-
-				case FreezeFirst:
-					left += Cols[1].width();
-					goto case FreezeId;
-
-				case FreezeId:
-					left += Cols[0].width();
-					break;
-			}
+			for (int c = 0; c != FrozenCount; ++c)
+				left += Cols[c].width();
 
 			return left;
 		}
@@ -2578,10 +2597,15 @@ namespace yata
 		/// displayed.
 		/// </summary>
 		/// <param name="cell">the cell to display</param>
-		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
-		internal bool EnsureDisplayed(Cell cell)
+		/// <param name="bypassPropanel">true to bypass any PropertyPanel
+		/// considerations</param>
+		/// <returns>a bitwise int defining controls that need to be
+		/// invalidated; note that the PropertyPanel's invalidation bit will
+		/// be flagged as long as the panel is visible regardless of whether it
+		/// really needs to be redrawn</returns>
+		internal int EnsureDisplayed(Cell cell, bool bypassPropanel = false)
 		{
-			bool refresh = false;
+			int invalid = INVALID_NONE;
 
 			if (cell.x >= FrozenCount)
 			{
@@ -2600,12 +2624,12 @@ namespace yata
 							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
 					{																	//    than the table's visible width.
 						_scrollHori.Value -= left - rect.X;
-						refresh = true;
+						invalid = INVALID_GRID;
 					}
 					else if (rect.X + rect.Width > right && rect.Width < right - left)
 					{
 						_scrollHori.Value += rect.X + rect.Width + bar - Width;
-						refresh = true;
+						invalid = INVALID_GRID;
 					}
 				}
 
@@ -2614,7 +2638,7 @@ namespace yata
 					if (rect.Y < HeightColhead)
 					{
 						_scrollVert.Value -= HeightColhead - rect.Y;
-						refresh = true;
+						invalid = INVALID_GRID;
 					}
 					else
 					{
@@ -2622,13 +2646,21 @@ namespace yata
 						if (rect.Y + rect.Height + bar > Height)
 						{
 							_scrollVert.Value += rect.Y + rect.Height + bar - Height;
-							refresh = true;
+							invalid = INVALID_GRID;
 						}
 					}
 				}
 			}
 
-			return refresh;
+			if (!bypassPropanel && Propanel != null && Propanel.Visible)
+			{
+				Propanel.EnsureDisplayed(cell.x);
+				invalid |= INVALID_PROP;
+			}
+
+			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
+
+			return invalid;
 		}
 
 		/// <summary>
@@ -2636,46 +2668,46 @@ namespace yata
 		/// displayed.
 		/// </summary>
 		/// <param name="r">the row-id display</param>
-		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
-		internal bool EnsureDisplayedRow(int r)
+		/// <returns>a bitwise int defining controls that need to be invalidated</returns>
+		internal int EnsureDisplayedRow(int r)
 		{
 			var bounds = getRowBounds(r);
-
 			if (bounds.X != HeightColhead)
 			{
 				if (bounds.X < HeightColhead)
 				{
 					_scrollVert.Value -= HeightColhead - bounds.X;
-					return true;
+					return (INVALID_GRID | INVALID_FROZ | INVALID_ROWS); // TODO: All those might not be needed ...
 				}
 
 				int bar = (_visHori ? _scrollHori.Height : 0);
 				if (bounds.Y + bar > Height)
 				{
 					_scrollVert.Value += bounds.Y + bar - Height;
-					return true;
+					return (INVALID_GRID | INVALID_FROZ | INVALID_ROWS); // TODO: All those might not be needed ...
 				}
 			}
-			return false;
+
+			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
+			return INVALID_NONE;
 		}
 
 		/// <summary>
 		/// Scrolls the table so that the currently selected cell or row is
 		/// (more or less) completely displayed.
 		/// </summary>
-		/// <returns>true if the table had to be scrolled - ie. needs Refresh</returns>
-		internal bool EnsureDisplayedCellOrRow()
+		/// <returns>a bitwise int defining controls that need to be invalidated</returns>
+		internal int EnsureDisplayedCellOrRow()
 		{
 			Cell sel = getSelectedCell();
 			if (sel != null)
 				return EnsureDisplayed(sel);
 
-			for (int r = 0; r != RowCount; ++r)
-			{
-				if (Rows[r].selected)
-					return EnsureDisplayedRow(r);
-			}
-			return false;
+			int r = getSelectedRow();
+			if (r != -1)
+				return EnsureDisplayedRow(r);
+
+			return INVALID_NONE;
 		}
 
 		/// <summary>
@@ -2727,13 +2759,11 @@ namespace yata
 				SelectRow(r);
 				EnsureDisplayedRow(r);
 
-				Invalidate();
-				_panelRows .Invalidate();
-				FrozenPanel.Invalidate();
-				
-				if (_propanel != null && _propanel.Visible)
-					_propanel.Invalidate();
+				int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+				if (Propanel != null && Propanel.Visible)
+					invalid |= INVALID_PROP;
 
+				Invalidator(invalid);
 				Select();
 			}
 		}
@@ -2829,20 +2859,24 @@ namespace yata
 						for (int c = 0; c != ColCount; ++c)
 							row[c].selected = @select;
 
-						Refresh();
+						int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+						if (Propanel != null && Propanel.Visible)
+							invalid |= INVALID_PROP;
+
+						Invalidator(invalid);
 					}
 					else if (e.Button == MouseButtons.Right)
 					{
 						_f.context_(r);
 					}
 				}
-				else
+				else // click below the last entry ->
 				{
 					int selr = getSelectedRow();
 					if (selr != -1)
 					{
 						Rows[selr].selected = false;
-						Refresh();
+						Invalidator(INVALID_ROWS);
 					}
 				}
 			}
@@ -2851,7 +2885,8 @@ namespace yata
 		/// <summary>
 		/// Gets the row-id of the currently selected row.
 		/// </summary>
-		/// <returns>the currently selected row-id</returns>
+		/// <returns>the currently selected row-id; -1 if no row is currently
+		/// selected</returns>
 		internal int getSelectedRow()
 		{
 			for (int r = 0; r != RowCount; ++r)
@@ -2874,9 +2909,8 @@ namespace yata
 			{
 				if (e.Button == MouseButtons.Left)
 				{
-					Select();
-
 					_editor.Visible = false;
+					Select();
 
 					int x = e.X + offsetHori;
 
@@ -2915,6 +2949,8 @@ namespace yata
 						@select = true;
 
 
+					int invalid = INVALID_GRID;
+
 					if ((ModifierKeys & Keys.Control) != Keys.Control)
 					{
 						if (!@select)
@@ -2933,6 +2969,10 @@ namespace yata
 						ClearCellSelects();
 						foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
 							row.selected = false;
+
+						invalid |= (INVALID_FROZ | INVALID_ROWS);
+						if (Propanel != null && Propanel.Visible)
+							invalid |= INVALID_PROP;
 					}
 
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift)
@@ -2972,12 +3012,12 @@ namespace yata
 					}
 
 					if (@select)
-						EnsureDisplayedCol(c);
+						EnsureDisplayedCol(c); // I suspect that if a scrollbar scrolls nothing needs to be invalidated. /coff
 
 					for (int r = 0; r != RowCount; ++r)
 						this[r,c].selected = @select;
 
-					Refresh();
+					Invalidator(invalid);
 				}
 				else if (e.Button == MouseButtons.Right)
 				{
@@ -3007,6 +3047,7 @@ namespace yata
 
 						ColSort(c);
 						EnsureDisplayedCellOrRow();
+						Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 					}
 /*					else // popup colhead context
 					{
@@ -3021,7 +3062,8 @@ namespace yata
 		/// <summary>
 		/// Gets the col-id of the currently selected col.
 		/// </summary>
-		/// <returns>the currently selected col-id</returns>
+		/// <returns>the currently selected col-id; -1 if no col is currently
+		/// selected</returns>
 		int getSelectedCol()
 		{
 			for (int c = 0; c != ColCount; ++c)
@@ -3064,6 +3106,7 @@ namespace yata
 
 				ColSort(0);
 				EnsureDisplayedCellOrRow();
+				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}
 
@@ -3083,6 +3126,7 @@ namespace yata
 
 				ColSort(1);
 				EnsureDisplayedCellOrRow();
+				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}
 
@@ -3102,6 +3146,7 @@ namespace yata
 
 				ColSort(2);
 				EnsureDisplayedCellOrRow();
+				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}
 

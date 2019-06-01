@@ -316,7 +316,7 @@ namespace yata
 				case Keys.Control | Keys.V:					// this bypasses the Edit menuitems and lets the editbox
 					if (Table != null						// take the message if/when the editbox is visible.
 						&& (Table._editor.Visible
-							|| (Table._propanel != null && Table._propanel._editor.Visible)))
+							|| (Table.Propanel != null && Table.Propanel._editor.Visible)))
 					{
 						return false;
 					}
@@ -494,7 +494,7 @@ namespace yata
 			if (Table != null && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
-				Table.Invalidate();
+				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 		}
 
@@ -512,7 +512,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Invalidate();
+					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
 				int saveOthers = 0;
@@ -589,8 +589,9 @@ namespace yata
 			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
 				ShowColorPanel();
-				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
+//				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
 							// but a refresh turns the client area gray at least instead of glitchy.
+							// NOTE: It went away.
 
 				var table = new YataGrid(this, pfe, read);
 
@@ -651,6 +652,8 @@ namespace yata
 					_table.leave_Grid(null, EventArgs.Empty);
 				}
 
+				Cell sel = Table.getSelectedCell();
+
 				btn_ProPanel .Visible = true;
 
 				it_MenuPaths .Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
@@ -668,7 +671,7 @@ namespace yata
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
 
-				it_CopyCell  .Enabled = (Table.getSelectedCell() != null);
+				it_CopyCell  .Enabled = (sel != null);
 				it_PasteCell .Enabled = (it_CopyCell.Enabled && !Table.Readonly);
 
 				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
@@ -679,12 +682,19 @@ namespace yata
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
 				it_ppOnOff   .Enabled = true;
-				it_ppTopBot  .Enabled = (Table._propanel != null && Table._propanel.Visible);
+				it_ppTopBot  .Enabled = (Table.Propanel != null && Table.Propanel.Visible);
 				it_ExternDiff.Enabled = File.Exists(Settings._diff);
 
 				it_freeze1   .Enabled = (Table.Cols.Count > 1);
 				it_freeze2   .Enabled = (Table.Cols.Count > 2);
 
+
+				if (Table.Propanel != null && Table.Propanel.Visible)
+				{
+					Table.Propanel.telemetric();
+					if (sel != null)
+						Table.Propanel.EnsureDisplayed(sel.x);
+				}
 
 				if (DifferDialog.that != null) // be careful w/ 'that'
 					DifferDialog.that.EnableGotoButton(true);
@@ -751,7 +761,7 @@ namespace yata
 						h = hT;
 				}
 				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
-				Tabs.Refresh(); // prevent text-drawing glitches ...
+//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
 			}
 		}
 
@@ -973,10 +983,10 @@ namespace yata
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
 
-					if (Table._propanel != null)
+					if (Table.Propanel != null)
 					{
-						Table.Controls.Remove(Table._propanel);
-						Table._propanel = null;
+						Table.Controls.Remove(Table.Propanel);
+						Table.Propanel = null;
 					}
 				}
 				else
@@ -1089,9 +1099,9 @@ namespace yata
 
 							SetTitlebarText();
 
-							if (force)
-								_table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
-															//               *as itself* it loses its Readonly flag.
+							if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
+																//               *as itself* it loses its Readonly flag.
+
 							int rows = _table.RowCount;
 							if (rows != 0) // rowcount should never be zero ...
 							{
@@ -1103,7 +1113,9 @@ namespace yata
 									for (int c = 0; c != _table.ColCount; ++c)
 										row[c].loadchanged = false;
 								}
-								_table.Refresh();
+
+								if (_table == Table)
+									_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
 								using (var sw = new StreamWriter(_table.Fullpath))
 								{
@@ -1265,7 +1277,6 @@ namespace yata
 			_r = r;
 
 			Table._editor.Visible = false;
-
 			Table.ClearSelects();
 
 			Row row = Table.Rows[_r];
@@ -1274,13 +1285,18 @@ namespace yata
 				row[c].selected = true;
 
 			Table.EnsureDisplayedRow(_r);
-			Table.Refresh();
+
+			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			if (Table.Propanel != null && Table.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			Table.Invalidator(invalid);
 
 			context_it_Header.Text = "_row @ id " + _r;
 
-			context_it_PasteAbove.Enabled =
-			context_it_Paste     .Enabled =
-			context_it_PasteBelow.Enabled = (_copy.Count != 0 && !Table.Readonly);
+			context_it_PasteAbove .Enabled =
+			context_it_Paste      .Enabled =
+			context_it_PasteBelow .Enabled = (_copy.Count != 0 && !Table.Readonly);
 
 			context_it_Cut        .Enabled =
 			context_it_CreateAbove.Enabled =
@@ -1335,7 +1351,11 @@ namespace yata
 
 				Table.Insert(_r, _copy[0]);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
 				Table._proHori = 0;
 
 
@@ -1377,7 +1397,12 @@ namespace yata
 
 				Table.Calibrate(_r);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
+				Table.Invalidator(YataGrid.INVALID_GRID);
 				Table._proHori = 0;
 
 
@@ -1403,7 +1428,11 @@ namespace yata
 
 				Table.Insert(_r + 1, _copy[0]);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
 				Table._proHori = 0;
 
 
@@ -1433,7 +1462,11 @@ namespace yata
 				}
 				Table.Insert(_r, fields);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
 				Table._proHori = 0;
 
 
@@ -1468,7 +1501,12 @@ namespace yata
 
 				Table.Calibrate(_r);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
+				Table.Invalidator(YataGrid.INVALID_GRID);
 				Table._proHori = 0;
 
 
@@ -1500,7 +1538,11 @@ namespace yata
 				}
 				Table.Insert(_r + 1, fields);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
 				Table._proHori = 0;
 
 
@@ -1527,7 +1569,11 @@ namespace yata
 
 				Table.Insert(_r);
 
-				Table.Refresh();
+/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid); */
 				Table._proHori = 0;
 
 
@@ -1561,7 +1607,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Invalidate();
+					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
 				foreach (var row in Table.Rows)
@@ -1677,14 +1723,13 @@ namespace yata
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
 		/// NOTE: Ensure that 'Table' is valid before call.
-		/// TODO: Allow frozen cols
 		/// </summary>
 		void Search()
 		{
 			if (Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
-				Table.Invalidate();
+				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 
 			string search = tb_Search.Text;
@@ -1737,11 +1782,11 @@ namespace yata
 
 						for (; c != Table.ColCount; ++c)
 						{
-							if (c >= Table.FrozenCount
-								&& !String.IsNullOrEmpty(text = Table[r,c].text)
-								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
+							if (c != 0 // don't search the id-col
+								&& ((text = Table[r,c].text.ToLower()) == search
+									|| (substring && text.Contains(search))))
 							{
-								Table.SelectCell(r,c);
+								Table.SelectCell(Table[r,c]);
 								return;
 							}
 						}
@@ -1751,11 +1796,11 @@ namespace yata
 					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
 					for (c = 0; c != Table.ColCount; ++c)
 					{
-						if (c >= Table.FrozenCount
-							&& !String.IsNullOrEmpty(text = Table[r,c].text)
-							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
+						if (c != 0 // don't search the id-col
+							&& ((text = Table[r,c].text.ToLower()) == search
+								|| (substring && text.Contains(search))))
 						{
-							Table.SelectCell(r,c);
+							Table.SelectCell(Table[r,c]);
 							return;
 						}
 					}
@@ -1795,11 +1840,11 @@ namespace yata
 
 						for (; c != -1; --c)
 						{
-							if (c >= Table.FrozenCount
-								&& !String.IsNullOrEmpty(text = Table[r,c].text)
-								&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
+							if (c != 0 // don't search the id-col
+								&& ((text = Table[r,c].text.ToLower()) == search
+									|| (substring && text.Contains(search))))
 							{
-								Table.SelectCell(r,c);
+								Table.SelectCell(Table[r,c]);
 								return;
 							}
 						}
@@ -1809,11 +1854,11 @@ namespace yata
 					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
 					for (c = Table.ColCount - 1; c != -1;         --c)
 					{
-						if (c >= Table.FrozenCount
-							&& !String.IsNullOrEmpty(text = Table[r,c].text)
-							&& ((text = text.ToLower()) == search || (substring && text.Contains(search))))
+						if (c != 0 // don't search the id-col
+							&& ((text = Table[r,c].text.ToLower()) == search
+								|| (substring && text.Contains(search))))
 						{
-							Table.SelectCell(r,c);
+							Table.SelectCell(Table[r,c]);
 							return;
 						}
 					}
@@ -1858,7 +1903,6 @@ namespace yata
 		/// item is enabled by default. The item/shortcut will be set disabled
 		/// either when the EditMenu opens or when Ctrl+N is keyed iff there are
 		/// no 'loadchanged' cells.
-		/// TODO: Allow frozen cols
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1880,7 +1924,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Invalidate();
+					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
 				Table.Select();
@@ -2036,9 +2080,7 @@ namespace yata
 					if (sel != null)
 					{
 						if (sel.text != _copytext)
-						{
 							Table.ChangeCellText(sel, _copytext);
-						}
 					}
 					else
 						CopyPasteCellError();
@@ -2291,7 +2333,7 @@ namespace yata
 			it_ColorRows .Enabled =
 			it_AutoCols  .Enabled =
 			it_ppOnOff   .Enabled = valid;
-			it_ppTopBot  .Enabled = valid && Table._propanel != null && Table._propanel.Visible;
+			it_ppTopBot  .Enabled = valid && Table.Propanel != null && Table.Propanel.Visible;
 
 			it_freeze1   .Enabled = valid && Table.Cols.Count > 1;
 			it_freeze2   .Enabled = valid && Table.Cols.Count > 2;
@@ -2302,7 +2344,7 @@ namespace yata
 			if (valid)
 			{
 				Table._editor.Visible = false;
-				Table.Invalidate();
+				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 		}
 
@@ -2429,7 +2471,12 @@ namespace yata
 						Table.UpdateFrozenControls(0);
 
 						Table.InitScroll();
-						Table.Refresh();
+
+						int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+						if (Table.Propanel != null && Table.Propanel.Visible)
+							invalid |= YataGrid.INVALID_PROP;
+
+						Table.Invalidator(invalid);
 					}
 				}
 				else
@@ -2477,7 +2524,7 @@ namespace yata
 					for (int c = 0; c != Table.ColCount; ++c)
 						row[c].loadchanged = false;
 				}
-				Table.Refresh();
+				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 		}
 
@@ -2545,26 +2592,34 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) togglePropanel();
+		}
+
+		/// <summary>
+		/// Toggles visibility of the PropertyPanel - instantiates a
+		/// PropertyPanel if required.
+		/// </summary>
+		void togglePropanel()
+		{
+			if (Table.Propanel == null
+				|| (Table.Propanel.Visible = !Table.Propanel.Visible))
 			{
-				if (Table._propanel == null
-					|| (Table._propanel.Visible = !Table._propanel.Visible))
-				{
-					if (Table._propanel == null)
-						Table._propanel = new PropertyPanel(Table);
-					else
-						Table._propanel.rewidthValfield();
-
-					Table._propanel.Show();
-					Table._propanel.BringToFront();
-
-					it_ppTopBot.Enabled = true;
-				}
+				if (Table.Propanel == null)
+					Table.Propanel = new PropertyPanel(Table);
 				else
-				{
-					Table._propanel.Hide();
-					it_ppTopBot.Enabled = false;
-				}
+					Table.Propanel.rewidthValfield();
+
+				Table.Propanel.Show();
+				Table.Propanel.BringToFront();
+
+				Table.Propanel.DockBot = Table.Propanel.DockBot;
+
+				it_ppTopBot.Enabled = true;
+			}
+			else
+			{
+				Table.Propanel.Hide();
+				it_ppTopBot.Enabled = false;
 			}
 		}
 
@@ -2576,8 +2631,8 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_PropertyPanelTopBot(object sender, EventArgs e)
 		{
-			if (Table != null && Table._propanel != null && Table._propanel.Visible)
-				Table._propanel.DockBot = !Table._propanel.DockBot;
+			if (Table != null && Table.Propanel != null && Table.Propanel.Visible)
+				Table.Propanel.DockBot = !Table.Propanel.DockBot;
 		}
 
 
@@ -2726,8 +2781,9 @@ namespace yata
 					// turn out even almost correct.
 					// NOTE: Height of any table should NOT be changing at all.
 
-					if (table.EnsureDisplayedCellOrRow())
-						table.Refresh(); // for big tables ...
+					int invalid = table.EnsureDisplayedCellOrRow();
+					if (table == Table)
+						table.Invalidator(invalid);
 				}
 
 				ShowColorPanel(false);
@@ -2783,7 +2839,7 @@ namespace yata
 		void tabMenu_Opening(object sender, CancelEventArgs e)
 		{
 			Table._editor.Visible = false;
-			Table.Invalidate();
+			Table.Invalidator(YataGrid.INVALID_GRID);
 
 			bool found = false;
 
@@ -2908,10 +2964,16 @@ namespace yata
 		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
 			if (_diff1 != null)
+			{
 				DiffReset(_diff1);
+				_diff1 = null;
+			}
 
 			if (_diff2 != null)
+			{
 				DiffReset(_diff2);
+				_diff2 = null;
+			}
 
 			Table.Select();
 		}
@@ -2933,9 +2995,6 @@ namespace yata
 				opsclick_AutosizeCols(null, EventArgs.Empty);
 			else
 				AutosizeCols(table);
-
-			table.Invalidate();
-			table = null;
 		}
 
 		/// <summary>
@@ -2966,8 +3025,13 @@ namespace yata
 			_diff1.InitScroll();
 			_diff2.InitScroll();
 
-			_diff1.Invalidate();
-			_diff2.Invalidate();
+			YataGrid table;
+			if      (_diff1 == Table) table = _diff1;
+			else if (_diff2 == Table) table = _diff2;
+			else                      table = null;
+
+			if (table != null)
+				table.Invalidator(YataGrid.INVALID_GRID);
 		}
 
 		/// <summary>
@@ -3103,10 +3167,6 @@ namespace yata
 			}
 
 
-			_diff1.Invalidate();
-			_diff2.Invalidate();
-
-
 			string label;
 			Color color;
 			bool @goto;
@@ -3151,7 +3211,7 @@ namespace yata
 				if (Table._editor.Visible)
 				{
 					Table._editor.Visible = false;
-					Table.Invalidate();
+					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
 				YataGrid table; // the other table - can be null.
@@ -3289,25 +3349,13 @@ namespace yata
 		void gotodiff(Cell sel, YataGrid table)
 		{
 			sel.selected = true;
-
-			Table.EnsureDisplayed(sel);
-			Table.Invalidate();
-			Table.FrozenPanel.Invalidate();
-
-			if (Table._propanel != null && Table._propanel.Visible)
-			{
-				Table._propanel.EnsureDisplayed(sel.x);
-				Table._propanel.Invalidate();
-			}
+			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | Table.EnsureDisplayed(sel));
 
 			if (table != null
 				&& sel.x < table.ColCount
 				&& sel.y < table.RowCount)
 			{
 				table[sel.y, sel.x].selected = true;
-
-//				if (table._propanel != null && table._propanel.Visible)	// TODO: propanel is NOT visible
-//					table._propanel.EnsureDisplayed(sel.x);				// TODO: scrollbar is NOT visible either
 			}
 		}
 		#endregion Tab menu
@@ -3390,10 +3438,10 @@ namespace yata
 			{
 				if (e.Button == MouseButtons.Left
 					|| (e.Button == MouseButtons.Right
-						&& Table._propanel != null && Table._propanel.Visible))
+						&& Table.Propanel != null && Table.Propanel.Visible))
 				{
 					btn_ProPanel.Depressed = true;
-					btn_ProPanel.Refresh();
+					btn_ProPanel.Invalidate();
 				}
 			}
 		}
@@ -3414,34 +3462,17 @@ namespace yata
 				if (e.Button == MouseButtons.Left)
 				{
 					btn_ProPanel.Depressed = false;
-					btn_ProPanel.Refresh();
+					btn_ProPanel.Invalidate();
 
-					if (Table._propanel == null
-						|| (Table._propanel.Visible = !Table._propanel.Visible))
-					{
-						if (Table._propanel == null)
-							Table._propanel = new PropertyPanel(Table);
-						else
-							Table._propanel.rewidthValfield();
-
-						Table._propanel.Show();
-						Table._propanel.BringToFront();
-
-						it_ppTopBot.Enabled = true;
-					}
-					else
-					{
-						Table._propanel.Hide();
-						it_ppTopBot.Enabled = false;
-					}
+					togglePropanel();
 				}
 				else if (e.Button == MouseButtons.Right
-					&& Table._propanel != null && Table._propanel.Visible)
+					&& Table.Propanel != null && Table.Propanel.Visible)
 				{
 					btn_ProPanel.Depressed = false;
-					btn_ProPanel.Refresh();
+					btn_ProPanel.Invalidate();
 
-					Table._propanel.DockBot = !Table._propanel.DockBot;
+					Table.Propanel.DockBot = !Table.Propanel.DockBot;
 				}
 			}
 		}
@@ -3565,8 +3596,7 @@ namespace yata
 						Table[r,c].diff = false;
 				}
 
-				destTable.Invalidate();
-				Table    .Invalidate();
+				Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
 				if (!destTable.Changed)
 				{

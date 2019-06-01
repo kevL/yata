@@ -326,7 +326,7 @@ namespace yata
 		/// <summary>
 		/// Applies a text-edit via the editbox.
 		/// </summary>
-		void ApplyTextEdit()
+		void ApplyCellEdit()
 		{
 			Cell cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
@@ -406,7 +406,7 @@ namespace yata
 				switch (keyData)
 				{
 					case Keys.Enter:
-						ApplyTextEdit();
+						ApplyCellEdit();
 						goto case Keys.Escape;
 
 					case Keys.Escape:
@@ -464,7 +464,7 @@ namespace yata
 
 				if (_r != -1)
 				{
-					Focus(); // snap
+					_grid._editor.Visible = false;
 
 					_c = (e.Y + _scroll.Value) / _heightr;
 
@@ -481,9 +481,6 @@ namespace yata
 
 					EnsureDisplayed(_c);
 
-					_grid.Invalidate();
-					_grid.FrozenPanel.Invalidate();
-
 					if (!_grid.Readonly && e.X > _widthVars)
 					{
 						_editRect.X      = _widthVars;
@@ -495,27 +492,24 @@ namespace yata
 						_editor.Top  = _editRect.Y + 1 - _scroll.Value;
 						_editor.Text = _grid[_r,_c].text;
 
+						_editor.SelectionStart = 0;
+						_editor.SelectionLength = _editor.Text.Length;
+
 						_editor.Visible = true;
 						_editor.Focus();
-
-						_editor.SelectionStart  = 0; // because .NET
-						_editor.SelectionLength = _editor.Text.Length;
-//						if (_editor.Text == Constants.Stars)
-//							_editor.SelectionLength = _editor.Text.Length;
-//						else
-//							_editor.SelectionStart = _editor.Text.Length;
 					}
 
-					Invalidate();
+					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_PROP);
+					Select();
 				}
 			}
-			else
+			else // is edit
 			{
 				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
-					ApplyTextEdit();
+					ApplyCellEdit();
 
 				_editor.Visible = false;
-				_grid.Refresh();
+				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 				_grid.Select();
 			}
 
