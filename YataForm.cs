@@ -1637,9 +1637,6 @@ namespace yata
 				it_PasteRange.Enabled = false;
 			}
 
-			it_CopyToClipboard  .Enabled = (_copy.Count != 0);
-			it_CopyFromClipboard.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
-
 			it_CreateRows.Enabled = (Table != null && !Table.Readonly);
 		}
 
@@ -2254,6 +2251,18 @@ namespace yata
 
 
 		#region Clipboard menu
+		/// <summary>
+		/// Handles opening the ClipboardMenu, determines if various items ought
+		/// be enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void clip_dropdownopening(object sender, EventArgs e)
+		{
+			it_ClipExport.Enabled = (_copy.Count != 0);
+			it_ClipImport.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
+		}
+
 		/// <summary>
 		/// Outputs the current contents of '_copy' to the Windows clipboard.
 		/// </summary>

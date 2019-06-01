@@ -47,8 +47,8 @@ namespace yata
 		ToolStripComboBox cb_SearchOption;
 
 		ToolStripMenuItem it_MenuClipboard;
-		ToolStripMenuItem it_CopyToClipboard;
-		ToolStripMenuItem it_CopyFromClipboard;
+		ToolStripMenuItem it_ClipExport;
+		ToolStripMenuItem it_ClipImport;
 		ToolStripMenuItem it_OpenClipEditor;
 
 		ToolStripMenuItem it_Menu2daOps;
@@ -222,8 +222,8 @@ namespace yata
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
 			this.it_MenuClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CopyFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClipExport = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClipImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_OpenClipEditor = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
@@ -720,31 +720,31 @@ namespace yata
 			// 
 			this.it_MenuClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuClipboard.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_CopyToClipboard,
-			this.it_CopyFromClipboard,
+			this.it_ClipExport,
+			this.it_ClipImport,
 			this.separator_19,
 			this.it_OpenClipEditor});
 			this.it_MenuClipboard.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.it_MenuClipboard.Name = "it_MenuClipboard";
 			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
 			this.it_MenuClipboard.Text = "&Clipboard";
-			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.clip_dropdownopening);
 			// 
-			// it_CopyToClipboard
+			// it_ClipExport
 			// 
-			this.it_CopyToClipboard.Enabled = false;
-			this.it_CopyToClipboard.Name = "it_CopyToClipboard";
-			this.it_CopyToClipboard.Size = new System.Drawing.Size(195, 22);
-			this.it_CopyToClipboard.Text = "&Export copied row(s)";
-			this.it_CopyToClipboard.Click += new System.EventHandler(this.clipclick_ExportCopy);
+			this.it_ClipExport.Enabled = false;
+			this.it_ClipExport.Name = "it_ClipExport";
+			this.it_ClipExport.Size = new System.Drawing.Size(195, 22);
+			this.it_ClipExport.Text = "&Export copied row(s)";
+			this.it_ClipExport.Click += new System.EventHandler(this.clipclick_ExportCopy);
 			// 
-			// it_CopyFromClipboard
+			// it_ClipImport
 			// 
-			this.it_CopyFromClipboard.Enabled = false;
-			this.it_CopyFromClipboard.Name = "it_CopyFromClipboard";
-			this.it_CopyFromClipboard.Size = new System.Drawing.Size(195, 22);
-			this.it_CopyFromClipboard.Text = "&Import copied row(s)";
-			this.it_CopyFromClipboard.Click += new System.EventHandler(this.clipclick_ImportCopy);
+			this.it_ClipImport.Enabled = false;
+			this.it_ClipImport.Name = "it_ClipImport";
+			this.it_ClipImport.Size = new System.Drawing.Size(195, 22);
+			this.it_ClipImport.Text = "&Import copied row(s)";
+			this.it_ClipImport.Click += new System.EventHandler(this.clipclick_ImportCopy);
 			// 
 			// separator_19
 			// 
