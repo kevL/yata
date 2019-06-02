@@ -3271,6 +3271,8 @@ namespace yata
 		/// <param name="col">the col-id to sort by</param>
 		void ColSort(int col)
 		{
+			DrawingControl.SuspendDrawing(_f);
+
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
 
 			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
@@ -3316,6 +3318,8 @@ namespace yata
 				}
 			}
 			_ur.ResetY(); // straighten out row._id and cell.y in UndoRedo's Restorables
+
+			DrawingControl.ResumeDrawing(_f);
 		}
 
 		/// <summary>
