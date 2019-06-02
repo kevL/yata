@@ -440,10 +440,7 @@ namespace yata
 					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
 
 					if (_table.Propanel != null && _table.Propanel.Visible)
-					{
 						_table.Propanel.telemetric();
-						_table.Propanel.DockBot = _table.Propanel.DockBot; // redeter Top of propanel
-					}
 
 					if (!_f.IsMin) _table.EnsureDisplayedCellOrRow();
 				}

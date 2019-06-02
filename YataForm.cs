@@ -329,6 +329,10 @@ namespace yata
 				case Keys.Shift | Keys.Control | Keys.N:	// backwards gotoloadchanged
 					editclick_GotoLoadchanged(null, EventArgs.Empty);
 					return true;
+
+				case Keys.Shift | Keys.F8:					// backwards propanel location cycle
+					opsclick_PropertyPanelLocation(null, EventArgs.Empty);
+					return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -682,7 +686,7 @@ namespace yata
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
 				it_ppOnOff   .Enabled = true;
-				it_ppTopBot  .Enabled = (Table.Propanel != null && Table.Propanel.Visible);
+				it_ppLocation.Enabled = (Table.Propanel != null && Table.Propanel.Visible);
 				it_ExternDiff.Enabled = File.Exists(Settings._diff);
 
 				it_freeze1   .Enabled = (Table.Cols.Count > 1);
@@ -730,7 +734,7 @@ namespace yata
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
 				it_ppOnOff   .Enabled =
-				it_ppTopBot  .Enabled =
+				it_ppLocation.Enabled =
 				it_ExternDiff.Enabled =
 
 				it_freeze1   .Enabled =
@@ -2342,7 +2346,7 @@ namespace yata
 			it_ColorRows .Enabled =
 			it_AutoCols  .Enabled =
 			it_ppOnOff   .Enabled = valid;
-			it_ppTopBot  .Enabled = valid && Table.Propanel != null && Table.Propanel.Visible;
+			it_ppLocation.Enabled = valid && Table.Propanel != null && Table.Propanel.Visible;
 
 			it_freeze1   .Enabled = valid && Table.Cols.Count > 1;
 			it_freeze2   .Enabled = valid && Table.Cols.Count > 2;
@@ -2625,14 +2629,14 @@ namespace yata
 				Table.Propanel.Show();
 				Table.Propanel.BringToFront();
 
-				Table.Propanel.DockBot = Table.Propanel.DockBot;
+				Table.Propanel.Dockstate = Table.Propanel.Dockstate;
 
-				it_ppTopBot.Enabled = true;
+				it_ppLocation.Enabled = true;
 			}
 			else
 			{
 				Table.Propanel.Hide();
-				it_ppTopBot.Enabled = false;
+				it_ppLocation.Enabled = false;
 			}
 		}
 
@@ -2642,10 +2646,10 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void opsclick_PropertyPanelTopBot(object sender, EventArgs e)
+		void opsclick_PropertyPanelLocation(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Propanel != null && Table.Propanel.Visible)
-				Table.Propanel.DockBot = !Table.Propanel.DockBot;
+				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
 		}
 
 
@@ -3493,7 +3497,7 @@ namespace yata
 					btn_ProPanel.Depressed = false;
 					btn_ProPanel.Invalidate();
 
-					Table.Propanel.DockBot = !Table.Propanel.DockBot;
+					Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
 				}
 			}
 		}

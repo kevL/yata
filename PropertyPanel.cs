@@ -86,6 +86,14 @@ namespace yata
 		:
 			Control
 	{
+		#region Enums
+		internal enum DockState
+		{
+			TR, BR, BL, TL
+		}
+		#endregion Enums
+
+
 		#region Fields (static)
 		static int _heightr = -1; // height of a row is the same for all propanels
 
@@ -110,16 +118,34 @@ namespace yata
 
 
 		#region Properties
-		bool _dockBot;
-		internal bool DockBot
+		DockState _dockstate = DockState.TR;
+		internal DockState Dockstate
 		{
-			get { return _dockBot; }
+			get { return _dockstate; }
 			set
 			{
-				if (_dockBot = value)
-					Top = _grid.Height - Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
-				else
-					Top = 0;
+				switch (_dockstate = value)
+				{
+					case DockState.TR:
+						Left = _grid.Width  - Width  - (_grid._visVert ? _grid._scrollVert.Width  : 0);
+						Top  = 0;
+						break;
+
+					case DockState.BR:
+						Left = _grid.Width  - Width  - (_grid._visVert ? _grid._scrollVert.Width  : 0);
+						Top  = _grid.Height - Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
+						break;
+
+					case DockState.BL:
+						Left = YataGrid.WidthRowhead - 1;
+						Top  = _grid.Height - Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
+						break;
+
+					case DockState.TL:
+						Left = YataGrid.WidthRowhead - 1;
+						Top  = 0;
+						break;
+				}
 			}
 		}
 		#endregion Properties
@@ -212,7 +238,7 @@ namespace yata
 			for (int r = 0; r != _grid.RowCount; ++r)
 			for (int c = 0; c != _grid.ColCount; ++c)
 			{
-				wT = _grid[r,c]._widthtext;	// ASSUME: That the widest text in the table-font
+				wT = _grid[r,c]._widthtext;	// NOTE: Assume that the widest text in the table-font
 				if (wT > _widthVals)		// will be widest text in the propanel font. Much faster.
 				{
 					_widthVals = wT;
@@ -234,8 +260,6 @@ namespace yata
 		{
 			Width = _widthVars + _widthVals;
 
-			Left = _grid.Left - (_grid._visVert ? _grid._scrollVert.Width : 0) + _grid.Width - Width;
-
 			int h = _grid.ColCount * _heightr;
 			int hGrid = _grid.Height - (_grid._visHori ? _grid._scrollHori.Height : 0);
 			if (h > hGrid)
@@ -244,6 +268,8 @@ namespace yata
 				Height = h;
 
 			InitScroll();
+
+			Dockstate = Dockstate;
 		}
 
 		/// <summary>
@@ -334,6 +360,33 @@ namespace yata
 				_grid.ChangeCellText(cell, _editor);
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
+		}
+
+		/// <summary>
+		/// Gets the next DockState in the cycle.
+		/// </summary>
+		/// <returns></returns>
+		internal DockState getNextDockstate()
+		{
+			if ((ModifierKeys & Keys.Shift) == 0)
+			{
+				switch (Dockstate) // clockwise
+				{
+					case DockState.TR: return DockState.BR;
+					case DockState.BR: return DockState.BL;
+					case DockState.BL: return DockState.TL;
+				}
+			}
+			else // [Shift] reverse cycle direction
+			{
+				switch (Dockstate) // counterclockwise
+				{
+					case DockState.TR: return DockState.TL;
+					case DockState.TL: return DockState.BL;
+					case DockState.BL: return DockState.BR;
+				}
+			}
+			return DockState.TR;
 		}
 		#endregion Methods
 
@@ -555,6 +608,9 @@ namespace yata
 			YataGrid.graphics.DrawLine(Pencils.DarkLine,							// vertical center line
 									   _widthVars, 1,
 									   _widthVars, HeightProps - offset - 1);
+			YataGrid.graphics.DrawLine(Pencils.DarkLine,							// vertical right line
+									   _widthVars + _widthVals, 1,
+									   _widthVars + _widthVals, HeightProps - offset - 1);
 			YataGrid.graphics.DrawLine(Pens.Black,									// horizontal top line
 									   1,     1,
 									   Width, 1);
