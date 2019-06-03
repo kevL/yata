@@ -322,15 +322,15 @@ namespace yata
 					}
 					break;
 
-				case Keys.Shift | Keys.F3:					// backwards search
+				case Keys.Shift | Keys.F3:					// reverse search
 					editclick_SearchNext(null, EventArgs.Empty);
 					return true;
 
-				case Keys.Shift | Keys.Control | Keys.N:	// backwards gotoloadchanged
+				case Keys.Shift | Keys.Control | Keys.N:	// reverse gotoloadchanged
 					editclick_GotoLoadchanged(null, EventArgs.Empty);
 					return true;
 
-				case Keys.Shift | Keys.F8:					// backwards propanel location cycle
+				case Keys.Shift | Keys.F8:					// reverse propanel location cycle
 					opsclick_PropertyPanelLocation(null, EventArgs.Empty);
 					return true;
 			}
@@ -1395,7 +1395,8 @@ namespace yata
 						field = Constants.Stars;
 
 					row[c].text = field;
-					row[c].diff = false;
+					row[c].diff =
+					row[c].loadchanged = false;
 				}
 				row._brush = Brushes.Created;
 
@@ -1499,7 +1500,8 @@ namespace yata
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
 					Table[_r,c].text = Constants.Stars;
-					Table[_r,c].diff = false;
+					Table[_r,c].diff =
+					Table[_r,c].loadchanged = false;
 				}
 				Table.Rows[_r]._brush = Brushes.Created;
 

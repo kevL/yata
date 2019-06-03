@@ -153,11 +153,11 @@ namespace yata
 
 		internal string text; // the cell's text
 
-		bool _sel;
+		bool _selected;
 		internal bool selected
 		{
-			get { return _sel; }
-			set { _sel = value; SetState(); }
+			get { return _selected; }
+			set { _selected = value; SetState(); }
 		}
 
 		bool _load;
@@ -241,8 +241,8 @@ namespace yata
 		{
 			var cell = new Cell(y,x, String.Copy(text));
 //			cell.selected    = selected;
-//			cell.loadchanged = loadchanged;
 //			cell.diff        = diff;
+			cell.loadchanged = loadchanged;
 			cell._widthtext  = _widthtext;
 
 			return cell;

@@ -31,6 +31,7 @@ namespace yata
 
 	sealed class UndoRedo
 	{
+		#region Enums
 		internal enum UrType
 		{
 			rt_Cell,		// 0 cell action
@@ -49,6 +50,7 @@ namespace yata
 			is_Undo,	// 1 - the Undo-state has been saved.
 			is_Redo		// 2 - the Redo-state has been saved.
 		}
+		#endregion Enums
 
 
 		#region Fields
@@ -498,7 +500,12 @@ namespace yata
 			cell.selected = true;
 			_grid.EnsureDisplayed(cell);
 
-			_grid._f.Refresh();
+
+			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			if (_grid.Propanel != null && _grid.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			_grid.Invalidator(invalid);
 		}
 
 		/// <summary>
@@ -517,11 +524,19 @@ namespace yata
 			int r = row._id;
 			_grid.Insert(r, fields, true, row._brush);
 
+			for (int c = 0; c != row.CellCount; ++c)
+				_grid[r,c].loadchanged = row[c].loadchanged;
+
 			_grid.ClearSelects();
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
-			_grid.Refresh();
+
+			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			if (_grid.Propanel != null && _grid.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			_grid.Invalidator(invalid);
 			_grid._proHori = 0;
 		}
 
@@ -541,7 +556,12 @@ namespace yata
 				r  = _grid.RowCount - 1;
 			_grid.EnsureDisplayedRow(r);
 
-			_grid.Refresh();
+
+			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			if (_grid.Propanel != null && _grid.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			_grid.Invalidator(invalid);
 			_grid._proHori = 0;
 		}
 
@@ -557,9 +577,11 @@ namespace yata
 			_grid.Calibrate(r);
 
 			_grid.ClearSelects();
+			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
-			_grid.Refresh();
+
+			_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_ROWS);
 		}
 
 		/// <summary>
@@ -582,6 +604,9 @@ namespace yata
 					fields[c] = String.Copy(row[c].text);
 
 				_grid.Insert(row._id, fields, false, row._brush);
+
+				for (int c = 0; c != row.CellCount; ++c)
+					_grid[row._id, c].loadchanged = row[c].loadchanged;
 			}
 			_grid.Calibrate(0, _grid.RowCount - 1);
 

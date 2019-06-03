@@ -560,7 +560,7 @@ namespace yata
 		/// <summary>
 		/// The table scrolls 1 pixel left if refreshing a table when scroll is
 		/// far right. This funct checks if the table is scrolled far right and
-		/// sets and additional 1 pixel offset for InitScrollers() to consider
+		/// sets and additional 1 pixel offset for InitScroll() to consider
 		/// during row insertions and deletions.
 		/// </summary>
 		internal void SetProHori()
