@@ -172,7 +172,7 @@ namespace yata
 			set
 			{
 				_changed = value;
-				_f.ResetTabText(this);
+				_f.SetTabText(this);
 			}
 		}
 
@@ -586,8 +586,6 @@ namespace yata
 				else
 					_scrollHori.Value = _scrollHori.Maximum = MaxHori = 0;
 			}
-			else
-				BypassInitScroll = false;
 		}
 
 		/// <summary>

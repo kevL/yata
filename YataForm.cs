@@ -747,13 +747,36 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Sets the tabtext of a specified table.
+		/// </summary>
+		/// <param name="table"></param>
+		internal void SetTabText(YataGrid table)
+		{
+			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+
+			string asterisk = table.Changed ? " *" : "";
+
+			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
+			{										//       - the 'Changed' mechanism should be bypassed such that all
+				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
+				{
+					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
+					break;
+				}
+			}
+			SetTabSize();
+
+			DrawingControl.ResumeDrawing(this);
+		}
+
+		/// <summary>
 		/// Sets the width of the tabs on the TabControl.
 		/// </summary>
 		void SetTabSize()
 		{
-			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls.
+			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls to OnResize().
 
-			if (Tabs != null && Tabs.TabCount != 0)
+			if (Tabs.TabCount != 0)
 			{
 				Size size;
 				int w = 25, wT, h = 10, hT;
@@ -1218,25 +1241,6 @@ namespace yata
 								   MessageBoxButtons.YesNo,
 								   MessageBoxIcon.Exclamation,
 								   MessageBoxDefaultButton.Button2);
-		}
-
-		internal void ResetTabText(YataGrid table)
-		{
-			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
-
-			string asterisk = table.Changed ? " *" : "";
-
-			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
-			{										//       - the 'Changed' mechanism should be bypassed such that all
-				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
-				{
-					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
-					break;
-				}
-			}
-			SetTabSize();
-
-			DrawingControl.ResumeDrawing(this);
 		}
 
 
