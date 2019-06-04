@@ -342,10 +342,16 @@ namespace yata
 		}
 
 
+		void closeContexts()
+		{
+			if (_f.tabMenu       != null) _f.tabMenu      .Close();
+			if (_f.cellMenu      != null) _f.cellMenu     .Close();
+			if (_f.contextEditor != null) _f.contextEditor.Close();
+		}
+
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
-			if (_f.tabMenu  != null) _f.tabMenu .Close();
-			if (_f.cellMenu != null) _f.cellMenu.Close();
+			closeContexts();
 
 			if (_table == null) _table = this;
 
@@ -395,8 +401,7 @@ namespace yata
 
 		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
-			if (_f.tabMenu  != null) _f.tabMenu .Close();
-			if (_f.cellMenu != null) _f.cellMenu.Close();
+			closeContexts();
 
 			if (_table == null) _table = this;
 

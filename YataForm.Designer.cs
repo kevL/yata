@@ -116,7 +116,7 @@ namespace yata
 		ToolStripSeparator separator_25;
 		ToolStripSeparator separator_26;
 
-		ContextMenuStrip contextEditor;
+		internal ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
 		ToolStripMenuItem context_it_Copy;
 		ToolStripMenuItem context_it_Cut;
