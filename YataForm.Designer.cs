@@ -115,6 +115,7 @@ namespace yata
 		ToolStripSeparator separator_24;
 		ToolStripSeparator separator_25;
 		ToolStripSeparator separator_26;
+		ToolStripSeparator separator_27;
 
 		internal ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -140,6 +141,7 @@ namespace yata
 		ToolStripMenuItem it_tabDiffJustify;
 
 		internal ContextMenuStrip cellMenu;
+		ToolStripMenuItem it_cellEdit;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
@@ -288,6 +290,8 @@ namespace yata
 			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.cellMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.it_cellEdit = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_27 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
@@ -1258,6 +1262,8 @@ namespace yata
 			// 
 			this.cellMenu.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cellMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_cellEdit,
+			this.separator_27,
 			this.it_cellCopy,
 			this.it_cellPaste,
 			this.separator_16,
@@ -1267,7 +1273,19 @@ namespace yata
 			this.it_cellMergeRo});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 126);
+			this.cellMenu.Size = new System.Drawing.Size(165, 176);
+			// 
+			// it_cellEdit
+			// 
+			this.it_cellEdit.Name = "it_cellEdit";
+			this.it_cellEdit.Size = new System.Drawing.Size(164, 22);
+			this.it_cellEdit.Text = "edit";
+			this.it_cellEdit.Click += new System.EventHandler(this.cellclick_EditCell);
+			// 
+			// separator_27
+			// 
+			this.separator_27.Name = "separator_27";
+			this.separator_27.Size = new System.Drawing.Size(161, 6);
 			// 
 			// it_cellCopy
 			// 

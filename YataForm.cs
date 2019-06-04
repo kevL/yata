@@ -3498,11 +3498,11 @@ namespace yata
 		{
 			Cell sel = Table.getSelectedCell();
 
+			it_cellEdit   .Enabled =
+			it_cellPaste  .Enabled = !Table.Readonly;
 			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
-
-			it_cellPaste.Enabled = !Table.Readonly;
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -3526,6 +3526,16 @@ namespace yata
 					 && destTable.RowCount > sel.y);
 			}
 			return false;
+		}
+
+		void cellclick_EditCell(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				Table.startCelledit();
+			}
+			else
+				ReadonlyError();
 		}
 
 		void cellclick_Stars(object sender, EventArgs e)

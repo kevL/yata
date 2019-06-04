@@ -1910,7 +1910,7 @@ namespace yata
 						&& (_editcell = getSelectedCell()) != null
 						&& _editcell.x >= FrozenCount)
 					{
-						EditCell();
+						Celledit();
 						Invalidator(INVALID_GRID);
 					}
 					return true;
@@ -2305,7 +2305,7 @@ namespace yata
 						else if (!Readonly) // cell is already selected
 						{
 							_editcell = cell;
-							EditCell();
+							Celledit();
 							Invalidator(INVALID_GRID);
 						}
 					}
@@ -2384,9 +2384,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Starts cell edit on either LMB or Enter-key.
+		/// Starts cell-edit on either LMB or Enter-key.
 		/// </summary>
-		void EditCell()
+		void Celledit()
 		{
 			EnsureDisplayed(_editcell);
 
@@ -2403,6 +2403,16 @@ namespace yata
 
 			_editor.Visible = true;
 			_editor.Focus();
+		}
+
+		/// <summary>
+		/// Starts a cell-edit from YataForm via the cellmenu.
+		/// </summary>
+		internal void startCelledit()
+		{
+			_editcell = getSelectedCell();
+			Celledit();
+			Invalidator(INVALID_GRID);
 		}
 
 		/// <summary>
