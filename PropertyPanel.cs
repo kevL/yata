@@ -532,7 +532,7 @@ namespace yata
 					}
 
 					if (_c >= _grid.FrozenCount)
-						_grid.EnsureDisplayedCellOrRow();
+						_grid.EnsureDisplayed();
 					else
 						_grid.EnsureDisplayedRow(_r);
 

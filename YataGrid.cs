@@ -471,7 +471,7 @@ namespace yata
 					if (_table.Propanel != null && _table.Propanel.Visible)
 						_table.Propanel.telemetric();
 
-					if (!_f.IsMin) _table.EnsureDisplayedCellOrRow();
+					if (!_f.IsMin) _table.EnsureDisplayed();
 				}
 				_table = null;
 
@@ -2710,6 +2710,24 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Scrolls the table so that the currently selected cell or row is
+		/// (more or less) completely displayed.
+		/// </summary>
+		/// <returns>a bitwise int defining controls that need to be invalidated</returns>
+		internal int EnsureDisplayed()
+		{
+			Cell sel = getSelectedCell();
+			if (sel != null)
+				return EnsureDisplayed(sel);
+
+			int r = getSelectedRow();
+			if (r != -1)
+				return EnsureDisplayedRow(r);
+
+			return INVALID_NONE;
+		}
+
+		/// <summary>
 		/// Scrolls the table so that a given row is (more or less) completely
 		/// displayed.
 		/// </summary>
@@ -2735,24 +2753,6 @@ namespace yata
 			}
 
 			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
-			return INVALID_NONE;
-		}
-
-		/// <summary>
-		/// Scrolls the table so that the currently selected cell or row is
-		/// (more or less) completely displayed.
-		/// </summary>
-		/// <returns>a bitwise int defining controls that need to be invalidated</returns>
-		internal int EnsureDisplayedCellOrRow()
-		{
-			Cell sel = getSelectedCell();
-			if (sel != null)
-				return EnsureDisplayed(sel);
-
-			int r = getSelectedRow();
-			if (r != -1)
-				return EnsureDisplayedRow(r);
-
 			return INVALID_NONE;
 		}
 
@@ -3092,7 +3092,7 @@ namespace yata
 						while ((left += Cols[c].width()) < x);
 
 						ColSort(c);
-						EnsureDisplayedCellOrRow();
+						EnsureDisplayed();
 						Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 					}
 /*					else // popup colhead context
@@ -3151,7 +3151,7 @@ namespace yata
 				Select();
 
 				ColSort(0);
-				EnsureDisplayedCellOrRow();
+				EnsureDisplayed();
 				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}
@@ -3171,7 +3171,7 @@ namespace yata
 				Select();
 
 				ColSort(1);
-				EnsureDisplayedCellOrRow();
+				EnsureDisplayed();
 				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}
@@ -3191,7 +3191,7 @@ namespace yata
 				Select();
 
 				ColSort(2);
-				EnsureDisplayedCellOrRow();
+				EnsureDisplayed();
 				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
 			}
 		}

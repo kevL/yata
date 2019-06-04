@@ -2787,7 +2787,7 @@ namespace yata
 					// turn out even almost correct.
 					// NOTE: Height of any table should NOT be changing at all.
 
-					int invalid = table.EnsureDisplayedCellOrRow();
+					int invalid = table.EnsureDisplayed();
 					if (table == Table)
 						table.Invalidator(invalid);
 				}
