@@ -368,7 +368,16 @@ namespace yata
 		/// <returns></returns>
 		internal DockState getNextDockstate()
 		{
-			if ((ModifierKeys & Keys.Shift) == 0)
+			if (_scroll.Visible)
+			{
+				switch (Dockstate) // left/right
+				{
+					case DockState.TR: return DockState.TL;
+					case DockState.BR: return DockState.BL;
+					case DockState.BL: return DockState.BR;
+				}
+			}
+			else if ((ModifierKeys & Keys.Shift) == 0)
 			{
 				switch (Dockstate) // clockwise
 				{
