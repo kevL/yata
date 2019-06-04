@@ -283,6 +283,7 @@ namespace yata
 			_editor.Visible     = false;
 			_editor.BackColor   = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
+			_editor.WordWrap    = false;
 //			_editor.Height      = cf. the PropertyPanel editor
 			_editor.LostFocus  += lostfocus_Editor;
 			_editor.KeyDown    += keydown_Editor;

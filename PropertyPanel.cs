@@ -179,7 +179,10 @@ namespace yata
 				Font = new System.Drawing.Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
 			if (_heightr == -1)
+			{
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
+				_editRect.Height = _heightr - 1; // cf YataGrid.EditCell()
+			}
 
 			HeightProps = _grid.ColCount * _heightr;
 
@@ -205,7 +208,8 @@ namespace yata
 			_editor.Visible     = false;
 			_editor.BackColor   = Colors.Editor;
 			_editor.BorderStyle = BorderStyle.None;
-			_editor.Height      = _heightr;
+			_editor.WordWrap    = false;
+//			_editor.Height      = _heightr;
 			_editor.LostFocus  += lostfocus_Editor;
 			_editor.KeyDown    += keydown_Editor;
 			_editor.Leave      += leave_Editor;
@@ -247,8 +251,9 @@ namespace yata
 				}
 			}
 
-			_editor.Width =
-			_widthVals = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
+			_widthVals      =
+			_editRect.Width = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
+			_editor  .Width = _widthVals - 6; // cf YataGrid.EditCell()
 
 			telemetric();
 		}
@@ -535,12 +540,10 @@ namespace yata
 
 					if (!_grid.Readonly && e.X > _widthVars)
 					{
-						_editRect.X      = _widthVars;
-						_editRect.Y      = _c * _heightr + 1;
-						_editRect.Width  = _widthVals;
-						_editRect.Height = _heightr - 1;
+						_editRect.X = _widthVars;
+						_editRect.Y = _c * _heightr + 1;
 
-						_editor.Left = _editRect.X + 5;
+						_editor.Left = _editRect.X + 5; // cf YataGrid.EditCell() ->
 						_editor.Top  = _editRect.Y + 1 - _scroll.Value;
 						_editor.Text = _grid[_r,_c].text;
 
