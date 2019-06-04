@@ -65,6 +65,29 @@ namespace yata
 		/// A flag that stops presumptive .NET events from firing ~50 billion.
 		/// </summary>
 		internal static bool _init;
+
+		/// <summary>
+		/// Another flag that stops presumptive .NET events from firing ~50
+		/// billion.
+		///
+		/// The table scrolls 1 pixel left if refreshing a table when scroll is
+		/// far right. OBSOLETE: This funct checks if the table is scrolled far
+		/// right and sets and additional 1 pixel offset for InitScroll() to
+		/// consider during row insertions and deletions or just
+		/// fullrow-changes.
+		///
+		/// It seems to happen only soon after a table is loaded - then it goes
+		/// away. nice ...
+		///
+		/// The problem appears to be that YataForm.SetTabSize() causes not one
+		/// but two Resize events; the first event calculates that the client-
+		/// width is 1px greater than it actually is. So I'm going to let the
+		/// Snuggle-to-Max routine (horizontal) do its work and bypass the 2nd
+		/// Resize event. Note the irony that when setting the TabSize in this
+		/// application the form does not need to be resized at all. No thanks
+		/// for wasting my day you dweebs.
+		/// </summary>
+		internal static bool BypassInitScroll;
 		#endregion Fields (static)
 
 
@@ -321,6 +344,8 @@ namespace yata
 
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
+			//logfile.Log("OnScrollValueChanged_vert()");
+
 			if (_f.tabMenu  != null) _f.tabMenu .Close();
 			if (_f.cellMenu != null) _f.cellMenu.Close();
 
@@ -372,6 +397,8 @@ namespace yata
 
 		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
+			//logfile.Log("OnScrollValueChanged_hori()");
+
 			if (_f.tabMenu  != null) _f.tabMenu .Close();
 			if (_f.cellMenu != null) _f.cellMenu.Close();
 
@@ -466,107 +493,137 @@ namespace yata
 		/// </summary>
 		internal void InitScroll()
 		{
-			HeightTable = HeightColhead + HeightRow * RowCount;
-
-			WidthTable = WidthRowhead;
-			for (int c = 0; c != ColCount; ++c)
-				WidthTable += Cols[c].width();
-
-			// NOTE: Height/Width *includes* the height/width of the relevant
-			// scrollbar(s) and panel(s).
-
-			bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
-			bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
-
-			_visVert = false; // again don't ask. Be happy.
-			_visHori = false;
-
-			_scrollVert.Visible =
-			_scrollHori.Visible = false;
-
-			if (visVert && visHori)
+			if (!BypassInitScroll)
 			{
-				_visVert =
-				_visHori = true;
+				HeightTable = HeightColhead + HeightRow * RowCount;
+
+				WidthTable = WidthRowhead;
+				for (int c = 0; c != ColCount; ++c)
+					WidthTable += Cols[c].width();
+
+				//logfile.Log("InitScroll() WidthTable= " + WidthTable);
+
+				// NOTE: Height/Width *includes* the height/width of the relevant
+				// scrollbar(s) and panel(s).
+
+				bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
+				bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
+
+				_visVert = false; // again don't ask. Be happy.
+				_visHori = false;
+
 				_scrollVert.Visible =
-				_scrollHori.Visible = true;
-			}
-			else if (visVert)
-			{
-				_visVert = true;
-				_visHori = (WidthTable > Width - _scrollVert.Width);
-				_scrollVert.Visible = true;
-				_scrollHori.Visible = _visHori;
-			}
-			else if (visHori)
-			{
-				_visVert = (HeightTable > Height - _scrollHori.Height);
-				_visHori = true;
-				_scrollVert.Visible = _visVert;
-				_scrollHori.Visible = true;
-			}
+				_scrollHori.Visible = false;
 
-			if (_visVert)
-			{
-				// NOTE: Do not set Maximum until after deciding whether
-				// or not max < 0. 'Cause it fucks everything up. bingo.
-				int vert = HeightTable - Height
-						 + (_scrollVert.LargeChange - 1)
-						 + (_visHori ? _scrollHori.Height : 0);
-
-				if (vert < _scrollVert.LargeChange)
-					_scrollVert.Maximum = MaxVert = 0; // TODO: Perhaps that should zero the Value and recurse.
-				else
+				if (visVert && visHori)
 				{
-					MaxVert = (_scrollVert.Maximum = vert) - (_scrollVert.LargeChange - 1);
-
-					// handle .NET OnResize anomaly ->
-					// keep the bottom of the table snuggled against the bottom of
-					// the visible area when resize enlarges the area
-					if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
-						_scrollVert.Value = MaxVert;
+					_visVert =
+					_visHori = true;
+					_scrollVert.Visible =
+					_scrollHori.Visible = true;
 				}
+				else if (visVert)
+				{
+					_visVert = true;
+					_visHori = (WidthTable > Width - _scrollVert.Width);
+					_scrollVert.Visible = true;
+					_scrollHori.Visible = _visHori;
+				}
+				else if (visHori)
+				{
+					_visVert = (HeightTable > Height - _scrollHori.Height);
+					_visHori = true;
+					_scrollVert.Visible = _visVert;
+					_scrollHori.Visible = true;
+				}
+
+				if (_visVert)
+				{
+					// NOTE: Do not set Maximum until after deciding whether
+					// or not max < 0. 'Cause it fucks everything up. bingo.
+					int vert = HeightTable - Height
+							 + (_scrollVert.LargeChange - 1)
+							 + (_visHori ? _scrollHori.Height : 0);
+
+					if (vert < _scrollVert.LargeChange)
+						_scrollVert.Maximum = MaxVert = 0; // TODO: Perhaps that should zero the Value and recurse.
+					else
+					{
+						MaxVert = (_scrollVert.Maximum = vert) - (_scrollVert.LargeChange - 1);
+
+						// handle .NET OnResize anomaly ->
+						// keep the bottom of the table snuggled against the bottom
+						// of the visible area when resize enlarges the area
+						if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
+							_scrollVert.Value = MaxVert;
+					}
+				}
+				else
+					_scrollVert.Value = _scrollVert.Maximum = MaxVert = 0;
+
+				if (_visHori)
+				{
+					//logfile.Log(". Width= " + Width); // Width increases by 1 for an arbitrary reason. Those fuckers. <- TODO
+
+					// NOTE: Do not set Maximum until after deciding whether
+					// or not max < 0. 'Cause it fucks everything up. bingo.
+					int hori = WidthTable - Width
+							 + (_scrollHori.LargeChange - 1)
+							 + (_visVert ? _scrollVert.Width : 0);// + _proHori;
+					//logfile.Log(". hori= " + hori + " lc= " + _scrollHori.LargeChange);
+
+					if (hori < _scrollHori.LargeChange)
+					{
+						//logfile.Log(". . (hori < _scrollHori.LargeChange)");
+						_scrollHori.Maximum = MaxHori = 0; // TODO: Perhaps that should zero the Value and recurse.
+					}
+					else
+					{
+						MaxHori = (_scrollHori.Maximum = hori) - (_scrollHori.LargeChange - 1);
+						//logfile.Log(". . (hori >= _scrollHori.LargeChange) MaxHori= " + MaxHori);
+
+						// handle .NET OnResize anomaly ->
+						// keep the right of the table snuggled against the right of
+						// the visible area when resize enlarges the area
+						if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
+						{
+							//logfile.Log(". . . SNUGGLE to Max");
+							_scrollHori.Value = MaxHori;// + _proHori;
+						}
+					}
+				}
+				else
+					_scrollHori.Value = _scrollHori.Maximum = MaxHori = 0;
 			}
 			else
-				_scrollVert.Value = _scrollVert.Maximum = MaxVert = 0;
-
-			if (_visHori)
-			{
-				// NOTE: Do not set Maximum until after deciding whether
-				// or not max < 0. 'Cause it fucks everything up. bingo.
-				int hori = WidthTable - Width
-						 + (_scrollHori.LargeChange - 1)
-						 + (_visVert ? _scrollVert.Width : 0);
-
-				if (hori < _scrollHori.LargeChange)
-					_scrollHori.Maximum = MaxHori = 0; // TODO: Perhaps that should zero the Value and recurse.
-				else
-				{
-					MaxHori = (_scrollHori.Maximum = hori) - (_scrollHori.LargeChange - 1);
-
-					// handle .NET OnResize anomaly ->
-					// keep the right of the table snuggled against the right of the
-					// visible area when resize enlarges the area
-					if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
-						_scrollHori.Value = MaxHori;
-				}
-			}
-			else
-				_scrollHori.Value = _scrollHori.Maximum = MaxHori = 0;
+				BypassInitScroll = false;
 		}
 
-		internal int _proHori;
+		int _proHori;
 
 		/// <summary>
 		/// The table scrolls 1 pixel left if refreshing a table when scroll is
 		/// far right. This funct checks if the table is scrolled far right and
 		/// sets and additional 1 pixel offset for InitScroll() to consider
-		/// during row insertions and deletions.
+		/// during row insertions and deletions or just row-changes.
+		/// 
+		/// It seems to happen only soon after a table is loaded - then it goes
+		/// way. nice ...
 		/// </summary>
-		internal void SetProHori()
+		/// <param name="reset">true to reset</param>
+		internal void SetProHori(bool reset = false)
 		{
-			if (WidthTable == Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
+			if (reset)
+			{
+				//logfile.Log("SetProHori() reset");
+				_proHori = 0;
+			}
+			else if (WidthTable == Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
+			{
 				_proHori = 1;
+				//logfile.Log("SetProHori() WidthTable= " + WidthTable);
+			}
+			//else logfile.Log("SetProHori() n/a pro= " + _proHori);
 		}
 
 		/// <summary>
@@ -1709,7 +1766,7 @@ namespace yata
 					{
 						SetProHori();
 						Delete();
-						_proHori = 0;
+						SetProHori(true);
 					}
 					break;
 			}

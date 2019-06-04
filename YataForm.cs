@@ -751,6 +751,8 @@ namespace yata
 		/// </summary>
 		void SetTabSize()
 		{
+			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls.
+
 			if (Tabs != null && Tabs.TabCount != 0)
 			{
 				Size size;
@@ -767,6 +769,8 @@ namespace yata
 				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
 //				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
 			}
+
+			YataGrid.BypassInitScroll = false;
 		}
 
 		/// <summary>
@@ -1360,7 +1364,7 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1408,7 +1412,7 @@ namespace yata
 
 				Table.Invalidator(invalid); */
 				Table.Invalidator(YataGrid.INVALID_GRID);
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				if (!Table.Changed)
@@ -1438,7 +1442,7 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1472,7 +1476,7 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1513,7 +1517,7 @@ namespace yata
 
 				Table.Invalidator(invalid); */
 				Table.Invalidator(YataGrid.INVALID_GRID);
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				if (!Table.Changed)
@@ -1549,7 +1553,7 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1580,7 +1584,7 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table._proHori = 0;
+				Table.SetProHori(true);
 
 
 				if (!Table.Changed)

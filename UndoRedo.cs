@@ -537,7 +537,7 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
-			_grid._proHori = 0;
+			_grid.SetProHori(true);
 		}
 
 		/// <summary>
@@ -562,7 +562,7 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
-			_grid._proHori = 0;
+			_grid.SetProHori(true);
 		}
 
 		/// <summary>
