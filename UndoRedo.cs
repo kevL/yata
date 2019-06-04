@@ -513,8 +513,6 @@ namespace yata
 		/// </summary>
 		void InsertRow()
 		{
-			_grid.SetProHori();
-
 			Row row = _it.r;
 
 			var fields = new string[row.CellCount];
@@ -537,7 +535,6 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
-			_grid.SetProHori(true);
 		}
 
 		/// <summary>
@@ -545,8 +542,6 @@ namespace yata
 		/// </summary>
 		void DeleteRow()
 		{
-			_grid.SetProHori();
-
 			int r = _it.r._id;
 
 			_grid.Insert(r);
@@ -562,7 +557,6 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
-			_grid.SetProHori(true);
 		}
 
 		/// <summary>

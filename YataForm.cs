@@ -1355,8 +1355,6 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.SetProHori();
-
 				Table.Insert(_r, _copy[0]);
 
 /*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
@@ -1364,7 +1362,6 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1386,8 +1383,6 @@ namespace yata
 				// - store the row's current state to 'rPre' in the Restorable
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
-
-				Table.SetProHori();
 
 				Row row = Table.Rows[_r];
 				string field;
@@ -1412,7 +1407,6 @@ namespace yata
 
 				Table.Invalidator(invalid); */
 				Table.Invalidator(YataGrid.INVALID_GRID);
-				Table.SetProHori(true);
 
 
 				if (!Table.Changed)
@@ -1433,8 +1427,6 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.SetProHori();
-
 				Table.Insert(_r + 1, _copy[0]);
 
 /*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
@@ -1442,7 +1434,6 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1461,8 +1452,6 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.SetProHori();
-
 				var fields = new string[Table.ColCount];
 				fields[0] = _r.ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
@@ -1476,7 +1465,6 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1499,8 +1487,6 @@ namespace yata
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
-				Table.SetProHori();
-
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
 					Table[_r,c].text = Constants.Stars;
@@ -1517,7 +1503,6 @@ namespace yata
 
 				Table.Invalidator(invalid); */
 				Table.Invalidator(YataGrid.INVALID_GRID);
-				Table.SetProHori(true);
 
 
 				if (!Table.Changed)
@@ -1538,8 +1523,6 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.SetProHori();
-
 				var fields = new string[Table.ColCount];
 				fields[0] = (_r + 1).ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
@@ -1553,7 +1536,6 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table.SetProHori(true);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1575,8 +1557,6 @@ namespace yata
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
 
-				Table.SetProHori();
-
 				Table.Insert(_r);
 
 /*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
@@ -1584,7 +1564,6 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid); */
-				Table.SetProHori(true);
 
 
 				if (!Table.Changed)
