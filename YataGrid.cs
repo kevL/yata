@@ -85,7 +85,7 @@ namespace yata
 		/// Snuggle-to-Max routine (horizontal) do its work and bypass the 2nd
 		/// Resize event. Note the irony that when setting the TabSize in this
 		/// application the form does not need to be resized at all. No thanks
-		/// for wasting my day you dweebs.
+		/// for wasting my day.
 		/// </summary>
 		internal static bool BypassInitScroll;
 		#endregion Fields (static)
