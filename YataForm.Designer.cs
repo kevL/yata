@@ -21,6 +21,7 @@ namespace yata
 		ToolStripMenuItem it_OpenFolder;
 		ToolStripMenuItem it_Open;
 		ToolStripMenuItem it_Reload;
+		ToolStripMenuItem it_Recent;
 		ToolStripMenuItem it_Save;
 		ToolStripMenuItem it_SaveAs;
 		ToolStripMenuItem it_SaveAll;
@@ -302,6 +303,7 @@ namespace yata
 			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
@@ -442,6 +444,7 @@ namespace yata
 			this.it_OpenFolder,
 			this.it_Open,
 			this.it_Reload,
+			this.it_Recent,
 			this.separator_1,
 			this.it_Save,
 			this.it_SaveAs,
@@ -1349,6 +1352,12 @@ namespace yata
 			this.it_cellInput.Size = new System.Drawing.Size(164, 22);
 			this.it_cellInput.Text = "input";
 			this.it_cellInput.Click += new System.EventHandler(this.cellclick_Input);
+			// 
+			// it_Recent
+			// 
+			this.it_Recent.Name = "it_Recent";
+			this.it_Recent.Size = new System.Drawing.Size(181, 22);
+			this.it_Recent.Text = "Recen&t";
 			// 
 			// YataForm
 			// 

@@ -9,7 +9,7 @@ namespace yata
 	/// <summary>
 	/// A dialog for the 2da-differ.
 	/// </summary>
-	public sealed class DifferDialog
+	sealed class DifferDialog
 		:
 			Form
 	{
@@ -33,7 +33,7 @@ namespace yata
 		/// <param name="copyable">info to be displayed with a fixed font in a
 		/// RichTextBox so it can be copied</param>
 		/// <param name="f">caller</param>
-		public DifferDialog(
+		internal DifferDialog(
 				string title,
 				string label,
 				string copyable,

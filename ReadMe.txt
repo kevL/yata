@@ -6,7 +6,7 @@ changed in the Settings.Cfg textfile.
 
 2019 june 5
 kevL's
-ver 3.2.0.0
+ver 3.3.0.0
 
 
 File
