@@ -213,6 +213,24 @@ namespace yata
 			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
 
 			DontBeepEvent += HandleDontBeepEvent;
+
+
+			//it_Recent
+			string dir = Application.StartupPath;
+			string pfe = Path.Combine(dir, "recent.cfg");
+			if (File.Exists(pfe))
+			{
+				string[] recents = File.ReadAllLines(pfe);
+				foreach (string recent in recents)
+				{
+					if (File.Exists(recent))
+					{
+						var it = new ToolStripMenuItem(recent);
+						it.Click += fileclick_Recent;
+						it_Recent.DropDownItems.Add(it);
+					}
+				}
+			}
 		}
 
 
@@ -549,6 +567,8 @@ namespace yata
 				}
 			}
 			it_OpenFolder.Visible = (it_OpenFolder.DropDownItems.Count != 0);
+
+			it_Recent.Visible = (it_Recent.DropDownItems.Count != 0);
 		}
 
 		void fileclick_Open(object sender, EventArgs e)
@@ -588,10 +608,19 @@ namespace yata
 		/// </summary>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly (default false)</param>
-		void CreatePage(string pfe, bool read = false)
+		/// <param name="it"></param>
+		void CreatePage(string pfe, bool read = false, ToolStripItem it = null)
 		{
 			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
+				if (it != null && it_Recent.DropDownItems.Contains(it))
+					it_Recent.DropDownItems.Remove(it);
+
+				it = new ToolStripMenuItem(pfe);
+				it.Click += fileclick_Recent;
+				it_Recent.DropDownItems.Insert(0, it);
+
+
 				ShowColorPanel();
 //				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
 							// but a refresh turns the client area gray at least instead of glitchy.
@@ -963,6 +992,25 @@ namespace yata
 											   MessageBoxDefaultButton.Button2) == DialogResult.No;
 				}
 			}
+
+			if (!e.Cancel)
+			{
+				int i = -1;
+				var recents = new string[it_Recent.DropDownItems.Count];
+				foreach (ToolStripMenuItem recent in it_Recent.DropDownItems)
+					recents[++i] = recent.Text;
+
+				string dir = Application.StartupPath;
+				string pfe = Path.Combine(dir, "recent.cfg");
+				try
+				{
+					File.WriteAllLines(pfe, recents);
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1034,6 +1082,21 @@ namespace yata
 					Table.Watcher.BypassFileChanged = true;
 				}
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_Recent(object sender, EventArgs e)
+		{
+			var it = sender as ToolStripMenuItem;
+			string pfe = it.Text;
+			if (File.Exists(pfe))
+				CreatePage(pfe, false, it);
+			else
+				it_Recent.DropDownItems.Remove(it);
 		}
 
 
