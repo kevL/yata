@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 may 28
+2019 june 4
 kevL's
-ver 3.1.2.0
+ver 3.2.0.0
 
 
 File
@@ -77,8 +77,10 @@ Clipboard
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
 
-- PropertyPanel on/off  : F7 (toggles the PropertyPanel on/off)
-- PropertyPanel top/bot : F8 (toggles the panel's position top/bottom)
+- PropertyPanel          : F7 (toggles the PropertyPanel on/off)
+- PropertyPanel location : F8 (key Shift to reverse direction. Cycles the
+                           panel's location through the four corners of the
+                           table)
 
 - External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
                          files open. See Appendix M: WinMerge)
@@ -196,18 +198,18 @@ LMB+Ctrl - adds or subtracts a cell from the currently selected cells
 RMB      - if editing a cell then a right-click on a different part of the table
            (either inside or outside the grid) cancels the edit
 
-Note that frozen-col cells cannot be selected or edited. Additionally, note that
-pressing Shift when clicking on a colhead or rowhead never selects a col or row;
-instead, Shift-clicking on a colhead or rowhead always selects the cells in that
-col or row, and will select a range of cols or rows if there is already another
-selected col or row. Pressing Ctrl, or Ctrl+Shift, when clicking a colhead or
-rowhead lends yet more permutations. But it's really not that complicated: just
-start clicking with or without Ctrl and Shift ... technically you're dealing
-with three items: cells, rows, and cols.
+Note that frozen-col cells cannot be directly selected or edited. Additionally,
+note that pressing Shift when clicking on a colhead or rowhead never selects a
+col or row; instead, Shift-clicking on a colhead or rowhead always selects the
+cells in that col or row, and will select a range of cols or rows if there is
+already another selected col or row. Pressing Ctrl, or Ctrl+Shift, when clicking
+a colhead or rowhead lends yet more permutations. But it's really not that
+complicated: just start clicking with or without Ctrl and Shift ... technically
+you're dealing with three items: cells, rows, and cols.
 
 OPERATIONS THAT REFORMAT LARGE TABLES (tens of thousands of Rows) TAKE TIME.
 Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
-takes about 15 seconds on my decently fast computer.
+takes ~20 seconds on my decently fast computer.
 
 
 Settings.Cfg file (do not use double-quotes)
@@ -283,10 +285,6 @@ For example it will go so far as to replace two adjacent double-quotes with
 "****" (without quotes). If you find issues that Yata doesn't deal well with
 it's suggested that you close the file in Yata and try to fix it in a
 text-editor (or a different 2da-editor).
-
-Further, the only way to edit the ID-col is with 2da Ops->Order row ids. And if
-you've chosen to Freeze the 1st or 2nd col, those cells can't be edited (or
-searched) until Freeze is turned back off.
 
 
 Appendix B: copy/paste range
@@ -462,21 +460,21 @@ selected cell, vertically in a panel that appears at the right. Click the small
 unlabeled button that's just beneath the Close button on the title bar to open
 and close the Property Panel.
 
-Cell-values can be edited by left-click. To accept an edit, press Enter or left-
-click on the panel; to cancel an edit, press Escape or right-click on the panel.
-Note that clicking elsewhere on the app will cause the panel to lose focus and
-cancel your current edit.
+Cell-values can be edited in the Property Panel by left-clicking a value field.
+To accept an edit, press Enter or left-click on the panel; to cancel an edit,
+press Escape or right-click on the panel. Note that clicking elsewhere on the
+app causes the panel to lose focus and cancel your current edit.
 
-Advanced: Note that it's possible to change the ID-value of a row in the
-Property Panel. It is recommended however to use 2da Ops->Order row ids instead,
+Advanced: Note that it is possible to change the ID-value of a row in the
+Property Panel. It is recommended however to use 2da Ops->Order row ids instead
 unless you have special reason not to. The value of a currently frozen col's
-cell can also be changed this way (further, note that such a value could be
+cell can also be changed this way (but, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
 
 A right-click on the Property Panel button will switch the panel's docked
 position from the topright of the grid to the bottomright of the grid, or vice
 versa. (This is noticeable only if the height of the panel is less than the
-height of the grid.)
+height of the client area.)
 
 
 Appendix K: Undo/Redo
@@ -504,18 +502,16 @@ popup with several operations including these four:
 
 Notes: diff1 must be selected before diff2. Diff2 can be re-selected, but
 re-selecting diff1 causes diff2 to be cleared; diff2 must be selected *after*
-diff1. Reloading a 2da causes its diff to be cleared.
+diff1. Reloading or sorting a 2da causes its diff to be cleared.
 
 Select diff2 causes four noticable things to happen:
 1. cells with texts that differ will be rendered with a teal background color
 2. the tables' cols will be justified automatically
 3. the tables will scroll in unison if possible
 4. the DifferDialog will appear. It lists any differences between col headers
-and row counts. Additionally a Goto button in the lower left corner of the
-dialog can be used to cycle through cell texts that are different in the two
-tables (key Shift to goto previous). Note that the count of cell differences
-includes the ID-cols but their backgrounds will not be colored teal (since the
-ID-col is a frozen col).
+   and row counts. Additionally a Goto button in the lower left corner of the
+   dialog can be used to cycle through cell texts that are different between the
+   two tables (key Shift to goto previous).
 
 A right-click on a diffed cell shows a popup with several operations including
 these two:
