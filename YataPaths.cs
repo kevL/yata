@@ -1169,14 +1169,14 @@ namespace yata
 		const int META_ANY                = unchecked((int)0xFFFFFFFF); // 4294967295 - the kitchen sink (not).
 
 		// TargetType
-		const int TARGET_NONE       = 0x00; //  0
-		const int TARGET_SELF       = 0x01; //  1
-		const int TARGET_CREATURE   = 0x02; //  2
-		const int TARGET_GROUND     = 0x04; //  4
-		const int TARGET_ITEMS      = 0x08; //  8
-		const int TARGET_DOORS      = 0x10; // 16
-		const int TARGET_PLACEABLES = 0x20; // 32
-		const int TARGET_TRIGGERS   = 0x40; // 64
+		internal const int TARGET_NONE       = 0x00; //  0
+		internal const int TARGET_SELF       = 0x01; //  1
+		internal const int TARGET_CREATURE   = 0x02; //  2
+		internal const int TARGET_GROUND     = 0x04; //  4
+		internal const int TARGET_ITEMS      = 0x08; //  8
+		internal const int TARGET_DOORS      = 0x10; // 16
+		internal const int TARGET_PLACEABLES = 0x20; // 32
+		internal const int TARGET_TRIGGERS   = 0x40; // 64
 
 
 		/// <summary>

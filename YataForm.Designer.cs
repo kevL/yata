@@ -116,6 +116,7 @@ namespace yata
 		ToolStripSeparator separator_25;
 		ToolStripSeparator separator_26;
 		ToolStripSeparator separator_27;
+		ToolStripSeparator separator_28;
 
 		internal ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -147,6 +148,7 @@ namespace yata
 		ToolStripMenuItem it_cellStars;
 		ToolStripMenuItem it_cellMergeCe;
 		ToolStripMenuItem it_cellMergeRo;
+		ToolStripMenuItem it_cellInput;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statbar_lblCords;
@@ -299,6 +301,8 @@ namespace yata
 			this.separator_24 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.contextEditor.SuspendLayout();
@@ -1270,10 +1274,12 @@ namespace yata
 			this.it_cellStars,
 			this.separator_24,
 			this.it_cellMergeCe,
-			this.it_cellMergeRo});
+			this.it_cellMergeRo,
+			this.separator_28,
+			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 154);
+			this.cellMenu.Size = new System.Drawing.Size(165, 204);
 			// 
 			// it_cellEdit
 			// 
@@ -1331,6 +1337,18 @@ namespace yata
 			this.it_cellMergeRo.Size = new System.Drawing.Size(164, 22);
 			this.it_cellMergeRo.Text = "merge to other - Ro";
 			this.it_cellMergeRo.Click += new System.EventHandler(this.cellclick_MergeRo);
+			// 
+			// separator_28
+			// 
+			this.separator_28.Name = "separator_28";
+			this.separator_28.Size = new System.Drawing.Size(161, 6);
+			// 
+			// it_cellInput
+			// 
+			this.it_cellInput.Name = "it_cellInput";
+			this.it_cellInput.Size = new System.Drawing.Size(164, 22);
+			this.it_cellInput.Text = "input";
+			this.it_cellInput.Click += new System.EventHandler(this.cellclick_Input);
 			// 
 			// YataForm
 			// 

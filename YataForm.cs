@@ -3500,9 +3500,10 @@ namespace yata
 
 			it_cellEdit   .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged);
+			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged); // TODO: does that need !Readonly
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
+			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && sel.x == 8); // col #8 = "TargetType"
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -3631,6 +3632,19 @@ namespace yata
 				// - store the row's changed state to 'rPos' in the Restorable
 				rest.rPos = destTable.Rows[r].Clone() as Row;
 				destTable._ur.Push(rest);
+			}
+		}
+
+		internal int _input, _original;
+		void cellclick_Input(object sender, EventArgs e)
+		{
+			_input = 0x00;
+			var f = new InfoHexDialog(Table);
+			if (f.ShowDialog(this) == DialogResult.OK
+				&& _input != _original)
+			{
+				Table.ChangeCellText(Table.getSelectedCell(), // does not do a text-check
+									 "0x" + _input.ToString("X2"));
 			}
 		}
 		#endregion Cell menu
