@@ -599,7 +599,7 @@ namespace yata
 
 				var table = new YataGrid(this, pfe, read);
 
-				int result = table.Load2da();
+				int result = table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
 					Table = table; // NOTE: Is done in tab_SelectedIndexChanged() also.
@@ -1004,7 +1004,7 @@ namespace yata
 				else if (Table == _diff2) _diff2 = null;
 
 
-				int result = Table.Load2da();
+				int result = Table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
 					Table._ur.Clear();
@@ -2070,7 +2070,7 @@ namespace yata
 					if (sel != null)
 					{
 						if (sel.text != _copytext)
-							Table.ChangeCellText(sel, _copytext);
+							Table.ChangeCellText(sel, _copytext); // does not do a text-check
 					}
 					else
 						CopyPasteCellError();
@@ -2293,7 +2293,7 @@ namespace yata
 				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
 				for (int i = 0; i != lines.Length; ++i)
 				{
-					string[] fields = YataGrid.Parse2daRow(lines[i]);
+					string[] fields = YataGrid.ParseTableRow(lines[i]);
 					_copy.Add(fields);
 				}
 			}
@@ -2474,7 +2474,7 @@ namespace yata
 						else if (Table == _diff2) _diff2 = null;
 
 						Table.colRewidth(0, 0, Table.RowCount - 1);
-						Table.UpdateFrozenControls(0);
+						Table.metricFrozenControls(0);
 
 						Table.InitScroll();
 
@@ -3027,10 +3027,10 @@ namespace yata
 			}
 
 			for (int c = 0; c != _diff1.ColCount; ++c)
-				_diff1.UpdateFrozenControls(c);
+				_diff1.metricFrozenControls(c);
 
 			for (int c = 0; c != _diff2.ColCount; ++c)
-				_diff2.UpdateFrozenControls(c);
+				_diff2.metricFrozenControls(c);
 
 			_diff1.InitScroll();
 			_diff2.InitScroll();
@@ -3545,7 +3545,7 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				if (sel != null)
 				{
-					Table.ChangeCellText(sel, Constants.Stars);
+					Table.ChangeCellText(sel, Constants.Stars); // does not do a text-check
 				}
 				else
 					CopyPasteCellError();
@@ -3572,7 +3572,7 @@ namespace yata
 				int c = src.x;
 
 				Cell dst = destTable[r,c];
-				destTable.ChangeCellText(dst, src.text);
+				destTable.ChangeCellText(dst, src.text); // does not do a text-check
 
 				_diff1[r,c].diff =
 				_diff2[r,c].diff = false;

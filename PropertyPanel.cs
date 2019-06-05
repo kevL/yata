@@ -362,7 +362,7 @@ namespace yata
 			Cell cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
 			{
-				_grid.ChangeCellText(cell, _editor);
+				_grid.ChangeCellText(cell, _editor); // does a text-check
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
 		}

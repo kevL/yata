@@ -494,7 +494,7 @@ namespace yata
 			_grid[r,c] = cell;
 
 			_grid.colRewidth(c, r);
-			_grid.UpdateFrozenControls(c);
+			_grid.metricFrozenControls(c);
 
 			_grid.ClearSelects();
 			cell.selected = true;

@@ -668,10 +668,10 @@ namespace yata
 		internal const int LOADRESULT_CHANGED = 2;
 
 		/// <summary>
-		/// Tries to load a 2da file.
+		/// Tries to load a 2da-file.
 		/// </summary>
 		/// <returns>a LOADRESULT_* val</returns>
-		internal int Load2da()
+		internal int LoadTable()
 		{
 			bool ignoreErrors = false;
 
@@ -692,7 +692,7 @@ namespace yata
 
 				if (i > LINE_COLHEADS)
 				{
-					string[] fields = Parse2daRow(line);
+					string[] fields = ParseTableRow(line);
 					if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 					{
 						++id; // test for well-formed, consistent IDs
@@ -926,12 +926,12 @@ namespace yata
 		/// </summary>
 		/// <param name="line"></param>
 		/// <returns></returns>
-		internal static string[] Parse2daRow(string line)
+		internal static string[] ParseTableRow(string line)
 		{
 			var list  = new List<string>();
 			var field = new List<char>();
 
-			bool add      = false;
+			bool @add     = false;
 			bool inQuotes = false;
 
 			char c;
@@ -941,7 +941,7 @@ namespace yata
 			{
 				if (pos == line.Length)						// hit lineend -> add the last field
 				{
-					if (add)
+					if (@add)
 					{
 						list.Add(new string(field.ToArray()));
 					}
@@ -954,17 +954,18 @@ namespace yata
 					{
 						inQuotes = (!inQuotes || c != '"');	// end quotation
 
-						add = true;
+						@add = true;
 						field.Add(c);
 					}
 					else if (c != ' ' && c != '\t')			// any non-whitespace char (except double-quote)
+//					else if (!Char.IsWhiteSpace(c))
 					{
-						add = true;
+						@add = true;
 						field.Add(c);
 					}
-					else if (add)							// hit a space or tab
+					else if (@add)							// hit a space or tab
 					{
-						add = false;
+						@add = false;
 						list.Add(new string(field.ToArray()));
 
 						field.Clear();
@@ -1031,9 +1032,9 @@ namespace yata
 			CreateRows();
 
 			FrozenPanel = new YataPanelFrozen(this, Cols[0].width());
-			FrozenLabelsInit();
+			initFrozenLabels();
 
-			SetStaticHeads();
+			metricStaticHeads();
 
 			Controls.Add(FrozenPanel);
 			Controls.Add(_panelRows);
@@ -1045,9 +1046,6 @@ namespace yata
 			InitScroll();
 
 			Select();
-
-			CheckCellTexts();
-
 			_init = false;
 		}
 
@@ -1070,7 +1068,7 @@ namespace yata
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
-			SetStaticHeads();
+			metricStaticHeads();
 
 
 			_scrollVert.LargeChange =
@@ -1091,18 +1089,16 @@ namespace yata
 			int c = 0;
 			if (!calibrate)
 			{
-				ColCount = Fields.Length + 1; // 'Fields' does not include rowhead and id-col
+				ColCount = Fields.Length + 1; // 'Fields' does not include rowhead or id-col
 
 				for (; c != ColCount; ++c)
-				{
 					Cols.Add(new Col());
-				}
 
 				Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
 			}
 
 			int w; c = 0;
-			foreach (string head in Fields) // colheads only.
+			foreach (string head in Fields) // set initial col-widths based on colheads only ->
 			{
 				++c; // start at col 1 - skip id col
 
@@ -1117,7 +1113,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Creates the rows and adds cells to each row.
+		/// Creates the rows and adds cells to each row. Also determines each
+		/// cell's 'loadchanged' bool.
 		/// </summary>
 		void CreateRows()
 		{
@@ -1126,7 +1123,7 @@ namespace yata
 			Cell cell;
 			string text = String.Empty;
 			Brush brush;
-			bool stars, changed = false;
+			bool loadchanged, changed = false;
 
 			for (int r = 0; r != RowCount; ++r)
 			{
@@ -1138,23 +1135,25 @@ namespace yata
 				Rows.Add(new Row(r, ColCount, brush, this));
 				for (int c = 0; c != ColCount; ++c)
 				{
+					loadchanged = false;
 					if (c < _rows[r].Length)
 					{
 						text = _rows[r][c];
-						stars = false;
+						if (CheckLoadField(ref text))
+						{
+							changed =
+							loadchanged = true;
+						}
 					}
 					else
 					{
 						text = Constants.Stars;
-						stars = true;
+						changed =
+						loadchanged = true;
 					}
 
 					cell = (this[r,c] = new Cell(r,c, text));
-					if (stars)
-					{
-						cell.loadchanged = true;
-						changed = true;
-					}
+					cell.loadchanged = loadchanged;
 				}
 			}
 			Changed |= changed;
@@ -1162,7 +1161,7 @@ namespace yata
 			_rows.Clear(); // done w/ '_rows'
 
 
-			int w, wT;
+			int w, wT; // adjust col-widths based on fields ->
 
 			for (int c = 0; c != ColCount; ++c)
 			{
@@ -1185,7 +1184,7 @@ namespace yata
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
 		/// </summary>
-		void FrozenLabelsInit()
+		void initFrozenLabels()
 		{
 			_labelid    .Visible =
 			_labelfirst .Visible =
@@ -1265,7 +1264,7 @@ namespace yata
 		/// Calculates and maintains rowhead width wrt/ current Font across all
 		/// tabs/tables.
 		/// </summary>
-		void SetStaticHeads()
+		void metricStaticHeads()
 		{
 			YataGrid table;
 
@@ -1301,11 +1300,11 @@ namespace yata
 				table._panelRows.Width  = WidthRowhead;
 				table._panelCols.Height = HeightColhead;
 
-				FrozenLabelsSet(table);
+				metricFrozenLabels(table);
 			}
 		}
 
-		internal void FrozenLabelsSet(YataGrid table = null)
+		internal void metricFrozenLabels(YataGrid table = null)
 		{
 			if (table == null) table = this;
 
@@ -1334,11 +1333,11 @@ namespace yata
 		/// Re-widths any frozen-labels and the frozen-panel if they need it.
 		/// </summary>
 		/// <param name="c">col that changed its width</param>
-		internal void UpdateFrozenControls(int c)
+		internal void metricFrozenControls(int c)
 		{
 			if (c < FreezeSecond)
 			{
-				FrozenLabelsSet(); // re-width the frozen-labels on the colhead
+				metricFrozenLabels(); // re-width the frozen-labels on the colhead
 
 				if (c < FrozenCount)
 					FrozenCount = FrozenCount; // re-width the frozen-panel
@@ -1932,7 +1931,7 @@ namespace yata
 		{
 			if (_editor.Text != _editcell.text)
 			{
-				ChangeCellText(_editcell, _editor);
+				ChangeCellText(_editcell, _editor); // does a text-check
 
 				if (Propanel != null && Propanel.Visible)
 					Invalidator(INVALID_PROP);
@@ -1941,6 +1940,7 @@ namespace yata
 
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
+		/// @note Performs a text-check.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="tb">the editor's textbox whose text to check for validity</param>
@@ -1967,7 +1967,7 @@ namespace yata
 			cell.text = tb.Text;
 
 			colRewidth(cell.x, cell.y);
-			UpdateFrozenControls(cell.x);
+			metricFrozenControls(cell.x);
 
 
 			rest.postext = cell.text;
@@ -1976,6 +1976,7 @@ namespace yata
 
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
+		/// @note Does *not* perform a text-check.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="text">the text to change to</param>
@@ -1995,7 +1996,7 @@ namespace yata
 			cell.text = text;
 
 			colRewidth(cell.x, cell.y);
-			UpdateFrozenControls(cell.x);
+			metricFrozenControls(cell.x);
 
 			int invalid = INVALID_GRID;
 			if (Propanel != null && Propanel.Visible)
@@ -2071,7 +2072,7 @@ namespace yata
 
 		/// <summary>
 		/// Checks the text that user submits to a cell.
-		/// Cf CheckCellText().
+		/// Cf CheckLoadField().
 		/// </summary>
 		/// <param name="tb"></param>
 		/// <returns>true if text is changed/fixed/corrected</returns>
@@ -2087,6 +2088,9 @@ namespace yata
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
+			if (field != tb.Text)
+				changed = true;
+
 			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
 			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
 			if (quoteFirst && quoteLast)
@@ -2112,7 +2116,6 @@ namespace yata
 					return true;
 				}
 
-				tb.Text = field;
 				changed = true;
 			}
 
@@ -2127,7 +2130,7 @@ namespace yata
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					tb.Text = first + test + last;
+					field = first + test + last;
 				}
 
 				if (test == Constants.Stars)
@@ -2137,51 +2140,42 @@ namespace yata
 				}
 			}
 
-			return changed;
-		}
-
-		/// <summary>
-		/// Checks the texts in all cells. Used only when loading or re-loading
-		/// a 2da - it can flag a cell's 'loadchanged' variable.
-		/// </summary>
-		void CheckCellTexts()
-		{
-			bool changed = false;
-
-			Cell cell;
-			foreach (var row in Rows)
+			if (!field.Contains("\""))
 			{
-				for (int c = 0; c != ColCount; ++c)
+				char[] chars = field.ToCharArray();
+				for (int pos = 0; pos != chars.Length; ++pos)
 				{
-					string text = (cell = row[c]).text;
-					if (CheckCellText(ref text))
+					if (Char.IsWhiteSpace(chars[pos]))
 					{
-						cell.text = text;
-						cell.loadchanged = true;
 						changed = true;
+						field = "\"" + field + "\"";
+						break;
 					}
 				}
 			}
-			Changed |= changed;
+
+			tb.Text = field;
+			return changed;
 		}
 
 		/// <summary>
 		/// Checks the text in a cell.
 		/// Cf CheckTextEdit().
 		/// </summary>
-		/// <param name="text">ref to a text-string</param>
+		/// <param name="field">ref to a text-string</param>
 		/// <returns>true if text is changed/fixed/corrected</returns>
-		bool CheckCellText(ref string text)
+		bool CheckLoadField(ref string field)
 		{
 			bool changed = false;
 
-			string field = text.Trim();
-
-			if (String.IsNullOrEmpty(field))
-			{
-				text = Constants.Stars;
-				return true;
-			}
+//			string field = text.Trim(); // this ought be redundant during file-load -->
+//			if (String.IsNullOrEmpty(field))
+//			{
+//				text = Constants.Stars;
+//				return true;
+//			}
+//			if (field != text)
+//				changed = true;
 
 			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
 			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
@@ -2190,7 +2184,7 @@ namespace yata
 				if (   field.Length < 3
 					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
 				{
-					text = Constants.Stars;
+					field = Constants.Stars;
 					return true;
 				}
 			}
@@ -2204,11 +2198,10 @@ namespace yata
 
 				if (field.Length == 2)
 				{
-					text = Constants.Stars;
+					field = Constants.Stars;
 					return true;
 				}
 
-				text = field;
 				changed = true;
 			}
 
@@ -2223,13 +2216,27 @@ namespace yata
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					text = first + test + last;
+					field = first + test + last;
 				}
 
 				if (test == Constants.Stars)
 				{
-					text = Constants.Stars;
-					changed = true;
+					field = Constants.Stars;
+					return true;
+				}
+			}
+
+			if (!field.Contains("\""))
+			{
+				char[] chars = field.ToCharArray();
+				for (int pos = 0; pos != chars.Length; ++pos)
+				{
+					if (Char.IsWhiteSpace(chars[pos]))
+					{
+						changed = true;
+						field = "\"" + field + "\"";
+						break;
+					}
 				}
 			}
 
