@@ -139,23 +139,23 @@ namespace yata
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
 
-				statusbar_label_Cords.Font.Dispose();
-				statusbar_label_Cords.Font = new Font(Settings._font2.FontFamily,
-													  Settings._font2.SizeInPoints - 0.5f);
+				statbar_lblCords.Font.Dispose();
+				statbar_lblCords.Font = new Font(Settings._font2.FontFamily,
+												 Settings._font2.SizeInPoints - 0.5f);
 
-				statusbar_label_Info.Font.Dispose();
-				statusbar_label_Info.Font = new Font(Settings._font2.FontFamily,
-													 Settings._font2.SizeInPoints + 1.0f);
+				statbar_lblInfo.Font.Dispose();
+				statbar_lblInfo.Font = new Font(Settings._font2.FontFamily,
+												Settings._font2.SizeInPoints + 1.0f);
 
-				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statusbar_label_Info.Font) + 2;
+				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statbar_lblInfo.Font) + 2;
 
-				statusbar            .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
-				statusbar_label_Cords.Height =
-				statusbar_label_Info .Height = (hBar     < 17) ? 17 : hBar;
+				statusbar       .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
+				statbar_lblCords.Height =
+				statbar_lblInfo .Height = (hBar     < 17) ? 17 : hBar;
 
-				int wCords0 = statusbar_label_Cords.Width;
-				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statusbar_label_Info.Font) + 10;
-				statusbar_label_Cords.Width = (wCords < wCords0) ? wCords0 : wCords;
+				int wCords0 = statbar_lblCords.Width;
+				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblInfo.Font) + 10;
+				statbar_lblCords.Width = (wCords < wCords0) ? wCords0 : wCords;
 
 
 				context_it_Header.Font.Dispose();
@@ -204,7 +204,7 @@ namespace yata
 
 			if (File.Exists(pfe_load))
 			{
-				CreateTabPage(pfe_load);
+				CreatePage(pfe_load);
 			}
 			else
 				ShowColorPanel();
@@ -440,7 +440,7 @@ namespace yata
 					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
 					if (File.Exists(pfe_load))
 					{
-						CreateTabPage(pfe_load);
+						CreatePage(pfe_load);
 					}
 				}
 			}
@@ -567,7 +567,7 @@ namespace yata
 				{
 					bool read = ofd.ReadOnlyChecked;
 					foreach (var pfe in ofd.FileNames)
-						CreateTabPage(pfe, read);
+						CreatePage(pfe, read);
 				}
 			}
 		}
@@ -588,7 +588,7 @@ namespace yata
 		/// </summary>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly (default false)</param>
-		void CreateTabPage(string pfe, bool read = false)
+		void CreatePage(string pfe, bool read = false)
 		{
 			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
@@ -3393,32 +3393,32 @@ namespace yata
 
 				if (id < Table.RowCount && col < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
 				{
-					statusbar_label_Cords.Text = "id= " + id + " col= " + col;
+					statbar_lblCords.Text = "id= " + id + " col= " + col;
 
 					switch (Table.Info)
 					{
 						case YataGrid.InfoType.INFO_CRAFT:
-							statusbar_label_Info.Text = getCraftInfo(id, col);
+							statbar_lblInfo.Text = getCraftInfo(id, col);
 							break;
 						case YataGrid.InfoType.INFO_SPELL:
-							statusbar_label_Info.Text = getSpellInfo(id, col);
+							statbar_lblInfo.Text = getSpellInfo(id, col);
 							break;
 
 						default:
-							statusbar_label_Info.Text = st;
+							statbar_lblInfo.Text = st;
 							break;
 					}
 				}
 				else
 				{
-					statusbar_label_Cords.Text =
-					statusbar_label_Info .Text = st;
+					statbar_lblCords.Text =
+					statbar_lblInfo .Text = st;
 				}
 			}
 			else
 			{
-				statusbar_label_Cords.Text =
-				statusbar_label_Info .Text = st;
+				statbar_lblCords.Text =
+				statbar_lblInfo .Text = st;
 			}
 		}
 		#endregion Statusbar
@@ -3435,7 +3435,7 @@ namespace yata
 		{
 			var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 			foreach (string file in files)
-				CreateTabPage(file);
+				CreatePage(file);
 		}
 		#endregion DragDrop file(s)
 

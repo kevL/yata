@@ -149,8 +149,8 @@ namespace yata
 		ToolStripMenuItem it_cellMergeRo;
 
 		StatusStrip statusbar;
-		ToolStripStatusLabel statusbar_label_Cords;
-		ToolStripStatusLabel statusbar_label_Info;
+		ToolStripStatusLabel statbar_lblCords;
+		ToolStripStatusLabel statbar_lblInfo;
 
 		Panel panel_ColorFill;
 
@@ -286,8 +286,8 @@ namespace yata
 			this.separator_10 = new System.Windows.Forms.ToolStripSeparator();
 			this.context_it_DeleteRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
-			this.statusbar_label_Cords = new System.Windows.Forms.ToolStripStatusLabel();
-			this.statusbar_label_Info = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_lblCords = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.cellMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_cellEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -1224,30 +1224,30 @@ namespace yata
 			// 
 			this.statusbar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.statusbar_label_Cords,
-			this.statusbar_label_Info});
+			this.statbar_lblCords,
+			this.statbar_lblInfo});
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(842, 22);
 			this.statusbar.TabIndex = 1;
 			// 
-			// statusbar_label_Cords
+			// statbar_lblCords
 			// 
-			this.statusbar_label_Cords.AutoSize = false;
-			this.statusbar_label_Cords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statusbar_label_Cords.Font = new System.Drawing.Font("Verdana", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.statusbar_label_Cords.Name = "statusbar_label_Cords";
-			this.statusbar_label_Cords.Size = new System.Drawing.Size(160, 17);
-			this.statusbar_label_Cords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statbar_lblCords.AutoSize = false;
+			this.statbar_lblCords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statbar_lblCords.Font = new System.Drawing.Font("Verdana", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_lblCords.Name = "statbar_lblCords";
+			this.statbar_lblCords.Size = new System.Drawing.Size(160, 17);
+			this.statbar_lblCords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// statusbar_label_Info
+			// statbar_lblInfo
 			// 
-			this.statusbar_label_Info.AutoSize = false;
-			this.statusbar_label_Info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statusbar_label_Info.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.statusbar_label_Info.Name = "statusbar_label_Info";
-			this.statusbar_label_Info.Size = new System.Drawing.Size(640, 17);
-			this.statusbar_label_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statbar_lblInfo.AutoSize = false;
+			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_lblInfo.Name = "statbar_lblInfo";
+			this.statbar_lblInfo.Size = new System.Drawing.Size(640, 17);
+			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill
 			// 
@@ -1273,7 +1273,7 @@ namespace yata
 			this.it_cellMergeRo});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 176);
+			this.cellMenu.Size = new System.Drawing.Size(165, 154);
 			// 
 			// it_cellEdit
 			// 
