@@ -2523,7 +2523,7 @@ namespace yata
 				for (int id = 0; id != Table.RowCount; ++id)
 				{
 					brush = (id % 2 == 0) ? Brushes.Alice
-										  : Brushes.Blanche;
+										  : Brushes.Bob;
 
 					(row = Table.Rows[id])._brush = brush;
 

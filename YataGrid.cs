@@ -1130,7 +1130,7 @@ namespace yata
 				changed = changed || (_rows[r].Length > ColCount); // flag Changed if any field(s) get cut off.
 
 				brush = (r % 2 == 0) ? Brushes.Alice
-									 : Brushes.Blanche;
+									 : Brushes.Bob;
 
 				Rows.Add(new Row(r, ColCount, brush, this));
 				for (int c = 0; c != ColCount; ++c)

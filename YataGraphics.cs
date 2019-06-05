@@ -89,7 +89,7 @@ namespace yata
 	{
 		// table
 		internal static readonly Brush Alice       = new SolidBrush(Color.AliceBlue);
-		internal static readonly Brush Blanche     = new SolidBrush(Color.BlanchedAlmond);
+		internal static readonly Brush Bob         = new SolidBrush(Color.BlanchedAlmond);
 		internal static readonly Brush Created     = new SolidBrush(SystemColors.ControlLight);
 
 		internal static readonly Brush Selected    = new SolidBrush(Color.PaleGreen);
