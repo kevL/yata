@@ -58,6 +58,7 @@ namespace yata
 					case MetaMagic:
 						ColType = MetaMagic;
 						Text = " MetaMagic";
+						setVisibleMetamagicTypes();
 
 						cb_00.Text = "(1)Empower";
 						cb_01.Text = "(2)Extend";
@@ -68,36 +69,30 @@ namespace yata
 						cb_06.Text = "(64)Persistent";
 						cb_07.Text = "(128)Permanent";
 
-						cb_08.Text = "Draining Blast";		//(256) // Invocation Shapes and Essences ->
-						cb_09.Text = "Eldritch Spear";		//(512)
-						cb_10.Text = "Frightful Blast";		//(1024)
-						cb_11.Text = "Hideous Blow";		//(2048)
-						cb_12.Text = "Beshadowed Blast";	//(4096)
-						cb_13.Text = "Brimstone Blast";		//(8192)
-						cb_14.Text = "Eldritch Chain";		//(16384)
-						cb_15.Text = "Hellrime Blast";		//(32768)
-						cb_16.Text = "Bewitching Blast";	//(65536)
-						cb_17.Text = "Eldritch Cone";		//(131072)
-						cb_18.Text = "Noxious Blast";		//(262144)
-						cb_19.Text = "Vitriolic Blast";		//(524288)
-						cb_20.Text = "Eldritch Doom";		//(1048576)
-						cb_21.Text = "Utterdark Blast";		//(2097152)
-						cb_22.Text = "Hindering Blast";		//(4194304)
-						cb_23.Text = "Binding Blast";		//(8388608)
+						cb_08.Text = "Draining Blast";		//(256) // Eldritch Essences ->
+						cb_09.Text = "Frightful Blast";		//(1024)
+						cb_10.Text = "Beshadowed Blast";	//(4096)
+						cb_11.Text = "Brimstone Blast";		//(8192)
+						cb_12.Text = "Hellrime Blast";		//(32768)
+						cb_13.Text = "Bewitching Blast";	//(65536)
+						cb_14.Text = "Noxious Blast";		//(262144)
+						cb_15.Text = "Vitriolic Blast";		//(524288)
+						cb_16.Text = "Utterdark Blast";		//(2097152)
+						cb_17.Text = "Hindering Blast";		//(4194304)
+						cb_18.Text = "Binding Blast";		//(8388608)
+
+						cb_19.Text = "Eldritch Spear";		//(512) // Invocation Shapes ->
+						cb_20.Text = "Hideous Blow";		//(2048)
+						cb_21.Text = "Eldritch Chain";		//(16384)
+						cb_22.Text = "Eldritch Cone";		//(131072)
+						cb_23.Text = "Eldritch Doom";		//(1048576)
 
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
 										   out result))
 						{
-							_f._original = result;
-
-							string format;
-							if (result <= 0xFF) format = "X2";
-							else                format = "X8";
-							lbl_Val.Text = "0x" + result.ToString(format);
-
-							setMetamagicVisible(result);
+							EnableMetamagicTypes(result);
 
 							cb_00.Checked = ((result & YataForm.META_EMPOWER)    != 0);
 							cb_01.Checked = ((result & YataForm.META_EXTEND)     != 0);
@@ -108,22 +103,23 @@ namespace yata
 							cb_06.Checked = ((result & YataForm.META_PERSISTENT) != 0);
 							cb_07.Checked = ((result & YataForm.META_PERMANENT)  != 0);
 
-							cb_08.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0); // Invocation Shapes and Essences ->
-							cb_09.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0);
-							cb_10.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
-							cb_11.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
-							cb_12.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0);
-							cb_13.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
-							cb_14.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0);
-							cb_15.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
-							cb_16.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
-							cb_17.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
-							cb_18.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
-							cb_19.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
-							cb_20.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
-							cb_21.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
-							cb_22.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
-							cb_23.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
+							cb_08.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0); // Eldritch Essences ->
+							cb_09.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
+							cb_10.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0);
+							cb_11.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
+							cb_12.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
+							cb_13.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
+							cb_14.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
+							cb_15.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
+							cb_16.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
+							cb_17.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
+							cb_18.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
+
+							cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0); // Invocation Shapes ->
+							cb_20.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
+							cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0);
+							cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
+							cb_23.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
 
 /*							switch (result)
 							{
@@ -134,11 +130,11 @@ namespace yata
 //									info += "ANY";
 									break;
 								case YataForm.META_I_ALL:
-//									info += "All Blast Shapes and Eldritch Essences";
+//									info += "All Eldritch Essences and Invocation Shapes";
 									break;
 								case YataForm.META_I_SHAPES:
 									// Eldritch Spear, Hideous Blow, Eldritch Chain, Eldritch Cone, Eldritch Doom
-//									info += "All Blast Shapes";
+//									info += "All Invocation Shapes";
 									break;
 								case YataForm.META_I_ESSENCES:
 									// Draining, Frightful, Beshadowed, Brimstone, Hellrime, Bewitching, Noxious,
@@ -147,11 +143,13 @@ namespace yata
 									break;
 							} */
 						}
+						SetInfoText(_f._original = result);
 						break;
 
 					case TargetType:
 						ColType = TargetType;
 						Text = " TargetType";
+						setVisibleTargetTypes();
 
 						cb_00.Text = "(1)Self";
 						cb_01.Text = "(2)Creatures";
@@ -166,17 +164,6 @@ namespace yata
 										   CultureInfo.InvariantCulture,
 										   out result))
 						{
-							_f._original = result;
-							lbl_Val.Text = "0x" + result.ToString("X2");
-
-							cb_00.Visible =
-							cb_01.Visible =
-							cb_02.Visible =
-							cb_03.Visible =
-							cb_04.Visible =
-							cb_05.Visible =
-							cb_06.Visible = true;
-
 							cb_00.Checked = ((result & YataForm.TARGET_SELF)       != 0);
 							cb_01.Checked = ((result & YataForm.TARGET_CREATURE)   != 0);
 							cb_02.Checked = ((result & YataForm.TARGET_GROUND)     != 0);
@@ -185,12 +172,60 @@ namespace yata
 							cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
 							cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
 						}
+						SetInfoText(_f._original = result);
 						break;
 				}
 			}
 		}
 
-		void setMetamagicVisible(int result)
+
+		void SetInfoText(int result)
+		{
+			string format;
+			switch (ColType)
+			{
+				case MetaMagic:
+					format = (result <= 0xFF) ? "X2" : "X8";
+					break;
+
+				default:
+				case TargetType:
+					format = "X2";
+					break;
+			}
+			lbl_Val.Text = "0x" + result.ToString(format);
+		}
+
+		void EnableMetamagicTypes(int result)
+		{
+			cb_00.Enabled =
+			cb_01.Enabled =
+			cb_02.Enabled =
+			cb_03.Enabled =
+			cb_04.Enabled =
+			cb_05.Enabled =
+			cb_06.Enabled =
+			cb_07.Enabled = (result <= 0xFF);
+
+			cb_08.Enabled = // Eldritch Essences and Invocation Shapes ->
+			cb_09.Enabled =
+			cb_10.Enabled =
+			cb_11.Enabled =
+			cb_12.Enabled =
+			cb_13.Enabled =
+			cb_14.Enabled =
+			cb_15.Enabled =
+			cb_16.Enabled =
+			cb_17.Enabled =
+			cb_18.Enabled =
+			cb_19.Enabled =
+			cb_20.Enabled =
+			cb_21.Enabled =
+			cb_22.Enabled =
+			cb_23.Enabled = (result == 0x00 || result > 0xFF);
+		}
+
+		void setVisibleMetamagicTypes()
 		{
 			cb_00.Visible =
 			cb_01.Visible =
@@ -199,9 +234,9 @@ namespace yata
 			cb_04.Visible =
 			cb_05.Visible =
 			cb_06.Visible =
-			cb_07.Visible = (result <= 0xFF);
+			cb_07.Visible =
 
-			cb_08.Visible =
+			cb_08.Visible = // Eldritch Essences and Invocation Shapes ->
 			cb_09.Visible =
 			cb_10.Visible =
 			cb_11.Visible =
@@ -216,7 +251,18 @@ namespace yata
 			cb_20.Visible =
 			cb_21.Visible =
 			cb_22.Visible =
-			cb_23.Visible = (result == 0x00 || result > 0xFF);
+			cb_23.Visible = true;
+		}
+
+		void setVisibleTargetTypes()
+		{
+			cb_00.Visible =
+			cb_01.Visible =
+			cb_02.Visible =
+			cb_03.Visible =
+			cb_04.Visible =
+			cb_05.Visible =
+			cb_06.Visible = true;
 		}
 		#endregion Methods
 
@@ -319,95 +365,91 @@ namespace yata
 				else            _grid._f._input &= ~YataForm.META_PERMANENT;
 			}
 
-			else if (cb == cb_08) // Invocation Shapes and Essences ->
+			else if (cb == cb_08) // Eldritch Essences and Invocation Shapes ->
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_DRAINING_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_DRAINING_BLAST;
 			}
 			else if (cb == cb_09)
 			{
-				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_SPEAR;
-				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_SPEAR;
-			}
-			else if (cb == cb_10)
-			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_FRIGHTFUL_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_FRIGHTFUL_BLAST;
 			}
-			else if (cb == cb_11)
-			{
-				if (cb.Checked) _grid._f._input |=  YataForm.META_I_HIDEOUS_BLOW;
-				else            _grid._f._input &= ~YataForm.META_I_HIDEOUS_BLOW;
-			}
-			else if (cb == cb_12)
+			else if (cb == cb_10)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_BESHADOWED_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_BESHADOWED_BLAST;
 			}
-			else if (cb == cb_13)
+			else if (cb == cb_11)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_BRIMSTONE_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_BRIMSTONE_BLAST;
 			}
-			else if (cb == cb_14)
-			{
-				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_CHAIN;
-				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_CHAIN;
-			}
-			else if (cb == cb_15)
+			else if (cb == cb_12)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_HELLRIME_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_HELLRIME_BLAST;
 			}
-			else if (cb == cb_16)
+			else if (cb == cb_13)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_BEWITCHING_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_BEWITCHING_BLAST;
 			}
-			else if (cb == cb_17)
-			{
-				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_CONE;
-				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_CONE;
-			}
-			else if (cb == cb_18)
+			else if (cb == cb_14)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_NOXIOUS_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_NOXIOUS_BLAST;
 			}
-			else if (cb == cb_19)
+			else if (cb == cb_15)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_VITRIOLIC_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_VITRIOLIC_BLAST;
 			}
-			else if (cb == cb_20)
-			{
-				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_DOOM;
-				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_DOOM;
-			}
-			else if (cb == cb_21)
+			else if (cb == cb_16)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_UTTERDARK_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_UTTERDARK_BLAST;
 			}
-			else if (cb == cb_22)
+			else if (cb == cb_17)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_HINDERING_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_HINDERING_BLAST;
 			}
-			else if (cb == cb_23)
+			else if (cb == cb_18)
 			{
 				if (cb.Checked) _grid._f._input |=  YataForm.META_I_BINDING_BLAST;
 				else            _grid._f._input &= ~YataForm.META_I_BINDING_BLAST;
 			}
 
+			else if (cb == cb_19)
+			{
+				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_SPEAR;
+				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_SPEAR;
+			}
+			else if (cb == cb_20)
+			{
+				if (cb.Checked) _grid._f._input |=  YataForm.META_I_HIDEOUS_BLOW;
+				else            _grid._f._input &= ~YataForm.META_I_HIDEOUS_BLOW;
+			}
+			else if (cb == cb_21)
+			{
+				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_CHAIN;
+				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_CHAIN;
+			}
+			else if (cb == cb_22)
+			{
+				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_CONE;
+				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_CONE;
+			}
+			else if (cb == cb_23)
+			{
+				if (cb.Checked) _grid._f._input |=  YataForm.META_I_ELDRITCH_DOOM;
+				else            _grid._f._input &= ~YataForm.META_I_ELDRITCH_DOOM;
+			}
+
 			int result = _grid._f._input;
-
-			string format;
-			if (result <= 0xFF) format = "X2";
-			else                format = "X8";
-			lbl_Val.Text = "0x" + result.ToString(format);
-
-			setMetamagicVisible(result);
+			SetInfoText(result);
+			EnableMetamagicTypes(result);
 		}
 
 		//internal const int TARGET_NONE       = 0x00; //  0
@@ -457,7 +499,7 @@ namespace yata
 			}
 
 			int result = _grid._f._input;
-			lbl_Val.Text = "0x" + result.ToString("X2");
+			SetInfoText(result);
 		}
 
 /*		void click_Accept(object sender, EventArgs e)

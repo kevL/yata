@@ -639,11 +639,11 @@ namespace yata
 									info += "ANY";
 									break;
 								case META_I_ALL:
-									info += "All Blast Shapes and Eldritch Essences";
+									info += "All Eldritch Essences and Invocation Shapes";
 									break;
 								case META_I_SHAPES:
 									// Eldritch Spear, Hideous Blow, Eldritch Chain, Eldritch Cone, Eldritch Doom
-									info += "All Blast Shapes";
+									info += "All Invocation Shapes";
 									break;
 								case META_I_ESSENCES:
 									// Draining, Frightful, Beshadowed, Brimstone, Hellrime, Bewitching, Noxious,
