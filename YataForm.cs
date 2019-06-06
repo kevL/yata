@@ -3709,7 +3709,7 @@ namespace yata
 			{
 				string format;
 				if (_input <= 0xFF) format = "X2";
-				else                format = "X8";
+				else                format = "X6";
 
 				Table.ChangeCellText(Table.getSelectedCell(), // does not do a text-check
 									 "0x" + _input.ToString(format));

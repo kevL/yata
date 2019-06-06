@@ -185,7 +185,7 @@ namespace yata
 			switch (ColType)
 			{
 				case MetaMagic:
-					format = (result <= 0xFF) ? "X2" : "X8";
+					format = (result <= 0xFF) ? "X2" : "X6";
 					break;
 
 				default:
@@ -584,7 +584,7 @@ namespace yata
 			// 
 			// cb_00
 			// 
-			this.cb_00.Location = new System.Drawing.Point(5, 25);
+			this.cb_00.Location = new System.Drawing.Point(10, 25);
 			this.cb_00.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_00.Name = "cb_00";
 			this.cb_00.Size = new System.Drawing.Size(120, 20);
@@ -596,7 +596,7 @@ namespace yata
 			// 
 			// cb_01
 			// 
-			this.cb_01.Location = new System.Drawing.Point(5, 45);
+			this.cb_01.Location = new System.Drawing.Point(10, 45);
 			this.cb_01.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_01.Name = "cb_01";
 			this.cb_01.Size = new System.Drawing.Size(120, 20);
@@ -608,7 +608,7 @@ namespace yata
 			// 
 			// cb_02
 			// 
-			this.cb_02.Location = new System.Drawing.Point(5, 65);
+			this.cb_02.Location = new System.Drawing.Point(10, 65);
 			this.cb_02.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_02.Name = "cb_02";
 			this.cb_02.Size = new System.Drawing.Size(120, 20);
@@ -620,7 +620,7 @@ namespace yata
 			// 
 			// cb_03
 			// 
-			this.cb_03.Location = new System.Drawing.Point(5, 85);
+			this.cb_03.Location = new System.Drawing.Point(10, 85);
 			this.cb_03.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_03.Name = "cb_03";
 			this.cb_03.Size = new System.Drawing.Size(120, 20);
@@ -632,7 +632,7 @@ namespace yata
 			// 
 			// cb_04
 			// 
-			this.cb_04.Location = new System.Drawing.Point(5, 105);
+			this.cb_04.Location = new System.Drawing.Point(10, 105);
 			this.cb_04.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_04.Name = "cb_04";
 			this.cb_04.Size = new System.Drawing.Size(120, 20);
@@ -644,7 +644,7 @@ namespace yata
 			// 
 			// cb_05
 			// 
-			this.cb_05.Location = new System.Drawing.Point(5, 125);
+			this.cb_05.Location = new System.Drawing.Point(10, 125);
 			this.cb_05.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_05.Name = "cb_05";
 			this.cb_05.Size = new System.Drawing.Size(120, 20);
@@ -656,7 +656,7 @@ namespace yata
 			// 
 			// cb_06
 			// 
-			this.cb_06.Location = new System.Drawing.Point(5, 145);
+			this.cb_06.Location = new System.Drawing.Point(10, 145);
 			this.cb_06.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_06.Name = "cb_06";
 			this.cb_06.Size = new System.Drawing.Size(120, 20);
@@ -668,7 +668,7 @@ namespace yata
 			// 
 			// cb_07
 			// 
-			this.cb_07.Location = new System.Drawing.Point(5, 165);
+			this.cb_07.Location = new System.Drawing.Point(10, 165);
 			this.cb_07.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_07.Name = "cb_07";
 			this.cb_07.Size = new System.Drawing.Size(120, 20);
@@ -706,7 +706,7 @@ namespace yata
 			// 
 			// cb_15
 			// 
-			this.cb_15.Location = new System.Drawing.Point(130, 165);
+			this.cb_15.Location = new System.Drawing.Point(135, 165);
 			this.cb_15.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_15.Name = "cb_15";
 			this.cb_15.Size = new System.Drawing.Size(120, 20);
@@ -718,7 +718,7 @@ namespace yata
 			// 
 			// cb_14
 			// 
-			this.cb_14.Location = new System.Drawing.Point(130, 145);
+			this.cb_14.Location = new System.Drawing.Point(135, 145);
 			this.cb_14.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_14.Name = "cb_14";
 			this.cb_14.Size = new System.Drawing.Size(120, 20);
@@ -730,7 +730,7 @@ namespace yata
 			// 
 			// cb_13
 			// 
-			this.cb_13.Location = new System.Drawing.Point(130, 125);
+			this.cb_13.Location = new System.Drawing.Point(135, 125);
 			this.cb_13.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_13.Name = "cb_13";
 			this.cb_13.Size = new System.Drawing.Size(120, 20);
@@ -742,7 +742,7 @@ namespace yata
 			// 
 			// cb_12
 			// 
-			this.cb_12.Location = new System.Drawing.Point(130, 105);
+			this.cb_12.Location = new System.Drawing.Point(135, 105);
 			this.cb_12.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_12.Name = "cb_12";
 			this.cb_12.Size = new System.Drawing.Size(120, 20);
@@ -754,7 +754,7 @@ namespace yata
 			// 
 			// cb_11
 			// 
-			this.cb_11.Location = new System.Drawing.Point(130, 85);
+			this.cb_11.Location = new System.Drawing.Point(135, 85);
 			this.cb_11.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_11.Name = "cb_11";
 			this.cb_11.Size = new System.Drawing.Size(120, 20);
@@ -766,7 +766,7 @@ namespace yata
 			// 
 			// cb_10
 			// 
-			this.cb_10.Location = new System.Drawing.Point(130, 65);
+			this.cb_10.Location = new System.Drawing.Point(135, 65);
 			this.cb_10.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_10.Name = "cb_10";
 			this.cb_10.Size = new System.Drawing.Size(120, 20);
@@ -778,7 +778,7 @@ namespace yata
 			// 
 			// cb_09
 			// 
-			this.cb_09.Location = new System.Drawing.Point(130, 45);
+			this.cb_09.Location = new System.Drawing.Point(135, 45);
 			this.cb_09.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_09.Name = "cb_09";
 			this.cb_09.Size = new System.Drawing.Size(120, 20);
@@ -790,7 +790,7 @@ namespace yata
 			// 
 			// cb_08
 			// 
-			this.cb_08.Location = new System.Drawing.Point(130, 25);
+			this.cb_08.Location = new System.Drawing.Point(135, 25);
 			this.cb_08.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_08.Name = "cb_08";
 			this.cb_08.Size = new System.Drawing.Size(120, 20);
@@ -802,7 +802,7 @@ namespace yata
 			// 
 			// cb_23
 			// 
-			this.cb_23.Location = new System.Drawing.Point(255, 165);
+			this.cb_23.Location = new System.Drawing.Point(260, 165);
 			this.cb_23.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_23.Name = "cb_23";
 			this.cb_23.Size = new System.Drawing.Size(120, 20);
@@ -814,7 +814,7 @@ namespace yata
 			// 
 			// cb_22
 			// 
-			this.cb_22.Location = new System.Drawing.Point(255, 145);
+			this.cb_22.Location = new System.Drawing.Point(260, 145);
 			this.cb_22.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_22.Name = "cb_22";
 			this.cb_22.Size = new System.Drawing.Size(120, 20);
@@ -826,7 +826,7 @@ namespace yata
 			// 
 			// cb_21
 			// 
-			this.cb_21.Location = new System.Drawing.Point(255, 125);
+			this.cb_21.Location = new System.Drawing.Point(260, 125);
 			this.cb_21.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_21.Name = "cb_21";
 			this.cb_21.Size = new System.Drawing.Size(120, 20);
@@ -838,7 +838,7 @@ namespace yata
 			// 
 			// cb_20
 			// 
-			this.cb_20.Location = new System.Drawing.Point(255, 105);
+			this.cb_20.Location = new System.Drawing.Point(260, 105);
 			this.cb_20.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_20.Name = "cb_20";
 			this.cb_20.Size = new System.Drawing.Size(120, 20);
@@ -850,7 +850,7 @@ namespace yata
 			// 
 			// cb_19
 			// 
-			this.cb_19.Location = new System.Drawing.Point(255, 85);
+			this.cb_19.Location = new System.Drawing.Point(260, 85);
 			this.cb_19.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_19.Name = "cb_19";
 			this.cb_19.Size = new System.Drawing.Size(120, 20);
@@ -862,7 +862,7 @@ namespace yata
 			// 
 			// cb_18
 			// 
-			this.cb_18.Location = new System.Drawing.Point(255, 65);
+			this.cb_18.Location = new System.Drawing.Point(260, 65);
 			this.cb_18.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_18.Name = "cb_18";
 			this.cb_18.Size = new System.Drawing.Size(120, 20);
@@ -874,7 +874,7 @@ namespace yata
 			// 
 			// cb_17
 			// 
-			this.cb_17.Location = new System.Drawing.Point(255, 45);
+			this.cb_17.Location = new System.Drawing.Point(260, 45);
 			this.cb_17.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_17.Name = "cb_17";
 			this.cb_17.Size = new System.Drawing.Size(120, 20);
@@ -886,7 +886,7 @@ namespace yata
 			// 
 			// cb_16
 			// 
-			this.cb_16.Location = new System.Drawing.Point(255, 25);
+			this.cb_16.Location = new System.Drawing.Point(260, 25);
 			this.cb_16.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_16.Name = "cb_16";
 			this.cb_16.Size = new System.Drawing.Size(120, 20);
