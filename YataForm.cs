@@ -3566,7 +3566,8 @@ namespace yata
 			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged); // TODO: does that need !Readonly
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
-			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && sel.x == 8); // col #8 = "TargetType"
+			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL
+								  && (sel.x == 7 || sel.x == 8)); // #7=MetaMagic #8="TargetType"
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -3706,8 +3707,12 @@ namespace yata
 			if (f.ShowDialog(this) == DialogResult.OK
 				&& _input != _original)
 			{
+				string format;
+				if (_input <= 0xFF) format = "X2";
+				else                format = "X8";
+
 				Table.ChangeCellText(Table.getSelectedCell(), // does not do a text-check
-									 "0x" + _input.ToString("X2"));
+									 "0x" + _input.ToString(format));
 			}
 		}
 		#endregion Cell menu

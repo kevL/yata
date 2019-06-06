@@ -1135,38 +1135,38 @@ namespace yata
 		const int FEATSPELL_FEATS  = 0x00001111;
 
 		// MetaMagic
-		const int META_NONE               = 0x00000000; //        0
-		const int META_EMPOWER            = 0x00000001; //        1
-		const int META_EXTEND             = 0x00000002; //        2
-		const int META_MAXIMIZE           = 0x00000004; //        4
-		const int META_QUICKEN            = 0x00000008; //        8
-		const int META_SILENT             = 0x00000010; //       16
-		const int META_STILL              = 0x00000020; //       32
-		const int META_PERSISTENT         = 0x00000040; //       64
-		const int META_PERMANENT          = 0x00000080; //      128
+		internal const int META_NONE               = 0x00000000; //        0
+		internal const int META_EMPOWER            = 0x00000001; //        1
+		internal const int META_EXTEND             = 0x00000002; //        2
+		internal const int META_MAXIMIZE           = 0x00000004; //        4
+		internal const int META_QUICKEN            = 0x00000008; //        8
+		internal const int META_SILENT             = 0x00000010; //       16
+		internal const int META_STILL              = 0x00000020; //       32
+		internal const int META_PERSISTENT         = 0x00000040; //       64
+		internal const int META_PERMANENT          = 0x00000080; //      128
 
-		const int META_I_DRAINING_BLAST   = 0x00000100; //      256
-		const int META_I_ELDRITCH_SPEAR   = 0x00000200; //      512
-		const int META_I_FRIGHTFUL_BLAST  = 0x00000400; //     1024
-		const int META_I_HIDEOUS_BLOW     = 0x00000800; //     2048
-		const int META_I_BESHADOWED_BLAST = 0x00001000; //     4096
-		const int META_I_BRIMSTONE_BLAST  = 0x00002000; //     8192
-		const int META_I_ELDRITCH_CHAIN   = 0x00004000; //    16384
-		const int META_I_HELLRIME_BLAST   = 0x00008000; //    32768
-		const int META_I_BEWITCHING_BLAST = 0x00010000; //    65536
-		const int META_I_ELDRITCH_CONE    = 0x00020000; //   131072
-		const int META_I_NOXIOUS_BLAST    = 0x00040000; //   262144
-		const int META_I_VITRIOLIC_BLAST  = 0x00080000; //   524288
-		const int META_I_ELDRITCH_DOOM    = 0x00100000; //  1048576
-		const int META_I_UTTERDARK_BLAST  = 0x00200000; //  2097152
-		const int META_I_HINDERING_BLAST  = 0x00400000; //  4194304
-		const int META_I_BINDING_BLAST    = 0x00800000; //  8388608
+		internal const int META_I_DRAINING_BLAST   = 0x00000100; //      256
+		internal const int META_I_ELDRITCH_SPEAR   = 0x00000200; //      512
+		internal const int META_I_FRIGHTFUL_BLAST  = 0x00000400; //     1024
+		internal const int META_I_HIDEOUS_BLOW     = 0x00000800; //     2048
+		internal const int META_I_BESHADOWED_BLAST = 0x00001000; //     4096
+		internal const int META_I_BRIMSTONE_BLAST  = 0x00002000; //     8192
+		internal const int META_I_ELDRITCH_CHAIN   = 0x00004000; //    16384
+		internal const int META_I_HELLRIME_BLAST   = 0x00008000; //    32768
+		internal const int META_I_BEWITCHING_BLAST = 0x00010000; //    65536
+		internal const int META_I_ELDRITCH_CONE    = 0x00020000; //   131072
+		internal const int META_I_NOXIOUS_BLAST    = 0x00040000; //   262144
+		internal const int META_I_VITRIOLIC_BLAST  = 0x00080000; //   524288
+		internal const int META_I_ELDRITCH_DOOM    = 0x00100000; //  1048576
+		internal const int META_I_UTTERDARK_BLAST  = 0x00200000; //  2097152
+		internal const int META_I_HINDERING_BLAST  = 0x00400000; //  4194304
+		internal const int META_I_BINDING_BLAST    = 0x00800000; //  8388608
 
-		const int META_I_SHAPES           = 0x00124A00; //  1198592 - all blast shapes
-		const int META_I_ESSENCES         = 0x00EDB500; // 15578368 - all eldritch essences
-		const int META_I_ALL              = 0x00FFFF00; // 16776960 - all shapes and essences
+		internal const int META_I_SHAPES           = 0x00124A00; //  1198592 - all blast shapes
+		internal const int META_I_ESSENCES         = 0x00EDB500; // 15578368 - all eldritch essences
+		internal const int META_I_ALL              = 0x00FFFF00; // 16776960 - all shapes and essences
 
-		const int META_ANY                = unchecked((int)0xFFFFFFFF); // 4294967295 - the kitchen sink (not).
+		internal const int META_ANY                = unchecked((int)0xFFFFFFFF); // 4294967295 - the kitchen sink (not).
 
 		// TargetType
 		internal const int TARGET_NONE       = 0x00; //  0
