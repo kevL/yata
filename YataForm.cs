@@ -3566,11 +3566,22 @@ namespace yata
 			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged); // TODO: does that need !Readonly
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
-			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL
-								  && (sel.x == 7 || sel.x == 8)); // #7=MetaMagic #8="TargetType"
+			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
+		}
+
+		bool isInfoInputCol(int c)
+		{
+			switch (c)
+			{
+				case 4: // School
+				case 7: // MetaMagic
+				case 8: // TargetType
+					return true;
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -3699,21 +3710,45 @@ namespace yata
 			}
 		}
 
-		internal int _input, _original;
+		internal int intInput, intOriginal;
+		internal string stInput, stOriginal;
+
 		void cellclick_Input(object sender, EventArgs e)
 		{
-			_input = 0x00;
-			var f = new InfoHexDialog(Table);
-			if (f.ShowDialog(this) == DialogResult.OK
-				&& _input != _original)
-			{
-				string format;
-				if (_input <= 0xFF) format = "X2";
-				else                format = "X6";
+			Cell cell = Table.getSelectedCell();
+			Form f;
 
-				Table.ChangeCellText(Table.getSelectedCell(), // does not do a text-check
-									 "0x" + _input.ToString(format));
+			switch (cell.x)
+			{
+				case 7: // MetaMagic
+				case 8: // TargetType
+					// HEX Input ->
+					intInput = 0x00;
+					f = new InfoHexDialog(Table, cell);
+					if (f.ShowDialog(this) == DialogResult.OK
+						&& intInput != intOriginal)
+					{
+						string format;
+						if (intInput <= 0xFF) format = "X2";
+						else                  format = "X6";
+
+						Table.ChangeCellText(cell, // does not do a text-check
+											 "0x" + intInput.ToString(format));
+					}
+					break;
+
+				case 4: // School
+					// STRING Input ->
+					stInput = String.Empty;
+					f = new InfoHexDialog(Table, cell);
+					if (f.ShowDialog(this) == DialogResult.OK
+						&& stInput != stOriginal)
+					{
+						Table.ChangeCellText(cell, stInput);
+					}
+					break;
 			}
+
 		}
 		#endregion Cell menu
 	}
