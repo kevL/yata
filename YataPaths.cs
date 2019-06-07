@@ -625,10 +625,11 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val.Substring(2),
-										   NumberStyles.AllowHexSpecifier,
-										   CultureInfo.InvariantCulture,
-										   out result))
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier,
+											  CultureInfo.InvariantCulture,
+											  out result))
 						{
 							switch (result)
 							{
@@ -813,10 +814,11 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val.Substring(2),
-										   NumberStyles.AllowHexSpecifier,
-										   CultureInfo.InvariantCulture,
-										   out result))
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier,
+											  CultureInfo.InvariantCulture,
+											  out result))
 						{
 							switch (result)
 							{
@@ -1041,10 +1043,11 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val.Substring(2),
-										   NumberStyles.AllowHexSpecifier,
-										   CultureInfo.InvariantCulture,
-										   out result))
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier,
+											  CultureInfo.InvariantCulture,
+											  out result))
 						{
 							switch (result)
 							{

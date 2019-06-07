@@ -86,7 +86,7 @@ namespace yata
 						cb_22.Text = "Eldritch Cone";		//(131072)
 						cb_23.Text = "Eldritch Doom";		//(1048576)
 
-						if (val == Constants.Stars) val = "0x00";
+						if (val == Constants.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
@@ -138,7 +138,7 @@ namespace yata
 						cb_05.Text = "(32)Placeables";
 						cb_06.Text = "(64)Triggers";
 
-						if (val == Constants.Stars) val = "0x00";
+						if (val == Constants.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
