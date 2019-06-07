@@ -193,7 +193,8 @@ namespace yata
 				switch (ColType)
 				{
 					case MetaMagic:
-						format = (result <= 0xFF) ? "X2" : "X6";
+						if (result <= 0xFF) goto default;
+						format = "X6";
 						break;
 
 					default:
