@@ -3588,6 +3588,7 @@ namespace yata
 			switch (c)
 			{
 				case 4: // School
+				case 5: // Range
 				case 7: // MetaMagic
 				case 8: // TargetType
 					return true;
@@ -3749,6 +3750,7 @@ namespace yata
 					break;
 
 				case 4: // School
+				case 5: // Range
 					// STRING Input ->
 					stInput = String.Empty;
 					f = new InfoHexDialog(Table, cell);

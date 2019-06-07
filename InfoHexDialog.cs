@@ -12,6 +12,7 @@ namespace yata
 	{
 		#region Fields (static)
 		const int School     = 4;
+		const int Range      = 5;
 		const int MetaMagic  = 7;
 		const int TargetType = 8;
 		#endregion Fields (static)
@@ -23,6 +24,7 @@ namespace yata
 		Cell _cell;
 
 		int ColType;
+		bool _bypass;
 		#endregion Fields
 
 
@@ -40,13 +42,13 @@ namespace yata
 			else
 				Font = _f.Font;
 
-			texts();
+			init();
 		}
 		#endregion cTor
 
 
 		#region Methods
-		void texts()
+		void init()
 		{
 			string val = _cell.text;
 			if (!String.IsNullOrEmpty(val)) // safety.
@@ -54,6 +56,60 @@ namespace yata
 				int result;
 				switch (_cell.x)
 				{
+					case School:
+						ColType = School;
+						Text = " School";
+						setVisibleSchools();
+
+						cb_00.Text = "Abjuration";
+						cb_01.Text = "Conjuration";
+						cb_02.Text = "Divination";
+						cb_03.Text = "Enchantment";
+						cb_04.Text = "Illusion";
+						cb_05.Text = "Necromancy";
+						cb_06.Text = "Transmutation";
+						cb_07.Text = "Evocation";
+
+						switch (val)
+						{
+							case "A": cb_00.Checked = true; break;
+							case "C": cb_01.Checked = true; break;
+							case "D": cb_02.Checked = true; break;
+							case "E": cb_03.Checked = true; break;
+							case "I": cb_04.Checked = true; break;
+							case "N": cb_05.Checked = true; break;
+							case "T": cb_05.Checked = true; break;
+							case "V": cb_05.Checked = true; break;
+						}
+
+						SetInfoText(-1, (_f.stOriginal = val));
+						break;
+
+					case Range:
+						ColType = Range;
+						Text = " Range";
+						setVisibleRanges();
+
+						cb_00.Text = "Personal" + (( 0 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 0] + "m") : String.Empty);
+						cb_01.Text = "Touch"    + (( 1 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 1] + "m") : String.Empty);
+						cb_02.Text = "Short"    + (( 2 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 2] + "m") : String.Empty);
+						cb_03.Text = "Medium"   + (( 3 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 3] + "m") : String.Empty);
+						cb_04.Text = "Long"     + (( 4 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 4] + "m") : String.Empty);
+						cb_05.Text = "Infinite" + ((14 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[14] + "m") : String.Empty);
+
+						switch (val)
+						{
+							case "P": cb_00.Checked = true; break;
+							case "T": cb_01.Checked = true; break;
+							case "S": cb_02.Checked = true; break;
+							case "M": cb_03.Checked = true; break;
+							case "L": cb_04.Checked = true; break;
+							case "I": cb_05.Checked = true; break;
+						}
+
+						SetInfoText(-1, (_f.stOriginal = val));
+						break;
+
 					case MetaMagic:
 						ColType = MetaMagic;
 						Text = " MetaMagic";
@@ -154,32 +210,6 @@ namespace yata
 						}
 						SetInfoText(_f.intOriginal = result);
 						break;
-
-					case School:
-						ColType = School;
-						Text = " School";
-						setVisibleSchools();
-
-						cb_00.Text = "Abjuration";
-						cb_01.Text = "Conjuration";
-						cb_02.Text = "Divination";
-						cb_03.Text = "Enchantment";
-						cb_04.Text = "Illusion";
-						cb_05.Text = "Necromancy";
-						cb_06.Text = "Transmutation";
-						cb_07.Text = "Evocation";
-
-						cb_00.Checked = val == "A";
-						cb_01.Checked = val == "C";
-						cb_02.Checked = val == "D";
-						cb_03.Checked = val == "E";
-						cb_04.Checked = val == "I";
-						cb_05.Checked = val == "N";
-						cb_06.Checked = val == "T";
-						cb_07.Checked = val == "V";
-
-						SetInfoText(-1, (_f.stOriginal = val));
-						break;
 				}
 			}
 		}
@@ -208,33 +238,26 @@ namespace yata
 				lbl_Val.Text = val;
 		}
 
-		void EnableMetaMagics(int result)
+		void setVisibleSchools()
 		{
-			cb_00.Enabled =
-			cb_01.Enabled =
-			cb_02.Enabled =
-			cb_03.Enabled =
-			cb_04.Enabled =
-			cb_05.Enabled =
-			cb_06.Enabled =
-			cb_07.Enabled = (result <= 0xFF);
+			cb_00.Visible =
+			cb_01.Visible =
+			cb_02.Visible =
+			cb_03.Visible =
+			cb_04.Visible =
+			cb_05.Visible =
+			cb_06.Visible =
+			cb_07.Visible = true;
+		}
 
-			cb_08.Enabled = // Eldritch Essences and Invocation Shapes ->
-			cb_09.Enabled =
-			cb_10.Enabled =
-			cb_11.Enabled =
-			cb_12.Enabled =
-			cb_13.Enabled =
-			cb_14.Enabled =
-			cb_15.Enabled =
-			cb_16.Enabled =
-			cb_17.Enabled =
-			cb_18.Enabled =
-			cb_19.Enabled =
-			cb_20.Enabled =
-			cb_21.Enabled =
-			cb_22.Enabled =
-			cb_23.Enabled = (result == 0x00 || result > 0xFF);
+		void setVisibleRanges()
+		{
+			cb_00.Visible =
+			cb_01.Visible =
+			cb_02.Visible =
+			cb_03.Visible =
+			cb_04.Visible =
+			cb_05.Visible = true;
 		}
 
 		void setVisibleMetaMagics()
@@ -266,6 +289,35 @@ namespace yata
 			cb_23.Visible = true;
 		}
 
+		void EnableMetaMagics(int result)
+		{
+			cb_00.Enabled =
+			cb_01.Enabled =
+			cb_02.Enabled =
+			cb_03.Enabled =
+			cb_04.Enabled =
+			cb_05.Enabled =
+			cb_06.Enabled =
+			cb_07.Enabled = (result <= 0xFF);
+
+			cb_08.Enabled = // Eldritch Essences and Invocation Shapes ->
+			cb_09.Enabled =
+			cb_10.Enabled =
+			cb_11.Enabled =
+			cb_12.Enabled =
+			cb_13.Enabled =
+			cb_14.Enabled =
+			cb_15.Enabled =
+			cb_16.Enabled =
+			cb_17.Enabled =
+			cb_18.Enabled =
+			cb_19.Enabled =
+			cb_20.Enabled =
+			cb_21.Enabled =
+			cb_22.Enabled =
+			cb_23.Enabled = (result == 0x00 || result > 0xFF);
+		}
+
 		void setVisibleTargetTypes()
 		{
 			cb_00.Visible =
@@ -275,18 +327,6 @@ namespace yata
 			cb_04.Visible =
 			cb_05.Visible =
 			cb_06.Visible = true;
-		}
-
-		void setVisibleSchools()
-		{
-			cb_00.Visible =
-			cb_01.Visible =
-			cb_02.Visible =
-			cb_03.Visible =
-			cb_04.Visible =
-			cb_05.Visible =
-			cb_06.Visible =
-			cb_07.Visible = true;
 		}
 		#endregion Methods
 
@@ -309,9 +349,120 @@ namespace yata
 
 			switch (ColType)
 			{
+				case School:     changed_School(cb);     break;
+				case Range:      changed_Range(cb);      break;
 				case MetaMagic:  changed_MetaMagic(cb);  break;
 				case TargetType: changed_TargetType(cb); break;
-				case School:     changed_School(cb);     break;
+			}
+		}
+
+		void changed_School(object cb)
+		{
+			if (!_bypass)
+			{
+				_bypass = true;
+
+				string text;
+				if (cb == cb_00)
+				{
+					text = "A";
+					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_01)
+				{
+					text = "C";
+					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_02)
+				{
+					text = "D";
+					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_03)
+				{
+					text = "E";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_04)
+				{
+					text = "I";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_05)
+				{
+					text = "N";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
+				}
+				else if (cb == cb_06)
+				{
+					text = "T";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
+				}
+				else //if (cb == cb_07)
+				{
+					text = "V";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
+				}
+				SetInfoText(-1, (_f.stInput = text));
+
+				_bypass = false;
+			}
+		}
+
+		void changed_Range(object cb)
+		{
+			if (!_bypass)
+			{
+				_bypass = true;
+
+				string text;
+				if (cb == cb_00)
+				{
+					text = "P";
+					cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked =false;
+				}
+				else if (cb == cb_01)
+				{
+					text = "T";
+					cb_00.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = false;
+				}
+				else if (cb == cb_02)
+				{
+					text = "S";
+					cb_00.Checked = cb_01.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = false;
+				}
+				else if (cb == cb_03)
+				{
+					text = "M";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked =
+					cb_04.Checked = cb_05.Checked = false;
+				}
+				else if (cb == cb_04)
+				{
+					text = "L";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked =
+					cb_03.Checked = cb_05.Checked = false;
+				}
+				else //if (cb == cb_05)
+				{
+					text = "I";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked =
+					cb_03.Checked = cb_04.Checked = false;
+				}
+				SetInfoText(-1, (_f.stInput = text));
+
+				_bypass = false;
 			}
 		}
 
@@ -485,67 +636,6 @@ namespace yata
 			SetInfoText(_f.intInput);
 		}
 
-		bool _bypass;
-		void changed_School(object cb)
-		{
-			if (!_bypass)
-			{
-				_bypass = true;
-
-				string text;
-				if (cb == cb_00)
-				{
-					text = "A";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_01)
-				{
-					text = "C";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_02)
-				{
-					text = "D";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_03)
-				{
-					text = "E";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_04)
-				{
-					text = "I";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_05)
-				{
-					text = "N";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-				else if (cb == cb_06)
-				{
-					text = "T";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
-				}
-				else //if (cb == cb_07)
-				{
-					text = "V";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
-				}
-				SetInfoText(-1, (_f.stInput = text));
-
-				_bypass = false;
-			}
-		}
 
 /*		void click_Accept(object sender, EventArgs e)
 		{} */
