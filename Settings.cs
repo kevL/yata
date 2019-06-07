@@ -27,6 +27,8 @@ namespace yata
 		internal static bool _gradient;
 		internal static bool _context;
 
+		internal static int _recent;
+
 		internal static string _diff;
 
 
@@ -177,6 +179,15 @@ namespace yata
 						{
 							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
 									&& line == "static");
+						}
+						else if (line.StartsWith("recent=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
+								&& Int32.TryParse(line, out result) && result > 0)
+							{
+								if (result > 16) result = 16;
+								_recent = result;
+							}
 						}
 						else if (line.StartsWith("diff=", StringComparison.InvariantCulture))
 						{

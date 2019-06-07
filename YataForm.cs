@@ -215,19 +215,21 @@ namespace yata
 			DontBeepEvent += HandleDontBeepEvent;
 
 
-			//it_Recent
-			string dir = Application.StartupPath;
-			string pfe = Path.Combine(dir, "recent.cfg");
-			if (File.Exists(pfe))
+			if (Settings._recent != 0)
 			{
-				string[] recents = File.ReadAllLines(pfe);
-				foreach (string recent in recents)
+				string dir = Application.StartupPath;
+				string pfe = Path.Combine(dir, "recent.cfg");
+				if (File.Exists(pfe))
 				{
-					if (File.Exists(recent))
+					string[] recents = File.ReadAllLines(pfe);
+					foreach (string recent in recents)
 					{
-						var it = new ToolStripMenuItem(recent);
-						it.Click += fileclick_Recent;
-						it_Recent.DropDownItems.Add(it);
+						if (File.Exists(recent))
+						{
+							var it = new ToolStripMenuItem(recent);
+							it.Click += fileclick_Recent;
+							it_Recent.DropDownItems.Add(it);
+						}
 					}
 				}
 			}
@@ -613,13 +615,15 @@ namespace yata
 		{
 			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
-				if (it != null && it_Recent.DropDownItems.Contains(it))
-					it_Recent.DropDownItems.Remove(it);
+				if (Settings._recent != 0)
+				{
+					if (it != null && it_Recent.DropDownItems.Contains(it))
+						it_Recent.DropDownItems.Remove(it);
 
-				it = new ToolStripMenuItem(pfe);
-				it.Click += fileclick_Recent;
-				it_Recent.DropDownItems.Insert(0, it);
-
+					it = new ToolStripMenuItem(pfe);
+					it.Click += fileclick_Recent;
+					it_Recent.DropDownItems.Insert(0, it);
+				}
 
 				ShowColorPanel();
 //				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
@@ -993,7 +997,7 @@ namespace yata
 				}
 			}
 
-			if (!e.Cancel)
+			if (!e.Cancel && Settings._recent != 0)
 			{
 				int i = -1;
 				var recents = new string[it_Recent.DropDownItems.Count];

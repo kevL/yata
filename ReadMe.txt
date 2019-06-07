@@ -4,16 +4,20 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 june 5
+2019 june 6
 kevL's
 ver 3.3.0.0
 
 
 File
-- Open ... @ folder (presets for the Open ... dialog - does not appear if no
-                     presets have been set)
+- Open ... @ folder (presets for the Open ... dialog - appears only if at least
+                     one "dirpreset=" has been set in Settings.Cfg - see the
+                     Settings.Cfg file options below)
 - Open ... : Ctrl+o
 - Reload   : Ctrl+r
+- Recent (lists recently opened files - appears only if "recent=" has been set
+          in Settings.Cfg and at least one valid filepath exists in the list -
+          see the Settings.Cfg file options below)
 
 - Save        : Ctrl+s
 - Save As ... : Ctrl+e
@@ -258,6 +262,14 @@ context=   a right-click on a rowhead displays the contextmenu at the mouse-
            cursor's location by default. It can be displayed in a static
            location at the topleft corner of the table instead of at the mouse-
            cursor by giving this variable a value of "static" (without quotes)
+recent=    (integer) a count of recently opened file-paths to store. If left
+           blank or a value less than 1 is specified, recently opened files will
+           not be tracked, while 16 is the hardcoded upper limit. SETTING
+           "recent=" TO A VALID VALUE ENABLES YATA TO WRITE THE FILE Recent.Cfg
+           TO ITS APPLICATION DIRECTORY. Recent.Cfg stores filepaths (without
+           quotes). THE WRITE-OPERATION CAN FAIL for a variety of reasons that I
+           really don't want to be arshed with - hence the option so you can
+           decide if it works on your OS.
 diff=      a path without quotes to your WinMerge executable for diffing and
            merging two 2da files (if desired). See Appendix L: WinMerge
 
