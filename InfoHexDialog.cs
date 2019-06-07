@@ -235,7 +235,7 @@ namespace yata
 				lbl_Val.Text = "0x" + result.ToString(format);
 			}
 			else
-				lbl_Val.Text = val;
+				lbl_Val.Text = (val == Constants.Stars) ? String.Empty : val;
 		}
 
 		void setVisibleSchools()
@@ -356,60 +356,84 @@ namespace yata
 			}
 		}
 
-		void changed_School(object cb)
+		void changed_School(CheckBox cb)
 		{
 			if (!_bypass)
 			{
 				_bypass = true;
 
-				string text;
+				string text = Constants.Stars;
 				if (cb == cb_00)
 				{
-					text = "A";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "A";
+						cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_01)
 				{
-					text = "C";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "C";
+						cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_02)
 				{
-					text = "D";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "D";
+						cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
+						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_03)
 				{
-					text = "E";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "E";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
+						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_04)
 				{
-					text = "I";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "I";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_05)
 				{
-					text = "N";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "N";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+						cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
+					}
 				}
 				else if (cb == cb_06)
 				{
-					text = "T";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
+					if (cb.Checked)
+					{
+						text = "T";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+						cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
+					}
 				}
 				else //if (cb == cb_07)
 				{
-					text = "V";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
+					if (cb.Checked)
+					{
+						text = "V";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+						cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
+					}
 				}
 				SetInfoText(-1, (_f.stInput = text));
 
@@ -417,48 +441,66 @@ namespace yata
 			}
 		}
 
-		void changed_Range(object cb)
+		void changed_Range(CheckBox cb)
 		{
 			if (!_bypass)
 			{
 				_bypass = true;
 
-				string text;
+				string text = Constants.Stars;
 				if (cb == cb_00)
 				{
-					text = "P";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked =false;
+					if (cb.Checked)
+					{
+						text = "P";
+						cb_01.Checked = cb_02.Checked = cb_03.Checked =
+						cb_04.Checked = cb_05.Checked =false;
+					}
 				}
 				else if (cb == cb_01)
 				{
-					text = "T";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
+					if (cb.Checked)
+					{
+						text = "T";
+						cb_00.Checked = cb_02.Checked = cb_03.Checked =
+						cb_04.Checked = cb_05.Checked = false;
+					}
 				}
 				else if (cb == cb_02)
 				{
-					text = "S";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
+					if (cb.Checked)
+					{
+						text = "S";
+						cb_00.Checked = cb_01.Checked = cb_03.Checked =
+						cb_04.Checked = cb_05.Checked = false;
+					}
 				}
 				else if (cb == cb_03)
 				{
-					text = "M";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_04.Checked = cb_05.Checked = false;
+					if (cb.Checked)
+					{
+						text = "M";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked =
+						cb_04.Checked = cb_05.Checked = false;
+					}
 				}
 				else if (cb == cb_04)
 				{
-					text = "L";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_03.Checked = cb_05.Checked = false;
+					if (cb.Checked)
+					{
+						text = "L";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked =
+						cb_03.Checked = cb_05.Checked = false;
+					}
 				}
 				else //if (cb == cb_05)
 				{
-					text = "I";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_03.Checked = cb_04.Checked = false;
+					if (cb.Checked)
+					{
+						text = "I";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked =
+						cb_03.Checked = cb_04.Checked = false;
+					}
 				}
 				SetInfoText(-1, (_f.stInput = text));
 

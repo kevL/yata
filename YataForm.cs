@@ -3722,8 +3722,13 @@ namespace yata
 			}
 		}
 
-		internal int intInput, intOriginal;
-		internal string stInput, stOriginal;
+
+		internal int
+			intOriginal,
+			intInput;
+		internal string
+			stOriginal,
+			stInput;
 
 		void cellclick_Input(object sender, EventArgs e)
 		{
@@ -3732,9 +3737,8 @@ namespace yata
 
 			switch (cell.x)
 			{
-				case 7: // MetaMagic
+				case 7: // MetaMagic // HEX Input ->
 				case 8: // TargetType
-					// HEX Input ->
 					intInput = 0x00;
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
@@ -3749,10 +3753,9 @@ namespace yata
 					}
 					break;
 
-				case 4: // School
+				case 4: // School // STRING Input ->
 				case 5: // Range
-					// STRING Input ->
-					stInput = String.Empty;
+					stInput = Constants.Stars;
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& stInput != stOriginal)
