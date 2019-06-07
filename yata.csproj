@@ -85,6 +85,9 @@
     <Compile Include="Crap.cs" />
     <Compile Include="DifferDialog.cs" />
     <Compile Include="InfoHexDialog.cs" />
+    <Compile Include="InfoHexDialog.Designer.cs">
+      <DependentUpon>InfoHexDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="PropertyPanel.cs" />
     <Compile Include="RowCreatorDialog.cs" />
     <Compile Include="RowCreatorDialog.Designer.cs">
@@ -129,7 +132,7 @@
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InfoHexDialog.resx">
-      <DependentUpon>InfoHexDialog.cs</DependentUpon>
+      <DependentUpon>InfoHexDialog.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
