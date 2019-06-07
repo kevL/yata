@@ -229,6 +229,9 @@ namespace yata
 							var it = new ToolStripMenuItem(recent);
 							it.Click += fileclick_Recent;
 							it_Recent.DropDownItems.Add(it);
+
+							if (it_Recent.DropDownItems.Count == Settings._recent)
+								break;
 						}
 					}
 				}
@@ -617,12 +620,16 @@ namespace yata
 			{
 				if (Settings._recent != 0)
 				{
-					if (it != null && it_Recent.DropDownItems.Contains(it))
+					if (it != null)
 						it_Recent.DropDownItems.Remove(it);
 
 					it = new ToolStripMenuItem(pfe);
 					it.Click += fileclick_Recent;
 					it_Recent.DropDownItems.Insert(0, it);
+
+					int count = it_Recent.DropDownItems.Count;
+					if (count > Settings._recent)
+						it_Recent.DropDownItems.Remove(it_Recent.DropDownItems[count]);
 				}
 
 				ShowColorPanel();
