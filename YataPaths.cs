@@ -100,20 +100,23 @@ namespace yata
 							{
 								info = Table.Cols[col].text + ": ";
 
-								string par = String.Empty;
-								int pos;
+								string ipEncoded; int pos;
 
 								string[] ips = val.Split(';');
 								for (int ip = 0; ip != ips.Length; ++ip)
 								{
-									par = ips[ip];
-									if ((pos = par.IndexOf(',')) != -1)
+									ipEncoded = ips[ip];
+									if ((pos = ipEncoded.IndexOf(',')) != -1)
 									{
-										if (Int32.TryParse(par.Substring(0, pos), out result)
+										if (Int32.TryParse(ipEncoded.Substring(0, pos), out result)
 											&& result < Info.ipLabels.Count)
 										{
-											info += Info.ipLabels[result]
-												  + Info.GetEncodedParsDescription(par);
+											info += Info.ipLabels[result];
+
+											if (ipEncoded.Length > pos + 1)
+												info += Info.GetEncodedParsDescription(ipEncoded, result, pos);
+											else
+												info += " bork";
 
 											if (ip != ips.Length - 1)
 												info += ", ";
@@ -121,7 +124,7 @@ namespace yata
 									}
 									else // is a PropertySet preparation val.
 									{
-										info += "PropertySet val=" + par; // TODO: description for par.
+										info += "PropertySet val=" + ipEncoded; // TODO: description for par.
 									}
 								}
 							}
