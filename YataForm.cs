@@ -3583,19 +3583,6 @@ namespace yata
 			cellMenu.Show(Table, loc);
 		}
 
-		bool isInfoInputCol(int c)
-		{
-			switch (c)
-			{
-				case 4: // School
-				case 5: // Range
-				case 7: // MetaMagic
-				case 8: // TargetType
-					return true;
-			}
-			return false;
-		}
-
 		/// <summary>
 		/// Helper for ShowCellMenu().
 		/// </summary>
@@ -3612,6 +3599,29 @@ namespace yata
 				return (destTable != null && !destTable.Readonly
 					 && destTable.ColCount > sel.x
 					 && destTable.RowCount > sel.y);
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Helper for ShowCellMenu().
+		/// </summary>
+		/// <param name="c">the col of the selected cell</param>
+		/// <returns></returns>
+		bool isInfoInputCol(int c)
+		{
+			switch (c)
+			{
+				case InfoHexDialog.School:
+				case InfoHexDialog.Range:
+				case InfoHexDialog.MetaMagic:
+				case InfoHexDialog.TargetType:
+					return true;
+
+				case InfoHexDialog.TargetingUI:
+					if (Info.targetLabels.Count != 0)
+						return true;
+					break;
 			}
 			return false;
 		}
@@ -3737,9 +3747,18 @@ namespace yata
 
 			switch (cell.x)
 			{
-				case 7: // MetaMagic // HEX Input ->
-				case 8: // TargetType
-					intInput = 0x00;
+				case InfoHexDialog.School: // STRING Input ->
+				case InfoHexDialog.Range:
+					f = new InfoHexDialog(Table, cell);
+					if (f.ShowDialog(this) == DialogResult.OK
+						&& stInput != stOriginal)
+					{
+						Table.ChangeCellText(cell, stInput); // does not do a text-check
+					}
+					break;
+
+				case InfoHexDialog.MetaMagic: // HEX Input ->
+				case InfoHexDialog.TargetType:
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& intInput != intOriginal)
@@ -3748,23 +3767,19 @@ namespace yata
 						if (intInput <= 0xFF) format = "X2";
 						else                  format = "X6";
 
-						Table.ChangeCellText(cell, // does not do a text-check
-											 "0x" + intInput.ToString(format));
+						Table.ChangeCellText(cell, "0x" + intInput.ToString(format)); // does not do a text-check
 					}
 					break;
 
-				case 4: // School // STRING Input ->
-				case 5: // Range
-					stInput = Constants.Stars;
+				case InfoHexDialog.TargetingUI: // INT Input ->
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
-						&& stInput != stOriginal)
+						&& intInput != intOriginal)
 					{
-						Table.ChangeCellText(cell, stInput);
+						Table.ChangeCellText(cell, intInput.ToString()); // does not do a text-check
 					}
 					break;
 			}
-
 		}
 		#endregion Cell menu
 	}

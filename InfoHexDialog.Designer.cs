@@ -7,6 +7,9 @@ namespace yata
 	{
 		System.ComponentModel.IContainer components = null;
 
+		Label lbl_Val;
+		ComboBox cbx_Val;
+
 		CheckBox cb_00;
 		CheckBox cb_01;
 		CheckBox cb_02;
@@ -15,24 +18,24 @@ namespace yata
 		CheckBox cb_05;
 		CheckBox cb_06;
 		CheckBox cb_07;
-		Button btn_Accept;
-		Label lbl_Val;
-		CheckBox cb_15;
-		CheckBox cb_14;
-		CheckBox cb_13;
-		CheckBox cb_12;
-		CheckBox cb_11;
-		CheckBox cb_10;
-		CheckBox cb_09;
 		CheckBox cb_08;
-		CheckBox cb_23;
-		CheckBox cb_22;
-		CheckBox cb_21;
-		CheckBox cb_20;
-		CheckBox cb_19;
-		CheckBox cb_18;
-		CheckBox cb_17;
+		CheckBox cb_09;
+		CheckBox cb_10;
+		CheckBox cb_11;
+		CheckBox cb_12;
+		CheckBox cb_13;
+		CheckBox cb_14;
+		CheckBox cb_15;
 		CheckBox cb_16;
+		CheckBox cb_17;
+		CheckBox cb_18;
+		CheckBox cb_19;
+		CheckBox cb_20;
+		CheckBox cb_21;
+		CheckBox cb_22;
+		CheckBox cb_23;
+
+		Button btn_Accept;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -77,11 +80,12 @@ namespace yata
 			this.cb_18 = new System.Windows.Forms.CheckBox();
 			this.cb_17 = new System.Windows.Forms.CheckBox();
 			this.cb_16 = new System.Windows.Forms.CheckBox();
+			this.cbx_Val = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// cb_00
 			// 
-			this.cb_00.Location = new System.Drawing.Point(10, 25);
+			this.cb_00.Location = new System.Drawing.Point(15, 25);
 			this.cb_00.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_00.Name = "cb_00";
 			this.cb_00.Size = new System.Drawing.Size(120, 20);
@@ -93,7 +97,7 @@ namespace yata
 			// 
 			// cb_01
 			// 
-			this.cb_01.Location = new System.Drawing.Point(10, 45);
+			this.cb_01.Location = new System.Drawing.Point(15, 45);
 			this.cb_01.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_01.Name = "cb_01";
 			this.cb_01.Size = new System.Drawing.Size(120, 20);
@@ -105,7 +109,7 @@ namespace yata
 			// 
 			// cb_02
 			// 
-			this.cb_02.Location = new System.Drawing.Point(10, 65);
+			this.cb_02.Location = new System.Drawing.Point(15, 65);
 			this.cb_02.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_02.Name = "cb_02";
 			this.cb_02.Size = new System.Drawing.Size(120, 20);
@@ -117,7 +121,7 @@ namespace yata
 			// 
 			// cb_03
 			// 
-			this.cb_03.Location = new System.Drawing.Point(10, 85);
+			this.cb_03.Location = new System.Drawing.Point(15, 85);
 			this.cb_03.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_03.Name = "cb_03";
 			this.cb_03.Size = new System.Drawing.Size(120, 20);
@@ -129,7 +133,7 @@ namespace yata
 			// 
 			// cb_04
 			// 
-			this.cb_04.Location = new System.Drawing.Point(10, 105);
+			this.cb_04.Location = new System.Drawing.Point(15, 105);
 			this.cb_04.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_04.Name = "cb_04";
 			this.cb_04.Size = new System.Drawing.Size(120, 20);
@@ -141,7 +145,7 @@ namespace yata
 			// 
 			// cb_05
 			// 
-			this.cb_05.Location = new System.Drawing.Point(10, 125);
+			this.cb_05.Location = new System.Drawing.Point(15, 125);
 			this.cb_05.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_05.Name = "cb_05";
 			this.cb_05.Size = new System.Drawing.Size(120, 20);
@@ -153,7 +157,7 @@ namespace yata
 			// 
 			// cb_06
 			// 
-			this.cb_06.Location = new System.Drawing.Point(10, 145);
+			this.cb_06.Location = new System.Drawing.Point(15, 145);
 			this.cb_06.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_06.Name = "cb_06";
 			this.cb_06.Size = new System.Drawing.Size(120, 20);
@@ -165,7 +169,7 @@ namespace yata
 			// 
 			// cb_07
 			// 
-			this.cb_07.Location = new System.Drawing.Point(10, 165);
+			this.cb_07.Location = new System.Drawing.Point(15, 165);
 			this.cb_07.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_07.Name = "cb_07";
 			this.cb_07.Size = new System.Drawing.Size(120, 20);
@@ -191,19 +195,18 @@ namespace yata
 			// 
 			// lbl_Val
 			// 
-			this.lbl_Val.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.lbl_Val.Location = new System.Drawing.Point(5, 5);
+			this.lbl_Val.Dock = System.Windows.Forms.DockStyle.Top;
+			this.lbl_Val.Location = new System.Drawing.Point(0, 0);
 			this.lbl_Val.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Val.Name = "lbl_Val";
-			this.lbl_Val.Size = new System.Drawing.Size(385, 15);
+			this.lbl_Val.Size = new System.Drawing.Size(394, 15);
 			this.lbl_Val.TabIndex = 0;
 			this.lbl_Val.Text = "lbl_Val";
 			this.lbl_Val.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// cb_15
 			// 
-			this.cb_15.Location = new System.Drawing.Point(135, 165);
+			this.cb_15.Location = new System.Drawing.Point(140, 165);
 			this.cb_15.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_15.Name = "cb_15";
 			this.cb_15.Size = new System.Drawing.Size(120, 20);
@@ -215,7 +218,7 @@ namespace yata
 			// 
 			// cb_14
 			// 
-			this.cb_14.Location = new System.Drawing.Point(135, 145);
+			this.cb_14.Location = new System.Drawing.Point(140, 145);
 			this.cb_14.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_14.Name = "cb_14";
 			this.cb_14.Size = new System.Drawing.Size(120, 20);
@@ -227,7 +230,7 @@ namespace yata
 			// 
 			// cb_13
 			// 
-			this.cb_13.Location = new System.Drawing.Point(135, 125);
+			this.cb_13.Location = new System.Drawing.Point(140, 125);
 			this.cb_13.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_13.Name = "cb_13";
 			this.cb_13.Size = new System.Drawing.Size(120, 20);
@@ -239,7 +242,7 @@ namespace yata
 			// 
 			// cb_12
 			// 
-			this.cb_12.Location = new System.Drawing.Point(135, 105);
+			this.cb_12.Location = new System.Drawing.Point(140, 105);
 			this.cb_12.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_12.Name = "cb_12";
 			this.cb_12.Size = new System.Drawing.Size(120, 20);
@@ -251,7 +254,7 @@ namespace yata
 			// 
 			// cb_11
 			// 
-			this.cb_11.Location = new System.Drawing.Point(135, 85);
+			this.cb_11.Location = new System.Drawing.Point(140, 85);
 			this.cb_11.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_11.Name = "cb_11";
 			this.cb_11.Size = new System.Drawing.Size(120, 20);
@@ -263,7 +266,7 @@ namespace yata
 			// 
 			// cb_10
 			// 
-			this.cb_10.Location = new System.Drawing.Point(135, 65);
+			this.cb_10.Location = new System.Drawing.Point(140, 65);
 			this.cb_10.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_10.Name = "cb_10";
 			this.cb_10.Size = new System.Drawing.Size(120, 20);
@@ -275,7 +278,7 @@ namespace yata
 			// 
 			// cb_09
 			// 
-			this.cb_09.Location = new System.Drawing.Point(135, 45);
+			this.cb_09.Location = new System.Drawing.Point(140, 45);
 			this.cb_09.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_09.Name = "cb_09";
 			this.cb_09.Size = new System.Drawing.Size(120, 20);
@@ -287,7 +290,7 @@ namespace yata
 			// 
 			// cb_08
 			// 
-			this.cb_08.Location = new System.Drawing.Point(135, 25);
+			this.cb_08.Location = new System.Drawing.Point(140, 25);
 			this.cb_08.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_08.Name = "cb_08";
 			this.cb_08.Size = new System.Drawing.Size(120, 20);
@@ -299,7 +302,7 @@ namespace yata
 			// 
 			// cb_23
 			// 
-			this.cb_23.Location = new System.Drawing.Point(260, 165);
+			this.cb_23.Location = new System.Drawing.Point(265, 165);
 			this.cb_23.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_23.Name = "cb_23";
 			this.cb_23.Size = new System.Drawing.Size(120, 20);
@@ -311,7 +314,7 @@ namespace yata
 			// 
 			// cb_22
 			// 
-			this.cb_22.Location = new System.Drawing.Point(260, 145);
+			this.cb_22.Location = new System.Drawing.Point(265, 145);
 			this.cb_22.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_22.Name = "cb_22";
 			this.cb_22.Size = new System.Drawing.Size(120, 20);
@@ -323,7 +326,7 @@ namespace yata
 			// 
 			// cb_21
 			// 
-			this.cb_21.Location = new System.Drawing.Point(260, 125);
+			this.cb_21.Location = new System.Drawing.Point(265, 125);
 			this.cb_21.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_21.Name = "cb_21";
 			this.cb_21.Size = new System.Drawing.Size(120, 20);
@@ -335,7 +338,7 @@ namespace yata
 			// 
 			// cb_20
 			// 
-			this.cb_20.Location = new System.Drawing.Point(260, 105);
+			this.cb_20.Location = new System.Drawing.Point(265, 105);
 			this.cb_20.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_20.Name = "cb_20";
 			this.cb_20.Size = new System.Drawing.Size(120, 20);
@@ -347,7 +350,7 @@ namespace yata
 			// 
 			// cb_19
 			// 
-			this.cb_19.Location = new System.Drawing.Point(260, 85);
+			this.cb_19.Location = new System.Drawing.Point(265, 85);
 			this.cb_19.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_19.Name = "cb_19";
 			this.cb_19.Size = new System.Drawing.Size(120, 20);
@@ -359,7 +362,7 @@ namespace yata
 			// 
 			// cb_18
 			// 
-			this.cb_18.Location = new System.Drawing.Point(260, 65);
+			this.cb_18.Location = new System.Drawing.Point(265, 65);
 			this.cb_18.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_18.Name = "cb_18";
 			this.cb_18.Size = new System.Drawing.Size(120, 20);
@@ -371,7 +374,7 @@ namespace yata
 			// 
 			// cb_17
 			// 
-			this.cb_17.Location = new System.Drawing.Point(260, 45);
+			this.cb_17.Location = new System.Drawing.Point(265, 45);
 			this.cb_17.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_17.Name = "cb_17";
 			this.cb_17.Size = new System.Drawing.Size(120, 20);
@@ -383,7 +386,7 @@ namespace yata
 			// 
 			// cb_16
 			// 
-			this.cb_16.Location = new System.Drawing.Point(260, 25);
+			this.cb_16.Location = new System.Drawing.Point(265, 25);
 			this.cb_16.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_16.Name = "cb_16";
 			this.cb_16.Size = new System.Drawing.Size(120, 20);
@@ -393,10 +396,25 @@ namespace yata
 			this.cb_16.Visible = false;
 			this.cb_16.CheckedChanged += new System.EventHandler(this.changed);
 			// 
+			// cbx_Val
+			// 
+			this.cbx_Val.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cbx_Val.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbx_Val.FormattingEnabled = true;
+			this.cbx_Val.Location = new System.Drawing.Point(0, 15);
+			this.cbx_Val.Margin = new System.Windows.Forms.Padding(0);
+			this.cbx_Val.MaxDropDownItems = 30;
+			this.cbx_Val.Name = "cbx_Val";
+			this.cbx_Val.Size = new System.Drawing.Size(394, 21);
+			this.cbx_Val.TabIndex = 26;
+			this.cbx_Val.Visible = false;
+			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_TargetingUi);
+			// 
 			// InfoHexDialog
 			// 
 			this.AcceptButton = this.btn_Accept;
 			this.ClientSize = new System.Drawing.Size(394, 216);
+			this.Controls.Add(this.cbx_Val);
 			this.Controls.Add(this.cb_23);
 			this.Controls.Add(this.cb_22);
 			this.Controls.Add(this.cb_21);

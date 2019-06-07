@@ -11,10 +11,11 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		const int School     = 4;
-		const int Range      = 5;
-		const int MetaMagic  = 7;
-		const int TargetType = 8;
+		internal const int School      =  4; // col in Spells.2da ->
+		internal const int Range       =  5;
+		internal const int MetaMagic   =  7;
+		internal const int TargetType  =  8;
+		internal const int TargetingUI = 66;
 		#endregion Fields (static)
 
 
@@ -24,6 +25,7 @@ namespace yata
 		Cell _cell;
 
 		int ColType;
+		bool _init;
 		bool _bypass;
 		#endregion Fields
 
@@ -50,6 +52,8 @@ namespace yata
 		#region Methods
 		void init()
 		{
+			_init = true;
+
 			string val = _cell.text;
 			if (!String.IsNullOrEmpty(val)) // safety.
 			{
@@ -82,7 +86,7 @@ namespace yata
 							case "V": cb_05.Checked = true; break;
 						}
 
-						SetInfoText(-1, (_f.stOriginal = val));
+						SetInfoText(-1, (_f.stOriginal = _f.stInput = val));
 						break;
 
 					case Range:
@@ -107,7 +111,7 @@ namespace yata
 							case "I": cb_05.Checked = true; break;
 						}
 
-						SetInfoText(-1, (_f.stOriginal = val));
+						SetInfoText(-1, (_f.stOriginal = _f.stInput = val));
 						break;
 
 					case MetaMagic:
@@ -178,7 +182,7 @@ namespace yata
 							cb_23.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
 
 						}
-						SetInfoText(_f.intOriginal = result);
+						SetInfoText(_f.intOriginal = _f.intInput = result);
 						break;
 
 					case TargetType:
@@ -208,10 +212,29 @@ namespace yata
 							cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
 							cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
 						}
-						SetInfoText(_f.intOriginal = result);
+						SetInfoText(_f.intOriginal = _f.intInput = result);
+						break;
+
+					case TargetingUI:
+						ColType = TargetingUI;
+						Text = " TargetingUI";
+						setVisibleTargetingUiTypes();
+						populateTargetingUiDropdown();
+
+						if (val == Constants.Stars) val = "0";
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < Info.targetLabels.Count)
+						{
+							cbx_Val.SelectedIndex = result;
+						}
+						else
+							cbx_Val.SelectedIndex = Info.targetLabels.Count; // "n/a"
+
+						_f.intOriginal = _f.intInput = result;
 						break;
 				}
 			}
+			_init = false;
 		}
 
 
@@ -328,6 +351,49 @@ namespace yata
 			cb_05.Visible =
 			cb_06.Visible = true;
 		}
+
+		void setVisibleTargetingUiTypes()
+		{
+			lbl_Val.Visible = false;
+			cbx_Val.Visible = true;
+		}
+
+		const float epsilon = 0.00001F;
+
+		void populateTargetingUiDropdown()
+		{
+			string text;
+
+			for (int i = 0; i != Info.targetLabels.Count; ++i)
+			{
+				text = i + " - " + Info.targetLabels[i];
+
+				bool haspars = false;
+
+				float f = Info.targetWidths[i];
+				if (Math.Abs(0.0F - f) > epsilon)
+				{
+					haspars = true;
+					text += " (" + f;
+				}
+
+				f = Info.targetLengths[i];
+				if (Math.Abs(0.0F - f) > epsilon)
+				{
+					if (!haspars)
+					{
+						haspars = true;
+						text += " (_";
+					}
+					text += " x " + f;
+				}
+
+				if (haspars) text += ")";
+
+				cbx_Val.Items.Add(new tui(text));
+			}
+			cbx_Val.Items.Add(new tui("n/a"));
+		}
 		#endregion Methods
 
 
@@ -347,14 +413,17 @@ namespace yata
 
 		void changed(object sender, EventArgs e)
 		{
-			_cb = sender as CheckBox;
-
-			switch (ColType)
+			if (!_init)
 			{
-				case School:     changed_School();     break;
-				case Range:      changed_Range();      break;
-				case MetaMagic:  changed_MetaMagic();  break;
-				case TargetType: changed_TargetType(); break;
+				_cb = sender as CheckBox;
+
+				switch (ColType)
+				{
+					case School:     changed_School();     break;
+					case Range:      changed_Range();      break;
+					case MetaMagic:  changed_MetaMagic();  break;
+					case TargetType: changed_TargetType(); break;
+				}
 			}
 		}
 
@@ -680,9 +749,43 @@ namespace yata
 			SetInfoText(_f.intInput);
 		}
 
+		void changed_TargetingUi(object sender, EventArgs e)
+		{
+			if (!_init)
+			{
+				if (cbx_Val.SelectedIndex == Info.targetLabels.Count)
+					_f.intInput = 0;
+				else
+					_f.intInput = cbx_Val.SelectedIndex;
+			}
+		}
 
 /*		void click_Accept(object sender, EventArgs e)
 		{} */
 		#endregion Events
+	}
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	sealed class tui // TargetingUI dropdown-object
+	{
+		string Label
+		{ get; set; }
+
+		internal tui(string label)
+		{
+			Label = label;
+		}
+
+		/// <summary>
+		/// Required.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return Label;
+		}
 	}
 }
