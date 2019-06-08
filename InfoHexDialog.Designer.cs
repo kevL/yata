@@ -199,10 +199,10 @@ namespace yata
 			this.lbl_Val.Location = new System.Drawing.Point(0, 0);
 			this.lbl_Val.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Val.Name = "lbl_Val";
-			this.lbl_Val.Size = new System.Drawing.Size(394, 15);
+			this.lbl_Val.Size = new System.Drawing.Size(394, 20);
 			this.lbl_Val.TabIndex = 0;
 			this.lbl_Val.Text = "lbl_Val";
-			this.lbl_Val.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lbl_Val.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// cb_15
 			// 
@@ -401,7 +401,7 @@ namespace yata
 			this.cbx_Val.Dock = System.Windows.Forms.DockStyle.Top;
 			this.cbx_Val.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbx_Val.FormattingEnabled = true;
-			this.cbx_Val.Location = new System.Drawing.Point(0, 15);
+			this.cbx_Val.Location = new System.Drawing.Point(0, 20);
 			this.cbx_Val.Margin = new System.Windows.Forms.Padding(0);
 			this.cbx_Val.MaxDropDownItems = 30;
 			this.cbx_Val.Name = "cbx_Val";
