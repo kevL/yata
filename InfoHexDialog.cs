@@ -453,27 +453,30 @@ namespace yata
 
 		void populateAsMetaMagics()
 		{
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_DRAINING_BLAST  .ToString("X6") + " - Draining Blast")); // Eldritch Essences ->
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_FRIGHTFUL_BLAST .ToString("X6") + " - Frightful Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BESHADOWED_BLAST.ToString("X6") + " - Beshadowed Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BRIMSTONE_BLAST .ToString("X6") + " - Brimstone Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HELLRIME_BLAST  .ToString("X6") + " - Hellrime Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BEWITCHING_BLAST.ToString("X6") + " - Bewitching Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_NOXIOUS_BLAST   .ToString("X6") + " - Noxious Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_VITRIOLIC_BLAST .ToString("X6") + " - Vitriolic Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_UTTERDARK_BLAST .ToString("X6") + " - Utterdark Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HINDERING_BLAST .ToString("X6") + " - Hindering Blast"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BINDING_BLAST   .ToString("X6") + " - Binding Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_DRAINING_BLAST)   + " - Draining Blast")); // Eldritch Essences ->
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_FRIGHTFUL_BLAST)  + " - Frightful Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BESHADOWED_BLAST) + " - Beshadowed Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BRIMSTONE_BLAST)  + " - Brimstone Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HELLRIME_BLAST)   + " - Hellrime Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BEWITCHING_BLAST) + " - Bewitching Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_NOXIOUS_BLAST)    + " - Noxious Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_VITRIOLIC_BLAST)  + " - Vitriolic Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_UTTERDARK_BLAST)  + " - Utterdark Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HINDERING_BLAST)  + " - Hindering Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BINDING_BLAST)    + " - Binding Blast"));
 
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_SPEAR  .ToString("X6") + " - Eldritch Spear")); // Invocation Shapes ->
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HIDEOUS_BLOW    .ToString("X6") + " - Hideous Blow"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_CHAIN  .ToString("X6") + " - Eldritch Chain"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_CONE   .ToString("X6") + " - Eldritch Cone"));
-			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_DOOM   .ToString("X6") + " - Eldritch Doom"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_SPEAR)   + " - Eldritch Spear")); // Invocation Shapes ->
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HIDEOUS_BLOW)     + " - Hideous Blow"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CHAIN)   + " - Eldritch Chain"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CONE)    + " - Eldritch Cone"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_DOOM)    + " - Eldritch Doom"));
 
 			cbx_Val.Items.Add(new tui("n/a"));
 			cbx_Val.SelectedIndex = 16;
 		}
+
+		string hexen(int i) { return "0x" + i.ToString("X6"); }
+
 
 		const float epsilon = 0.00001F;
 
