@@ -3621,13 +3621,13 @@ namespace yata
 				case InfoHexDialog.AsMetaMagic:
 					return true;
 
-				case InfoHexDialog.TargetingUI:
-					if (Info.targetLabels.Count != 0)
+				case InfoHexDialog.Category:
+					if (Info.categoryLabels.Count != 0)
 						return true;
 					break;
 
-				case InfoHexDialog.Category:
-					if (Info.categoryLabels.Count != 0)
+				case InfoHexDialog.TargetingUI:
+					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
 			}

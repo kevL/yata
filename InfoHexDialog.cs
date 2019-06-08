@@ -227,31 +227,65 @@ namespace yata
 
 						switch (val)
 						{
-							case "Acid":           cbx_Val.SelectedIndex =  0; break;
-							case "Cold":           cbx_Val.SelectedIndex =  1; break;
+							case "Acid":           cbx_Val.SelectedIndex =  0; break; // sub
+							case "Cold":           cbx_Val.SelectedIndex =  1; break; // sub
 							case "Death":          cbx_Val.SelectedIndex =  2; break;
 							case "Disease":        cbx_Val.SelectedIndex =  3; break;
-							case "Divine":         cbx_Val.SelectedIndex =  4; break;
-							case "Electricity":    cbx_Val.SelectedIndex =  5; break;
-							case "Evil":           cbx_Val.SelectedIndex =  6; break;
+							case "Divine":         cbx_Val.SelectedIndex =  4; break; // sub
+							case "Electricity":    cbx_Val.SelectedIndex =  5; break; // sub
+							case "Evil":           cbx_Val.SelectedIndex =  6; break; // non-standard
 							case "Fear":           cbx_Val.SelectedIndex =  7; break;
-							case "Fire":           cbx_Val.SelectedIndex =  8; break;
-							case "Magical":        cbx_Val.SelectedIndex =  9; break;
+							case "Fire":           cbx_Val.SelectedIndex =  8; break; // sub
+							case "Magical":        cbx_Val.SelectedIndex =  9; break; // sub
 							case "Mind_Affecting": cbx_Val.SelectedIndex = 10; break;
-							case "Negative":       cbx_Val.SelectedIndex = 11; break;
+							case "Negative":       cbx_Val.SelectedIndex = 11; break; // sub
 							case "Paralysis":      cbx_Val.SelectedIndex = 12; break;
 							case "Poison":         cbx_Val.SelectedIndex = 13; break;
-							case "Positive":       cbx_Val.SelectedIndex = 14; break;
-							case "Sonic":          cbx_Val.SelectedIndex = 15; break;
-							case "Constitution":   cbx_Val.SelectedIndex = 16; break;
-							case "Water":          cbx_Val.SelectedIndex = 17; break;
+							case "Positive":       cbx_Val.SelectedIndex = 14; break; // sub
+							case "Sonic":          cbx_Val.SelectedIndex = 15; break; // sub
+							case "Constitution":   cbx_Val.SelectedIndex = 16; break; // non-standard
+							case "Water":          cbx_Val.SelectedIndex = 17; break; // non-standard
 
 							default:
 							case Constants.Stars:  cbx_Val.SelectedIndex = 18; break;
 						}
 						_f.stOriginal = _f.stInput = val;
 						break;
-
+/*
+int IMMUNITY_TYPE_NONE                      =  0;
+int IMMUNITY_TYPE_MIND_SPELLS               =  1; // y
+int IMMUNITY_TYPE_POISON                    =  2; // y
+int IMMUNITY_TYPE_DISEASE                   =  3; // y
+int IMMUNITY_TYPE_FEAR                      =  4; // y
+int IMMUNITY_TYPE_TRAP                      =  5;
+int IMMUNITY_TYPE_PARALYSIS                 =  6; // y
+int IMMUNITY_TYPE_BLINDNESS                 =  7;
+int IMMUNITY_TYPE_DEAFNESS                  =  8;
+int IMMUNITY_TYPE_SLOW                      =  9;
+int IMMUNITY_TYPE_ENTANGLE                  = 10;
+int IMMUNITY_TYPE_SILENCE                   = 11;
+int IMMUNITY_TYPE_STUN                      = 12;
+int IMMUNITY_TYPE_SLEEP                     = 13;
+int IMMUNITY_TYPE_CHARM                     = 14;
+int IMMUNITY_TYPE_DOMINATE                  = 15;
+int IMMUNITY_TYPE_CONFUSED                  = 16;
+int IMMUNITY_TYPE_CURSED                    = 17;
+int IMMUNITY_TYPE_DAZED                     = 18;
+int IMMUNITY_TYPE_ABILITY_DECREASE          = 19;
+int IMMUNITY_TYPE_ATTACK_DECREASE           = 20;
+int IMMUNITY_TYPE_DAMAGE_DECREASE           = 21;
+int IMMUNITY_TYPE_DAMAGE_IMMUNITY_DECREASE  = 22;
+int IMMUNITY_TYPE_AC_DECREASE               = 23;
+int IMMUNITY_TYPE_MOVEMENT_SPEED_DECREASE   = 24;
+int IMMUNITY_TYPE_SAVING_THROW_DECREASE     = 25;
+int IMMUNITY_TYPE_SPELL_RESISTANCE_DECREASE = 26;
+int IMMUNITY_TYPE_SKILL_DECREASE            = 27;
+int IMMUNITY_TYPE_KNOCKDOWN                 = 28;
+int IMMUNITY_TYPE_NEGATIVE_LEVEL            = 29;
+int IMMUNITY_TYPE_SNEAK_ATTACK              = 30;
+int IMMUNITY_TYPE_CRITICAL_HIT              = 31;
+int IMMUNITY_TYPE_DEATH                     = 32; // y
+*/
 					case Category:
 						ColType = Category;
 						Text = " Category";

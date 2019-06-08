@@ -218,6 +218,8 @@ takes ~20 seconds on my decently fast computer.
 
 Settings.Cfg file (do not use double-quotes)
 
+Any change to settings requires a restart.
+
 the following variables ought be respected:
 
 font=      a .NET string that represents the desired table-font (see Font->
