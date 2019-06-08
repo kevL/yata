@@ -220,7 +220,7 @@ namespace yata
 						ColType = Category;
 						Text = " Category";
 						setComboboxVisible();
-						populateCategoryDropdown();
+						populateCategories();
 
 						if (val == Constants.Stars) val = "0";
 						if (Int32.TryParse(val, out result)
@@ -238,7 +238,7 @@ namespace yata
 						ColType = TargetingUI;
 						Text = " TargetingUI";
 						setComboboxVisible();
-						populateTargetingUiDropdown();
+						populateTargeters();
 
 						if (val == Constants.Stars) val = "0";
 						if (Int32.TryParse(val, out result)
@@ -377,7 +377,7 @@ namespace yata
 			cbx_Val.Visible = true;
 		}
 
-		void populateCategoryDropdown()
+		void populateCategories()
 		{
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
@@ -388,7 +388,7 @@ namespace yata
 
 		const float epsilon = 0.00001F;
 
-		void populateTargetingUiDropdown()
+		void populateTargeters()
 		{
 			string text;
 
