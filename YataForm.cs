@@ -3616,6 +3616,7 @@ namespace yata
 				case InfoHexDialog.Range:
 				case InfoHexDialog.MetaMagic:
 				case InfoHexDialog.TargetType:
+				case InfoHexDialog.ImmunityType:
 				case InfoHexDialog.UserType:
 				case InfoHexDialog.AsMetaMagic:
 					return true;
@@ -3756,6 +3757,7 @@ namespace yata
 			{
 				case InfoHexDialog.School: // STRING Input ->
 				case InfoHexDialog.Range:
+				case InfoHexDialog.ImmunityType:
 				case InfoHexDialog.UserType:
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
