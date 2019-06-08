@@ -16,6 +16,7 @@ namespace yata
 		internal const int MetaMagic   =  7;
 		internal const int TargetType  =  8;
 		internal const int Category    = 52;
+		internal const int UserType    = 54;
 		internal const int TargetingUI = 66;
 		#endregion Fields (static)
 
@@ -87,7 +88,7 @@ namespace yata
 							case "V": cb_05.Checked = true; break;
 						}
 
-						SetInfoText(-1, (_f.stOriginal = _f.stInput = val));
+						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
 						break;
 
 					case Range:
@@ -112,7 +113,7 @@ namespace yata
 							case "I": cb_05.Checked = true; break;
 						}
 
-						SetInfoText(-1, (_f.stOriginal = _f.stInput = val));
+						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
 						break;
 
 					case MetaMagic:
@@ -232,6 +233,26 @@ namespace yata
 							cbx_Val.SelectedIndex = Info.categoryLabels.Count; // "n/a"
 
 						_f.intOriginal = _f.intInput = result;
+						break;
+
+					case UserType:
+						ColType = UserType;
+						Text = " UserType";
+						setVisibleUserTypes();
+
+						cb_00.Text = "1 - Spell";
+						cb_01.Text = "2 - Special Ability";
+						cb_02.Text = "3 - Feat";
+						cb_03.Text = "4 - Item Power";
+
+						switch (val)
+						{
+							case "1": cb_00.Checked = true; break;
+							case "2": cb_01.Checked = true; break;
+							case "3": cb_02.Checked = true; break;
+							case "4": cb_03.Checked = true; break;
+						}
+						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
 						break;
 
 					case TargetingUI:
@@ -371,6 +392,14 @@ namespace yata
 			cb_06.Visible = true;
 		}
 
+		void setVisibleUserTypes()
+		{
+			cb_00.Visible =
+			cb_01.Visible =
+			cb_02.Visible =
+			cb_03.Visible = true;
+		}
+
 		void setComboboxVisible()
 		{
 			lbl_Val.Visible = false;
@@ -451,6 +480,7 @@ namespace yata
 					case Range:      changed_Range();      break;
 					case MetaMagic:  changed_MetaMagic();  break;
 					case TargetType: changed_TargetType(); break;
+					case UserType:   changed_UserType();   break;
 				}
 			}
 		}
@@ -461,12 +491,12 @@ namespace yata
 			{
 				_bypass = true;
 
-				string text = Constants.Stars;
+				string val = Constants.Stars;
 				if (_cb == cb_00)
 				{
 					if (_cb.Checked)
 					{
-						text = "A";
+						val = "A";
 						cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
 						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -475,7 +505,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "C";
+						val = "C";
 						cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
 						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -484,7 +514,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "D";
+						val = "D";
 						cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
 						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -493,7 +523,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "E";
+						val = "E";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
 						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -502,7 +532,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "I";
+						val = "I";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -511,7 +541,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "N";
+						val = "N";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
 					}
@@ -520,7 +550,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "T";
+						val = "T";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
 					}
@@ -529,12 +559,12 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "V";
+						val = "V";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
 					}
 				}
-				SetInfoText(-1, (_f.stInput = text));
+				SetInfoText(-1, _f.stInput = val);
 
 				_bypass = false;
 			}
@@ -546,12 +576,12 @@ namespace yata
 			{
 				_bypass = true;
 
-				string text = Constants.Stars;
+				string val = Constants.Stars;
 				if (_cb == cb_00)
 				{
 					if (_cb.Checked)
 					{
-						text = "P";
+						val = "P";
 						cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = false;
 					}
@@ -560,7 +590,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "T";
+						val = "T";
 						cb_00.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = false;
 					}
@@ -569,7 +599,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "S";
+						val = "S";
 						cb_00.Checked = cb_01.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = false;
 					}
@@ -578,7 +608,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "M";
+						val = "M";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked =
 						cb_04.Checked = cb_05.Checked = false;
 					}
@@ -587,7 +617,7 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "L";
+						val = "L";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked =
 						cb_03.Checked = cb_05.Checked = false;
 					}
@@ -596,12 +626,12 @@ namespace yata
 				{
 					if (_cb.Checked)
 					{
-						text = "I";
+						val = "I";
 						cb_00.Checked = cb_01.Checked = cb_02.Checked =
 						cb_03.Checked = cb_04.Checked = false;
 					}
 				}
-				SetInfoText(-1, (_f.stInput = text));
+				SetInfoText(-1, _f.stInput = val);
 
 				_bypass = false;
 			}
@@ -775,6 +805,51 @@ namespace yata
 			}
 
 			SetInfoText(_f.intInput);
+		}
+
+		void changed_UserType()
+		{
+			if (!_bypass)
+			{
+				_bypass = true;
+
+				string val = Constants.Stars;
+				if (_cb == cb_00)
+				{
+					if (_cb.Checked)
+					{
+						val = "1";
+						cb_01.Checked = cb_02.Checked = cb_03.Checked = false;
+					}
+				}
+				else if (_cb == cb_01)
+				{
+					if (_cb.Checked)
+					{
+						val = "2";
+						cb_00.Checked = cb_02.Checked = cb_03.Checked = false;
+					}
+				}
+				else if (_cb == cb_02)
+				{
+					if (_cb.Checked)
+					{
+						val = "3";
+						cb_00.Checked = cb_01.Checked = cb_03.Checked = false;
+					}
+				}
+				else //if (_cb == cb_03)
+				{
+					if (_cb.Checked)
+					{
+						val = "4";
+						cb_00.Checked = cb_01.Checked = cb_02.Checked = false;
+					}
+				}
+				SetInfoText(-1, _f.stInput = val);
+
+				_bypass = false;
+			}
 		}
 
 		void changed_Combobox(object sender, EventArgs e)
