@@ -93,7 +93,7 @@ namespace yata
 			this.cb_00.Text = "cb_00";
 			this.cb_00.UseVisualStyleBackColor = true;
 			this.cb_00.Visible = false;
-			this.cb_00.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_00.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_01
 			// 
@@ -105,7 +105,7 @@ namespace yata
 			this.cb_01.Text = "cb_01";
 			this.cb_01.UseVisualStyleBackColor = true;
 			this.cb_01.Visible = false;
-			this.cb_01.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_01.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_02
 			// 
@@ -117,7 +117,7 @@ namespace yata
 			this.cb_02.Text = "cb_02";
 			this.cb_02.UseVisualStyleBackColor = true;
 			this.cb_02.Visible = false;
-			this.cb_02.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_02.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_03
 			// 
@@ -129,7 +129,7 @@ namespace yata
 			this.cb_03.Text = "cb_03";
 			this.cb_03.UseVisualStyleBackColor = true;
 			this.cb_03.Visible = false;
-			this.cb_03.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_03.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_04
 			// 
@@ -141,7 +141,7 @@ namespace yata
 			this.cb_04.Text = "cb_04";
 			this.cb_04.UseVisualStyleBackColor = true;
 			this.cb_04.Visible = false;
-			this.cb_04.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_04.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_05
 			// 
@@ -153,7 +153,7 @@ namespace yata
 			this.cb_05.Text = "cb_05";
 			this.cb_05.UseVisualStyleBackColor = true;
 			this.cb_05.Visible = false;
-			this.cb_05.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_05.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_06
 			// 
@@ -165,7 +165,7 @@ namespace yata
 			this.cb_06.Text = "cb_06";
 			this.cb_06.UseVisualStyleBackColor = true;
 			this.cb_06.Visible = false;
-			this.cb_06.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_06.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_07
 			// 
@@ -177,7 +177,7 @@ namespace yata
 			this.cb_07.Text = "cb_07";
 			this.cb_07.UseVisualStyleBackColor = true;
 			this.cb_07.Visible = false;
-			this.cb_07.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_07.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// btn_Accept
 			// 
@@ -214,7 +214,7 @@ namespace yata
 			this.cb_15.Text = "cb_15";
 			this.cb_15.UseVisualStyleBackColor = true;
 			this.cb_15.Visible = false;
-			this.cb_15.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_15.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_14
 			// 
@@ -226,7 +226,7 @@ namespace yata
 			this.cb_14.Text = "cb_14";
 			this.cb_14.UseVisualStyleBackColor = true;
 			this.cb_14.Visible = false;
-			this.cb_14.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_14.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_13
 			// 
@@ -238,7 +238,7 @@ namespace yata
 			this.cb_13.Text = "cb_13";
 			this.cb_13.UseVisualStyleBackColor = true;
 			this.cb_13.Visible = false;
-			this.cb_13.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_13.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_12
 			// 
@@ -250,7 +250,7 @@ namespace yata
 			this.cb_12.Text = "cb_12";
 			this.cb_12.UseVisualStyleBackColor = true;
 			this.cb_12.Visible = false;
-			this.cb_12.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_12.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_11
 			// 
@@ -262,7 +262,7 @@ namespace yata
 			this.cb_11.Text = "cb_11";
 			this.cb_11.UseVisualStyleBackColor = true;
 			this.cb_11.Visible = false;
-			this.cb_11.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_11.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_10
 			// 
@@ -274,7 +274,7 @@ namespace yata
 			this.cb_10.Text = "cb_10";
 			this.cb_10.UseVisualStyleBackColor = true;
 			this.cb_10.Visible = false;
-			this.cb_10.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_10.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_09
 			// 
@@ -286,7 +286,7 @@ namespace yata
 			this.cb_09.Text = "cb_09";
 			this.cb_09.UseVisualStyleBackColor = true;
 			this.cb_09.Visible = false;
-			this.cb_09.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_09.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_08
 			// 
@@ -298,7 +298,7 @@ namespace yata
 			this.cb_08.Text = "cb_08";
 			this.cb_08.UseVisualStyleBackColor = true;
 			this.cb_08.Visible = false;
-			this.cb_08.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_08.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_23
 			// 
@@ -310,7 +310,7 @@ namespace yata
 			this.cb_23.Text = "cb_23";
 			this.cb_23.UseVisualStyleBackColor = true;
 			this.cb_23.Visible = false;
-			this.cb_23.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_23.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_22
 			// 
@@ -322,7 +322,7 @@ namespace yata
 			this.cb_22.Text = "cb_22";
 			this.cb_22.UseVisualStyleBackColor = true;
 			this.cb_22.Visible = false;
-			this.cb_22.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_22.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_21
 			// 
@@ -334,7 +334,7 @@ namespace yata
 			this.cb_21.Text = "cb_21";
 			this.cb_21.UseVisualStyleBackColor = true;
 			this.cb_21.Visible = false;
-			this.cb_21.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_21.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_20
 			// 
@@ -346,7 +346,7 @@ namespace yata
 			this.cb_20.Text = "cb_20";
 			this.cb_20.UseVisualStyleBackColor = true;
 			this.cb_20.Visible = false;
-			this.cb_20.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_20.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_19
 			// 
@@ -358,7 +358,7 @@ namespace yata
 			this.cb_19.Text = "cb_19";
 			this.cb_19.UseVisualStyleBackColor = true;
 			this.cb_19.Visible = false;
-			this.cb_19.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_19.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_18
 			// 
@@ -370,7 +370,7 @@ namespace yata
 			this.cb_18.Text = "cb_18";
 			this.cb_18.UseVisualStyleBackColor = true;
 			this.cb_18.Visible = false;
-			this.cb_18.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_18.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_17
 			// 
@@ -382,7 +382,7 @@ namespace yata
 			this.cb_17.Text = "cb_17";
 			this.cb_17.UseVisualStyleBackColor = true;
 			this.cb_17.Visible = false;
-			this.cb_17.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_17.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cb_16
 			// 
@@ -394,7 +394,7 @@ namespace yata
 			this.cb_16.Text = "cb_16";
 			this.cb_16.UseVisualStyleBackColor = true;
 			this.cb_16.Visible = false;
-			this.cb_16.CheckedChanged += new System.EventHandler(this.changed);
+			this.cb_16.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
 			// cbx_Val
 			// 
@@ -408,7 +408,7 @@ namespace yata
 			this.cbx_Val.Size = new System.Drawing.Size(394, 21);
 			this.cbx_Val.TabIndex = 26;
 			this.cbx_Val.Visible = false;
-			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_TargetingUi);
+			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_Combobox);
 			// 
 			// InfoHexDialog
 			// 

@@ -15,6 +15,7 @@ namespace yata
 		internal const int Range       =  5;
 		internal const int MetaMagic   =  7;
 		internal const int TargetType  =  8;
+		internal const int Category    = 52;
 		internal const int TargetingUI = 66;
 		#endregion Fields (static)
 
@@ -215,10 +216,28 @@ namespace yata
 						SetInfoText(_f.intOriginal = _f.intInput = result);
 						break;
 
+					case Category:
+						ColType = Category;
+						Text = " Category";
+						setComboboxVisible();
+						populateCategoryDropdown();
+
+						if (val == Constants.Stars) val = "0";
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < Info.categoryLabels.Count)
+						{
+							cbx_Val.SelectedIndex = result;
+						}
+						else
+							cbx_Val.SelectedIndex = Info.categoryLabels.Count; // "n/a"
+
+						_f.intOriginal = _f.intInput = result;
+						break;
+
 					case TargetingUI:
 						ColType = TargetingUI;
 						Text = " TargetingUI";
-						setVisibleTargetingUiTypes();
+						setComboboxVisible();
 						populateTargetingUiDropdown();
 
 						if (val == Constants.Stars) val = "0";
@@ -352,10 +371,19 @@ namespace yata
 			cb_06.Visible = true;
 		}
 
-		void setVisibleTargetingUiTypes()
+		void setComboboxVisible()
 		{
 			lbl_Val.Visible = false;
 			cbx_Val.Visible = true;
+		}
+
+		void populateCategoryDropdown()
+		{
+			for (int i = 0; i != Info.categoryLabels.Count; ++i)
+			{
+				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
+			}
+			cbx_Val.Items.Add(new tui("n/a"));
 		}
 
 		const float epsilon = 0.00001F;
@@ -411,7 +439,7 @@ namespace yata
 		#region Events
 		CheckBox _cb;
 
-		void changed(object sender, EventArgs e)
+		void changed_Checkbox(object sender, EventArgs e)
 		{
 			if (!_init)
 			{
@@ -749,16 +777,29 @@ namespace yata
 			SetInfoText(_f.intInput);
 		}
 
-		void changed_TargetingUi(object sender, EventArgs e)
+		void changed_Combobox(object sender, EventArgs e)
 		{
 			if (!_init)
 			{
-				if (cbx_Val.SelectedIndex == Info.targetLabels.Count)
-					_f.intInput = 0;
-				else
-					_f.intInput = cbx_Val.SelectedIndex;
+				switch (ColType)
+				{
+					case Category:
+						if (cbx_Val.SelectedIndex == Info.categoryLabels.Count)
+							_f.intInput = 0;
+						else
+							_f.intInput = cbx_Val.SelectedIndex;
+						break;
+
+					case TargetingUI:
+						if (cbx_Val.SelectedIndex == Info.targetLabels.Count)
+							_f.intInput = 0;
+						else
+							_f.intInput = cbx_Val.SelectedIndex;
+						break;
+				}
 			}
 		}
+
 
 /*		void click_Accept(object sender, EventArgs e)
 		{} */

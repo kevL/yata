@@ -3622,6 +3622,11 @@ namespace yata
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoHexDialog.Category:
+					if (Info.categoryLabels.Count != 0)
+						return true;
+					break;
 			}
 			return false;
 		}
@@ -3771,7 +3776,8 @@ namespace yata
 					}
 					break;
 
-				case InfoHexDialog.TargetingUI: // INT Input ->
+				case InfoHexDialog.Category: // INT Input ->
+				case InfoHexDialog.TargetingUI:
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& intInput != intOriginal)
