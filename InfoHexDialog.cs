@@ -17,6 +17,7 @@ namespace yata
 		internal const int TargetType  =  8;
 		internal const int Category    = 52;
 		internal const int UserType    = 54;
+		internal const int AsMetaMagic = 65;
 		internal const int TargetingUI = 66;
 		#endregion Fields (static)
 
@@ -255,13 +256,48 @@ namespace yata
 						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
 						break;
 
+					case AsMetaMagic:
+						ColType = AsMetaMagic;
+						Text = " AsMetaMagic";
+						setComboboxVisible();
+						populateAsMetaMagics();
+
+						if (val == Constants.Stars || val.Length < 3) val = "0x0";
+						if (Int32.TryParse(val.Substring(2),
+										   NumberStyles.AllowHexSpecifier,
+										   CultureInfo.InvariantCulture,
+										   out result))
+						{
+							switch (result)
+							{
+								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
+								case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  1; break;
+								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  2; break;
+								case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
+								case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  4; break;
+								case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  5; break;
+								case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  6; break;
+								case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex =  7; break;
+								case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  8; break;
+								case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  9; break;
+								case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex = 10; break;
+
+								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 11; break; // Invocation Shapes ->
+								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 12; break;
+								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 13; break;
+								case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 14; break;
+								case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 15; break;
+							}
+						}
+						_f.intOriginal = _f.intInput = result;
+						break;
+
 					case TargetingUI:
 						ColType = TargetingUI;
 						Text = " TargetingUI";
 						setComboboxVisible();
 						populateTargeters();
 
-						if (val == Constants.Stars) val = "0";
 						if (Int32.TryParse(val, out result)
 							&& result > -1 && result < Info.targetLabels.Count)
 						{
@@ -270,7 +306,7 @@ namespace yata
 						else
 							cbx_Val.SelectedIndex = Info.targetLabels.Count; // "n/a"
 
-						_f.intOriginal = _f.intInput = result;
+						_f.stOriginal = _f.stInput = val;
 						break;
 				}
 			}
@@ -413,6 +449,30 @@ namespace yata
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
 			}
 			cbx_Val.Items.Add(new tui("n/a"));
+		}
+
+		void populateAsMetaMagics()
+		{
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_DRAINING_BLAST  .ToString("X6") + " - Draining Blast")); // Eldritch Essences ->
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_FRIGHTFUL_BLAST .ToString("X6") + " - Frightful Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BESHADOWED_BLAST.ToString("X6") + " - Beshadowed Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BRIMSTONE_BLAST .ToString("X6") + " - Brimstone Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HELLRIME_BLAST  .ToString("X6") + " - Hellrime Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BEWITCHING_BLAST.ToString("X6") + " - Bewitching Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_NOXIOUS_BLAST   .ToString("X6") + " - Noxious Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_VITRIOLIC_BLAST .ToString("X6") + " - Vitriolic Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_UTTERDARK_BLAST .ToString("X6") + " - Utterdark Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HINDERING_BLAST .ToString("X6") + " - Hindering Blast"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_BINDING_BLAST   .ToString("X6") + " - Binding Blast"));
+
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_SPEAR  .ToString("X6") + " - Eldritch Spear")); // Invocation Shapes ->
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_HIDEOUS_BLOW    .ToString("X6") + " - Hideous Blow"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_CHAIN  .ToString("X6") + " - Eldritch Chain"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_CONE   .ToString("X6") + " - Eldritch Cone"));
+			cbx_Val.Items.Add(new tui("0x" + YataForm.META_I_ELDRITCH_DOOM   .ToString("X6") + " - Eldritch Doom"));
+
+			cbx_Val.Items.Add(new tui("n/a"));
+			cbx_Val.SelectedIndex = 16;
 		}
 
 		const float epsilon = 0.00001F;
@@ -680,7 +740,7 @@ namespace yata
 				else             _f.intInput &= ~YataForm.META_PERMANENT;
 			}
 
-			else if (_cb == cb_08) // Eldritch Essences and Invocation Shapes ->
+			else if (_cb == cb_08) // Eldritch Essences ->
 			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_DRAINING_BLAST;
 				else             _f.intInput &= ~YataForm.META_I_DRAINING_BLAST;
@@ -736,7 +796,7 @@ namespace yata
 				else             _f.intInput &= ~YataForm.META_I_BINDING_BLAST;
 			}
 
-			else if (_cb == cb_19)
+			else if (_cb == cb_19) // Invocation Shapes ->
 			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_SPEAR;
 				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_SPEAR;
@@ -856,22 +916,35 @@ namespace yata
 		{
 			if (!_init)
 			{
-				switch (ColType)
+				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
 				{
-					case Category:
-						if (cbx_Val.SelectedIndex == Info.categoryLabels.Count)
-							_f.intInput = 0;
-						else
-							_f.intInput = cbx_Val.SelectedIndex;
-						break;
-
-					case TargetingUI:
-						if (cbx_Val.SelectedIndex == Info.targetLabels.Count)
-							_f.intInput = 0;
-						else
-							_f.intInput = cbx_Val.SelectedIndex;
-						break;
+					_f.intInput = 0;
 				}
+				else if (ColType == AsMetaMagic)
+				{
+					switch (cbx_Val.SelectedIndex)
+					{
+						case  0: _f.intInput = YataForm.META_I_DRAINING_BLAST;   break; // Eldritch Essences ->
+						case  1: _f.intInput = YataForm.META_I_FRIGHTFUL_BLAST;  break;
+						case  2: _f.intInput = YataForm.META_I_BESHADOWED_BLAST; break;
+						case  3: _f.intInput = YataForm.META_I_BRIMSTONE_BLAST;  break;
+						case  4: _f.intInput = YataForm.META_I_HELLRIME_BLAST;   break;
+						case  5: _f.intInput = YataForm.META_I_BEWITCHING_BLAST; break;
+						case  6: _f.intInput = YataForm.META_I_NOXIOUS_BLAST;    break;
+						case  7: _f.intInput = YataForm.META_I_VITRIOLIC_BLAST;  break;
+						case  8: _f.intInput = YataForm.META_I_UTTERDARK_BLAST;  break;
+						case  9: _f.intInput = YataForm.META_I_HINDERING_BLAST;  break;
+						case 10: _f.intInput = YataForm.META_I_BINDING_BLAST;    break;
+
+						case 11: _f.intInput = YataForm.META_I_ELDRITCH_SPEAR;   break; // Invocation Shapes ->
+						case 12: _f.intInput = YataForm.META_I_HIDEOUS_BLOW;     break;
+						case 13: _f.intInput = YataForm.META_I_ELDRITCH_CHAIN;   break;
+						case 14: _f.intInput = YataForm.META_I_ELDRITCH_CONE;    break;
+						case 15: _f.intInput = YataForm.META_I_ELDRITCH_DOOM;    break;
+					}
+				}
+				else
+					_f.intInput = cbx_Val.SelectedIndex;
 			}
 		}
 
@@ -883,13 +956,22 @@ namespace yata
 
 
 	/// <summary>
-	/// 
+	/// An class-object for populating the 'cbx_Val' dropdown-list.
+	/// @note 'tui' stands for TruncatedUmbilicalIntersection but that was too
+	/// long ... so I shortened it.
 	/// </summary>
-	sealed class tui // TargetingUI dropdown-object
+	sealed class tui
 	{
+		/// <summary>
+		/// Appears as the text of this item.
+		/// </summary>
 		string Label
 		{ get; set; }
 
+		/// <summary>
+		/// Constructs an item for populating the 'cbx_Val' dropdown-list.
+		/// </summary>
+		/// <param name="label"></param>
 		internal tui(string label)
 		{
 			Label = label;
