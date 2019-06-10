@@ -129,14 +129,14 @@ namespace yata
 
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
+		/// TODO: Check that the given 2da really has the required cols.
 		/// </summary>
 		/// <param name="pfe2da"></param>
 		/// <param name="labels"></param>
 		/// <param name="it"></param>
 		/// <param name="col">col in the 2da of the label</param>
 		/// <param name="col1">col in the 2da of an int (default -1)</param>
-		/// <param name="ints">a collection MUST be passed in if col2 is not -1</param>
-		/// TODO: Check that the given 2da really has the required cols.
+		/// <param name="ints">a collection MUST be passed in if col1 is not -1</param>
 		internal static void GropeLabels(string pfe2da,
 										 ICollection<string> labels,
 										 ToolStripMenuItem it,
@@ -151,9 +151,9 @@ namespace yata
 				// WARNING: This does *not* handle quotation marks around 2da fields.
 				foreach (string row in rows) // test for double-quote character and exit if found.
 				{
-					foreach (char character in row)
+					foreach (char c in row)
 					{
-						if (character == '"')
+						if (c == '"')
 						{
 							const string info = "The 2da-file contains double-quotes. Although that can be"
 											  + " valid in a 2da-file this function is not coded to cope."
@@ -209,6 +209,7 @@ namespace yata
 
 		/// <summary>
 		/// Gets the label-strings plus width/height values from SpellTarget.2da.
+		/// TODO: Check that the given 2da really has the required cols.
 		/// </summary>
 		/// <param name="pfe2da">path_file_extension to the 2da</param>
 		/// <param name="labels">the cache in which to store the labels</param>
@@ -218,7 +219,6 @@ namespace yata
 		/// <param name="col2">col in the 2da of a float (default -1)</param>
 		/// <param name="floats1">a collection MUST be passed in if col1 is not -1</param>
 		/// <param name="floats2">a collection MUST be passed in if col2 is not -1</param>
-		/// TODO: Check that the given 2da really has the required cols.
 		internal static void GropeSpellTarget(string pfe2da,
 											  ICollection<string> labels,
 											  ToolStripMenuItem it,
@@ -304,8 +304,10 @@ namespace yata
 
 		/// <summary>
 		/// Gets the TCC-type as a string for a given (int)tag.
+		/// @note TCC=TheCompleteCraftsman defines its own item-types.
 		/// </summary>
-		/// <param name="tag"></param>
+		/// <param name="tag">the (int)value of the TAGS col in Crafting.2da -
+		/// ie. is not an nwn/2 tag</param>
 		/// <returns></returns>
 		internal static string GetTccType(int tag)
 		{
@@ -2858,8 +2860,8 @@ namespace yata
 				// itemproperty ItemPropertyOnMonsterHitProperties(int nProperty, int nSpecial=0);
 				// Iprp_MonsterHit.2da
 //						case 72: // ITEM_PROPERTY_ON_MONSTER_HIT
-					// kL_NOTE: I don't think we'll be enchanting any creature-items ....
-					// But if so see case 48: // ITEM_PROPERTY_ON_HIT_PROPERTIES
+							// kL_NOTE: I don't think we'll be enchanting any creature-items ....
+							// But if so see case 48: // ITEM_PROPERTY_ON_HIT_PROPERTIES
 //							break;
 
 				// Returns Item property turn resistance. You must specify the resistance bonus.
@@ -2966,7 +2968,7 @@ namespace yata
 				// gore, and slam). IT WILL NOT WORK ON NORMAL WEAPONS.
 				// itemproperty ItemPropertyMonsterDamage(int nDamage);
 //						case 77: // ITEM_PROPERTY_MONSTER_DAMAGE
-					// kL_NOTE: I don't think we'll be enchanting any creature-items ....
+							// kL_NOTE: I don't think we'll be enchanting any creature-items ....
 //							break;
 
 				// Returns Item property immunity to spell level. You must specify the level of
@@ -3101,11 +3103,11 @@ namespace yata
 					info += GetPar(pars, 0) + " raw"; // TODO: investigate
 					break;
 
-//						case 85: // no case 85 in nwscript: "ArrowCatching"
-//						case 86: // no case 86 in nwscript: "Bashing"
-//						case 87: // no case 87 in nwscript: "Animated"
-//						case 88: // no case 88 in nwscript: "Wild"
-//						case 89: // no case 89 in nwscript: "Etherealness"
+//				case 85: // no case 85 in nwscript: "ArrowCatching"
+//				case 86: // no case 86 in nwscript: "Bashing"
+//				case 87: // no case 87 in nwscript: "Animated"
+//				case 88: // no case 88 in nwscript: "Wild"
+//				case 89: // no case 89 in nwscript: "Etherealness"
 
 				// JLR-OEI 04/03/06: This version is REPLACING the old DEPRECATED one.
 				// Returns Item property damage reduction. You must specify:
