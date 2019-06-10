@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -20,6 +19,45 @@ namespace yata
 		internal const int UserType     = 54;
 		internal const int AsMetaMagic  = 65;
 		internal const int TargetingUI  = 66;
+
+		const string Acid           = "Acid";
+		const string Cold           = "Cold";
+		const string Death          = "Death";
+		const string Disease        = "Disease";
+		const string Divine         = "Divine";
+		const string Electricity    = "Electricity";
+		const string Evil           = "Evil";
+		const string Fear           = "Fear";
+		const string Fire           = "Fire";
+		const string Magical        = "Magical";
+		const string Mind_Affecting = "Mind_Affecting";
+		const string Negative       = "Negative";
+		const string Paralysis      = "Paralysis";
+		const string Poison         = "Poison";
+		const string Positive       = "Positive";
+		const string Sonic          = "Sonic";
+		const string Constitution   = "Constitution";
+		const string Water          = "Water";
+
+		const string non = "n/a";
+
+		const string BeshadowedBlast = "Beshadowed Blast";
+		const string BewitchingBlast = "Bewitching Blast";
+		const string BindingBlast    = "Binding Blast";
+		const string BrimstoneBlast  = "Brimstone Blast";
+		const string DrainingBlast   = "Draining Blast";
+		const string FrightfulBlast  = "Frightful Blast";
+		const string HellrimeBlast   = "Hellrime Blast";
+		const string HinderingBlast  = "Hindering Blast";
+		const string NoxiousBlast    = "Noxious Blast";
+		const string UtterdarkBlast  = "Utterdark Blast";
+		const string VitriolicBlast  = "Vitriolic Blast";
+
+		const string EldritchChain   = "Eldritch Chain";
+		const string EldritchCone    = "Eldritch Cone";
+		const string EldritchDoom    = "Eldritch Doom";
+		const string EldritchSpear   = "Eldritch Spear";
+		const string HideousBlow     = "Hideous Blow";
 		#endregion Fields (static)
 
 
@@ -31,6 +69,8 @@ namespace yata
 		int ColType;
 		bool _init;
 		bool _bypass;
+
+		CheckBox _cb;
 		#endregion Fields
 
 
@@ -132,23 +172,23 @@ namespace yata
 						cb_06.Text = "(64)Persistent";
 						cb_07.Text = "(128)Permanent";
 
-						cb_08.Text = "Draining Blast";		//(256) // Eldritch Essences ->
-						cb_09.Text = "Frightful Blast";		//(1024)
-						cb_10.Text = "Beshadowed Blast";	//(4096)
-						cb_11.Text = "Brimstone Blast";		//(8192)
-						cb_12.Text = "Hellrime Blast";		//(32768)
-						cb_13.Text = "Bewitching Blast";	//(65536)
-						cb_14.Text = "Noxious Blast";		//(262144)
-						cb_15.Text = "Vitriolic Blast";		//(524288)
-						cb_16.Text = "Utterdark Blast";		//(2097152)
-						cb_17.Text = "Hindering Blast";		//(4194304)
-						cb_18.Text = "Binding Blast";		//(8388608)
+						cb_08.Text = BeshadowedBlast;	//(4096) // Eldritch Essences ->
+						cb_09.Text = BewitchingBlast;	//(65536)
+						cb_10.Text = BindingBlast;		//(8388608)
+						cb_11.Text = BrimstoneBlast;	//(8192)
+						cb_12.Text = DrainingBlast;		//(256)
+						cb_13.Text = FrightfulBlast;	//(1024)
+						cb_14.Text = HellrimeBlast;		//(32768)
+						cb_15.Text = HinderingBlast;	//(4194304)
+						cb_16.Text = NoxiousBlast;		//(262144)
+						cb_17.Text = UtterdarkBlast;	//(2097152)
+						cb_18.Text = VitriolicBlast;	//(524288)
 
-						cb_19.Text = "Eldritch Spear";		//(512) // Invocation Shapes ->
-						cb_20.Text = "Hideous Blow";		//(2048)
-						cb_21.Text = "Eldritch Chain";		//(16384)
-						cb_22.Text = "Eldritch Cone";		//(131072)
-						cb_23.Text = "Eldritch Doom";		//(1048576)
+						cb_19.Text = EldritchChain;		//(16384) // Invocation Shapes ->
+						cb_20.Text = EldritchCone;		//(131072)
+						cb_21.Text = EldritchDoom;		//(1048576)
+						cb_22.Text = EldritchSpear;		//(512)
+						cb_23.Text = HideousBlow;		//(2048)
 
 						if (val == Constants.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
@@ -167,23 +207,23 @@ namespace yata
 							cb_06.Checked = ((result & YataForm.META_PERSISTENT) != 0);
 							cb_07.Checked = ((result & YataForm.META_PERMANENT)  != 0);
 
-							cb_08.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0); // Eldritch Essences ->
-							cb_09.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
-							cb_10.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0);
+							cb_08.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0); // Eldritch Essences ->
+							cb_09.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
+							cb_10.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
 							cb_11.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
-							cb_12.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
-							cb_13.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
-							cb_14.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
-							cb_15.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
-							cb_16.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
-							cb_17.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
-							cb_18.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
+							cb_12.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0);
+							cb_13.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
+							cb_14.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
+							cb_15.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
+							cb_16.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
+							cb_17.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
+							cb_18.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
 
-							cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0); // Invocation Shapes ->
-							cb_20.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
-							cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0);
-							cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
-							cb_23.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
+							cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0); // Invocation Shapes ->
+							cb_20.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
+							cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
+							cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0);
+							cb_23.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
 
 						}
 						SetInfoText(_f.intOriginal = _f.intInput = result);
@@ -227,27 +267,27 @@ namespace yata
 
 						switch (val)
 						{
-							case "Acid":           cbx_Val.SelectedIndex =  0; break; // sub
-							case "Cold":           cbx_Val.SelectedIndex =  1; break; // sub
-							case "Death":          cbx_Val.SelectedIndex =  2; break;
-							case "Disease":        cbx_Val.SelectedIndex =  3; break;
-							case "Divine":         cbx_Val.SelectedIndex =  4; break; // sub
-							case "Electricity":    cbx_Val.SelectedIndex =  5; break; // sub
-							case "Evil":           cbx_Val.SelectedIndex =  6; break; // non-standard
-							case "Fear":           cbx_Val.SelectedIndex =  7; break;
-							case "Fire":           cbx_Val.SelectedIndex =  8; break; // sub
-							case "Magical":        cbx_Val.SelectedIndex =  9; break; // sub
-							case "Mind_Affecting": cbx_Val.SelectedIndex = 10; break;
-							case "Negative":       cbx_Val.SelectedIndex = 11; break; // sub
-							case "Paralysis":      cbx_Val.SelectedIndex = 12; break;
-							case "Poison":         cbx_Val.SelectedIndex = 13; break;
-							case "Positive":       cbx_Val.SelectedIndex = 14; break; // sub
-							case "Sonic":          cbx_Val.SelectedIndex = 15; break; // sub
-							case "Constitution":   cbx_Val.SelectedIndex = 16; break; // non-standard
-							case "Water":          cbx_Val.SelectedIndex = 17; break; // non-standard
+							case Acid:            cbx_Val.SelectedIndex =  0; break; // sub
+							case Cold:            cbx_Val.SelectedIndex =  1; break; // sub
+							case Death:           cbx_Val.SelectedIndex =  2; break;
+							case Disease:         cbx_Val.SelectedIndex =  3; break;
+							case Divine:          cbx_Val.SelectedIndex =  4; break; // sub
+							case Electricity:     cbx_Val.SelectedIndex =  5; break; // sub
+							case Evil:            cbx_Val.SelectedIndex =  6; break; // non-standard
+							case Fear:            cbx_Val.SelectedIndex =  7; break;
+							case Fire:            cbx_Val.SelectedIndex =  8; break; // sub
+							case Magical:         cbx_Val.SelectedIndex =  9; break; // sub
+							case Mind_Affecting:  cbx_Val.SelectedIndex = 10; break;
+							case Negative:        cbx_Val.SelectedIndex = 11; break; // sub
+							case Paralysis:       cbx_Val.SelectedIndex = 12; break;
+							case Poison:          cbx_Val.SelectedIndex = 13; break;
+							case Positive:        cbx_Val.SelectedIndex = 14; break; // sub
+							case Sonic:           cbx_Val.SelectedIndex = 15; break; // sub
+							case Constitution:    cbx_Val.SelectedIndex = 16; break; // non-standard
+							case Water:           cbx_Val.SelectedIndex = 17; break; // non-standard
 
 							default:
-							case Constants.Stars:  cbx_Val.SelectedIndex = 18; break;
+							case Constants.Stars: cbx_Val.SelectedIndex = 18; break;
 						}
 						_f.stOriginal = _f.stInput = val;
 						break;
@@ -338,23 +378,23 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						{
 							switch (result)
 							{
-								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
-								case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  1; break;
-								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  2; break;
+								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break;
+								case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
+								case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
 								case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
-								case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  4; break;
-								case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  5; break;
-								case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  6; break;
-								case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex =  7; break;
-								case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  8; break;
-								case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  9; break;
-								case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex = 10; break;
+								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break; // Eldritch Essences ->
+								case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
+								case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
+								case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
+								case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
+								case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
+								case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
 
-								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 11; break; // Invocation Shapes ->
-								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 12; break;
-								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 13; break;
-								case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 14; break;
-								case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 15; break;
+								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break;
+								case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
+								case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
+								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break; // Invocation Shapes ->
+								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
 							}
 						}
 						_f.intOriginal = _f.intInput = result;
@@ -512,26 +552,26 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 		void populateImmunityTypes()
 		{
-			cbx_Val.Items.Add(new tui("Acid"));
-			cbx_Val.Items.Add(new tui("Cold"));
-			cbx_Val.Items.Add(new tui("Death"));
-			cbx_Val.Items.Add(new tui("Disease"));
-			cbx_Val.Items.Add(new tui("Divine"));
-			cbx_Val.Items.Add(new tui("Electricity"));
-			cbx_Val.Items.Add(new tui("Evil"));
-			cbx_Val.Items.Add(new tui("Fear"));
-			cbx_Val.Items.Add(new tui("Fire"));
-			cbx_Val.Items.Add(new tui("Magical"));
-			cbx_Val.Items.Add(new tui("Mind_Affecting"));
-			cbx_Val.Items.Add(new tui("Negative"));
-			cbx_Val.Items.Add(new tui("Paralysis"));
-			cbx_Val.Items.Add(new tui("Poison"));
-			cbx_Val.Items.Add(new tui("Positive"));
-			cbx_Val.Items.Add(new tui("Sonic"));
-			cbx_Val.Items.Add(new tui("Constitution"));
-			cbx_Val.Items.Add(new tui("Water"));
+			cbx_Val.Items.Add(new tui(Acid));
+			cbx_Val.Items.Add(new tui(Cold));
+			cbx_Val.Items.Add(new tui(Death));
+			cbx_Val.Items.Add(new tui(Disease));
+			cbx_Val.Items.Add(new tui(Divine));
+			cbx_Val.Items.Add(new tui(Electricity));
+			cbx_Val.Items.Add(new tui(Evil));
+			cbx_Val.Items.Add(new tui(Fear));
+			cbx_Val.Items.Add(new tui(Fire));
+			cbx_Val.Items.Add(new tui(Magical));
+			cbx_Val.Items.Add(new tui(Mind_Affecting));
+			cbx_Val.Items.Add(new tui(Negative));
+			cbx_Val.Items.Add(new tui(Paralysis));
+			cbx_Val.Items.Add(new tui(Poison));
+			cbx_Val.Items.Add(new tui(Positive));
+			cbx_Val.Items.Add(new tui(Sonic));
+			cbx_Val.Items.Add(new tui(Constitution));
+			cbx_Val.Items.Add(new tui(Water));
 
-			cbx_Val.Items.Add(new tui("n/a"));
+			cbx_Val.Items.Add(new tui(non));
 		}
 
 		void populateCategories()
@@ -540,30 +580,30 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
 			}
-			cbx_Val.Items.Add(new tui("n/a"));
+			cbx_Val.Items.Add(new tui(non));
 		}
 
 		void populateAsMetaMagics()
 		{
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_DRAINING_BLAST)   + " - Draining Blast")); // Eldritch Essences ->
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_FRIGHTFUL_BLAST)  + " - Frightful Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BESHADOWED_BLAST) + " - Beshadowed Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BRIMSTONE_BLAST)  + " - Brimstone Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HELLRIME_BLAST)   + " - Hellrime Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BEWITCHING_BLAST) + " - Bewitching Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_NOXIOUS_BLAST)    + " - Noxious Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_VITRIOLIC_BLAST)  + " - Vitriolic Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_UTTERDARK_BLAST)  + " - Utterdark Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HINDERING_BLAST)  + " - Hindering Blast"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BINDING_BLAST)    + " - Binding Blast"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BESHADOWED_BLAST) + " - " + BeshadowedBlast)); // Eldritch Essences ->
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BEWITCHING_BLAST) + " - " + BewitchingBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BINDING_BLAST)    + " - " + BindingBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_BRIMSTONE_BLAST)  + " - " + BrimstoneBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_DRAINING_BLAST)   + " - " + DrainingBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_FRIGHTFUL_BLAST)  + " - " + FrightfulBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HELLRIME_BLAST)   + " - " + HellrimeBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HINDERING_BLAST)  + " - " + HinderingBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_NOXIOUS_BLAST)    + " - " + NoxiousBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_UTTERDARK_BLAST)  + " - " + UtterdarkBlast));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_VITRIOLIC_BLAST)  + " - " + VitriolicBlast));
 
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_SPEAR)   + " - Eldritch Spear")); // Invocation Shapes ->
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HIDEOUS_BLOW)     + " - Hideous Blow"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CHAIN)   + " - Eldritch Chain"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CONE)    + " - Eldritch Cone"));
-			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_DOOM)    + " - Eldritch Doom"));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CHAIN)   + " - " + EldritchChain)); // Invocation Shapes ->
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_CONE)    + " - " + EldritchCone));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_DOOM)    + " - " + EldritchDoom));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_SPEAR)   + " - " + EldritchSpear));
+			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HIDEOUS_BLOW)     + " - " + HideousBlow));
 
-			cbx_Val.Items.Add(new tui("n/a"));
+			cbx_Val.Items.Add(new tui(non));
 			cbx_Val.SelectedIndex = 16;
 		}
 
@@ -604,7 +644,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 				cbx_Val.Items.Add(new tui(text));
 			}
-			cbx_Val.Items.Add(new tui("n/a"));
+			cbx_Val.Items.Add(new tui(non));
 		}
 		#endregion Methods
 
@@ -621,8 +661,6 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 
 		#region Events
-		CheckBox _cb;
-
 		void changed_Checkbox(object sender, EventArgs e)
 		{
 			if (!_init)
@@ -837,18 +875,18 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 			else if (_cb == cb_08) // Eldritch Essences ->
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_DRAINING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_DRAINING_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BESHADOWED_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_BESHADOWED_BLAST;
 			}
 			else if (_cb == cb_09)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_FRIGHTFUL_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_FRIGHTFUL_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BEWITCHING_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_BEWITCHING_BLAST;
 			}
 			else if (_cb == cb_10)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BESHADOWED_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BESHADOWED_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BINDING_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_BINDING_BLAST;
 			}
 			else if (_cb == cb_11)
 			{
@@ -857,64 +895,64 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			}
 			else if (_cb == cb_12)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HELLRIME_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_HELLRIME_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_DRAINING_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_DRAINING_BLAST;
 			}
 			else if (_cb == cb_13)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BEWITCHING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BEWITCHING_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_FRIGHTFUL_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_FRIGHTFUL_BLAST;
 			}
 			else if (_cb == cb_14)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_NOXIOUS_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_NOXIOUS_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HELLRIME_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_HELLRIME_BLAST;
 			}
 			else if (_cb == cb_15)
-			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_VITRIOLIC_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_VITRIOLIC_BLAST;
-			}
-			else if (_cb == cb_16)
-			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_UTTERDARK_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_UTTERDARK_BLAST;
-			}
-			else if (_cb == cb_17)
 			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HINDERING_BLAST;
 				else             _f.intInput &= ~YataForm.META_I_HINDERING_BLAST;
 			}
+			else if (_cb == cb_16)
+			{
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_NOXIOUS_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_NOXIOUS_BLAST;
+			}
+			else if (_cb == cb_17)
+			{
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_UTTERDARK_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_UTTERDARK_BLAST;
+			}
 			else if (_cb == cb_18)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BINDING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BINDING_BLAST;
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_VITRIOLIC_BLAST;
+				else             _f.intInput &= ~YataForm.META_I_VITRIOLIC_BLAST;
 			}
 
 			else if (_cb == cb_19) // Invocation Shapes ->
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_SPEAR;
-				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_SPEAR;
-			}
-			else if (_cb == cb_20)
-			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HIDEOUS_BLOW;
-				else             _f.intInput &= ~YataForm.META_I_HIDEOUS_BLOW;
-			}
-			else if (_cb == cb_21)
-			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_CHAIN;
 				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_CHAIN;
 			}
-			else if (_cb == cb_22)
+			else if (_cb == cb_20)
 			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_CONE;
 				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_CONE;
 			}
-			else if (_cb == cb_23)
+			else if (_cb == cb_21)
 			{
 				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_DOOM;
 				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_DOOM;
+			}
+			else if (_cb == cb_22)
+			{
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_SPEAR;
+				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_SPEAR;
+			}
+			else if (_cb == cb_23)
+			{
+				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HIDEOUS_BLOW;
+				else             _f.intInput &= ~YataForm.META_I_HIDEOUS_BLOW;
 			}
 
 			SetInfoText(_f.intInput);
@@ -1023,47 +1061,47 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						case ImmunityType:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.stInput = "Acid";           break;
-								case  1: _f.stInput = "Cold";           break;
-								case  2: _f.stInput = "Death";          break;
-								case  3: _f.stInput = "Disease";        break;
-								case  4: _f.stInput = "Divine";         break;
-								case  5: _f.stInput = "Electricity";    break;
-								case  6: _f.stInput = "Evil";           break;
-								case  7: _f.stInput = "Fear";           break;
-								case  8: _f.stInput = "Fire";           break;
-								case  9: _f.stInput = "Magical";        break;
-								case 10: _f.stInput = "Mind_Affecting"; break;
-								case 11: _f.stInput = "Negative";       break;
-								case 12: _f.stInput = "Paralysis";      break;
-								case 13: _f.stInput = "Poison";         break;
-								case 14: _f.stInput = "Positive";       break;
-								case 15: _f.stInput = "Sonic";          break;
-								case 16: _f.stInput = "Constitution";   break;
-								case 17: _f.stInput = "Water";          break;
+								case  0: _f.stInput = Acid;           break;
+								case  1: _f.stInput = Cold;           break;
+								case  2: _f.stInput = Death;          break;
+								case  3: _f.stInput = Disease;        break;
+								case  4: _f.stInput = Divine;         break;
+								case  5: _f.stInput = Electricity;    break;
+								case  6: _f.stInput = Evil;           break;
+								case  7: _f.stInput = Fear;           break;
+								case  8: _f.stInput = Fire;           break;
+								case  9: _f.stInput = Magical;        break;
+								case 10: _f.stInput = Mind_Affecting; break;
+								case 11: _f.stInput = Negative;       break;
+								case 12: _f.stInput = Paralysis;      break;
+								case 13: _f.stInput = Poison;         break;
+								case 14: _f.stInput = Positive;       break;
+								case 15: _f.stInput = Sonic;          break;
+								case 16: _f.stInput = Constitution;   break;
+								case 17: _f.stInput = Water;          break;
 							}
 							break;
 
 						case AsMetaMagic:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.intInput = YataForm.META_I_DRAINING_BLAST;   break; // Eldritch Essences ->
-								case  1: _f.intInput = YataForm.META_I_FRIGHTFUL_BLAST;  break;
-								case  2: _f.intInput = YataForm.META_I_BESHADOWED_BLAST; break;
+								case  0: _f.intInput = YataForm.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
+								case  1: _f.intInput = YataForm.META_I_BEWITCHING_BLAST; break;
+								case  2: _f.intInput = YataForm.META_I_BINDING_BLAST;    break;
 								case  3: _f.intInput = YataForm.META_I_BRIMSTONE_BLAST;  break;
-								case  4: _f.intInput = YataForm.META_I_HELLRIME_BLAST;   break;
-								case  5: _f.intInput = YataForm.META_I_BEWITCHING_BLAST; break;
-								case  6: _f.intInput = YataForm.META_I_NOXIOUS_BLAST;    break;
-								case  7: _f.intInput = YataForm.META_I_VITRIOLIC_BLAST;  break;
-								case  8: _f.intInput = YataForm.META_I_UTTERDARK_BLAST;  break;
-								case  9: _f.intInput = YataForm.META_I_HINDERING_BLAST;  break;
-								case 10: _f.intInput = YataForm.META_I_BINDING_BLAST;    break;
-		
-								case 11: _f.intInput = YataForm.META_I_ELDRITCH_SPEAR;   break; // Invocation Shapes ->
-								case 12: _f.intInput = YataForm.META_I_HIDEOUS_BLOW;     break;
-								case 13: _f.intInput = YataForm.META_I_ELDRITCH_CHAIN;   break;
-								case 14: _f.intInput = YataForm.META_I_ELDRITCH_CONE;    break;
-								case 15: _f.intInput = YataForm.META_I_ELDRITCH_DOOM;    break;
+								case  4: _f.intInput = YataForm.META_I_DRAINING_BLAST;   break;
+								case  5: _f.intInput = YataForm.META_I_FRIGHTFUL_BLAST;  break;
+								case  6: _f.intInput = YataForm.META_I_HELLRIME_BLAST;   break;
+								case  7: _f.intInput = YataForm.META_I_HINDERING_BLAST;  break;
+								case  8: _f.intInput = YataForm.META_I_NOXIOUS_BLAST;    break;
+								case  9: _f.intInput = YataForm.META_I_UTTERDARK_BLAST;  break;
+								case 10: _f.intInput = YataForm.META_I_VITRIOLIC_BLAST;  break;
+
+								case 11: _f.intInput = YataForm.META_I_ELDRITCH_CHAIN;   break; // Invocation Shapes ->
+								case 12: _f.intInput = YataForm.META_I_ELDRITCH_CONE;    break;
+								case 13: _f.intInput = YataForm.META_I_ELDRITCH_DOOM;    break;
+								case 14: _f.intInput = YataForm.META_I_ELDRITCH_SPEAR;   break;
+								case 15: _f.intInput = YataForm.META_I_HIDEOUS_BLOW;     break;
 							}
 							break;
 
@@ -1083,9 +1121,9 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 
 	/// <summary>
-	/// An class-object for populating the 'cbx_Val' dropdown-list.
-	/// @note 'tui' stands for TruncatedUmbilicalIntersection but that was too
-	/// long ... so I shortened it.
+	/// A class-object for populating the 'cbx_Val' dropdown-list.
+	/// @note 'tui' stands for ... "A class-object for populating the 'cbx_Val'
+	/// dropdown-list".
 	/// </summary>
 	sealed class tui
 	{
