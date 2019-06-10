@@ -3129,11 +3129,11 @@ namespace yata
 
 			string copyable = String.Empty;
 
-			int fields1 = _diff1.Fields.Length;				// check field count ->
+			int fields1 = _diff1.Fields.Length;				// check colhead count ->
 			int fields2 = _diff2.Fields.Length;
 			if (fields1 != fields2)
 			{
-				copyable = "Head count differs: (a) " + fields1 + "  (b) " + fields2;
+				copyable = "Head count: (a) " + fields1 + "  (b) " + fields2;
 			}
 
 			int fields = Math.Min(fields1, fields2);		// diff fields ->
@@ -3144,18 +3144,23 @@ namespace yata
 					if (!String.IsNullOrEmpty(copyable))
 						copyable += Environment.NewLine;
 
-					copyable += "Head #" + f + " differs: (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
+					copyable += "Head #" + f + ": (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
 				}
 			}
+
+
+			bool prelinedone = false;
 
 			int cols1 = _diff1.ColCount;					// check col count ->
 			int cols2 = _diff2.ColCount;
 			if (cols1 != cols2)
 			{
 				if (!String.IsNullOrEmpty(copyable))
-					copyable += Environment.NewLine;
-
-				copyable += "Col count differs: (a) " + cols1 + "  (b) " + cols2;
+				{
+					copyable += Environment.NewLine + Environment.NewLine;
+					prelinedone = true;
+				}
+				copyable += "Col count: (a) " + cols1 + "  (b) " + cols2;
 			}
 
 			int rows1 = _diff1.RowCount;					// check row count ->
@@ -3163,11 +3168,16 @@ namespace yata
 			if (rows1 != rows2)
 			{
 				if (!String.IsNullOrEmpty(copyable))
+				{
 					copyable += Environment.NewLine;
-
-				copyable += "Row count differs: (a) " + rows1 + "  (b) " + rows2;
+					if (!prelinedone)
+						copyable += Environment.NewLine;
+				}
+				copyable += "Row count: (a) " + rows1 + "  (b) " + rows2;
 			}
 
+
+			prelinedone = false;
 
 			int celldiffs = 0;
 
@@ -3185,17 +3195,15 @@ namespace yata
 				}
 			}
 
-			bool blanklinedone = false;
-
 			if (celldiffs != 0)
 			{
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine + Environment.NewLine;
-					blanklinedone = true;
+					prelinedone = true;
 				}
 
-				copyable += "Cell texts differ: " + celldiffs + " (inclusive)";
+				copyable += "Cell texts: " + celldiffs + " (inclusive)";
 			}
 
 			celldiffs = 0;
@@ -3243,11 +3251,11 @@ namespace yata
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine;
-					if (!blanklinedone)
+					if (!prelinedone)
 						copyable += Environment.NewLine;
 				}
 
-				copyable += "Cell texts differ: " + celldiffs + " (exclusive)";
+				copyable += "Cell texts: " + celldiffs + " (exclusive)";
 			}
 
 
