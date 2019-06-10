@@ -3195,14 +3195,15 @@ namespace yata
 				}
 			}
 
+			bool @goto = false;
 			if (celldiffs != 0)
 			{
+				@goto = true;
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine + Environment.NewLine;
 					prelinedone = true;
 				}
-
 				copyable += "Cell texts: " + celldiffs + " (inclusive)";
 			}
 
@@ -3248,31 +3249,28 @@ namespace yata
 
 			if (celldiffs != 0)
 			{
+				@goto = true;
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine;
 					if (!prelinedone)
 						copyable += Environment.NewLine;
 				}
-
 				copyable += "Cell texts: " + celldiffs + " (exclusive)";
 			}
 
 
 			string label;
 			Color color;
-			bool @goto;
 			if (String.IsNullOrEmpty(copyable))
 			{
 				label = "Tables are identical.";
 				color = Colors.Text;
-				@goto = false;
 			}
 			else
 			{
 				label = "Tables are different.";
 				color = Color.Firebrick;
-				@goto = true;
 			}
 
 			string title = "diff (a) "
