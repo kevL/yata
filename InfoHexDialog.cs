@@ -378,11 +378,11 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						{
 							switch (result)
 							{
-								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break;
+								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
 								case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
 								case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
 								case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
-								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break; // Eldritch Essences ->
+								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
 								case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
 								case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
 								case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
@@ -390,10 +390,10 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 								case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
 								case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
 
-								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break;
+								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Invocation Shapes ->
 								case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
 								case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
-								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break; // Invocation Shapes ->
+								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
 								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
 							}
 						}
