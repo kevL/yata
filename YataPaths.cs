@@ -643,11 +643,11 @@ namespace yata
 									info += "ANY";
 									break;
 								case META_I_ALL:
-									info += "All Eldritch Essences and Invocation Shapes";
+									info += "All Eldritch Essences and Blast Shapes";
 									break;
 								case META_I_SHAPES:
 									// Eldritch Spear, Hideous Blow, Eldritch Chain, Eldritch Cone, Eldritch Doom
-									info += "All Invocation Shapes";
+									info += "All Blast Shapes";
 									break;
 								case META_I_ESSENCES:
 									// Draining, Frightful, Beshadowed, Brimstone, Hellrime, Bewitching, Noxious,
@@ -706,100 +706,100 @@ namespace yata
 										space = true;
 									}
 
-									if ((result & META_I_DRAINING_BLAST) != 0) // Invocation Shapes and Essences ->
+									if ((result & META_I_DRAINING_BLAST) != 0) // Eldritch Essences and Blast Shapes ->
 									{
 										if (space) info += " - "; // that should never happen.
-										info += "Draining Blast"; //(256)
+										info += gs.DrainingBlast; //(256)
 										space = true;
 									}
 									if ((result & META_I_ELDRITCH_SPEAR) != 0)
 									{
 										if (space) info += ", ";
-										info += "Eldritch Spear"; //(512)
+										info += gs.EldritchSpear; //(512)
 										space = true;
 									}
 									if ((result & META_I_FRIGHTFUL_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Frightful Blast"; //(1024)
+										info += gs.FrightfulBlast; //(1024)
 										space = true;
 									}
 									if ((result & META_I_HIDEOUS_BLOW) != 0)
 									{
 										if (space) info += ", ";
-										info += "Hideous Blow"; //(2048)
+										info += gs.HideousBlow; //(2048)
 										space = true;
 									}
 									if ((result & META_I_BESHADOWED_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Beshadowed Blast"; //(4096)
+										info += gs.BeshadowedBlast; //(4096)
 										space = true;
 									}
 									if ((result & META_I_BRIMSTONE_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Brimstone Blast"; //(8192)
+										info += gs.BrimstoneBlast; //(8192)
 										space = true;
 									}
 									if ((result & META_I_ELDRITCH_CHAIN) != 0)
 									{
 										if (space) info += ", ";
-										info += "Eldritch Chain"; //(16384)
+										info += gs.EldritchChain; //(16384)
 										space = true;
 									}
 									if ((result & META_I_HELLRIME_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Hellrime Blast"; //(32768)
+										info += gs.HellrimeBlast; //(32768)
 										space = true;
 									}
 									if ((result & META_I_BEWITCHING_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Bewitching Blast"; //(65536)
+										info += gs.BewitchingBlast; //(65536)
 										space = true;
 									}
 									if ((result & META_I_ELDRITCH_CONE) != 0)
 									{
 										if (space) info += ", ";
-										info += "Eldritch Cone"; //(131072)
+										info += gs.EldritchCone; //(131072)
 										space = true;
 									}
 									if ((result & META_I_NOXIOUS_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Noxious Blast"; //(262144)
+										info += gs.NoxiousBlast; //(262144)
 										space = true;
 									}
 									if ((result & META_I_VITRIOLIC_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Vitriolic Blast"; //(524288)
+										info += gs.VitriolicBlast; //(524288)
 										space = true;
 									}
 									if ((result & META_I_ELDRITCH_DOOM) != 0)
 									{
 										if (space) info += ", ";
-										info += "Eldritch Doom"; //(1048576)
+										info += gs.EldritchDoom; //(1048576)
 										space = true;
 									}
 									if ((result & META_I_UTTERDARK_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Utterdark Blast"; //(2097152)
+										info += gs.UtterdarkBlast; //(2097152)
 										space = true;
 									}
 									if ((result & META_I_HINDERING_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Hindering Blast"; //(4194304)
+										info += gs.HinderingBlast; //(4194304)
 										space = true;
 									}
 									if ((result & META_I_BINDING_BLAST) != 0)
 									{
 										if (space) info += ", ";
-										info += "Binding Blast"; //(8388608)
+										info += gs.BindingBlast; //(8388608)
 									}
 									break;
 								}
@@ -1054,22 +1054,22 @@ namespace yata
 						{
 							switch (result)
 							{
-								case META_I_DRAINING_BLAST:   info += "Draining Blast";   break;
-								case META_I_ELDRITCH_SPEAR:   info += "Eldritch Spear";   break;
-								case META_I_FRIGHTFUL_BLAST:  info += "Frightful Blast";  break;
-								case META_I_HIDEOUS_BLOW:     info += "Hideous Blow";     break;
-								case META_I_BESHADOWED_BLAST: info += "Beshadowed Blast"; break;
-								case META_I_BRIMSTONE_BLAST:  info += "Brimstone Blast";  break;
-								case META_I_ELDRITCH_CHAIN:   info += "Eldritch Chain";   break;
-								case META_I_HELLRIME_BLAST:   info += "Hellrime Blast";   break;
-								case META_I_BEWITCHING_BLAST: info += "Bewitching Blast"; break;
-								case META_I_ELDRITCH_CONE:    info += "Eldritch Cone";    break;
-								case META_I_NOXIOUS_BLAST:    info += "Noxious Blast";    break;
-								case META_I_VITRIOLIC_BLAST:  info += "Vitriolic Blast";  break;
-								case META_I_ELDRITCH_DOOM:    info += "Eldritch Doom";    break;
-								case META_I_UTTERDARK_BLAST:  info += "Utterdark Blast";  break;
-								case META_I_HINDERING_BLAST:  info += "Hindering Blast";  break;
-								case META_I_BINDING_BLAST:    info += "Binding Blast";    break;
+								case META_I_DRAINING_BLAST:   info += gs.DrainingBlast;   break;
+								case META_I_ELDRITCH_SPEAR:   info += gs.EldritchSpear;   break;
+								case META_I_FRIGHTFUL_BLAST:  info += gs.FrightfulBlast;  break;
+								case META_I_HIDEOUS_BLOW:     info += gs.HideousBlow;     break;
+								case META_I_BESHADOWED_BLAST: info += gs.BeshadowedBlast; break;
+								case META_I_BRIMSTONE_BLAST:  info += gs.BrimstoneBlast;  break;
+								case META_I_ELDRITCH_CHAIN:   info += gs.EldritchChain;   break;
+								case META_I_HELLRIME_BLAST:   info += gs.HellrimeBlast;   break;
+								case META_I_BEWITCHING_BLAST: info += gs.BewitchingBlast; break;
+								case META_I_ELDRITCH_CONE:    info += gs.EldritchCone;    break;
+								case META_I_NOXIOUS_BLAST:    info += gs.NoxiousBlast;    break;
+								case META_I_VITRIOLIC_BLAST:  info += gs.VitriolicBlast;  break;
+								case META_I_ELDRITCH_DOOM:    info += gs.EldritchDoom;    break;
+								case META_I_UTTERDARK_BLAST:  info += gs.UtterdarkBlast;  break;
+								case META_I_HINDERING_BLAST:  info += gs.HinderingBlast;  break;
+								case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
 
 								default:
 									info += "bork";

@@ -35,6 +35,12 @@ namespace yata
 		CheckBox cb_22;
 		CheckBox cb_23;
 
+		GroupBox gb_MetaGroups;
+		CheckBox cb_MetaAllES;
+		CheckBox cb_MetaAllE;
+		CheckBox cb_MetaAllS;
+
+		Button btn_Clear;
 		Button btn_Accept;
 
 		/// <summary>
@@ -81,6 +87,12 @@ namespace yata
 			this.cb_17 = new System.Windows.Forms.CheckBox();
 			this.cb_16 = new System.Windows.Forms.CheckBox();
 			this.cbx_Val = new System.Windows.Forms.ComboBox();
+			this.gb_MetaGroups = new System.Windows.Forms.GroupBox();
+			this.cb_MetaAllS = new System.Windows.Forms.CheckBox();
+			this.cb_MetaAllE = new System.Windows.Forms.CheckBox();
+			this.cb_MetaAllES = new System.Windows.Forms.CheckBox();
+			this.btn_Clear = new System.Windows.Forms.Button();
+			this.gb_MetaGroups.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// cb_00
@@ -181,15 +193,14 @@ namespace yata
 			// 
 			// btn_Accept
 			// 
-			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
+			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Accept.Location = new System.Drawing.Point(5, 187);
+			this.btn_Accept.Location = new System.Drawing.Point(5, 214);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(385, 27);
-			this.btn_Accept.TabIndex = 26;
+			this.btn_Accept.TabIndex = 28;
 			this.btn_Accept.Text = "accept";
 			this.btn_Accept.UseVisualStyleBackColor = true;
 			// 
@@ -410,10 +421,69 @@ namespace yata
 			this.cbx_Val.Visible = false;
 			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_Combobox);
 			// 
+			// gb_MetaGroups
+			// 
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllS);
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllE);
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllES);
+			this.gb_MetaGroups.Location = new System.Drawing.Point(75, 180);
+			this.gb_MetaGroups.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_MetaGroups.Name = "gb_MetaGroups";
+			this.gb_MetaGroups.Padding = new System.Windows.Forms.Padding(0);
+			this.gb_MetaGroups.Size = new System.Drawing.Size(315, 32);
+			this.gb_MetaGroups.TabIndex = 27;
+			this.gb_MetaGroups.TabStop = false;
+			this.gb_MetaGroups.Visible = false;
+			// 
+			// cb_MetaAllS
+			// 
+			this.cb_MetaAllS.Location = new System.Drawing.Point(230, 10);
+			this.cb_MetaAllS.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllS.Name = "cb_MetaAllS";
+			this.cb_MetaAllS.Size = new System.Drawing.Size(80, 20);
+			this.cb_MetaAllS.TabIndex = 2;
+			this.cb_MetaAllS.Text = "all Shapes";
+			this.cb_MetaAllS.UseVisualStyleBackColor = true;
+			this.cb_MetaAllS.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			// 
+			// cb_MetaAllE
+			// 
+			this.cb_MetaAllE.Location = new System.Drawing.Point(145, 10);
+			this.cb_MetaAllE.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllE.Name = "cb_MetaAllE";
+			this.cb_MetaAllE.Size = new System.Drawing.Size(85, 20);
+			this.cb_MetaAllE.TabIndex = 1;
+			this.cb_MetaAllE.Text = "all Essences";
+			this.cb_MetaAllE.UseVisualStyleBackColor = true;
+			this.cb_MetaAllE.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			// 
+			// cb_MetaAllES
+			// 
+			this.cb_MetaAllES.Location = new System.Drawing.Point(10, 10);
+			this.cb_MetaAllES.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllES.Name = "cb_MetaAllES";
+			this.cb_MetaAllES.Size = new System.Drawing.Size(135, 20);
+			this.cb_MetaAllES.TabIndex = 0;
+			this.cb_MetaAllES.Text = "all Essences + Shapes";
+			this.cb_MetaAllES.UseVisualStyleBackColor = true;
+			this.cb_MetaAllES.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			// 
+			// btn_Clear
+			// 
+			this.btn_Clear.Location = new System.Drawing.Point(5, 190);
+			this.btn_Clear.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_Clear.Name = "btn_Clear";
+			this.btn_Clear.Size = new System.Drawing.Size(65, 20);
+			this.btn_Clear.TabIndex = 26;
+			this.btn_Clear.Text = "clear";
+			this.btn_Clear.UseVisualStyleBackColor = true;
+			this.btn_Clear.Click += new System.EventHandler(this.click_Clear);
+			// 
 			// InfoHexDialog
 			// 
 			this.AcceptButton = this.btn_Accept;
-			this.ClientSize = new System.Drawing.Size(394, 216);
+			this.ClientSize = new System.Drawing.Size(394, 243);
+			this.Controls.Add(this.btn_Clear);
 			this.Controls.Add(this.cb_23);
 			this.Controls.Add(this.cb_22);
 			this.Controls.Add(this.cb_21);
@@ -441,6 +511,7 @@ namespace yata
 			this.Controls.Add(this.cbx_Val);
 			this.Controls.Add(this.lbl_Val);
 			this.Controls.Add(this.btn_Accept);
+			this.Controls.Add(this.gb_MetaGroups);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
@@ -449,6 +520,7 @@ namespace yata
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.gb_MetaGroups.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

@@ -3765,6 +3765,7 @@ namespace yata
 				case InfoHexDialog.Range:
 				case InfoHexDialog.ImmunityType:
 				case InfoHexDialog.UserType:
+				case InfoHexDialog.TargetingUI:
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& stInput != stOriginal)
@@ -3789,7 +3790,6 @@ namespace yata
 					break;
 
 				case InfoHexDialog.Category: // INT Input ->
-				case InfoHexDialog.TargetingUI:
 					f = new InfoHexDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& intInput != intOriginal)

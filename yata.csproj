@@ -81,6 +81,7 @@
     <Compile Include="FileWatcherDialog.Designer.cs">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="gs.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="DifferDialog.cs" />
