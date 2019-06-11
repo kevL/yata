@@ -3618,21 +3618,21 @@ namespace yata
 		{
 			switch (c)
 			{
-				case InfoHexDialog.School:
-				case InfoHexDialog.Range:
-				case InfoHexDialog.MetaMagic:
-				case InfoHexDialog.TargetType:
-				case InfoHexDialog.ImmunityType:
-				case InfoHexDialog.UserType:
-				case InfoHexDialog.AsMetaMagic:
+				case InfoInputDialog.School:
+				case InfoInputDialog.Range:
+				case InfoInputDialog.MetaMagic:
+				case InfoInputDialog.TargetType:
+				case InfoInputDialog.ImmunityType:
+				case InfoInputDialog.UserType:
+				case InfoInputDialog.AsMetaMagic:
 					return true;
 
-				case InfoHexDialog.Category:
+				case InfoInputDialog.Category:
 					if (Info.categoryLabels.Count != 0)
 						return true;
 					break;
 
-				case InfoHexDialog.TargetingUI:
+				case InfoInputDialog.TargetingUI:
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
@@ -3761,12 +3761,12 @@ namespace yata
 
 			switch (cell.x)
 			{
-				case InfoHexDialog.School: // STRING Input ->
-				case InfoHexDialog.Range:
-				case InfoHexDialog.ImmunityType:
-				case InfoHexDialog.UserType:
-				case InfoHexDialog.TargetingUI:
-					f = new InfoHexDialog(Table, cell);
+				case InfoInputDialog.School: // STRING Input ->
+				case InfoInputDialog.Range:
+				case InfoInputDialog.ImmunityType:
+				case InfoInputDialog.UserType:
+				case InfoInputDialog.TargetingUI:
+					f = new InfoInputDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& stInput != stOriginal)
 					{
@@ -3774,10 +3774,10 @@ namespace yata
 					}
 					break;
 
-				case InfoHexDialog.MetaMagic: // HEX Input ->
-				case InfoHexDialog.TargetType:
-				case InfoHexDialog.AsMetaMagic:
-					f = new InfoHexDialog(Table, cell);
+				case InfoInputDialog.MetaMagic: // HEX Input ->
+				case InfoInputDialog.TargetType:
+				case InfoInputDialog.AsMetaMagic:
+					f = new InfoInputDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& intInput != intOriginal)
 					{
@@ -3789,8 +3789,8 @@ namespace yata
 					}
 					break;
 
-				case InfoHexDialog.Category: // INT Input ->
-					f = new InfoHexDialog(Table, cell);
+				case InfoInputDialog.Category: // INT Input ->
+					f = new InfoInputDialog(Table, cell);
 					if (f.ShowDialog(this) == DialogResult.OK
 						&& intInput != intOriginal)
 					{

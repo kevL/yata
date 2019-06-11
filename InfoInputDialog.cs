@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class InfoHexDialog
+	sealed partial class InfoInputDialog
 		:
 			Form
 	{
@@ -58,7 +58,7 @@ namespace yata
 
 
 		#region cTor
-		internal InfoHexDialog(YataGrid grid, Cell cell)
+		internal InfoInputDialog(YataGrid grid, Cell cell)
 		{
 			InitializeComponent();
 
