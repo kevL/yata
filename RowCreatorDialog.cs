@@ -66,8 +66,6 @@ namespace yata
 
 		void click_Ok(object sender, EventArgs e)
 		{
-			_error = true;
-
 			int result;
 
 			if (cb_Pad.Checked)
@@ -78,6 +76,8 @@ namespace yata
 					_f._startCr  = YataForm.Table.RowCount;
 					_f._lengthCr = result - _f._startCr + 1;
 				}
+				else
+					_error = true;
 			}
 			else
 			{
@@ -86,6 +86,8 @@ namespace yata
 					_error = false;
 					_f._startCr = result;
 				}
+				else
+					_error = true;
 
 				if (rb_Length.Checked)
 				{
@@ -94,12 +96,16 @@ namespace yata
 						_error = false;
 						_f._lengthCr = result;
 					}
+					else
+						_error = true;
 				}
 				else if (Int32.TryParse(tb_Stop.Text, out result))
 				{
 					_error = false;
 					_f._lengthCr = result - _f._startCr + 1;
 				}
+				else
+					_error = true;
 			}
 
 			if (_error
