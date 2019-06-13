@@ -38,6 +38,9 @@ namespace yata
 		readonly YataTabs tabControl = new YataTabs();
 		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
 
+		/// <summary>
+		/// A list used for copy/paste row(s).
+		/// </summary>
 		List<string[]> _copy = new List<string[]>();
 
 		/// <summary>
@@ -2257,6 +2260,10 @@ namespace yata
 				}
 
 				Table.Calibrate(selr, _copy.Count - 1); // paste range
+
+				Table.ClearSelects();
+				Table.Rows[selr].selected = true;
+				Table.RangeSelect = _copy.Count - 1;
 				Table.EnsureDisplayedRow(selr);
 
 
