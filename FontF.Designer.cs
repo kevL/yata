@@ -18,7 +18,7 @@ namespace yata
 		ListBox list_Size;
 		Label lbl_Example;
 		TextBox tb_Size;
-		GroupBox groupBox1;
+		GroupBox gb_Example;
 		CheckBox cb_Bold;
 		CheckBox cb_Italic;
 		TextBox tb_NetString;
@@ -53,11 +53,11 @@ namespace yata
 			this.list_Size = new System.Windows.Forms.ListBox();
 			this.lbl_Example = new System.Windows.Forms.Label();
 			this.tb_Size = new System.Windows.Forms.TextBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.gb_Example = new System.Windows.Forms.GroupBox();
 			this.cb_Bold = new System.Windows.Forms.CheckBox();
 			this.cb_Italic = new System.Windows.Forms.CheckBox();
 			this.tb_NetString = new System.Windows.Forms.TextBox();
-			this.groupBox1.SuspendLayout();
+			this.gb_Example.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// list_Font
@@ -156,19 +156,19 @@ namespace yata
 			this.tb_Size.TabIndex = 2;
 			this.tb_Size.TextChanged += new System.EventHandler(this.fontSize_TextChanged);
 			// 
-			// groupBox1
+			// gb_Example
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.gb_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.lbl_Example);
-			this.groupBox1.Location = new System.Drawing.Point(5, 250);
-			this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Padding = new System.Windows.Forms.Padding(0);
-			this.groupBox1.Size = new System.Drawing.Size(455, 105);
-			this.groupBox1.TabIndex = 9;
-			this.groupBox1.TabStop = false;
+			this.gb_Example.Controls.Add(this.lbl_Example);
+			this.gb_Example.Location = new System.Drawing.Point(5, 250);
+			this.gb_Example.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Example.Name = "gb_Example";
+			this.gb_Example.Padding = new System.Windows.Forms.Padding(0);
+			this.gb_Example.Size = new System.Drawing.Size(455, 105);
+			this.gb_Example.TabIndex = 9;
+			this.gb_Example.TabStop = false;
 			// 
 			// cb_Bold
 			// 
@@ -218,7 +218,7 @@ namespace yata
 			this.Controls.Add(this.tb_NetString);
 			this.Controls.Add(this.cb_Italic);
 			this.Controls.Add(this.cb_Bold);
-			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.gb_Example);
 			this.Controls.Add(this.btn_Ok);
 			this.Controls.Add(this.btn_Apply);
 			this.Controls.Add(this.tb_Size);
@@ -235,7 +235,7 @@ namespace yata
 			this.Text = " yata - Choose Font ... be patient";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
 			this.Load += new System.EventHandler(this.OnLoad);
-			this.groupBox1.ResumeLayout(false);
+			this.gb_Example.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

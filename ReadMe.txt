@@ -185,9 +185,9 @@ LMB       - click-drag col-boundary to re-width a col (The text of a colhead
 RMB       - click a col-boundary to auto-width a col (Note that frozen cols
             can't be re-sized.)
 RMB+Shift - sorts the table by the col either ascending or descending (Note that
-            the ID-header changes to a reddish color as a warning to indicate
-            that the table is not ordered correctly. Before sorting by cols, it
-            is strongly suggested to check the row-IDs under 2da Ops->Test row
+            the ID-header changes to a red color as a warning to indicate that
+            the table is not ordered correctly. Before sorting by cols, it is
+            strongly suggested to check the row-IDs under 2da Ops->Test row
             order, since re-sorting by row-IDs is the best way to get your table
             back into its correct order. Tables are saved in the order that they
             are sorted.)

@@ -44,9 +44,7 @@ namespace yata
 			_f = f;
 
 			if (Settings._font2 != null)
-			{
 				Font = Settings._font2;
-			}
 			else
 				Font = _f.Font;
 
