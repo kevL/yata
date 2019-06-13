@@ -420,7 +420,7 @@ namespace yata
 		/// Gets a Darth Vader quote.
 		/// </summary>
 		/// <returns></returns>
-		string GetDarthQuote()
+		static string GetDarthQuote()
 		{
 			string quote = String.Empty;
 
