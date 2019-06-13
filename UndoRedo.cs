@@ -583,7 +583,7 @@ namespace yata
 		/// </summary>
 		void InsertArray()
 		{
-			_grid._f.ShowColorPanel();
+			_grid._f.Obfuscate();
 			DrawingControl.SuspendDrawing(_grid);
 
 
@@ -615,7 +615,7 @@ namespace yata
 			// NOTE: Does not select the row's cells.
 
 
-			_grid._f.ShowColorPanel(false);
+			_grid._f.Obfuscate(false);
 			DrawingControl.ResumeDrawing(_grid);
 		}
 
@@ -624,7 +624,7 @@ namespace yata
 		/// </summary>
 		void DeleteArray()
 		{
-			_grid._f.ShowColorPanel();
+			_grid._f.Obfuscate();
 			DrawingControl.SuspendDrawing(_grid);
 
 
@@ -642,7 +642,7 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			_grid._f.ShowColorPanel(false);
+			_grid._f.Obfuscate(false);
 			DrawingControl.ResumeDrawing(_grid);
 		}
 		#endregion Methods (actions)

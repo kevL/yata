@@ -207,7 +207,7 @@ namespace yata
 				CreatePage(pfe_load);
 			}
 			else
-				ShowColorPanel();
+				Obfuscate();
 
 			//else // DEBUG instaload ->
 			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
@@ -510,12 +510,27 @@ namespace yata
 		#endregion Methods (static)
 
 
-		internal void ShowColorPanel(bool vis = true)
+		/// <summary>
+		/// Obscures or unobscures the table behind a dedicated color-panel.
+		/// Can be called before and after calibrating and drawing the table in
+		/// order to hide unsightly .NET spaz-attacks (despite double-buffering
+		/// etc).
+		/// </summary>
+		/// <param name="obscure">true to bring the color-panel to front, false
+		/// to send the color-panel to back</param>
+		internal void Obfuscate(bool obscure = true)
 		{
-			if (vis) panel_ColorFill.BringToFront();
-			else     panel_ColorFill.SendToBack();
+			if (obscure) panel_ColorFill.BringToFront();
+			else         panel_ColorFill.SendToBack();
 		}
 
+		/// <summary>
+		/// Hides the editor. This is a generic handler that should be invoked
+		/// when opening a menu on the menubar (iff the menu doesn't have its
+		/// own dropdown-handler).
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void dropdownopening(object sender, EventArgs e)
 		{
 			if (Table != null && Table._editor.Visible)
@@ -632,7 +647,7 @@ namespace yata
 						it_Recent.DropDownItems.Remove(it_Recent.DropDownItems[count]);
 				}
 
-				ShowColorPanel();
+				Obfuscate();
 //				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
 							// but a refresh turns the client area gray at least instead of glitchy.
 							// NOTE: It went away.
@@ -684,7 +699,7 @@ namespace yata
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
-				ShowColorPanel(false);
+				Obfuscate(false);
 
 				int saveOthers = 0;
 				for (int i = 0; i != Tabs.TabCount; ++i)
@@ -745,7 +760,7 @@ namespace yata
 			}
 			else
 			{
-				ShowColorPanel();
+				Obfuscate();
 
 				btn_ProPanel .Visible =
 				it_MenuPaths .Visible =
@@ -1056,7 +1071,7 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				ShowColorPanel();
+				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
 				if      (Table == _diff1) _diff1 = null;
@@ -1087,7 +1102,7 @@ namespace yata
 
 				if (Table != null)
 				{
-					ShowColorPanel(false);
+					Obfuscate(false);
 					DrawingControl.ResumeDrawing(Table);
 
 					Table.Watcher.BypassFileChanged = true;
@@ -2224,7 +2239,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				ShowColorPanel();
+				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
 
@@ -2253,7 +2268,7 @@ namespace yata
 				Table._ur.Push(rest);
 
 
-				ShowColorPanel(false);
+				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
 			else
@@ -2262,8 +2277,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple blank
-		/// rows.
+		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple
+		/// blank rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2274,7 +2289,7 @@ namespace yata
 				var f = new RowCreatorDialog(this);
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
-					ShowColorPanel();
+					Obfuscate();
 					DrawingControl.SuspendDrawing(Table);
 
 
@@ -2311,7 +2326,7 @@ namespace yata
 					Table._ur.Push(rest);
 
 
-					ShowColorPanel(false);
+					Obfuscate(false);
 					DrawingControl.ResumeDrawing(Table);
 				}
 			}
@@ -2573,12 +2588,12 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				ShowColorPanel();
+				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
 				AutosizeCols(Table);
 
-				ShowColorPanel(false);
+				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
 		}
@@ -2837,7 +2852,7 @@ namespace yata
 
 			if (Table != null)
 			{
-				ShowColorPanel();
+				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
 				SetTabSize();
@@ -2870,7 +2885,7 @@ namespace yata
 						table.Invalidator(invalid);
 				}
 
-				ShowColorPanel(false);
+				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
 		}

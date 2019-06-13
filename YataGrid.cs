@@ -1777,7 +1777,7 @@ namespace yata
 			int selr = getSelectedRow();
 			if (selr != -1)
 			{
-				_f.ShowColorPanel();
+				_f.Obfuscate();
 				DrawingControl.SuspendDrawing(this);
 
 
@@ -1823,7 +1823,7 @@ namespace yata
 				_ur.Push(rest);
 
 
-				_f.ShowColorPanel(false);
+				_f.Obfuscate(false);
 				DrawingControl.ResumeDrawing(this);
 			}
 		}
