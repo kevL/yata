@@ -2466,7 +2466,57 @@ namespace yata
 				it_ppOnOff.Checked = false;
 		}
 
-		void opsclick_CheckRowOrder(object sender, EventArgs e)
+		void opsclick_Order(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0)
+			{
+				if (!Table.Readonly)
+				{
+					bool changed = false;
+
+					string val;
+					int result;
+
+					for (int r = 0; r != Table.RowCount; ++r)
+					{
+						if (String.IsNullOrEmpty(val = Table[r,0].text)
+							|| !Int32.TryParse(val, out result)
+							|| result != r)
+						{
+							Table[r,0].text = r.ToString();
+							changed = true;
+						}
+					}
+
+					if (changed)
+					{
+						Table.Changed = true;
+						Table._ur.ResetSaved(true);
+					}
+
+					if (changed)
+					{
+						if      (Table == _diff1) _diff1 = null;
+						else if (Table == _diff2) _diff2 = null;
+
+						Table.colRewidth(0, 0, Table.RowCount - 1);
+						Table.metricFrozenControls(0);
+
+						Table.InitScroll();
+
+						int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+						if (Table.Propanel != null && Table.Propanel.Visible)
+							invalid |= YataGrid.INVALID_PROP;
+
+						Table.Invalidator(invalid);
+					}
+				}
+				else
+					ReadonlyError();
+			}
+		}
+
+		void opsclick_TestOrder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
 			{
@@ -2533,7 +2583,7 @@ namespace yata
 											MessageBoxIcon.Exclamation,
 											MessageBoxDefaultButton.Button1) == DialogResult.Yes)
 						{
-							opsclick_Reorder(null, EventArgs.Empty);
+							opsclick_Order(null, EventArgs.Empty);
 						}
 					}
 					else
@@ -2549,56 +2599,6 @@ namespace yata
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Information,
 									MessageBoxDefaultButton.Button1);
-			}
-		}
-
-		void opsclick_Reorder(object sender, EventArgs e)
-		{
-			if (Table != null && Table.RowCount != 0)
-			{
-				if (!Table.Readonly)
-				{
-					bool changed = false;
-
-					string val;
-					int result;
-
-					for (int r = 0; r != Table.RowCount; ++r)
-					{
-						if (String.IsNullOrEmpty(val = Table[r,0].text)
-							|| !Int32.TryParse(val, out result)
-							|| result != r)
-						{
-							Table[r,0].text = r.ToString();
-							changed = true;
-						}
-					}
-
-					if (changed)
-					{
-						Table.Changed = true;
-						Table._ur.ResetSaved(true);
-					}
-
-					if (changed)
-					{
-						if      (Table == _diff1) _diff1 = null;
-						else if (Table == _diff2) _diff2 = null;
-
-						Table.colRewidth(0, 0, Table.RowCount - 1);
-						Table.metricFrozenControls(0);
-
-						Table.InitScroll();
-
-						int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-						if (Table.Propanel != null && Table.Propanel.Visible)
-							invalid |= YataGrid.INVALID_PROP;
-
-						Table.Invalidator(invalid);
-					}
-				}
-				else
-					ReadonlyError();
 			}
 		}
 

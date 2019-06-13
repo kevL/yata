@@ -65,8 +65,8 @@ Clipboard
 
 
 2da Ops
-- Test row order : Ctrl+t (tests the row-order of the currently displayed 2da)
 - Order row ids  : Ctrl+d (auto-orders the IDs of the currently displayed 2da)
+- Test row order : Ctrl+t (tests the row-order of the currently displayed 2da)
 
 - Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 - Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are
@@ -184,7 +184,7 @@ LMB       - click-drag col-boundary to re-width a col (The text of a colhead
 RMB       - click a col-boundary to auto-width a col (Note that frozen cols
             can't be re-sized.)
 RMB+Shift - sorts the table by the col either ascending or descending (Note that
-            the ID-header changes to a violet color as a warning to indicate
+            the ID-header changes to a reddish color as a warning to indicate
             that the table is not ordered correctly. Before sorting by cols, it
             is strongly suggested to check the row-IDs under 2da Ops->Test row
             order, since re-sorting by row-IDs is the best way to get your table
@@ -197,10 +197,11 @@ RMB - opens the contextmenu for single-row editing
 click on a table-cell
 LMB      - selects a cell or if already selected then starts the cell-editor, or
            if editing a cell then a left-click on a different part of the table
-           (either inside or outside the grid) accepts the edit
+           either inside or outside the grid accepts the edit
 LMB+Ctrl - adds or subtracts a cell from the currently selected cells
-RMB      - if editing a cell then a right-click on a different part of the table
-           (either inside or outside the grid) cancels the edit
+RMB      - selects a cell and opens the cell context (Note that if editing a
+           cell then a right-click on a different part of the table either
+           inside or outside the grid also cancels the edit.)
 
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a

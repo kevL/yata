@@ -779,8 +779,8 @@ namespace yata
 			// 
 			this.it_Menu2daOps.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_Menu2daOps.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_CheckRows,
 			this.it_OrderRows,
+			this.it_CheckRows,
 			this.separator_11,
 			this.it_AutoCols,
 			this.it_ColorRows,
@@ -806,7 +806,7 @@ namespace yata
 			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
 			this.it_CheckRows.Size = new System.Drawing.Size(236, 22);
 			this.it_CheckRows.Text = "&Test row order";
-			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_CheckRowOrder);
+			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_TestOrder);
 			// 
 			// it_OrderRows
 			// 
@@ -815,7 +815,7 @@ namespace yata
 			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.it_OrderRows.Size = new System.Drawing.Size(236, 22);
 			this.it_OrderRows.Text = "Or&der row ids";
-			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Reorder);
+			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Order);
 			// 
 			// separator_11
 			// 
