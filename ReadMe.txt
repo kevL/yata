@@ -283,6 +283,10 @@ or Spells.2da are loaded as the cursor is moved over their cells. (Yata was
 designed with Crafting in mind and can show stuff like Encoded IPs as readable
 strings on the statusbar, eg.)
 
+To bypass a setting without deleting it, prefix its line with any character you
+want. The parser considers only lines that begin with the string-variables
+above; any line that doesn't begin exactly with one of those strings is ignored.
+
 
 Appendix A: note on Load
 
