@@ -44,7 +44,7 @@ Edit
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a selected row or range of rows)
 
-- Create row(s) (opens a dialog that inserts 1 or more blank rows at a given id)
+- Create row(s) (opens a dialog that inserts 1+ rows at a given id)
 
 
 Goto box (type a row ID and press Enter)
