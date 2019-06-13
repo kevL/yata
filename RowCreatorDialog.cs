@@ -439,7 +439,7 @@ namespace yata
 		#endregion Events
 
 
-		#region Methods
+		#region Methods (static)
 		/// <summary>
 		/// Gets a Darth Vader quote.
 		/// </summary>
@@ -492,6 +492,6 @@ namespace yata
 			return quote + Environment.NewLine + Environment.NewLine
 				 + "- Darth Vader";
 		}
-		#endregion Methods
+		#endregion Methods (static)
 	}
 }
