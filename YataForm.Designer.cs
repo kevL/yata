@@ -197,6 +197,7 @@ namespace yata
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -303,7 +304,6 @@ namespace yata
 			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
@@ -482,6 +482,12 @@ namespace yata
 			this.it_Reload.Size = new System.Drawing.Size(181, 22);
 			this.it_Reload.Text = "&Reload";
 			this.it_Reload.Click += new System.EventHandler(this.fileclick_Reload);
+			// 
+			// it_Recent
+			// 
+			this.it_Recent.Name = "it_Recent";
+			this.it_Recent.Size = new System.Drawing.Size(181, 22);
+			this.it_Recent.Text = "Recen&t";
 			// 
 			// separator_1
 			// 
@@ -1282,7 +1288,7 @@ namespace yata
 			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 204);
+			this.cellMenu.Size = new System.Drawing.Size(165, 182);
 			// 
 			// it_cellEdit
 			// 
@@ -1352,12 +1358,6 @@ namespace yata
 			this.it_cellInput.Size = new System.Drawing.Size(164, 22);
 			this.it_cellInput.Text = "input";
 			this.it_cellInput.Click += new System.EventHandler(this.cellclick_Input);
-			// 
-			// it_Recent
-			// 
-			this.it_Recent.Name = "it_Recent";
-			this.it_Recent.Size = new System.Drawing.Size(181, 22);
-			this.it_Recent.Text = "Recen&t";
 			// 
 			// YataForm
 			// 
