@@ -648,7 +648,7 @@ namespace yata
 
 					int count = it_Recent.DropDownItems.Count;
 					if (count > Settings._recent)
-						it_Recent.DropDownItems.Remove(it_Recent.DropDownItems[count]);
+						it_Recent.DropDownItems.Remove(it_Recent.DropDownItems[count - 1]);
 				}
 
 				Obfuscate();
