@@ -53,7 +53,7 @@ namespace yata
 		string _preset = String.Empty;
 
 		internal int _startCr, _lengthCr;
-		internal bool _fillCr;
+		internal CrFillType _fillCr;
 
 		internal Font FontAccent;
 
@@ -2284,6 +2284,11 @@ namespace yata
 		}
 
 
+		internal enum CrFillType
+		{
+			Stars, Selected, Copied
+		}
+
 		/// <summary>
 		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple
 		/// blank rows.
@@ -2294,7 +2299,9 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				var f = new RowCreatorDialog(this, (_copy.Count != 0));
+				int selr = Table.getSelectedRow();
+
+				var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0);
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
@@ -2304,20 +2311,27 @@ namespace yata
 					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
 
 					var cells = new string[Table.ColCount];
-					if (_fillCr)
+					switch (_fillCr)
 					{
-						for (int i = 0; i != Table.ColCount; ++i)
-						{
-							if (i < _copy[0].Length)
-								cells[i] = _copy[0][i];
-							else
+						case CrFillType.Stars:
+							for (int i = 0; i != Table.ColCount; ++i)
 								cells[i] = Constants.Stars;
-						}
-					}
-					else
-					{
-						for (int i = 0; i != Table.ColCount; ++i)
-							cells[i] = Constants.Stars;
+							break;
+
+						case CrFillType.Selected:
+							for (int i = 0; i != Table.ColCount; ++i)
+								cells[i] = Table[selr, i].text;
+							break;
+
+						case CrFillType.Copied:
+							for (int i = 0; i != Table.ColCount; ++i)
+							{
+								if (i < _copy[0].Length)
+									cells[i] = _copy[0][i];
+								else
+									cells[i] = Constants.Stars;
+							}
+							break;
 					}
 
 					int r = _startCr;

@@ -26,7 +26,10 @@ namespace yata
 		Label la_StartAdd;
 		Label la_StopFinish;
 		Label la_StopCount;
-		CheckBox cb_Fill;
+		GroupBox gb_Fillstyle;
+		RadioButton rb_FillCopied;
+		RadioButton rb_FillStars;
+		RadioButton rb_FillSelected;
 
 
 		/// <summary>
@@ -65,16 +68,20 @@ namespace yata
 			this.la_StopCount = new System.Windows.Forms.Label();
 			this.tb_StopCount = new System.Windows.Forms.TextBox();
 			this.rb_StopCount = new System.Windows.Forms.RadioButton();
-			this.cb_Fill = new System.Windows.Forms.CheckBox();
+			this.gb_Fillstyle = new System.Windows.Forms.GroupBox();
+			this.rb_FillSelected = new System.Windows.Forms.RadioButton();
+			this.rb_FillCopied = new System.Windows.Forms.RadioButton();
+			this.rb_FillStars = new System.Windows.Forms.RadioButton();
 			this.gb_Start.SuspendLayout();
 			this.gb_Stop.SuspendLayout();
+			this.gb_Fillstyle.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Cancel
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(10, 145);
+			this.btn_Cancel.Location = new System.Drawing.Point(10, 200);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(110, 33);
@@ -86,7 +93,7 @@ namespace yata
 			// 
 			this.btn_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Okay.Location = new System.Drawing.Point(125, 145);
+			this.btn_Okay.Location = new System.Drawing.Point(125, 200);
 			this.btn_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Okay.Name = "btn_Okay";
 			this.btn_Okay.Size = new System.Drawing.Size(110, 33);
@@ -262,23 +269,59 @@ namespace yata
 			this.rb_StopCount.UseVisualStyleBackColor = true;
 			this.rb_StopCount.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
-			// cb_Fill
+			// gb_Fillstyle
 			// 
-			this.cb_Fill.Enabled = false;
-			this.cb_Fill.Location = new System.Drawing.Point(15, 125);
-			this.cb_Fill.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Fill.Name = "cb_Fill";
-			this.cb_Fill.Size = new System.Drawing.Size(220, 20);
-			this.cb_Fill.TabIndex = 2;
-			this.cb_Fill.Text = "Fill with copied row";
-			this.cb_Fill.UseVisualStyleBackColor = true;
+			this.gb_Fillstyle.Controls.Add(this.rb_FillSelected);
+			this.gb_Fillstyle.Controls.Add(this.rb_FillCopied);
+			this.gb_Fillstyle.Controls.Add(this.rb_FillStars);
+			this.gb_Fillstyle.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gb_Fillstyle.Location = new System.Drawing.Point(0, 120);
+			this.gb_Fillstyle.Name = "gb_Fillstyle";
+			this.gb_Fillstyle.Size = new System.Drawing.Size(244, 78);
+			this.gb_Fillstyle.TabIndex = 2;
+			this.gb_Fillstyle.TabStop = false;
+			this.gb_Fillstyle.Text = " Fields ";
+			// 
+			// rb_FillSelected
+			// 
+			this.rb_FillSelected.Enabled = false;
+			this.rb_FillSelected.Location = new System.Drawing.Point(10, 35);
+			this.rb_FillSelected.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_FillSelected.Name = "rb_FillSelected";
+			this.rb_FillSelected.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillSelected.TabIndex = 1;
+			this.rb_FillSelected.Text = "Selected row";
+			this.rb_FillSelected.UseVisualStyleBackColor = true;
+			// 
+			// rb_FillCopied
+			// 
+			this.rb_FillCopied.Enabled = false;
+			this.rb_FillCopied.Location = new System.Drawing.Point(10, 55);
+			this.rb_FillCopied.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_FillCopied.Name = "rb_FillCopied";
+			this.rb_FillCopied.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillCopied.TabIndex = 2;
+			this.rb_FillCopied.Text = "Copied row";
+			this.rb_FillCopied.UseVisualStyleBackColor = true;
+			// 
+			// rb_FillStars
+			// 
+			this.rb_FillStars.Checked = true;
+			this.rb_FillStars.Location = new System.Drawing.Point(10, 15);
+			this.rb_FillStars.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_FillStars.Name = "rb_FillStars";
+			this.rb_FillStars.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillStars.TabIndex = 0;
+			this.rb_FillStars.TabStop = true;
+			this.rb_FillStars.Text = "****";
+			this.rb_FillStars.UseVisualStyleBackColor = true;
 			// 
 			// RowCreatorDialog
 			// 
 			this.AcceptButton = this.btn_Okay;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(244, 181);
-			this.Controls.Add(this.cb_Fill);
+			this.ClientSize = new System.Drawing.Size(244, 236);
+			this.Controls.Add(this.gb_Fillstyle);
 			this.Controls.Add(this.gb_Stop);
 			this.Controls.Add(this.gb_Start);
 			this.Controls.Add(this.btn_Okay);
@@ -295,6 +338,7 @@ namespace yata
 			this.gb_Start.PerformLayout();
 			this.gb_Stop.ResumeLayout(false);
 			this.gb_Stop.PerformLayout();
+			this.gb_Fillstyle.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

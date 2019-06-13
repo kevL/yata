@@ -39,8 +39,9 @@ namespace yata
 		/// 
 		/// </summary>
 		/// <param name="f"></param>
-		/// <param name="enablefill"></param>
-		internal RowCreatorDialog(YataForm f, bool enablefill)
+		/// <param name="r"></param>
+		/// <param name="copyfill"></param>
+		internal RowCreatorDialog(YataForm f, int r, bool copyfill)
 		{
 			InitializeComponent();
 
@@ -67,14 +68,16 @@ namespace yata
 			}
 
 
-			_init = true;
+			rb_FillSelected.Enabled = (r != 0);
+			rb_FillCopied  .Enabled = copyfill;
 
-			int r = YataForm.Table.getSelectedRow() + 1;
 			if (r != 0)
 			{
 				_start = StartType.Insert;
 				_stop  = StopType.Count;
 			}
+
+			_init = true;
 
 			switch (_start)
 			{
@@ -155,8 +158,6 @@ namespace yata
 				tb_StopFinish.BackColor = Color.WhiteSmoke;
 				tb_StopCount .BackColor = Color.FloralWhite;
 			}
-
-			cb_Fill.Enabled = enablefill;
 		}
 		#endregion cTor
 
@@ -442,8 +443,9 @@ namespace yata
 							MessageBoxDefaultButton.Button1,
 							0);
 			}
-			else
-				_f._fillCr = cb_Fill.Checked;
+			else if (rb_FillCopied  .Checked) _f._fillCr = YataForm.CrFillType.Copied;
+			else if (rb_FillSelected.Checked) _f._fillCr = YataForm.CrFillType.Selected;
+			else                              _f._fillCr = YataForm.CrFillType.Stars; // rb_FillStars.Checked
 		}
 		#endregion Events
 
