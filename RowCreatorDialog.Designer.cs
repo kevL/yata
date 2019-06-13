@@ -12,18 +12,20 @@ namespace yata
 
 		Button btn_Cancel;
 		Button btn_Okay;
-		Label lbl_Start;
-		Label lbl_Stop;
-		TextBox tb_Start;
-		TextBox tb_Stop;
-		TextBox tb_Length;
-		Label lbl_Length;
-		RadioButton rb_Stop;
-		RadioButton rb_Length;
-		Label lbl_Pad;
-		CheckBox cb_Pad;
-		TextBox tb_Pad;
-		GroupBox gb_Insert;
+		RadioButton rb_StartAdd;
+		RadioButton rb_StartInsert;
+		GroupBox gb_Start;
+		GroupBox gb_Stop;
+		RadioButton rb_StopCount;
+		RadioButton rb_StopFinish;
+		TextBox tb_StartInsert;
+		TextBox tb_StartAdd;
+		TextBox tb_StopFinish;
+		TextBox tb_StopCount;
+		Label la_StartInsert;
+		Label la_StartAdd;
+		Label la_StopFinish;
+		Label la_StopCount;
 
 
 		/// <summary>
@@ -48,182 +50,225 @@ namespace yata
 		{
 			this.btn_Cancel = new System.Windows.Forms.Button();
 			this.btn_Okay = new System.Windows.Forms.Button();
-			this.lbl_Start = new System.Windows.Forms.Label();
-			this.lbl_Stop = new System.Windows.Forms.Label();
-			this.tb_Start = new System.Windows.Forms.TextBox();
-			this.tb_Stop = new System.Windows.Forms.TextBox();
-			this.tb_Length = new System.Windows.Forms.TextBox();
-			this.lbl_Length = new System.Windows.Forms.Label();
-			this.rb_Stop = new System.Windows.Forms.RadioButton();
-			this.rb_Length = new System.Windows.Forms.RadioButton();
-			this.lbl_Pad = new System.Windows.Forms.Label();
-			this.cb_Pad = new System.Windows.Forms.CheckBox();
-			this.tb_Pad = new System.Windows.Forms.TextBox();
-			this.gb_Insert = new System.Windows.Forms.GroupBox();
-			this.gb_Insert.SuspendLayout();
+			this.rb_StartAdd = new System.Windows.Forms.RadioButton();
+			this.rb_StartInsert = new System.Windows.Forms.RadioButton();
+			this.gb_Start = new System.Windows.Forms.GroupBox();
+			this.la_StartInsert = new System.Windows.Forms.Label();
+			this.la_StartAdd = new System.Windows.Forms.Label();
+			this.tb_StartInsert = new System.Windows.Forms.TextBox();
+			this.tb_StartAdd = new System.Windows.Forms.TextBox();
+			this.gb_Stop = new System.Windows.Forms.GroupBox();
+			this.la_StopFinish = new System.Windows.Forms.Label();
+			this.tb_StopFinish = new System.Windows.Forms.TextBox();
+			this.rb_StopFinish = new System.Windows.Forms.RadioButton();
+			this.la_StopCount = new System.Windows.Forms.Label();
+			this.tb_StopCount = new System.Windows.Forms.TextBox();
+			this.rb_StopCount = new System.Windows.Forms.RadioButton();
+			this.gb_Start.SuspendLayout();
+			this.gb_Stop.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Cancel
 			// 
+			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(10, 100);
+			this.btn_Cancel.Location = new System.Drawing.Point(10, 125);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(110, 35);
-			this.btn_Cancel.TabIndex = 4;
+			this.btn_Cancel.Size = new System.Drawing.Size(110, 33);
+			this.btn_Cancel.TabIndex = 2;
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
-			this.btn_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// btn_Okay
 			// 
-			this.btn_Okay.Location = new System.Drawing.Point(125, 100);
+			this.btn_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btn_Okay.Location = new System.Drawing.Point(125, 125);
 			this.btn_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Okay.Name = "btn_Okay";
-			this.btn_Okay.Size = new System.Drawing.Size(110, 35);
-			this.btn_Okay.TabIndex = 5;
+			this.btn_Okay.Size = new System.Drawing.Size(110, 33);
+			this.btn_Okay.TabIndex = 3;
 			this.btn_Okay.Text = "Ok";
 			this.btn_Okay.UseVisualStyleBackColor = true;
 			this.btn_Okay.Click += new System.EventHandler(this.click_Ok);
 			// 
-			// lbl_Start
+			// rb_StartAdd
 			// 
-			this.lbl_Start.Location = new System.Drawing.Point(5, 20);
-			this.lbl_Start.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Start.Name = "lbl_Start";
-			this.lbl_Start.Size = new System.Drawing.Size(50, 15);
-			this.lbl_Start.TabIndex = 0;
-			this.lbl_Start.Text = "START";
+			this.rb_StartAdd.Location = new System.Drawing.Point(10, 15);
+			this.rb_StartAdd.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_StartAdd.Name = "rb_StartAdd";
+			this.rb_StartAdd.Size = new System.Drawing.Size(110, 20);
+			this.rb_StartAdd.TabIndex = 0;
+			this.rb_StartAdd.Text = "Add row(s)";
+			this.rb_StartAdd.UseVisualStyleBackColor = true;
+			this.rb_StartAdd.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
-			// lbl_Stop
+			// rb_StartInsert
 			// 
-			this.lbl_Stop.Location = new System.Drawing.Point(5, 40);
-			this.lbl_Stop.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Stop.Name = "lbl_Stop";
-			this.lbl_Stop.Size = new System.Drawing.Size(50, 15);
-			this.lbl_Stop.TabIndex = 4;
-			this.lbl_Stop.Text = "STOP";
+			this.rb_StartInsert.Location = new System.Drawing.Point(10, 35);
+			this.rb_StartInsert.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_StartInsert.Name = "rb_StartInsert";
+			this.rb_StartInsert.Size = new System.Drawing.Size(110, 20);
+			this.rb_StartInsert.TabIndex = 3;
+			this.rb_StartInsert.Text = "Insert row(s)";
+			this.rb_StartInsert.UseVisualStyleBackColor = true;
+			this.rb_StartInsert.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
-			// tb_Start
+			// gb_Start
 			// 
-			this.tb_Start.Location = new System.Drawing.Point(55, 17);
-			this.tb_Start.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Start.Name = "tb_Start";
-			this.tb_Start.Size = new System.Drawing.Size(55, 20);
-			this.tb_Start.TabIndex = 1;
+			this.gb_Start.Controls.Add(this.la_StartInsert);
+			this.gb_Start.Controls.Add(this.la_StartAdd);
+			this.gb_Start.Controls.Add(this.tb_StartInsert);
+			this.gb_Start.Controls.Add(this.tb_StartAdd);
+			this.gb_Start.Controls.Add(this.rb_StartAdd);
+			this.gb_Start.Controls.Add(this.rb_StartInsert);
+			this.gb_Start.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gb_Start.Location = new System.Drawing.Point(0, 0);
+			this.gb_Start.Name = "gb_Start";
+			this.gb_Start.Size = new System.Drawing.Size(244, 60);
+			this.gb_Start.TabIndex = 0;
+			this.gb_Start.TabStop = false;
+			this.gb_Start.Text = " START ";
 			// 
-			// tb_Stop
+			// la_StartInsert
 			// 
-			this.tb_Stop.Enabled = false;
-			this.tb_Stop.Location = new System.Drawing.Point(55, 37);
-			this.tb_Stop.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Stop.Name = "tb_Stop";
-			this.tb_Stop.Size = new System.Drawing.Size(55, 20);
-			this.tb_Stop.TabIndex = 5;
+			this.la_StartInsert.Location = new System.Drawing.Point(190, 35);
+			this.la_StartInsert.Margin = new System.Windows.Forms.Padding(0);
+			this.la_StartInsert.Name = "la_StartInsert";
+			this.la_StartInsert.Size = new System.Drawing.Size(50, 20);
+			this.la_StartInsert.TabIndex = 5;
+			this.la_StartInsert.Text = "id";
+			this.la_StartInsert.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// tb_Length
+			// la_StartAdd
 			// 
-			this.tb_Length.Location = new System.Drawing.Point(175, 17);
-			this.tb_Length.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Length.Name = "tb_Length";
-			this.tb_Length.Size = new System.Drawing.Size(55, 20);
-			this.tb_Length.TabIndex = 3;
+			this.la_StartAdd.Location = new System.Drawing.Point(190, 15);
+			this.la_StartAdd.Margin = new System.Windows.Forms.Padding(0);
+			this.la_StartAdd.Name = "la_StartAdd";
+			this.la_StartAdd.Size = new System.Drawing.Size(50, 20);
+			this.la_StartAdd.TabIndex = 2;
+			this.la_StartAdd.Text = "id";
+			this.la_StartAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// lbl_Length
+			// tb_StartInsert
 			// 
-			this.lbl_Length.Location = new System.Drawing.Point(115, 20);
-			this.lbl_Length.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Length.Name = "lbl_Length";
-			this.lbl_Length.Size = new System.Drawing.Size(60, 15);
-			this.lbl_Length.TabIndex = 2;
-			this.lbl_Length.Text = "LENGTH";
+			this.tb_StartInsert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StartInsert.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StartInsert.Enabled = false;
+			this.tb_StartInsert.Location = new System.Drawing.Point(125, 35);
+			this.tb_StartInsert.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StartInsert.Name = "tb_StartInsert";
+			this.tb_StartInsert.Size = new System.Drawing.Size(60, 20);
+			this.tb_StartInsert.TabIndex = 4;
+			this.tb_StartInsert.WordWrap = false;
+			this.tb_StartInsert.TextChanged += new System.EventHandler(this.textchanged);
 			// 
-			// rb_Stop
+			// tb_StartAdd
 			// 
-			this.rb_Stop.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.rb_Stop.Location = new System.Drawing.Point(120, 40);
-			this.rb_Stop.Margin = new System.Windows.Forms.Padding(0);
-			this.rb_Stop.Name = "rb_Stop";
-			this.rb_Stop.Size = new System.Drawing.Size(15, 15);
-			this.rb_Stop.TabIndex = 6;
-			this.rb_Stop.UseVisualStyleBackColor = true;
-			this.rb_Stop.CheckedChanged += new System.EventHandler(this.checkchanged_Insert);
+			this.tb_StartAdd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StartAdd.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StartAdd.Enabled = false;
+			this.tb_StartAdd.Location = new System.Drawing.Point(125, 15);
+			this.tb_StartAdd.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StartAdd.Name = "tb_StartAdd";
+			this.tb_StartAdd.ReadOnly = true;
+			this.tb_StartAdd.Size = new System.Drawing.Size(60, 20);
+			this.tb_StartAdd.TabIndex = 1;
+			this.tb_StartAdd.WordWrap = false;
 			// 
-			// rb_Length
+			// gb_Stop
 			// 
-			this.rb_Length.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.rb_Length.Checked = true;
-			this.rb_Length.Location = new System.Drawing.Point(140, 40);
-			this.rb_Length.Margin = new System.Windows.Forms.Padding(0);
-			this.rb_Length.Name = "rb_Length";
-			this.rb_Length.Size = new System.Drawing.Size(15, 15);
-			this.rb_Length.TabIndex = 7;
-			this.rb_Length.TabStop = true;
-			this.rb_Length.UseVisualStyleBackColor = true;
+			this.gb_Stop.Controls.Add(this.la_StopFinish);
+			this.gb_Stop.Controls.Add(this.tb_StopFinish);
+			this.gb_Stop.Controls.Add(this.rb_StopFinish);
+			this.gb_Stop.Controls.Add(this.la_StopCount);
+			this.gb_Stop.Controls.Add(this.tb_StopCount);
+			this.gb_Stop.Controls.Add(this.rb_StopCount);
+			this.gb_Stop.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gb_Stop.Location = new System.Drawing.Point(0, 60);
+			this.gb_Stop.Name = "gb_Stop";
+			this.gb_Stop.Size = new System.Drawing.Size(244, 60);
+			this.gb_Stop.TabIndex = 1;
+			this.gb_Stop.TabStop = false;
+			this.gb_Stop.Text = " STOP ";
 			// 
-			// lbl_Pad
+			// la_StopFinish
 			// 
-			this.lbl_Pad.Location = new System.Drawing.Point(30, 10);
-			this.lbl_Pad.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Pad.Name = "lbl_Pad";
-			this.lbl_Pad.Size = new System.Drawing.Size(90, 15);
-			this.lbl_Pad.TabIndex = 1;
-			this.lbl_Pad.Text = "Pad end to Id#";
+			this.la_StopFinish.Location = new System.Drawing.Point(190, 15);
+			this.la_StopFinish.Margin = new System.Windows.Forms.Padding(0);
+			this.la_StopFinish.Name = "la_StopFinish";
+			this.la_StopFinish.Size = new System.Drawing.Size(50, 20);
+			this.la_StopFinish.TabIndex = 2;
+			this.la_StopFinish.Text = "id";
+			this.la_StopFinish.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// cb_Pad
+			// tb_StopFinish
 			// 
-			this.cb_Pad.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.cb_Pad.Checked = true;
-			this.cb_Pad.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cb_Pad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.cb_Pad.Location = new System.Drawing.Point(15, 10);
-			this.cb_Pad.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Pad.Name = "cb_Pad";
-			this.cb_Pad.Size = new System.Drawing.Size(15, 15);
-			this.cb_Pad.TabIndex = 0;
-			this.cb_Pad.UseVisualStyleBackColor = true;
-			this.cb_Pad.CheckedChanged += new System.EventHandler(this.checkchanged_Pad);
+			this.tb_StopFinish.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StopFinish.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StopFinish.Enabled = false;
+			this.tb_StopFinish.Location = new System.Drawing.Point(125, 15);
+			this.tb_StopFinish.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StopFinish.Name = "tb_StopFinish";
+			this.tb_StopFinish.Size = new System.Drawing.Size(60, 20);
+			this.tb_StopFinish.TabIndex = 1;
+			this.tb_StopFinish.WordWrap = false;
+			this.tb_StopFinish.TextChanged += new System.EventHandler(this.textchanged);
 			// 
-			// tb_Pad
+			// rb_StopFinish
 			// 
-			this.tb_Pad.Location = new System.Drawing.Point(120, 7);
-			this.tb_Pad.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Pad.Name = "tb_Pad";
-			this.tb_Pad.Size = new System.Drawing.Size(55, 20);
-			this.tb_Pad.TabIndex = 2;
+			this.rb_StopFinish.Location = new System.Drawing.Point(10, 15);
+			this.rb_StopFinish.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_StopFinish.Name = "rb_StopFinish";
+			this.rb_StopFinish.Size = new System.Drawing.Size(110, 20);
+			this.rb_StopFinish.TabIndex = 0;
+			this.rb_StopFinish.Text = "row Finish";
+			this.rb_StopFinish.UseVisualStyleBackColor = true;
 			// 
-			// gb_Insert
+			// la_StopCount
 			// 
-			this.gb_Insert.Controls.Add(this.lbl_Start);
-			this.gb_Insert.Controls.Add(this.lbl_Stop);
-			this.gb_Insert.Controls.Add(this.tb_Start);
-			this.gb_Insert.Controls.Add(this.tb_Stop);
-			this.gb_Insert.Controls.Add(this.rb_Length);
-			this.gb_Insert.Controls.Add(this.lbl_Length);
-			this.gb_Insert.Controls.Add(this.rb_Stop);
-			this.gb_Insert.Controls.Add(this.tb_Length);
-			this.gb_Insert.Enabled = false;
-			this.gb_Insert.Location = new System.Drawing.Point(5, 30);
-			this.gb_Insert.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Insert.Name = "gb_Insert";
-			this.gb_Insert.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Insert.Size = new System.Drawing.Size(235, 65);
-			this.gb_Insert.TabIndex = 3;
-			this.gb_Insert.TabStop = false;
-			this.gb_Insert.Text = " or Insert (inclusive) ";
+			this.la_StopCount.Location = new System.Drawing.Point(190, 35);
+			this.la_StopCount.Margin = new System.Windows.Forms.Padding(0);
+			this.la_StopCount.Name = "la_StopCount";
+			this.la_StopCount.Size = new System.Drawing.Size(50, 20);
+			this.la_StopCount.TabIndex = 5;
+			this.la_StopCount.Text = "row(s)";
+			this.la_StopCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// tb_StopCount
+			// 
+			this.tb_StopCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StopCount.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StopCount.Enabled = false;
+			this.tb_StopCount.Location = new System.Drawing.Point(125, 35);
+			this.tb_StopCount.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StopCount.Name = "tb_StopCount";
+			this.tb_StopCount.Size = new System.Drawing.Size(60, 20);
+			this.tb_StopCount.TabIndex = 4;
+			this.tb_StopCount.WordWrap = false;
+			this.tb_StopCount.TextChanged += new System.EventHandler(this.textchanged);
+			// 
+			// rb_StopCount
+			// 
+			this.rb_StopCount.Location = new System.Drawing.Point(10, 35);
+			this.rb_StopCount.Margin = new System.Windows.Forms.Padding(0);
+			this.rb_StopCount.Name = "rb_StopCount";
+			this.rb_StopCount.Size = new System.Drawing.Size(110, 20);
+			this.rb_StopCount.TabIndex = 3;
+			this.rb_StopCount.Text = "row Count";
+			this.rb_StopCount.UseVisualStyleBackColor = true;
+			this.rb_StopCount.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
 			// RowCreatorDialog
 			// 
 			this.AcceptButton = this.btn_Okay;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(244, 141);
-			this.Controls.Add(this.gb_Insert);
-			this.Controls.Add(this.tb_Pad);
-			this.Controls.Add(this.cb_Pad);
-			this.Controls.Add(this.lbl_Pad);
+			this.ClientSize = new System.Drawing.Size(244, 161);
+			this.Controls.Add(this.gb_Stop);
+			this.Controls.Add(this.gb_Start);
 			this.Controls.Add(this.btn_Okay);
 			this.Controls.Add(this.btn_Cancel);
-			this.Font = new System.Drawing.Font("Georgia", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -232,10 +277,11 @@ namespace yata
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = " yata - Create rows";
-			this.gb_Insert.ResumeLayout(false);
-			this.gb_Insert.PerformLayout();
+			this.gb_Start.ResumeLayout(false);
+			this.gb_Start.PerformLayout();
+			this.gb_Stop.ResumeLayout(false);
+			this.gb_Stop.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 	}
