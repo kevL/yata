@@ -2296,6 +2296,10 @@ namespace yata
 					}
 
 					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+
+					Table.ClearSelects();
+					Table.Rows[_startCr].selected = true;
+					Table.RangeSelect = _lengthCr - 1;
 					Table.EnsureDisplayedRow(_startCr);
 
 
