@@ -133,7 +133,7 @@ namespace yata
 			_init = false;
 
 
-			tb_StartAdd.BackColor = Color.Pink;
+			tb_StartAdd.BackColor = Color.Azure;
 
 			if (rb_StartInsert.Checked)
 				tb_StartInsert.BackColor = Color.FloralWhite;
