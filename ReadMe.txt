@@ -42,9 +42,10 @@ Edit
 - Paste cell  : Ctrl+v (pastes a single cell if only 1 cell is selected)
 
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
-- Paste row(s) : Shift+Ctrl+v (pastes a selected row or range of rows)
+- Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)
 
-- Create row(s) (opens a dialog that inserts 1+ rows at a given id)
+- Create row(s) (opens a dialog that inserts 1+ rows at a given id with the
+                 option to use a first copied row as a fill)
 
 
 Goto box (type a row ID and press Enter)
@@ -192,7 +193,8 @@ RMB+Shift - sorts the table by the col either ascending or descending (Note that
             are sorted.)
 
 click on the rowheads
-RMB - opens the contextmenu for single-row editing
+RMB - opens the context for single-row editing (This handles single-row editing
+      only - for multi-row editing see the Edit menu.)
 
 click on a table-cell
 LMB      - selects a cell or if already selected then starts the cell-editor, or
