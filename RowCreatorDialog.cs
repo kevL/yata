@@ -65,6 +65,11 @@ namespace yata
 			_init = true;
 
 			int r = YataForm.Table.getSelectedRow() + 1;
+			if (r != 0)
+			{
+				_start = StartType.Insert;
+				_stop  = StopType.Count;
+			}
 
 			switch (_start)
 			{
@@ -93,6 +98,12 @@ namespace yata
 			switch (_stop)
 			{
 				case StopType.non:
+					rb_StopFinish.Checked =
+					tb_StopFinish.Enabled =  rb_StartAdd.Checked;
+					rb_StopCount .Checked =
+					tb_StopCount .Enabled = !rb_StartAdd.Checked;
+					break;
+
 				case StopType.Finish:
 					rb_StopFinish.Checked =
 					tb_StopFinish.Enabled = true;
@@ -108,10 +119,16 @@ namespace yata
 					break;
 			}
 
-			tb_StartAdd   .Text =
-			tb_StopFinish .Text = YataForm.Table.Rows.Count.ToString();
+			tb_StartAdd   .Text = YataForm.Table.Rows.Count.ToString();
 			tb_StartInsert.Text = r.ToString();
-			tb_StopCount  .Text = _count;
+
+			int result = Int32.Parse(_count); // shall be valid and greater than 0.
+			if (rb_StartAdd.Checked)
+				tb_StopFinish.Text = (Int32.Parse(tb_StartAdd   .Text) + result - 1).ToString(); // readonly - shall be valid.
+			else //if (rb_StartInsert.Checked)
+				tb_StopFinish.Text = (Int32.Parse(tb_StartInsert.Text) + result - 1).ToString(); // shall be valid.
+
+			tb_StopCount.Text = _count;
 
 			_init = false;
 
@@ -152,7 +169,14 @@ namespace yata
 				else //if (rb_StopFinish.Checked)
 					_stop = StopType.Finish;
 
-				_count = tb_StopCount.Text;
+				int result;
+				if (Int32.TryParse(tb_StopCount.Text, out result)
+					&& result > 0)
+				{
+					_count = tb_StopCount.Text;
+				}
+				else
+					_count = "1";
 
 				base.OnFormClosing(e);
 			}
@@ -239,7 +263,7 @@ namespace yata
 
 				int result;
 				if (Int32.TryParse(tb.Text, out result)
-				    && (result > 0 || (tb != tb_StopCount && result > -1)))
+					&& (result > 0 || (tb != tb_StopCount && result > -1)))
 				{
 					int result2;
 					if (tb == tb_StartInsert) // result
@@ -265,7 +289,7 @@ namespace yata
 					{
 						if (rb_StartAdd.Checked)
 						{
-							result2 = Int32.Parse(tb_StartAdd.Text);
+							result2 = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
 							if (result < result2)
 							{
 								tb_StopFinish.ForeColor =
