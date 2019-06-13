@@ -290,7 +290,7 @@ namespace yata
 			this.rb_FillSelected.Name = "rb_FillSelected";
 			this.rb_FillSelected.Size = new System.Drawing.Size(230, 20);
 			this.rb_FillSelected.TabIndex = 1;
-			this.rb_FillSelected.Text = "Selected row";
+			this.rb_FillSelected.Text = "use Selected row";
 			this.rb_FillSelected.UseVisualStyleBackColor = true;
 			// 
 			// rb_FillCopied
@@ -301,7 +301,7 @@ namespace yata
 			this.rb_FillCopied.Name = "rb_FillCopied";
 			this.rb_FillCopied.Size = new System.Drawing.Size(230, 20);
 			this.rb_FillCopied.TabIndex = 2;
-			this.rb_FillCopied.Text = "Copied row";
+			this.rb_FillCopied.Text = "use Copied row";
 			this.rb_FillCopied.UseVisualStyleBackColor = true;
 			// 
 			// rb_FillStars
