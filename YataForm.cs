@@ -53,6 +53,7 @@ namespace yata
 		string _preset = String.Empty;
 
 		internal int _startCr, _lengthCr;
+		internal bool _fillCr;
 
 		internal Font FontAccent;
 
@@ -2293,7 +2294,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				var f = new RowCreatorDialog(this);
+				var f = new RowCreatorDialog(this, (_copy.Count != 0));
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
@@ -2303,9 +2304,20 @@ namespace yata
 					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
 
 					var cells = new string[Table.ColCount];
-					for (int i = 0; i != Table.ColCount; ++i)
+					if (_fillCr)
 					{
-						cells[i] = Constants.Stars;
+						for (int i = 0; i != Table.ColCount; ++i)
+						{
+							if (i < _copy[0].Length)
+								cells[i] = _copy[0][i];
+							else
+								cells[i] = Constants.Stars;
+						}
+					}
+					else
+					{
+						for (int i = 0; i != Table.ColCount; ++i)
+							cells[i] = Constants.Stars;
 					}
 
 					int r = _startCr;

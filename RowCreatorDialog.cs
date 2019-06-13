@@ -35,7 +35,12 @@ namespace yata
 
 
 		#region cTor
-		internal RowCreatorDialog(YataForm f)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="f"></param>
+		/// <param name="enablefill"></param>
+		internal RowCreatorDialog(YataForm f, bool enablefill)
 		{
 			InitializeComponent();
 
@@ -150,6 +155,8 @@ namespace yata
 				tb_StopFinish.BackColor = Color.WhiteSmoke;
 				tb_StopCount .BackColor = Color.FloralWhite;
 			}
+
+			cb_Fill.Enabled = enablefill;
 		}
 		#endregion cTor
 
@@ -435,6 +442,8 @@ namespace yata
 							MessageBoxDefaultButton.Button1,
 							0);
 			}
+			else
+				_f._fillCr = cb_Fill.Checked;
 		}
 		#endregion Events
 
