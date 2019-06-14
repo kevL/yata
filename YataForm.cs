@@ -95,7 +95,7 @@ namespace yata
 
 			InitializeComponent();
 
-			tabControl.ContextMenuStrip = tabMenu;
+			Tabs.ContextMenuStrip = tabMenu;
 
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -248,25 +248,25 @@ namespace yata
 		/// </summary>
 		void InitializeTabControl()
 		{
-			tabControl.Name          = "tabControl";
-			tabControl.TabIndex      = 3;
-			tabControl.SelectedIndex = 0;
+			Tabs.Name          = "Tabs";
+			Tabs.TabIndex      = 3;
+			Tabs.SelectedIndex = 0;
 
-			tabControl.Dock      = DockStyle.Fill;
-			tabControl.Multiline = true;
-			tabControl.AllowDrop = true;
-			tabControl.DrawMode  = TabDrawMode.OwnerDrawFixed;
-			tabControl.SizeMode  = TabSizeMode.Fixed;
+			Tabs.Dock      = DockStyle.Fill;
+			Tabs.Multiline = true;
+			Tabs.AllowDrop = true;
+			Tabs.DrawMode  = TabDrawMode.OwnerDrawFixed;
+			Tabs.SizeMode  = TabSizeMode.Fixed;
 
-			tabControl.Location = new Point(0,24);
-			tabControl.Size     = new Size(842,408);
-			tabControl.Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
-			tabControl.Margin   = new Padding(0); // right got it.
+			Tabs.Location = new Point(0,24);
+			Tabs.Size     = new Size(842,408);
+			Tabs.Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
+			Tabs.Margin   = new Padding(0); // right got it.
 
-			tabControl.DrawItem             += tab_DrawItem;
-			tabControl.SelectedIndexChanged += tab_SelectedIndexChanged;
+			Tabs.DrawItem             += tab_DrawItem;
+			Tabs.SelectedIndexChanged += tab_SelectedIndexChanged;
 
-			Controls.Add(tabControl);
+			Controls.Add(Tabs);
 		}
 
 		/// <summary>
@@ -569,16 +569,19 @@ namespace yata
 						++saveOthers;
 				}
 
-				it_Reload .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll.Enabled = (saveOthers != 0);
-				it_Save   .Enabled = !Table.Readonly;
+				it_Reload  .Enabled = File.Exists(Table.Fullpath);
+				it_Readonly.Enabled = true;
+				it_SaveAll .Enabled = (saveOthers != 0);
+				it_Save    .Enabled = !Table.Readonly;
 			}
 			else
 			{
-				it_Reload .Enabled =
-				it_SaveAll.Enabled =
-				it_Save   .Enabled = false;
+				it_Reload  .Enabled =
+				it_Readonly.Enabled =
+				it_SaveAll .Enabled =
+				it_Save    .Enabled = false;
 			}
+
 
 			_preset = String.Empty;
 
@@ -747,6 +750,8 @@ namespace yata
 				it_freeze1   .Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
 				it_freeze2   .Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
 
+				it_Readonly  .Checked = Table.Readonly;
+
 				it_Undo      .Enabled = Table._ur.CanUndo;
 				it_Redo      .Enabled = Table._ur.CanRedo;
 
@@ -794,6 +799,8 @@ namespace yata
 
 				it_freeze1   .Checked =
 				it_freeze2   .Checked =
+
+				it_Readonly  .Checked =
 
 				it_Undo      .Enabled =
 				it_Redo      .Enabled =
@@ -1138,7 +1145,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Opens a 2da-file from the Recent-files list. Removes the item from
+		/// the list if it was not found on disk.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1150,6 +1158,19 @@ namespace yata
 				CreatePage(pfe);
 			else
 				it_Recent.DropDownItems.Remove(it);
+		}
+
+		/// <summary>
+		/// Allows user to set the current table's readonly flag after it has
+		/// been opened. (The readonly setter appears otherwise only on the
+		/// file-open dialog.)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_Readonly(object sender, EventArgs e)
+		{
+			Table.Readonly = it_Readonly.Checked;
+			Tabs.Invalidate();
 		}
 
 

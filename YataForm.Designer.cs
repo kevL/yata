@@ -22,6 +22,7 @@ namespace yata
 		ToolStripMenuItem it_Open;
 		ToolStripMenuItem it_Reload;
 		ToolStripMenuItem it_Recent;
+		ToolStripMenuItem it_Readonly;
 		ToolStripMenuItem it_Save;
 		ToolStripMenuItem it_SaveAs;
 		ToolStripMenuItem it_SaveAll;
@@ -118,6 +119,7 @@ namespace yata
 		ToolStripSeparator separator_26;
 		ToolStripSeparator separator_27;
 		ToolStripSeparator separator_28;
+		ToolStripSeparator separator_29;
 
 		internal ContextMenuStrip contextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -198,6 +200,8 @@ namespace yata
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Recent = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_29 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Readonly = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -233,8 +237,8 @@ namespace yata
 			this.separator_19 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_OpenClipEditor = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Menu2daOps = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ColorRows = new System.Windows.Forms.ToolStripMenuItem();
@@ -445,6 +449,8 @@ namespace yata
 			this.it_Open,
 			this.it_Reload,
 			this.it_Recent,
+			this.separator_29,
+			this.it_Readonly,
 			this.separator_1,
 			this.it_Save,
 			this.it_SaveAs,
@@ -488,6 +494,20 @@ namespace yata
 			this.it_Recent.Name = "it_Recent";
 			this.it_Recent.Size = new System.Drawing.Size(181, 22);
 			this.it_Recent.Text = "Recen&t";
+			// 
+			// separator_29
+			// 
+			this.separator_29.Name = "separator_29";
+			this.separator_29.Size = new System.Drawing.Size(178, 6);
+			// 
+			// it_Readonly
+			// 
+			this.it_Readonly.CheckOnClick = true;
+			this.it_Readonly.Enabled = false;
+			this.it_Readonly.Name = "it_Readonly";
+			this.it_Readonly.Size = new System.Drawing.Size(181, 22);
+			this.it_Readonly.Text = "flag Readonly";
+			this.it_Readonly.Click += new System.EventHandler(this.fileclick_Readonly);
 			// 
 			// separator_1
 			// 
@@ -799,15 +819,6 @@ namespace yata
 			this.it_Menu2daOps.Text = "2&da Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
-			// it_CheckRows
-			// 
-			this.it_CheckRows.Enabled = false;
-			this.it_CheckRows.Name = "it_CheckRows";
-			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-			this.it_CheckRows.Size = new System.Drawing.Size(236, 22);
-			this.it_CheckRows.Text = "&Test row order";
-			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_TestOrder);
-			// 
 			// it_OrderRows
 			// 
 			this.it_OrderRows.Enabled = false;
@@ -816,6 +827,15 @@ namespace yata
 			this.it_OrderRows.Size = new System.Drawing.Size(236, 22);
 			this.it_OrderRows.Text = "Or&der row ids";
 			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Order);
+			// 
+			// it_CheckRows
+			// 
+			this.it_CheckRows.Enabled = false;
+			this.it_CheckRows.Name = "it_CheckRows";
+			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+			this.it_CheckRows.Size = new System.Drawing.Size(236, 22);
+			this.it_CheckRows.Text = "&Test row order";
+			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_TestOrder);
 			// 
 			// separator_11
 			// 
