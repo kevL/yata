@@ -581,16 +581,18 @@ namespace yata
 			}
 
 			_preset = String.Empty;
-			it_OpenFolder.DropDownItems.Clear();
+
+			ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
+			presets.Clear();
 			foreach (var dir in Settings._dirpreset)
 			{
 				if (Directory.Exists(dir))
 				{
-					var preset = it_OpenFolder.DropDownItems.Add(dir);
+					var preset = presets.Add(dir);
 					preset.Click += fileclick_OpenFolder;
 				}
 			}
-			it_OpenFolder.Visible = (it_OpenFolder.DropDownItems.Count != 0);
+			it_OpenFolder.Visible = (presets.Count != 0);
 
 			it_Recent.Visible = (it_Recent.DropDownItems.Count != 0);
 		}
@@ -632,23 +634,44 @@ namespace yata
 		/// </summary>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly (default false)</param>
-		/// <param name="it"></param>
-		void CreatePage(string pfe, bool read = false, ToolStripItem it = null)
+		void CreatePage(string pfe, bool read = false)
 		{
 			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
 			{
 				if (Settings._recent != 0)
 				{
-					if (it != null)
-						it_Recent.DropDownItems.Remove(it);
+					ToolStripItemCollection recents = it_Recent.DropDownItems;
+					ToolStripItem it;
 
-					it = new ToolStripMenuItem(pfe);
-					it.Click += fileclick_Recent;
-					it_Recent.DropDownItems.Insert(0, it);
+					byte bits = 0;
+					for (int i = 0; i != recents.Count; ++i)
+					{
+						it = recents[i];
+						if (it.Text == pfe)
+						{
+							if (i == 0) bits = 1;
+							else
+							{
+								bits = 2;
+								recents.Remove(it);
+							}
+							break;
+						}
+					}
 
-					int count = it_Recent.DropDownItems.Count;
-					if (count > Settings._recent)
-						it_Recent.DropDownItems.Remove(it_Recent.DropDownItems[count - 1]);
+					if ((bits & 1) == 0)
+					{
+						it = new ToolStripMenuItem(pfe);
+						it.Click += fileclick_Recent;
+						recents.Insert(0, it);
+
+						if (bits == 0)
+						{
+							int count = recents.Count;
+							if (count > Settings._recent)
+								recents.Remove(recents[count - 1]);
+						}
+					}
 				}
 
 				Obfuscate();
@@ -1124,7 +1147,7 @@ namespace yata
 			var it = sender as ToolStripMenuItem;
 			string pfe = it.Text;
 			if (File.Exists(pfe))
-				CreatePage(pfe, false, it);
+				CreatePage(pfe);
 			else
 				it_Recent.DropDownItems.Remove(it);
 		}
@@ -3632,7 +3655,7 @@ namespace yata
 
 			it_cellEdit   .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellStars  .Enabled = (sel.text != Constants.Stars || sel.loadchanged); // TODO: does that need !Readonly
+			it_cellStars  .Enabled = !Table.Readonly && (sel.text != Constants.Stars || sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
 			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
