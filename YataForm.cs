@@ -220,26 +220,7 @@ namespace yata
 
 
 			if (Settings._recent != 0)
-			{
-				string dir = Application.StartupPath;
-				string pfe = Path.Combine(dir, "recent.cfg");
-				if (File.Exists(pfe))
-				{
-					string[] recents = File.ReadAllLines(pfe);
-					foreach (string recent in recents)
-					{
-						if (File.Exists(recent))
-						{
-							var it = new ToolStripMenuItem(recent);
-							it.Click += fileclick_Recent;
-							it_Recent.DropDownItems.Add(it);
-
-							if (it_Recent.DropDownItems.Count == Settings._recent)
-								break;
-						}
-					}
-				}
-			}
+				InitializeRecentFiles();
 		}
 
 
@@ -291,6 +272,30 @@ namespace yata
 			btn_ProPanel.MouseUp   += mouseup_btnPropertyPanel;
 
 			Controls.Add(btn_ProPanel);
+		}
+
+		void InitializeRecentFiles()
+		{
+			string dir = Application.StartupPath;
+			string pfe = Path.Combine(dir, "recent.cfg");
+			if (File.Exists(pfe))
+			{
+				ToolStripItemCollection recents = it_Recent.DropDownItems;
+
+				string[] lines = File.ReadAllLines(pfe);
+				foreach (string line in lines)
+				{
+					if (File.Exists(line))
+					{
+						var it = new ToolStripMenuItem(line);
+						it.Click += fileclick_Recent;
+						recents.Add(it);
+
+						if (recents.Count == Settings._recent)
+							break;
+					}
+				}
+			}
 		}
 		#endregion cTor
 
