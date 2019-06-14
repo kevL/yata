@@ -24,6 +24,9 @@ namespace yata
 
 		static string _count = "1";
 
+		const string ADD    = "Add";
+		const string INSERT = "Insert";
+
 		readonly static Random _rand = new Random();
 		#endregion Fields (static)
 
@@ -141,6 +144,11 @@ namespace yata
 			_init = false;
 
 
+			if (rb_StartAdd.Checked)
+				btn_Accept.Text = ADD;
+			else //if (rb_StartInsert.Checked)
+				btn_Accept.Text = INSERT;
+
 			tb_StartAdd.BackColor = Color.Azure;
 
 			if (rb_StartInsert.Checked)
@@ -203,7 +211,9 @@ namespace yata
 
 				if (rb == rb_StartAdd)
 				{
-					tb_StartAdd   .Enabled =  rb.Checked;
+					if (tb_StartAdd.Enabled = rb.Checked)
+						btn_Accept.Text = ADD;
+
 					tb_StartInsert.Enabled = !rb.Checked;
 
 					tb_StartInsert.BackColor = Color.WhiteSmoke;
@@ -218,8 +228,10 @@ namespace yata
 				}
 				else if (rb == rb_StartInsert)
 				{
-					tb_StartAdd   .Enabled = !rb.Checked;
-					tb_StartInsert.Enabled =  rb.Checked;
+					tb_StartAdd .Enabled = !rb.Checked;
+
+					if (tb_StartInsert.Enabled = rb.Checked)
+						btn_Accept.Text = INSERT;
 
 					tb_StartInsert.BackColor = Color.FloralWhite;
 

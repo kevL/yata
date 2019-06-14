@@ -11,7 +11,7 @@ namespace yata
 		System.ComponentModel.IContainer components = null;
 
 		Button btn_Cancel;
-		Button btn_Okay;
+		Button btn_Accept;
 		RadioButton rb_StartAdd;
 		RadioButton rb_StartInsert;
 		GroupBox gb_Start;
@@ -53,7 +53,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.btn_Cancel = new System.Windows.Forms.Button();
-			this.btn_Okay = new System.Windows.Forms.Button();
+			this.btn_Accept = new System.Windows.Forms.Button();
 			this.rb_StartAdd = new System.Windows.Forms.RadioButton();
 			this.rb_StartInsert = new System.Windows.Forms.RadioButton();
 			this.gb_Start = new System.Windows.Forms.GroupBox();
@@ -89,18 +89,17 @@ namespace yata
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			// 
-			// btn_Okay
+			// btn_Accept
 			// 
-			this.btn_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Okay.Location = new System.Drawing.Point(125, 200);
-			this.btn_Okay.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Okay.Name = "btn_Okay";
-			this.btn_Okay.Size = new System.Drawing.Size(110, 33);
-			this.btn_Okay.TabIndex = 4;
-			this.btn_Okay.Text = "Ok";
-			this.btn_Okay.UseVisualStyleBackColor = true;
-			this.btn_Okay.Click += new System.EventHandler(this.click_Ok);
+			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btn_Accept.Location = new System.Drawing.Point(125, 200);
+			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_Accept.Name = "btn_Accept";
+			this.btn_Accept.Size = new System.Drawing.Size(110, 33);
+			this.btn_Accept.TabIndex = 4;
+			this.btn_Accept.UseVisualStyleBackColor = true;
+			this.btn_Accept.Click += new System.EventHandler(this.click_Ok);
 			// 
 			// rb_StartAdd
 			// 
@@ -288,7 +287,7 @@ namespace yata
 			this.rb_FillSelected.Location = new System.Drawing.Point(10, 35);
 			this.rb_FillSelected.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillSelected.Name = "rb_FillSelected";
-			this.rb_FillSelected.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillSelected.Size = new System.Drawing.Size(115, 20);
 			this.rb_FillSelected.TabIndex = 1;
 			this.rb_FillSelected.Text = "use Selected row";
 			this.rb_FillSelected.UseVisualStyleBackColor = true;
@@ -299,7 +298,7 @@ namespace yata
 			this.rb_FillCopied.Location = new System.Drawing.Point(10, 55);
 			this.rb_FillCopied.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillCopied.Name = "rb_FillCopied";
-			this.rb_FillCopied.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillCopied.Size = new System.Drawing.Size(115, 20);
 			this.rb_FillCopied.TabIndex = 2;
 			this.rb_FillCopied.Text = "use Copied row";
 			this.rb_FillCopied.UseVisualStyleBackColor = true;
@@ -310,7 +309,7 @@ namespace yata
 			this.rb_FillStars.Location = new System.Drawing.Point(10, 15);
 			this.rb_FillStars.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillStars.Name = "rb_FillStars";
-			this.rb_FillStars.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillStars.Size = new System.Drawing.Size(115, 20);
 			this.rb_FillStars.TabIndex = 0;
 			this.rb_FillStars.TabStop = true;
 			this.rb_FillStars.Text = "****";
@@ -318,13 +317,13 @@ namespace yata
 			// 
 			// RowCreatorDialog
 			// 
-			this.AcceptButton = this.btn_Okay;
+			this.AcceptButton = this.btn_Accept;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(244, 236);
 			this.Controls.Add(this.gb_Fillstyle);
 			this.Controls.Add(this.gb_Stop);
 			this.Controls.Add(this.gb_Start);
-			this.Controls.Add(this.btn_Okay);
+			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
