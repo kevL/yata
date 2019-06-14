@@ -2287,6 +2287,8 @@ namespace yata
 
 					if (!_editor.Visible)
 					{
+						Select();
+
 						if ((ModifierKeys & Keys.Control) == Keys.Control)
 						{
 							if (cell.selected = !cell.selected)
@@ -2297,7 +2299,6 @@ namespace yata
 								invalid |= INVALID_PROP;
 
 							Invalidator(invalid);
-							Select();
 						}
 						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{
@@ -2308,7 +2309,6 @@ namespace yata
 							cell.selected = true;
 
 							Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
-							Select();
 						}
 						else if (!Readonly) // cell is already selected
 						{

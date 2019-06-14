@@ -386,12 +386,12 @@ namespace yata
 				case Keys.Enter: // do this here to get rid of the beep.
 					if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
 					{
-						_dontbeep = DONTBEEP_DEFAULT;
-
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 							_dontbeep = DONTBEEP_SEARCH;
 						else if (tb_Goto.Focused)
 							_dontbeep = DONTBEEP_GOTO;
+						else
+							_dontbeep = DONTBEEP_DEFAULT;
 
 						if (_dontbeep != DONTBEEP_DEFAULT)
 						{
