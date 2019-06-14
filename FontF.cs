@@ -126,8 +126,6 @@ namespace yata
 			_load = false;
 
 			lbl_Example.Text = EXAMPLE;
-
-			_f.DefaultFont_toggleenabled();
 		}
 		#endregion cTor
 
@@ -157,8 +155,7 @@ namespace yata
 		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
-			_f.Font_uncheck();
-			_f.DefaultFont_toggleenabled();
+			_f.FontF_closing();
 
 			_x = Left;
 			_y = Top;

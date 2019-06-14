@@ -16,13 +16,25 @@ namespace yata
 	/// <summary>
 	/// Yata ....
 	/// </summary>
-	public partial class YataForm //<T> where T : object
+	partial class YataForm
 		:
 			Form
 	{
-		#region Events
+		#region Enumerators
+		/// <summary>
+		/// Defines field fill-types used by the CreateRows dialog.
+		/// </summary>
+		internal enum CrFillType
+		{ Stars, Selected, Copied }
+		#endregion Enumerators
+
+
+		#region Triggers
+		/// <summary>
+		/// whatever. Don't beep at us.
+		/// </summary>
 		internal event DontBeepEventHandler DontBeepEvent;
-		#endregion
+		#endregion Triggers
 
 
 		#region Fields (static)
@@ -65,7 +77,43 @@ namespace yata
 		const int DONTBEEP_GOTO    = 1;
 		const int DONTBEEP_SEARCH  = 2;
 
+		internal DifferDialog _fdiffer;
 		internal YataGrid _diff1, _diff2;
+
+		/// <summary>
+		/// Caches a fullpath when doing SaveAs.
+		/// So that the Table's new path-variables don't get assigned unless the
+		/// save is successful - ie. verify several conditions first.
+		/// </summary>
+		string _pfeT = String.Empty;
+
+		/// <summary>
+		/// A pointer to a 'YataGrid' table that will be used during the save-
+		/// routine. Is required because it can't be assumed that the current
+		/// 'Table' is the table being saved; that is, the SaveAll operation
+		/// needs to cycle through all tables: See fileclick_SaveAll().
+		/// </summary>
+		YataGrid _table;
+
+		/// <summary>
+		/// A flag that prevents a Readonly warning/error from showing twice.
+		/// </summary>
+		bool _warned;
+
+		/// <summary>
+		/// Tracks the row-id during single-row edit operations via the context.
+		/// </summary>
+		int _r;
+
+		/// <summary>
+		/// Int for InfoInputDialog (PathInfo).
+		/// </summary>
+		internal int intOriginal, intInput;
+
+		/// <summary>
+		/// String for InfoInputDialog (PathInfo).
+		/// </summary>
+		internal string stOriginal, stInput;
 		#endregion Fields
 
 
@@ -116,7 +164,7 @@ namespace yata
 
 			FontDefault = Font;
 
-			Settings.ScanSettings(); // load an Optional manual settings file
+			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
 
 			if (Settings._font != null)
 			{
@@ -137,8 +185,8 @@ namespace yata
 				menubar.Font.Dispose();
 				menubar.Font = Settings._font2;
 
-				contextEditor.Font.Dispose();
-				contextEditor.Font = Settings._font2;
+				ContextEditor.Font.Dispose();
+				ContextEditor.Font = Settings._font2;
 
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
@@ -206,10 +254,8 @@ namespace yata
 			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
-			if (File.Exists(pfe_load))
-			{
+			if (File.Exists(pfe_load)) // load file from FileExplorer ...
 				CreatePage(pfe_load);
-			}
 			else
 				Obfuscate();
 
@@ -519,6 +565,7 @@ namespace yata
 		#endregion Methods (static)
 
 
+		#region Methods
 		/// <summary>
 		/// Obscures or unobscures the table behind a dedicated color-panel.
 		/// Can be called before and after calibrating and drawing the table in
@@ -534,6 +581,22 @@ namespace yata
 		}
 
 		/// <summary>
+		/// TODO: This funct is obsolete; tables that are Readonly shall not
+		/// fire events that can change the table at all.
+		/// </summary>
+		internal void ReadonlyError()
+		{
+			MessageBox.Show("The 2da-file is opened as readonly.",
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Hand,
+							MessageBoxDefaultButton.Button1);
+		}
+		#endregion Methods
+
+
+		#region Events
+		/// <summary>
 		/// Hides the editor. This is a generic handler that should be invoked
 		/// when opening a menu on the menubar (iff the menu doesn't have its
 		/// own dropdown-handler).
@@ -548,92 +611,10 @@ namespace yata
 				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 		}
+		#endregion Events
 
 
-		#region File menu
-		/// <summary>
-		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void file_dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				int saveOthers = 0;
-				for (int i = 0; i != Tabs.TabCount; ++i)
-				{
-					_table = Tabs.TabPages[i].Tag as YataGrid;
-					if (_table != Table && !_table.Readonly && _table.Changed)
-						++saveOthers;
-				}
-
-				it_Reload  .Enabled = File.Exists(Table.Fullpath);
-				it_Readonly.Enabled = true;
-				it_SaveAll .Enabled = (saveOthers != 0);
-				it_Save    .Enabled = !Table.Readonly;
-			}
-			else
-			{
-				it_Reload  .Enabled =
-				it_Readonly.Enabled =
-				it_SaveAll .Enabled =
-				it_Save    .Enabled = false;
-			}
-
-
-			_preset = String.Empty;
-
-			ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
-			presets.Clear();
-			foreach (var dir in Settings._dirpreset)
-			{
-				if (Directory.Exists(dir))
-				{
-					var preset = presets.Add(dir);
-					preset.Click += fileclick_OpenFolder;
-				}
-			}
-			it_OpenFolder.Visible = (presets.Count != 0);
-
-			it_Recent.Visible = (it_Recent.DropDownItems.Count != 0);
-		}
-
-		void fileclick_Open(object sender, EventArgs e)
-		{
-			using (var ofd = new OpenFileDialog())
-			{
-				ofd.InitialDirectory = _preset;
-
-				ofd.Title  = "Select a 2da file";
-				ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-
-				ofd.ShowReadOnly =
-				ofd.Multiselect  = true;
-
-				if (ofd.ShowDialog() == DialogResult.OK)
-				{
-					bool read = ofd.ReadOnlyChecked;
-					foreach (var pfe in ofd.FileNames)
-						CreatePage(pfe, read);
-				}
-			}
-		}
-
-		void fileclick_OpenFolder(object sender, EventArgs e)
-		{
-			var it = sender as ToolStripMenuItem;
-			_preset = it.Text;
-
-			fileclick_Open(null, EventArgs.Empty);
-		}
-
+		#region Methods (create)
 		/// <summary>
 		/// Creates a tab-page and instantiates a table-grid for it.
 		/// @note The filename w/out extension must not be blank since
@@ -644,7 +625,8 @@ namespace yata
 		/// <param name="read">readonly (default false)</param>
 		void CreatePage(string pfe, bool read = false)
 		{
-			if (File.Exists(pfe) && !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))
+			if (File.Exists(pfe)													// safety (probably).
+				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))	// what idjut would ... oh, wait.
 			{
 				if (Settings._recent != 0)
 				{
@@ -722,7 +704,30 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Sets the titlebar text to something reasonable.
+		/// </summary>
+		void SetTitlebarText()
+		{
+			string text = TITLE;
 
+			if (Table != null)
+			{
+				string pfe = Table.Fullpath;
+				text += " - " + Path.GetFileName(pfe);
+
+				string dir = Path.GetDirectoryName(pfe);
+				if (!String.IsNullOrEmpty(dir))
+				{
+					text += " - " + dir;
+				}
+			}
+			Text = text;
+		}
+		#endregion Methods (create)
+
+
+		#region Events (tabs)
 		/// <summary>
 		/// Handles tab-selection/deselection.
 		/// </summary>
@@ -841,56 +846,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the tabtext of a specified table.
-		/// </summary>
-		/// <param name="table"></param>
-		internal void SetTabText(YataGrid table)
-		{
-			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
-
-			string asterisk = table.Changed ? " *" : "";
-
-			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
-			{										//       - the 'Changed' mechanism should be bypassed such that all
-				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
-				{
-					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
-					break;
-				}
-			}
-			SetTabSize();
-
-			DrawingControl.ResumeDrawing(this);
-		}
-
-		/// <summary>
-		/// Sets the width of the tabs on the TabControl.
-		/// </summary>
-		void SetTabSize()
-		{
-			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls to OnResize().
-
-			if (Tabs.TabCount != 0)
-			{
-				Size size;
-				int w = 25, wT, h = 10, hT;
-				for (int tab = 0; tab != Tabs.TabCount; ++tab)
-				{
-					size = YataGraphics.MeasureSize(Tabs.TabPages[tab].Text, FontAccent);
-					if ((wT = size.Width) > w)
-						w = wT;
-
-					if ((hT = size.Height) > h)
-						h = hT;
-				}
-				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
-//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
-			}
-
-			YataGrid.BypassInitScroll = false;
-		}
-
-		/// <summary>
 		/// Draws the tab-text in Bold iff selected.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -945,6 +900,37 @@ namespace yata
 								  rect.X + w, y);
 			}
 		}
+		#endregion Events (tabs)
+
+
+		#region Methods (tabs)
+		/// <summary>
+		/// Sets the width of the tabs on the TabControl.
+		/// </summary>
+		void SetTabSize()
+		{
+			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls to OnResize().
+
+			if (Tabs.TabCount != 0)
+			{
+				Size size;
+				int w = 25, wT, h = 10, hT;
+				for (int tab = 0; tab != Tabs.TabCount; ++tab)
+				{
+					size = YataGraphics.MeasureSize(Tabs.TabPages[tab].Text, FontAccent);
+					if ((wT = size.Width) > w)
+						w = wT;
+
+					if ((hT = size.Height) > h)
+						h = hT;
+				}
+				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
+//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
+			}
+
+			YataGrid.BypassInitScroll = false;
+		}
+
 
 		/// <summary>
 		/// Disposes a tab's table's 'FileWatcher' before a specified tab-page
@@ -963,67 +949,74 @@ namespace yata
 			table = null;
 		}
 
-
-		internal void fileclick_CloseTab(object sender, EventArgs e)
+		/// <summary>
+		/// Sets the tabtext of a specified table.
+		/// @note Is called by YataGrid.Changed flag.
+		/// </summary>
+		/// <param name="table"></param>
+		internal void SetTabText(YataGrid table)
 		{
-			if (Table != null
-				&& (!Table.Changed
-					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-									   " warning",
-									   MessageBoxButtons.YesNo,
-									   MessageBoxIcon.Warning,
-									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
-			{
-				CloseTabpage(Tabs.SelectedTab);
+			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
-				if (Tabs.TabCount == 0)
-					Table = null;
+			string asterisk = table.Changed ? " *" : "";
 
-				SetTabSize();
-				SetTitlebarText();
-			}
-		}
-
-		void fileclick_CloseAllTabs(object sender, EventArgs e)
-		{
-			bool close = true;
-
-			var tables = GetChangedTables();
-			if (tables.Count != 0)
-			{
-				string info = String.Empty;
-				foreach (string table in tables)
+			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
+			{										//       - the 'Changed' mechanism should be bypassed such that all
+				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
 				{
-					info += table + Environment.NewLine;
+					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
+					break;
 				}
-
-				close = MessageBox.Show("Data has changed."
-										+ Environment.NewLine + Environment.NewLine
-										+ info
-										+ Environment.NewLine
-										+ "Okay to exit ...",
-										" warning",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Warning,
-										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
 			}
+			SetTabSize();
 
-			if (close)
-			{
-				Table = null;
-
-				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-					CloseTabpage(Tabs.TabPages[tab]);
-
-				SetTitlebarText();
-			}
+			DrawingControl.ResumeDrawing(this);
 		}
+		#endregion Methods (tabs)
 
-		void fileclick_Quit(object sender, EventArgs e)
+
+		#region Methods (save)
+		DialogResult SaveWarning(string info)
 		{
-			Close(); // let yata_Closing() handle it ...
+			_warned = true;
+			return MessageBox.Show(info
+								   + Environment.NewLine + Environment.NewLine
+								   + "Save anyway ...",
+								   " burp",
+								   MessageBoxButtons.YesNo,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
 		}
 
+		/// <summary>
+		/// Checks the row-order before save.
+		/// </summary>
+		/// <returns>true if row-order is okay</returns>
+		bool CheckRowOrder()
+		{
+			string val;
+			int result;
+
+			for (int id = 0; id != Table.RowCount; ++id)
+			{
+				if (String.IsNullOrEmpty(val = Table[id,0].text)
+					|| !Int32.TryParse(val, out result)
+					|| result != id)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		#endregion Methods (save)
+
+
+		#region Events (close)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void yata_Closing(object sender, CancelEventArgs e)
 		{
 			if (Tabs.TabPages.Count == 1)
@@ -1077,7 +1070,10 @@ namespace yata
 				}
 			}
 		}
+		#endregion Events (close)
 
+
+		#region Methods (close)
 		/// <summary>
 		/// Returns a list of currently loaded tables that have been modified.
 		/// </summary>
@@ -1098,8 +1094,108 @@ namespace yata
 			}
 			return tables;
 		}
+		#endregion Methods (close)
 
 
+		#region Events (file)
+		/// <summary>
+		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void file_dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
+
+				int saveOthers = 0;
+				for (int i = 0; i != Tabs.TabCount; ++i)
+				{
+					_table = Tabs.TabPages[i].Tag as YataGrid;
+					if (_table != Table && !_table.Readonly && _table.Changed)
+						++saveOthers;
+				}
+
+				it_Reload  .Enabled = File.Exists(Table.Fullpath);
+				it_Readonly.Enabled = true;
+				it_SaveAll .Enabled = (saveOthers != 0);
+				it_Save    .Enabled = !Table.Readonly;
+			}
+			else
+			{
+				it_Reload  .Enabled =
+				it_Readonly.Enabled =
+				it_SaveAll .Enabled =
+				it_Save    .Enabled = false;
+			}
+
+
+			_preset = String.Empty;
+
+			ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
+			presets.Clear();
+			foreach (var dir in Settings._dirpreset)
+			{
+				if (Directory.Exists(dir))
+				{
+					var preset = presets.Add(dir);
+					preset.Click += fileclick_OpenFolder;
+				}
+			}
+			it_OpenFolder.Visible = (presets.Count != 0);
+
+			it_Recent.Visible = (it_Recent.DropDownItems.Count != 0);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_OpenFolder(object sender, EventArgs e)
+		{
+			var it = sender as ToolStripMenuItem;
+			_preset = it.Text;
+
+			fileclick_Open(null, EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_Open(object sender, EventArgs e)
+		{
+			using (var ofd = new OpenFileDialog())
+			{
+				ofd.InitialDirectory = _preset;
+
+				ofd.Title  = "Select a 2da file";
+				ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+				ofd.ShowReadOnly =
+				ofd.Multiselect  = true;
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+				{
+					bool read = ofd.ReadOnlyChecked;
+					foreach (var pfe in ofd.FileNames)
+						CreatePage(pfe, read);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
 			if (Table != null && File.Exists(Table.Fullpath)
@@ -1180,47 +1276,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Sets the titlebar text to something reasonable.
+		/// 
 		/// </summary>
-		void SetTitlebarText()
-		{
-			string text = TITLE;
-
-			if (Table != null)
-			{
-				string pfe = Table.Fullpath;
-				text += " - " + Path.GetFileName(pfe);
-
-				string dir = Path.GetDirectoryName(pfe);
-				if (!String.IsNullOrEmpty(dir))
-				{
-					text += " - " + dir;
-				}
-			}
-			Text = text;
-		}
-
-
-		/// <summary>
-		/// Caches a fullpath when doing SaveAs.
-		/// So that the Table's new path-variables don't get assigned unless the
-		/// save is successful - ie. verify several conditions first.
-		/// </summary>
-		string _pfeT = String.Empty;
-
-		/// <summary>
-		/// A pointer to a 'YataGrid' table that will be used during the save-
-		/// routine. Is required because it can't be assumed that the current
-		/// 'Table' is the table being saved; that is, the SaveAll operation
-		/// needs to cycle through all tables: See fileclick_SaveAll().
-		/// </summary>
-		YataGrid _table;
-
-		/// <summary>
-		/// A flag that prevents a Readonly warning/error from showing twice.
-		/// </summary>
-		bool _warned;
-
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null) // safety I believe.
@@ -1339,6 +1398,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0) // rowcount should never be zero ...
@@ -1358,6 +1422,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void fileclick_SaveAll(object sender, EventArgs e)
 		{
 			for (int i = 0; i != Tabs.TabCount; ++i)
@@ -1373,59 +1442,90 @@ namespace yata
 			}
 		}
 
-		DialogResult SaveWarning(string info)
-		{
-			_warned = true;
-			return MessageBox.Show(info
-								   + Environment.NewLine + Environment.NewLine
-								   + "Save anyway ...",
-								   " burp",
-								   MessageBoxButtons.YesNo,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
-		}
-
 
 		/// <summary>
-		/// Checks the row-order before save.
+		/// 
 		/// </summary>
-		/// <returns>true if row-order is okay</returns>
-		bool CheckRowOrder()
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		internal void fileclick_CloseTab(object sender, EventArgs e)
 		{
-			string val;
-			int result;
-
-			for (int id = 0; id != Table.RowCount; ++id)
+			if (Table != null
+				&& (!Table.Changed
+					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+									   " warning",
+									   MessageBoxButtons.YesNo,
+									   MessageBoxIcon.Warning,
+									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				if (String.IsNullOrEmpty(val = Table[id,0].text)
-					|| !Int32.TryParse(val, out result)
-					|| result != id)
-				{
-					return false;
-				}
+				CloseTabpage(Tabs.SelectedTab);
+
+				if (Tabs.TabCount == 0)
+					Table = null;
+
+				SetTabSize();
+				SetTitlebarText();
 			}
-			return true;
 		}
-		#endregion File menu
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_CloseAllTabs(object sender, EventArgs e)
+		{
+			bool close = true;
+
+			var tables = GetChangedTables();
+			if (tables.Count != 0)
+			{
+				string info = String.Empty;
+				foreach (string table in tables)
+				{
+					info += table + Environment.NewLine;
+				}
+
+				close = MessageBox.Show("Data has changed."
+										+ Environment.NewLine + Environment.NewLine
+										+ info
+										+ Environment.NewLine
+										+ "Okay to exit ...",
+										" warning",
+										MessageBoxButtons.YesNo,
+										MessageBoxIcon.Warning,
+										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+			}
+
+			if (close)
+			{
+				Table = null;
+
+				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+					CloseTabpage(Tabs.TabPages[tab]);
+
+				SetTitlebarText();
+			}
+		}
 
 
 		/// <summary>
-		/// TODO: This funct is obsolete; tables that are Readonly shall not
-		/// fire events that can change the table at all.
+		/// 
 		/// </summary>
-		internal void ReadonlyError()
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fileclick_Quit(object sender, EventArgs e)
 		{
-			MessageBox.Show("The 2da-file is opened as readonly.",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Hand,
-							MessageBoxDefaultButton.Button1);
+			Close(); // let yata_Closing() handle it ...
 		}
+		#endregion Events (file)
 
 
-		#region Context menu
-		int _r;
-
+		#region Methods (context)
+		/// <summary>
+		/// Opens the context for single-row editing.
+		/// </summary>
+		/// <param name="r"></param>
 		internal void context_(int r)
 		{
 			_r = r;
@@ -1433,11 +1533,7 @@ namespace yata
 			Table._editor.Visible = false;
 			Table.ClearSelects();
 
-			Row row = Table.Rows[_r];
-			row.selected = true;
-			for (int c = 0; c != Table.ColCount; ++c)
-				row[c].selected = true;
-
+			Table.SelectRow(_r);
 			Table.EnsureDisplayedRow(_r);
 
 			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
@@ -1450,7 +1546,7 @@ namespace yata
 
 			context_it_PasteAbove .Enabled =
 			context_it_Paste      .Enabled =
-			context_it_PasteBelow .Enabled = (_copy.Count != 0 && !Table.Readonly);
+			context_it_PasteBelow .Enabled = !Table.Readonly && _copy.Count != 0;
 
 			context_it_Cut        .Enabled =
 			context_it_CreateAbove.Enabled =
@@ -1467,14 +1563,27 @@ namespace yata
 			else											// vanilla location
 				loc = Table.PointToClient(Cursor.Position);
 
-			contextEditor.Show(Table, loc);
+			ContextEditor.Show(Table, loc);
 		}
+		#endregion Methods (context)
 
+
+		#region Events (context)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_Header(object sender, EventArgs e)
 		{
-			contextEditor.Hide();
+			ContextEditor.Hide();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditCopy(object sender, EventArgs e)
 		{
 			_copy.Clear();
@@ -1486,6 +1595,11 @@ namespace yata
 			_copy.Add(fields);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditCut(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1497,6 +1611,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditPasteAbove(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1522,6 +1641,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditPaste(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1569,6 +1693,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditPasteBelow(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1594,6 +1723,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditCreateAbove(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1625,6 +1759,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditClear(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1665,6 +1804,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditCreateBelow(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1696,6 +1840,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void contextclick_EditDelete(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -1722,10 +1871,10 @@ namespace yata
 			else
 				ReadonlyError();
 		}
-		#endregion Context menu
+		#endregion Events (context)
 
 
-		#region Edit menu
+		#region Events (edit)
 		/// <summary>
 		/// Handles opening the EditMenu, determines if various items ought be
 		/// enabled.
@@ -1776,6 +1925,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_Undo(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -1786,6 +1940,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_Redo(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -1796,33 +1955,42 @@ namespace yata
 			}
 		}
 
-		internal void EnableUndo(bool enable)
-		{
-			it_Undo.Enabled = enable;
-		}
-
-		internal void EnableRedo(bool enable)
-		{
-			it_Redo.Enabled = enable;
-		}
-
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void textchanged_Search(object sender, EventArgs e)
 		{
 			it_Searchnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_Search(object sender, EventArgs e)
 		{
 			tb_Search.Focus();
 			tb_Search.SelectAll();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void enter_Search(object sender, EventArgs e)
 		{
 			_firstclick = true;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_Search(object sender, EventArgs e)
 		{
 			if (_firstclick)
@@ -1832,6 +2000,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
@@ -1999,6 +2172,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void textchanged_Goto(object sender, EventArgs e)
 		{
 			int result;
@@ -2009,17 +2187,32 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_Goto(object sender, EventArgs e)
 		{
 			tb_Goto.Focus();
 			tb_Goto.SelectAll();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void enter_Goto(object sender, EventArgs e)
 		{
 			_firstclick = true;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_Goto(object sender, EventArgs e)
 		{
 			if (_firstclick)
@@ -2180,6 +2373,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_CopyCell(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -2194,6 +2392,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_PasteCell(object sender, EventArgs e)
 		{
 			if (tb_Goto.Focused)
@@ -2222,39 +2425,12 @@ namespace yata
 			}
 		}
 
+
 		/// <summary>
-		/// helper for editclick_PasteCell()
+		/// 
 		/// </summary>
-		/// <param name="tb"></param>
-		void SetTextboxText(ToolStripItem tb)
-		{
-			if (Clipboard.ContainsText(TextDataFormat.Text))
-			{
-				tb.Text = Clipboard.GetText(TextDataFormat.Text);
-			}
-			else if (_copytext != Constants.Stars || tb == tb_Search)
-			{
-				tb.Text = _copytext;
-			}
-			else
-				tb.Text = String.Empty;
-		}
-
-		void CopyPasteCellError()
-		{
-			MessageBox.Show("Select one (1) cell.",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Exclamation,
-							MessageBoxDefaultButton.Button1);
-		}
-
-
-		internal void EnableCopyRange(bool enabled)
-		{
-			it_CopyRange.Enabled = enabled;
-		}
-
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_CopyRange(object sender, EventArgs e)
 		{
 			_copy.Clear();
@@ -2288,6 +2464,11 @@ namespace yata
 				it_PasteRange.Enabled = true;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void editclick_PasteRange(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -2332,11 +2513,6 @@ namespace yata
 				ReadonlyError();
 		}
 
-
-		internal enum CrFillType
-		{
-			Stars, Selected, Copied
-		}
 
 		/// <summary>
 		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple
@@ -2415,10 +2591,71 @@ namespace yata
 			else
 				ReadonlyError();
 		}
-		#endregion Edit menu
+		#endregion Events (edit)
 
 
-		#region Clipboard menu
+		#region Methods (edit)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="enable"></param>
+		internal void EnableUndo(bool enable)
+		{
+			it_Undo.Enabled = enable;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="enable"></param>
+		internal void EnableRedo(bool enable)
+		{
+			it_Redo.Enabled = enable;
+		}
+
+		/// <summary>
+		/// @note Is called by Row.selected.
+		/// </summary>
+		/// <param name="enabled"></param>
+		internal void EnableCopyRange(bool enabled)
+		{
+			it_CopyRange.Enabled = enabled;
+		}
+
+
+		/// <summary>
+		/// Helper for editclick_PasteCell().
+		/// </summary>
+		/// <param name="tb"></param>
+		void SetTextboxText(ToolStripItem tb)
+		{
+			if (Clipboard.ContainsText(TextDataFormat.Text))
+			{
+				tb.Text = Clipboard.GetText(TextDataFormat.Text);
+			}
+			else if (_copytext != Constants.Stars || tb == tb_Search)
+			{
+				tb.Text = _copytext;
+			}
+			else
+				tb.Text = String.Empty;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void CopyPasteCellError()
+		{
+			MessageBox.Show("Select one (1) cell.",
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation,
+							MessageBoxDefaultButton.Button1);
+		}
+		#endregion Methods (edit)
+
+
+		#region Events (clipboard)
 		/// <summary>
 		/// Handles opening the ClipboardMenu, determines if various items ought
 		/// be enabled.
@@ -2492,15 +2729,21 @@ namespace yata
 			else
 				f.BringToFront();
 		}
+		#endregion Events (clipboard)
 
+
+		#region Methods (clipboard)
+		/// <summary>
+		/// 
+		/// </summary>
 		internal void Clip_uncheck()
 		{
 			it_OpenClipEditor.Checked = false;
 		}
-		#endregion Clipboard menu
+		#endregion Methods (clipboard)
 
 
-		#region 2da Ops menu
+		#region Events (2daOps)
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
 			bool valid = (Table != null);
@@ -2529,6 +2772,11 @@ namespace yata
 				it_ppOnOff.Checked = false;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_Order(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -2579,6 +2827,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_TestOrder(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -2666,6 +2919,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -2680,6 +2938,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// @note Is also called by DiffReset().
+		/// </summary>
+		/// <param name="table"></param>
 		void AutosizeCols(YataGrid table)
 		{
 			foreach (var c in table.Cols)
@@ -2688,6 +2950,11 @@ namespace yata
 			table.Calibrate(0, table.RowCount - 1); // autosize
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0)
@@ -2710,6 +2977,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
 		{
 			if (Table != null && Table.ColCount > 1)
@@ -2733,6 +3005,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void opsclick_Freeze2ndCol(object sender, EventArgs e)
 		{
 			if (Table != null && Table.ColCount > 2)
@@ -2869,10 +3146,10 @@ namespace yata
 								MessageBoxDefaultButton.Button1);
 			}
 		}
-		#endregion 2da Ops menu
+		#endregion Events (2daOps)
 
 
-		#region Font menu
+		#region Events (font)
 		/// <summary>
 		/// Opens the FontPicker form.
 		/// </summary>
@@ -2883,6 +3160,8 @@ namespace yata
 			var f = Application.OpenForms["FontF"];
 			if (f == null)
 			{
+				it_FontDefault.Enabled = false;
+
 				it_Font.Checked = true;
 				f = new FontF(this);
 				f.Show(this);
@@ -2901,15 +3180,19 @@ namespace yata
 			if (!Font.Equals(FontDefault))
 				doFont(FontDefault);
 		}
+		#endregion Events (font)
 
-		internal void Font_uncheck()
+
+		#region Methods (font)
+		/// <summary>
+		/// Dechecks the "Font ... be patient" menuitem and re-enables the "Load
+		/// default font" menuitem when the font-dialog closes.
+		/// @note The latter item is disabled while the font dialog is open.
+		/// </summary>
+		internal void FontF_closing()
 		{
 			it_Font.Checked = false;
-		}
-
-		internal void DefaultFont_toggleenabled()
-		{
-			it_FontDefault.Enabled = !it_FontDefault.Enabled;
+			it_FontDefault.Enabled = true;
 		}
 
 		/// <summary>
@@ -2971,10 +3254,10 @@ namespace yata
 				DrawingControl.ResumeDrawing(Table);
 			}
 		}
-		#endregion Font menu
+		#endregion Methods (font)
 
 
-		#region Help menu
+		#region Events (help)
 		void helpclick_Help(object sender, EventArgs e)
 		{
 			string path = Path.Combine(Application.StartupPath, "ReadMe.txt");
@@ -3007,10 +3290,10 @@ namespace yata
 							MessageBoxIcon.Information,
 							MessageBoxDefaultButton.Button1);
 		}
-		#endregion Help menu
+		#endregion Events (help)
 
 
-		#region Tab menu
+		#region Events (tab)
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
 		/// the context.
@@ -3103,8 +3386,8 @@ namespace yata
 						CloseTabpage(Tabs.TabPages[tab]);
 				}
 
-				SetTabSize();
 				SetTitlebarText();
+				SetTabSize();
 
 				DrawingControl.ResumeDrawing(this);
 			}
@@ -3164,25 +3447,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for tabclick_DiffReset().
-		/// @note Check that 'table' is not null before call.
-		/// </summary>
-		/// <param name="table"></param>
-		void DiffReset(YataGrid table)
-		{
-			for (int r = 0; r != table.RowCount; ++r)
-			for (int c = 0; c != table.ColCount; ++c)
-			{
-				table[r,c].diff = false;
-			}
-
-			if (table == Table)
-				opsclick_AutosizeCols(null, EventArgs.Empty);
-			else
-				AutosizeCols(table);
-		}
-
-		/// <summary>
 		/// Aligns the two diffed tables for easy switching back and forth.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -3217,6 +3481,28 @@ namespace yata
 
 			if (table != null)
 				table.Invalidator(YataGrid.INVALID_GRID);
+		}
+		#endregion Events (tab)
+
+
+		#region Methods (tab)
+		/// <summary>
+		/// Helper for tabclick_DiffReset().
+		/// @note Check that 'table' is not null before call.
+		/// </summary>
+		/// <param name="table"></param>
+		void DiffReset(YataGrid table)
+		{
+			for (int r = 0; r != table.RowCount; ++r)
+			for (int c = 0; c != table.ColCount; ++c)
+			{
+				table[r,c].diff = false;
+			}
+
+			if (table == Table)
+				opsclick_AutosizeCols(null, EventArgs.Empty);
+			else
+				AutosizeCols(table);
 		}
 
 		/// <summary>
@@ -3387,7 +3673,6 @@ namespace yata
 			if (@goto) _fdiffer.ShowGotoButton();
 			_fdiffer.Show(); // is not owned.
 		}
-		internal DifferDialog _fdiffer;
 
 		/// <summary>
 		/// Selects the next diffed cell in the table (or both tables if both
@@ -3553,10 +3838,10 @@ namespace yata
 				table[sel.y, sel.x].selected = true;
 			}
 		}
-		#endregion Tab menu
+		#endregion Methods (tab)
 
 
-		#region Statusbar
+		#region Methods (statusbar)
 		/// <summary>
 		/// Mouseover datacells prints table-cords plus info to the statusbar if
 		/// a relevant 2da (eg. Crafting, Spells) is loaded.
@@ -3602,10 +3887,10 @@ namespace yata
 				statbar_lblInfo .Text = st;
 			}
 		}
-		#endregion Statusbar
+		#endregion Methods (statusbar)
 
 
-		#region DragDrop file(s)
+		#region Events (dragdrop)
 		internal void yata_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -3618,10 +3903,10 @@ namespace yata
 			foreach (string file in files)
 				CreatePage(file);
 		}
-		#endregion DragDrop file(s)
+		#endregion Events (dragdrop)
 
 
-		#region PropertyPanel
+		#region Events (propanel)
 		/// <summary>
 		/// Handler for MouseDown on the PropertyPanel button.
 		/// </summary>
@@ -3671,10 +3956,13 @@ namespace yata
 				}
 			}
 		}
-		#endregion PropertyPanel
+		#endregion Events (propanel)
 
 
-		#region Cell menu
+		#region Methods (cell)
+		/// <summary>
+		/// 
+		/// </summary>
 		internal void ShowCellMenu()
 		{
 			Cell sel = Table.getSelectedCell();
@@ -3740,7 +4028,15 @@ namespace yata
 			}
 			return false;
 		}
+		#endregion Methods (cell)
 
+
+		#region Events (cell)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void cellclick_EditCell(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -3751,6 +4047,11 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void cellclick_Stars(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
@@ -3848,13 +4149,11 @@ namespace yata
 		}
 
 
-		internal int
-			intOriginal,
-			intInput;
-		internal string
-			stOriginal,
-			stInput;
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void cellclick_Input(object sender, EventArgs e)
 		{
 			Cell cell = Table.getSelectedCell();
@@ -3900,7 +4199,7 @@ namespace yata
 					break;
 			}
 		}
-		#endregion Cell menu
+		#endregion Events (cell)
 	}
 
 

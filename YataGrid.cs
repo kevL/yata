@@ -348,7 +348,7 @@ namespace yata
 		{
 			if (_f.tabMenu       != null) _f.tabMenu      .Close();
 			if (_f.cellMenu      != null) _f.cellMenu     .Close();
-			if (_f.contextEditor != null) _f.contextEditor.Close();
+			if (_f.ContextEditor != null) _f.ContextEditor.Close();
 		}
 
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
@@ -1749,7 +1749,7 @@ namespace yata
 		/// @note Check that 'r' doesn't over/underflow 'Rows' before call.
 		/// </summary>
 		/// <param name="r">row-id</param>
-		void SelectRow(int r)
+		internal void SelectRow(int r)
 		{
 			Row row = Rows[r];
 			row.selected = true;

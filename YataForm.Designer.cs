@@ -121,7 +121,7 @@ namespace yata
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
 
-		internal ContextMenuStrip contextEditor;
+		internal ContextMenuStrip ContextEditor;
 		ToolStripMenuItem context_it_Header;
 		ToolStripMenuItem context_it_Copy;
 		ToolStripMenuItem context_it_Cut;
@@ -278,7 +278,7 @@ namespace yata
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
-			this.contextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.ContextEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.context_it_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.context_it_Copy = new System.Windows.Forms.ToolStripMenuItem();
@@ -311,7 +311,7 @@ namespace yata
 			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
-			this.contextEditor.SuspendLayout();
+			this.ContextEditor.SuspendLayout();
 			this.statusbar.SuspendLayout();
 			this.cellMenu.SuspendLayout();
 			this.SuspendLayout();
@@ -1140,10 +1140,10 @@ namespace yata
 			this.it_About.Text = "&About";
 			this.it_About.Click += new System.EventHandler(this.helpclick_About);
 			// 
-			// contextEditor
+			// ContextEditor
 			// 
-			this.contextEditor.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.contextEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.ContextEditor.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ContextEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.context_it_Header,
 			this.separator_7,
 			this.context_it_Copy,
@@ -1158,9 +1158,9 @@ namespace yata
 			this.context_it_CreateBelow,
 			this.separator_10,
 			this.context_it_DeleteRow});
-			this.contextEditor.Name = "contextMenuStrip1";
-			this.contextEditor.ShowImageMargin = false;
-			this.contextEditor.Size = new System.Drawing.Size(177, 248);
+			this.ContextEditor.Name = "contextMenuStrip1";
+			this.ContextEditor.ShowImageMargin = false;
+			this.ContextEditor.Size = new System.Drawing.Size(177, 270);
 			// 
 			// context_it_Header
 			// 
@@ -1401,7 +1401,7 @@ namespace yata
 			this.tabMenu.ResumeLayout(false);
 			this.menubar.ResumeLayout(false);
 			this.menubar.PerformLayout();
-			this.contextEditor.ResumeLayout(false);
+			this.ContextEditor.ResumeLayout(false);
 			this.statusbar.ResumeLayout(false);
 			this.statusbar.PerformLayout();
 			this.cellMenu.ResumeLayout(false);

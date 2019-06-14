@@ -125,9 +125,9 @@ namespace yata
 			// 
 			// gb_Start
 			// 
+			this.gb_Start.Controls.Add(this.tb_StartInsert);
 			this.gb_Start.Controls.Add(this.la_StartInsert);
 			this.gb_Start.Controls.Add(this.la_StartAdd);
-			this.gb_Start.Controls.Add(this.tb_StartInsert);
 			this.gb_Start.Controls.Add(this.tb_StartAdd);
 			this.gb_Start.Controls.Add(this.rb_StartAdd);
 			this.gb_Start.Controls.Add(this.rb_StartInsert);
@@ -187,11 +187,11 @@ namespace yata
 			// 
 			// gb_Stop
 			// 
+			this.gb_Stop.Controls.Add(this.tb_StopCount);
 			this.gb_Stop.Controls.Add(this.la_StopFinish);
 			this.gb_Stop.Controls.Add(this.tb_StopFinish);
 			this.gb_Stop.Controls.Add(this.rb_StopFinish);
 			this.gb_Stop.Controls.Add(this.la_StopCount);
-			this.gb_Stop.Controls.Add(this.tb_StopCount);
 			this.gb_Stop.Controls.Add(this.rb_StopCount);
 			this.gb_Stop.Dock = System.Windows.Forms.DockStyle.Top;
 			this.gb_Stop.Location = new System.Drawing.Point(0, 60);
@@ -287,7 +287,7 @@ namespace yata
 			this.rb_FillSelected.Location = new System.Drawing.Point(10, 35);
 			this.rb_FillSelected.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillSelected.Name = "rb_FillSelected";
-			this.rb_FillSelected.Size = new System.Drawing.Size(115, 20);
+			this.rb_FillSelected.Size = new System.Drawing.Size(230, 20);
 			this.rb_FillSelected.TabIndex = 1;
 			this.rb_FillSelected.Text = "use Selected row";
 			this.rb_FillSelected.UseVisualStyleBackColor = true;
@@ -298,7 +298,7 @@ namespace yata
 			this.rb_FillCopied.Location = new System.Drawing.Point(10, 55);
 			this.rb_FillCopied.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillCopied.Name = "rb_FillCopied";
-			this.rb_FillCopied.Size = new System.Drawing.Size(115, 20);
+			this.rb_FillCopied.Size = new System.Drawing.Size(230, 20);
 			this.rb_FillCopied.TabIndex = 2;
 			this.rb_FillCopied.Text = "use Copied row";
 			this.rb_FillCopied.UseVisualStyleBackColor = true;
@@ -309,7 +309,7 @@ namespace yata
 			this.rb_FillStars.Location = new System.Drawing.Point(10, 15);
 			this.rb_FillStars.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillStars.Name = "rb_FillStars";
-			this.rb_FillStars.Size = new System.Drawing.Size(115, 20);
+			this.rb_FillStars.Size = new System.Drawing.Size(230, 20);
 			this.rb_FillStars.TabIndex = 0;
 			this.rb_FillStars.TabStop = true;
 			this.rb_FillStars.Text = "****";
