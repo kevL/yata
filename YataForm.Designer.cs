@@ -506,7 +506,7 @@ namespace yata
 			this.it_Readonly.Enabled = false;
 			this.it_Readonly.Name = "it_Readonly";
 			this.it_Readonly.Size = new System.Drawing.Size(181, 22);
-			this.it_Readonly.Text = "Readonly";
+			this.it_Readonly.Text = "Rea&donly";
 			this.it_Readonly.Click += new System.EventHandler(this.fileclick_Readonly);
 			// 
 			// separator_1
