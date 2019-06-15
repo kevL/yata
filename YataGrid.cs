@@ -375,29 +375,7 @@ namespace yata
 
 			if (_f._diff1 != null && _f._diff2 != null)
 			{
-				VScrollBar vert = null;
-
-				if      (_f._diff1 == this) vert = _f._diff2._scrollVert;
-				else if (_f._diff2 == this) vert = _f._diff1._scrollVert;
-
-				if (vert != null && vert.Maximum != 0)
-				{
-					if (_scrollVert.Value < vert.Maximum - vert.LargeChange)
-					{
-						vert.Value = _scrollVert.Value;
-					}
-					else
-						vert.Value = vert.Maximum - (vert.LargeChange - 1);
-
-					Select();
-
-					// NOTE: An interesting effect occurs if this is the longer table.
-					// When [Ctrl+End] is keyed and the other table fires this funct it
-					// causes this table to bounce back to the other table's Max value.
-					// It's a convenient stop-mechanism to indicate that the other
-					// table is not as long as this one; fortunately a second key
-					// [Ctrl+End] allows this table to continue to its final destination.
-				}
+				SyncDiffedGrids();
 			}
 		}
 
@@ -424,30 +402,60 @@ namespace yata
 
 
 			if (_f._diff1 != null && _f._diff2 != null)
+				SyncDiffedGrids();
+		}
+
+		/// <summary>
+		/// Synchs diffed tables both vertically and horizontally.
+		/// </summary>
+		void SyncDiffedGrids()
+		{
+			VScrollBar vert = null;
+
+			if      (_f._diff1 == this) vert = _f._diff2._scrollVert;
+			else if (_f._diff2 == this) vert = _f._diff1._scrollVert;
+
+			if (vert != null && vert.Maximum != 0)
 			{
-				HScrollBar hori = null;
-
-				if      (_f._diff1 == this) hori = _f._diff2._scrollHori;
-				else if (_f._diff2 == this) hori = _f._diff1._scrollHori;
-
-				if (hori != null && hori.Maximum != 0)
+				if (_scrollVert.Value < vert.Maximum - vert.LargeChange)
 				{
-					if (_scrollHori.Value < hori.Maximum - hori.LargeChange)
-					{
-						hori.Value = _scrollHori.Value;
-					}
-					else
-						hori.Value = hori.Maximum - (hori.LargeChange - 1);
-
-					Select();
-
-					// NOTE: An interesting effect occurs if this is the wider table.
-					// When [End] is keyed and the other table fires this funct it
-					// causes this table to bounce back to the other table's Max value.
-					// It's a convenient stop-mechanism to indicate that the other
-					// table is not as wide as this one; fortunately a second key
-					// [End] allows this table to continue to its final destination.
+					vert.Value = _scrollVert.Value;
 				}
+				else
+					vert.Value = vert.Maximum - (vert.LargeChange - 1);
+
+				Select();
+
+				// NOTE: An interesting effect occurs if this is the longer table.
+				// When [Ctrl+End] is keyed and the other table fires this funct it
+				// causes this table to bounce back to the other table's Max value.
+				// It's a convenient stop-mechanism to indicate that the other
+				// table is not as long as this one; fortunately a second key
+				// [Ctrl+End] allows this table to continue to its final destination.
+			}
+
+			HScrollBar hori = null;
+
+			if      (_f._diff1 == this) hori = _f._diff2._scrollHori;
+			else if (_f._diff2 == this) hori = _f._diff1._scrollHori;
+
+			if (hori != null && hori.Maximum != 0)
+			{
+				if (_scrollHori.Value < hori.Maximum - hori.LargeChange)
+				{
+					hori.Value = _scrollHori.Value;
+				}
+				else
+					hori.Value = hori.Maximum - (hori.LargeChange - 1);
+
+				Select();
+
+				// NOTE: An interesting effect occurs if this is the wider table.
+				// When [End] is keyed and the other table fires this funct it
+				// causes this table to bounce back to the other table's Max value.
+				// It's a convenient stop-mechanism to indicate that the other
+				// table is not as wide as this one; fortunately a second key
+				// [End] allows this table to continue to its final destination.
 			}
 		}
 
@@ -2677,7 +2685,12 @@ namespace yata
 						|| (rect.Width > right - left
 							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
 					{																	//    than the table's visible width.
-						_scrollHori.Value -= left - rect.X;
+						int val = _scrollHori.Value; // wtf (start)
+						val -= left - rect.X;
+						if (val > -1)
+							_scrollHori.Value = val; // wtf (stop)
+
+//						_scrollHori.Value -= left - rect.X;
 						invalid = INVALID_GRID;
 					}
 					else if (rect.X + rect.Width > right && rect.Width < right - left)
@@ -2705,6 +2718,8 @@ namespace yata
 					}
 				}
 			}
+			else
+				invalid = EnsureDisplayedRow(cell.y);
 
 			if (!bypassPropanel && Propanel != null && Propanel.Visible)
 			{

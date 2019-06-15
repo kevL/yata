@@ -419,7 +419,7 @@ namespace yata
 			this.it_tabDiffJustify.Name = "it_tabDiffJustify";
 			this.it_tabDiffJustify.Size = new System.Drawing.Size(138, 22);
 			this.it_tabDiffJustify.Text = "Justify tables";
-			this.it_tabDiffJustify.Click += new System.EventHandler(this.tabclick_DiffJustify);
+			this.it_tabDiffJustify.Click += new System.EventHandler(this.tabclick_DiffSync);
 			// 
 			// menubar
 			// 

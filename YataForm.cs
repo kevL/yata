@@ -957,6 +957,9 @@ namespace yata
 			if      (table == _diff1) _diff1 = null;
 			else if (table == _diff2) _diff2 = null;
 
+			if (_diff1 == null && _diff2 == null && _fdiffer != null)
+				_fdiffer.Close();
+
 			Tabs.TabPages.Remove(page);
 			table = null;
 		}
@@ -3430,10 +3433,13 @@ namespace yata
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
 			if (_fdiffer != null) _fdiffer.Close();
+			if (_diff2   != null) DiffReset(_diff2);
 
 			_diff2 = Table;
-			doDiff();
-			tabclick_DiffJustify(null, EventArgs.Empty);
+			if (doDiff())
+				tabclick_DiffSync(null, EventArgs.Empty);
+			else
+				_diff1 = _diff2 = null;
 		}
 
 		/// <summary>
@@ -3465,7 +3471,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void tabclick_DiffJustify(object sender, EventArgs e)
+		void tabclick_DiffSync(object sender, EventArgs e)
 		{
 			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			int w1, w2;
@@ -3479,11 +3485,18 @@ namespace yata
 				else if (w2 > w1) _diff1.Cols[c].width(w2, true);
 			}
 
-			for (int c = 0; c != _diff1.ColCount; ++c)
+			cols = Math.Min(YataGrid.FreezeSecond, _diff1.ColCount);
+			for (int c = 0; c != cols; ++c)
 				_diff1.metricFrozenControls(c);
 
-			for (int c = 0; c != _diff2.ColCount; ++c)
+			cols = Math.Min(YataGrid.FreezeSecond, _diff2.ColCount);
+			for (int c = 0; c != cols; ++c)
 				_diff2.metricFrozenControls(c);
+
+			_diff1._scrollVert.Value =
+			_diff1._scrollHori.Value =
+			_diff2._scrollVert.Value =
+			_diff2._scrollHori.Value = 0; // keep it simple stupid.
 
 			_diff1.InitScroll();
 			_diff2.InitScroll();
@@ -3522,11 +3535,14 @@ namespace yata
 		/// <summary>
 		/// The yata-diff routine.
 		/// </summary>
-		void doDiff()
+		/// <returns>true if differences are found</returns>
+		bool doDiff()
 		{
 			_diff1.ClearSelects();
 			_diff2.ClearSelects();
 
+
+			bool isDiff = false;
 
 			string copyable = String.Empty;
 
@@ -3534,6 +3550,7 @@ namespace yata
 			int fields2 = _diff2.Fields.Length;
 			if (fields1 != fields2)
 			{
+				isDiff = true;
 				copyable = "Head count: (a) " + fields1 + "  (b) " + fields2;
 			}
 
@@ -3542,6 +3559,7 @@ namespace yata
 			{
 				if (_diff1.Fields[f] != _diff2.Fields[f])
 				{
+					isDiff = true;
 					if (!String.IsNullOrEmpty(copyable))
 						copyable += Environment.NewLine;
 
@@ -3556,6 +3574,7 @@ namespace yata
 			int cols2 = _diff2.ColCount;
 			if (cols1 != cols2)
 			{
+				isDiff = true;
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine + Environment.NewLine;
@@ -3568,6 +3587,7 @@ namespace yata
 			int rows2 = _diff2.RowCount;
 			if (rows1 != rows2)
 			{
+				isDiff = true;
 				if (!String.IsNullOrEmpty(copyable))
 				{
 					copyable += Environment.NewLine;
@@ -3686,17 +3706,25 @@ namespace yata
 			_fdiffer.SetLabelColor(color);
 			if (@goto) _fdiffer.ShowGotoButton();
 			_fdiffer.Show(); // is not owned, will be disposed auto.
+
+			return isDiff || @goto;
 		}
 
 		/// <summary>
 		/// Selects the next diffed cell in the table (or both tables if both
 		/// are valid).
-		/// TODO: Allow frozen cols
+		/// @note Frozen cells will be selected but they don't respect
+		/// EnsureDisplayed(). They get no respect ...
 		/// </summary>
 		internal void GotoDiffCell()
 		{
 			if (WindowState == FormWindowState.Minimized)
 				WindowState = FormWindowState.Normal;
+			else
+			{
+				TopMost = true;
+				TopMost = false;
+			}
 
 			if (Table != null
 				&& (_diff1 != null  || _diff2 != null)
@@ -3707,6 +3735,8 @@ namespace yata
 					Table._editor.Visible = false;
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
+
+				Table.Select();
 
 				YataGrid table; // the other table - can be null.
 
