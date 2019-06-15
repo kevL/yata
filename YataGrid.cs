@@ -410,6 +410,54 @@ namespace yata
 		}
 
 		/// <summary>
+		/// @note This fires whenever a fly sneezes.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnResize(EventArgs e)
+		{
+			if (!_init)
+			{
+				bool doneSync = false;
+
+				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
+				{
+					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+					_table.InitScroll();
+
+					// NOTE: The panels can be null during the load sequence.
+					if (_table._panelCols  != null) _table._panelCols .Width  = Width;
+					if (_table._panelRows  != null) _table._panelRows .Height = Height;
+					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
+
+					if (_table.Propanel != null && _table.Propanel.Visible)
+						_table.Propanel.telemetric();
+
+					if (!_f.IsMin) _table.EnsureDisplayed();
+
+					if (!doneSync
+						&& _f._diff1 != null && _f._diff2 != null
+						&& (_f._diff1 == _table || _f._diff2 == _table))
+					{
+						doneSync = true;
+						SyncDiffedGrids();
+					}
+				}
+				_table = null;
+
+//				if (_piColhead != null) _piColhead.Dispose();
+//				_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
+
+//				if (_piRowhead != null) _piRowhead.Dispose();
+//				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
+			}
+
+			if (_f.WindowState != FormWindowState.Minimized)
+				_f.IsMin = false;
+
+//			base.OnResize(e);
+		}
+
+		/// <summary>
 		/// Synchs diffed tables both vertically and horizontally.
 		/// </summary>
 		void SyncDiffedGrids()
@@ -439,13 +487,6 @@ namespace yata
 					vert.Value = table.MaxVert;
 
 				Select();
-
-				// NOTE: An interesting effect occurs if this is the longer table.
-				// When [Ctrl+End] is keyed and the other table fires this funct it
-				// causes this table to bounce back to the other table's Max value.
-				// It's a convenient stop-mechanism to indicate that the other
-				// table is not as long as this one; fortunately a second key
-				// [Ctrl+End] allows this table to continue to its final destination.
 			}
 
 			if (table.MaxHori != 0)
@@ -456,52 +497,7 @@ namespace yata
 					hori.Value = table.MaxHori;
 
 				Select();
-
-				// NOTE: An interesting effect occurs if this is the wider table.
-				// When [End] is keyed and the other table fires this funct it
-				// causes this table to bounce back to the other table's Max value.
-				// It's a convenient stop-mechanism to indicate that the other
-				// table is not as wide as this one; fortunately a second key
-				// [End] allows this table to continue to its final destination.
 			}
-		}
-
-		/// <summary>
-		/// @note This fires whenever a fly sneezes.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnResize(EventArgs e)
-		{
-			if (!_init)
-			{
-				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
-				{
-					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-					_table.InitScroll();
-
-					// NOTE: The panels can be null during the load sequence.
-					if (_table._panelCols  != null) _table._panelCols .Width  = Width;
-					if (_table._panelRows  != null) _table._panelRows .Height = Height;
-					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
-
-					if (_table.Propanel != null && _table.Propanel.Visible)
-						_table.Propanel.telemetric();
-
-					if (!_f.IsMin) _table.EnsureDisplayed();
-				}
-				_table = null;
-
-//				if (_piColhead != null) _piColhead.Dispose();
-//				_piColhead = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead));
-
-//				if (_piRowhead != null) _piRowhead.Dispose();
-//				_piRowhead = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable));
-			}
-
-			if (_f.WindowState != FormWindowState.Minimized)
-				_f.IsMin = false;
-
-//			base.OnResize(e);
 		}
 
 
