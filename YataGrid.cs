@@ -372,8 +372,9 @@ namespace yata
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
-
-			if (_f._diff1 != null && _f._diff2 != null)
+			if (_table == YataForm.Table
+				&& _f._diff1 != null && _f._diff2 != null
+				&& (_f._diff1 == _table || _f._diff2 == _table))
 			{
 				SyncDiffedGrids();
 			}
@@ -400,9 +401,12 @@ namespace yata
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
-
-			if (_f._diff1 != null && _f._diff2 != null)
+			if (_table == YataForm.Table
+				&& _f._diff1 != null && _f._diff2 != null
+				&& (_f._diff1 == _table || _f._diff2 == _table))
+			{
 				SyncDiffedGrids();
+			}
 		}
 
 		/// <summary>
@@ -411,18 +415,28 @@ namespace yata
 		void SyncDiffedGrids()
 		{
 			VScrollBar vert = null;
+			HScrollBar hori = null;
 
-			if      (_f._diff1 == this) vert = _f._diff2._scrollVert;
-			else if (_f._diff2 == this) vert = _f._diff1._scrollVert;
-
-			if (vert != null && vert.Maximum != 0)
+			YataGrid table;
+			if (_f._diff1 == _table)
 			{
-				if (_scrollVert.Value < vert.Maximum - vert.LargeChange)
-				{
+				table = _f._diff2;
+				vert = table._scrollVert;
+				hori = table._scrollHori;
+			}
+			else //if (_f._diff2 == _table)
+			{
+				table = _f._diff1;
+				vert = table._scrollVert;
+				hori = table._scrollHori;
+			}
+
+			if (table.MaxVert != 0)
+			{
+				if (_scrollVert.Value < table.MaxVert)
 					vert.Value = _scrollVert.Value;
-				}
 				else
-					vert.Value = vert.Maximum - (vert.LargeChange - 1);
+					vert.Value = table.MaxVert;
 
 				Select();
 
@@ -434,19 +448,12 @@ namespace yata
 				// [Ctrl+End] allows this table to continue to its final destination.
 			}
 
-			HScrollBar hori = null;
-
-			if      (_f._diff1 == this) hori = _f._diff2._scrollHori;
-			else if (_f._diff2 == this) hori = _f._diff1._scrollHori;
-
-			if (hori != null && hori.Maximum != 0)
+			if (table.MaxHori != 0)
 			{
-				if (_scrollHori.Value < hori.Maximum - hori.LargeChange)
-				{
+				if (_scrollHori.Value < table.MaxHori)
 					hori.Value = _scrollHori.Value;
-				}
 				else
-					hori.Value = hori.Maximum - (hori.LargeChange - 1);
+					hori.Value = table.MaxHori;
 
 				Select();
 
@@ -2685,17 +2692,14 @@ namespace yata
 						|| (rect.Width > right - left
 							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
 					{																	//    than the table's visible width.
-						int val = _scrollHori.Value; // wtf (start)
-						val -= left - rect.X;
-						if (val > -1)
-							_scrollHori.Value = val; // wtf (stop)
-
-//						_scrollHori.Value -= left - rect.X;
+						int val = _scrollHori.Value - left + rect.X;
+						_scrollHori.Value = Math.Max(val, 0);
 						invalid = INVALID_GRID;
 					}
 					else if (rect.X + rect.Width > right && rect.Width < right - left)
 					{
-						_scrollHori.Value += rect.X + rect.Width + bar - Width;
+						int val = _scrollHori.Value + rect.X + rect.Width + bar - Width;
+						_scrollHori.Value = Math.Min(val, MaxHori);
 						invalid = INVALID_GRID;
 					}
 				}
@@ -2704,7 +2708,8 @@ namespace yata
 				{
 					if (rect.Y < HeightColhead)
 					{
-						_scrollVert.Value -= HeightColhead - rect.Y;
+						int val = _scrollVert.Value - HeightColhead + rect.Y;
+						_scrollVert.Value = Math.Max(val, 0);
 						invalid = INVALID_GRID;
 					}
 					else
@@ -2712,14 +2717,18 @@ namespace yata
 						bar = (_visHori ? _scrollHori.Height : 0);
 						if (rect.Y + rect.Height + bar > Height)
 						{
-							_scrollVert.Value += rect.Y + rect.Height + bar - Height;
+							int val = _scrollVert.Value + rect.Y + rect.Height + bar - Height;
+							_scrollVert.Value = Math.Min(val, MaxVert);
 							invalid = INVALID_GRID;
 						}
 					}
 				}
 			}
 			else
+			{
+				_scrollHori.Value = 0;
 				invalid = EnsureDisplayedRow(cell.y);
+			}
 
 			if (!bypassPropanel && Propanel != null && Propanel.Visible)
 			{
