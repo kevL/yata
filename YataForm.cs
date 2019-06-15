@@ -89,9 +89,10 @@ namespace yata
 
 		/// <summary>
 		/// A pointer to a 'YataGrid' table that will be used during the save-
-		/// routine. Is required because it can't be assumed that the current
-		/// 'Table' is the table being saved; that is, the SaveAll operation
-		/// needs to cycle through all tables: See fileclick_SaveAll().
+		/// routine (and other places where it's convenient). Is required
+		/// because it can't be assumed that the current 'Table' is the table
+		/// being saved; that is, the SaveAll operation needs to cycle through
+		/// all tables: See fileclick_SaveAll().
 		/// </summary>
 		YataGrid _table;
 
