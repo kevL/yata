@@ -43,6 +43,8 @@ namespace yata
 
 		internal static string pfe_load; // cl arg
 
+		internal static bool IsSaveAll;
+
 		static Graphics graphics;
 		#endregion Fields (static)
 
@@ -608,25 +610,28 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the count of tabpages that have been flagged Changed excluding
-		/// the current table and tables flagged as Readonly.
+		/// Checks if there is a non-readonly table open and optionally calls
+		/// all tables' Leave event handler.
 		/// </summary>
 		/// <param name="fireLeave">true to fire the LeaveEvent on all tables</param>
 		/// <returns></returns>
-		int getChangedCount(bool fireLeave = false)
+		bool allowSaveAll(bool fireLeave = false)
 		{
-			int changed = 0;
+			bool allow = false;
 			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
 				_table = Tabs.TabPages[i].Tag as YataGrid;
-				if (_table != Table && !_table.Readonly && _table.Changed)
-					++changed;
+				if (!_table.Readonly)
+				{
+					allow = true;
+					if (!fireLeave) break;
+				}
 
 				if (fireLeave)
 					_table.leave_Grid(null, EventArgs.Empty);
 			}
 			_table = null;
-			return changed;
+			return allow;
 		}
 		#endregion Methods
 
@@ -792,8 +797,8 @@ namespace yata
 				it_Redo      .Enabled = Table._ur.CanRedo;
 
 				it_Reload    .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll   .Enabled = (getChangedCount(true) != 0);
 				it_Save      .Enabled = !Table.Readonly;
+				it_SaveAll   .Enabled = allowSaveAll(true);
 				it_SaveAs    .Enabled =
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
@@ -842,8 +847,8 @@ namespace yata
 				it_Redo      .Enabled =
 
 				it_Reload    .Enabled =
-				it_SaveAll   .Enabled =
 				it_Save      .Enabled =
+				it_SaveAll   .Enabled =
 				it_SaveAs    .Enabled =
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled =
@@ -1165,7 +1170,7 @@ namespace yata
 
 				it_Reload  .Enabled = File.Exists(Table.Fullpath);
 				it_Readonly.Enabled = true;
-				it_SaveAll .Enabled = (getChangedCount() != 0);
+				it_SaveAll .Enabled = allowSaveAll();
 				it_Save    .Enabled = !Table.Readonly;
 			}
 			else
@@ -1464,7 +1469,6 @@ namespace yata
 			}
 		}
 
-		internal static bool IsSaveAll;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1472,26 +1476,34 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_SaveAll(object sender, EventArgs e)
 		{
-			IsSaveAll = true;
-
-			for (int i = 0; i != Tabs.TabCount; ++i)
+			if (allowSaveAll())
 			{
-				_table = Tabs.TabPages[i].Tag as YataGrid;
-				if (!_table.Readonly && _table.Changed)
+				IsSaveAll = true;
+
+				bool changed = false;
+				for (int i = 0; i != Tabs.TabCount; ++i)
 				{
-					_table.Watcher.Enabled = false;
+					_table = Tabs.TabPages[i].Tag as YataGrid;
+					if (!_table.Readonly)
+					{
+						_table.Watcher.Enabled = false; // TODO. wut
 
-					_pfeT = _table.Fullpath;
-					fileclick_Save(sender, e);
+						if (_table.Changed)
+							changed = true;
 
-					_table.Watcher.Enabled = true;
+						_pfeT = _table.Fullpath;
+						fileclick_Save(sender, e);
+
+						_table.Watcher.Enabled = true;
+					}
 				}
-			}
-			_table = null;
-			it_SaveAll.Enabled = false;
+				_table = null;
 
-			SetAllTabTexts();
-			IsSaveAll = false;
+				if (changed)
+					SetAllTabTexts();
+
+				IsSaveAll = false;
+			}
 		}
 
 
