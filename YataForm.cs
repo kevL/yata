@@ -38,7 +38,8 @@ namespace yata
 
 
 		#region Fields (static)
-		const string TITLE = " Yata";
+		const string TITLE    = " Yata";
+		const string ASTERICS = " *";
 
 		internal static string pfe_load; // cl arg
 
@@ -956,7 +957,6 @@ namespace yata
 			YataGrid.BypassInitScroll = false;
 		}
 
-
 		/// <summary>
 		/// Disposes a tab's table's 'FileWatcher' before a specified tab-page
 		/// is removed from the tab-collection.
@@ -986,15 +986,37 @@ namespace yata
 		{
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
-			string asterisk = table.Changed ? " *" : "";
+			string asterics = table.Changed ? ASTERICS : String.Empty;
 
-			foreach (TabPage page in Tabs.TabPages)	// TODO: this is iterated multiple times during a SaveAll operation
-			{										//       - the 'Changed' mechanism should be bypassed such that all
-				if ((YataGrid)page.Tag == table)	//         tabpage text/size is done once after all files get saved.
+			foreach (TabPage tab in Tabs.TabPages)
+			{
+				if ((YataGrid)tab.Tag == table)
 				{
-					page.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterisk;
+					tab.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterics;
 					break;
 				}
+			}
+			SetTabSize();
+
+			DrawingControl.ResumeDrawing(this);
+		}
+
+		/// <summary>
+		/// Sets the tabtexts of all tables.
+		/// @note Is called by fileclick_SaveAll().
+		/// </summary>
+		void SetAllTabTexts()
+		{
+			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+
+			string asterics;
+
+			YataGrid table;
+			foreach (TabPage tab in Tabs.TabPages)
+			{
+				table = tab.Tag as YataGrid;
+				asterics = table.Changed ? ASTERICS : String.Empty;
+				tab.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterics;
 			}
 			SetTabSize();
 
@@ -1442,6 +1464,7 @@ namespace yata
 			}
 		}
 
+		internal static bool IsSaveAll;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1449,6 +1472,8 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_SaveAll(object sender, EventArgs e)
 		{
+			IsSaveAll = true;
+
 			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
 				_table = Tabs.TabPages[i].Tag as YataGrid;
@@ -1464,6 +1489,9 @@ namespace yata
 			}
 			_table = null;
 			it_SaveAll.Enabled = false;
+
+			SetAllTabTexts();
+			IsSaveAll = false;
 		}
 
 

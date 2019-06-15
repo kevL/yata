@@ -172,7 +172,9 @@ namespace yata
 			set
 			{
 				_changed = value;
-				_f.SetTabText(this);
+
+				if (!YataForm.IsSaveAll) // delay setting all tab-texts
+					_f.SetTabText(this);
 			}
 		}
 
