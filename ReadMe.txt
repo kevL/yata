@@ -19,6 +19,8 @@ File
           in Settings.Cfg and at least one valid filepath exists in the list -
           see the Settings.Cfg file options below)
 
+- Readonly : sets or clears the table's Readonly flag
+
 - Save        : Ctrl+s
 - Save As ... : Ctrl+e
 - Close
@@ -518,8 +520,10 @@ popup with several operations including these four:
 - Select diff1 (selects the currently displayed table as diff1)
 - Select diff2 (selects the currently displayed table as diff2)
 - Reset diffs (clears tables of their diff flags)
-- Justify tables (re-widths the cols of the two diffed tables so they are
-                  visually aligned)
+- Sync tables (re-widths the cols of the two diffed tables so they are visually
+               aligned - this is done auto when diff2 is selected. Its only use
+               as far as I can see is if you want to re-sync the tables after
+               sizing cols yourself)
 
 Notes: diff1 must be selected before diff2. Diff2 can be re-selected, but
 re-selecting diff1 causes diff2 to be cleared; diff2 must be selected *after*
@@ -532,7 +536,9 @@ Select diff2 causes four noticable things to happen:
 4. the DifferDialog will appear. It lists any differences between col headers
    and row counts. Additionally a Goto button in the lower left corner of the
    dialog can be used to cycle through cell texts that are different between the
-   two tables (key Shift to goto previous).
+   two tables (key Shift to goto previous). Note that closing the DifferDialog
+   does not reset diffs; the tables will still be sync'd and the backgrounds of
+   any diff'd cells will still be colored teal.
 
 A right-click on a diffed cell shows a popup with several operations including
 these two:

@@ -142,7 +142,7 @@ namespace yata
 		ToolStripMenuItem it_tabDiff1;
 		ToolStripMenuItem it_tabDiff2;
 		ToolStripMenuItem it_tabDiffReset;
-		ToolStripMenuItem it_tabDiffJustify;
+		ToolStripMenuItem it_tabDiffSync;
 
 		internal ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellEdit;
@@ -193,7 +193,7 @@ namespace yata
 			this.it_tabDiff1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabDiff2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_tabDiffReset = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiffJustify = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_tabDiffSync = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -331,7 +331,7 @@ namespace yata
 			this.it_tabDiff1,
 			this.it_tabDiff2,
 			this.it_tabDiffReset,
-			this.it_tabDiffJustify});
+			this.it_tabDiffSync});
 			this.tabMenu.Name = "tabMenu";
 			this.tabMenu.ShowImageMargin = false;
 			this.tabMenu.Size = new System.Drawing.Size(139, 220);
@@ -413,13 +413,13 @@ namespace yata
 			this.it_tabDiffReset.Text = "Reset diffs";
 			this.it_tabDiffReset.Click += new System.EventHandler(this.tabclick_DiffReset);
 			// 
-			// it_tabDiffJustify
+			// it_tabDiffSync
 			// 
-			this.it_tabDiffJustify.Enabled = false;
-			this.it_tabDiffJustify.Name = "it_tabDiffJustify";
-			this.it_tabDiffJustify.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiffJustify.Text = "Justify tables";
-			this.it_tabDiffJustify.Click += new System.EventHandler(this.tabclick_DiffSync);
+			this.it_tabDiffSync.Enabled = false;
+			this.it_tabDiffSync.Name = "it_tabDiffSync";
+			this.it_tabDiffSync.Size = new System.Drawing.Size(138, 22);
+			this.it_tabDiffSync.Text = "Sync tables";
+			this.it_tabDiffSync.Click += new System.EventHandler(this.tabclick_DiffSync);
 			// 
 			// menubar
 			// 
@@ -1160,7 +1160,7 @@ namespace yata
 			this.context_it_DeleteRow});
 			this.ContextEditor.Name = "ContextEditor";
 			this.ContextEditor.ShowImageMargin = false;
-			this.ContextEditor.Size = new System.Drawing.Size(177, 270);
+			this.ContextEditor.Size = new System.Drawing.Size(177, 248);
 			// 
 			// context_it_Header
 			// 

@@ -3345,9 +3345,9 @@ namespace yata
 				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
 
 				// NOTE: 'it_tabDiff1' is always enabled.
-				it_tabDiff2         .Enabled = (_diff1 != null && _diff1 != Table);
-				it_tabDiffReset     .Enabled = (_diff1 != null || _diff2 != null);
-				it_tabDiffJustify   .Enabled = (_diff1 != null && _diff2 != null);
+				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
+				it_tabDiffReset.Enabled = (_diff1 != null || _diff2 != null);
+				it_tabDiffSync .Enabled = (_diff1 != null && _diff2 != null);
 
 				if (_diff1 != null)
 					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
