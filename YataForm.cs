@@ -604,6 +604,28 @@ namespace yata
 							MessageBoxIcon.Hand,
 							MessageBoxDefaultButton.Button1);
 		}
+
+		/// <summary>
+		/// Gets the count of tabpages that have been flagged Changed excluding
+		/// the current table and tables flagged as Readonly.
+		/// </summary>
+		/// <param name="fireLeave">true to fire the LeaveEvent on all tables</param>
+		/// <returns></returns>
+		int getChangedCount(bool fireLeave = false)
+		{
+			int changed = 0;
+			for (int i = 0; i != Tabs.TabCount; ++i)
+			{
+				_table = Tabs.TabPages[i].Tag as YataGrid;
+				if (_table != Table && !_table.Readonly && _table.Changed)
+					++changed;
+
+				if (fireLeave)
+					_table.leave_Grid(null, EventArgs.Empty);
+			}
+			_table = null;
+			return changed;
+		}
 		#endregion Methods
 
 
@@ -753,16 +775,6 @@ namespace yata
 
 				Obfuscate(false);
 
-				int saveOthers = 0;
-				for (int i = 0; i != Tabs.TabCount; ++i)
-				{
-					_table = Tabs.TabPages[i].Tag as YataGrid;
-					if (_table != Table && !_table.Readonly && _table.Changed)
-						++saveOthers;
-
-					_table.leave_Grid(null, EventArgs.Empty);
-				}
-
 				Cell sel = Table.getSelectedCell();
 
 				btn_ProPanel .Visible = true;
@@ -778,7 +790,7 @@ namespace yata
 				it_Redo      .Enabled = Table._ur.CanRedo;
 
 				it_Reload    .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll   .Enabled = (saveOthers != 0);
+				it_SaveAll   .Enabled = (getChangedCount(true) != 0);
 				it_Save      .Enabled = !Table.Readonly;
 				it_SaveAs    .Enabled =
 				it_Close     .Enabled =
@@ -1128,17 +1140,9 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				int saveOthers = 0;
-				for (int i = 0; i != Tabs.TabCount; ++i)
-				{
-					_table = Tabs.TabPages[i].Tag as YataGrid;
-					if (_table != Table && !_table.Readonly && _table.Changed)
-						++saveOthers;
-				}
-
 				it_Reload  .Enabled = File.Exists(Table.Fullpath);
 				it_Readonly.Enabled = true;
-				it_SaveAll .Enabled = (saveOthers != 0);
+				it_SaveAll .Enabled = (getChangedCount() != 0);
 				it_Save    .Enabled = !Table.Readonly;
 			}
 			else
@@ -1455,6 +1459,7 @@ namespace yata
 					_table.Watcher.Enabled = true;
 				}
 			}
+			_table = null;
 		}
 
 
