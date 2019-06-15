@@ -1453,13 +1453,16 @@ namespace yata
 				_table = Tabs.TabPages[i].Tag as YataGrid;
 				if (!_table.Readonly && _table.Changed)
 				{
-					_pfeT = _table.Fullpath;
 					_table.Watcher.Enabled = false;
+
+					_pfeT = _table.Fullpath;
 					fileclick_Save(sender, e);
+
 					_table.Watcher.Enabled = true;
 				}
 			}
 			_table = null;
+			it_SaveAll.Enabled = false;
 		}
 
 
