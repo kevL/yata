@@ -9,13 +9,13 @@ namespace yata
 		:
 			Form
 	{
-		#region Enums
+		#region Enumerators
 		enum StartType
 		{ non, Add, Insert }
 
 		enum StopType
 		{ non, Finish, Count }
-		#endregion Enums
+		#endregion Enumerators
 
 
 		#region Fields (static)
@@ -34,6 +34,8 @@ namespace yata
 		#region Fields
 		YataForm _f;
 		bool _cancel, _init;
+
+		Font _font, _fontyata, _fontf;
 		#endregion Fields
 
 
@@ -51,24 +53,21 @@ namespace yata
 			_f = f;
 
 			if (Settings._font2 != null)
-				Font = Settings._font2;
+				_font = YataForm.CreateFont(Settings._font2);
 			else
-				Font = _f.Font;
+				_fontyata = YataForm.CreateFont(_f.Font);
+
+			Font = _font ?? _fontyata;
 
 			if (Settings._fontf != null)
-			{
-				tb_StartAdd   .Font =
-				tb_StartInsert.Font =
-				tb_StopFinish .Font =
-				tb_StopCount  .Font = Settings._fontf;
-			}
-			else
-			{
-				tb_StartAdd   .Font =
-				tb_StartInsert.Font =
-				tb_StopFinish .Font =
-				tb_StopCount  .Font = _f.Font;
-			}
+				_fontf = YataForm.CreateFont(Settings._fontf);
+			else if (_fontyata == null)
+				_fontf = YataForm.CreateFont(_f.Font);
+
+			tb_StartAdd   .Font =
+			tb_StartInsert.Font =
+			tb_StopFinish .Font =
+			tb_StopCount  .Font = _fontf ?? _fontyata;
 
 
 			rb_FillSelected.Enabled = (r != 0);

@@ -1158,7 +1158,7 @@ namespace yata
 			this.context_it_CreateBelow,
 			this.separator_10,
 			this.context_it_DeleteRow});
-			this.ContextEditor.Name = "contextMenuStrip1";
+			this.ContextEditor.Name = "ContextEditor";
 			this.ContextEditor.ShowImageMargin = false;
 			this.ContextEditor.Size = new System.Drawing.Size(177, 270);
 			// 

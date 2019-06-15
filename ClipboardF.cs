@@ -32,14 +32,14 @@ namespace yata
 			_f = f;
 
 			if (Settings._font2 != null)
-				Font = Settings._font2;
+				Font = YataForm.CreateFont(Settings._font2);
 			else
-				Font = _f.Font;
+				Font = YataForm.CreateFont(_f.Font);
 
 			if (Settings._fontf != null)
 			{
 				rtb_Clip.Font.Dispose();
-				rtb_Clip.Font = Settings._fontf;
+				rtb_Clip.Font = YataForm.CreateFont(Settings._fontf);
 			}
 
 			// TODO: controls are not resizing per Font correctly.

@@ -44,14 +44,14 @@ namespace yata
 			_f = f;
 
 			if (Settings._font2 != null)
-				Font = Settings._font2;
+				Font = YataForm.CreateFont(Settings._font2);
 			else
-				Font = _f.Font;
+				Font = YataForm.CreateFont(_f.Font);
 
 			if (Settings._fontf != null)
 			{
 				rtb_Info.Font.Dispose();
-				rtb_Info.Font = Settings._fontf;
+				rtb_Info.Font = YataForm.CreateFont(Settings._fontf);
 			}
 
 			Text = title;
@@ -224,6 +224,8 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
+			Font.Dispose();
+			rtb_Info.Font.Dispose();
 			base.Dispose(disposing);
 		}
 

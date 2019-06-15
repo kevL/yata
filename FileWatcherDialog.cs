@@ -30,7 +30,7 @@ namespace yata
 			InitializeComponent();
 
 			_grid = grid;
-			Font = _grid.Font;
+			Font = YataForm.CreateFont(_grid.Font);
 
 			var f = _grid._f;
 			for (int i = 0; i != f.Tabs.TabCount; ++i)

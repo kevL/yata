@@ -41,6 +41,9 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
+			if (_font     != null) _font    .Dispose();
+			if (_fontyata != null) _fontyata.Dispose();
+			if (_fontf    != null) _fontf   .Dispose();
 			base.Dispose(disposing);
 		}
 

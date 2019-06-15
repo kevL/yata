@@ -529,7 +529,7 @@ namespace yata
 
 
 		#region Methods (static)
-		static FontStyle getStyleStandard(FontFamily ff)
+		internal static FontStyle getStyleStandard(FontFamily ff)
 		{
 			FontStyle style;
 			if (!ff.IsStyleAvailable(style = FontStyle.Regular))
@@ -561,6 +561,18 @@ namespace yata
 				}
 			}
 			return style;
+		}
+
+		/// <summary>
+		/// Creates a standard-style font with a maximum fontsize of 8 points.
+		/// </summary>
+		/// <param name="font"></param>
+		/// <returns></returns>
+		internal static Font CreateFont(Font font)
+		{
+			return new Font(font.Name,
+						   (font.SizeInPoints > 8F) ? 8F : font.SizeInPoints,
+							YataForm.getStyleStandard(font.FontFamily));
 		}
 		#endregion Methods (static)
 
@@ -2526,66 +2538,68 @@ namespace yata
 			{
 				int selr = Table.getSelectedRow();
 
-				var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0);
-				if (f.ShowDialog(this) == DialogResult.OK)
+				using (var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0))
 				{
-					Obfuscate();
-					DrawingControl.SuspendDrawing(Table);
-
-
-					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
-
-					var cells = new string[Table.ColCount];
-					switch (_fillCr)
+					if (f.ShowDialog(this) == DialogResult.OK)
 					{
-						case CrFillType.Stars:
-							for (int i = 0; i != Table.ColCount; ++i)
-								cells[i] = Constants.Stars;
-							break;
+						Obfuscate();
+						DrawingControl.SuspendDrawing(Table);
 
-						case CrFillType.Selected:
-							for (int i = 0; i != Table.ColCount; ++i)
-								cells[i] = Table[selr, i].text;
-							break;
 
-						case CrFillType.Copied:
-							for (int i = 0; i != Table.ColCount; ++i)
-							{
-								if (i < _copy[0].Length)
-									cells[i] = _copy[0][i];
-								else
+						Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
+
+						var cells = new string[Table.ColCount];
+						switch (_fillCr)
+						{
+							case CrFillType.Stars:
+								for (int i = 0; i != Table.ColCount; ++i)
 									cells[i] = Constants.Stars;
-							}
-							break;
+								break;
+
+							case CrFillType.Selected:
+								for (int i = 0; i != Table.ColCount; ++i)
+									cells[i] = Table[selr, i].text;
+								break;
+
+							case CrFillType.Copied:
+								for (int i = 0; i != Table.ColCount; ++i)
+								{
+									if (i < _copy[0].Length)
+										cells[i] = _copy[0][i];
+									else
+										cells[i] = Constants.Stars;
+								}
+								break;
+						}
+
+						int r = _startCr;
+						for (int i = 0; i != _lengthCr; ++i, ++r)
+						{
+							cells[0] = r.ToString();
+
+							Table.Insert(r, cells, false);
+							rest.array[i] = Table.Rows[r].Clone() as Row;
+						}
+
+						Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+
+						Table.ClearSelects();
+						Table.Rows[_startCr].selected = true;
+						Table.RangeSelect = _lengthCr - 1;
+						Table.EnsureDisplayedRow(_startCr);
+
+
+						if (!Table.Changed)
+						{
+							Table.Changed = true;
+							rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+						}
+						Table._ur.Push(rest);
+
+
+						Obfuscate(false);
+						DrawingControl.ResumeDrawing(Table);
 					}
-
-					int r = _startCr;
-					for (int i = 0; i != _lengthCr; ++i, ++r)
-					{
-						cells[0] = r.ToString();
-
-						Table.Insert(r, cells, false);
-						rest.array[i] = Table.Rows[r].Clone() as Row;
-					}
-
-					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
-
-					Table.ClearSelects();
-					Table.Rows[_startCr].selected = true;
-					Table.RangeSelect = _lengthCr - 1;
-					Table.EnsureDisplayedRow(_startCr);
-
-
-					if (!Table.Changed)
-					{
-						Table.Changed = true;
-						rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-					}
-					Table._ur.Push(rest);
-
-
-					Obfuscate(false);
-					DrawingControl.ResumeDrawing(Table);
 				}
 			}
 			else
@@ -2724,7 +2738,7 @@ namespace yata
 			{
 				it_OpenClipEditor.Checked = true;
 				f = new ClipboardF(this);
-				f.Show(this);
+				f.Show(this); // will be disposed auto.
 			}
 			else
 				f.BringToFront();
@@ -3671,7 +3685,7 @@ namespace yata
 										this);
 			_fdiffer.SetLabelColor(color);
 			if (@goto) _fdiffer.ShowGotoButton();
-			_fdiffer.Show(); // is not owned.
+			_fdiffer.Show(); // is not owned, will be disposed auto.
 		}
 
 		/// <summary>
@@ -4166,35 +4180,41 @@ namespace yata
 				case InfoInputDialog.ImmunityType:
 				case InfoInputDialog.UserType:
 				case InfoInputDialog.TargetingUI:
-					f = new InfoInputDialog(Table, cell);
-					if (f.ShowDialog(this) == DialogResult.OK
-						&& stInput != stOriginal)
+					using (f = new InfoInputDialog(Table, cell))
 					{
-						Table.ChangeCellText(cell, stInput); // does not do a text-check
+						if (f.ShowDialog(this) == DialogResult.OK
+							&& stInput != stOriginal)
+						{
+							Table.ChangeCellText(cell, stInput); // does not do a text-check
+						}
 					}
 					break;
 
 				case InfoInputDialog.MetaMagic: // HEX Input ->
 				case InfoInputDialog.TargetType:
 				case InfoInputDialog.AsMetaMagic:
-					f = new InfoInputDialog(Table, cell);
-					if (f.ShowDialog(this) == DialogResult.OK
-						&& intInput != intOriginal)
+					using (f = new InfoInputDialog(Table, cell))
 					{
-						string format;
-						if (intInput <= 0xFF) format = "X2";
-						else                  format = "X6";
+						if (f.ShowDialog(this) == DialogResult.OK
+							&& intInput != intOriginal)
+						{
+							string format;
+							if (intInput <= 0xFF) format = "X2";
+							else                  format = "X6";
 
-						Table.ChangeCellText(cell, "0x" + intInput.ToString(format)); // does not do a text-check
+							Table.ChangeCellText(cell, "0x" + intInput.ToString(format)); // does not do a text-check
+						}
 					}
 					break;
 
 				case InfoInputDialog.Category: // INT Input ->
-					f = new InfoInputDialog(Table, cell);
-					if (f.ShowDialog(this) == DialogResult.OK
-						&& intInput != intOriginal)
+					using (f = new InfoInputDialog(Table, cell))
 					{
-						Table.ChangeCellText(cell, intInput.ToString()); // does not do a text-check
+						if (f.ShowDialog(this) == DialogResult.OK
+							&& intInput != intOriginal)
+						{
+							Table.ChangeCellText(cell, intInput.ToString()); // does not do a text-check
+						}
 					}
 					break;
 			}

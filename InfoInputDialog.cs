@@ -67,9 +67,9 @@ namespace yata
 			_cell = cell;
 
 			if (Settings._font2 != null)
-				Font = Settings._font2;
+				Font = YataForm.CreateFont(Settings._font2);
 			else
-				Font = _f.Font;
+				Font = YataForm.CreateFont(_f.Font);
 
 			init();
 		}

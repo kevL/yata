@@ -26,6 +26,8 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
+			Font.Dispose();
+			rtb_Clip.Font.Dispose();
 			base.Dispose(disposing);
 		}
 		
