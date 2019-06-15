@@ -571,7 +571,7 @@ namespace yata
 		internal static Font CreateFont(Font font)
 		{
 			return new Font(font.Name,
-						   (font.SizeInPoints > 8F) ? 8F : font.SizeInPoints,
+						   (font.SizeInPoints > 9F) ? 9F : font.SizeInPoints,
 							YataForm.getStyleStandard(font.FontFamily));
 		}
 		#endregion Methods (static)
