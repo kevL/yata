@@ -798,6 +798,7 @@ namespace yata
 				it_Save      .Enabled = !Table.Readonly;
 				it_SaveAll   .Enabled = allowSaveAll(true);
 				it_SaveAs    .Enabled =
+				it_Readonly  .Enabled =
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
 
@@ -848,6 +849,7 @@ namespace yata
 				it_Save      .Enabled =
 				it_SaveAll   .Enabled =
 				it_SaveAs    .Enabled =
+				it_Readonly  .Enabled =
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled =
 
@@ -1165,14 +1167,12 @@ namespace yata
 				}
 
 				it_Reload  .Enabled = File.Exists(Table.Fullpath);
-				it_Readonly.Enabled = true;
 				it_SaveAll .Enabled = allowSaveAll();
 				it_Save    .Enabled = !Table.Readonly;
 			}
 			else
 			{
 				it_Reload  .Enabled =
-				it_Readonly.Enabled =
 				it_SaveAll .Enabled =
 				it_Save    .Enabled = false;
 			}
@@ -2721,18 +2721,6 @@ namespace yata
 
 
 		#region Events (clipboard)
-		/// <summary>
-		/// Handles opening the ClipboardMenu, determines if various items ought
-		/// be enabled.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void clip_dropdownopening(object sender, EventArgs e)
-		{
-			it_ClipExport.Enabled = (_copy.Count != 0);
-			it_ClipImport.Enabled = Clipboard.ContainsText(TextDataFormat.Text);
-		}
-
 		/// <summary>
 		/// Outputs the current contents of '_copy' to the Windows clipboard.
 		/// </summary>

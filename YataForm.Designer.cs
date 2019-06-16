@@ -505,6 +505,7 @@ namespace yata
 			this.it_Readonly.CheckOnClick = true;
 			this.it_Readonly.Enabled = false;
 			this.it_Readonly.Name = "it_Readonly";
+			this.it_Readonly.ShortcutKeys = System.Windows.Forms.Keys.F12;
 			this.it_Readonly.Size = new System.Drawing.Size(181, 22);
 			this.it_Readonly.Text = "Rea&donly";
 			this.it_Readonly.Click += new System.EventHandler(this.fileclick_Readonly);
@@ -550,6 +551,7 @@ namespace yata
 			// 
 			this.it_Close.Enabled = false;
 			this.it_Close.Name = "it_Close";
+			this.it_Close.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.it_Close.Size = new System.Drawing.Size(181, 22);
 			this.it_Close.Text = "&Close";
 			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
@@ -766,33 +768,34 @@ namespace yata
 			this.it_MenuClipboard.Name = "it_MenuClipboard";
 			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
 			this.it_MenuClipboard.Text = "&Clipboard";
-			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.clip_dropdownopening);
+			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_ClipExport
 			// 
-			this.it_ClipExport.Enabled = false;
 			this.it_ClipExport.Name = "it_ClipExport";
-			this.it_ClipExport.Size = new System.Drawing.Size(195, 22);
+			this.it_ClipExport.ShortcutKeys = System.Windows.Forms.Keys.F9;
+			this.it_ClipExport.Size = new System.Drawing.Size(222, 22);
 			this.it_ClipExport.Text = "&Export copied row(s)";
 			this.it_ClipExport.Click += new System.EventHandler(this.clipclick_ExportCopy);
 			// 
 			// it_ClipImport
 			// 
-			this.it_ClipImport.Enabled = false;
 			this.it_ClipImport.Name = "it_ClipImport";
-			this.it_ClipImport.Size = new System.Drawing.Size(195, 22);
+			this.it_ClipImport.ShortcutKeys = System.Windows.Forms.Keys.F10;
+			this.it_ClipImport.Size = new System.Drawing.Size(222, 22);
 			this.it_ClipImport.Text = "&Import copied row(s)";
 			this.it_ClipImport.Click += new System.EventHandler(this.clipclick_ImportCopy);
 			// 
 			// separator_19
 			// 
 			this.separator_19.Name = "separator_19";
-			this.separator_19.Size = new System.Drawing.Size(192, 6);
+			this.separator_19.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_OpenClipEditor
 			// 
 			this.it_OpenClipEditor.Name = "it_OpenClipEditor";
-			this.it_OpenClipEditor.Size = new System.Drawing.Size(195, 22);
+			this.it_OpenClipEditor.ShortcutKeys = System.Windows.Forms.Keys.F11;
+			this.it_OpenClipEditor.Size = new System.Drawing.Size(222, 22);
 			this.it_OpenClipEditor.Text = "&Open clip editor";
 			this.it_OpenClipEditor.Click += new System.EventHandler(this.clipclick_ViewClipboard);
 			// 
