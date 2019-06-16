@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -732,7 +731,7 @@ namespace yata
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED);
 
 					if (WindowState == FormWindowState.Minimized)
-						WindowState = FormWindowState.Normal;
+						WindowState  = FormWindowState.Normal;
 
 					TopMost = true;
 					TopMost = false;
@@ -785,10 +784,10 @@ namespace yata
 
 				btn_ProPanel .Visible = true;
 
-				it_MenuPaths .Visible = (Table.Info != YataGrid.InfoType.INFO_NONE);
+				it_MenuPaths .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
-				it_freeze1   .Checked = (Table.FrozenCount == YataGrid.FreezeFirst);
-				it_freeze2   .Checked = (Table.FrozenCount == YataGrid.FreezeSecond);
+				it_freeze1   .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
+				it_freeze2   .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
 
 				it_Readonly  .Checked = Table.Readonly;
 
@@ -802,22 +801,22 @@ namespace yata
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
 
-				it_CopyCell  .Enabled = (sel != null);
-				it_PasteCell .Enabled = (it_CopyCell.Enabled && !Table.Readonly);
-
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange.Enabled = (_copy.Count != 0 && !Table.Readonly);
+				it_CopyCell  .Enabled = sel != null;
+				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
+				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
+				it_PasteRange.Enabled = !Table.Readonly && _copy.Count != 0;
+				it_CreateRows.Enabled = !Table.Readonly;
 
 				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
 				it_ColorRows .Enabled =
 				it_AutoCols  .Enabled =
 				it_ppOnOff   .Enabled = true;
-				it_ppLocation.Enabled = (Table.Propanel != null && Table.Propanel.Visible);
+				it_ppLocation.Enabled = Table.Propanel != null && Table.Propanel.Visible;
 				it_ExternDiff.Enabled = File.Exists(Settings._diff);
 
-				it_freeze1   .Enabled = (Table.Cols.Count > 1);
-				it_freeze2   .Enabled = (Table.Cols.Count > 2);
+				it_freeze1   .Enabled = Table.Cols.Count > 1;
+				it_freeze2   .Enabled = Table.Cols.Count > 2;
 
 
 				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -854,9 +853,9 @@ namespace yata
 
 				it_CopyCell  .Enabled = 
 				it_PasteCell .Enabled =
-
 				it_CopyRange .Enabled =
 				it_PasteRange.Enabled =
+				it_CreateRows.Enabled =
 
 				it_OrderRows .Enabled =
 				it_CheckRows .Enabled =
@@ -2583,76 +2582,79 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_CreateRows(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+			if (Table != null)
 			{
-				int selr = Table.getSelectedRow();
-
-				using (var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0))
+				if (!Table.Readonly)
 				{
-					if (f.ShowDialog(this) == DialogResult.OK)
+					int selr = Table.getSelectedRow();
+
+					using (var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0))
 					{
-						Obfuscate();
-						DrawingControl.SuspendDrawing(Table);
-
-
-						Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
-
-						var cells = new string[Table.ColCount];
-						switch (_fillCr)
+						if (f.ShowDialog(this) == DialogResult.OK)
 						{
-							case CrFillType.Stars:
-								for (int i = 0; i != Table.ColCount; ++i)
-									cells[i] = Constants.Stars;
-								break;
+							Obfuscate();
+							DrawingControl.SuspendDrawing(Table);
 
-							case CrFillType.Selected:
-								for (int i = 0; i != Table.ColCount; ++i)
-									cells[i] = Table[selr, i].text;
-								break;
 
-							case CrFillType.Copied:
-								for (int i = 0; i != Table.ColCount; ++i)
-								{
-									if (i < _copy[0].Length)
-										cells[i] = _copy[0][i];
-									else
+							Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
+
+							var cells = new string[Table.ColCount];
+							switch (_fillCr)
+							{
+								case CrFillType.Stars:
+									for (int i = 0; i != Table.ColCount; ++i)
 										cells[i] = Constants.Stars;
-								}
-								break;
+									break;
+
+								case CrFillType.Selected:
+									for (int i = 0; i != Table.ColCount; ++i)
+										cells[i] = Table[selr, i].text;
+									break;
+
+								case CrFillType.Copied:
+									for (int i = 0; i != Table.ColCount; ++i)
+									{
+										if (i < _copy[0].Length)
+											cells[i] = _copy[0][i];
+										else
+											cells[i] = Constants.Stars;
+									}
+									break;
+							}
+
+							int r = _startCr;
+							for (int i = 0; i != _lengthCr; ++i, ++r)
+							{
+								cells[0] = r.ToString();
+
+								Table.Insert(r, cells, false);
+								rest.array[i] = Table.Rows[r].Clone() as Row;
+							}
+
+							Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+
+							Table.ClearSelects();
+							Table.Rows[_startCr].selected = true;
+							Table.RangeSelect = _lengthCr - 1;
+							Table.EnsureDisplayedRow(_startCr);
+
+
+							if (!Table.Changed)
+							{
+								Table.Changed = true;
+								rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+							}
+							Table._ur.Push(rest);
+
+
+							Obfuscate(false);
+							DrawingControl.ResumeDrawing(Table);
 						}
-
-						int r = _startCr;
-						for (int i = 0; i != _lengthCr; ++i, ++r)
-						{
-							cells[0] = r.ToString();
-
-							Table.Insert(r, cells, false);
-							rest.array[i] = Table.Rows[r].Clone() as Row;
-						}
-
-						Table.Calibrate(_startCr, _lengthCr - 1); // insert range
-
-						Table.ClearSelects();
-						Table.Rows[_startCr].selected = true;
-						Table.RangeSelect = _lengthCr - 1;
-						Table.EnsureDisplayedRow(_startCr);
-
-
-						if (!Table.Changed)
-						{
-							Table.Changed = true;
-							rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-						}
-						Table._ur.Push(rest);
-
-
-						Obfuscate(false);
-						DrawingControl.ResumeDrawing(Table);
 					}
 				}
+				else
+					ReadonlyError();
 			}
-			else
-				ReadonlyError();
 		}
 		#endregion Events (edit)
 
@@ -3321,6 +3323,11 @@ namespace yata
 
 
 		#region Events (help)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void helpclick_Help(object sender, EventArgs e)
 		{
 			string path = Path.Combine(Application.StartupPath, "ReadMe.txt");
@@ -3334,39 +3341,15 @@ namespace yata
 								MessageBoxDefaultButton.Button1);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void helpclick_About(object sender, EventArgs e)
 		{
-			var an = Assembly.GetExecutingAssembly().GetName();
-			string ver = "Ver "
-					   + an.Version.Major + "."
-					   + an.Version.Minor + "."
-					   + an.Version.Build + "."
-					   + an.Version.Revision;
-#if DEBUG
-			ver += " - debug";
-#else
-			ver += " - release";
-#endif
-			DateTime dt = Assembly.GetExecutingAssembly().GetLinkerTime();
-			ver += Environment.NewLine + Environment.NewLine
-				 + String.Format(System.Globalization.CultureInfo.CurrentCulture,
-								 "{0:yyyy MMM d}  {0:HH}:{0:mm}:{0:ss} {0:zzz}",
-								 dt);
-
-			ver += Environment.NewLine + Environment.NewLine
-				 + "This is a derivative work of the guy who invented the wheel and "
-				 + " that bloke who made the notches on a 40,000 year old piece of"
-				 + " petrified wood that are thought to be the beginnings of"
-				 + " mathematics. But I'd guess their copyrights are out of date.";
-
-			ver += Environment.NewLine + Environment.NewLine
-				 + "Executive Producer: Arnie the stuffed armadillo";
-
-			MessageBox.Show(ver,
-							" Version info",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Information,
-							MessageBoxDefaultButton.Button1);
+			using (var f = new About(this))
+				f.ShowDialog();
 		}
 		#endregion Events (help)
 
@@ -4331,36 +4314,4 @@ namespace yata
 	/// </summary>
 	internal delegate void DontBeepEventHandler();
 	#endregion Delegates
-
-
-	/// <summary>
-	/// Lifted from StackOverflow.com:
-	/// https://stackoverflow.com/questions/1600962/displaying-the-build-date#answer-1600990
-	/// - what a fucking pain in the ass.
-	/// </summary>
-	public static class DateTimeExtension
-	{
-		public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
-		{
-			var filePath = assembly.Location;
-			const int c_PeHeaderOffset = 60;
-			const int c_LinkerTimestampOffset = 8;
-
-			var buffer = new byte[2048];
-
-			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-				stream.Read(buffer, 0, 2048);
-
-			var offset = BitConverter.ToInt32(buffer, c_PeHeaderOffset);
-			var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-			var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
-
-			var tz = target ?? TimeZoneInfo.Local;
-			var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
-
-			return localTime;
-		}
-	}
 }

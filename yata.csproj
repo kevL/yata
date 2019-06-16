@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs" />
     <Compile Include="ClipboardF.cs" />
     <Compile Include="ClipboardF.Designer.cs">
       <DependentUpon>ClipboardF.cs</DependentUpon>
@@ -120,6 +121,9 @@
     <Compile Include="YataPanels.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClipboardF.resx">
       <DependentUpon>ClipboardF.Designer.cs</DependentUpon>
     </EmbeddedResource>

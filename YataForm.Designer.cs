@@ -718,6 +718,7 @@ namespace yata
 			// 
 			this.it_CreateRows.Enabled = false;
 			this.it_CreateRows.Name = "it_CreateRows";
+			this.it_CreateRows.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.it_CreateRows.Size = new System.Drawing.Size(226, 22);
 			this.it_CreateRows.Text = "Crea&te row(s) ...";
 			this.it_CreateRows.Click += new System.EventHandler(this.editclick_CreateRows);
