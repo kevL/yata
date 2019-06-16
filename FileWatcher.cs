@@ -43,7 +43,7 @@ namespace yata
 			Pfe = _grid.Fullpath;
 			_last = File.GetLastWriteTime(Pfe);
 
-			Interval = 225;
+			Interval = 300;
 			Start();
 		}
 		#endregion cTor
@@ -51,7 +51,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handels this FileWatcher's tick event.
+		/// Handels this FileWatcher's tick event in C#.
 		/// @note Check for a valid YataGrid since disposal of this watcher
 		/// could be delayed. See CloseTabpage() where the grid is nulled.
 		/// </summary>
