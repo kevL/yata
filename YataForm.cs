@@ -3347,6 +3347,21 @@ namespace yata
 #else
 			ver += " - release";
 #endif
+			DateTime dt = Assembly.GetExecutingAssembly().GetLinkerTime();
+			ver += Environment.NewLine + Environment.NewLine
+				 + String.Format(System.Globalization.CultureInfo.CurrentCulture,
+								 "{0:yyyy MMM d}  {0:HH}:{0:mm}:{0:ss} {0:zzz}",
+								 dt);
+
+			ver += Environment.NewLine + Environment.NewLine
+				 + "This is a derivative work of the guy who invented the wheel and "
+				 + " that bloke who made the notches on a 40,000 year old piece of"
+				 + " petrified wood that are thought to be the beginnings of"
+				 + " mathematics. But I'd guess their copyrights are out of date.";
+
+			ver += Environment.NewLine + Environment.NewLine
+				 + "Executive Producer: Arnie the stuffed armadillo";
+
 			MessageBox.Show(ver,
 							" Version info",
 							MessageBoxButtons.OK,
@@ -4316,4 +4331,36 @@ namespace yata
 	/// </summary>
 	internal delegate void DontBeepEventHandler();
 	#endregion Delegates
+
+
+	/// <summary>
+	/// Lifted from StackOverflow.com:
+	/// https://stackoverflow.com/questions/1600962/displaying-the-build-date#answer-1600990
+	/// - what a fucking pain in the ass.
+	/// </summary>
+	public static class DateTimeExtension
+	{
+		public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
+		{
+			var filePath = assembly.Location;
+			const int c_PeHeaderOffset = 60;
+			const int c_LinkerTimestampOffset = 8;
+
+			var buffer = new byte[2048];
+
+			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+				stream.Read(buffer, 0, 2048);
+
+			var offset = BitConverter.ToInt32(buffer, c_PeHeaderOffset);
+			var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
+
+			var tz = target ?? TimeZoneInfo.Local;
+			var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
+
+			return localTime;
+		}
+	}
 }
