@@ -6,7 +6,7 @@ changed in the Settings.Cfg textfile.
 
 2019 june 16
 kevL's
-ver 3.3.5.0
+ver 3.3.6.0
 
 
 File
@@ -19,11 +19,11 @@ File
           in Settings.Cfg and at least one valid filepath exists in the list -
           see the Settings.Cfg file options below)
 
-- Readonly : sets or clears the table's Readonly flag
+- Readonly : F12 (toggles the currently focused table's Readonly flag)
 
 - Save        : Ctrl+s
 - Save As ... : Ctrl+e
-- Close
+- Close       : F4
 - Close all (this is a multi-tabbed application)
 
 - Quit : Ctrl+q
@@ -46,8 +46,8 @@ Edit
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)
 
-- Create row(s) (opens a dialog that inserts 1+ rows at a given id with the
-                 option to use a first copied row as a fill)
+- Create row(s) : F2 (opens a dialog that inserts 1+ rows at a given id with the
+                      option to use a first copied row as a fill)
 
 
 Goto box (type a row ID and press Enter)
@@ -59,12 +59,14 @@ Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) (exports the internal copy-list to the clipboard)
-- Import copied row(s) (imports any clipboard-text to the internal copy-list
-                        WARNING: No validity test is done on the clipboard text;
-                        importing assumes that the text on your clipboard
-                        clipboard contains valid 2da-row data)
-- Open clip editor (accesses the Windows Clipboard for viewing/editing)
+- Export copied row(s) : F9 (exports the internal copy-list to the clipboard)
+- Import copied row(s) : F10 (imports any clipboard text to the internal
+                              copy-list WARNING: No validity test is done on the
+                              clipboard text; importing assumes that the text
+                              contains valid 2da-row data)
+
+- Open clip editor : F11 (accesses the Windows Clipboard for viewing/editing -
+                          only clips in text format are displayed or handled)
 
 
 2da Ops
