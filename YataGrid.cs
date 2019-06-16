@@ -346,6 +346,9 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
 		void closeContexts()
 		{
 			if (_f.tabMenu       != null) _f.tabMenu      .Close();
@@ -353,6 +356,11 @@ namespace yata
 			if (_f.ContextEditor != null) _f.ContextEditor.Close();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
 			closeContexts();
@@ -382,6 +390,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
 			closeContexts();
@@ -990,6 +1003,11 @@ namespace yata
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="changed"></param>
+		/// <param name="reload"></param>
 		internal void Init(bool changed, bool reload = false)
 		{
 			if (reload)
@@ -1318,6 +1336,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="table"></param>
 		internal void metricFrozenLabels(YataGrid table = null)
 		{
 			if (table == null) table = this;
@@ -3386,12 +3408,26 @@ namespace yata
 			TopDownSplitMerge(rowsT, 0, count, rows);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rows"></param>
+		/// <param name="iBegin"></param>
+		/// <param name="iEnd"></param>
+		/// <param name="rowsT"></param>
 		void CopyArray(IList<Row> rows, int iBegin, int iEnd, ICollection<Row> rowsT)
 		{
 			for (int i = iBegin; i != iEnd; ++i)
 				rowsT.Add(rows[i]);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rowsT"></param>
+		/// <param name="iBegin"></param>
+		/// <param name="iEnd"></param>
+		/// <param name="rows"></param>
 		void TopDownSplitMerge(List<Row> rowsT, int iBegin, int iEnd, List<Row> rows)
 		{
 			if (iEnd - iBegin < 2)
@@ -3405,6 +3441,14 @@ namespace yata
 			TopDownMerge(rowsT, iBegin, iMiddle, iEnd, rows);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rows"></param>
+		/// <param name="iBegin"></param>
+		/// <param name="iMiddle"></param>
+		/// <param name="iEnd"></param>
+		/// <param name="rowsT"></param>
 		void TopDownMerge(IList<Row> rows, int iBegin, int iMiddle, int iEnd, IList<Row> rowsT)
 		{
 			int i = iBegin, j = iMiddle;
@@ -3575,11 +3619,21 @@ namespace yata
 
 
 		#region DragDrop file(s)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void grid_DragEnter(object sender, DragEventArgs e)
 		{
 			_f.yata_DragEnter(sender, e);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void grid_DragDrop(object sender, DragEventArgs e)
 		{
 			_f.yata_DragDrop(sender, e);

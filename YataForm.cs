@@ -118,6 +118,8 @@ namespace yata
 		/// String for InfoInputDialog (PathInfo).
 		/// </summary>
 		internal string stOriginal, stInput;
+
+		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 		#endregion Fields
 
 
@@ -268,7 +270,6 @@ namespace yata
 
 			DontBeepEvent += HandleDontBeepEvent;
 
-
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
 		}
@@ -363,8 +364,6 @@ namespace yata
 //			base.OnMouseWheel(e);
 		}
 
-
-		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
 		/// <summary>
 		/// Sets 'IsMin' true so that when the form is minimized then restored/
@@ -576,7 +575,7 @@ namespace yata
 		{
 			return new Font(font.Name,
 						   (font.SizeInPoints > 9F) ? 9F : font.SizeInPoints,
-							YataForm.getStyleStandard(font.FontFamily));
+							getStyleStandard(font.FontFamily));
 		}
 		#endregion Methods (static)
 
@@ -966,20 +965,20 @@ namespace yata
 		/// Disposes a tab's table's 'FileWatcher' before a specified tab-page
 		/// is removed from the tab-collection.
 		/// </summary>
-		/// <param name="page">the tab-page with which to deal</param>
-		void CloseTabpage(TabPage page)
+		/// <param name="tab">the tab-page with which to deal</param>
+		void CloseTabpage(TabPage tab)
 		{
-			var table = page.Tag as YataGrid;
-			table.Watcher.Dispose();
+			_table = tab.Tag as YataGrid;
+			_table.Watcher.Dispose();
 
-			if      (table == _diff1) _diff1 = null;
-			else if (table == _diff2) _diff2 = null;
+			if      (_table == _diff1) _diff1 = null;
+			else if (_table == _diff2) _diff2 = null;
 
 			if (_diff1 == null && _diff2 == null && _fdiffer != null)
 				_fdiffer.Close();
 
-			Tabs.TabPages.Remove(page);
-			table = null;
+			Tabs.TabPages.Remove(tab);
+			_table = null;
 		}
 
 		/// <summary>
@@ -992,7 +991,6 @@ namespace yata
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			string asterics = table.Changed ? ASTERICS : String.Empty;
-
 			foreach (TabPage tab in Tabs.TabPages)
 			{
 				if ((YataGrid)tab.Tag == table)
@@ -1015,14 +1013,13 @@ namespace yata
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			string asterics;
-
-			YataGrid table;
 			foreach (TabPage tab in Tabs.TabPages)
 			{
-				table = tab.Tag as YataGrid;
-				asterics = table.Changed ? ASTERICS : String.Empty;
-				tab.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterics;
+				_table = tab.Tag as YataGrid;
+				asterics = _table.Changed ? ASTERICS : String.Empty;
+				tab.Text = Path.GetFileNameWithoutExtension(_table.Fullpath) + asterics;
 			}
+			_table = null;
 			SetTabSize();
 
 			DrawingControl.ResumeDrawing(this);
