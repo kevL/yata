@@ -81,7 +81,7 @@ namespace yata
 			this.btn_Done.Name = "btn_Done";
 			this.btn_Done.Size = new System.Drawing.Size(370, 30);
 			this.btn_Done.TabIndex = 1;
-			this.btn_Done.Text = "done";
+			this.btn_Done.Text = "begone foul demon";
 			this.btn_Done.UseVisualStyleBackColor = true;
 			this.btn_Done.Click += new System.EventHandler(this.click_Done);
 			// 
