@@ -137,7 +137,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles a click on the Reset button. Clears and desyncs the diff'd
-		/// tables.
+		/// tables. Closes this dialog via 'YataForm'.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
