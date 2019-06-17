@@ -63,8 +63,8 @@ namespace yata
 				tb_NetString.Font = Settings._fontfdialog;
 			}
 
-			tb_NetString.BackColor =
-			tb_Size     .BackColor = Colors.TextboxBackground;
+			tb_Size     .BackColor = Color.White;
+			tb_NetString.BackColor = Colors.TextboxBackground;
 
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;

@@ -149,7 +149,6 @@ namespace yata
 			// 
 			// tb_Size
 			// 
-			this.tb_Size.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Size.Location = new System.Drawing.Point(275, 10);
 			this.tb_Size.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Size.Name = "tb_Size";
