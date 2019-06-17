@@ -565,18 +565,6 @@ namespace yata
 			}
 			return style;
 		}
-
-		/// <summary>
-		/// Creates a standard-style font with a maximum fontsize of 8 points.
-		/// </summary>
-		/// <param name="font"></param>
-		/// <returns></returns>
-		internal static Font CreateFont(Font font)
-		{
-			return new Font(font.Name,
-						   (font.SizeInPoints > 9F) ? 9F : font.SizeInPoints,
-							getStyleStandard(font.FontFamily));
-		}
 		#endregion Methods (static)
 
 
@@ -3343,8 +3331,8 @@ namespace yata
 		/// <param name="e"></param>
 		void helpclick_About(object sender, EventArgs e)
 		{
-			using (var f = new About(this))
-				f.ShowDialog();
+			using (var f = new About())
+				f.ShowDialog(this);
 		}
 		#endregion Events (help)
 

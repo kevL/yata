@@ -15,7 +15,7 @@ namespace yata
 			Form
 	{
 		#region cTor
-		internal About(YataForm f)
+		internal About()
 		{
 			InitializeComponent();
 
