@@ -41,9 +41,6 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
-			if (_font     != null) _font    .Dispose();
-			if (_fontyata != null) _fontyata.Dispose();
-			if (_fontf    != null) _fontf   .Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -60,16 +57,16 @@ namespace yata
 			this.rb_StartAdd = new System.Windows.Forms.RadioButton();
 			this.rb_StartInsert = new System.Windows.Forms.RadioButton();
 			this.gb_Start = new System.Windows.Forms.GroupBox();
+			this.tb_StartInsert = new System.Windows.Forms.TextBox();
 			this.la_StartInsert = new System.Windows.Forms.Label();
 			this.la_StartAdd = new System.Windows.Forms.Label();
-			this.tb_StartInsert = new System.Windows.Forms.TextBox();
 			this.tb_StartAdd = new System.Windows.Forms.TextBox();
 			this.gb_Stop = new System.Windows.Forms.GroupBox();
+			this.tb_StopCount = new System.Windows.Forms.TextBox();
 			this.la_StopFinish = new System.Windows.Forms.Label();
 			this.tb_StopFinish = new System.Windows.Forms.TextBox();
 			this.rb_StopFinish = new System.Windows.Forms.RadioButton();
 			this.la_StopCount = new System.Windows.Forms.Label();
-			this.tb_StopCount = new System.Windows.Forms.TextBox();
 			this.rb_StopCount = new System.Windows.Forms.RadioButton();
 			this.gb_Fillstyle = new System.Windows.Forms.GroupBox();
 			this.rb_FillSelected = new System.Windows.Forms.RadioButton();
@@ -142,6 +139,19 @@ namespace yata
 			this.gb_Start.TabStop = false;
 			this.gb_Start.Text = " START ";
 			// 
+			// tb_StartInsert
+			// 
+			this.tb_StartInsert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StartInsert.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StartInsert.Enabled = false;
+			this.tb_StartInsert.Location = new System.Drawing.Point(125, 35);
+			this.tb_StartInsert.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StartInsert.Name = "tb_StartInsert";
+			this.tb_StartInsert.Size = new System.Drawing.Size(60, 20);
+			this.tb_StartInsert.TabIndex = 4;
+			this.tb_StartInsert.WordWrap = false;
+			this.tb_StartInsert.TextChanged += new System.EventHandler(this.textchanged);
+			// 
 			// la_StartInsert
 			// 
 			this.la_StartInsert.Location = new System.Drawing.Point(190, 35);
@@ -162,25 +172,12 @@ namespace yata
 			this.la_StartAdd.Text = "id";
 			this.la_StartAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// tb_StartInsert
-			// 
-			this.tb_StartInsert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StartInsert.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.tb_StartInsert.Enabled = false;
-			this.tb_StartInsert.Location = new System.Drawing.Point(125, 35);
-			this.tb_StartInsert.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_StartInsert.Name = "tb_StartInsert";
-			this.tb_StartInsert.Size = new System.Drawing.Size(60, 20);
-			this.tb_StartInsert.TabIndex = 4;
-			this.tb_StartInsert.WordWrap = false;
-			this.tb_StartInsert.TextChanged += new System.EventHandler(this.textchanged);
-			// 
 			// tb_StartAdd
 			// 
 			this.tb_StartAdd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_StartAdd.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StartAdd.Enabled = false;
-			this.tb_StartAdd.Location = new System.Drawing.Point(125, 15);
+			this.tb_StartAdd.Location = new System.Drawing.Point(125, 14);
 			this.tb_StartAdd.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StartAdd.Name = "tb_StartAdd";
 			this.tb_StartAdd.ReadOnly = true;
@@ -204,6 +201,19 @@ namespace yata
 			this.gb_Stop.TabStop = false;
 			this.gb_Stop.Text = " STOP ";
 			// 
+			// tb_StopCount
+			// 
+			this.tb_StopCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_StopCount.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.tb_StopCount.Enabled = false;
+			this.tb_StopCount.Location = new System.Drawing.Point(125, 35);
+			this.tb_StopCount.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_StopCount.Name = "tb_StopCount";
+			this.tb_StopCount.Size = new System.Drawing.Size(60, 20);
+			this.tb_StopCount.TabIndex = 4;
+			this.tb_StopCount.WordWrap = false;
+			this.tb_StopCount.TextChanged += new System.EventHandler(this.textchanged);
+			// 
 			// la_StopFinish
 			// 
 			this.la_StopFinish.Location = new System.Drawing.Point(190, 15);
@@ -219,7 +229,7 @@ namespace yata
 			this.tb_StopFinish.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_StopFinish.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StopFinish.Enabled = false;
-			this.tb_StopFinish.Location = new System.Drawing.Point(125, 15);
+			this.tb_StopFinish.Location = new System.Drawing.Point(125, 14);
 			this.tb_StopFinish.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StopFinish.Name = "tb_StopFinish";
 			this.tb_StopFinish.Size = new System.Drawing.Size(60, 20);
@@ -246,19 +256,6 @@ namespace yata
 			this.la_StopCount.TabIndex = 5;
 			this.la_StopCount.Text = "row(s)";
 			this.la_StopCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// tb_StopCount
-			// 
-			this.tb_StopCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StopCount.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.tb_StopCount.Enabled = false;
-			this.tb_StopCount.Location = new System.Drawing.Point(125, 35);
-			this.tb_StopCount.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_StopCount.Name = "tb_StopCount";
-			this.tb_StopCount.Size = new System.Drawing.Size(60, 20);
-			this.tb_StopCount.TabIndex = 4;
-			this.tb_StopCount.WordWrap = false;
-			this.tb_StopCount.TextChanged += new System.EventHandler(this.textchanged);
 			// 
 			// rb_StopCount
 			// 

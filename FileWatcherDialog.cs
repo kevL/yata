@@ -29,13 +29,22 @@ namespace yata
 			InitializeComponent();
 
 			_grid = grid;
-			Font = YataForm.CreateFont(_grid.Font);
+
+			if (Settings._font2dialog != null)
+				Font = Settings._font2dialog;
+			else
+				Font = Settings._fontdialog;
+
+			if (Settings._fontfdialog != null)
+			{
+				tb_Pfe.Font.Dispose();
+				tb_Pfe.Font = Settings._fontfdialog;
+			}
 
 			var f = _grid._f;
 			for (int i = 0; i != f.Tabs.TabCount; ++i)
 			{
-				TabPage tab = f.Tabs.TabPages[i];
-				if ((YataGrid)tab.Tag == _grid)
+				if ((YataGrid)f.Tabs.TabPages[i].Tag == _grid)
 				{
 					f.Tabs.SelectedIndex = i;
 					break;
@@ -43,8 +52,7 @@ namespace yata
 			}
 
 			tb_Pfe.Text = _grid.Fullpath;
-
-			Width = TextRenderer.MeasureText(tb_Pfe.Text, Font).Width + 15;
+			Width = YataGraphics.MeasureWidth(tb_Pfe.Text, tb_Pfe.Font) + 28;
 
 			string text = String.Empty;
 			switch (_fwdType = fwdType)

@@ -31,19 +31,20 @@ namespace yata
 
 			_f = f;
 
-			if (Settings._font2 != null)
-				Font = YataForm.CreateFont(Settings._font2);
+			if (Settings._font2dialog != null)
+				Font = Settings._font2dialog;
 			else
-				Font = YataForm.CreateFont(_f.Font);
+				Font = Settings._fontdialog;
 
 			if (Settings._fontf != null)
 			{
 				rtb_Clip.Font.Dispose();
-				rtb_Clip.Font = YataForm.CreateFont(Settings._fontf);
+				rtb_Clip.Font = Settings._fontf;
 			}
 
 			// TODO: controls are not resizing per Font correctly.
 			// vid. AutoScaleMode=
+			// yeah I noticed that; hence the "dialog" fonts ...
 
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;

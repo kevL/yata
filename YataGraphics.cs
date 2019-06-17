@@ -18,6 +18,11 @@ namespace yata
 		internal static Graphics graphics;
 
 		/// <summary>
+		/// The height of Yata's default font.
+		/// </summary>
+		internal static int hFontDefault;
+
+		/// <summary>
 		/// Flags used when measuring texts.
 		/// </summary>
 		internal const TextFormatFlags flags = TextFormatFlags.NoPrefix

@@ -10,10 +10,10 @@ namespace yata
 {
 	static class Settings
 	{
-		internal static Font _font;
-		internal static Font _font2;
-		internal static Font _font3;
-		internal static Font _fontf;
+		internal static Font _font,  _fontdialog;	// grid
+		internal static Font _font2, _font2dialog;	// menus, dialogs
+		internal static Font _font3;				// propanel
+		internal static Font _fontf, _fontfdialog;	// dialog textboxes etc.
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
@@ -61,6 +61,8 @@ namespace yata
 									_font.Dispose(); // NOTE: Fail silently.
 									_font = null;
 								}
+								else
+									_fontdialog = CreateDialogFont(_font);
 							}
 						}
 						else if (line.StartsWith("font2=", StringComparison.InvariantCulture))
@@ -79,6 +81,8 @@ namespace yata
 									_font2.Dispose(); // NOTE: Fail silently.
 									_font2 = null;
 								}
+								else
+									_font2dialog = CreateDialogFont(_font2);
 							}
 						}
 						else if (line.StartsWith("font3=", StringComparison.InvariantCulture))
@@ -115,6 +119,8 @@ namespace yata
 									_fontf.Dispose(); // NOTE: Fail silently.
 									_fontf = null;
 								}
+								else
+									_fontfdialog = CreateDialogFont(_fontf);
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
@@ -199,6 +205,28 @@ namespace yata
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="font"></param>
+		/// <returns>a font that's roughly the size of Yata's default font</returns>
+		internal static Font CreateDialogFont(Font font)
+		{
+			if (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, font) > YataGraphics.hFontDefault)
+			{
+				FontStyle style = YataForm.getStyleStandard(font.FontFamily);
+				float pts = font.SizeInPoints;
+				var fontdialog = new Font(font.Name, pts, style);
+				while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
+				{
+					fontdialog.Dispose();
+					fontdialog = new Font(font.Name, pts -= 1F, YataForm.getStyleStandard(font.FontFamily));
+				}
+				return fontdialog;
+			}
+			return font;
 		}
 	}
 }

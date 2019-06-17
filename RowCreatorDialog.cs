@@ -34,14 +34,12 @@ namespace yata
 		#region Fields
 		YataForm _f;
 		bool _cancel, _init;
-
-		Font _font, _fontyata, _fontf;
 		#endregion Fields
 
 
 		#region cTor
 		/// <summary>
-		/// 
+		/// cTor.
 		/// </summary>
 		/// <param name="f"></param>
 		/// <param name="r"></param>
@@ -52,22 +50,25 @@ namespace yata
 
 			_f = f;
 
-			if (Settings._font2 != null)
-				_font = YataForm.CreateFont(Settings._font2);
+			if (Settings._font2dialog != null)
+				Font = Settings._font2dialog;
 			else
-				_fontyata = YataForm.CreateFont(_f.Font);
+				Font = Settings._fontdialog;
 
-			Font = _font ?? _fontyata;
-
-			if (Settings._fontf != null)
-				_fontf = YataForm.CreateFont(Settings._fontf);
-			else if (_fontyata == null)
-				_fontf = YataForm.CreateFont(_f.Font);
-
-			tb_StartAdd   .Font =
-			tb_StartInsert.Font =
-			tb_StopFinish .Font =
-			tb_StopCount  .Font = _fontf ?? _fontyata;
+			if (Settings._fontfdialog != null)
+			{
+				tb_StartAdd   .Font =
+				tb_StartInsert.Font =
+				tb_StopFinish .Font =
+				tb_StopCount  .Font = Settings._fontfdialog;
+			}
+			else
+			{
+				tb_StartAdd   .Font =
+				tb_StartInsert.Font =
+				tb_StopFinish .Font =
+				tb_StopCount  .Font = new Font("Consolas", 9F); // rely on GC for disposal.
+			}
 
 
 			rb_FillSelected.Enabled = (r != 0);

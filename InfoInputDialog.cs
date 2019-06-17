@@ -66,10 +66,10 @@ namespace yata
 			_f    = _grid._f;
 			_cell = cell;
 
-			if (Settings._font2 != null)
-				Font = YataForm.CreateFont(Settings._font2);
+			if (Settings._font2dialog != null)
+				Font = Settings._font2dialog;
 			else
-				Font = YataForm.CreateFont(_f.Font);
+				Font = Settings._fontdialog;
 
 			init();
 		}

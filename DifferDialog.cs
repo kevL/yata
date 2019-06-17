@@ -43,15 +43,15 @@ namespace yata
 
 			_f = f;
 
-			if (Settings._font2 != null)
-				Font = YataForm.CreateFont(Settings._font2);
+			if (Settings._font2dialog != null)
+				Font = Settings._font2dialog;
 			else
-				Font = YataForm.CreateFont(_f.Font);
+				Font = Settings._fontdialog;
 
 			if (Settings._fontf != null)
 			{
 				rtb_Info.Font.Dispose();
-				rtb_Info.Font = YataForm.CreateFont(Settings._fontf);
+				rtb_Info.Font = Settings._fontf;
 			}
 
 			Text = title;
@@ -148,7 +148,7 @@ namespace yata
 			int width = 0, test;
 			foreach (var line in lines)
 			{
-				if ((test = TextRenderer.MeasureText(line, rtb_Info.Font).Width) > width)
+				if ((test = YataGraphics.MeasureWidth(line, rtb_Info.Font)) > width)
 					width = test;
 			}
 			return width;
@@ -224,8 +224,6 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
-			Font.Dispose();
-			rtb_Info.Font.Dispose();
 			base.Dispose(disposing);
 		}
 

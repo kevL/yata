@@ -15,8 +15,8 @@ namespace yata
 		Label lbl_Info;
 		Button btn_Close2da;
 		TextBox tb_Pfe;
-		Panel panel1;
-		Panel panel2;
+		Panel pnl_Bot;
+		Panel pnl_Top;
 
 
 		/// <summary>
@@ -28,7 +28,6 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
-			Font.Dispose();
 			base.Dispose(disposing);
 		}
 		
@@ -45,10 +44,10 @@ namespace yata
 			this.lbl_Info = new System.Windows.Forms.Label();
 			this.btn_Close2da = new System.Windows.Forms.Button();
 			this.tb_Pfe = new System.Windows.Forms.TextBox();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
+			this.pnl_Bot = new System.Windows.Forms.Panel();
+			this.pnl_Top = new System.Windows.Forms.Panel();
+			this.pnl_Bot.SuspendLayout();
+			this.pnl_Top.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Cancel
@@ -104,42 +103,43 @@ namespace yata
 			// tb_Pfe
 			// 
 			this.tb_Pfe.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tb_Pfe.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_Pfe.Location = new System.Drawing.Point(0, 20);
 			this.tb_Pfe.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Pfe.Name = "tb_Pfe";
 			this.tb_Pfe.ReadOnly = true;
-			this.tb_Pfe.Size = new System.Drawing.Size(342, 20);
+			this.tb_Pfe.Size = new System.Drawing.Size(342, 22);
 			this.tb_Pfe.TabIndex = 1;
 			// 
-			// panel1
+			// pnl_Bot
 			// 
-			this.panel1.Controls.Add(this.btn_Close2da);
-			this.panel1.Controls.Add(this.btn_Cancel);
-			this.panel1.Controls.Add(this.btn_Action);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 40);
-			this.panel1.Margin = new System.Windows.Forms.Padding(0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(342, 39);
-			this.panel1.TabIndex = 1;
+			this.pnl_Bot.Controls.Add(this.btn_Close2da);
+			this.pnl_Bot.Controls.Add(this.btn_Cancel);
+			this.pnl_Bot.Controls.Add(this.btn_Action);
+			this.pnl_Bot.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.pnl_Bot.Location = new System.Drawing.Point(0, 46);
+			this.pnl_Bot.Margin = new System.Windows.Forms.Padding(0);
+			this.pnl_Bot.Name = "pnl_Bot";
+			this.pnl_Bot.Size = new System.Drawing.Size(342, 38);
+			this.pnl_Bot.TabIndex = 1;
 			// 
-			// panel2
+			// pnl_Top
 			// 
-			this.panel2.Controls.Add(this.tb_Pfe);
-			this.panel2.Controls.Add(this.lbl_Info);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Margin = new System.Windows.Forms.Padding(0);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(342, 40);
-			this.panel2.TabIndex = 0;
+			this.pnl_Top.Controls.Add(this.tb_Pfe);
+			this.pnl_Top.Controls.Add(this.lbl_Info);
+			this.pnl_Top.Dock = System.Windows.Forms.DockStyle.Top;
+			this.pnl_Top.Location = new System.Drawing.Point(0, 0);
+			this.pnl_Top.Margin = new System.Windows.Forms.Padding(0);
+			this.pnl_Top.Name = "pnl_Top";
+			this.pnl_Top.Size = new System.Drawing.Size(342, 45);
+			this.pnl_Top.TabIndex = 0;
 			// 
 			// FileWatcherDialog
 			// 
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(342, 79);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.panel2);
+			this.ClientSize = new System.Drawing.Size(342, 84);
+			this.Controls.Add(this.pnl_Bot);
+			this.Controls.Add(this.pnl_Top);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(350, 105);
@@ -149,9 +149,9 @@ namespace yata
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = " yata - File warn";
 			this.TopMost = true;
-			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
+			this.pnl_Bot.ResumeLayout(false);
+			this.pnl_Top.ResumeLayout(false);
+			this.pnl_Top.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

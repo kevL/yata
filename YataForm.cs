@@ -166,15 +166,16 @@ namespace yata
 
 
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
+			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
 			FontDefault = Font;
 
 			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
 
 			if (Settings._font != null)
-			{
 				Font = Settings._font;
-			}
+			else
+				Settings._fontdialog = new Font(Font.Name, Font.Size, Font.Style, Font.Unit);
 
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
@@ -3262,9 +3263,15 @@ namespace yata
 			// AutoScaleMode is currently set to "None".
 			//
 			// See also SetProcessDPIAware()
+			// NOTE: Apparently setting GraphicsUnit.Pixel when creating new
+			// Font-objects effectively bypasses the OS' DPI user-setting.
 
 			Font = font; // rely on GC here
+			FontAccent.Dispose();
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
+			Settings._fontdialog.Dispose();
+			Settings._fontdialog = Settings.CreateDialogFont(Font);
+
 
 			YataGrid.SetStaticMetrics(this);
 
