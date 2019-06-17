@@ -3743,7 +3743,9 @@ namespace yata
 										copyable,
 										this);
 			_fdiffer.SetLabelColor(color);
-			if (@goto) _fdiffer.ShowGotoButton();
+			if (@goto)           _fdiffer.ShowGotoButton();
+			if (@goto || isDiff) _fdiffer.ShowResetButton();
+
 			_fdiffer.Show(); // is not owned, will be disposed auto.
 
 			return isDiff || @goto;
