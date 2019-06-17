@@ -1,10 +1,33 @@
 ﻿namespace yata
 {
 	/// <summary>
-	/// Global strings.
+	/// Global (const) strings.
 	/// </summary>
 	static class gs
 	{
+		internal const string Stars           = "****";
+
+		internal const string non             = "n/a";
+
+		internal const string Acid            = "Acid";
+		internal const string Cold            = "Cold";
+		internal const string Death           = "Death";
+		internal const string Disease         = "Disease";
+		internal const string Divine          = "Divine";
+		internal const string Electricity     = "Electricity";
+		internal const string Evil            = "Evil";
+		internal const string Fear            = "Fear";
+		internal const string Fire            = "Fire";
+		internal const string Magical         = "Magical";
+		internal const string Mind_Affecting  = "Mind_Affecting";
+		internal const string Negative        = "Negative";
+		internal const string Paralysis       = "Paralysis";
+		internal const string Poison          = "Poison";
+		internal const string Positive        = "Positive";
+		internal const string Sonic           = "Sonic";
+		internal const string Constitution    = "Constitution";
+		internal const string Water           = "Water";
+
 		internal const string BeshadowedBlast = "Beshadowed Blast";
 		internal const string BewitchingBlast = "Bewitching Blast";
 		internal const string BindingBlast    = "Binding Blast";
@@ -23,4 +46,15 @@
 		internal const string EldritchSpear   = "Eldritch Spear";
 		internal const string HideousBlow     = "Hideous Blow";
 	}
+
+
+	#region Constants
+	/// <summary>
+	/// Global constants.
+	/// </summary>
+	static class Constants
+	{
+		internal const float epsilon = 0.00001F;
+	}
+	#endregion Constants
 }

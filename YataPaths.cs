@@ -69,7 +69,7 @@ namespace yata
 						{
 							info = Table.Cols[col].text + ": (tcc) ";
 
-							if (val == Constants.Stars)
+							if (val == gs.Stars)
 							{
 								info += Info.GetTccType(0); // TCC_TYPE_NONE
 							}
@@ -96,7 +96,7 @@ namespace yata
 					{
 						if (!String.IsNullOrEmpty(val = Table[id,col].text))
 						{
-							if (val != Constants.Stars)
+							if (val != gs.Stars)
 							{
 								info = Table.Cols[col].text + ": ";
 
@@ -805,7 +805,7 @@ namespace yata
 								}
 							}
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "none";
 						else
 							info += "bork";
@@ -876,7 +876,7 @@ namespace yata
 								}
 							}
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "none";
 						else
 							info += "bork";
@@ -908,7 +908,7 @@ namespace yata
 							else
 								info += "bork";
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "n/a";
 						else
 							info += "bork";
@@ -988,7 +988,7 @@ namespace yata
 							else
 								info += "bork";
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "n/a";
 						else
 							info += "bork";
@@ -1034,7 +1034,7 @@ namespace yata
 							else
 								info += "bork";
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "n/a";
 						else
 							info += "bork";
@@ -1076,7 +1076,7 @@ namespace yata
 									break;
 							}
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "n/a";
 						else
 							info += "bork";
@@ -1125,7 +1125,7 @@ namespace yata
 							else
 								info += "bork";
 						}
-						else if (val == Constants.Stars)
+						else if (val == gs.Stars)
 							info += "point"; // id #0 (shouldn't do that though)
 						else
 							info += "bork";

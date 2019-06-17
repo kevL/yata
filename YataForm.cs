@@ -62,7 +62,7 @@ namespace yata
 		/// @note A cell's text shall never be null or blank, therefore
 		/// '_copytext' shall never be null or blank.
 		/// </summary>
-		string _copytext = Constants.Stars;
+		string _copytext = gs.Stars;
 
 		string _preset = String.Empty;
 
@@ -1410,7 +1410,7 @@ namespace yata
 											if (!String.IsNullOrEmpty(val = _table[r,c].text))
 												line += val;
 											else
-												line += Constants.Stars;
+												line += gs.Stars;
 										}
 
 										sw.WriteLine(line);
@@ -1710,7 +1710,7 @@ namespace yata
 					if (c < _copy[0].Length)
 						field = _copy[0][c];
 					else
-						field = Constants.Stars;
+						field = gs.Stars;
 
 					row[c].text = field;
 					row[c].diff =
@@ -1785,7 +1785,7 @@ namespace yata
 				fields[0] = _r.ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
-					fields[c] = Constants.Stars;
+					fields[c] = gs.Stars;
 				}
 				Table.Insert(_r, fields);
 
@@ -1823,7 +1823,7 @@ namespace yata
 
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
-					Table[_r,c].text = Constants.Stars;
+					Table[_r,c].text = gs.Stars;
 					Table[_r,c].diff =
 					Table[_r,c].loadchanged = false;
 				}
@@ -1866,7 +1866,7 @@ namespace yata
 				fields[0] = (_r + 1).ToString();
 				for (int c = 1; c != Table.ColCount; ++c)
 				{
-					fields[c] = Constants.Stars;
+					fields[c] = gs.Stars;
 				}
 				Table.Insert(_r + 1, fields);
 
@@ -2592,7 +2592,7 @@ namespace yata
 							{
 								case CrFillType.Stars:
 									for (int i = 0; i != Table.ColCount; ++i)
-										cells[i] = Constants.Stars;
+										cells[i] = gs.Stars;
 									break;
 
 								case CrFillType.Selected:
@@ -2606,7 +2606,7 @@ namespace yata
 										if (i < _copy[0].Length)
 											cells[i] = _copy[0][i];
 										else
-											cells[i] = Constants.Stars;
+											cells[i] = gs.Stars;
 									}
 									break;
 							}
@@ -2687,7 +2687,7 @@ namespace yata
 			{
 				tb.Text = Clipboard.GetText(TextDataFormat.Text);
 			}
-			else if (_copytext != Constants.Stars || tb == tb_Search)
+			else if (_copytext != gs.Stars || tb == tb_Search)
 			{
 				tb.Text = _copytext;
 			}
@@ -4042,7 +4042,7 @@ namespace yata
 
 			it_cellEdit   .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellStars  .Enabled = !Table.Readonly && (sel.text != Constants.Stars || sel.loadchanged);
+			it_cellStars  .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled(sel);
 			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
@@ -4132,7 +4132,7 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				if (sel != null)
 				{
-					Table.ChangeCellText(sel, Constants.Stars); // does not do a text-check
+					Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
 				}
 				else
 					CopyPasteCellError();
@@ -4197,7 +4197,7 @@ namespace yata
 				{
 					for (; c != destTable.ColCount; ++c)
 					{
-						destTable[r,c].text = Constants.Stars;
+						destTable[r,c].text = gs.Stars;
 						destTable[r,c].diff = false;
 					}
 				}
@@ -4280,17 +4280,6 @@ namespace yata
 		}
 		#endregion Events (cell)
 	}
-
-
-	#region Constants
-	/// <summary>
-	/// Global constant.
-	/// </summary>
-	static class Constants
-	{
-		internal const string Stars = "****";
-	}
-	#endregion Constants
 
 
 	#region Delegates

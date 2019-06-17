@@ -921,7 +921,7 @@ namespace yata
 			{
 				var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 				for (int c = 0; c <= Fields.Length; ++c)
-					cells[c] = Constants.Stars;
+					cells[c] = gs.Stars;
 
 				_rows.Add(cells);
 				return LOADRESULT_CHANGED; // used to flag the Table as changed.
@@ -1179,7 +1179,7 @@ namespace yata
 					}
 					else
 					{
-						text = Constants.Stars;
+						text = gs.Stars;
 						changed =
 						loadchanged = true;
 					}
@@ -2120,7 +2120,7 @@ namespace yata
 
 			if (String.IsNullOrEmpty(field))
 			{
-				tb.Text = Constants.Stars;
+				tb.Text = gs.Stars;
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
@@ -2134,7 +2134,7 @@ namespace yata
 				if (   field.Length < 3
 					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
 				{
-					tb.Text = Constants.Stars;
+					tb.Text = gs.Stars;
 					return true;
 				}
 			}
@@ -2148,7 +2148,7 @@ namespace yata
 
 				if (field.Length == 2)
 				{
-					tb.Text = Constants.Stars;
+					tb.Text = gs.Stars;
 					return true;
 				}
 
@@ -2169,9 +2169,9 @@ namespace yata
 					field = first + test + last;
 				}
 
-				if (test == Constants.Stars)
+				if (test == gs.Stars)
 				{
-					tb.Text = Constants.Stars;
+					tb.Text = gs.Stars;
 					return true;
 				}
 			}
@@ -2207,7 +2207,7 @@ namespace yata
 //			string field = text.Trim(); // this ought be redundant during file-load -->
 //			if (String.IsNullOrEmpty(field))
 //			{
-//				text = Constants.Stars;
+//				text = gs.Stars;
 //				return true;
 //			}
 //			if (field != text)
@@ -2220,7 +2220,7 @@ namespace yata
 				if (   field.Length < 3
 					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
 				{
-					field = Constants.Stars;
+					field = gs.Stars;
 					return true;
 				}
 			}
@@ -2234,7 +2234,7 @@ namespace yata
 
 				if (field.Length == 2)
 				{
-					field = Constants.Stars;
+					field = gs.Stars;
 					return true;
 				}
 
@@ -2255,9 +2255,9 @@ namespace yata
 					field = first + test + last;
 				}
 
-				if (test == Constants.Stars)
+				if (test == gs.Stars)
 				{
-					field = Constants.Stars;
+					field = gs.Stars;
 					return true;
 				}
 			}
@@ -3276,7 +3276,7 @@ namespace yata
 					if (c < fields.Length)
 						field = fields[c];
 					else
-						field = Constants.Stars;
+						field = gs.Stars;
 
 					row[c] = new Cell(id, c, field);
 				}
@@ -3309,7 +3309,7 @@ namespace yata
 
 					row = new Row(id, ColCount, Brushes.Created, this);
 					for (int c = 0; c != ColCount; ++c)
-						row[c] = new Cell(id, c, Constants.Stars);
+						row[c] = new Cell(id, c, gs.Stars);
 
 					Rows.Add(row);
 
@@ -3490,8 +3490,8 @@ namespace yata
 
 			int result;
 
-			bool a_isStars = (_a == Constants.Stars);
-			bool b_isStars = (_b == Constants.Stars);
+			bool a_isStars = (_a == gs.Stars);
+			bool b_isStars = (_b == gs.Stars);
 
 			if (a_isStars && b_isStars) // sort stars last.
 			{

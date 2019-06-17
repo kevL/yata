@@ -19,29 +19,6 @@ namespace yata
 		internal const int UserType     = 54;
 		internal const int AsMetaMagic  = 65;
 		internal const int TargetingUI  = 66;
-
-		const string Acid           = "Acid";
-		const string Cold           = "Cold";
-		const string Death          = "Death";
-		const string Disease        = "Disease";
-		const string Divine         = "Divine";
-		const string Electricity    = "Electricity";
-		const string Evil           = "Evil";
-		const string Fear           = "Fear";
-		const string Fire           = "Fire";
-		const string Magical        = "Magical";
-		const string Mind_Affecting = "Mind_Affecting";
-		const string Negative       = "Negative";
-		const string Paralysis      = "Paralysis";
-		const string Poison         = "Poison";
-		const string Positive       = "Positive";
-		const string Sonic          = "Sonic";
-		const string Constitution   = "Constitution";
-		const string Water          = "Water";
-
-		const string non = "n/a";
-
-		const float epsilon = 0.00001F;
 		#endregion Fields (static)
 
 
@@ -113,7 +90,7 @@ namespace yata
 				{
 					btn_Clear.Enabled = false;
 
-					_f.stInput  = Constants.Stars;
+					_f.stInput  = gs.Stars;
 					_f.intInput = 0;
 				}
 				else
@@ -125,24 +102,24 @@ namespace yata
 						case ImmunityType:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.stInput = Acid;           break;
-								case  1: _f.stInput = Cold;           break;
-								case  2: _f.stInput = Death;          break;
-								case  3: _f.stInput = Disease;        break;
-								case  4: _f.stInput = Divine;         break;
-								case  5: _f.stInput = Electricity;    break;
-								case  6: _f.stInput = Evil;           break;
-								case  7: _f.stInput = Fear;           break;
-								case  8: _f.stInput = Fire;           break;
-								case  9: _f.stInput = Magical;        break;
-								case 10: _f.stInput = Mind_Affecting; break;
-								case 11: _f.stInput = Negative;       break;
-								case 12: _f.stInput = Paralysis;      break;
-								case 13: _f.stInput = Poison;         break;
-								case 14: _f.stInput = Positive;       break;
-								case 15: _f.stInput = Sonic;          break;
-								case 16: _f.stInput = Constitution;   break;
-								case 17: _f.stInput = Water;          break;
+								case  0: _f.stInput = gs.Acid;           break;
+								case  1: _f.stInput = gs.Cold;           break;
+								case  2: _f.stInput = gs.Death;          break;
+								case  3: _f.stInput = gs.Disease;        break;
+								case  4: _f.stInput = gs.Divine;         break;
+								case  5: _f.stInput = gs.Electricity;    break;
+								case  6: _f.stInput = gs.Evil;           break;
+								case  7: _f.stInput = gs.Fear;           break;
+								case  8: _f.stInput = gs.Fire;           break;
+								case  9: _f.stInput = gs.Magical;        break;
+								case 10: _f.stInput = gs.Mind_Affecting; break;
+								case 11: _f.stInput = gs.Negative;       break;
+								case 12: _f.stInput = gs.Paralysis;      break;
+								case 13: _f.stInput = gs.Poison;         break;
+								case 14: _f.stInput = gs.Positive;       break;
+								case 15: _f.stInput = gs.Sonic;          break;
+								case 16: _f.stInput = gs.Constitution;   break;
+								case 17: _f.stInput = gs.Water;          break;
 							}
 							break;
 
@@ -228,26 +205,26 @@ namespace yata
 			switch (ColType)
 			{
 				case School:		// string, checkboxes, exclusive
-					if (_f.stInput != Constants.Stars)
+					if (_f.stInput != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = cb_06.Checked = cb_07.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = Constants.Stars);
+						SetInfoText(-1, _f.stInput = gs.Stars);
 					}
 					break;
 
 				case Range:			// string, checkboxes, exclusive
-					if (_f.stInput != Constants.Stars)
+					if (_f.stInput != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = Constants.Stars);
+						SetInfoText(-1, _f.stInput = gs.Stars);
 					}
 					break;
 
@@ -283,7 +260,7 @@ namespace yata
 
 				case ImmunityType:	// string, dropdown,   exclusive
 				case TargetingUI:	// string, dropdown,   exclusive
-					if (_f.stInput != Constants.Stars)
+					if (_f.stInput != gs.Stars)
 					{
 						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
 					}
@@ -298,13 +275,13 @@ namespace yata
 					break;
 
 				case UserType:		// string, checkboxes, exclusive
-					if (_f.stInput != Constants.Stars)
+					if (_f.stInput != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = Constants.Stars);
+						SetInfoText(-1, _f.stInput = gs.Stars);
 					}
 					break;
 			}
@@ -354,7 +331,7 @@ namespace yata
 						}
 
 						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
-						btn_Clear.Enabled = (val != Constants.Stars);
+						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
 					case Range:
@@ -380,7 +357,7 @@ namespace yata
 						}
 
 						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
-						btn_Clear.Enabled = (val != Constants.Stars);
+						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
 					case MetaMagic:
@@ -415,7 +392,7 @@ namespace yata
 						cb_22.Text = gs.EldritchSpear;		//(512)
 						cb_23.Text = gs.HideousBlow;		//(2048)
 
-						if (val == Constants.Stars || val.Length < 3) val = "0x0";
+						if (val == gs.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
@@ -472,7 +449,7 @@ namespace yata
 						cb_05.Text = "(32)Placeables";
 						cb_06.Text = "(64)Triggers";
 
-						if (val == Constants.Stars || val.Length < 3) val = "0x0";
+						if (val == gs.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
@@ -498,30 +475,30 @@ namespace yata
 
 						switch (val)
 						{
-							case Acid:            cbx_Val.SelectedIndex =  0; break; // sub
-							case Cold:            cbx_Val.SelectedIndex =  1; break; // sub
-							case Death:           cbx_Val.SelectedIndex =  2; break;
-							case Disease:         cbx_Val.SelectedIndex =  3; break;
-							case Divine:          cbx_Val.SelectedIndex =  4; break; // sub
-							case Electricity:     cbx_Val.SelectedIndex =  5; break; // sub
-							case Evil:            cbx_Val.SelectedIndex =  6; break; // non-standard
-							case Fear:            cbx_Val.SelectedIndex =  7; break;
-							case Fire:            cbx_Val.SelectedIndex =  8; break; // sub
-							case Magical:         cbx_Val.SelectedIndex =  9; break; // sub
-							case Mind_Affecting:  cbx_Val.SelectedIndex = 10; break;
-							case Negative:        cbx_Val.SelectedIndex = 11; break; // sub
-							case Paralysis:       cbx_Val.SelectedIndex = 12; break;
-							case Poison:          cbx_Val.SelectedIndex = 13; break;
-							case Positive:        cbx_Val.SelectedIndex = 14; break; // sub
-							case Sonic:           cbx_Val.SelectedIndex = 15; break; // sub
-							case Constitution:    cbx_Val.SelectedIndex = 16; break; // non-standard
-							case Water:           cbx_Val.SelectedIndex = 17; break; // non-standard
+							case gs.Acid:           cbx_Val.SelectedIndex =  0; break; // sub
+							case gs.Cold:           cbx_Val.SelectedIndex =  1; break; // sub
+							case gs.Death:          cbx_Val.SelectedIndex =  2; break;
+							case gs.Disease:        cbx_Val.SelectedIndex =  3; break;
+							case gs.Divine:         cbx_Val.SelectedIndex =  4; break; // sub
+							case gs.Electricity:    cbx_Val.SelectedIndex =  5; break; // sub
+							case gs.Evil:           cbx_Val.SelectedIndex =  6; break; // non-standard
+							case gs.Fear:           cbx_Val.SelectedIndex =  7; break;
+							case gs.Fire:           cbx_Val.SelectedIndex =  8; break; // sub
+							case gs.Magical:        cbx_Val.SelectedIndex =  9; break; // sub
+							case gs.Mind_Affecting: cbx_Val.SelectedIndex = 10; break;
+							case gs.Negative:       cbx_Val.SelectedIndex = 11; break; // sub
+							case gs.Paralysis:      cbx_Val.SelectedIndex = 12; break;
+							case gs.Poison:         cbx_Val.SelectedIndex = 13; break;
+							case gs.Positive:       cbx_Val.SelectedIndex = 14; break; // sub
+							case gs.Sonic:          cbx_Val.SelectedIndex = 15; break; // sub
+							case gs.Constitution:   cbx_Val.SelectedIndex = 16; break; // non-standard
+							case gs.Water:          cbx_Val.SelectedIndex = 17; break; // non-standard
 
 							default:
-							case Constants.Stars: cbx_Val.SelectedIndex = 18; break;
+							case gs.Stars: cbx_Val.SelectedIndex = 18; break;
 						}
 						_f.stOriginal = _f.stInput = val;
-						btn_Clear.Enabled = (val != Constants.Stars);
+						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 /*
 int IMMUNITY_TYPE_NONE                      =  0;
@@ -564,7 +541,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						setComboboxVisible();
 						populateCategories();
 
-						if (val == Constants.Stars) val = "0";
+						if (val == gs.Stars) val = "0";
 						if (Int32.TryParse(val, out result)
 							&& result > -1 && result < Info.categoryLabels.Count)
 						{
@@ -595,7 +572,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 							case "4": cb_03.Checked = true; break;
 						}
 						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
-						btn_Clear.Enabled = (val != Constants.Stars);
+						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
 					case AsMetaMagic:
@@ -604,7 +581,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						setComboboxVisible();
 						populateAsMetaMagics();
 
-						if (val == Constants.Stars || val.Length < 3) val = "0x0";
+						if (val == gs.Stars || val.Length < 3) val = "0x0";
 						if (Int32.TryParse(val.Substring(2),
 										   NumberStyles.AllowHexSpecifier,
 										   CultureInfo.InvariantCulture,
@@ -650,7 +627,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 							cbx_Val.SelectedIndex = Info.targetLabels.Count; // "n/a"
 
 						_f.stOriginal = _f.stInput = val;
-						btn_Clear.Enabled = (val != Constants.Stars);
+						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 				}
 			}
@@ -678,7 +655,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 				lbl_Val.Text = "0x" + result.ToString(format);
 			}
 			else
-				lbl_Val.Text = (val == Constants.Stars) ? String.Empty : val;
+				lbl_Val.Text = (val == gs.Stars) ? String.Empty : val;
 		}
 
 		void setComboboxVisible()
@@ -784,26 +761,26 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 		void populateImmunityTypes()
 		{
-			cbx_Val.Items.Add(new tui(Acid));
-			cbx_Val.Items.Add(new tui(Cold));
-			cbx_Val.Items.Add(new tui(Death));
-			cbx_Val.Items.Add(new tui(Disease));
-			cbx_Val.Items.Add(new tui(Divine));
-			cbx_Val.Items.Add(new tui(Electricity));
-			cbx_Val.Items.Add(new tui(Evil));
-			cbx_Val.Items.Add(new tui(Fear));
-			cbx_Val.Items.Add(new tui(Fire));
-			cbx_Val.Items.Add(new tui(Magical));
-			cbx_Val.Items.Add(new tui(Mind_Affecting));
-			cbx_Val.Items.Add(new tui(Negative));
-			cbx_Val.Items.Add(new tui(Paralysis));
-			cbx_Val.Items.Add(new tui(Poison));
-			cbx_Val.Items.Add(new tui(Positive));
-			cbx_Val.Items.Add(new tui(Sonic));
-			cbx_Val.Items.Add(new tui(Constitution));
-			cbx_Val.Items.Add(new tui(Water));
+			cbx_Val.Items.Add(new tui(gs.Acid));
+			cbx_Val.Items.Add(new tui(gs.Cold));
+			cbx_Val.Items.Add(new tui(gs.Death));
+			cbx_Val.Items.Add(new tui(gs.Disease));
+			cbx_Val.Items.Add(new tui(gs.Divine));
+			cbx_Val.Items.Add(new tui(gs.Electricity));
+			cbx_Val.Items.Add(new tui(gs.Evil));
+			cbx_Val.Items.Add(new tui(gs.Fear));
+			cbx_Val.Items.Add(new tui(gs.Fire));
+			cbx_Val.Items.Add(new tui(gs.Magical));
+			cbx_Val.Items.Add(new tui(gs.Mind_Affecting));
+			cbx_Val.Items.Add(new tui(gs.Negative));
+			cbx_Val.Items.Add(new tui(gs.Paralysis));
+			cbx_Val.Items.Add(new tui(gs.Poison));
+			cbx_Val.Items.Add(new tui(gs.Positive));
+			cbx_Val.Items.Add(new tui(gs.Sonic));
+			cbx_Val.Items.Add(new tui(gs.Constitution));
+			cbx_Val.Items.Add(new tui(gs.Water));
 
-			cbx_Val.Items.Add(new tui(non));
+			cbx_Val.Items.Add(new tui(gs.non));
 		}
 
 		void populateCategories()
@@ -812,7 +789,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
 			}
-			cbx_Val.Items.Add(new tui(non));
+			cbx_Val.Items.Add(new tui(gs.non));
 		}
 
 		void setVisibleUserTypes()
@@ -843,7 +820,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
 			cbx_Val.Items.Add(new tui(hexen(YataForm.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
 
-			cbx_Val.Items.Add(new tui(non));
+			cbx_Val.Items.Add(new tui(gs.non));
 			cbx_Val.SelectedIndex = 16;
 		}
 
@@ -861,14 +838,14 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 				bool haspars = false;
 
 				float f = Info.targetWidths[i];
-				if (Math.Abs(0.0F - f) > epsilon)
+				if (Math.Abs(0.0F - f) > Constants.epsilon)
 				{
 					haspars = true;
 					text += " (" + f;
 				}
 
 				f = Info.targetLengths[i];
-				if (Math.Abs(0.0F - f) > epsilon)
+				if (Math.Abs(0.0F - f) > Constants.epsilon)
 				{
 					if (!haspars)
 					{
@@ -882,7 +859,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 
 				cbx_Val.Items.Add(new tui(text));
 			}
-			cbx_Val.Items.Add(new tui(non));
+			cbx_Val.Items.Add(new tui(gs.non));
 		}
 
 
@@ -892,7 +869,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			{
 				_init = true;
 
-				string val = Constants.Stars;
+				string val = gs.Stars;
 				if (_cb == cb_00)
 				{
 					if (_cb.Checked)
@@ -966,7 +943,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 					}
 				}
 				SetInfoText(-1, _f.stInput = val);
-				btn_Clear.Enabled = (val != Constants.Stars);
+				btn_Clear.Enabled = (val != gs.Stars);
 
 				_init = false;
 			}
@@ -978,7 +955,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			{
 				_init = true;
 
-				string val = Constants.Stars;
+				string val = gs.Stars;
 				if (_cb == cb_00)
 				{
 					if (_cb.Checked)
@@ -1034,7 +1011,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 					}
 				}
 				SetInfoText(-1, _f.stInput = val);
-				btn_Clear.Enabled = (val != Constants.Stars);
+				btn_Clear.Enabled = (val != gs.Stars);
 
 				_init = false;
 			}
@@ -1221,7 +1198,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			{
 				_init = true;
 
-				string val = Constants.Stars;
+				string val = gs.Stars;
 				if (_cb == cb_00)
 				{
 					if (_cb.Checked)
@@ -1256,7 +1233,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 				}
 				SetInfoText(-1, _f.stInput = val);
 
-				btn_Clear.Enabled = (val != Constants.Stars);
+				btn_Clear.Enabled = (val != gs.Stars);
 				_init = false;
 			}
 		}
