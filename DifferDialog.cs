@@ -14,7 +14,7 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		const int WIDTH_Min = 350;
+		const int WIDTH_Min = 325;
 
 		static int _x = -1;
 		static int _y = -1;
@@ -58,52 +58,29 @@ namespace yata
 
 			Text = title;
 
-			bool
-				hasLabel    = !String.IsNullOrEmpty(label),
-				hasCopyable = !String.IsNullOrEmpty(copyable);
+			lbl_Info.Height = YataGraphics.MeasureHeight(label, Font) + 15; // +15 = label's pad top+bot +5
+			lbl_Info.Text = label;
 
-			int width = 0;
-			if (hasCopyable) // deter total width based on longest copyable line
+			int w;
+			if (!String.IsNullOrEmpty(copyable))
 			{
-				width = GetWidth(copyable);
-				width += 40; // parent panel's pad left+right +5
+				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
+
+				w = GetWidth(copyable) + 30;					// +30 = parent panel's pad left+right +5
+				pnl_Copyable.Height = GetHeight(copyable) + 20;	// +20 = parent panel's pad top+bot +5
+
+				rtb_Copyable.Text = copyable;
 			}
 			else
 			{
 				pnl_Copyable.Visible = false;
-				pnl_Copyable.Height = 0;
+				pnl_Copyable.Height = w = 0;
 			}
 
-			if (width < WIDTH_Min) width = WIDTH_Min;
-			var size = new Size(width, Int32.MaxValue);
+			if (w < WIDTH_Min) w = WIDTH_Min;
 
-
-			if (hasLabel)
-			{
-				int height = GetHeight(label, size);
-				lbl_Info.Height = height + 15; // label's pad top+bot +5
-			}
-			else
-			{
-				lbl_Info.Visible = false;
-				lbl_Info.Height = 0;
-			}
-
-			if (hasCopyable)
-			{
-				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
-				int height = TextRenderer.MeasureText(copyable,
-													  rtb_Copyable.Font,
-													  size).Height;
-				pnl_Copyable.Height = height + 20; // parent panel's pad top+bot +5
-			}
-
-			ClientSize = new Size(width + 25, // +25 for pad real and imagined.
+			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
 								  lbl_Info.Height + pnl_Copyable.Height + btn_Okay.Height);
-
-			lbl_Info.Text     = label;
-			rtb_Copyable.Text = copyable;
-
 
 			if (_x == -1) _x = _f.Left + 50;
 			if (_y == -1) _y = _f.Top  + 50;
@@ -117,6 +94,10 @@ namespace yata
 
 
 		#region Events (override)
+		/// <summary>
+		/// Handles this dialog's load event. Niceties ...
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
 			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
@@ -124,6 +105,11 @@ namespace yata
 			rtb_Copyable.SelectionStart = rtb_Copyable.Text.Length;
 		}
 
+		/// <summary>
+		/// Handles this dialog's closing event. Sets the static location and
+		/// nulls the differ in 'YataForm'.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			_x = Left;
@@ -131,23 +117,41 @@ namespace yata
 
 			_f._fdiffer = null;
 
-			this.Dispose(true);
+			this.Dispose(true); // <- probably unnecessary.
 			base.OnFormClosing(e);
 		}
 		#endregion Events (override)
 
 
 		#region Events
+		/// <summary>
+		/// Handles a click on the Okay button. Closes this dialog without doing
+		/// anything else.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_btnOkay(object sender, EventArgs e)
 		{
 			Close();
 		}
 
+		/// <summary>
+		/// Handles a click on the Reset button. Clears and desyncs the diff'd
+		/// tables.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_btnReset(object sender, EventArgs e)
 		{
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Handles a click on the Goto button. Goes to the next diff'd cell or
+		/// the previous diff'd cell if [Shift] is depressed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_btnGoto(object sender, EventArgs e)
 		{
 			_f.GotoDiffCell();
@@ -156,6 +160,11 @@ namespace yata
 
 
 		#region Methods
+		/// <summary>
+		/// Deters width based on longest copyable line.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
 		int GetWidth(string text)
 		{
 			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
@@ -170,49 +179,50 @@ namespace yata
 			return width;
 		}
 
-		int GetHeight(string text, Size size)
+		/// <summary>
+		/// Deters height based on line-height * lines.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		int GetHeight(string text)
 		{
 			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
 										StringSplitOptions.None);
 
-			float heightF;
-			int
-				hdefault = 0,
-				height   = 0,
-				total    = 0;
-
-			Graphics graphics = CreateGraphics();
-			foreach (var line in lines)
-			{
-				heightF = graphics.MeasureString(line, lbl_Info.Font, size).Height; // NOTE: TextRenderer ain't workin right for that.
-				height = (int)Math.Ceiling(heightF);
-
-				if (hdefault == 0)
-					hdefault = height;
-				else if (height == 0) // IMPORTANT: 1st line shall not be blank (unless all are blank).
-					height = hdefault;
-
-				total += height;
-			}
-			return total;
+			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
+				 * lines.Length;
 		}
 
 
+		/// <summary>
+		/// Sets the text-color of the info.
+		/// </summary>
+		/// <param name="color"></param>
 		internal void SetLabelColor(Color color)
 		{
 			lbl_Info.ForeColor = color;
 		}
 
+		/// <summary>
+		/// Visibles the reset button.
+		/// </summary>
 		internal void ShowResetButton()
 		{
 			btn_Reset.Visible = true;
 		}
 
+		/// <summary>
+		/// Visibles the goto button.
+		/// </summary>
 		internal void ShowGotoButton()
 		{
 			btn_Goto.Visible = true;
 		}
 
+		/// <summary>
+		/// Enables/disables the goto button.
+		/// </summary>
+		/// <param name="enabled">true to enable</param>
 		internal void EnableGotoButton(bool enabled)
 		{
 			btn_Goto.Enabled = enabled;
@@ -231,7 +241,7 @@ namespace yata
 		Button btn_Reset;
 
 		/// <summary>
-		/// Clean up any resources being used.
+		/// Cleans up any resources being used.
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
