@@ -127,6 +127,10 @@ namespace yata
 		internal static readonly Color TextColSized      = Color.Olive;
 		internal static readonly Color TextColSorted_asc = Color.CadetBlue;
 		internal static readonly Color TextColSorted_des = Color.RosyBrown;
+
+		internal static readonly Color TextboxBackground = Color.WhiteSmoke;
+		internal static readonly Color TextboxSelected   = Color.FloralWhite;
+		internal static readonly Color TextboxReadonly   = Color.Azure;
 	}
 
 	static class Gradients

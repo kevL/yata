@@ -149,6 +149,7 @@ namespace yata
 			// 
 			// tb_Size
 			// 
+			this.tb_Size.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Size.Location = new System.Drawing.Point(275, 10);
 			this.tb_Size.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Size.Name = "tb_Size";
@@ -198,6 +199,7 @@ namespace yata
 			// 
 			this.tb_NetString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tb_NetString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_NetString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_NetString.HideSelection = false;
 			this.tb_NetString.Location = new System.Drawing.Point(5, 358);

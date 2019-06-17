@@ -42,6 +42,8 @@ namespace yata
 				rtb_Clip.Font = Settings._fontf;
 			}
 
+			rtb_Clip.BackColor = Colors.TextboxBackground;
+
 			// TODO: controls are not resizing per Font correctly.
 			// vid. AutoScaleMode=
 			// yeah I noticed that; hence the "dialog" fonts ...
@@ -58,6 +60,16 @@ namespace yata
 			click_Get(null, EventArgs.Empty);
 		}
 		#endregion cTor
+
+
+		#region Events (override)
+		protected override void OnLoad(EventArgs e)
+		{
+			rtb_Clip.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
+			rtb_Clip.Select();
+			rtb_Clip.SelectionStart = rtb_Clip.Text.Length;
+		}
+		#endregion Events (override)
 
 
 		#region Events

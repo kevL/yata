@@ -50,18 +50,20 @@ namespace yata
 
 			if (Settings._fontf != null)
 			{
-				rtb_Info.Font.Dispose();
-				rtb_Info.Font = Settings._fontf;
+				rtb_Copyable.Font.Dispose();
+				rtb_Copyable.Font = Settings._fontf;
 			}
+
+//			rtb_Copyable.BackColor = Colors.TextboxBackground;
 
 			Text = title;
 
 			bool
-				bLabel = !String.IsNullOrEmpty(label),
-				bCopya = !String.IsNullOrEmpty(copyable);
+				hasLabel    = !String.IsNullOrEmpty(label),
+				hasCopyable = !String.IsNullOrEmpty(copyable);
 
 			int width = 0;
-			if (bCopya) // deter total width based on longest copyable line
+			if (hasCopyable) // deter total width based on longest copyable line
 			{
 				width = GetWidth(copyable);
 				width += 40; // panel's pad left+right + 5
@@ -69,17 +71,17 @@ namespace yata
 			else
 			{
 				pnl_Info.Visible =
-				rtb_Info.Visible = false;
+				rtb_Copyable.Visible = false;
 
 				pnl_Info.Height =
-				rtb_Info.Height = 0;
+				rtb_Copyable.Height = 0;
 			}
 
 			if (width < 350) width = 350;
 			var size = new Size(width, Int32.MaxValue);
 
 
-			if (bLabel)
+			if (hasLabel)
 			{
 				int height = GetHeight(label, size);
 				lbl_Info.Height = height + 15; // label's pad top+bot +5
@@ -90,20 +92,20 @@ namespace yata
 				lbl_Info.Height = 0;
 			}
 
-			if (bCopya)
+			if (hasCopyable)
 			{
 				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
 				int height = TextRenderer.MeasureText(copyable,
-													  rtb_Info.Font,
+													  rtb_Copyable.Font,
 													  size).Height;
 				pnl_Info.Height = height + 20; // panel's pad top+bot + 5
 			}
 
 			ClientSize = new Size(width + 25, // +25 for pad real and imagined.
-								  lbl_Info.Height + rtb_Info.Height + btn_Okay.Height + 20);
+								  lbl_Info.Height + rtb_Copyable.Height + btn_Okay.Height + 20);
 
 			lbl_Info.Text = label;
-			rtb_Info.Text = copyable;
+			rtb_Copyable.Text = copyable;
 
 
 			if (_x == -1) _x = _f.Left + 50;
@@ -112,7 +114,44 @@ namespace yata
 			Left = _x;
 			Top  = _y;
 		}
+		#endregion
 
+
+		#region Events (override)
+		protected override void OnLoad(EventArgs e)
+		{
+			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
+			rtb_Copyable.Select();
+			rtb_Copyable.SelectionStart = rtb_Copyable.Text.Length;
+		}
+
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			_x = Left;
+			_y = Top;
+
+			_f._fdiffer = null;
+
+			this.Dispose(true);
+			base.OnFormClosing(e);
+		}
+		#endregion Events (override)
+
+
+		#region Events
+		void click_btnOkay(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		void click_btnGoto(object sender, EventArgs e)
+		{
+			_f.GotoDiffCell();
+		}
+		#endregion Events
+
+
+		#region Methods
 		int GetHeight(string text, Size size)
 		{
 			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
@@ -148,7 +187,7 @@ namespace yata
 			int width = 0, test;
 			foreach (var line in lines)
 			{
-				if ((test = YataGraphics.MeasureWidth(line, rtb_Info.Font)) > width)
+				if ((test = YataGraphics.MeasureWidth(line, rtb_Copyable.Font)) > width)
 					width = test;
 			}
 			return width;
@@ -169,49 +208,14 @@ namespace yata
 		{
 			btn_Goto.Enabled = enabled;
 		}
-		#endregion
-
-
-		#region Events (override)
-		protected override void OnLoad(EventArgs e)
-		{
-			rtb_Info.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
-			rtb_Info.Select();
-			rtb_Info.SelectionStart = rtb_Info.Text.Length;
-		}
-
-		protected override void OnFormClosing(FormClosingEventArgs e)
-		{
-			_x = Left;
-			_y = Top;
-
-			_f._fdiffer = null;
-
-			this.Dispose(true);
-			base.OnFormClosing(e);
-		}
-		#endregion Events (override)
-
-
-		#region Events
-		void click_btnOkay(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		void click_btnGoto(object sender, EventArgs e)
-		{
-			_f.GotoDiffCell();
-		}
-		#endregion Events
-
+		#endregion Methods
 
 
 		#region Windows Form Designer generated code
 		Container components = null;
 
 		Label lbl_Info;
-		RichTextBox rtb_Info;
+		RichTextBox rtb_Copyable;
 		Panel pnl_Info;
 		Button btn_Goto;
 		Button btn_Okay;
@@ -234,7 +238,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.lbl_Info = new System.Windows.Forms.Label();
-			this.rtb_Info = new System.Windows.Forms.RichTextBox();
+			this.rtb_Copyable = new System.Windows.Forms.RichTextBox();
 			this.pnl_Info = new System.Windows.Forms.Panel();
 			this.btn_Goto = new System.Windows.Forms.Button();
 			this.btn_Okay = new System.Windows.Forms.Button();
@@ -253,25 +257,27 @@ namespace yata
 			this.lbl_Info.Text = "lbl_Info";
 			this.lbl_Info.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// rtb_Info
+			// rtb_Copyable
 			// 
-			this.rtb_Info.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtb_Info.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rtb_Info.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.rtb_Info.HideSelection = false;
-			this.rtb_Info.Location = new System.Drawing.Point(15, 5);
-			this.rtb_Info.Margin = new System.Windows.Forms.Padding(0);
-			this.rtb_Info.Name = "rtb_Info";
-			this.rtb_Info.ReadOnly = true;
-			this.rtb_Info.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-			this.rtb_Info.Size = new System.Drawing.Size(469, 90);
-			this.rtb_Info.TabIndex = 0;
-			this.rtb_Info.Text = "rtb_Info";
-			this.rtb_Info.WordWrap = false;
+			this.rtb_Copyable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.rtb_Copyable.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.rtb_Copyable.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rtb_Copyable.HideSelection = false;
+			this.rtb_Copyable.Location = new System.Drawing.Point(15, 5);
+			this.rtb_Copyable.Margin = new System.Windows.Forms.Padding(0);
+			this.rtb_Copyable.Name = "rtb_Copyable";
+			this.rtb_Copyable.ReadOnly = true;
+			this.rtb_Copyable.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+			this.rtb_Copyable.Size = new System.Drawing.Size(469, 90);
+			this.rtb_Copyable.TabIndex = 0;
+			this.rtb_Copyable.Text = "rtb_Copyable";
+			this.rtb_Copyable.WordWrap = false;
 			// 
 			// pnl_Info
 			// 
-			this.pnl_Info.Controls.Add(this.rtb_Info);
+			this.pnl_Info.Controls.Add(this.rtb_Copyable);
 			this.pnl_Info.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pnl_Info.Location = new System.Drawing.Point(0, 30);
 			this.pnl_Info.Margin = new System.Windows.Forms.Padding(0);

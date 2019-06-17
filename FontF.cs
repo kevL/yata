@@ -60,8 +60,11 @@ namespace yata
 			if (Settings._fontf != null)
 			{
 				tb_NetString.Font.Dispose();
-				tb_NetString.Font = Settings._fontf;
+				tb_NetString.Font = Settings._fontfdialog;
 			}
+
+			tb_NetString.BackColor =
+			tb_Size     .BackColor = Colors.TextboxBackground;
 
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;

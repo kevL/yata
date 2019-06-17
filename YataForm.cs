@@ -3733,7 +3733,7 @@ namespace yata
 				color = Color.Firebrick;
 			}
 
-			string title = "diff (a) "
+			string title = " diff (a) "
 						 + Path.GetFileNameWithoutExtension(_diff1.Fullpath)
 						 + " - (b) "
 						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);

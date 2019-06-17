@@ -82,7 +82,7 @@ namespace yata
 			this.lbl_Info.Location = new System.Drawing.Point(0, 0);
 			this.lbl_Info.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Info.Name = "lbl_Info";
-			this.lbl_Info.Size = new System.Drawing.Size(342, 20);
+			this.lbl_Info.Size = new System.Drawing.Size(342, 22);
 			this.lbl_Info.TabIndex = 0;
 			this.lbl_Info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -102,9 +102,10 @@ namespace yata
 			// 
 			// tb_Pfe
 			// 
+			this.tb_Pfe.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Pfe.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tb_Pfe.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tb_Pfe.Location = new System.Drawing.Point(0, 20);
+			this.tb_Pfe.Location = new System.Drawing.Point(0, 22);
 			this.tb_Pfe.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Pfe.Name = "tb_Pfe";
 			this.tb_Pfe.ReadOnly = true;

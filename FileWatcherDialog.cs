@@ -41,6 +41,8 @@ namespace yata
 				tb_Pfe.Font = Settings._fontfdialog;
 			}
 
+			tb_Pfe.BackColor = Colors.TextboxBackground;
+
 			var f = _grid._f;
 			for (int i = 0; i != f.Tabs.TabCount; ++i)
 			{

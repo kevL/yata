@@ -149,22 +149,22 @@ namespace yata
 			else //if (rb_StartInsert.Checked)
 				btn_Accept.Text = INSERT;
 
-			tb_StartAdd.BackColor = Color.Azure;
+			tb_StartAdd.BackColor = Colors.TextboxReadonly;
 
 			if (rb_StartInsert.Checked)
-				tb_StartInsert.BackColor = Color.FloralWhite;
+				tb_StartInsert.BackColor = Colors.TextboxSelected;
 			else
-				tb_StartInsert.BackColor = Color.WhiteSmoke;
+				tb_StartInsert.BackColor = Colors.TextboxBackground;
 
 			if (rb_StopFinish.Checked)
 			{
-				tb_StopFinish.BackColor = Color.FloralWhite;
-				tb_StopCount .BackColor = Color.WhiteSmoke;
+				tb_StopFinish.BackColor = Colors.TextboxSelected;
+				tb_StopCount .BackColor = Colors.TextboxBackground;
 			}
 			else //if (rb_StopCount.Checked)
 			{
-				tb_StopFinish.BackColor = Color.WhiteSmoke;
-				tb_StopCount .BackColor = Color.FloralWhite;
+				tb_StopFinish.BackColor = Colors.TextboxBackground;
+				tb_StopCount .BackColor = Colors.TextboxSelected;
 			}
 		}
 		#endregion cTor
@@ -216,7 +216,7 @@ namespace yata
 
 					tb_StartInsert.Enabled = !rb.Checked;
 
-					tb_StartInsert.BackColor = Color.WhiteSmoke;
+					tb_StartInsert.BackColor = Colors.TextboxBackground;
 
 					int result2;
 					if (Int32.TryParse(tb_StopCount.Text, out result2)
@@ -233,7 +233,7 @@ namespace yata
 					if (tb_StartInsert.Enabled = rb.Checked)
 						btn_Accept.Text = INSERT;
 
-					tb_StartInsert.BackColor = Color.FloralWhite;
+					tb_StartInsert.BackColor = Colors.TextboxSelected;
 
 					int result2;
 					if (Int32.TryParse(tb_StopCount.Text, out result2)
@@ -248,13 +248,13 @@ namespace yata
 				{
 					if (tb_StopFinish.Enabled = rb.Checked)
 					{
-						tb_StopFinish.BackColor = Color.FloralWhite;
-						tb_StopCount .BackColor = Color.WhiteSmoke;
+						tb_StopFinish.BackColor = Colors.TextboxSelected;
+						tb_StopCount .BackColor = Colors.TextboxBackground;
 					}
 					else
 					{
-						tb_StopFinish.BackColor = Color.WhiteSmoke;
-						tb_StopCount .BackColor = Color.FloralWhite;
+						tb_StopFinish.BackColor = Colors.TextboxBackground;
+						tb_StopCount .BackColor = Colors.TextboxSelected;
 					}
 					tb_StopCount.Enabled = !rb.Checked;
 				}
@@ -262,13 +262,13 @@ namespace yata
 				{
 					if (tb_StopCount.Enabled = rb.Checked)
 					{
-						tb_StopFinish.BackColor = Color.WhiteSmoke;
-						tb_StopCount .BackColor = Color.FloralWhite;
+						tb_StopFinish.BackColor = Colors.TextboxBackground;
+						tb_StopCount .BackColor = Colors.TextboxSelected;
 					}
 					else
 					{
-						tb_StopFinish.BackColor = Color.FloralWhite;
-						tb_StopCount .BackColor = Color.WhiteSmoke;
+						tb_StopFinish.BackColor = Colors.TextboxSelected;
+						tb_StopCount .BackColor = Colors.TextboxBackground;
 					}
 					tb_StopFinish.Enabled = !rb.Checked;
 				}
