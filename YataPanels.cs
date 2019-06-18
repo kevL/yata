@@ -155,7 +155,7 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						_grid.colRewidth(_grabCol);
+						_grid.DeterColwidth(_grabCol);
 						_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
 					}
 				}

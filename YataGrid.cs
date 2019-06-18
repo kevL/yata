@@ -307,6 +307,7 @@ namespace yata
 		#endregion cTor
 
 
+		#region Invalidate
 		internal const int INVALID_NONE = 0x00;
 		internal const int INVALID_GRID = 0x01; // this table
 		internal const int INVALID_PROP = 0x02; // the PropertyPanel
@@ -344,8 +345,10 @@ namespace yata
 				_labelsecond.Invalidate();
 			}
 		}
+		#endregion Invalidate
 
 
+		#region Scrollbars
 		/// <summary>
 		/// 
 		/// </summary>
@@ -684,8 +687,10 @@ namespace yata
 				}
 			}
 		}
+		#endregion Scrollbars
 
 
+		#region Load
 //		const int LINE_HEADER   = 0;
 		const int LINE_VALTYPE  = 1;
 		const int LINE_COLHEADS = 2;
@@ -1001,8 +1006,10 @@ namespace yata
 			}
 			return list.ToArray();
 		}
+		#endregion Load
 
 
+		#region Init
 		/// <summary>
 		/// 
 		/// </summary>
@@ -1096,7 +1103,7 @@ namespace yata
 			_editor.Visible = false;
 
 			for (int c = 0; c != ColCount; ++c)
-				colRewidth(c, r, range);
+				DeterColwidth(c, r, range);
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
@@ -1379,6 +1386,7 @@ namespace yata
 					FrozenCount = FrozenCount; // re-width the frozen-panel
 			}
 		}
+		#endregion Init
 
 
 		/// <summary>
@@ -2002,7 +2010,7 @@ namespace yata
 
 			cell.text = tb.Text;
 
-			colRewidth(cell.x, cell.y);
+			DeterColwidth(cell.x, cell.y);
 			metricFrozenControls(cell.x);
 
 
@@ -2031,7 +2039,7 @@ namespace yata
 
 			cell.text = text;
 
-			colRewidth(cell.x, cell.y);
+			DeterColwidth(cell.x, cell.y);
 			metricFrozenControls(cell.x);
 
 			int invalid = INVALID_GRID;
@@ -2055,7 +2063,7 @@ namespace yata
 		/// text-widths need to be re-measured)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
-		internal void colRewidth(int c, int r = -1, int range = 0)
+		internal void DeterColwidth(int c, int r = -1, int range = 0)
 		{
 			var col = Cols[c];
 

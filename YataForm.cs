@@ -2852,7 +2852,7 @@ namespace yata
 						if      (Table == _diff1) _diff1 = null;
 						else if (Table == _diff2) _diff2 = null;
 
-						Table.colRewidth(0, 0, Table.RowCount - 1);
+						Table.DeterColwidth(0, 0, Table.RowCount - 1);
 						Table.metricFrozenControls(0);
 
 						Table.InitScroll();
@@ -3038,7 +3038,7 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.colRewidth(1);
+						Table.DeterColwidth(1);
 					}
 					Table.FrozenCount = YataGrid.FreezeFirst;
 				}
@@ -3066,14 +3066,14 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.colRewidth(1);
+						Table.DeterColwidth(1);
 					}
 
 					col = Table.Cols[2];
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.colRewidth(2);
+						Table.DeterColwidth(2);
 					}
 
 					Table.FrozenCount = YataGrid.FreezeSecond;
