@@ -3900,13 +3900,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Syncs two diffed tables when a cell, row, or col gets selected.
+		/// Syncs two diffed tables when a cell or row gets selected.
 		/// </summary>
 		/// <param name="sel"></param>
 		/// <param name="r"></param>
-		/// <param name="c"></param>
-		/// <returns>true if tables are sync'd</returns>
-		internal bool SyncSelect(Cell sel = null, int r = -1, int c = -1)
+		/// <returns>true if diff-tables are valid</returns>
+		internal bool SyncSelect(Cell sel = null, int r = -1)
 		{
 			if (_diff1 != null && _diff2 != null)
 			{
@@ -3927,16 +3926,8 @@ namespace yata
 						// Do not call _table.SelectRow() since that's a recursion.
 						Row row = _table.Rows[r];
 						row.selected = true;
-						for (c = 0; c != _table.ColCount; ++c)
+						for (int c = 0; c != _table.ColCount; ++c)
 							row[c].selected = true;
-					}
-				}
-				else if (c != -1)
-				{
-					if (c < _table.ColCount)
-					{
-						for (r = 0; r != _table.RowCount; ++r)
-							_table[r,c].selected = true;
 					}
 				}
 				_table = null;
