@@ -1579,18 +1579,6 @@ namespace yata
 		{
 			_r = r;
 
-			Table._editor.Visible = false;
-			Table.ClearSelects();
-
-			Table.SelectRow(_r);
-			Table.EnsureDisplayedRow(_r);
-
-			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-			if (Table.Propanel != null && Table.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
-
-			Table.Invalidator(invalid);
-
 			context_it_Header.Text = "_row @ id " + _r;
 
 			context_it_PasteAbove .Enabled =
@@ -3748,7 +3736,7 @@ namespace yata
 		internal void GotoDiffCell()
 		{
 			if (WindowState == FormWindowState.Minimized)
-				WindowState = FormWindowState.Normal;
+				WindowState  = FormWindowState.Normal;
 			else
 			{
 				TopMost = true;
@@ -3901,11 +3889,7 @@ namespace yata
 		/// <param name="table">the other table</param>
 		void gotodiff(Cell sel, YataGrid table)
 		{
-			sel.selected = true;
-			Table.Invalidator(YataGrid.INVALID_GRID
-							| YataGrid.INVALID_FROZ
-							| YataGrid.INVALID_ROWS
-							| Table.EnsureDisplayed(sel));
+			Table.SelectCell(sel);
 
 			if (table != null
 				&& sel.x < table.ColCount
@@ -3913,6 +3897,52 @@ namespace yata
 			{
 				table[sel.y, sel.x].selected = true;
 			}
+		}
+
+		/// <summary>
+		/// Syncs two diffed tables when a cell, row, or col gets selected.
+		/// </summary>
+		/// <param name="sel"></param>
+		/// <param name="r"></param>
+		/// <param name="c"></param>
+		/// <returns>true if tables are sync'd</returns>
+		internal bool SyncSelect(Cell sel = null, int r = -1, int c = -1)
+		{
+			if (_diff1 != null && _diff2 != null)
+			{
+				if      (Table == _diff1) _table = _diff2;
+				else if (Table == _diff2) _table = _diff1;
+				else return false;
+
+				_table.ClearSelects();
+				if (sel != null)
+				{
+					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
+						_table[sel.y, sel.x].selected = true;
+				}
+				else if (r != -1)
+				{
+					if (r < _table.RowCount)
+					{
+						// Do not call _table.SelectRow() since that's a recursion.
+						Row row = _table.Rows[r];
+						row.selected = true;
+						for (c = 0; c != _table.ColCount; ++c)
+							row[c].selected = true;
+					}
+				}
+				else if (c != -1)
+				{
+					if (c < _table.ColCount)
+					{
+						for (r = 0; r != _table.RowCount; ++r)
+							_table[r,c].selected = true;
+					}
+				}
+				_table = null;
+				return true;
+			}
+			return false;
 		}
 		#endregion Methods (tab)
 

@@ -1764,6 +1764,7 @@ namespace yata
 
 				case Keys.Escape: // NOTE: needs to bypass KeyPreview
 					ClearSelects();
+					_f.SyncSelect();
 					invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					break;
 
@@ -1781,6 +1782,7 @@ namespace yata
 			}
 			else if (display)				// -> is a Cell operation
 			{
+				_f.SyncSelect(sel);
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
 						  | EnsureDisplayed(sel));
@@ -1792,10 +1794,13 @@ namespace yata
 		/// <summary>
 		/// Selects a specified row by Id and flags its cells selected.
 		/// @note Check that 'r' doesn't over/underflow 'Rows' before call.
+		/// @note Calls SyncSelect().
 		/// </summary>
 		/// <param name="r">row-id</param>
 		internal void SelectRow(int r)
 		{
+			_f.SyncSelect(null, r);
+
 			Row row = Rows[r];
 			row.selected = true;
 			for (int c = 0; c != ColCount; ++c)
@@ -1805,7 +1810,7 @@ namespace yata
 		/// <summary>
 		/// Selects a specified cell and invalidates stuff.
 		/// @note Called by YataForm.Search() and
-		/// YataForm.editclick_GotoLoadchanged().
+		/// YataForm.editclick_GotoLoadchanged() and YataForm.gotodiff().
 		/// </summary>
 		/// <param name="cell"></param>
 		internal void SelectCell(Cell cell)
@@ -1813,6 +1818,7 @@ namespace yata
 			cell.selected = true;
 			Invalidator(INVALID_GRID
 					  | INVALID_FROZ
+					  | INVALID_ROWS
 					  | EnsureDisplayed(cell));
 		}
 
@@ -2329,7 +2335,7 @@ namespace yata
 				Cell cell = getClickedCell(e.X, e.Y);
 				if (cell != null) // safety.
 				{
-					foreach (var col in Cols)
+					foreach (var col in Cols) // always clear col-selects
 						col.selected = false;
 
 					if (!_editor.Visible)
@@ -2339,8 +2345,20 @@ namespace yata
 						if ((ModifierKeys & Keys.Control) == Keys.Control)
 						{
 							if (cell.selected = !cell.selected)
+							{
+								if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+								{
+									foreach (var row in Rows)
+										row.selected = false;
+
+									ClearCellSelects();
+									cell.selected = true;
+								}
 								EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-																					// selectedcell is not the only selected cell
+							}														//    selectedcell is not the only selected cell
+							else
+								_f.SyncSelect();
+
 							int invalid = INVALID_GRID;
 							if (Propanel != null && Propanel.Visible)
 								invalid |= INVALID_PROP;
@@ -2354,6 +2372,7 @@ namespace yata
 
 							ClearCellSelects();
 							cell.selected = true;
+							_f.SyncSelect(cell);
 
 							Invalidator(INVALID_GRID
 									  | INVALID_FROZ
@@ -2390,6 +2409,7 @@ namespace yata
 				{
 					ClearSelects();
 					cell.selected = true;
+					_f.SyncSelect(cell);
 
 					Invalidator(INVALID_GRID
 							  | INVALID_FROZ
@@ -2893,7 +2913,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
-			if (RowCount != 0)
+			if (RowCount != 0) // rowcount should never be "0"
 			{
 				int r = (e.Y + offsetVert) / HeightRow;
 				if (r < RowCount)
@@ -2903,11 +2923,13 @@ namespace yata
 						_editor.Visible = false;
 						Select();
 
-						var row = Rows[r];
-
+						Row row = Rows[r];
 						bool @select;
 
-						if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects
+						bool shift = ((ModifierKeys & Keys.Shift)   == Keys.Shift),
+							 ctrl  = ((ModifierKeys & Keys.Control) == Keys.Control);
+
+						if (!shift) // select if any of the row's cells are not selected ->
 						{
 							@select = false;
 							for (int c = 0; c != ColCount; ++c)
@@ -2919,17 +2941,52 @@ namespace yata
 								}
 							}
 						}
-						else
-							@select = true;
+						else				// [Shift] always selects cells; never selects row but
+							@select = true; // can subselect row if there is a selected row already
 
 
-						foreach (var col in Cols) // always clear col-selects
+						YataGrid table = null; // NOTE: It'd probly not be wise to use '_table' here.
+						if (_f._diff1 != null && _f._diff2 != null)
+						{
+							if      (YataForm.Table == _f._diff1) table = _f._diff2;
+							else if (YataForm.Table == _f._diff2) table = _f._diff1;
+						}
+
+						foreach (var col in Cols) // always clear col-selects ->
 							col.selected = false;
 
-						if ((ModifierKeys & Keys.Control) != Keys.Control)
+						if (table != null) // sync table
+						{
+							foreach (var col in table.Cols)
+								col.selected = false;
+						}
+
+
+						if (!ctrl) // clear all cells if not [Ctrl] ->
+						{
 							ClearCellSelects();
 
-						if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+							if (table != null) // sync table
+								table.ClearCellSelects();
+						}
+
+						if (!shift) // select or deselect row ->
+						{
+							foreach (var ro in Rows)
+								ro.selected = false;
+
+							row.selected = @select;
+
+							if (table != null) // sync table
+							{
+								foreach (var ro in table.Rows)
+									ro.selected = false;
+
+								if (r < table.RowCount)
+									table.Rows[r].selected = @select;
+							}
+						}
+						else // subselect rows iff there is already a selected row ->
 						{
 							int selr = getSelectedRow();
 							if (selr != -1)
@@ -2937,43 +2994,58 @@ namespace yata
 								RangeSelect = (r - selr);
 
 								int start, stop;
-								if (selr < r)
+								Row subro;
+
+								if (table != null) // sync table
 								{
-									start = selr;
-									stop  = r;
-								}
-								else
-								{
-									start = r;
-									stop  = selr;
+									int selr2 = table.getSelectedRow();
+									if (selr2 != -1 && r < table.RowCount)
+									{
+										table.RangeSelect = (r - selr2);
+
+										if (selr2 < r) { start = selr2; stop = r; }
+										else           { start = r; stop = selr2; }
+
+										while (start != stop + 1)
+										{
+											if (start != r) // done below
+											{
+												subro = table.Rows[start];
+												for (int c = 0; c != table.ColCount; ++c)
+													subro[c].selected = true;
+											}
+											++start;
+										}
+									}
 								}
 
-								Row ro;
+								if (selr < r) { start = selr; stop = r; }
+								else          { start = r; stop = selr; }
+
 								while (start != stop + 1)
 								{
 									if (start != r) // done below
 									{
-										ro = Rows[start];
+										subro = Rows[start];
 										for (int c = 0; c != ColCount; ++c)
-											ro[c].selected = true;
+											subro[c].selected = true;
 									}
 									++start;
 								}
 							}
 						}
-						else
-						{
-							foreach (var ro in Rows)
-								ro.selected = false;
-
-							row.selected = @select;
-						}
 
 						if (@select)
 							EnsureDisplayedRow(r);
 
-						for (int c = 0; c != ColCount; ++c)
+						for (int c = 0; c != ColCount; ++c) // select or deselect row-cells
 							row[c].selected = @select;
+
+						if (table != null && r < table.RowCount) // sync table
+						{
+							for (int c = 0; c != table.ColCount; ++c) // select or deselect row-cells
+								table[r,c].selected = @select;
+						}
 
 						int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						if (Propanel != null && Propanel.Visible)
@@ -2983,17 +3055,32 @@ namespace yata
 					}
 					else if (e.Button == MouseButtons.Right)
 					{
+						_editor.Visible = false;
+						ClearSelects();
+
+						SelectRow(r);
+						_f.SyncSelect(null, r);
+						EnsureDisplayedRow(r);
+
+						int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+						if (Propanel != null && Propanel.Visible)
+							invalid |= INVALID_PROP;
+
+						Invalidator(invalid);
+
 						_f.context_(r);
 					}
 				}
 				else // click below the last entry ->
 				{
-					int selr = getSelectedRow();
-					if (selr != -1)
-					{
-						Rows[selr].selected = false;
-						Invalidator(INVALID_ROWS);
-					}
+					ClearSelects();
+					_f.SyncSelect();
+
+					int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+					if (Propanel != null && Propanel.Visible)
+						invalid |= INVALID_PROP;
+
+					Invalidator(invalid);
 				}
 			}
 		}
@@ -3021,7 +3108,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
-			if (!_panelCols._grab && RowCount != 0)
+			if (!_panelCols.Grab && RowCount != 0)
 			{
 				if (e.Button == MouseButtons.Left)
 				{
@@ -3048,10 +3135,14 @@ namespace yata
 					while ((left += Cols[c].width()) < x);
 
 
-					bool @select = false;
+					bool @select;
 
-					if ((ModifierKeys & Keys.Shift) != Keys.Shift) // else Shift always selects all col-cells
+					bool shift = ((ModifierKeys & Keys.Shift)   == Keys.Shift),
+						 ctrl  = ((ModifierKeys & Keys.Control) == Keys.Control);
+
+					if (!shift) // select if any of the col's cells are not selected ->
 					{
+						@select = false;
 						for (int r = 0; r != RowCount; ++r)
 						{
 							if (!this[r,c].selected)
@@ -3061,52 +3152,90 @@ namespace yata
 							}
 						}
 					}
-					else
-						@select = true;
+					else				// [Shift] always selects cells; never selects col but
+						@select = true; // can subselect col if there is a selected col already
 
+
+					YataGrid table = null; // NOTE: It'd probly not be wise to use '_table' here.
+					if (_f._diff1 != null && _f._diff2 != null)
+					{
+						if      (YataForm.Table == _f._diff1) table = _f._diff2;
+						else if (YataForm.Table == _f._diff2) table = _f._diff1;
+					}
 
 					int invalid = INVALID_GRID;
 
-					if ((ModifierKeys & Keys.Control) != Keys.Control)
+					if (!ctrl) // clear all cells and rows if not [Ctrl] ->
 					{
-						if (!@select)
+						for (int i = 0; i != RowCount && !@select; ++i) // if another col's cells are already selected
+						for (int j = 0; j != ColCount && !@select; ++j) // force the col to select after clearing all selects.
 						{
-							for (int i = 0; i != RowCount; ++i) // if other col-cells are currently selected and Ctrl is NOT
-							for (int j = 0; j != ColCount; ++j) // pressed force the col to select after clearing all selects.
-							{
-								if (j != c && this[i,j].selected)
-								{
-									@select = true;
-									break;
-								}
-							}
+							if (j != c && this[i,j].selected)
+								@select = true;
 						}
 
 						ClearCellSelects();
-						foreach (var row in Rows) // clear row-select if Ctrl is NOT pressed
+						foreach (var row in Rows)
 							row.selected = false;
+
+						if (table != null) // sync table
+						{
+							table.ClearCellSelects();
+
+							foreach (var row in table.Rows)
+								row.selected = false;
+						}
 
 						invalid |= (INVALID_FROZ | INVALID_ROWS);
 						if (Propanel != null && Propanel.Visible)
 							invalid |= INVALID_PROP;
 					}
 
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+					if (!shift) // select or deselect col ->
+					{
+						foreach (var col in Cols)
+							col.selected = false;
+
+						Cols[c].selected = @select;
+
+						if (table != null) // sync table
+						{
+							foreach (var col in table.Cols)
+								col.selected = false;
+
+							if (c < table.ColCount)
+								table.Cols[c].selected = @select;
+						}
+					}
+					else // subselect cols iff there is already a selected col ->
 					{
 						int selc = getSelectedCol();
 						if (selc != -1)
 						{
 							int start, stop;
-							if (selc < c)
+
+							if (table != null) // sync table
 							{
-								start = selc;
-								stop  = c;
+								int selc2 = table.getSelectedCol();
+								if (selc2 != -1 && c < table.ColCount)
+								{
+									if (selc2 < c) { start = selc2; stop = c; }
+									else           { start = c; stop = selc2; }
+
+									while (start != stop + 1)
+									{
+										if (start != c) // done below
+										{
+											for (int r = 0; r != table.RowCount; ++r)
+												table[r,start].selected = true;
+										}
+										++start;
+									}
+								}
 							}
-							else
-							{
-								start = c;
-								stop  = selc;
-							}
+
+							if (selc < c) { start = selc; stop = c; }
+							else          { start = c; stop = selc; }
 
 							while (start != stop + 1)
 							{
@@ -3119,19 +3248,18 @@ namespace yata
 							}
 						}
 					}
-					else
-					{
-						foreach (var col in Cols)
-							col.selected = false;
-
-						Cols[c].selected = @select;
-					}
 
 					if (@select)
-						EnsureDisplayedCol(c); // I suspect that if a scrollbar scrolls nothing needs to be invalidated. /coff
+						EnsureDisplayedCol(c);
 
-					for (int r = 0; r != RowCount; ++r)
+					for (int r = 0; r != RowCount; ++r) // select or deselect col-cells
 						this[r,c].selected = @select;
+
+					if (table != null && c < table.ColCount) // sync table
+					{
+						for (int r = 0; r != table.RowCount; ++r) // select or deselect col-cells
+							table[r,c].selected = @select;
+					}
 
 					Invalidator(invalid);
 				}
