@@ -62,8 +62,8 @@ Clipboard
 - Export copied row(s) : F9 (exports the internal copy-list to the clipboard)
 - Import copied row(s) : F10 (imports any clipboard text to the internal
                               copy-list WARNING: No validity test is done on the
-                              clipboard text; importing assumes that the text
-                              contains valid 2da-row data)
+                              clipboard text; importing assumes that the text on
+                              your clipboard contains valid 2da-row data)
 
 - Open clip editor : F11 (accesses the Windows Clipboard for viewing/editing -
                           only clips in text format are displayed or handled)
@@ -539,8 +539,10 @@ Select diff2 causes four noticable things to happen:
    and row counts. Additionally a Goto button in the lower left corner of the
    dialog can be used to cycle through cell texts that are different between the
    two tables (key Shift to goto previous). Note that closing the DifferDialog
-   does not reset diffs; the tables will still be sync'd and the backgrounds of
-   any diff'd cells will still be colored teal.
+   with its Okay button (or its Close icon or the [Esc] key) does not reset
+   diffs; the tables will still be sync'd and the backgrounds of any diff'd
+   cells will still be colored teal unless reset by either the Reset button or
+   via the tab menu.
 
 A right-click on a diffed cell shows a popup with several operations including
 these two:
