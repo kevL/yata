@@ -68,7 +68,7 @@ namespace yata
 		}
 
 
-		internal bool _grab;
+		internal bool Grab;
 		int _grabCol;
 		int _grabStart;
 
@@ -79,7 +79,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			if (!_grab)
+			if (!Grab)
 			{
 				int labels = YataGrid.WidthRowhead; // TODO: This value should be cached instead.
 				for (int f = 0; f != _grid.FrozenCount; ++f)
@@ -119,16 +119,16 @@ namespace yata
 			}
 			_grid.Invalidator(invalid);
 
-			_grab = (Cursor == Cursors.VSplit);
+			Grab = (Cursor == Cursors.VSplit);
 
 //			base.OnMouseDown(e);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			if (_grab)
+			if (Grab)
 			{
-				_grab = false;
+				Grab = false;
 				Cursor = Cursors.Default;
 
 				if (e.Button == MouseButtons.Left)
@@ -148,7 +148,7 @@ namespace yata
 				}
 				else if (e.Button == MouseButtons.Right)
 				{
-					_grab = false;
+					Grab = false;
 					Cursor = Cursors.Default;
 
 					var col = _grid.Cols[_grabCol];
