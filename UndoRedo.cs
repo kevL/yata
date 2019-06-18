@@ -501,7 +501,9 @@ namespace yata
 			_grid.EnsureDisplayed(cell);
 
 
-			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS;
 			if (_grid.Propanel != null && _grid.Propanel.Visible)
 				invalid |= YataGrid.INVALID_PROP;
 
@@ -530,7 +532,9 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS;
 			if (_grid.Propanel != null && _grid.Propanel.Visible)
 				invalid |= YataGrid.INVALID_PROP;
 
@@ -552,7 +556,9 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS;
 			if (_grid.Propanel != null && _grid.Propanel.Visible)
 				invalid |= YataGrid.INVALID_PROP;
 
@@ -575,7 +581,8 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_ROWS);
+			_grid.Invalidator(YataGrid.INVALID_GRID
+							| YataGrid.INVALID_ROWS);
 		}
 
 		/// <summary>

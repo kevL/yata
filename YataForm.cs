@@ -3902,7 +3902,10 @@ namespace yata
 		void gotodiff(Cell sel, YataGrid table)
 		{
 			sel.selected = true;
-			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | Table.EnsureDisplayed(sel));
+			Table.Invalidator(YataGrid.INVALID_GRID
+							| YataGrid.INVALID_FROZ
+							| YataGrid.INVALID_ROWS
+							| Table.EnsureDisplayed(sel));
 
 			if (table != null
 				&& sel.x < table.ColCount

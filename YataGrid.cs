@@ -1781,7 +1781,9 @@ namespace yata
 			}
 			else if (display)				// -> is a Cell operation
 			{
-				Invalidator(INVALID_GRID | INVALID_FROZ | EnsureDisplayed(sel));
+				Invalidator(INVALID_GRID
+						  | INVALID_FROZ
+						  | EnsureDisplayed(sel));
 			}
 
 //			base.OnKeyDown(e);
@@ -1809,7 +1811,9 @@ namespace yata
 		internal void SelectCell(Cell cell)
 		{
 			cell.selected = true;
-			Invalidator(INVALID_GRID | INVALID_FROZ | EnsureDisplayed(cell));
+			Invalidator(INVALID_GRID
+					  | INVALID_FROZ
+					  | EnsureDisplayed(cell));
 		}
 
 		/// <summary>
@@ -2351,7 +2355,10 @@ namespace yata
 							ClearCellSelects();
 							cell.selected = true;
 
-							Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
+							Invalidator(INVALID_GRID
+									  | INVALID_FROZ
+									  | INVALID_ROWS
+									  | EnsureDisplayed(cell));
 						}
 						else if (!Readonly) // cell is already selected
 						{
@@ -2384,7 +2391,10 @@ namespace yata
 					ClearSelects();
 					cell.selected = true;
 
-					Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS | EnsureDisplayed(cell));
+					Invalidator(INVALID_GRID
+							  | INVALID_FROZ
+							  | INVALID_ROWS
+							  | EnsureDisplayed(cell));
 					_f.ShowCellMenu();
 				}
 				else
@@ -3153,7 +3163,10 @@ namespace yata
 
 						ColSort(c);
 						EnsureDisplayed();
-						Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
+						Invalidator(INVALID_GRID
+								  | INVALID_FROZ
+								  | INVALID_COLS
+								  | INVALID_LBLS);
 					}
 /*					else // popup colhead context
 					{
@@ -3212,7 +3225,10 @@ namespace yata
 
 				ColSort(0);
 				EnsureDisplayed();
-				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
+				Invalidator(INVALID_GRID
+						  | INVALID_FROZ
+						  | INVALID_COLS
+						  | INVALID_LBLS);
 			}
 		}
 
@@ -3232,7 +3248,10 @@ namespace yata
 
 				ColSort(1);
 				EnsureDisplayed();
-				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
+				Invalidator(INVALID_GRID
+						  | INVALID_FROZ
+						  | INVALID_COLS
+						  | INVALID_LBLS);
 			}
 		}
 
@@ -3252,7 +3271,10 @@ namespace yata
 
 				ColSort(2);
 				EnsureDisplayed();
-				Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_COLS | INVALID_LBLS);
+				Invalidator(INVALID_GRID
+						  | INVALID_FROZ
+						  | INVALID_COLS
+						  | INVALID_LBLS);
 			}
 		}
 
