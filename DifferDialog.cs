@@ -18,6 +18,8 @@ namespace yata
 
 		static int _x = -1;
 		static int _y = -1;
+
+		static string[] SEPARATORS = { "\r\n", "\r", "\n" };
 		#endregion Fields (static)
 
 
@@ -167,8 +169,7 @@ namespace yata
 		/// <returns></returns>
 		int GetWidth(string text)
 		{
-			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
-										StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = text.Split(SEPARATORS, StringSplitOptions.RemoveEmptyEntries);
 
 			int width = 0, test;
 			foreach (var line in lines)
@@ -186,8 +187,7 @@ namespace yata
 		/// <returns></returns>
 		int GetHeight(string text)
 		{
-			string[] lines = text.Split(new[]{ "\r\n", "\r", "\n" },
-										StringSplitOptions.None);
+			string[] lines = text.Split(SEPARATORS, StringSplitOptions.None);
 
 			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
 				 * lines.Length;
