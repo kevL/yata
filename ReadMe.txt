@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 june 18
+2019 june 19
 kevL's
-ver 3.3.7.0
+ver 3.3.8.0
 
 
 File
@@ -281,6 +281,9 @@ recent=    (integer) a count of recently opened file-paths to store. If left
            decide if it works on your OS.
 diff=      a path without quotes to your WinMerge executable for diffing and
            merging two 2da files (if desired). See Appendix L: WinMerge
+dialog=    a path without quotes to your Dialog.Tlk file. Strrefs can often
+           print their string values to the statusbar if Dialog.Tlk has been
+           pathed
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
