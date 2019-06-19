@@ -1992,6 +1992,7 @@ namespace yata
 			}
 		}
 
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -2080,6 +2081,8 @@ namespace yata
 				search = search.ToLower();
 
 				Cell sel = Table.getSelectedCell();
+				int rStart = Table.getSelectedRow();
+
 				Table.ClearSelects();
 
 				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
@@ -2087,19 +2090,15 @@ namespace yata
 
 				string text;
 
-				int rStart, r,c;
+				int r,c;
 
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward search ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = -1;
-						rStart =  0;
+						c = -1;
+						if (rStart == -1) rStart = 0;
 					}
 
 					for (r = rStart; r != Table.RowCount; ++r)
@@ -2112,9 +2111,7 @@ namespace yata
 								c = 0;
 
 								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-								{
 									++r;
-								}
 								else						// or to the top of the table if on the last row
 									r = 0;
 							}
@@ -2149,15 +2146,11 @@ namespace yata
 				}
 				else // backward search ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = Table.ColCount;
-						rStart = Table.RowCount - 1;
+						c = Table.ColCount;
+						if (rStart == -1) rStart = Table.RowCount - 1;
 					}
 
 					for (r = rStart; r != -1; --r)
@@ -2170,9 +2163,7 @@ namespace yata
 								c = Table.ColCount - 1;
 
 								if (r > 0)	// jump to the last cell of the previous row
-								{
 									--r;
-								}
 								else		// or to the bottom of the table if on the first row
 									r = Table.RowCount - 1;
 							}
@@ -2292,23 +2283,21 @@ namespace yata
 				Table.Select();
 
 				Cell sel = Table.getSelectedCell();
+				int rStart = Table.getSelectedRow();
+
 				Table.ClearSelects();
 
-				int rStart, r,c;
+				int r,c;
 
 				bool start = true;
 
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = -1;
-						rStart =  0;
+						c = -1;
+						if (rStart == -1) rStart = 0;
 					}
 
 					for (r = rStart; r != Table.RowCount; ++r)
@@ -2321,9 +2310,7 @@ namespace yata
 								c = 0;
 
 								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-								{
 									++r;
-								}
 								else						// or to the top of the table if on the last row
 									r = 0;
 							}
@@ -2354,15 +2341,11 @@ namespace yata
 				}
 				else // backward goto ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = Table.ColCount;
-						rStart = Table.RowCount - 1;
+						c = Table.ColCount;
+						if (rStart == -1) rStart = Table.RowCount - 1;
 					}
 
 					for (r = rStart; r != -1; --r)
@@ -2375,9 +2358,7 @@ namespace yata
 								c = Table.ColCount - 1;
 
 								if (r > 0)	// jump to the last cell of the previous row
-								{
 									--r;
-								}
 								else		// or to the bottom of the table if on the first row
 									r = Table.RowCount - 1;
 							}
@@ -3761,26 +3742,24 @@ namespace yata
 				else                 table = _diff1;
 
 				Cell sel = Table.getSelectedCell();
+				int rStart = Table.getSelectedRow();
+
 				Table.ClearSelects();
 
 				if (table != null)
 					table.ClearSelects();
 
-				int rStart, r,c;
+				int r,c;
 
 				bool start = true;
 
 				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = -1;
-						rStart =  0;
+						c = -1;
+						if (rStart == -1) rStart = 0;
 					}
 
 					for (r = rStart; r != Table.RowCount; ++r)
@@ -3793,9 +3772,7 @@ namespace yata
 								c = 0;
 
 								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-								{
 									++r;
-								}
 								else						// or to the top of the table if on the last row
 									r = 0;
 							}
@@ -3826,15 +3803,11 @@ namespace yata
 				}
 				else // backward goto ->
 				{
-					if (sel != null)
-					{
-						c      = sel.x;
-						rStart = sel.y;
-					}
+					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else
 					{
-						c      = Table.ColCount;
-						rStart = Table.RowCount - 1;
+						c = Table.ColCount;
+						if (rStart == -1) rStart = Table.RowCount - 1;
 					}
 
 					for (r = rStart; r != -1; --r)
@@ -3847,9 +3820,7 @@ namespace yata
 								c = Table.ColCount - 1;
 
 								if (r > 0)	// jump to the last cell of the previous row
-								{
 									--r;
-								}
 								else		// or to the bottom of the table if on the first row
 									r = Table.RowCount - 1;
 							}
@@ -3889,7 +3860,7 @@ namespace yata
 		/// <param name="table">the other table</param>
 		void gotodiff(Cell sel, YataGrid table)
 		{
-			Table.SelectCell(sel);
+			Table.SelectCell(sel, false);
 
 			if (table != null
 				&& sel.x < table.ColCount

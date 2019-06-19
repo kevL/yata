@@ -1812,9 +1812,13 @@ namespace yata
 		/// @note Called by YataForm.Search() and
 		/// YataForm.editclick_GotoLoadchanged() and YataForm.gotodiff().
 		/// </summary>
-		/// <param name="cell"></param>
-		internal void SelectCell(Cell cell)
+		/// <param name="cell">a cell to select</param>
+		/// <param name="sync">true to sync the select between diffed tables;
+		/// false if sync will be performed by the caller</param>
+		internal void SelectCell(Cell cell, bool sync = true)
 		{
+			if (sync) _f.SyncSelect(cell);
+
 			cell.selected = true;
 			Invalidator(INVALID_GRID
 					  | INVALID_FROZ
