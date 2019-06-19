@@ -119,6 +119,8 @@ namespace yata
 		internal string stOriginal, stInput;
 
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
+
+		List<string> Strrefheads = new List<string>();
 		#endregion Fields
 
 
@@ -265,13 +267,13 @@ namespace yata
 			else
 				Obfuscate();
 
-			//else // DEBUG instaload ->
-			//	CreateTabPage(@"C:\Users\User\Documents\Neverwinter Nights 2\override\2da\spells.2da");
-
 			DontBeepEvent += HandleDontBeepEvent;
 
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
+
+			if (TlkReader.LoadTalkTable(Settings._dialog))
+				TlkReader.LoadDialogHeads(Strrefheads);
 		}
 
 
@@ -3911,10 +3913,10 @@ namespace yata
 
 		#region Methods (statusbar)
 		/// <summary>
-		/// Mouseover datacells prints table-cords plus info to the statusbar if
-		/// a relevant 2da (eg. Crafting, Spells) is loaded.
+		/// Mouseover datacells prints table-cords plus PathInfo to the
+		/// statusbar if a relevant 2da (eg. Crafting, Spells) is loaded.
 		/// </summary>
-		/// <param name="cords">null to clear statusbar-cords and -info</param>
+		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
 		internal void PrintInfo(Point? cords = null)
 		{
 			string st = String.Empty;
@@ -3929,18 +3931,41 @@ namespace yata
 				{
 					statbar_lblCords.Text = "id= " + id + " col= " + col;
 
-					switch (Table.Info)
+					if (col != 0 && isStrrefcol(Table.Fields[col - 1]))
 					{
-						case YataGrid.InfoType.INFO_CRAFT:
-							statbar_lblInfo.Text = getCraftInfo(id, col);
-							break;
-						case YataGrid.InfoType.INFO_SPELL:
-							statbar_lblInfo.Text = getSpellInfo(id, col);
-							break;
+						int result;
+						if (Int32.TryParse(Table[id,col].text, out result) && result > -1
+							&& TlkReader.DictDialog.ContainsKey((uint)result))
+						{
+							string text = TlkReader.DictDialog[(uint)result];
+							string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
-						default:
+							text = array[0];
+							if (text.Length > 99)
+								text = text.Substring(0, 99) + " ...";
+							else if (array.Length > 1)
+								text += " ...";
+
+							statbar_lblInfo.Text = text;
+						}
+						else
 							statbar_lblInfo.Text = st;
-							break;
+					}
+					else
+					{
+						switch (Table.Info)
+						{
+							case YataGrid.InfoType.INFO_CRAFT:
+								statbar_lblInfo.Text = getCraftInfo(id, col);
+								break;
+							case YataGrid.InfoType.INFO_SPELL:
+								statbar_lblInfo.Text = getSpellInfo(id, col);
+								break;
+
+							default:
+								statbar_lblInfo.Text = st;
+								break;
+						}
 					}
 				}
 				else
@@ -3954,6 +3979,16 @@ namespace yata
 				statbar_lblCords.Text =
 				statbar_lblInfo .Text = st;
 			}
+		}
+
+		bool isStrrefcol(string text)
+		{
+			foreach (var head in Strrefheads)
+			{
+				if (head == text)
+					return true;
+			}
+			return false;
 		}
 		#endregion Methods (statusbar)
 

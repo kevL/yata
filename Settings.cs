@@ -10,6 +10,8 @@ namespace yata
 {
 	static class Settings
 	{
+		const string FE = "settings.cfg";
+
 		internal static Font _font,  _fontdialog;	// grid
 		internal static Font _font2, _font2dialog;	// menus, dialogs
 		internal static Font _font3;				// propanel
@@ -30,13 +32,14 @@ namespace yata
 		internal static int _recent;
 
 		internal static string _diff;
+		internal static string _dialog;
 
 
 		internal static void ScanSettings()
 		{
 			int result;
 
-			string pfe = Path.Combine(Application.StartupPath, "settings.cfg");
+			string pfe = Path.Combine(Application.StartupPath, FE);
 			if (File.Exists(pfe))
 			{
 				using (var fs = File.OpenRead(pfe))
@@ -200,6 +203,13 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
 								_diff = line;
+							}
+						}
+						else if (line.StartsWith("dialog=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim()))
+							{
+								_dialog = line;
 							}
 						}
 					}

@@ -45,6 +45,8 @@
 		internal const string EldritchDoom    = "Eldritch Doom";
 		internal const string EldritchSpear   = "Eldritch Spear";
 		internal const string HideousBlow     = "Hideous Blow";
+
+		internal static string[] SEPARATORS = { "\r\n", "\r", "\n" };
 	}
 
 
