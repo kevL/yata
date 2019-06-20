@@ -438,8 +438,8 @@ namespace yata
 			this.it_MenuClipboard,
 			this.it_Menu2daOps,
 			this.it_MenuFont,
-			this.it_MenuPaths,
 			this.it_MenuTalkfile,
+			this.it_MenuPaths,
 			this.it_MenuHelp});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
@@ -467,7 +467,8 @@ namespace yata
 			this.separator_2,
 			this.it_Quit});
 			this.it_MenuFile.Name = "it_MenuFile";
-			this.it_MenuFile.Size = new System.Drawing.Size(38, 20);
+			this.it_MenuFile.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuFile.Size = new System.Drawing.Size(34, 20);
 			this.it_MenuFile.Text = "&File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
 			// 
@@ -604,7 +605,8 @@ namespace yata
 			this.separator_13,
 			this.it_CreateRows});
 			this.it_MenuEdit.Name = "it_MenuEdit";
-			this.it_MenuEdit.Size = new System.Drawing.Size(40, 20);
+			this.it_MenuEdit.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuEdit.Size = new System.Drawing.Size(36, 20);
 			this.it_MenuEdit.Text = "&Edit";
 			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
 			// 
@@ -735,7 +737,7 @@ namespace yata
 			// 
 			this.tb_Goto.AutoSize = false;
 			this.tb_Goto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_Goto.Margin = new System.Windows.Forms.Padding(1, 0, 5, 0);
+			this.tb_Goto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.tb_Goto.Name = "tb_Goto";
 			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
@@ -759,6 +761,7 @@ namespace yata
 			this.cb_SearchOption.AutoSize = false;
 			this.cb_SearchOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+			this.cb_SearchOption.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.cb_SearchOption.Name = "cb_SearchOption";
 			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
 			// 
@@ -772,7 +775,8 @@ namespace yata
 			this.it_OpenClipEditor});
 			this.it_MenuClipboard.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.it_MenuClipboard.Name = "it_MenuClipboard";
-			this.it_MenuClipboard.Size = new System.Drawing.Size(74, 20);
+			this.it_MenuClipboard.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuClipboard.Size = new System.Drawing.Size(70, 20);
 			this.it_MenuClipboard.Text = "&Clipboard";
 			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
@@ -825,7 +829,8 @@ namespace yata
 			this.separator_21,
 			this.it_ClearUr});
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
-			this.it_Menu2daOps.Size = new System.Drawing.Size(66, 20);
+			this.it_Menu2daOps.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_Menu2daOps.Size = new System.Drawing.Size(62, 20);
 			this.it_Menu2daOps.Text = "2&da Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
@@ -950,7 +955,8 @@ namespace yata
 			this.it_Font,
 			this.it_FontDefault});
 			this.it_MenuFont.Name = "it_MenuFont";
-			this.it_MenuFont.Size = new System.Drawing.Size(43, 20);
+			this.it_MenuFont.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuFont.Size = new System.Drawing.Size(39, 20);
 			this.it_MenuFont.Text = "&Font";
 			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
@@ -992,7 +998,8 @@ namespace yata
 			this.it_PathRanges2da,
 			this.it_PathSpellTarget2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
-			this.it_MenuPaths.Size = new System.Drawing.Size(50, 20);
+			this.it_MenuPaths.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);
 			this.it_MenuPaths.Text = "&Paths";
 			this.it_MenuPaths.Visible = false;
 			this.it_MenuPaths.DropDownOpening += new System.EventHandler(this.dropdownopening);
@@ -1130,14 +1137,15 @@ namespace yata
 			this.it_MenuTalkfile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_PathTalkfile});
 			this.it_MenuTalkfile.Name = "it_MenuTalkfile";
-			this.it_MenuTalkfile.Size = new System.Drawing.Size(60, 20);
+			this.it_MenuTalkfile.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuTalkfile.Size = new System.Drawing.Size(56, 20);
 			this.it_MenuTalkfile.Text = "&Talkfile";
 			this.it_MenuTalkfile.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_PathTalkfile
 			// 
 			this.it_PathTalkfile.Name = "it_PathTalkfile";
-			this.it_PathTalkfile.Size = new System.Drawing.Size(130, 22);
+			this.it_PathTalkfile.Size = new System.Drawing.Size(152, 22);
 			this.it_PathTalkfile.Text = "&Path to ...";
 			this.it_PathTalkfile.Click += new System.EventHandler(this.itclick_PathTalkfile);
 			// 
@@ -1148,7 +1156,8 @@ namespace yata
 			this.it_ReadMe,
 			this.it_About});
 			this.it_MenuHelp.Name = "it_MenuHelp";
-			this.it_MenuHelp.Size = new System.Drawing.Size(44, 20);
+			this.it_MenuHelp.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuHelp.Size = new System.Drawing.Size(40, 20);
 			this.it_MenuHelp.Text = "&Help";
 			this.it_MenuHelp.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
