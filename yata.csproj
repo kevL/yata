@@ -95,6 +95,7 @@
     <Compile Include="RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="TalkDialog.cs" />
     <Compile Include="TalkReader.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
@@ -146,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TalkDialog.resx">
+      <DependentUpon>TalkDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>

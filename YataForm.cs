@@ -4065,12 +4065,13 @@ namespace yata
 		{
 			Cell sel = Table.getSelectedCell();
 
-			it_cellEdit   .Enabled =
-			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellStars  .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
-			it_cellMergeCe.Enabled = 
-			it_cellMergeRo.Enabled = isMergeEnabled(sel);
-			it_cellInput  .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
+			it_cellEdit     .Enabled =
+			it_cellPaste    .Enabled = !Table.Readonly;
+			it_cellStars    .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
+			it_cellMergeCe  .Enabled = 
+			it_cellMergeRo  .Enabled = isMergeEnabled(sel);
+			it_cellInput    .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
+			it_cellTalkEntry.Enabled = isTalkEntryEnabled(sel);
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -4092,6 +4093,28 @@ namespace yata
 				return (destTable != null && !destTable.Readonly
 					 && destTable.ColCount > sel.x
 					 && destTable.RowCount > sel.y);
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sel"></param>
+		/// <returns>true if TalkEntry dialog will be enabled</returns>
+		bool isTalkEntryEnabled(Cell sel)
+		{
+			if (sel.x != 0 && Strrefheads.Contains(Table.Fields[sel.x - 1]))
+			{
+				string field = sel.text;
+				if (field == gs.Stars) field = "0";
+
+				int result;
+				if (Int32.TryParse(field, out result) && result > -1
+					&& TalkReader.DictDialog.ContainsKey(result))
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -4302,6 +4325,32 @@ namespace yata
 					}
 					break;
 			}
+		}
+
+		/// <summary>
+		/// Handler for cell-context "talk entry", opens a 'TalkDialog' that
+		/// displays the text's corresponding Dialog.Tlk entry in a readonly
+		/// RichTextBox for the user's investigation and/or copying.
+		/// @note Check that the cell's text parses to a valid non-negative
+		/// integer, or blank "****", and that 'DictDialog' contains an entry
+		/// for that integer before allowing the event to trigger (ie, else
+		/// disable the context it - see ShowCellMenu()).
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_TalkEntry(object sender, EventArgs e)
+		{
+			Cell cell = Table.getSelectedCell();
+			string field = cell.text;
+			if (field == gs.Stars) field = "0";
+			int tlkId = Int32.Parse(field);
+
+			string title = " tlk - " + tlkId;
+			string label = tlkId.ToString();
+			string copyable = TalkReader.DictDialog[tlkId];
+
+			var f = new TalkDialog(title, label, copyable, this);
+			f.Show(); // no owner.
 		}
 		#endregion Events (cell)
 	}
