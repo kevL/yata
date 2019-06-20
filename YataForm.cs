@@ -276,7 +276,7 @@ namespace yata
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
 
-			if (TlkReader.LoadTalkTable(Settings._dialog))
+			if (TlkReader.LoadTalkfile(Settings._dialog, it_PathTalkfile))
 				TlkReader.LoadDialogHeads(Strrefheads);
 		}
 
@@ -3937,10 +3937,13 @@ namespace yata
 
 						statbar_lblCords.Text = " id= " + r + "  col= " + c;
 
-						if (c != 0 && isStrrefcol(Table.Fields[c - 1]))
+						if (c != 0 && Strrefheads.Contains(Table.Fields[c - 1]))
 						{
+							string field = Table[r,c].text;
+							if (field == gs.Stars) field = "0";
+
 							int result;
-							if (Int32.TryParse(Table[r,c].text, out result) && result > -1
+							if (Int32.TryParse(field, out result) && result > -1
 								&& TlkReader.DictDialog.ContainsKey(result))
 							{
 								string text = TlkReader.DictDialog[result];
@@ -3955,7 +3958,7 @@ namespace yata
 								statbar_lblInfo.Text = text;
 							}
 							else
-								statbar_lblInfo.Text = String.Empty;
+								statbar_lblInfo.Text = gs.non;
 						}
 						else
 						{
@@ -3981,16 +3984,6 @@ namespace yata
 			_track_x = _track_y = -1;
 			statbar_lblCords.Text =
 			statbar_lblInfo .Text = String.Empty;
-		}
-
-		bool isStrrefcol(string text)
-		{
-			foreach (var head in Strrefheads)
-			{
-				if (head == text)
-					return true;
-			}
-			return false;
 		}
 		#endregion Methods (statusbar)
 

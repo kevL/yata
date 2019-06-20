@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using System.Text;
 
 
@@ -39,9 +40,12 @@ namespace yata
 		/// @note See description of .tlk Format at the bot of this file.
 		/// </summary>
 		/// <param name="pfeTlk">fullpath of Dialog.Tlk</param>
+		/// <param name="it"></param>
 		/// <returns>true if 1+ entry loads</returns>
-		internal static bool LoadTalkTable(string pfeTlk)
+		internal static bool LoadTalkfile(string pfeTlk, ToolStripMenuItem it)
 		{
+			DictDialog.Clear();
+
 			if (File.Exists(pfeTlk))
 			{
 //				using (FileStream fs = File.OpenRead(pfeTlk)){}
@@ -137,10 +141,10 @@ namespace yata
 							DictDialog.Add((int)i, text);
 						}
 					}
-					return (DictDialog.Count != 0);
+					return (it.Checked = (DictDialog.Count != 0));
 				}
 			}
-			return false;
+			return (it.Checked = false);
 		}
 
 		/// <summary>

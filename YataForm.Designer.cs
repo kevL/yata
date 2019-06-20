@@ -87,6 +87,9 @@ namespace yata
 		ToolStripMenuItem it_PathRanges2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
 
+		ToolStripMenuItem it_MenuTalkfile;
+		ToolStripMenuItem it_PathTalkfile;
+
 		ToolStripMenuItem it_MenuHelp;
 		ToolStripMenuItem it_ReadMe;
 		ToolStripMenuItem it_About;
@@ -275,6 +278,8 @@ namespace yata
 			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuTalkfile = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathTalkfile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -434,6 +439,7 @@ namespace yata
 			this.it_Menu2daOps,
 			this.it_MenuFont,
 			this.it_MenuPaths,
+			this.it_MenuTalkfile,
 			this.it_MenuHelp});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
@@ -1117,6 +1123,23 @@ namespace yata
 			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSpellTarget2da.Text = "path Spell&Target.2da";
 			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
+			// 
+			// it_MenuTalkfile
+			// 
+			this.it_MenuTalkfile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuTalkfile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_PathTalkfile});
+			this.it_MenuTalkfile.Name = "it_MenuTalkfile";
+			this.it_MenuTalkfile.Size = new System.Drawing.Size(60, 20);
+			this.it_MenuTalkfile.Text = "&Talkfile";
+			this.it_MenuTalkfile.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			// 
+			// it_PathTalkfile
+			// 
+			this.it_PathTalkfile.Name = "it_PathTalkfile";
+			this.it_PathTalkfile.Size = new System.Drawing.Size(130, 22);
+			this.it_PathTalkfile.Text = "&Path to ...";
+			this.it_PathTalkfile.Click += new System.EventHandler(this.itclick_PathTalkfile);
 			// 
 			// it_MenuHelp
 			// 

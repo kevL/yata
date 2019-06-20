@@ -1290,6 +1290,7 @@ namespace yata
 		#endregion Spells info
 
 
+		#region Paths
 		void itclick_PathAll(object sender, EventArgs e)
 		{
 			using (var fbd = new FolderBrowserDialog())
@@ -1393,5 +1394,32 @@ namespace yata
 								  Info.targetWidths,
 								  Info.targetLengths);
 		}
+		#endregion Paths
+
+
+		#region Talkfile
+		void itclick_PathTalkfile(object sender, EventArgs e)
+		{
+			if (!it_PathTalkfile.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Dialog.Tlk";
+					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						if (TlkReader.LoadTalkfile(ofd.FileName, it_PathTalkfile))
+							TlkReader.LoadDialogHeads(Strrefheads);
+					}
+				}
+			}
+			else
+			{
+				it_PathTalkfile.Checked = false;
+				TlkReader.DictDialog.Clear();
+			}
+		}
+		#endregion Talkfile
 	}
 }
