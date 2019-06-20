@@ -3941,9 +3941,9 @@ namespace yata
 						{
 							int result;
 							if (Int32.TryParse(Table[r,c].text, out result) && result > -1
-								&& TlkReader.DictDialog.ContainsKey((uint)result))
+								&& TlkReader.DictDialog.ContainsKey(result))
 							{
-								string text = TlkReader.DictDialog[(uint)result];
+								string text = TlkReader.DictDialog[result];
 								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
 								text = array[0];

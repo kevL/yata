@@ -13,8 +13,8 @@ namespace yata
 		/// The dialog-dictionary. The dictionary does not contain unassigned
 		/// entries so check if a key is valid before trying to get its value.
 		/// </summary>
-		internal static Dictionary<uint, string> DictDialog =
-					new Dictionary<uint, string>();
+		internal static Dictionary<int, string> DictDialog =
+					new Dictionary<int, string>();
 
 		const uint TEXT_PRESENT    =  1; // Data flag - a text is present in the Entries area
 
@@ -134,7 +134,7 @@ namespace yata
 
 							string text = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
 
-							DictDialog.Add(i, text);
+							DictDialog.Add((int)i, text);
 						}
 					}
 					return (DictDialog.Count != 0);
