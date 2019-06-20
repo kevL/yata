@@ -101,15 +101,26 @@ Clipboard
 
 Font
 - Font ... be patient (pick a font, any valid TrueType font on your system, to
-  display the table-data. THE CHOICE OF FONT WILL NOT BE SAVED. But note that
-  along the bottom of the dialog is a .NET font-string that can be copy/pasted
-  to Settings.Cfg for any of the "font=" variables. See the section below about
-  the Settings.Cfg file)
+                       display the table-data. THE CHOICE OF FONT WILL NOT BE
+                       SAVED. But note that along the bottom of the dialog is a
+                       .NET font-string that can be copy/pasted to Settings.Cfg
+                       for any of the "font=" variables. See the section below
+                       about the Settings.Cfg file)
 - Load default font (sets the table-font to Yata's hardcoded default font)
 
 
 Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
        Appendix E: how to use Info paths)
+
+
+Talkfile
+- Path to ... (opens a file-browser to select a Dialog.Tlk file. THE PATH WILL
+               NOT BE SAVED. But see the Settings.Cfg "dialog=" option. A check
+               will appear if the file is loaded successfully - clicking this
+               operation when checked clears loaded talkfile entries. Note that
+               if the file changes on disk - Yata does not write to the
+               talkfile, it only reads it - then it needs to be re-pathed for
+               those changes to be reflected on the statusbar)
 
 
 Help
@@ -164,9 +175,10 @@ Enter - starts editing a cell if the table has focus and only one cell is
       - performs goto if the Goto box has focus
 
 Delete - when a row is selected (as indicated with a green field at the far left
-of a row) the Delete-key deletes that row. Use Shift+LMB on another row, above
-or below the selected row, to select a range of rows to delete. If all rows of a
-table are deleted a single default row will be created.
+         of a row) the Delete-key deletes that row. Use Shift+LMB on another
+         row, above or below the selected row, to select a range of rows to
+         delete. If all rows of a table are deleted a single default row will be
+         created.
 
 
 MOUSE:
