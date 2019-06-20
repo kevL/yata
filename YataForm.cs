@@ -276,8 +276,8 @@ namespace yata
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
 
-			if (TlkReader.LoadTalkfile(Settings._dialog, it_PathTalkfile))
-				TlkReader.LoadDialogHeads(Strrefheads);
+			if (TalkReader.LoadTalkfile(Settings._dialog, it_PathTalkfile))
+				TalkReader.LoadDialogHeads(Strrefheads);
 		}
 
 
@@ -3944,9 +3944,9 @@ namespace yata
 
 							int result;
 							if (Int32.TryParse(field, out result) && result > -1
-								&& TlkReader.DictDialog.ContainsKey(result))
+								&& TalkReader.DictDialog.ContainsKey(result))
 							{
-								string text = TlkReader.DictDialog[result];
+								string text = TalkReader.DictDialog[result];
 								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
 								text = array[0];

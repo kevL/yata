@@ -95,7 +95,7 @@
     <Compile Include="RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="TlkReader.cs" />
+    <Compile Include="TalkReader.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />

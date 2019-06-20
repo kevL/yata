@@ -7,7 +7,7 @@ using System.Text;
 
 namespace yata
 {
-	static class TlkReader
+	static class TalkReader
 	{
 		#region Fields (static)
 		/// <summary>

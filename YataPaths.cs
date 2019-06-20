@@ -1409,15 +1409,15 @@ namespace yata
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
-						if (TlkReader.LoadTalkfile(ofd.FileName, it_PathTalkfile))
-							TlkReader.LoadDialogHeads(Strrefheads);
+						if (TalkReader.LoadTalkfile(ofd.FileName, it_PathTalkfile))
+							TalkReader.LoadDialogHeads(Strrefheads);
 					}
 				}
 			}
 			else
 			{
 				it_PathTalkfile.Checked = false;
-				TlkReader.DictDialog.Clear();
+				TalkReader.DictDialog.Clear();
 			}
 		}
 		#endregion Talkfile
