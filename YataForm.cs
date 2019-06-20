@@ -121,6 +121,9 @@ namespace yata
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
 		List<string> Strrefheads = new List<string>();
+
+		int _track_x = -1; // tracks last mouseover coords ->
+		int _track_y = -1;
 		#endregion Fields
 
 
@@ -3913,72 +3916,70 @@ namespace yata
 
 		#region Methods (statusbar)
 		/// <summary>
-		/// Mouseover datacells prints table-cords plus PathInfo to the
-		/// statusbar if a relevant 2da (eg. Crafting, Spells) is loaded.
+		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
+		/// a relevant 2da (eg. Crafting, Spells) is loaded.
 		/// </summary>
 		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
 		internal void PrintInfo(Point? cords = null)
 		{
-			string st = String.Empty;
-
 			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
 			{
-				var pt = (Point)cords;
-				int id  = pt.Y;
-				int col = pt.X;
+				var cord = (Point)cords;
+				int c = cord.X;
+				int r = cord.Y;
 
-				if (id < Table.RowCount && col < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
+				if (r < Table.RowCount && c < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
 				{
-					statbar_lblCords.Text = "id= " + id + " col= " + col;
-
-					if (col != 0 && isStrrefcol(Table.Fields[col - 1]))
+					if (c != _track_x || r != _track_y)
 					{
-						int result;
-						if (Int32.TryParse(Table[id,col].text, out result) && result > -1
-							&& TlkReader.DictDialog.ContainsKey((uint)result))
+						_track_x = c; _track_y = r;
+
+						statbar_lblCords.Text = "id= " + r + " col= " + c;
+
+						if (c != 0 && isStrrefcol(Table.Fields[c - 1]))
 						{
-							string text = TlkReader.DictDialog[(uint)result];
-							string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
+							int result;
+							if (Int32.TryParse(Table[r,c].text, out result) && result > -1
+								&& TlkReader.DictDialog.ContainsKey((uint)result))
+							{
+								string text = TlkReader.DictDialog[(uint)result];
+								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
-							text = array[0];
-							if (text.Length > 99)
-								text = text.Substring(0, 99) + " ...";
-							else if (array.Length > 1)
-								text += " ...";
+								text = array[0];
+								if (text.Length > 99)
+									text = text.Substring(0, 99) + " ...";
+								else if (array.Length > 1)
+									text += " ...";
 
-							statbar_lblInfo.Text = text;
+								statbar_lblInfo.Text = text;
+							}
+							else
+								statbar_lblInfo.Text = String.Empty;
 						}
 						else
-							statbar_lblInfo.Text = st;
-					}
-					else
-					{
-						switch (Table.Info)
 						{
-							case YataGrid.InfoType.INFO_CRAFT:
-								statbar_lblInfo.Text = getCraftInfo(id, col);
-								break;
-							case YataGrid.InfoType.INFO_SPELL:
-								statbar_lblInfo.Text = getSpellInfo(id, col);
-								break;
+							switch (Table.Info)
+							{
+								case YataGrid.InfoType.INFO_CRAFT:
+									statbar_lblInfo.Text = getCraftInfo(r,c);
+									break;
+								case YataGrid.InfoType.INFO_SPELL:
+									statbar_lblInfo.Text = getSpellInfo(r,c);
+									break;
 
-							default:
-								statbar_lblInfo.Text = st;
-								break;
+								default:
+									statbar_lblInfo.Text = String.Empty;
+									break;
+							}
 						}
 					}
-				}
-				else
-				{
-					statbar_lblCords.Text =
-					statbar_lblInfo .Text = st;
+					return;
 				}
 			}
-			else
-			{
-				statbar_lblCords.Text =
-				statbar_lblInfo .Text = st;
-			}
+
+			_track_x = _track_y = -1;
+			statbar_lblCords.Text =
+			statbar_lblInfo .Text = String.Empty;
 		}
 
 		bool isStrrefcol(string text)

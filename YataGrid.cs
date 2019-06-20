@@ -2536,8 +2536,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles mouse-movement over the grid - prints coordinates and info
-		/// to the statusbar.
+		/// Handles mouse-movement over the grid and its background area -
+		/// prints coordinates and path-info to the statusbar.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseMove(MouseEventArgs e)
@@ -2556,9 +2556,7 @@ namespace yata
 							int left = getLeft();
 							if (x > left)
 							{
-								var cords = getCords(x, y, left);
-								_f.PrintInfo(new Point(cords.X, cords.Y));
-
+								_f.PrintInfo(getCords(x, y, left));
 								return;
 							}
 						}
