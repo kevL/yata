@@ -1283,7 +1283,8 @@ namespace yata
 			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblInfo.Name = "statbar_lblInfo";
-			this.statbar_lblInfo.Size = new System.Drawing.Size(640, 17);
+			this.statbar_lblInfo.Size = new System.Drawing.Size(667, 17);
+			this.statbar_lblInfo.Spring = true;
 			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill

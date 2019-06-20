@@ -216,9 +216,10 @@ namespace yata
 				statbar_lblCords.Height =
 				statbar_lblInfo .Height = (hBar     < 17) ? 17 : hBar;
 
-				int wCords0 = statbar_lblCords.Width;
-				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblInfo.Font) + 10;
-				statbar_lblCords.Width = (wCords < wCords0) ? wCords0 : wCords;
+//				int wCords0 = statbar_lblCords.Width;
+//				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblInfo.Font) + 10;
+//				statbar_lblCords.Width = (wCords < wCords0) ? wCords0 : wCords;
+				statbar_lblCords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblCords.Font) + 20;
 
 
 				context_it_Header.Font.Dispose();
@@ -3934,7 +3935,7 @@ namespace yata
 					{
 						_track_x = c; _track_y = r;
 
-						statbar_lblCords.Text = "id= " + r + " col= " + c;
+						statbar_lblCords.Text = " id= " + r + "  col= " + c;
 
 						if (c != 0 && isStrrefcol(Table.Fields[c - 1]))
 						{

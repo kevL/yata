@@ -2570,8 +2570,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles timer ticks - clears statusbar coordinates and info when the
-		/// mouse-cursor leaves the grid. (MouseLeave is unreliable.)
+		/// Handles timer ticks - clears statusbar coordinates and path-info
+		/// when the mouse-cursor leaves the grid. (MouseLeave is unreliable.)
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

@@ -9,7 +9,7 @@ namespace yata
 	static class YataGraphics
 	{
 		internal const string HEIGHT_TEST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-		internal const string WIDTH_CORDS = "id= 99999 col= 99";
+		internal const string WIDTH_CORDS = " id= 99999  col= 99";
 
 		/// <summary>
 		/// An IDeviceContext used for measuring texts.
