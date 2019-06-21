@@ -16,6 +16,11 @@ namespace yata
 	{
 		#region Fields (static)
 		const int WIDTH_Min = 325;
+		const int WIDTH_Max = 900;
+		const int HIGHT_Min = 130;
+		const int HIGHT_Max = 500;
+
+		const int VERT_PAD_CANCEL = 10;
 
 		static int _x = -1;
 		static int _y = -1;
@@ -26,7 +31,7 @@ namespace yata
 		YataForm _f;
 
 		int _eId; // talkfile's EntryId
-		int _eId_original;
+		int _eId_init;
 		#endregion Fields
 
 
@@ -47,7 +52,7 @@ namespace yata
 
 			string strref = cell.text;
 			if (strref == gs.Stars) strref = "0";
-			_eId_original = Int32.Parse(strref); // NOTE: '_eId' will be set OnTextChanged when 'tb_Strref.Text' gets set below.
+			_eId_init = Int32.Parse(strref); // NOTE: '_eId' will be set OnTextChanged when 'tb_Strref.Text' gets set below.
 
 
 			if (Settings._font2dialog != null)
@@ -75,19 +80,21 @@ namespace yata
 			int w = GetWidth(copyable) + 30;				// +30 = parent panel's pad left+right +5
 			pnl_Copyable.Height = GetHeight(copyable) + 20;	// +20 = parent panel's pad top+bot +5
 
-			if (w < WIDTH_Min) w = WIDTH_Min;
+			if      (w < WIDTH_Min) w = WIDTH_Min;
+			else if (w > WIDTH_Max) w = WIDTH_Max;
 
-			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
-								  lbl_Info.Height + pnl_Copyable.Height + btn_Cancel.Height + 15); // +15 = pad above Cancel button
+			int h = lbl_Info.Height + pnl_Copyable.Height + btn_Cancel.Height;
+			if      (h < HIGHT_Min) h = HIGHT_Min;
+			else if (h > HIGHT_Max) h = HIGHT_Max;
+
+			ClientSize = new Size(w + 20,				// +20 = pad real and imagined.
+								  h + VERT_PAD_CANCEL);	// +10 = pad above Cancel button
 
 			if (_x == -1) _x = _f.Left + 30;
 			if (_y == -1) _y = _f.Top  + 30;
 
 			Left = _x;
 			Top  = _y;
-
-			MinimumSize = new Size(Width, Height);
-			MaximumSize = new Size(1000,  Height);
 
 			rtb_Copyable.BackColor = Color.Khaki; // <- won't work right in the designer.
 			tb_Strref   .BackColor = Colors.TextboxBackground;
@@ -106,6 +113,15 @@ namespace yata
 			rtb_Copyable.Select();
 
 			rtb_Copyable.Text = TalkReader.DictDialog[_eId]; // sigh.
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			pnl_Copyable.Height = ClientSize.Height
+								- lbl_Info  .Height
+								- btn_Cancel.Height - VERT_PAD_CANCEL;
+			base.OnResize(e);
+			pnl_Copyable.Invalidate();
 		}
 
 		/// <summary>
@@ -134,7 +150,7 @@ namespace yata
 		{
 			if (String.IsNullOrEmpty(tb_Strref.Text))
 			{
-				_eId = _eId_original; // revert to default.
+				_eId = _eId_init; // revert to default.
 			}
 			else
 			{
@@ -142,7 +158,7 @@ namespace yata
 				if (!Int32.TryParse(tb_Strref.Text, out result)
 					|| result < 0)
 				{
-					tb_Strref.Text = _eId_original.ToString(); // recurse.
+					tb_Strref.Text = _eId_init.ToString(); // recurse.
 					tb_Strref.SelectionStart = tb_Strref.Text.Length;
 				}
 				else if (result < TalkReader.lo)
@@ -203,14 +219,15 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles a click on the Prevert button.
+		/// Handles a click on the Prevert button. Reverts the strref to its
+		/// initial val.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_btnPrevert(object sender, EventArgs e)
 		{
-			if (_eId != _eId_original)
-				tb_Strref.Text = _eId_original.ToString();
+			if (_eId != _eId_init)
+				tb_Strref.Text = _eId_init.ToString();
 		}
 
 		/// <summary>
@@ -379,11 +396,12 @@ namespace yata
 			this.rtb_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtb_Copyable.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rtb_Copyable.HideSelection = false;
-			this.rtb_Copyable.Location = new System.Drawing.Point(15, 5);
+			this.rtb_Copyable.Location = new System.Drawing.Point(7, 1);
 			this.rtb_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.rtb_Copyable.Name = "rtb_Copyable";
 			this.rtb_Copyable.ReadOnly = true;
-			this.rtb_Copyable.Size = new System.Drawing.Size(467, 90);
+			this.rtb_Copyable.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.rtb_Copyable.Size = new System.Drawing.Size(484, 98);
 			this.rtb_Copyable.TabIndex = 0;
 			this.rtb_Copyable.Text = "rtb_Copyable";
 			// 
@@ -395,7 +413,7 @@ namespace yata
 			this.pnl_Copyable.Location = new System.Drawing.Point(0, 30);
 			this.pnl_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.pnl_Copyable.Name = "pnl_Copyable";
-			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(15, 5, 10, 5);
+			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(7, 1, 1, 1);
 			this.pnl_Copyable.Size = new System.Drawing.Size(492, 100);
 			this.pnl_Copyable.TabIndex = 1;
 			this.pnl_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_CopyPanel);
@@ -490,8 +508,9 @@ namespace yata
 			this.Controls.Add(this.btn_Cancel);
 			this.Controls.Add(this.pnl_Copyable);
 			this.Controls.Add(this.lbl_Info);
-			this.MaximizeBox = false;
 			this.Name = "TalkDialog";
+			this.ShowInTaskbar = false;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.pnl_Copyable.ResumeLayout(false);
 			this.ResumeLayout(false);
