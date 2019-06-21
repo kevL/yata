@@ -1423,8 +1423,8 @@ namespace yata
 			// 
 			this.it_cellTalkEntry.Name = "it_cellTalkEntry";
 			this.it_cellTalkEntry.Size = new System.Drawing.Size(164, 22);
-			this.it_cellTalkEntry.Text = "talker";
-			this.it_cellTalkEntry.Click += new System.EventHandler(this.cellclick_TalkEntry);
+			this.it_cellTalkEntry.Text = "strref";
+			this.it_cellTalkEntry.Click += new System.EventHandler(this.cellclick_Strref);
 			// 
 			// YataForm
 			// 

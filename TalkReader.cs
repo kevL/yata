@@ -14,8 +14,8 @@ namespace yata
 		/// The dialog-dictionary. The dictionary does not contain unassigned
 		/// entries so check if a key is valid before trying to get its value.
 		/// </summary>
-		internal static Dictionary<int, string> DictDialog =
-					new Dictionary<int, string>();
+		internal static SortedDictionary<int, string> DictDialog =
+					new SortedDictionary<int, string>();
 
 		const uint TEXT_PRESENT    =  1; // Data flag - a text is present in the Entries area
 
@@ -31,6 +31,8 @@ namespace yata
 		const uint LengthOffset    = 32; // offset from the start of a Data ele to its TextLength field
 
 		const string Ver = "TLK V3.0";
+
+		internal static int lo, hi;
 		#endregion Fields (static)
 
 
@@ -141,7 +143,19 @@ namespace yata
 							DictDialog.Add((int)i, text);
 						}
 					}
-					return (it.Checked = (DictDialog.Count != 0));
+
+					lo = Int32.MaxValue;
+					hi = Int32.MinValue;
+
+					if (DictDialog.Count != 0)
+					{
+						foreach (int key in DictDialog.Keys)
+						{
+							if (key > hi) hi = key;
+							if (key < lo) lo = key;
+						}
+						return (it.Checked = true);
+					}
 				}
 			}
 			return (it.Checked = false);

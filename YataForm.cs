@@ -121,6 +121,7 @@ namespace yata
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
 		List<string> Strrefheads = new List<string>();
+		internal string _strref; // holds the possible return-val of 'TalkDialog'
 
 		int _track_x = -1; // tracks last mouseover coords ->
 		int _track_y = -1;
@@ -4328,7 +4329,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "talk entry", opens a 'TalkDialog' that
+		/// Handler for cell-context "strref" - opens a 'TalkDialog' that
 		/// displays the text's corresponding Dialog.Tlk entry in a readonly
 		/// RichTextBox for the user's investigation and/or copying.
 		/// @note Check that the cell's text parses to a valid non-negative
@@ -4338,19 +4339,19 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_TalkEntry(object sender, EventArgs e)
+		void cellclick_Strref(object sender, EventArgs e)
 		{
-			Cell cell = Table.getSelectedCell();
-			string field = cell.text;
-			if (field == gs.Stars) field = "0";
-			int tlkId = Int32.Parse(field);
+			Cell sel = Table.getSelectedCell();
+			_strref = sel.text;
 
-			string title = " tlk - " + tlkId;
-			string label = tlkId.ToString();
-			string copyable = TalkReader.DictDialog[tlkId];
-
-			var f = new TalkDialog(title, label, copyable, this);
-			f.Show(); // no owner.
+			using (var f = new TalkDialog(sel, this))
+			{
+				if (f.ShowDialog(this) == DialogResult.OK
+					&& _strref != sel.text)
+				{
+					Table.ChangeCellText(sel, _strref);
+				}
+			}
 		}
 		#endregion Events (cell)
 	}
