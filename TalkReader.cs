@@ -48,7 +48,7 @@ namespace yata
 
 		#region Methods (static)
 		/// <summary>
-		/// Adds key-value pairs [(uint)strref, (string)text] to 'DictDialo' or
+		/// Adds key-value pairs [(int)strref, (string)text] to 'DictDialo' or
 		/// 'DictCusto'.
 		/// @note See description of .tlk Format at the bot of this file.
 		/// </summary>
