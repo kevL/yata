@@ -217,9 +217,6 @@ namespace yata
 				statbar_lblCords.Height =
 				statbar_lblInfo .Height = (hBar     < 17) ? 17 : hBar;
 
-//				int wCords0 = statbar_lblCords.Width;
-//				int wCords = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblInfo.Font) + 10;
-//				statbar_lblCords.Width = (wCords < wCords0) ? wCords0 : wCords;
 				statbar_lblCords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblCords.Font) + 20;
 
 

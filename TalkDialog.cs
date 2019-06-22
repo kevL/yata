@@ -257,21 +257,18 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnPre(object sender, EventArgs e)
 		{
-			if (_dict.Count != 0)
+			do
 			{
-				do
-				{
-					if (_eId <= lo)
-						_eId = hi + 1;
+				if (_eId <= lo)
+					_eId = hi + 1;
 
-					if (_dict.ContainsKey(--_eId))
-					{
-						tb_Strref.Text = _eId.ToString();
-						return;
-					}
+				if (_dict.ContainsKey(--_eId))
+				{
+					tb_Strref.Text = _eId.ToString();
+					return;
 				}
-				while (true);
 			}
+			while (true);
 		}
 
 		/// <summary>
@@ -282,21 +279,18 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnPos(object sender, EventArgs e)
 		{
-			if (_dict.Count != 0)
+			do
 			{
-				do
-				{
-					if (_eId >= hi)
-						_eId = lo - 1;
+				if (_eId >= hi)
+					_eId = lo - 1;
 
-					if (_dict.ContainsKey(++_eId))
-					{
-						tb_Strref.Text = _eId.ToString();
-						return;
-					}
+				if (_dict.ContainsKey(++_eId))
+				{
+					tb_Strref.Text = _eId.ToString();
+					return;
 				}
-				while (true);
 			}
+			while (true);
 		}
 
 

@@ -1409,7 +1409,7 @@ namespace yata
 			{
 				using (var ofd = new OpenFileDialog())
 				{
-					ofd.Title  = "Select Dialog.Tlk";
+					ofd.Title  = " Select Dialog.Tlk";
 					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 
 					if (ofd.ShowDialog() == DialogResult.OK)
@@ -1440,7 +1440,7 @@ namespace yata
 			{
 				using (var ofd = new OpenFileDialog())
 				{
-					ofd.Title  = "Select a TalkTable";
+					ofd.Title  = " Select a TalkTable";
 					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 
 					if (ofd.ShowDialog() == DialogResult.OK)
