@@ -33,6 +33,7 @@ namespace yata
 
 		internal static string _diff;
 		internal static string _dialog;
+		internal static string _dialogalt;
 
 
 		internal static void ScanSettings()
@@ -210,6 +211,13 @@ namespace yata
 							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim()))
 							{
 								_dialog = line;
+							}
+						}
+						else if (line.StartsWith("dialogalt=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim()))
+							{
+								_dialogalt = line;
 							}
 						}
 					}

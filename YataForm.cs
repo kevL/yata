@@ -121,7 +121,7 @@ namespace yata
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
 		List<string> Strrefheads = new List<string>();
-		internal string _strref; // holds the possible return-val of 'TalkDialog'
+		internal string _strref; // the strref set by 'TalkDialog'
 
 		int _track_x = -1; // tracks last mouseover coords ->
 		int _track_y = -1;
@@ -277,8 +277,11 @@ namespace yata
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
 
-			if (TalkReader.LoadTalkfile(Settings._dialog, it_PathTalkfile))
-				TalkReader.LoadDialogHeads(Strrefheads);
+			if (  TalkReader.Load(Settings._dialog,    it_PathTalkD)
+				| TalkReader.Load(Settings._dialogalt, it_PathTalkC, true))
+			{
+				TalkReader.LoadTalkingHeads(Strrefheads);
+			}
 		}
 
 
@@ -3940,14 +3943,30 @@ namespace yata
 
 						if (c != 0 && Strrefheads.Contains(Table.Fields[c - 1]))
 						{
-							string field = Table[r,c].text;
-							if (field == gs.Stars) field = "0";
+							string text = null;
+
+							string strref = Table[r,c].text;
+							if (strref == gs.Stars) strref = "0";
 
 							int result;
-							if (Int32.TryParse(field, out result) && result > -1
-								&& TalkReader.DictDialog.ContainsKey(result))
+							if (Int32.TryParse(strref, out result)
+								&& result > -1 && result < (TalkReader.bitCusto | TalkReader.strref))
 							{
-								string text = TalkReader.DictDialog[result];
+								bool alt = ((result & TalkReader.bitCusto) != 0);
+								result &= TalkReader.strref;
+
+								if (!alt && TalkReader.DictDialo.ContainsKey(result))
+								{
+									text = TalkReader.DictDialo[result];
+								}
+								else if (alt && TalkReader.DictCusto.ContainsKey(result))
+								{
+									text = TalkReader.DictCusto[result];
+								}
+							}
+
+							if (!String.IsNullOrEmpty(text))
+							{
 								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
 								text = array[0];
@@ -4066,13 +4085,13 @@ namespace yata
 		{
 			Cell sel = Table.getSelectedCell();
 
-			it_cellEdit     .Enabled =
-			it_cellPaste    .Enabled = !Table.Readonly;
-			it_cellStars    .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
-			it_cellMergeCe  .Enabled = 
-			it_cellMergeRo  .Enabled = isMergeEnabled(sel);
-			it_cellInput    .Enabled = (Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x));
-			it_cellTalkEntry.Enabled = isTalkEntryEnabled(sel);
+			it_cellEdit   .Enabled =
+			it_cellPaste  .Enabled = !Table.Readonly;
+			it_cellStars  .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
+			it_cellMergeCe.Enabled = 
+			it_cellMergeRo.Enabled = isMergeEnabled(sel);
+			it_cellInput  .Enabled = Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x);
+			it_cellStrref .Enabled = isStrrefEnabled(sel);
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -4094,28 +4113,6 @@ namespace yata
 				return (destTable != null && !destTable.Readonly
 					 && destTable.ColCount > sel.x
 					 && destTable.RowCount > sel.y);
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sel"></param>
-		/// <returns>true if TalkEntry dialog will be enabled</returns>
-		bool isTalkEntryEnabled(Cell sel)
-		{
-			if (sel.x != 0 && Strrefheads.Contains(Table.Fields[sel.x - 1]))
-			{
-				string field = sel.text;
-				if (field == gs.Stars) field = "0";
-
-				int result;
-				if (Int32.TryParse(field, out result) && result > -1
-					&& TalkReader.DictDialog.ContainsKey(result))
-				{
-					return true;
-				}
 			}
 			return false;
 		}
@@ -4147,6 +4144,25 @@ namespace yata
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sel"></param>
+		/// <returns>true if TalkEntry dialog will be enabled</returns>
+		bool isStrrefEnabled(Cell sel)
+		{
+			if (sel.x != 0 && Strrefheads.Contains(Table.Fields[sel.x - 1]))
+			{
+				string strref = sel.text;
+				if (strref == gs.Stars) strref = "0";
+
+				int result;
+				return Int32.TryParse(strref, out result)
+					&& result > -1 && result < (TalkReader.bitCusto | TalkReader.strref);
 			}
 			return false;
 		}
@@ -4333,9 +4349,8 @@ namespace yata
 		/// displays the text's corresponding Dialog.Tlk entry in a readonly
 		/// RichTextBox for the user's investigation and/or copying.
 		/// @note Check that the cell's text parses to a valid non-negative
-		/// integer, or blank "****", and that 'DictDialog' contains an entry
-		/// for that integer before allowing the event to trigger (ie, else
-		/// disable the context it - see ShowCellMenu()).
+		/// integer, or blank "****", before allowing the event to trigger (ie,
+		/// else disable the context it - see ShowCellMenu()).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4350,7 +4365,8 @@ namespace yata
 					&& _strref != sel.text)
 				{
 					Table.ChangeCellText(sel, _strref);
-				}
+					Invalidate();	// lolziMScopter - else the titlebar and borders can arbitrarily disappear.
+				}					// nobody knows why ... q TwilightZone
 			}
 		}
 		#endregion Events (cell)

@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2019 june 19
+2019 june 22
 kevL's
 ver 3.3.8.0
 
@@ -46,8 +46,9 @@ Edit
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)
 
-- Create row(s) : F2 (opens a dialog that inserts 1+ rows at a given id with the
-                      option to use a first copied row as a fill)
+- Create row(s) : F2 (opens a dialog that inserts 1+ rows at a given id with
+                      options to use (a) a selected row or (b) the first of any
+                      currently copied rows or (c) "****" to fill the fields)
 
 
 Goto box (type a row ID and press Enter)
@@ -113,15 +114,17 @@ Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
        Appendix E: how to use Info paths)
 
 
-Talkfile
+TalkTable
 - Path to ... (opens a file-browser to select a Dialog.Tlk file. THE PATH WILL
                NOT BE SAVED. But see the Settings.Cfg "dialog=" option. A check
                will appear if the file is loaded successfully - clicking this
-               operation when checked clears loaded talkfile entries. Note that
+               operation when checked clears loaded talktable entries. Note that
                if the file changes on disk - Yata does not write to the
-               talkfile, it only reads it - then it needs to be re-pathed for
-               those changes to be reflected on the statusbar)
-
+               talktable, it only reads it - then it needs to be re-pathed for
+               those changes to be reflected on the statusbar or in a selected
+               cell's "strref" dialog)
+- Path to custom ... (opens a file-browser to select a custom talktable - see
+                      Path to ... and the Settings.Cfg "dialogalt=" option)
 
 Help
 - ReadMe.txt : F1 (opens this document in a text-editor)
@@ -296,6 +299,7 @@ diff=      a path without quotes to your WinMerge executable for diffing and
 dialog=    a path without quotes to your Dialog.Tlk file. Strrefs can often
            print their string values to the statusbar if Dialog.Tlk has been
            pathed
+dialogalt= as "dialog=" but for a custom talktable
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows.Forms;
 
 
@@ -13,7 +14,7 @@ namespace yata
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
-		System.ComponentModel.IContainer components = null;
+		IContainer components;
 
 		MenuStrip menubar;
 
@@ -87,8 +88,9 @@ namespace yata
 		ToolStripMenuItem it_PathRanges2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
 
-		ToolStripMenuItem it_MenuTalkfile;
-		ToolStripMenuItem it_PathTalkfile;
+		ToolStripMenuItem it_MenuTalkTable;
+		ToolStripMenuItem it_PathTalkD;
+		ToolStripMenuItem it_PathTalkC;
 
 		ToolStripMenuItem it_MenuHelp;
 		ToolStripMenuItem it_ReadMe;
@@ -155,7 +157,7 @@ namespace yata
 		ToolStripMenuItem it_cellMergeCe;
 		ToolStripMenuItem it_cellMergeRo;
 		ToolStripMenuItem it_cellInput;
-		ToolStripMenuItem it_cellTalkEntry;
+		ToolStripMenuItem it_cellStrref;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statbar_lblCords;
@@ -259,8 +261,9 @@ namespace yata
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_MenuTalkfile = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathTalkfile = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuTalkTable = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathTalkD = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathTalkC = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -315,7 +318,7 @@ namespace yata
 			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellTalkEntry = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellStrref = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
 			this.ContextEditor.SuspendLayout();
@@ -440,7 +443,7 @@ namespace yata
 			this.it_MenuClipboard,
 			this.it_Menu2daOps,
 			this.it_MenuFont,
-			this.it_MenuTalkfile,
+			this.it_MenuTalkTable,
 			this.it_MenuPaths,
 			this.it_MenuHelp});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
@@ -976,23 +979,31 @@ namespace yata
 			this.it_FontDefault.Text = "&Load default font";
 			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
 			// 
-			// it_MenuTalkfile
+			// it_MenuTalkTable
 			// 
-			this.it_MenuTalkfile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.it_MenuTalkfile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_PathTalkfile});
-			this.it_MenuTalkfile.Name = "it_MenuTalkfile";
-			this.it_MenuTalkfile.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.it_MenuTalkfile.Size = new System.Drawing.Size(56, 20);
-			this.it_MenuTalkfile.Text = "&Talkfile";
-			this.it_MenuTalkfile.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_MenuTalkTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuTalkTable.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_PathTalkD,
+			this.it_PathTalkC});
+			this.it_MenuTalkTable.Name = "it_MenuTalkTable";
+			this.it_MenuTalkTable.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuTalkTable.Size = new System.Drawing.Size(70, 20);
+			this.it_MenuTalkTable.Text = "&TalkTable";
+			this.it_MenuTalkTable.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
-			// it_PathTalkfile
+			// it_PathTalkD
 			// 
-			this.it_PathTalkfile.Name = "it_PathTalkfile";
-			this.it_PathTalkfile.Size = new System.Drawing.Size(130, 22);
-			this.it_PathTalkfile.Text = "&Path to ...";
-			this.it_PathTalkfile.Click += new System.EventHandler(this.itclick_PathTalkfile);
+			this.it_PathTalkD.Name = "it_PathTalkD";
+			this.it_PathTalkD.Size = new System.Drawing.Size(175, 22);
+			this.it_PathTalkD.Text = "&Path to ...";
+			this.it_PathTalkD.Click += new System.EventHandler(this.itclick_PathTalkD);
+			// 
+			// it_PathTalkC
+			// 
+			this.it_PathTalkC.Name = "it_PathTalkC";
+			this.it_PathTalkC.Size = new System.Drawing.Size(175, 22);
+			this.it_PathTalkC.Text = "&Path to custom ...";
+			this.it_PathTalkC.Click += new System.EventHandler(this.itclick_PathTalkC);
 			// 
 			// it_MenuPaths
 			// 
@@ -1345,10 +1356,10 @@ namespace yata
 			this.it_cellMergeRo,
 			this.separator_28,
 			this.it_cellInput,
-			this.it_cellTalkEntry});
+			this.it_cellStrref});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 226);
+			this.cellMenu.Size = new System.Drawing.Size(165, 204);
 			// 
 			// it_cellEdit
 			// 
@@ -1419,12 +1430,12 @@ namespace yata
 			this.it_cellInput.Text = "input";
 			this.it_cellInput.Click += new System.EventHandler(this.cellclick_Input);
 			// 
-			// it_cellTalkEntry
+			// it_cellStrref
 			// 
-			this.it_cellTalkEntry.Name = "it_cellTalkEntry";
-			this.it_cellTalkEntry.Size = new System.Drawing.Size(164, 22);
-			this.it_cellTalkEntry.Text = "strref";
-			this.it_cellTalkEntry.Click += new System.EventHandler(this.cellclick_Strref);
+			this.it_cellStrref.Name = "it_cellStrref";
+			this.it_cellStrref.Size = new System.Drawing.Size(164, 22);
+			this.it_cellStrref.Text = "strref";
+			this.it_cellStrref.Click += new System.EventHandler(this.cellclick_Strref);
 			// 
 			// YataForm
 			// 

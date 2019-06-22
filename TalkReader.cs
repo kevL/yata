@@ -13,11 +13,18 @@ namespace yata
 		/// <summary>
 		/// The dialog-dictionary. The dictionary does not contain unassigned
 		/// entries so check if a key is valid before trying to get its value.
+		/// @note Does not really need to be "Sorted" ...
 		/// </summary>
-		internal static SortedDictionary<int, string> DictDialog =
+		internal static SortedDictionary<int, string> DictDialo =
 					new SortedDictionary<int, string>();
 
-		const uint TEXT_PRESENT    =  1; // Data flag - a text is present in the Entries area
+		internal static SortedDictionary<int, string> DictCusto =
+					new SortedDictionary<int, string>();
+
+		internal const int bitCusto = 0x01000000; // flag in the strref for Custo talktable
+		internal const int strref   = 0x00FFFFFF; // isolates the actual strref-val
+
+		const uint TEXT_PRESENT    =  1; // Data flag - a text is present in the Texts area
 
 		const uint HeaderStart     =  0; // start-byte of the byte-array
 //		const uint LanguageIdStart =  8; // offset of the field that contains the LanguageId
@@ -27,30 +34,46 @@ namespace yata
 		const uint DataStart       = 20; // length in bytes of the Header area
 		const uint DataLength      = 40; // length in bytes of 1 Data area
 
-		const uint EntryOffset     = 28; // offset from the start of a Data ele to its TextStart field
-		const uint LengthOffset    = 32; // offset from the start of a Data ele to its TextLength field
+		const uint TextStartField  = 28; // offset from the start of a Data ele to its TextStart field
+		const uint TextLengthField = 32; // offset from the start of a Data ele to its TextLength field
 
 		const string Ver = "TLK V3.0";
 
-		internal static int lo, hi;
+		internal static int loDialo, hiDialo;
+		internal static int loCusto, hiCusto;
+
+		internal static string AltLabel;
 		#endregion Fields (static)
 
 
 		#region Methods (static)
 		/// <summary>
-		/// Adds key-value pairs [(uint)strref, (string)text] to 'DictDialog'.
+		/// Adds key-value pairs [(uint)strref, (string)text] to 'DictDialo' or
+		/// 'DictCusto'.
 		/// @note See description of .tlk Format at the bot of this file.
 		/// </summary>
 		/// <param name="pfeTlk">fullpath of Dialog.Tlk</param>
 		/// <param name="it"></param>
+		/// <param name="alt"></param>
 		/// <returns>true if 1+ entry loads</returns>
-		internal static bool LoadTalkfile(string pfeTlk, ToolStripMenuItem it)
+		internal static bool Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
 		{
-			DictDialog.Clear();
+			SortedDictionary<int, string> dict;
+
+			if (!alt) dict = DictDialo;
+			else
+			{
+				dict = DictCusto;
+				AltLabel = null;
+			}
+
+			dict.Clear();
 
 			if (File.Exists(pfeTlk))
 			{
 //				using (FileStream fs = File.OpenRead(pfeTlk)){}
+
+				if (alt) AltLabel = Path.GetFileNameWithoutExtension(pfeTlk).ToUpper();
 
 				byte[] bytes = File.ReadAllBytes(pfeTlk);
 
@@ -112,7 +135,7 @@ namespace yata
 
 						if ((Flags & TEXT_PRESENT) != 0)
 						{
-							pos = start + EntryOffset;
+							pos = start + TextStartField;
 
 							buffer = new byte[4];
 							for (b = 0; b != 4; ++b)
@@ -122,7 +145,7 @@ namespace yata
 							uint TextStart = BitConverter.ToUInt32(buffer, 0);
 
 
-							pos = start + LengthOffset;
+							pos = start + TextLengthField;
 
 							buffer = new byte[4];
 							for (b = 0; b != 4; ++b)
@@ -140,20 +163,24 @@ namespace yata
 
 							string text = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
 
-							DictDialog.Add((int)i, text);
+							dict.Add((int)i, text);
 						}
 					}
 
-					lo = Int32.MaxValue;
-					hi = Int32.MinValue;
+					int lo = Int32.MaxValue;
+					int hi = Int32.MinValue;
 
-					if (DictDialog.Count != 0)
+					if (dict.Count != 0)
 					{
-						foreach (int key in DictDialog.Keys)
+						foreach (int key in dict.Keys)
 						{
 							if (key > hi) hi = key;
 							if (key < lo) lo = key;
 						}
+
+						if (!alt) { loDialo = lo; hiDialo = hi; }
+						else      { loCusto = lo; hiCusto = hi; }
+
 						return (it.Checked = true);
 					}
 				}
@@ -165,7 +192,7 @@ namespace yata
 		/// Adds relevant colhead-fields to a list.
 		/// </summary>
 		/// <param name="heads">pointer to a string-list</param>
-		internal static void LoadDialogHeads(ICollection<string> heads)
+		internal static void LoadTalkingHeads(ICollection<string> heads)
 		{
 			heads.Add("ActionStrRef");		// KeyMap.2da
 			heads.Add("ActivatedName");		// CombatModes.2da
@@ -255,6 +282,15 @@ The StringEntryTable begins at the StringEntriesOffset specified in the Header
 of the file, and continues to the end of the file. All the localized text is
 contained in the StringEntryTable as non-null-terminated strings. As soon as one
 string ends, the next one begins. kL_note: Consider it ASCII.
+*/
+
+// dialog.tlk -> 16777215 MaxVal 0x00FFFFFF
+/*
+If a module uses an alternate talk table, then bit 0x01000000 of a StrRef
+specifies whether the StrRef should be fetched from the normal dialog.tlk or
+from the alternate tlk file, If the bit is 0, the StrRef is fetched as normal
+from dialog.tlk. If the bit is 1, then the StrRef is fetched from the
+alternative talk table.
 */
 
 /*

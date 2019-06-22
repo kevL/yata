@@ -1398,9 +1398,14 @@ namespace yata
 
 
 		#region Talkfile
-		void itclick_PathTalkfile(object sender, EventArgs e)
+		/// <summary>
+		/// Handles click to load Dialog.Tlk file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathTalkD(object sender, EventArgs e)
 		{
-			if (!it_PathTalkfile.Checked)
+			if (!it_PathTalkD.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
@@ -1409,15 +1414,50 @@ namespace yata
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
-						if (TalkReader.LoadTalkfile(ofd.FileName, it_PathTalkfile))
-							TalkReader.LoadDialogHeads(Strrefheads);
+						if (TalkReader.Load(ofd.FileName, it_PathTalkD)
+							&& Strrefheads.Count == 0)
+						{
+							TalkReader.LoadTalkingHeads(Strrefheads);
+						}
 					}
 				}
 			}
 			else
 			{
-				it_PathTalkfile.Checked = false;
-				TalkReader.DictDialog.Clear();
+				it_PathTalkD.Checked = false;
+				TalkReader.DictDialo.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles click to load a custom Talkfile.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathTalkC(object sender, EventArgs e)
+		{
+			if (!it_PathTalkC.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select a TalkTable";
+					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						if (TalkReader.Load(ofd.FileName, it_PathTalkC, true)
+							&& Strrefheads.Count == 0)
+						{
+							TalkReader.LoadTalkingHeads(Strrefheads);
+						}
+					}
+				}
+			}
+			else
+			{
+				it_PathTalkC.Checked = false;
+				TalkReader.DictCusto.Clear();
+				TalkReader.AltLabel = null;
 			}
 		}
 		#endregion Talkfile
