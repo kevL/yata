@@ -1413,13 +1413,7 @@ namespace yata
 					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						if (TalkReader.Load(ofd.FileName, it_PathTalkD)
-							&& Strrefheads.Count == 0)
-						{
-							TalkReader.LoadTalkingHeads(Strrefheads);
-						}
-					}
+						TalkReader.Load(ofd.FileName, it_PathTalkD);
 				}
 			}
 			else
@@ -1444,13 +1438,7 @@ namespace yata
 					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						if (TalkReader.Load(ofd.FileName, it_PathTalkC, true)
-							&& Strrefheads.Count == 0)
-						{
-							TalkReader.LoadTalkingHeads(Strrefheads);
-						}
-					}
+						TalkReader.Load(ofd.FileName, it_PathTalkC, true);
 				}
 			}
 			else

@@ -274,11 +274,9 @@ namespace yata
 			if (Settings._recent != 0)
 				InitializeRecentFiles();
 
-			if (  TalkReader.Load(Settings._dialog,    it_PathTalkD)
-				| TalkReader.Load(Settings._dialogalt, it_PathTalkC, true))
-			{
-				TalkReader.LoadTalkingHeads(Strrefheads);
-			}
+			TalkReader.LoadTalkingHeads(Strrefheads);
+			TalkReader.Load(Settings._dialog,    it_PathTalkD);
+			TalkReader.Load(Settings._dialogalt, it_PathTalkC, true);
 		}
 
 
@@ -3967,10 +3965,8 @@ namespace yata
 								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
 
 								text = array[0];
-								if (text.Length > 99)
-									text = text.Substring(0, 99) + " ...";
-								else if (array.Length > 1)
-									text += " ...";
+								if      (text .Length > 99) text = text.Substring(0, 99) + " ...";
+								else if (array.Length >  1) text += " ...";
 
 								statbar_lblInfo.Text = text;
 							}
