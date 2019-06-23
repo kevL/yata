@@ -4323,18 +4323,18 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handler for the cell-context's sub "STRREF" DropDownOpening event.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void dropdownopening_Strref(object sender, EventArgs e)
 		{
-			bool invalid = _strInt == -1;
+			bool invalid = (_strInt == TalkReader.invalid);
 
 			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
-				it_cellStrref_specialflag.Text = "set special flag";
+				it_cellStrref_specialflag.Text = "set Special";
 			else
-				it_cellStrref_specialflag.Text = "clear special flag";
+				it_cellStrref_specialflag.Text = "clear Special";
 
 			it_cellStrref_specialflag.Enabled =
 			it_cellStrref_blank      .Enabled = !Table.Readonly && !invalid;
@@ -4342,12 +4342,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "strref" - opens a 'TalkDialog' that
-		/// displays the text's corresponding Dialog.Tlk entry in a readonly
-		/// RichTextBox for the user's investigation and/or copying.
-		/// @note Check that the cell's text parses to a valid non-negative
-		/// integer, or blank "****", before allowing the event to trigger (ie,
-		/// else disable the context it - see ShowCellMenu()).
+		/// Handler for cell-context "STRREF" click. Opens a 'TalkDialog' that
+		/// displays the text's corresponding Dialog.Tlk or special entry in a
+		/// readonly RichTextBox for the user's investigation and/or copying.
+		/// @note Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger (ie, else disable the context it - see
+		/// ShowCellMenu() and dropdownopening_Strref()).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4367,7 +4367,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handler for cell-context "set/clear Special" click. Toggles the
+		/// special-bit flag.
+		/// @note Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger (ie, else disable the context it - see
+		/// ShowCellMenu() and dropdownopening_Strref()).
+		/// @note The invalid strref (-1) cannot be toggled.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4387,7 +4392,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handler for cell-context "set Invalid (-1)" click. Sets a strref to
+		/// "-1" if not already.
+		/// @note Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger (ie, else disable the context it - see
+		/// ShowCellMenu() and dropdownopening_Strref()).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

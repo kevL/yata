@@ -1424,7 +1424,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles click to load a custom Talkfile.
+		/// Handles click to load a special Talkfile.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

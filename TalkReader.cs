@@ -57,7 +57,7 @@ namespace yata
 		/// <param name="it"></param>
 		/// <param name="alt"></param>
 		/// <returns>true if 1+ entry loads</returns>
-		internal static bool Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
+		internal static void Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
 		{
 			SortedDictionary<int, string> dict;
 
@@ -182,11 +182,12 @@ namespace yata
 						if (!alt) { loDialo = lo; hiDialo = hi; }
 						else      { loCusto = lo; hiCusto = hi; }
 
-						return (it.Checked = true);
+						it.Checked = true;
+						return;
 					}
 				}
 			}
-			return (it.Checked = false);
+			it.Checked = false;
 		}
 
 		/// <summary>

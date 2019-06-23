@@ -43,9 +43,8 @@ namespace yata
 		#region cTor
 		/// <summary>
 		/// cTor.
-		/// @note Check that the cell's text parses to a valid non-negative
-		/// integer, or blank "****", before allowing instantiation - see
-		/// YataForm.ShowCellMenu()).
+		/// @note Check that the cell's text parses to a valid value - see
+		/// YataForm.ShowCellMenu() and YataForm.dropdownopening_Strref()).
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <param name="f"></param>
@@ -120,22 +119,7 @@ namespace yata
 			Top  = _y;
 
 
-			if (_dict.Count == 0)
-			{
-				btn_Backward.Enabled =
-				btn_Forward .Enabled = false;
-
-				pnl_Copyable.BackColor =
-				rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
-			}
-			else
-			{
-				btn_Backward.Enabled =
-				btn_Forward .Enabled = true;
-
-				pnl_Copyable.BackColor =
-				rtb_Copyable.BackColor = Colors.TalkfileLoaded;
-			}
+			PokeUi(_dict.Count != 0);
 
 			tb_Strref.BackColor = Colors.TextboxBackground; // <- won't work right in the designer.
 
@@ -193,7 +177,7 @@ namespace yata
 		{
 			if (String.IsNullOrEmpty(tb_Strref.Text))
 			{
-				rtb_Copyable.Text = _dict[_eId = _eId_init]; // revert to default.
+				_eId = _eId_init; // revert to default.
 			}
 			else
 			{
@@ -201,21 +185,19 @@ namespace yata
 				if (!Int32.TryParse(tb_Strref.Text, out result)
 					|| result < TalkReader.invalid || result > TalkReader.strref)
 				{
-					tb_Strref.Text = _eId_init.ToString(); // recurse.
+					tb_Strref.Text = _eId_init.ToString();
 					tb_Strref.SelectionStart = tb_Strref.Text.Length;
+					return; // recurse.
 				}
-				else // let the Select button handle it.
-				{
-					_eId = result; // This is the setter for the '_eId' val.
 
-					if (_dict.ContainsKey(_eId))
-					{
-						rtb_Copyable.Text = _dict[_eId];
-					}
-					else
-						rtb_Copyable.Text = String.Empty;
-				}
+				// else let the Select button handle it.
+				_eId = result; // This is the setter for the '_eId' val.
 			}
+
+			if (_dict.ContainsKey(_eId))
+				rtb_Copyable.Text = _dict[_eId];
+			else
+				rtb_Copyable.Text = String.Empty;
 		}
 
 		/// <summary>
@@ -236,8 +218,9 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnSelect(object sender, EventArgs e)
 		{
-			if (_dict.Count == 0			// -> talkfile not loaded, therefore user knows what he/she
-				|| _dict.ContainsKey(_eId)	// is doing (ie, red panel BG) so let it through.
+			if (_eId == TalkReader.invalid
+				|| _dict.Count == 0			// -> talkfile not loaded, therefore user knows what he/she
+				|| _dict.ContainsKey(_eId)	// is doing (ie, red panel BG) so let it go through.
 				|| MessageBox.Show(this,
 								   "Entry not found.",
 								   " Bad Strref",
@@ -246,12 +229,61 @@ namespace yata
 								   MessageBoxDefaultButton.Button2,
 								   0) == DialogResult.OK)
 			{
-				if (cb_Custo.Checked)
+				if (_eId != TalkReader.invalid && cb_Custo.Checked)
 					_eId |= TalkReader.bitCusto;
 
 				_f._strref = _eId.ToString();
 				Close();
 			}
+		}
+
+		/// <summary>
+		/// Handles a click on the Load ... button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_btnLoad(object sender, EventArgs e)
+		{
+			if (!cb_Custo.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = " Select Dialog.Tlk";
+					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+						TalkReader.Load(ofd.FileName, _f.it_PathTalkD);
+				}
+
+				lo = TalkReader.loDialo;
+				hi = TalkReader.hiDialo;
+			}
+			else
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = " Select a TalkTable";
+					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+						TalkReader.Load(ofd.FileName, _f.it_PathTalkC, true);
+				}
+
+				lo = TalkReader.loCusto;
+				hi = TalkReader.hiCusto;
+			}
+
+			PokeUi(_dict.Count != 0);
+
+			if (_dict.ContainsKey(_eId))
+				rtb_Copyable.Text = _dict[_eId];
+			else
+				rtb_Copyable.Text = String.Empty;
+
+			if (TalkReader.AltLabel != null)
+				cb_Custo.Text = TalkReader.AltLabel;
+			else
+				cb_Custo.Text = "Custom";
 		}
 
 
@@ -333,31 +365,12 @@ namespace yata
 					hi = TalkReader.hiCusto;
 				}
 
-				if (_dict.Count == 0)
-				{
-					btn_Backward.Enabled =
-					btn_Forward .Enabled = false;
+				PokeUi(_dict.Count != 0);
 
-					pnl_Copyable.BackColor =
-					rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
-
-					rtb_Copyable.Text = String.Empty;
-				}
+				if (_dict.ContainsKey(_eId))
+					rtb_Copyable.Text = _dict[_eId];
 				else
-				{
-					btn_Backward.Enabled =
-					btn_Forward .Enabled = true;
-
-					pnl_Copyable.BackColor =
-					rtb_Copyable.BackColor = Colors.TalkfileLoaded;
-
-					if (_dict.ContainsKey(_eId))
-					{
-						rtb_Copyable.Text = _dict[_eId];
-					}
-					else
-						rtb_Copyable.Text = String.Empty;
-				}
+					rtb_Copyable.Text = String.Empty;
 			}
 		}
 
@@ -417,6 +430,31 @@ namespace yata
 			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
 				 * lines.Length;
 		}
+
+		/// <summary>
+		/// Sets UI elements depending on whether there are any entries in the
+		/// current TalkTable's dictionary.
+		/// </summary>
+		/// <param name="hasEntries"></param>
+		void PokeUi(bool hasEntries)
+		{
+			if (hasEntries)
+			{
+				btn_Backward.Enabled =
+				btn_Forward .Enabled = true;
+
+				pnl_Copyable.BackColor =
+				rtb_Copyable.BackColor = Colors.TalkfileLoaded;
+			}
+			else
+			{
+				btn_Backward.Enabled =
+				btn_Forward .Enabled = false;
+
+				pnl_Copyable.BackColor =
+				rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
+			}
+		}
 		#endregion Methods
 
 
@@ -428,6 +466,7 @@ namespace yata
 		Panel pnl_Copyable;
 		Button btn_Cancel;
 		Button btn_Select;
+		Button btn_Load;
 		Button btn_Forward;
 		Button btn_Prevert;
 		Button btn_Backward;
@@ -461,6 +500,7 @@ namespace yata
 			this.pnl_Copyable = new System.Windows.Forms.Panel();
 			this.btn_Cancel = new System.Windows.Forms.Button();
 			this.btn_Select = new System.Windows.Forms.Button();
+			this.btn_Load = new System.Windows.Forms.Button();
 			this.pnl_Head.SuspendLayout();
 			this.pnl_Copyable.SuspendLayout();
 			this.SuspendLayout();
@@ -576,7 +616,7 @@ namespace yata
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(85, 30);
-			this.btn_Cancel.TabIndex = 3;
+			this.btn_Cancel.TabIndex = 4;
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.click_btnCancel);
@@ -589,10 +629,22 @@ namespace yata
 			this.btn_Select.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Select.Name = "btn_Select";
 			this.btn_Select.Size = new System.Drawing.Size(85, 30);
-			this.btn_Select.TabIndex = 2;
+			this.btn_Select.TabIndex = 3;
 			this.btn_Select.Text = "Select";
 			this.btn_Select.UseVisualStyleBackColor = true;
 			this.btn_Select.Click += new System.EventHandler(this.click_btnSelect);
+			// 
+			// btn_Load
+			// 
+			this.btn_Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btn_Load.Location = new System.Drawing.Point(5, 140);
+			this.btn_Load.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_Load.Name = "btn_Load";
+			this.btn_Load.Size = new System.Drawing.Size(85, 30);
+			this.btn_Load.TabIndex = 2;
+			this.btn_Load.Text = "Load ...";
+			this.btn_Load.UseVisualStyleBackColor = true;
+			this.btn_Load.Click += new System.EventHandler(this.click_btnLoad);
 			// 
 			// TalkDialog
 			// 
@@ -600,6 +652,7 @@ namespace yata
 			this.AutoScroll = true;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(492, 174);
+			this.Controls.Add(this.btn_Load);
 			this.Controls.Add(this.btn_Select);
 			this.Controls.Add(this.btn_Cancel);
 			this.Controls.Add(this.pnl_Copyable);
