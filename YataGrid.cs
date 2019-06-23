@@ -2493,9 +2493,10 @@ namespace yata
 		/// <summary>
 		/// Starts a cell-edit from YataForm via the cellmenu.
 		/// </summary>
-		internal void startCelledit()
+		/// <param name="cell"></param>
+		internal void startCelledit(Cell cell)
 		{
-			_editcell = getSelectedCell();
+			_editcell = cell;
 			Celledit();
 			Invalidator(INVALID_GRID);
 		}

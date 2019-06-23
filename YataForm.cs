@@ -121,7 +121,9 @@ namespace yata
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
 		List<string> Strrefheads = new List<string>();
-		internal string _strref; // the strref set by 'TalkDialog'
+		internal string _strref; // the strref assigned by 'TalkDialog'
+		int _strInt;	// cache for cell-context's dropdown functs
+		Cell _sel;		// cache for cell-context's dropdown functs
 
 		int _track_x = -1; // tracks last mouseover coords ->
 		int _track_y = -1;
@@ -3945,18 +3947,26 @@ namespace yata
 
 							int result;
 							if (Int32.TryParse(strref, out result)
-								&& result > -1 && result < (TalkReader.bitCusto | TalkReader.strref))
+								&& result >=  TalkReader.invalid
+								&& result <= (TalkReader.bitCusto | TalkReader.strref))
 							{
-								bool alt = ((result & TalkReader.bitCusto) != 0);
-								result &= TalkReader.strref;
-
-								if (!alt && TalkReader.DictDialo.ContainsKey(result))
+								if (result == TalkReader.invalid)
 								{
-									text = TalkReader.DictDialo[result];
+									text = gs.Space;
 								}
-								else if (alt && TalkReader.DictCusto.ContainsKey(result))
+								else
 								{
-									text = TalkReader.DictCusto[result];
+									bool alt = ((result & TalkReader.bitCusto) != 0);
+									result &= TalkReader.strref;
+
+									if (!alt && TalkReader.DictDialo.ContainsKey(result))
+									{
+										text = TalkReader.DictDialo[result];
+									}
+									else if (alt && TalkReader.DictCusto.ContainsKey(result))
+									{
+										text = TalkReader.DictCusto[result];
+									}
 								}
 							}
 
@@ -4076,15 +4086,18 @@ namespace yata
 		/// </summary>
 		internal void ShowCellMenu()
 		{
-			Cell sel = Table.getSelectedCell();
+			_sel = Table.getSelectedCell();
 
 			it_cellEdit   .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellStars  .Enabled = !Table.Readonly && (sel.text != gs.Stars || sel.loadchanged);
+			it_cellStars  .Enabled = !Table.Readonly
+								  && (_sel.text != gs.Stars || _sel.loadchanged);
 			it_cellMergeCe.Enabled = 
-			it_cellMergeRo.Enabled = isMergeEnabled(sel);
-			it_cellInput  .Enabled = Table.Info == YataGrid.InfoType.INFO_SPELL && isInfoInputCol(sel.x);
-			it_cellStrref .Enabled = isStrrefEnabled(sel);
+			it_cellMergeRo.Enabled = isMergeEnabled();
+			it_cellInput  .Enabled = !Table.Readonly
+								  && Table.Info == YataGrid.InfoType.INFO_SPELL
+								  && isInfoInputCol();
+			it_cellStrref .Enabled = isStrrefEnabled();
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -4093,19 +4106,18 @@ namespace yata
 		/// <summary>
 		/// Helper for ShowCellMenu().
 		/// </summary>
-		/// <param name="sel"></param>
 		/// <returns>true if Merge (cell or row) will be enabled</returns>
-		bool isMergeEnabled(Cell sel)
+		bool isMergeEnabled()
 		{
-			if (sel.diff && _diff1 != null && _diff2 != null)
+			if (_sel.diff && _diff1 != null && _diff2 != null)
 			{
 				YataGrid destTable = null;
 				if      (Table == _diff1) destTable = _diff2;
 				else if (Table == _diff2) destTable = _diff1;
 
 				return (destTable != null && !destTable.Readonly
-					 && destTable.ColCount > sel.x
-					 && destTable.RowCount > sel.y);
+					 && destTable.ColCount > _sel.x
+					 && destTable.RowCount > _sel.y);
 			}
 			return false;
 		}
@@ -4113,11 +4125,10 @@ namespace yata
 		/// <summary>
 		/// Helper for ShowCellMenu().
 		/// </summary>
-		/// <param name="c">the col of the selected cell</param>
 		/// <returns></returns>
-		bool isInfoInputCol(int c)
+		bool isInfoInputCol()
 		{
-			switch (c)
+			switch (_sel.x)
 			{
 				case InfoInputDialog.School:
 				case InfoInputDialog.Range:
@@ -4144,18 +4155,17 @@ namespace yata
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="sel"></param>
 		/// <returns>true if TalkEntry dialog will be enabled</returns>
-		bool isStrrefEnabled(Cell sel)
+		bool isStrrefEnabled()
 		{
-			if (sel.x != 0 && Strrefheads.Contains(Table.Fields[sel.x - 1]))
+			if (_sel.x != 0 && Strrefheads.Contains(Table.Fields[_sel.x - 1]))
 			{
-				string strref = sel.text;
+				string strref = _sel.text;
 				if (strref == gs.Stars) strref = "0";
 
-				int result;
-				return Int32.TryParse(strref, out result)
-					&& result > -1 && result < (TalkReader.bitCusto | TalkReader.strref);
+				return Int32.TryParse(strref, out _strInt)
+					&& _strInt >=  TalkReader.invalid
+					&& _strInt <= (TalkReader.bitCusto | TalkReader.strref);
 			}
 			return false;
 		}
@@ -4170,12 +4180,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_EditCell(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
-			{
-				Table.startCelledit();
-			}
-			else
-				ReadonlyError();
+			Table.startCelledit(_sel);
 		}
 
 		/// <summary>
@@ -4185,18 +4190,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Stars(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
-			{
-				Cell sel = Table.getSelectedCell();
-				if (sel != null)
-				{
-					Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
-				}
-				else
-					CopyPasteCellError();
-			}
-			else
-				ReadonlyError();
+			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
 		}
 
 		/// <summary>
@@ -4206,22 +4200,18 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_MergeCe(object sender, EventArgs e)
 		{
-			YataGrid destTable = null;
-			if      (Table == _diff1) destTable = _diff2;
-			else if (Table == _diff2) destTable = _diff1;
+			YataGrid destTable;
+			if (Table == _diff1) destTable = _diff2;
+			else                 destTable = _diff1;
 
-			if (destTable != null) // safety.
-			{
-				Cell src = Table.getSelectedCell();
-				int r = src.y;
-				int c = src.x;
+			int r = _sel.y;
+			int c = _sel.x;
 
-				Cell dst = destTable[r,c];
-				destTable.ChangeCellText(dst, src.text); // does not do a text-check
+			Cell dst = destTable[r,c];
+			destTable.ChangeCellText(dst, _sel.text); // does not do a text-check
 
-				_diff1[r,c].diff =
-				_diff2[r,c].diff = false;
-			}
+			_diff1[r,c].diff =
+			_diff2[r,c].diff = false;
 		}
 
 		/// <summary>
@@ -4231,52 +4221,49 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_MergeRo(object sender, EventArgs e)
 		{
-			YataGrid destTable = null;
-			if      (Table == _diff1) destTable = _diff2;
-			else if (Table == _diff2) destTable = _diff1;
+			YataGrid destTable;
+			if (Table == _diff1) destTable = _diff2;
+			else                 destTable = _diff1;
 
-			if (destTable != null) // safety.
+			int r = _sel.y;
+
+			// - store the row's current state to 'rPre' in the Restorable
+			Restorable rest = UndoRedo.createRow(destTable.Rows[r]);
+
+			int c = 0;
+			for (; c != destTable.ColCount && c != Table.ColCount; ++c)
 			{
-				int r = Table.getSelectedCell().y;
+				destTable[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
+				destTable[r,c].diff = false;
 
-				// - store the row's current state to 'rPre' in the Restorable
-				Restorable rest = UndoRedo.createRow(destTable.Rows[r]);
-
-				int c = 0;
-				for (; c != destTable.ColCount && c != Table.ColCount; ++c)
-				{
-					destTable[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
-					destTable[r,c].diff = false;
-
-					Table[r,c].diff = false;
-				}
-
-				if (destTable.ColCount > Table.ColCount)
-				{
-					for (; c != destTable.ColCount; ++c)
-					{
-						destTable[r,c].text = gs.Stars;
-						destTable[r,c].diff = false;
-					}
-				}
-				else if (destTable.ColCount < Table.ColCount)
-				{
-					for (; c != Table.ColCount; ++c)
-						Table[r,c].diff = false;
-				}
-
-				Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-
-				if (!destTable.Changed)
-				{
-					destTable.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-
-				// - store the row's changed state to 'rPos' in the Restorable
-				rest.rPos = destTable.Rows[r].Clone() as Row;
-				destTable._ur.Push(rest);
+				Table[r,c].diff = false;
 			}
+
+			if (destTable.ColCount > Table.ColCount)
+			{
+				for (; c != destTable.ColCount; ++c)
+				{
+					destTable[r,c].text = gs.Stars;
+					destTable[r,c].diff = false;
+				}
+			}
+			else if (destTable.ColCount < Table.ColCount)
+			{
+				for (; c != Table.ColCount; ++c)
+					Table[r,c].diff = false;
+			}
+
+			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+
+			if (!destTable.Changed)
+			{
+				destTable.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+
+			// - store the row's changed state to 'rPos' in the Restorable
+			rest.rPos = destTable.Rows[r].Clone() as Row;
+			destTable._ur.Push(rest);
 		}
 
 
@@ -4287,22 +4274,19 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Input(object sender, EventArgs e)
 		{
-			Cell cell = Table.getSelectedCell();
-			Form f;
-
-			switch (cell.x)
+			switch (_sel.x)
 			{
 				case InfoInputDialog.School: // STRING Input ->
 				case InfoInputDialog.Range:
 				case InfoInputDialog.ImmunityType:
 				case InfoInputDialog.UserType:
 				case InfoInputDialog.TargetingUI:
-					using (f = new InfoInputDialog(Table, cell))
+					using (var f = new InfoInputDialog(Table, _sel))
 					{
 						if (f.ShowDialog(this) == DialogResult.OK
 							&& stInput != stOriginal)
 						{
-							Table.ChangeCellText(cell, stInput); // does not do a text-check
+							Table.ChangeCellText(_sel, stInput); // does not do a text-check
 						}
 					}
 					break;
@@ -4310,7 +4294,7 @@ namespace yata
 				case InfoInputDialog.MetaMagic: // HEX Input ->
 				case InfoInputDialog.TargetType:
 				case InfoInputDialog.AsMetaMagic:
-					using (f = new InfoInputDialog(Table, cell))
+					using (var f = new InfoInputDialog(Table, _sel))
 					{
 						if (f.ShowDialog(this) == DialogResult.OK
 							&& intInput != intOriginal)
@@ -4319,22 +4303,42 @@ namespace yata
 							if (intInput <= 0xFF) format = "X2";
 							else                  format = "X6";
 
-							Table.ChangeCellText(cell, "0x" + intInput.ToString(format)); // does not do a text-check
+							Table.ChangeCellText(_sel, "0x" + intInput.ToString(format)); // does not do a text-check
 						}
 					}
 					break;
 
 				case InfoInputDialog.Category: // INT Input ->
-					using (f = new InfoInputDialog(Table, cell))
+					using (var f = new InfoInputDialog(Table, _sel))
 					{
 						if (f.ShowDialog(this) == DialogResult.OK
 							&& intInput != intOriginal)
 						{
-							Table.ChangeCellText(cell, intInput.ToString()); // does not do a text-check
+							Table.ChangeCellText(_sel, intInput.ToString()); // does not do a text-check
 						}
 					}
 					break;
 			}
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void dropdownopening_Strref(object sender, EventArgs e)
+		{
+			bool invalid = _strInt == -1;
+
+			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
+				it_cellStrref_specialflag.Text = "set special flag";
+			else
+				it_cellStrref_specialflag.Text = "clear special flag";
+
+			it_cellStrref_specialflag.Enabled =
+			it_cellStrref_blank      .Enabled = !Table.Readonly && !invalid;
+
 		}
 
 		/// <summary>
@@ -4347,20 +4351,49 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Strref(object sender, EventArgs e)
+		void cellclick_Strref_talktable(object sender, EventArgs e)
 		{
-			Cell sel = Table.getSelectedCell();
-			_strref = sel.text;
+			_strref = _sel.text;
 
-			using (var f = new TalkDialog(sel, this))
+			using (var f = new TalkDialog(_sel, this))
 			{
 				if (f.ShowDialog(this) == DialogResult.OK
-					&& _strref != sel.text)
+					&& _strref != _sel.text)
 				{
-					Table.ChangeCellText(sel, _strref);
+					Table.ChangeCellText(_sel, _strref); // does not do a text-check
 					Invalidate();	// lolziMScopter - else the titlebar and borders can arbitrarily disappear.
 				}					// nobody knows why ... q TwilightZone
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Strref_specialflag(object sender, EventArgs e)
+		{
+			if ((_strInt & TalkReader.bitCusto) != 0)
+			{
+				_strInt &= TalkReader.strref;	// knocks out 'bitCusto' and any MSB errors
+			}
+			else
+			{
+				_strInt &= TalkReader.strref;	// knocks out any MSB errors
+				_strInt |= TalkReader.bitCusto;	// flags 'bitCusto'
+			}
+
+			Table.ChangeCellText(_sel, _strInt.ToString()); // does not do a text-check
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Strref_blank(object sender, EventArgs e)
+		{
+			Table.ChangeCellText(_sel, "-1"); // does not do a text-check
 		}
 		#endregion Events (cell)
 	}

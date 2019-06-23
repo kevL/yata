@@ -23,6 +23,7 @@ namespace yata
 
 		internal const int bitCusto = 0x01000000; // flag in the strref for Custo talktable
 		internal const int strref   = 0x00FFFFFF; // isolates the actual strref-val
+		internal const int invalid  = -1;         // no entry, a blank string; note that a valid id without an entry is also a blank string
 
 		const uint TEXT_PRESENT    =  1; // Data flag - a text is present in the Texts area
 
@@ -261,7 +262,7 @@ FileType            4-char "TLK "												0x00000000
 FileVersion         4-char "V3.0"												0x00000020
 LanguageID          DWORD  Language ID											0x00000040
 StringCount         DWORD  Count of strings										0x00000060
-StringEntriesOffset DWORD  Offset from start of file to the String Entry Table	0x00000080
+StringEntriesOffset DWORD  Offset from start of file to the StringEntryTable	0x00000080
 
 __STRINGDATAELEMENT__															0x000000A0 [start] bit 160 / byte 20
 Flags          DWORD   Flags about this StrRef.									0x00000000
@@ -286,11 +287,26 @@ string ends, the next one begins. kL_note: Consider it UTF8.
 
 // dialog.tlk -> 16777215 MaxVal 0x00FFFFFF
 /*
+The StrRef is a 32-bit unsigned integer that serves as an index into the table
+of strings stored in the talk table. To specify an invalid StrRef, the talk
+table system uses a StrRef in which all the bits are 1 (ie. 4294967295, or
+0xFFFFFFFF, the maximum possible 32-bit unsigned value, or -1 if it were a
+signed 32-bit value). When presented with the invalid StrRef value, the text
+returned should be a blank string.
+
+Valid StrRefs can have values of up to 0x00FFFFFF, or 16777215. Any higher
+values will have the upper 2 bytes masked off and set to 0, so 0x01000001, or
+16777217, for example, will be treated as StrRef 1.
+
 If a module uses an alternate talk table, then bit 0x01000000 of a StrRef
 specifies whether the StrRef should be fetched from the normal dialog.tlk or
 from the alternate tlk file, If the bit is 0, the StrRef is fetched as normal
 from dialog.tlk. If the bit is 1, then the StrRef is fetched from the
 alternative talk table.
+
+If the alternate tlk file does not exist, could not be loaded, or does not
+contain the requested StrRef, then the StrRef is fetched as normal from the
+standard dialog.tlk file. kL_note: But that's just silly.
 */
 
 /*

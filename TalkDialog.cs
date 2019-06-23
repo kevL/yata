@@ -62,7 +62,7 @@ namespace yata
 
 			_eId_init = Int32.Parse(strref);
 
-			if ((_eId_init & TalkReader.bitCusto) == 0)
+			if (_eId_init == TalkReader.invalid || (_eId_init & TalkReader.bitCusto) == 0)
 			{
 				_dict = TalkReader.DictDialo;
 				lo = TalkReader.loDialo;
@@ -79,7 +79,8 @@ namespace yata
 				_init = false;
 			}
 
-			_eId_init &= TalkReader.strref;
+			if (_eId_init != TalkReader.invalid)
+				_eId_init &= TalkReader.strref;
 
 			tb_Strref.Text = _eId_init.ToString(); // <- sets '_eId' and 'rtb_Copyable.Text'
 
@@ -140,6 +141,8 @@ namespace yata
 
 			if (TalkReader.AltLabel != null)
 				cb_Custo.Text = TalkReader.AltLabel;
+
+			btn_Select.Enabled = !YataForm.Table.Readonly;
 		}
 		#endregion
 
@@ -196,7 +199,7 @@ namespace yata
 			{
 				int result;
 				if (!Int32.TryParse(tb_Strref.Text, out result)
-					|| result < 0 || result > TalkReader.strref)
+					|| result < TalkReader.invalid || result > TalkReader.strref)
 				{
 					tb_Strref.Text = _eId_init.ToString(); // recurse.
 					tb_Strref.SelectionStart = tb_Strref.Text.Length;
@@ -480,10 +483,10 @@ namespace yata
 			// 
 			this.cb_Custo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.cb_Custo.Location = new System.Drawing.Point(172, 3);
+			this.cb_Custo.Location = new System.Drawing.Point(165, 3);
 			this.cb_Custo.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Custo.Name = "cb_Custo";
-			this.cb_Custo.Size = new System.Drawing.Size(320, 20);
+			this.cb_Custo.Size = new System.Drawing.Size(325, 20);
 			this.cb_Custo.TabIndex = 4;
 			this.cb_Custo.Text = "Custom";
 			this.cb_Custo.UseVisualStyleBackColor = true;
@@ -496,9 +499,9 @@ namespace yata
 			this.tb_Strref.Location = new System.Drawing.Point(1, 1);
 			this.tb_Strref.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Strref.Name = "tb_Strref";
-			this.tb_Strref.Size = new System.Drawing.Size(62, 22);
+			this.tb_Strref.Size = new System.Drawing.Size(65, 22);
 			this.tb_Strref.TabIndex = 0;
-			this.tb_Strref.Text = "-1";
+			this.tb_Strref.Text = "-2";
 			this.tb_Strref.TextChanged += new System.EventHandler(this.textchanged_Strref);
 			// 
 			// btn_Forward

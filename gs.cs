@@ -7,6 +7,8 @@
 	{
 		internal const string Stars           = "****";
 
+		internal const string Space           = " ";
+
 		internal const string non             = "n/a";
 
 		internal const string Acid            = "Acid";
@@ -45,6 +47,7 @@
 		internal const string EldritchDoom    = "Eldritch Doom";
 		internal const string EldritchSpear   = "Eldritch Spear";
 		internal const string HideousBlow     = "Hideous Blow";
+
 
 		internal static string[] SEPARATORS = { "\r\n", "\r", "\n" };
 	}
