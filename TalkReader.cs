@@ -78,16 +78,16 @@ namespace yata
 				byte[] bytes = File.ReadAllBytes(pfeTlk);
 
 				uint pos = HeaderStart;
+				uint b;
 
 				var buffer = new byte[8];
-				for (uint i = 0; i != 8; ++i)
-					buffer[i] = bytes[pos++];
+				for (b = 0; b != 8; ++b)
+					buffer[b] = bytes[pos++];
 
-				string sAsci = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+				string sAsci = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
 				if (sAsci == Ver) // check if v3.0 tlktable
 				{
 					bool le = BitConverter.IsLittleEndian; // hardware architecture
-					uint b;
 
 //					pos = HeaderStart + LanguageIdStart;
 //					buffer = new byte[4];
@@ -161,7 +161,7 @@ namespace yata
 							for (b = 0; b != TextLength; ++b)
 								buffer[b] = bytes[pos++];
 
-							string text = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+							string text = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
 
 							dict.Add((int)i, text);
 						}
@@ -281,7 +281,7 @@ __STRINGENTRYTABLE__
 The StringEntryTable begins at the StringEntriesOffset specified in the Header
 of the file, and continues to the end of the file. All the localized text is
 contained in the StringEntryTable as non-null-terminated strings. As soon as one
-string ends, the next one begins. kL_note: Consider it ASCII.
+string ends, the next one begins. kL_note: Consider it UTF8.
 */
 
 // dialog.tlk -> 16777215 MaxVal 0x00FFFFFF

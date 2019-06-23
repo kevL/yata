@@ -518,7 +518,7 @@ namespace yata
 			this.rtb_Copyable.Name = "rtb_Copyable";
 			this.rtb_Copyable.ReadOnly = true;
 			this.rtb_Copyable.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.rtb_Copyable.Size = new System.Drawing.Size(481, 107);
+			this.rtb_Copyable.Size = new System.Drawing.Size(484, 107);
 			this.rtb_Copyable.TabIndex = 0;
 			this.rtb_Copyable.Text = "rtb_Copyable";
 			// 
@@ -530,7 +530,7 @@ namespace yata
 			this.pnl_Copyable.Location = new System.Drawing.Point(0, 26);
 			this.pnl_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.pnl_Copyable.Name = "pnl_Copyable";
-			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(7, 1, 4, 1);
+			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(7, 1, 1, 1);
 			this.pnl_Copyable.Size = new System.Drawing.Size(492, 109);
 			this.pnl_Copyable.TabIndex = 1;
 			this.pnl_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_CopyPanel);
