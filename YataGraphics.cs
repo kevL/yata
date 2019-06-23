@@ -131,6 +131,9 @@ namespace yata
 		internal static readonly Color TextboxBackground = Color.WhiteSmoke;
 		internal static readonly Color TextboxSelected   = Color.FloralWhite;
 		internal static readonly Color TextboxReadonly   = Color.Azure;
+
+		internal static readonly Color TalkfileLoaded    = Color.Khaki;
+		internal static readonly Color TalkfileLoaded_f  = Color.Crimson;
 	}
 
 	static class Gradients

@@ -119,11 +119,24 @@ namespace yata
 			Top  = _y;
 
 
-			rtb_Copyable.BackColor = Color.Khaki; // <- won't work right in the designer.
-			tb_Strref   .BackColor = Colors.TextboxBackground;
+			if (_dict.Count == 0)
+			{
+				btn_Backward.Enabled =
+				btn_Forward .Enabled = false;
 
-			btn_Backward.Enabled =
-			btn_Forward .Enabled = _dict.Count != 0;
+				pnl_Copyable.BackColor =
+				rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
+			}
+			else
+			{
+				btn_Backward.Enabled =
+				btn_Forward .Enabled = true;
+
+				pnl_Copyable.BackColor =
+				rtb_Copyable.BackColor = Colors.TalkfileLoaded;
+			}
+
+			tb_Strref.BackColor = Colors.TextboxBackground; // <- won't work right in the designer.
 
 			if (TalkReader.AltLabel != null)
 				cb_Custo.Text = TalkReader.AltLabel;
@@ -220,9 +233,10 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnSelect(object sender, EventArgs e)
 		{
-			if (_dict.ContainsKey(_eId)
+			if (_dict.Count == 0			// -> talkfile not loaded, therefore user knows what he/she
+				|| _dict.ContainsKey(_eId)	// is doing (ie, red panel BG) so let it through.
 				|| MessageBox.Show(this,
-								   "Strref not found.",
+								   "Entry not found.",
 								   " Bad Strref",
 								   MessageBoxButtons.OKCancel,
 								   MessageBoxIcon.Warning,
@@ -316,15 +330,31 @@ namespace yata
 					hi = TalkReader.hiCusto;
 				}
 
-				if (_dict.ContainsKey(_eId))
+				if (_dict.Count == 0)
 				{
-					rtb_Copyable.Text = _dict[_eId];
+					btn_Backward.Enabled =
+					btn_Forward .Enabled = false;
+
+					pnl_Copyable.BackColor =
+					rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
+
+					rtb_Copyable.Text = String.Empty;
 				}
 				else
-					rtb_Copyable.Text = String.Empty;
+				{
+					btn_Backward.Enabled =
+					btn_Forward .Enabled = true;
 
-				btn_Backward.Enabled =
-				btn_Forward .Enabled = _dict.Count != 0;
+					pnl_Copyable.BackColor =
+					rtb_Copyable.BackColor = Colors.TalkfileLoaded;
+
+					if (_dict.ContainsKey(_eId))
+					{
+						rtb_Copyable.Text = _dict[_eId];
+					}
+					else
+						rtb_Copyable.Text = String.Empty;
+				}
 			}
 		}
 
