@@ -1415,8 +1415,8 @@ namespace yata
 
 		/// <summary>
 		/// Handles navigation by keyboard around the table. Also handles the
-		/// delete-key for selected row(s) as well as the escape-key to clear
-		/// all selections.
+		/// delete-key for selected row(s) or a single selected cell as well as
+		/// the escape-key to clear all selections.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -1827,7 +1827,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a single or multiple rows on keypress Delete.
+		/// Deletes a single or multiple rows on keypress Delete, but if a row
+		/// is not selected and a single cell is selected then clear its
+		/// celltext ("****").
 		/// </summary>
 		void Delete()
 		{
@@ -1882,6 +1884,15 @@ namespace yata
 
 				_f.Obfuscate(false);
 				DrawingControl.ResumeDrawing(this);
+			}
+			else
+			{
+				Cell sel = getSelectedCell();
+				if (sel != null
+					&& (sel.text != gs.Stars || sel.loadchanged))
+				{
+					ChangeCellText(sel, gs.Stars);
+				}
 			}
 		}
 

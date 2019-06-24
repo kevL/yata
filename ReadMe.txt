@@ -6,7 +6,7 @@ changed in the Settings.Cfg textfile.
 
 2019 june 23
 kevL's
-ver 3.3.9.0
+ver 3.3.9.1
 
 
 File
@@ -182,6 +182,8 @@ Delete - when a row is selected (as indicated with a green field at the far left
          row, above or below the selected row, to select a range of rows to
          delete. If all rows of a table are deleted a single default row will be
          created.
+       - if a row is not selected and only 1 cell is selected, Delete clears its
+         celltext ("****")
 
 
 MOUSE:
