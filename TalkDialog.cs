@@ -20,7 +20,8 @@ namespace yata
 		const int HIGHT_Min = 130;
 		const int HIGHT_Max = 500;
 
-		const int VERT_PAD_CANCEL = 10;
+		const int pad_HORI = 20; // pad real and imagined
+		const int pad_VERT = 10; // pad above Cancel button
 
 		static int _x = -1;
 		static int _y = -1;
@@ -109,8 +110,8 @@ namespace yata
 			if      (h < HIGHT_Min) h = HIGHT_Min;
 			else if (h > HIGHT_Max) h = HIGHT_Max;
 
-			ClientSize = new Size(w + 20,				// +20 = pad real and imagined.
-								  h + VERT_PAD_CANCEL);	// +10 = pad above Cancel button
+			ClientSize = new Size(w + pad_HORI,
+								  h + pad_VERT);
 
 			if (_x == -1) _x = _f.Left + 30;
 			if (_y == -1) _y = _f.Top  + 30;
@@ -126,7 +127,7 @@ namespace yata
 			if (TalkReader.AltLabel != null)
 				cb_Custo.Text = TalkReader.AltLabel;
 
-			btn_Select.Enabled = !YataForm.Table.Readonly;
+			btn_Accept.Enabled = !YataForm.Table.Readonly;
 		}
 		#endregion
 
@@ -138,6 +139,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
+			int widthborder = (Width  - ClientSize.Width) / 2;
+			int heighttitle = (Height - ClientSize.Height - 2 * widthborder);
+
+			MinimumSize = new Size(WIDTH_Min + pad_HORI + 2 * widthborder,
+								   HIGHT_Min + pad_VERT + 2 * widthborder + heighttitle);
+
 			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the cTor or designer to work right.
 			rtb_Copyable.Select();
 		}
@@ -146,7 +153,7 @@ namespace yata
 		{
 			pnl_Copyable.Height = ClientSize.Height
 								- pnl_Head  .Height
-								- btn_Cancel.Height - VERT_PAD_CANCEL;
+								- btn_Cancel.Height - pad_VERT;
 			base.OnResize(e);
 			pnl_Copyable.Invalidate();
 		}
@@ -435,25 +442,20 @@ namespace yata
 		/// Sets UI elements depending on whether there are any entries in the
 		/// current TalkTable's dictionary.
 		/// </summary>
-		/// <param name="hasEntries"></param>
-		void PokeUi(bool hasEntries)
+		/// <param name="enabled">true if the current dictionary has entries</param>
+		void PokeUi(bool enabled)
 		{
-			if (hasEntries)
+			Color color;
+			if (btn_Backward.Enabled =
+				btn_Forward .Enabled = enabled)
 			{
-				btn_Backward.Enabled =
-				btn_Forward .Enabled = true;
-
-				pnl_Copyable.BackColor =
-				rtb_Copyable.BackColor = Colors.TalkfileLoaded;
+				color = Colors.TalkfileLoaded;
 			}
 			else
-			{
-				btn_Backward.Enabled =
-				btn_Forward .Enabled = false;
+				color = Colors.TalkfileLoaded_f;
 
-				pnl_Copyable.BackColor =
-				rtb_Copyable.BackColor = Colors.TalkfileLoaded_f;
-			}
+			pnl_Copyable.BackColor =
+			rtb_Copyable.BackColor = color;
 		}
 		#endregion Methods
 
@@ -465,7 +467,7 @@ namespace yata
 		RichTextBox rtb_Copyable;
 		Panel pnl_Copyable;
 		Button btn_Cancel;
-		Button btn_Select;
+		Button btn_Accept;
 		Button btn_Load;
 		Button btn_Forward;
 		Button btn_Prevert;
@@ -499,7 +501,7 @@ namespace yata
 			this.rtb_Copyable = new System.Windows.Forms.RichTextBox();
 			this.pnl_Copyable = new System.Windows.Forms.Panel();
 			this.btn_Cancel = new System.Windows.Forms.Button();
-			this.btn_Select = new System.Windows.Forms.Button();
+			this.btn_Accept = new System.Windows.Forms.Button();
 			this.btn_Load = new System.Windows.Forms.Button();
 			this.pnl_Head.SuspendLayout();
 			this.pnl_Copyable.SuspendLayout();
@@ -523,10 +525,10 @@ namespace yata
 			// 
 			this.cb_Custo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.cb_Custo.Location = new System.Drawing.Point(165, 3);
+			this.cb_Custo.Location = new System.Drawing.Point(170, 3);
 			this.cb_Custo.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Custo.Name = "cb_Custo";
-			this.cb_Custo.Size = new System.Drawing.Size(325, 20);
+			this.cb_Custo.Size = new System.Drawing.Size(320, 20);
 			this.cb_Custo.TabIndex = 4;
 			this.cb_Custo.Text = "Custom";
 			this.cb_Custo.UseVisualStyleBackColor = true;
@@ -539,7 +541,7 @@ namespace yata
 			this.tb_Strref.Location = new System.Drawing.Point(1, 1);
 			this.tb_Strref.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Strref.Name = "tb_Strref";
-			this.tb_Strref.Size = new System.Drawing.Size(65, 22);
+			this.tb_Strref.Size = new System.Drawing.Size(66, 22);
 			this.tb_Strref.TabIndex = 0;
 			this.tb_Strref.Text = "-2";
 			this.tb_Strref.TextChanged += new System.EventHandler(this.textchanged_Strref);
@@ -586,12 +588,12 @@ namespace yata
 			this.rtb_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtb_Copyable.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rtb_Copyable.HideSelection = false;
-			this.rtb_Copyable.Location = new System.Drawing.Point(7, 1);
+			this.rtb_Copyable.Location = new System.Drawing.Point(6, 1);
 			this.rtb_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.rtb_Copyable.Name = "rtb_Copyable";
 			this.rtb_Copyable.ReadOnly = true;
 			this.rtb_Copyable.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.rtb_Copyable.Size = new System.Drawing.Size(484, 107);
+			this.rtb_Copyable.Size = new System.Drawing.Size(485, 107);
 			this.rtb_Copyable.TabIndex = 0;
 			this.rtb_Copyable.Text = "rtb_Copyable";
 			// 
@@ -603,7 +605,7 @@ namespace yata
 			this.pnl_Copyable.Location = new System.Drawing.Point(0, 26);
 			this.pnl_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.pnl_Copyable.Name = "pnl_Copyable";
-			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(7, 1, 1, 1);
+			this.pnl_Copyable.Padding = new System.Windows.Forms.Padding(6, 1, 1, 1);
 			this.pnl_Copyable.Size = new System.Drawing.Size(492, 109);
 			this.pnl_Copyable.TabIndex = 1;
 			this.pnl_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_CopyPanel);
@@ -621,26 +623,26 @@ namespace yata
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.click_btnCancel);
 			// 
-			// btn_Select
+			// btn_Accept
 			// 
-			this.btn_Select.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Select.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Select.Location = new System.Drawing.Point(310, 140);
-			this.btn_Select.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Select.Name = "btn_Select";
-			this.btn_Select.Size = new System.Drawing.Size(85, 30);
-			this.btn_Select.TabIndex = 3;
-			this.btn_Select.Text = "Select";
-			this.btn_Select.UseVisualStyleBackColor = true;
-			this.btn_Select.Click += new System.EventHandler(this.click_btnSelect);
+			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btn_Accept.Location = new System.Drawing.Point(310, 140);
+			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_Accept.Name = "btn_Accept";
+			this.btn_Accept.Size = new System.Drawing.Size(85, 30);
+			this.btn_Accept.TabIndex = 3;
+			this.btn_Accept.Text = "Accept";
+			this.btn_Accept.UseVisualStyleBackColor = true;
+			this.btn_Accept.Click += new System.EventHandler(this.click_btnSelect);
 			// 
 			// btn_Load
 			// 
 			this.btn_Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.btn_Load.Location = new System.Drawing.Point(5, 140);
+			this.btn_Load.Location = new System.Drawing.Point(5, 145);
 			this.btn_Load.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Load.Name = "btn_Load";
-			this.btn_Load.Size = new System.Drawing.Size(85, 30);
+			this.btn_Load.Size = new System.Drawing.Size(70, 25);
 			this.btn_Load.TabIndex = 2;
 			this.btn_Load.Text = "Load ...";
 			this.btn_Load.UseVisualStyleBackColor = true;
@@ -648,12 +650,12 @@ namespace yata
 			// 
 			// TalkDialog
 			// 
-			this.AcceptButton = this.btn_Select;
+			this.AcceptButton = this.btn_Accept;
 			this.AutoScroll = true;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(492, 174);
 			this.Controls.Add(this.btn_Load);
-			this.Controls.Add(this.btn_Select);
+			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
 			this.Controls.Add(this.pnl_Copyable);
 			this.Controls.Add(this.pnl_Head);

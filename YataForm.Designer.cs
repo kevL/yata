@@ -159,8 +159,8 @@ namespace yata
 		ToolStripMenuItem it_cellInput;
 		ToolStripMenuItem it_cellStrref;
 		ToolStripMenuItem it_cellStrref_talktable;
-		ToolStripMenuItem it_cellStrref_specialflag;
-		ToolStripMenuItem it_cellStrref_blank;
+		ToolStripMenuItem it_cellStrref_special;
+		ToolStripMenuItem it_cellStrref_invalid;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statbar_lblCords;
@@ -322,8 +322,8 @@ namespace yata
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellStrref = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellStrref_talktable = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellStrref_specialflag = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellStrref_blank = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellStrref_special = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellStrref_invalid = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMenu.SuspendLayout();
 			this.menubar.SuspendLayout();
@@ -1365,7 +1365,7 @@ namespace yata
 			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(174, 204);
+			this.cellMenu.Size = new System.Drawing.Size(174, 226);
 			// 
 			// it_cellEdit
 			// 
@@ -1433,8 +1433,8 @@ namespace yata
 			// 
 			this.it_cellStrref.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_cellStrref_talktable,
-			this.it_cellStrref_specialflag,
-			this.it_cellStrref_blank});
+			this.it_cellStrref_special,
+			this.it_cellStrref_invalid});
 			this.it_cellStrref.Name = "it_cellStrref";
 			this.it_cellStrref.Size = new System.Drawing.Size(173, 22);
 			this.it_cellStrref.Text = "STRREF";
@@ -1447,19 +1447,19 @@ namespace yata
 			this.it_cellStrref_talktable.Text = "TalkTable";
 			this.it_cellStrref_talktable.Click += new System.EventHandler(this.cellclick_Strref_talktable);
 			// 
-			// it_cellStrref_specialflag
+			// it_cellStrref_special
 			// 
-			this.it_cellStrref_specialflag.Name = "it_cellStrref_specialflag";
-			this.it_cellStrref_specialflag.Size = new System.Drawing.Size(160, 22);
-			this.it_cellStrref_specialflag.Text = "set Special";
-			this.it_cellStrref_specialflag.Click += new System.EventHandler(this.cellclick_Strref_specialflag);
+			this.it_cellStrref_special.Name = "it_cellStrref_special";
+			this.it_cellStrref_special.Size = new System.Drawing.Size(160, 22);
+			this.it_cellStrref_special.Text = "set Special";
+			this.it_cellStrref_special.Click += new System.EventHandler(this.cellclick_Strref_special);
 			// 
-			// it_cellStrref_blank
+			// it_cellStrref_invalid
 			// 
-			this.it_cellStrref_blank.Name = "it_cellStrref_blank";
-			this.it_cellStrref_blank.Size = new System.Drawing.Size(160, 22);
-			this.it_cellStrref_blank.Text = "set Invalid (-1)";
-			this.it_cellStrref_blank.Click += new System.EventHandler(this.cellclick_Strref_blank);
+			this.it_cellStrref_invalid.Name = "it_cellStrref_invalid";
+			this.it_cellStrref_invalid.Size = new System.Drawing.Size(160, 22);
+			this.it_cellStrref_invalid.Text = "set Invalid (-1)";
+			this.it_cellStrref_invalid.Click += new System.EventHandler(this.cellclick_Strref_invalid);
 			// 
 			// it_cellInput
 			// 

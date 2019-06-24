@@ -4332,13 +4332,12 @@ namespace yata
 			bool invalid = (_strInt == TalkReader.invalid);
 
 			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
-				it_cellStrref_specialflag.Text = "set Special";
+				it_cellStrref_special.Text = "set Special";
 			else
-				it_cellStrref_specialflag.Text = "clear Special";
+				it_cellStrref_special.Text = "clear Special";
 
-			it_cellStrref_specialflag.Enabled =
-			it_cellStrref_blank      .Enabled = !Table.Readonly && !invalid;
-
+			it_cellStrref_special.Enabled =
+			it_cellStrref_invalid.Enabled = !Table.Readonly && !invalid;
 		}
 
 		/// <summary>
@@ -4376,7 +4375,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Strref_specialflag(object sender, EventArgs e)
+		void cellclick_Strref_special(object sender, EventArgs e)
 		{
 			if ((_strInt & TalkReader.bitCusto) != 0)
 			{
@@ -4400,7 +4399,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Strref_blank(object sender, EventArgs e)
+		void cellclick_Strref_invalid(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, "-1"); // does not do a text-check
 		}
