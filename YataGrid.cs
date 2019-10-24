@@ -2131,7 +2131,7 @@ namespace yata
 				if (range == 0 && w != width)	// if range >0 let Calibrate() handle multiple
 				{								// cols or at least the scrollers and do the UI-update
 					InitScroll();
-					Invalidator(INVALID_GRID);
+					Invalidator(INVALID_GRID | INVALID_COLS);
 				}
 			}
 
