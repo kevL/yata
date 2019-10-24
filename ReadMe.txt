@@ -23,7 +23,9 @@ File
 
 - Save        : Ctrl+s
 - Save As ... : Ctrl+e
-- Close       : F4
+- Save All    : Ctrl+a
+
+- Close : F4
 - Close all (this is a multi-tabbed application)
 
 - Quit : Ctrl+q
@@ -40,8 +42,8 @@ Edit
 - Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
                              Load)
 
-- Copy cell   : Ctrl+c (copies a single cell if only 1 cell is selected)
-- Paste cell  : Ctrl+v (pastes a single cell if only 1 cell is selected)
+- Copy cell  : Ctrl+c (copies a single cell if only 1 cell is selected)
+- Paste cell : Ctrl+v (pastes a single cell if only 1 cell is selected)
 
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)
@@ -60,7 +62,7 @@ Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) : F9 (exports the internal copy-list to the clipboard)
+- Export copied row(s) : F9  (exports the internal copy-list to the clipboard)
 - Import copied row(s) : F10 (imports any clipboard text to the internal
                               copy-list WARNING: No validity test is done on the
                               clipboard text; importing assumes that the text on
@@ -517,10 +519,11 @@ unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (but, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
 
-A right-click on the Property Panel button will switch the panel's docked
-position from the topright of the grid to the bottomright of the grid, or vice
-versa. (This is noticeable only if the height of the panel is less than the
-height of the client area.)
+A right-click on the Property Panel button will cycle the panel's docked
+location through the four corners of the page in a clockwise direction, or
+counter-clockwise if the Shift key is pressed. If the height of the panel is
+greater than the height of the page, the panel simply shifts to the left or
+right side instead.
 
 
 Appendix K: Undo/Redo
@@ -542,11 +545,11 @@ popup with several operations including these four:
 
 - Select diff1 (selects the currently displayed table as diff1)
 - Select diff2 (selects the currently displayed table as diff2)
-- Reset diffs (clears tables of their diff flags)
-- Sync tables (re-widths the cols of the two diffed tables so they are visually
-               aligned - this is done auto when diff2 is selected. Its only use
-               as far as I can see is if you want to re-sync the tables after
-               sizing cols yourself)
+- Reset diffs  (clears tables of their diff flags)
+- Sync tables  (re-widths the cols of the two diffed tables so they are visually
+                aligned - this is done auto when diff2 is selected. Its only use
+                as far as I can see is if you want to re-sync the tables after
+                sizing cols yourself)
 
 Notes: diff1 must be selected before diff2. Diff2 can be re-selected, but
 re-selecting diff1 causes diff2 to be cleared; diff2 must be selected *after*
