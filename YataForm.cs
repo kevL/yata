@@ -437,7 +437,7 @@ namespace yata
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			switch (e.KeyCode)
+			switch (e.KeyData)
 			{
 				case Keys.Enter: // do this here to get rid of the beep.
 					if (Table != null && Table.RowCount != 0) // rowcount should never be "0"

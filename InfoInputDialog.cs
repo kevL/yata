@@ -56,7 +56,7 @@ namespace yata
 		#region Events (override)
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Escape)
+			if (e.KeyData == Keys.Escape)
 				Close();
 			else
 				base.OnKeyDown(e);
