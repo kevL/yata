@@ -50,7 +50,7 @@ namespace yata
 								 dt);
 
 			ver += Environment.NewLine + Environment.NewLine
-				 + "This is a derivative work of the guy who invented the wheel and "
+				 + "This is a derivative work of the guy who invented the wheel and"
 				 + " that bloke who made the notches on a 40,000 year old piece of"
 				 + " petrified wood that are thought to be the beginnings of"
 				 + " mathematics. But I'd guess their copyrights are out of date.";
