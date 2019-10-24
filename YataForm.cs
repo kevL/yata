@@ -976,6 +976,8 @@ namespace yata
 
 			Tabs.TabPages.Remove(tab);
 			_table = null;
+
+			YataGrid.metricStaticHeads(this);
 		}
 
 		/// <summary>

@@ -1073,7 +1073,7 @@ namespace yata
 			FrozenPanel = new YataPanelFrozen(this, Cols[0].width());
 			initFrozenLabels();
 
-			metricStaticHeads();
+			metricStaticHeads(_f);
 
 			Controls.Add(FrozenPanel);
 			Controls.Add(_panelRows);
@@ -1107,7 +1107,7 @@ namespace yata
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
-			metricStaticHeads();
+			metricStaticHeads(_f);
 
 
 			_scrollVert.LargeChange =
@@ -1303,34 +1303,31 @@ namespace yata
 		/// Calculates and maintains rowhead width wrt/ current Font across all
 		/// tabs/tables.
 		/// </summary>
-		void metricStaticHeads()
+		/// <param name="f"></param>
+		internal static void metricStaticHeads(YataForm f)
 		{
 			YataGrid table;
 
 			int rows = 0, rowsTest; // row-headers' width stays uniform across all tabpages
 
-			int tabs = _f.Tabs.TabCount;
+			int tabs = f.Tabs.TabCount;
 			int tab = 0;
 			for (; tab != tabs; ++tab) // find the table w/ most rows ->
 			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				table = f.Tabs.TabPages[tab].Tag as YataGrid;
 				if ((rowsTest = table.RowCount - 1) > rows)
 					rows = rowsTest;
 			}
 
-			string text = "9"; // determine how many nines need to be measured ->
-			int w = 1;
+			string texttest = "9"; // determine how many nines need to be measured ->
 			while ((rows /= 10) != 0)
-			{
-				++w;
-				text += "9";
-			}
+				texttest += "9";
 
-			WidthRowhead = YataGraphics.MeasureWidth(text, _f.FontAccent) + _padHoriRowhead * 2;
+			WidthRowhead = YataGraphics.MeasureWidth(texttest, f.FontAccent) + _padHoriRowhead * 2;
 
 			for (tab = 0; tab != tabs; ++tab)
 			{
-				table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+				table = f.Tabs.TabPages[tab].Tag as YataGrid;
 
 				table.WidthTable = WidthRowhead;
 				for (int c = 0; c != table.ColCount; ++c)
@@ -1347,10 +1344,8 @@ namespace yata
 		/// 
 		/// </summary>
 		/// <param name="table"></param>
-		internal void metricFrozenLabels(YataGrid table = null)
+		internal static void metricFrozenLabels(YataGrid table)
 		{
-			if (table == null) table = this;
-
 			if (table.ColCount != 0)
 			{
 				int w0 = table.Cols[0].width();
@@ -1380,7 +1375,7 @@ namespace yata
 		{
 			if (c < FreezeSecond)
 			{
-				metricFrozenLabels(); // re-width the frozen-labels on the colhead
+				metricFrozenLabels(this); // re-width the frozen-labels on the colhead
 
 				if (c < FrozenCount)
 					FrozenCount = FrozenCount; // re-width the frozen-panel
