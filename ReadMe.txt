@@ -102,20 +102,6 @@ Clipboard
                    table has its own undo/redo stacks)
 
 
-Font
-- Font ... be patient (pick a font, any valid TrueType font on your system, to
-                       display the table-data. THE CHOICE OF FONT WILL NOT BE
-                       SAVED. But note that along the bottom of the dialog is a
-                       .NET font-string that can be copy/pasted to Settings.Cfg
-                       for any of the "font=" variables. See the section below
-                       about the Settings.Cfg file)
-- Load default font (sets the table-font to Yata's hardcoded default font)
-
-
-Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
-       Appendix E: how to use Info paths)
-
-
 TalkTable
 - Path to ... (opens a file-browser to select a Dialog.Tlk file. THE PATH WILL
                NOT BE SAVED. But see the Settings.Cfg "dialog=" option. A check
@@ -127,6 +113,21 @@ TalkTable
                cell's "strref" dialog)
 - Path to custom ... (opens a file-browser to select a custom talktable - see
                       Path to ... and the Settings.Cfg "dialogalt=" option)
+
+
+Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
+       Appendix E: how to use Info paths)
+
+
+Font
+- Font ... be patient (pick a font, any valid TrueType font on your system, to
+                       display the table-data. THE CHOICE OF FONT WILL NOT BE
+                       SAVED. But note that along the bottom of the dialog is a
+                       .NET font-string that can be copy/pasted to Settings.Cfg
+                       for any of the "font=" variables. See the section below
+                       about the Settings.Cfg file)
+- Load default font (sets the table-font to Yata's hardcoded default font)
+
 
 Help
 - ReadMe.txt : F1 (opens this document in a text-editor)
