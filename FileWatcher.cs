@@ -16,7 +16,6 @@ namespace yata
 		#region Fields
 		readonly YataGrid _grid;
 		DateTime _last;
-
 		#endregion Fields
 
 
@@ -69,15 +68,13 @@ namespace yata
 						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
 							fwd.ShowDialog(_grid._f);
 					}
-					else if (!BypassFileChanged)
+					else if (!BypassFileChanged
+						&& File.GetLastWriteTime(Pfe) != _last)
 					{
-						if (File.GetLastWriteTime(Pfe) != _last)
-						{
-							_last = File.GetLastWriteTime(Pfe);
+						_last = File.GetLastWriteTime(Pfe);
 
-							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
-								fwd.ShowDialog(_grid._f);
-						}
+						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
+							fwd.ShowDialog(_grid._f);
 					}
 				}
 
