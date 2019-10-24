@@ -63,13 +63,13 @@ namespace yata
 		#endregion Methods
 
 
-		#region Windows Form Designer generated code
+		#region Designer
 		Container components = null;
-		private System.Windows.Forms.Button btn_Close;
-		private System.Windows.Forms.Label la_Text;
+		Button btn_Close;
+		Label la_Text;
 
 		/// <summary>
-		/// Clean up any resources being used.
+		/// Cleans up any resources being used.
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
@@ -127,7 +127,7 @@ namespace yata
 			this.ResumeLayout(false);
 
 		}
-		#endregion
+		#endregion Designer
 	}
 
 
