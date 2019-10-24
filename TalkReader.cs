@@ -53,10 +53,9 @@ namespace yata
 		/// 'DictCusto'.
 		/// @note See description of .tlk Format at the bot of this file.
 		/// </summary>
-		/// <param name="pfeTlk">fullpath of Dialog.Tlk</param>
-		/// <param name="it"></param>
-		/// <param name="alt"></param>
-		/// <returns>true if 1+ entry loads</returns>
+		/// <param name="pfeTlk">fullpath of a talktable</param>
+		/// <param name="it">a menuitem to check/uncheck</param>
+		/// <param name="alt">true if loading a custom table</param>
 		internal static void Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
 		{
 			SortedDictionary<int, string> dict;
@@ -85,8 +84,8 @@ namespace yata
 				for (b = 0; b != 8; ++b)
 					buffer[b] = bytes[pos++];
 
-				string sAsci = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-				if (sAsci == Ver) // check if v3.0 tlktable
+				string sUtf8 = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+				if (sUtf8 == Ver) // check if v3.0 tlktable
 				{
 					bool le = BitConverter.IsLittleEndian; // hardware architecture
 
@@ -105,7 +104,7 @@ namespace yata
 						buffer[b] = bytes[pos++];
 
 					if (!le) Array.Reverse(buffer);
-					uint TextCount = BitConverter.ToUInt32(buffer, 0);
+					uint TextsCount = BitConverter.ToUInt32(buffer, 0);
 
 
 					pos = HeaderStart + TextsStartField;
@@ -121,7 +120,7 @@ namespace yata
 
 					uint start;
 
-					for (uint i = 0; i != TextCount; ++i)
+					for (uint i = 0; i != TextsCount; ++i)
 					{
 						start = DataStart + i * DataLength;
 						pos = start;
@@ -168,11 +167,11 @@ namespace yata
 						}
 					}
 
-					int lo = Int32.MaxValue;
-					int hi = Int32.MinValue;
-
 					if (dict.Count != 0)
 					{
+						int lo = Int32.MaxValue;
+						int hi = Int32.MinValue;
+
 						foreach (int key in dict.Keys)
 						{
 							if (key > hi) hi = key;
