@@ -66,9 +66,9 @@ namespace yata
 		ToolStripMenuItem it_ExternDiff;
 		ToolStripMenuItem it_ClearUr;
 
-		ToolStripMenuItem it_MenuFont;
-		ToolStripMenuItem it_Font;
-		ToolStripMenuItem it_FontDefault;
+		ToolStripMenuItem it_MenuTalkTable;
+		internal ToolStripMenuItem it_PathTalkD;
+		internal ToolStripMenuItem it_PathTalkC;
 
 		ToolStripMenuItem it_MenuPaths;
 		ToolStripMenuItem it_PathAll;
@@ -88,9 +88,9 @@ namespace yata
 		ToolStripMenuItem it_PathRanges2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
 
-		ToolStripMenuItem it_MenuTalkTable;
-		internal ToolStripMenuItem it_PathTalkD;
-		internal ToolStripMenuItem it_PathTalkC;
+		ToolStripMenuItem it_MenuFont;
+		ToolStripMenuItem it_Font;
+		ToolStripMenuItem it_FontDefault;
 
 		ToolStripMenuItem it_MenuHelp;
 		ToolStripMenuItem it_ReadMe;
@@ -261,9 +261,6 @@ namespace yata
 			this.it_ExternDiff = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_21 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ClearUr = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuTalkTable = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathTalkD = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathTalkC = new System.Windows.Forms.ToolStripMenuItem();
@@ -287,6 +284,9 @@ namespace yata
 			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -448,9 +448,9 @@ namespace yata
 			this.cb_SearchOption,
 			this.it_MenuClipboard,
 			this.it_Menu2daOps,
-			this.it_MenuFont,
 			this.it_MenuTalkTable,
 			this.it_MenuPaths,
+			this.it_MenuFont,
 			this.it_MenuHelp});
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
@@ -959,32 +959,6 @@ namespace yata
 			this.it_ClearUr.Text = "&Clear undo/redo";
 			this.it_ClearUr.Click += new System.EventHandler(this.opsclick_ClearUr);
 			// 
-			// it_MenuFont
-			// 
-			this.it_MenuFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.it_MenuFont.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_Font,
-			this.it_FontDefault});
-			this.it_MenuFont.Name = "it_MenuFont";
-			this.it_MenuFont.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.it_MenuFont.Size = new System.Drawing.Size(39, 20);
-			this.it_MenuFont.Text = "&Font";
-			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.dropdownopening);
-			// 
-			// it_Font
-			// 
-			this.it_Font.Name = "it_Font";
-			this.it_Font.Size = new System.Drawing.Size(175, 22);
-			this.it_Font.Text = "Font ... &be patient";
-			this.it_Font.Click += new System.EventHandler(this.fontclick_Font);
-			// 
-			// it_FontDefault
-			// 
-			this.it_FontDefault.Name = "it_FontDefault";
-			this.it_FontDefault.Size = new System.Drawing.Size(175, 22);
-			this.it_FontDefault.Text = "&Load default font";
-			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
-			// 
 			// it_MenuTalkTable
 			// 
 			this.it_MenuTalkTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -1167,6 +1141,32 @@ namespace yata
 			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSpellTarget2da.Text = "path Spell&Target.2da";
 			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
+			// 
+			// it_MenuFont
+			// 
+			this.it_MenuFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuFont.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_Font,
+			this.it_FontDefault});
+			this.it_MenuFont.Name = "it_MenuFont";
+			this.it_MenuFont.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.it_MenuFont.Size = new System.Drawing.Size(39, 20);
+			this.it_MenuFont.Text = "&Font";
+			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			// 
+			// it_Font
+			// 
+			this.it_Font.Name = "it_Font";
+			this.it_Font.Size = new System.Drawing.Size(175, 22);
+			this.it_Font.Text = "Font ... &be patient";
+			this.it_Font.Click += new System.EventHandler(this.fontclick_Font);
+			// 
+			// it_FontDefault
+			// 
+			this.it_FontDefault.Name = "it_FontDefault";
+			this.it_FontDefault.Size = new System.Drawing.Size(175, 22);
+			this.it_FontDefault.Text = "&Load default font";
+			this.it_FontDefault.Click += new System.EventHandler(this.fontclick_Default);
 			// 
 			// it_MenuHelp
 			// 
