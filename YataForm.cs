@@ -4332,11 +4332,11 @@ namespace yata
 			bool invalid = (_strInt == TalkReader.invalid);
 
 			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
-				it_cellStrref_special.Text = "set Special";
+				it_cellStrref_custom.Text = "set Custom";
 			else
-				it_cellStrref_special.Text = "clear Special";
+				it_cellStrref_custom.Text = "clear Custom";
 
-			it_cellStrref_special.Enabled =
+			it_cellStrref_custom .Enabled =
 			it_cellStrref_invalid.Enabled = !Table.Readonly && !invalid;
 		}
 
@@ -4366,8 +4366,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "set/clear Special" click. Toggles the
-		/// special-bit flag.
+		/// Handler for cell-context "set/clear Custom" click. Toggles the
+		/// custom-bit flag.
 		/// @note Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger (ie, else disable the context it - see
 		/// ShowCellMenu() and dropdownopening_Strref()).
@@ -4375,7 +4375,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Strref_special(object sender, EventArgs e)
+		void cellclick_Strref_custom(object sender, EventArgs e)
 		{
 			if ((_strInt & TalkReader.bitCusto) != 0)
 			{
