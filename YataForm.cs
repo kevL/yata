@@ -881,6 +881,10 @@ namespace yata
 		{
 			var tab = Tabs.TabPages[e.Index];
 
+			string text = tab.Text;		// force refresh of text ->
+			tab.Text = String.Empty;	// it can go wonky during drag&drop tabs
+			tab.Text = text;
+
 			int y;
 
 			FontStyle style;
