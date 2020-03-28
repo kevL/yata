@@ -907,7 +907,17 @@ namespace yata
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			Color color;
-			if (((YataGrid)tab.Tag).Readonly)
+
+			// NOTE: The tag (and text...) can be null when the tabcontrol needs
+			// to extend down to create another row. Go figur.
+			// Fortunately the text of a table that is opened as readonly will
+			// still appear in the TextReadonly color because .net tends to be
+			// redundant and so this draw routine gets a second call right away
+			// with its Tag/table valid.
+			// Note that this is one of those null-errors that the debugger will
+			// slough off ....
+			var table = tab.Tag as YataGrid;
+			if (table != null && table.Readonly)
 				color = Colors.TextReadonly;
 			else
 				color = Colors.Text;
