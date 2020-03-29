@@ -25,6 +25,7 @@ namespace yata
 		internal static int _w = -1;
 		internal static int _h = -1;
 
+		internal static bool _maximized;
 		internal static bool _strict;
 		internal static bool _gradient;
 		internal static bool _context;
@@ -219,6 +220,11 @@ namespace yata
 							{
 								_dialogalt = line;
 							}
+						}
+						else if (line.StartsWith("maximized=", StringComparison.InvariantCulture))
+						{
+							_maximized = (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
+								   && line == "true");
 						}
 					}
 				}

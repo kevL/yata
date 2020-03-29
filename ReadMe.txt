@@ -305,6 +305,9 @@ dialog=    a path without quotes to your Dialog.Tlk file. Strrefs can often
            print their string values to the statusbar if Dialog.Tlk has been
            pathed
 dialogalt= as "dialog=" but for a custom talktable
+maximized= "true" (without quotes) to start Yata in a maximized window. A true
+           setting takes precedence over the x/y/w/h settings although the
+           latter are recalled if the window is restored.
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
