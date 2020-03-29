@@ -487,7 +487,7 @@ namespace yata
 					break;
 
 				case DONTBEEP_GOTO:
-					Table.doGoto(tb_Goto.Text);
+					Table.doGoto(tb_Goto.Text, true);
 					break;
 			}
 		}
@@ -2238,6 +2238,10 @@ namespace yata
 				|| result < 0)
 			{
 				tb_Goto.Text = "0";
+			}
+			else if (Table != null && Settings._instantgoto)
+			{
+				Table.doGoto(tb_Goto.Text, false); // NOTE: Text is checked for validity in doGoto().
 			}
 		}
 

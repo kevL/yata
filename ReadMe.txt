@@ -249,65 +249,71 @@ Any change to settings requires a restart.
 
 the following variables ought be respected:
 
-font=      a .NET string that represents the desired table-font (see Font->
-           Font ... be patient)
-font2=     a .NET string that represents a desired (usually smaller) font for
-           menus (Yata needs to be reloaded before it will display a changed
-           menu-font)
-font3=     a .NET string that represents a desired font for the PropertyPanel
-           (Yata needs to be reloaded before it will display a changed
-           PropertyPanel font)
-fontf=     a .NET string that represents a desired fixed-width font (Yata needs
-           to be reloaded before it will display a changed fixed-width font)
-pathall=   a path without quotes to a valid directory to grope for 2da info
-           for Crafting.2da or Spells.2da (see Appendix E: how to use Info
-           paths)
-pathall=   another path for Crafting and Spells info
-pathall=   etc. (the first pathall has lowest priority and any info found will
-           be replaced by any info found in subsequent pathall directories;
-           there can be as many or as few pathall directories as you like)
-dirpreset= a path without quotes to a valid directory for the Open ... @ folder
-           dialog
-dirpreset= another path for the Open ... @ folder dialog
-dirpreset= etc. (there can be as many or as few dirpresets as you like)
-x=         (integer) the desired x-position to start the app on your monitor
-y=         (integer) the desired y-position to start the app on your monitor
-w=         (integer) the desired starting width of the app on your monitor
-h=         (integer) the desired starting height of the app on your monitor
-strict=    "true" (without quotes) to show extra warnings when loading a
-           2da-file (default false). Strict is intended for users who want to
-           notice stuff that is by and large safe to disregard: (1) non alpha-
-           numeric characters (other than underscore) in col headers [note that
-           double-quotes are disallowed in col headers regardless] (2) a
-           character on the 2nd line of a 2da [the 2nd line should be blank as
-           far as Yata goes] (3) a tab-character in the version header instead
-           of a space-character (4) and Strict also suppresses the tooltip that
-           appears when a col is sorted by anything other than ID-ascending
-           ("warn : Table is not sorted by ascending ID") - ie, persons who use
-           Strict don't get a tooltip although the ID-header still turns to a
-           red color regardless of this setting
-gradient=  "true" (without quotes) to draw the colhead bar with gradient colors
-context=   a right-click on a rowhead displays the contextmenu at the mouse-
-           cursor's location by default. It can be displayed in a static
-           location at the topleft corner of the table instead of at the mouse-
-           cursor by giving this variable a value of "static" (without quotes)
-recent=    (integer) a count of recently opened file-paths to store. If left
-           blank or a value less than 1 is specified, recently opened files will
-           not be tracked, while 16 is the hardcoded upper limit. SETTING
-           "recent=" TO A VALID VALUE ENABLES YATA TO WRITE THE FILE Recent.Cfg
-           TO ITS APPLICATION DIRECTORY. Recent.Cfg stores filepaths (without
-           quotes). THE WRITE-OPERATION CAN FAIL for a variety of reasons that I
-           really don't want to be arshed with - hence the option so you can
-           decide if it works on your OS.
-diff=      a path without quotes to your WinMerge executable for diffing and
-           merging two 2da files (if desired). See Appendix L: WinMerge
-dialog=    a path without quotes to your Dialog.Tlk file. Strrefs can often
-           print their string values to the statusbar if Dialog.Tlk has been
-           pathed
-dialogalt= as "dialog=" but for a custom talktable
-maximized= "true" (without quotes) to start Yata in a maximized window. A true
-           setting takes precedence over the x/y/w/h settings although the
-           latter are recalled if the window is restored.
+font=        a .NET string that represents the desired table-font (see Font->
+             Font ... be patient)
+font2=       a .NET string that represents a desired (usually smaller) font for
+             menus (Yata needs to be reloaded before it will display a changed
+             menu-font)
+font3=       a .NET string that represents a desired font for the PropertyPanel
+             (Yata needs to be reloaded before it will display a changed
+             PropertyPanel font)
+fontf=       a .NET string that represents a desired fixed-width font (Yata
+             needs to be reloaded before it will display a changed fixed-width
+             font)
+pathall=     a path without quotes to a valid directory to grope for 2da info
+             for Crafting.2da or Spells.2da (see Appendix E: how to use Info
+             paths)
+pathall=     another path for Crafting and Spells info
+pathall=     etc. (the first pathall has lowest priority and any info found will
+             be replaced by any info found in subsequent pathall directories;
+             there can be as many or as few pathall directories as you like)
+dirpreset=   a path without quotes to a valid directory for the
+             Open ... @ folder dialog
+dirpreset=   another path for the Open ... @ folder dialog
+dirpreset=   etc. (there can be as many or as few dirpresets as you like)
+x=           (integer) the desired x-position to start the app on your monitor
+y=           (integer) the desired y-position to start the app on your monitor
+w=           (integer) the desired starting width of the app on your monitor
+h=           (integer) the desired starting height of the app on your monitor
+strict=      "true" (without quotes) to show extra warnings when loading a
+             2da-file (default false). Strict is intended for users who want to
+             notice stuff that is by and large safe to disregard: (1) non alpha-
+             numeric characters (other than underscore) in col headers [note
+             that double-quotes are disallowed in col headers regardless] (2) a
+             character on the 2nd line of a 2da [the 2nd line should be blank as
+             far as Yata goes] (3) a tab-character in the version header instead
+             of a space-character (4) and Strict also suppresses the tooltip
+             that appears when a col is sorted by anything other than ID-
+             ascending ("warn : Table is not sorted by ascending ID") - ie,
+             persons who use Strict don't get a tooltip although the ID-header
+             still turns to a red color regardless of this setting
+gradient=    "true" (without quotes) to draw the colhead bar with gradient
+             colors
+context=     a right-click on a rowhead displays the contextmenu at the mouse-
+             cursor's location by default. It can be displayed in a static
+             location at the topleft corner of the table instead of at the
+             mouse-cursor by giving this variable a value of "static" (without
+             quotes)
+recent=      (integer) a count of recently opened file-paths to store. If left
+             blank or a value less than 1 is specified, recently opened files
+             will not be tracked, while 16 is the hardcoded upper limit. SETTING
+             "recent=" TO A VALID VALUE ENABLES YATA TO WRITE THE FILE
+             Recent.Cfg TO ITS APPLICATION DIRECTORY. Recent.Cfg stores
+             filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
+             variety of reasons that I really don't want to be arshed with -
+             hence the option so you can decide if it works on your OS.
+diff=        a path without quotes to your WinMerge executable for diffing and
+             merging two 2da files (if desired). See Appendix L: WinMerge
+dialog=      a path without quotes to your Dialog.Tlk file. Strrefs can often
+             print their string values to the statusbar if Dialog.Tlk has been
+             pathed
+dialogalt=   as "dialog=" but for a custom talktable
+maximized=   "true" (without quotes) to start Yata in a maximized window. A true
+             setting takes precedence over the x/y/w/h settings although the
+             latter are recalled if the window is restored.
+instantgoto= "true" (without quotes) causes the current table to select a row as
+             digits are typed in the goto-box. If false [Enter] needs to be
+             pressed to select a row after digits are typed.
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

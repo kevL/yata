@@ -2892,7 +2892,8 @@ namespace yata
 		/// goto-box.
 		/// </summary>
 		/// <param name="text"></param>
-		internal void doGoto(string text)
+		/// <param name="selectTable"></param>
+		internal void doGoto(string text, bool selectTable)
 		{
 			int r;
 			if (Int32.TryParse(text, out r)
@@ -2909,7 +2910,9 @@ namespace yata
 					invalid |= INVALID_PROP;
 
 				Invalidator(invalid);
-				Select();
+
+				if (selectTable) // on [Enter] (not instantgoto)
+					Select();
 			}
 		}
 
