@@ -30,6 +30,7 @@ namespace yata
 		internal static bool _context;
 		internal static bool _maximized;
 		internal static bool _instantgoto;
+		internal static bool _casesort;
 
 		internal static int _recent;
 
@@ -231,6 +232,11 @@ namespace yata
 						{
 							_instantgoto = (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
 										&& line == "true");
+						}
+						else if (line.StartsWith("casesort=", StringComparison.InvariantCulture))
+						{
+							_casesort = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && line == "true");
 						}
 					}
 				}

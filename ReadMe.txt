@@ -314,6 +314,7 @@ maximized=   "true" (without quotes) to start Yata in a maximized window. A true
 instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
              pressed to select a row after digits are typed.
+casesort=    "true" (without quotes) for case-sensitive sorting
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

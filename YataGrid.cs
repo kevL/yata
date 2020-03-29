@@ -3658,6 +3658,12 @@ namespace yata
 			_a = row1[_sortcol].text;
 			_b = row2[_sortcol].text;
 
+			if (!Settings._casesort)
+			{
+				_a = _a.ToLower();
+				_b = _b.ToLower();
+			}
+
 			int result;
 
 			bool a_isStars = (_a == gs.Stars);
