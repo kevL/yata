@@ -176,13 +176,12 @@ namespace yata
 				Font = Settings._font3;
 			}
 			else
-				Font = new System.Drawing.Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+				Font = new Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
 			if (_heightr == -1)
-			{
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;
-				_editRect.Height = _heightr - 1; // cf YataGrid.EditCell()
-			}
+
+			_editRect.Height = _heightr - 1; // cf YataGrid.EditCell()
 
 			HeightProps = _grid.ColCount * _heightr;
 
@@ -210,7 +209,6 @@ namespace yata
 			_editor.BorderStyle = BorderStyle.None;
 			_editor.WordWrap    = false;
 			_editor.Margin      = new Padding(0);
-//			_editor.Height      = _heightr;
 			_editor.LostFocus  += lostfocus_Editor;
 			_editor.KeyDown    += keydown_Editor;
 			_editor.Leave      += leave_Editor;
