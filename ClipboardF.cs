@@ -69,6 +69,28 @@ namespace yata
 			rtb_Clip.Select();
 			rtb_Clip.SelectionStart = rtb_Clip.Text.Length;
 		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			// If the vertical scrollbar is visible and user pulls the bottom of
+			// the window down past the end of the text -> keep the last line of
+			// the text snuggled against the bottom of the window. Thanks.
+			//
+			// The following code forces the scrollbar/text to re-layout which
+			// is all that's needed to keep the last line snuggled against the
+			// bottom of the control.
+
+			int pos = rtb_Clip.SelectionStart;
+			int len = rtb_Clip.SelectionLength;
+
+			rtb_Clip.SelectionStart  =
+			rtb_Clip.SelectionLength = 0;
+
+			rtb_Clip.SelectionStart  = pos;
+			rtb_Clip.SelectionLength = len;
+		}
 		#endregion Events (override)
 
 
