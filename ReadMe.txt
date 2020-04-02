@@ -310,10 +310,10 @@ dialog=      a path without quotes to your Dialog.Tlk file. Strrefs can often
 dialogalt=   as "dialog=" but for a custom talktable
 maximized=   "true" (without quotes) to start Yata in a maximized window. A true
              setting takes precedence over the x/y/w/h settings although the
-             latter are recalled if the window is restored.
+             latter are recalled if the window is restored
 instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
-             pressed to select a row after digits are typed.
+             pressed to select a row after digits are typed
 casesort=    "true" (without quotes) for case-sensitive sorting
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
