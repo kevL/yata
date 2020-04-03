@@ -15,7 +15,7 @@ namespace yata
 		// NOTE: The MouseUp event does NOT fire when a drag-drop is released.
 
 		#region Fields
-		TabPage _tabDrag, _tabOver;
+		TabPage _tabDrag;
 		#endregion Fields
 
 
@@ -77,45 +77,47 @@ namespace yata
 		// fires if drop is on an invalid object.
 		protected override void OnDragDrop(DragEventArgs drgevent)
 		{
-			if (_tabDrag != null
-				&& (_tabOver = get()) != null
-				&& _tabOver != _tabDrag)
+			if (_tabDrag != null)
 			{
-				int src = TabPages.IndexOf(_tabDrag);
-				int dst = TabPages.IndexOf(_tabOver);
-
-				if (src < dst) // NOTE: The start and stop IDs won't be the same.
+				TabPage tabOver = get();
+				if (tabOver != null && tabOver != _tabDrag)
 				{
-					do
-					{
-						TabPages[src] = TabPages[++src];
-					}
-					while (src != dst);
-				}
-				else //if (dst < src)
-				{
-					do
-					{
-						TabPages[src] = TabPages[--src];
-					}
-					while (src != dst);
-				}
+					int src = TabPages.IndexOf(_tabDrag);
+					int dst = TabPages.IndexOf( tabOver);
 
-				TabPages[dst] = _tabDrag;
-				SelectedIndex = dst;
+					if (src < dst) // NOTE: The start and stop IDs won't be the same.
+					{
+						do
+						{
+							TabPages[src] = TabPages[++src];
+						}
+						while (src != dst);
+					}
+					else //if (dst < src)
+					{
+						do
+						{
+							TabPages[src] = TabPages[--src];
+						}
+						while (src != dst);
+					}
+
+					TabPages[dst] = _tabDrag;
+					SelectedIndex = dst;
+
+					// prevent text-drawing glitches ...
+					// Eg. 3 tabs open. DragnDrop the leftmost to the rightmost position
+					// or vice versa. The text on the center tab gets superimposed such
+					// that it looks like gibberish (until the tab is user-forced to
+					// redraw).
+					// Unfortunately there still appears to be a single draw-frame in
+					// which the old and new texts get superimposed before this refresh
+					// happens.
+					Refresh();
+				}
 			}
 
 			base.OnDragDrop(drgevent);
-
-			// prevent text-drawing glitches ...
-			// Eg. 3 tabs open. DragnDrop the leftmost to the rightmost position
-			// or vice versa. The text on the center tab gets superimposed such
-			// that it looks like gibberish (until the tab is user-forced to
-			// redraw).
-			// Unfortunately there still appears to be a single draw-frame in
-			// which the old and new texts get superimposed before this refresh
-			// happens.
-			Refresh();
 		}
 
 		// NOTE: Either OnDragDrop fires on a successful target or OnDragLeave

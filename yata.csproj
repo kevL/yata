@@ -158,6 +158,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <PostBuildEvent>copy /y C:\GIT\yata\bin\Release\yata.exe "C:\Program Files\Yata\"
+copy /y C:\GIT\yata\ReadMe.txt "C:\Program Files\Yata\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
