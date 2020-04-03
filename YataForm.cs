@@ -266,15 +266,15 @@ namespace yata
 			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
+			if (Settings._recent != 0)
+				InitializeRecentFiles(); // init recents before loading a table from FileExplorer
+
 			if (File.Exists(pfe_load)) // load file from FileExplorer ...
 				CreatePage(pfe_load);
 			else
 				Obfuscate();
 
 			DontBeepEvent += HandleDontBeepEvent;
-
-			if (Settings._recent != 0)
-				InitializeRecentFiles();
 
 			TalkReader.LoadTalkingHeads(Strrefheads);
 			TalkReader.Load(Settings._dialog,    it_PathTalkD);
@@ -671,34 +671,31 @@ namespace yata
 					ToolStripItemCollection recents = it_Recent.DropDownItems;
 					ToolStripItem it;
 
-					byte bits = 0;
+					bool found = false;
+
 					for (int i = 0; i != recents.Count; ++i)
 					{
-						it = recents[i];
-						if (it.Text == pfe)
+						if ((it = recents[i]).Text == pfe)
 						{
-							if (i == 0) bits = 1;
-							else
+							found = true;
+
+							if (i != 0)
 							{
-								bits = 2;
 								recents.Remove(it);
+								recents.Insert(0, it);
 							}
 							break;
 						}
 					}
 
-					if ((bits & 1) == 0)
+					if (!found)
 					{
 						it = new ToolStripMenuItem(pfe);
 						it.Click += fileclick_Recent;
 						recents.Insert(0, it);
 
-						if (bits == 0)
-						{
-							int count = recents.Count;
-							if (count > Settings._recent)
-								recents.Remove(recents[count - 1]);
-						}
+						if (recents.Count > Settings._recent)
+							recents.Remove(recents[recents.Count - 1]);
 					}
 				}
 
@@ -883,10 +880,6 @@ namespace yata
 		void tab_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			var tab = Tabs.TabPages[e.Index];
-
-			string text = tab.Text;		// force refresh of text ->
-			tab.Text = String.Empty;	// it can go wonky during drag&drop tabs
-			tab.Text = text;
 
 			int y;
 

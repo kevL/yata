@@ -81,7 +81,7 @@ namespace yata
 				}
 
 				TabPages[dst] = _tabDrag;
-				SelectedIndex = TabPages.IndexOf(_tabDrag);
+				SelectedIndex = dst;
 			}
 		}
 
@@ -120,7 +120,16 @@ namespace yata
 				ClearTabs();
 			}
 			base.OnDragDrop(drgevent);
-//			Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
+
+			// prevent text-drawing glitches ...
+			// Eg. 3 tabs open. DragnDrop the leftmost to the rightmost position
+			// or vice versa. The text on the center tab gets superimposed such
+			// that it looks like gibberish (until the tab is user-forced to
+			// redraw).
+			// Unfortunately there still appears to be a single draw-frame in
+			// which the old and new texts get superimposed before this refresh
+			// happens.
+			Refresh();
 		}
 
 		// NOTE: Either OnDragDrop fires on a successful target or OnDragLeave
