@@ -53,43 +53,6 @@ namespace yata
 			}
 			return null;
 		}
-
-		void DropDrag()
-		{
-			if (_tabDrag != null
-				&& (_tabOver = get()) != null
-				&& _tabDrag != _tabOver)
-			{
-				int src = TabPages.IndexOf(_tabDrag);
-				int dst = TabPages.IndexOf(_tabOver);
-
-				if (src < dst) // NOTE: The start and stop IDs won't be the same.
-				{
-					do
-					{
-						TabPages[src] = TabPages[++src];
-					}
-					while (src != dst);
-				}
-				else //if (dst < src)
-				{
-					do
-					{
-						TabPages[src] = TabPages[--src];
-					}
-					while (src != dst);
-				}
-
-				TabPages[dst] = _tabDrag;
-				SelectedIndex = dst;
-			}
-		}
-
-		void ClearTabs()
-		{
-			_tabDrag =
-			_tabOver = null;
-		}
 		#endregion Methods
 
 
@@ -114,11 +77,34 @@ namespace yata
 		// fires if drop is on an invalid object.
 		protected override void OnDragDrop(DragEventArgs drgevent)
 		{
-			if (_tabDrag != null)
+			if (_tabDrag != null
+				&& (_tabOver = get()) != null
+				&& _tabOver != _tabDrag)
 			{
-				DropDrag();
-				ClearTabs();
+				int src = TabPages.IndexOf(_tabDrag);
+				int dst = TabPages.IndexOf(_tabOver);
+
+				if (src < dst) // NOTE: The start and stop IDs won't be the same.
+				{
+					do
+					{
+						TabPages[src] = TabPages[++src];
+					}
+					while (src != dst);
+				}
+				else //if (dst < src)
+				{
+					do
+					{
+						TabPages[src] = TabPages[--src];
+					}
+					while (src != dst);
+				}
+
+				TabPages[dst] = _tabDrag;
+				SelectedIndex = dst;
 			}
+
 			base.OnDragDrop(drgevent);
 
 			// prevent text-drawing glitches ...
@@ -133,12 +119,12 @@ namespace yata
 		}
 
 		// NOTE: Either OnDragDrop fires on a successful target or OnDragLeave
-		// fires if drop is on an invalid object.
-		protected override void OnDragLeave(EventArgs e)
-		{
-			ClearTabs();
-			base.OnDragLeave(e);
-		}
+		// fires if drop is on an invalid object. Or as soon as the cursor
+		// leaves the tab-row(s).
+//		protected override void OnDragLeave(EventArgs e)
+//		{
+//			base.OnDragLeave(e);
+//		}
 		#endregion Events (override)
 
 
