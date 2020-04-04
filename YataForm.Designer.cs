@@ -154,6 +154,8 @@ namespace yata
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellStars;
+		ToolStripMenuItem it_cellLower;
+		ToolStripMenuItem it_cellUpper;
 		ToolStripMenuItem it_cellMergeCe;
 		ToolStripMenuItem it_cellMergeRo;
 		ToolStripMenuItem it_cellInput;
@@ -316,6 +318,8 @@ namespace yata
 			this.it_cellPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellStars = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellLower = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_cellUpper = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_24 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
@@ -1357,6 +1361,8 @@ namespace yata
 			this.it_cellPaste,
 			this.separator_16,
 			this.it_cellStars,
+			this.it_cellLower,
+			this.it_cellUpper,
 			this.separator_24,
 			this.it_cellMergeCe,
 			this.it_cellMergeRo,
@@ -1365,7 +1371,7 @@ namespace yata
 			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(174, 226);
+			this.cellMenu.Size = new System.Drawing.Size(174, 270);
 			// 
 			// it_cellEdit
 			// 
@@ -1404,6 +1410,20 @@ namespace yata
 			this.it_cellStars.Size = new System.Drawing.Size(173, 22);
 			this.it_cellStars.Text = "****";
 			this.it_cellStars.Click += new System.EventHandler(this.cellclick_Stars);
+			// 
+			// it_cellLower
+			// 
+			this.it_cellLower.Name = "it_cellLower";
+			this.it_cellLower.Size = new System.Drawing.Size(173, 22);
+			this.it_cellLower.Text = "lowercase";
+			this.it_cellLower.Click += new System.EventHandler(this.cellclick_Lowercase);
+			// 
+			// it_cellUpper
+			// 
+			this.it_cellUpper.Name = "it_cellUpper";
+			this.it_cellUpper.Size = new System.Drawing.Size(173, 22);
+			this.it_cellUpper.Text = "uppercase";
+			this.it_cellUpper.Click += new System.EventHandler(this.cellclick_Uppercase);
 			// 
 			// separator_24
 			// 

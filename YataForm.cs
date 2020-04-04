@@ -4106,6 +4106,10 @@ namespace yata
 
 			it_cellEdit   .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
+			it_cellLower  .Enabled = !Table.Readonly
+								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
+			it_cellUpper  .Enabled = !Table.Readonly
+								  && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
 			it_cellStars  .Enabled = !Table.Readonly
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 			it_cellMergeCe.Enabled = 
@@ -4207,6 +4211,26 @@ namespace yata
 		void cellclick_Stars(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Lowercase(object sender, EventArgs e)
+		{
+			Table.ChangeCellText(_sel, _sel.text.ToLower()); // does not do a text-check
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Uppercase(object sender, EventArgs e)
+		{
+			Table.ChangeCellText(_sel, _sel.text.ToUpper()); // does not do a text-check
 		}
 
 		/// <summary>
