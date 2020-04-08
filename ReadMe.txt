@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2020 april 4
+2020 april 7
 kevL's
-ver 3.5.5.0
+ver 3.5.6.0
 
 
 File
@@ -44,6 +44,11 @@ Edit
 
 - Copy cell  : Ctrl+c (copies a single cell if only 1 cell is selected)
 - Paste cell : Ctrl+v (pastes a single cell if only 1 cell is selected)
+
+- ****                       : replaces all selected cells with "****"
+- Lowercase                  : converts all selected cells to lowercase
+- Uppercase                  : converts all selected cells to uppercase
+- Apply text to selected ... : opens a dialog that replaces all selected cells
 
 - Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
 - Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)

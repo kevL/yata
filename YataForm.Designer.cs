@@ -40,6 +40,10 @@ namespace yata
 		ToolStripMenuItem it_GotoLoadchanged;
 		internal ToolStripMenuItem it_CopyCell;
 		internal ToolStripMenuItem it_PasteCell;
+		ToolStripMenuItem it_Stars;
+		ToolStripMenuItem it_Lower;
+		ToolStripMenuItem it_Upper;
+		ToolStripMenuItem it_Paste;
 		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRange;
 		ToolStripMenuItem it_CreateRows;
@@ -125,6 +129,7 @@ namespace yata
 		ToolStripSeparator separator_27;
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
+		ToolStripSeparator separator_30;
 
 		internal ContextMenuStrip ContextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -235,6 +240,11 @@ namespace yata
 			this.it_CopyCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_20 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Stars = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Lower = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Upper = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Paste = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_30 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
@@ -615,6 +625,11 @@ namespace yata
 			this.it_CopyCell,
 			this.it_PasteCell,
 			this.separator_20,
+			this.it_Stars,
+			this.it_Lower,
+			this.it_Upper,
+			this.it_Paste,
+			this.separator_30,
 			this.it_CopyRange,
 			this.it_PasteRange,
 			this.separator_13,
@@ -713,6 +728,47 @@ namespace yata
 			// 
 			this.separator_20.Name = "separator_20";
 			this.separator_20.Size = new System.Drawing.Size(223, 6);
+			// 
+			// it_Stars
+			// 
+			this.it_Stars.Enabled = false;
+			this.it_Stars.Name = "it_Stars";
+			this.it_Stars.ShowShortcutKeys = false;
+			this.it_Stars.Size = new System.Drawing.Size(226, 22);
+			this.it_Stars.Text = "****";
+			this.it_Stars.Click += new System.EventHandler(this.editclick_Stars);
+			// 
+			// it_Lower
+			// 
+			this.it_Lower.Enabled = false;
+			this.it_Lower.Name = "it_Lower";
+			this.it_Lower.ShowShortcutKeys = false;
+			this.it_Lower.Size = new System.Drawing.Size(226, 22);
+			this.it_Lower.Text = "Lowercase";
+			this.it_Lower.Click += new System.EventHandler(this.editclick_Lower);
+			// 
+			// it_Upper
+			// 
+			this.it_Upper.Enabled = false;
+			this.it_Upper.Name = "it_Upper";
+			this.it_Upper.ShowShortcutKeys = false;
+			this.it_Upper.Size = new System.Drawing.Size(226, 22);
+			this.it_Upper.Text = "Uppercase";
+			this.it_Upper.Click += new System.EventHandler(this.editclick_Upper);
+			// 
+			// it_Paste
+			// 
+			this.it_Paste.Enabled = false;
+			this.it_Paste.Name = "it_Paste";
+			this.it_Paste.ShowShortcutKeys = false;
+			this.it_Paste.Size = new System.Drawing.Size(226, 22);
+			this.it_Paste.Text = "Apply text to selected ...";
+			this.it_Paste.Click += new System.EventHandler(this.editclick_Text);
+			// 
+			// separator_30
+			// 
+			this.separator_30.Name = "separator_30";
+			this.separator_30.Size = new System.Drawing.Size(223, 6);
 			// 
 			// it_CopyRange
 			// 
@@ -1371,7 +1427,7 @@ namespace yata
 			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(174, 270);
+			this.cellMenu.Size = new System.Drawing.Size(174, 248);
 			// 
 			// it_cellEdit
 			// 

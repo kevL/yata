@@ -2431,8 +2431,13 @@ namespace yata
 					Select();
 			}
 
-			_f.it_CopyCell .Enabled = (getSelectedCell() != null);
-			_f.it_PasteCell.Enabled = (_f.it_CopyCell.Enabled && !Readonly);
+			_f.it_CopyCell .Enabled = getSelectedCell() != null;
+			_f.it_PasteCell.Enabled = !Readonly && _f.it_CopyCell.Enabled;
+
+//			_f.it_Stars    .Enabled = // not needed because there are no shortcuts for these
+//			_f.it_Lower    .Enabled = // NOTE: Might not be needed anyway if .net checks
+//			_f.it_Upper    .Enabled = // dropdownopening before allowing a shortcut to fire.
+//			_f.it_Paste    .Enabled = !Readonly && isAnyCellSelected();
 
 //			base.OnMouseClick(e);
 		}
@@ -2520,6 +2525,11 @@ namespace yata
 
 			_f.it_CopyCell .Enabled =
 			_f.it_PasteCell.Enabled = false;
+
+//			_f.it_Stars    .Enabled =
+//			_f.it_Lower    .Enabled =
+//			_f.it_Upper    .Enabled =
+//			_f.it_Paste    .Enabled = false;
 		}
 
 		/// <summary>
@@ -2539,6 +2549,11 @@ namespace yata
 
 			_f.it_CopyCell .Enabled =
 			_f.it_PasteCell.Enabled = false;
+
+//			_f.it_Stars    .Enabled =
+//			_f.it_Lower    .Enabled =
+//			_f.it_Upper    .Enabled =
+//			_f.it_Paste    .Enabled = false;
 		}
 
 
@@ -2601,8 +2616,8 @@ namespace yata
 		/// <summary>
 		/// Checks if only one cell is currently selected and returns it if so.
 		/// </summary>
-		/// <returns>the only cell selected, null if none or more than one cell
-		/// is currently selected</returns>
+		/// <returns>the only cell selected, else null if none or more than one
+		/// cell is selected</returns>
 		internal Cell getSelectedCell()
 		{
 			Cell cell0 = null;
@@ -2623,6 +2638,24 @@ namespace yata
 			}
 			return cell0;
 		}
+
+		/// <summary>
+		/// Checks if any cell is currently selected.
+		/// </summary>
+		/// <returns>true if a cell is selected</returns>
+		internal bool isAnyCellSelected()
+		{
+			foreach (var row in Rows)
+			{
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if (row[c].selected)
+						return true;
+				}
+			}
+			return false;
+		}
+
 
 		/// <summary>
 		/// Gets the col/row coordinates of a cell based on the current mouse-

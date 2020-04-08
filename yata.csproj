@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="TalkDialog.cs" />
     <Compile Include="TalkReader.cs" />
+    <Compile Include="TextInputDialog.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataGraphics.cs" />
     <Compile Include="YataPaint.cs" />
@@ -150,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TalkDialog.resx">
       <DependentUpon>TalkDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextInputDialog.resx">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>

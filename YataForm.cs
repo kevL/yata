@@ -62,7 +62,7 @@ namespace yata
 		/// @note A cell's text shall never be null or blank, therefore
 		/// '_copytext' shall never be null or blank.
 		/// </summary>
-		string _copytext = gs.Stars;
+		internal string _copytext = gs.Stars;
 
 		string _preset = String.Empty;
 
@@ -804,6 +804,11 @@ namespace yata
 				it_PasteRange.Enabled = !Table.Readonly && _copy.Count != 0;
 				it_CreateRows.Enabled = !Table.Readonly;
 
+				it_Stars     .Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled = 
+				it_Paste     .Enabled = !Table.Readonly && Table.isAnyCellSelected();
+
 				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
 				it_ColorRows .Enabled =
@@ -854,6 +859,11 @@ namespace yata
 				it_CopyRange .Enabled =
 				it_PasteRange.Enabled =
 				it_CreateRows.Enabled =
+
+				it_Stars     .Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled =
+				it_Paste     .Enabled =
 
 				it_OrderRows .Enabled =
 				it_CheckRows .Enabled =
@@ -1198,9 +1208,9 @@ namespace yata
 					preset.Click += fileclick_OpenFolder;
 				}
 			}
-			it_OpenFolder.Visible = (presets.Count != 0);
+			it_OpenFolder.Visible = presets.Count != 0;
 
-			it_Recent.Visible = (it_Recent.DropDownItems.Count != 0);
+			it_Recent.Visible = it_Recent.DropDownItems.Count != 0;
 		}
 
 		/// <summary>
@@ -1939,7 +1949,6 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			it_Searchnext     .Enabled = (Table != null && !String.IsNullOrEmpty(tb_Search.Text));
 			it_GotoLoadchanged.Enabled = false;
 
 			if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
@@ -1962,22 +1971,38 @@ namespace yata
 					}
 				}
 
-				it_CopyCell  .Enabled = (Table.getSelectedCell() != null);
-				it_PasteCell .Enabled = (it_CopyCell.Enabled && !Table.Readonly);
+				it_Searchnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange.Enabled = (_copy.Count != 0 && !Table.Readonly);
+				it_CopyCell  .Enabled = Table.getSelectedCell() != null;
+				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
+
+				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
+				it_PasteRange.Enabled = !Table.Readonly && _copy.Count != 0;
+
+				it_CreateRows.Enabled = !Table.Readonly;
+
+				it_Stars     .Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled =
+				it_Paste     .Enabled = !Table.Readonly && Table.isAnyCellSelected();
 			}
 			else
 			{
-				it_CopyCell  .Enabled = 
+				it_Searchnext.Enabled =
+
+				it_CopyCell  .Enabled =
 				it_PasteCell .Enabled =
 
 				it_CopyRange .Enabled =
-				it_PasteRange.Enabled = false;
-			}
+				it_PasteRange.Enabled =
 
-			it_CreateRows.Enabled = (Table != null && !Table.Readonly);
+				it_CreateRows.Enabled =
+
+				it_Stars     .Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled =
+				it_Paste     .Enabled = false;
+			}
 		}
 
 
@@ -2415,7 +2440,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Copies an only selected cell.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2434,7 +2459,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Pastes to an only selected cell.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2468,7 +2493,86 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Pastes "****" to all selected cells.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_Stars(object sender, EventArgs e)
+		{
+			foreach (var row in Table.Rows)
+			{
+				for (int c = 0; c != Table.ColCount; ++c)
+				{
+					if (row[c].selected)
+						Table.ChangeCellText(row[c], gs.Stars); // TODO: Optimize that for multiple cells.
+				}
+			}
+		}
+
+		/// <summary>
+		/// Converts all selected cells to lowercase.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_Lower(object sender, EventArgs e)
+		{
+			foreach (var row in Table.Rows)
+			{
+				for (int c = 0; c != Table.ColCount; ++c)
+				{
+					if (row[c].selected)
+						Table.ChangeCellText(row[c], row[c].text.ToLower()); // TODO: Optimize that for multiple cells.
+				}
+			}
+		}
+
+		/// <summary>
+		/// Converts all selected cells to uppercase.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_Upper(object sender, EventArgs e)
+		{
+			foreach (var row in Table.Rows)
+			{
+				for (int c = 0; c != Table.ColCount; ++c)
+				{
+					if (row[c].selected)
+						Table.ChangeCellText(row[c], row[c].text.ToUpper()); // TODO: Optimize that for multiple cells.
+				}
+			}
+		}
+
+		/// <summary>
+		/// Opens a text-input dialog for pasting text to all selected cells.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editclick_Text(object sender, EventArgs e)
+		{
+			using (var f = new TextInputDialog(this))
+			{
+				if (f.ShowDialog(this) == DialogResult.OK)
+				{
+					Cell sel;
+
+					foreach (var row in Table.Rows)
+					{
+						for (int c = 0; c != Table.ColCount; ++c)
+						{
+							if ((sel = row[c]).selected && sel.text != _copytext)
+							{
+								Table.ChangeCellText(sel, _copytext); // does not do a text-check
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Copies a range of rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2506,7 +2610,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Pastes a range of rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
