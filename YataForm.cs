@@ -267,7 +267,7 @@ namespace yata
 
 
 			if (Settings._recent != 0)
-				InitializeRecentFiles(); // init recents before loading a table from FileExplorer
+				InitializeRecentFiles(); // init recents before (potentially) loading a table from FileExplorer
 
 			if (File.Exists(pfe_load)) // load file from FileExplorer ...
 				CreatePage(pfe_load);
@@ -2505,7 +2505,9 @@ namespace yata
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
 					if ((sel = row[c]).selected && sel.text != gs.Stars)
+					{
 						Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
+					}
 				}
 			}
 		}
@@ -2523,7 +2525,9 @@ namespace yata
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
 					if ((sel = row[c]).selected && sel.text != sel.text.ToLower())
+					{
 						Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
+					}
 				}
 			}
 		}
