@@ -2499,12 +2499,13 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_Stars(object sender, EventArgs e)
 		{
+			Cell sel;
 			foreach (var row in Table.Rows)
 			{
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
-					if (row[c].selected)
-						Table.ChangeCellText(row[c], gs.Stars); // TODO: Optimize that for multiple cells.
+					if ((sel = row[c]).selected && sel.text != gs.Stars)
+						Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
 				}
 			}
 		}
@@ -2516,12 +2517,13 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_Lower(object sender, EventArgs e)
 		{
+			Cell sel;
 			foreach (var row in Table.Rows)
 			{
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
-					if (row[c].selected)
-						Table.ChangeCellText(row[c], row[c].text.ToLower()); // TODO: Optimize that for multiple cells.
+					if ((sel = row[c]).selected && sel.text != sel.text.ToLower())
+						Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
 				}
 			}
 		}
@@ -2533,12 +2535,15 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_Upper(object sender, EventArgs e)
 		{
+			Cell sel;
 			foreach (var row in Table.Rows)
 			{
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
-					if (row[c].selected)
-						Table.ChangeCellText(row[c], row[c].text.ToUpper()); // TODO: Optimize that for multiple cells.
+					if ((sel = row[c]).selected && sel.text != sel.text.ToUpper())
+					{
+						Table.ChangeCellText(sel, sel.text.ToUpper()); // TODO: Optimize that for multiple cells.
+					}
 				}
 			}
 		}
@@ -2555,7 +2560,6 @@ namespace yata
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					Cell sel;
-
 					foreach (var row in Table.Rows)
 					{
 						for (int c = 0; c != Table.ColCount; ++c)
