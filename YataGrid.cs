@@ -2352,28 +2352,72 @@ namespace yata
 					{
 						Select();
 
-						if ((ModifierKeys & Keys.Control) == Keys.Control)
+
+						bool ctrl  = (ModifierKeys & Keys.Control) != 0;
+						bool shift = (ModifierKeys & Keys.Shift)   != 0;
+						bool alt   = (ModifierKeys & Keys.Alt)     != 0;
+
+						if (ctrl || shift || alt) // safety. Ensure that modifiers are treated exclusively and independently ->
 						{
-							if (cell.selected = !cell.selected)
+							if (ctrl && !shift && !alt)
 							{
-								if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+								if (cell.selected = !cell.selected)
 								{
-									foreach (var row in Rows)
-										row.selected = false;
+									if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+									{
+										ClearSelects();
+										cell.selected = true;
+									}
+									EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+								}														//    selectedcell is not the only selected cell
+								else
+									_f.SyncSelect();
 
-									ClearCellSelects();
-									cell.selected = true;
+								int invalid = INVALID_GRID;
+								if (Propanel != null && Propanel.Visible)
+									invalid |= INVALID_PROP;
+
+								Invalidator(invalid);
+							}
+							else if (shift && !ctrl && !alt)
+							{
+								if (!cell.selected)
+								{
+									Cell sel = null;
+
+									if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+									{
+										ClearSelects();
+										cell.selected = true;
+
+										EnsureDisplayed(sel = cell);
+									}
+									else if ((sel = getSelectedCell()) != null)
+									{
+										ClearSelects();
+
+										int strt_r = Math.Min(sel.y, cell.y);
+										int stop_r = Math.Max(sel.y, cell.y);
+										int strt_c = Math.Min(sel.x, cell.x);
+										int stop_c = Math.Max(sel.x, cell.x);
+
+										for (int r = strt_r; r <= stop_r; ++r)
+										for (int c = strt_c; c <= stop_c; ++c)
+											this[r,c].selected = true;
+
+										EnsureDisplayed(cell, true);
+									}
+
+									if (sel != null)
+									{
+										int invalid = INVALID_GRID;
+										if (Propanel != null && Propanel.Visible)
+											invalid |= INVALID_PROP;
+
+										Invalidator(invalid);
+									}
 								}
-								EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-							}														//    selectedcell is not the only selected cell
-							else
-								_f.SyncSelect();
-
-							int invalid = INVALID_GRID;
-							if (Propanel != null && Propanel.Visible)
-								invalid |= INVALID_PROP;
-
-							Invalidator(invalid);
+							}
 						}
 						else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 						{

@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2020 april 7
+2020 april 8
 kevL's
-ver 3.5.6.0
+ver 3.5.7.0
 
 
 File
@@ -226,13 +226,15 @@ RMB - opens the context for single-row editing (This handles single-row editing
       only - for multi-row editing see the Edit menu.)
 
 click on a table-cell
-LMB      - selects a cell or if already selected then starts the cell-editor, or
-           if editing a cell then a left-click on a different part of the table
-           either inside or outside the grid accepts the edit
-LMB+Ctrl - adds or subtracts a cell from the currently selected cells
-RMB      - selects a cell and opens the cell context (Note that if editing a
-           cell then a right-click on a different part of the table either
-           inside or outside the grid also cancels the edit.)
+LMB       - selects a cell or if already selected then starts the cell-editor,
+            or if editing a cell then a left-click on a different part of the
+            table either inside or outside the grid accepts the edit
+LMB+Ctrl  - adds or subtracts a cell from the currently selected cells
+LMB+Shift - selects a block of cells if there is only one currently selected
+            cell
+RMB       - selects a cell and opens the cell context (Note that if editing a
+            cell then a right-click on a different part of the table either
+            inside or outside the grid also cancels the edit.)
 
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a
