@@ -176,7 +176,7 @@ namespace yata
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
-			FontDefault = Font;
+			FontDefault = Font.Clone() as Font;
 
 			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
 
@@ -544,36 +544,30 @@ namespace yata
 		#region Methods (static)
 		internal static FontStyle getStyleStandard(FontFamily ff)
 		{
-			FontStyle style;
-			if (!ff.IsStyleAvailable(style = FontStyle.Regular))
-			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
-			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
-			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle)))
+			if (ff.IsStyleAvailable(FontStyle.Regular)) return FontStyle.Regular;
+			if (ff.IsStyleAvailable(FontStyle.Italic))  return FontStyle.Italic;
+			if (ff.IsStyleAvailable(FontStyle.Bold))    return FontStyle.Bold;
+
+			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
 			{
-				if (ff.IsStyleAvailable(styleTest)) // determine first available style (any) of Family ->
-				{
-					style = styleTest;
-					break;
-				}
+				if (ff.IsStyleAvailable(style)) // determine first available style (any) of Family ->
+					return style;
 			}
-			return style;
+			return FontStyle.Regular;
 		}
 
 		static FontStyle getStyleAccented(FontFamily ff)
 		{
-			FontStyle style;
-			if (!ff.IsStyleAvailable(style = FontStyle.Bold))
-			if (!ff.IsStyleAvailable(style = FontStyle.Underline))
-			if (!ff.IsStyleAvailable(style = FontStyle.Italic))
-			foreach (FontStyle styleTest in Enum.GetValues(typeof(FontStyle)))
+			if (ff.IsStyleAvailable(FontStyle.Bold))      return FontStyle.Bold;
+			if (ff.IsStyleAvailable(FontStyle.Underline)) return FontStyle.Underline;
+			if (ff.IsStyleAvailable(FontStyle.Italic))    return FontStyle.Italic;
+
+			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
 			{
-				if (ff.IsStyleAvailable(styleTest)) // determine first available style (any) of Family ->
-				{
-					style = styleTest;
-					break;
-				}
+				if (ff.IsStyleAvailable(style)) // determine first available style (any) of Family ->
+					return style;
 			}
-			return style;
+			return FontStyle.Regular;
 		}
 		#endregion Methods (static)
 
@@ -3307,8 +3301,8 @@ namespace yata
 			if (f == null)
 			{
 				it_FontDefault.Enabled = false;
-
 				it_Font.Checked = true;
+
 				f = new FontF(this);
 				f.Show(this);
 			}
@@ -3358,9 +3352,12 @@ namespace yata
 			// NOTE: Apparently setting GraphicsUnit.Pixel when creating new
 			// Font-objects effectively bypasses the OS' DPI user-setting.
 
-			Font = font; // rely on GC here
+			Font.Dispose();
+			Font = font;
+
 			FontAccent.Dispose();
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
+
 			Settings._fontdialog.Dispose();
 			Settings._fontdialog = Settings.CreateDialogFont(Font);
 

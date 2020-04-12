@@ -12,59 +12,54 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		/* FontStyle
-		Regular   0 - Normal text.
-		Bold      1 - Bold text.
-		Italic    2 - Italic text.
-		Underline 4 - Underlined text.
-		Strikeout 8 - Text with a line through the middle.
-		*/
-		static string EXAMPLE = "01234567890 `~!@#$%^&*()_+-=\\|[]{};:'\",<.>/?" + Environment.NewLine
+		static string LAZYDOG = "01234567890 `~!@#$%^&*()_+-=\\|[]{};:'\",<.>/?" + Environment.NewLine
 							  + "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
+
+		static string REGULAR_ABSENT = " does not support the Regular style."    + Environment.NewLine + Environment.NewLine
+									 + "Choose a different style ...";
 
 		static int _x = -1;
 		static int _y = -1;
 		static int _w = -1;
 		static int _h = -1;
+
+		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
 		#endregion Fields (static)
 
 
 		#region Fields
 		readonly List<FontFamily> _ffs   = new List<FontFamily>();
-		readonly List<Font>       _fonts = new List<Font>(); // fonts will be disposed
+		readonly List<Font>       _fonts = new List<Font>(); // all fonts used to render the listbox will be disposed
 
 		readonly YataForm _f;
-		readonly Font _font;
-		readonly bool _load;
+		bool _init;
 
-		bool
-			_dirty, // ie. displayed font and/or its style have changed
-			_applied,
-			_bypassStyleChanged;
+		int  _id; // tracks the current index of the fontlist because .net will treat it as changed when it didn't.
+		bool _regular;
 		#endregion Fields
 
 
 		#region cTor
 		/// <summary>
-		/// cTor.
+		/// cTor. Instantiates this dialog.
 		/// </summary>
 		internal FontF(YataForm f)
 		{
 			InitializeComponent();
 
 			_f = f;
-			_font = _f.Font;
-			_load = true;
+
+			_init = true;
 
 			if (Settings._fontf != null)
 			{
-				tb_NetString.Font.Dispose();
-				tb_NetString.Font = Settings._fontfdialog;
+				tb_FontString.Font.Dispose();
+				tb_FontString.Font = Settings._fontfdialog;
 			}
 
-			tb_Size     .BackColor = Color.White;
-			tb_NetString.BackColor = Colors.TextboxBackground;
+			tb_FontSize  .BackColor = Color.White;
+			tb_FontString.BackColor = Colors.TextboxBackground;
 
 			if (_x == -1) _x = _f.Left + 20;
 			if (_y == -1) _y = _f.Top  + 20;
@@ -76,60 +71,114 @@ namespace yata
 			if (_h != -1) Height = _h;
 
 
-			int fontStart  = -1; // for showing the start-font's characteristics
-			int fontStartT = -1; // in the lists
+			// Safely ensure that Yata's current font is good to go
+			// else set defaults ->
+
+			int fontList_init = -1; // for showing the initial font's characteristics in the list ->
+			int fontList_test = -1;
 
 //			var fontCollection = new System.Drawing.Text.InstalledFontCollection();
 //			foreach (var family in fontCollection.Families)
 //			{}
 
 			Font font;
-			FontStyle? style;
 			foreach (var ff in FontFamily.Families)
 			{
-				if ((style = getFirstStyle(ff)) != null)
+				FontStyle style = getStyle(ff);
+				if (style != FontStyleInvalid)
 				{
-					font = new Font(ff, 10, style.Value);
-					if (font.Name == ff.Name)
+					font = new Font(ff, 10, style);
+
+					if (fontList_init == -1) // look for Yata's current font ->
 					{
-						++fontStartT;
-						if (font.Name == _font.Name)
-							fontStart = fontStartT;
-
-						_ffs.Add(ff);
-						list_Font.Items.Add(font);
-
-						_fonts.Add(font); // <- is purely for Disposal.
+						++fontList_test;
+						if (font.Name == _f.Font.Name)
+							fontList_init = fontList_test;
 					}
+
+					_ffs.Add(ff);
+					list_Font.Items.Add(font);
+
+					_fonts.Add(font); // '_fonts' is purely storage for Disposal of the fonts used to render the fontlist.
 				}
 			}
 
-			if (fontStart != -1)
-				list_Font.SelectedIndex = fontStart;
+			float size_init;
+			FontStyle style_init;
+
+			if (fontList_init != -1)
+			{
+				list_Font.SelectedIndex = fontList_init;
+				size_init = _f.Font.SizeInPoints;
+				tb_FontSize.Text = size_init.ToString();
+				style_init = _f.Font.Style;
+
+				cb_Bold.Checked = (style_init & FontStyle.Bold)      != 0;
+				cb_Ital.Checked = (style_init & FontStyle.Italic)    != 0;
+				cb_Undr.Checked = (style_init & FontStyle.Underline) != 0;
+				cb_Strk.Checked = (style_init & FontStyle.Strikeout) != 0;
+			}
 			else
 			{
-				_dirty = true;
+				bu_Apply.Enabled = true;
+
 				list_Font.SelectedIndex = 0; // you'd better have at least 1 font on your system buckwheat /lol
+				size_init = 10F;
+				tb_FontSize.Text = "10";
+				style_init = getStyle(_ffs[list_Font.SelectedIndex]);
 			}
 
-			list_Size.Items.AddRange(new object[]
-			{
-				 "6", "7", "8", "9","10","11","12","13",
-				"14","15","16","17","18","19","20","21"
-			});
+			_id = list_Font.SelectedIndex;
+			_regular = _ffs[_id].IsStyleAvailable(FontStyle.Regular);
 
-			if (fontStart != -1)
-				tb_Size.Text = _font.SizeInPoints.ToString();
-			else
-			{
-				_dirty = true;
-				tb_Size.Text = "10";
-			}
+			lbl_Lazydog.Font = new Font(_ffs[_id].Name, size_init, style_init);
+			lbl_Lazydog.Text = LAZYDOG;
 
-			_load = false;
 
-			lbl_Example.Text = EXAMPLE;
+			tb_FontSize.MouseWheel += size_mousewheel;
+
+
+			_init = false;
 		}
+
+/*		void LogValidStyles()
+		{
+			foreach (var ff in FontFamily.Families)
+			{
+				bool found = false;
+
+				if (ff.IsStyleAvailable(FontStyle.Regular))
+				{
+					found = true;
+					logfile.Log(ff.Name + " - regular");
+				}
+				if (ff.IsStyleAvailable(FontStyle.Bold))
+				{
+					found = true;
+					logfile.Log(ff.Name + " - bold");
+				}
+				if (ff.IsStyleAvailable(FontStyle.Italic))
+				{
+					found = true;
+					logfile.Log(ff.Name + " - italic");
+				}
+				if (ff.IsStyleAvailable(FontStyle.Underline))
+				{
+					found = true;
+					logfile.Log(ff.Name + " - underline");
+				}
+				if (ff.IsStyleAvailable(FontStyle.Strikeout))
+				{
+					found = true;
+					logfile.Log(ff.Name + " - strikeout");
+				}
+
+				if (!found)
+					logfile.Log(ff.Name + " - STYLE INVALID");
+
+				logfile.Log("");
+			}
+		} */
 		#endregion cTor
 
 
@@ -150,65 +199,54 @@ namespace yata
 
 		/// <summary>
 		/// Handles the form-closing event.
-		/// NOTE: This is not the same as Cancel/Revert - this will not revert
-		/// the table-font if a different font has been Applied. Rather it
-		/// closes the FontPicker and leaves things as they are.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
-			_f.FontF_closing();
-
 			_x = Left;
 			_y = Top;
 			_w = Width;
 			_h = Height;
 
-			if (lbl_Example.Font != null)
-				lbl_Example.Font.Dispose();
+			_f.FontF_closing();
+
+			lbl_Lazydog.Font.Dispose();
 		}
 		#endregion Events
 
 
-		#region Button handlers
-		void btnOk_click(object sender, EventArgs e)
+		#region button handlers
+		/// <summary>
+		/// Applies the font that currently displays the text but does not close
+		/// this dialog.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_Apply(object sender, EventArgs e)
 		{
-			if (_dirty)
-				_f.doFont((Font)lbl_Example.Font.Clone());
+			bu_Apply.Enabled = false;
+			_f.doFont((Font)lbl_Lazydog.Font.Clone());
+		}
 
-			lbl_Example.Font.Dispose();
-			lbl_Example.Font = null;
-
+		/// <summary>
+		/// Closes this dialog. See OnClosing().
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_Close(object sender, EventArgs e)
+		{
 			Close();
 		}
-
-		void btnApply_click(object sender, EventArgs e)
-		{
-			if (_dirty)
-			{
-				_dirty = false;
-				_applied = true;
-
-				_f.doFont((Font)lbl_Example.Font.Clone());
-				btn_Cancel.Text = "— REVERT —";
-			}
-		}
-
-		void btnCancel_click(object sender, EventArgs e)
-		{
-			if (_applied)
-				_f.doFont(_font);
-
-			lbl_Example.Font.Dispose();
-			lbl_Example.Font = null;
-
-			Close();
-		}
-		#endregion Button handlers
+		#endregion button handlers
 
 
-		#region FontFamily
+		#region font list/size/style handlers
+		/// <summary>
+		/// Draws the font labels in the font list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void fontList_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			if (e.Index != -1)
@@ -228,173 +266,158 @@ namespace yata
 			}
 		}
 
-		void fontList_SelectedIndexChanged(object sender, EventArgs e)
+		/// <summary>
+		/// Fired by any control that causes the text to change.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void fontchanged(object sender, EventArgs e)
 		{
-			_dirty |= !_load;
-
-			var ff = _ffs[list_Font.SelectedIndex];
-
-			cb_Bold  .Visible = ff.IsStyleAvailable(FontStyle.Bold);
-			cb_Italic.Visible = ff.IsStyleAvailable(FontStyle.Italic);
-
-			_bypassStyleChanged = true;
-
-			cb_Bold  .Checked =
-			cb_Italic.Checked = false;
-
-			if (!_load)
+			if (!_init)
 			{
-				var style = getFirstStyle(ff); // note: This has been checked in cTor for !null and !Underline and !Strikeout
-				switch (style)
+				if (sender == list_Font)
 				{
-					case FontStyle.Regular:
-						break;
+					// Lovely. Selected index changes when selected index doesn't change.
+					if (list_Font.SelectedIndex != _id)
+					{
+						FontFamily ff = _ffs[(_id = list_Font.SelectedIndex)];
 
-					case FontStyle.Bold:
-						cb_Bold.Checked = true;
-						break;
+						cb_Bold.Enabled = ff.IsStyleAvailable(FontStyle.Bold);
+						cb_Ital.Enabled = ff.IsStyleAvailable(FontStyle.Italic);
+						cb_Undr.Enabled = ff.IsStyleAvailable(FontStyle.Underline);
+						cb_Strk.Enabled = ff.IsStyleAvailable(FontStyle.Strikeout);
 
-					case FontStyle.Italic:
-						cb_Italic.Checked = true;
-						break;
-				}
-			}
-			else // loading ...
-			{
-				cb_Bold  .Checked = _font.Bold;
-				cb_Italic.Checked = _font.Italic;
-			}
+						_init = true; // changes to the checkboxes shall bypass this funct.
+						if (!cb_Bold.Enabled) cb_Bold.Checked = false;
+						if (!cb_Ital.Enabled) cb_Ital.Checked = false;
+						if (!cb_Undr.Enabled) cb_Undr.Checked = false;
+						if (!cb_Strk.Enabled) cb_Strk.Checked = false;
+						_init = false;
 
-			_bypassStyleChanged = false;
+						_regular = ff.IsStyleAvailable(FontStyle.Regular);
 
-			SetSampleFont();
-		}
-		#endregion FontFamily
-
-
-		#region FontStyle
-		void cbBold_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!_bypassStyleChanged)
-			{
-				if (   !cb_Bold  .Checked
-					&& !cb_Italic.Checked
-					&& !_ffs[list_Font.SelectedIndex].IsStyleAvailable(FontStyle.Regular))
-				{
-					cb_Bold.Checked = true;
+						CreateTextFont();
+					}
 				}
 				else
-					_dirty |= !_load;
-	
-				SetSampleFont();
+					CreateTextFont();
 			}
 		}
 
-		void cbItalic_CheckedChanged(object sender, EventArgs e)
+		/// <summary>
+		/// Increases or decreases the pointsize with the mousewheel when the
+		/// size-box has focus.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void size_mousewheel(object sender, MouseEventArgs e)
 		{
-			if (!_bypassStyleChanged)
+			float size;
+			if (float.TryParse(tb_FontSize.Text, out size))
 			{
-				if (   !cb_Italic.Checked
-					&& !cb_Bold  .Checked
-					&& !_ffs[list_Font.SelectedIndex].IsStyleAvailable(FontStyle.Regular))
+				if (e.Delta > 0 && size >= 1F)
 				{
-					cb_Italic.Checked = true;
+					tb_FontSize.Text = (size + 0.25F).ToString();
 				}
-				else
-					_dirty |= !_load;
-	
-				SetSampleFont();
-			}
-		}
-		#endregion FontStyle
-
-
-		#region FontSize
-		void sizeList_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			if (e.Index != -1)
-			{
-				e.DrawBackground();
-				e.DrawFocusRectangle();
-
-				TextRenderer.DrawText(e.Graphics,
-									  list_Size.Items[e.Index].ToString(),
-									  Font,
-									  e.Bounds,
-									  Colors.Text,
-									  TextFormatFlags.NoPrefix);
+				else if (e.Delta < 0 && size >= 1.25F)
+				{
+					tb_FontSize.Text = (size - 0.25F).ToString();
+				}
 			}
 		}
 
-		void fontSize_SelectedIndexChanged(object sender, EventArgs e)
+		/// <summary>
+		/// Focuses the size-box when the size-label is clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_pointlabel(object sender, EventArgs e)
 		{
-			tb_Size.Text = list_Size.SelectedItem.ToString();
+			tb_FontSize.Focus();
 		}
-
-		void fontSize_TextChanged(object sender, EventArgs e)
-		{
-			_dirty |= !_load;
-			SetSampleFont();
-		}
-		#endregion FontSize
+		#endregion font list/size/style handlers
 
 
 		#region Methods
 		/// <summary>
 		/// Gets the first available style in a given FontFamily.
+		/// NOTE: ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net ! ( not )
 		/// </summary>
 		/// <param name="ff">a FontFamily</param>
-		/// <returns>a nullable FontStyle</returns>
-		FontStyle? getFirstStyle(FontFamily ff)
+		/// <returns>the first FontStyle found else FontStyleInvalid</returns>
+		FontStyle getStyle(FontFamily ff)
 		{
 			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
 			{
-				if (ff.IsStyleAvailable(style)
-					&& style != FontStyle.Underline
-					&& style != FontStyle.Strikeout)
-				{
+				if (ff.IsStyleAvailable(style))
 					return style;
-				}
 			}
-			return null;
+			return FontStyleInvalid;
 		}
 
 		/// <summary>
-		/// Prints text in the chosen font.
+		/// Prints sample text in the fontlist's currently selected font.
 		/// </summary>
-		void SetSampleFont()
+		void CreateTextFont()
 		{
-			if (list_Font.SelectedIndex != -1)
+			if (_id != -1) // safety.
 			{
 				float size;
-				if (float.TryParse(tb_Size.Text, out size)
-					&& size > 0)
+				if (float.TryParse(tb_FontSize.Text, out size)
+					&& size >= 1F)
 				{
-					var style = FontStyle.Regular;	// =0
+					var style = FontStyle.Regular;						// =0
+					if (cb_Bold.Checked) style |= FontStyle.Bold;		// =1
+					if (cb_Ital.Checked) style |= FontStyle.Italic;		// =2
+					if (cb_Undr.Checked) style |= FontStyle.Underline;	// =4
+					if (cb_Strk.Checked) style |= FontStyle.Strikeout;	// =8
 
-					if (cb_Bold.Checked)
-						style |= FontStyle.Bold;	// =1
+					lbl_Lazydog.Font.Dispose();
 
-					if (cb_Italic.Checked)
-						style |= FontStyle.Italic;	// =2
+					if (style == FontStyle.Regular && !_regular)
+					{
+						lbl_Lazydog.ForeColor = Color.Crimson;
+						lbl_Lazydog.Font = new Font("Verdana", 8F, FontStyle.Bold);
+						lbl_Lazydog.Text = _ffs[_id].Name + REGULAR_ABSENT;
 
-					lbl_Example.Font = new Font(_ffs[list_Font.SelectedIndex].Name, // rely on GC here
-												size, style);
+						tb_FontString.Text = String.Empty;
 
-					SetNetString();
+						bu_Apply.Enabled = false;
+						return;
+					}
+
+					lbl_Lazydog.ForeColor = SystemColors.ControlText;
+					lbl_Lazydog.Font = new Font(_ffs[_id].Name, size, style);
+					lbl_Lazydog.Text = LAZYDOG;
+
+					printstring();
 				}
 			}
+			bu_Apply.Enabled = !copulate(lbl_Lazydog.Font, _f.Font);
 		}
 
 		/// <summary>
-		/// Prints the .NET font-string of the currently chosen font (for use by
-		/// Settings.Cfg).
+		/// Compares two fonts for a reasonable identity.
 		/// </summary>
-		void SetNetString()
+		/// <param name="font1"></param>
+		/// <param name="font2"></param>
+		/// <returns></returns>
+		static bool copulate(Font font1, Font font2)
+		{
+			return font1.Name  == font2.Name
+				&& font1.Style == font2.Style
+				&& Math.Abs(font2.SizeInPoints - font1.SizeInPoints) <= 0.0005F;
+		}
+
+		/// <summary>
+		/// Prints the .NET font-string of the currently chosen font (for user
+		/// to use in Settings.Cfg).
+		/// </summary>
+		void printstring()
 		{
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			tb_NetString.Text = tc.ConvertToString(lbl_Example.Font);
-			tb_NetString.SelectionStart = tb_NetString.Text.Length;
+			tb_FontString.Text = tc.ConvertToString(lbl_Lazydog.Font);
+			tb_FontString.SelectionStart = tb_FontString.Text.Length;
 		}
 
 

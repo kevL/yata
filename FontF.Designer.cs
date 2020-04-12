@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 
@@ -8,20 +10,21 @@ namespace yata
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
-		System.ComponentModel.IContainer components = null;
+		IContainer components = null; // not used.
 
 		ListBox list_Font;
-		Button btn_Ok;
-		Button btn_Apply;
-		Button btn_Cancel;
+		Button bu_Apply;
+		Button bu_Cancel;
 		Label lbl_Size;
-		ListBox list_Size;
-		Label lbl_Example;
-		TextBox tb_Size;
-		GroupBox gb_Example;
+		Label lbl_Lazydog;
+		TextBox tb_FontSize;
+		GroupBox gb_Text;
 		CheckBox cb_Bold;
-		CheckBox cb_Italic;
-		TextBox tb_NetString;
+		CheckBox cb_Ital;
+		CheckBox cb_Undr;
+		CheckBox cb_Strk;
+		TextBox tb_FontString;
+		GroupBox gb_Style;
 
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -46,18 +49,20 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.list_Font = new System.Windows.Forms.ListBox();
-			this.btn_Ok = new System.Windows.Forms.Button();
-			this.btn_Apply = new System.Windows.Forms.Button();
-			this.btn_Cancel = new System.Windows.Forms.Button();
+			this.bu_Apply = new System.Windows.Forms.Button();
+			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.lbl_Size = new System.Windows.Forms.Label();
-			this.list_Size = new System.Windows.Forms.ListBox();
-			this.lbl_Example = new System.Windows.Forms.Label();
-			this.tb_Size = new System.Windows.Forms.TextBox();
-			this.gb_Example = new System.Windows.Forms.GroupBox();
+			this.lbl_Lazydog = new System.Windows.Forms.Label();
+			this.tb_FontSize = new System.Windows.Forms.TextBox();
+			this.gb_Text = new System.Windows.Forms.GroupBox();
+			this.tb_FontString = new System.Windows.Forms.TextBox();
+			this.gb_Style = new System.Windows.Forms.GroupBox();
+			this.cb_Strk = new System.Windows.Forms.CheckBox();
+			this.cb_Undr = new System.Windows.Forms.CheckBox();
+			this.cb_Ital = new System.Windows.Forms.CheckBox();
 			this.cb_Bold = new System.Windows.Forms.CheckBox();
-			this.cb_Italic = new System.Windows.Forms.CheckBox();
-			this.tb_NetString = new System.Windows.Forms.TextBox();
-			this.gb_Example.SuspendLayout();
+			this.gb_Text.SuspendLayout();
+			this.gb_Style.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// list_Font
@@ -68,163 +73,176 @@ namespace yata
 			this.list_Font.Location = new System.Drawing.Point(5, 5);
 			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
 			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(230, 244);
+			this.list_Font.Size = new System.Drawing.Size(270, 244);
 			this.list_Font.TabIndex = 0;
 			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_DrawItem);
-			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.fontList_SelectedIndexChanged);
+			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.fontchanged);
 			// 
-			// btn_Ok
+			// bu_Apply
 			// 
-			this.btn_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.bu_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Ok.Location = new System.Drawing.Point(275, 115);
-			this.btn_Ok.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Ok.Name = "btn_Ok";
-			this.btn_Ok.Size = new System.Drawing.Size(185, 40);
-			this.btn_Ok.TabIndex = 6;
-			this.btn_Ok.Text = "— ok —";
-			this.btn_Ok.UseVisualStyleBackColor = true;
-			this.btn_Ok.Click += new System.EventHandler(this.btnOk_click);
+			this.bu_Apply.Enabled = false;
+			this.bu_Apply.Location = new System.Drawing.Point(280, 149);
+			this.bu_Apply.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Apply.Name = "bu_Apply";
+			this.bu_Apply.Size = new System.Drawing.Size(175, 35);
+			this.bu_Apply.TabIndex = 4;
+			this.bu_Apply.Text = "— apply —";
+			this.bu_Apply.UseVisualStyleBackColor = true;
+			this.bu_Apply.Click += new System.EventHandler(this.click_Apply);
 			// 
-			// btn_Apply
+			// bu_Cancel
 			// 
-			this.btn_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Apply.Location = new System.Drawing.Point(275, 160);
-			this.btn_Apply.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Apply.Name = "btn_Apply";
-			this.btn_Apply.Size = new System.Drawing.Size(185, 40);
-			this.btn_Apply.TabIndex = 7;
-			this.btn_Apply.Text = "— apply —";
-			this.btn_Apply.UseVisualStyleBackColor = true;
-			this.btn_Apply.Click += new System.EventHandler(this.btnApply_click);
-			// 
-			// btn_Cancel
-			// 
-			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(275, 205);
-			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(185, 40);
-			this.btn_Cancel.TabIndex = 8;
-			this.btn_Cancel.Text = "— cancel —";
-			this.btn_Cancel.UseVisualStyleBackColor = true;
-			this.btn_Cancel.Click += new System.EventHandler(this.btnCancel_click);
+			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Location = new System.Drawing.Point(280, 189);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Cancel.Name = "bu_Cancel";
+			this.bu_Cancel.Size = new System.Drawing.Size(175, 35);
+			this.bu_Cancel.TabIndex = 5;
+			this.bu_Cancel.Text = "— close —";
+			this.bu_Cancel.UseVisualStyleBackColor = true;
+			this.bu_Cancel.Click += new System.EventHandler(this.click_Close);
 			// 
 			// lbl_Size
 			// 
-			this.lbl_Size.Location = new System.Drawing.Point(315, 10);
+			this.lbl_Size.Location = new System.Drawing.Point(320, 10);
 			this.lbl_Size.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Size = new System.Drawing.Size(20, 20);
-			this.lbl_Size.TabIndex = 3;
+			this.lbl_Size.Size = new System.Drawing.Size(30, 15);
+			this.lbl_Size.TabIndex = 2;
 			this.lbl_Size.Text = "pt";
 			this.lbl_Size.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lbl_Size.Click += new System.EventHandler(this.click_pointlabel);
 			// 
-			// list_Size
+			// lbl_Lazydog
 			// 
-			this.list_Size.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.list_Size.FormattingEnabled = true;
-			this.list_Size.ItemHeight = 15;
-			this.list_Size.Location = new System.Drawing.Point(240, 5);
-			this.list_Size.Margin = new System.Windows.Forms.Padding(0);
-			this.list_Size.Name = "list_Size";
-			this.list_Size.Size = new System.Drawing.Size(30, 244);
-			this.list_Size.TabIndex = 1;
-			this.list_Size.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.sizeList_DrawItem);
-			this.list_Size.SelectedIndexChanged += new System.EventHandler(this.fontSize_SelectedIndexChanged);
-			// 
-			// lbl_Example
-			// 
-			this.lbl_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.lbl_Lazydog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.lbl_Example.Location = new System.Drawing.Point(5, 12);
-			this.lbl_Example.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Example.Name = "lbl_Example";
-			this.lbl_Example.Size = new System.Drawing.Size(445, 88);
-			this.lbl_Example.TabIndex = 0;
+			this.lbl_Lazydog.Location = new System.Drawing.Point(5, 12);
+			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
+			this.lbl_Lazydog.Name = "lbl_Lazydog";
+			this.lbl_Lazydog.Size = new System.Drawing.Size(440, 88);
+			this.lbl_Lazydog.TabIndex = 0;
 			// 
-			// tb_Size
+			// tb_FontSize
 			// 
-			this.tb_Size.Location = new System.Drawing.Point(275, 10);
-			this.tb_Size.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Size.Name = "tb_Size";
-			this.tb_Size.Size = new System.Drawing.Size(40, 20);
-			this.tb_Size.TabIndex = 2;
-			this.tb_Size.TextChanged += new System.EventHandler(this.fontSize_TextChanged);
+			this.tb_FontSize.Location = new System.Drawing.Point(280, 10);
+			this.tb_FontSize.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_FontSize.Name = "tb_FontSize";
+			this.tb_FontSize.Size = new System.Drawing.Size(40, 20);
+			this.tb_FontSize.TabIndex = 1;
+			this.tb_FontSize.TextChanged += new System.EventHandler(this.fontchanged);
 			// 
-			// gb_Example
+			// gb_Text
 			// 
-			this.gb_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.gb_Text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.gb_Example.Controls.Add(this.lbl_Example);
-			this.gb_Example.Location = new System.Drawing.Point(5, 250);
-			this.gb_Example.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Example.Name = "gb_Example";
-			this.gb_Example.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Example.Size = new System.Drawing.Size(455, 105);
-			this.gb_Example.TabIndex = 9;
-			this.gb_Example.TabStop = false;
+			this.gb_Text.Controls.Add(this.lbl_Lazydog);
+			this.gb_Text.Location = new System.Drawing.Point(5, 250);
+			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Text.Name = "gb_Text";
+			this.gb_Text.Padding = new System.Windows.Forms.Padding(0);
+			this.gb_Text.Size = new System.Drawing.Size(450, 105);
+			this.gb_Text.TabIndex = 6;
+			this.gb_Text.TabStop = false;
+			// 
+			// tb_FontString
+			// 
+			this.tb_FontString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tb_FontString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_FontString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tb_FontString.HideSelection = false;
+			this.tb_FontString.Location = new System.Drawing.Point(5, 358);
+			this.tb_FontString.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_FontString.Name = "tb_FontString";
+			this.tb_FontString.ReadOnly = true;
+			this.tb_FontString.Size = new System.Drawing.Size(450, 22);
+			this.tb_FontString.TabIndex = 7;
+			this.tb_FontString.WordWrap = false;
+			// 
+			// gb_Style
+			// 
+			this.gb_Style.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.gb_Style.Controls.Add(this.cb_Strk);
+			this.gb_Style.Controls.Add(this.cb_Undr);
+			this.gb_Style.Controls.Add(this.cb_Ital);
+			this.gb_Style.Controls.Add(this.cb_Bold);
+			this.gb_Style.Location = new System.Drawing.Point(280, 31);
+			this.gb_Style.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Style.Name = "gb_Style";
+			this.gb_Style.Padding = new System.Windows.Forms.Padding(0);
+			this.gb_Style.Size = new System.Drawing.Size(175, 100);
+			this.gb_Style.TabIndex = 3;
+			this.gb_Style.TabStop = false;
+			// 
+			// cb_Strk
+			// 
+			this.cb_Strk.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Strk.Location = new System.Drawing.Point(9, 75);
+			this.cb_Strk.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Strk.Name = "cb_Strk";
+			this.cb_Strk.Size = new System.Drawing.Size(80, 20);
+			this.cb_Strk.TabIndex = 3;
+			this.cb_Strk.Text = "strikeout";
+			this.cb_Strk.UseVisualStyleBackColor = true;
+			this.cb_Strk.CheckedChanged += new System.EventHandler(this.fontchanged);
+			// 
+			// cb_Undr
+			// 
+			this.cb_Undr.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Undr.Location = new System.Drawing.Point(9, 55);
+			this.cb_Undr.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Undr.Name = "cb_Undr";
+			this.cb_Undr.Size = new System.Drawing.Size(80, 20);
+			this.cb_Undr.TabIndex = 2;
+			this.cb_Undr.Text = "underline";
+			this.cb_Undr.UseVisualStyleBackColor = true;
+			this.cb_Undr.CheckedChanged += new System.EventHandler(this.fontchanged);
+			// 
+			// cb_Ital
+			// 
+			this.cb_Ital.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Ital.Location = new System.Drawing.Point(9, 35);
+			this.cb_Ital.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Ital.Name = "cb_Ital";
+			this.cb_Ital.Size = new System.Drawing.Size(55, 20);
+			this.cb_Ital.TabIndex = 1;
+			this.cb_Ital.Text = "italic";
+			this.cb_Ital.UseVisualStyleBackColor = true;
+			this.cb_Ital.CheckedChanged += new System.EventHandler(this.fontchanged);
 			// 
 			// cb_Bold
 			// 
 			this.cb_Bold.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Bold.Location = new System.Drawing.Point(280, 40);
+			this.cb_Bold.Location = new System.Drawing.Point(9, 15);
 			this.cb_Bold.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Bold.Name = "cb_Bold";
-			this.cb_Bold.Size = new System.Drawing.Size(55, 15);
-			this.cb_Bold.TabIndex = 4;
+			this.cb_Bold.Size = new System.Drawing.Size(55, 20);
+			this.cb_Bold.TabIndex = 0;
 			this.cb_Bold.Text = "bold";
 			this.cb_Bold.UseVisualStyleBackColor = true;
-			this.cb_Bold.CheckedChanged += new System.EventHandler(this.cbBold_CheckedChanged);
-			// 
-			// cb_Italic
-			// 
-			this.cb_Italic.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Italic.Location = new System.Drawing.Point(280, 60);
-			this.cb_Italic.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Italic.Name = "cb_Italic";
-			this.cb_Italic.Size = new System.Drawing.Size(55, 15);
-			this.cb_Italic.TabIndex = 5;
-			this.cb_Italic.Text = "italic";
-			this.cb_Italic.UseVisualStyleBackColor = true;
-			this.cb_Italic.CheckedChanged += new System.EventHandler(this.cbItalic_CheckedChanged);
-			// 
-			// tb_NetString
-			// 
-			this.tb_NetString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.tb_NetString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_NetString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tb_NetString.HideSelection = false;
-			this.tb_NetString.Location = new System.Drawing.Point(5, 358);
-			this.tb_NetString.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_NetString.Name = "tb_NetString";
-			this.tb_NetString.ReadOnly = true;
-			this.tb_NetString.Size = new System.Drawing.Size(455, 22);
-			this.tb_NetString.TabIndex = 10;
-			this.tb_NetString.WordWrap = false;
+			this.cb_Bold.CheckedChanged += new System.EventHandler(this.fontchanged);
 			// 
 			// FontF
 			// 
-			this.AcceptButton = this.btn_Ok;
+			this.AcceptButton = this.bu_Apply;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(465, 384);
-			this.Controls.Add(this.tb_NetString);
-			this.Controls.Add(this.cb_Italic);
-			this.Controls.Add(this.cb_Bold);
-			this.Controls.Add(this.gb_Example);
-			this.Controls.Add(this.btn_Ok);
-			this.Controls.Add(this.btn_Apply);
-			this.Controls.Add(this.tb_Size);
-			this.Controls.Add(this.btn_Cancel);
-			this.Controls.Add(this.list_Size);
+			this.CancelButton = this.bu_Cancel;
+			this.ClientSize = new System.Drawing.Size(460, 384);
+			this.Controls.Add(this.gb_Style);
+			this.Controls.Add(this.tb_FontString);
+			this.Controls.Add(this.gb_Text);
+			this.Controls.Add(this.bu_Apply);
+			this.Controls.Add(this.tb_FontSize);
+			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.list_Font);
 			this.Controls.Add(this.lbl_Size);
 			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -236,7 +254,8 @@ namespace yata
 			this.Text = " yata - Choose Font ... be patient";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
 			this.Load += new System.EventHandler(this.OnLoad);
-			this.gb_Example.ResumeLayout(false);
+			this.gb_Text.ResumeLayout(false);
+			this.gb_Style.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
