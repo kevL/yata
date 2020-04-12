@@ -47,10 +47,7 @@ namespace yata
 		internal FontF(YataForm f)
 		{
 			InitializeComponent();
-
 			_f = f;
-
-			_init = true;
 
 			if (Settings._fontf != null)
 			{
@@ -73,6 +70,7 @@ namespace yata
 
 			// Safely ensure that Yata's current font is good to go
 			// else set defaults ->
+			_init = true;
 
 			int fontList_init = -1; // for showing the initial font's characteristics in the list ->
 			int fontList_test = -1;
@@ -109,9 +107,9 @@ namespace yata
 			if (fontList_init != -1)
 			{
 				list_Font.SelectedIndex = fontList_init;
-				size_init = _f.Font.SizeInPoints;
-				tb_FontSize.Text = size_init.ToString();
+
 				style_init = _f.Font.Style;
+				size_init  = _f.Font.SizeInPoints;
 
 				cb_Bold.Checked = (style_init & FontStyle.Bold)      != 0;
 				cb_Ital.Checked = (style_init & FontStyle.Italic)    != 0;
@@ -122,21 +120,17 @@ namespace yata
 			{
 				bu_Apply.Enabled = true;
 
-				list_Font.SelectedIndex = 0; // you'd better have at least 1 font on your system buckwheat /lol
-				size_init = 10F;
-				tb_FontSize.Text = "10";
-				style_init = getStyle(_ffs[list_Font.SelectedIndex]);
+				style_init = getStyle(_ffs[(list_Font.SelectedIndex = 0)]); // you'd better have at least 1 font on your system buckwheat /lol
+				size_init  = 10F;
 			}
 
-			_id = list_Font.SelectedIndex;
-			_regular = _ffs[_id].IsStyleAvailable(FontStyle.Regular);
+			_regular = _ffs[(_id = list_Font.SelectedIndex)].IsStyleAvailable(FontStyle.Regular);
 
 			lbl_Lazydog.Font = new Font(_ffs[_id].Name, size_init, style_init);
 			lbl_Lazydog.Text = LAZYDOG;
 
-
+			tb_FontSize.Text = size_init.ToString();
 			tb_FontSize.MouseWheel += size_mousewheel;
-
 
 			_init = false;
 		}
@@ -292,29 +286,26 @@ namespace yata
 				if (sender == list_Font)
 				{
 					// Lovely. Selected index changes when selected index doesn't change.
-					if (list_Font.SelectedIndex != _id)
-					{
-						FontFamily ff = _ffs[(_id = list_Font.SelectedIndex)];
+					if (list_Font.SelectedIndex == _id)
+						return;
 
-						cb_Bold.Enabled = ff.IsStyleAvailable(FontStyle.Bold);
-						cb_Ital.Enabled = ff.IsStyleAvailable(FontStyle.Italic);
-						cb_Undr.Enabled = ff.IsStyleAvailable(FontStyle.Underline);
-						cb_Strk.Enabled = ff.IsStyleAvailable(FontStyle.Strikeout);
+					FontFamily ff = _ffs[(_id = list_Font.SelectedIndex)];
 
-						_init = true; // changes to the checkboxes shall bypass this funct.
-						if (!cb_Bold.Enabled) cb_Bold.Checked = false;
-						if (!cb_Ital.Enabled) cb_Ital.Checked = false;
-						if (!cb_Undr.Enabled) cb_Undr.Checked = false;
-						if (!cb_Strk.Enabled) cb_Strk.Checked = false;
-						_init = false;
+					cb_Bold.Enabled = ff.IsStyleAvailable(FontStyle.Bold);
+					cb_Ital.Enabled = ff.IsStyleAvailable(FontStyle.Italic);
+					cb_Undr.Enabled = ff.IsStyleAvailable(FontStyle.Underline);
+					cb_Strk.Enabled = ff.IsStyleAvailable(FontStyle.Strikeout);
 
-						_regular = ff.IsStyleAvailable(FontStyle.Regular);
+					_init = true; // changes to the checkboxes shall bypass this funct.
+					if (!cb_Bold.Enabled) cb_Bold.Checked = false;
+					if (!cb_Ital.Enabled) cb_Ital.Checked = false;
+					if (!cb_Undr.Enabled) cb_Undr.Checked = false;
+					if (!cb_Strk.Enabled) cb_Strk.Checked = false;
+					_init = false;
 
-						CreateLazydog();
-					}
+					_regular = ff.IsStyleAvailable(FontStyle.Regular);
 				}
-				else
-					CreateLazydog();
+				CreateLazydog();
 			}
 		}
 
@@ -366,7 +357,7 @@ namespace yata
 				if (ff.IsStyleAvailable(style))
 					return style;
 			}
-			return FontStyleInvalid;
+			return FontStyleInvalid; // yes this can happen.
 		}
 
 		/// <summary>
