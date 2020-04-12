@@ -77,9 +77,8 @@ namespace yata
 			int fontList_init = -1; // for showing the initial font's characteristics in the list ->
 			int fontList_test = -1;
 
-//			var fontCollection = new System.Drawing.Text.InstalledFontCollection();
-//			foreach (var family in fontCollection.Families)
-//			{}
+			//LogValidStyles();
+			//LogAllFonts();
 
 			Font font;
 			foreach (var ff in FontFamily.Families)
@@ -88,17 +87,18 @@ namespace yata
 				if (style != FontStyleInvalid)
 				{
 					font = new Font(ff, 10, style);
-
-					if (fontList_init == -1) // look for Yata's current font ->
+					if (font.Name == ff.Name) // safety.
 					{
-						++fontList_test;
-						if (font.Name == _f.Font.Name)
-							fontList_init = fontList_test;
+						if (fontList_init == -1) // look for Yata's current font ->
+						{
+							++fontList_test;
+							if (font.Name == _f.Font.Name)
+								fontList_init = fontList_test;
+						}
+
+						_ffs.Add(ff);
+						list_Font.Items.Add(font);
 					}
-
-					_ffs.Add(ff);
-					list_Font.Items.Add(font);
-
 					_fonts.Add(font); // '_fonts' is purely storage for Disposal of the fonts used to render the fontlist.
 				}
 			}
@@ -178,6 +178,20 @@ namespace yata
 
 				logfile.Log("");
 			}
+		} */
+
+/*		void LogAllFonts()
+		{
+			using (var ifc = new System.Drawing.Text.InstalledFontCollection())
+			{
+				logfile.Log("InstalledFontCollection count= " + ifc.Families.Length);
+//				foreach (var ff in ifc.Families)
+//					logfile.Log(ff.Name);
+			}
+
+			logfile.Log("FontFamily.Familes count= " + FontFamily.Families.Length);
+//			foreach (var ff in FontFamily.Families)
+//				logfile.Log(ff.Name);
 		} */
 		#endregion cTor
 
@@ -296,11 +310,11 @@ namespace yata
 
 						_regular = ff.IsStyleAvailable(FontStyle.Regular);
 
-						CreateTextFont();
+						CreateLazydog();
 					}
 				}
 				else
-					CreateTextFont();
+					CreateLazydog();
 			}
 		}
 
@@ -356,9 +370,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Prints sample text in the fontlist's currently selected font.
+		/// Creates the lazydog font from the dialog's current values and prints
+		/// the preview text in that font. Also decides whether the Apply button
+		/// is enabled.
 		/// </summary>
-		void CreateTextFont()
+		void CreateLazydog()
 		{
 			if (_id != -1) // safety.
 			{
@@ -374,7 +390,7 @@ namespace yata
 
 					lbl_Lazydog.Font.Dispose();
 
-					if (style == FontStyle.Regular && !_regular)
+					if (style == FontStyle.Regular && !_regular) // error
 					{
 						lbl_Lazydog.ForeColor = Color.Crimson;
 						lbl_Lazydog.Font = new Font("Verdana", 8F, FontStyle.Bold);
@@ -423,7 +439,6 @@ namespace yata
 
 		/// <summary>
 		/// Disposes the fonts in the fontList.
-		/// not sure if this is required but here it is ...
 		/// </summary>
 		void DisposeFonts()
 		{

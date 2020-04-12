@@ -83,7 +83,7 @@ namespace yata
 			this.bu_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Apply.Enabled = false;
-			this.bu_Apply.Location = new System.Drawing.Point(280, 149);
+			this.bu_Apply.Location = new System.Drawing.Point(280, 150);
 			this.bu_Apply.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Apply.Name = "bu_Apply";
 			this.bu_Apply.Size = new System.Drawing.Size(175, 35);
@@ -108,10 +108,10 @@ namespace yata
 			// 
 			// lbl_Size
 			// 
-			this.lbl_Size.Location = new System.Drawing.Point(320, 10);
+			this.lbl_Size.Location = new System.Drawing.Point(322, 10);
 			this.lbl_Size.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Size = new System.Drawing.Size(30, 15);
+			this.lbl_Size.Size = new System.Drawing.Size(26, 15);
 			this.lbl_Size.TabIndex = 2;
 			this.lbl_Size.Text = "pt";
 			this.lbl_Size.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -130,7 +130,7 @@ namespace yata
 			// 
 			// tb_FontSize
 			// 
-			this.tb_FontSize.Location = new System.Drawing.Point(280, 10);
+			this.tb_FontSize.Location = new System.Drawing.Point(282, 10);
 			this.tb_FontSize.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_FontSize.Name = "tb_FontSize";
 			this.tb_FontSize.Size = new System.Drawing.Size(40, 20);
@@ -185,7 +185,7 @@ namespace yata
 			// cb_Strk
 			// 
 			this.cb_Strk.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Strk.Location = new System.Drawing.Point(9, 75);
+			this.cb_Strk.Location = new System.Drawing.Point(10, 75);
 			this.cb_Strk.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Strk.Name = "cb_Strk";
 			this.cb_Strk.Size = new System.Drawing.Size(80, 20);
@@ -197,7 +197,7 @@ namespace yata
 			// cb_Undr
 			// 
 			this.cb_Undr.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Undr.Location = new System.Drawing.Point(9, 55);
+			this.cb_Undr.Location = new System.Drawing.Point(10, 55);
 			this.cb_Undr.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Undr.Name = "cb_Undr";
 			this.cb_Undr.Size = new System.Drawing.Size(80, 20);
@@ -209,7 +209,7 @@ namespace yata
 			// cb_Ital
 			// 
 			this.cb_Ital.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Ital.Location = new System.Drawing.Point(9, 35);
+			this.cb_Ital.Location = new System.Drawing.Point(10, 35);
 			this.cb_Ital.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Ital.Name = "cb_Ital";
 			this.cb_Ital.Size = new System.Drawing.Size(55, 20);
@@ -221,7 +221,7 @@ namespace yata
 			// cb_Bold
 			// 
 			this.cb_Bold.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Bold.Location = new System.Drawing.Point(9, 15);
+			this.cb_Bold.Location = new System.Drawing.Point(10, 15);
 			this.cb_Bold.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Bold.Name = "cb_Bold";
 			this.cb_Bold.Size = new System.Drawing.Size(55, 20);

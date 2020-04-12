@@ -553,7 +553,7 @@ namespace yata
 				if (ff.IsStyleAvailable(style)) // determine first available style (any) of Family ->
 					return style;
 			}
-			return FontStyle.Regular;
+			return FontStyle.Regular; // this ought never happen.
 		}
 
 		static FontStyle getStyleAccented(FontFamily ff)
@@ -567,7 +567,7 @@ namespace yata
 				if (ff.IsStyleAvailable(style)) // determine first available style (any) of Family ->
 					return style;
 			}
-			return FontStyle.Regular;
+			return FontStyle.Regular; // this ought never happen.
 		}
 		#endregion Methods (static)
 
