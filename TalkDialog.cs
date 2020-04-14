@@ -145,7 +145,7 @@ namespace yata
 			MinimumSize = new Size(WIDTH_Min + pad_HORI + 2 * widthborder,
 								   HIGHT_Min + pad_VERT + 2 * widthborder + heighttitle);
 
-			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the cTor or designer to work right.
+			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the cTor for designer to work right.
 			rtb_Copyable.Select();
 		}
 

@@ -300,7 +300,7 @@ values will have the upper 2 bytes masked off and set to 0, so 0x01000001, or
 
 If a module uses an alternate talk table, then bit 0x01000000 of a StrRef
 specifies whether the StrRef should be fetched from the normal dialog.tlk or
-from the alternate tlk file, If the bit is 0, the StrRef is fetched as normal
+from the alternate tlk file. If the bit is 0, the StrRef is fetched as normal
 from dialog.tlk. If the bit is 1, then the StrRef is fetched from the
 alternative talk table.
 
