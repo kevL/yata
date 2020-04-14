@@ -31,7 +31,7 @@ namespace yata
 		/// Writes a line to the logfile.
 		/// </summary>
 		/// <param name="line">the line to write</param>
-		public static void Log(string line)
+		public static void Log(string line = "")
 		{
 #if DEBUG
 			string pfe = Path.Combine(Application.StartupPath, Logfile);
