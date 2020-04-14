@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
+//using System.IO;
+//using Microsoft.Win32;
+
 
 namespace yata
 {
@@ -16,8 +19,9 @@ namespace yata
 							  + "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
 							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
-		static string REGULAR_ABSENT = " does not support the Regular style."    + Environment.NewLine + Environment.NewLine
-									 + "Choose a different style ...";
+		static string REGULAR_ABSENT = " does not support the Regular style."
+									 + Environment.NewLine + Environment.NewLine
+									 + "choose a different style ...";
 
 		static int _x = -1;
 		static int _y = -1;
@@ -35,15 +39,16 @@ namespace yata
 		readonly YataForm _f;
 		bool _init;
 
-		int  _id; // tracks the current index of the fontlist because .net will treat it as changed when it didn't.
-		bool _regular;
+		int  _id = -1;	// tracks the current index of the fontlist because .net will treat it as changed when it didn't.
+		bool _regular;	// true if the currently chosen font's Regular style is available
 		#endregion Fields
 
 
 		#region cTor
 		/// <summary>
-		/// cTor. Instantiates this dialog.
+		/// cTor. Instantiates this font-dialog.
 		/// </summary>
+		/// <param name="f">the form that owns this dialog</param>
 		internal FontF(YataForm f)
 		{
 			InitializeComponent();
@@ -77,6 +82,7 @@ namespace yata
 
 			//LogValidStyles();
 			//LogAllFonts();
+			//LogFontFiles();
 
 			Font font;
 			foreach (var ff in FontFamily.Families)
@@ -96,8 +102,11 @@ namespace yata
 
 						_ffs.Add(ff);
 						list_Font.Items.Add(font);
+
+						_fonts.Add(font); // '_fonts' is purely storage for Disposal of the fonts used to render the fontlist.
 					}
-					_fonts.Add(font); // '_fonts' is purely storage for Disposal of the fonts used to render the fontlist.
+					else
+						font.Dispose();
 				}
 			}
 
@@ -107,35 +116,33 @@ namespace yata
 			if (fontList_init != -1)
 			{
 				list_Font.SelectedIndex = fontList_init;
-
 				style_init = _f.Font.Style;
 				size_init  = _f.Font.SizeInPoints;
-
-				cb_Bold.Checked = (style_init & FontStyle.Bold)      != 0;
-				cb_Ital.Checked = (style_init & FontStyle.Italic)    != 0;
-				cb_Undr.Checked = (style_init & FontStyle.Underline) != 0;
-				cb_Strk.Checked = (style_init & FontStyle.Strikeout) != 0;
 			}
 			else
 			{
-				bu_Apply.Enabled = true;
-
-				style_init = getStyle(_ffs[(list_Font.SelectedIndex = 0)]); // you'd better have at least 1 font on your system buckwheat /lol
+				list_Font.SelectedIndex = 0;
+				style_init = getStyle(_ffs[0]); // you'd better have at least 1 font on your system buckwheat /lol
 				size_init  = 10F;
 			}
 
-			_regular = _ffs[(_id = list_Font.SelectedIndex)].IsStyleAvailable(FontStyle.Regular);
-
-			lbl_Lazydog.Font = new Font(_ffs[_id].Name, size_init, style_init);
-			lbl_Lazydog.Text = LAZYDOG;
+			cb_Bold.Checked = (style_init & FontStyle.Bold)      != 0;
+			cb_Ital.Checked = (style_init & FontStyle.Italic)    != 0;
+			cb_Undr.Checked = (style_init & FontStyle.Underline) != 0;
+			cb_Strk.Checked = (style_init & FontStyle.Strikeout) != 0;
 
 			tb_FontSize.Text = size_init.ToString();
-			tb_FontSize.MouseWheel += size_mousewheel;
+			tb_FontSize.MouseWheel += size_mousewheel; // NOTE: Mousewheel event is not shown in the designer.
 
 			_init = false;
+
+			fontchanged(list_Font, EventArgs.Empty);
 		}
 
-/*		void LogValidStyles()
+/*		/// <summary>
+		/// Debug funct.
+		/// </summary>
+		void LogValidStyles()
 		{
 			foreach (var ff in FontFamily.Families)
 			{
@@ -174,7 +181,10 @@ namespace yata
 			}
 		} */
 
-/*		void LogAllFonts()
+/*		/// <summary>
+		/// Debug funct.
+		/// </summary>
+		void LogAllFonts()
 		{
 			using (var ifc = new System.Drawing.Text.InstalledFontCollection())
 			{
@@ -186,6 +196,99 @@ namespace yata
 			logfile.Log("FontFamily.Familes count= " + FontFamily.Families.Length);
 //			foreach (var ff in FontFamily.Families)
 //				logfile.Log(ff.Name);
+		} */
+
+/*		/// <summary>
+		/// Debug funct.
+		/// </summary>
+		void LogFontFiles()
+		{
+			var di = new DirectoryInfo(@"C:\Windows\Fonts");
+
+			var ttfFiles = new List<string>();
+
+			FileInfo[] files = di.GetFiles("*.ttf");
+			foreach (FileInfo file in files)
+			{
+				logfile.Log(file.Name);
+				ttfFiles.Add(file.Name.ToLower());
+			}
+			logfile.Log();
+			logfile.Log("COUNT (ttf)= " + files.Length);
+			logfile.Log();
+			logfile.Log();
+
+			files = di.GetFiles("*.ttc");
+			foreach (FileInfo file in files)
+			{
+				logfile.Log(file.Name);
+			}
+			logfile.Log();
+			logfile.Log("COUNT (ttc)= " + files.Length);
+			logfile.Log();
+			logfile.Log();
+
+			files = di.GetFiles("*.otf");
+			foreach (FileInfo file in files)
+			{
+				logfile.Log(file.Name);
+			}
+			logfile.Log();
+			logfile.Log("COUNT (otf)= " + files.Length);
+			logfile.Log();
+			logfile.Log();
+
+			files = di.GetFiles("*.fon");
+			foreach (FileInfo file in files)
+			{
+				logfile.Log(file.Name);
+			}
+			logfile.Log();
+			logfile.Log("COUNT (fon)= " + files.Length);
+			logfile.Log();
+			logfile.Log();
+
+
+			int countTtf = 0;
+			int countTtc = 0;
+			int countOtf = 0;
+			int countFon = 0;
+
+			var ttfInstalled = new List<string>();
+
+			RegistryKey fonts = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", false);
+			string[] vars = fonts.GetValueNames();
+			foreach (string @var in vars)
+			{
+				string val = fonts.GetValue(@var) as String;
+				logfile.Log(@var + " : " + val);
+
+				switch (val.Substring(val.Length - 3).ToLower())
+				{
+					case "ttf":
+						++countTtf;
+						ttfInstalled.Add(val.ToLower());
+						break;
+
+					case "ttc": ++countTtc; break;
+					case "otf": ++countOtf; break;
+					case "fon": ++countFon; break;
+				}
+			}
+			logfile.Log();
+			logfile.Log("COUNT (installed)= "     + vars.Length);
+			logfile.Log("COUNT (installed ttf)= " + countTtf);
+			logfile.Log("COUNT (installed ttc)= " + countTtc);
+			logfile.Log("COUNT (installed otf)= " + countOtf);
+			logfile.Log("COUNT (installed fon)= " + countFon);
+			logfile.Log();
+			logfile.Log();
+
+			foreach (string val in ttfFiles)
+			{
+				if (!ttfInstalled.Contains(val))
+					logfile.Log("installed does NOT contain : " + val);
+			}
 		} */
 		#endregion cTor
 

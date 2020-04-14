@@ -122,6 +122,7 @@ namespace yata
 			this.lbl_Lazydog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
+			this.lbl_Lazydog.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbl_Lazydog.Location = new System.Drawing.Point(5, 12);
 			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Lazydog.Name = "lbl_Lazydog";
