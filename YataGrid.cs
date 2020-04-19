@@ -2929,6 +2929,7 @@ namespace yata
 			}
 
 			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
+			// ... and auto-focuses the Table.
 			return INVALID_NONE;
 		}
 
@@ -2980,7 +2981,8 @@ namespace yata
 				ClearSelects();
 
 				SelectRow(r);
-				EnsureDisplayedRow(r);
+				EnsureDisplayedRow(r);	// NOTE: That auto-focuses the table if it has to scroll.
+										// See note re. "instantgoto=true"
 
 				int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 				if (Propanel != null && Propanel.Visible)
@@ -2989,7 +2991,17 @@ namespace yata
 				Invalidator(invalid);
 
 				if (selectTable) // on [Enter] (not instantgoto)
+				{
 					Select();
+				}
+				else
+				{
+					// Option "instantgoto=true" ->
+					// keep the gotobox focused in case EnsureDisplayedRow()
+					// causes the Table to scroll - because .net is going to
+					// auto-focus the Table if it does.
+					_f.tb_Goto.Focus();
+				}
 			}
 		}
 

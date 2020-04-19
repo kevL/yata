@@ -48,7 +48,7 @@ namespace yata
 		ToolStripMenuItem it_PasteRange;
 		ToolStripMenuItem it_CreateRows;
 
-		ToolStripTextBox tb_Goto;
+		internal ToolStripTextBox tb_Goto;
 
 		ToolStripTextBox tb_Search;
 		ToolStripComboBox cb_SearchOption;
