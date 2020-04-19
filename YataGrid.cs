@@ -378,8 +378,11 @@ namespace yata
 
 			_table.offsetVert = _table._scrollVert.Value;
 
-			if (!_f._isEnterkeyedSearch)	// <- if not Search by [Enter]
-				Select();					// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
+				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
+			{
+				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			}
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -412,8 +415,11 @@ namespace yata
 
 			_table.offsetHori = _table._scrollHori.Value;
 
-			if (!_f._isEnterkeyedSearch)	// <- if not Search by [Enter]
-				Select();					// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
+				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
+			{
+				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			}
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -2887,7 +2893,6 @@ namespace yata
 			}
 
 			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
-
 			return invalid;
 		}
 
@@ -2935,7 +2940,6 @@ namespace yata
 			}
 
 			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
-			// ... and auto-focuses the Table.
 			return INVALID_NONE;
 		}
 
@@ -2987,8 +2991,7 @@ namespace yata
 				ClearSelects();
 
 				SelectRow(r);
-				EnsureDisplayedRow(r);	// NOTE: That auto-focuses the table if it has to scroll.
-										// See note re. "instantgoto=true"
+				EnsureDisplayedRow(r);
 
 				int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 				if (Propanel != null && Propanel.Visible)
@@ -2996,18 +2999,8 @@ namespace yata
 
 				Invalidator(invalid);
 
-				if (selectTable) // on [Enter] (not instantgoto)
-				{
+				if (selectTable) // on [Enter] ie. not instantgoto
 					Select();
-				}
-				else
-				{
-					// Option "instantgoto=true" ->
-					// keep the gotobox focused in case EnsureDisplayedRow()
-					// causes the Table to scroll - because .net is going to
-					// auto-focus the Table if it does.
-					_f.tb_Goto.Focus();
-				}
 			}
 		}
 
