@@ -71,7 +71,7 @@ namespace yata
 
 		internal Font FontAccent;
 
-		internal bool isSearch;
+		internal bool _isEnterkeyedSearch;
 		bool _firstclick; // preps the Search or Goto textboxes to select all text
 
 		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
@@ -443,7 +443,7 @@ namespace yata
 			switch (e.KeyData)
 			{
 				case Keys.Enter: // do this here to get rid of the beep.
-					if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
+					if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 					{
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 							_dontbeep = DONTBEEP_SEARCH;
@@ -483,7 +483,7 @@ namespace yata
 			switch (_dontbeep)
 			{
 				case DONTBEEP_SEARCH:
-					doSearch();
+					EnterkeyedSearch();
 					break;
 
 				case DONTBEEP_GOTO:
@@ -1460,7 +1460,7 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // rowcount should never be zero ...
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				using (var sfd = new SaveFileDialog())
 				{
@@ -1945,7 +1945,7 @@ namespace yata
 		{
 			it_GotoLoadchanged.Enabled = false;
 
-			if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				if (Table._editor.Visible)
 				{
@@ -2032,7 +2032,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles textchanged for the searchbox. Enables/disables searchnext.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2042,7 +2042,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2053,7 +2053,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2063,7 +2063,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2077,13 +2077,16 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Initiates [F3] search by focusing the Table.
+		/// @note This is fired only from the EditMenu (click/F3) and its item
+		/// is enabled by default. The item/shortcut will be set disabled when
+		/// the EditMenu opens iff the search-string is blank.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // rowcount should never be "0"
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				Table.Select(); // [F3] shall focus the table, [Enter] shall keep focus on the tb/cbx.
 				Search();
@@ -2094,11 +2097,11 @@ namespace yata
 		/// Performs a search when the Enter-key is pressed and focus is on
 		/// either the search-box or the search-option dropdown.
 		/// </summary>
-		void doSearch()
+		void EnterkeyedSearch()
 		{
-			isSearch = true; // [Enter] shall keep focus on the tb/cbx, [F3] shall focus the table.
+			_isEnterkeyedSearch = true; // [Enter] shall keep focus on the tb/cbx, [F3] shall focus the table.
 			Search();
-			isSearch = false;
+			_isEnterkeyedSearch = false;
 		}
 
 		/// <summary>
@@ -2107,57 +2110,74 @@ namespace yata
 		/// </summary>
 		void Search()
 		{
-			if (Table._editor.Visible)
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
 			{
-				Table._editor.Visible = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
-
-			string search = tb_Search.Text;
-			if (!String.IsNullOrEmpty(search))
-			{
-				search = search.ToLower();
-
-				Cell sel = Table.getSelectedCell();
-				int rStart = Table.getSelectedRow();
-
-				Table.ClearSelects();
-
-				bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
-				bool start = true;
-
-				string text;
-
-				int r,c;
-
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward search ->
+				if (Table._editor.Visible)
 				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = -1;
-						if (rStart == -1) rStart = 0;
-					}
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
 
-					for (r = rStart; r != Table.RowCount; ++r)
+
+				string search = tb_Search.Text;
+				if (!String.IsNullOrEmpty(search))
+				{
+					search = search.ToLower();
+
+					Cell sel = Table.getSelectedCell();
+					int rStart = Table.getSelectedRow();
+
+					Table.ClearSelects();
+
+					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+					bool start = true;
+
+					string text;
+
+					int r,c;
+
+					if ((ModifierKeys & Keys.Shift) == 0) // forward search ->
 					{
-						if (start)
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							start = false;
-							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							c = -1;
+							if (rStart == -1) rStart = 0;
+						}
+
+						for (r = rStart; r != Table.RowCount; ++r)
+						{
+							if (start)
 							{
+								start = false;
+								if (++c == Table.ColCount)		// if starting on the last cell of a row
+								{
+									c = 0;
+
+									if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+										++r;
+									else						// or to the top of the table if on the last row
+										r = 0;
+								}
+							}
+							else
 								c = 0;
 
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-									++r;
-								else						// or to the top of the table if on the last row
-									r = 0;
+							for (; c != Table.ColCount; ++c)
+							{
+								if (c != 0 // don't search the id-col
+									&& ((text = Table[r,c].text.ToLower()) == search
+										|| (substring && text.Contains(search))))
+								{
+									Table.SelectCell(Table[r,c]);
+									return;
+								}
 							}
 						}
-						else
-							c = 0;
 
-						for (; c != Table.ColCount; ++c)
+						// TODO: tighten exact start/end-cells
+						for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+						for (c = 0; c != Table.ColCount; ++c)
 						{
 							if (c != 0 // don't search the id-col
 								&& ((text = Table[r,c].text.ToLower()) == search
@@ -2168,48 +2188,48 @@ namespace yata
 							}
 						}
 					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
-					for (c = 0; c != Table.ColCount; ++c)
+					else // backward search ->
 					{
-						if (c != 0 // don't search the id-col
-							&& ((text = Table[r,c].text.ToLower()) == search
-								|| (substring && text.Contains(search))))
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							Table.SelectCell(Table[r,c]);
-							return;
+							c = Table.ColCount;
+							if (rStart == -1) rStart = Table.RowCount - 1;
 						}
-					}
-				}
-				else // backward search ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = Table.ColCount;
-						if (rStart == -1) rStart = Table.RowCount - 1;
-					}
 
-					for (r = rStart; r != -1; --r)
-					{
-						if (start)
+						for (r = rStart; r != -1; --r)
 						{
-							start = false;
-							if (--c == -1)	// if starting on the first cell of a row
+							if (start)
 							{
+								start = false;
+								if (--c == -1)	// if starting on the first cell of a row
+								{
+									c = Table.ColCount - 1;
+
+									if (r > 0)	// jump to the last cell of the previous row
+										--r;
+									else		// or to the bottom of the table if on the first row
+										r = Table.RowCount - 1;
+								}
+							}
+							else
 								c = Table.ColCount - 1;
 
-								if (r > 0)	// jump to the last cell of the previous row
-									--r;
-								else		// or to the bottom of the table if on the first row
-									r = Table.RowCount - 1;
+							for (; c != -1; --c)
+							{
+								if (c != 0 // don't search the id-col
+									&& ((text = Table[r,c].text.ToLower()) == search
+										|| (substring && text.Contains(search))))
+								{
+									Table.SelectCell(Table[r,c]);
+									return;
+								}
 							}
 						}
-						else
-							c = Table.ColCount - 1;
 
-						for (; c != -1; --c)
+						// TODO: tighten exact start/end-cells
+						for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+						for (c = Table.ColCount - 1; c != -1;         --c)
 						{
 							if (c != 0 // don't search the id-col
 								&& ((text = Table[r,c].text.ToLower()) == search
@@ -2220,20 +2240,17 @@ namespace yata
 							}
 						}
 					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;         --c)
-					{
-						if (c != 0 // don't search the id-col
-							&& ((text = Table[r,c].text.ToLower()) == search
-								|| (substring && text.Contains(search))))
-						{
-							Table.SelectCell(Table[r,c]);
-							return;
-						}
-					}
 				}
+
+
+				// else not found ->
+				Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
+
+				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid);
 			}
 		}
 
@@ -2303,64 +2320,78 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			bool found = false;
-			if (Table != null)
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
 			{
-				for (int r = 0; r != Table.RowCount && !found; ++r)
-				for (int c = 0; c != Table.ColCount && !found; ++c)
+				bool found = false;
+				if (Table != null)
 				{
-					if (Table[r,c].loadchanged)
-						found = true;
-				}
-			}
-
-			if (it_GotoLoadchanged.Enabled = found)
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				Table.Select();
-
-				Cell sel = Table.getSelectedCell();
-				int rStart = Table.getSelectedRow();
-
-				Table.ClearSelects();
-
-				int r,c;
-
-				bool start = true;
-
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
+					for (int r = 0; r != Table.RowCount && !found; ++r)
+					for (int c = 0; c != Table.ColCount && !found; ++c)
 					{
-						c = -1;
-						if (rStart == -1) rStart = 0;
+						if (Table[r,c].loadchanged)
+							found = true;
+					}
+				}
+
+				if (it_GotoLoadchanged.Enabled = found)
+				{
+					if (Table._editor.Visible)
+					{
+						Table._editor.Visible = false;
+						Table.Invalidator(YataGrid.INVALID_GRID);
 					}
 
-					for (r = rStart; r != Table.RowCount; ++r)
+					Table.Select();
+
+					Cell sel = Table.getSelectedCell();
+					int rStart = Table.getSelectedRow();
+
+					Table.ClearSelects();
+
+					int r,c;
+
+					bool start = true;
+
+					if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
 					{
-						if (start)
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							start = false;
-							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							c = -1;
+							if (rStart == -1) rStart = 0;
+						}
+
+						for (r = rStart; r != Table.RowCount; ++r)
+						{
+							if (start)
 							{
+								start = false;
+								if (++c == Table.ColCount)		// if starting on the last cell of a row
+								{
+									c = 0;
+
+									if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+										++r;
+									else						// or to the top of the table if on the last row
+										r = 0;
+								}
+							}
+							else
 								c = 0;
 
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-									++r;
-								else						// or to the top of the table if on the last row
-									r = 0;
+							for (; c != Table.ColCount; ++c)
+							{
+								if ((sel = Table[r,c]).loadchanged)
+								{
+									Table.SelectCell(sel);
+									return;
+								}
 							}
 						}
-						else
-							c = 0;
 
-						for (; c != Table.ColCount; ++c)
+						// TODO: tighten exact start/end-cells
+						for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+						for (c = 0; c != Table.ColCount; ++c)
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
@@ -2369,63 +2400,52 @@ namespace yata
 							}
 						}
 					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
-					for (c = 0; c != Table.ColCount; ++c)
+					else // backward goto ->
 					{
-						if ((sel = Table[r,c]).loadchanged)
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							Table.SelectCell(sel);
-							return;
+							c = Table.ColCount;
+							if (rStart == -1) rStart = Table.RowCount - 1;
 						}
-					}
-				}
-				else // backward goto ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = Table.ColCount;
-						if (rStart == -1) rStart = Table.RowCount - 1;
-					}
 
-					for (r = rStart; r != -1; --r)
-					{
-						if (start)
+						for (r = rStart; r != -1; --r)
 						{
-							start = false;
-							if (--c == -1)	// if starting on the first cell of a row
+							if (start)
 							{
+								start = false;
+								if (--c == -1)	// if starting on the first cell of a row
+								{
+									c = Table.ColCount - 1;
+
+									if (r > 0)	// jump to the last cell of the previous row
+										--r;
+									else		// or to the bottom of the table if on the first row
+										r = Table.RowCount - 1;
+								}
+							}
+							else
 								c = Table.ColCount - 1;
 
-								if (r > 0)	// jump to the last cell of the previous row
-									--r;
-								else		// or to the bottom of the table if on the first row
-									r = Table.RowCount - 1;
+							for (; c != -1; --c)
+							{
+								if ((sel = Table[r,c]).loadchanged)
+								{
+									Table.SelectCell(sel);
+									return;
+								}
 							}
 						}
-						else
-							c = Table.ColCount - 1;
 
-						for (; c != -1; --c)
+						// TODO: tighten exact start/end-cells
+						for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+						for (c = Table.ColCount - 1; c != -1;         --c)
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
 								Table.SelectCell(sel);
 								return;
 							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;         --c)
-					{
-						if ((sel = Table[r,c]).loadchanged)
-						{
-							Table.SelectCell(sel);
-							return;
 						}
 					}
 				}
@@ -2919,7 +2939,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0)
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				if (!Table.Readonly)
 				{
@@ -2974,7 +2994,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_TestOrder(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0)
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				var list = new List<string>();
 
@@ -3097,7 +3117,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0)
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				Row row;
 				Brush brush;
@@ -3885,7 +3905,7 @@ namespace yata
 
 				bool start = true;
 
-				if ((ModifierKeys & Keys.Shift) != Keys.Shift) // forward goto ->
+				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
 				{
 					if (sel != null) { c = sel.x; rStart = sel.y; }
 					else

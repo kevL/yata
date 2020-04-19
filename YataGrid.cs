@@ -288,9 +288,9 @@ namespace yata
 			_editor.WordWrap    = false;
 			_editor.Margin      = new Padding(0);
 //			_editor.Height      = cf. the PropertyPanel editor
-			_editor.LostFocus  += lostfocus_Editor;
 			_editor.KeyDown    += keydown_Editor;
-			_editor.Leave      += leave_Editor;
+			_editor.LostFocus  += lostfocus_Editor;
+//			_editor.Leave      += leave_Editor;
 
 			Controls.Add(_editor);
 
@@ -378,8 +378,8 @@ namespace yata
 
 			_table.offsetVert = _table._scrollVert.Value;
 
-			if (!_f.isSearch)	// <- if not Search by [Enter]
-				Select();		// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			if (!_f._isEnterkeyedSearch)	// <- if not Search by [Enter]
+				Select();					// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -412,8 +412,8 @@ namespace yata
 
 			_table.offsetHori = _table._scrollHori.Value;
 
-			if (!_f.isSearch)	// <- if not Search by [Enter]
-				Select();		// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
+			if (!_f._isEnterkeyedSearch)	// <- if not Search by [Enter]
+				Select();					// <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 
 			var pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
@@ -628,61 +628,64 @@ namespace yata
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if (Propanel != null && Propanel._scroll.Visible
-				&& e.X > Propanel.Left && e.X < Propanel.Left + Propanel.Width)
+			if ((ModifierKeys & Keys.Alt) == 0)
 			{
-				Propanel.Scroll(e);
-			}
-			else if (!_editor.Visible)
-			{
-				if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) != Keys.Control))
+				if (Propanel != null && Propanel._scroll.Visible
+					&& e.X > Propanel.Left && e.X < Propanel.Left + Propanel.Width)
 				{
-					int h;
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid vertically 1 visible-height per delta
-					{
-						h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-					}
-					else
-						h = _scrollVert.LargeChange;
-
-					if (e.Delta > 0)
-					{
-						if (_scrollVert.Value - h < 0)
-							_scrollVert.Value = 0;
-						else
-							_scrollVert.Value -= h;
-					}
-					else if (e.Delta < 0)
-					{
-						if (_scrollVert.Value + h > MaxVert)
-							_scrollVert.Value = MaxVert;
-						else
-							_scrollVert.Value += h;
-					}
+					Propanel.Scroll(e);
 				}
-				else if (_visHori)
+				else if (!_editor.Visible)
 				{
-					int w;
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid horizontally 1 visible-width per delta
+					if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) == 0))
 					{
-						w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-					}
-					else
-						w = _scrollHori.LargeChange;
+						int h;
+						if ((ModifierKeys & Keys.Shift) != 0) // shift grid vertically 1 visible-height per delta
+						{
+							h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+						}
+						else
+							h = _scrollVert.LargeChange;
 
-					if (e.Delta > 0)
-					{
-						if (_scrollHori.Value - w < 0)
-							_scrollHori.Value = 0;
-						else
-							_scrollHori.Value -= w;
+						if (e.Delta > 0)
+						{
+							if (_scrollVert.Value - h < 0)
+								_scrollVert.Value = 0;
+							else
+								_scrollVert.Value -= h;
+						}
+						else if (e.Delta < 0)
+						{
+							if (_scrollVert.Value + h > MaxVert)
+								_scrollVert.Value = MaxVert;
+							else
+								_scrollVert.Value += h;
+						}
 					}
-					else if (e.Delta < 0)
+					else if (_visHori)
 					{
-						if (_scrollHori.Value + w > MaxHori)
-							_scrollHori.Value = MaxHori;
+						int w;
+						if ((ModifierKeys & Keys.Shift) != 0) // shift grid horizontally 1 visible-width per delta
+						{
+							w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+						}
 						else
-							_scrollHori.Value += w;
+							w = _scrollHori.LargeChange;
+
+						if (e.Delta > 0)
+						{
+							if (_scrollHori.Value - w < 0)
+								_scrollHori.Value = 0;
+							else
+								_scrollHori.Value -= w;
+						}
+						else if (e.Delta < 0)
+						{
+							if (_scrollHori.Value + w > MaxHori)
+								_scrollHori.Value = MaxHori;
+							else
+								_scrollHori.Value += w;
+						}
 					}
 				}
 			}
@@ -1919,10 +1922,12 @@ namespace yata
 			Invalidator(INVALID_GRID);
 		}
 
-		/// <summary>
+/*		/// <summary>
 		/// Handles the Leave event in the cell-editor.
 		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/PageDown is
 		/// pressed while editing.
+		/// @note Not sure that this is needed anymore: Ctrl+PageUp/PageDown
+		/// just hides the editor.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1930,7 +1935,7 @@ namespace yata
 		{
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
 				_editor.Focus(); // ie. don't leave editor.
-		}
+		} */
 
 		/// <summary>
 		/// Handles the Leave event for the grid: hides the editbox if it is
@@ -2716,8 +2721,9 @@ namespace yata
 							// is assigned but its value is never used" warning. Notice,
 							// however, that now 'l' is never used but ... no warning.
 							// Thank god these guys didn't write the code that got to the Moon.
+							//
 							// ps. My theory is that Stanley Kubrick wanted people to believe
-							// that he faked the landings; that's right, he ** faked the fake **
+							// that he faked the landings; that's right, he ** faked fake **
 							// Moon landings!
 
 			var cords = new Point();
@@ -3014,7 +3020,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
-			if (RowCount != 0) // rowcount should never be "0"
+			if (RowCount != 0 && (ModifierKeys & Keys.Alt) == 0) // NOTE: 'RowCount' should never be 0
 			{
 				int r = (e.Y + offsetVert) / HeightRow;
 				if (r < RowCount)
@@ -3027,10 +3033,10 @@ namespace yata
 						Row row = Rows[r];
 						bool @select;
 
-						bool shift = ((ModifierKeys & Keys.Shift)   == Keys.Shift),
-							 ctrl  = ((ModifierKeys & Keys.Control) == Keys.Control);
+						bool shft = ((ModifierKeys & Keys.Shift)   != 0),
+							 ctrl = ((ModifierKeys & Keys.Control) != 0);
 
-						if (!shift) // select if any of the row's cells are not selected ->
+						if (!shft) // select if any of the row's cells are not selected ->
 						{
 							@select = false;
 							for (int c = 0; c != ColCount; ++c)
@@ -3071,7 +3077,7 @@ namespace yata
 								table.ClearCellSelects();
 						}
 
-						if (!shift) // select or deselect row ->
+						if (!shft) // select or deselect row ->
 						{
 							foreach (var ro in Rows)
 								ro.selected = false;
@@ -3209,7 +3215,7 @@ namespace yata
 		/// <param name="e"></param>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
-			if (!_panelCols.Grab && RowCount != 0)
+			if (!_panelCols.Grab && RowCount != 0 && (ModifierKeys & Keys.Alt) == 0) // NOTE: 'RowCount' should never be 0
 			{
 				if (e.Button == MouseButtons.Left)
 				{
@@ -3238,10 +3244,10 @@ namespace yata
 
 					bool @select;
 
-					bool shift = ((ModifierKeys & Keys.Shift)   == Keys.Shift),
-						 ctrl  = ((ModifierKeys & Keys.Control) == Keys.Control);
+					bool shft = ((ModifierKeys & Keys.Shift)   != 0),
+						 ctrl = ((ModifierKeys & Keys.Control) != 0);
 
-					if (!shift) // select if any of the col's cells are not selected ->
+					if (!shft) // select if any of the col's cells are not selected ->
 					{
 						@select = false;
 						for (int r = 0; r != RowCount; ++r)
@@ -3292,7 +3298,7 @@ namespace yata
 							invalid |= INVALID_PROP;
 					}
 
-					if (!shift) // select or deselect col ->
+					if (!shft) // select or deselect col ->
 					{
 						foreach (var col in Cols)
 							col.selected = false;
@@ -3366,7 +3372,7 @@ namespace yata
 				}
 				else if (e.Button == MouseButtons.Right)
 				{
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) // Shift+RMB = sort by col
+					if (ModifierKeys == Keys.Shift) // Shift+RMB = sort by col
 					{
 						_editor.Visible = false;
 						Select();
@@ -3397,12 +3403,12 @@ namespace yata
 								  | INVALID_COLS
 								  | INVALID_LBLS);
 					}
-/*					else // popup colhead context
-					{
-						// change colhead text
-						// insert col
-						// fill col-cells w/ text (req. inputbox)
-					} */
+//					else // popup colhead context
+//					{
+//						// change colhead text
+//						// insert col
+//						// fill col-cells w/ text (req. inputbox)
+//					}
 				}
 			}
 		}
@@ -3439,66 +3445,50 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Shift+RMB = sort by id
+		/// Shift+RMB = sort by id-col
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void labelid_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (RowCount != 0
-				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
-			{
-				_editor.Visible = false;
-				Select();
-
-				ColSort(0);
-				EnsureDisplayed();
-				Invalidator(INVALID_GRID
-						  | INVALID_FROZ
-						  | INVALID_COLS
-						  | INVALID_LBLS);
-			}
+			if (e.Button == MouseButtons.Right)
+				labelSort(0);
 		}
 
 		/// <summary>
-		/// Shift+RMB = sort by 1st col
+		/// Shift+RMB = sort by 1st frozen col
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void labelfirst_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (RowCount != 0
-				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
-			{
-				_editor.Visible = false;
-				Select();
-
-				ColSort(1);
-				EnsureDisplayed();
-				Invalidator(INVALID_GRID
-						  | INVALID_FROZ
-						  | INVALID_COLS
-						  | INVALID_LBLS);
-			}
+			if (e.Button == MouseButtons.Right)
+				labelSort(1);
 		}
 
 		/// <summary>
-		/// Shift+RMB = sort by 2nd col
+		/// Shift+RMB = sort by 2nd frozen col
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void labelsecond_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (RowCount != 0
-				&& e.Button == MouseButtons.Right
-				&& (ModifierKeys & Keys.Shift) == Keys.Shift)
+			if (e.Button == MouseButtons.Right)
+				labelSort(2);
+		}
+
+		/// <summary>
+		/// helper for sorting by labels
+		/// </summary>
+		/// <param name="col"></param>
+		void labelSort(int col)
+		{
+			if (RowCount != 0 && ModifierKeys == Keys.Shift) // NOTE: 'RowCount' shall never be 0
 			{
 				_editor.Visible = false;
 				Select();
 
-				ColSort(2);
+				ColSort(col);
 				EnsureDisplayed();
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
