@@ -2679,16 +2679,14 @@ namespace yata
 
 			Cell cell;
 			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
 			{
-				for (int c = 0; c != ColCount; ++c)
+				if ((cell = row[c]).selected)
 				{
-					if ((cell = row[c]).selected)
-					{
-						if (cell0 != null)
-							return null;
+					if (cell0 != null)
+						return null;
 
-						cell0 = cell;
-					}
+					cell0 = cell;
 				}
 			}
 			return cell0;
@@ -2701,12 +2699,10 @@ namespace yata
 		internal bool isAnyCellSelected()
 		{
 			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
 			{
-				for (int c = 0; c != ColCount; ++c)
-				{
-					if (row[c].selected)
-						return true;
-				}
+				if (row[c].selected)
+					return true;
 			}
 			return false;
 		}
