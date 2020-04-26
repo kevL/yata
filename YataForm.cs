@@ -3443,18 +3443,8 @@ namespace yata
 				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
 
-				if (_fontF != null) // layout for big tables will send the Font dialog below the form ->
-				{
-					// in fact layout for big tables will send the form and dialog below any open apps
-					// if you try to keep the dialog on top
-					TopMost = true;
-
-					_fontF.TopMost = true;
-					_fontF.TopMost = false;
-
-					TopMost = false;
-					// Ps. yes those are in an order that works on my machine at least.
-				}
+				if (_fontF != null)			// layout for big tables will send the Font dialog below the form ->
+					_fontF.BringToFront();	// (although it should never be behind the form because its owner IS the form)
 			}
 		}
 		#endregion Methods (font)
