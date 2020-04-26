@@ -142,6 +142,9 @@ namespace yata
 
 		Font FontDefault
 		{ get; set; }
+
+		FontF _fontF
+		{ get; set; }
 		#endregion Properties
 
 
@@ -695,8 +698,8 @@ namespace yata
 
 				Obfuscate();
 //				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
-							// but a refresh turns the client area gray at least instead of glitchy.
-							// NOTE: It went away.
+							// but a refresh turns the client-area gray at least instead of glitchy.
+							// NOTE: It went away; the table-area turns gray.
 
 				var table = new YataGrid(this, pfe, read);
 
@@ -1129,7 +1132,7 @@ namespace yata
 				{
 					File.WriteAllLines(pfe, recents);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					MessageBox.Show(ex.Message);
 				}
@@ -1390,7 +1393,7 @@ namespace yata
 																//               *as itself* it loses its Readonly flag.
 
 							int rows = _table.RowCount;
-							if (rows != 0) // rowcount should never be zero ...
+							if (rows != 0) // NOTE: 'RowCount' shall never be 0
 							{
 								_table.Changed = false;
 								_table._ur.ResetSaved();
@@ -1682,11 +1685,11 @@ namespace yata
 			{
 				Table.Insert(_r, _copy[0]);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1731,11 +1734,11 @@ namespace yata
 
 				Table.Calibrate(_r);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 				Table.Invalidator(YataGrid.INVALID_GRID);
 
 
@@ -1764,11 +1767,11 @@ namespace yata
 			{
 				Table.Insert(_r + 1, _copy[0]);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1800,11 +1803,11 @@ namespace yata
 				}
 				Table.Insert(_r, fields);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -1842,11 +1845,11 @@ namespace yata
 
 				Table.Calibrate(_r);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 				Table.Invalidator(YataGrid.INVALID_GRID);
 
 
@@ -1881,11 +1884,11 @@ namespace yata
 				}
 				Table.Insert(_r + 1, fields);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 
 
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -1914,11 +1917,11 @@ namespace yata
 
 				Table.Insert(_r);
 
-/*				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid); */
+//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+//				if (Table.Propanel != null && Table.Propanel.Visible)
+//					invalid |= YataGrid.INVALID_PROP;
+//
+//				Table.Invalidator(invalid);
 
 
 				if (!Table.Changed)
@@ -2515,13 +2518,11 @@ namespace yata
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				for (int c = 0; c != Table.ColCount; ++c)
+				if ((sel = row[c]).selected && sel.text != gs.Stars)
 				{
-					if ((sel = row[c]).selected && sel.text != gs.Stars)
-					{
-						Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
-					}
+					Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
 				}
 			}
 		}
@@ -2535,13 +2536,11 @@ namespace yata
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				for (int c = 0; c != Table.ColCount; ++c)
+				if ((sel = row[c]).selected && sel.text != sel.text.ToLower())
 				{
-					if ((sel = row[c]).selected && sel.text != sel.text.ToLower())
-					{
-						Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
-					}
+					Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
 				}
 			}
 		}
@@ -2555,13 +2554,11 @@ namespace yata
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				for (int c = 0; c != Table.ColCount; ++c)
+				if ((sel = row[c]).selected && sel.text != sel.text.ToUpper())
 				{
-					if ((sel = row[c]).selected && sel.text != sel.text.ToUpper())
-					{
-						Table.ChangeCellText(sel, sel.text.ToUpper()); // TODO: Optimize that for multiple cells.
-					}
+					Table.ChangeCellText(sel, sel.text.ToUpper()); // TODO: Optimize that for multiple cells.
 				}
 			}
 		}
@@ -2579,13 +2576,11 @@ namespace yata
 				{
 					Cell sel;
 					foreach (var row in Table.Rows)
+					for (int c = 0; c != Table.ColCount; ++c)
 					{
-						for (int c = 0; c != Table.ColCount; ++c)
+						if ((sel = row[c]).selected && sel.text != _copytext)
 						{
-							if ((sel = row[c]).selected && sel.text != _copytext)
-							{
-								Table.ChangeCellText(sel, _copytext); // does not do a text-check
-							}
+							Table.ChangeCellText(sel, _copytext); // does not do a text-check
 						}
 					}
 				}
@@ -3317,7 +3312,26 @@ namespace yata
 		/// <param name="e"></param>
 		void fontclick_Font(object sender, EventArgs e)
 		{
-			var f = Application.OpenForms["FontF"];
+			if (_fontF == null)
+			{
+				it_FontDefault.Enabled = false;
+				it_Font.Checked = true;
+
+				_fontF = new FontF(this);
+				_fontF.Show(this);
+			}
+			else
+			{
+				if (_fontF.WindowState == FormWindowState.Minimized)
+				{
+					if (_fontF.Maximized)
+						_fontF.WindowState = FormWindowState.Maximized;
+					else
+						_fontF.WindowState = FormWindowState.Normal;
+				}
+				_fontF.BringToFront();
+			}
+/*			var f = Application.OpenForms["FontF"];
 			if (f == null)
 			{
 				it_FontDefault.Enabled = false;
@@ -3327,7 +3341,12 @@ namespace yata
 				f.Show(this);
 			}
 			else
+			{
+				if (f.WindowState == FormWindowState.Minimized)
+					f.WindowState  = FormWindowState.Normal;
+
 				f.BringToFront();
+			} */
 		}
 
 		/// <summary>
@@ -3351,6 +3370,8 @@ namespace yata
 		/// </summary>
 		internal void FontF_closing()
 		{
+			_fontF = null;
+
 			it_Font.Checked = false;
 			it_FontDefault.Enabled = true;
 		}
@@ -3421,6 +3442,19 @@ namespace yata
 
 				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
+
+				if (_fontF != null) // layout for big tables will send the Font dialog below the form ->
+				{
+					// in fact layout for big tables will send the form and dialog below any open apps
+					// if you try to keep the dialog on top
+					TopMost = true;
+
+					_fontF.TopMost = true;
+					_fontF.TopMost = false;
+
+					TopMost = false;
+					// Ps. yes those are in an order that works on my machine at least.
+				}
 			}
 		}
 		#endregion Methods (font)
@@ -4042,16 +4076,13 @@ namespace yata
 					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
 						_table[sel.y, sel.x].selected = true;
 				}
-				else if (r != -1)
+				else if (r != -1 && r < _table.RowCount)
 				{
-					if (r < _table.RowCount)
-					{
-						// Do not call _table.SelectRow() since that's a recursion.
-						Row row = _table.Rows[r];
-						row.selected = true;
-						for (int c = 0; c != _table.ColCount; ++c)
-							row[c].selected = true;
-					}
+					// Do not call _table.SelectRow() since that's a recursion.
+					Row row = _table.Rows[r];
+					row.selected = true;
+					for (int c = 0; c != _table.ColCount; ++c)
+						row[c].selected = true;
 				}
 				_table = null;
 				return true;
@@ -4182,7 +4213,7 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				if (e.Button == MouseButtons.Left
+				if (    e.Button == MouseButtons.Left
 					|| (e.Button == MouseButtons.Right
 						&& Table.Propanel != null && Table.Propanel.Visible))
 				{
@@ -4243,7 +4274,7 @@ namespace yata
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled();
-			it_cellInput  .Enabled = !Table.Readonly
+			it_cellInput  .Enabled = !Table.Readonly // TODO: Allow viewing the InfoInput dialog but disable its controls.
 								  && Table.Info == YataGrid.InfoType.INFO_SPELL
 								  && isInfoInputCol();
 			it_cellStrref .Enabled = isStrrefEnabled();

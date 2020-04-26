@@ -136,7 +136,7 @@ namespace yata
 			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 18);
 			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Lazydog.Name = "lbl_Lazydog";
-			this.lbl_Lazydog.Size = new System.Drawing.Size(473, 103);
+			this.lbl_Lazydog.Size = new System.Drawing.Size(473, 98);
 			this.lbl_Lazydog.TabIndex = 0;
 			// 
 			// tb_FontSize
@@ -157,7 +157,7 @@ namespace yata
 			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Text.Name = "gb_Text";
 			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 5, 5, 5);
-			this.gb_Text.Size = new System.Drawing.Size(488, 126);
+			this.gb_Text.Size = new System.Drawing.Size(488, 121);
 			this.gb_Text.TabIndex = 2;
 			this.gb_Text.TabStop = false;
 			// 
@@ -167,7 +167,7 @@ namespace yata
 			this.tb_FontString.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.tb_FontString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_FontString.HideSelection = false;
-			this.tb_FontString.Location = new System.Drawing.Point(2, 126);
+			this.tb_FontString.Location = new System.Drawing.Point(2, 121);
 			this.tb_FontString.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_FontString.Name = "tb_FontString";
 			this.tb_FontString.ReadOnly = true;
@@ -301,7 +301,7 @@ namespace yata
 			this.sc_Hori.Panel2.Controls.Add(this.tb_FontString);
 			this.sc_Hori.Panel2.Padding = new System.Windows.Forms.Padding(2, 0, 2, 2);
 			this.sc_Hori.Panel2MinSize = 24;
-			this.sc_Hori.Size = new System.Drawing.Size(492, 399);
+			this.sc_Hori.Size = new System.Drawing.Size(492, 394);
 			this.sc_Hori.SplitterDistance = 246;
 			this.sc_Hori.SplitterWidth = 3;
 			this.sc_Hori.TabIndex = 4;
@@ -313,7 +313,7 @@ namespace yata
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(492, 399);
+			this.ClientSize = new System.Drawing.Size(492, 394);
 			this.Controls.Add(this.sc_Hori);
 			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = global::yata.Properties.Resources.yata_icon;

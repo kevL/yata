@@ -46,6 +46,12 @@ namespace yata
 		#endregion Fields
 
 
+		#region Properties
+		internal bool Maximized
+		{ get; private set; }
+		#endregion Properties
+
+
 		#region cTor
 		/// <summary>
 		/// cTor. Instantiates this font-dialog.
@@ -204,7 +210,11 @@ namespace yata
 				{
 					_w = ClientSize.Width;
 					_h = ClientSize.Height;
+
+					Maximized = false;
 				}
+				else
+					Maximized = true;
 			}
 		}
 
