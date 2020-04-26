@@ -155,7 +155,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events
+		#region Events (override)
 		/// <summary>
 		/// Handles the load-event. This ought ensure that the FontPicker
 		/// appears on top. If a user has a lot of fonts installed on their
@@ -223,7 +223,7 @@ namespace yata
 			//logfile.Log("OnSplitterMoved()");
 			list_Font.TopIndex = list_Font.SelectedIndex;
 		}
-		#endregion Events
+		#endregion Events (override)
 
 
 		#region button handlers
@@ -354,6 +354,7 @@ typedef enum FontStyle
 		void click_pointlabel(object sender, EventArgs e)
 		{
 			tb_FontSize.Focus();
+			tb_FontSize.SelectionStart = tb_FontSize.Text.Length;
 		}
 		#endregion font list/size/style handlers
 
