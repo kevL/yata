@@ -22,7 +22,7 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
+		readonly YataForm _f;
 		#endregion Fields
 
 
