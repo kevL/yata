@@ -1290,6 +1290,87 @@ namespace yata
 		#endregion Spells info
 
 
+		#region Feat info
+		/// <summary>
+		/// Gets a readable string when mouseovering cols in Feat.2da.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="col"></param>
+		/// <returns></returns>
+		string getFeatInfo(int id, int col)
+		{
+			string info = "n/a";
+
+			string val;
+			int result;
+
+			switch (col)
+			{
+				case InfoInputDialog.MasterFeat: // MasterFeats.2da
+					if (it_PathMasterFeats2da.Checked
+					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.masterfeatLabels.Count)
+								{
+									info += Info.masterfeatLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+			}
+
+			return info;
+		}
+
+		/// <summary>
+		/// Handles clicking the PathMasterFeats menuitem.
+		/// Intended to add labels from MasterFeats.2da to the 'masterfeatLabels'
+		/// list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathMasterFeats2da(object sender, EventArgs e)
+		{
+			if (!it_PathMasterFeats2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select MasterFeats.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.masterfeatLabels,
+										 it_PathMasterFeats2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathMasterFeats2da.Checked = false;
+				Info.masterfeatLabels.Clear();
+			}
+		}
+		#endregion Feat info
+
+
 		#region Paths
 		void itclick_PathAll(object sender, EventArgs e)
 		{
@@ -1393,6 +1474,13 @@ namespace yata
 								  4,
 								  Info.targetWidths,
 								  Info.targetLengths);
+
+
+			// Feat info ->
+			Info.GropeLabels(Path.Combine(directory, "masterfeats.2da"),
+							 Info.masterfeatLabels,
+							 it_PathMasterFeats2da,
+							 1);
 		}
 		#endregion Paths
 

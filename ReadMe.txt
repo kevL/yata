@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2020 april 26
+2020 july 24
 kevL's
-ver 3.6.0.0
+ver 3.7.0.0
 
 
 File
@@ -268,9 +268,9 @@ fontf=       a .NET string that represents a desired fixed-width font (Yata
              needs to be reloaded before it will display a changed fixed-width
              font)
 pathall=     a path without quotes to a valid directory to grope for 2da info
-             for Crafting.2da or Spells.2da (see Appendix E: how to use Info
-             paths)
-pathall=     another path for Crafting and Spells info
+             for Crafting.2da, Spells.2da, or Feat.2da (see Appendix E: how to
+             use Info paths)
+pathall=     another path for Crafting, Spells, and Feat info
 pathall=     etc. (the first pathall has lowest priority and any info found will
              be replaced by any info found in subsequent pathall directories;
              there can be as many or as few pathall directories as you like)
@@ -326,10 +326,10 @@ casesort=    "true" (without quotes) for case-sensitive sorting
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
 
-The pathall directories are for gathering Info that will appear if Crafting.2da
-or Spells.2da are loaded as the cursor is moved over their cells. (Yata was
-designed with Crafting in mind and can show stuff like Encoded IPs as readable
-strings on the statusbar, eg.)
+The pathall directories are for gathering Info that will appear on the statusbar
+if Crafting.2da, Spells.2da, or Feat.2da are loaded as the cursor is moved over
+their cells. (Yata was designed with Crafting in mind and can show stuff like
+Encoded IPs as readable strings on the statusbar, eg.)
 
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
@@ -416,22 +416,22 @@ does not align cols.
 
 Appendix E: how to use Info paths
 
-Yata is capable of displaying readable info about fields in Crafting.2da and
-Spells.2da. Paths to various other 2da-files need to be set first, then info
-ought be displayed on the statusbar when the mouse-cursor is moved over the
-cells of certain cols like "CATEGORY" (displays the title of the trigger-spell)
-or "EFFECTS" (displays the recipe's itemproperty in a readable way), etc. Note
-that pathing to 2da-files can also be termed, groping ... that is, when a 2da-
-file is pathed it will be groped for relevant info.
+Yata is capable of displaying readable info about fields in Crafting.2da,
+Spells.2da, and Feat.2da. Paths to various other 2da-files need to be set first,
+then info ought be displayed on the statusbar when the mouse-cursor is moved
+over the cells of certain cols like "CATEGORY" (displays the title of the
+trigger-spell) or "EFFECTS" (displays the recipe's itemproperty in a readable
+way), etc. Note that pathing to 2da-files can also be termed, groping ... that
+is, when a 2da-file is pathed it will be groped for relevant info.
 
-There are two ways to get such info: (a) Using the Paths menu when Crafting.2da
-or Spells.2da is loaded, (b) Using "pathall=" entries in Settings.Cfg.
+There are two ways to get such info: (a) Using the Paths menu when Crafting.2da,
+Spells.2da, or Feat.2da is loaded, (b) Using "pathall=" entries in Settings.Cfg.
 
 (a) Using the Paths menu
 
-Paths appears on the menubar only when Crafting.2da or Spells.2da are loaded -
-the filename without extension needs to be "crafting" or "spells" (case-
-insensitive). The items under Paths are divided into four sections:
+Paths appears on the menubar only when Crafting.2da, Spells.2da, or Feat.2da are
+loaded - the filename without extension needs to be "crafting", "spells", or
+"feat" (case-insensitive). The items under Paths are divided into five sections:
 
 Path all ...             : this item opens a folder browser dialog to search for
                            any/all applicable 2da-file(s). It can be used more
@@ -462,6 +462,11 @@ path SpellTarget.2da       to the entry on the menu; selecting the item a second
                            Spells.2da - note that Info for Spells.2da can also
                            make use of data that's groped from Spells.2da,
                            Feat.2da, and Classes.2da above.
+--
+path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
+                           path to a specific 2da-file. A check will appear next
+                           to the entry on the menu; selecting the item a second
+                           time would clear the info. This is used by Feat.2da.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

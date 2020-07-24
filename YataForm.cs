@@ -4085,7 +4085,7 @@ namespace yata
 		#region Methods (statusbar)
 		/// <summary>
 		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
-		/// a relevant 2da (eg. Crafting, Spells) is loaded.
+		/// a relevant 2da (eg. Crafting, Spells, Feat) is loaded.
 		/// </summary>
 		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
 		internal void PrintInfo(Point? cords = null)
@@ -4158,6 +4158,9 @@ namespace yata
 									break;
 								case YataGrid.InfoType.INFO_SPELL:
 									statbar_lblInfo.Text = getSpellInfo(r,c);
+									break;
+								case YataGrid.InfoType.INFO_FEAT:
+									statbar_lblInfo.Text = getFeatInfo(r,c);
 									break;
 
 								default:
@@ -4265,8 +4268,8 @@ namespace yata
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled();
 			it_cellInput  .Enabled = !Table.Readonly // TODO: Allow viewing the InfoInput dialog but disable its controls.
-								  && Table.Info == YataGrid.InfoType.INFO_SPELL
-								  && isInfoInputCol();
+								  && (   (Table.Info == YataGrid.InfoType.INFO_SPELL && isSpellsInfoInputCol())
+									  || (Table.Info == YataGrid.InfoType.INFO_FEAT  && isFeatInfoInputCol()));
 			it_cellStrref .Enabled = isStrrefEnabled();
 
 			Point loc = Table.PointToClient(Cursor.Position);
@@ -4296,7 +4299,7 @@ namespace yata
 		/// Helper for ShowCellMenu().
 		/// </summary>
 		/// <returns></returns>
-		bool isInfoInputCol()
+		bool isSpellsInfoInputCol()
 		{
 			switch (_sel.x)
 			{
@@ -4318,6 +4321,56 @@ namespace yata
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Helper for ShowCellMenu().
+		/// </summary>
+		/// <returns></returns>
+		bool isFeatInfoInputCol()
+		{
+			switch (_sel.x)
+			{
+				// "MINSPELLLVL"
+				// "PREREQFEAT1"
+				// "PREREQFEAT2"
+				// "GAINMULTIPLE"
+				// "EFFECTSSTACK"
+				// "ALLCLASSESCANUSE"
+				// "CATEGORY"
+				// "SPELLID"
+				// "SUCCESSOR"
+				// "USESMAPFEAT"
+				// "MASTERFEAT"			y
+				// "TARGETSELF"
+				// "OrReqFeat0"
+				// "OrReqFeat1"
+				// "OrReqFeat2"
+				// "OrReqFeat3"
+				// "OrReqFeat4"
+				// "OrReqFeat5"
+				// "REQSKILL"
+				// "REQSKILL2"
+				// "TOOLSETCATEGORIES"
+				// "HostileFeat"
+				// "MinLevelClass"
+				// "PreReqEpic"
+				// "FeatCategory"
+				// "IsActive"
+				// "IsPersistent"
+				// "TogleMode"
+				// "DMFeat"
+				// "REMOVED"
+				// "AlignRestrict"
+				// "ImmunityType"
+				// "Instant"
+
+			case InfoInputDialog.MasterFeat:
+				if (Info.masterfeatLabels.Count != 0)
+					return true;
+				break;
 			}
 			return false;
 		}

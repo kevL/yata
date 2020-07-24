@@ -91,6 +91,7 @@ namespace yata
 		ToolStripMenuItem it_PathCategories2da;
 		ToolStripMenuItem it_PathRanges2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
+		ToolStripMenuItem it_PathMasterFeats2da;
 
 		ToolStripMenuItem it_MenuFont;
 		ToolStripMenuItem it_Font;
@@ -130,6 +131,7 @@ namespace yata
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
 		ToolStripSeparator separator_30;
+		ToolStripSeparator separator_31;
 
 		internal ContextMenuStrip ContextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -296,6 +298,8 @@ namespace yata
 			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_31 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_PathMasterFeats2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
@@ -1067,7 +1071,9 @@ namespace yata
 			this.separator_15,
 			this.it_PathCategories2da,
 			this.it_PathRanges2da,
-			this.it_PathSpellTarget2da});
+			this.it_PathSpellTarget2da,
+			this.separator_31,
+			this.it_PathMasterFeats2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);
@@ -1201,6 +1207,18 @@ namespace yata
 			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSpellTarget2da.Text = "path Spell&Target.2da";
 			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
+			// 
+			// separator_31
+			// 
+			this.separator_31.Name = "separator_31";
+			this.separator_31.Size = new System.Drawing.Size(219, 6);
+			// 
+			// it_PathMasterFeats2da
+			// 
+			this.it_PathMasterFeats2da.Name = "it_PathMasterFeats2da";
+			this.it_PathMasterFeats2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathMasterFeats2da.Text = "path MasterFeats.2da";
+			this.it_PathMasterFeats2da.Click += new System.EventHandler(this.itclick_PathMasterFeats2da);
 			// 
 			// it_MenuFont
 			// 

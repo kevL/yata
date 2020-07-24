@@ -19,6 +19,8 @@ namespace yata
 		internal const int UserType     = 54;
 		internal const int AsMetaMagic  = 65;
 		internal const int TargetingUI  = 66;
+
+		internal const int MasterFeat   = 32; // col in Feat.2da ->
 		#endregion Fields (static)
 
 

@@ -127,6 +127,15 @@ namespace yata
 		#endregion Spells caches
 
 
+		#region Feat caches
+		/// <summary>
+		/// A list that holds labels for master-feats in MasterFeats.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> masterfeatLabels = new List<string>();
+		#endregion Feat caches
+
+
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
 		/// TODO: Check that the given 2da really has the required cols.
@@ -193,9 +202,8 @@ namespace yata
 								{
 									int result;
 									if (!Int32.TryParse(cols[col1], out result))
-									{
 										result = -1; // always add an int to keep sync w/ the labels
-									}
+
 									ints.Add(result);
 								}
 							}

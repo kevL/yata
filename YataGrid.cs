@@ -21,7 +21,8 @@ namespace yata
 		{
 			INFO_NONE,	// 0
 			INFO_CRAFT,	// 1
-			INFO_SPELL	// 2
+			INFO_SPELL,	// 2
+			INFO_FEAT	// 3
 		}
 		#endregion Enums
 
@@ -1062,6 +1063,10 @@ namespace yata
 
 					case "spells":
 						Info = InfoType.INFO_SPELL;
+						goto case "";
+
+					case "feat":
+						Info = InfoType.INFO_FEAT;
 						goto case "";
 
 					case "":									// NOTE: YataForm.CreateTabPage() does not allow a blank
