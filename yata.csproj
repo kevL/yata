@@ -75,10 +75,15 @@
     <Compile Include="Info.cs" />
     <Compile Include="Crap.cs" />
     <Compile Include="DifferDialog.cs" />
-    <Compile Include="InfoInputDialog.cs" />
-    <Compile Include="InfoInputDialog.Designer.cs">
-      <DependentUpon>InfoInputDialog.cs</DependentUpon>
+    <Compile Include="InfoInputFeat.cs" />
+    <Compile Include="InfoInputFeat.Designer.cs">
+      <DependentUpon>InfoInputFeat.cs</DependentUpon>
     </Compile>
+    <Compile Include="InfoInputSpells.cs" />
+    <Compile Include="InfoInputSpells.Designer.cs">
+      <DependentUpon>InfoInputSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InfoInputTui.cs" />
     <Compile Include="PropertyPanel.cs" />
     <Compile Include="RowCreatorDialog.cs" />
     <Compile Include="RowCreatorDialog.Designer.cs">
@@ -128,8 +133,8 @@
     <EmbeddedResource Include="DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoInputDialog.resx">
-      <DependentUpon>InfoInputDialog.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="InfoInputSpells.resx">
+      <DependentUpon>InfoInputSpells.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

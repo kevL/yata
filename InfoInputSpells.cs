@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class InfoInputDialog
+	sealed partial class InfoInputSpells
 		:
 			Form
 	{
@@ -19,8 +19,6 @@ namespace yata
 		internal const int UserType     = 54;
 		internal const int AsMetaMagic  = 65;
 		internal const int TargetingUI  = 66;
-
-		internal const int MasterFeat   = 32; // col in Feat.2da ->
 		#endregion Fields (static)
 
 
@@ -37,7 +35,7 @@ namespace yata
 
 
 		#region cTor
-		internal InfoInputDialog(YataGrid grid, Cell cell)
+		internal InfoInputSpells(YataGrid grid, Cell cell)
 		{
 			InitializeComponent();
 
@@ -290,8 +288,8 @@ namespace yata
 		}
 
 
-/*		void click_Accept(object sender, EventArgs e)
-		{} */
+//		void click_Accept(object sender, EventArgs e)
+//		{}
 		#endregion Events
 
 
@@ -1251,38 +1249,5 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 			_init = false;
 		}
 		#endregion Methods
-	}
-
-
-	/// <summary>
-	/// A class-object for populating the 'cbx_Val' dropdown-list.
-	/// @note 'tui' stands for ... "A class-object for populating the 'cbx_Val'
-	/// dropdown-list".
-	/// </summary>
-	sealed class tui
-	{
-		/// <summary>
-		/// Appears as the text of this item.
-		/// </summary>
-		string Label
-		{ get; set; }
-
-		/// <summary>
-		/// Constructs an item for populating the 'cbx_Val' dropdown-list.
-		/// </summary>
-		/// <param name="label"></param>
-		internal tui(string label)
-		{
-			Label = label;
-		}
-
-		/// <summary>
-		/// Required.
-		/// </summary>
-		/// <returns></returns>
-		public override string ToString()
-		{
-			return Label;
-		}
 	}
 }

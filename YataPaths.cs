@@ -1306,7 +1306,7 @@ namespace yata
 
 			switch (col)
 			{
-				case InfoInputDialog.MasterFeat: // MasterFeats.2da
+				case 32: // MasterFeats.2da
 					if (it_PathMasterFeats2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{

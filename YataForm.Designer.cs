@@ -1559,7 +1559,7 @@ namespace yata
 			// 
 			this.it_cellInput.Name = "it_cellInput";
 			this.it_cellInput.Size = new System.Drawing.Size(173, 22);
-			this.it_cellInput.Text = "InfoInput (spells.2da)";
+			this.it_cellInput.Text = "InfoInput";
 			this.it_cellInput.Click += new System.EventHandler(this.cellclick_Input);
 			// 
 			// YataForm

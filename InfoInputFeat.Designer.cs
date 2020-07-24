@@ -3,7 +3,7 @@
 
 namespace yata
 {
-	partial class InfoInputDialog
+	partial class InfoInputFeat
 	{
 		System.ComponentModel.IContainer components = null;
 
@@ -479,7 +479,7 @@ namespace yata
 			this.btn_Clear.UseVisualStyleBackColor = true;
 			this.btn_Clear.Click += new System.EventHandler(this.click_Clear);
 			// 
-			// InfoInputDialog
+			// InfoInputFeat
 			// 
 			this.AcceptButton = this.btn_Accept;
 			this.ClientSize = new System.Drawing.Size(394, 243);
@@ -516,7 +516,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "InfoInputDialog";
+			this.Name = "InfoInputFeat";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

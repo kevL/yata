@@ -109,12 +109,12 @@ namespace yata
 		int _r;
 
 		/// <summary>
-		/// Int for InfoInputDialog (PathInfo).
+		/// Int for InfoInputSpells or InfoInputFeat (PathInfo).
 		/// </summary>
 		internal int intOriginal, intInput;
 
 		/// <summary>
-		/// String for InfoInputDialog (PathInfo).
+		/// String for InfoInputSpells (PathInfo).
 		/// </summary>
 		internal string stOriginal, stInput;
 
@@ -4267,10 +4267,29 @@ namespace yata
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled();
-			it_cellInput  .Enabled = !Table.Readonly // TODO: Allow viewing the InfoInput dialog but disable its controls.
-								  && (   (Table.Info == YataGrid.InfoType.INFO_SPELL && isSpellsInfoInputCol())
-									  || (Table.Info == YataGrid.InfoType.INFO_FEAT  && isFeatInfoInputCol()));
 			it_cellStrref .Enabled = isStrrefEnabled();
+
+			switch (Table.Info)
+			{
+//				default: // NOTE: These cases are disabled but will be visible.
+				case YataGrid.InfoType.INFO_NONE:
+				case YataGrid.InfoType.INFO_CRAFT:
+					it_cellInput.Text    = "InfoInput";
+					it_cellInput.Enabled = false;
+					break;
+
+				// TODO: If Readonly allow viewing the InfoInput dialog but disable its controls ->
+
+				case YataGrid.InfoType.INFO_SPELL:
+					it_cellInput.Text    = "InfoInput (spells.2da)";
+					it_cellInput.Enabled = !Table.Readonly && isSpellsInfoInputCol();
+					break;
+
+				case YataGrid.InfoType.INFO_FEAT:
+					it_cellInput.Text    = "InfoInput (feat.2da)";
+					it_cellInput.Enabled = !Table.Readonly && isFeatInfoInputCol();
+					break;
+			}
 
 			Point loc = Table.PointToClient(Cursor.Position);
 			cellMenu.Show(Table, loc);
@@ -4303,21 +4322,21 @@ namespace yata
 		{
 			switch (_sel.x)
 			{
-				case InfoInputDialog.School:
-				case InfoInputDialog.Range:
-				case InfoInputDialog.MetaMagic:
-				case InfoInputDialog.TargetType:
-				case InfoInputDialog.ImmunityType:
-				case InfoInputDialog.UserType:
-				case InfoInputDialog.AsMetaMagic:
+				case InfoInputSpells.School:
+				case InfoInputSpells.Range:
+				case InfoInputSpells.MetaMagic:
+				case InfoInputSpells.TargetType:
+				case InfoInputSpells.ImmunityType:
+				case InfoInputSpells.UserType:
+				case InfoInputSpells.AsMetaMagic:
 					return true;
 
-				case InfoInputDialog.Category:
+				case InfoInputSpells.Category:
 					if (Info.categoryLabels.Count != 0)
 						return true;
 					break;
 
-				case InfoInputDialog.TargetingUI:
+				case InfoInputSpells.TargetingUI:
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
@@ -4367,7 +4386,7 @@ namespace yata
 				// "ImmunityType"
 				// "Instant"
 
-			case InfoInputDialog.MasterFeat:
+			case InfoInputFeat.MasterFeat:
 				if (Info.masterfeatLabels.Count != 0)
 					return true;
 				break;
@@ -4517,48 +4536,73 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Input(object sender, EventArgs e)
 		{
-			switch (_sel.x)
+			switch (Table.Info)
 			{
-				case InfoInputDialog.School: // STRING Input ->
-				case InfoInputDialog.Range:
-				case InfoInputDialog.ImmunityType:
-				case InfoInputDialog.UserType:
-				case InfoInputDialog.TargetingUI:
-					using (var f = new InfoInputDialog(Table, _sel))
+				case YataGrid.InfoType.INFO_SPELL:
+					switch (_sel.x)
 					{
-						if (f.ShowDialog(this) == DialogResult.OK
-							&& stInput != stOriginal)
-						{
-							Table.ChangeCellText(_sel, stInput); // does not do a text-check
-						}
+						case InfoInputSpells.School: // STRING Input ->
+						case InfoInputSpells.Range:
+						case InfoInputSpells.ImmunityType:
+						case InfoInputSpells.UserType:
+						case InfoInputSpells.TargetingUI:
+							using (var f = new InfoInputSpells(Table, _sel))
+							{
+								if (f.ShowDialog(this) == DialogResult.OK
+									&& stInput != stOriginal)
+								{
+									Table.ChangeCellText(_sel, stInput); // does not do a text-check
+								}
+							}
+							break;
+	
+						case InfoInputSpells.MetaMagic: // HEX Input ->
+						case InfoInputSpells.TargetType:
+						case InfoInputSpells.AsMetaMagic:
+							using (var f = new InfoInputSpells(Table, _sel))
+							{
+								if (f.ShowDialog(this) == DialogResult.OK
+									&& intInput != intOriginal)
+								{
+									string format;
+									if (intInput <= 0xFF) format = "X2";
+									else                  format = "X6";
+	
+									Table.ChangeCellText(_sel, "0x" + intInput.ToString(format)); // does not do a text-check
+								}
+							}
+							break;
+	
+						case InfoInputSpells.Category: // INT Input ->
+							using (var f = new InfoInputSpells(Table, _sel))
+							{
+								if (f.ShowDialog(this) == DialogResult.OK
+									&& intInput != intOriginal)
+								{
+									Table.ChangeCellText(_sel, intInput.ToString()); // does not do a text-check
+								}
+							}
+							break;
 					}
 					break;
 
-				case InfoInputDialog.MetaMagic: // HEX Input ->
-				case InfoInputDialog.TargetType:
-				case InfoInputDialog.AsMetaMagic:
-					using (var f = new InfoInputDialog(Table, _sel))
+				case YataGrid.InfoType.INFO_FEAT:
+					switch (_sel.x)
 					{
-						if (f.ShowDialog(this) == DialogResult.OK
-							&& intInput != intOriginal)
-						{
-							string format;
-							if (intInput <= 0xFF) format = "X2";
-							else                  format = "X6";
+						case InfoInputFeat.MasterFeat: // INT Input ->
+							using (var f = new InfoInputFeat(Table, _sel))
+							{
+								if (f.ShowDialog(this) == DialogResult.OK
+									&& intInput != intOriginal)
+								{
+									string cell;
+									if (intInput == -1) cell = gs.Stars;
+									else                cell = intInput.ToString();
 
-							Table.ChangeCellText(_sel, "0x" + intInput.ToString(format)); // does not do a text-check
-						}
-					}
-					break;
-
-				case InfoInputDialog.Category: // INT Input ->
-					using (var f = new InfoInputDialog(Table, _sel))
-					{
-						if (f.ShowDialog(this) == DialogResult.OK
-							&& intInput != intOriginal)
-						{
-							Table.ChangeCellText(_sel, intInput.ToString()); // does not do a text-check
-						}
+									Table.ChangeCellText(_sel, cell); // does not do a text-check
+								}
+							}
+							break;
 					}
 					break;
 			}
