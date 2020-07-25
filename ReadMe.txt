@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2020 july 24
+2020 july 25
 kevL's
 ver 3.7.0.0
 
@@ -120,8 +120,8 @@ TalkTable
                       Path to ... and the Settings.Cfg "dialogalt=" option)
 
 
-Paths (appears only when a 2da called "crafting" or "spells" is loaded - see
-       Appendix E: how to use Info paths)
+Paths (appears only when a 2da called "crafting", "spells", or "feat" is loaded
+       - see Appendix E: how to use Info paths)
 
 
 Font
@@ -466,7 +466,9 @@ path SpellTarget.2da       to the entry on the menu; selecting the item a second
 path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
                            path to a specific 2da-file. A check will appear next
                            to the entry on the menu; selecting the item a second
-                           time would clear the info. This is used by Feat.2da.
+                           time would clear the info. This is used by Feat.2da -
+                           note that Info for Feat.2da can also make use of data
+                           that's groped from Feat.2da above.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

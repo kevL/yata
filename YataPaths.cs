@@ -1306,6 +1306,34 @@ namespace yata
 
 			switch (col)
 			{
+				case 20: // Feat.2da
+				case 21:
+					if (it_PathFeat2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.featsLabels.Count)
+								{
+									info += Info.featsLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == gs.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+
 				case 32: // MasterFeats.2da
 					if (it_PathMasterFeats2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))

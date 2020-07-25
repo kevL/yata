@@ -128,6 +128,8 @@ namespace yata
 
 
 		#region Feat caches
+		// NOTE: Also uses Feat.2da for prereqfeat1- and prereqfeat2-labels.
+
 		/// <summary>
 		/// A list that holds labels for master-feats in MasterFeats.2da.
 		/// - optional

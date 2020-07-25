@@ -4253,7 +4253,7 @@ namespace yata
 		/// <summary>
 		/// 
 		/// </summary>
-		internal void ShowCellMenu()
+		internal void popupCellmenu()
 		{
 			_sel = Table.getSelectedCell();
 
@@ -4353,8 +4353,8 @@ namespace yata
 			switch (_sel.x)
 			{
 				// "MINSPELLLVL"
-				// "PREREQFEAT1"
-				// "PREREQFEAT2"
+				// "PREREQFEAT1"		info
+				// "PREREQFEAT2"		info
 				// "GAINMULTIPLE"
 				// "EFFECTSSTACK"
 				// "ALLCLASSESCANUSE"
@@ -4362,7 +4362,7 @@ namespace yata
 				// "SPELLID"
 				// "SUCCESSOR"
 				// "USESMAPFEAT"
-				// "MASTERFEAT"			y
+				// "MASTERFEAT"			info + infoinput
 				// "TARGETSELF"
 				// "OrReqFeat0"
 				// "OrReqFeat1"
@@ -4386,10 +4386,14 @@ namespace yata
 				// "ImmunityType"
 				// "Instant"
 
-			case InfoInputFeat.MasterFeat:
-				if (Info.masterfeatLabels.Count != 0)
-					return true;
-				break;
+//				case InfoInputFeat.PrereqFeat1:
+//				case InfoInputFeat.PrereqFeat2:
+//					break;
+
+				case InfoInputFeat.MasterFeat:
+					if (Info.masterfeatLabels.Count != 0)
+						return true;
+					break;
 			}
 			return false;
 		}

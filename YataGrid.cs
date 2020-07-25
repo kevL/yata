@@ -2485,7 +2485,7 @@ namespace yata
 							  | INVALID_FROZ
 							  | INVALID_ROWS
 							  | EnsureDisplayed(cell));
-					_f.ShowCellMenu();
+					_f.popupCellmenu();
 				}
 				else
 					Select();

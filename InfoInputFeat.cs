@@ -10,7 +10,11 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		internal const int MasterFeat = 32; // col in Feat.2da
+		// cols in Feat.2da ->
+//		internal const int PrereqFeat1 = 20; // "PREREQFEAT1"
+//		internal const int PrereqFeat2 = 21; // "PREREQFEAT2"
+
+		internal const int MasterFeat  = 32; // "MASTERFEAT"
 		#endregion Fields (static)
 
 
@@ -697,7 +701,7 @@ namespace yata
 		{
 			for (int i = 0; i != Info.masterfeatLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i])); // .ToLower()
+				cbx_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i]));
 			}
 			cbx_Val.Items.Add(new tui(gs.non));
 		}
