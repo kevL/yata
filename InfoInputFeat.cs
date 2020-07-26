@@ -13,6 +13,7 @@ namespace yata
 		// cols in Feat.2da ->
 //		internal const int PrereqFeat1 = 20; // "PREREQFEAT1"
 //		internal const int PrereqFeat2 = 21; // "PREREQFEAT2"
+//		internal const int SpellId     = 27; // "SPELLID"
 
 		internal const int MasterFeat  = 32; // "MASTERFEAT"
 		#endregion Fields (static)

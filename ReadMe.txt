@@ -468,7 +468,7 @@ path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
                            to the entry on the menu; selecting the item a second
                            time would clear the info. This is used by Feat.2da -
                            note that Info for Feat.2da can also make use of data
-                           that's groped from Feat.2da above.
+                           that's groped from Spells.2da and Feat.2da above.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

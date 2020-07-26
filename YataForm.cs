@@ -4359,7 +4359,7 @@ namespace yata
 				// "EFFECTSSTACK"
 				// "ALLCLASSESCANUSE"
 				// "CATEGORY"
-				// "SPELLID"
+				// "SPELLID"			info
 				// "SUCCESSOR"
 				// "USESMAPFEAT"
 				// "MASTERFEAT"			info + infoinput
@@ -4388,6 +4388,9 @@ namespace yata
 
 //				case InfoInputFeat.PrereqFeat1:
 //				case InfoInputFeat.PrereqFeat2:
+//					break;
+
+//				case InfoInputFeat.SpellId:
 //					break;
 
 				case InfoInputFeat.MasterFeat:

@@ -32,12 +32,36 @@ namespace yata
 					{
 						if (!String.IsNullOrEmpty(val = Table[id,col].text)
 							&& Int32.TryParse(val, out result)
-							&& result < Info.spellLabels.Count)
+							&& result > -1 && result < Info.spellLabels.Count)
 						{
 							info = Table.Cols[col].text + ": "
 								 + Info.spellLabels[result];
 						}
 					}
+/*					if (it_PathSpells2da.Checked // TODO: tighten Crafting Info return-strings like in SpellsInfo and FeatInfo ->
+					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.spellLabels.Count)
+								{
+									info += Info.spellLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == gs.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					} */
 					break;
 
 //				case  2: // "REAGENTS"
@@ -55,7 +79,7 @@ namespace yata
 								for (int tag = 0; tag != array.Length; ++tag)
 								{
 									if (Int32.TryParse(array[tag], out result)
-										&& result < Info.tagLabels.Count)
+										&& result > -1 && result < Info.tagLabels.Count)
 									{
 										info += Info.tagLabels[result];
 
@@ -109,7 +133,7 @@ namespace yata
 									if ((pos = ipEncoded.IndexOf(',')) != -1)
 									{
 										if (Int32.TryParse(ipEncoded.Substring(0, pos), out result)
-											&& result < Info.ipLabels.Count)
+											&& result > -1 && result < Info.ipLabels.Count)
 										{
 											info += Info.ipLabels[result];
 
@@ -138,13 +162,13 @@ namespace yata
 					if (it_PathFeat2da.Checked)
 					{
 						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& Int32.TryParse(val, out result))
+							&& Int32.TryParse(val, out result) && result > -1)
 						{
 							string cat = Table[id,1].text;
 							if (!String.IsNullOrEmpty(cat))
 							{
 								int result2;
-								if (Int32.TryParse(cat, out result2)) // is triggered by spell id
+								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL is a feat
 								{
 									if (result < Info.featsLabels.Count)
 									{
@@ -152,7 +176,7 @@ namespace yata
 											 + Info.featsLabels[result];
 									}
 								}
-								else // is triggered NOT by spell - but by mold-tag, or is Alchemy or Distillation
+								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation - SKILL is a skill
 								{
 									if (result < Info.skillLabels.Count)
 									{
@@ -1016,7 +1040,7 @@ namespace yata
 								{
 									feat     = (result % FEATSPELL_MASTER);
 									dividend = (result / FEATSPELL_MASTER);
-									right    = (result & FEATSPELL_FEATS);
+									right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
 								}
 
 								if (feat < Info.featsLabels.Count)
@@ -1138,7 +1162,7 @@ namespace yata
 
 		// FeatSpells
 		const int FEATSPELL_MASTER = 0x00010000;
-		const int FEATSPELL_FEATS  = 0x00001111;
+		const int FEATSPELL_FEATS  = 0x00001111; // TODO: is that real or should it be 0x0000FFFF
 
 		// MetaMagic
 		internal const int META_NONE               = 0x00000000; //        0
@@ -1306,8 +1330,8 @@ namespace yata
 
 			switch (col)
 			{
-				case 20: // Feat.2da
-				case 21:
+				case 20: // "PREREQFEAT1" - Feat.2da
+				case 21: // "PREREQFEAT2" - Feat.2da
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1334,7 +1358,34 @@ namespace yata
 					}
 					break;
 
-				case 32: // MasterFeats.2da
+				case 27: // "SPELLID" - Spells.2da
+					if (it_PathSpells2da.Checked
+					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.spellLabels.Count)
+								{
+									info += Info.spellLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += "bork";
+						}
+						else if (val == gs.Stars)
+							info += "n/a";
+						else
+							info += "bork";
+					}
+					break;
+
+				case 32: // "MASTERFEAT" - MasterFeats.2da
 					if (it_PathMasterFeats2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
