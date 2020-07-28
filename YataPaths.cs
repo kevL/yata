@@ -1358,6 +1358,26 @@ namespace yata
 					}
 					break;
 
+				case 25: // "CATEGORY" - Categories.2da
+					if (it_PathCategories2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result) && result > -1)
+						{
+							if (result < Info.categoryLabels.Count)
+							{
+								info += Info.categoryLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += "bork";
+					}
+					break;
+
 				case 27: // "SPELLID" - Spells.2da
 					if (it_PathSpells2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))

@@ -90,8 +90,8 @@ namespace yata
 				{
 					btn_Clear.Enabled = false;
 
-					_f.stInput  = gs.Stars;
-					_f.intInput = 0;
+					_f.str1 = gs.Stars;
+					_f.int1 = 0;
 				}
 				else
 				{
@@ -102,56 +102,56 @@ namespace yata
 						case ImmunityType:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.stInput = gs.Acid;           break;
-								case  1: _f.stInput = gs.Cold;           break;
-								case  2: _f.stInput = gs.Death;          break;
-								case  3: _f.stInput = gs.Disease;        break;
-								case  4: _f.stInput = gs.Divine;         break;
-								case  5: _f.stInput = gs.Electricity;    break;
-								case  6: _f.stInput = gs.Evil;           break;
-								case  7: _f.stInput = gs.Fear;           break;
-								case  8: _f.stInput = gs.Fire;           break;
-								case  9: _f.stInput = gs.Magical;        break;
-								case 10: _f.stInput = gs.Mind_Affecting; break;
-								case 11: _f.stInput = gs.Negative;       break;
-								case 12: _f.stInput = gs.Paralysis;      break;
-								case 13: _f.stInput = gs.Poison;         break;
-								case 14: _f.stInput = gs.Positive;       break;
-								case 15: _f.stInput = gs.Sonic;          break;
-								case 16: _f.stInput = gs.Constitution;   break;
-								case 17: _f.stInput = gs.Water;          break;
+								case  0: _f.str1 = gs.Acid;           break;
+								case  1: _f.str1 = gs.Cold;           break;
+								case  2: _f.str1 = gs.Death;          break;
+								case  3: _f.str1 = gs.Disease;        break;
+								case  4: _f.str1 = gs.Divine;         break;
+								case  5: _f.str1 = gs.Electricity;    break;
+								case  6: _f.str1 = gs.Evil;           break;
+								case  7: _f.str1 = gs.Fear;           break;
+								case  8: _f.str1 = gs.Fire;           break;
+								case  9: _f.str1 = gs.Magical;        break;
+								case 10: _f.str1 = gs.Mind_Affecting; break;
+								case 11: _f.str1 = gs.Negative;       break;
+								case 12: _f.str1 = gs.Paralysis;      break;
+								case 13: _f.str1 = gs.Poison;         break;
+								case 14: _f.str1 = gs.Positive;       break;
+								case 15: _f.str1 = gs.Sonic;          break;
+								case 16: _f.str1 = gs.Constitution;   break;
+								case 17: _f.str1 = gs.Water;          break;
 							}
 							break;
 
 						case Category:
-							_f.intInput = cbx_Val.SelectedIndex;
+							_f.int1 = cbx_Val.SelectedIndex;
 							break;
 
 						case AsMetaMagic:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.intInput = YataForm.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
-								case  1: _f.intInput = YataForm.META_I_BEWITCHING_BLAST; break;
-								case  2: _f.intInput = YataForm.META_I_BINDING_BLAST;    break;
-								case  3: _f.intInput = YataForm.META_I_BRIMSTONE_BLAST;  break;
-								case  4: _f.intInput = YataForm.META_I_DRAINING_BLAST;   break;
-								case  5: _f.intInput = YataForm.META_I_FRIGHTFUL_BLAST;  break;
-								case  6: _f.intInput = YataForm.META_I_HELLRIME_BLAST;   break;
-								case  7: _f.intInput = YataForm.META_I_HINDERING_BLAST;  break;
-								case  8: _f.intInput = YataForm.META_I_NOXIOUS_BLAST;    break;
-								case  9: _f.intInput = YataForm.META_I_UTTERDARK_BLAST;  break;
-								case 10: _f.intInput = YataForm.META_I_VITRIOLIC_BLAST;  break;
+								case  0: _f.int1 = YataForm.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
+								case  1: _f.int1 = YataForm.META_I_BEWITCHING_BLAST; break;
+								case  2: _f.int1 = YataForm.META_I_BINDING_BLAST;    break;
+								case  3: _f.int1 = YataForm.META_I_BRIMSTONE_BLAST;  break;
+								case  4: _f.int1 = YataForm.META_I_DRAINING_BLAST;   break;
+								case  5: _f.int1 = YataForm.META_I_FRIGHTFUL_BLAST;  break;
+								case  6: _f.int1 = YataForm.META_I_HELLRIME_BLAST;   break;
+								case  7: _f.int1 = YataForm.META_I_HINDERING_BLAST;  break;
+								case  8: _f.int1 = YataForm.META_I_NOXIOUS_BLAST;    break;
+								case  9: _f.int1 = YataForm.META_I_UTTERDARK_BLAST;  break;
+								case 10: _f.int1 = YataForm.META_I_VITRIOLIC_BLAST;  break;
 
-								case 11: _f.intInput = YataForm.META_I_ELDRITCH_CHAIN;   break; // Blast Shapes ->
-								case 12: _f.intInput = YataForm.META_I_ELDRITCH_CONE;    break;
-								case 13: _f.intInput = YataForm.META_I_ELDRITCH_DOOM;    break;
-								case 14: _f.intInput = YataForm.META_I_ELDRITCH_SPEAR;   break;
-								case 15: _f.intInput = YataForm.META_I_HIDEOUS_BLOW;     break;
+								case 11: _f.int1 = YataForm.META_I_ELDRITCH_CHAIN;   break; // Blast Shapes ->
+								case 12: _f.int1 = YataForm.META_I_ELDRITCH_CONE;    break;
+								case 13: _f.int1 = YataForm.META_I_ELDRITCH_DOOM;    break;
+								case 14: _f.int1 = YataForm.META_I_ELDRITCH_SPEAR;   break;
+								case 15: _f.int1 = YataForm.META_I_HIDEOUS_BLOW;     break;
 							}
 							break;
 
 						case TargetingUI:
-							_f.stInput = cbx_Val.SelectedIndex.ToString();
+							_f.str1 = cbx_Val.SelectedIndex.ToString();
 							break;
 					}
 				}
@@ -171,10 +171,10 @@ namespace yata
 						cb_12.Checked = cb_13.Checked = cb_14.Checked = cb_15.Checked =
 						cb_16.Checked = cb_17.Checked = cb_18.Checked = cb.Checked)
 					{
-						_f.intInput |=  YataForm.META_I_ESSENCES;
+						_f.int1 |=  YataForm.META_I_ESSENCES;
 					}
 					else
-						_f.intInput &= ~YataForm.META_I_ESSENCES;
+						_f.int1 &= ~YataForm.META_I_ESSENCES;
 				}
 
 				if (cb == cb_MetaAllES || cb == cb_MetaAllS)
@@ -182,18 +182,18 @@ namespace yata
 					if (cb_19.Checked = cb_20.Checked = cb_21.Checked =
 						cb_22.Checked = cb_23.Checked = cb.Checked)
 					{
-						_f.intInput |=  YataForm.META_I_SHAPES;
+						_f.int1 |=  YataForm.META_I_SHAPES;
 					}
 					else
-						_f.intInput &= ~YataForm.META_I_SHAPES;
+						_f.int1 &= ~YataForm.META_I_SHAPES;
 				}
 				_init = false;
 
-				SetInfoText(_f.intInput);
-				EnableMetaMagics(_f.intInput);
-				checkMetagroups(_f.intInput);
+				SetInfoText(_f.int1);
+				EnableMetaMagics(_f.int1);
+				checkMetagroups(_f.int1);
 
-				btn_Clear.Enabled = (_f.intInput != 0);
+				btn_Clear.Enabled = (_f.int1 != 0);
 			}
 		}
 
@@ -205,31 +205,31 @@ namespace yata
 			switch (ColType)
 			{
 				case School:		// string, checkboxes, exclusive
-					if (_f.stInput != gs.Stars)
+					if (_f.str1 != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = cb_06.Checked = cb_07.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = gs.Stars);
+						SetInfoText(-1, _f.str1 = gs.Stars);
 					}
 					break;
 
 				case Range:			// string, checkboxes, exclusive
-					if (_f.stInput != gs.Stars)
+					if (_f.str1 != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = gs.Stars);
+						SetInfoText(-1, _f.str1 = gs.Stars);
 					}
 					break;
 
 				case MetaMagic:		// int,    checkboxes, inclusive
-					if (_f.intInput != 0)
+					if (_f.int1 != 0)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
@@ -240,27 +240,27 @@ namespace yata
 						cb_20.Checked = cb_21.Checked = cb_22.Checked = cb_23.Checked =
 						_init = false;
 
-						SetInfoText(_f.intInput = 0);
-						EnableMetaMagics(_f.intInput);
-						checkMetagroups(_f.intInput);
+						SetInfoText(_f.int1 = 0);
+						EnableMetaMagics(_f.int1);
+						checkMetagroups(_f.int1);
 					}
 					break;
 
 				case TargetType:	// int,    checkboxes, inclusive
-					if (_f.intInput != 0)
+					if (_f.int1 != 0)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						cb_04.Checked = cb_05.Checked = cb_06.Checked =
 						_init = false;
 
-						SetInfoText(_f.intInput = 0);
+						SetInfoText(_f.int1 = 0);
 					}
 					break;
 
 				case ImmunityType:	// string, dropdown,   exclusive
 				case TargetingUI:	// string, dropdown,   exclusive
-					if (_f.stInput != gs.Stars)
+					if (_f.str1 != gs.Stars)
 					{
 						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
 					}
@@ -268,20 +268,20 @@ namespace yata
 
 				case Category:		// int,    dropdown,   exclusive
 				case AsMetaMagic:	// int,    dropdown,   exclusive
-					if (_f.intInput != 0)
+					if (_f.int1 != 0)
 					{
 						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
 					}
 					break;
 
 				case UserType:		// string, checkboxes, exclusive
-					if (_f.stInput != gs.Stars)
+					if (_f.str1 != gs.Stars)
 					{
 						_init = true;
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
 						_init = false;
 
-						SetInfoText(-1, _f.stInput = gs.Stars);
+						SetInfoText(-1, _f.str1 = gs.Stars);
 					}
 					break;
 			}
@@ -330,7 +330,7 @@ namespace yata
 							case "V": cb_07.Checked = true; break;
 						}
 
-						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
+						SetInfoText(-1, _f.str0 = _f.str1 = val);
 						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
@@ -356,7 +356,7 @@ namespace yata
 							case "I": cb_05.Checked = true; break;
 						}
 
-						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
+						SetInfoText(-1, _f.str0 = _f.str1 = val);
 						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
@@ -432,7 +432,7 @@ namespace yata
 //							cb_MetaAllE .Checked = ((result & YataForm.META_I_ESSENCES) == YataForm.META_I_ESSENCES);
 //							cb_MetaAllS .Checked = ((result & YataForm.META_I_SHAPES)   == YataForm.META_I_SHAPES);
 						}
-						SetInfoText(_f.intOriginal = _f.intInput = result);
+						SetInfoText(_f.int0 = _f.int1 = result);
 						btn_Clear.Enabled = (result != 0);
 						break;
 
@@ -463,7 +463,7 @@ namespace yata
 							cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
 							cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
 						}
-						SetInfoText(_f.intOriginal = _f.intInput = result);
+						SetInfoText(_f.int0 = _f.int1 = result);
 						btn_Clear.Enabled = (result != 0);
 						break;
 
@@ -497,7 +497,7 @@ namespace yata
 							default:
 							case gs.Stars: cbx_Val.SelectedIndex = 18; break;
 						}
-						_f.stOriginal = _f.stInput = val;
+						_f.str0 = _f.str1 = val;
 						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 /*
@@ -550,7 +550,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						else
 							cbx_Val.SelectedIndex = Info.categoryLabels.Count; // "n/a"
 
-						_f.intOriginal = _f.intInput = result;
+						_f.int0 = _f.int1 = result;
 						btn_Clear.Enabled = (result != 0);
 						break;
 
@@ -571,7 +571,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 							case "3": cb_02.Checked = true; break;
 							case "4": cb_03.Checked = true; break;
 						}
-						SetInfoText(-1, _f.stOriginal = _f.stInput = val);
+						SetInfoText(-1, _f.str0 = _f.str1 = val);
 						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 
@@ -608,7 +608,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
 							}
 						}
-						_f.intOriginal = _f.intInput = result;
+						_f.int0 = _f.int1 = result;
 						btn_Clear.Enabled = (result != 0);
 						break;
 
@@ -626,7 +626,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						else
 							cbx_Val.SelectedIndex = Info.targetLabels.Count; // "n/a"
 
-						_f.stOriginal = _f.stInput = val;
+						_f.str0 = _f.str1 = val;
 						btn_Clear.Enabled = (val != gs.Stars);
 						break;
 				}
@@ -942,7 +942,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
 					}
 				}
-				SetInfoText(-1, _f.stInput = val);
+				SetInfoText(-1, _f.str1 = val);
 				btn_Clear.Enabled = (val != gs.Stars);
 
 				_init = false;
@@ -1010,7 +1010,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						cb_03.Checked = cb_04.Checked = false;
 					}
 				}
-				SetInfoText(-1, _f.stInput = val);
+				SetInfoText(-1, _f.str1 = val);
 				btn_Clear.Enabled = (val != gs.Stars);
 
 				_init = false;
@@ -1021,175 +1021,175 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 		{
 			if (_cb == cb_00)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_EMPOWER;
-				else             _f.intInput &= ~YataForm.META_EMPOWER;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_EMPOWER;
+				else             _f.int1 &= ~YataForm.META_EMPOWER;
 			}
 			else if (_cb == cb_01)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_EXTEND;
-				else             _f.intInput &= ~YataForm.META_EXTEND;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_EXTEND;
+				else             _f.int1 &= ~YataForm.META_EXTEND;
 			}
 			else if (_cb == cb_02)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_MAXIMIZE;
-				else             _f.intInput &= ~YataForm.META_MAXIMIZE;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_MAXIMIZE;
+				else             _f.int1 &= ~YataForm.META_MAXIMIZE;
 			}
 			else if (_cb == cb_03)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_QUICKEN;
-				else             _f.intInput &= ~YataForm.META_QUICKEN;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_QUICKEN;
+				else             _f.int1 &= ~YataForm.META_QUICKEN;
 			}
 			else if (_cb == cb_04)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_SILENT;
-				else             _f.intInput &= ~YataForm.META_SILENT;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_SILENT;
+				else             _f.int1 &= ~YataForm.META_SILENT;
 			}
 			else if (_cb == cb_05)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_STILL;
-				else             _f.intInput &= ~YataForm.META_STILL;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_STILL;
+				else             _f.int1 &= ~YataForm.META_STILL;
 			}
 			else if (_cb == cb_06)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_PERSISTENT;
-				else             _f.intInput &= ~YataForm.META_PERSISTENT;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_PERSISTENT;
+				else             _f.int1 &= ~YataForm.META_PERSISTENT;
 			}
 			else if (_cb == cb_07)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_PERMANENT;
-				else             _f.intInput &= ~YataForm.META_PERMANENT;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_PERMANENT;
+				else             _f.int1 &= ~YataForm.META_PERMANENT;
 			}
 
 			else if (_cb == cb_08) // Eldritch Essences ->
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BESHADOWED_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BESHADOWED_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BESHADOWED_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_BESHADOWED_BLAST;
 			}
 			else if (_cb == cb_09)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BEWITCHING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BEWITCHING_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BEWITCHING_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_BEWITCHING_BLAST;
 			}
 			else if (_cb == cb_10)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BINDING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BINDING_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BINDING_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_BINDING_BLAST;
 			}
 			else if (_cb == cb_11)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_BRIMSTONE_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_BRIMSTONE_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BRIMSTONE_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_BRIMSTONE_BLAST;
 			}
 			else if (_cb == cb_12)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_DRAINING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_DRAINING_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_DRAINING_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_DRAINING_BLAST;
 			}
 			else if (_cb == cb_13)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_FRIGHTFUL_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_FRIGHTFUL_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_FRIGHTFUL_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_FRIGHTFUL_BLAST;
 			}
 			else if (_cb == cb_14)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HELLRIME_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_HELLRIME_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HELLRIME_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_HELLRIME_BLAST;
 			}
 			else if (_cb == cb_15)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HINDERING_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_HINDERING_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HINDERING_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_HINDERING_BLAST;
 			}
 			else if (_cb == cb_16)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_NOXIOUS_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_NOXIOUS_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_NOXIOUS_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_NOXIOUS_BLAST;
 			}
 			else if (_cb == cb_17)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_UTTERDARK_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_UTTERDARK_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_UTTERDARK_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_UTTERDARK_BLAST;
 			}
 			else if (_cb == cb_18)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_VITRIOLIC_BLAST;
-				else             _f.intInput &= ~YataForm.META_I_VITRIOLIC_BLAST;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_VITRIOLIC_BLAST;
+				else             _f.int1 &= ~YataForm.META_I_VITRIOLIC_BLAST;
 			}
 
 			else if (_cb == cb_19) // Blast Shapes ->
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_CHAIN;
-				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_CHAIN;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_CHAIN;
+				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_CHAIN;
 			}
 			else if (_cb == cb_20)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_CONE;
-				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_CONE;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_CONE;
+				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_CONE;
 			}
 			else if (_cb == cb_21)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_DOOM;
-				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_DOOM;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_DOOM;
+				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_DOOM;
 			}
 			else if (_cb == cb_22)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_ELDRITCH_SPEAR;
-				else             _f.intInput &= ~YataForm.META_I_ELDRITCH_SPEAR;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_SPEAR;
+				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_SPEAR;
 			}
 			else if (_cb == cb_23)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.META_I_HIDEOUS_BLOW;
-				else             _f.intInput &= ~YataForm.META_I_HIDEOUS_BLOW;
+				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HIDEOUS_BLOW;
+				else             _f.int1 &= ~YataForm.META_I_HIDEOUS_BLOW;
 			}
 
-			SetInfoText(_f.intInput);
-			EnableMetaMagics(_f.intInput);
-			checkMetagroups(_f.intInput);
+			SetInfoText(_f.int1);
+			EnableMetaMagics(_f.int1);
+			checkMetagroups(_f.int1);
 
-			btn_Clear.Enabled = (_f.intInput != 0);
+			btn_Clear.Enabled = (_f.int1 != 0);
 		}
 
 		void changed_TargetType()
 		{
 			if (_cb == cb_00)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_SELF;
-				else             _f.intInput &= ~YataForm.TARGET_SELF;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_SELF;
+				else             _f.int1 &= ~YataForm.TARGET_SELF;
 			}
 			else if (_cb == cb_01)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_CREATURE;
-				else             _f.intInput &= ~YataForm.TARGET_CREATURE;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_CREATURE;
+				else             _f.int1 &= ~YataForm.TARGET_CREATURE;
 			}
 			else if (_cb == cb_02)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_GROUND;
-				else             _f.intInput &= ~YataForm.TARGET_GROUND;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_GROUND;
+				else             _f.int1 &= ~YataForm.TARGET_GROUND;
 			}
 			else if (_cb == cb_03)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_ITEMS;
-				else             _f.intInput &= ~YataForm.TARGET_ITEMS;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_ITEMS;
+				else             _f.int1 &= ~YataForm.TARGET_ITEMS;
 			}
 			else if (_cb == cb_04)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_DOORS;
-				else             _f.intInput &= ~YataForm.TARGET_DOORS;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_DOORS;
+				else             _f.int1 &= ~YataForm.TARGET_DOORS;
 			}
 			else if (_cb == cb_05)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_PLACEABLES;
-				else             _f.intInput &= ~YataForm.TARGET_PLACEABLES;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_PLACEABLES;
+				else             _f.int1 &= ~YataForm.TARGET_PLACEABLES;
 			}
 			else if (_cb == cb_06)
 			{
-				if (_cb.Checked) _f.intInput |=  YataForm.TARGET_TRIGGERS;
-				else             _f.intInput &= ~YataForm.TARGET_TRIGGERS;
+				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_TRIGGERS;
+				else             _f.int1 &= ~YataForm.TARGET_TRIGGERS;
 			}
 
-			SetInfoText(_f.intInput);
+			SetInfoText(_f.int1);
 
-			btn_Clear.Enabled = (_f.intInput != 0);
+			btn_Clear.Enabled = (_f.int1 != 0);
 		}
 
 		void changed_UserType()
@@ -1231,7 +1231,7 @@ int IMMUNITY_TYPE_DEATH                     = 32; // y
 						cb_00.Checked = cb_01.Checked = cb_02.Checked = false;
 					}
 				}
-				SetInfoText(-1, _f.stInput = val);
+				SetInfoText(-1, _f.str1 = val);
 
 				btn_Clear.Enabled = (val != gs.Stars);
 				_init = false;

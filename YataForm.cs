@@ -109,14 +109,14 @@ namespace yata
 		int _r;
 
 		/// <summary>
-		/// Int for InfoInputSpells or InfoInputFeat (PathInfo).
+		/// Int-input for InfoInputSpells or InfoInputFeat (re PathInfo).
 		/// </summary>
-		internal int intOriginal, intInput;
+		internal int int0, int1;
 
 		/// <summary>
-		/// String for InfoInputSpells (PathInfo).
+		/// String-input for InfoInputSpells or InfoInputFeat (re PathInfo).
 		/// </summary>
-		internal string stOriginal, stInput;
+		internal string str0, str1;
 
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
@@ -4358,7 +4358,7 @@ namespace yata
 				// "GAINMULTIPLE"
 				// "EFFECTSSTACK"
 				// "ALLCLASSESCANUSE"
-				// "CATEGORY"
+				// "CATEGORY"			info + infoinput
 				// "SPELLID"			info
 				// "SUCCESSOR"
 				// "USESMAPFEAT"
@@ -4389,6 +4389,11 @@ namespace yata
 //				case InfoInputFeat.PrereqFeat1:
 //				case InfoInputFeat.PrereqFeat2:
 //					break;
+
+				case InfoInputFeat.Category:
+					if (Info.categoryLabels.Count != 0)
+						return true;
+					break;
 
 //				case InfoInputFeat.SpellId:
 //					break;
@@ -4541,7 +4546,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Input(object sender, EventArgs e)
+		void cellclick_InfoInput(object sender, EventArgs e)
 		{
 			switch (Table.Info)
 			{
@@ -4556,37 +4561,37 @@ namespace yata
 							using (var f = new InfoInputSpells(Table, _sel))
 							{
 								if (f.ShowDialog(this) == DialogResult.OK
-									&& stInput != stOriginal)
+									&& str1 != str0)
 								{
-									Table.ChangeCellText(_sel, stInput); // does not do a text-check
+									Table.ChangeCellText(_sel, str1); // does not do a text-check
 								}
 							}
 							break;
-	
+
 						case InfoInputSpells.MetaMagic: // HEX Input ->
 						case InfoInputSpells.TargetType:
 						case InfoInputSpells.AsMetaMagic:
 							using (var f = new InfoInputSpells(Table, _sel))
 							{
 								if (f.ShowDialog(this) == DialogResult.OK
-									&& intInput != intOriginal)
+									&& int1 != int0)
 								{
 									string format;
-									if (intInput <= 0xFF) format = "X2";
-									else                  format = "X6";
-	
-									Table.ChangeCellText(_sel, "0x" + intInput.ToString(format)); // does not do a text-check
+									if (int1 <= 0xFF) format = "X2";
+									else              format = "X6";
+
+									Table.ChangeCellText(_sel, "0x" + int1.ToString(format)); // does not do a text-check
 								}
 							}
 							break;
-	
+
 						case InfoInputSpells.Category: // INT Input ->
 							using (var f = new InfoInputSpells(Table, _sel))
 							{
 								if (f.ShowDialog(this) == DialogResult.OK
-									&& intInput != intOriginal)
+									&& int1 != int0)
 								{
-									Table.ChangeCellText(_sel, intInput.ToString()); // does not do a text-check
+									Table.ChangeCellText(_sel, int1.ToString()); // does not do a text-check
 								}
 							}
 							break;
@@ -4596,22 +4601,31 @@ namespace yata
 				case YataGrid.InfoType.INFO_FEAT:
 					switch (_sel.x)
 					{
-						case InfoInputFeat.MasterFeat: // INT Input ->
-							using (var f = new InfoInputFeat(Table, _sel))
-							{
-								if (f.ShowDialog(this) == DialogResult.OK
-									&& intInput != intOriginal)
-								{
-									string cell;
-									if (intInput == -1) cell = gs.Stars;
-									else                cell = intInput.ToString();
-
-									Table.ChangeCellText(_sel, cell); // does not do a text-check
-								}
-							}
+						case InfoInputFeat.Category: // INT Input ->
+						case InfoInputFeat.MasterFeat:
+							doIntInput();
 							break;
 					}
 					break;
+			}
+		}
+
+		/// <summary>
+		/// helper for cellclick_InfoInput()
+		/// </summary>
+		void doIntInput()
+		{
+			using (var f = new InfoInputFeat(Table, _sel))
+			{
+				if (f.ShowDialog(this) == DialogResult.OK
+					&& int1 != int0)
+				{
+					string val;
+					if (int1 == -1) val = gs.Stars;
+					else            val = int1.ToString();
+
+					Table.ChangeCellText(_sel, val); // does not do a text-check
+				}
 			}
 		}
 
