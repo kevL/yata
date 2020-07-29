@@ -481,16 +481,13 @@ namespace yata
 			{
 				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
 				{
-					btn_Clear.Enabled = false;
+//					btn_Clear.Enabled = false;
 
 //					_f.stInput  = gs.Stars;
 
 					switch (ColType)
 					{
 						case Category:
-							_f.int1 = 0;
-							break;
-
 						case MasterFeat:
 							_f.int1 = -1;
 							break;
@@ -498,14 +495,11 @@ namespace yata
 				}
 				else
 				{
-					btn_Clear.Enabled = true;
+//					btn_Clear.Enabled = true;
 
 					switch (ColType)
 					{
 						case Category:
-							_f.int1 = cbx_Val.SelectedIndex;
-							break;
-
 						case MasterFeat:
 							_f.int1 = cbx_Val.SelectedIndex;
 							break;
@@ -607,24 +601,18 @@ namespace yata
 
 		void click_Clear(object sender, EventArgs e)
 		{
-			btn_Clear.Enabled = false;
-
-			switch (ColType)
-			{
-				case Category: // int, dropdown, ...
-					if (_f.int1 != 0)
-					{
-						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
-					}
-					break;
-
-				case MasterFeat: // int, dropdown, ...
-					if (_f.int1 != -1)
-					{
-						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
-					}
-					break;
-			}
+//			btn_Clear.Enabled = false;
+//
+//			switch (ColType)
+//			{
+//				case Category:   // int, dropdown, ...
+//				case MasterFeat: // int, dropdown, ...
+//					if (_f.int1 != -1)
+//					{
+//						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
+//					}
+//					break;
+//			}
 		}
 /*
 				case School:		// string, checkboxes, exclusive
