@@ -447,25 +447,46 @@ namespace yata
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
 					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
-					_table.InitScroll();
 
-					// NOTE: The panels can be null during the load sequence.
-					if (_table._panelCols  != null) _table._panelCols .Width  = Width;
-					if (_table._panelRows  != null) _table._panelRows .Height = Height;
-					if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
+					// BLARG. The table can be invalid when a yata-process is
+					// already running and user opens more, multiple files from
+					// Windows Explorer via RMB-fileopen. Note that RMB-fileopen
+					// exhibits different behavior than selecting files and
+					// pressing [Enter]. Note also that Windows w7 does not
+					// exhibit consistent behavior here when opening multiple
+					// files; all the selected files might not get sent to
+					// Program.Main()->YataForm.CreatePage().
 
-					if (_table.Propanel != null && _table.Propanel.Visible)
-						_table.Propanel.telemetric();
-
-					if (!_f.IsMin) _table.EnsureDisplayed();
-
-					if (!doneSync
-						&& _f._diff1 != null && _f._diff2 != null
-						&& (_f._diff1 == _table || _f._diff2 == _table))
+					if (_table != null)
 					{
-						doneSync = true;
-						SyncDiffedGrids();
+						_table.InitScroll();
+
+						// NOTE: The panels can be null during the load sequence.
+						if (_table._panelCols  != null) _table._panelCols .Width  = Width;
+						if (_table._panelRows  != null) _table._panelRows .Height = Height;
+						if (_table.FrozenPanel != null) _table.FrozenPanel.Height = Height;
+
+						if (_table.Propanel != null && _table.Propanel.Visible)
+							_table.Propanel.telemetric();
+
+						if (!_f.IsMin) _table.EnsureDisplayed();
+
+						if (!doneSync
+							&& _f._diff1 != null && _f._diff2 != null
+							&& (_f._diff1 == _table || _f._diff2 == _table))
+						{
+							doneSync = true;
+							SyncDiffedGrids();
+						}
 					}
+//					else // this is not reliable either ->
+//					{
+//						MessageBox.Show("A table failed to open. Windows failed to send a file to Yata.",
+//										" burp",
+//										MessageBoxButtons.OK,
+//										MessageBoxIcon.Error,
+//										MessageBoxDefaultButton.Button1);
+//					}
 				}
 				_table = null;
 

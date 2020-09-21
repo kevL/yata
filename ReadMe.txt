@@ -513,9 +513,14 @@ executable needs to be run directly (without passing in any file arguments).
 Note that when opening multiple files from Windows Explorer either by selecting
 and pressing Enter or with right-click and Open on the contextmenu that appears,
 the files will open in separate instances of Yata if there is not a running
-instance of Yata. If there is a running instance of Yata they will open in the
-earliest instance like opening a single file from Explorer does. This is a
-.NET <-> Windows Explorer/OS limitation.
+instance of Yata. If there is one or more running instances of Yata they will
+open in the earliest instance. This is a .NET/Windows Explorer/OS limitation.
+
+IT IS HIGHLY RECOMMENDED TO OPEN ONLY ONE FILE AT A TIME FROM WINDOWS EXPLORER.
+To open multiple files from Windows Explorer reliably would require a special
+Open with Yata entry on Explorer's contextmenu and I don't want to do that.
+Selecting a single file (or two ...) to open from Explorer should be okay -
+however if there are too many some of them tend to get ignored.
 
 
 Appendix I: a note on associating file extensions in Windows Explorer

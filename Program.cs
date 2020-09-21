@@ -29,15 +29,21 @@ namespace yata
 			//	st += Environment.NewLine + arg;
 			//logfile.Log("Main() args= " + st);
 
+			//logfile.Log(Environment.NewLine + "--------");
+			//string a = String.Empty;
+			//for (int i = 0; i != args.Length; ++i)
+			//	a += ";" + args[i] + ";";
+			//logfile.Log("Main() args=" + a);
+
 
 			Process proc = null;
 
 			if (args.Length != 0) // else always start a new instance of Yata
 			{
 				var current  = Process.GetCurrentProcess();
-				int id       = current.Id;
 				string label = current.ProcessName;
 
+				//int id = current.Id;
 				//logfile.Log(". current process= " + id + " : " + label + " h= " + current.Handle);
 
 				DateTime dt = DateTime.Now, dtTest;
@@ -73,7 +79,7 @@ namespace yata
 
 			if (proc != null)
 			{
-				//logfile.Log(". proc = " + proc.Id + " : " + proc.ProcessName);
+				//logfile.Log(". FOUND INSTANCE proc= " + proc.Id + " : " + proc.ProcessName);
 
 				// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 				IntPtr ptrCopyData = IntPtr.Zero;

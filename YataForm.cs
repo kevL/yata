@@ -533,9 +533,7 @@ namespace yata
 				{
 					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
 					if (File.Exists(pfe_load))
-					{
 						CreatePage(pfe_load);
-					}
 				}
 			}
 			else
@@ -660,9 +658,13 @@ namespace yata
 		/// <param name="read">readonly (default false)</param>
 		void CreatePage(string pfe, bool read = false)
 		{
+			//logfile.Log("CreatePage() pfe= " + pfe);
+
 			if (File.Exists(pfe)													// safety (probably).
 				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))	// what idjut would ... oh, wait.
 			{
+				//logfile.Log(". File Ok");
+
 				if (Settings._recent != 0)
 				{
 					ToolStripItemCollection recents = it_Recent.DropDownItems;
@@ -4189,9 +4191,9 @@ namespace yata
 
 		internal void yata_DragDrop(object sender, DragEventArgs e)
 		{
-			var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			foreach (string file in files)
-				CreatePage(file);
+			var paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+			foreach (string pfe in paths)
+				CreatePage(pfe);
 		}
 		#endregion Events (dragdrop)
 
