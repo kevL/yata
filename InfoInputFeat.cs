@@ -166,7 +166,7 @@ namespace yata
 		{
 			if (!_init)
 			{
-				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1) // "n/a"
+				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
 				{
 					btn_Clear.Enabled = false;
 
@@ -200,7 +200,7 @@ namespace yata
 			{
 				case Category:   // int,dropdown,unique
 				case MasterFeat: // int,dropdown,unique
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // "n/a"
+					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 					break;
 			}
 		}

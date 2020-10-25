@@ -185,6 +185,14 @@ namespace yata
 
 							metamagicGroups(result);
 
+							// TODO: There is an issue. If an unconventional value is passed
+							// in from YataForm it could have bits for both standard metamagic
+							// and invocation metamagic which should be disallowed here.
+							// The initialization routine will then check disabled checkboxes,
+							// which should never happen ...
+							//
+							// It's not a major concern but it's definitely awkward
+
 							if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0)
 							{
 								_f.int0 = result;
@@ -318,8 +326,8 @@ namespace yata
 
 						if (val.Length > 2 && val.Substring(0,2) == "0x"
 							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier,
-											  CultureInfo.InvariantCulture,
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 											  out result))
 						{
 							switch (result)
