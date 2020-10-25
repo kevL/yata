@@ -108,15 +108,27 @@ namespace yata
 		/// </summary>
 		int _r;
 
-		/// <summary>
-		/// Int-input for InfoInputSpells or InfoInputFeat (re PathInfo).
-		/// </summary>
-		internal int int0, int1;
 
 		/// <summary>
 		/// String-input for InfoInputSpells or InfoInputFeat (re PathInfo).
+		/// 'str0' is the current value; 'str1' will be the user-chosen value
+		/// that's assigned on Accept.
 		/// </summary>
 		internal string str0, str1;
+
+		/// <summary>
+		/// Int-input for InfoInputSpells or InfoInputFeat (re PathInfo).
+		/// 'int0' is the current value; 'int1' will be the user-chosen value
+		/// that's assigned on Accept.
+		/// </summary>
+		internal int int0, int1;
+
+		// NOTE: These are to initialize 'int0' and 'int1' and need to be
+		// different to recognize that an invalid current value should be
+		// changed to stars (iff the user accepts the dialog).
+		internal const int II_INIT_INVALID = -2; // for 'int0'
+		internal const int II_ASSIGN_STARS = -1; // for 'int1'
+
 
 		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
 
@@ -4559,7 +4571,6 @@ namespace yata
 						case InfoInputSpells.Range:
 						case InfoInputSpells.ImmunityType:
 						case InfoInputSpells.UserType:
-						case InfoInputSpells.TargetingUI:
 							using (var f = new InfoInputSpells(Table, _sel))
 							{
 								if (f.ShowDialog(this) == DialogResult.OK
@@ -4578,24 +4589,25 @@ namespace yata
 								if (f.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
 								{
-									string format;
-									if (int1 <= 0xFF) format = "X2";
-									else              format = "X6";
+									if (int1 == II_ASSIGN_STARS)
+									{
+										Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+									}
+									else
+									{
+										string q;
+										if (int1 > 0xFF) q = "X6"; // is MetaMagic (invocation)
+										else             q = "X2"; // is MetaMagic (standard) or TargetType
 
-									Table.ChangeCellText(_sel, "0x" + int1.ToString(format)); // does not do a text-check
+										Table.ChangeCellText(_sel, "0x" + int1.ToString(q)); // does not do a text-check
+									}
 								}
 							}
 							break;
 
 						case InfoInputSpells.Category: // INT Input ->
-							using (var f = new InfoInputSpells(Table, _sel))
-							{
-								if (f.ShowDialog(this) == DialogResult.OK
-									&& int1 != int0)
-								{
-									Table.ChangeCellText(_sel, int1.ToString()); // does not do a text-check
-								}
-							}
+						case InfoInputSpells.TargetingUI:
+							doIntInput();
 							break;
 					}
 					break;
@@ -4623,8 +4635,8 @@ namespace yata
 					&& int1 != int0)
 				{
 					string val;
-					if (int1 == -1) val = gs.Stars;
-					else            val = int1.ToString();
+					if (int1 == II_ASSIGN_STARS) val = gs.Stars;
+					else                         val = int1.ToString();
 
 					Table.ChangeCellText(_sel, val); // does not do a text-check
 				}

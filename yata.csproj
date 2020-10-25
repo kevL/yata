@@ -133,6 +133,9 @@
     <EmbeddedResource Include="DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InfoInputFeat.resx">
+      <DependentUpon>InfoInputFeat.Designer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InfoInputSpells.resx">
       <DependentUpon>InfoInputSpells.Designer.cs</DependentUpon>
     </EmbeddedResource>

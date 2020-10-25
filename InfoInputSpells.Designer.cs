@@ -36,9 +36,9 @@ namespace yata
 		CheckBox cb_23;
 
 		GroupBox gb_MetaGroups;
-		CheckBox cb_MetaAllES;
-		CheckBox cb_MetaAllE;
-		CheckBox cb_MetaAllS;
+		CheckBox cb_MetaAllShapesEssences;
+		CheckBox cb_MetaAllEssences;
+		CheckBox cb_MetaAllShapes;
 
 		Button btn_Clear;
 		Button btn_Accept;
@@ -88,9 +88,9 @@ namespace yata
 			this.cb_16 = new System.Windows.Forms.CheckBox();
 			this.cbx_Val = new System.Windows.Forms.ComboBox();
 			this.gb_MetaGroups = new System.Windows.Forms.GroupBox();
-			this.cb_MetaAllS = new System.Windows.Forms.CheckBox();
-			this.cb_MetaAllE = new System.Windows.Forms.CheckBox();
-			this.cb_MetaAllES = new System.Windows.Forms.CheckBox();
+			this.cb_MetaAllShapes = new System.Windows.Forms.CheckBox();
+			this.cb_MetaAllEssences = new System.Windows.Forms.CheckBox();
+			this.cb_MetaAllShapesEssences = new System.Windows.Forms.CheckBox();
 			this.btn_Clear = new System.Windows.Forms.Button();
 			this.gb_MetaGroups.SuspendLayout();
 			this.SuspendLayout();
@@ -423,9 +423,9 @@ namespace yata
 			// 
 			// gb_MetaGroups
 			// 
-			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllS);
-			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllE);
-			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllES);
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllShapes);
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllEssences);
+			this.gb_MetaGroups.Controls.Add(this.cb_MetaAllShapesEssences);
 			this.gb_MetaGroups.Location = new System.Drawing.Point(75, 180);
 			this.gb_MetaGroups.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_MetaGroups.Name = "gb_MetaGroups";
@@ -437,36 +437,36 @@ namespace yata
 			// 
 			// cb_MetaAllS
 			// 
-			this.cb_MetaAllS.Location = new System.Drawing.Point(230, 10);
-			this.cb_MetaAllS.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllS.Name = "cb_MetaAllS";
-			this.cb_MetaAllS.Size = new System.Drawing.Size(80, 20);
-			this.cb_MetaAllS.TabIndex = 2;
-			this.cb_MetaAllS.Text = "all Shapes";
-			this.cb_MetaAllS.UseVisualStyleBackColor = true;
-			this.cb_MetaAllS.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			this.cb_MetaAllShapes.Location = new System.Drawing.Point(230, 10);
+			this.cb_MetaAllShapes.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllShapes.Name = "cb_MetaAllS";
+			this.cb_MetaAllShapes.Size = new System.Drawing.Size(80, 20);
+			this.cb_MetaAllShapes.TabIndex = 2;
+			this.cb_MetaAllShapes.Text = "all Shapes";
+			this.cb_MetaAllShapes.UseVisualStyleBackColor = true;
+			this.cb_MetaAllShapes.CheckedChanged += new System.EventHandler(this.changed_MetamagicGroup);
 			// 
 			// cb_MetaAllE
 			// 
-			this.cb_MetaAllE.Location = new System.Drawing.Point(145, 10);
-			this.cb_MetaAllE.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllE.Name = "cb_MetaAllE";
-			this.cb_MetaAllE.Size = new System.Drawing.Size(85, 20);
-			this.cb_MetaAllE.TabIndex = 1;
-			this.cb_MetaAllE.Text = "all Essences";
-			this.cb_MetaAllE.UseVisualStyleBackColor = true;
-			this.cb_MetaAllE.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			this.cb_MetaAllEssences.Location = new System.Drawing.Point(145, 10);
+			this.cb_MetaAllEssences.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllEssences.Name = "cb_MetaAllE";
+			this.cb_MetaAllEssences.Size = new System.Drawing.Size(85, 20);
+			this.cb_MetaAllEssences.TabIndex = 1;
+			this.cb_MetaAllEssences.Text = "all Essences";
+			this.cb_MetaAllEssences.UseVisualStyleBackColor = true;
+			this.cb_MetaAllEssences.CheckedChanged += new System.EventHandler(this.changed_MetamagicGroup);
 			// 
 			// cb_MetaAllES
 			// 
-			this.cb_MetaAllES.Location = new System.Drawing.Point(10, 10);
-			this.cb_MetaAllES.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllES.Name = "cb_MetaAllES";
-			this.cb_MetaAllES.Size = new System.Drawing.Size(135, 20);
-			this.cb_MetaAllES.TabIndex = 0;
-			this.cb_MetaAllES.Text = "all Essences + Shapes";
-			this.cb_MetaAllES.UseVisualStyleBackColor = true;
-			this.cb_MetaAllES.CheckedChanged += new System.EventHandler(this.changed_MetaGroup);
+			this.cb_MetaAllShapesEssences.Location = new System.Drawing.Point(10, 10);
+			this.cb_MetaAllShapesEssences.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_MetaAllShapesEssences.Name = "cb_MetaAllES";
+			this.cb_MetaAllShapesEssences.Size = new System.Drawing.Size(135, 20);
+			this.cb_MetaAllShapesEssences.TabIndex = 0;
+			this.cb_MetaAllShapesEssences.Text = "all Essences + Shapes";
+			this.cb_MetaAllShapesEssences.UseVisualStyleBackColor = true;
+			this.cb_MetaAllShapesEssences.CheckedChanged += new System.EventHandler(this.changed_MetamagicGroup);
 			// 
 			// btn_Clear
 			// 

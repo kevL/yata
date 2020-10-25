@@ -1175,6 +1175,10 @@ namespace yata
 		internal const int META_PERSISTENT         = 0x00000040; //       64
 		internal const int META_PERMANENT          = 0x00000080; //      128
 
+		internal const int META_STANDARD           = META_EMPOWER | META_EXTEND | META_MAXIMIZE
+												   | META_QUICKEN | META_SILENT | META_STILL
+												   | META_PERSISTENT | META_PERMANENT;
+
 		internal const int META_I_DRAINING_BLAST   = 0x00000100; //      256
 		internal const int META_I_ELDRITCH_SPEAR   = 0x00000200; //      512
 		internal const int META_I_FRIGHTFUL_BLAST  = 0x00000400; //     1024
@@ -1207,6 +1211,10 @@ namespace yata
 		internal const int TARGET_DOORS      = 0x10; // 16
 		internal const int TARGET_PLACEABLES = 0x20; // 32
 		internal const int TARGET_TRIGGERS   = 0x40; // 64
+
+		internal const int TARGET_TOTAL      = TARGET_SELF | TARGET_CREATURE | TARGET_GROUND
+											 | TARGET_ITEMS | TARGET_DOORS | TARGET_PLACEABLES
+											 | TARGET_TRIGGERS;
 
 
 		/// <summary>
