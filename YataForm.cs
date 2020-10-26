@@ -4607,7 +4607,7 @@ namespace yata
 
 						case InfoInputSpells.Category: // INT Input ->
 						case InfoInputSpells.TargetingUI:
-							doIntInput();
+							doIntInputSpells();
 							break;
 					}
 					break;
@@ -4617,7 +4617,7 @@ namespace yata
 					{
 						case InfoInputFeat.Category: // INT Input ->
 						case InfoInputFeat.MasterFeat:
-							doIntInput();
+							doIntInputFeat();
 							break;
 					}
 					break;
@@ -4627,7 +4627,26 @@ namespace yata
 		/// <summary>
 		/// helper for cellclick_InfoInput()
 		/// </summary>
-		void doIntInput()
+		void doIntInputSpells()
+		{
+			using (var f = new InfoInputSpells(Table, _sel))
+			{
+				if (f.ShowDialog(this) == DialogResult.OK
+					&& int1 != int0)
+				{
+					string val;
+					if (int1 == II_ASSIGN_STARS) val = gs.Stars;
+					else                         val = int1.ToString();
+
+					Table.ChangeCellText(_sel, val); // does not do a text-check
+				}
+			}
+		}
+
+		/// <summary>
+		/// helper for cellclick_InfoInput()
+		/// </summary>
+		void doIntInputFeat()
 		{
 			using (var f = new InfoInputFeat(Table, _sel))
 			{
