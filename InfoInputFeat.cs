@@ -105,7 +105,7 @@ namespace yata
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
 			}
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace yata
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i]));
 			}
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 
@@ -162,6 +162,11 @@ namespace yata
 		{
 		}
 
+		/// <summary>
+		/// Handles user changing a combobox selection.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void changed_Combobox(object sender, EventArgs e)
 		{
 			if (!_init)

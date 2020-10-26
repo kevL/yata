@@ -522,7 +522,7 @@ namespace yata
 			cbx_Val.Items.Add(new tui(gs.Constitution));
 			cbx_Val.Items.Add(new tui(gs.Water));
 
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -539,7 +539,7 @@ namespace yata
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
 			}
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -570,7 +570,7 @@ namespace yata
 			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
 			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
 
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -620,7 +620,7 @@ namespace yata
 
 				cbx_Val.Items.Add(new tui(text));
 			}
-			cbx_Val.Items.Add(new tui(gs.non));
+			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
 
@@ -654,6 +654,11 @@ namespace yata
 
 
 		#region Events
+		/// <summary>
+		/// Handles user changing a checkbox.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void changed_Checkbox(object sender, EventArgs e)
 		{
 			if (!_init)
@@ -671,6 +676,9 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
 		void change_School()
 		{
 			string val = gs.Stars;
@@ -754,6 +762,9 @@ namespace yata
 			btn_Clear.Enabled = (val != gs.Stars);
 		}
 
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
 		void change_Range()
 		{
 			string val = gs.Stars;
@@ -819,6 +830,9 @@ namespace yata
 			btn_Clear.Enabled = (val != gs.Stars);
 		}
 
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
 		void change_MetaMagic()
 		{
 			if (_cb == cb_00) // standard ->
@@ -952,6 +966,9 @@ namespace yata
 			btn_Clear.Enabled = (_f.int1 != 0);
 		}
 
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
 		void change_TargetType()
 		{
 			if (_cb == cb_00)
@@ -995,6 +1012,9 @@ namespace yata
 			btn_Clear.Enabled = (_f.int1 != 0);
 		}
 
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
 		void change_UserType()
 		{
 			string val = gs.Stars;
@@ -1040,7 +1060,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles changing any dropdown selection.
+		/// Handles user changing a combobox selection.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
