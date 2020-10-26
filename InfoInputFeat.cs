@@ -10,14 +10,17 @@ namespace yata
 	{
 		#region Fields (static)
 		// col in Feat.2da ->
-//		internal const int PrereqFeat1 = 20; // "PREREQFEAT1"
-//		internal const int PrereqFeat2 = 21; // "PREREQFEAT2"
+//		internal const int PrereqFeat1     = 20; // "PREREQFEAT1"
+//		internal const int PrereqFeat2     = 21; // "PREREQFEAT2"
 
-		internal const int Category    = 25; // "CATEGORY"
+		internal const int Category        = 25; // "CATEGORY"
 
-//		internal const int SpellId     = 27; // "SPELLID"
+//		internal const int SpellId         = 27; // "SPELLID"
 
-		internal const int MasterFeat  = 32; // "MASTERFEAT"
+		internal const int MasterFeat      = 32; // "MASTERFEAT"
+
+//		internal const int ToolsCategories = 47; // "TOOLSCATEGORIES"
+//		internal const int FeatCategory    = 54; // "FeatCategory"
 		#endregion Fields (static)
 
 
