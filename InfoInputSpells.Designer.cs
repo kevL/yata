@@ -100,7 +100,7 @@ namespace yata
 			this.cb_00.Location = new System.Drawing.Point(15, 25);
 			this.cb_00.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_00.Name = "cb_00";
-			this.cb_00.Size = new System.Drawing.Size(140, 20);
+			this.cb_00.Size = new System.Drawing.Size(135, 20);
 			this.cb_00.TabIndex = 2;
 			this.cb_00.Text = "cb_00";
 			this.cb_00.UseVisualStyleBackColor = true;
@@ -112,7 +112,7 @@ namespace yata
 			this.cb_01.Location = new System.Drawing.Point(15, 45);
 			this.cb_01.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_01.Name = "cb_01";
-			this.cb_01.Size = new System.Drawing.Size(140, 20);
+			this.cb_01.Size = new System.Drawing.Size(135, 20);
 			this.cb_01.TabIndex = 3;
 			this.cb_01.Text = "cb_01";
 			this.cb_01.UseVisualStyleBackColor = true;
@@ -124,7 +124,7 @@ namespace yata
 			this.cb_02.Location = new System.Drawing.Point(15, 65);
 			this.cb_02.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_02.Name = "cb_02";
-			this.cb_02.Size = new System.Drawing.Size(140, 20);
+			this.cb_02.Size = new System.Drawing.Size(135, 20);
 			this.cb_02.TabIndex = 4;
 			this.cb_02.Text = "cb_02";
 			this.cb_02.UseVisualStyleBackColor = true;
@@ -136,7 +136,7 @@ namespace yata
 			this.cb_03.Location = new System.Drawing.Point(15, 85);
 			this.cb_03.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_03.Name = "cb_03";
-			this.cb_03.Size = new System.Drawing.Size(140, 20);
+			this.cb_03.Size = new System.Drawing.Size(135, 20);
 			this.cb_03.TabIndex = 5;
 			this.cb_03.Text = "cb_03";
 			this.cb_03.UseVisualStyleBackColor = true;
@@ -148,7 +148,7 @@ namespace yata
 			this.cb_04.Location = new System.Drawing.Point(15, 105);
 			this.cb_04.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_04.Name = "cb_04";
-			this.cb_04.Size = new System.Drawing.Size(140, 20);
+			this.cb_04.Size = new System.Drawing.Size(135, 20);
 			this.cb_04.TabIndex = 6;
 			this.cb_04.Text = "cb_04";
 			this.cb_04.UseVisualStyleBackColor = true;
@@ -160,7 +160,7 @@ namespace yata
 			this.cb_05.Location = new System.Drawing.Point(15, 125);
 			this.cb_05.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_05.Name = "cb_05";
-			this.cb_05.Size = new System.Drawing.Size(140, 20);
+			this.cb_05.Size = new System.Drawing.Size(135, 20);
 			this.cb_05.TabIndex = 7;
 			this.cb_05.Text = "cb_05";
 			this.cb_05.UseVisualStyleBackColor = true;
@@ -172,7 +172,7 @@ namespace yata
 			this.cb_06.Location = new System.Drawing.Point(15, 145);
 			this.cb_06.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_06.Name = "cb_06";
-			this.cb_06.Size = new System.Drawing.Size(140, 20);
+			this.cb_06.Size = new System.Drawing.Size(135, 20);
 			this.cb_06.TabIndex = 8;
 			this.cb_06.Text = "cb_06";
 			this.cb_06.UseVisualStyleBackColor = true;
@@ -184,7 +184,7 @@ namespace yata
 			this.cb_07.Location = new System.Drawing.Point(15, 165);
 			this.cb_07.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_07.Name = "cb_07";
-			this.cb_07.Size = new System.Drawing.Size(140, 20);
+			this.cb_07.Size = new System.Drawing.Size(135, 20);
 			this.cb_07.TabIndex = 9;
 			this.cb_07.Text = "cb_07";
 			this.cb_07.UseVisualStyleBackColor = true;
@@ -199,7 +199,7 @@ namespace yata
 			this.btn_Accept.Location = new System.Drawing.Point(5, 214);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Accept.Name = "btn_Accept";
-			this.btn_Accept.Size = new System.Drawing.Size(385, 27);
+			this.btn_Accept.Size = new System.Drawing.Size(405, 27);
 			this.btn_Accept.TabIndex = 28;
 			this.btn_Accept.Text = "accept";
 			this.btn_Accept.UseVisualStyleBackColor = true;
@@ -210,17 +210,17 @@ namespace yata
 			this.lbl_Val.Location = new System.Drawing.Point(0, 0);
 			this.lbl_Val.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Val.Name = "lbl_Val";
-			this.lbl_Val.Size = new System.Drawing.Size(394, 20);
+			this.lbl_Val.Size = new System.Drawing.Size(414, 20);
 			this.lbl_Val.TabIndex = 0;
 			this.lbl_Val.Text = "lbl_Val";
 			this.lbl_Val.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// cb_15
 			// 
-			this.cb_15.Location = new System.Drawing.Point(140, 165);
+			this.cb_15.Location = new System.Drawing.Point(155, 165);
 			this.cb_15.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_15.Name = "cb_15";
-			this.cb_15.Size = new System.Drawing.Size(120, 20);
+			this.cb_15.Size = new System.Drawing.Size(125, 20);
 			this.cb_15.TabIndex = 17;
 			this.cb_15.Text = "cb_15";
 			this.cb_15.UseVisualStyleBackColor = true;
@@ -229,10 +229,10 @@ namespace yata
 			// 
 			// cb_14
 			// 
-			this.cb_14.Location = new System.Drawing.Point(140, 145);
+			this.cb_14.Location = new System.Drawing.Point(155, 145);
 			this.cb_14.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_14.Name = "cb_14";
-			this.cb_14.Size = new System.Drawing.Size(120, 20);
+			this.cb_14.Size = new System.Drawing.Size(125, 20);
 			this.cb_14.TabIndex = 16;
 			this.cb_14.Text = "cb_14";
 			this.cb_14.UseVisualStyleBackColor = true;
@@ -241,10 +241,10 @@ namespace yata
 			// 
 			// cb_13
 			// 
-			this.cb_13.Location = new System.Drawing.Point(140, 125);
+			this.cb_13.Location = new System.Drawing.Point(155, 125);
 			this.cb_13.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_13.Name = "cb_13";
-			this.cb_13.Size = new System.Drawing.Size(120, 20);
+			this.cb_13.Size = new System.Drawing.Size(125, 20);
 			this.cb_13.TabIndex = 15;
 			this.cb_13.Text = "cb_13";
 			this.cb_13.UseVisualStyleBackColor = true;
@@ -253,10 +253,10 @@ namespace yata
 			// 
 			// cb_12
 			// 
-			this.cb_12.Location = new System.Drawing.Point(140, 105);
+			this.cb_12.Location = new System.Drawing.Point(155, 105);
 			this.cb_12.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_12.Name = "cb_12";
-			this.cb_12.Size = new System.Drawing.Size(120, 20);
+			this.cb_12.Size = new System.Drawing.Size(125, 20);
 			this.cb_12.TabIndex = 14;
 			this.cb_12.Text = "cb_12";
 			this.cb_12.UseVisualStyleBackColor = true;
@@ -265,10 +265,10 @@ namespace yata
 			// 
 			// cb_11
 			// 
-			this.cb_11.Location = new System.Drawing.Point(140, 85);
+			this.cb_11.Location = new System.Drawing.Point(155, 85);
 			this.cb_11.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_11.Name = "cb_11";
-			this.cb_11.Size = new System.Drawing.Size(120, 20);
+			this.cb_11.Size = new System.Drawing.Size(125, 20);
 			this.cb_11.TabIndex = 13;
 			this.cb_11.Text = "cb_11";
 			this.cb_11.UseVisualStyleBackColor = true;
@@ -277,10 +277,10 @@ namespace yata
 			// 
 			// cb_10
 			// 
-			this.cb_10.Location = new System.Drawing.Point(140, 65);
+			this.cb_10.Location = new System.Drawing.Point(155, 65);
 			this.cb_10.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_10.Name = "cb_10";
-			this.cb_10.Size = new System.Drawing.Size(120, 20);
+			this.cb_10.Size = new System.Drawing.Size(125, 20);
 			this.cb_10.TabIndex = 12;
 			this.cb_10.Text = "cb_10";
 			this.cb_10.UseVisualStyleBackColor = true;
@@ -289,10 +289,10 @@ namespace yata
 			// 
 			// cb_09
 			// 
-			this.cb_09.Location = new System.Drawing.Point(140, 45);
+			this.cb_09.Location = new System.Drawing.Point(155, 45);
 			this.cb_09.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_09.Name = "cb_09";
-			this.cb_09.Size = new System.Drawing.Size(120, 20);
+			this.cb_09.Size = new System.Drawing.Size(125, 20);
 			this.cb_09.TabIndex = 11;
 			this.cb_09.Text = "cb_09";
 			this.cb_09.UseVisualStyleBackColor = true;
@@ -301,10 +301,10 @@ namespace yata
 			// 
 			// cb_08
 			// 
-			this.cb_08.Location = new System.Drawing.Point(140, 25);
+			this.cb_08.Location = new System.Drawing.Point(155, 25);
 			this.cb_08.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_08.Name = "cb_08";
-			this.cb_08.Size = new System.Drawing.Size(120, 20);
+			this.cb_08.Size = new System.Drawing.Size(125, 20);
 			this.cb_08.TabIndex = 10;
 			this.cb_08.Text = "cb_08";
 			this.cb_08.UseVisualStyleBackColor = true;
@@ -313,10 +313,10 @@ namespace yata
 			// 
 			// cb_23
 			// 
-			this.cb_23.Location = new System.Drawing.Point(265, 165);
+			this.cb_23.Location = new System.Drawing.Point(285, 165);
 			this.cb_23.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_23.Name = "cb_23";
-			this.cb_23.Size = new System.Drawing.Size(120, 20);
+			this.cb_23.Size = new System.Drawing.Size(125, 20);
 			this.cb_23.TabIndex = 25;
 			this.cb_23.Text = "cb_23";
 			this.cb_23.UseVisualStyleBackColor = true;
@@ -325,10 +325,10 @@ namespace yata
 			// 
 			// cb_22
 			// 
-			this.cb_22.Location = new System.Drawing.Point(265, 145);
+			this.cb_22.Location = new System.Drawing.Point(285, 145);
 			this.cb_22.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_22.Name = "cb_22";
-			this.cb_22.Size = new System.Drawing.Size(120, 20);
+			this.cb_22.Size = new System.Drawing.Size(125, 20);
 			this.cb_22.TabIndex = 24;
 			this.cb_22.Text = "cb_22";
 			this.cb_22.UseVisualStyleBackColor = true;
@@ -337,10 +337,10 @@ namespace yata
 			// 
 			// cb_21
 			// 
-			this.cb_21.Location = new System.Drawing.Point(265, 125);
+			this.cb_21.Location = new System.Drawing.Point(285, 125);
 			this.cb_21.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_21.Name = "cb_21";
-			this.cb_21.Size = new System.Drawing.Size(120, 20);
+			this.cb_21.Size = new System.Drawing.Size(125, 20);
 			this.cb_21.TabIndex = 23;
 			this.cb_21.Text = "cb_21";
 			this.cb_21.UseVisualStyleBackColor = true;
@@ -349,10 +349,10 @@ namespace yata
 			// 
 			// cb_20
 			// 
-			this.cb_20.Location = new System.Drawing.Point(265, 105);
+			this.cb_20.Location = new System.Drawing.Point(285, 105);
 			this.cb_20.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_20.Name = "cb_20";
-			this.cb_20.Size = new System.Drawing.Size(120, 20);
+			this.cb_20.Size = new System.Drawing.Size(125, 20);
 			this.cb_20.TabIndex = 22;
 			this.cb_20.Text = "cb_20";
 			this.cb_20.UseVisualStyleBackColor = true;
@@ -361,10 +361,10 @@ namespace yata
 			// 
 			// cb_19
 			// 
-			this.cb_19.Location = new System.Drawing.Point(265, 85);
+			this.cb_19.Location = new System.Drawing.Point(285, 85);
 			this.cb_19.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_19.Name = "cb_19";
-			this.cb_19.Size = new System.Drawing.Size(120, 20);
+			this.cb_19.Size = new System.Drawing.Size(125, 20);
 			this.cb_19.TabIndex = 21;
 			this.cb_19.Text = "cb_19";
 			this.cb_19.UseVisualStyleBackColor = true;
@@ -373,10 +373,10 @@ namespace yata
 			// 
 			// cb_18
 			// 
-			this.cb_18.Location = new System.Drawing.Point(265, 65);
+			this.cb_18.Location = new System.Drawing.Point(285, 65);
 			this.cb_18.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_18.Name = "cb_18";
-			this.cb_18.Size = new System.Drawing.Size(120, 20);
+			this.cb_18.Size = new System.Drawing.Size(125, 20);
 			this.cb_18.TabIndex = 20;
 			this.cb_18.Text = "cb_18";
 			this.cb_18.UseVisualStyleBackColor = true;
@@ -385,10 +385,10 @@ namespace yata
 			// 
 			// cb_17
 			// 
-			this.cb_17.Location = new System.Drawing.Point(265, 45);
+			this.cb_17.Location = new System.Drawing.Point(285, 45);
 			this.cb_17.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_17.Name = "cb_17";
-			this.cb_17.Size = new System.Drawing.Size(120, 20);
+			this.cb_17.Size = new System.Drawing.Size(125, 20);
 			this.cb_17.TabIndex = 19;
 			this.cb_17.Text = "cb_17";
 			this.cb_17.UseVisualStyleBackColor = true;
@@ -397,10 +397,10 @@ namespace yata
 			// 
 			// cb_16
 			// 
-			this.cb_16.Location = new System.Drawing.Point(265, 25);
+			this.cb_16.Location = new System.Drawing.Point(285, 25);
 			this.cb_16.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_16.Name = "cb_16";
-			this.cb_16.Size = new System.Drawing.Size(120, 20);
+			this.cb_16.Size = new System.Drawing.Size(125, 20);
 			this.cb_16.TabIndex = 18;
 			this.cb_16.Text = "cb_16";
 			this.cb_16.UseVisualStyleBackColor = true;
@@ -416,7 +416,7 @@ namespace yata
 			this.cbx_Val.Margin = new System.Windows.Forms.Padding(0);
 			this.cbx_Val.MaxDropDownItems = 30;
 			this.cbx_Val.Name = "cbx_Val";
-			this.cbx_Val.Size = new System.Drawing.Size(394, 21);
+			this.cbx_Val.Size = new System.Drawing.Size(414, 21);
 			this.cbx_Val.TabIndex = 1;
 			this.cbx_Val.Visible = false;
 			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_Combobox);
@@ -430,38 +430,38 @@ namespace yata
 			this.gb_MetaGroups.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_MetaGroups.Name = "gb_MetaGroups";
 			this.gb_MetaGroups.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_MetaGroups.Size = new System.Drawing.Size(315, 32);
+			this.gb_MetaGroups.Size = new System.Drawing.Size(335, 32);
 			this.gb_MetaGroups.TabIndex = 27;
 			this.gb_MetaGroups.TabStop = false;
 			this.gb_MetaGroups.Visible = false;
 			// 
-			// cb_MetaAllS
+			// cb_MetaAllShapes
 			// 
-			this.cb_MetaAllShapes.Location = new System.Drawing.Point(230, 10);
+			this.cb_MetaAllShapes.Location = new System.Drawing.Point(250, 10);
 			this.cb_MetaAllShapes.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllShapes.Name = "cb_MetaAllS";
+			this.cb_MetaAllShapes.Name = "cb_MetaAllShapes";
 			this.cb_MetaAllShapes.Size = new System.Drawing.Size(80, 20);
 			this.cb_MetaAllShapes.TabIndex = 2;
 			this.cb_MetaAllShapes.Text = "all Shapes";
 			this.cb_MetaAllShapes.UseVisualStyleBackColor = true;
 			this.cb_MetaAllShapes.CheckedChanged += new System.EventHandler(this.changed_MetamagicGroup);
 			// 
-			// cb_MetaAllE
+			// cb_MetaAllEssences
 			// 
-			this.cb_MetaAllEssences.Location = new System.Drawing.Point(145, 10);
+			this.cb_MetaAllEssences.Location = new System.Drawing.Point(155, 10);
 			this.cb_MetaAllEssences.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllEssences.Name = "cb_MetaAllE";
+			this.cb_MetaAllEssences.Name = "cb_MetaAllEssences";
 			this.cb_MetaAllEssences.Size = new System.Drawing.Size(85, 20);
 			this.cb_MetaAllEssences.TabIndex = 1;
 			this.cb_MetaAllEssences.Text = "all Essences";
 			this.cb_MetaAllEssences.UseVisualStyleBackColor = true;
 			this.cb_MetaAllEssences.CheckedChanged += new System.EventHandler(this.changed_MetamagicGroup);
 			// 
-			// cb_MetaAllES
+			// cb_MetaAllShapesEssences
 			// 
 			this.cb_MetaAllShapesEssences.Location = new System.Drawing.Point(10, 10);
 			this.cb_MetaAllShapesEssences.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_MetaAllShapesEssences.Name = "cb_MetaAllES";
+			this.cb_MetaAllShapesEssences.Name = "cb_MetaAllShapesEssences";
 			this.cb_MetaAllShapesEssences.Size = new System.Drawing.Size(135, 20);
 			this.cb_MetaAllShapesEssences.TabIndex = 0;
 			this.cb_MetaAllShapesEssences.Text = "all Essences + Shapes";
@@ -482,7 +482,7 @@ namespace yata
 			// InfoInputSpells
 			// 
 			this.AcceptButton = this.btn_Accept;
-			this.ClientSize = new System.Drawing.Size(394, 243);
+			this.ClientSize = new System.Drawing.Size(414, 243);
 			this.Controls.Add(this.btn_Clear);
 			this.Controls.Add(this.cb_23);
 			this.Controls.Add(this.cb_22);

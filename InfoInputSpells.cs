@@ -101,8 +101,7 @@ namespace yata
 				switch (_cell.x)
 				{
 					case School: // string-val,checkbox,unique // TODO: change 'School' to string-val,dropdown,unique
-						initstring(val);
-
+						_f.str0 = _f.str1 = val;
 						vis_Schools();
 
 						switch (val)
@@ -120,11 +119,11 @@ namespace yata
 
 							default: _f.str1 = gs.Stars; break;
 						}
+						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
 
 					case Range: // string-val,checkbox,unique // TODO: change 'Range' to string-val,dropdown,unique
-						initstring(val);
-
+						_f.str0 = _f.str1 = val;
 						vis_Ranges();
 
 						switch (val)
@@ -140,6 +139,7 @@ namespace yata
 
 							default: _f.str1 = gs.Stars; break;
 						}
+						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
 
 					case MetaMagic: // int-val(hex),checkbox,multiple
@@ -191,11 +191,15 @@ namespace yata
 							// The initialization routine will then check disabled checkboxes,
 							// which should never happen ...
 							//
-							// It's not a major concern but it's definitely awkward
+							// It's not a major concern but it's definitely awkward. The
+							// problem is I'd have to ask the user which set he/she wants
+							// to keep: standard or invocation ... and I don't want to
+							// set that up.
 
-							if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0)
+							if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0) // invalid - bits outside allowed range
 							{
 								_f.int0 = result;
+								// crop 'result' so 'int1' differs from 'int0' ->
 								printHexString(_f.int1 = (result &= (YataForm.META_STANDARD | YataForm.META_I_ALL)));
 							}
 							else
@@ -257,8 +261,7 @@ namespace yata
 						// are generally accepted values but they do not correspond exactly
 						// to the IMMUNITY_TYPE_* constants in NwScript.nss.
 
-						initstring(val);
-
+						_f.str0 = _f.str1 = val;
 						list_ImmunityTypes();
 
 						switch (val)
@@ -286,6 +289,7 @@ namespace yata
 
 							default: _f.str1 = gs.Stars; goto case gs.Stars;
 						}
+						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
 
 					case Category: // int-val,dropdown,unique
@@ -295,8 +299,7 @@ namespace yata
 						break;
 
 					case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
-						initstring(val);
-
+						_f.str0 = _f.str1 = val;
 						vis_UserTypes();
 
 						switch (val)
@@ -310,6 +313,7 @@ namespace yata
 
 							default: _f.str1 = gs.Stars; break;
 						}
+						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
 
 					case AsMetaMagic: // int-val(hex),dropdown,unique
@@ -372,20 +376,6 @@ namespace yata
 			_init = false;
 		}
 
-
-		/// <summary>
-		/// Initializes the string-return variables, the Clear button, and text
-		/// (if the dialog is in checkbox-configuration).
-		/// </summary>
-		/// <param name="val"></param>
-		void initstring(string val)
-		{
-			if (lbl_Val.Visible)
-				lbl_Val.Text = val;
-
-			_f.str0 = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
-		}
 
 		void vis_Schools()
 		{
