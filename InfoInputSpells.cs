@@ -25,19 +25,17 @@ namespace yata
 	/// If a value is passed in from YataForm that this dialog does not
 	/// recognize as valid (ie. the value is not listed as any of the choices
 	/// that user can select) then default values shall be assigned to the '0'
-	/// and '1' variables. Since strings are always valid to return to YataForm,
-	/// the two variables are initialized with the passed in value; the user
-	/// needs to choose a different string-value to return or else YataForm
-	/// won't bother with it.
+	/// and '1' variables. 'str0' and 'str1' are initialized with the passed in
+	/// value unless the passed in value is considered invalid, for which 'str1'
+	/// will be initialzed to "****"; if not, the user needs to choose a
+	/// different string-value to return or else YataForm won't bother with it.
 	/// 
-	/// Integer returns, however, are tricker. Very tricky ...
+	/// Integer returns, however, are trickier. Very tricky ...
 	/// 
 	/// The value displayed at the top of a checkbox-configuration shall be the
 	/// value that will be returned to YataForm iff user clicks the Accept
 	/// button. A combobox-configuration displays the value that will be
 	/// returned (iff user clicks the Accept button) in the combobox itself.
-
-
 	/// </summary>
 	sealed partial class InfoInputSpells
 		:
