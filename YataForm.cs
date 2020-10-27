@@ -4139,14 +4139,13 @@ namespace yata
 									bool alt = ((result & TalkReader.bitCusto) != 0);
 									result &= TalkReader.strref;
 
-									if (!alt && TalkReader.DictDialo.ContainsKey(result))
+									if (!alt)
 									{
-										text = TalkReader.DictDialo[result];
+										if (TalkReader.DictDialo.ContainsKey(result))
+											text = TalkReader.DictDialo[result];
 									}
-									else if (alt && TalkReader.DictCusto.ContainsKey(result))
-									{
+									else if (TalkReader.DictCusto.ContainsKey(result))
 										text = TalkReader.DictCusto[result];
-									}
 								}
 							}
 
