@@ -10,6 +10,7 @@
 		internal const string Space           = " ";
 
 		internal const string non             = "n/a";
+		internal const string bork            = "bork";
 
 		internal const string Acid            = "Acid";
 		internal const string Cold            = "Cold";

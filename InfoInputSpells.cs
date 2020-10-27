@@ -396,12 +396,12 @@ namespace yata
 		{
 			Text = " Range";
 
-			cb_00.Text = "Personal" + (( 0 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 0] + "m") : String.Empty);
-			cb_01.Text = "Touch"    + (( 1 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 1] + "m") : String.Empty);
-			cb_02.Text = "Short"    + (( 2 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 2] + "m") : String.Empty);
-			cb_03.Text = "Medium"   + (( 3 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 3] + "m") : String.Empty);
-			cb_04.Text = "Long"     + (( 4 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[ 4] + "m") : String.Empty);
-			cb_05.Text = "Infinite" + ((14 < Info.rangeRanges.Count) ? (" " + Info.rangeRanges[14] + "m") : String.Empty);
+			cb_00.Text = "Personal" + (( 0 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 0] + "m") : String.Empty);
+			cb_01.Text = "Touch"    + (( 1 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 1] + "m") : String.Empty);
+			cb_02.Text = "Short"    + (( 2 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 2] + "m") : String.Empty);
+			cb_03.Text = "Medium"   + (( 3 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 3] + "m") : String.Empty);
+			cb_04.Text = "Long"     + (( 4 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 4] + "m") : String.Empty);
+			cb_05.Text = "Infinite" + ((14 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[14] + "m") : String.Empty);
 
 			cb_00.Visible = cb_01.Visible = cb_02.Visible = cb_03.Visible =
 			cb_04.Visible = cb_05.Visible = true;

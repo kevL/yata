@@ -1429,7 +1429,7 @@ namespace yata
 									string line = String.Empty;
 									foreach (string field in _table.Fields)		// col-fields ->
 									{
-										line += " " + field;
+										line += gs.Space + field;
 									}
 									sw.WriteLine(line);
 
@@ -1445,7 +1445,7 @@ namespace yata
 										for (int c = 0; c != cols; ++c)
 										{
 											if (c != 0)
-												line += " ";
+												line += gs.Space;
 
 											if (!String.IsNullOrEmpty(val = _table[r,c].text))
 												line += val;
@@ -2849,7 +2849,7 @@ namespace yata
 			{
 				for (int j = 0; j != _copy[i].Length; ++j)
 				{
-					if (j != 0) clip += " ";
+					if (j != 0) clip += gs.Space;
 					clip += _copy[i][j];
 				}
 

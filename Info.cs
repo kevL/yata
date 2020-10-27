@@ -349,7 +349,7 @@ namespace yata
 				case 78: return "Bracer";
 				case 80: return "Cloak";
 			}
-			return "bork";
+			return gs.bork;
 		}
 
 		/// <summary>
@@ -390,7 +390,7 @@ namespace yata
 						case 4: info += "wis"; break;
 						case 5: info += "cha"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 13)
@@ -398,7 +398,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property AC bonus. You need to specify the bonus.
@@ -412,7 +412,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property AC bonus vs. alignment group. An example of
@@ -439,7 +439,7 @@ namespace yata
 						case 4: info += "vs good";    break;
 						case 5: info += "vs evil";    break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -447,7 +447,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property AC bonus vs. Damage type (ie. piercing). You
@@ -479,7 +479,7 @@ namespace yata
 						case 1: info += "vs pierc"; break;
 						case 2: info += "vs slash"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -487,7 +487,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property AC bonus vs. Racial group. You need to specify
@@ -509,14 +509,14 @@ namespace yata
 							info += "vs " + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
 					{
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property AC bonus vs. Specific alignment. You need to
@@ -548,7 +548,7 @@ namespace yata
 						case 7: info += "vs CN"; break;
 						case 8: info += "vs CE"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -556,7 +556,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property Enhancement bonus. You need to specify the
@@ -570,7 +570,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property Enhancement bonus vs. an Alignment group. You
@@ -596,7 +596,7 @@ namespace yata
 						case 4: info += "vs good";    break;
 						case 5: info += "vs evil";    break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -604,7 +604,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property Enhancement bonus vs. Racial group. You need
@@ -626,14 +626,14 @@ namespace yata
 							info += "vs " + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
 					{
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property Enhancement bonus vs. a specific alignment. You
@@ -665,7 +665,7 @@ namespace yata
 						case 7: info += "vs CN"; break;
 						case 8: info += "vs CE"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -673,7 +673,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property Enhancment penalty. You need to specify the
@@ -687,7 +687,7 @@ namespace yata
 						info += "-" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property weight reduction. You need to specify the weight
@@ -716,7 +716,7 @@ namespace yata
 						case 8: info +=  "1%"; break;
 						case 9: info += "70%"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -737,7 +737,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property Bonus level spell (Bonus spell of level). You must
@@ -759,14 +759,14 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > -1 && par < 10)
 					{
 						info += " L" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 //						case 14: // no case 14 in nwscript: "Boomerang" in ItemPropDef.2da
@@ -800,7 +800,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					switch (GetPar(pars, 1))
 					{
@@ -831,7 +831,7 @@ namespace yata
 						case 12: info += " / 5 per day";  break;
 						case 13: info += " / infinite";   break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -872,7 +872,7 @@ namespace yata
 						case 12: info += "positive^";  break;
 						case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -940,7 +940,7 @@ namespace yata
 						case 60: info += " +3d6";  break;
 						case 61: info += " +6d6";  break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -968,7 +968,7 @@ namespace yata
 						case 4: info += "vs good";    break;
 						case 5: info += "vs evil";    break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1000,7 +1000,7 @@ namespace yata
 						case 12: info += " positive^";  break;
 						case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 
 					switch (GetPar(pars, 2))
@@ -1068,7 +1068,7 @@ namespace yata
 						case 60: info += " +3d6";  break;
 						case 61: info += " +6d6";  break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1092,7 +1092,7 @@ namespace yata
 							info += "vs " + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					switch (GetPar(pars, 1))
 					{
@@ -1123,7 +1123,7 @@ namespace yata
 						case 12: info += " positive^";  break;
 						case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 
 					switch (GetPar(pars, 2))
@@ -1191,7 +1191,7 @@ namespace yata
 						case 60: info += " +3d6";  break;
 						case 61: info += " +6d6";  break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1225,7 +1225,7 @@ namespace yata
 						case 7: info += "vs CN"; break;
 						case 8: info += "vs CE"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1257,7 +1257,7 @@ namespace yata
 						case 12: info += " positive^";  break;
 						case 13: info += " sonic";      break; // TODO: Test other damage-types.
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 
 					switch (GetPar(pars, 2))
@@ -1325,7 +1325,7 @@ namespace yata
 						case 60: info += " +3d6";  break;
 						case 61: info += " +6d6";  break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1367,7 +1367,7 @@ namespace yata
 						case 12: info += "positive^";  break;
 						case 13: info += "sonic";      break; // TODO: Test other damage-types.
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1387,7 +1387,7 @@ namespace yata
 						case 6: info +=  " 90%"; break;
 						case 7: info += " 100%"; break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1401,7 +1401,7 @@ namespace yata
 						info += "-" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 //						case 22: // ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED "DamageReduced" in ItemPropDef.2da / Iprp_Protection.2da
@@ -1444,7 +1444,7 @@ namespace yata
 						case 12: info += "positive";   break;
 						case 13: info += "sonic";      break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1470,7 +1470,7 @@ namespace yata
 						case  9: info += " 45"; break;
 						case 10: info += " 50"; break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1512,7 +1512,7 @@ namespace yata
 						case 12: info += "positive";   break;
 						case 13: info += "sonic";      break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1532,7 +1532,7 @@ namespace yata
 						case 6: info +=  " 90%"; break;
 						case 7: info += " 100%"; break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1566,7 +1566,7 @@ namespace yata
 						case 4: info += "wis"; break;
 						case 5: info += "cha"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 11)
@@ -1574,7 +1574,7 @@ namespace yata
 						info += " -" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property decrease Armor Class. You must specify the armor
@@ -1597,7 +1597,7 @@ namespace yata
 						case 3: info += "shield";     break;
 						case 4: info += "deflection"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 6)
@@ -1605,7 +1605,7 @@ namespace yata
 						info += " -" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property decrease skill. You must specify the constant for the
@@ -1626,14 +1626,14 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 11)
 					{
 						info += " -" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 //						case 30: // no case 30 in nwscript: "DoubleStack" in ItemPropDef.2da
@@ -1658,7 +1658,7 @@ namespace yata
 						case 4: info +=  "80%"; break;
 						case 5: info += "100%"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -1691,7 +1691,7 @@ namespace yata
 						case 1: info += "pierc"; break;
 						case 2: info += "slash"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -1724,7 +1724,7 @@ namespace yata
 						case 1: info += "pierc"; break;
 						case 2: info += "slash"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -1769,7 +1769,7 @@ namespace yata
 						case 8: info += "vs criticals";          break;
 						case 9: info += "vs deathmagic";         break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -1812,7 +1812,7 @@ namespace yata
 						case 10: info += "30"; break;
 						case 11: info += "32"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -1835,7 +1835,7 @@ namespace yata
 						case 2: info += "will"; break;
 						case 3: info += "refl"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -1843,7 +1843,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property saving throw bonus vs. a specific effect or damage type.
@@ -1885,7 +1885,7 @@ namespace yata
 						case 14: info += "positive";      break;
 						case 15: info += "sonic";         break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -1893,7 +1893,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 //						case 42: // no case 42 in nwscript
@@ -1922,7 +1922,7 @@ namespace yata
 						case 3: info += "normal"; break;
 						case 4: info += "bright"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -1942,7 +1942,7 @@ namespace yata
 						case 5: info += " orange"; break;
 						case 6: info += " white";  break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -1957,7 +1957,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 //						case 46: // ITEM_PROPERTY_MIND_BLANK - no function in nwscript
@@ -2067,7 +2067,7 @@ namespace yata
 						case 24: info += "vorpal";             break;
 						case 25: info += "wounding";           break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -2101,7 +2101,7 @@ namespace yata
 						case 12: info += " dc38"; break;
 						case 13: info += " dc40"; break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 
 					switch (par)
@@ -2200,7 +2200,7 @@ namespace yata
 								case 38: info += " 100%/4 rnd"; break;
 								case 39: info += " 100%/5 rnd"; break;
 
-								default: info += " bork"; break;
+								default: info += gs.Space + gs.bork; break;
 							}
 							break;
 
@@ -2220,7 +2220,7 @@ namespace yata
 								case 4: info += " wis"; break;
 								case 5: info += " cha"; break;
 
-								default: info += " bork"; break;
+								default: info += gs.Space + gs.bork; break;
 							}
 							break;
 
@@ -2240,7 +2240,7 @@ namespace yata
 								case 4: info += " -d2 wis"; break;
 								case 5: info += " -d2 cha"; break;
 
-								default: info += " bork"; break;
+								default: info += gs.Space + gs.bork; break;
 							}
 							break;
 
@@ -2267,13 +2267,13 @@ namespace yata
 								if (diseaseLabels.Count != 0
 									&& par < diseaseLabels.Count)
 								{
-									info += " " + diseaseLabels[par];
+									info += gs.Space + diseaseLabels[par];
 								}
 								else
-									info += " " + par;
+									info += gs.Space + par;
 							}
 							else
-								info += " bork";
+								info += gs.Space + gs.bork;
 							break;
 
 						case 21: // slayrace
@@ -2288,7 +2288,7 @@ namespace yata
 									info += " vs " + par;
 							}
 							else
-								info += " bork";
+								info += gs.Space + gs.bork;
 							break;
 
 						case 22: // slayalignmentgroup
@@ -2307,7 +2307,7 @@ namespace yata
 								case 4: info += " vs good";    break;
 								case 5: info += " vs evil";    break;
 
-								default: info += " bork"; break;
+								default: info += gs.Space + gs.bork; break;
 							}
 							break;
 
@@ -2333,7 +2333,7 @@ namespace yata
 								case 7: info += " vs CN"; break;
 								case 8: info += " vs CE"; break;
 
-								default: info += " bork"; break;
+								default: info += gs.Space + gs.bork; break;
 							}
 							break;
 					}
@@ -2358,7 +2358,7 @@ namespace yata
 						case 2: info += "will"; break;
 						case 3: info += "refl"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -2366,7 +2366,7 @@ namespace yata
 						info += " -" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property reduced saving throw vs. an effect or damage type. You must
@@ -2408,7 +2408,7 @@ namespace yata
 						case 14: info += "positive";      break;
 						case 15: info += "sonic";         break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -2416,7 +2416,7 @@ namespace yata
 						info += " -" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property regeneration. You must specify the regeneration amount.
@@ -2429,7 +2429,7 @@ namespace yata
 						info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property skill bonus. You must specify the skill to which the user
@@ -2450,14 +2450,14 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 51)
 					{
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property spell immunity vs. specific spell. You must specify the
@@ -2477,7 +2477,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property spell immunity vs. spell school. You must specify the
@@ -2505,7 +2505,7 @@ namespace yata
 						case 6: info += "necromancy";    break;
 						case 7: info += "transmutation"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -2519,7 +2519,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property Attack bonus. You must specify an attack bonus. The bonus
@@ -2532,7 +2532,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property Attack bonus vs. alignment group. You must specify the
@@ -2557,7 +2557,7 @@ namespace yata
 						case 4: info += "vs good";    break;
 						case 5: info += "vs evil";    break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -2565,7 +2565,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property attack bonus vs. racial group. You must specify the
@@ -2586,14 +2586,14 @@ namespace yata
 							info += "vs " + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
 					{
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property attack bonus vs. a specific alignment. You must specify
@@ -2624,7 +2624,7 @@ namespace yata
 						case 7: info += "vs CN"; break;
 						case 8: info += "vs CE"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					if ((par = GetPar(pars, 1)) > 0 && par < 21)
@@ -2632,7 +2632,7 @@ namespace yata
 						info += " +" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Returns Item property attack penalty. You must specify the attack penalty.
@@ -2645,7 +2645,7 @@ namespace yata
 						info += "-" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property unlimited ammo. If you leave the parameter field blank
@@ -2668,7 +2668,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property limit use by alignment group. You must specify the
@@ -2692,7 +2692,7 @@ namespace yata
 						case 4: info += "vs good";    break;
 						case 5: info += "vs evil";    break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -2713,7 +2713,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property limit use by race. You must specify the race(s) who are
@@ -2733,7 +2733,7 @@ namespace yata
 							info += par.ToString();
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property limit use by specific alignment. You must specify the
@@ -2763,7 +2763,7 @@ namespace yata
 						case 7: info += "vs CN"; break;
 						case 8: info += "vs CE"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -2786,7 +2786,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 //						case 68: // no case 68 in nwscript: "Vorpal" in ItemPropDef.2da
@@ -2811,7 +2811,7 @@ namespace yata
 						case 4: info += "epic";    break; // NOTE: no IP_CONST_TRAPSTRENGTH_* defined in nwscript.
 //								case 5: fatal
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 
 					switch (GetPar(pars, 1))
@@ -2839,7 +2839,7 @@ namespace yata
 						case 10: info += " sonic";      break;
 						case 11: info += " negative";   break;
 
-						default: info += " bork"; break;
+						default: info += gs.Space + gs.bork; break;
 					}
 					break;
 
@@ -2885,7 +2885,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property Massive Critical. You must specify the extra damage
@@ -2958,7 +2958,7 @@ namespace yata
 						case 60: info += "+3d6";  break;
 						case 61: info += "+6d6";  break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -2994,7 +2994,7 @@ namespace yata
 						info += "L" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property special walk. If no parameters are specified it will
@@ -3009,7 +3009,7 @@ namespace yata
 						case 0:
 						case 1: info += "zombie"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -3023,7 +3023,7 @@ namespace yata
 						info += "+" + par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 					break;
 
 				// Returns Item property weight increase. You must specify the weight increase
@@ -3046,7 +3046,7 @@ namespace yata
 						case 4: info +=  "+50 lb"; break;
 						case 5: info += "+100 lb"; break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 
@@ -3068,14 +3068,14 @@ namespace yata
 							info += par;
 					}
 					else
-						info += "bork";
+						info += gs.bork;
 
 					if ((par = GetPar(pars, 1)) > 0)
 					{
 						info += " L" + par;
 					}
 					else
-						info += " bork";
+						info += gs.Space + gs.bork;
 					break;
 
 				// Creates a visual effect (ITEM_VISUAL_*) that may be applied to
@@ -3101,7 +3101,7 @@ namespace yata
 						case 5: info += "holy";       break;
 						case 6: info += "evil";       break;
 
-						default: info += "bork"; break;
+						default: info += gs.bork; break;
 					}
 					break;
 

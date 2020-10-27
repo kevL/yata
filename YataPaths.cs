@@ -17,7 +17,7 @@ namespace yata
 		/// <returns></returns>
 		string getCraftInfo(int id, int col)
 		{
-			string info = "n/a";
+			string info = gs.non;
 
 			string val;
 			int result;
@@ -55,12 +55,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					} */
 					break;
 
@@ -140,7 +140,7 @@ namespace yata
 											if (ipEncoded.Length > pos + 1)
 												info += Info.GetEncodedParsDescription(ipEncoded, result, pos);
 											else
-												info += " bork";
+												info += gs.Space + gs.bork;
 
 											if (ip != ips.Length - 1)
 												info += ", ";
@@ -590,7 +590,7 @@ namespace yata
 		/// <returns></returns>
 		string getSpellInfo(int id, int col)
 		{
-			string info = "n/a";
+			string info = gs.non;
 
 			string val;
 			int result;
@@ -614,7 +614,7 @@ namespace yata
 							case "V": info += "Evocation";     break;
 
 							default:
-								info += "bork";
+								info += gs.bork;
 								break;
 						}
 					}
@@ -636,13 +636,13 @@ namespace yata
 							case "I": info += "Infinite"; r = 14; break;
 
 							default:
-								info += "bork";
+								info += gs.bork;
 								break;
 						}
 
 						if (r != -1 && r < Info.rangeRanges.Count && it_PathRanges2da.Checked)
 						{
-							info += " " + Info.rangeRanges[r] + "m";
+							info += gs.Space + Info.rangeRanges[r] + "m";
 						}
 					}
 					break;
@@ -689,43 +689,43 @@ namespace yata
 									}
 									if ((result & META_EXTEND) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(2)Extend";
 										space = true;
 									}
 									if ((result & META_MAXIMIZE) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(4)Maximize";
 										space = true;
 									}
 									if ((result & META_QUICKEN) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(8)Quicken";
 										space = true;
 									}
 									if ((result & META_SILENT) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(16)Silent";
 										space = true;
 									}
 									if ((result & META_STILL) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(32)Still";
 										space = true;
 									}
 									if ((result & META_PERSISTENT) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(64)Persistent";
 										space = true;
 									}
 									if ((result & META_PERMANENT) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(128)Permanent";
 										space = true;
 									}
@@ -832,7 +832,7 @@ namespace yata
 						else if (val == gs.Stars)
 							info += "none";
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -863,37 +863,37 @@ namespace yata
 									}
 									if ((result & TARGET_CREATURE) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(2)Creatures";
 										space = true;
 									}
 									if ((result & TARGET_GROUND) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(4)Ground";
 										space = true;
 									}
 									if ((result & TARGET_ITEMS) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(8)Items";
 										space = true;
 									}
 									if ((result & TARGET_DOORS) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(16)Doors";
 										space = true;
 									}
 									if ((result & TARGET_PLACEABLES) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(32)Placeables";
 										space = true;
 									}
 									if ((result & TARGET_TRIGGERS) != 0)
 									{
-										if (space) info += " ";
+										if (space) info += gs.Space;
 										info += "(64)Triggers";
 									}
 									break;
@@ -903,7 +903,7 @@ namespace yata
 						else if (val == gs.Stars)
 							info += "none";
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -930,12 +930,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -955,7 +955,7 @@ namespace yata
 								info += val;
 						}
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -974,12 +974,12 @@ namespace yata
 								case 4: info += "Item Power";      break;
 
 								default:
-									info += "bork";
+									info += gs.bork;
 									break;
 							}
 						}
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -998,7 +998,7 @@ namespace yata
 									switch (result)
 									{
 										case 0:				// NOTE: Although #0 Barbarian is valid it's used for n/a here.
-											info += "n/a";	// The 2da-field ought be "****" instead ofc.
+											info += gs.non;	// The 2da-field ought be "****" instead ofc.
 											break;
 
 										default:
@@ -1010,12 +1010,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1056,12 +1056,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1096,14 +1096,14 @@ namespace yata
 								case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
 
 								default:
-									info += "bork";
+									info += gs.bork;
 									break;
 							}
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1147,12 +1147,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
 							info += "point"; // id #0 (shouldn't do that though)
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 			}
@@ -1331,7 +1331,7 @@ namespace yata
 		/// <returns></returns>
 		string getFeatInfo(int id, int col)
 		{
-			string info = "n/a";
+			string info = gs.non;
 
 			string val;
 			int result;
@@ -1357,12 +1357,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1382,7 +1382,7 @@ namespace yata
 								info += val;
 						}
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1404,12 +1404,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars)
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 
@@ -1431,12 +1431,12 @@ namespace yata
 									info += val;
 							}
 							else
-								info += "bork";
+								info += gs.bork;
 						}
 						else if (val == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
-							info += "n/a";
+							info += gs.non;
 						else
-							info += "bork";
+							info += gs.bork;
 					}
 					break;
 			}
