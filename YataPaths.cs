@@ -159,7 +159,7 @@ namespace yata
 //				case  5: // "OUTPUT"
 
 				case  6: // "SKILL"
-					if (it_PathFeat2da.Checked)
+					if (it_PathFeat2da.Checked || it_PathSkills2da.Checked)
 					{
 						if (!String.IsNullOrEmpty(val = Table[id,col].text)
 							&& Int32.TryParse(val, out result) && result > -1)
@@ -167,22 +167,26 @@ namespace yata
 							string cat = Table[id,1].text;
 							if (!String.IsNullOrEmpty(cat))
 							{
+								info = Table.Cols[col].text + ": ";
+
 								int result2;
-								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL is a feat
+								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL-col is a feat
 								{
 									if (result < Info.featsLabels.Count)
 									{
-										info = Table.Cols[col].text + ": "
-											 + Info.featsLabels[result];
+										info += Info.featsLabels[result];
 									}
+									else
+										info += gs.non;
 								}
-								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation - SKILL is a skill
+								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation - SKILL-col is a skill
 								{
 									if (result < Info.skillLabels.Count)
 									{
-										info = Table.Cols[col].text + ": "
-											 + Info.skillLabels[result];
+										info += Info.skillLabels[result];
 									}
+									else
+										info += gs.non;
 								}
 							}
 						}
