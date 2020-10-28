@@ -1453,6 +1453,30 @@ namespace yata
 
 				case 40: // "REQSKILL" - Skills.2da ->
 				case 43: // "REQSKILL2"
+					if (it_PathSkills2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							if (result > -1)
+							{
+								if (result < Info.skillLabels.Count)
+								{
+									info += Info.skillLabels[result];
+								}
+								else
+									info += val;
+							}
+							else
+								info += gs.bork;
+						}
+						else if (val == gs.Stars)
+							info += gs.non;
+						else
+							info += gs.bork;
+					}
 					break;
 			}
 
