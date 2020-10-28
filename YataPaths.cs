@@ -1340,6 +1340,7 @@ namespace yata
 			{
 				case 20: // "PREREQFEAT1" - Feat.2da
 				case 21: // "PREREQFEAT2" - Feat.2da
+				case 28: // "SUCCESSOR" - Feat.2da
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
