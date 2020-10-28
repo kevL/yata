@@ -460,15 +460,16 @@ path Ranges.2da            path to a specific 2da-file. A check will appear next
 path SpellTarget.2da       to the entry on the menu; selecting the item a second
                            time would clear the info. These are used by
                            Spells.2da - note that Info for Spells.2da can also
-                           make use of data that's groped from Spells.2da,
-                           Feat.2da, and Classes.2da above.
+                           make use of data that's groped from Feat.2da,
+                           Spells.2da, and Classes.2da above.
 --
 path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
-                           path to a specific 2da-file. A check will appear next
-                           to the entry on the menu; selecting the item a second
+                           to a specific 2da-file. A check will appear next to
+                           the entry on the menu; selecting the item a second
                            time would clear the info. This is used by Feat.2da -
                            note that Info for Feat.2da can also make use of data
-                           that's groped from Spells.2da and Feat.2da above.
+                           that's groped from Feat.2da, Skills.2da, Spells.2da
+                           and Categories.2da above.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

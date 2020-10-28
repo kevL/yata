@@ -617,9 +617,7 @@ namespace yata
 							case "T": info += "Transmutation"; break;
 							case "V": info += "Evocation";     break;
 
-							default:
-								info += gs.bork;
-								break;
+							default:  info += gs.bork;         break;
 						}
 					}
 					break;
@@ -639,9 +637,7 @@ namespace yata
 							case "L": info += "Long";     r =  4; break;
 							case "I": info += "Infinite"; r = 14; break;
 
-							default:
-								info += gs.bork;
-								break;
+							default:  info += gs.bork;            break;
 						}
 
 						if (r != -1 && r < Info.rangeRanges.Count && it_PathRanges2da.Checked)
@@ -972,14 +968,12 @@ namespace yata
 						{
 							switch (result)
 							{
-								case 1: info += "Spell";           break;
-								case 2: info += "Special Ability"; break;
-								case 3: info += "Feat";            break;
-								case 4: info += "Item Power";      break;
+								case 1:  info += "Spell";           break;
+								case 2:  info += "Special Ability"; break;
+								case 3:  info += "Feat";            break;
+								case 4:  info += "Item Power";      break;
 
-								default:
-									info += gs.bork;
-									break;
+								default: info += gs.bork;           break;
 							}
 						}
 						else
@@ -1099,9 +1093,7 @@ namespace yata
 								case META_I_HINDERING_BLAST:  info += gs.HinderingBlast;  break;
 								case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
 
-								default:
-									info += gs.bork;
-									break;
+								default:                      info += gs.bork;            break;
 							}
 						}
 						else if (val == gs.Stars)
@@ -1474,6 +1466,31 @@ namespace yata
 						}
 						else if (val == gs.Stars)
 							info += gs.non;
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case 47: // "TOOLSCATEGORIES"
+					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							switch (result)
+							{
+								case 0:  info += "All Feats";           break;
+								case 1:  info += "Combat Feats";        break;
+								case 2:  info += "Active Combat Feats"; break;
+								case 3:  info += "Defensive Feats";     break;
+								case 4:  info += "Magical Feats";       break;
+								case 5:  info += "Class/Racial Feats";  break;
+								case 6:  info += "Other Feats";         break;
+
+								default: info += gs.bork;               break;
+							}
+						}
 						else
 							info += gs.bork;
 					}
