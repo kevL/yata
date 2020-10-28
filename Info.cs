@@ -129,6 +129,7 @@ namespace yata
 
 		#region Feat caches
 		// NOTE: Also uses Feat.2da for prereqfeat1- and prereqfeat2-labels (etc).
+		// NOTE: Also uses Spells.2da for spell-labels.
 		// NOTE: Also uses Categories.2da for category-labels.
 		// NOTE: Also uses Skills.2da for skill-labels.
 
