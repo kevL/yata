@@ -918,7 +918,7 @@ namespace yata
 				case 51: // "SubRadSpell5"
 				case 53: // "Master"
 					if (it_PathSpells2da.Checked
-					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -1399,7 +1399,7 @@ namespace yata
 
 				case 27: // "SPELLID" - Spells.2da
 					if (it_PathSpells2da.Checked
-					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -1426,7 +1426,7 @@ namespace yata
 
 				case 32: // "MASTERFEAT" - MasterFeats.2da
 					if (it_PathMasterFeats2da.Checked
-					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -1449,6 +1449,10 @@ namespace yata
 						else
 							info += gs.bork;
 					}
+					break;
+
+				case 40: // "REQSKILL" - Skills.2da ->
+				case 43: // "REQSKILL2"
 					break;
 			}
 
