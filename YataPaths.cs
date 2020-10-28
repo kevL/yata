@@ -1328,7 +1328,7 @@ namespace yata
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="col"></param>
-		/// <returns></returns>
+		/// <returns>info text for the statusbar</returns>
 		string getFeatInfo(int id, int col)
 		{
 			string info = gs.non;
@@ -1338,9 +1338,15 @@ namespace yata
 
 			switch (col)
 			{
-				case 20: // "PREREQFEAT1" - Feat.2da
-				case 21: // "PREREQFEAT2" - Feat.2da
-				case 28: // "SUCCESSOR" - Feat.2da
+				case 20: // "PREREQFEAT1" - Feat.2da ->
+				case 21: // "PREREQFEAT2"
+				case 28: // "SUCCESSOR"
+				case 34: // "OrReqFeat0"
+				case 35: // "OrReqFeat1"
+				case 36: // "OrReqFeat2"
+				case 37: // "OrReqFeat3"
+				case 38: // "OrReqFeat4"
+				case 39: // "OrReqFeat5"
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
