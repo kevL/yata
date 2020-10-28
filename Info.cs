@@ -19,7 +19,7 @@ namespace yata
 		/// A list that holds labels for feats in Feat.2da.
 		/// - optional
 		/// </summary>
-		internal static List<string> featsLabels = new List<string>();
+		internal static List<string> featLabels = new List<string>();
 
 		/// <summary>
 		/// A list that holds labels for itemproperties in ItemPropDef.2da.
@@ -55,13 +55,13 @@ namespace yata
 		/// A list that holds labels for ip-spells in Iprp_Spells.2da.
 		/// - optional
 		/// </summary>
-		internal static List<string> ipspellsLabels = new List<string>();
+		internal static List<string> ipspellLabels = new List<string>();
 
 		/// <summary>
 		/// A list that holds casterlevel for ip-spells in Iprp_Spells.2da.
 		/// - optional
 		/// </summary>
-		internal static List<int> ipspellsLevels = new List<int>();
+		internal static List<int> ipspellLevels = new List<int>();
 
 		/// <summary>
 		/// A list that holds labels for diseases in Disease.2da.
@@ -79,7 +79,7 @@ namespace yata
 		/// A list that holds labels for feats in Iprp_Feats.2da.
 		/// - optional
 		/// </summary>
-		internal static List<string> ipfeatsLabels = new List<string>();
+		internal static List<string> ipfeatLabels = new List<string>();
 
 		/// <summary>
 		/// A list that holds labels for ammo in Iprp_AmmoCost.2da.
@@ -130,6 +130,7 @@ namespace yata
 		#region Feat caches
 		// NOTE: Also uses Feat.2da for prereqfeat1- and prereqfeat2-labels (etc).
 		// NOTE: Also uses Categories.2da for category-labels.
+		// NOTE: Also uses Skills.2da for skill-labels.
 
 		/// <summary>
 		/// A list that holds labels for master-feats in MasterFeats.2da.
@@ -728,10 +729,10 @@ namespace yata
 					info += "[1](";
 					if ((par = GetPar(pars, 0)) != -1)
 					{
-						if (ipfeatsLabels.Count != 0
-							&& par < ipfeatsLabels.Count)
+						if (ipfeatLabels.Count != 0
+							&& par < ipfeatLabels.Count)
 						{
-							info += ipfeatsLabels[par];
+							info += ipfeatLabels[par];
 						}
 						else
 							info += par.ToString();
@@ -791,10 +792,10 @@ namespace yata
 					info += "[2](";
 					if ((par = GetPar(pars, 0)) != -1)
 					{
-						if (ipspellsLabels.Count != 0
-							&& par < ipspellsLabels.Count)
+						if (ipspellLabels.Count != 0
+							&& par < ipspellLabels.Count)
 						{
-							info += ipspellsLabels[par] + " L" + ipspellsLevels[par];
+							info += ipspellLabels[par] + " L" + ipspellLevels[par];
 						}
 						else
 							info += par.ToString();

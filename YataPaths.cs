@@ -172,9 +172,9 @@ namespace yata
 								int result2;
 								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL-col is a feat
 								{
-									if (result < Info.featsLabels.Count)
+									if (result < Info.featLabels.Count)
 									{
-										info += Info.featsLabels[result];
+										info += Info.featLabels[result];
 									}
 									else
 										info += gs.non;
@@ -252,7 +252,7 @@ namespace yata
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
-										 Info.featsLabels,
+										 Info.featLabels,
 										 it_PathFeat2da,
 										 1);
 					}
@@ -261,7 +261,7 @@ namespace yata
 			else
 			{
 				it_PathFeat2da.Checked = false;
-				Info.featsLabels.Clear();
+				Info.featLabels.Clear();
 			}
 		}
 
@@ -472,7 +472,7 @@ namespace yata
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
-										 Info.ipfeatsLabels,
+										 Info.ipfeatLabels,
 										 it_PathIprpFeats2da,
 										 2);
 					}
@@ -481,7 +481,7 @@ namespace yata
 			else
 			{
 				it_PathIprpFeats2da.Checked = false;
-				Info.ipfeatsLabels.Clear();
+				Info.ipfeatLabels.Clear();
 			}
 		}
 
@@ -536,19 +536,19 @@ namespace yata
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
-										 Info.ipspellsLabels,
+										 Info.ipspellLabels,
 										 it_PathIprpSpells2da,
 										 1,
 										 3,
-										 Info.ipspellsLevels);
+										 Info.ipspellLevels);
 					}
 				}
 			}
 			else
 			{
 				it_PathIprpSpells2da.Checked = false;
-				Info.ipspellsLabels.Clear();
-				Info.ipspellsLevels.Clear();
+				Info.ipspellLabels.Clear();
+				Info.ipspellLevels.Clear();
 			}
 		}
 
@@ -1047,9 +1047,9 @@ namespace yata
 									right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
 								}
 
-								if (feat < Info.featsLabels.Count)
+								if (feat < Info.featLabels.Count)
 								{
-									info += Info.featsLabels[feat];
+									info += Info.featLabels[feat];
 									if (dividend != -1)
 									{
 										info += " (d=" + dividend + ")";
@@ -1360,9 +1360,9 @@ namespace yata
 						{
 							if (result > -1)
 							{
-								if (result < Info.featsLabels.Count)
+								if (result < Info.featLabels.Count)
 								{
-									info += Info.featsLabels[result];
+									info += Info.featLabels[result];
 								}
 								else
 									info += val;
@@ -1513,7 +1513,7 @@ namespace yata
 							 2);
 
 			Info.GropeLabels(Path.Combine(directory, "feat.2da"),
-							 Info.featsLabels,
+							 Info.featLabels,
 							 it_PathFeat2da,
 							 1);
 
@@ -1549,7 +1549,7 @@ namespace yata
 							 2);
 
 			Info.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
-							 Info.ipfeatsLabels,
+							 Info.ipfeatLabels,
 							 it_PathIprpFeats2da,
 							 2);
 
@@ -1559,11 +1559,11 @@ namespace yata
 							 1);
 
 			Info.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
-							 Info.ipspellsLabels,
+							 Info.ipspellLabels,
 							 it_PathIprpSpells2da,
 							 1, // label
 							 3, // level
-							 Info.ipspellsLevels);
+							 Info.ipspellLevels);
 
 			Info.GropeLabels(Path.Combine(directory, "racialtypes.2da"),
 							 Info.raceLabels,
