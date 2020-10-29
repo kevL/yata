@@ -128,7 +128,7 @@ namespace yata
 
 
 		#region Feat caches
-		// NOTE: Also uses Feat.2da for prereqfeat1- and prereqfeat2-labels (etc).
+		// NOTE: Also uses Feat.2da for feat-labels.
 		// NOTE: Also uses Spells.2da for spell-labels.
 		// NOTE: Also uses Categories.2da for category-labels.
 		// NOTE: Also uses Skills.2da for skill-labels.
@@ -145,9 +145,9 @@ namespace yata
 		/// Gets the label-strings from a given 2da.
 		/// TODO: Check that the given 2da really has the required cols.
 		/// </summary>
-		/// <param name="pfe2da"></param>
-		/// <param name="labels"></param>
-		/// <param name="it"></param>
+		/// <param name="pfe2da">path_file_extension to the 2da</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
 		/// <param name="col">col in the 2da of the label</param>
 		/// <param name="col1">col in the 2da of an int (default -1)</param>
 		/// <param name="ints">a collection MUST be passed in if col1 is not -1</param>
@@ -160,56 +160,38 @@ namespace yata
 		{
 			if (File.Exists(pfe2da))
 			{
-				string[] rows = File.ReadAllLines(pfe2da);
-
-				// WARNING: This does *not* handle quotation marks around 2da fields.
-				foreach (string row in rows) // test for double-quote character and exit if found.
-				{
-					foreach (char c in row)
-					{
-						if (c == '"')
-						{
-							const string info = "The 2da-file contains double-quotes. Although that can be"
-											  + " valid in a 2da-file this function is not coded to cope."
-											  + " Format the 2da-file to not use double-quotes if you want"
-											  + " to access it here.";
-							MessageBox.Show(info,
-											" burp",
-											MessageBoxButtons.OK,
-											MessageBoxIcon.Error,
-											MessageBoxDefaultButton.Button1);
-							return;
-						}
-					}
-				}
-
-
 				labels.Clear();
 				if (ints != null) ints.Clear();
 
-				string line;
-				string[] cols;
+				string[] lines = File.ReadAllLines(pfe2da);
 
-				for (int row = 0; row != rows.Length; ++row)
+				// WARNING: This function does *not* handle quotation marks around 2da fields.
+				if (!hasQuote(lines))
 				{
-					if (!String.IsNullOrEmpty(line = rows[row].Trim()))
+					string line;
+					string[] fields;
+
+					for (int i = 0; i != lines.Length; ++i)
 					{
-						cols = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-						if (cols.Length > col && cols.Length > col1)
+						if (!String.IsNullOrEmpty(line = lines[i].Trim()))
 						{
-							int id;
-							if (Int32.TryParse(cols[0], out id)) // is a valid 2da row
+							fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+							if (fields.Length > col && fields.Length > col1)
 							{
-								labels.Add(cols[col]); // and hope for the best.
-
-								if (col1 != -1)
+								int id;
+								if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
 								{
-									int result;
-									if (!Int32.TryParse(cols[col1], out result))
-										result = -1; // always add an int to keep sync w/ the labels
+									labels.Add(fields[col]); // and hope for the best.
 
-									ints.Add(result);
+									if (col1 != -1)
+									{
+										int result;
+										if (!Int32.TryParse(fields[col1], out result))
+											result = -1; // always add an int to keep sync w/ the labels
+
+										ints.Add(result);
+									}
 								}
 							}
 						}
@@ -243,68 +225,50 @@ namespace yata
 		{
 			if (File.Exists(pfe2da))
 			{
-				string[] lines = File.ReadAllLines(pfe2da);
-
-				// WARNING: This does *not* handle quotation marks around 2da fields.
-				foreach (string line in lines) // test for double-quote character and exit if found.
-				{
-					foreach (char c in line)
-					{
-						if (c == '"')
-						{
-							const string info = "The 2da-file contains double-quotes. Although that can be"
-											  + " valid in a 2da-file this function is not coded to cope."
-											  + " Format the 2da-file to not use double-quotes if you want"
-											  + " to access it here.";
-							MessageBox.Show(info,
-											" burp",
-											MessageBoxButtons.OK,
-											MessageBoxIcon.Error,
-											MessageBoxDefaultButton.Button1);
-							return;
-						}
-					}
-				}
-
-
 				labels.Clear();
 				if (floats1 != null) floats1.Clear();
 				if (floats2 != null) floats2.Clear();
 
-				string line0;
-				string[] fields;
+				string[] lines = File.ReadAllLines(pfe2da);
 
-				for (int i = 0; i != lines.Length; ++i)
+				// WARNING: This function does *not* handle quotation marks around 2da fields.
+				if (!hasQuote(lines))
 				{
-					if (!String.IsNullOrEmpty(line0 = lines[i].Trim()))
+					string line;
+					string[] fields;
+
+					for (int i = 0; i != lines.Length; ++i)
 					{
-						fields = line0.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-						if (fields.Length > col && fields.Length > col1 && fields.Length > col2)
+						if (!String.IsNullOrEmpty(line = lines[i].Trim()))
 						{
-							int id;
-							if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+							fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+							if (fields.Length > col && fields.Length > col1 && fields.Length > col2)
 							{
-								labels.Add(fields[col]); // and hope for the best.
-
-								float result;
-
-								if (col1 != -1)
+								int id;
+								if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
 								{
-									if (!float.TryParse(fields[col1], out result))
-									{
-										result = 0.0F; // always add a float to keep sync w/ the labels
-									}
-									floats1.Add(result);
-								}
+									labels.Add(fields[col]); // and hope for the best.
 
-								if (col2 != -1)
-								{
-									if (!float.TryParse(fields[col2], out result))
+									float result;
+
+									if (col1 != -1)
 									{
-										result = 0.0F; // always add a float to keep sync w/ the labels
+										if (!Single.TryParse(fields[col1], out result))
+										{
+											result = 0.0F; // always add a float to keep sync w/ the labels
+										}
+										floats1.Add(result);
 									}
-									floats2.Add(result);
+
+									if (col2 != -1)
+									{
+										if (!Single.TryParse(fields[col2], out result))
+										{
+											result = 0.0F; // always add a float to keep sync w/ the labels
+										}
+										floats2.Add(result);
+									}
 								}
 							}
 						}
@@ -314,6 +278,37 @@ namespace yata
 				it.Checked = (labels.Count != 0);
 			}
 		}
+
+		/// <summary>
+		/// Checks for a quotation character and if so shows an error to the
+		/// user.
+		/// </summary>
+		/// <param name="lines">an array of strings</param>
+		/// <returns>true if a quote character is found</returns>
+		static bool hasQuote(string[] lines)
+		{
+			foreach (string line in lines)
+			{
+				foreach (char c in line)
+				{
+					if (c == '"')
+					{
+						const string info = "The 2da-file contains double-quotes. Although that can be"
+										  + " valid in a 2da-file this function is not coded to cope."
+										  + " Format the 2da-file to not use double-quotes if you want"
+										  + " to access it here.";
+						MessageBox.Show(info,
+										" burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Error,
+										MessageBoxDefaultButton.Button1);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 
 		/// <summary>
 		/// Gets the TCC-type as a string for a given (int)tag.
