@@ -4,23 +4,17 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// <see cref="InfoInputSpells" />
+	/// </summary>
 	sealed partial class InfoInputFeat
 		:
 			Form
 	{
 		#region Fields (static)
-		// col in Feat.2da ->
-//		internal const int PrereqFeat1     = 20; // "PREREQFEAT1"
-//		internal const int PrereqFeat2     = 21; // "PREREQFEAT2"
-
-		internal const int Category        = 25; // "CATEGORY"
-
-//		internal const int SpellId         = 27; // "SPELLID"
-
-		internal const int MasterFeat      = 32; // "MASTERFEAT"
-
-//		internal const int ToolsCategories = 47; // "TOOLSCATEGORIES"
-//		internal const int FeatCategory    = 54; // "FeatCategory"
+		internal const int Category        = 25; // col in Feat.2da ->
+		internal const int MasterFeat      = 32;
+		internal const int ToolsCategories = 47;
 		#endregion Fields (static)
 
 
@@ -31,7 +25,7 @@ namespace yata
 
 		bool _init;
 
-//		CheckBox _cb;
+		CheckBox _cb;
 		#endregion Fields
 
 
@@ -78,9 +72,47 @@ namespace yata
 
 						initintvals(val);
 						break;
+
+					case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
+						_f.str0 = _f.str1 = val;
+						vis_ToolsCategories();
+
+						switch (val)
+						{
+							case "0": cb_00.Checked = true; break;
+							case "1": cb_01.Checked = true; break;
+							case "2": cb_02.Checked = true; break;
+							case "3": cb_03.Checked = true; break;
+							case "4": cb_04.Checked = true; break;
+							case "5": cb_05.Checked = true; break;
+							case "6": cb_06.Checked = true; break;
+
+							case gs.Stars: break;
+
+							default: _f.str1 = gs.Stars; break;
+						}
+						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+						break;
 				}
 			}
 			_init = false;
+		}
+
+
+		void vis_ToolsCategories()
+		{
+			Text = " ToolsCategories";
+
+			cb_00.Text = "0 - All Feats";
+			cb_01.Text = "1 - Combat Feats";
+			cb_02.Text = "2 - Active Combat Feats";
+			cb_03.Text = "3 - Defensive Feats";
+			cb_04.Text = "4 - Magical Feats";
+			cb_05.Text = "5 - Class/Racial Feats";
+			cb_06.Text = "6 - Other Feats";
+
+			cb_00.Visible = cb_01.Visible = cb_02.Visible = cb_03.Visible =
+			cb_04.Visible = cb_05.Visible = cb_06.Visible = true;
 		}
 
 
@@ -92,7 +124,6 @@ namespace yata
 			lbl_Val.Visible = false;
 			cbx_Val.Visible = true;
 		}
-
 
 		/// <summary>
 		/// Adds allowable entries for "CATEGORY" (Categories.2da) to the
@@ -161,8 +192,99 @@ namespace yata
 
 
 		#region Events
+		/// <summary>
+		/// Handles user changing a checkbox.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void changed_Checkbox(object sender, EventArgs e)
 		{
+			if (!_init)
+			{
+				_cb = sender as CheckBox;
+
+				switch (_cell.x)
+				{
+					case ToolsCategories: change_ToolsCategories(); break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// helper for changed_Checkbox()
+		/// </summary>
+		void change_ToolsCategories()
+		{
+			string val = gs.Stars;
+
+			_init = true;
+			if (_cb == cb_00)
+			{
+				if (_cb.Checked)
+				{
+					val = "0";
+					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = false;
+				}
+			}
+			else if (_cb == cb_01)
+			{
+				if (_cb.Checked)
+				{
+					val = "1";
+					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = false;
+				}
+			}
+			else if (_cb == cb_02)
+			{
+				if (_cb.Checked)
+				{
+					val = "2";
+					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = false;
+				}
+			}
+			else if (_cb == cb_03)
+			{
+				if (_cb.Checked)
+				{
+					val = "3";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
+					cb_05.Checked = cb_06.Checked = false;
+				}
+			}
+			else if (_cb == cb_04)
+			{
+				if (_cb.Checked)
+				{
+					val = "4";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_05.Checked = cb_06.Checked = false;
+				}
+			}
+			else if (_cb == cb_05)
+			{
+				if (_cb.Checked)
+				{
+					val = "5";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_06.Checked = false;
+				}
+			}
+			else //if (_cb == cb_06)
+			{
+				if (_cb.Checked)
+				{
+					val = "6";
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = false;
+				}
+			}
+			_init = false;
+
+			lbl_Val.Text = _f.str1 = val;
+			btn_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -209,6 +331,17 @@ namespace yata
 				case Category:   // int,dropdown,unique
 				case MasterFeat: // int,dropdown,unique
 					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+					break;
+
+				case ToolsCategories: // string,checkbox,unique
+					btn_Clear.Enabled = false;
+
+					lbl_Val.Text = _f.str1 = gs.Stars;
+
+					_init = true;
+					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
+					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
+					_init = false;
 					break;
 			}
 		}

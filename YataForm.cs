@@ -4264,7 +4264,7 @@ namespace yata
 
 		#region Methods (cell)
 		/// <summary>
-		/// 
+		/// Shows the cell popup menu.
 		/// </summary>
 		internal void popupCellmenu()
 		{
@@ -4373,19 +4373,19 @@ namespace yata
 				// "ALLCLASSESCANUSE"
 				// "CATEGORY"			info + infoinput
 				// "SPELLID"			info
-				// "SUCCESSOR"
+				// "SUCCESSOR"			info
 				// "USESMAPFEAT"
 				// "MASTERFEAT"			info + infoinput
 				// "TARGETSELF"
-				// "OrReqFeat0"
-				// "OrReqFeat1"
-				// "OrReqFeat2"
-				// "OrReqFeat3"
-				// "OrReqFeat4"
-				// "OrReqFeat5"
-				// "REQSKILL"
-				// "REQSKILL2"
-				// "TOOLSETCATEGORIES"
+				// "OrReqFeat0"			info
+				// "OrReqFeat1"			info
+				// "OrReqFeat2"			info
+				// "OrReqFeat3"			info
+				// "OrReqFeat4"			info
+				// "OrReqFeat5"			info
+				// "REQSKILL"			info
+				// "REQSKILL2"			info
+				// "TOOLSCATEGORIES"	info + infoinput
 				// "HostileFeat"
 				// "MinLevelClass"
 				// "PreReqEpic"
@@ -4399,22 +4399,18 @@ namespace yata
 				// "ImmunityType"
 				// "Instant"
 
-//				case InfoInputFeat.PrereqFeat1:
-//				case InfoInputFeat.PrereqFeat2:
-//					break;
-
 				case InfoInputFeat.Category:
 					if (Info.categoryLabels.Count != 0)
 						return true;
 					break;
 
-//				case InfoInputFeat.SpellId:
-//					break;
-
 				case InfoInputFeat.MasterFeat:
 					if (Info.masterfeatLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoInputFeat.ToolsCategories:
+					return true;
 			}
 			return false;
 		}
@@ -4617,6 +4613,17 @@ namespace yata
 						case InfoInputFeat.Category: // INT Input ->
 						case InfoInputFeat.MasterFeat:
 							doIntInputFeat();
+							break;
+
+						case InfoInputFeat.ToolsCategories:
+							using (var f = new InfoInputFeat(Table, _sel))
+							{
+								if (f.ShowDialog(this) == DialogResult.OK
+									&& str1 != str0)
+								{
+									Table.ChangeCellText(_sel, str1); // does not do a text-check
+								}
+							}
 							break;
 					}
 					break;
