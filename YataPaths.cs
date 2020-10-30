@@ -28,17 +28,7 @@ namespace yata
 //				case  0: // id
 
 				case  1: // "CATEGORY"
-					if (it_PathSpells2da.Checked)
-					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& Int32.TryParse(val, out result)
-							&& result > -1 && result < Info.spellLabels.Count)
-						{
-							info = Table.Cols[col].text + ": "
-								 + Info.spellLabels[result];
-						}
-					}
-/*					if (it_PathSpells2da.Checked // TODO: tighten Crafting Info return-strings like in SpellsInfo and FeatInfo ->
+					if (it_PathSpells2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
@@ -58,10 +48,20 @@ namespace yata
 								info += gs.bork;
 						}
 						else if (val == gs.Stars)
+						{
 							info += gs.non;
+						}
 						else
-							info += gs.bork;
-					} */
+						{
+//							info += val;
+							switch (val)
+							{
+								case "ALC": info += "Alchemy";      break;
+								case "DIS": info += "Distillation"; break;
+								default:    info += "Mundane";      break; // 'val' should be the tag of a Mold here
+							}
+						}
+					}
 					break;
 
 //				case  2: // "REAGENTS"
@@ -73,25 +73,32 @@ namespace yata
 						{
 							if (it_PathBaseItems2da.Checked)
 							{
-								info = Table.Cols[col].text + ": (base) ";
+								info = Table.Cols[col].text + ": [BaseItem] ";
 
 								string[] array = val.Substring(1).Split(','); // lose the "B"
-								for (int tag = 0; tag != array.Length; ++tag)
+								for (int i = 0; i != array.Length; ++i)
 								{
-									if (Int32.TryParse(array[tag], out result)
-										&& result > -1 && result < Info.tagLabels.Count)
+									if (Int32.TryParse(array[i], out result)
+										&& result > -1)
 									{
-										info += Info.tagLabels[result];
-
-										if (tag != array.Length - 1)
-											info += ", ";
+										if (result < Info.tagLabels.Count)
+										{
+											info += Info.tagLabels[result];
+										}
+										else
+											info += val;
 									}
+									else
+										info += gs.bork;
+
+									if (i != array.Length - 1)
+										info += ", ";
 								}
 							}
 						}
 						else // is a TCC item-type
 						{
-							info = Table.Cols[col].text + ": (tcc) ";
+							info = Table.Cols[col].text + ": [TCC] ";
 
 							if (val == gs.Stars)
 							{
@@ -100,15 +107,17 @@ namespace yata
 							else
 							{
 								string[] array = val.Split(',');
-								for (int tag = 0; tag != array.Length; ++tag)
+								for (int i = 0; i != array.Length; ++i)
 								{
-									if (Int32.TryParse(array[tag], out result))
+									if (Int32.TryParse(array[i], out result))
 									{
 										info += Info.GetTccType(result);
-
-										if (tag != array.Length - 1)
-											info += ", ";
 									}
+									else
+										info += gs.bork;
+
+									if (i != array.Length - 1)
+										info += ", ";
 								}
 							}
 						}
@@ -118,39 +127,47 @@ namespace yata
 				case  4: // "EFFECTS"
 					if (it_PathItemPropDef2da.Checked)
 					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text))
+						if (!String.IsNullOrEmpty(val = Table[id,col].text)
+							&& val != gs.Stars)
 						{
-							if (val != gs.Stars)
+							info = Table.Cols[col].text + ": ";
+
+							string ipEncoded; int pos;
+
+							string[] ips = val.Split(';');
+							for (int i = 0; i != ips.Length; ++i)
 							{
-								info = Table.Cols[col].text + ": ";
-
-								string ipEncoded; int pos;
-
-								string[] ips = val.Split(';');
-								for (int ip = 0; ip != ips.Length; ++ip)
+								ipEncoded = ips[i];
+								if ((pos = ipEncoded.IndexOf(',')) != -1)
 								{
-									ipEncoded = ips[ip];
-									if ((pos = ipEncoded.IndexOf(',')) != -1)
+									// NOTE: 'result' is the nwn2 ip-constant
+									if (pos != 0 && Int32.TryParse(ipEncoded.Substring(0, pos), out result)
+										&& result > -1)
 									{
-										if (Int32.TryParse(ipEncoded.Substring(0, pos), out result)
-											&& result > -1 && result < Info.ipLabels.Count)
+										if (result < Info.ipLabels.Count)
 										{
-											info += Info.ipLabels[result];
+											info += Info.ipLabels[result] + gs.Space;
 
 											if (ipEncoded.Length > pos + 1)
-												info += Info.GetEncodedParsDescription(ipEncoded, result, pos);
+											{
+												info += Info.GetDecodedDescription(ipEncoded, result, pos);
+											}
 											else
-												info += gs.Space + gs.bork;
-
-											if (ip != ips.Length - 1)
-												info += ", ";
+												info += gs.bork;
 										}
+										else
+											info += result.ToString();
 									}
-									else // is a PropertySet preparation val.
-									{
-										info += "PropertySet val=" + ipEncoded; // TODO: description for par.
-									}
+									else
+										info += gs.bork;
 								}
+								else // is a PropertySet preparation val.
+								{
+									info += "PropertySet val=" + ipEncoded; // TODO: description for par.
+								}
+
+								if (i != ips.Length - 1)
+									info += ", ";
 							}
 						}
 					}
@@ -159,16 +176,18 @@ namespace yata
 //				case  5: // "OUTPUT"
 
 				case  6: // "SKILL"
-					if (it_PathFeat2da.Checked || it_PathSkills2da.Checked)
+					if ((it_PathFeat2da.Checked || it_PathSkills2da.Checked)
+						&& !String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& Int32.TryParse(val, out result) && result > -1)
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1)
 						{
 							string cat = Table[id,1].text;
-							if (!String.IsNullOrEmpty(cat))
+							if (!String.IsNullOrEmpty(cat) && cat != gs.Stars)
 							{
-								info = Table.Cols[col].text + ": ";
-
 								int result2;
 								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL-col is a feat
 								{
@@ -177,7 +196,7 @@ namespace yata
 										info += Info.featLabels[result];
 									}
 									else
-										info += gs.non;
+										info += val;
 								}
 								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation - SKILL-col is a skill
 								{
@@ -186,10 +205,14 @@ namespace yata
 										info += Info.skillLabels[result];
 									}
 									else
-										info += gs.non;
+										info += val;
 								}
 							}
+							else
+								info += gs.non;
 						}
+						else
+							info += gs.bork;
 					}
 					break;
 

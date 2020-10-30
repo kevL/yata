@@ -280,7 +280,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Checks for a quotation character and if so shows an error to the
+		/// Checks for a quotation character and if found shows an error to the
 		/// user.
 		/// </summary>
 		/// <param name="lines">an array of strings</param>
@@ -357,7 +357,7 @@ namespace yata
 		/// <param name="pos">position of the first delimiter (after the IP,
 		/// before the Pars)</param>
 		/// <returns></returns>
-		internal static string GetEncodedParsDescription(string ipEncoded, int ip, int pos)
+		internal static string GetDecodedDescription(string ipEncoded, int ip, int pos)
 		{
 			string info = String.Empty;
 
