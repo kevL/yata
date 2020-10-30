@@ -186,6 +186,9 @@ namespace yata
 			// it is shown when there are no TabPages and hides when there are.
 			// It also appears when loading a 2da in an attempt to hide
 			// unsightly graphical glitches.
+			//
+			// TODO: Instead of using BringToFront() and SendToBack() to show or
+			// hide the panel try using its Visible bool.
 
 
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
