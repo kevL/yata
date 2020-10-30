@@ -138,6 +138,12 @@ namespace yata
 		/// - optional
 		/// </summary>
 		internal static List<string> masterfeatLabels = new List<string>();
+
+		/// <summary>
+		/// A list that holds labels for combatmodes in CombatModes.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> combatmodeLabels = new List<string>();
 		#endregion Feat caches
 
 

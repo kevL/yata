@@ -1473,22 +1473,20 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.skillLabels.Count)
 							{
-								if (result < Info.skillLabels.Count)
-								{
-									info += Info.skillLabels[result];
-								}
-								else
-									info += val;
+								info += Info.skillLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1513,6 +1511,31 @@ namespace yata
 
 								default: info += gs.bork;               break;
 							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case 57: // "ToggleMode"
+					if (it_PathCombatModes2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.combatmodeLabels.Count)
+							{
+								info += Info.combatmodeLabels[result];
+							}
+							else
+								info += val;
 						}
 						else
 							info += gs.bork;
@@ -1552,6 +1575,38 @@ namespace yata
 			{
 				it_PathMasterFeats2da.Checked = false;
 				Info.masterfeatLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathCombatModes menuitem.
+		/// Intended to add labels from CombatModes.2da to the 'combatmodeLabels'
+		/// list.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void itclick_PathCombatModes2da(object sender, EventArgs e)
+		{
+			if (!it_PathCombatModes2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select CombatModes.2da";
+					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.combatmodeLabels,
+										 it_PathCombatModes2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathCombatModes2da.Checked = false;
+				Info.combatmodeLabels.Clear();
 			}
 		}
 		#endregion Feat info
@@ -1666,6 +1721,11 @@ namespace yata
 			Info.GropeLabels(Path.Combine(directory, "masterfeats.2da"),
 							 Info.masterfeatLabels,
 							 it_PathMasterFeats2da,
+							 1);
+
+			Info.GropeLabels(Path.Combine(directory, "combatmodes.2da"),
+							 Info.combatmodeLabels,
+							 it_PathCombatModes2da,
 							 1);
 		}
 		#endregion Paths
