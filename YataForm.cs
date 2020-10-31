@@ -4400,7 +4400,7 @@ namespace yata
 				// "FeatCategory"
 				// "IsActive"
 				// "IsPersistent"
-				// "TogleMode"
+				// "TogleMode"			info + infoinput
 				// "DMFeat"
 				// "REMOVED"
 				// "AlignRestrict"
@@ -4419,6 +4419,11 @@ namespace yata
 
 				case InfoInputFeat.ToolsCategories: // this doesn't rely on 2da-gropes ->
 					return true;
+
+				case InfoInputFeat.ToggleMode:
+					if (Info.combatmodeLabels.Count != 0)
+						return true;
+					break;
 			}
 			return false;
 		}
@@ -4621,6 +4626,7 @@ namespace yata
 					{
 						case InfoInputFeat.Category: // INT Input ->
 						case InfoInputFeat.MasterFeat:
+						case InfoInputFeat.ToggleMode:
 							doIntInputFeat();
 							break;
 

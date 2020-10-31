@@ -1503,7 +1503,7 @@ namespace yata
 					}
 					break;
 
-				case 57: // "ToggleMode" // TODO: InfoInput that
+				case 57: // "ToggleMode"
 					if (it_PathCombatModes2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{

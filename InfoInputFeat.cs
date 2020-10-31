@@ -15,6 +15,7 @@ namespace yata
 		internal const int Category        = 25; // col in Feat.2da ->
 		internal const int MasterFeat      = 32;
 		internal const int ToolsCategories = 47;
+		internal const int ToggleMode      = 57;
 		#endregion Fields (static)
 
 
@@ -93,6 +94,12 @@ namespace yata
 						}
 						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
+
+					case ToggleMode:
+						list_CombatModes();
+
+						initintvals(val);
+						break;
 				}
 			}
 			_init = false;
@@ -155,6 +162,19 @@ namespace yata
 			for (int i = 0; i != Info.masterfeatLabels.Count; ++i)
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i]));
+			}
+			cbx_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		void list_CombatModes()
+		{
+			Text = " ToggleMode";
+
+			dropdown();
+
+			for (int i = 0; i != Info.combatmodeLabels.Count; ++i)
+			{
+				cbx_Val.Items.Add(new tui(i + " - " + Info.combatmodeLabels[i]));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -311,6 +331,7 @@ namespace yata
 					{
 						case Category:
 						case MasterFeat:
+						case ToggleMode:
 							_f.int1 = cbx_Val.SelectedIndex;
 							break;
 					}
@@ -330,6 +351,7 @@ namespace yata
 			{
 				case Category:   // int,dropdown,unique
 				case MasterFeat: // int,dropdown,unique
+				case ToggleMode: // int,dropdown,unique
 					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 					break;
 
