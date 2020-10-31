@@ -352,7 +352,7 @@ namespace yata
 				case Category:   // int,dropdown,unique
 				case MasterFeat: // int,dropdown,unique
 				case ToggleMode: // int,dropdown,unique
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
 					break;
 
 				case ToolsCategories: // string,checkbox,unique
