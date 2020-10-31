@@ -33,7 +33,11 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result))
 						{
 							if (result > -1)
 							{
@@ -47,13 +51,8 @@ namespace yata
 							else
 								info += gs.bork;
 						}
-						else if (val == gs.Stars)
-						{
-							info += gs.non;
-						}
 						else
 						{
-//							info += val;
 							switch (val)
 							{
 								case "ALC": info += "Alchemy";      break;
@@ -67,71 +66,66 @@ namespace yata
 //				case  2: // "REAGENTS"
 
 				case  3: // "TAGS"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						if (val.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
 						{
-							if (it_PathBaseItems2da.Checked)
-							{
-								info = Table.Cols[col].text + ": [BaseItem] ";
+							info = Table.Cols[col].text + ": [BaseItem] ";
 
-								string[] array = val.Substring(1).Split(','); // lose the "B"
-								for (int i = 0; i != array.Length; ++i)
+							string[] array = val.Substring(1).Split(','); // lose the "B"
+							for (int i = 0; i != array.Length; ++i)
+							{
+								if (Int32.TryParse(array[i], out result)
+									&& result > -1)
 								{
-									if (Int32.TryParse(array[i], out result)
-										&& result > -1)
+									if (result < Info.tagLabels.Count) //&& it_PathBaseItems2da.Checked <- redundant
 									{
-										if (result < Info.tagLabels.Count)
-										{
-											info += Info.tagLabels[result];
-										}
-										else
-											info += val;
+										info += Info.tagLabels[result];
 									}
 									else
-										info += gs.bork;
-
-									if (i != array.Length - 1)
-										info += ", ";
+										info += array[i];
 								}
+								else
+									info += gs.bork;
+
+								if (i != array.Length - 1)
+									info += ", ";
 							}
 						}
 						else // is a TCC item-type
 						{
 							info = Table.Cols[col].text + ": [TCC] ";
 
-							if (val == gs.Stars)
+							string[] array = val.Split(',');
+							for (int i = 0; i != array.Length; ++i)
 							{
-								info += Info.GetTccType(0); // TCC_TYPE_NONE
-							}
-							else
-							{
-								string[] array = val.Split(',');
-								for (int i = 0; i != array.Length; ++i)
+								if (Int32.TryParse(array[i], out result))
 								{
-									if (Int32.TryParse(array[i], out result))
-									{
-										info += Info.GetTccType(result);
-									}
-									else
-										info += gs.bork;
-
-									if (i != array.Length - 1)
-										info += ", ";
+									info += Info.GetTccType(result);
 								}
+								else
+									info += gs.bork;
+
+								if (i != array.Length - 1)
+									info += ", ";
 							}
 						}
 					}
 					break;
 
 				case  4: // "EFFECTS"
-					if (it_PathItemPropDef2da.Checked)
+					if (it_PathItemPropDef2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
-						if (!String.IsNullOrEmpty(val = Table[id,col].text)
-							&& val != gs.Stars)
-						{
-							info = Table.Cols[col].text + ": ";
+						info = Table.Cols[col].text + ": ";
 
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else
+						{
 							string ipEncoded; int pos;
 
 							string[] ips = val.Split(';');
@@ -177,19 +171,22 @@ namespace yata
 
 				case  6: // "SKILL"
 					if ((it_PathFeat2da.Checked || it_PathSkills2da.Checked)
-						&& !String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
 							&& result > -1)
 						{
 							string cat = Table[id,1].text;
 							if (!String.IsNullOrEmpty(cat) && cat != gs.Stars)
 							{
 								int result2;
-								if (Int32.TryParse(cat, out result2)) // is triggered by spell id - SKILL-col is a feat
+								if (Int32.TryParse(cat, out result2)) // is triggered by spell id -> SKILL-col is a feat
 								{
 									if (result < Info.featLabels.Count)
 									{
@@ -198,7 +195,7 @@ namespace yata
 									else
 										info += val;
 								}
-								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation - SKILL-col is a skill
+								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation -> SKILL-col is a skill
 								{
 									if (result < Info.skillLabels.Count)
 									{
@@ -625,7 +622,8 @@ namespace yata
 			switch (col)
 			{
 				case  4: // "School" (also SpellSchools.2da)
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -646,11 +644,12 @@ namespace yata
 					break;
 
 				case  5: // "Range" (Ranges.2da)
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
-						int r = -1;
+						int r;
 						switch (val.ToUpper())
 						{
 							case "P": info += "Personal"; r =  0; break; // NOTE: 'rangeLabels' could be used but
@@ -660,10 +659,10 @@ namespace yata
 							case "L": info += "Long";     r =  4; break;
 							case "I": info += "Infinite"; r = 14; break;
 
-							default:  info += gs.bork;            break;
+							default:  info += gs.bork;    r = -1; break;
 						}
 
-						if (r != -1 && r < Info.rangeRanges.Count && it_PathRanges2da.Checked)
+						if (r != -1 && r < Info.rangeRanges.Count) //&& it_PathRanges2da.Checked <- redundant
 						{
 							info += gs.Space + Info.rangeRanges[r] + "m";
 						}
@@ -671,14 +670,15 @@ namespace yata
 					break;
 
 				case  7: // "MetaMagic"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
 						if (val.Length > 2
 							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier,
-											  CultureInfo.InvariantCulture,
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 											  out result))
 						{
 							switch (result)
@@ -852,22 +852,21 @@ namespace yata
 								}
 							}
 						}
-						else if (val == gs.Stars)
-							info += "none";
 						else
 							info += gs.bork;
 					}
 					break;
 
 				case  8: // "TargetType"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
 						if (val.Length > 2
 							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier,
-											  CultureInfo.InvariantCulture,
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 											  out result))
 						{
 							switch (result)
@@ -923,8 +922,6 @@ namespace yata
 								}
 							}
 						}
-						else if (val == gs.Stars)
-							info += "none";
 						else
 							info += gs.bork;
 					}
@@ -941,22 +938,20 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.spellLabels.Count)
 							{
-								if (result < Info.spellLabels.Count)
-								{
-									info += Info.spellLabels[result];
-								}
-								else
-									info += val;
+								info += Info.spellLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -968,7 +963,12 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result) && result > -1)
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
 						{
 							if (result < Info.categoryLabels.Count)
 							{
@@ -983,7 +983,8 @@ namespace yata
 					break;
 
 				case 54: // "UserType"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -1004,37 +1005,28 @@ namespace yata
 					}
 					break;
 
-				case 58: // "SpontCastClassReq" (Classes.2da)
+				case 58: // "SpontCastClassReq" (Classes.2da) // TODO: InfoInput that
 					if (it_PathClasses2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.classLabels.Count)
 							{
-								if (result < Info.classLabels.Count)
-								{
-									switch (result)
-									{
-										case 0:				// NOTE: Although #0 Barbarian is valid it's used for n/a here.
-											info += gs.non;	// The 2da-field ought be "****" instead ofc.
-											break;
-
-										default:
-											info += Info.classLabels[result];
-											break;
-									}
-								}
-								else
-									info += val;
+								// NOTE: The stock Spells.2da uses "0" for n/a here.
+								// The field ought be "****" (or "-1") instead ofc.
+								info += Info.classLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1046,55 +1038,54 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							int feat, dividend, right;
+							if (result < FEATSPELL_MASTER)
 							{
-								int feat, dividend, right;
-								if (result < FEATSPELL_MASTER)
-								{
-									feat     = result;
-									dividend = -1;
-									right    = -1;
-								}
-								else
-								{
-									feat     = (result % FEATSPELL_MASTER);
-									dividend = (result / FEATSPELL_MASTER);
-									right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
-								}
-
-								if (feat < Info.featLabels.Count)
-								{
-									info += Info.featLabels[feat];
-									if (dividend != -1)
-									{
-										info += " (d=" + dividend + ")";
-										info += " (r=" + right    + ")";
-									}
-								}
-								else
-									info += val;
+								feat     = result;
+								dividend = -1;
+								right    = -1;
 							}
 							else
-								info += gs.bork;
+							{
+								feat     = (result % FEATSPELL_MASTER);
+								dividend = (result / FEATSPELL_MASTER);
+								right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
+							}
+
+							if (feat < Info.featLabels.Count)
+							{
+								info += Info.featLabels[feat];
+								if (dividend != -1)
+								{
+									info += " (d=" + dividend + ")";
+									info += " (r=" + right    + ")";
+								}
+							}
+							else
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
 					break;
 
 				case 65: // "AsMetaMagic"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
 						if (val.Length > 2
 							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier,
-											  CultureInfo.InvariantCulture,
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 											  out result))
 						{
 							switch (result)
@@ -1119,8 +1110,6 @@ namespace yata
 								default:                      info += gs.bork;            break;
 							}
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1132,44 +1121,42 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars)
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.targetLabels.Count)
 							{
-								if (result < Info.targetLabels.Count)
+								info += Info.targetLabels[result];
+
+								bool b = false;
+
+								float f = Info.targetWidths[result];
+								if (Math.Abs(0.0F - f) > 0.00001F)
 								{
-									info += Info.targetLabels[result];
+									b = true;
+									info += " (" + f;
+								}
 
-									bool b = false;
-
-									float f = Info.targetWidths[result];
-									if (Math.Abs(0.0F - f) > 0.00001F)
+								f = Info.targetLengths[result];
+								if (Math.Abs(0.0F - f) > 0.00001F)
+								{
+									if (!b)
 									{
 										b = true;
-										info += " (" + f;
+										info += " (_";
 									}
-
-									f = Info.targetLengths[result];
-									if (Math.Abs(0.0F - f) > 0.00001F)
-									{
-										if (!b)
-										{
-											b = true;
-											info += " (_";
-										}
-										info += " x " + f;
-									}
-
-									if (b) info += ")";
+									info += " x " + f;
 								}
-								else
-									info += val;
+
+								if (b) info += ")";
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += "point"; // id #0 (shouldn't do that though)
 						else
 							info += gs.bork;
 					}
@@ -1371,22 +1358,20 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.featLabels.Count)
 							{
-								if (result < Info.featLabels.Count)
-								{
-									info += Info.featLabels[result];
-								}
-								else
-									info += val;
+								info += Info.featLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1398,7 +1383,12 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result) && result > -1)
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "****" /hah
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
 						{
 							if (result < Info.categoryLabels.Count)
 							{
@@ -1418,22 +1408,20 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.spellLabels.Count)
 							{
-								if (result < Info.spellLabels.Count)
-								{
-									info += Info.spellLabels[result];
-								}
-								else
-									info += val;
+								info += Info.spellLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars)
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1445,22 +1433,20 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
 						{
-							if (result > -1)
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.masterfeatLabels.Count)
 							{
-								if (result < Info.masterfeatLabels.Count)
-								{
-									info += Info.masterfeatLabels[result];
-								}
-								else
-									info += val;
+								info += Info.masterfeatLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
-						else if (val == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
-							info += gs.non;
 						else
 							info += gs.bork;
 					}
@@ -1473,7 +1459,7 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
 						{
 							info += gs.non;
 						}
@@ -1493,11 +1479,13 @@ namespace yata
 					break;
 
 				case 47: // "TOOLSCATEGORIES"
-					if (!String.IsNullOrEmpty(val = Table[id,col].text))
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "All Feats"
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 7)
 						{
 							switch (result)
 							{
@@ -1508,8 +1496,6 @@ namespace yata
 								case 4:  info += "Magical Feats";       break;
 								case 5:  info += "Class/Racial Feats";  break;
 								case 6:  info += "Other Feats";         break;
-
-								default: info += gs.bork;               break;
 							}
 						}
 						else
@@ -1517,13 +1503,13 @@ namespace yata
 					}
 					break;
 
-				case 57: // "ToggleMode"
+				case 57: // "ToggleMode" // TODO: InfoInput that
 					if (it_PathCombatModes2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
 						{
 							info += gs.non;
 						}
