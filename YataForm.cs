@@ -4338,7 +4338,7 @@ namespace yata
 		{
 			switch (_sel.x)
 			{
-				case InfoInputSpells.School:
+				case InfoInputSpells.School: // these don't rely on 2da-gropes ->
 				case InfoInputSpells.Range:
 				case InfoInputSpells.MetaMagic:
 				case InfoInputSpells.TargetType:
@@ -4349,6 +4349,11 @@ namespace yata
 
 				case InfoInputSpells.Category:
 					if (Info.categoryLabels.Count != 0)
+						return true;
+					break;
+
+				case InfoInputSpells.SpontCastClass:
+					if (Info.classLabels.Count != 0)
 						return true;
 					break;
 
@@ -4412,14 +4417,14 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputFeat.ToolsCategories:
+				case InfoInputFeat.ToolsCategories: // this doesn't rely on 2da-gropes ->
 					return true;
 			}
 			return false;
 		}
 
 		/// <summary>
-		/// 
+		/// Checks if it's okay to print a TalkTable entry to the statusbar.
 		/// </summary>
 		/// <returns>true if TalkEntry dialog will be enabled</returns>
 		bool isStrrefEnabled()
@@ -4604,6 +4609,7 @@ namespace yata
 							break;
 
 						case InfoInputSpells.Category: // INT Input ->
+						case InfoInputSpells.SpontCastClass:
 						case InfoInputSpells.TargetingUI:
 							doIntInputSpells();
 							break;

@@ -1005,7 +1005,7 @@ namespace yata
 					}
 					break;
 
-				case 58: // "SpontCastClassReq" (Classes.2da) // TODO: InfoInput that
+				case 58: // "SpontCastClassReq" (Classes.2da)
 					if (it_PathClasses2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{

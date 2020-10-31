@@ -42,15 +42,16 @@ namespace yata
 			Form
 	{
 		#region Fields (static)
-		internal const int School       =  4; // col in Spells.2da ->
-		internal const int Range        =  5;
-		internal const int MetaMagic    =  7;
-		internal const int TargetType   =  8;
-		internal const int ImmunityType = 45;
-		internal const int Category     = 52;
-		internal const int UserType     = 54;
-		internal const int AsMetaMagic  = 65;
-		internal const int TargetingUI  = 66;
+		internal const int School         =  4; // col in Spells.2da ->
+		internal const int Range          =  5;
+		internal const int MetaMagic      =  7;
+		internal const int TargetType     =  8;
+		internal const int ImmunityType   = 45;
+		internal const int Category       = 52;
+		internal const int UserType       = 54;
+		internal const int SpontCastClass = 58;
+		internal const int AsMetaMagic    = 65;
+		internal const int TargetingUI    = 66;
 		#endregion Fields (static)
 
 
@@ -314,6 +315,12 @@ namespace yata
 						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 						break;
 
+					case SpontCastClass: // int-val,dropdown,unique
+						list_SpontCastClasses();
+
+						initintvals(val);
+						break;
+
 					case AsMetaMagic: // int-val(hex),dropdown,unique
 						list_AsMetaMagics();
 
@@ -536,6 +543,23 @@ namespace yata
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
 				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
+			}
+			cbx_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for "SpontCastClassReq" (Classes.2da) to the
+		/// combobox along with a final stars item.
+		/// </summary>
+		void list_SpontCastClasses()
+		{
+			Text = " SpontCastClassReq";
+
+			dropdown();
+
+			for (int i = 0; i != Info.classLabels.Count; ++i)
+			{
+				cbx_Val.Items.Add(new tui(i + " - " + Info.classLabels[i]));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -1127,6 +1151,7 @@ namespace yata
 							break;
 
 						case Category:
+						case SpontCastClass:
 						case TargetingUI:
 							_f.int1 = cbx_Val.SelectedIndex;
 							break;
@@ -1267,6 +1292,7 @@ namespace yata
 
 				case ImmunityType:
 				case Category:
+				case SpontCastClass:
 				case AsMetaMagic:
 				case TargetingUI:
 					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
