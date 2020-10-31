@@ -27,7 +27,7 @@ namespace yata
 //				case -1: // rowhead
 //				case  0: // id
 
-				case  1: // "CATEGORY"
+				case 1: // "CATEGORY"
 					if (it_PathSpells2da.Checked
 					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -63,9 +63,9 @@ namespace yata
 					}
 					break;
 
-//				case  2: // "REAGENTS"
+//				case 2: // "REAGENTS"
 
-				case  3: // "TAGS"
+				case 3: // "TAGS"
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -114,7 +114,7 @@ namespace yata
 					}
 					break;
 
-				case  4: // "EFFECTS"
+				case 4: // "EFFECTS"
 					if (it_PathItemPropDef2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -167,9 +167,9 @@ namespace yata
 					}
 					break;
 
-//				case  5: // "OUTPUT"
+//				case 5: // "OUTPUT"
 
-				case  6: // "SKILL"
+				case 6: // "SKILL"
 					if ((it_PathFeat2da.Checked || it_PathSkills2da.Checked)
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -621,7 +621,7 @@ namespace yata
 
 			switch (col)
 			{
-				case  4: // "School" (also SpellSchools.2da)
+				case 4: // "School" (also SpellSchools.2da)
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -643,7 +643,7 @@ namespace yata
 					}
 					break;
 
-				case  5: // "Range" (Ranges.2da)
+				case 5: // "Range" (Ranges.2da)
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -669,7 +669,7 @@ namespace yata
 					}
 					break;
 
-				case  7: // "MetaMagic"
+				case 7: // "MetaMagic"
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -857,7 +857,7 @@ namespace yata
 					}
 					break;
 
-				case  8: // "TargetType"
+				case 8: // "TargetType"
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
