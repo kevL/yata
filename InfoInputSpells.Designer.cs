@@ -193,13 +193,12 @@ namespace yata
 			// 
 			// btn_Accept
 			// 
-			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Accept.Location = new System.Drawing.Point(5, 214);
+			this.btn_Accept.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.btn_Accept.Location = new System.Drawing.Point(0, 214);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Accept.Name = "btn_Accept";
-			this.btn_Accept.Size = new System.Drawing.Size(405, 27);
+			this.btn_Accept.Size = new System.Drawing.Size(414, 27);
 			this.btn_Accept.TabIndex = 28;
 			this.btn_Accept.Text = "accept";
 			this.btn_Accept.UseVisualStyleBackColor = true;
@@ -482,7 +481,7 @@ namespace yata
 			// InfoInputSpells
 			// 
 			this.AcceptButton = this.btn_Accept;
-			this.ClientSize = new System.Drawing.Size(414, 243);
+			this.ClientSize = new System.Drawing.Size(414, 241);
 			this.Controls.Add(this.btn_Clear);
 			this.Controls.Add(this.cb_23);
 			this.Controls.Add(this.cb_22);
