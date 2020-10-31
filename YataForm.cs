@@ -4668,7 +4668,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Shows and InfoInput dialog and handles its return.
+		/// Shows an InfoInput dialog and handles its return.
 		/// - helper for doIntInputSpells() and doIntInputFeat().
 		/// </summary>
 		/// <param name="f"></param>
