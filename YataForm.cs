@@ -4646,40 +4646,42 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for cellclick_InfoInput()
+		/// - helper for cellclick_InfoInput()
 		/// </summary>
 		void doIntInputSpells()
 		{
 			using (var f = new InfoInputSpells(Table, _sel))
 			{
-				if (f.ShowDialog(this) == DialogResult.OK
-					&& int1 != int0)
-				{
-					string val;
-					if (int1 == II_ASSIGN_STARS) val = gs.Stars;
-					else                         val = int1.ToString();
-
-					Table.ChangeCellText(_sel, val); // does not do a text-check
-				}
+				doIntInput(f);
 			}
 		}
 
 		/// <summary>
-		/// helper for cellclick_InfoInput()
+		/// - helper for cellclick_InfoInput()
 		/// </summary>
 		void doIntInputFeat()
 		{
 			using (var f = new InfoInputFeat(Table, _sel))
 			{
-				if (f.ShowDialog(this) == DialogResult.OK
-					&& int1 != int0)
-				{
-					string val;
-					if (int1 == II_ASSIGN_STARS) val = gs.Stars;
-					else                         val = int1.ToString();
+				doIntInput(f);
+			}
+		}
 
-					Table.ChangeCellText(_sel, val); // does not do a text-check
-				}
+		/// <summary>
+		/// Shows and InfoInput dialog and handles its return.
+		/// - helper for doIntInputSpells() and doIntInputFeat().
+		/// </summary>
+		/// <param name="f"></param>
+		void doIntInput(Form f)
+		{
+			if (f.ShowDialog(this) == DialogResult.OK
+				&& int1 != int0)
+			{
+				string val;
+				if (int1 == II_ASSIGN_STARS) val = gs.Stars;
+				else                         val = int1.ToString();
+
+				Table.ChangeCellText(_sel, val); // does not do a text-check
 			}
 		}
 
