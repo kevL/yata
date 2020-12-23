@@ -31,6 +31,17 @@ namespace yata
 		static int _h = -1;
 
 		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
+
+		/* GdiPlus.dll - gdiplusheaders.h (#include Gdiplus.h)
+		typedef enum FontStyle
+		{
+			FontStyleRegular,
+			FontStyleBold,
+			FontStyleItalic,
+			FontStyleBoldItalic,
+			FontStyleUnderline,
+			FontStyleStrikeout
+		}; */
 		#endregion Fields (static)
 
 
@@ -233,10 +244,13 @@ namespace yata
 		{
 			bu_Apply.Enabled = false;
 			_f.doFont(lbl_Lazydog.Font.Clone() as Font);
+
+			TopMost = true; // see OnLoad() doc
+			TopMost = false;
 		}
 
 		/// <summary>
-		/// Closes this dialog. See OnClosing().
+		/// Closes this dialog. See <see cref="OnClosing"/>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -306,17 +320,6 @@ namespace yata
 				CreateLazydog();
 			}
 		}
-/* GdiPlus.dll - gdiplusheaders.h (#include Gdiplus.h)
-typedef enum FontStyle
-{
-	FontStyleRegular,
-	FontStyleBold,
-	FontStyleItalic,
-	FontStyleBoldItalic,
-	FontStyleUnderline,
-	FontStyleStrikeout
-};
-*/
 
 		/// <summary>
 		/// Increases or decreases the pointsize with the mousewheel when the
@@ -358,7 +361,7 @@ typedef enum FontStyle
 		#region Methods
 		/// <summary>
 		/// Gets the first available style in a given FontFamily.
-		/// NOTE: ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net ! ( not )
+		/// NOTE: ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net! .not
 		/// </summary>
 		/// <param name="ff">a FontFamily</param>
 		/// <returns>the first FontStyle found else FontStyleInvalid</returns>
