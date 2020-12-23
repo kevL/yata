@@ -59,7 +59,6 @@ namespace yata
 		/// <param name="f">the form that owns this dialog</param>
 		internal FontF(YataForm f)
 		{
-			//logfile.Log("\ncTor");
 			InitializeComponent();
 			_f = f;
 
@@ -166,7 +165,6 @@ namespace yata
 		/// <param name="e"></param>
 		void OnLoad(object sender, EventArgs e)
 		{
-			//logfile.Log("OnLoad()");
 			TopMost = true;
 			TopMost = false;
 		}
@@ -198,7 +196,6 @@ namespace yata
 		/// <param name="e"></param>
 		void OnResize(object sender, EventArgs e)
 		{
-			//logfile.Log("OnResize());
 			if (WindowState != FormWindowState.Minimized)
 			{
 				if (sc_Hori.SplitterDistance > ClientSize.Height - 24)
@@ -220,7 +217,6 @@ namespace yata
 
 		void OnSplitterMoved(object sender, SplitterEventArgs e)
 		{
-			//logfile.Log("OnSplitterMoved()");
 			list_Font.TopIndex = list_Font.SelectedIndex;
 		}
 		#endregion Events (override)
@@ -236,7 +232,7 @@ namespace yata
 		void click_Apply(object sender, EventArgs e)
 		{
 			bu_Apply.Enabled = false;
-			_f.doFont((Font)lbl_Lazydog.Font.Clone());
+			_f.doFont(lbl_Lazydog.Font.Clone() as Font);
 		}
 
 		/// <summary>

@@ -194,7 +194,8 @@ namespace yata
 			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
 			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
-			FontDefault = Font.Clone() as Font;
+			FontDefault = new Font("Georgia", 8F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+			Font = FontDefault.Clone() as Font;
 
 			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
 
@@ -3322,6 +3323,18 @@ namespace yata
 
 
 		#region Events (font)
+		void font_dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null && Table._editor.Visible)
+			{
+				Table._editor.Visible = false;
+				Table.Invalidator(YataGrid.INVALID_GRID);
+			}
+
+			it_FontDefault.Enabled = !Font.Equals(FontDefault)
+								  && !it_Font.Checked;
+		}
+
 		/// <summary>
 		/// Opens the FontPicker form.
 		/// </summary>
@@ -3329,9 +3342,9 @@ namespace yata
 		/// <param name="e"></param>
 		void fontclick_Font(object sender, EventArgs e)
 		{
+			// var f = Application.OpenForms["FontF"];
 			if (_fontF == null)
 			{
-				it_FontDefault.Enabled = false;
 				it_Font.Checked = true;
 
 				_fontF = new FontF(this);
@@ -3348,33 +3361,18 @@ namespace yata
 				}
 				_fontF.BringToFront();
 			}
-/*			var f = Application.OpenForms["FontF"];
-			if (f == null)
-			{
-				it_FontDefault.Enabled = false;
-				it_Font.Checked = true;
-
-				f = new FontF(this);
-				f.Show(this);
-			}
-			else
-			{
-				if (f.WindowState == FormWindowState.Minimized)
-					f.WindowState  = FormWindowState.Normal;
-
-				f.BringToFront();
-			} */
 		}
 
 		/// <summary>
 		/// Sets the form's font to the default Font.
+		/// @note The item will be disabled if the FontPicker is open or if the
+		/// form's current Font is equal to the FontDefault font.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void fontclick_Default(object sender, EventArgs e)
 		{
-			if (!Font.Equals(FontDefault))
-				doFont(FontDefault);
+			doFont(FontDefault.Clone() as Font);
 		}
 		#endregion Events (font)
 
@@ -3388,9 +3386,7 @@ namespace yata
 		internal void FontF_closing()
 		{
 			_fontF = null;
-
 			it_Font.Checked = false;
-			it_FontDefault.Enabled = true;
 		}
 
 		/// <summary>
