@@ -447,13 +447,12 @@ namespace yata
 				|| _f._lengthCr < 1)
 			{
 				_cancel = true;
-				MessageBox.Show(
-							GetDarthQuote(),
-							" Error",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error,
-							MessageBoxDefaultButton.Button1,
-							0);
+				MessageBox.Show(GetDarthQuote(),
+								" Error",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Error,
+								MessageBoxDefaultButton.Button1,
+								0);
 			}
 			else if (rb_FillCopied  .Checked) _f._fillCr = YataForm.CrFillType.Copied;
 			else if (rb_FillSelected.Checked) _f._fillCr = YataForm.CrFillType.Selected;
