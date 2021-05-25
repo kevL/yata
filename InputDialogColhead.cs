@@ -17,7 +17,7 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
+		bool _bypasstextchanged;
 		#endregion Fields
 
 
@@ -25,11 +25,9 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal InputDialogColhead(YataForm f)
+		internal InputDialogColhead()
 		{
 			InitializeComponent();
-
-			_f = f;
 
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
@@ -72,7 +70,6 @@ namespace yata
 			DialogResult = DialogResult.OK;
 		}
 
-		bool _bypasstextchanged;
 		/// <summary>
 		/// Handles text-input in the TextBox.
 		/// <remarks>Col-head text shall be alphanumeric or underscore.</remarks>
