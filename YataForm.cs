@@ -837,8 +837,8 @@ namespace yata
 				it_ppLocation.Enabled = Table.Propanel != null && Table.Propanel.Visible;
 				it_ExternDiff.Enabled = File.Exists(Settings._diff);
 
-				it_freeze1   .Enabled = Table.Cols.Count > 1;
-				it_freeze2   .Enabled = Table.Cols.Count > 2;
+				it_freeze1   .Enabled = Table.ColCount > 1;
+				it_freeze2   .Enabled = Table.ColCount > 2;
 
 
 				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -2862,7 +2862,7 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				bool isColSelected = (Table.getSelectedCol() != -1);
+				bool isColSelected = (Table.getSelectedCol() > 0); // id-col is disallowed
 
 				it_CreateHead.Enabled = !Table.Readonly;
 				it_DeleteHead.Enabled = !Table.Readonly && isColSelected;
@@ -2887,11 +2887,11 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety. Is checked in editcol_dropdownopening()
 			{
-				if (!Table.Readonly) // safefy. Is checked in editcol_dropdownopening()
+				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
 				{
-					using (var f = new InputDialogColhead(this))
+					using (var f = new InputDialogColhead())
 					{
 						if (f.ShowDialog(this) == DialogResult.OK
 							&& InputDialogColhead._text.Length != 0)
@@ -2902,29 +2902,57 @@ namespace yata
 							int selc = Table.getSelectedCol();		// create at far right if no col selected or id-col is selected
 							if (selc < 1) selc = Table.ColCount;	// - not sure that id-col could ever be selected
 
-							it_freeze1.Checked =
-							it_freeze2.Checked = false;
-							Table.FrozenCount = YataGrid.FreezeId;
-
-							Table.ClearSelects();
-
-							foreach (var row in Table.Rows)
-							for (int c = 0; c != Table.ColCount; ++c)
-								row[c].loadchanged = false;
-
-							tabclick_DiffReset(null, EventArgs.Empty);
-//							Table.Select(); // done by tabclick_DiffReset()
-
-							if (Table.Propanel != null && Table.Propanel.Visible)
-							{
-								// TODO: close pp-editor if visible (check code for that generally)
-								Table.Propanel.Hide();
-								it_ppLocation.Enabled = false;
-							}
-
-							Table._ur.Clear(); // TODO: request confirmation
+							steadystate();
 
 							Table.CreateCol(selc);
+							// TODO: flag changed Table
+
+							Table.InitScroll();
+
+							DrawingControl.ResumeDrawing(Table);
+							Obfuscate(false);
+
+							Table.EnsureDisplayedCol(selc);
+
+							it_freeze1.Enabled = Table.ColCount > 1;
+							it_freeze2.Enabled = Table.ColCount > 2;
+						}
+					}
+				}
+				else
+					ReadonlyError();
+			}
+		}
+
+		/// <summary>
+		/// Opens a text-input dialog for creating a col.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcolclick_DeleteHead(object sender, EventArgs e)
+		{
+			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			{
+				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
+				{
+					int selc = Table.getSelectedCol();
+					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
+					{
+						if (MessageBox.Show("Are you sure you want to delete the selected col"
+												+ Environment.NewLine + Environment.NewLine
+												+ "\t" + Table.Fields[selc - 1],
+											" Delete colhead",
+											MessageBoxButtons.YesNo,
+											MessageBoxIcon.Warning,
+											MessageBoxDefaultButton.Button2,
+											0) == DialogResult.Yes)
+						{
+							Obfuscate();
+							DrawingControl.SuspendDrawing(Table);
+
+							steadystate();
+
+							Table.DeleteCol(selc);
 							// TODO: flag changed Table
 
 							Table.InitScroll();
@@ -2935,16 +2963,44 @@ namespace yata
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);
 
-							Table.EnsureDisplayedCol(selc);
-
-							it_freeze1.Enabled = Table.Cols.Count > 1;
-							it_freeze2.Enabled = Table.Cols.Count > 2;
+							it_freeze1.Enabled = Table.ColCount > 1;
+							it_freeze2.Enabled = Table.ColCount > 2;
 						}
 					}
 				}
 				else
 					ReadonlyError();
 			}
+		}
+
+		/// <summary>
+		/// Puts the table in a neutral state.
+		/// </summary>
+		/// <remarks>Helper for <see cref="editcolclick_CreateHead"/> and
+		/// <see cref="editcolclick_DeleteHead"/>.</remarks>
+		void steadystate()
+		{
+			it_freeze1.Checked =
+			it_freeze2.Checked = false;
+			Table.FrozenCount = YataGrid.FreezeId;
+
+			Table.ClearSelects();
+
+			foreach (var row in Table.Rows)
+			for (int c = 0; c != Table.ColCount; ++c)
+				row[c].loadchanged = false;
+
+			tabclick_DiffReset(null, EventArgs.Empty);
+//			Table.Select(); // done by tabclick_DiffReset()
+
+			if (Table.Propanel != null && Table.Propanel.Visible)
+			{
+				// TODO: close pp-editor if visible (check code for that generally)
+				Table.Propanel.Hide();
+				it_ppLocation.Enabled = false;
+			}
+
+			Table._ur.Clear(); // TODO: request confirmation
 		}
 		#endregion Events (editcol)
 
@@ -3037,8 +3093,8 @@ namespace yata
 			it_ppOnOff   .Enabled = valid;
 			it_ppLocation.Enabled = valid && Table.Propanel != null && Table.Propanel.Visible;
 
-			it_freeze1   .Enabled = valid && Table.Cols.Count > 1;
-			it_freeze2   .Enabled = valid && Table.Cols.Count > 2;
+			it_freeze1   .Enabled = valid && Table.ColCount > 1;
+			it_freeze2   .Enabled = valid && Table.ColCount > 2;
 
 			it_ExternDiff.Enabled = valid && File.Exists(Settings._diff);
 			it_ClearUr   .Enabled = valid && (Table._ur.CanUndo || Table._ur.CanRedo);

@@ -849,6 +849,7 @@ namespace yata
 			this.it_DeleteHead.Name = "it_DeleteHead";
 			this.it_DeleteHead.Size = new System.Drawing.Size(158, 22);
 			this.it_DeleteHead.Text = "delete head ...";
+			this.it_DeleteHead.Click += new System.EventHandler(this.editcolclick_DeleteHead);
 			// 
 			// separator_32
 			// 

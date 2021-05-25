@@ -1186,6 +1186,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Creates a col.
+		/// </summary>
+		/// <param name="selc"></param>
 		internal void CreateCol(int selc)
 		{
 //			for (int r = 0; r != RowCount; ++r) // debug ->
@@ -1259,6 +1263,48 @@ namespace yata
 //			for (int c = 0; c != ColCount; ++c)
 //				logfile.Log(this[r,c].ToString());
 //			logfile.Log();
+		}
+
+		/// <summary>
+		/// Deletes a col.
+		/// </summary>
+		/// <param name="selc"></param>
+		internal void DeleteCol(int selc)
+		{
+			--selc; // the Field-count is 1 less than the col-count
+
+			int fieldsLength = Fields.Length - 1; // create a new Fields array ->
+			var fields = new string[fieldsLength];
+			for (int i = 0; i != fieldsLength; ++i)
+			{
+				if (i < selc) fields[i] = Fields[i];
+				else          fields[i] = Fields[i + 1];
+			}
+			Fields = fields;
+
+			++selc; // revert to col-id
+
+			for (int r = 0; r != RowCount; ++r)
+			{
+				var cells = new Cell[ColCount - 1]; // create a new Cells array in each row ->
+				for (int c = 0; c != ColCount - 1; ++c)
+				{
+					if (c < selc)
+					{
+						cells[c] = this[r,c];
+					}
+					else
+					{
+						cells[c] = this[r, c + 1];
+						cells[c].x -= 1;
+					}
+				}
+				Rows[r]._cells = cells;
+				Rows[r].Length -= 1;
+			}
+
+			Cols.RemoveAt(selc);
+			--ColCount;
 		}
 
 		/// <summary>
