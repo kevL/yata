@@ -58,7 +58,7 @@ namespace yata
 
 		readonly YataGrid _grid;
 
-		readonly Cell[] _cells;
+		internal Cell[] _cells;
 
 		/// <summary>
 		/// Gets/sets the cell at pos [c].
@@ -69,8 +69,8 @@ namespace yata
 			set { _cells[c] = value; }
 		}
 
-		internal int CellCount
-		{ get; private set; }
+		internal int Length
+		{ get; set; }
 
 		internal Brush _brush;
 
@@ -100,7 +100,7 @@ namespace yata
 		internal Row(int id, int cols, Brush brush, YataGrid grid)
 		{
 			_id = id;
-			_cells = new Cell[CellCount = cols];
+			_cells = new Cell[Length = cols];
 			_brush = brush;
 			_grid = grid;
 		}
@@ -115,7 +115,7 @@ namespace yata
 		internal Row(int id, Cell[] cells, Brush brush, YataGrid grid)
 		{
 			_id = id;
-			CellCount = (_cells = cells).Length;
+			Length = (_cells = cells).Length;
 			_brush = brush;
 			_grid = grid;
 		}
@@ -125,8 +125,8 @@ namespace yata
 		#region ICloneable requirements
 		public object Clone()
 		{
-			var cells = new Cell[CellCount];
-			for (int i = 0; i != CellCount; ++i)
+			var cells = new Cell[Length];
+			for (int i = 0; i != Length; ++i)
 				cells[i] = _cells[i].Clone() as Cell;
 
 			return new Row(_id, cells, _brush, _grid);
@@ -250,7 +250,7 @@ namespace yata
 		#endregion ICloneable requirements
 
 
-/*		public override string ToString()
+		public override string ToString()
 		{
 			return String.Format("Cell:{0}"
 							   + ". text= {1}{0}"
@@ -258,14 +258,20 @@ namespace yata
 							   + ". x= {3}{0}"
 							   + ". selected= {4}{0}"
 							   + ". loadchanged= {5}{0}"
-							   + ". _widthtext {6}",
-								 Environment.NewLine,
-								 text,
-								 y,
-								 x,
-								 selected,
-								 loadchanged,
-								 _widthtext);
-		} */
+							   + ". diff= {6}{0}"
+							   + ". _widthtext= {7}{0}"
+							   + ". state= {8}{0}"
+							   + ". y_presort= {9}",
+								 Environment.NewLine,	// 0
+								 text,					// 1
+								 y,						// 2
+								 x,						// 3
+								 selected,				// 4
+								 loadchanged,			// 5
+								 diff,					// 6
+								 _widthtext,			// 7
+								 state,					// 8
+								 y_presort);			// 9
+		}
 	}
 }

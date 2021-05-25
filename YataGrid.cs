@@ -1186,6 +1186,81 @@ namespace yata
 			}
 		}
 
+		internal void CreateCol(int selc)
+		{
+//			for (int r = 0; r != RowCount; ++r) // debug ->
+//			for (int c = 0; c != ColCount; ++c)
+//				logfile.Log(this[r,c].ToString());
+//			logfile.Log();
+
+
+			--selc; // the Field-count is 1 less than the col-count
+
+			int widthstars = YataGraphics.MeasureWidth(gs.Stars, Font);
+
+			int fieldsLength = Fields.Length + 1; // create a new Fields array ->
+			var fields = new string[fieldsLength];
+			for (int i = 0; i != fieldsLength; ++i)
+			{
+				if (i < selc)
+				{
+					fields[i] = Fields[i];
+				}
+				else if (i == selc)
+				{
+					fields[i] = InputDialogColhead._text;
+
+					var col = new Col();
+					col.text = InputDialogColhead._text;
+					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
+					col.width(col._widthtext + _padHori * 2 + _padHoriSort);
+					col.selected = true;
+
+					Cols.Insert(i + 1, col);
+					++ColCount;
+
+					for (int r = 0; r != RowCount; ++r)
+					{
+						var cells = new Cell[ColCount]; // create a new Cells array in each row ->
+						for (int c = 0; c != ColCount; ++c)
+						{
+							if (c < selc + 1)
+							{
+								cells[c] = this[r,c];
+							}
+							else if (c == selc + 1)
+							{
+								cells[c] = new Cell(r,c, gs.Stars);
+								cells[c].selected = true;
+								cells[c]._widthtext = widthstars;
+							}
+							else // (c > selc + 1)
+							{
+								cells[c] = this[r, c - 1];
+								cells[c].x += 1;
+							}
+						}
+						Rows[r]._cells = cells;
+						Rows[r].Length += 1;
+					}
+				}
+				else // (i > selc)
+				{
+					fields[i] = Fields[i - 1];
+				}
+			}
+			Fields = fields;
+
+			if ((widthstars += _padHori * 2) > Cols[++selc].width())
+				Cols[selc].width(widthstars);
+
+
+//			for (int r = 0; r != RowCount; ++r) // debug ->
+//			for (int c = 0; c != ColCount; ++c)
+//				logfile.Log(this[r,c].ToString());
+//			logfile.Log();
+		}
+
 		/// <summary>
 		/// Creates the rows and adds cells to each row. Also determines each
 		/// cell's 'loadchanged' bool.
@@ -2970,7 +3045,7 @@ namespace yata
 		/// displayed.
 		/// </summary>
 		/// <param name="c">the col to display</param>
-		void EnsureDisplayedCol(int c)
+		internal void EnsureDisplayedCol(int c)
 		{
 			var bounds = getColBounds(c);
 
@@ -3433,7 +3508,7 @@ namespace yata
 		/// </summary>
 		/// <returns>the currently selected col-id; -1 if no col is currently
 		/// selected</returns>
-		int getSelectedCol()
+		internal int getSelectedCol()
 		{
 			for (int c = 0; c != ColCount; ++c)
 			{

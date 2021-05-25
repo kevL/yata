@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2020 december 23
+2021 may 25
 kevL's
-ver 3.9.4.0
+ver 4.0.0.0
 
 
 File
@@ -56,6 +56,14 @@ Edit
 - Create row(s) : F2 (opens a dialog that inserts 1+ rows at a given id with
                       options to use (a) a selected row or (b) the first of any
                       currently copied rows or (c) "****" to fill the fields)
+
+
+Editcol
+- create head ... : clears Undo/Redo, etc
+- delete head ... : clears Undo/Redo, etc
+
+- copy col
+- paste col
 
 
 Goto box (type a row ID and press Enter)

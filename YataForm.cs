@@ -55,7 +55,12 @@ namespace yata
 		/// <summary>
 		/// A list used for copy/paste row(s).
 		/// </summary>
-		List<string[]> _copy = new List<string[]>();
+		List<string[]> _copyr = new List<string[]>();
+
+		/// <summary>
+		/// A list used for copy/paste col.
+		/// </summary>
+		List<string> _copyc = new List<string>();
 
 		/// <summary>
 		/// A string used for Copy/PasteCell.
@@ -816,7 +821,7 @@ namespace yata
 				it_CopyCell  .Enabled = sel != null;
 				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
 				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
-				it_PasteRange.Enabled = !Table.Readonly && _copy.Count != 0;
+				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
 				it_CreateRows.Enabled = !Table.Readonly;
 
 				it_Stars     .Enabled =
@@ -1627,7 +1632,7 @@ namespace yata
 
 			context_it_PasteAbove .Enabled =
 			context_it_Paste      .Enabled =
-			context_it_PasteBelow .Enabled = !Table.Readonly && _copy.Count != 0;
+			context_it_PasteBelow .Enabled = !Table.Readonly && _copyr.Count != 0;
 
 			context_it_Cut        .Enabled =
 			context_it_CreateAbove.Enabled =
@@ -1667,13 +1672,13 @@ namespace yata
 		/// <param name="e"></param>
 		void contextclick_EditCopy(object sender, EventArgs e)
 		{
-			_copy.Clear();
+			_copyr.Clear();
 
 			var fields = new string[Table.ColCount];
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = Table[_r,c].text;
 
-			_copy.Add(fields);
+			_copyr.Add(fields);
 		}
 
 		/// <summary>
@@ -1701,7 +1706,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.Insert(_r, _copy[0]);
+				Table.Insert(_r, _copyr[0]);
 
 //				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
 //				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -1739,8 +1744,8 @@ namespace yata
 				string field;
 				for (int c = 0; c != Table.ColCount; ++c)
 				{
-					if (c < _copy[0].Length)
-						field = _copy[0][c];
+					if (c < _copyr[0].Length)
+						field = _copyr[0][c];
 					else
 						field = gs.Stars;
 
@@ -1783,7 +1788,7 @@ namespace yata
 		{
 			if (!Table.Readonly)
 			{
-				Table.Insert(_r + 1, _copy[0]);
+				Table.Insert(_r + 1, _copyr[0]);
 
 //				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
 //				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -1992,7 +1997,7 @@ namespace yata
 				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
 
 				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
-				it_PasteRange.Enabled = !Table.Readonly && _copy.Count != 0;
+				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
 
 				it_CreateRows.Enabled = !Table.Readonly;
 
@@ -2613,7 +2618,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_CopyRange(object sender, EventArgs e)
 		{
-			_copy.Clear();
+			_copyr.Clear();
 
 			int selr = Table.getSelectedRow();
 
@@ -2636,7 +2641,7 @@ namespace yata
 				for (int c = 0; c != Table.ColCount; ++c)
 					fields[c] = Table[rFirst,c].text;
 
-				_copy.Add(fields);
+				_copyr.Add(fields);
 				++rFirst;
 			}
 
@@ -2657,24 +2662,24 @@ namespace yata
 				DrawingControl.SuspendDrawing(Table);
 
 
-				Restorable rest = UndoRedo.createArray(_copy.Count, UndoRedo.UrType.rt_ArrayDelete);
+				Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
 
 				int selr = Table.getSelectedRow();
 				if (selr == -1)
 					selr = Table.RowCount;
 
 				int r = selr;
-				for (int i = 0; i != _copy.Count; ++i, ++r)
+				for (int i = 0; i != _copyr.Count; ++i, ++r)
 				{
-					Table.Insert(r, _copy[i], false);
+					Table.Insert(r, _copyr[i], false);
 					rest.array[i] = Table.Rows[r].Clone() as Row;
 				}
 
-				Table.Calibrate(selr, _copy.Count - 1); // paste range
+				Table.Calibrate(selr, _copyr.Count - 1); // paste range
 
 				Table.ClearSelects();
 				Table.Rows[selr].selected = true;
-				Table.RangeSelect = _copy.Count - 1;
+				Table.RangeSelect = _copyr.Count - 1;
 				Table.EnsureDisplayedRow(selr);
 
 
@@ -2708,7 +2713,7 @@ namespace yata
 				{
 					int selr = Table.getSelectedRow();
 
-					using (var f = new RowCreatorDialog(this, selr + 1, _copy.Count != 0))
+					using (var f = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
 					{
 						if (f.ShowDialog(this) == DialogResult.OK)
 						{
@@ -2734,8 +2739,8 @@ namespace yata
 								case CrFillType.Copied:
 									for (int i = 0; i != Table.ColCount; ++i)
 									{
-										if (i < _copy[0].Length)
-											cells[i] = _copy[0][i];
+										if (i < _copyr[0].Length)
+											cells[i] = _copyr[0][i];
 										else
 											cells[i] = gs.Stars;
 									}
@@ -2840,37 +2845,141 @@ namespace yata
 		#endregion Methods (edit)
 
 
+		#region Events (editcol)
+		/// <summary>
+		/// Handles opening the EditcolMenu, determines if various items ought
+		/// be enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcol_dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
+
+				bool isColSelected = (Table.getSelectedCol() != -1);
+
+				it_CreateHead.Enabled = !Table.Readonly;
+				it_DeleteHead.Enabled = !Table.Readonly && isColSelected;
+
+				it_CopyCol   .Enabled = isColSelected;
+				it_PasteCol  .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
+			}
+			else
+			{
+				it_CreateHead.Enabled =
+				it_DeleteHead.Enabled =
+
+				it_CopyCol   .Enabled =
+				it_PasteCol  .Enabled = false;
+			}
+		}
+
+		/// <summary>
+		/// Opens a text-input dialog for creating a col.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcolclick_CreateHead(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				if (!Table.Readonly) // safefy. Is checked in editcol_dropdownopening()
+				{
+					using (var f = new InputDialogColhead(this))
+					{
+						if (f.ShowDialog(this) == DialogResult.OK
+							&& InputDialogColhead._text.Length != 0)
+						{
+							Obfuscate();
+							DrawingControl.SuspendDrawing(Table);
+
+							int selc = Table.getSelectedCol();		// create at far right if no col selected or id-col is selected
+							if (selc < 1) selc = Table.ColCount;	// - not sure that id-col could ever be selected
+
+							it_freeze1.Checked =
+							it_freeze2.Checked = false;
+							Table.FrozenCount = YataGrid.FreezeId;
+
+							Table.ClearSelects();
+
+							foreach (var row in Table.Rows)
+							for (int c = 0; c != Table.ColCount; ++c)
+								row[c].loadchanged = false;
+
+							tabclick_DiffReset(null, EventArgs.Empty);
+//							Table.Select(); // done by tabclick_DiffReset()
+
+							if (Table.Propanel != null && Table.Propanel.Visible)
+							{
+								// TODO: close pp-editor if visible (check code for that generally)
+								Table.Propanel.Hide();
+								it_ppLocation.Enabled = false;
+							}
+
+							Table._ur.Clear(); // TODO: request confirmation
+
+							Table.CreateCol(selc);
+							// TODO: flag changed Table
+
+							Table.InitScroll();
+
+//							Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
+//							Refresh();
+
+							DrawingControl.ResumeDrawing(Table);
+							Obfuscate(false);
+
+							Table.EnsureDisplayedCol(selc);
+
+							it_freeze1.Enabled = Table.Cols.Count > 1;
+							it_freeze2.Enabled = Table.Cols.Count > 2;
+						}
+					}
+				}
+				else
+					ReadonlyError();
+			}
+		}
+		#endregion Events (editcol)
+
+
 		#region Events (clipboard)
 		/// <summary>
-		/// Outputs the current contents of '_copy' to the Windows clipboard.
+		/// Outputs the current contents of '_copyr' to the Windows clipboard.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void clipclick_ExportCopy(object sender, EventArgs e)
 		{
 			string clip = String.Empty;
-			for (int i = 0; i != _copy.Count; ++i)
+			for (int i = 0; i != _copyr.Count; ++i)
 			{
-				for (int j = 0; j != _copy[i].Length; ++j)
+				for (int j = 0; j != _copyr[i].Length; ++j)
 				{
 					if (j != 0) clip += gs.Space;
-					clip += _copy[i][j];
+					clip += _copyr[i][j];
 				}
 
-				if (i != _copy.Count - 1)
+				if (i != _copyr.Count - 1)
 					clip += Environment.NewLine;
 			}
 			ClipboardAssistant.SetText(clip);
 		}
 
 		/// <summary>
-		/// Imports the current contents of the Windows clipboard to '_copy'.
+		/// Imports the current contents of the Windows clipboard to '_copyr'.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void clipclick_ImportCopy(object sender, EventArgs e)
 		{
-			_copy.Clear();
+			_copyr.Clear();
 
 			string clip = Clipboard.GetText(TextDataFormat.Text);
 			if (!String.IsNullOrEmpty(clip))
@@ -2879,7 +2988,7 @@ namespace yata
 				for (int i = 0; i != lines.Length; ++i)
 				{
 					string[] fields = YataGrid.ParseTableRow(lines[i]);
-					_copy.Add(fields);
+					_copyr.Add(fields);
 				}
 			}
 		}

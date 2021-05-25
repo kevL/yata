@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -47,6 +48,12 @@ namespace yata
 		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRange;
 		ToolStripMenuItem it_CreateRows;
+
+		ToolStripMenuItem it_MenuEditcol;
+		ToolStripMenuItem it_CreateHead;
+		ToolStripMenuItem it_DeleteHead;
+		ToolStripMenuItem it_CopyCol;
+		ToolStripMenuItem it_PasteCol;
 
 		internal ToolStripTextBox tb_Goto;
 
@@ -133,6 +140,7 @@ namespace yata
 		ToolStripSeparator separator_29;
 		ToolStripSeparator separator_30;
 		ToolStripSeparator separator_31;
+		ToolStripSeparator separator_32;
 
 		internal ContextMenuStrip ContextEditor;
 		ToolStripMenuItem context_it_Header;
@@ -252,6 +260,12 @@ namespace yata
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_MenuEditcol = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CreateHead = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_DeleteHead = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_32 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_CopyCol = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteCol = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -463,6 +477,7 @@ namespace yata
 			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
+			this.it_MenuEditcol,
 			this.tb_Goto,
 			this.tb_Search,
 			this.cb_SearchOption,
@@ -808,6 +823,49 @@ namespace yata
 			this.it_CreateRows.Size = new System.Drawing.Size(226, 22);
 			this.it_CreateRows.Text = "Crea&te row(s) ...";
 			this.it_CreateRows.Click += new System.EventHandler(this.editclick_CreateRows);
+			// 
+			// it_MenuEditcol
+			// 
+			this.it_MenuEditcol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_CreateHead,
+			this.it_DeleteHead,
+			this.separator_32,
+			this.it_CopyCol,
+			this.it_PasteCol});
+			this.it_MenuEditcol.Name = "it_MenuEditcol";
+			this.it_MenuEditcol.Size = new System.Drawing.Size(56, 20);
+			this.it_MenuEditcol.Text = "Editcol";
+			this.it_MenuEditcol.DropDownOpening += new System.EventHandler(this.editcol_dropdownopening);
+			// 
+			// it_CreateHead
+			// 
+			this.it_CreateHead.Name = "it_CreateHead";
+			this.it_CreateHead.Size = new System.Drawing.Size(158, 22);
+			this.it_CreateHead.Text = "create head ...";
+			this.it_CreateHead.Click += new System.EventHandler(this.editcolclick_CreateHead);
+			// 
+			// it_DeleteHead
+			// 
+			this.it_DeleteHead.Name = "it_DeleteHead";
+			this.it_DeleteHead.Size = new System.Drawing.Size(158, 22);
+			this.it_DeleteHead.Text = "delete head ...";
+			// 
+			// separator_32
+			// 
+			this.separator_32.Name = "separator_32";
+			this.separator_32.Size = new System.Drawing.Size(155, 6);
+			// 
+			// it_CopyCol
+			// 
+			this.it_CopyCol.Name = "it_CopyCol";
+			this.it_CopyCol.Size = new System.Drawing.Size(158, 22);
+			this.it_CopyCol.Text = "copy col";
+			// 
+			// it_PasteCol
+			// 
+			this.it_PasteCol.Name = "it_PasteCol";
+			this.it_PasteCol.Size = new System.Drawing.Size(158, 22);
+			this.it_PasteCol.Text = "paste col";
 			// 
 			// tb_Goto
 			// 

@@ -517,14 +517,14 @@ namespace yata
 		{
 			Row row = _it.r;
 
-			var fields = new string[row.CellCount];
-			for (int c = 0; c != row.CellCount; ++c)
+			var fields = new string[row.Length];
+			for (int c = 0; c != row.Length; ++c)
 				fields[c] = String.Copy(row[c].text);
 
 			int r = row._id;
 			_grid.Insert(r, fields, true, row._brush);
 
-			for (int c = 0; c != row.CellCount; ++c)
+			for (int c = 0; c != row.Length; ++c)
 				_grid[r,c].loadchanged = row[c].loadchanged;
 
 			_grid.ClearSelects();
@@ -594,7 +594,7 @@ namespace yata
 			DrawingControl.SuspendDrawing(_grid);
 
 
-			int cols = _it.array[0].CellCount;
+			int cols = _it.array[0].Length;
 			var fields = new string[cols];
 
 			Row row;
@@ -606,7 +606,7 @@ namespace yata
 
 				_grid.Insert(row._id, fields, false, row._brush);
 
-				for (int c = 0; c != row.CellCount; ++c)
+				for (int c = 0; c != row.Length; ++c)
 					_grid[row._id, c].loadchanged = row[c].loadchanged;
 			}
 			_grid.Calibrate(0, _grid.RowCount - 1);

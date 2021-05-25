@@ -84,6 +84,7 @@
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="InfoInputTui.cs" />
+    <Compile Include="InputDialogColhead.cs" />
     <Compile Include="PropertyPanel.cs" />
     <Compile Include="RowCreatorDialog.cs" />
     <Compile Include="RowCreatorDialog.Designer.cs">
@@ -138,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InfoInputSpells.resx">
       <DependentUpon>InfoInputSpells.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InputDialogColhead.resx">
+      <DependentUpon>InputDialogColhead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
