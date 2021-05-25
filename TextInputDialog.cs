@@ -28,6 +28,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
+		/// <param name="f"></param>
 		internal TextInputDialog(YataForm f)
 		{
 			InitializeComponent();
