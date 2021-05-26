@@ -2908,7 +2908,6 @@ namespace yata
 							steadystate();
 
 							Table.CreateCol(selc);
-							// TODO: flag changed Table
 
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);
@@ -2952,7 +2951,6 @@ namespace yata
 							steadystate();
 
 							Table.DeleteCol(selc);
-							// TODO: flag changed Table
 
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);
@@ -3016,7 +3014,6 @@ namespace yata
 								&& InputDialogColhead._text.Length != 0)
 							{
 								Table.RelabelCol(selc);
-								// TODO: flag changed Table
 							}
 						}
 					}
@@ -3084,7 +3081,6 @@ namespace yata
 							DrawingControl.SuspendDrawing(Table);
 
 							Table.PasteCol(selc, _copyc);
-							// TODO: flag changed Table
 
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);

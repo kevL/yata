@@ -1254,6 +1254,8 @@ namespace yata
 
 			InitScroll();
 			EnsureDisplayedCol(selc);
+
+			if (!Changed) Changed = true;
 		}
 
 		/// <summary>
@@ -1298,6 +1300,8 @@ namespace yata
 			--ColCount;
 
 			InitScroll();
+
+			if (!Changed) Changed = true;
 		}
 
 		/// <summary>
@@ -1313,6 +1317,8 @@ namespace yata
 			Colwidth(selc);
 			InitScroll();
 			EnsureDisplayedCol(selc);
+
+			if (!Changed) Changed = true;
 		}
 
 		/// <summary>
@@ -1334,6 +1340,8 @@ namespace yata
 			Colwidth(selc, 0, RowCount - 1);
 			InitScroll();
 			EnsureDisplayedCol(selc);
+
+			if (!Changed) Changed = true;
 		}
 
 		/// <summary>
