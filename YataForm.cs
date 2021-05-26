@@ -3008,10 +3008,13 @@ namespace yata
 					int selc = Table.getSelectedCol();
 					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
 					{
+						string head = Table.Fields[selc - 1];
+						InputDialogColhead._text = head;
 						using (var f = new InputDialogColhead())
 						{
 							if (f.ShowDialog(this) == DialogResult.OK
-								&& InputDialogColhead._text.Length != 0)
+								&& InputDialogColhead._text.Length != 0
+								&& InputDialogColhead._text != head)
 							{
 								Table.RelabelCol(selc);
 							}
