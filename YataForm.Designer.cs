@@ -871,12 +871,14 @@ namespace yata
 			this.it_CopyCol.Name = "it_CopyCol";
 			this.it_CopyCol.Size = new System.Drawing.Size(161, 22);
 			this.it_CopyCol.Text = "copy col";
+			this.it_CopyCol.Click += new System.EventHandler(this.editcolclick_CopyCol);
 			// 
 			// it_PasteCol
 			// 
 			this.it_PasteCol.Name = "it_PasteCol";
 			this.it_PasteCol.Size = new System.Drawing.Size(161, 22);
 			this.it_PasteCol.Text = "paste col";
+			this.it_PasteCol.Click += new System.EventHandler(this.editcolclick_PasteCol);
 			// 
 			// tb_Goto
 			// 

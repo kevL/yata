@@ -1138,7 +1138,7 @@ namespace yata
 			_editor.Visible = false;
 
 			for (int c = 0; c != ColCount; ++c)
-				DeterColwidth(c, r, range);
+				Colwidth(c,r, range);
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
@@ -1192,12 +1192,6 @@ namespace yata
 		/// <param name="selc"></param>
 		internal void CreateCol(int selc)
 		{
-//			for (int r = 0; r != RowCount; ++r) // debug ->
-//			for (int c = 0; c != ColCount; ++c)
-//				logfile.Log(this[r,c].ToString());
-//			logfile.Log();
-
-
 			--selc; // the Field-count is 1 less than the col-count
 
 			int widthstars = YataGraphics.MeasureWidth(gs.Stars, Font);
@@ -1258,11 +1252,8 @@ namespace yata
 			if ((widthstars += _padHori * 2) > Cols[++selc].width())
 				Cols[selc].width(widthstars);
 
-
-//			for (int r = 0; r != RowCount; ++r) // debug ->
-//			for (int c = 0; c != ColCount; ++c)
-//				logfile.Log(this[r,c].ToString());
-//			logfile.Log();
+			InitScroll();
+			EnsureDisplayedCol(selc);
 		}
 
 		/// <summary>
@@ -1305,6 +1296,8 @@ namespace yata
 
 			Cols.RemoveAt(selc);
 			--ColCount;
+
+			InitScroll();
 		}
 
 		/// <summary>
@@ -1313,24 +1306,34 @@ namespace yata
 		/// <param name="selc"></param>
 		internal void RelabelCol(int selc)
 		{
-			--selc; // the Field-count is 1 less than the col-count
+			Fields[selc - 1] = InputDialogColhead._text; // the Field-count is 1 less than the col-count
+			Cols[selc]._widthtext = YataGraphics.MeasureWidth((Cols[selc].text = InputDialogColhead._text),
+															  _f.FontAccent);
 
-			int fieldsLength = Fields.Length; // create a new Fields array ->
-			var fields = new string[fieldsLength];
-			for (int i = 0; i != fieldsLength; ++i)
+			Colwidth(selc);
+			InitScroll();
+			EnsureDisplayedCol(selc);
+		}
+
+		/// <summary>
+		/// Pastes cell-texts into a col.
+		/// </summary>
+		/// <param name="selc"></param>
+		/// <param name="copyc"></param>
+		internal void PasteCol(int selc, IList<string> copyc)
+		{
+			ClearSelects();
+
+			for (int r = 0; r != RowCount && r != copyc.Count; ++r)
 			{
-				if (i == selc)
-				{
-					fields[i] = InputDialogColhead._text;
-
-					var col = Cols[i + 1];
-					col.text = InputDialogColhead._text;
-					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
-				}
-				else
-					fields[i] = Fields[i];
+				var cell = this[r, selc];
+				cell.text = copyc[r];
+				cell.selected = true;
 			}
-			Fields = fields;
+
+			Colwidth(selc, 0, RowCount - 1);
+			InitScroll();
+			EnsureDisplayedCol(selc);
 		}
 
 		/// <summary>
@@ -2188,10 +2191,10 @@ namespace yata
 
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
-		/// @note Performs a text-check.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="tb">the editor's textbox whose text to check for validity</param>
+		/// <remarks>Performs a text-check.</remarks>
 		internal void ChangeCellText(Cell cell, Control tb)
 		{
 			Restorable rest = UndoRedo.createCell(cell);
@@ -2214,7 +2217,7 @@ namespace yata
 
 			cell.text = tb.Text;
 
-			DeterColwidth(cell.x, cell.y);
+			Colwidth(cell.x, cell.y);
 			metricFrozenControls(cell.x);
 
 
@@ -2224,10 +2227,10 @@ namespace yata
 
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
-		/// @note Does *not* perform a text-check.
 		/// </summary>
 		/// <param name="cell">a Cell</param>
 		/// <param name="text">the text to change to</param>
+		/// <remarks>Does *not* perform a text-check.</remarks>
 		internal void ChangeCellText(Cell cell, string text)
 		{
 			Restorable rest = UndoRedo.createCell(cell);
@@ -2243,7 +2246,7 @@ namespace yata
 
 			cell.text = text;
 
-			DeterColwidth(cell.x, cell.y);
+			Colwidth(cell.x, cell.y);
 			metricFrozenControls(cell.x);
 
 			int invalid = INVALID_GRID;
@@ -2267,48 +2270,48 @@ namespace yata
 		/// text-widths need to be re-measured)</param>
 		/// <param name="range">range of rows to consider as changed (default 0
 		/// for single row)</param>
-		internal void DeterColwidth(int c, int r = -1, int range = 0)
+		internal void Colwidth(int c, int r = -1, int range = 0)
 		{
 			var col = Cols[c];
 
-			int w = col._widthtext + _padHoriSort;
-			int wT;
+			int colwidth = col._widthtext + _padHoriSort;
+			int widthTest;
 
-			if (r != -1) // NOTE: re-calc '_widthtext' regardless of what happens below ->
+			if (r != -1) // re-calc '_widthtext' regardless of what happens below ->
 			{
-				int r1 = r + range;
-				for (; r <= r1; ++r)
+				int rend = r + range;
+				for (; r <= rend; ++r)
 				{
-					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
-					this[r,c]._widthtext = wT;
-					if (wT > w) w = wT;
+					widthTest = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					this[r,c]._widthtext = widthTest;
+					if (widthTest > colwidth) colwidth = widthTest;
 				}
 			}
 
 			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
 			{					// be forced (eg. on reload) unflag UserSized on all cols first.
-				w += _padHori * 2;
+				colwidth += _padHori * 2;
 
-				int width = col.width();
-				if (w > width)
+				int totalwidth = col.width();
+				if (colwidth > totalwidth)
 				{
-					col.width(w);
+					col.width(colwidth);
 				}
-				else if (w < width) // recalc width on the entire col
+				else if (colwidth < totalwidth) // recalc width on the entire col
 				{
-					if (c == 0 || _wId > w)
-						w = _wId;
+					if (c == 0 || _wId > colwidth)
+						colwidth = _wId;
 
 					for (r = 0; r != RowCount; ++r)
 					{
-						wT = this[r,c]._widthtext + _padHori * 2;
-						if (wT > w) w = wT;
+						widthTest = this[r,c]._widthtext + _padHori * 2;
+						if (widthTest > colwidth) colwidth = widthTest;
 					}
-					col.width(w, true);
+					col.width(colwidth, true);
 				}
 
-				if (range == 0 && w != width)	// if range >0 let Calibrate() handle multiple
-				{								// cols or at least the scrollers and do the UI-update
+				if (range == 0 && colwidth != totalwidth)	// if range >0 let Calibrate() handle multiple
+				{											// cols or at least the scrollers and do the UI-update
 					InitScroll();
 					Invalidator(INVALID_GRID | INVALID_COLS);
 				}

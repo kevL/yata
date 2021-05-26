@@ -250,7 +250,7 @@ namespace yata
 		#endregion ICloneable requirements
 
 
-		public override string ToString()
+/*		public override string ToString()
 		{
 			return String.Format("Cell:{0}"
 							   + ". text= {1}{0}"
@@ -272,6 +272,6 @@ namespace yata
 								 _widthtext,			// 7
 								 state,					// 8
 								 y_presort);			// 9
-		}
+		} */
 	}
 }

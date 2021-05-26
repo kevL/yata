@@ -59,11 +59,12 @@ Edit
 
 
 Editcol
-- create head ... : clears Undo/Redo, etc
-- delete head ... : clears Undo/Redo, etc
+- create head ...  : creates a col. This clears Undo/Redo, etc.
+- delete head ...  : deletes a col. This clears Undo/Redo, etc.
+- relabel head ... : relabels the head of a selected col
 
-- copy col
-- paste col
+- copy col  : copies the cells of a selected col
+- paste col : pastes copied cells into a selected col
 
 
 Goto box (type a row ID and press Enter)
@@ -571,6 +572,7 @@ Yata stores the state of cell-text changes and row insertions and deletions for
 Undo and Redo operations.
 
 IMPORTANT: The following operations cannot be Undone/Redone
+- create or delete or relabel a col; paste col-cells
 - order row ids
 - recolor rows
 - font changes

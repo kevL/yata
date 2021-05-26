@@ -305,6 +305,10 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Helper for <see cref="ResetY"/>.
+		/// </summary>
+		/// <param name="rests"></param>
 		void ResetY(ref Restorable[] rests)
 		{
 			int y;
@@ -493,7 +497,7 @@ namespace yata
 
 			_grid[r,c] = cell;
 
-			_grid.DeterColwidth(c, r);
+			_grid.Colwidth(c,r);
 			_grid.metricFrozenControls(c);
 
 			_grid.ClearSelects();

@@ -2883,7 +2883,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens a text-input dialog for creating a col.
+		/// Opens a text-input dialog for creating a col at a selected col-id or
+		/// at the far right if no col is selected.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2909,12 +2910,8 @@ namespace yata
 							Table.CreateCol(selc);
 							// TODO: flag changed Table
 
-							Table.InitScroll();
-
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);
-
-							Table.EnsureDisplayedCol(selc);
 
 							it_freeze1.Enabled = Table.ColCount > 1;
 							it_freeze2.Enabled = Table.ColCount > 2;
@@ -2927,7 +2924,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a col w/ confirmation.
+		/// Deletes a selected col w/ confirmation.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2956,11 +2953,6 @@ namespace yata
 
 							Table.DeleteCol(selc);
 							// TODO: flag changed Table
-
-							Table.InitScroll();
-
-//							Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
-//							Refresh();
 
 							DrawingControl.ResumeDrawing(Table);
 							Obfuscate(false);
@@ -2993,7 +2985,6 @@ namespace yata
 				row[c].loadchanged = false;
 
 			tabclick_DiffReset(null, EventArgs.Empty);
-//			Table.Select(); // done by tabclick_DiffReset()
 
 			if (Table.Propanel != null && Table.Propanel.Visible)
 			{
@@ -3006,7 +2997,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Relabels a colhead.
+		/// Relabels the colhead of a selected col.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3026,13 +3017,77 @@ namespace yata
 							{
 								Table.RelabelCol(selc);
 								// TODO: flag changed Table
-
-								Table.DeterColwidth(selc);
-
-								Table.InitScroll();
-
-								Table.EnsureDisplayedCol(selc);
 							}
+						}
+					}
+				}
+				else
+					ReadonlyError();
+			}
+		}
+
+		/// <summary>
+		/// Copies all cell-fields in a selected col to '_copyc'.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcolclick_CopyCol(object sender, EventArgs e)
+		{
+			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			{
+				int selc = Table.getSelectedCol();
+				if (selc > 0) // safety. Is checked in editcol_dropdownopening()
+				{
+					_copyc.Clear();
+
+					for (int r = 0; r != Table.RowCount; ++r)
+						_copyc.Add(Table[r, selc].text);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Pastes '_copyc' to the cell-fields of a selected col.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcolclick_PasteCol(object sender, EventArgs e)
+		{
+			if (Table != null && _copyc.Count != 0) // safety. Is checked in editcol_dropdownopening()
+			{
+				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
+				{
+					int selc = Table.getSelectedCol();
+					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
+					{
+						string sWarn = String.Empty;
+						if (Table.RowCount < _copyc.Count)
+						{
+							int diff = _copyc.Count - Table.RowCount;
+							sWarn = "The table has " + diff + " less row(s) than the copy.";
+						}
+						else if (Table.RowCount > _copyc.Count)
+						{
+							int diff = Table.RowCount - _copyc.Count;
+							sWarn = "The copy has " + diff + " less row(s) than the table.";
+						}
+
+						if (sWarn.Length == 0
+							|| MessageBox.Show(sWarn + " Do you want to continue",
+												" Count mismatch",
+												MessageBoxButtons.YesNo,
+												MessageBoxIcon.Warning,
+												MessageBoxDefaultButton.Button2,
+												0) == DialogResult.Yes)
+						{
+							Obfuscate();
+							DrawingControl.SuspendDrawing(Table);
+
+							Table.PasteCol(selc, _copyc);
+							// TODO: flag changed Table
+
+							DrawingControl.ResumeDrawing(Table);
+							Obfuscate(false);
 						}
 					}
 				}
@@ -3186,7 +3241,7 @@ namespace yata
 						if      (Table == _diff1) _diff1 = null;
 						else if (Table == _diff2) _diff2 = null;
 
-						Table.DeterColwidth(0, 0, Table.RowCount - 1);
+						Table.Colwidth(0, 0, Table.RowCount - 1);
 						Table.metricFrozenControls(0);
 
 						Table.InitScroll();
@@ -3372,7 +3427,7 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.DeterColwidth(1);
+						Table.Colwidth(1);
 					}
 					Table.FrozenCount = YataGrid.FreezeFirst;
 				}
@@ -3400,14 +3455,14 @@ namespace yata
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.DeterColwidth(1);
+						Table.Colwidth(1);
 					}
 
 					col = Table.Cols[2];
 					if (col.UserSized)
 					{
 						col.UserSized = false;
-						Table.DeterColwidth(2);
+						Table.Colwidth(2);
 					}
 
 					Table.FrozenCount = YataGrid.FreezeSecond;
