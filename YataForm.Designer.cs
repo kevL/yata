@@ -52,6 +52,7 @@ namespace yata
 		ToolStripMenuItem it_MenuEditcol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
+		ToolStripMenuItem it_RelabelHead;
 		ToolStripMenuItem it_CopyCol;
 		ToolStripMenuItem it_PasteCol;
 
@@ -263,6 +264,7 @@ namespace yata
 			this.it_MenuEditcol = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CreateHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeleteHead = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_RelabelHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_32 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyCol = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCol = new System.Windows.Forms.ToolStripMenuItem();
@@ -829,6 +831,7 @@ namespace yata
 			this.it_MenuEditcol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_CreateHead,
 			this.it_DeleteHead,
+			this.it_RelabelHead,
 			this.separator_32,
 			this.it_CopyCol,
 			this.it_PasteCol});
@@ -840,32 +843,39 @@ namespace yata
 			// it_CreateHead
 			// 
 			this.it_CreateHead.Name = "it_CreateHead";
-			this.it_CreateHead.Size = new System.Drawing.Size(158, 22);
+			this.it_CreateHead.Size = new System.Drawing.Size(161, 22);
 			this.it_CreateHead.Text = "create head ...";
 			this.it_CreateHead.Click += new System.EventHandler(this.editcolclick_CreateHead);
 			// 
 			// it_DeleteHead
 			// 
 			this.it_DeleteHead.Name = "it_DeleteHead";
-			this.it_DeleteHead.Size = new System.Drawing.Size(158, 22);
+			this.it_DeleteHead.Size = new System.Drawing.Size(161, 22);
 			this.it_DeleteHead.Text = "delete head ...";
 			this.it_DeleteHead.Click += new System.EventHandler(this.editcolclick_DeleteHead);
+			// 
+			// it_RelabelHead
+			// 
+			this.it_RelabelHead.Name = "it_RelabelHead";
+			this.it_RelabelHead.Size = new System.Drawing.Size(161, 22);
+			this.it_RelabelHead.Text = "relabel head ...";
+			this.it_RelabelHead.Click += new System.EventHandler(this.editcolclick_RelabelHead);
 			// 
 			// separator_32
 			// 
 			this.separator_32.Name = "separator_32";
-			this.separator_32.Size = new System.Drawing.Size(155, 6);
+			this.separator_32.Size = new System.Drawing.Size(158, 6);
 			// 
 			// it_CopyCol
 			// 
 			this.it_CopyCol.Name = "it_CopyCol";
-			this.it_CopyCol.Size = new System.Drawing.Size(158, 22);
+			this.it_CopyCol.Size = new System.Drawing.Size(161, 22);
 			this.it_CopyCol.Text = "copy col";
 			// 
 			// it_PasteCol
 			// 
 			this.it_PasteCol.Name = "it_PasteCol";
-			this.it_PasteCol.Size = new System.Drawing.Size(158, 22);
+			this.it_PasteCol.Size = new System.Drawing.Size(161, 22);
 			this.it_PasteCol.Text = "paste col";
 			// 
 			// tb_Goto

@@ -2864,19 +2864,21 @@ namespace yata
 
 				bool isColSelected = (Table.getSelectedCol() > 0); // id-col is disallowed
 
-				it_CreateHead.Enabled = !Table.Readonly;
-				it_DeleteHead.Enabled = !Table.Readonly && isColSelected;
+				it_CreateHead .Enabled = !Table.Readonly;
+				it_DeleteHead .Enabled =
+				it_RelabelHead.Enabled = !Table.Readonly && isColSelected;
 
-				it_CopyCol   .Enabled = isColSelected;
-				it_PasteCol  .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
+				it_CopyCol    .Enabled = isColSelected;
+				it_PasteCol   .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
 			}
 			else
 			{
-				it_CreateHead.Enabled =
-				it_DeleteHead.Enabled =
+				it_CreateHead .Enabled =
+				it_DeleteHead .Enabled =
+				it_RelabelHead.Enabled =
 
-				it_CopyCol   .Enabled =
-				it_PasteCol  .Enabled = false;
+				it_CopyCol    .Enabled =
+				it_PasteCol   .Enabled = false;
 			}
 		}
 
@@ -2925,7 +2927,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens a text-input dialog for creating a col.
+		/// Deletes a col w/ confirmation.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3001,6 +3003,42 @@ namespace yata
 			}
 
 			Table._ur.Clear(); // TODO: request confirmation
+		}
+
+		/// <summary>
+		/// Relabels a colhead.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcolclick_RelabelHead(object sender, EventArgs e)
+		{
+			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			{
+				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
+				{
+					int selc = Table.getSelectedCol();
+					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
+					{
+						using (var f = new InputDialogColhead())
+						{
+							if (f.ShowDialog(this) == DialogResult.OK
+								&& InputDialogColhead._text.Length != 0)
+							{
+								Table.RelabelCol(selc);
+								// TODO: flag changed Table
+
+								Table.DeterColwidth(selc);
+
+								Table.InitScroll();
+
+								Table.EnsureDisplayedCol(selc);
+							}
+						}
+					}
+				}
+				else
+					ReadonlyError();
+			}
 		}
 		#endregion Events (editcol)
 

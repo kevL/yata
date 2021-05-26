@@ -1308,6 +1308,32 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Relabels a col.
+		/// </summary>
+		/// <param name="selc"></param>
+		internal void RelabelCol(int selc)
+		{
+			--selc; // the Field-count is 1 less than the col-count
+
+			int fieldsLength = Fields.Length; // create a new Fields array ->
+			var fields = new string[fieldsLength];
+			for (int i = 0; i != fieldsLength; ++i)
+			{
+				if (i == selc)
+				{
+					fields[i] = InputDialogColhead._text;
+
+					var col = Cols[i + 1];
+					col.text = InputDialogColhead._text;
+					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
+				}
+				else
+					fields[i] = Fields[i];
+			}
+			Fields = fields;
+		}
+
+		/// <summary>
 		/// Creates the rows and adds cells to each row. Also determines each
 		/// cell's 'loadchanged' bool.
 		/// </summary>
@@ -2780,7 +2806,7 @@ namespace yata
 							int left = getLeft();
 							if (x > left)
 							{
-								_f.PrintInfo(getCords(x, y, left));
+								_f.PrintInfo(getCords(x,y, left));
 								return;
 							}
 						}
