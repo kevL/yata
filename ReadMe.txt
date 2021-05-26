@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 may 25
+2021 may 26
 kevL's
 ver 4.0.0.0
 
@@ -60,7 +60,7 @@ Edit
 
 Editcol
 - create head ...  : creates a col. This clears Undo/Redo, etc.
-- delete head ...  : deletes a col. This clears Undo/Redo, etc.
+- delete head ...  : deletes a selected col. This clears Undo/Redo, etc.
 - relabel head ... : relabels the head of a selected col
 
 - copy col  : copies the cells of a selected col
