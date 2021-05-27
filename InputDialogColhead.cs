@@ -72,10 +72,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles text-input in the TextBox.
-		/// <remarks>Col-head text shall be alphanumeric or underscore.</remarks>
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Col-head text shall be alphanumeric or underscore.</remarks>
 		void textchanged_Input(object sender, EventArgs e)
 		{
 			if (!_bypasstextchanged)
