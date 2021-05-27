@@ -59,7 +59,10 @@ Edit
 
 
 Editcol
-- create head ...  : creates a col. This clears Undo/Redo, etc.
+- create head ...  : creates a col. This clears Undo/Redo, etc. The col will be
+                     created at the position of a selected col, shifting the
+                     table to the right; press [Esc] to deselect any selected
+                     col to create a col at the far right of the table
 - delete head ...  : deletes a selected col. This clears Undo/Redo, etc.
 - relabel head ... : relabels the head of a selected col
 
