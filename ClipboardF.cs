@@ -23,7 +23,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor.
+		/// cTor. Instantiates Yata's clipboard dialog.
 		/// </summary>
 		internal ClipboardF(YataForm f)
 		{
@@ -63,6 +63,10 @@ namespace yata
 
 
 		#region Events (override)
+		/// <summary>
+		/// Handles the load event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
 			rtb_Clip.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
@@ -70,6 +74,10 @@ namespace yata
 			rtb_Clip.SelectionStart = rtb_Clip.Text.Length;
 		}
 
+		/// <summary>
+		/// Handles the resize event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
@@ -95,11 +103,21 @@ namespace yata
 
 
 		#region Events
+		/// <summary>
+		/// Handles click on the Done button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_Done(object sender, EventArgs e)
 		{
 			Close();
 		}
 
+		/// <summary>
+		/// Handles click on the Get button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_Get(object sender, EventArgs e)
 		{
 			string clip = Clipboard.GetText(TextDataFormat.Text).Trim();
@@ -109,12 +127,22 @@ namespace yata
 				rtb_Clip.Text = String.Empty;
 		}
 
+		/// <summary>
+		/// Handles click on the Set button.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void click_Set(object sender, EventArgs e)
 		{
 			ClipboardAssistant.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
 		}
 
 
+		/// <summary>
+		/// Handles the formclosing event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
 			_f.Clip_uncheck();
