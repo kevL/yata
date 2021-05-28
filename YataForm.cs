@@ -1980,10 +1980,11 @@ namespace yata
 				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 				it_GotoLoadchanged.Enabled = Table.isLoadchanged();
 
-				it_CopyCell       .Enabled = Table.getSelectedCell() != null;
-				it_PasteCell      .Enabled = !Table.Readonly && it_CopyCell.Enabled;
+				bool oneSelected = (Table.getSelectedCell() != null);
+				it_CopyCell       .Enabled = oneSelected;
+				it_PasteCell      .Enabled = oneSelected && !Table.Readonly;
 
-				it_CopyRange      .Enabled = Table.getSelectedRow() != -1;
+				it_CopyRange      .Enabled = (Table.getSelectedRow() != -1);
 				it_PasteRange     .Enabled = !Table.Readonly && _copyr.Count != 0;
 
 				it_CreateRows     .Enabled = !Table.Readonly;
