@@ -827,7 +827,7 @@ namespace yata
 				it_Stars     .Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled = 
-				it_Paste     .Enabled = !Table.Readonly && Table.isAnyCellSelected();
+				it_Paste     .Enabled = !Table.Readonly && Table.isCellSelected();
 
 				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
@@ -1969,8 +1969,6 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			it_GotoLoadchanged.Enabled = false;
-
 			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 			{
 				if (Table._editor.Visible)
@@ -1979,49 +1977,39 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				foreach (var row in Table.Rows)
-				{
-					for (int c = 0; c != Table.ColCount; ++c)
-					{
-						if (row[c].loadchanged)
-						{
-							it_GotoLoadchanged.Enabled = true;
-							break;
-						}
-					}
-				}
+				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
+				it_GotoLoadchanged.Enabled = Table.isLoadchanged();
 
-				it_Searchnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
+				it_CopyCell       .Enabled = Table.getSelectedCell() != null;
+				it_PasteCell      .Enabled = !Table.Readonly && it_CopyCell.Enabled;
 
-				it_CopyCell  .Enabled = Table.getSelectedCell() != null;
-				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
+				it_CopyRange      .Enabled = Table.getSelectedRow() != -1;
+				it_PasteRange     .Enabled = !Table.Readonly && _copyr.Count != 0;
 
-				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
-				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_CreateRows     .Enabled = !Table.Readonly;
 
-				it_CreateRows.Enabled = !Table.Readonly;
-
-				it_Stars     .Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled =
-				it_Paste     .Enabled = !Table.Readonly && Table.isAnyCellSelected();
+				it_Stars          .Enabled =
+				it_Lower          .Enabled =
+				it_Upper          .Enabled =
+				it_Paste          .Enabled = !Table.Readonly && Table.isCellSelected();
 			}
 			else
 			{
-				it_Searchnext.Enabled =
+				it_Searchnext     .Enabled =
+				it_GotoLoadchanged.Enabled =
 
-				it_CopyCell  .Enabled =
-				it_PasteCell .Enabled =
+				it_CopyCell       .Enabled =
+				it_PasteCell      .Enabled =
 
-				it_CopyRange .Enabled =
-				it_PasteRange.Enabled =
+				it_CopyRange      .Enabled =
+				it_PasteRange     .Enabled =
 
-				it_CreateRows.Enabled =
+				it_CreateRows     .Enabled =
 
-				it_Stars     .Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled =
-				it_Paste     .Enabled = false;
+				it_Stars          .Enabled =
+				it_Lower          .Enabled =
+				it_Upper          .Enabled =
+				it_Paste          .Enabled = false;
 			}
 		}
 
@@ -2346,78 +2334,54 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
+			if (Table != null && (it_GotoLoadchanged.Enabled = Table.isLoadchanged())
+				&& (ModifierKeys & Keys.Alt) == 0)
 			{
-				bool found = false;
-				if (Table != null)
+				if (Table._editor.Visible)
 				{
-					for (int r = 0; r != Table.RowCount && !found; ++r)
-					for (int c = 0; c != Table.ColCount && !found; ++c)
-					{
-						if (Table[r,c].loadchanged)
-							found = true;
-					}
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				if (it_GotoLoadchanged.Enabled = found)
+				Table.Select();
+
+				Cell sel = Table.getSelectedCell();
+				int rStart = Table.getSelectedRow();
+
+				Table.ClearSelects();
+
+				int r,c;
+
+				bool start = true;
+
+				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
 				{
-					if (Table._editor.Visible)
+					if (sel != null) { c = sel.x; rStart = sel.y; }
+					else
 					{
-						Table._editor.Visible = false;
-						Table.Invalidator(YataGrid.INVALID_GRID);
+						c = -1;
+						if (rStart == -1) rStart = 0;
 					}
 
-					Table.Select();
-
-					Cell sel = Table.getSelectedCell();
-					int rStart = Table.getSelectedRow();
-
-					Table.ClearSelects();
-
-					int r,c;
-
-					bool start = true;
-
-					if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
+					for (r = rStart; r != Table.RowCount; ++r)
 					{
-						if (sel != null) { c = sel.x; rStart = sel.y; }
-						else
+						if (start)
 						{
-							c = -1;
-							if (rStart == -1) rStart = 0;
-						}
-
-						for (r = rStart; r != Table.RowCount; ++r)
-						{
-							if (start)
+							start = false;
+							if (++c == Table.ColCount)		// if starting on the last cell of a row
 							{
-								start = false;
-								if (++c == Table.ColCount)		// if starting on the last cell of a row
-								{
-									c = 0;
-
-									if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-										++r;
-									else						// or to the top of the table if on the last row
-										r = 0;
-								}
-							}
-							else
 								c = 0;
 
-							for (; c != Table.ColCount; ++c)
-							{
-								if ((sel = Table[r,c]).loadchanged)
-								{
-									Table.SelectCell(sel);
-									return;
-								}
+								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+									++r;
+								else						// or to the top of the table if on the last row
+									r = 0;
 							}
 						}
+						else
+							c = 0;
 
-						// TODO: tighten exact start/end-cells
-						for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
-						for (c = 0; c != Table.ColCount; ++c)
+						for (; c != Table.ColCount; ++c)
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
@@ -2426,52 +2390,63 @@ namespace yata
 							}
 						}
 					}
-					else // backward goto ->
+
+					// TODO: tighten exact start/end-cells
+					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+					for (c = 0; c != Table.ColCount; ++c)
 					{
-						if (sel != null) { c = sel.x; rStart = sel.y; }
-						else
+						if ((sel = Table[r,c]).loadchanged)
 						{
-							c = Table.ColCount;
-							if (rStart == -1) rStart = Table.RowCount - 1;
+							Table.SelectCell(sel);
+							return;
 						}
+					}
+				}
+				else // backward goto ->
+				{
+					if (sel != null) { c = sel.x; rStart = sel.y; }
+					else
+					{
+						c = Table.ColCount;
+						if (rStart == -1) rStart = Table.RowCount - 1;
+					}
 
-						for (r = rStart; r != -1; --r)
+					for (r = rStart; r != -1; --r)
+					{
+						if (start)
 						{
-							if (start)
+							start = false;
+							if (--c == -1)	// if starting on the first cell of a row
 							{
-								start = false;
-								if (--c == -1)	// if starting on the first cell of a row
-								{
-									c = Table.ColCount - 1;
-
-									if (r > 0)	// jump to the last cell of the previous row
-										--r;
-									else		// or to the bottom of the table if on the first row
-										r = Table.RowCount - 1;
-								}
-							}
-							else
 								c = Table.ColCount - 1;
 
-							for (; c != -1; --c)
-							{
-								if ((sel = Table[r,c]).loadchanged)
-								{
-									Table.SelectCell(sel);
-									return;
-								}
+								if (r > 0)	// jump to the last cell of the previous row
+									--r;
+								else		// or to the bottom of the table if on the first row
+									r = Table.RowCount - 1;
 							}
 						}
+						else
+							c = Table.ColCount - 1;
 
-						// TODO: tighten exact start/end-cells
-						for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-						for (c = Table.ColCount - 1; c != -1;         --c)
+						for (; c != -1; --c)
 						{
 							if ((sel = Table[r,c]).loadchanged)
 							{
 								Table.SelectCell(sel);
 								return;
 							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;         --c)
+					{
+						if ((sel = Table[r,c]).loadchanged)
+						{
+							Table.SelectCell(sel);
+							return;
 						}
 					}
 				}

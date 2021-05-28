@@ -2676,7 +2676,7 @@ namespace yata
 //			_f.it_Stars    .Enabled = // not needed because there are no shortcuts for these
 //			_f.it_Lower    .Enabled = // NOTE: Might not be needed anyway if .net checks
 //			_f.it_Upper    .Enabled = // dropdownopening before allowing a shortcut to fire.
-//			_f.it_Paste    .Enabled = !Readonly && isAnyCellSelected();
+//			_f.it_Paste    .Enabled = !Readonly && isCellSelected();
 
 //			base.OnMouseClick(e);
 		}
@@ -2880,12 +2880,28 @@ namespace yata
 		/// Checks if any cell is currently selected.
 		/// </summary>
 		/// <returns>true if a cell is selected</returns>
-		internal bool isAnyCellSelected()
+		internal bool isCellSelected()
 		{
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
 			{
 				if (row[c].selected)
+					return true;
+			}
+			return false;
+		}
+
+
+		/// <summary>
+		/// Checks if any cell is currently loadchanged.
+		/// </summary>
+		/// <returns>true if a cell is loadchanged</returns>
+		internal bool isLoadchanged()
+		{
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (row[c].loadchanged)
 					return true;
 			}
 			return false;
