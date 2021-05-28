@@ -1070,6 +1070,12 @@ namespace yata
 
 
 		#region Methods (save)
+		/// <summary>
+		/// Requests user-confirmation when saving a file when readonly or when
+		/// faulty IDs get detected.
+		/// </summary>
+		/// <param name="info"></param>
+		/// <returns></returns>
 		DialogResult SaveWarning(string info)
 		{
 			_warned = true;
@@ -1107,7 +1113,8 @@ namespace yata
 
 		#region Events (close)
 		/// <summary>
-		/// 
+		/// Handles Yata closing event. Requests user-confirmation if data has
+		/// changed and writes a recent-files list if appropriate.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1237,7 +1244,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to open a preset folder.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1250,7 +1257,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to open a folder. Shows an open-file-dialog.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1276,7 +1283,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to reload the current table. Requests
+		/// user-confirmation if data has changed etc.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1347,8 +1355,9 @@ namespace yata
 
 		/// <summary>
 		/// Allows user to set the current table's readonly flag after it has
-		/// been opened. (The readonly setter appears otherwise only on the
-		/// file-open dialog.)
+		/// been opened.
+		/// @note The readonly setter appears otherwise only on the file-open
+		/// dialog.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1360,10 +1369,11 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click to save the current Table.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>This is also used by SaveAs, SaveAll, and the FileWatcher.</remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null) // safety I believe.
@@ -1483,7 +1493,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click on file SaveAs.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1507,7 +1517,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click on file SaveAll.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1545,7 +1555,8 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click on file Close. Also used when a file fails to
+		/// reload and by the FileWatcher.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1570,7 +1581,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click on file CloseAll.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1611,7 +1622,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click on file Quit.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1659,7 +1670,7 @@ namespace yata
 
 		#region Events (context)
 		/// <summary>
-		/// 
+		/// Handles context-click on the context-header.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1669,7 +1680,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to copy a row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1685,7 +1696,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to cut a row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1701,7 +1712,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to paste above the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1731,7 +1742,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to paste into the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1783,7 +1794,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to paste below the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1813,7 +1824,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to create a row above the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1849,7 +1860,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to clear the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1894,7 +1905,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to create a row below the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1930,7 +1941,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles context-click to delete the current row.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2019,7 +2030,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click to undo the previous operation if possible.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2034,7 +2045,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to redo the previous operation if possible.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2124,7 +2135,7 @@ namespace yata
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
-		/// NOTE: Ensure that 'Table' is valid before call.
+		/// @note Ensure that 'Table' is valid before call.
 		/// </summary>
 		void Search()
 		{
@@ -2274,7 +2285,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles textchanged in the goto box.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2293,7 +2304,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to focus the goto box.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2304,7 +2315,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles the enter event of the goto box.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2314,7 +2325,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles click on the goto box.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2765,7 +2776,7 @@ namespace yata
 
 		#region Methods (edit)
 		/// <summary>
-		/// 
+		/// Enables/disables undo.
 		/// </summary>
 		/// <param name="enable"></param>
 		internal void EnableUndo(bool enable)
@@ -2774,7 +2785,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Enables/disables redo.
 		/// </summary>
 		/// <param name="enable"></param>
 		internal void EnableRedo(bool enable)
@@ -2783,6 +2794,7 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Enables/disables the copy-rows it.
 		/// @note Is called by Row.selected.
 		/// </summary>
 		/// <param name="enabled"></param>
@@ -2793,9 +2805,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Helper for editclick_PasteCell().
+		/// Sets the text of a given textbox.
 		/// </summary>
 		/// <param name="tb"></param>
+		/// <remarks>Helper for <see cref="editclick_PasteCell"/>.</remarks>
 		void SetTextboxText(ToolStripItem tb)
 		{
 			if (Clipboard.ContainsText(TextDataFormat.Text))
@@ -2811,7 +2824,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Shows user and error if there is not a single cell selected when
+		/// copying or pasting a cell.
 		/// </summary>
 		void CopyPasteCellError()
 		{
@@ -3143,7 +3157,8 @@ namespace yata
 
 		#region Methods (clipboard)
 		/// <summary>
-		/// 
+		/// Clears the check on the clipboard-it when the clipboard-dialog
+		/// closes.
 		/// </summary>
 		internal void Clip_uncheck()
 		{
@@ -3153,6 +3168,12 @@ namespace yata
 
 
 		#region Events (2daOps)
+		/// <summary>
+		/// Handles opening the 2daOpsMenu, determines if various items ought be
+		/// enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
 			bool valid = (Table != null);
@@ -3182,7 +3203,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to order row-ids.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3237,7 +3258,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to test row-ids.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3329,7 +3350,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click to autosize cols.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3348,19 +3369,21 @@ namespace yata
 		}
 
 		/// <summary>
-		/// @note Is also called by DiffReset().
+		/// Autosizes all cols of a given table.
 		/// </summary>
 		/// <param name="table"></param>
+		/// <remarks>Helper for <see cref="opsclick_AutosizeCols"/> but is also
+		/// called by <see cref="DiffReset"/></remarks>
 		void AutosizeCols(YataGrid table)
 		{
-			foreach (var c in table.Cols)
-				c.UserSized = false;
+			foreach (var col in table.Cols)
+				col.UserSized = false;
 
 			table.Calibrate(0, table.RowCount - 1); // autosize
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to recolor rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3387,7 +3410,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles it-click to freeze first col.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3415,7 +3438,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to freeze second col.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3559,6 +3582,12 @@ namespace yata
 
 
 		#region Events (font)
+		/// <summary>
+		/// Handles opening the FontMenu, determines if various items ought be
+		/// enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void font_dropdownopening(object sender, EventArgs e)
 		{
 			if (Table != null && Table._editor.Visible)
@@ -3701,7 +3730,7 @@ namespace yata
 
 		#region Events (help)
 		/// <summary>
-		/// 
+		/// Handles it-click to open ReadMe.txt.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3719,7 +3748,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles it-click to open the About box.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4429,12 +4458,22 @@ namespace yata
 
 
 		#region Events (dragdrop)
+		/// <summary>
+		/// Handles dragging a tab to another position.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void yata_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				e.Effect = DragDropEffects.Copy;
 		}
 
+		/// <summary>
+		/// Handles dropping at tab to another position.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		internal void yata_DragDrop(object sender, DragEventArgs e)
 		{
 			var paths = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -4682,7 +4721,7 @@ namespace yata
 
 		#region Events (cell)
 		/// <summary>
-		/// 
+		/// Handles cell-click edit.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4692,7 +4731,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles cell-click stars.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4702,7 +4741,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles cell-click lowercase.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4712,7 +4751,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles cell-click uppercase.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4796,7 +4835,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Handles cell-click InfoInput dialog.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
