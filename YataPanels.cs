@@ -15,6 +15,10 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
+		/// <summary>
+		/// cTor for col-panel.
+		/// </summary>
+		/// <param name="grid"></param>
 		internal YataPanelCols(YataGrid grid)
 		{
 			DrawingControl.SetDoubleBuffered(this);
@@ -29,6 +33,10 @@ namespace yata
 			MouseClick += _grid.click_ColheadPanel;
 		}
 
+		/// <summary>
+		/// Handles the resize event.
+		/// </summary>
+		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
 		{
 			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
@@ -107,6 +115,10 @@ namespace yata
 //			base.OnMouseMove(e);
 		}
 
+		/// <summary>
+		/// Handles the mousedown event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			_grid._editor.Visible = false;
@@ -124,6 +136,10 @@ namespace yata
 //			base.OnMouseDown(e);
 		}
 
+		/// <summary>
+		/// Handles the mouseup event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			if (Grab)
@@ -175,6 +191,10 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
+		/// <summary>
+		/// cTor for row-panel.
+		/// </summary>
+		/// <param name="grid"></param>
 		internal YataPanelRows(YataGrid grid)
 		{
 			DrawingControl.SetDoubleBuffered(this);
@@ -219,6 +239,11 @@ namespace yata
 	{
 		readonly YataGrid _grid;
 
+		/// <summary>
+		/// cTor for frozen-panel.
+		/// </summary>
+		/// <param name="grid"></param>
+		/// <param name="w"></param>
 		internal YataPanelFrozen(YataGrid grid, int w)
 		{
 			DrawingControl.SetDoubleBuffered(this);
