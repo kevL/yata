@@ -22,6 +22,11 @@ namespace yata
 
 
 		#region cTor
+		/// <summary>
+		/// cTor. Instantiates a FileWatcherDialog.
+		/// </summary>
+		/// <param name="grid"></param>
+		/// <param name="fwdType"></param>
 		internal FileWatcherDialog(
 				YataGrid grid,
 				int fwdType)
@@ -81,6 +86,10 @@ namespace yata
 
 
 		#region Events (override)
+		/// <summary>
+		/// Handles the resize event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
@@ -89,6 +98,10 @@ namespace yata
 			tb_Pfe.SelectionStart = tb_Pfe.Text.Length;
 		}
 
+		/// <summary>
+		/// Handles the formclosing event.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			switch (DialogResult)
