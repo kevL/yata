@@ -1,5 +1,4 @@
 using System;
-//using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -167,7 +166,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor.
+		/// cTor. This is Yata.
 		/// </summary>
 		internal YataForm()
 		{
@@ -359,6 +358,9 @@ namespace yata
 			Controls.Add(btn_ProPanel);
 		}
 
+		/// <summary>
+		/// Initializes the recent-files list.
+		/// </summary>
 		void InitializeRecentFiles()
 		{
 			string dir = Application.StartupPath;
@@ -818,8 +820,9 @@ namespace yata
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled = true;
 
-				it_CopyCell  .Enabled = sel != null;
-				it_PasteCell .Enabled = !Table.Readonly && it_CopyCell.Enabled;
+				bool oneSelected = (sel != null);
+				it_CopyCell  .Enabled = oneSelected;
+				it_PasteCell .Enabled = oneSelected && !Table.Readonly;
 				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
 				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
 				it_CreateRows.Enabled = !Table.Readonly;
