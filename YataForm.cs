@@ -4583,7 +4583,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for ShowCellMenu().
+		/// Helper for <see cref="popupCellmenu"/>.
 		/// </summary>
 		/// <returns>true if Merge (cell or row) will be enabled</returns>
 		bool isMergeEnabled()
@@ -4602,7 +4602,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for ShowCellMenu().
+		/// Helper for <see cref="popupCellmenu"/>.
 		/// </summary>
 		/// <returns></returns>
 		bool isSpellsInfoInputCol()
@@ -4637,7 +4637,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for ShowCellMenu().
+		/// Helper for <see cref="popupCellmenu"/>.
 		/// </summary>
 		/// <returns></returns>
 		bool isFeatInfoInputCol()
@@ -4981,7 +4981,7 @@ namespace yata
 		/// readonly RichTextBox for the user's investigation and/or copying.
 		/// @note Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger (ie, else disable the context it - see
-		/// ShowCellMenu() and dropdownopening_Strref()).
+		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -5005,11 +5005,11 @@ namespace yata
 		/// custom-bit flag.
 		/// @note Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger (ie, else disable the context it - see
-		/// ShowCellMenu() and dropdownopening_Strref()).
-		/// @note The invalid strref (-1) cannot be toggled.
+		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>The invalid strref (-1) cannot be toggled.</remarks>
 		void cellclick_Strref_custom(object sender, EventArgs e)
 		{
 			if ((_strInt & TalkReader.bitCusto) != 0)
@@ -5030,7 +5030,7 @@ namespace yata
 		/// "-1" if not already.
 		/// @note Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger (ie, else disable the context it - see
-		/// ShowCellMenu() and dropdownopening_Strref()).
+		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

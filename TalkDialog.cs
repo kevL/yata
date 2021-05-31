@@ -45,7 +45,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// @note Check that the cell's text parses to a valid value - see
-		/// YataForm.ShowCellMenu() and YataForm.dropdownopening_Strref()).
+		/// YataForm.popupCellmenu() and YataForm.dropdownopening_Strref()).
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <param name="f"></param>
