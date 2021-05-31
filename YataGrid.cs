@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+//using System.Threading;
 using System.Windows.Forms;
 
 
@@ -60,7 +61,8 @@ namespace yata
 		/// Hides any info that's currently displayed on the statusbar when the
 		/// cursor leaves the table-area. (The OnLeave event is unreliable.)
 		/// </summary>
-		static Timer _t1 = new Timer();
+		/// <remarks>namespace req'd to differentiate System.Threading.Timer</remarks>
+		static System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
 
 		/// <summary>
 		/// A flag that stops presumptive .NET events from firing ~50 billion.
@@ -351,7 +353,7 @@ namespace yata
 
 		#region Scrollbars
 		/// <summary>
-		/// 
+		/// Closes the RMB context-menus for (1) tabs, (2) cells, and (3) rows.
 		/// </summary>
 		void closeContexts()
 		{
@@ -361,7 +363,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Scrolls the table vertically.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -398,7 +400,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Scrolls the table horizontally.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -435,9 +437,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// @note This fires whenever a fly sneezes.
+		/// Handles the resize event.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>This fires whenever a fly sneezes.</remarks>
 		protected override void OnResize(EventArgs e)
 		{
 			if (!_init)
@@ -1042,7 +1045,7 @@ namespace yata
 
 		#region Init
 		/// <summary>
-		/// 
+		/// Initializes a created or reloaded table.
 		/// </summary>
 		/// <param name="changed"></param>
 		/// <param name="reload"></param>
@@ -1171,7 +1174,7 @@ namespace yata
 				Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
 			}
 
-			int w; c = 0;
+			int widthtext; c = 0;
 			foreach (string head in Fields) // set initial col-widths based on colheads only ->
 			{
 				++c; // start at col 1 - skip id col
@@ -1179,10 +1182,10 @@ namespace yata
 				if (!calibrate)
 					Cols[c].text = head;
 
-				w = YataGraphics.MeasureWidth(head, _f.FontAccent);
-				Cols[c]._widthtext = w;
+				widthtext = YataGraphics.MeasureWidth(head, _f.FontAccent);
+				Cols[c]._widthtext = widthtext;
 
-				Cols[c].width(w + _padHori * 2 + _padHoriSort, calibrate);
+				Cols[c].width(widthtext + _padHori * 2 + _padHoriSort, calibrate);
 			}
 		}
 
@@ -1393,22 +1396,147 @@ namespace yata
 			_rows.Clear(); // done w/ '_rows'
 
 
-			int w, wT; // adjust col-widths based on fields ->
+			int widthstars = YataGraphics.MeasureWidth(gs.Stars, Font);
 
+			int w, wT; // adjust col-widths based on fields ->
 			for (int c = 0; c != ColCount; ++c)
 			{
-				w = _wId;
+				w = _wId; // NOTE: Can be 0.
 				for (int r = 0; r != RowCount; ++r)
 				{
-					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					if ((text = this[r,c].text) == gs.Stars) // bingo.
+						wT = widthstars;
+					else
+						wT = YataGraphics.MeasureWidth(text, Font);
+
 					this[r,c]._widthtext = wT;
 
-					wT += _padHori * 2;
-					if (wT > w) w = wT;
+					if ((wT += _padHori * 2) > w) w = wT;
+				}
+				Cols[c].width(w);
+			}
+
+
+//			var threads = new Thread[ColCount];
+//			for (int c = 0; c != ColCount; ++c)
+//			{
+//				int cT = c;
+//				threads[c] = new Thread(() => doCol(cT));
+//				//logfile.Log("c= " + c + " IsBackground= " + threads[c].IsBackground); // default false
+//				threads[c].IsBackground = true;
+//				threads[c].Start();
+//			}
+
+//			int procs = Environment.ProcessorCount;
+//			logfile.Log("ProcessorCount= " + procs);
+//			var threads = new Thread[procs];
+//			for (int i = 0; i != procs; ++i)
+//			{
+//				threads[i] = new Thread(()=> doCol(0, RowCount/procs)); // wont work - a lone doCol() method would be totally thread unsafe.
+//			}
+
+//			int c0 = 0;
+//			int c1 = ColCount / 4;
+//			int c2 = ColCount / 2;
+//			int c3 = ColCount * 3 / 4;
+//			int c4 = ColCount;
+//
+//			logfile.Log("c0= " + c0);
+//			logfile.Log("c1= " + c1);
+//			logfile.Log("c2= " + c2);
+//			logfile.Log("c3= " + c3);
+//			logfile.Log("c4= " + c4);
+//
+//			var threads = new Thread[4];
+//			threads[0] = new Thread(()=> doCol0(c0,c1));
+//			threads[0].IsBackground = true;
+//			threads[0].Start();
+//			threads[1] = new Thread(()=> doCol1(c1,c2));
+//			threads[1].IsBackground = true;
+//			threads[1].Start();
+//			threads[2] = new Thread(()=> doCol2(c2,c3));
+//			threads[2].IsBackground = true;
+//			threads[2].Start();
+//			threads[3] = new Thread(()=> doCol3(c3,c4));
+//			threads[3].IsBackground = true;
+//			threads[3].Start();
+//
+//			foreach (var thread in threads)
+//				thread.Join();
+		}
+
+/*		void doCol0(int c0, int c1)
+		{
+			for (int c = c0; c != c1; ++c)
+			{
+				int w = 0, wT;
+				for (int r = 0; r != RowCount; ++r)
+				{
+					lock (Font)
+					{
+					//logfile.Log("doCol0 c= " + c + " r= " + r);
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					}
+					this[r,c]._widthtext = wT;
+					if ((wT += _padHori * 2) > w) w = wT;
 				}
 				Cols[c].width(w);
 			}
 		}
+		void doCol1(int c1, int c2)
+		{
+			for (int c = c1; c != c2; ++c)
+			{
+				int w = 0, wT;
+				for (int r = 0; r != RowCount; ++r)
+				{
+					lock (Font)
+					{
+					//logfile.Log("doCol1 c= " + c + " r= " + r);
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					}
+					this[r,c]._widthtext = wT;
+					if ((wT += _padHori * 2) > w) w = wT;
+				}
+				Cols[c].width(w);
+			}
+		}
+		void doCol2(int c2, int c3)
+		{
+			for (int c = c2; c != c3; ++c)
+			{
+				int w = 0, wT;
+				for (int r = 0; r != RowCount; ++r)
+				{
+					lock (Font)
+					{
+					//logfile.Log("doCol2 c= " + c + " r= " + r);
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					}
+					this[r,c]._widthtext = wT;
+					if ((wT += _padHori * 2) > w) w = wT;
+				}
+				Cols[c].width(w);
+			}
+		}
+		void doCol3(int c3, int c4)
+		{
+			for (int c = c3; c != c4; ++c)
+			{
+				int w = 0, wT;
+				for (int r = 0; r != RowCount; ++r)
+				{
+					lock (Font)
+					{
+					//logfile.Log("doCol3 c= " + c + " r= " + r);
+					wT = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					}
+					this[r,c]._widthtext = wT;
+					if ((wT += _padHori * 2) > w) w = wT;
+				}
+				Cols[c].width(w);
+			}
+		} */
 
 
 		bool _initFrozenLabels = true;
@@ -1534,7 +1662,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Re-widths and re-locates the frozen labels.
 		/// </summary>
 		/// <param name="table"></param>
 		internal static void metricFrozenLabels(YataGrid table)
@@ -2283,25 +2411,26 @@ namespace yata
 			var col = Cols[c];
 
 			int colwidth = col._widthtext + _padHoriSort;
-			int widthTest;
+			int widthtext;
 
 			if (r != -1) // re-calc '_widthtext' regardless of what happens below ->
 			{
 				int rend = r + range;
 				for (; r <= rend; ++r)
 				{
-					widthTest = YataGraphics.MeasureWidth(this[r,c].text, Font);
-					this[r,c]._widthtext = widthTest;
-					if (widthTest > colwidth) colwidth = widthTest;
+					widthtext = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					this[r,c]._widthtext = widthtext;
+
+					if (widthtext > colwidth)
+						colwidth = widthtext;
 				}
 			}
 
 			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
 			{					// be forced (eg. on reload) unflag UserSized on all cols first.
-				colwidth += _padHori * 2;
-
 				int totalwidth = col.width();
-				if (colwidth > totalwidth)
+
+				if ((colwidth += _padHori * 2) > totalwidth)
 				{
 					col.width(colwidth);
 				}
@@ -2312,13 +2441,15 @@ namespace yata
 
 					for (r = 0; r != RowCount; ++r)
 					{
-						widthTest = this[r,c]._widthtext + _padHori * 2;
-						if (widthTest > colwidth) colwidth = widthTest;
+						widthtext = this[r,c]._widthtext + _padHori * 2; // TODO: these text-widths should still be resized even if 'col.UserSized' above is true
+
+						if (widthtext > colwidth)
+							colwidth = widthtext;
 					}
 					col.width(colwidth, true);
 				}
 
-				if (range == 0 && colwidth != totalwidth)	// if range >0 let Calibrate() handle multiple
+				if (range == 0 && totalwidth != colwidth)	// if range >0 let Calibrate() handle multiple
 				{											// cols or at least the scrollers and do the UI-update
 					InitScroll();
 					Invalidator(INVALID_GRID | INVALID_COLS);
@@ -2694,7 +2825,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the cell clicked at x/y.
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
@@ -3778,9 +3909,9 @@ namespace yata
 
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.
-		/// @note Mergesort.
 		/// </summary>
 		/// <param name="col">the col-id to sort by</param>
+		/// <remarks>Performs a mergesort.</remarks>
 		void ColSort(int col)
 		{
 			DrawingControl.SuspendDrawing(_f);
@@ -3835,37 +3966,41 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Starts a mergesort.
 		/// https://en.wikipedia.org/wiki/Merge_sort#Top-down_implementation
 		/// </summary>
 		/// <param name="rows"></param>
 		/// <param name="rowsT"></param>
 		/// <param name="count"></param>
+		/// <remarks>Helper for <see cref="ColSort"/>.</remarks>
 		void TopDownMergeSort(List<Row> rows, List<Row> rowsT, int count)
 		{
-			CopyArray(rows, 0, count, rowsT);
+			CopyList(rows, 0, count, rowsT);
 			TopDownSplitMerge(rowsT, 0, count, rows);
 		}
 
 		/// <summary>
-		/// 
+		/// Makes a copy of the rows to sort.
 		/// </summary>
 		/// <param name="rows"></param>
 		/// <param name="iBegin"></param>
 		/// <param name="iEnd"></param>
 		/// <param name="rowsT"></param>
-		void CopyArray(IList<Row> rows, int iBegin, int iEnd, ICollection<Row> rowsT)
+		/// <remarks>Helper for <see cref="TopDownMergeSort"/>.</remarks>
+		void CopyList(IList<Row> rows, int iBegin, int iEnd, ICollection<Row> rowsT)
 		{
 			for (int i = iBegin; i != iEnd; ++i)
 				rowsT.Add(rows[i]);
 		}
 
 		/// <summary>
-		/// 
+		/// Recursive funct that shuffles through the sort-lists.
 		/// </summary>
 		/// <param name="rowsT"></param>
 		/// <param name="iBegin"></param>
 		/// <param name="iEnd"></param>
 		/// <param name="rows"></param>
+		/// <remarks>Called by <see cref="TopDownMergeSort"/>.</remarks>
 		void TopDownSplitMerge(List<Row> rowsT, int iBegin, int iEnd, List<Row> rows)
 		{
 			if (iEnd - iBegin < 2)
@@ -3880,13 +4015,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Shuffles through the sort-lists.
 		/// </summary>
 		/// <param name="rows"></param>
 		/// <param name="iBegin"></param>
 		/// <param name="iMiddle"></param>
 		/// <param name="iEnd"></param>
 		/// <param name="rowsT"></param>
+		/// <remarks>Helper for <see cref="TopDownSplitMerge"/>.</remarks>
 		void TopDownMerge(IList<Row> rows, int iBegin, int iMiddle, int iEnd, IList<Row> rowsT)
 		{
 			int i = iBegin, j = iMiddle;
@@ -4064,7 +4200,7 @@ namespace yata
 
 		#region DragDrop file(s)
 		/// <summary>
-		/// 
+		/// Handles dragging a file onto the grid.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4074,7 +4210,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles dropping a file onto the grid.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

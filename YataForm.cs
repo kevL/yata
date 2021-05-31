@@ -4459,7 +4459,7 @@ namespace yata
 
 		#region Events (dragdrop)
 		/// <summary>
-		/// Handles dragging a tab to another position.
+		/// Handles dragging a file onto Yata.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4470,7 +4470,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles dropping at tab to another position.
+		/// Handles dropping a file(s) onto Yata.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
