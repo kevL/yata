@@ -1816,10 +1816,10 @@ namespace yata
 					{
 						if (sel != null)
 						{
-							if (sel.x != ColCount - 1 || sel.y != RowCount - 1)
+							if (sel.x != FrozenCount || sel.y != RowCount - 1)
 							{
 								sel.selected = false;
-								(sel = this[RowCount - 1, ColCount - 1]).selected = true;
+								(sel = this[RowCount - 1, FrozenCount]).selected = true;
 							}
 							display = true;
 						}
@@ -2152,7 +2152,7 @@ namespace yata
 
 		/// <summary>
 		/// Deletes a single or multiple rows on keypress Delete, but if a row
-		/// is not selected and a single cell is selected then clear its
+		/// is not selected and a single cell is selected then clears its
 		/// celltext ("****").
 		/// </summary>
 		void Delete()
