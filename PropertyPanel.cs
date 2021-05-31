@@ -6,6 +6,10 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// The button in the upper-right corner of Yata that opens/cycles the
+	/// PropertyPanel.
+	/// </summary>
 	sealed class PropertyPanelButton
 		:
 			Button
@@ -28,6 +32,9 @@ namespace yata
 
 
 		#region cTor
+		/// <summary>
+		/// cTor.
+		/// </summary>
 		internal PropertyPanelButton()
 		{
 			DrawingControl.SetDoubleBuffered(this);
@@ -82,15 +89,16 @@ namespace yata
 	}
 
 
+	/// <summary>
+	/// Yata's PropertyPanel. Each tabbed table gets its own Propanel.
+	/// </summary>
 	sealed class PropertyPanel
 		:
 			Control
 	{
 		#region Enums
 		internal enum DockState
-		{
-			TR, BR, BL, TL
-		}
+		{ TR, BR, BL, TL }
 		#endregion Enums
 
 
@@ -153,7 +161,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor.
+		/// cTor. Each tabbed table gets its own Propanel.
 		/// </summary>
 		internal PropertyPanel(YataGrid grid)
 		{
@@ -225,13 +233,11 @@ namespace yata
 		internal void rewidthValfield()
 		{
 //			for (int r = 0; r != _grid.RowCount; ++r)
+//			for (int c = 0; c != _grid.ColCount; ++c)
 //			{
-//				for (int c = 0; c != _grid.ColCount; ++c)
-//				{
-//					wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
-//					if (wT > _widthVals)
-//						_widthVals = wT;
-//				}
+//				wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
+//				if (wT > _widthVals)
+//					_widthVals = wT;
 //			}
 //			_widthVals += _padHori * 2;
 
@@ -241,16 +247,15 @@ namespace yata
 			for (int r = 0; r != _grid.RowCount; ++r)
 			for (int c = 0; c != _grid.ColCount; ++c)
 			{
-				wT = _grid[r,c]._widthtext;	// NOTE: Assume that the widest text in the table-font
-				if (wT > _widthVals)		// will be widest text in the propanel font. Much faster.
-				{
+				if ((wT = _grid[r,c]._widthtext) > _widthVals)	// NOTE: Assume that the widest text in the table-font
+				{												// will be widest text in the propanel font. Much faster.
 					_widthVals = wT;
 					rT = r;
 					cT = c;
 				}
 			}
 
-			_widthVals      =
+			_widthVals =
 			_editRect.Width = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
 			_editor  .Width = _widthVals - 6; // cf YataGrid.EditCell()
 
