@@ -5036,7 +5036,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Strref_invalid(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, "-1"); // does not do a text-check
+			Table.ChangeCellText(_sel, gs.Invalid); // does not do a text-check
 		}
 		#endregion Events (cell)
 	}

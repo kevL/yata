@@ -6,6 +6,7 @@
 	static class gs
 	{
 		internal const string Stars           = "****";
+		internal const string Invalid         = "-1";
 
 		internal const string Space           = " ";
 
