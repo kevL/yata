@@ -2441,7 +2441,7 @@ namespace yata
 
 					for (r = 0; r != RowCount; ++r)
 					{
-						widthtext = this[r,c]._widthtext + _padHori * 2; // TODO: these text-widths should still be resized even if 'col.UserSized' above is true
+						widthtext = this[r,c]._widthtext + _padHori * 2;
 
 						if (widthtext > colwidth)
 							colwidth = widthtext;
