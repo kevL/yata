@@ -2169,7 +2169,6 @@ namespace yata
 				sel = this[0, FrozenCount];
 				sel.selected = true;
 			}
-
 			_f.SyncSelect(sel);
 
 			Invalidator(INVALID_GRID
