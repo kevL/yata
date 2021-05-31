@@ -1206,8 +1206,6 @@ namespace yata
 		{
 			--selc; // the Field-count is 1 less than the col-count
 
-			int widthstars = YataGraphics.MeasureWidth(gs.Stars, Font);
-
 			int fieldsLength = Fields.Length + 1; // create a new Fields array ->
 			var fields = new string[fieldsLength];
 			for (int i = 0; i != fieldsLength; ++i)
@@ -1242,7 +1240,7 @@ namespace yata
 							{
 								cells[c] = new Cell(r,c, gs.Stars);
 								cells[c].selected = true;
-								cells[c]._widthtext = widthstars;
+								cells[c]._widthtext = _wStars;
 							}
 							else // (c > selc + 1)
 							{
@@ -1261,8 +1259,8 @@ namespace yata
 			}
 			Fields = fields;
 
-			if ((widthstars += _padHori * 2) > Cols[++selc].width())
-				Cols[selc].width(widthstars);
+			int w = _wStars + _padHori * 2;
+			if (w > Cols[++selc].width()) Cols[selc].width(w);
 
 			InitScroll();
 			EnsureDisplayedCol(selc);
@@ -2425,10 +2423,16 @@ namespace yata
 
 			if (r != -1) // re-calc '_widthtext' regardless of what happens below ->
 			{
+				string text;
+
 				int rend = r + range;
 				for (; r <= rend; ++r)
 				{
-					widthtext = YataGraphics.MeasureWidth(this[r,c].text, Font);
+					if ((text = this[r,c].text) == gs.Stars) // bingo.
+						widthtext = _wStars;
+					else
+						widthtext = YataGraphics.MeasureWidth(text, Font);
+
 					this[r,c]._widthtext = widthtext;
 
 					if (widthtext > colwidth)
