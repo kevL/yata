@@ -279,7 +279,7 @@ namespace yata
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
 				TextRenderer.DrawText(graphics,
-									  "id",
+									  gs.Id,
 									  _f.FontAccent,
 									  rect,
 									  Colors.Text,

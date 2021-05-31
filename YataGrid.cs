@@ -51,7 +51,16 @@ namespace yata
 		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
 		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
 
-		static int _wId; // minimum width of a cell (ergo of a col if width of colhead-text is narrower)
+		/// <summary>
+		/// Min width of a cell - ergo of a colhead even if width of
+		/// colhead-text is narrower
+		/// </summary>
+		internal static int _wId;
+
+		/// <summary>
+		/// Width of "****" in pixels.
+		/// </summary>
+		static int _wStars;
 
 		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
 		internal const int FreezeFirst  = 2;
@@ -1171,7 +1180,7 @@ namespace yata
 				for (; c != ColCount; ++c)
 					Cols.Add(new Col());
 
-				Cols[0].text = "id"; // NOTE: Is not measured - the cells below it determine col-width.
+				Cols[0].text = gs.Id; // NOTE: Is not measured - the cells below it determine col-width.
 			}
 
 			int widthtext; c = 0;
@@ -1396,16 +1405,14 @@ namespace yata
 			_rows.Clear(); // done w/ '_rows'
 
 
-			int widthstars = YataGraphics.MeasureWidth(gs.Stars, Font);
-
 			int w, wT; // adjust col-widths based on fields ->
 			for (int c = 0; c != ColCount; ++c)
 			{
-				w = _wId; // NOTE: Can be 0.
+				w = _wId; // start each col at min colwidth
 				for (int r = 0; r != RowCount; ++r)
 				{
 					if ((text = this[r,c].text) == gs.Stars) // bingo.
-						wT = widthstars;
+						wT = _wStars;
 					else
 						wT = YataGraphics.MeasureWidth(text, Font);
 
@@ -1608,16 +1615,19 @@ namespace yata
 
 
 		/// <summary>
-		/// Sets standard HeightColhead, HeightRow, and minimum cell width.
-		/// These values are the same for all loaded tables.
+		/// Sets standard <see cref="HeightColhead"/>, <see cref="HeightRow"/>,
+		/// and minimum cell-width <see cref="_wId"/>. Also caches width of
+		/// "****".
 		/// </summary>
 		/// <param name="f"></param>
+		/// <remarks>These values are the same for all loaded tables.</remarks>
 		internal static void SetStaticMetrics(YataForm f)
 		{
 			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
 			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
 
-			_wId = YataGraphics.MeasureWidth("id", f.Font) + _padHoriRowhead * 2;
+			_wId    = YataGraphics.MeasureWidth(gs.Id,    f.Font) + _padHoriRowhead * 2;
+			_wStars = YataGraphics.MeasureWidth(gs.Stars, f.Font);
 		}
 
 		/// <summary>

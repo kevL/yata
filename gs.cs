@@ -7,6 +7,7 @@
 	{
 		internal const string Stars           = "****";
 		internal const string Invalid         = "-1";
+		internal const string Id              = "id";
 
 		internal const string Space           = " ";
 
