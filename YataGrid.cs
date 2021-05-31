@@ -2151,6 +2151,50 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Focuses the table and selects the first cell in the table iff no
+		/// cell is currently selected. If cells are currently selected call
+		/// <see cref="EnsureDisplayed(Cell)"/>.
+		/// </summary>
+		/// <remarks>Called at the form-level by YataForm.OnKeyDown() [Space].</remarks>
+		internal void SelectFirstCell()
+		{
+			Select(); // focus table
+
+			Cell sel = getFirstSelectedCell();
+			if (sel == null)
+			{
+				foreach (var row in Rows) row.selected = false;
+				foreach (var col in Cols) col.selected = false;
+
+				sel = this[0, FrozenCount];
+				sel.selected = true;
+			}
+
+			_f.SyncSelect(sel);
+
+			Invalidator(INVALID_GRID
+					  | INVALID_FROZ
+					  | INVALID_ROWS
+					  | EnsureDisplayed(sel));
+		}
+
+		/// <summary>
+		/// Gets the first selected cell in the table else null.
+		/// </summary>
+		/// <returns></returns>
+		Cell getFirstSelectedCell()
+		{
+			Cell sel;
+
+			for (int r = 0; r != RowCount; ++r)
+			for (int c = 0; c != ColCount; ++c)
+				if ((sel = this[r,c]).selected)
+					return sel;
+
+			return null;
+		}
+
+		/// <summary>
 		/// Deletes a single or multiple rows on keypress Delete, but if a row
 		/// is not selected and a single cell is selected then clears its
 		/// celltext ("****").
@@ -2815,8 +2859,9 @@ namespace yata
 					Select();
 			}
 
-			_f.it_CopyCell .Enabled = getSelectedCell() != null;
-			_f.it_PasteCell.Enabled = !Readonly && _f.it_CopyCell.Enabled;
+			bool oneSelected = (getSelectedCell() != null);
+			_f.it_CopyCell .Enabled = oneSelected;
+			_f.it_PasteCell.Enabled = oneSelected && !Readonly;
 
 //			_f.it_Stars    .Enabled = // not needed because there are no shortcuts for these
 //			_f.it_Lower    .Enabled = // NOTE: Might not be needed anyway if .net checks

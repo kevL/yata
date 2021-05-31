@@ -459,9 +459,9 @@ namespace yata
 		/// Handles the KeyDown event on the form.
 		/// @note Requires the form's KeyPreview property flagged true in order
 		/// to handle the event if a control is focused.
-		/// @note Fires repeatedly if a key is held depressed.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Fires repeatedly if a key is held depressed.</remarks>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
@@ -492,6 +492,14 @@ namespace yata
 					{
 						e.SuppressKeyPress = true;
 						Table.Select();
+					}
+					break;
+
+				case Keys.Space:
+					if (Table != null)
+					{
+						e.SuppressKeyPress = true;
+						Table.SelectFirstCell();
 					}
 					break;
 			}

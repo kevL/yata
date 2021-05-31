@@ -205,6 +205,9 @@ Delete - when a row is selected (as indicated with a green field at the far left
        - if a row is not selected and only 1 cell is selected, Delete clears its
          celltext ("****")
 
+Space - focuses the table and selects the first cell. If cell(s) are already
+        selected the table will scroll to ensure that the first selected cell is
+        visible.
 
 MOUSE:
 wheel - scrolls up/down if the vertical scrollbar is visible and either of
