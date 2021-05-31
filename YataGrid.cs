@@ -1615,7 +1615,7 @@ namespace yata
 		/// <summary>
 		/// Sets standard <see cref="HeightColhead"/>, <see cref="HeightRow"/>,
 		/// and minimum cell-width <see cref="_wId"/>. Also caches width of
-		/// "****".
+		/// "****" in <see cref="_wStars"/>.
 		/// </summary>
 		/// <param name="f"></param>
 		/// <remarks>These values are the same for all loaded tables.</remarks>
@@ -1659,8 +1659,8 @@ namespace yata
 				table = f.Tabs.TabPages[tab].Tag as YataGrid;
 
 				table.WidthTable = WidthRowhead;
-				for (int c = 0; c != table.ColCount; ++c)
-					table.WidthTable += table.Cols[c].width();
+				foreach (var col in table.Cols)
+					table.WidthTable += col.width();
 
 				table._panelRows.Width  = WidthRowhead;
 				table._panelCols.Height = HeightColhead;
