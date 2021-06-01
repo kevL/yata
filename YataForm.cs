@@ -496,7 +496,9 @@ namespace yata
 					break;
 
 				case Keys.Space:
-					if (Table != null)
+					if (Table != null
+						&& !Table._editor.Visible
+						&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 					{
 						e.SuppressKeyPress = true;
 						Table.SelectFirstCell();
