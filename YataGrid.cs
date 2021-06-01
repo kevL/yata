@@ -67,13 +67,6 @@ namespace yata
 		internal const int FreezeSecond = 3;
 
 		/// <summary>
-		/// Hides any info that's currently displayed on the statusbar when the
-		/// cursor leaves the table-area. (The OnLeave event is unreliable.)
-		/// </summary>
-		/// <remarks>namespace req'd to differentiate System.Threading.Timer</remarks>
-		static System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
-
-		/// <summary>
 		/// A flag that stops presumptive .NET events from firing ~50 billion.
 		/// </summary>
 		internal static bool _init;
@@ -289,10 +282,6 @@ namespace yata
 
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
-
-			_t1.Interval = 223;
-			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
-			_t1.Tick += t1_Tick;
 
 			_editor.Visible     = false;
 			_editor.BackColor   = Colors.Editor;
@@ -1148,7 +1137,6 @@ namespace yata
 		internal void Calibrate(int r = -1, int range = 0)
 		{
 			_init = true;
-
 			_editor.Visible = false;
 
 			for (int c = 0; c != ColCount; ++c)
@@ -1164,7 +1152,6 @@ namespace yata
 			InitScroll();
 
 			Select();
-
 			_init = false;
 		}
 
@@ -3022,25 +3009,21 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles timer ticks - clears statusbar coordinates and path-info
-		/// when the mouse-cursor leaves the grid.
+		/// Clears statusbar coordinates and path-info when the mouse-cursor
+		/// leaves the grid.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		/// <remarks>The MouseLeave event is unreliable.</remarks>
-		void t1_Tick(object sender, EventArgs e)
+		/// <remarks>Called by YataForm.t1_Tick(). The MouseLeave event is
+		/// unreliable.</remarks>
+		internal void MouseLeaveTicker()
 		{
-			if (!_init && _f.Tabs.TabCount != 0 && _f.Tabs.SelectedTab.Tag == this) // required for CloseAll ...
-			{
-				int left = getLeft();
-				var rect = new Rectangle(left,
-										 HeightColhead,
-										 Width  - left          - (_visVert ? _scrollVert.Width  : 0),
-										 Height - HeightColhead - (_visHori ? _scrollHori.Height : 0));
+			int left = getLeft();
+			var rect = new Rectangle(left,
+									 HeightColhead,
+									 Width  - left          - (_visVert ? _scrollVert.Width  : 0),
+									 Height - HeightColhead - (_visHori ? _scrollHori.Height : 0));
 
-				if (!rect.Contains(PointToClient(Cursor.Position)))
-					_f.PrintInfo(); // clear
-			}
+			if (!rect.Contains(PointToClient(Cursor.Position)))
+				_f.PrintInfo(); // clear
 		}
 
 

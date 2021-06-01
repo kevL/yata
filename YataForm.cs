@@ -143,6 +143,13 @@ namespace yata
 
 		int _track_x = -1; // tracks last mouseover coords ->
 		int _track_y = -1;
+
+		/// <summary>
+		/// Hides any info that's currently displayed on the statusbar when the
+		/// cursor leaves the table-area.
+		/// </summary>
+		/// <remarks>Maintain namespace to differentiate System.Threading.Timer</remarks>
+		static System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
 		#endregion Fields
 
 
@@ -297,6 +304,10 @@ namespace yata
 			else
 				Obfuscate();
 
+			_t1.Interval = 223;
+			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
+			_t1.Tick += t1_Tick;
+
 			DontBeepEvent += HandleDontBeepEvent;
 
 			TalkReader.LoadTalkingHeads(Strrefheads);
@@ -385,6 +396,20 @@ namespace yata
 			}
 		}
 		#endregion cTor
+
+
+		/// <summary>
+		/// Handles timer ticks - clears statusbar coordinates and path-info
+		/// when the mouse-cursor leaves the grid.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks></remarks>
+		void t1_Tick(object sender, EventArgs e)
+		{
+			if (!YataGrid._init && Table != null) // && Tabs.TabCount != 0
+				Table.MouseLeaveTicker();
+		}
 
 
 		#region Events (override)
