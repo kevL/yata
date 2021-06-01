@@ -53,7 +53,7 @@ namespace yata
 
 		/// <summary>
 		/// Min width of a cell - ergo of a colhead even if width of
-		/// colhead-text is narrower
+		/// colhead-text is narrower.
 		/// </summary>
 		internal static int _wId;
 
@@ -246,9 +246,9 @@ namespace yata
 		/// <summary>
 		/// The quantity of rows that are flagged for an operation excluding the
 		/// currently selected row.
-		/// @note The value will be negative if the range of subselected rows
-		/// is above the currently selected row - else positive.
 		/// </summary>
+		/// <remarks>The value will be negative if the range of subselected rows
+		/// is above the currently selected row - else positive.</remarks>
 		internal int RangeSelect
 		{ get; set; }
 
@@ -259,7 +259,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor.
+		/// cTor. Instantiates a 2da-file in this YataGrid format/layout.
 		/// </summary>
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
@@ -329,10 +329,12 @@ namespace yata
 		internal const int INVALID_LBLS = 0x20; // the static labels that head the frozen panel
 
 		/// <summary>
-		/// Flags various controls of this grid for UI-update.
-		/// @note Check that 'Propanel' is valid before a call w/ 'INVALID_PROP'.
+		/// Invalidates various controls of this grid for UI-update based on
+		/// the <see cref="INVALID_NONE">INVALID</see> flags.
 		/// </summary>
 		/// <param name="invalid"></param>
+		/// <remarks>Check that 'Propanel' is valid before a call w/
+		/// <see cref="INVALID_PROP"/>.</remarks>
 		internal void Invalidator(int invalid)
 		{
 			if ((invalid & INVALID_GRID) != 0)
@@ -3021,10 +3023,11 @@ namespace yata
 
 		/// <summary>
 		/// Handles timer ticks - clears statusbar coordinates and path-info
-		/// when the mouse-cursor leaves the grid. (MouseLeave is unreliable.)
+		/// when the mouse-cursor leaves the grid.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>The MouseLeave event is unreliable.</remarks>
 		void t1_Tick(object sender, EventArgs e)
 		{
 			if (!_init && _f.Tabs.TabCount != 0 && _f.Tabs.SelectedTab.Tag == this) // required for CloseAll ...
@@ -3189,7 +3192,7 @@ namespace yata
 
 		/// <summary>
 		/// Gets the x-pos of the right edge of the frozen-panel; ie, the left
-		/// edge of the visible/editable area of the table
+		/// edge of the visible/editable area of the table.
 		/// </summary>
 		/// <returns></returns>
 		int getLeft()
