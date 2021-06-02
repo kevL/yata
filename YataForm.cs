@@ -407,7 +407,7 @@ namespace yata
 		/// <remarks></remarks>
 		void t1_Tick(object sender, EventArgs e)
 		{
-			if (!YataGrid._init && Table != null) // && Tabs.TabCount != 0
+			if (_track_x != -1 && !YataGrid._init && Table != null) // && Tabs.TabCount != 0
 				Table.MouseLeaveTicker();
 		}
 
