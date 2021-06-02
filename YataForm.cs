@@ -404,7 +404,6 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		/// <remarks></remarks>
 		void t1_Tick(object sender, EventArgs e)
 		{
 			if (_track_x != -1 && !YataGrid._init && Table != null) // && Tabs.TabCount != 0
