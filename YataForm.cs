@@ -149,7 +149,7 @@ namespace yata
 		/// cursor leaves the table-area.
 		/// </summary>
 		/// <remarks>Maintain namespace to differentiate System.Threading.Timer</remarks>
-		static System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
+		System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
 		#endregion Fields
 
 
