@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 june 1
+2021 june 4
 kevL's
-ver 4.1.2.0
+ver 4.1.2.1
 
 
 File
@@ -502,14 +502,12 @@ stock files.
 
 Appendix F: creating a 2da-file
 
-Yata cannot be used to create a new 2da-file from scratch. Nor is it able to
-change the quantity of cols or the col labels. It is able to edit only rows and
-cell-fields. So if you want a brand new 2da, at a minimum you should use a text-
-editor to specify the 2da version header, followed by a blank line, followed by
-a line with the col labels (preceeded by a space) - look at the top of any valid
-2da, in a text-editor, to see what those first three lines should look like.
-Yata ought then be able to open the 2da and assign a first blank row with
-default cell-values.
+Yata cannot be used to create a new 2da-file from scratch. So if you want a
+brand new 2da, at a minimum you should use a text-editor to specify the 2da
+version header, followed by a blank line, followed by a line with the col labels
+(preceeded by a space) - look at the top of any valid 2da, in a text-editor, to
+see what those first three lines should look like. Yata ought then be able to
+open the 2da and assign a first blank row with default cell-values.
 
 
 Appendix G: Drag & Drop to open 2da-file(s)
