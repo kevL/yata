@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 june 4
+2021 july 15
 kevL's
-ver 4.1.2.1
+ver 4.2.0.0
 
 
 File
@@ -202,8 +202,7 @@ Delete - when a row is selected (as indicated with a green field at the far left
          row, above or below the selected row, to select a range of rows to
          delete. If all rows of a table are deleted a single default row will be
          created.
-       - if a row is not selected and only 1 cell is selected, Delete clears its
-         celltext ("****")
+       - if a row is not selected, Delete clears the text of selected cells
 
 Space - focuses the table and selects the first cell. If cell(s) are already
         selected the table will scroll to ensure that the first selected cell is
