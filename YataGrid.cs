@@ -2856,11 +2856,16 @@ namespace yata
 		/// Because sometimes I'm a stupid and double-click to start textedit.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>If a cell is currently being edited any changes to that
+		/// cell will be accepted and the cell that is double-clicked if any
+		/// shall (sic) enter its edit-state.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
+			{
 				OnMouseClick(e);
-
+				OnMouseClick(e);
+			}
 //			base.OnMouseDoubleClick(e);
 		}
 
