@@ -1407,7 +1407,10 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		/// <remarks>This is also used by SaveAs, SaveAll, and the FileWatcher.</remarks>
+		/// <remarks>This is also used by
+		/// <c><see cref="fileclick_SaveAs()">fileclick_SaveAs()</see></c>,
+		/// <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c>,
+		/// and <c><see cref="FileWatcherDialog"></see>.OnFormClosing</c>.</remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null) // safety I believe.
