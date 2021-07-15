@@ -1465,8 +1465,7 @@ namespace yata
 							if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
 																//               *as itself* it loses its Readonly flag.
 
-							int rows = _table.RowCount;
-							if (rows != 0) // NOTE: 'RowCount' shall never be 0
+							if (_table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
 							{
 								_table.Changed = false;
 								_table._ur.ResetSaved();
@@ -1480,45 +1479,7 @@ namespace yata
 								if (_table == Table)
 									_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
-								using (var sw = new StreamWriter(_table.Fullpath))
-								{
-									sw.WriteLine("2DA V2.0");					// header ->
-									sw.WriteLine("");
-
-									string line = String.Empty;
-									foreach (string field in _table.Fields)		// col-fields ->
-									{
-										line += gs.Space + field;
-									}
-									sw.WriteLine(line);
-
-
-									string val;
-
-									int cols = _table.ColCount;
-
-									for (int r = 0; r != rows; ++r)				// row-cells ->
-									{
-										line = String.Empty;
-
-										for (int c = 0; c != cols; ++c)
-										{
-											if (c != 0)
-												line += gs.Space;
-
-											if (!String.IsNullOrEmpty(val = _table[r,c].text))
-												line += val;
-											else
-												line += gs.Stars;
-										}
-
-										sw.WriteLine(line);
-									}
-
-									_table.Watcher.Pfe = _table.Fullpath;
-									_table.Watcher.BypassFileDeleted = false;
-									_table.Watcher.BypassFileChanged = true;
-								}
+								FileOutput.Write(_table);
 							}
 						}
 //						}

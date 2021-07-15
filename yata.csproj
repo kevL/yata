@@ -66,6 +66,7 @@
     <Compile Include="ClipboardF.Designer.cs">
       <DependentUpon>ClipboardF.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileOutput.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="FileWatcherDialog.cs" />
     <Compile Include="FileWatcherDialog.Designer.cs">
