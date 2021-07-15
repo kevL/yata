@@ -2183,9 +2183,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a single or multiple rows on keypress Delete, but if a row
-		/// is not selected and a single cell is selected then clears its
-		/// celltext ("****").
+		/// Deletes a single or multiple rows on keypress Delete, or if a row
+		/// is not selected then it replaces all selected cells' texts with
+		/// "****".
 		/// </summary>
 		void Delete()
 		{
@@ -2242,14 +2242,7 @@ namespace yata
 				DrawingControl.ResumeDrawing(this);
 			}
 			else
-			{
-				Cell sel = getSelectedCell();
-				if (sel != null
-					&& (sel.text != gs.Stars || sel.loadchanged))
-				{
-					ChangeCellText(sel, gs.Stars);
-				}
-			}
+				_f.editclick_Stars(null, EventArgs.Empty);
 		}
 
 

@@ -2561,13 +2561,14 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_Stars(object sender, EventArgs e)
+		internal void editclick_Stars(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				if ((sel = row[c]).selected && sel.text != gs.Stars)
+				if ((sel = row[c]).selected
+					&& (sel.text != gs.Stars || sel.loadchanged))
 				{
 					Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
 				}
