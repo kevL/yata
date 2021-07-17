@@ -31,13 +31,18 @@ namespace yata
 		internal static bool _maximized;
 		internal static bool _instantgoto;
 		internal static bool _casesort;
-		internal static bool _alignoutput;
 
 		internal static int _recent;
+		internal static int _alignoutput;
 
 		internal static string _diff;
 		internal static string _dialog;
 		internal static string _dialogalt;
+
+
+		internal const int AoFalse = 0;
+		internal const int AoTrue  = 1;
+		internal const int AoTabs  = 2;
 
 
 		internal static void ScanSettings()
@@ -241,8 +246,14 @@ namespace yata
 						}
 						else if (line.StartsWith("alignoutput=", StringComparison.InvariantCulture))
 						{
-							_alignoutput = (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
-										&& line == "true");
+							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim()))
+							{
+								switch (line)
+								{
+									case "true": _alignoutput = AoTrue; break;
+									case "tabs": _alignoutput = AoTabs; break;
+								}
+							}
 						}
 					}
 				}

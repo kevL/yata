@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 july 15
+2021 july 16
 kevL's
 ver 4.2.0.0
 
@@ -336,6 +336,10 @@ instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
              pressed to select a row after digits are typed
 casesort=    "true" (without quotes) for case-sensitive sorting
+alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
+             "tabs" (without quotes) to align cols with tabs. Note that using
+             tab-characters in 2da files is not officially supported and could
+             break in other applications
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
