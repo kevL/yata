@@ -7,8 +7,9 @@ namespace yata
 {
 	/// <summary>
 	/// Creates an object that watches for external/disk file-changed events.
-	/// @note Call Dispose() when it goes out of scope: YataForm.CloseTabpage().
 	/// </summary>
+	/// <remarks>Call <c>Dispose()</c> when it goes out of scope:
+	/// <c><see cref="YataForm"/>.CloseTabpage()</c>.</remarks>
 	sealed class FileWatcher
 		:
 			Timer
