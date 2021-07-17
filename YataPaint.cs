@@ -248,7 +248,7 @@ namespace yata
 
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
-			if (!YataGrid._init)
+			if (!_init)
 			{
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -312,7 +312,7 @@ namespace yata
 
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
-			if (!YataGrid._init)
+			if (!_init)
 			{
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -363,7 +363,7 @@ namespace yata
 
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
-			if (!YataGrid._init)
+			if (!_init)
 			{
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
