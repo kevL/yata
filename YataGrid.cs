@@ -1351,7 +1351,6 @@ namespace yata
 		{
 			RowCount = _rows.Count;
 
-			Cell cell;
 			string text = String.Empty;
 			Brush brush;
 			bool loadchanged, changed = false;
@@ -1383,8 +1382,7 @@ namespace yata
 						loadchanged = true;
 					}
 
-					cell = (this[r,c] = new Cell(r,c, text));
-					cell.loadchanged = loadchanged;
+					(this[r,c] = new Cell(r,c, text)).loadchanged = loadchanged;
 				}
 			}
 			Changed |= changed;
