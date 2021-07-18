@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Text;
 //using System.Threading;
 using System.Windows.Forms;
 
@@ -733,17 +734,97 @@ namespace yata
 		internal const int LOADRESULT_TRUE    = 1;
 		internal const int LOADRESULT_CHANGED = 2;
 
+		static int CodePage = -1;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="codepage"></param>
+		/// <returns></returns>
+		internal static bool CheckCodepage(int codepage)
+		{
+			EncodingInfo[] encs = Encoding.GetEncodings();
+			for (int i = 0; i != encs.Length; ++i)
+			{
+				if (encs[i].CodePage == codepage)
+					return true;
+			}
+			return false;
+		}
+
 		/// <summary>
 		/// Tries to load a 2da-file.
 		/// </summary>
 		/// <returns>a LOADRESULT_* val</returns>
 		internal int LoadTable()
 		{
+			// �
+//			byte[] asciiBytes = Encoding.ASCII.GetBytes("�");
+//			logfile.Log("� = " + asciiBytes);
+//			foreach (var b in asciiBytes)
+//				logfile.Log(((int)b).ToString());
+//
+//			byte[] utf8Bytes = Encoding.UTF8.GetBytes("�");
+//			logfile.Log("� = " + utf8Bytes);
+//			foreach (var b in utf8Bytes)
+//				logfile.Log(((int)b).ToString());
+
+//			logfile.Log();
+//			logfile.Log("default encoding= " + Encoding.GetEncoding(0));
+//			EncodingInfo[] encs = Encoding.GetEncodings();
+//			foreach (var enc in encs)
+//			{
+//				logfile.Log();
+//				logfile.Log(". enc= " + enc.Name);
+//				logfile.Log(". DisplayName= " + enc.DisplayName);
+//				logfile.Log(". CodePage= " + enc.CodePage);
+//			}
+
+			string[] lines = File.ReadAllLines(Fullpath); // default encoding is UTF-8
+
+			for (int i = 0; i != lines.Length; ++i)
+			{
+				if (lines[i].Contains("�"))
+				{
+					if (CodePage == -1)
+						CodePage = Settings._codepage; // init.
+
+					Encoding enc;
+
+					if (CodePage == 0 || CheckCodepage(CodePage))
+					{
+						// CodePage is default or user-valid.
+						enc = Encoding.GetEncoding(CodePage);
+					}
+					else
+						enc = null;
+
+
+					using (var cpd = new CodePageDialog(enc))
+					{
+						int result;
+						if (cpd.ShowDialog(_f) == DialogResult.OK
+							&& Int32.TryParse(cpd.GetCodePage(), out result)
+							&& result > -1 && result < 65536
+							&& CheckCodepage(result))
+						{
+							lines = File.ReadAllLines(Fullpath, Encoding.GetEncoding(result));
+						}
+						else // silently fail.
+						{
+							_init = false;
+							return LOADRESULT_FALSE;
+						}
+					}
+					break;
+				}
+			}
+
+
 			bool ignoreErrors = false;
 
 			int id = -1;
 
-			string[] lines = File.ReadAllLines(Fullpath);
 			string line = String.Empty;
 
 			int total = lines.Length;

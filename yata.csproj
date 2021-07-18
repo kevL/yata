@@ -66,6 +66,7 @@
     <Compile Include="ClipboardF.Designer.cs">
       <DependentUpon>ClipboardF.cs</DependentUpon>
     </Compile>
+    <Compile Include="CodePageDialog.cs" />
     <Compile Include="FileOutput.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="FileWatcherDialog.cs" />
@@ -125,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ClipboardF.resx">
       <DependentUpon>ClipboardF.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodePageDialog.resx">
+      <DependentUpon>CodePageDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileWatcherDialog.resx">
       <DependentUpon>FileWatcherDialog.Designer.cs</DependentUpon>

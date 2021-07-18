@@ -34,6 +34,7 @@ namespace yata
 
 		internal static int _recent;
 		internal static int _alignoutput;
+		internal static int _codepage;
 
 		internal static string _diff;
 		internal static string _dialog;
@@ -253,6 +254,14 @@ namespace yata
 									case "true": _alignoutput = AoTrue; break;
 									case "tabs": _alignoutput = AoTabs; break;
 								}
+							}
+						}
+						else if (line.StartsWith("codepage=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
+								&& Int32.TryParse(line, out result) && result > -1)
+							{
+								_codepage = result;
 							}
 						}
 					}
