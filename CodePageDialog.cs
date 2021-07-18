@@ -41,10 +41,6 @@ namespace yata
 
 			la_Head.Text = head;
 
-//			la_CodepageInfo.Text = enc.HeaderName   + Environment.NewLine
-//								 + enc.EncodingName + Environment.NewLine
-//								 + enc.CodePage;
-
 			_pre = enc.CodePage;
 			tb_Codepage.Text = enc.CodePage.ToString();
 
