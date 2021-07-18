@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 july 16
+2021 july 18
 kevL's
 ver 4.2.0.0
 
@@ -340,6 +340,7 @@ alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
              "tabs" (without quotes) to align cols with tabs. Note that using
              tab-characters in 2da files is not officially supported and could
              break in other applications
+codepage=    (integer) see Appendix N: Codepages
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
@@ -657,3 +658,21 @@ http://winmerge.org/
 
 kdiff3 (which is overkill for 2da files) can be downloaded at
 http://kdiff3.sourceforge.net/
+
+
+Appendix N: Codepages
+
+UTF-8 and ASCII encoded textfiles ought be interpreted by .NET easily. But if
+text was encoded with any of the extended-ASCII (aka ANSI) charactersets then it
+becomes an issue since there is no way to rigorously determine what encoding was
+used. Yata uses a very basic detection routine - it decodes text as UTF-8 and
+searches for � - if that character is found then a dialog appears asking what
+codepage should be used to interpret the 2da's encoding. If this value is left
+blank then your machine's default encoding/characterset will appear in the
+dialog; but if a valid codepage is specified in Settings.Cfg then that codepage
+will appear in the dialog instead.
+
+In either case the desired codepage for loading a 2da file can be specified in
+that dialog.
+
+Note that Yata always encodes output as UTF-8.
