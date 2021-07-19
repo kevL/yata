@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 
@@ -7,11 +6,6 @@ namespace yata
 {
 	sealed partial class FontF
 	{
-		/// <summary>
-		/// Designer variable used to keep track of non-visual components.
-		/// </summary>
-		IContainer components = null; // not used.
-
 		ListBox list_Font;
 		Button bu_Apply;
 		Button bu_Cancel;
@@ -29,20 +23,6 @@ namespace yata
 		SplitContainer sc_Hori;
 		GroupBox gb_Size;
 		Panel pa_Pad;
-
-		/// <summary>
-		/// Disposes resources used by the form.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed</param>
-		protected override void Dispose(bool disposing)
-		{
-			DisposeFonts(); // kL_add.
-
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
