@@ -76,6 +76,8 @@ namespace yata
 		/// <param name="e"></param>
 		void tb_Codepage_textchanged(object sender, EventArgs e)
 		{
+			Encoding enc = null;
+
 			if (tb_Codepage.Text.Length == 0)
 			{
 				la_CodepageInfo.Text = String.Empty;
@@ -97,7 +99,7 @@ namespace yata
 				}
 				else if (YataGrid.CheckCodepage(_pre = result))
 				{
-					Encoding enc = Encoding.GetEncoding(_pre);
+					enc = Encoding.GetEncoding(_pre);
 
 					la_CodepageInfo.ForeColor = Colors.Text;
 					la_CodepageInfo.Text = enc.HeaderName   + Environment.NewLine
@@ -110,6 +112,7 @@ namespace yata
 					la_CodepageInfo.Text = "Codepage invalid.";
 				}
 			}
+			bu_Accept.Enabled = (enc != null);
 		}
 
 
@@ -346,6 +349,7 @@ namespace yata
 			this.Controls.Add(this.bu_Accept);
 			this.MaximizeBox = false;
 			this.Name = "CodePageDialog";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Choose a codepage";
 			this.ResumeLayout(false);
