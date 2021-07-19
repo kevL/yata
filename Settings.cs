@@ -285,7 +285,7 @@ namespace yata
 				while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
 				{
 					fontdialog.Dispose();
-					fontdialog = new Font(font.Name, pts -= 1F, YataForm.getStyleStandard(font.FontFamily));
+					fontdialog = new Font(font.Name, pts -= 0.75F, YataForm.getStyleStandard(font.FontFamily));
 				}
 				return fontdialog;
 			}
