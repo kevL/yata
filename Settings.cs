@@ -259,7 +259,8 @@ namespace yata
 						else if (line.StartsWith("codepage=", StringComparison.InvariantCulture))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
-								&& Int32.TryParse(line, out result) && result > -1)
+								&& Int32.TryParse(line, out result)
+								&& result > -1 && result < 65536)
 							{
 								_codepage = result;
 							}
