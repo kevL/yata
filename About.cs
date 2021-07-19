@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -64,20 +63,8 @@ namespace yata
 
 
 		#region Designer
-		Container components = null;
 		Button btn_Close;
 		Label la_Text;
-
-		/// <summary>
-		/// Cleans up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of

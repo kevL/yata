@@ -1,15 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 
 namespace yata
 {
 	sealed partial class RowCreatorDialog
 	{
-		/// <summary>
-		/// Designer variable used to keep track of non-visual components.
-		/// </summary>
-		System.ComponentModel.IContainer components = null;
-
 		Button btn_Cancel;
 		Button btn_Accept;
 		RadioButton rb_StartAdd;
@@ -30,19 +26,6 @@ namespace yata
 		RadioButton rb_FillCopied;
 		RadioButton rb_FillStars;
 		RadioButton rb_FillSelected;
-
-
-		/// <summary>
-		/// Disposes resources used by the form.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.

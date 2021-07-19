@@ -1,12 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 
 namespace yata
 {
 	partial class InfoInputSpells
 	{
-		System.ComponentModel.IContainer components = null;
-
 		Label lbl_Val;
 		ComboBox cbx_Val;
 
@@ -42,17 +41,6 @@ namespace yata
 
 		Button btn_Clear;
 		Button btn_Accept;
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of

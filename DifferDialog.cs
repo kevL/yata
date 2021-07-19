@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -229,25 +228,12 @@ namespace yata
 
 
 		#region Windows Form Designer generated code
-		Container components = null;
-
 		Label lbl_Info;
 		RichTextBox rtb_Copyable;
 		Panel pnl_Copyable;
 		Button btn_Goto;
 		Button btn_Okay;
 		Button btn_Reset;
-
-		/// <summary>
-		/// Cleans up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of

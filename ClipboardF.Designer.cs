@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 
 
@@ -5,30 +6,12 @@ namespace yata
 {
 	sealed partial class ClipboardF
 	{
-		/// <summary>
-		/// Designer variable used to keep track of non-visual components.
-		/// </summary>
-		System.ComponentModel.IContainer components = null;
-
 		RichTextBox rtb_Clip;
 		Panel panel1;
 		Button btn_Set;
 		Button btn_Get;
 		Button btn_Done;
 
-
-		/// <summary>
-		/// Disposes resources used by the form.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
-		
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -461,8 +460,6 @@ namespace yata
 
 
 		#region Windows Form Designer generated code
-		Container components = null;
-
 		Panel pnl_Head;
 		RichTextBox rtb_Copyable;
 		Panel pnl_Copyable;
@@ -474,17 +471,6 @@ namespace yata
 		Button btn_Backward;
 		TextBox tb_Strref;
 		CheckBox cb_Custo;
-
-		/// <summary>
-		/// Cleans up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-
-			base.Dispose(disposing);
-		}
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of
