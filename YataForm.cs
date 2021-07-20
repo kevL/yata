@@ -202,18 +202,19 @@ namespace yata
 			// hide the panel try using its Visible bool.
 
 
-			YataGraphics.graphics = CreateGraphics(); //Graphics.FromHwnd(IntPtr.Zero))
-			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
+			YataGraphics.graphics = CreateGraphics();
 
 			FontDefault = new Font("Georgia", 8F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 			Font = FontDefault.Clone() as Font;
+
+			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
 			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
 
 			if (Settings._font != null)
 				Font = Settings._font;
 			else
-				Settings._fontdialog = new Font(Font.Name, Font.Size, Font.Style, Font.Unit);
+				Settings._fontdialog = Settings.CreateDialogFont(Font);
 
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
@@ -221,10 +222,10 @@ namespace yata
 			{
 				// Relative Font-sizes (as defined in the Designer):
 				//
-				// menubar, contextEditor, statusbar, tabMenu, cellMenu = unity.
-				// context_it_Header     = +0.5
-				// statusbar_label_Cords = -0.5
-				// statusbar_label_Info  = +1.0
+				// menubar, ContextEditor, statusbar, tabMenu, cellMenu = unity.
+				// context_it_Header     = +0.75
+				// statusbar_label_Cords = -0.75
+				// statusbar_label_Info  = +1.50
 
 				menubar.Font.Dispose();
 				menubar.Font = Settings._font2;
@@ -237,11 +238,11 @@ namespace yata
 
 				statbar_lblCords.Font.Dispose();
 				statbar_lblCords.Font = new Font(Settings._font2.FontFamily,
-												 Settings._font2.SizeInPoints - 0.5f);
+												 Settings._font2.SizeInPoints - 0.75f);
 
 				statbar_lblInfo.Font.Dispose();
 				statbar_lblInfo.Font = new Font(Settings._font2.FontFamily,
-												Settings._font2.SizeInPoints + 1.0f);
+												Settings._font2.SizeInPoints + 1.5f);
 
 				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statbar_lblInfo.Font) + 2;
 
@@ -254,7 +255,7 @@ namespace yata
 
 				context_it_Header.Font.Dispose();
 				context_it_Header.Font = new Font(Settings._font2.FontFamily,
-												  Settings._font2.SizeInPoints + 0.5f,
+												  Settings._font2.SizeInPoints + 0.75f,
 												  getStyleAccented(Settings._font2.FontFamily));
 
 				tabMenu.Font.Dispose();
@@ -962,46 +963,47 @@ namespace yata
 				y = 2;
 			}
 
-			var font = new Font(Font.Name, Font.SizeInPoints - 0.5f, style);
-
-			// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
-			int w = YataGraphics.MeasureWidth(tab.Text, font);
-			var rect = e.Bounds;
-			rect.X   = e.Bounds.X + (e.Bounds.Width - w) / 2;
-			rect.Y   = e.Bounds.Y + y; // NOTE: 'y' is a padding tweak.
-
-			graphics = e.Graphics;
-			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			Color color;
-
-			// NOTE: The tag (and text...) can be null when the tabcontrol needs
-			// to extend down to create another row. Go figur.
-			// Fortunately the text of a table that is opened as readonly will
-			// still appear in the TextReadonly color because .net tends to be
-			// redundant and so this draw routine gets a second call right away
-			// with its Tag/table valid.
-			// Note that this is one of those null-errors that the debugger will
-			// slough off ....
-			var table = tab.Tag as YataGrid;
-			if (table != null && table.Readonly)
-				color = Colors.TextReadonly;
-			else
-				color = Colors.Text;
-
-			TextRenderer.DrawText(graphics,
-								  tab.Text,
-								  font,
-								  rect,
-								  color,
-								  YataGraphics.flags);
-
-			if (y == 1 && Tabs.Focused)
+			using (var font = new Font(Font.Name, Font.SizeInPoints - 0.75f, style))
 			{
-				y = rect.Y + rect.Height - 5;
-				graphics.DrawLine(Pencils.LightLine,
-								  rect.X,     y,
-								  rect.X + w, y);
+				// NOTE: MS doc for DrawText() says that using a Point doesn't work on Win2000 machines.
+				int w = YataGraphics.MeasureWidth(tab.Text, font);
+				var rect = e.Bounds;
+				rect.X   = e.Bounds.X + (e.Bounds.Width - w) / 2;
+				rect.Y   = e.Bounds.Y + y; // NOTE: 'y' is a padding tweak.
+
+				graphics = e.Graphics;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+				Color color;
+
+				// NOTE: The tag (and text...) can be null when the tabcontrol needs
+				// to extend down to create another row. Go figur.
+				// Fortunately the text of a table that is opened as readonly will
+				// still appear in the TextReadonly color because .net tends to be
+				// redundant and so this draw routine gets a second call right away
+				// with its Tag/table valid.
+				// Note that this is one of those null-errors that the debugger will
+				// slough off ....
+				var table = tab.Tag as YataGrid;
+				if (table != null && table.Readonly)
+					color = Colors.TextReadonly;
+				else
+					color = Colors.Text;
+
+				TextRenderer.DrawText(graphics,
+									  tab.Text,
+									  font,
+									  rect,
+									  color,
+									  YataGraphics.flags);
+
+				if (y == 1 && Tabs.Focused)
+				{
+					y = rect.Y + rect.Height - 5;
+					graphics.DrawLine(Pencils.LightLine,
+									  rect.X,     y,
+									  rect.X + w, y);
+				}
 			}
 		}
 		#endregion Events (tabs)
@@ -3673,11 +3675,11 @@ namespace yata
 			Font.Dispose();
 			Font = font;
 
-			FontAccent.Dispose();
-			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
-
 			Settings._fontdialog.Dispose();
 			Settings._fontdialog = Settings.CreateDialogFont(Font);
+
+			FontAccent.Dispose();
+			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
 
 			YataGrid.SetStaticMetrics(this);
@@ -3712,13 +3714,12 @@ namespace yata
 					// turn out even almost correct.
 					// NOTE: Height of any table should NOT be changing at all.
 
-					int invalid = table.EnsureDisplayed();
 					if (table == Table)
-						table.Invalidator(invalid);
+						table.Invalidator(table.EnsureDisplayed());
 				}
 
-				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
+				Obfuscate(false);
 
 				if (_fontF != null)			// layout for big tables will send the Font dialog below the form ->
 					_fontF.BringToFront();	// (although it should never be behind the form because its owner IS the form)

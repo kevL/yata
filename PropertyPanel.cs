@@ -184,7 +184,7 @@ namespace yata
 				Font = Settings._font3;
 			}
 			else
-				Font = new Font("Verdana", 7.5F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+				Font = new Font("Verdana", 7.25F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
 
 			if (_heightr == -1)
 				_heightr = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font) + _padVert * 2;

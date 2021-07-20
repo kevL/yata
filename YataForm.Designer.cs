@@ -1377,7 +1377,7 @@ namespace yata
 			// 
 			// context_it_Header
 			// 
-			this.context_it_Header.Font = new System.Drawing.Font("Verdana", 8.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.context_it_Header.Font = new System.Drawing.Font("Verdana", 8.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.context_it_Header.Name = "context_it_Header";
 			this.context_it_Header.Size = new System.Drawing.Size(176, 22);
 			this.context_it_Header.Text = "_row @ 16";
@@ -1481,7 +1481,7 @@ namespace yata
 			// 
 			this.statbar_lblCords.AutoSize = false;
 			this.statbar_lblCords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statbar_lblCords.Font = new System.Drawing.Font("Verdana", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_lblCords.Font = new System.Drawing.Font("Verdana", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblCords.Name = "statbar_lblCords";
 			this.statbar_lblCords.Size = new System.Drawing.Size(160, 17);
 			this.statbar_lblCords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1490,7 +1490,7 @@ namespace yata
 			// 
 			this.statbar_lblInfo.AutoSize = false;
 			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblInfo.Name = "statbar_lblInfo";
 			this.statbar_lblInfo.Size = new System.Drawing.Size(667, 17);
 			this.statbar_lblInfo.Spring = true;
