@@ -46,7 +46,7 @@ namespace yata
 		internal static string _dialogalt;
 
 
-		internal const int AoFalse = 0;
+		internal const int AoFalse = 0; // Align_Output vals ->
 		internal const int AoTrue  = 1;
 		internal const int AoTabs  = 2;
 
@@ -287,19 +287,16 @@ namespace yata
 		{
 			var fontdialog = font.Clone() as Font;
 
-			if (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
+			string label = fontdialog.Name;
+			FontStyle style = YataForm.getStyleStandard(fontdialog.FontFamily);
+
+			float pts;
+			while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
 			{
-				string label; float pts; FontFamily ff;
+				pts = fontdialog.SizeInPoints;
 
-				while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
-				{
-					label = fontdialog.Name;
-					pts   = fontdialog.SizeInPoints;
-					ff    = fontdialog.FontFamily;
-
-					fontdialog.Dispose();
-					fontdialog = new Font(label, pts -= 0.75F, YataForm.getStyleStandard(ff));
-				}
+				fontdialog.Dispose();
+				fontdialog = new Font(label, pts -= 0.75F, style);
 			}
 			return fontdialog;
 		}
