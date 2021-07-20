@@ -249,7 +249,6 @@ namespace yata
 			// 
 			// bu_Default
 			// 
-			this.bu_Default.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Default.Location = new System.Drawing.Point(110, 75);
 			this.bu_Default.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Default.Name = "bu_Default";
@@ -262,7 +261,6 @@ namespace yata
 			// 
 			// bu_Utf8
 			// 
-			this.bu_Utf8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Utf8.Location = new System.Drawing.Point(190, 75);
 			this.bu_Utf8.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Utf8.Name = "bu_Utf8";
@@ -275,7 +273,6 @@ namespace yata
 			// 
 			// bu_Custom
 			// 
-			this.bu_Custom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Custom.Location = new System.Drawing.Point(270, 75);
 			this.bu_Custom.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Custom.Name = "bu_Custom";
@@ -288,7 +285,8 @@ namespace yata
 			// 
 			// bu_List
 			// 
-			this.bu_List.Location = new System.Drawing.Point(358, 75);
+			this.bu_List.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_List.Location = new System.Drawing.Point(364, 75);
 			this.bu_List.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_List.Name = "bu_List";
 			this.bu_List.Size = new System.Drawing.Size(75, 20);
