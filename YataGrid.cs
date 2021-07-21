@@ -2952,7 +2952,9 @@ namespace yata
 		/// shall (sic) enter its edit-state.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
-			if (_allowdoubleclick && e.Button == MouseButtons.Left)
+			if (_allowdoubleclick
+				&& e.Button == MouseButtons.Left)
+//				&& !Settings._strict
 			{
 				if (!_cellClicked.selected)
 					OnMouseClick(e);
