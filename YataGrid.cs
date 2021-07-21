@@ -800,7 +800,7 @@ namespace yata
 						enc = null;
 
 
-					using (var cpd = new CodePageDialog(enc))
+					using (var cpd = new CodePageDialog(_f, enc))
 					{
 						int result;
 						if (cpd.ShowDialog(_f) == DialogResult.OK

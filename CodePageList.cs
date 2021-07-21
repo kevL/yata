@@ -8,6 +8,14 @@ namespace yata
 	sealed class CodePageList
 		: Form
 	{
+		#region Fields (static)
+		static int _x = -1;
+		static int _y = -1;
+		static int _w = -1;
+		static int _h = -1;
+		#endregion Fields (static)
+
+
 		#region Fields
 		CodePageDialog _cpd;
 		#endregion Fields
@@ -17,6 +25,8 @@ namespace yata
 		internal CodePageList(CodePageDialog cpd)
 		{
 			InitializeComponent();
+
+			_cpd = cpd;
 
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
@@ -29,7 +39,14 @@ namespace yata
 				tb_List.Font = Settings._fontf_tb;
 			}
 
-			_cpd = cpd;
+			if (_x == -1) _x = _cpd.Left + 20;
+			if (_y == -1) _y = _cpd.Top  + 20;
+
+			Left = _x;
+			Top  = _y;
+
+			if (_w != -1) Width  = _w;
+			if (_h != -1) Height = _h;
 
 			var sb = new StringBuilder();
 
@@ -54,12 +71,17 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// 
+		/// Handles the <c>FormClosing</c> event.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			_cpd.List = null;
+
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
 
 			base.OnFormClosing(e);
 		}
@@ -111,6 +133,7 @@ namespace yata
 			this.Controls.Add(this.tb_List);
 			this.KeyPreview = true;
 			this.Name = "CodePageList";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = ".net Codepages";
 			this.ResumeLayout(false);
 			this.PerformLayout();

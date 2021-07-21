@@ -9,6 +9,14 @@ namespace yata
 	sealed class CodePageDialog
 		: Form
 	{
+		#region Fields (static)
+		static int _x = -1;
+		static int _y = -1;
+		static int _w = -1;
+		static int _h = -1;
+		#endregion Fields (static)
+
+
 		#region Properties
 		internal CodePageList List
 		{ get; set; }
@@ -19,7 +27,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal CodePageDialog(Encoding enc)
+		internal CodePageDialog(YataForm f, Encoding enc)
 		{
 			InitializeComponent();
 
@@ -36,13 +44,22 @@ namespace yata
 
 			tb_Codepage.BackColor = Colors.TextboxBackground;
 
-			string head = "The 2da file appears to be in ANSI."
-						+ " Please enter the encoding of its text.";
+			if (_x == -1) _x = f.Left + 20;
+			if (_y == -1) _y = f.Top  + 20;
+
+			Left = _x;
+			Top  = _y;
+
+			if (_w != -1) Width  = _w;
+			if (_h != -1) Height = _h;
+
+			string head = "The 2da file appears to have ANSI encoding."
+						+ " Please enter the codepage of its text.";
 
 			if (enc == null)
 			{
 				head += Environment.NewLine + Environment.NewLine
-					  + "The codepage in your Settings.Cfg is invalid.";
+					  + "The #codepage in Settings.Cfg is invalid.";
 
 				enc = Encoding.GetEncoding(0);
 			}
@@ -64,6 +81,23 @@ namespace yata
 		// replaced by � ensure that your 2da files are encoded in UTF-8 or
 		// ASCII before opening them in Yata."
 		#endregion cTor
+
+
+		#region Handlers (override)
+		/// <summary>
+		/// Handles the <c>FormClosing</c> event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
+
+			base.OnFormClosing(e);
+		}
+		#endregion Handlers (override)
 
 
 		#region Handlers
@@ -232,7 +266,7 @@ namespace yata
 			this.la_Head.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Head.Name = "la_Head";
 			this.la_Head.Padding = new System.Windows.Forms.Padding(10, 7, 5, 0);
-			this.la_Head.Size = new System.Drawing.Size(442, 75);
+			this.la_Head.Size = new System.Drawing.Size(427, 75);
 			this.la_Head.TabIndex = 0;
 			this.la_Head.Text = "la_Head";
 			// 
@@ -249,7 +283,7 @@ namespace yata
 			// 
 			// bu_Default
 			// 
-			this.bu_Default.Location = new System.Drawing.Point(110, 75);
+			this.bu_Default.Location = new System.Drawing.Point(109, 75);
 			this.bu_Default.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Default.Name = "bu_Default";
 			this.bu_Default.Size = new System.Drawing.Size(75, 20);
@@ -261,7 +295,7 @@ namespace yata
 			// 
 			// bu_Utf8
 			// 
-			this.bu_Utf8.Location = new System.Drawing.Point(190, 75);
+			this.bu_Utf8.Location = new System.Drawing.Point(188, 75);
 			this.bu_Utf8.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Utf8.Name = "bu_Utf8";
 			this.bu_Utf8.Size = new System.Drawing.Size(75, 20);
@@ -273,7 +307,7 @@ namespace yata
 			// 
 			// bu_Custom
 			// 
-			this.bu_Custom.Location = new System.Drawing.Point(270, 75);
+			this.bu_Custom.Location = new System.Drawing.Point(267, 75);
 			this.bu_Custom.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Custom.Name = "bu_Custom";
 			this.bu_Custom.Size = new System.Drawing.Size(75, 20);
@@ -286,7 +320,7 @@ namespace yata
 			// bu_List
 			// 
 			this.bu_List.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_List.Location = new System.Drawing.Point(364, 75);
+			this.bu_List.Location = new System.Drawing.Point(346, 75);
 			this.bu_List.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_List.Name = "bu_List";
 			this.bu_List.Size = new System.Drawing.Size(75, 20);
@@ -303,7 +337,7 @@ namespace yata
 			this.la_CodepageInfo.Location = new System.Drawing.Point(10, 100);
 			this.la_CodepageInfo.Margin = new System.Windows.Forms.Padding(0);
 			this.la_CodepageInfo.Name = "la_CodepageInfo";
-			this.la_CodepageInfo.Size = new System.Drawing.Size(430, 70);
+			this.la_CodepageInfo.Size = new System.Drawing.Size(415, 70);
 			this.la_CodepageInfo.TabIndex = 6;
 			this.la_CodepageInfo.Text = "la_CodepageInfo";
 			// 
@@ -311,7 +345,7 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(286, 172);
+			this.bu_Cancel.Location = new System.Drawing.Point(271, 172);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(75, 25);
@@ -323,7 +357,7 @@ namespace yata
 			// 
 			this.bu_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Accept.Location = new System.Drawing.Point(364, 172);
+			this.bu_Accept.Location = new System.Drawing.Point(349, 172);
 			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Accept.Name = "bu_Accept";
 			this.bu_Accept.Size = new System.Drawing.Size(75, 25);
@@ -335,20 +369,21 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Accept;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(442, 199);
-			this.Controls.Add(this.bu_List);
+			this.ClientSize = new System.Drawing.Size(427, 199);
 			this.Controls.Add(this.bu_Custom);
 			this.Controls.Add(this.bu_Utf8);
 			this.Controls.Add(this.bu_Default);
 			this.Controls.Add(this.la_Head);
 			this.Controls.Add(this.tb_Codepage);
+			this.Controls.Add(this.bu_List);
 			this.Controls.Add(this.la_CodepageInfo);
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.bu_Accept);
 			this.MaximizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(435, 225);
 			this.Name = "CodePageDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Choose a codepage";
 			this.ResumeLayout(false);
 			this.PerformLayout();
