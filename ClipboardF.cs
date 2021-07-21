@@ -139,7 +139,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles the formclosing event.
+		/// Handles the <c>FormClosing</c> event.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
