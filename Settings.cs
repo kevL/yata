@@ -19,6 +19,7 @@ namespace yata
 		internal static Font _font2dialog;	// all dialogs if valid.
 
 		internal static Font _font3;		// propanel
+
 		internal static Font _fontf;		// richtextboxes
 		internal static Font _fontfdialog;	// textboxes
 
