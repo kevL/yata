@@ -73,7 +73,7 @@ namespace yata
 			InitializeComponent();
 			_f = f;
 
-			if (Settings._fontf != null)
+			if (Settings._fontfdialog != null)
 			{
 				tb_FontString.Font.Dispose();
 				tb_FontString.Font = Settings._fontfdialog;

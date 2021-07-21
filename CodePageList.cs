@@ -23,7 +23,7 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			if (Settings._fontf != null)
+			if (Settings._fontfdialog != null)
 			{
 				tb_List.Font.Dispose();
 				tb_List.Font = Settings._fontfdialog;
