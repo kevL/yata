@@ -28,10 +28,10 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			if (Settings._fontfdialog != null)
+			if (Settings._fontf_tb != null)
 			{
 				tb_Codepage.Font.Dispose();
-				tb_Codepage.Font = Settings._fontfdialog;
+				tb_Codepage.Font = Settings._fontf_tb;
 			}
 
 			tb_Codepage.BackColor = Colors.TextboxBackground;

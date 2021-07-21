@@ -40,10 +40,10 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			if (Settings._fontfdialog != null)
+			if (Settings._fontf_tb != null)
 			{
 				tb_Pfe.Font.Dispose();
-				tb_Pfe.Font = Settings._fontfdialog;
+				tb_Pfe.Font = Settings._fontf_tb;
 			}
 
 			tb_Pfe.BackColor = Colors.TextboxBackground;

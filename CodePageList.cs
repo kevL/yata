@@ -23,10 +23,10 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			if (Settings._fontfdialog != null)
+			if (Settings._fontf_tb != null)
 			{
 				tb_List.Font.Dispose();
-				tb_List.Font = Settings._fontfdialog;
+				tb_List.Font = Settings._fontf_tb;
 			}
 
 			_cpd = cpd;

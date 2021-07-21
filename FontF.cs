@@ -73,10 +73,10 @@ namespace yata
 			InitializeComponent();
 			_f = f;
 
-			if (Settings._fontfdialog != null)
+			if (Settings._fontf_tb != null)
 			{
 				tb_FontString.Font.Dispose();
-				tb_FontString.Font = Settings._fontfdialog;
+				tb_FontString.Font = Settings._fontf_tb;
 			}
 
 			tb_FontSize  .BackColor = Color.White;

@@ -95,7 +95,7 @@ namespace yata
 				rtb_Copyable.Font = Settings._fontf;
 
 				tb_Strref.Font.Dispose();
-				tb_Strref.Font = Settings._fontfdialog;
+				tb_Strref.Font = Settings._fontf_tb;
 			}
 
 

@@ -55,12 +55,12 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			if (Settings._fontfdialog != null)
+			if (Settings._fontf_tb != null)
 			{
 				tb_StartAdd   .Font =
 				tb_StartInsert.Font =
 				tb_StopFinish .Font =
-				tb_StopCount  .Font = Settings._fontfdialog;
+				tb_StopCount  .Font = Settings._fontf_tb;
 			}
 			else
 			{

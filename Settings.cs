@@ -20,8 +20,8 @@ namespace yata
 
 		internal static Font _font3;		// propanel
 
-		internal static Font _fontf;		// richtextboxes
-		internal static Font _fontfdialog;	// textboxes
+		internal static Font _fontf;		// richtextboxes (preferably fixed-font)
+		internal static Font _fontf_tb;		// textboxes (preferably fixed-font)
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
@@ -140,7 +140,7 @@ namespace yata
 									_fontf = null;
 								}
 								else
-									_fontfdialog = CreateDialogFont(_fontf);
+									_fontf_tb = CreateDialogFont(_fontf);
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
