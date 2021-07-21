@@ -64,7 +64,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles the load event.
+		/// Handles the <c>Load</c> event.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
@@ -75,7 +75,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the resize event.
+		/// Handles the <c>Resize</c> event.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
@@ -98,6 +98,22 @@ namespace yata
 
 			rtb_Clip.SelectionStart  = pos;
 			rtb_Clip.SelectionLength = len;
+		}
+
+		/// <summary>
+		/// Handles the <c>FormClosing</c> event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			_f.Clip_uncheck();
+
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
+
+			base.OnFormClosing(e);
 		}
 		#endregion Events (override)
 
@@ -135,22 +151,6 @@ namespace yata
 		void click_Set(object sender, EventArgs e)
 		{
 			ClipboardAssistant.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
-		}
-
-
-		/// <summary>
-		/// Handles the <c>FormClosing</c> event.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void OnClosing(object sender, FormClosingEventArgs e)
-		{
-			_f.Clip_uncheck();
-
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
 		}
 		#endregion Events
 	}

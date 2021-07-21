@@ -100,7 +100,6 @@ namespace yata
 			this.Name = "ClipboardF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
