@@ -2752,8 +2752,19 @@ namespace yata
 		}
 
 
-		bool _allowdoubleclick;
-		Cell _cellClicked;
+		/// <summary>
+		/// <c>true</c> allows the
+		/// <c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>
+		/// handler.
+		/// </summary>
+		bool _double;
+
+		/// <summary>
+		/// The clicked cell.
+		/// </summary>
+		/// <remarks><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>
+		/// can use this.</remarks>
+		Cell _cell;
 
 		/// <summary>
 		/// LMB selects a cell or enables/disables the editbox. RMB opens a
@@ -2764,6 +2775,9 @@ namespace yata
 		/// or left panels.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+			//logfile.Log("OnMouseClick()");
+			_double = false;
+
 			if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
 			{
 				if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
@@ -2789,23 +2803,22 @@ namespace yata
 			}
 			else
 			{
-				Cell cell;
-
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
-						if ((cell = getClickedCell(e.X, e.Y)) != null) // safety.
+						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 						{
-							if (_allowdoubleclick = !cell.selected)
-								_cellClicked = cell;
-
+							//logfile.Log(". cell valid");
 							foreach (var col in Cols) // always clear col-selects
 								col.selected = false;
 
 							if (_editor.Visible)
 							{
-								if (cell != _editcell)
+								//logfile.Log(". . editor Visible");
+								if (_cell != _editcell)
 								{
+									_double = true;
+
 									ApplyCellEdit();
 									_editor.Visible = false;
 									Invalidator(INVALID_GRID);
@@ -2816,6 +2829,7 @@ namespace yata
 							}
 							else
 							{
+								//logfile.Log(". . editor NOT Visible");
 								Select();
 
 								bool ctrl  = (ModifierKeys & Keys.Control) != 0;
@@ -2824,19 +2838,20 @@ namespace yata
 
 								if (ctrl || shift || alt) // safety. Ensure that modifiers are treated exclusively and independently in what follows
 								{
-									if (!alt) // [Alt] is unused (but consume it here).
+									//logfile.Log(". . . Modifier key");
+									if (!alt) // [Alt] is unused so ignore it here.
 									{
 										if (ctrl && !shift) // select/unselect single cell ->
 										{
-											if (cell.selected = !cell.selected)
+											if (_cell.selected = !_cell.selected)
 											{
-												if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+												if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
 												{
 													ClearSelects();
-													cell.selected = true;
+													_cell.selected = true;
 												}
-												EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-											}														//    selectedcell is not the only selected cell
+												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+											}															//    selectedcell is not the only selected cell
 											else
 												_f.SyncSelect();
 
@@ -2848,31 +2863,31 @@ namespace yata
 										}
 										else if (shift && !ctrl) // do block selection ->
 										{
-											if (!cell.selected)
+											if (!_cell.selected)
 											{
 												Cell sel = null;
 
-												if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+												if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
 												{
 													ClearSelects();
-													cell.selected = true;
+													_cell.selected = true;
 
-													EnsureDisplayed(sel = cell);
+													EnsureDisplayed(sel = _cell);
 												}
 												else if ((sel = getSelectedCell()) != null)
 												{
 													ClearSelects();
 
-													int strt_r = Math.Min(sel.y, cell.y);
-													int stop_r = Math.Max(sel.y, cell.y);
-													int strt_c = Math.Min(sel.x, cell.x);
-													int stop_c = Math.Max(sel.x, cell.x);
+													int strt_r = Math.Min(sel.y, _cell.y);
+													int stop_r = Math.Max(sel.y, _cell.y);
+													int strt_c = Math.Min(sel.x, _cell.x);
+													int stop_c = Math.Max(sel.x, _cell.x);
 
 													for (int r = strt_r; r <= stop_r; ++r)
 													for (int c = strt_c; c <= stop_c; ++c)
 														this[r,c].selected = true;
 
-													EnsureDisplayed(cell, true);
+													EnsureDisplayed(_cell, true);
 												}
 
 												if (sel != null)
@@ -2887,27 +2902,27 @@ namespace yata
 										}
 									}
 								}
-								else if (!cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
+								else if (!_cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 								{
+									//logfile.Log(". . . cell is not selected or it's not the only selected cell");
+									_double = true;
+
 									foreach (var row in Rows)
 										row.selected = false;
 
-									// TODO: clear Cols perhaps.
-
 									ClearCellSelects();
-									cell.selected = true;
-									_f.SyncSelect(cell);
+									_cell.selected = true;
+									_f.SyncSelect(_cell);
 
 									Invalidator(INVALID_GRID
 											  | INVALID_FROZ
 											  | INVALID_ROWS
-											  | EnsureDisplayed(cell));
+											  | EnsureDisplayed(_cell));
 								}
 								else if (!Readonly) // cell is already selected
 								{
-//									_allowdoubleclick = true;
-
-									_editcell = cell;
+									//logfile.Log(". . . cell is already selected");
+									_editcell = _cell;
 									Celledit();
 									Invalidator(INVALID_GRID);
 								}
@@ -2918,16 +2933,16 @@ namespace yata
 						break;
 
 					case MouseButtons.Right:
-						if ((cell = getClickedCell(e.X, e.Y)) != null) // safety.
+						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 						{
 							ClearSelects();
-							cell.selected = true;
-							_f.SyncSelect(cell);
+							_cell.selected = true;
+							_f.SyncSelect(_cell);
 
 							Invalidator(INVALID_GRID
 									  | INVALID_FROZ
 									  | INVALID_ROWS
-									  | EnsureDisplayed(cell));
+									  | EnsureDisplayed(_cell));
 							_f.popupCellmenu();
 						}
 						else
@@ -2957,15 +2972,20 @@ namespace yata
 		/// shall (sic) enter its edit-state.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
-			if (_allowdoubleclick
-				&& e.Button == MouseButtons.Left)
+			//logfile.Log("OnMouseDoubleClick() _allowdoubleclick= " + _double);
+			if (_double)
+//				&& e.Button == MouseButtons.Left // is true if '_double' is true.
 //				&& !Settings._strict
 			{
-				if (!_cellClicked.selected)
+				if (!_cell.selected)
+				{
+					//logfile.Log(". . cell not selected - do click");
 					OnMouseClick(e);
-
+				}
+				//logfile.Log(". do click");
 				OnMouseClick(e);
 			}
+			//logfile.Log();
 //			base.OnMouseDoubleClick(e);
 		}
 
