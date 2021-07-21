@@ -2822,64 +2822,67 @@ namespace yata
 								bool shift = (ModifierKeys & Keys.Shift)   != 0;
 								bool alt   = (ModifierKeys & Keys.Alt)     != 0;
 
-								if (ctrl || shift || alt) // safety. Ensure that modifiers are treated exclusively and independently ->
+								if (ctrl || shift || alt) // safety. Ensure that modifiers are treated exclusively and independently in what follows
 								{
-									if (ctrl && !shift && !alt)
+									if (!alt) // [Alt] is unused (but consume it here).
 									{
-										if (cell.selected = !cell.selected)
+										if (ctrl && !shift) // select/unselect single cell ->
 										{
-											if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+											if (cell.selected = !cell.selected)
 											{
-												ClearSelects();
-												cell.selected = true;
-											}
-											EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-										}														//    selectedcell is not the only selected cell
-										else
-											_f.SyncSelect();
+												if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+												{
+													ClearSelects();
+													cell.selected = true;
+												}
+												EnsureDisplayed(cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+											}														//    selectedcell is not the only selected cell
+											else
+												_f.SyncSelect();
 
-										int invalid = INVALID_GRID;
-										if (Propanel != null && Propanel.Visible)
-											invalid |= INVALID_PROP;
+											int invalid = INVALID_GRID;
+											if (Propanel != null && Propanel.Visible)
+												invalid |= INVALID_PROP;
 
-										Invalidator(invalid);
-									}
-									else if (shift && !ctrl && !alt)
-									{
-										if (!cell.selected)
+											Invalidator(invalid);
+										}
+										else if (shift && !ctrl) // do block selection ->
 										{
-											Cell sel = null;
-
-											if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+											if (!cell.selected)
 											{
-												ClearSelects();
-												cell.selected = true;
+												Cell sel = null;
 
-												EnsureDisplayed(sel = cell);
-											}
-											else if ((sel = getSelectedCell()) != null)
-											{
-												ClearSelects();
+												if (_f.SyncSelect(cell)) // don't allow multiple-cell selection if sync'd
+												{
+													ClearSelects();
+													cell.selected = true;
 
-												int strt_r = Math.Min(sel.y, cell.y);
-												int stop_r = Math.Max(sel.y, cell.y);
-												int strt_c = Math.Min(sel.x, cell.x);
-												int stop_c = Math.Max(sel.x, cell.x);
+													EnsureDisplayed(sel = cell);
+												}
+												else if ((sel = getSelectedCell()) != null)
+												{
+													ClearSelects();
 
-												for (int r = strt_r; r <= stop_r; ++r)
-												for (int c = strt_c; c <= stop_c; ++c)
-													this[r,c].selected = true;
+													int strt_r = Math.Min(sel.y, cell.y);
+													int stop_r = Math.Max(sel.y, cell.y);
+													int strt_c = Math.Min(sel.x, cell.x);
+													int stop_c = Math.Max(sel.x, cell.x);
 
-												EnsureDisplayed(cell, true);
-											}
+													for (int r = strt_r; r <= stop_r; ++r)
+													for (int c = strt_c; c <= stop_c; ++c)
+														this[r,c].selected = true;
 
-											if (sel != null)
-											{
-												int invalid = INVALID_GRID;
-												if (Propanel != null && Propanel.Visible)
-													invalid |= INVALID_PROP;
+													EnsureDisplayed(cell, true);
+												}
 
-												Invalidator(invalid);
+												if (sel != null)
+												{
+													int invalid = INVALID_GRID;
+													if (Propanel != null && Propanel.Visible)
+														invalid |= INVALID_PROP;
+
+													Invalidator(invalid);
+												}
 											}
 										}
 									}
@@ -2888,6 +2891,8 @@ namespace yata
 								{
 									foreach (var row in Rows)
 										row.selected = false;
+
+									// TODO: clear Cols perhaps.
 
 									ClearCellSelects();
 									cell.selected = true;
