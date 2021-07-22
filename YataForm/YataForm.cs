@@ -14,7 +14,7 @@ namespace yata
 	/// <summary>
 	/// Yata ....
 	/// </summary>
-	partial class YataForm
+	sealed partial class YataForm
 		:
 			Form
 	{

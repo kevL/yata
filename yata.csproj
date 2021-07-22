@@ -61,113 +61,120 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.cs" />
-    <Compile Include="ClipboardF.cs" />
-    <Compile Include="ClipboardF.Designer.cs">
+    <Compile Include="Controls\PropertyPanel.cs" />
+    <Compile Include="Controls\YataTabs.cs" />
+    <Compile Include="Dialogs\About.cs" />
+    <Compile Include="Dialogs\ClipboardF.cs" />
+    <Compile Include="Dialogs\ClipboardF.Designer.cs">
       <DependentUpon>ClipboardF.cs</DependentUpon>
     </Compile>
-    <Compile Include="CodePageDialog.cs" />
-    <Compile Include="CodePageList.cs" />
-    <Compile Include="FileOutput.cs" />
-    <Compile Include="FileWatcher.cs" />
-    <Compile Include="FileWatcherDialog.cs" />
-    <Compile Include="FileWatcherDialog.Designer.cs">
+    <Compile Include="Dialogs\CodePageDialog.cs" />
+    <Compile Include="Dialogs\CodePageList.cs" />
+    <Compile Include="Dialogs\DifferDialog.cs" />
+    <Compile Include="Dialogs\FileWatcher.cs" />
+    <Compile Include="Dialogs\FileWatcherDialog.cs" />
+    <Compile Include="Dialogs\FileWatcherDialog.Designer.cs">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="gs.cs" />
-    <Compile Include="Info.cs" />
-    <Compile Include="Crap.cs" />
-    <Compile Include="DifferDialog.cs" />
-    <Compile Include="InfoInputFeat.cs" />
-    <Compile Include="InfoInputFeat.Designer.cs">
-      <DependentUpon>InfoInputFeat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="InfoInputSpells.cs" />
-    <Compile Include="InfoInputSpells.Designer.cs">
-      <DependentUpon>InfoInputSpells.cs</DependentUpon>
-    </Compile>
-    <Compile Include="InfoInputTui.cs" />
-    <Compile Include="InputDialogColhead.cs" />
-    <Compile Include="PropertyPanel.cs" />
-    <Compile Include="RowCreatorDialog.cs" />
-    <Compile Include="RowCreatorDialog.Designer.cs">
-      <DependentUpon>RowCreatorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TalkDialog.cs" />
-    <Compile Include="TalkReader.cs" />
-    <Compile Include="TextInputDialog.cs" />
-    <Compile Include="UndoRedo.cs" />
-    <Compile Include="YataGraphics.cs" />
-    <Compile Include="YataPaint.cs" />
-    <Compile Include="YataPaths.cs" />
-    <Compile Include="YataTabs.cs" />
-    <Compile Include="FontF.cs" />
-    <Compile Include="FontF.Designer.cs">
+    <Compile Include="Dialogs\FontF.cs" />
+    <Compile Include="Dialogs\FontF.Designer.cs">
       <DependentUpon>FontF.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\InfoInputFeat.cs" />
+    <Compile Include="Dialogs\InfoInputFeat.Designer.cs">
+      <DependentUpon>InfoInputFeat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\InfoInputSpells.cs" />
+    <Compile Include="Dialogs\InfoInputSpells.Designer.cs">
+      <DependentUpon>InfoInputSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\InfoInputTui.cs" />
+    <Compile Include="Dialogs\InputDialogColhead.cs" />
+    <Compile Include="Dialogs\RowCreatorDialog.cs" />
+    <Compile Include="Dialogs\RowCreatorDialog.Designer.cs">
+      <DependentUpon>RowCreatorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TalkDialog.cs" />
+    <Compile Include="Dialogs\TalkReader.cs" />
+    <Compile Include="Dialogs\TextInputDialog.cs" />
+    <Compile Include="Statics\Crap.cs" />
+    <Compile Include="Statics\DrawingControl.cs" />
+    <Compile Include="Statics\FileOutput.cs" />
+    <Compile Include="Statics\gs.cs" />
+    <Compile Include="Statics\Info.cs" />
+    <Compile Include="Statics\logger.cs" />
+    <Compile Include="Statics\Settings.cs" />
+    <Compile Include="Statics\YataGraphics.cs" />
+    <Compile Include="Statics\YataPanels.cs" />
+    <Compile Include="UndoRedo.cs" />
+    <Compile Include="YataForm\YataForm.cs" />
+    <Compile Include="YataForm\YataForm.Designer.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm\YataPaths.cs" />
+    <Compile Include="YataGrid\YataGrid.cs" />
+    <Compile Include="YataGrid\YataPaint.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="logger.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="YataData.cs" />
-    <Compile Include="YataForm.cs" />
-    <Compile Include="YataForm.Designer.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DrawingControl.cs" />
-    <Compile Include="YataGrid.cs" />
-    <Compile Include="YataPanels.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="About.resx">
+    <EmbeddedResource Include="Dialogs\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ClipboardF.resx">
-      <DependentUpon>ClipboardF.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\ClipboardF.resx">
+      <DependentUpon>ClipboardF.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CodePageDialog.resx">
+    <EmbeddedResource Include="Dialogs\CodePageDialog.resx">
       <DependentUpon>CodePageDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CodePageList.resx">
+    <EmbeddedResource Include="Dialogs\CodePageList.resx">
       <DependentUpon>CodePageList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileWatcherDialog.resx">
-      <DependentUpon>FileWatcherDialog.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FontF.resx">
-      <DependentUpon>FontF.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DifferDialog.resx">
+    <EmbeddedResource Include="Dialogs\DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoInputFeat.resx">
-      <DependentUpon>InfoInputFeat.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\FileWatcherDialog.resx">
+      <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoInputSpells.resx">
-      <DependentUpon>InfoInputSpells.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\FontF.resx">
+      <DependentUpon>FontF.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputDialogColhead.resx">
+    <EmbeddedResource Include="Dialogs\InfoInputFeat.resx">
+      <DependentUpon>InfoInputFeat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\InfoInputSpells.resx">
+      <DependentUpon>InfoInputSpells.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\InputDialogColhead.resx">
       <DependentUpon>InputDialogColhead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\RowCreatorDialog.resx">
+      <DependentUpon>RowCreatorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\TalkDialog.resx">
+      <DependentUpon>TalkDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\TextInputDialog.resx">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RowCreatorDialog.resx">
-      <DependentUpon>RowCreatorDialog.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TalkDialog.resx">
-      <DependentUpon>TalkDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextInputDialog.resx">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YataForm.resx">
+    <EmbeddedResource Include="YataForm\YataForm.resx">
       <DependentUpon>YataForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs" />
+    <Folder Include="Controls" />
+    <Folder Include="YataGrid" />
+    <Folder Include="YataForm" />
+    <Folder Include="Statics" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

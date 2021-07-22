@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class YataForm
+	sealed partial class YataForm
 	{
 		// okay. Fed up.
 		// YataTabs 'tabControl' and PropertyPanelButton 'btn_PropertyPanel'

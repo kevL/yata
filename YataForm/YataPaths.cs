@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class YataForm
+	sealed partial class YataForm
 	{
 		#region Crafting info
 		/// <summary>
