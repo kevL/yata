@@ -166,7 +166,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="YataForm\YataForm.resx">
-      <DependentUpon>YataForm.Designer.cs</DependentUpon>
+      <DependentUpon>YataForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
