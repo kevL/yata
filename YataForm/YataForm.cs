@@ -20,7 +20,8 @@ namespace yata
 	{
 		#region Enumerators
 		/// <summary>
-		/// Defines field fill-types used by the CreateRows dialog.
+		/// Defines field fill-types used by
+		/// <c><see cref="RowCreatorDialog"/></c>.
 		/// </summary>
 		internal enum CrFillType
 		{ Stars, Selected, Copied }
@@ -63,9 +64,9 @@ namespace yata
 
 		/// <summary>
 		/// A string used for Copy/PasteCell.
-		/// @note A cell's text shall never be null or blank, therefore
-		/// '_copytext' shall never be null or blank.
 		/// </summary>
+		/// <remarks>A cell's text shall never be null or blank, therefore
+		/// <c>_copytext</c> shall never be null or blank.</remarks>
 		internal string _copytext = gs.Stars;
 
 		string _preset = String.Empty;
@@ -94,12 +95,13 @@ namespace yata
 		string _pfeT = String.Empty;
 
 		/// <summary>
-		/// A pointer to a 'YataGrid' table that will be used during the save-
-		/// routine (and other places where it's convenient). Is required
-		/// because it can't be assumed that the current 'Table' is the table
-		/// being saved; that is, the SaveAll operation needs to cycle through
-		/// all tables: See fileclick_SaveAll().
+		/// A pointer to a <c><see cref="YataGrid"/></c> table that will be used
+		/// during the save-routine (and other places where it's convenient). Is
+		/// required because it can't be assumed that the current
+		/// <c><see cref="Table"/></c> is the table being saved; that is, the
+		/// SaveAll operation needs to cycle through all tables.
 		/// </summary>
+		/// <seealso cref="fileclick_SaveAll()">fileclick_SaveAll()</seealso>
 		YataGrid _table;
 
 		/// <summary>
@@ -115,15 +117,15 @@ namespace yata
 
 		/// <summary>
 		/// String-input for InfoInputSpells or InfoInputFeat (re PathInfo).
-		/// 'str0' is the current value; 'str1' will be the user-chosen value
-		/// that's assigned on Accept.
+		/// <c>str0</c> is the current value; <c>str1</c> will be the
+		/// user-chosen value that's assigned on Accept.
 		/// </summary>
 		internal string str0, str1;
 
 		/// <summary>
 		/// Int-input for InfoInputSpells or InfoInputFeat (re PathInfo).
-		/// 'int0' is the current value; 'int1' will be the user-chosen value
-		/// that's assigned on Accept.
+		/// <c>int0</c> is the current value; <c>int1</c> will be the
+		/// user-chosen value that's assigned on Accept.
 		/// </summary>
 		internal int int0, int1;
 
@@ -134,7 +136,10 @@ namespace yata
 		internal const int II_ASSIGN_STARS = -1; // for 'int1'
 
 
-		internal bool IsMin; // works in conjunction w/ YataGrid.OnResize()
+		/// <summary>
+		/// Works in conjunction w/ <c><see cref="YataGrid"></see>.OnResize()</c>.
+		/// </summary>
+		internal bool IsMin;
 
 		List<string> Strrefheads = new List<string>();
 		internal string _strref; // the strref assigned by 'TalkDialog'
@@ -154,7 +159,10 @@ namespace yata
 
 
 		#region Properties (static)
-		internal static YataGrid Table // there can be only 1 Table.
+		/// <summary>
+		/// There can be only 1 <c>Table</c>.
+		/// </summary>
+		internal static YataGrid Table
 		{ get; private set; }
 		#endregion Properties (static)
 
