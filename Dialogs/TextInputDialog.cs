@@ -50,7 +50,11 @@ namespace yata
 
 			la_Head.Text = head;
 
-			tb_Input.Text = _f._copytext;
+			if (_f._copytext.Length == 1)
+				tb_Input.Text = _f._copytext[0,0];
+			else
+				tb_Input.Text = String.Empty;
+
 			tb_Input.SelectionStart = 0;
 			tb_Input.SelectionLength = tb_Input.Text.Length;
 		}
@@ -83,7 +87,7 @@ namespace yata
 			}
 			else
 			{
-				_f._copytext = tb_Input.Text;
+				_f._copytext = new string[,] {{ tb_Input.Text }};
 				DialogResult = DialogResult.OK;
 				Close();
 			}

@@ -67,7 +67,7 @@ namespace yata
 		/// </summary>
 		/// <remarks>A cell's text shall never be null or blank, therefore
 		/// <c>_copytext</c> shall never be null or blank.</remarks>
-		internal string _copytext = gs.Stars;
+		internal string[,] _copytext = {{ gs.Stars }};
 
 		string _preset = String.Empty;
 
@@ -2528,7 +2528,7 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				if (sel != null) // safety (believe it or not).
 				{
-					_copytext = sel.text;
+					_copytext = new [,] {{ sel.text }};
 				}
 				else
 					CopyPasteCellError();
@@ -2555,10 +2555,11 @@ namespace yata
 				if (!Table.Readonly)
 				{
 					Cell sel = Table.getSelectedCell();
-					if (sel != null)
+					if (sel != null
+						&& _copytext.Length == 1)
 					{
-						if (sel.text != _copytext)
-							Table.ChangeCellText(sel, _copytext); // does not do a text-check
+						if (sel.text != _copytext[0,0])
+							Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
 					}
 					else
 						CopyPasteCellError();
@@ -2580,9 +2581,10 @@ namespace yata
 			{
 				tb.Text = Clipboard.GetText(TextDataFormat.Text);
 			}
-			else if (_copytext != gs.Stars || tb == tb_Search)
+			else if (_copytext.Length == 1
+				&& (_copytext[0,0] != gs.Stars || tb == tb_Search))
 			{
-				tb.Text = _copytext;
+				tb.Text = _copytext[0,0];
 			}
 			else
 				tb.Text = String.Empty;
@@ -2668,13 +2670,16 @@ namespace yata
 			{
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
-					Cell sel;
-					foreach (var row in Table.Rows)
-					for (int c = 0; c != Table.ColCount; ++c)
+					if (_copytext.Length == 1)
 					{
-						if ((sel = row[c]).selected && sel.text != _copytext)
+						Cell sel;
+						foreach (var row in Table.Rows)
+						for (int c = 0; c != Table.ColCount; ++c)
 						{
-							Table.ChangeCellText(sel, _copytext); // does not do a text-check
+							if ((sel = row[c]).selected && sel.text != _copytext[0,0])
+							{
+								Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
+							}
 						}
 					}
 				}
