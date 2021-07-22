@@ -841,6 +841,11 @@ namespace yata
 
 				Obfuscate(false);
 
+				// NOTE: Subits under Menuits don't really need to be detered
+				// here; they all shall have dropdowns that deter their needs
+				// and if they have hotkeys the handlers shall be conditioned to
+				// bypass if an operation is invalid per state.
+
 				Cell sel = Table.getSelectedCell();
 
 				btn_ProPanel .Visible = true;
@@ -873,7 +878,7 @@ namespace yata
 				it_Stars     .Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled = 
-				it_Paste     .Enabled = !Table.Readonly && Table.isCellSelected();
+				it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
 
 				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
@@ -929,7 +934,7 @@ namespace yata
 				it_Stars     .Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled =
-				it_Paste     .Enabled =
+				it_Apply     .Enabled =
 
 				it_OrderRows .Enabled =
 				it_CheckRows .Enabled =
@@ -1258,15 +1263,15 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				it_Reload  .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll .Enabled = allowSaveAll();
-				it_Save    .Enabled = !Table.Readonly;
+				it_Reload .Enabled = File.Exists(Table.Fullpath);
+				it_SaveAll.Enabled = allowSaveAll();
+				it_Save   .Enabled = !Table.Readonly;
 			}
 			else
 			{
-				it_Reload  .Enabled =
-				it_SaveAll .Enabled =
-				it_Save    .Enabled = false;
+				it_Reload .Enabled =
+				it_SaveAll.Enabled =
+				it_Save   .Enabled = false;
 			}
 
 
@@ -2000,39 +2005,12 @@ namespace yata
 				}
 
 				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
-				it_GotoLoadchanged.Enabled = Table.isLoadchanged();
-
-				bool oneSelected = (Table.getSelectedCell() != null);
-				it_CopyCell       .Enabled = oneSelected;
-				it_PasteCell      .Enabled = oneSelected && !Table.Readonly;
-
-				it_CopyRange      .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange     .Enabled = !Table.Readonly && _copyr.Count != 0;
-
-				it_CreateRows     .Enabled = !Table.Readonly;
-
-				it_Stars          .Enabled =
-				it_Lower          .Enabled =
-				it_Upper          .Enabled =
-				it_Paste          .Enabled = !Table.Readonly && Table.isCellSelected();
+				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 			}
 			else
 			{
 				it_Searchnext     .Enabled =
-				it_GotoLoadchanged.Enabled =
-
-				it_CopyCell       .Enabled =
-				it_PasteCell      .Enabled =
-
-				it_CopyRange      .Enabled =
-				it_PasteRange     .Enabled =
-
-				it_CreateRows     .Enabled =
-
-				it_Stars          .Enabled =
-				it_Lower          .Enabled =
-				it_Upper          .Enabled =
-				it_Paste          .Enabled = false;
+				it_GotoLoadchanged.Enabled = false;
 			}
 		}
 
@@ -2357,7 +2335,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if (Table != null && (it_GotoLoadchanged.Enabled = Table.isLoadchanged())
+			if (Table != null && (it_GotoLoadchanged.Enabled = Table.anyLoadchanged())
 				&& (ModifierKeys & Keys.Alt) == 0)
 			{
 				if (Table._editor.Visible)
@@ -2475,6 +2453,67 @@ namespace yata
 				}
 			}
 		}
+		#endregion Events (edit)
+
+
+		#region Methods (edit)
+		/// <summary>
+		/// Enables/disables undo.
+		/// </summary>
+		/// <param name="enable"></param>
+		internal void EnableUndo(bool enable)
+		{
+			it_Undo.Enabled = enable;
+		}
+
+		/// <summary>
+		/// Enables/disables redo.
+		/// </summary>
+		/// <param name="enable"></param>
+		internal void EnableRedo(bool enable)
+		{
+			it_Redo.Enabled = enable;
+		}
+		#endregion Methods (edit)
+
+
+		#region Events (editcells)
+		/// <summary>
+		/// Handles opening the EditCellsMenu, determines if various items ought
+		/// be enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editcells_dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
+
+				bool oneSelected = (Table.getSelectedCell() != null);
+				it_CopyCell .Enabled = oneSelected;
+				it_PasteCell.Enabled = oneSelected && !Table.Readonly;
+
+				it_Stars    .Enabled =
+				it_Lower    .Enabled =
+				it_Upper    .Enabled =
+				it_Apply    .Enabled = !Table.Readonly && Table.anyCellSelected();
+			}
+			else
+			{
+				it_CopyCell .Enabled =
+				it_PasteCell.Enabled =
+
+				it_Stars    .Enabled =
+				it_Lower    .Enabled =
+				it_Upper    .Enabled =
+				it_Apply    .Enabled = false;
+			}
+		}
 
 
 		/// <summary>
@@ -2482,7 +2521,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_CopyCell(object sender, EventArgs e)
+		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -2501,7 +2540,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_PasteCell(object sender, EventArgs e)
+		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
 			if (tb_Goto.Focused)
 			{
@@ -2529,13 +2568,46 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Sets the text of a given textbox.
+		/// </summary>
+		/// <param name="tb"></param>
+		/// <remarks>Helper for
+		/// <c><see cref="editcellsclick_PasteCell()">editcellsclick_PasteCell()</see></c>.</remarks>
+		void SetTextboxText(ToolStripItem tb)
+		{
+			if (Clipboard.ContainsText(TextDataFormat.Text))
+			{
+				tb.Text = Clipboard.GetText(TextDataFormat.Text);
+			}
+			else if (_copytext != gs.Stars || tb == tb_Search)
+			{
+				tb.Text = _copytext;
+			}
+			else
+				tb.Text = String.Empty;
+		}
+
+		/// <summary>
+		/// Shows user and error if there is not a single cell selected when
+		/// copying or pasting a cell.
+		/// </summary>
+		void CopyPasteCellError()
+		{
+			MessageBox.Show("Select one (1) cell.",
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation,
+							MessageBoxDefaultButton.Button1);
+		}
+
 
 		/// <summary>
 		/// Pastes "****" to all selected cells.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		internal void editclick_Stars(object sender, EventArgs e)
+		internal void editcellsclick_Stars(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
@@ -2554,7 +2626,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_Lower(object sender, EventArgs e)
+		void editcellsclick_Lower(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
@@ -2572,7 +2644,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_Upper(object sender, EventArgs e)
+		void editcellsclick_Upper(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
@@ -2590,7 +2662,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_Text(object sender, EventArgs e)
+		void editcellsclick_Text(object sender, EventArgs e)
 		{
 			using (var f = new TextInputDialog(this))
 			{
@@ -2608,6 +2680,37 @@ namespace yata
 				}
 			}
 		}
+		#endregion Events (editcells)
+
+
+		#region Events (editrows)
+		/// <summary>
+		/// Handles opening the EditRowsMenu, determines if various items ought
+		/// be enabled.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editrows_dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
+
+				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
+				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_CreateRows.Enabled = !Table.Readonly;
+			}
+			else
+			{
+				it_CopyRange .Enabled =
+				it_PasteRange.Enabled =
+				it_CreateRows.Enabled = false;
+			}
+		}
 
 
 		/// <summary>
@@ -2615,7 +2718,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_CopyRange(object sender, EventArgs e)
+		void editrowsclick_CopyRange(object sender, EventArgs e)
 		{
 			_copyr.Clear();
 
@@ -2653,7 +2756,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_PasteRange(object sender, EventArgs e)
+		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
 			{
@@ -2699,12 +2802,12 @@ namespace yata
 
 
 		/// <summary>
-		/// Instantiates 'RowCreatorDialog' for inserting/creating multiple
-		/// blank rows.
+		/// Instantiates <c><see cref="RowCreatorDialog"/></c> for
+		/// inserting/creating multiple blank rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void editclick_CreateRows(object sender, EventArgs e)
+		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
 			if (Table != null)
 			{
@@ -2780,71 +2883,20 @@ namespace yata
 					ReadonlyError();
 			}
 		}
-		#endregion Events (edit)
+		#endregion Events (editrows)
 
 
-		#region Methods (edit)
-		/// <summary>
-		/// Enables/disables undo.
-		/// </summary>
-		/// <param name="enable"></param>
-		internal void EnableUndo(bool enable)
-		{
-			it_Undo.Enabled = enable;
-		}
-
-		/// <summary>
-		/// Enables/disables redo.
-		/// </summary>
-		/// <param name="enable"></param>
-		internal void EnableRedo(bool enable)
-		{
-			it_Redo.Enabled = enable;
-		}
-
+		#region Methods (editrows)
 		/// <summary>
 		/// Enables/disables the copy-rows it.
-		/// @note Is called by Row.selected.
 		/// </summary>
 		/// <param name="enabled"></param>
+		/// <remarks>Is called by <c>Row.selected</c>.</remarks>
 		internal void EnableCopyRange(bool enabled)
 		{
 			it_CopyRange.Enabled = enabled;
 		}
-
-
-		/// <summary>
-		/// Sets the text of a given textbox.
-		/// </summary>
-		/// <param name="tb"></param>
-		/// <remarks>Helper for <see cref="editclick_PasteCell"/>.</remarks>
-		void SetTextboxText(ToolStripItem tb)
-		{
-			if (Clipboard.ContainsText(TextDataFormat.Text))
-			{
-				tb.Text = Clipboard.GetText(TextDataFormat.Text);
-			}
-			else if (_copytext != gs.Stars || tb == tb_Search)
-			{
-				tb.Text = _copytext;
-			}
-			else
-				tb.Text = String.Empty;
-		}
-
-		/// <summary>
-		/// Shows user and error if there is not a single cell selected when
-		/// copying or pasting a cell.
-		/// </summary>
-		void CopyPasteCellError()
-		{
-			MessageBox.Show("Select one (1) cell.",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Exclamation,
-							MessageBoxDefaultButton.Button1);
-		}
-		#endregion Methods (edit)
+		#endregion Methods (editrows)
 
 
 		#region Events (editcol)

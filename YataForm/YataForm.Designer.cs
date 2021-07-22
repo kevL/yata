@@ -39,17 +39,21 @@ namespace yata
 		ToolStripMenuItem it_Searchnext;
 		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
+
+		ToolStripMenuItem it_MenuCells;
 		internal ToolStripMenuItem it_CopyCell;
 		internal ToolStripMenuItem it_PasteCell;
 		ToolStripMenuItem it_Stars;
 		ToolStripMenuItem it_Lower;
 		ToolStripMenuItem it_Upper;
-		ToolStripMenuItem it_Paste;
+		ToolStripMenuItem it_Apply;
+
+		ToolStripMenuItem it_MenuRows;
 		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRange;
 		ToolStripMenuItem it_CreateRows;
 
-		ToolStripMenuItem it_MenuEditcol;
+		ToolStripMenuItem it_MenuCol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
 		ToolStripMenuItem it_RelabelHead;
@@ -113,7 +117,6 @@ namespace yata
 		ToolStripSeparator separator_1;
 		ToolStripSeparator separator_2;
 		ToolStripSeparator separator_3;
-		ToolStripSeparator separator_4;
 		ToolStripSeparator separator_5;
 		ToolStripSeparator separator_6;
 		ToolStripSeparator separator_7;
@@ -139,7 +142,6 @@ namespace yata
 		ToolStripSeparator separator_27;
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
-		ToolStripSeparator separator_30;
 		ToolStripSeparator separator_31;
 		ToolStripSeparator separator_32;
 
@@ -248,20 +250,23 @@ namespace yata
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_4 = new System.Windows.Forms.ToolStripSeparator();
+
+			this.it_MenuCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_20 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Stars = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Lower = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Upper = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_Paste = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_30 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Apply = new System.Windows.Forms.ToolStripMenuItem();
+
+			this.it_MenuRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_MenuEditcol = new System.Windows.Forms.ToolStripMenuItem();
+
+			this.it_MenuCol = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CreateHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeleteHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RelabelHead = new System.Windows.Forms.ToolStripMenuItem();
@@ -479,7 +484,9 @@ namespace yata
 			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
-			this.it_MenuEditcol,
+			this.it_MenuCells,
+			this.it_MenuRows,
+			this.it_MenuCol,
 			this.tb_Goto,
 			this.tb_Search,
 			this.cb_SearchOption,
@@ -492,7 +499,7 @@ namespace yata
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(842, 24);
+			this.menubar.Size = new System.Drawing.Size(912, 24);
 			this.menubar.TabIndex = 0;
 			// 
 			// it_MenuFile
@@ -643,20 +650,7 @@ namespace yata
 			this.it_Searchnext,
 			this.separator_3,
 			this.it_Goto,
-			this.it_GotoLoadchanged,
-			this.separator_4,
-			this.it_CopyCell,
-			this.it_PasteCell,
-			this.separator_20,
-			this.it_Stars,
-			this.it_Lower,
-			this.it_Upper,
-			this.it_Paste,
-			this.separator_30,
-			this.it_CopyRange,
-			this.it_PasteRange,
-			this.separator_13,
-			this.it_CreateRows});
+			this.it_GotoLoadchanged});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuEdit.Size = new System.Drawing.Size(36, 20);
@@ -723,10 +717,21 @@ namespace yata
 			this.it_GotoLoadchanged.Text = "Goto loadcha&nged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
-			// separator_4
+			// it_MenuCells
 			// 
-			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(223, 6);
+			this.it_MenuCells.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuCells.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_CopyCell,
+			this.it_PasteCell,
+			this.separator_20,
+			this.it_Stars,
+			this.it_Lower,
+			this.it_Upper,
+			this.it_Apply});
+			this.it_MenuCells.Name = "it_MenuCells";
+			this.it_MenuCells.Size = new System.Drawing.Size(47, 20);
+			this.it_MenuCells.Text = "Cells";
+			this.it_MenuCells.DropDownOpening += new System.EventHandler(this.editcells_dropdownopening);
 			// 
 			// it_CopyCell
 			// 
@@ -735,7 +740,7 @@ namespace yata
 			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.it_CopyCell.Size = new System.Drawing.Size(226, 22);
 			this.it_CopyCell.Text = "&Copy cell";
-			this.it_CopyCell.Click += new System.EventHandler(this.editclick_CopyCell);
+			this.it_CopyCell.Click += new System.EventHandler(this.editcellsclick_CopyCell);
 			// 
 			// it_PasteCell
 			// 
@@ -744,7 +749,7 @@ namespace yata
 			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.it_PasteCell.Size = new System.Drawing.Size(226, 22);
 			this.it_PasteCell.Text = "&Paste cell";
-			this.it_PasteCell.Click += new System.EventHandler(this.editclick_PasteCell);
+			this.it_PasteCell.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
 			// separator_20
 			// 
@@ -758,7 +763,7 @@ namespace yata
 			this.it_Stars.ShowShortcutKeys = false;
 			this.it_Stars.Size = new System.Drawing.Size(226, 22);
 			this.it_Stars.Text = "****";
-			this.it_Stars.Click += new System.EventHandler(this.editclick_Stars);
+			this.it_Stars.Click += new System.EventHandler(this.editcellsclick_Stars);
 			// 
 			// it_Lower
 			// 
@@ -767,7 +772,7 @@ namespace yata
 			this.it_Lower.ShowShortcutKeys = false;
 			this.it_Lower.Size = new System.Drawing.Size(226, 22);
 			this.it_Lower.Text = "Lowercase";
-			this.it_Lower.Click += new System.EventHandler(this.editclick_Lower);
+			this.it_Lower.Click += new System.EventHandler(this.editcellsclick_Lower);
 			// 
 			// it_Upper
 			// 
@@ -776,21 +781,28 @@ namespace yata
 			this.it_Upper.ShowShortcutKeys = false;
 			this.it_Upper.Size = new System.Drawing.Size(226, 22);
 			this.it_Upper.Text = "Uppercase";
-			this.it_Upper.Click += new System.EventHandler(this.editclick_Upper);
+			this.it_Upper.Click += new System.EventHandler(this.editcellsclick_Upper);
 			// 
-			// it_Paste
+			// it_Apply
 			// 
-			this.it_Paste.Enabled = false;
-			this.it_Paste.Name = "it_Paste";
-			this.it_Paste.ShowShortcutKeys = false;
-			this.it_Paste.Size = new System.Drawing.Size(226, 22);
-			this.it_Paste.Text = "Apply text to selected ...";
-			this.it_Paste.Click += new System.EventHandler(this.editclick_Text);
+			this.it_Apply.Enabled = false;
+			this.it_Apply.Name = "it_Apply";
+			this.it_Apply.ShowShortcutKeys = false;
+			this.it_Apply.Size = new System.Drawing.Size(226, 22);
+			this.it_Apply.Text = "Apply text to selected ...";
+			this.it_Apply.Click += new System.EventHandler(this.editcellsclick_Text);
 			// 
-			// separator_30
+			// it_MenuRows
 			// 
-			this.separator_30.Name = "separator_30";
-			this.separator_30.Size = new System.Drawing.Size(223, 6);
+			this.it_MenuRows.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.it_MenuRows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_CopyRange,
+			this.it_PasteRange,
+			this.separator_13,
+			this.it_CreateRows});
+			this.it_MenuRows.Name = "it_MenuRows";
+			this.it_MenuRows.Size = new System.Drawing.Size(49, 20);
+			this.it_MenuRows.Text = "Rows";
 			// 
 			// it_CopyRange
 			// 
@@ -800,7 +812,7 @@ namespace yata
 			| System.Windows.Forms.Keys.C)));
 			this.it_CopyRange.Size = new System.Drawing.Size(226, 22);
 			this.it_CopyRange.Text = "C&opy row(s)";
-			this.it_CopyRange.Click += new System.EventHandler(this.editclick_CopyRange);
+			this.it_CopyRange.Click += new System.EventHandler(this.editrowsclick_CopyRange);
 			// 
 			// it_PasteRange
 			// 
@@ -810,7 +822,7 @@ namespace yata
 			| System.Windows.Forms.Keys.V)));
 			this.it_PasteRange.Size = new System.Drawing.Size(226, 22);
 			this.it_PasteRange.Text = "P&aste row(s)";
-			this.it_PasteRange.Click += new System.EventHandler(this.editclick_PasteRange);
+			this.it_PasteRange.Click += new System.EventHandler(this.editrowsclick_PasteRange);
 			// 
 			// separator_13
 			// 
@@ -824,21 +836,21 @@ namespace yata
 			this.it_CreateRows.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.it_CreateRows.Size = new System.Drawing.Size(226, 22);
 			this.it_CreateRows.Text = "Crea&te row(s) ...";
-			this.it_CreateRows.Click += new System.EventHandler(this.editclick_CreateRows);
+			this.it_CreateRows.Click += new System.EventHandler(this.editrowsclick_CreateRows);
 			// 
-			// it_MenuEditcol
+			// it_MenuCol
 			// 
-			this.it_MenuEditcol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_MenuCol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_CreateHead,
 			this.it_DeleteHead,
 			this.it_RelabelHead,
 			this.separator_32,
 			this.it_CopyCol,
 			this.it_PasteCol});
-			this.it_MenuEditcol.Name = "it_MenuEditcol";
-			this.it_MenuEditcol.Size = new System.Drawing.Size(56, 20);
-			this.it_MenuEditcol.Text = "Editcol";
-			this.it_MenuEditcol.DropDownOpening += new System.EventHandler(this.editcol_dropdownopening);
+			this.it_MenuCol.Name = "it_MenuCol";
+			this.it_MenuCol.Size = new System.Drawing.Size(38, 20);
+			this.it_MenuCol.Text = "Col";
+			this.it_MenuCol.DropDownOpening += new System.EventHandler(this.editcol_dropdownopening);
 			// 
 			// it_CreateHead
 			// 
@@ -1474,7 +1486,7 @@ namespace yata
 			this.statbar_lblInfo});
 			this.statusbar.Location = new System.Drawing.Point(0, 432);
 			this.statusbar.Name = "statusbar";
-			this.statusbar.Size = new System.Drawing.Size(842, 22);
+			this.statusbar.Size = new System.Drawing.Size(912, 22);
 			this.statusbar.TabIndex = 1;
 			// 
 			// statbar_lblCords
@@ -1492,7 +1504,7 @@ namespace yata
 			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblInfo.Name = "statbar_lblInfo";
-			this.statbar_lblInfo.Size = new System.Drawing.Size(667, 17);
+			this.statbar_lblInfo.Size = new System.Drawing.Size(737, 17);
 			this.statbar_lblInfo.Spring = true;
 			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1502,7 +1514,7 @@ namespace yata
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
+			this.panel_ColorFill.Size = new System.Drawing.Size(912, 408);
 			this.panel_ColorFill.TabIndex = 2;
 			// 
 			// cellMenu
@@ -1544,14 +1556,14 @@ namespace yata
 			this.it_cellCopy.Name = "it_cellCopy";
 			this.it_cellCopy.Size = new System.Drawing.Size(164, 22);
 			this.it_cellCopy.Text = "copy cell";
-			this.it_cellCopy.Click += new System.EventHandler(this.editclick_CopyCell);
+			this.it_cellCopy.Click += new System.EventHandler(this.editcellsclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
 			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
 			this.it_cellPaste.Text = "paste cell";
-			this.it_cellPaste.Click += new System.EventHandler(this.editclick_PasteCell);
+			this.it_cellPaste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
 			// separator_16
 			// 
@@ -1646,7 +1658,7 @@ namespace yata
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(842, 454);
+			this.ClientSize = new System.Drawing.Size(912, 454);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.menubar);
 			this.Controls.Add(this.statusbar);

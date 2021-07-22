@@ -2321,7 +2321,7 @@ namespace yata
 				DrawingControl.ResumeDrawing(this);
 			}
 			else
-				_f.editclick_Stars(null, EventArgs.Empty);
+				_f.editcellsclick_Stars(null, EventArgs.Empty);
 		}
 
 
@@ -2958,7 +2958,7 @@ namespace yata
 //			_f.it_Stars    .Enabled = // not needed because there are no shortcuts for these
 //			_f.it_Lower    .Enabled = // NOTE: Might not be needed anyway if .net checks
 //			_f.it_Upper    .Enabled = // dropdownopening before allowing a shortcut to fire.
-//			_f.it_Paste    .Enabled = !Readonly && isCellSelected();
+//			_f.it_Apply    .Enabled = !Readonly && anyCellSelected();
 
 //			base.OnMouseClick(e);
 		}
@@ -3064,7 +3064,7 @@ namespace yata
 //			_f.it_Stars    .Enabled =
 //			_f.it_Lower    .Enabled =
 //			_f.it_Upper    .Enabled =
-//			_f.it_Paste    .Enabled = false;
+//			_f.it_Apply    .Enabled = false;
 		}
 
 		/// <summary>
@@ -3088,7 +3088,7 @@ namespace yata
 //			_f.it_Stars    .Enabled =
 //			_f.it_Lower    .Enabled =
 //			_f.it_Upper    .Enabled =
-//			_f.it_Paste    .Enabled = false;
+//			_f.it_Apply    .Enabled = false;
 		}
 
 
@@ -3172,8 +3172,8 @@ namespace yata
 		/// <summary>
 		/// Checks if any cell is currently selected.
 		/// </summary>
-		/// <returns>true if a cell is selected</returns>
-		internal bool isCellSelected()
+		/// <returns><c>true</c> if a cell is selected</returns>
+		internal bool anyCellSelected()
 		{
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
@@ -3188,8 +3188,8 @@ namespace yata
 		/// <summary>
 		/// Checks if any cell is currently loadchanged.
 		/// </summary>
-		/// <returns>true if a cell is loadchanged</returns>
-		internal bool isLoadchanged()
+		/// <returns><c>true</c> if a cell is loadchanged</returns>
+		internal bool anyLoadchanged()
 		{
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
