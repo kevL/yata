@@ -12,9 +12,9 @@ namespace yata
 		internal const string WIDTH_CORDS = " id= 99999  col= 99";
 
 		/// <summary>
-		/// An IDeviceContext used for measuring texts.
-		/// @note Is defined in the YataForm cTor.
+		/// An <c>IDeviceContext</c> used for measuring texts.
 		/// </summary>
+		/// <remarks>Is defined in the YataForm cTor.</remarks>
 		internal static Graphics graphics;
 
 		/// <summary>
