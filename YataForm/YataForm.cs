@@ -289,7 +289,9 @@ namespace yata
 
 			if (w == -1) w = Width;
 			if (h == -1) h = Height;
-			ClientSize = new Size(w,h);
+
+			if (w != Width || h != Height)
+				ClientSize = new Size(w,h);
 
 
 			cb_SearchOption.Items.AddRange(new object[]
@@ -368,8 +370,8 @@ namespace yata
 			btn_ProPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			btn_ProPanel.UseVisualStyleBackColor = true;
 
-			btn_ProPanel.Location = new Point(823,0);
 			btn_ProPanel.Size     = new Size(20,20);
+			btn_ProPanel.Location = new Point(823,0);
 			btn_ProPanel.Margin   = new Padding(0);
 
 			btn_ProPanel.MouseDown += mousedown_btnPropertyPanel;
