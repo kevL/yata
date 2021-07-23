@@ -172,6 +172,7 @@ namespace yata
 
 		internal ContextMenuStrip cellMenu;
 		ToolStripMenuItem it_cellEdit;
+		ToolStripMenuItem it_cellCut;
 		ToolStripMenuItem it_cellCopy;
 		ToolStripMenuItem it_cellPaste;
 		ToolStripMenuItem it_cellDelete;
@@ -352,10 +353,11 @@ namespace yata
 			this.cellMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.it_cellEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_27 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_cellCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellPaste = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_cellLower = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_cellUpper = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_24 = new System.Windows.Forms.ToolStripSeparator();
@@ -1540,6 +1542,7 @@ namespace yata
 			this.cellMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_cellEdit,
 			this.separator_27,
+			this.it_cellCut,
 			this.it_cellCopy,
 			this.it_cellPaste,
 			this.it_cellDelete,
@@ -1554,7 +1557,7 @@ namespace yata
 			this.it_cellInput});
 			this.cellMenu.Name = "cellMenu";
 			this.cellMenu.ShowImageMargin = false;
-			this.cellMenu.Size = new System.Drawing.Size(165, 270);
+			this.cellMenu.Size = new System.Drawing.Size(165, 292);
 			// 
 			// it_cellEdit
 			// 
@@ -1568,24 +1571,26 @@ namespace yata
 			this.separator_27.Name = "separator_27";
 			this.separator_27.Size = new System.Drawing.Size(161, 6);
 			// 
+			// it_cellCut
+			// 
+			this.it_cellCut.Name = "it_cellCut";
+			this.it_cellCut.Size = new System.Drawing.Size(164, 22);
+			this.it_cellCut.Text = "cut";
+			this.it_cellCut.Click += new System.EventHandler(this.editcellsclick_CutCell);
+			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
 			this.it_cellCopy.Size = new System.Drawing.Size(164, 22);
-			this.it_cellCopy.Text = "copy cell";
+			this.it_cellCopy.Text = "copy";
 			this.it_cellCopy.Click += new System.EventHandler(this.editcellsclick_CopyCell);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
 			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
-			this.it_cellPaste.Text = "paste cell";
+			this.it_cellPaste.Text = "paste";
 			this.it_cellPaste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
-			// 
-			// separator_16
-			// 
-			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(161, 6);
 			// 
 			// it_cellDelete
 			// 
@@ -1593,6 +1598,11 @@ namespace yata
 			this.it_cellDelete.Size = new System.Drawing.Size(164, 22);
 			this.it_cellDelete.Text = "delete";
 			this.it_cellDelete.Click += new System.EventHandler(this.cellclick_Delete);
+			// 
+			// separator_16
+			// 
+			this.separator_16.Name = "separator_16";
+			this.separator_16.Size = new System.Drawing.Size(161, 6);
 			// 
 			// it_cellLower
 			// 

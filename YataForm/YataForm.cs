@@ -2529,6 +2529,7 @@ namespace yata
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item><c><see cref="it_CutCell"/></c> - Menu|Cells|Cut</item>
+		/// <item><c><see cref="it_cellCut"/></c> - Cell|Cut</item>
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
@@ -4674,6 +4675,7 @@ namespace yata
 			_sel = Table.getSelectedCell();
 
 			it_cellEdit   .Enabled =
+			it_cellCut    .Enabled =
 			it_cellPaste  .Enabled = !Table.Readonly;
 			it_cellLower  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
