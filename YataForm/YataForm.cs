@@ -464,9 +464,10 @@ namespace yata
 
 			switch (keyData)
 			{
-				case Keys.Control | Keys.C:					// bypass Ctrl+c and Ctrl+v if the editor is visible.
-				case Keys.Control | Keys.V:					// this bypasses the Edit menuitems and lets the editbox
-					if (Table != null						// take the message if/when the editbox is visible.
+				case Keys.Control | Keys.X: // bypass Ctrl+x, Ctrl+c, Ctrl+v if the editor is visible.
+				case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
+				case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
+					if (Table != null
 						&& (Table._editor.Visible
 							|| (Table.Propanel != null && Table.Propanel._editor.Visible)))
 					{
@@ -491,9 +492,9 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles the KeyDown event on the form.
-		/// @note Requires the form's KeyPreview property flagged true in order
-		/// to handle the event if a control is focused.
+		/// Handles the <c>KeyDown</c> event on the form.
+		/// @note Requires the form's <c>KeyPreview</c> property flagged true in
+		/// order to handle the event if a control is focused.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>Fires repeatedly if a key is held depressed.</remarks>
@@ -846,7 +847,7 @@ namespace yata
 				// NOTE: Subits under Menuits don't really need to be detered
 				// here; they all shall have dropdowns that deter their needs
 				// and if they have hotkeys the handlers shall be conditioned to
-				// bypass if an operation is invalid per state.
+				// bypass if an operation is invalid in current state.
 
 				Cell sel = Table.getSelectedCell();
 
@@ -871,16 +872,17 @@ namespace yata
 				it_CloseAll  .Enabled = true;
 
 				bool oneSelected = (sel != null);
+				it_CutCell   .Enabled =
 				it_CopyCell  .Enabled = oneSelected;
 				it_PasteCell .Enabled = oneSelected && !Table.Readonly;
-				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
-				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_CreateRows.Enabled = !Table.Readonly;
-
-				it_Stars     .Enabled =
+				it_DeleteCell.Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled = 
 				it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
+
+				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
+				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_CreateRows.Enabled = !Table.Readonly;
 
 				it_OrderRows .Enabled = !Table.Readonly;
 				it_CheckRows .Enabled =
@@ -927,16 +929,17 @@ namespace yata
 				it_Close     .Enabled =
 				it_CloseAll  .Enabled =
 
-				it_CopyCell  .Enabled = 
+				it_CutCell   .Enabled =
+				it_CopyCell  .Enabled =
 				it_PasteCell .Enabled =
-				it_CopyRange .Enabled =
-				it_PasteRange.Enabled =
-				it_CreateRows.Enabled =
-
-				it_Stars     .Enabled =
+				it_DeleteCell.Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled =
 				it_Apply     .Enabled =
+
+				it_CopyRange .Enabled =
+				it_PasteRange.Enabled =
+				it_CreateRows.Enabled =
 
 				it_OrderRows .Enabled =
 				it_CheckRows .Enabled =
@@ -2497,32 +2500,63 @@ namespace yata
 				}
 
 				bool oneSelected = (Table.getSelectedCell() != null);
-				it_CopyCell .Enabled = oneSelected;
-				it_PasteCell.Enabled = oneSelected && !Table.Readonly;
-
-				it_Stars    .Enabled =
-				it_Lower    .Enabled =
-				it_Upper    .Enabled =
-				it_Apply    .Enabled = !Table.Readonly && Table.anyCellSelected();
+				it_CutCell   .Enabled =
+				it_CopyCell  .Enabled = oneSelected;
+				it_PasteCell .Enabled = oneSelected && !Table.Readonly;
+				it_DeleteCell.Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled =
+				it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
 			}
 			else
 			{
-				it_CopyCell .Enabled =
-				it_PasteCell.Enabled =
-
-				it_Stars    .Enabled =
-				it_Lower    .Enabled =
-				it_Upper    .Enabled =
-				it_Apply    .Enabled = false;
+				it_CutCell   .Enabled =
+				it_CopyCell  .Enabled =
+				it_PasteCell .Enabled =
+				it_DeleteCell.Enabled =
+				it_Lower     .Enabled =
+				it_Upper     .Enabled =
+				it_Apply     .Enabled = false;
 			}
 		}
 
+
+		/// <summary>
+		/// Cuts an only selected cell.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_CutCell"/></c> - Menu|Cells|Cut</item>
+		/// </list></remarks>
+		void editcellsclick_CutCell(object sender, EventArgs e)
+		{
+			if (Table != null)
+			{
+				Cell sel = Table.getSelectedCell();
+				if (sel != null) // safety (believe it or not).
+				{
+					_copytext = new string[,] {{ sel.text }};
+
+					if (sel.text != gs.Stars || sel.loadchanged)
+						Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
+				}
+				else
+					CopyPasteCellError();
+			}
+		}
 
 		/// <summary>
 		/// Copies an only selected cell.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_CopyCell"/></c> - Menu|Cells|Copy</item>
+		/// <item><c><see cref="it_cellCopy"/></c> - Cell|Copy</item>
+		/// </list></remarks>
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -2530,7 +2564,7 @@ namespace yata
 				Cell sel = Table.getSelectedCell();
 				if (sel != null) // safety (believe it or not).
 				{
-					_copytext = new [,] {{ sel.text }};
+					_copytext = new string[,] {{ sel.text }};
 				}
 				else
 					CopyPasteCellError();
@@ -2542,6 +2576,11 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_PasteCell"/></c> - Menu|Cells|Paste</item>
+		/// <item><c><see cref="it_cellPaste"/></c> - Cell|Paste</item>
+		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
 			if (tb_Goto.Focused)
@@ -2557,10 +2596,9 @@ namespace yata
 				if (!Table.Readonly)
 				{
 					Cell sel = Table.getSelectedCell();
-					if (sel != null
-						&& _copytext.Length == 1)
+					if (sel != null && _copytext.Length == 1)
 					{
-						if (sel.text != _copytext[0,0])
+						if (sel.text != _copytext[0,0] || sel.loadchanged)
 							Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
 					}
 					else
@@ -2611,7 +2649,12 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		internal void editcellsclick_Stars(object sender, EventArgs e)
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_DeleteCell"/></c> - Menu|Cells|Delete</item>
+		/// <item><c><see cref="YataGrid"/>.Delete()</c></item>
+		/// </list></remarks>
+		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
@@ -2630,13 +2673,18 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Lower"/></c> - Menu|Cells|Lowercase</item>
+		/// </list></remarks>
 		void editcellsclick_Lower(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				if ((sel = row[c]).selected && sel.text != sel.text.ToLower())
+				if ((sel = row[c]).selected
+					&& (sel.text != sel.text.ToLower() || sel.loadchanged))
 				{
 					Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
 				}
@@ -2648,13 +2696,18 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Upper"/></c> - Menu|Cells|Uppercase</item>
+		/// </list></remarks>
 		void editcellsclick_Upper(object sender, EventArgs e)
 		{
 			Cell sel;
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				if ((sel = row[c]).selected && sel.text != sel.text.ToUpper())
+				if ((sel = row[c]).selected
+					&& (sel.text != sel.text.ToUpper() || sel.loadchanged))
 				{
 					Table.ChangeCellText(sel, sel.text.ToUpper()); // TODO: Optimize that for multiple cells.
 				}
@@ -2666,6 +2719,10 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Apply"/></c> - Menu|Cells|Apply text ...</item>
+		/// </list></remarks>
 		void editcellsclick_Text(object sender, EventArgs e)
 		{
 			using (var f = new TextInputDialog(this))
@@ -2678,7 +2735,8 @@ namespace yata
 						foreach (var row in Table.Rows)
 						for (int c = 0; c != Table.ColCount; ++c)
 						{
-							if ((sel = row[c]).selected && sel.text != _copytext[0,0])
+							if ((sel = row[c]).selected
+								&& (sel.text != _copytext[0,0] || sel.loadchanged))
 							{
 								Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
 							}
@@ -3029,8 +3087,10 @@ namespace yata
 		/// <summary>
 		/// Puts the table in a neutral state.
 		/// </summary>
-		/// <remarks>Helper for <see cref="editcolclick_CreateHead"/> and
-		/// <see cref="editcolclick_DeleteHead"/>.</remarks>
+		/// <remarks>Helper for
+		/// <c><see cref="editcolclick_CreateHead()">editcolclick_CreateHead()</see></c>
+		/// and
+		/// <c><see cref="editcolclick_DeleteHead()">editcolclick_DeleteHead()</see></c>.</remarks>
 		void steadystate()
 		{
 			it_freeze1.Checked =
@@ -3088,7 +3148,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Copies all cell-fields in a selected col to '_copyc'.
+		/// Copies all cell-fields in a selected col to
+		/// <c><see cref="_copyc"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3108,7 +3169,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Pastes '_copyc' to the cell-fields of a selected col.
+		/// Pastes <c><see cref="_copyc"/></c> to the cell-fields of a selected
+		/// col.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

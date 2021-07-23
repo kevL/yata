@@ -2221,7 +2221,7 @@ namespace yata
 		/// <summary>
 		/// Focuses the table and selects the first cell in the table iff no
 		/// cell is currently selected. If cells are currently selected call
-		/// <see cref="EnsureDisplayed(Cell)"/>.
+		/// <c><see cref="EnsureDisplayed(Cell)">EnsureDisplayed(Cell)</see></c>.
 		/// </summary>
 		/// <remarks>Called at the form-level by YataForm.OnKeyDown() [Space].</remarks>
 		internal void SelectFirstCell()
@@ -2262,9 +2262,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a single or multiple rows on keypress Delete, or if a row
-		/// is not selected then it replaces all selected cells' texts with
-		/// "****".
+		/// Deletes a single or multiple rows on keypress <c>[Delete]</c> or if
+		/// a row is not selected then it replaces all selected cells' texts
+		/// with "****".
 		/// </summary>
 		void Delete()
 		{
@@ -2321,7 +2321,7 @@ namespace yata
 				DrawingControl.ResumeDrawing(this);
 			}
 			else
-				_f.editcellsclick_Stars(null, EventArgs.Empty);
+				_f.editcellsclick_Delete(null, EventArgs.Empty);
 		}
 
 
@@ -2952,6 +2952,7 @@ namespace yata
 			}
 
 			bool oneSelected = (getSelectedCell() != null);
+			_f.it_CutCell  .Enabled =
 			_f.it_CopyCell .Enabled = oneSelected;
 			_f.it_PasteCell.Enabled = oneSelected && !Readonly;
 
@@ -3058,6 +3059,7 @@ namespace yata
 					row[c].selected = false;
 			}
 
+			_f.it_CutCell  .Enabled =
 			_f.it_CopyCell .Enabled =
 			_f.it_PasteCell.Enabled = false;
 
@@ -3082,6 +3084,7 @@ namespace yata
 			foreach (var col in Cols)
 				col.selected = false;
 
+			_f.it_CutCell  .Enabled =
 			_f.it_CopyCell .Enabled =
 			_f.it_PasteCell.Enabled = false;
 
