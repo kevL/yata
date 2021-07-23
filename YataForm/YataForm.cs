@@ -4679,7 +4679,7 @@ namespace yata
 								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
 			it_cellUpper  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
-			it_cellStars  .Enabled = !Table.Readonly
+			it_cellDelete .Enabled = !Table.Readonly
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 			it_cellMergeCe.Enabled = 
 			it_cellMergeRo.Enabled = isMergeEnabled();
@@ -4687,7 +4687,7 @@ namespace yata
 
 			switch (Table.Info)
 			{
-//				default: // NOTE: These cases are disabled but will be visible.
+//				default: // NOTE: The default cases are disabled but will be visible.
 				case YataGrid.InfoType.INFO_NONE:
 				case YataGrid.InfoType.INFO_CRAFT:
 					it_cellInput.Text    = "InfoInput";
@@ -4712,9 +4712,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <see cref="popupCellmenu"/>.
+		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
-		/// <returns>true if Merge (cell or row) will be enabled</returns>
+		/// <returns><c>true</c> if Merge (cell or row) will be enabled</returns>
 		bool isMergeEnabled()
 		{
 			if (_sel.diff && _diff1 != null && _diff2 != null)
@@ -4731,7 +4731,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <see cref="popupCellmenu"/>.
+		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
 		/// <returns></returns>
 		bool isSpellsInfoInputCol()
@@ -4766,7 +4766,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <see cref="popupCellmenu"/>.
+		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
 		/// <returns></returns>
 		bool isFeatInfoInputCol()
@@ -4831,7 +4831,7 @@ namespace yata
 		/// <summary>
 		/// Checks if it's okay to print a TalkTable entry to the statusbar.
 		/// </summary>
-		/// <returns>true if TalkEntry dialog will be enabled</returns>
+		/// <returns><c>true</c> if TalkEntry dialog will be enabled</returns>
 		bool isStrrefEnabled()
 		{
 			if (_sel.x != 0 && Strrefheads.Contains(Table.Fields[_sel.x - 1]))
@@ -4864,7 +4864,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Stars(object sender, EventArgs e)
+		void cellclick_Delete(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
 		}
@@ -4874,7 +4874,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Lowercase(object sender, EventArgs e)
+		void cellclick_Lower(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, _sel.text.ToLower()); // does not do a text-check
 		}
@@ -4884,7 +4884,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_Uppercase(object sender, EventArgs e)
+		void cellclick_Upper(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, _sel.text.ToUpper()); // does not do a text-check
 		}
