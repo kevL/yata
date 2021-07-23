@@ -1564,7 +1564,7 @@ namespace yata
 			this.it_cellEdit.Name = "it_cellEdit";
 			this.it_cellEdit.Size = new System.Drawing.Size(164, 22);
 			this.it_cellEdit.Text = "edit";
-			this.it_cellEdit.Click += new System.EventHandler(this.cellclick_EditCell);
+			this.it_cellEdit.Click += new System.EventHandler(this.cellclick_Edit);
 			// 
 			// separator_27
 			// 
@@ -1576,21 +1576,21 @@ namespace yata
 			this.it_cellCut.Name = "it_cellCut";
 			this.it_cellCut.Size = new System.Drawing.Size(164, 22);
 			this.it_cellCut.Text = "cut";
-			this.it_cellCut.Click += new System.EventHandler(this.editcellsclick_CutCell);
+			this.it_cellCut.Click += new System.EventHandler(this.cellclick_Cut);
 			// 
 			// it_cellCopy
 			// 
 			this.it_cellCopy.Name = "it_cellCopy";
 			this.it_cellCopy.Size = new System.Drawing.Size(164, 22);
 			this.it_cellCopy.Text = "copy";
-			this.it_cellCopy.Click += new System.EventHandler(this.editcellsclick_CopyCell);
+			this.it_cellCopy.Click += new System.EventHandler(this.cellclick_Copy);
 			// 
 			// it_cellPaste
 			// 
 			this.it_cellPaste.Name = "it_cellPaste";
 			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
 			this.it_cellPaste.Text = "paste";
-			this.it_cellPaste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
+			this.it_cellPaste.Click += new System.EventHandler(this.cellclick_Paste);
 			// 
 			// it_cellDelete
 			// 

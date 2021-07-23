@@ -2529,7 +2529,6 @@ namespace yata
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item><c><see cref="it_CutCell"/></c> - Menu|Cells|Cut</item>
-		/// <item><c><see cref="it_cellCut"/></c> - Cell|Cut</item>
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
@@ -2556,7 +2555,6 @@ namespace yata
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item><c><see cref="it_CopyCell"/></c> - Menu|Cells|Copy</item>
-		/// <item><c><see cref="it_cellCopy"/></c> - Cell|Copy</item>
 		/// </list></remarks>
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
@@ -2580,7 +2578,6 @@ namespace yata
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item><c><see cref="it_PasteCell"/></c> - Menu|Cells|Paste</item>
-		/// <item><c><see cref="it_cellPaste"/></c> - Cell|Paste</item>
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
@@ -4674,17 +4671,24 @@ namespace yata
 		{
 			_sel = Table.getSelectedCell();
 
-			it_cellEdit   .Enabled =
-			it_cellCut    .Enabled =
-			it_cellPaste  .Enabled = !Table.Readonly;
+			it_cellEdit   .Enabled = !Table.Readonly;
+
+			it_cellCut    .Enabled = !Table.Readonly;
+//			it_cellCopy   .Enabled = true; // always enabled here.
+			it_cellPaste  .Enabled = !Table.Readonly
+								  && _copytext.Length == 1
+								  && (_sel.text != _copytext[0,0] || _sel.loadchanged);
+			it_cellDelete .Enabled = !Table.Readonly
+								  && (_sel.text != gs.Stars || _sel.loadchanged);
+
 			it_cellLower  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
 			it_cellUpper  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
-			it_cellDelete .Enabled = !Table.Readonly
-								  && (_sel.text != gs.Stars || _sel.loadchanged);
-			it_cellMergeCe.Enabled = 
+
+			it_cellMergeCe.Enabled =
 			it_cellMergeRo.Enabled = isMergeEnabled();
+
 			it_cellStrref .Enabled = isStrrefEnabled();
 
 			switch (Table.Info)
@@ -4856,13 +4860,46 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void cellclick_EditCell(object sender, EventArgs e)
+		void cellclick_Edit(object sender, EventArgs e)
 		{
 			Table.startCelledit(_sel);
 		}
 
 		/// <summary>
-		/// Handles cell-click stars.
+		/// Handles cell-click cut.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Cut(object sender, EventArgs e)
+		{
+			_copytext = new string[,] {{ _sel.text }};
+
+			if (_sel.text != gs.Stars || _sel.loadchanged)
+				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+		}
+
+		/// <summary>
+		/// Handles cell-click copy.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Copy(object sender, EventArgs e)
+		{
+			_copytext = new string[,] {{ _sel.text }};
+		}
+
+		/// <summary>
+		/// Handles cell-click paste.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void cellclick_Paste(object sender, EventArgs e)
+		{
+			Table.ChangeCellText(_sel, _copytext[0,0]); // does not do a text-check
+		}
+
+		/// <summary>
+		/// Handles cell-click delete.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
