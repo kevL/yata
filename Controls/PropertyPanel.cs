@@ -372,7 +372,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the next DockState in the cycle.
+		/// Gets the next <c><see cref="DockState"/></c> in the cycle.
 		/// </summary>
 		/// <returns></returns>
 		internal DockState getNextDockstate()
