@@ -101,7 +101,7 @@ namespace yata
 		/// <c><see cref="Table"/></c> is the table being saved; that is, the
 		/// SaveAll operation needs to cycle through all tables.
 		/// </summary>
-		/// <seealso cref="fileclick_SaveAll()">fileclick_SaveAll()</seealso>
+		/// <seealso cref="fileclick_SaveAll()"><c>fileclick_SaveAll()</c></seealso>
 		YataGrid _table;
 
 		/// <summary>
@@ -467,6 +467,7 @@ namespace yata
 				case Keys.Control | Keys.X: // bypass Ctrl+x, Ctrl+c, Ctrl+v if the editor is visible.
 				case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
 				case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
+				case Keys.Delete:
 					if (Table != null
 						&& (Table._editor.Visible
 							|| (Table.Propanel != null && Table.Propanel._editor.Visible)))
@@ -492,12 +493,14 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles the <c>KeyDown</c> event on the form.
-		/// @note Requires the form's <c>KeyPreview</c> property flagged true in
-		/// order to handle the event if a control is focused.
+		/// Handles the <c>KeyDown</c> event at the form-level.
 		/// </summary>
 		/// <param name="e"></param>
-		/// <remarks>Fires repeatedly if a key is held depressed.</remarks>
+		/// <remarks>Requires the form's <c>KeyPreview</c> property flagged
+		/// <c>true</c>.
+		/// 
+		/// 
+		/// Fires repeatedly if a key is held depressed.</remarks>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
@@ -545,11 +548,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Forwards a keydown [Enter] event to an appropriate funct.
-		/// @note Is basically just a convoluted handler for the OnKeyDown()
-		/// handler to stop the *beep* if [Enter] is keyed when a textbox is
-		/// focused.
+		/// Forwards a <c>KeyDown</c> <c>[Enter]</c> event to an appropriate funct.
 		/// </summary>
+		/// <remarks>Is basically just a convoluted handler for the
+		/// <c><see cref="OnKeyDown()">OnKeyDown()</see></c> handler to stop the
+		/// *beep* if <c>[Enter]</c> is keyed when a <c>TextBox</c> is focused.</remarks>
 		void HandleDontBeepEvent()
 		{
 			switch (_dontbeep)
@@ -649,8 +652,8 @@ namespace yata
 		/// order to hide unsightly .NET spaz-attacks (despite double-buffering
 		/// etc).
 		/// </summary>
-		/// <param name="obscure">true to bring the color-panel to front, false
-		/// to send the color-panel to back</param>
+		/// <param name="obscure"><c>true</c> to bring the color-panel to front
+		/// or <c>false</c> to send the color-panel to back</param>
 		internal void Obfuscate(bool obscure = true)
 		{
 			if (obscure) panel_ColorFill.BringToFront();
@@ -658,8 +661,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// TODO: This funct is obsolete; tables that are Readonly shall not
-		/// fire events that can change the table at all.
+		/// TODO: This funct is obsolete; tables that are
+		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
+		/// not fire events that can change the table at all.
 		/// </summary>
 		internal void ReadonlyError()
 		{
@@ -672,11 +676,12 @@ namespace yata
 
 		/// <summary>
 		/// Checks if there is a non-readonly table open and optionally calls
-		/// all tables' Leave event handler.
+		/// all tables' <c>Leave</c> event handler.
 		/// </summary>
-		/// <param name="fireLeave">true to fire the LeaveEvent on all tables</param>
-		/// <returns></returns>
-		bool allowSaveAll(bool fireLeave = false)
+		/// <param name="leave"><c>true</c> to fire the <c>Leave</c> event on
+		/// all tables</param>
+		/// <returns><c>true</c> to allow SaveAll</returns>
+		bool allowSaveAll(bool leave = false)
 		{
 			bool allow = false;
 			for (int i = 0; i != Tabs.TabCount; ++i)
@@ -685,10 +690,10 @@ namespace yata
 				if (!_table.Readonly)
 				{
 					allow = true;
-					if (!fireLeave) break;
+					if (!leave) break;
 				}
 
-				if (fireLeave)
+				if (leave)
 					_table.leave_Grid(null, EventArgs.Empty);
 			}
 			_table = null;
@@ -699,9 +704,9 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Hides the editor. This is a generic handler that should be invoked
-		/// when opening a menu on the menubar (iff the menu doesn't have its
-		/// own dropdown-handler).
+		/// Hides the <c>_editor</c>. This is a generic handler that should be
+		/// invoked when opening a menu on the menubar (iff the menu doesn't
+		/// have its own dropdown-handler).
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -847,53 +852,59 @@ namespace yata
 				// NOTE: Subits under Menuits don't really need to be detered
 				// here; they all shall have dropdowns that deter their needs
 				// and if they have hotkeys the handlers shall be conditioned to
-				// bypass if an operation is invalid in current state.
+				// bypass if an operation is in/valid in current state.
+				//
+				// NOTE: Subits that are un/checked shall be consistent since
+				// they could be used to deter state.
 
 				Cell sel = Table.getSelectedCell();
 
-				btn_ProPanel .Visible = true;
+				btn_ProPanel  .Visible = true;
+				it_MenuPaths  .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
-				it_MenuPaths .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
-				it_freeze1   .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
-				it_freeze2   .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
+				it_freeze1    .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
+				it_freeze2    .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
 
-				it_Readonly  .Checked = Table.Readonly;
+				it_Readonly   .Checked = Table.Readonly;
 
-				it_Undo      .Enabled = Table._ur.CanUndo;
-				it_Redo      .Enabled = Table._ur.CanRedo;
 
-				it_Reload    .Enabled = File.Exists(Table.Fullpath);
-				it_Save      .Enabled = !Table.Readonly;
-				it_SaveAll   .Enabled = allowSaveAll(true);
-				it_SaveAs    .Enabled =
-				it_Readonly  .Enabled =
-				it_Close     .Enabled =
-				it_CloseAll  .Enabled = true;
+				it_Undo       .Enabled = Table._ur.CanUndo;
+				it_Redo       .Enabled = Table._ur.CanRedo;
 
-				bool oneSelected = (sel != null);
-				it_CutCell   .Enabled =
-				it_CopyCell  .Enabled = oneSelected;
-				it_PasteCell .Enabled = oneSelected && !Table.Readonly;
-				it_DeleteCell.Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled = 
-				it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
+				it_Reload     .Enabled = File.Exists(Table.Fullpath);
+				it_Save       .Enabled = !Table.Readonly;
+				it_SaveAll    .Enabled = allowSaveAll(true);
+				it_SaveAs     .Enabled =
+				it_Readonly   .Enabled =
+				it_Close      .Enabled =
+				it_CloseAll   .Enabled = true;
 
-				it_CopyRange .Enabled = Table.getSelectedRow() != -1;
-				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_CreateRows.Enabled = !Table.Readonly;
+				bool oneSelected = sel != null;
+				it_CutCell    .Enabled =
+				it_CopyCell   .Enabled = oneSelected;
+				it_PasteCell  .Enabled = oneSelected && !Table.Readonly;
+				it_DeleteCell .Enabled =
+				it_Lower      .Enabled =
+				it_Upper      .Enabled = 
+				it_Apply      .Enabled = !Table.Readonly && Table.anyCellSelected();
 
-				it_OrderRows .Enabled = !Table.Readonly;
-				it_CheckRows .Enabled =
-				it_ColorRows .Enabled =
-				it_AutoCols  .Enabled =
-				it_ppOnOff   .Enabled = true;
-				it_ppLocation.Enabled = Table.Propanel != null && Table.Propanel.Visible;
-				it_ExternDiff.Enabled = File.Exists(Settings._diff);
+				bool isrowselected = Table.getSelectedRow() != -1;
+				it_CopyRange  .Enabled = isrowselected;
+				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
+				it_CreateRows .Enabled = !Table.Readonly;
 
-				it_freeze1   .Enabled = Table.ColCount > 1;
-				it_freeze2   .Enabled = Table.ColCount > 2;
+				it_OrderRows  .Enabled = !Table.Readonly;
+				it_CheckRows  .Enabled =
+				it_ColorRows  .Enabled =
+				it_AutoCols   .Enabled =
+				it_ppOnOff    .Enabled = true;
+				it_ppLocation .Enabled = Table.Propanel != null && Table.Propanel.Visible;
+				it_ExternDiff .Enabled = File.Exists(Settings._diff);
+
+				it_freeze1    .Enabled = Table.ColCount > 1;
+				it_freeze2    .Enabled = Table.ColCount > 2;
 
 
 				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -910,47 +921,50 @@ namespace yata
 			{
 				Obfuscate();
 
-				btn_ProPanel .Visible =
-				it_MenuPaths .Visible =
+				btn_ProPanel  .Visible =
+				it_MenuPaths  .Visible =
 
-				it_freeze1   .Checked =
-				it_freeze2   .Checked =
 
-				it_Readonly  .Checked =
+				it_freeze1    .Checked =
+				it_freeze2    .Checked =
 
-				it_Undo      .Enabled =
-				it_Redo      .Enabled =
+				it_Readonly   .Checked =
 
-				it_Reload    .Enabled =
-				it_Save      .Enabled =
-				it_SaveAll   .Enabled =
-				it_SaveAs    .Enabled =
-				it_Readonly  .Enabled =
-				it_Close     .Enabled =
-				it_CloseAll  .Enabled =
 
-				it_CutCell   .Enabled =
-				it_CopyCell  .Enabled =
-				it_PasteCell .Enabled =
-				it_DeleteCell.Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled =
-				it_Apply     .Enabled =
+				it_Undo       .Enabled =
+				it_Redo       .Enabled =
 
-				it_CopyRange .Enabled =
-				it_PasteRange.Enabled =
-				it_CreateRows.Enabled =
+				it_Reload     .Enabled =
+				it_Save       .Enabled =
+				it_SaveAll    .Enabled =
+				it_SaveAs     .Enabled =
+				it_Readonly   .Enabled =
+				it_Close      .Enabled =
+				it_CloseAll   .Enabled =
 
-				it_OrderRows .Enabled =
-				it_CheckRows .Enabled =
-				it_ColorRows .Enabled =
-				it_AutoCols  .Enabled =
-				it_ppOnOff   .Enabled =
-				it_ppLocation.Enabled =
-				it_ExternDiff.Enabled =
+				it_CutCell    .Enabled =
+				it_CopyCell   .Enabled =
+				it_PasteCell  .Enabled =
+				it_DeleteCell .Enabled =
+				it_Lower      .Enabled =
+				it_Upper      .Enabled =
+				it_Apply      .Enabled =
 
-				it_freeze1   .Enabled =
-				it_freeze2   .Enabled = false;
+				it_CopyRange  .Enabled =
+				it_PasteRange .Enabled =
+				it_DeleteRange.Enabled =
+				it_CreateRows .Enabled =
+
+				it_OrderRows  .Enabled =
+				it_CheckRows  .Enabled =
+				it_ColorRows  .Enabled =
+				it_AutoCols   .Enabled =
+				it_ppOnOff    .Enabled =
+				it_ppLocation .Enabled =
+				it_ExternDiff .Enabled =
+
+				it_freeze1    .Enabled =
+				it_freeze2    .Enabled = false;
 
 				_fdiffer = null;
 			}
@@ -967,7 +981,7 @@ namespace yata
 		{
 			var tab = Tabs.TabPages[e.Index];
 
-			int y;
+			int y; // vertical text-padding tweak
 
 			FontStyle style;
 			if (tab == Tabs.SelectedTab)
@@ -987,7 +1001,7 @@ namespace yata
 				int w = YataGraphics.MeasureWidth(tab.Text, font);
 				var rect = e.Bounds;
 				rect.X   = e.Bounds.X + (e.Bounds.Width - w) / 2;
-				rect.Y   = e.Bounds.Y + y; // NOTE: 'y' is a padding tweak.
+				rect.Y   = e.Bounds.Y + y;
 
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -1003,7 +1017,7 @@ namespace yata
 				// Note that this is one of those null-errors that the debugger will
 				// slough off ....
 				var table = tab.Tag as YataGrid;
-				if (table != null && table.Readonly)
+				if (table.Readonly) //table != null && // 'table' better not be null.
 					color = Colors.TextReadonly;
 				else
 					color = Colors.Text;
@@ -1056,8 +1070,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Disposes a tab's table's 'FileWatcher' before a specified tab-page
-		/// is removed from the tab-collection.
+		/// Disposes a tab's table's <c><see cref="FileWatcher"/></c> before a
+		/// specified tab-page is removed from the tab-collection.
 		/// </summary>
 		/// <param name="tab">the tab-page with which to deal</param>
 		void CloseTabpage(TabPage tab)
@@ -1079,9 +1093,10 @@ namespace yata
 
 		/// <summary>
 		/// Sets the tabtext of a specified table.
-		/// @note Is called by YataGrid.Changed flag.
 		/// </summary>
 		/// <param name="table"></param>
+		/// <remarks>Is called by
+		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> property.</remarks>
 		internal void SetTabText(YataGrid table)
 		{
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
@@ -1102,8 +1117,9 @@ namespace yata
 
 		/// <summary>
 		/// Sets the tabtexts of all tables.
-		/// @note Is called by fileclick_SaveAll().
 		/// </summary>
+		/// <remarks>Called by
+		/// <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c>.</remarks>
 		void SetAllTabTexts()
 		{
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
@@ -1410,11 +1426,11 @@ namespace yata
 		/// <summary>
 		/// Allows user to set the current table's readonly flag after it has
 		/// been opened.
-		/// @note The readonly setter appears otherwise only on the file-open
-		/// dialog.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>The readonly setter appears otherwise only in the file-open
+		/// dialog.</remarks>
 		void fileclick_Readonly(object sender, EventArgs e)
 		{
 			Table.Readonly = it_Readonly.Checked;
@@ -2009,11 +2025,17 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
+//				it_Undo.Enabled = Table._ur.CanUndo;
+//				it_Redo.Enabled = Table._ur.CanRedo;
+
 				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 			}
 			else
 			{
+//				it_Undo           .Enabled =
+//				it_Redo           .Enabled =
+
 				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled = false;
 			}
@@ -2027,7 +2049,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_Undo(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null)// && Table._ur.CanUndo
 			{
 				Table._ur.Undo();
 				it_Undo.Enabled = Table._ur.CanUndo;
@@ -2042,7 +2064,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editclick_Redo(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null)// && Table._ur.CanRedo
 			{
 				Table._ur.Redo();
 				it_Redo.Enabled = Table._ur.CanRedo;
@@ -2097,13 +2119,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Initiates [F3] search by focusing the Table.
-		/// @note This is fired only from the EditMenu (click/F3) and its item
-		/// is enabled by default. The item/shortcut will be set disabled when
-		/// the EditMenu opens iff the search-string is blank.
+		/// Initiates <c>[F3]</c> search by focusing the
+		/// <c><see cref="Table"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>This is fired only from the EditMenu (click/F3) and its
+		/// item is enabled by default. The item/shortcut will be set disabled
+		/// when the EditMenu opens iff the search-string is blank.</remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
@@ -2126,8 +2149,9 @@ namespace yata
 
 		/// <summary>
 		/// Searches the current table for the string in the search-box.
-		/// @note Ensure that 'Table' is valid before call.
 		/// </summary>
+		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
+		/// call.</remarks>
 		void Search()
 		{
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
@@ -2331,13 +2355,13 @@ namespace yata
 
 		/// <summary>
 		/// Selects the next LoadChanged cell.
-		/// @note This is fired only from the EditMenu (click/Ctrl+N) and its
-		/// item is enabled by default. The item/shortcut will be set disabled
-		/// either when the EditMenu opens or when Ctrl+N is keyed iff there are
-		/// no 'loadchanged' cells.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>This is fired only from the EditMenu (click/Ctrl+N) and its
+		/// item is enabled by default. The item/shortcut will be set disabled
+		/// either when the EditMenu opens or when Ctrl+N is keyed iff there are
+		/// no 'loadchanged' cells.</remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
 			if (Table != null && (it_GotoLoadchanged.Enabled = Table.anyLoadchanged())
@@ -2500,9 +2524,9 @@ namespace yata
 				}
 
 				bool oneSelected = (Table.getSelectedCell() != null);
-				it_CutCell   .Enabled =
+				it_CutCell   .Enabled = oneSelected && !Table.Readonly;
 				it_CopyCell  .Enabled = oneSelected;
-				it_PasteCell .Enabled = oneSelected && !Table.Readonly;
+				it_PasteCell .Enabled = oneSelected && !Table.Readonly && _copytext.Length == 1;
 				it_DeleteCell.Enabled =
 				it_Lower     .Enabled =
 				it_Upper     .Enabled =
@@ -2534,16 +2558,21 @@ namespace yata
 		{
 			if (Table != null)
 			{
-				Cell sel = Table.getSelectedCell();
-				if (sel != null) // safety (believe it or not).
+				if (!Table.Readonly)
 				{
-					_copytext = new string[,] {{ sel.text }};
+					Cell sel = Table.getSelectedCell();
+					if (sel != null)
+					{
+						_copytext = new string[,] {{ sel.text }};
 
-					if (sel.text != gs.Stars || sel.loadchanged)
-						Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
+						if (sel.text != gs.Stars || sel.loadchanged)
+							Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
+					}
+					else
+						CopyPasteCellError();
 				}
 				else
-					CopyPasteCellError();
+					ReadonlyError();
 			}
 		}
 
@@ -2561,7 +2590,7 @@ namespace yata
 			if (Table != null)
 			{
 				Cell sel = Table.getSelectedCell();
-				if (sel != null) // safety (believe it or not).
+				if (sel != null)
 				{
 					_copytext = new string[,] {{ sel.text }};
 				}
@@ -2654,15 +2683,23 @@ namespace yata
 		/// </list></remarks>
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
-			Cell sel;
-			foreach (var row in Table.Rows)
-			for (int c = 0; c != Table.ColCount; ++c)
+			if (Table != null)
 			{
-				if ((sel = row[c]).selected
-					&& (sel.text != gs.Stars || sel.loadchanged))
+				if (!Table.Readonly)
 				{
-					Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
+					Cell sel;
+					foreach (var row in Table.Rows)
+					for (int c = 0; c != Table.ColCount; ++c)
+					{
+						if ((sel = row[c]).selected
+							&& (sel.text != gs.Stars || sel.loadchanged))
+						{
+							Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
+						}
+					}
 				}
+				else
+					ReadonlyError();
 			}
 		}
 
@@ -2721,7 +2758,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Apply"/></c> - Menu|Cells|Apply text ...</item>
 		/// </list></remarks>
-		void editcellsclick_Text(object sender, EventArgs e)
+		void editcellsclick_Apply(object sender, EventArgs e)
 		{
 			using (var f = new TextInputDialog(this))
 			{
@@ -2763,15 +2800,20 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				it_CopyRange .Enabled = (Table.getSelectedRow() != -1);
-				it_PasteRange.Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_CreateRows.Enabled = !Table.Readonly;
+				bool isrowselected = Table.getSelectedRow() != -1;
+				it_CopyRange  .Enabled = isrowselected;
+				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
+
+				it_CreateRows .Enabled = !Table.Readonly;
 			}
 			else
 			{
-				it_CopyRange .Enabled =
-				it_PasteRange.Enabled =
-				it_CreateRows.Enabled = false;
+				it_CopyRange  .Enabled =
+				it_PasteRange .Enabled =
+				it_DeleteRange.Enabled =
+
+				it_CreateRows .Enabled = false;
 			}
 		}
 
@@ -2863,10 +2905,27 @@ namespace yata
 				ReadonlyError();
 		}
 
+		/// <summary>
+		/// Deletes a range of rows.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editrowsclick_DeleteRange(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				int selr = Table.getSelectedRow();
+				if (selr != -1)
+					Table.DeleteRows(selr);
+			}
+			else
+				ReadonlyError();
+		}
+
 
 		/// <summary>
 		/// Instantiates <c><see cref="RowCreatorDialog"/></c> for
-		/// inserting/creating multiple blank rows.
+		/// inserting/creating multiple rows.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -3500,8 +3559,10 @@ namespace yata
 		/// Autosizes all cols of a given table.
 		/// </summary>
 		/// <param name="table"></param>
-		/// <remarks>Helper for <see cref="opsclick_AutosizeCols"/> but is also
-		/// called by <see cref="DiffReset"/></remarks>
+		/// <remarks>Helper for
+		/// <c><see cref="opsclick_AutosizeCols()">opsclick_AutosizeCols()</see></c>
+		/// but is also called by
+		/// <c><see cref="DiffReset()">DiffReset()</see></c>.</remarks>
 		void AutosizeCols(YataGrid table)
 		{
 			foreach (var col in table.Cols)
@@ -3604,10 +3665,10 @@ namespace yata
 
 		/// <summary>
 		/// Handler for the PropertyPanel's visibility.
-		/// Cf mouseup_btnPropertyPanel()
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <seealso cref="mouseup_btnPropertyPanel()"><c>mouseup_btnPropertyPanel()</c></seealso>
 		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
 		{
 			if (Table != null) togglePropanel();
@@ -3643,10 +3704,10 @@ namespace yata
 
 		/// <summary>
 		/// Handler for the PropertyPanel's position.
-		/// Cf mouseup_btnPropertyPanel()
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <seealso cref="mouseup_btnPropertyPanel()"><c>mouseup_btnPropertyPanel()</c></seealso>
 		void opsclick_PropertyPanelLocation(object sender, EventArgs e)
 		{
 			if (Table != null && Table.Propanel != null && Table.Propanel.Visible)
@@ -4631,12 +4692,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for MouseUp on the PropertyPanel button.
-		/// Cf opsclick_PropertyPanelOnOff()
-		/// Cf opsclick_PropertyPanelTopBot()
+		/// Handler for <c>MouseUp</c> on the PropertyPanel button.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <seealso cref="opsclick_PropertyPanelOnOff()"><c>opsclick_PropertyPanelOnOff()</c></seealso>
+		/// <seealso cref="opsclick_PropertyPanelLocation()"><c>opsclick_PropertyPanelLocation()</c></seealso>
 		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
 		{
 			if (Table != null)

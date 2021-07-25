@@ -1806,9 +1806,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles navigation by keyboard around the table. Also handles the
-		/// delete-key for selected row(s) or a single selected cell as well as
-		/// the escape-key to clear all selections.
+		/// Handles navigation by keyboard around this <c>YataGrid</c>. Also
+		/// handles the <c>[Esc]</c> key to clear all selections.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -2159,10 +2158,6 @@ namespace yata
 					_f.SyncSelect();
 					invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					break;
-
-				case Keys.Delete:
-					if (!Readonly) Delete();
-					break;
 			}
 
 			if (invalid != INVALID_NONE)	// -> is a Row operation or ClearSelects()
@@ -2262,66 +2257,61 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a single or multiple rows on keypress <c>[Delete]</c> or if
-		/// a row is not selected then it replaces all selected cells' texts
-		/// with "****".
+		/// Deletes a single or multiple rows.
 		/// </summary>
-		void Delete()
+		/// <param name="selr">the currently selected row</param>
+		/// <remarks>Called by
+		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
+		internal void DeleteRows(int selr)
 		{
-			int selr = getSelectedRow();
-			if (selr != -1)
+			_f.Obfuscate();
+			DrawingControl.SuspendDrawing(this);
+
+
+			int range = Math.Abs(RangeSelect);
+			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
+
+			int rFirst, rLast;
+			if (RangeSelect > 0)
 			{
-				_f.Obfuscate();
-				DrawingControl.SuspendDrawing(this);
-
-
-				int range = Math.Abs(RangeSelect);
-				Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
-
-				int rFirst, rLast;
-				if (RangeSelect > 0)
-				{
-					rFirst = selr;
-					rLast  = selr + RangeSelect;
-				}
-				else
-				{
-					rFirst = selr + RangeSelect;
-					rLast  = selr;
-				}
-
-				while (rLast >= rFirst) // reverse delete.
-				{
-					rest.array[range--] = Rows[rLast].Clone() as Row;
-					Insert(rLast, null, false);
-
-					--rLast;
-				}
-
-				if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
-					rLast = 0;
-				else
-					rLast = -1; // calibrate all extant rows.
-
-				Calibrate(rLast); // delete key
-
-				if (selr < RowCount)
-					EnsureDisplayedRow(selr);
-
-
-				if (!Changed)
-				{
-					Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				_ur.Push(rest);
-
-
-				_f.Obfuscate(false);
-				DrawingControl.ResumeDrawing(this);
+				rFirst = selr;
+				rLast  = selr + RangeSelect;
 			}
 			else
-				_f.editcellsclick_Delete(null, EventArgs.Empty);
+			{
+				rFirst = selr + RangeSelect;
+				rLast  = selr;
+			}
+
+			while (rLast >= rFirst) // reverse delete.
+			{
+				rest.array[range--] = Rows[rLast].Clone() as Row;
+				Insert(rLast, null, false);
+
+				--rLast;
+			}
+
+			if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
+				rLast = 0;
+			else
+				rLast = -1; // calibrate all extant rows.
+
+			Calibrate(rLast); // delete key
+
+			if (selr < RowCount)
+				EnsureDisplayedRow(selr);
+
+
+			if (!Changed)
+			{
+				Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			_ur.Push(rest);
+
+
+			_f.Obfuscate(false);
+			DrawingControl.ResumeDrawing(this);
 		}
 
 
@@ -2368,14 +2358,14 @@ namespace yata
 		} */
 
 		/// <summary>
-		/// Handles the Leave event for the grid: hides the editbox if it is
-		/// visible.
-		/// @note But it doesn't fire if the tabpage changes w/ key
-		/// Ctrl+PageUp/PageDown. Lovely /explode - is fixed in
-		/// YataForm.tab_SelectedIndexChanged().
+		/// Handles the <c>Leave</c> event for the grid - hides the
+		/// <c><see cref="_editor"/></c> if it is visible.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>But it doesn't fire if the tabpage changes w/ key
+		/// Ctrl+PageUp/PageDown. Lovely /explode - is fixed in
+		/// <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
 		internal void leave_Grid(object sender, EventArgs e)
 		{
 			if (_editor.Visible)
@@ -2386,8 +2376,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
-		/// fires during edit or so.
+		/// Handles ending editing a cell by pressing
+		/// <c>[Enter]</c> or <c>[Escape]</c>/<c>[Tab]</c>.
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
@@ -2424,7 +2414,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Applies a cell-edit via the editbox.
+		/// Applies a cell-edit via the <c><see cref="_editor"/></c>.
 		/// </summary>
 		void ApplyCellEdit()
 		{
@@ -2440,8 +2430,9 @@ namespace yata
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
-		/// <param name="cell">a Cell</param>
-		/// <param name="tb">the editor's textbox whose text to check for validity</param>
+		/// <param name="cell">a <c><see cref="Cell"/></c></param>
+		/// <param name="tb">the editor's <c>TextBox</c> whose text to check for
+		/// validity</param>
 		/// <remarks>Performs a text-check.</remarks>
 		internal void ChangeCellText(Cell cell, Control tb)
 		{
@@ -2476,7 +2467,7 @@ namespace yata
 		/// <summary>
 		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
-		/// <param name="cell">a Cell</param>
+		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>
 		/// <remarks>Does *not* perform a text-check.</remarks>
 		internal void ChangeCellText(Cell cell, string text)
@@ -2583,7 +2574,7 @@ namespace yata
 		/// </summary>
 		/// <param name="tb"></param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
-		/// <seealso cref="CheckLoadField()">CheckLoadField()</seealso>
+		/// <seealso cref="CheckLoadField()"><c>CheckLoadField()</c></seealso>
 		internal static bool CheckTextEdit(Control tb)
 		{
 			bool changed = false;
@@ -2671,7 +2662,7 @@ namespace yata
 		/// </summary>
 		/// <param name="field">ref to a text-string</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
-		/// <seealso cref="CheckTextEdit()">CheckTextEdit()</seealso>
+		/// <seealso cref="CheckTextEdit()"><c>CheckTextEdit()</c></seealso>
 		bool CheckLoadField(ref string field)
 		{
 			bool changed = false;
@@ -3059,21 +3050,25 @@ namespace yata
 					row[c].selected = false;
 			}
 
-			_f.it_CutCell  .Enabled =
-			_f.it_CopyCell .Enabled =
-			_f.it_PasteCell.Enabled = false;
+			_f.it_CutCell   .Enabled =
+			_f.it_CopyCell  .Enabled =
+			_f.it_PasteCell .Enabled =
+			_f.it_DeleteCell.Enabled = false;
 
-//			_f.it_Stars    .Enabled =
-//			_f.it_Lower    .Enabled =
-//			_f.it_Upper    .Enabled =
-//			_f.it_Apply    .Enabled = false;
+//			_f.it_Stars     .Enabled =
+//			_f.it_Lower     .Enabled =
+//			_f.it_Upper     .Enabled =
+//			_f.it_Apply     .Enabled = false;
 		}
 
 		/// <summary>
-		/// Clears all rows, cells and cols that are currently selected.
+		/// Clears all cols, rows, and cells that are currently selected.
 		/// </summary>
 		internal void ClearSelects()
 		{
+			foreach (var col in Cols)
+				col.selected = false;
+
 			foreach (var row in Rows)
 			{
 				row.selected = false;
@@ -3081,17 +3076,21 @@ namespace yata
 					row[c].selected = false;
 			}
 
-			foreach (var col in Cols)
-				col.selected = false;
+			_f.it_CutCell   .Enabled =
+			_f.it_CopyCell  .Enabled =
+			_f.it_PasteCell .Enabled =
+			_f.it_DeleteCell.Enabled = false;
 
-			_f.it_CutCell  .Enabled =
-			_f.it_CopyCell .Enabled =
-			_f.it_PasteCell.Enabled = false;
+//			_f.it_Stars     .Enabled =
+//			_f.it_Lower     .Enabled =
+//			_f.it_Upper     .Enabled =
+//			_f.it_Apply     .Enabled = false;
 
-//			_f.it_Stars    .Enabled =
-//			_f.it_Lower    .Enabled =
-//			_f.it_Upper    .Enabled =
-//			_f.it_Apply    .Enabled = false;
+
+			_f.it_CopyRange  .Enabled =
+			_f.it_DeleteRange.Enabled = false;
+
+			// TODO: Perhaps disable all Col subits if they get hotkeys.
 		}
 
 
@@ -3694,10 +3693,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles a mouseclick on the colhead. Selects or deselects col(s).
-		/// Fires only on the colhead panel.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Fires only on the colhead panel.</remarks>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
 			if (!_panelCols.Grab && RowCount != 0 && (ModifierKeys & Keys.Alt) == 0) // NOTE: 'RowCount' should never be 0
