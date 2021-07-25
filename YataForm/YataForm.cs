@@ -468,6 +468,7 @@ namespace yata
 				case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
 				case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
 				case Keys.Delete:
+//				case Keys.Delete | Keys.Shift: // appears to not be used by textboxes.
 					if (Table != null
 						&& (Table._editor.Visible
 							|| (Table.Propanel != null && Table.Propanel._editor.Visible)))
@@ -856,6 +857,8 @@ namespace yata
 				//
 				// NOTE: Subits that are un/checked shall be consistent since
 				// they could be used to deter state.
+				//
+				// NOTE: its that are disabled to not fire on their hotkey-presses(!)
 
 				Cell sel = Table.getSelectedCell();
 
