@@ -893,6 +893,7 @@ namespace yata
 				it_Apply      .Enabled = !Table.Readonly && Table.anyCellSelected();
 
 				bool isrowselected = Table.getSelectedRow() != -1;
+				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
 				it_CopyRange  .Enabled = isrowselected;
 				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
 				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
@@ -953,6 +954,7 @@ namespace yata
 				it_Upper      .Enabled =
 				it_Apply      .Enabled =
 
+				it_CutRange   .Enabled =
 				it_CopyRange  .Enabled =
 				it_PasteRange .Enabled =
 				it_DeleteRange.Enabled =
@@ -2804,6 +2806,7 @@ namespace yata
 				}
 
 				bool isrowselected = Table.getSelectedRow() != -1;
+				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
 				it_CopyRange  .Enabled = isrowselected;
 				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
 				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
@@ -2812,6 +2815,7 @@ namespace yata
 			}
 			else
 			{
+				it_CutRange   .Enabled =
 				it_CopyRange  .Enabled =
 				it_PasteRange .Enabled =
 				it_DeleteRange.Enabled =
@@ -2820,6 +2824,22 @@ namespace yata
 			}
 		}
 
+
+		/// <summary>
+		/// Cuts a range of rows.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void editrowsclick_CutRange(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				editrowsclick_CopyRange(null, EventArgs.Empty);
+				editrowsclick_DeleteRange(null, EventArgs.Empty);
+			}
+			else
+				ReadonlyError();
+		}
 
 		/// <summary>
 		/// Copies a range of rows.

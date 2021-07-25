@@ -3087,6 +3087,7 @@ namespace yata
 //			_f.it_Apply     .Enabled = false;
 
 
+			_f.it_CutRange   .Enabled =
 			_f.it_CopyRange  .Enabled =
 			_f.it_DeleteRange.Enabled = false;
 
