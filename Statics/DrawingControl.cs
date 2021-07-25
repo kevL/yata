@@ -15,12 +15,13 @@ namespace yata
 		const int WM_SETREDRAW = 11;
 
 		/// <summary>
-		/// Some controls, such as the DataGridView, do not allow setting the
-		/// DoubleBuffered property. It is set as a protected property. This
-		/// method is a work-around to allow setting it. Call this in the
-		/// constructor just after InitializeComponent().
+		/// Some controls, such as the <c>DataGridView</c>, do not allow setting
+		/// the <c>DoubleBuffered</c> property. It is set as a protected
+		/// property. This method is a work-around to allow setting it. Call
+		/// this in the constructor just after <c>InitializeComponent()</c>.
 		/// </summary>
-		/// <param name="control">the Control on which to set DoubleBuffered to true</param>
+		/// <param name="control">the <c>Control</c> on which to set
+		/// <c>DoubleBuffered</c> <c>true</c></param>
 		internal static void SetDoubleBuffered(object control)
 		{
 			// if not remote desktop session then enable double-buffering optimization
@@ -37,8 +38,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Suspend drawing updates for the specified control. After the control
-		/// has been updated call DrawingControl.ResumeDrawing(Control control).
+		/// Suspend drawing updates for the specified <c>IWin32Window</c>
+		/// control. After the control has been updated call
+		/// <c><see cref="ResumeDrawing()">ResumeDrawing()</see></c>.
 		/// </summary>
 		/// <param name="control">the control to suspend draw updates on</param>
 		internal static void SuspendDrawing(IWin32Window control)
@@ -47,9 +49,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Resume drawing updates for the specified control.
+		/// Resume drawing updates for the specified <c>Control</c>.
 		/// </summary>
-		/// <param name="control">the control to resume draw updates on</param>
+		/// <param name="control">the <c>Control</c> to resume draw updates on</param>
 		internal static void ResumeDrawing(Control control)
 		{
 			SendMessage(control.Handle, WM_SETREDRAW, true, 0);
