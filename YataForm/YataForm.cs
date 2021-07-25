@@ -49,7 +49,6 @@ namespace yata
 
 
 		#region Fields
-		readonly YataTabs tabControl = new YataTabs();
 		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
 
 		/// <summary>
@@ -168,7 +167,8 @@ namespace yata
 
 
 		#region Properties
-		internal TabControl Tabs
+		readonly YataTabs tabControl = new YataTabs();
+		internal YataTabs Tabs
 		{ get { return tabControl; } }
 
 		Font FontDefault
@@ -185,8 +185,19 @@ namespace yata
 		/// </summary>
 		internal YataForm()
 		{
-			InitializeTabControl();
-			InitializePropertyPanelButton();
+			// init 'Tabs' ->
+			Tabs.DrawItem             += tab_DrawItem;
+			Tabs.SelectedIndexChanged += tab_SelectedIndexChanged;
+
+			Controls.Add(Tabs);
+
+			// init 'btn_ProPanel' ->
+			btn_ProPanel.MouseDown += mousedown_btnPropertyPanel;
+			btn_ProPanel.MouseUp   += mouseup_btnPropertyPanel;
+
+			Controls.Add(btn_ProPanel);
+
+			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 			InitializeComponent();
 
@@ -304,8 +315,6 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
-			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
-
 
 			if (Settings._recent != 0)
 				InitializeRecentFiles(); // init recents before (potentially) loading a table from FileExplorer
@@ -329,56 +338,6 @@ namespace yata
 				WindowState = FormWindowState.Maximized;
 		}
 
-
-		/// <summary>
-		/// Initializes the TabControl.
-		/// </summary>
-		void InitializeTabControl()
-		{
-			Tabs.Name          = "Tabs";
-			Tabs.TabIndex      = 3;
-			Tabs.SelectedIndex = 0;
-
-			Tabs.Dock      = DockStyle.Fill;
-			Tabs.Multiline = true;
-			Tabs.AllowDrop = true;
-			Tabs.DrawMode  = TabDrawMode.OwnerDrawFixed;
-			Tabs.SizeMode  = TabSizeMode.Fixed;
-
-			Tabs.Location = new Point(0,24);
-			Tabs.Size     = new Size(842,408);
-			Tabs.Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
-			Tabs.Margin   = new Padding(0); // right got it.
-
-			Tabs.DrawItem             += tab_DrawItem;
-			Tabs.SelectedIndexChanged += tab_SelectedIndexChanged;
-
-			Controls.Add(Tabs);
-		}
-
-		/// <summary>
-		/// Initializes the PropertyPanelButton.
-		/// </summary>
-		void InitializePropertyPanelButton()
-		{
-			btn_ProPanel.Name     = "btn_PropertyPanel";
-			btn_ProPanel.TabIndex = 4;
-			btn_ProPanel.TabStop  = false;
-
-			btn_ProPanel.Visible = false;
-
-			btn_ProPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			btn_ProPanel.UseVisualStyleBackColor = true;
-
-			btn_ProPanel.Size     = new Size(20,20);
-			btn_ProPanel.Location = new Point(823,0);
-			btn_ProPanel.Margin   = new Padding(0);
-
-			btn_ProPanel.MouseDown += mousedown_btnPropertyPanel;
-			btn_ProPanel.MouseUp   += mouseup_btnPropertyPanel;
-
-			Controls.Add(btn_ProPanel);
-		}
 
 		/// <summary>
 		/// Initializes the recent-files list.

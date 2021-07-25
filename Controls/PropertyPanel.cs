@@ -46,6 +46,21 @@ namespace yata
 
 			_rectBg = new Rectangle(0,0, Width, Height);
 			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);
+
+
+			Name     = "btn_PropertyPanel";
+			TabIndex = 4;
+			TabStop  = false;
+
+			Visible = false;
+
+			Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			UseVisualStyleBackColor = true;
+
+			Size     = new Size(20,20);
+			Location = new Point(823,0);
+			Margin   = new Padding(0);
+
 		}
 		#endregion cTor
 
