@@ -320,11 +320,11 @@ namespace yata
 
 		/// <summary>
 		/// Invalidates various controls of this grid for UI-update based on
-		/// the <see cref="INVALID_NONE">INVALID</see> flags.
+		/// the <c><see cref="INVALID_NONE">INVALID</see></c> flags.
 		/// </summary>
 		/// <param name="invalid"></param>
-		/// <remarks>Check that 'Propanel' is valid before a call w/
-		/// <see cref="INVALID_PROP"/>.</remarks>
+		/// <remarks>Check that <c><see cref="Propanel"/></c> is valid before a
+		/// call w/ <c><see cref="INVALID_PROP"/></c>.</remarks>
 		internal void Invalidator(int invalid)
 		{
 			if ((invalid & INVALID_GRID) != 0)
@@ -737,7 +737,7 @@ namespace yata
 		static int CodePage = -1;
 
 		/// <summary>
-		/// 
+		/// Checks if <paramref name="codepage"/> is recognized by .NET.
 		/// </summary>
 		/// <param name="codepage"></param>
 		/// <returns></returns>
@@ -1681,9 +1681,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Sets standard <see cref="HeightColhead"/>, <see cref="HeightRow"/>,
-		/// and minimum cell-width <see cref="_wId"/>. Also caches width of
-		/// "****" in <see cref="_wStars"/>.
+		/// Sets standard <c><see cref="HeightColhead"/></c>,
+		/// <c><see cref="HeightRow"/></c>, and minimum cell-width
+		/// <c><see cref="_wId"/></c>. Also caches width of "****" in
+		/// <c><see cref="_wStars"/></c>.
 		/// </summary>
 		/// <param name="f"></param>
 		/// <remarks>These values are the same for all loaded tables.</remarks>
