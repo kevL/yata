@@ -152,7 +152,8 @@ namespace yata
 		/// Hides any info that's currently displayed on the statusbar when the
 		/// cursor leaves the table-area.
 		/// </summary>
-		/// <remarks>Maintain namespace to differentiate System.Threading.Timer</remarks>
+		/// <remarks>Maintain namespace to differentiate
+		/// <c>System.Threading.Timer</c>.</remarks>
 		System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
 		#endregion Fields
 
@@ -1069,7 +1070,7 @@ namespace yata
 			string asterics = table.Changed ? ASTERICS : String.Empty;
 			foreach (TabPage tab in Tabs.TabPages)
 			{
-				if ((YataGrid)tab.Tag == table)
+				if (tab.Tag as YataGrid == table)
 				{
 					tab.Text = Path.GetFileNameWithoutExtension(table.Fullpath) + asterics;
 					break;
@@ -1126,7 +1127,7 @@ namespace yata
 		/// <summary>
 		/// Checks the row-order before save.
 		/// </summary>
-		/// <returns>true if row-order is okay</returns>
+		/// <returns><c>true</c> if row-order is okay</returns>
 		bool CheckRowOrder()
 		{
 			string val;
@@ -1148,8 +1149,8 @@ namespace yata
 
 		#region Events (close)
 		/// <summary>
-		/// Handles Yata closing event. Requests user-confirmation if data has
-		/// changed and writes a recent-files list if appropriate.
+		/// Handles Yata's <c>FormClosing</c> event. Requests user-confirmation
+		/// if data has changed and writes a recent-files list if appropriate.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1213,7 +1214,8 @@ namespace yata
 		/// <summary>
 		/// Returns a list of currently loaded tables that have been modified.
 		/// </summary>
-		/// <param name="excludecurrent">true to exclude the current Table</param>
+		/// <param name="excludecurrent"><c>true</c> to exclude the current
+		/// table</param>
 		/// <returns></returns>
 		List<string> GetChangedTables(bool excludecurrent = false)
 		{
@@ -1235,7 +1237,7 @@ namespace yata
 
 		#region Events (file)
 		/// <summary>
-		/// Handles opening the FileMenu, FolderPresets item and its sub-items.
+		/// Handles opening the FileMenu, FolderPresets it and its subits.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1292,7 +1294,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to open a folder. Shows an open-file-dialog.
+		/// Handles it-click to open a folder. Shows an <c>OpenFileDialog</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1373,8 +1375,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens a 2da-file from the Recent-files list. Removes the item from
-		/// the list if it was not found on disk.
+		/// Opens a 2da-file from the Recent-files list. Removes the it from the
+		/// list if it was not found on disk.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1555,7 +1557,8 @@ namespace yata
 
 		/// <summary>
 		/// Handles it-click on file Close. Also used when a file fails to
-		/// reload and by the FileWatcher.
+		/// reload and by the
+		/// <c><see cref="YataGrid.Watcher">YataGrid.Watcher</see></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
