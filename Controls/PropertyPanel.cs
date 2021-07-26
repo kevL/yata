@@ -60,7 +60,6 @@ namespace yata
 			Size     = new Size(20,20);
 			Location = new Point(823,0);
 			Margin   = new Padding(0);
-
 		}
 		#endregion cTor
 
