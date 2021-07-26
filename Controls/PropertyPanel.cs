@@ -57,9 +57,7 @@ namespace yata
 			Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			UseVisualStyleBackColor = true;
 
-			Size     = new Size(20,20);
-			Location = new Point(823,0);
-			Margin   = new Padding(0);
+			Margin = new Padding(0);
 		}
 		#endregion cTor
 

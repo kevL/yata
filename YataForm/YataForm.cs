@@ -197,8 +197,6 @@ namespace yata
 
 			Controls.Add(btn_ProPanel);
 
-			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
-
 			InitializeComponent();
 
 			Tabs.ContextMenuStrip = tabMenu;
@@ -314,6 +312,9 @@ namespace yata
 
 
 			YataGrid.SetStaticMetrics(this);
+
+			btn_ProPanel.Left = ClientSize.Width - PropertyPanelButton.HEIGHT + 1;
+			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
 			if (Settings._recent != 0)

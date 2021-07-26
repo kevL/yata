@@ -51,8 +51,6 @@ namespace yata
 			DrawMode  = TabDrawMode.OwnerDrawFixed;
 			SizeMode  = TabSizeMode.Fixed;
 
-			Location = new Point(0,24);
-			Size     = new Size(842,408);
 			Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
 			Margin   = new Padding(0); // right got it.
 		}
