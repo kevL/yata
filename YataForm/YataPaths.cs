@@ -1599,6 +1599,11 @@ namespace yata
 
 
 		#region Paths
+		/// <summary>
+		/// Opens a <c>FolderBrowserDialog</c> for groping.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void itclick_PathAll(object sender, EventArgs e)
 		{
 			using (var fbd = new FolderBrowserDialog())
@@ -1607,12 +1612,14 @@ namespace yata
 				fbd.Description = "Find a folder to search through 2da-files for extra info.";
 
 				if (fbd.ShowDialog() == DialogResult.OK)
-				{
 					GropeLabels(fbd.SelectedPath);
-				}
 			}
 		}
 
+		/// <summary>
+		/// Rifles through various .2das for info.
+		/// </summary>
+		/// <param name="directory"></param>
 		internal void GropeLabels(string directory)
 		{
 			// Crafting info ->
