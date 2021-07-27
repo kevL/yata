@@ -666,12 +666,19 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Hides the <c>_editor</c>. This is a generic handler that should be
-		/// invoked when opening a menu on the menubar (iff the menu doesn't
-		/// have its own dropdown-handler).
+		/// Hides the <c><see cref="YataGrid._editor">YataGrid._editor</see></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>This is a generic handler that should be invoked when
+		/// opening a menu on the menubar (iff the menu doesn't have its own
+		/// dropdown-handler).
+		/// 
+		/// 
+		/// Note that the
+		/// <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c> does
+		/// not need to be hidden here since it gets hidden when the
+		/// <c>Propanel</c> loses focus.</remarks>
 		void dropdownopening(object sender, EventArgs e)
 		{
 			if (Table != null && Table._editor.Visible)
@@ -686,12 +693,15 @@ namespace yata
 		#region Methods (create)
 		/// <summary>
 		/// Creates a tab-page and instantiates a table-grid for it.
-		/// @note The filename w/out extension must not be blank since
-		/// YataGrid.Init() is going to use blank as a fallthrough while
-		/// determining the grid's 'InfoType' to call GropeLabels().
 		/// </summary>
 		/// <param name="pfe">path_file_extension</param>
-		/// <param name="read">readonly (default false)</param>
+		/// <param name="read"><c>true</c> to create table as
+		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c></param>
+		/// <remarks>The filename w/out extension must not be blank since
+		/// <c><see cref="YataGrid.Init()">YataGrid.Init()</see></c> is going to
+		/// use blank as a fallthrough while determining the grid's
+		/// <c><see cref="YataGrid.InfoType">YataGrid.InfoType</see></c> to call
+		/// <c><see cref="GropeLabels()">GropeLabels()</see></c>.</remarks>
 		void CreatePage(string pfe, bool read = false)
 		{
 			//logfile.Log("CreatePage() pfe= " + pfe);
@@ -730,7 +740,10 @@ namespace yata
 						recents.Insert(0, it);
 
 						if (recents.Count > Settings._recent)
-							recents.Remove(recents[recents.Count - 1]);
+						{
+							recents.Remove(it = recents[recents.Count - 1]);
+							it.Dispose();
+						}
 					}
 				}
 
@@ -1192,7 +1205,7 @@ namespace yata
 			{
 				int i = -1;
 				var recents = new string[it_Recent.DropDownItems.Count];
-				foreach (ToolStripMenuItem recent in it_Recent.DropDownItems)
+				foreach (ToolStripItem recent in it_Recent.DropDownItems)
 					recents[++i] = recent.Text;
 
 				string dir = Application.StartupPath;
@@ -1237,7 +1250,9 @@ namespace yata
 
 		#region Events (file)
 		/// <summary>
-		/// Handles opening the FileMenu, FolderPresets it and its subits.
+		/// Handles opening <c><see cref="it_MenuFile"/></c> including
+		/// <c><see cref="it_OpenFolder"/></c> and
+		/// <c><see cref="it_Recent"/></c> and their subits.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1263,22 +1278,39 @@ namespace yata
 			}
 
 
+			// folder presets ->
 			_preset = String.Empty;
 
 			ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
+			foreach (ToolStripItem it in presets)
+				it.Dispose();
+
 			presets.Clear();
+
+			ToolStripItem preset;
 			foreach (var dir in Settings._dirpreset)
 			{
 				if (Directory.Exists(dir))
 				{
-					var preset = presets.Add(dir);
+					preset = presets.Add(dir);
 					preset.Click += fileclick_OpenFolder;
 				}
 			}
 			it_OpenFolder.Visible = presets.Count != 0;
 
+			// recently opened files ->
+			ToolStripItemCollection recents = it_Recent.DropDownItems;
+			foreach (ToolStripItem it in recents)
+			{
+				if (!File.Exists(it.Text))
+				{
+					it_Recent.DropDownItems.Remove(it);
+					it.Dispose();
+				}
+			}
 			it_Recent.Visible = it_Recent.DropDownItems.Count != 0;
 		}
+
 
 		/// <summary>
 		/// Handles it-click to open a preset folder.
@@ -1287,9 +1319,7 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_OpenFolder(object sender, EventArgs e)
 		{
-			var it = sender as ToolStripMenuItem;
-			_preset = it.Text;
-
+			_preset = (sender as ToolStripItem).Text;
 			fileclick_Open(null, EventArgs.Empty);
 		}
 
@@ -1375,19 +1405,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens a 2da-file from the Recent-files list. Removes the it from the
-		/// list if it was not found on disk.
+		/// Opens a 2da-file from the recent-files list.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Invalid its get deleted when dropdown opens.</remarks>
 		void fileclick_Recent(object sender, EventArgs e)
 		{
-			var it = sender as ToolStripMenuItem;
-			string pfe = it.Text;
-			if (File.Exists(pfe))
-				CreatePage(pfe);
-			else
-				it_Recent.DropDownItems.Remove(it);
+			CreatePage((sender as ToolStripItem).Text);
 		}
 
 		/// <summary>
@@ -1421,16 +1446,14 @@ namespace yata
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 				bool bypassReadonly;
 
-				var it = sender as ToolStripMenuItem;
-
-				if (it == it_SaveAs)
+				if (sender == it_SaveAs)
 				{
 					_table = Table;
 					// '_pfeT' is set by caller
 					force = (_pfeT == _table.Fullpath);
 					bypassReadonly = false;
 				}
-				else if (it == it_SaveAll)
+				else if (sender == it_SaveAll)
 				{
 					// '_pfeT' and '_table' are set by caller
 					force = false;
@@ -1442,7 +1465,7 @@ namespace yata
 					_pfeT = _table.Fullpath;
 					force = false;
 
-					if (it == it_Save || it == it_tabSave)
+					if (sender == it_Save || sender == it_tabSave)
 						bypassReadonly = false;
 					else
 						bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
