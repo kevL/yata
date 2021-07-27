@@ -8,7 +8,7 @@ namespace yata
 	/// <summary>
 	/// Creates an object that watches for external/disk file-changed events.
 	/// </summary>
-	/// <remarks>Call <c>Dispose()</c> when it goes out of scope:
+	/// <remarks>Call <c>Dispose()</c> when it goes out of scope. See
 	/// <c><see cref="YataForm"/>.CloseTabpage()</c>.</remarks>
 	sealed class FileWatcher
 		:
@@ -51,11 +51,13 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handels this FileWatcher's tick event in C#.
-		/// @note Check for a valid YataGrid since disposal of this watcher
-		/// could be delayed. See CloseTabpage() where the grid is nulled.
+		/// Handels this <c>FileWatcher's</c> <c>Tick</c> event in C#.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Check for a valid <c><see cref="YataGrid"/></c> since
+		/// disposal of this <c>FileWatcher</c> could be delayed. See
+		/// <c><see cref="YataForm"/>.CloseTabpage()</c> where the grid is
+		/// nulled.</remarks>
 		protected override void OnTick(EventArgs e)
 		{
 			if (_grid != null) // ~safety.
@@ -64,6 +66,8 @@ namespace yata
 				{
 					if (!File.Exists(Pfe))
 					{
+						// TODO: Disable 'it_Reload' but reenable it if user chooses to re-save in FileWatcherDialog.
+
 						BypassFileDeleted = true;
 
 						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
