@@ -41,9 +41,8 @@ namespace yata
 		{
 			DrawingControl.SetDoubleBuffered(this);
 
-			Name          = "Tabs";
-			TabIndex      = 3;
-			SelectedIndex = 0;
+			Name     = "Tabs";
+			TabIndex = 3;
 
 			Dock      = DockStyle.Fill;
 			Multiline = true;
