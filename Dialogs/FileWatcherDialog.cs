@@ -48,12 +48,12 @@ namespace yata
 
 			tb_Pfe.BackColor = Colors.TextboxBackground;
 
-			var f = _grid._f;
-			for (int i = 0; i != f.Tabs.TabCount; ++i)
+			YataTabs tabs = _grid._f.Tabs;
+			for (int i = 0; i != tabs.TabCount; ++i)
 			{
-				if ((YataGrid)f.Tabs.TabPages[i].Tag == _grid)
+				if (tabs.TabPages[i].Tag as YataGrid == _grid)
 				{
-					f.Tabs.SelectedIndex = i;
+					tabs.SelectedIndex = i;
 					break;
 				}
 			}
@@ -87,7 +87,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles the resize event.
+		/// Handles the <c>Resize</c> event.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
@@ -99,7 +99,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the formclosing event.
+		/// Handles the <c>FormClosing</c> event.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
