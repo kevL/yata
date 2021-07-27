@@ -155,8 +155,9 @@ namespace yata
 		/// <param name="labels">the cache in which to store the labels</param>
 		/// <param name="it">the path-item on which to toggle Checked</param>
 		/// <param name="col">col in the 2da of the label</param>
-		/// <param name="col1">col in the 2da of an int (default -1)</param>
-		/// <param name="ints">a collection MUST be passed in if col1 is not -1</param>
+		/// <param name="col1">col in the 2da of an int</param>
+		/// <param name="ints">a collection MUST be passed in if
+		/// <paramref name="col1"/> is not <c>-1</c></param>
 		internal static void GropeLabels(string pfe2da,
 										 ICollection<string> labels,
 										 ToolStripMenuItem it,
