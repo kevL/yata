@@ -8,6 +8,27 @@ namespace yata
 {
 	sealed partial class YataForm
 	{
+		#region Methods (static)
+		/// <summary>
+		/// Gets the dialog-filter for <c>.2da</c> files.
+		/// </summary>
+		/// <returns></returns>
+		static string Get2daFilter()
+		{
+			return "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+		}
+
+		/// <summary>
+		/// Gets the dialog-filter for <c>.Tlk</c> files.
+		/// </summary>
+		/// <returns></returns>
+		internal static string GetTlkFilter()
+		{
+			return "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+		}
+		#endregion Methods (static)
+
+
 		#region Crafting info
 		/// <summary>
 		/// Gets a readable string when mouseovering cols in Crafting.2da.
@@ -236,7 +257,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select BaseItems.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -267,7 +288,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Feat.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -298,7 +319,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select ItemPropDef.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -329,7 +350,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Skills.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -360,7 +381,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Spells.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -394,7 +415,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Classes.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -425,7 +446,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Disease.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -456,7 +477,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_AmmoCost.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -487,7 +508,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_Feats.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -519,7 +540,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_OnHitSpells.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -551,7 +572,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_Spells.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -585,7 +606,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select RacialTypes.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1237,7 +1258,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Ranges.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1272,7 +1293,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Categories.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1304,7 +1325,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select SpellTarget.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1546,7 +1567,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select MasterFeats.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1578,7 +1599,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select CombatModes.2da";
-					ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1737,7 +1758,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+					ofd.Filter = GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, it_PathTalkD);
@@ -1762,7 +1783,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+					ofd.Filter = GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, it_PathTalkC, true);

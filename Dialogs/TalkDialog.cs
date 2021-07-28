@@ -255,7 +255,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+					ofd.Filter = YataForm.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, _f.it_PathTalkD);
@@ -269,7 +269,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+					ofd.Filter = YataForm.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, _f.it_PathTalkC, true);

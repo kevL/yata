@@ -1349,7 +1349,7 @@ namespace yata
 				ofd.InitialDirectory = _preset;
 
 				ofd.Title  = "Select a 2da file";
-				ofd.Filter = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+				ofd.Filter = Get2daFilter();
 
 				ofd.ShowReadOnly =
 				ofd.Multiselect  = true;
@@ -1578,7 +1578,7 @@ namespace yata
 				using (var sfd = new SaveFileDialog())
 				{
 					sfd.Title    = "Save as ...";
-					sfd.Filter   = "2da files (*.2da)|*.2da|All files (*.*)|*.*";
+					sfd.Filter   = Get2daFilter();
 					sfd.FileName = Path.GetFileName(Table.Fullpath);
 
 					if (sfd.ShowDialog() == DialogResult.OK)
