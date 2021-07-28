@@ -292,11 +292,8 @@ namespace yata
 //			_editor.Height      = cf. the PropertyPanel editor
 			_editor.KeyDown    += keydown_Editor;
 			_editor.LostFocus  += lostfocus_Editor;
-//			_editor.Leave      += leave_Editor;
 
 			Controls.Add(_editor);
-
-			Leave += leave_Grid;
 
 			AllowDrop = true;
 			DragEnter += grid_DragEnter;
@@ -503,8 +500,6 @@ namespace yata
 
 			if (_f.WindowState != FormWindowState.Minimized)
 				_f.IsMin = false;
-
-//			base.OnResize(e);
 		}
 
 		/// <summary>
@@ -1802,8 +1797,6 @@ namespace yata
 					e.IsInputKey = true; // as opposed to 'IsDialogKey' ... I'd guess, it's really not transparent.
 					break;
 			}
-
-//			base.OnPreviewKeyDown(e);
 		}
 
 		/// <summary>
@@ -2175,8 +2168,6 @@ namespace yata
 						  | INVALID_FROZ
 						  | EnsureDisplayed(sel));
 			}
-
-//			base.OnKeyDown(e);
 		}
 
 		/// <summary>
@@ -2317,12 +2308,12 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles KeyDown events in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Alt is pressed while
-		/// editing.
+		/// Handles <c>KeyDown</c> events for the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Works around dweeby .NET behavior if Alt is pressed while
+		/// editing.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
 			//logfile.Log("YataGrid.keydown_Editor() e.KeyData= " + e.KeyData);
@@ -2331,43 +2322,29 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the editor losing focus.
-		/// @note This funct is a partial catchall for other places where the
-		/// editor needs to hide.
+		/// Handles the <c>LostFocus</c> event for the
+		/// <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>This funct is a partial catchall for other places where the
+		/// <c>_editor</c> needs to hide.</remarks>
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
 			_editor.Visible = false;
 			Invalidator(INVALID_GRID);
 		}
 
-/*		/// <summary>
-		/// Handles the Leave event in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/PageDown is
-		/// pressed while editing.
-		/// @note Not sure that this is needed anymore: Ctrl+PageUp/PageDown
-		/// just hides the editor.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void leave_Editor(object sender, EventArgs e)
-		{
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
-				_editor.Focus(); // ie. don't leave editor.
-		} */
 
 		/// <summary>
 		/// Handles the <c>Leave</c> event for the grid - hides the
 		/// <c><see cref="_editor"/></c> if it is visible.
 		/// </summary>
-		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		/// <remarks>Obsolete: but it doesn't fire if the tabpage changes w/
 		/// <c>[Ctrl+PageUp]/[Ctrl+PageDown]</c>. Lovely /explode - can be fixed
 		/// in <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
-		void leave_Grid(object sender, EventArgs e)
+		protected override void OnLeave(EventArgs e)
 		{
 			if (_editor.Visible)
 			{
@@ -2952,8 +2929,6 @@ namespace yata
 //			_f.it_Lower    .Enabled = // NOTE: Might not be needed anyway if .net checks
 //			_f.it_Upper    .Enabled = // dropdownopening before allowing a shortcut to fire.
 //			_f.it_Apply    .Enabled = !Readonly && anyCellSelected();
-
-//			base.OnMouseClick(e);
 		}
 
 		/// <summary>
@@ -2965,21 +2940,13 @@ namespace yata
 		/// shall (sic) enter its edit-state.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
-			//logfile.Log("OnMouseDoubleClick() _allowdoubleclick= " + _double);
 			if (_double)
-//				&& e.Button == MouseButtons.Left // is true if '_double' is true.
-//				&& !Settings._strict
 			{
 				if (!_cell.selected)
-				{
-					//logfile.Log(". . cell not selected - do click");
 					OnMouseClick(e);
-				}
-				//logfile.Log(". do click");
+
 				OnMouseClick(e);
 			}
-			//logfile.Log();
-//			base.OnMouseDoubleClick(e);
 		}
 
 		/// <summary>
@@ -3125,8 +3092,6 @@ namespace yata
 				}
 				_f.PrintInfo(); // clear
 			}
-
-//			base.OnMouseMove(e);
 		}
 
 
