@@ -629,7 +629,7 @@ namespace yata
 		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
 		/// not fire events that can change the table at all.
 		/// </summary>
-		internal void ReadonlyError()
+		void ReadonlyError()
 		{
 			MessageBox.Show("The 2da-file is opened as readonly.",
 							" burp",
@@ -642,27 +642,36 @@ namespace yata
 		/// Checks if there is a non-readonly table open and optionally calls
 		/// all tables' <c>Leave</c> event handler.
 		/// </summary>
-		/// <param name="leave"><c>true</c> to fire the <c>Leave</c> event on
-		/// all tables</param>
-		/// <returns><c>true</c> to allow SaveAll</returns>
-		bool allowSaveAll(bool leave = false)
+		/// <returns><c>true</c> if SaveAll is allowed</returns>
+		bool AllowSaveAll()
 		{
-			bool allow = false;
 			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
-				_table = Tabs.TabPages[i].Tag as YataGrid;
-				if (!_table.Readonly)
-				{
-					allow = true;
-					if (!leave) break;
-				}
-
-				if (leave)
-					_table.leave_Grid(null, EventArgs.Empty);
+				if (!(Tabs.TabPages[i].Tag as YataGrid).Readonly)
+					return true;
 			}
-			_table = null;
-			return allow;
+			return false;
 		}
+
+/*		/// <summary>
+		/// Hides a visible editor when the tabpage changes.
+		/// </summary>
+		/// <remarks>This is a redundant check jic user changes the tabpage w/
+		/// <c>[Ctrl+PageUp]/[Ctrl+PageDown]</c>. Typically each
+		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>Leave</c> handler
+		/// takes care of it.</remarks>
+		void HideEditor()
+		{
+			YataGrid table;
+			for (int i = 0; i != Tabs.TabCount; ++i)
+			{
+				if ((table = Tabs.TabPages[i].Tag as YataGrid)._editor.Visible)
+				{
+					table._editor.Visible = false;
+					break;
+				}
+			}
+		} */
 		#endregion Methods
 
 
@@ -826,6 +835,14 @@ namespace yata
 
 				Obfuscate(false);
 
+				// NOTE: Hiding a visible editor when user changes the tabpage
+				// is usually handled by YataGrid's Leave event; but
+				// [Ctrl+PageUp]/[Ctrl+PageDown] will change the tabpage without
+				// firing the Leave event. So do this typically redundant check
+				// ->
+//				HideEditor();
+				// NOTE: Appears to no longer be needed.
+
 				// NOTE: Subits under Menuits don't really need to be detered
 				// here; they all shall have dropdowns that deter their needs
 				// and if they have hotkeys the handlers shall be conditioned to
@@ -853,7 +870,7 @@ namespace yata
 
 				it_Reload     .Enabled = File.Exists(Table.Fullpath);
 				it_Save       .Enabled = !Table.Readonly;
-				it_SaveAll    .Enabled = allowSaveAll(true);
+				it_SaveAll    .Enabled = AllowSaveAll();
 				it_SaveAs     .Enabled =
 				it_Readonly   .Enabled =
 				it_Close      .Enabled =
@@ -1268,7 +1285,7 @@ namespace yata
 				}
 
 				it_Reload .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll.Enabled = allowSaveAll();
+				it_SaveAll.Enabled = AllowSaveAll();
 			}
 			else
 			{
@@ -1593,11 +1610,19 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file SaveAll.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_SaveAll"/></c></item>
+		/// </list>
+		/// </param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|SaveAll <c>[Ctrl+a]</c></item>
+		/// </list></remarks>
 		void fileclick_SaveAll(object sender, EventArgs e)
 		{
-			if (allowSaveAll())
+			if (AllowSaveAll())
 			{
 				IsSaveAll = true;
 

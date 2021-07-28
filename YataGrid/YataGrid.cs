@@ -2364,10 +2364,10 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		/// <remarks>But it doesn't fire if the tabpage changes w/ key
-		/// Ctrl+PageUp/PageDown. Lovely /explode - is fixed in
-		/// <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
-		internal void leave_Grid(object sender, EventArgs e)
+		/// <remarks>Obsolete: but it doesn't fire if the tabpage changes w/
+		/// <c>[Ctrl+PageUp]/[Ctrl+PageDown]</c>. Lovely /explode - can be fixed
+		/// in <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
+		void leave_Grid(object sender, EventArgs e)
 		{
 			if (_editor.Visible)
 			{
