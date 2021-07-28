@@ -42,8 +42,6 @@ namespace yata
 			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
 															 new Point(0, Height),
 															 Color.Lavender, Color.MediumOrchid);
-
-//			base.OnResize(eventargs);
 		}
 
 		/// <summary>
@@ -71,8 +69,6 @@ namespace yata
 										   Width, Height);
 				_grid.LabelColheads();
 			}
-
-//			base.OnPaint(e);
 		}
 
 
@@ -111,8 +107,6 @@ namespace yata
 				}
 				Cursor = Cursors.Default;
 			}
-
-//			base.OnMouseMove(e);
 		}
 
 		/// <summary>
@@ -132,8 +126,6 @@ namespace yata
 			_grid.Invalidator(invalid);
 
 			Grab = (Cursor == Cursors.VSplit);
-
-//			base.OnMouseDown(e);
 		}
 
 		/// <summary>
@@ -177,8 +169,6 @@ namespace yata
 				}
 			}
 			_grid.Select();
-
-//			base.OnMouseUp(e);
 		}
 	}
 
@@ -225,8 +215,6 @@ namespace yata
 										   Width - 1, Height);
 				_grid.LabelRowheads();
 			}
-
-//			base.OnPaint(e);
 		}
 	}
 
@@ -268,8 +256,6 @@ namespace yata
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 				_grid.PaintFrozenPanel();
 			}
-
-//			base.OnPaint(e);
 		}
 
 		/// <summary>
@@ -284,8 +270,6 @@ namespace yata
 				_grid.Invalidator(YataGrid.INVALID_GRID);
 			}
 			_grid.Select();
-
-//			base.OnMouseClick(e);
 		}
 	}
 }

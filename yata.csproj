@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\PropertyPanel.cs" />
+    <Compile Include="Controls\YataPanels.cs" />
     <Compile Include="Controls\YataTabs.cs" />
     <Compile Include="Dialogs\About.cs" />
     <Compile Include="Dialogs\ClipboardF.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Statics\logger.cs" />
     <Compile Include="Statics\Settings.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
-    <Compile Include="Statics\YataPanels.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataForm\YataForm.cs" />
     <Compile Include="YataForm\YataForm.Designer.cs">
