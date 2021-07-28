@@ -9,7 +9,7 @@ namespace yata
 	/// Creates an object that watches for external/disk file-changed events.
 	/// </summary>
 	/// <remarks>Call <c>Dispose()</c> when it goes out of scope. See
-	/// <c><see cref="YataForm"/>.CloseTabpage()</c>.</remarks>
+	/// <c><see cref="YataForm"/>.ClosePage()</c>.</remarks>
 	sealed class FileWatcher
 		:
 			Timer
@@ -56,8 +56,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>Check for a valid <c><see cref="YataGrid"/></c> since
 		/// disposal of this <c>FileWatcher</c> could be delayed. See
-		/// <c><see cref="YataForm"/>.CloseTabpage()</c> where the grid is
-		/// nulled.</remarks>
+		/// <c><see cref="YataForm"/>.ClosePage()</c> where the grid is nulled.</remarks>
 		protected override void OnTick(EventArgs e)
 		{
 			if (_grid != null) // ~safety.

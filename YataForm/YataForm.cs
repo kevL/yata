@@ -1024,7 +1024,7 @@ namespace yata
 
 		#region Methods (tabs)
 		/// <summary>
-		/// Sets the width of the tabs on the TabControl.
+		/// Sets the width of the tabs on <c><see cref="YataTabs"/></c>.
 		/// </summary>
 		void SetTabSize()
 		{
@@ -1055,7 +1055,7 @@ namespace yata
 		/// specified tab-page is removed from the tab-collection.
 		/// </summary>
 		/// <param name="tab">the tab-page with which to deal</param>
-		void CloseTabpage(TabPage tab)
+		void ClosePage(TabPage tab)
 		{
 			_table = tab.Tag as YataGrid;
 			_table.Watcher.Dispose();
@@ -1239,8 +1239,8 @@ namespace yata
 			YataGrid table;
 			foreach (TabPage page in Tabs.TabPages)
 			{
-				table = page.Tag as YataGrid;
-				if (table.Changed && (!excludecurrent || table != Table))
+				if ((table = page.Tag as YataGrid).Changed
+					&& (!excludecurrent || table != Table))
 				{
 					tables.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
 				}
@@ -1384,7 +1384,7 @@ namespace yata
 		{
 			if (Table != null && File.Exists(Table.Fullpath)
 				&& (!Table.Changed
-					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to reload ...",
 									   " warning",
 									   MessageBoxButtons.YesNo,
 									   MessageBoxIcon.Warning,
@@ -1416,7 +1416,7 @@ namespace yata
 				else
 				{
 					Table.Changed = false; // bypass the close-tab warning.
-					fileclick_CloseTab(null, EventArgs.Empty);
+					fileclick_CloseTab(sender, e);
 				}
 
 				if (Table != null)
@@ -1483,7 +1483,7 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
-			if (Table != null) // safety I believe.
+			if (Table != null) // safety.
 			{
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 				bool bypassReadonly;
@@ -1645,7 +1645,7 @@ namespace yata
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
-				CloseTabpage(Tabs.SelectedTab);
+				ClosePage(Tabs.SelectedTab);
 
 				if (Tabs.TabCount == 0)
 					Table = null;
@@ -1689,7 +1689,7 @@ namespace yata
 				Table = null;
 
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-					CloseTabpage(Tabs.TabPages[tab]);
+					ClosePage(Tabs.TabPages[tab]);
 
 				SetTitlebarText();
 			}
@@ -4097,7 +4097,7 @@ namespace yata
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 				{
 					if (tab != Tabs.SelectedIndex)
-						CloseTabpage(Tabs.TabPages[tab]);
+						ClosePage(Tabs.TabPages[tab]);
 				}
 
 				SetTitlebarText();

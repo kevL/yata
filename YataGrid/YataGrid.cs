@@ -1174,7 +1174,7 @@ namespace yata
 						Info = InfoType.INFO_FEAT;
 						goto case "";
 
-					case "":									// NOTE: YataForm.CreateTabPage() does not allow a blank
+					case "":									// NOTE: YataForm.CreatePage() does not allow a blank
 						foreach (var dir in Settings._pathall)	// filename to load so this should be (reasonably) safe.
 							_f.GropeLabels(dir);
 						break;
