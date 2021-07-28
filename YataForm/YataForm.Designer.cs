@@ -563,6 +563,7 @@ namespace yata
 			this.it_Recent.Name = "it_Recent";
 			this.it_Recent.Size = new System.Drawing.Size(181, 22);
 			this.it_Recent.Text = "Recen&t";
+			this.it_Recent.Visible = false;
 			// 
 			// separator_29
 			// 

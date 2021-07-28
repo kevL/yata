@@ -351,13 +351,14 @@ namespace yata
 			if (File.Exists(pfe))
 			{
 				ToolStripItemCollection recents = it_Recent.DropDownItems;
+				ToolStripItem it;
 
 				string[] lines = File.ReadAllLines(pfe);
 				foreach (string line in lines)
 				{
 					if (File.Exists(line))
 					{
-						var it = new ToolStripMenuItem(line);
+						it = new ToolStripMenuItem(line);
 						it.Click += fileclick_Recent;
 						recents.Add(it);
 
@@ -1268,47 +1269,50 @@ namespace yata
 
 				it_Reload .Enabled = File.Exists(Table.Fullpath);
 				it_SaveAll.Enabled = allowSaveAll();
-				it_Save   .Enabled = !Table.Readonly;
 			}
 			else
 			{
 				it_Reload .Enabled =
-				it_SaveAll.Enabled =
-				it_Save   .Enabled = false;
+				it_SaveAll.Enabled = false;
 			}
 
 
 			// folder presets ->
-			_preset = String.Empty;
-
-			ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
-			foreach (ToolStripItem it in presets)
-				it.Dispose();
-
-			presets.Clear();
-
-			ToolStripItem preset;
-			foreach (var dir in Settings._dirpreset)
+			if (Settings._dirpreset.Count != 0)
 			{
-				if (Directory.Exists(dir))
-				{
-					preset = presets.Add(dir);
-					preset.Click += fileclick_OpenFolder;
-				}
-			}
-			it_OpenFolder.Visible = presets.Count != 0;
+				_preset = String.Empty;
 
-			// recently opened files ->
-			ToolStripItemCollection recents = it_Recent.DropDownItems;
-			foreach (ToolStripItem it in recents)
-			{
-				if (!File.Exists(it.Text))
+				ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
+				for (int i = presets.Count - 1; i != -1; --i)
+					presets[i].Dispose();
+
+				presets.Clear();
+
+				ToolStripItem preset;
+				foreach (var dir in Settings._dirpreset)
 				{
-					it_Recent.DropDownItems.Remove(it);
-					it.Dispose();
+					if (Directory.Exists(dir))
+					{
+						preset = presets.Add(dir);
+						preset.Click += fileclick_OpenFolder;
+					}
 				}
+				it_OpenFolder.Visible = presets.Count != 0;
 			}
-			it_Recent.Visible = it_Recent.DropDownItems.Count != 0;
+
+			if (Settings._recent != 0) // recent files ->
+			{
+				ToolStripItemCollection recents = it_Recent.DropDownItems;
+				foreach (ToolStripItem it in recents)
+				{
+					if (!File.Exists(it.Text))
+					{
+						recents.Remove(it);
+						it.Dispose();
+					}
+				}
+				it_Recent.Visible = recents.Count != 0;
+			}
 		}
 
 
@@ -1425,7 +1429,7 @@ namespace yata
 		/// dialog.</remarks>
 		void fileclick_Readonly(object sender, EventArgs e)
 		{
-			Table.Readonly = it_Readonly.Checked;
+			it_Save.Enabled = !(Table.Readonly = it_Readonly.Checked);
 			Tabs.Invalidate();
 		}
 
