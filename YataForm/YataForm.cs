@@ -319,7 +319,7 @@ namespace yata
 
 
 			if (Settings._recent != 0)
-				InitializeRecentFiles(); // init recents before (potentially) loading a table from FileExplorer
+				CreateRecentfilesSubmenuItems(); // init recents before (potentially) loading a table from FileExplorer
 
 			if (File.Exists(pfe_load)) // load file from FileExplorer ...
 				CreatePage(pfe_load);
@@ -342,9 +342,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Initializes the recent-files list.
+		/// Initializes the recent-files list from entries in the user-file
+		/// "recent.cfg".
 		/// </summary>
-		void InitializeRecentFiles()
+		void CreateRecentfilesSubmenuItems()
 		{
 			string dir = Application.StartupPath;
 			string pfe = Path.Combine(dir, "recent.cfg");
@@ -1251,11 +1252,10 @@ namespace yata
 
 		#region Events (file)
 		/// <summary>
-		/// Handles opening <c><see cref="it_MenuFile"/></c> including
-		/// <c><see cref="it_OpenFolder"/></c> and
-		/// <c><see cref="it_Recent"/></c> and their subits.
+		/// Handles opening the File menu along with the preset-dirs and
+		/// recent-files submenus.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_MenuFile"/></c></param>
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
@@ -1277,7 +1277,7 @@ namespace yata
 			}
 
 
-			// folder presets ->
+			// directory presets ->
 			if (Settings._dirpreset.Count != 0)
 			{
 				_preset = String.Empty;
@@ -1319,19 +1319,29 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to open a preset folder.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_OpenFolder"/></c> subits</param>
 		/// <param name="e"></param>
 		void fileclick_OpenFolder(object sender, EventArgs e)
 		{
 			_preset = (sender as ToolStripItem).Text;
-			fileclick_Open(null, EventArgs.Empty);
+			fileclick_Open(sender, e);
 		}
 
 		/// <summary>
 		/// Handles it-click to open a folder. Shows an <c>OpenFileDialog</c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Open"/></c></item>
+		/// <item><c><see cref="it_OpenFolder"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|Open <c>[Ctrl+o]</c></item>
+		/// <item><c><see cref="fileclick_OpenFolder()">fileclick_OpenFolder()</see></c></item>
+		/// </list></remarks>
 		void fileclick_Open(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
@@ -1357,8 +1367,19 @@ namespace yata
 		/// Handles it-click to reload the current table. Requests
 		/// user-confirmation if data has changed etc.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Reload"/></c></item>
+		/// <item><c><see cref="it_tabReload"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|Reload <c>[Ctrl+r]</c></item>
+		/// <item>tab|Reload</item>
+		/// <item><c><see cref="FileWatcherDialog"/>.OnFormClosing()</c></item>
+		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
 			if (Table != null && File.Exists(Table.Fullpath)
@@ -1411,9 +1432,9 @@ namespace yata
 		/// <summary>
 		/// Opens a 2da-file from the recent-files list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Recent"/></c> subits</param>
 		/// <param name="e"></param>
-		/// <remarks>Invalid its get deleted when dropdown opens.</remarks>
+		/// <remarks>Invalid subits get deleted when dropdown opens.</remarks>
 		void fileclick_Recent(object sender, EventArgs e)
 		{
 			CreatePage((sender as ToolStripItem).Text);
@@ -1423,10 +1444,16 @@ namespace yata
 		/// Allows user to set the current table's readonly flag after it has
 		/// been opened.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Readonly"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>The readonly setter appears otherwise only in the file-open
-		/// dialog.</remarks>
+		/// dialog.
+		/// 
+		/// 
+		/// Called by
+		/// <list type="bullet">
+		/// <item>File|Readonly <c>[F12]</c></item>
+		/// </list></remarks>
 		void fileclick_Readonly(object sender, EventArgs e)
 		{
 			it_Save.Enabled = !(Table.Readonly = it_Readonly.Checked);
@@ -1437,12 +1464,23 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to save the current Table.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Save"/></c></item>
+		/// <item><c><see cref="it_tabSave"/></c></item>
+		/// <item><c><see cref="it_SaveAs"/></c></item>
+		/// <item><c><see cref="it_SaveAll"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks>This is also used by
-		/// <c><see cref="fileclick_SaveAs()">fileclick_SaveAs()</see></c>,
-		/// <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c>,
-		/// and <c><see cref="FileWatcherDialog"></see>.OnFormClosing</c>.</remarks>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|Save <c>[Ctrl+s]</c></item>
+		/// <item>tab|Save</item>
+		/// <item>File|SaveAs <c>[Ctrl+e]</c> <c><see cref="fileclick_SaveAs()">fileclick_SaveAs()</see></c></item>
+		/// <item>File|SaveAll <c>[Ctrl+a]</c> <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c></item>
+		/// <item><c><see cref="FileWatcherDialog"></see>.OnFormClosing</c></item>
+		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
 			if (Table != null) // safety I believe.
