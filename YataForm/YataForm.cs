@@ -1497,7 +1497,7 @@ namespace yata
 				}
 				else if (sender == it_SaveAll)
 				{
-					// '_pfeT' and '_table' are set by caller
+					// '_table' and '_pfeT' are set by caller
 					force = false;
 					bypassReadonly = false;
 				}
@@ -1561,11 +1561,19 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file SaveAs.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_SaveAs"/></c></item>
+		/// </list>
+		/// </param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|SaveAs <c>[Ctrl+e]</c></item>
+		/// </list></remarks>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				using (var sfd = new SaveFileDialog())
 				{
