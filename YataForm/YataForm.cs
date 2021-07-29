@@ -1284,14 +1284,10 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				it_Reload .Enabled = File.Exists(Table.Fullpath);
-				it_SaveAll.Enabled = AllowSaveAll();
+				it_Reload.Enabled = File.Exists(Table.Fullpath);
 			}
 			else
-			{
-				it_Reload .Enabled =
-				it_SaveAll.Enabled = false;
-			}
+				it_Reload.Enabled = false;
 
 
 			// directory presets ->
@@ -1473,7 +1469,9 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_Readonly(object sender, EventArgs e)
 		{
-			it_Save.Enabled = !(Table.Readonly = it_Readonly.Checked);
+			it_Save   .Enabled = !(Table.Readonly = it_Readonly.Checked);
+			it_SaveAll.Enabled = AllowSaveAll();
+
 			Tabs.Invalidate();
 		}
 
