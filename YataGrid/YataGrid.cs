@@ -18,6 +18,33 @@ namespace yata
 		:
 			Control
 	{
+		/// <summary>
+		/// Do not implement <c>IDisposable</c> here.
+		/// </summary>
+		/// <remarks>Because I hate that 'pattern'.</remarks>
+		internal void DisposeWatcher()
+		{
+			Watcher.Dispose();
+
+//			TooltipSort.Dispose(); // is static.
+
+			// these are added to Controls so shouldn't need to be explicitly disposed ->
+//			_editor.Dispose();
+
+//			_scrollVert.Dispose();
+//			_scrollHori.Dispose();
+
+//			_panelCols .Dispose();
+//			_panelRows .Dispose();
+//			FrozenPanel.Dispose();
+
+			// these are added to _panelCols.Controls so shouldn't need to be explicitly disposed ->
+//			_labelid    .Dispose();
+//			_labelfirst .Dispose();
+//			_labelsecond.Dispose();
+		}
+
+
 		#region Enums
 		internal enum InfoType
 		{
@@ -137,7 +164,7 @@ namespace yata
 		/// The text-edit box. Note there is only one (1) editor that floats to
 		/// wherever it's required.
 		/// </summary>
-		internal readonly TextBox _editor = new TextBox();
+		internal readonly TextBox _editor = new TextBox(); // TODO: static
 
 		/// <summary>
 		/// The cell that's currently under the editbox.
@@ -385,7 +412,7 @@ namespace yata
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
-			var pt = PointToClient(Cursor.Position);
+			Point pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
@@ -422,7 +449,7 @@ namespace yata
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
-			var pt = PointToClient(Cursor.Position);
+			Point pt = PointToClient(Cursor.Position);
 			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
@@ -1039,7 +1066,7 @@ namespace yata
 					cells[c] = gs.Stars;
 
 				_rows.Add(cells);
-				return LOADRESULT_CHANGED; // used to flag the Table as changed.
+				return LOADRESULT_CHANGED; // flag the Table as changed
 			}
 
 			return LOADRESULT_TRUE;
@@ -4036,7 +4063,7 @@ namespace yata
 
 
 		#region Sort
-		ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
+		static ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
 
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.

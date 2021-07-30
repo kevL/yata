@@ -114,7 +114,7 @@ namespace yata
 
 				case DialogResult.Abort:	// btn_Close2da
 					_grid.Changed = false;
-					_grid._f.fileclick_CloseTab(null, EventArgs.Empty);
+					_grid._f.fileclick_ClosePage(null, EventArgs.Empty);
 					break;
 
 				case DialogResult.Yes:		// btn_Action

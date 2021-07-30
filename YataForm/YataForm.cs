@@ -778,7 +778,6 @@ namespace yata
 					tab.Tag = Table;
 
 					tab.Text = Path.GetFileNameWithoutExtension(pfe);
-					SetTabSize();
 
 					tab.Controls.Add(Table);
 					Tabs.SelectedTab = tab;
@@ -829,11 +828,11 @@ namespace yata
 		/// <param name="e"></param>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			//logfile.Log("YataForm.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
+
 			if (Tabs.SelectedIndex != -1)
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
-
-				Obfuscate(false);
 
 				// NOTE: Hiding a visible editor when user changes the tabpage
 				// is usually handled by YataGrid's Leave event; but
@@ -913,9 +912,15 @@ namespace yata
 
 				if (_fdiffer != null)
 					_fdiffer.EnableGotoButton(true);
+
+				SetTabSize();
+
+				Obfuscate(false);
 			}
 			else
 			{
+				Table = null;
+
 				Obfuscate();
 
 				btn_ProPanel  .Visible =
@@ -1075,7 +1080,9 @@ namespace yata
 		void ClosePage(TabPage tab)
 		{
 			_table = tab.Tag as YataGrid;
-			_table.Watcher.Dispose();
+
+			_table.DisposeWatcher();
+			_table.Dispose();
 
 			if      (_table == _diff1) _diff1 = null;
 			else if (_table == _diff2) _diff2 = null;
@@ -1084,6 +1091,7 @@ namespace yata
 				_fdiffer.Close();
 
 			Tabs.TabPages.Remove(tab);
+			tab.Dispose();
 			_table = null;
 
 			YataGrid.metricStaticHeads(this);
@@ -1429,7 +1437,7 @@ namespace yata
 				else
 				{
 					Table.Changed = false; // bypass the close-tab warning.
-					fileclick_CloseTab(sender, e);
+					fileclick_ClosePage(sender, e);
 				}
 
 				if (Table != null)
@@ -1652,29 +1660,36 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click on file Close. Also used when a file fails to
-		/// reload and by the
-		/// <c><see cref="YataGrid.Watcher">YataGrid.Watcher</see></c>.
+		/// Handles it-click on file Close.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Close"/></c></item>
+		/// <item><c><see cref="it_tabClose"/></c></item>
+		/// <item><c><see cref="it_Reload"/></c></item>
+		/// <item><c><see cref="it_tabReload"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
-		internal void fileclick_CloseTab(object sender, EventArgs e)
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|Close <c>[F4]</c></item>
+		/// <item>tab|Save</item>
+		/// <item>File|Reload <c>[Ctrl+r]</c> <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
+		/// <item>tab|Reload</item>
+		/// <item><c><see cref="FileWatcherDialog"></see>.OnFormClosing</c></item>
+		/// </list></remarks>
+		internal void fileclick_ClosePage(object sender, EventArgs e)
 		{
 			if (Table != null
 				&& (!Table.Changed
-					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
+					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to close ...",
 									   " warning",
 									   MessageBoxButtons.YesNo,
 									   MessageBoxIcon.Warning,
 									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
 			{
 				ClosePage(Tabs.SelectedTab);
-
-				if (Tabs.TabCount == 0)
-					Table = null;
-
-				SetTabSize();
-				SetTitlebarText();
 			}
 		}
 
@@ -1687,7 +1702,7 @@ namespace yata
 		{
 			bool close = true;
 
-			var tables = GetChangedTables();
+			List<string> tables = GetChangedTables();
 			if (tables.Count != 0)
 			{
 				string info = String.Empty;
@@ -1700,7 +1715,7 @@ namespace yata
 										+ Environment.NewLine + Environment.NewLine
 										+ info
 										+ Environment.NewLine
-										+ "Okay to exit ...",
+										+ "Okay to close ...",
 										" warning",
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Warning,
@@ -1709,12 +1724,8 @@ namespace yata
 
 			if (close)
 			{
-				Table = null;
-
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 					ClosePage(Tabs.TabPages[tab]);
-
-				SetTitlebarText();
 			}
 		}
 
@@ -4106,7 +4117,7 @@ namespace yata
 										+ Environment.NewLine + Environment.NewLine
 										+ info
 										+ Environment.NewLine
-										+ "Okay to exit ...",
+										+ "Okay to close ...",
 										" warning",
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Warning,
@@ -4123,8 +4134,9 @@ namespace yata
 						ClosePage(Tabs.TabPages[tab]);
 				}
 
-				SetTitlebarText();
 				SetTabSize();
+
+				it_SaveAll.Enabled = AllowSaveAll();
 
 				DrawingControl.ResumeDrawing(this);
 			}

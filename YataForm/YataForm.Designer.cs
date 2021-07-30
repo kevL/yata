@@ -407,7 +407,7 @@ namespace yata
 			this.it_tabClose.Size = new System.Drawing.Size(138, 22);
 			this.it_tabClose.Text = "Close";
 			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabClose.Click += new System.EventHandler(this.fileclick_CloseTab);
+			this.it_tabClose.Click += new System.EventHandler(this.fileclick_ClosePage);
 			// 
 			// it_tabCloseAll
 			// 
@@ -624,7 +624,7 @@ namespace yata
 			this.it_Close.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.it_Close.Size = new System.Drawing.Size(181, 22);
 			this.it_Close.Text = "&Close";
-			this.it_Close.Click += new System.EventHandler(this.fileclick_CloseTab);
+			this.it_Close.Click += new System.EventHandler(this.fileclick_ClosePage);
 			// 
 			// it_CloseAll
 			// 
