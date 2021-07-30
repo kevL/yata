@@ -1361,7 +1361,8 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>File|Open <c>[Ctrl+o]</c></item>
-		/// <item><c><see cref="fileclick_OpenFolder()">fileclick_OpenFolder()</see></c></item>
+		/// <item>File|Open@Folder
+		/// <c><see cref="fileclick_OpenFolder()">fileclick_OpenFolder()</see></c></item>
 		/// </list></remarks>
 		void fileclick_Open(object sender, EventArgs e)
 		{
@@ -1674,9 +1675,11 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>File|Close <c>[F4]</c></item>
-		/// <item>tab|Save</item>
-		/// <item>File|Reload <c>[Ctrl+r]</c> <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
-		/// <item>tab|Reload</item>
+		/// <item>tab|Close</item>
+		/// <item>File|Reload <c>[Ctrl+r]</c>
+		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
+		/// <item>tab|Reload 
+		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
 		/// <item><c><see cref="FileWatcherDialog"></see>.OnFormClosing</c></item>
 		/// </list></remarks>
 		internal void fileclick_ClosePage(object sender, EventArgs e)
@@ -1696,8 +1699,18 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file CloseAll.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_CloseAll"/></c></item>
+		/// <item><c><see cref="it_tabCloseAll"/></c></item>
+		/// </list>
+		/// </param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|CloseAll</item>
+		/// <item>tab|CloseAll</item>
+		/// </list></remarks>
 		void fileclick_CloseAllTabs(object sender, EventArgs e)
 		{
 			bool close = true;
