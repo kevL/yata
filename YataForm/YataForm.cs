@@ -1746,8 +1746,16 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file Quit.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Quit"/></c></item>
+		/// </list>
+		/// </param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>File|Quit</item>
+		/// </list></remarks>
 		void fileclick_Quit(object sender, EventArgs e)
 		{
 			Close(); // let yata_Closing() handle it ...
