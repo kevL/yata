@@ -1732,7 +1732,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
-		/// <item>File|Quit</item>
+		/// <item>File|Quit <c>[Ctrl+q]</c></item>
 		/// </list></remarks>
 		void fileclick_Quit(object sender, EventArgs e)
 		{
@@ -2099,17 +2099,11 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-//				it_Undo.Enabled = Table._ur.CanUndo;
-//				it_Redo.Enabled = Table._ur.CanRedo;
-
 				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 			}
 			else
 			{
-//				it_Undo           .Enabled =
-//				it_Redo           .Enabled =
-
 				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled = false;
 			}
@@ -2119,11 +2113,15 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to undo the previous operation if possible.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Undo"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Undo <c>[Ctrl+z]</c></item>
+		/// </list></remarks>
 		void editclick_Undo(object sender, EventArgs e)
 		{
-			if (Table != null)// && Table._ur.CanUndo
+			if (Table != null)
 			{
 				Table._ur.Undo();
 				it_Undo.Enabled = Table._ur.CanUndo;
@@ -2134,11 +2132,15 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to redo the previous operation if possible.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Redo"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Redo <c>[Ctrl+y]</c></item>
+		/// </list></remarks>
 		void editclick_Redo(object sender, EventArgs e)
 		{
-			if (Table != null)// && Table._ur.CanRedo
+			if (Table != null)
 			{
 				Table._ur.Redo();
 				it_Redo.Enabled = Table._ur.CanRedo;
