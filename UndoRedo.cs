@@ -5,12 +5,14 @@ using System.Collections.Generic;
 namespace yata
 {
 	/// <summary>
-	/// Restorables contain values for the action that's about to be performed
-	/// on Undo/Redo. Each Restorable contains an Undo-state and a Redo-state;
-	/// they toggle back and forth depending on the action, Undo() or Redo().
-	/// @note Classvar '_it' is the state that is being undone/redone; it is
-	/// used by the action that's invoked.
+	/// <c>Restorables</c> contain values for the action that's about to be
+	/// performed on Undo/Redo. Each <c>Restorable</c> contains an Undo-state
+	/// and a Redo-state; they toggle back and forth depending on the action,
+	/// <c><see cref="UndoRedo.Undo()">UndoRedo.Undo()</see></c> or
+	/// <c><see cref="UndoRedo.Redo()">UndoRedo.Redo()</see></c>.
 	/// </summary>
+	/// <remarks><c><see cref="UndoRedo"/>._it</c> is the state that is being
+	/// undone/redone; it is used by the action that's invoked.</remarks>
 	struct Restorable
 	{
 		internal UndoRedo.UrType RestoreType;
@@ -60,8 +62,9 @@ namespace yata
 		readonly Stack<Restorable> Redoables = new Stack<Restorable>(); // states that can be Redone to
 
 		/// <summary>
-		/// '_it' is the state that the user has most recently invoked by either
-		/// Undo() or Redo().
+		/// <c>_it</c> is the state that the user has most recently invoked by
+		/// either <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		Restorable _it;
 		#endregion Fields
@@ -84,7 +87,8 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="grid">a YataGrid that this UndoRedo will track changes for</param>
+		/// <param name="grid">a <c><see cref="YataGrid"/></c> that this
+		/// <c>UndoRedo</c> will track changes for</param>
 		internal UndoRedo(YataGrid grid)
 		{
 			_grid = grid;
@@ -94,9 +98,10 @@ namespace yata
 
 		#region Methods (static)
 		/// <summary>
-		/// Instantiates a restorable cell when user changes state.
+		/// Instantiates a <c><see cref="Restorable"/></c> cell when user
+		/// changes state.
 		/// </summary>
-		/// <param name="cell">a table Cell object</param>
+		/// <param name="cell">a table <c><see cref="Cell"/></c> object</param>
 		/// <returns></returns>
 		internal static Restorable createCell(ICloneable cell)
 		{
@@ -119,12 +124,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable row when user changes state - ie inserts
-		/// or deletes a row.
+		/// Instantiates a <c><see cref="Restorable"/></c> row when user changes
+		/// state - ie inserts or deletes a row.
 		/// </summary>
-		/// <param name="row">a table Row object</param>
-		/// <param name="type">'rt_Delete' for a row to be deleted or
-		/// 'rt_Insert' for a row to be inserted</param>
+		/// <param name="row">a table <c><see cref="Row"/></c> object</param>
+		/// <param name="type"><c><see cref="UrType.rt_Delete">UrType.rt_Delete</see></c>
+		/// for a row to be deleted or
+		/// <c><see cref="UrType.rt_Insert">UrType.rt_Insert</see></c> for a row
+		/// to be inserted</param>
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row, UrType type)
 		{
@@ -148,10 +155,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable row when user changes state - ie changes
-		/// an existing row.
+		/// Instantiates a <c><see cref="Restorable"/></c> row when user changes
+		/// state - ie changes an existing row.
 		/// </summary>
-		/// <param name="row">a table Row object</param>
+		/// <param name="row">a table <c><see cref="Row"/></c> object</param>
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row)
 		{
@@ -174,11 +181,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Instantiates a restorable array of rows when user changes state.
+		/// Instantiates a <c><see cref="Restorable"/></c> array of rows when
+		/// user changes state.
 		/// </summary>
 		/// <param name="rows">quantity of rows in the Row-array</param>
-		/// <param name="type">'rt_ArrayDelete' for row(s) to be deleted or
-		/// 'rt_ArrayInsert' for row(s) to be inserted</param>
+		/// <param name="type"><c><see cref="UrType.rt_ArrayDelete">UrType.rt_ArrayDelete</see></c>
+		/// for row(s) to be deleted or
+		/// <c><see cref="UrType.rt_ArrayInsert">UrType.rt_ArrayInsert</see></c>
+		/// for row(s) to be inserted</param>
 		/// <returns></returns>
 		internal static Restorable createArray(int rows, UrType type)
 		{
@@ -204,7 +214,8 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Clears Undoables and Redoables stacks.
+		/// Clears the <c><see cref="Undoables"/></c> and
+		/// <c><see cref="Redoables"/></c> stacks.
 		/// </summary>
 		internal void Clear()
 		{
@@ -217,10 +228,12 @@ namespace yata
 
 
 		/// <summary>
-		/// User's current state is pushed into Undoables on any regular state-
-		/// change. The stack of Redoables is cleared.
+		/// User's current state is pushed onto <c><see cref="Undoables"/></c>
+		/// on any regular state-change. The stack of
+		/// <c><see cref="Redoables"/></c> is cleared.
 		/// </summary>
-		/// <param name="it">a Restorable object to push onto the top of 'Undoables'</param>
+		/// <param name="it">a <c><see cref="Restorable"/></c> object to push
+		/// onto the top of the <c>Undoables</c> stack</param>
 		internal void Push(Restorable it)
 		{
 			Undoables.Push(it);
@@ -232,12 +245,17 @@ namespace yata
 
 
 		/// <summary>
-		/// Re-determines the 'isSaved' var of the Restorables when user saves
-		/// the 2da-file.
-		/// @note It would probably be easier to contain Restorables in Lists
-		/// instead of Stacks.
+		/// Re-determines the
+		/// <c><see cref="Restorable.isSaved">Restorable.isSaved</see></c> var
+		/// of the <c><see cref="Undoables"/></c> and
+		/// <c><see cref="Redoables"/></c> when user saves the 2da-file.
 		/// </summary>
-		/// <param name="allchanged">sets all Restorables to 'is_None'</param>
+		/// <param name="allchanged"><c>true</c> to set all <c>Undoables</c> and
+		/// <c>Redoables</c> to
+		/// <c><see cref="IsSavedType.is_None">IsSavedType.is_None</see></c></param>
+		/// <remarks>It would probably be easier to contain
+		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
+		/// instead of <c>Stacks</c>.</remarks>
 		internal void ResetSaved(bool allchanged = false)
 		{
 			if (Undoables.Count != 0)
@@ -274,12 +292,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Re-determines the y-position (aka row) of all Restorables when user
-		/// sorts cols.
-		/// @note The presort-vars do not need to be cleared.
-		/// @note It would probably be easier to contain Restorables in Lists
-		/// instead of Stacks.
+		/// Re-determines the y-position (aka row) of all
+		/// <c><see cref="Restorable">Restorables</see></c> when user sorts cols.
 		/// </summary>
+		/// <remarks>The presort-vars do not need to be cleared.
+		/// 
+		/// 
+		/// It would probably be easier to contain
+		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
+		/// instead of <c>Stacks</c>.</remarks>
 		internal void ResetY()
 		{
 			if (Undoables.Count != 0)
@@ -306,7 +327,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <see cref="ResetY"/>.
+		/// Helper for <c><see cref="ResetY()">ResetY()</see></c>.
 		/// </summary>
 		/// <param name="rests"></param>
 		void ResetY(ref Restorable[] rests)
@@ -485,7 +506,8 @@ namespace yata
 
 		#region Methods (actions)
 		/// <summary>
-		/// Changes cell-text in accord with Undo() or Redo().
+		/// Changes cell-text in accord with <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void RestoreCell()
 		{
@@ -515,7 +537,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Inserts a row in accord with Undo() or Redo().
+		/// Inserts a row in accord with <c><see cref="Undo()">Undo()</see></c>
+		/// or <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void InsertRow()
 		{
@@ -546,7 +569,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a row in accord with Undo() or Redo().
+		/// Deletes a row in accord with <c><see cref="Undo()">Undo()</see></c>
+		/// or <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void DeleteRow()
 		{
@@ -570,7 +594,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overwrites a row in accord with Undo() or Redo().
+		/// Overwrites a row in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void Overwrite()
 		{
@@ -590,7 +616,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Inserts an array of rows in accord with Undo() or Redo().
+		/// Inserts an array of rows in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void InsertArray()
 		{
@@ -631,7 +659,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes an array of rows in accord with Undo() or Redo().
+		/// Deletes an array of rows in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void DeleteArray()
 		{
