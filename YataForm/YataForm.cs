@@ -1196,36 +1196,19 @@ namespace yata
 		/// <param name="e"></param>
 		void yata_Closing(object sender, CancelEventArgs e)
 		{
-			if (Tabs.TabPages.Count == 1)
+			if (Tabs.TabPages.Count != 0)
 			{
-				e.Cancel = Table.Changed
-						&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to exit ...",
-										   " warning",
-										   MessageBoxButtons.YesNo,
-										   MessageBoxIcon.Warning,
-										   MessageBoxDefaultButton.Button2) == DialogResult.No;
-			}
-			else if (Tabs.TabPages.Count > 1)
-			{
-				var tables = GetChangedTables();
-				if (tables.Count != 0)
+				if (Tabs.TabPages.Count == 1)
 				{
-					string info = String.Empty;
-					foreach (string table in tables)
-					{
-						info += table + Environment.NewLine;
-					}
-
-					e.Cancel = MessageBox.Show("Data has changed."
-											   + Environment.NewLine + Environment.NewLine
-											   + info
-											   + Environment.NewLine
-											   + "Okay to exit ...",
+					e.Cancel = Table.Changed
+							&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to quit ...",
 											   " warning",
 											   MessageBoxButtons.YesNo,
 											   MessageBoxIcon.Warning,
 											   MessageBoxDefaultButton.Button2) == DialogResult.No;
 				}
+				else
+					e.Cancel = CheckChangedTables("quit");
 			}
 
 			if (!e.Cancel && Settings._recent != 0)
@@ -1252,14 +1235,17 @@ namespace yata
 
 		#region Methods (close)
 		/// <summary>
-		/// Returns a list of currently loaded tables that have been modified.
+		/// Checks if any currently opened tables have their
+		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
 		/// </summary>
+		/// <param name="info">"close" files or "quit" Yata</param>
 		/// <param name="excludecurrent"><c>true</c> to exclude the current
-		/// table</param>
-		/// <returns></returns>
-		List<string> GetChangedTables(bool excludecurrent = false)
+		/// table - used by CloseAllOtherTables</param>
+		/// <returns><c>true</c> if there are any changed tables and user
+		/// chooses to cancel</returns>
+		bool CheckChangedTables(string info, bool excludecurrent = false)
 		{
-			var tables = new List<string>();
+			string tables = String.Empty;
 
 			YataGrid table;
 			foreach (TabPage page in Tabs.TabPages)
@@ -1267,10 +1253,24 @@ namespace yata
 				if ((table = page.Tag as YataGrid).Changed
 					&& (!excludecurrent || table != Table))
 				{
-					tables.Add(Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant());
+					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant()
+							+ Environment.NewLine;
 				}
 			}
-			return tables;
+
+			if (tables.Length != 0)
+			{
+				return MessageBox.Show("Data has changed."
+									  + Environment.NewLine + Environment.NewLine
+									  + tables
+									  + Environment.NewLine
+									  + "Okay to " + info + " ...",
+									  " warning",
+									  MessageBoxButtons.YesNo,
+									  MessageBoxIcon.Warning,
+									  MessageBoxDefaultButton.Button2) == DialogResult.No;
+			}
+			return false;
 		}
 		#endregion Methods (close)
 
@@ -1713,29 +1713,7 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_CloseAllTabs(object sender, EventArgs e)
 		{
-			bool close = true;
-
-			List<string> tables = GetChangedTables();
-			if (tables.Count != 0)
-			{
-				string info = String.Empty;
-				foreach (string table in tables)
-				{
-					info += table + Environment.NewLine;
-				}
-
-				close = MessageBox.Show("Data has changed."
-										+ Environment.NewLine + Environment.NewLine
-										+ info
-										+ Environment.NewLine
-										+ "Okay to close ...",
-										" warning",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Warning,
-										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
-			}
-
-			if (close)
+			if (!CheckChangedTables("close"))
 			{
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 					ClosePage(Tabs.TabPages[tab]);
@@ -4123,29 +4101,7 @@ namespace yata
 		/// <param name="e"></param>
 		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
 		{
-			bool close = true;
-
-			var tables = GetChangedTables(true);
-			if (tables.Count != 0)
-			{
-				string info = String.Empty;
-				foreach (string table in tables)
-				{
-					info += table + Environment.NewLine;
-				}
-
-				close = MessageBox.Show("Data has changed."
-										+ Environment.NewLine + Environment.NewLine
-										+ info
-										+ Environment.NewLine
-										+ "Okay to close ...",
-										" warning",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Warning,
-										MessageBoxDefaultButton.Button2) == DialogResult.Yes;
-			}
-
-			if (close)
+			if (!CheckChangedTables("close", true))
 			{
 				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
@@ -4168,7 +4124,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Selects '_diff1'.
+		/// Selects <c><see cref="_diff1"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -4179,7 +4135,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Selects '_diff2'.
+		/// Selects <c><see cref="_diff2"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
