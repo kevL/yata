@@ -698,6 +698,7 @@ namespace yata
 			// 
 			// it_Searchnext
 			// 
+			this.it_Searchnext.Enabled = false;
 			this.it_Searchnext.Name = "it_Searchnext";
 			this.it_Searchnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.it_Searchnext.Size = new System.Drawing.Size(222, 22);

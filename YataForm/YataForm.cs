@@ -512,7 +512,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Forwards a <c>KeyDown</c> <c>[Enter]</c> event to an appropriate funct.
+		/// Forwards a <c>KeyDown</c> <c>[Enter]</c> event to an appropriate
+		/// funct.
 		/// </summary>
 		/// <remarks>Is basically just a convoluted handler for the
 		/// <c><see cref="OnKeyDown()">OnKeyDown()</see></c> handler to stop the
@@ -875,6 +876,8 @@ namespace yata
 				it_Close      .Enabled =
 				it_CloseAll   .Enabled = true;
 
+				it_Searchnext .Enabled = tb_Search.Text.Length != 0;
+
 				bool oneSelected = sel != null;
 				it_CutCell    .Enabled =
 				it_CopyCell   .Enabled = oneSelected;
@@ -943,6 +946,8 @@ namespace yata
 				it_Readonly   .Enabled =
 				it_Close      .Enabled =
 				it_CloseAll   .Enabled =
+
+				it_Searchnext .Enabled =
 
 				it_CutCell    .Enabled =
 				it_CopyCell   .Enabled =
@@ -1585,11 +1590,7 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file SaveAs.
 		/// </summary>
-		/// <param name="sender">
-		/// <list type="bullet">
-		/// <item><c><see cref="it_SaveAs"/></c></item>
-		/// </list>
-		/// </param>
+		/// <param name="sender"><c><see cref="it_SaveAs"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
@@ -1617,11 +1618,7 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file SaveAll.
 		/// </summary>
-		/// <param name="sender">
-		/// <list type="bullet">
-		/// <item><c><see cref="it_SaveAll"/></c></item>
-		/// </list>
-		/// </param>
+		/// <param name="sender"><c><see cref="it_SaveAll"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
@@ -1703,8 +1700,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="it_CloseAll"/></c></item>
 		/// <item><c><see cref="it_tabCloseAll"/></c></item>
-		/// </list>
-		/// </param>
+		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
@@ -1724,11 +1720,7 @@ namespace yata
 		/// <summary>
 		/// Handles it-click on file Quit.
 		/// </summary>
-		/// <param name="sender">
-		/// <list type="bullet">
-		/// <item><c><see cref="it_Quit"/></c></item>
-		/// </list>
-		/// </param>
+		/// <param name="sender"><c><see cref="it_Quit"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
@@ -2087,11 +2079,11 @@ namespace yata
 		/// Handles opening the EditMenu, determines if various items ought be
 		/// enabled.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_MenuEdit"/></c></param>
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				if (Table._editor.Visible)
 				{
@@ -2099,14 +2091,10 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				it_Searchnext     .Enabled = !String.IsNullOrEmpty(tb_Search.Text);
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 			}
 			else
-			{
-				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled = false;
-			}
 		}
 
 
@@ -2152,18 +2140,23 @@ namespace yata
 		/// <summary>
 		/// Handles textchanged for the searchbox. Enables/disables searchnext.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Search(object sender, EventArgs e)
 		{
-			it_Searchnext.Enabled = !String.IsNullOrEmpty(tb_Search.Text);
+			it_Searchnext.Enabled = Table != null
+								 && tb_Search.Text.Length != 0;
 		}
 
 		/// <summary>
 		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Search"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Find <c>[Ctrl+f]</c></item>
+		/// </list></remarks>
 		void editclick_Search(object sender, EventArgs e)
 		{
 			tb_Search.Focus();
@@ -2173,7 +2166,7 @@ namespace yata
 		/// <summary>
 		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
 		void enter_Search(object sender, EventArgs e)
 		{
@@ -2183,7 +2176,7 @@ namespace yata
 		/// <summary>
 		/// Handles selectall hocus-pocus when user clicks the searchbox.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
 		void click_Search(object sender, EventArgs e)
 		{
@@ -2195,30 +2188,35 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Initiates <c>[F3]</c> search by focusing the
+		/// Performs <c>[F3]</c> search with focus on the
 		/// <c><see cref="Table"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Searchnext"/></c></item>
+		/// <item><c>null</c> (reverse search w/ <c>[Shift]</c>)</item>
+		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks>This is fired only from the EditMenu (click/F3) and its
-		/// item is enabled by default. The item/shortcut will be set disabled
-		/// when the EditMenu opens iff the search-string is blank.</remarks>
+		/// <remarks><c>[F3]</c> shall focus the table, <c>[Enter]</c> shall
+		/// keep focus on the tb/cbx.</remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
-				Table.Select(); // [F3] shall focus the table, [Enter] shall keep focus on the tb/cbx.
+				Table.Select();
 				Search();
 			}
 		}
 
 		/// <summary>
-		/// Performs a search when the Enter-key is pressed and focus is on
+		/// Performs a search when <c>[Enter]</c> is pressed and focus is on
 		/// either the search-box or the search-option dropdown.
 		/// </summary>
+		/// <remarks><c>[Enter]</c> shall keep focus on the tb/cbx, <c>[F3]</c>
+		/// shall focus the table.</remarks>
 		void EnterkeyedSearch()
 		{
-			_isEnterkeyedSearch = true; // [Enter] shall keep focus on the tb/cbx, [F3] shall focus the table.
+			_isEnterkeyedSearch = true;
 			Search();
 			_isEnterkeyedSearch = false;
 		}
