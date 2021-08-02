@@ -166,7 +166,20 @@ namespace yata
 		internal bool loadchanged
 		{
 			get { return _loadchanged; }
-			set { _loadchanged = value; SetState(); }
+			set
+			{
+				_loadchanged = value;
+				SetState();
+
+				if (!YataGrid._init)
+				{
+					if (_loadchanged)
+						YataForm.that.EnableGotoLoadchanged(true);
+					else
+						YataForm.that.EnableGotoLoadchanged(YataForm.Table.anyLoadchanged());
+				}
+				// else selecting the tab at initial load deters 'it_GotoLoadchanged.Enabled'.
+			}
 		}
 
 		bool _diff;

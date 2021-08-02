@@ -37,6 +37,8 @@ namespace yata
 
 
 		#region Fields (static)
+		internal static YataForm that;
+
 		const string TITLE    = " Yata";
 		const string ASTERICS = " *";
 
@@ -186,6 +188,8 @@ namespace yata
 		/// </summary>
 		internal YataForm()
 		{
+			that = this;
+
 			// init 'Tabs' ->
 			Tabs.DrawItem             += tab_DrawItem;
 			Tabs.SelectedIndexChanged += tab_SelectedIndexChanged;
@@ -855,55 +859,56 @@ namespace yata
 
 				Cell sel = Table.getSelectedCell();
 
-				btn_ProPanel  .Visible = true;
-				it_MenuPaths  .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
+				btn_ProPanel      .Visible = true;
+				it_MenuPaths      .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
 
-				it_freeze1    .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
-				it_freeze2    .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
+				it_freeze1        .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
+				it_freeze2        .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
 
-				it_Readonly   .Checked = Table.Readonly;
+				it_Readonly       .Checked = Table.Readonly;
 
 
-				it_Undo       .Enabled = Table._ur.CanUndo;
-				it_Redo       .Enabled = Table._ur.CanRedo;
+				it_Undo           .Enabled = Table._ur.CanUndo;
+				it_Redo           .Enabled = Table._ur.CanRedo;
 
-				it_Reload     .Enabled = File.Exists(Table.Fullpath);
-				it_Save       .Enabled = !Table.Readonly;
-				it_SaveAll    .Enabled = AllowSaveAll();
-				it_SaveAs     .Enabled =
-				it_Readonly   .Enabled =
-				it_Close      .Enabled =
-				it_CloseAll   .Enabled = true;
+				it_Reload         .Enabled = File.Exists(Table.Fullpath);
+				it_Save           .Enabled = !Table.Readonly;
+				it_SaveAll        .Enabled = AllowSaveAll();
+				it_SaveAs         .Enabled =
+				it_Readonly       .Enabled =
+				it_Close          .Enabled =
+				it_CloseAll       .Enabled = true;
 
-				it_Searchnext .Enabled = tb_Search.Text.Length != 0;
+				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
+				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 
 				bool oneSelected = sel != null;
-				it_CutCell    .Enabled =
-				it_CopyCell   .Enabled = oneSelected;
-				it_PasteCell  .Enabled = oneSelected && !Table.Readonly;
-				it_DeleteCell .Enabled =
-				it_Lower      .Enabled =
-				it_Upper      .Enabled = 
-				it_Apply      .Enabled = !Table.Readonly && Table.anyCellSelected();
+				it_CutCell        .Enabled =
+				it_CopyCell       .Enabled = oneSelected;
+				it_PasteCell      .Enabled = oneSelected && !Table.Readonly;
+				it_DeleteCell     .Enabled =
+				it_Lower          .Enabled =
+				it_Upper          .Enabled = 
+				it_Apply          .Enabled = !Table.Readonly && Table.anyCellSelected();
 
 				bool isrowselected = Table.getSelectedRow() != -1;
-				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
-				it_CopyRange  .Enabled = isrowselected;
-				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
-				it_CreateRows .Enabled = !Table.Readonly;
+				it_CutRange       .Enabled = !Table.Readonly && isrowselected;
+				it_CopyRange      .Enabled = isrowselected;
+				it_PasteRange     .Enabled = !Table.Readonly && _copyr.Count != 0;
+				it_DeleteRange    .Enabled = !Table.Readonly && isrowselected;
+				it_CreateRows     .Enabled = !Table.Readonly;
 
-				it_OrderRows  .Enabled = !Table.Readonly;
-				it_CheckRows  .Enabled =
-				it_ColorRows  .Enabled =
-				it_AutoCols   .Enabled =
-				it_ppOnOff    .Enabled = true;
-				it_ppLocation .Enabled = Table.Propanel != null && Table.Propanel.Visible;
-				it_ExternDiff .Enabled = File.Exists(Settings._diff);
+				it_OrderRows      .Enabled = !Table.Readonly;
+				it_CheckRows      .Enabled =
+				it_ColorRows      .Enabled =
+				it_AutoCols       .Enabled =
+				it_ppOnOff        .Enabled = true;
+				it_ppLocation     .Enabled = Table.Propanel != null && Table.Propanel.Visible;
+				it_ExternDiff     .Enabled = File.Exists(Settings._diff);
 
-				it_freeze1    .Enabled = Table.ColCount > 1;
-				it_freeze2    .Enabled = Table.ColCount > 2;
+				it_freeze1        .Enabled = Table.ColCount > 1;
+				it_freeze2        .Enabled = Table.ColCount > 2;
 
 
 				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -926,53 +931,54 @@ namespace yata
 
 				Obfuscate();
 
-				btn_ProPanel  .Visible =
-				it_MenuPaths  .Visible =
+				btn_ProPanel      .Visible =
+				it_MenuPaths      .Visible =
 
 
-				it_freeze1    .Checked =
-				it_freeze2    .Checked =
+				it_freeze1        .Checked =
+				it_freeze2        .Checked =
 
-				it_Readonly   .Checked =
+				it_Readonly       .Checked =
 
 
-				it_Undo       .Enabled =
-				it_Redo       .Enabled =
+				it_Undo           .Enabled =
+				it_Redo           .Enabled =
 
-				it_Reload     .Enabled =
-				it_Save       .Enabled =
-				it_SaveAll    .Enabled =
-				it_SaveAs     .Enabled =
-				it_Readonly   .Enabled =
-				it_Close      .Enabled =
-				it_CloseAll   .Enabled =
+				it_Reload         .Enabled =
+				it_Save           .Enabled =
+				it_SaveAll        .Enabled =
+				it_SaveAs         .Enabled =
+				it_Readonly       .Enabled =
+				it_Close          .Enabled =
+				it_CloseAll       .Enabled =
 
-				it_Searchnext .Enabled =
+				it_Searchnext     .Enabled =
+				it_GotoLoadchanged.Enabled =
 
-				it_CutCell    .Enabled =
-				it_CopyCell   .Enabled =
-				it_PasteCell  .Enabled =
-				it_DeleteCell .Enabled =
-				it_Lower      .Enabled =
-				it_Upper      .Enabled =
-				it_Apply      .Enabled =
+				it_CutCell        .Enabled =
+				it_CopyCell       .Enabled =
+				it_PasteCell      .Enabled =
+				it_DeleteCell     .Enabled =
+				it_Lower          .Enabled =
+				it_Upper          .Enabled =
+				it_Apply          .Enabled =
 
-				it_CutRange   .Enabled =
-				it_CopyRange  .Enabled =
-				it_PasteRange .Enabled =
-				it_DeleteRange.Enabled =
-				it_CreateRows .Enabled =
+				it_CutRange       .Enabled =
+				it_CopyRange      .Enabled =
+				it_PasteRange     .Enabled =
+				it_DeleteRange    .Enabled =
+				it_CreateRows     .Enabled =
 
-				it_OrderRows  .Enabled =
-				it_CheckRows  .Enabled =
-				it_ColorRows  .Enabled =
-				it_AutoCols   .Enabled =
-				it_ppOnOff    .Enabled =
-				it_ppLocation .Enabled =
-				it_ExternDiff .Enabled =
+				it_OrderRows      .Enabled =
+				it_CheckRows      .Enabled =
+				it_ColorRows      .Enabled =
+				it_AutoCols       .Enabled =
+				it_ppOnOff        .Enabled =
+				it_ppLocation     .Enabled =
+				it_ExternDiff     .Enabled =
 
-				it_freeze1    .Enabled =
-				it_freeze2    .Enabled = false;
+				it_freeze1        .Enabled =
+				it_freeze2        .Enabled = false;
 
 				_fdiffer = null;
 			}
@@ -1568,10 +1574,8 @@ namespace yata
 								_table._ur.ResetSaved();
 
 								foreach (var row in _table.Rows)
-								{
-									for (int c = 0; c != _table.ColCount; ++c)
-										row[c].loadchanged = false;
-								}
+								for (int c = 0; c != _table.ColCount; ++c)
+									row[c].loadchanged = false;
 
 								if (_table == Table)
 									_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
@@ -2076,29 +2080,6 @@ namespace yata
 
 		#region Events (edit)
 		/// <summary>
-		/// Handles opening the EditMenu, determines if various items ought be
-		/// enabled.
-		/// </summary>
-		/// <param name="sender"><c><see cref="it_MenuEdit"/></c></param>
-		/// <param name="e"></param>
-		void edit_dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
-			}
-			else
-				it_GotoLoadchanged.Enabled = false;
-		}
-
-
-		/// <summary>
 		/// Handles it-click to undo the previous operation if possible.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Undo"/></c></param>
@@ -2193,12 +2174,20 @@ namespace yata
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
-		/// <item><c><see cref="it_Searchnext"/></c></item>
+		/// <item><c><see cref="it_Searchnext"/></c> <c>[F3]</c></item>
 		/// <item><c>null</c> (reverse search w/ <c>[Shift]</c>)</item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks><c>[F3]</c> shall focus the table, <c>[Enter]</c> shall
-		/// keep focus on the tb/cbx.</remarks>
+		/// keep focus on the tb/cbx.
+		/// 
+		/// 
+		/// Called by
+		/// <list type="bullet">
+		/// <item>Edit|Find next <c>[F3]</c></item>
+		/// <item><c>[Shift+F3]</c>
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c></item>
+		/// </list></remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -2376,15 +2365,17 @@ namespace yata
 		/// <summary>
 		/// Handles textchanged in the goto box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Goto(object sender, EventArgs e)
 		{
+			// TODO: allow a blank string
+
 			int result;
 			if (!Int32.TryParse(tb_Goto.Text, out result)
 				|| result < 0)
 			{
-				tb_Goto.Text = "0";
+				tb_Goto.Text = "0"; // recurse
 			}
 			else if (Table != null && Settings._instantgoto)
 			{
@@ -2395,8 +2386,12 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to focus the goto box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Goto"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Goto <c>[Ctrl+g]</c></item>
+		/// </list></remarks>
 		void editclick_Goto(object sender, EventArgs e)
 		{
 			tb_Goto.Focus();
@@ -2406,7 +2401,7 @@ namespace yata
 		/// <summary>
 		/// Handles the enter event of the goto box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
 		void enter_Goto(object sender, EventArgs e)
 		{
@@ -2416,7 +2411,7 @@ namespace yata
 		/// <summary>
 		/// Handles click on the goto box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
 		void click_Goto(object sender, EventArgs e)
 		{
@@ -2430,15 +2425,21 @@ namespace yata
 		/// <summary>
 		/// Selects the next LoadChanged cell.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_GotoLoadchanged"/></c> <c>[Ctrl+n]</c></item>
+		/// <item><c>null</c> (reverse goto w/ <c>[Shift]</c>)</item>
+		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks>This is fired only from the EditMenu (click/Ctrl+N) and its
-		/// item is enabled by default. The item/shortcut will be set disabled
-		/// either when the EditMenu opens or when Ctrl+N is keyed iff there are
-		/// no 'loadchanged' cells.</remarks>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Goto loadchanged <c>[Ctrl+n]</c></item>
+		/// <item><c>[Shift+Ctrl+n]</c>
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c></item>
+		/// </list></remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if (Table != null && (it_GotoLoadchanged.Enabled = Table.anyLoadchanged())
+			if (Table != null && Table.anyLoadchanged()
 				&& (ModifierKeys & Keys.Alt) == 0)
 			{
 				if (Table._editor.Visible)
@@ -2561,7 +2562,7 @@ namespace yata
 
 		#region Methods (edit)
 		/// <summary>
-		/// Enables/disables undo.
+		/// Enables/disables <c><see cref="it_Undo"/></c>.
 		/// </summary>
 		/// <param name="enable"></param>
 		internal void EnableUndo(bool enable)
@@ -2570,12 +2571,21 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Enables/disables redo.
+		/// Enables/disables <c><see cref="it_Redo"/></c>.
 		/// </summary>
 		/// <param name="enable"></param>
 		internal void EnableRedo(bool enable)
 		{
 			it_Redo.Enabled = enable;
+		}
+
+		/// <summary>
+		/// Enables/disables <c><see cref="it_GotoLoadchanged"/></c>.
+		/// </summary>
+		/// <param name="enable"></param>
+		internal void EnableGotoLoadchanged(bool enable)
+		{
+			it_GotoLoadchanged.Enabled = enable;
 		}
 		#endregion Methods (edit)
 

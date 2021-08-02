@@ -663,7 +663,7 @@ namespace yata
 			this.it_MenuEdit.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuEdit.Size = new System.Drawing.Size(36, 20);
 			this.it_MenuEdit.Text = "&Edit";
-			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
+			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_Undo
 			// 
@@ -720,6 +720,7 @@ namespace yata
 			// 
 			// it_GotoLoadchanged
 			// 
+			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
 			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.it_GotoLoadchanged.Size = new System.Drawing.Size(222, 22);
