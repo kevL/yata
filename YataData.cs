@@ -19,16 +19,17 @@ namespace yata
 		{ get; set; }
 
 		/// <summary>
-		/// Sets the width.
-		/// @note When loading a 2da width is set to the colhead first, but then
-		/// can be replaced by the widest cell-width under it. The col's width
-		/// is thus allowed to only increase when loading a 2da. When a cell's
-		/// text changes however the col-width should be allowed to decrease if
-		/// it's less wide than the current width (but not if it's less wide
-		/// than the colhead's width). Hence the 'force' par.
+		/// Sets <c><see cref="_width"/></c>.
 		/// </summary>
 		/// <param name="w">the width in pixels</param>
-		/// <param name="force">true to allow decreasing the width</param>
+		/// <param name="force"><c>true</c> to allow decreasing the width</param>
+		/// <remarks>When loading a 2da width is set to the colhead first, but
+		/// then can be replaced by the widest cell-width under it. The col's
+		/// width is thus allowed to only increase when loading a 2da. When a
+		/// cell's text changes however the col-width should be allowed to
+		/// decrease if it's less wide than the current width (but not if it's
+		/// less wide than the colhead's width). Hence the
+		/// <paramref name="force"/> parameter.</remarks>
 		internal void width(int w, bool force = false)
 		{
 			if (force || w > _width)
@@ -36,7 +37,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the width.
+		/// Gets <c><see cref="_width"/></c>.
 		/// </summary>
 		/// <returns></returns>
 		internal int width()
@@ -61,7 +62,7 @@ namespace yata
 		internal Cell[] _cells;
 
 		/// <summary>
-		/// Gets/sets the cell at pos [c].
+		/// Gets/sets the cell at pos <c>[</c><paramref name="c"/><c>]</c>.
 		/// </summary>
 		internal Cell this[int c]
 		{
@@ -91,7 +92,7 @@ namespace yata
 
 		#region cTors
 		/// <summary>
-		/// cTor[1] - primary.
+		/// cTor[1].
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="cols"></param>
@@ -106,12 +107,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// cTor[2] - used by Clone().
+		/// cTor[2].
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="cells"></param>
 		/// <param name="brush"></param>
 		/// <param name="grid"></param>
+		/// <remarks>Used by <c><see cref="Clone()">Clone()</see></c>.</remarks>
 		internal Row(int id, Cell[] cells, Brush brush, YataGrid grid)
 		{
 			_id = id;
@@ -160,11 +162,11 @@ namespace yata
 			set { _selected = value; SetState(); }
 		}
 
-		bool _load;
+		bool _loadchanged;
 		internal bool loadchanged
 		{
-			get { return _load; }
-			set { _load = value; SetState(); }
+			get { return _loadchanged; }
+			set { _loadchanged = value; SetState(); }
 		}
 
 		bool _diff;
@@ -197,9 +199,8 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// State is used only for priority of color by YataGrid.OnPaint().
-		/// TODO: Replace the bools (ergo state also) w/ a bitwise enumeration
-		/// and add bool/state: 'edit' if cell is being edited.
+		/// <c><see cref="state"/></c> is used only for priority of color by
+		/// <c><see cref="YataGrid"/>.OnPaint()</c>.
 		/// </summary>
 		void SetState()
 		{
@@ -210,26 +211,28 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets a brush for the background color of this Cell.
-		/// @note Check that 'state' is not Default before call.
+		/// Gets a brush for the background color of this <c>Cell</c>.
 		/// </summary>
-		/// <param name="edit">true if in edit</param>
+		/// <param name="edit"><c>true</c> if cell is in editmode</param>
 		/// <returns></returns>
+		/// <remarks>Check that <c><see cref="state"/></c> is not
+		/// <c><see cref="CellState.Default"></see></c> before
+		/// call.</remarks>
 		internal Brush getBrush(bool edit = false)
 		{
 			switch (state)
 			{
+//				case CellState.Selected:
 				default:
-				case Cell.CellState.Selected:
 					if (edit)
 						return Brushes.Editor;
 
 					return Brushes.Selected;
 
-				case Cell.CellState.Diff:
+				case CellState.Diff:
 					return Brushes.Diff;
 
-				case Cell.CellState.LoadChanged:
+				case CellState.LoadChanged:
 					return Brushes.LoadChanged;
 			}
 		}
@@ -240,8 +243,6 @@ namespace yata
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
-//			cell.selected    = selected;
-//			cell.diff        = diff;
 			cell.loadchanged = loadchanged;
 			cell._widthtext  = _widthtext;
 
