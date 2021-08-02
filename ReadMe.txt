@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 july 18
+2021 august 1
 kevL's
 ver 4.2.0.0
 
@@ -667,10 +667,10 @@ text was encoded with any of the extended-ASCII (aka ANSI) charactersets then it
 becomes an issue since there is no way to rigorously determine what encoding was
 used. Yata uses a very basic detection routine - it decodes text as UTF-8 and
 searches for � - if that character is found then a dialog appears asking what
-codepage should be used to interpret the 2da's encoding. If this value is left
-blank then your machine's default encoding/characterset will appear in the
-dialog; but if a valid codepage is specified in Settings.Cfg then that codepage
-will appear in the dialog instead.
+codepage should be used to interpret the 2da's encoding. If a valid codepage is
+specified in Settings.Cfg then that codepage will appear in the dialog; if not
+then your machine's default encoding/characterset will appear in the dialog
+instead.
 
 In either case the desired codepage for loading a 2da file can be specified in
 that dialog.
