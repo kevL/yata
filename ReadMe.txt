@@ -429,8 +429,11 @@ clear all selections of rows and cells.
 
 Appendix D: output
 
-Yata outputs 2da-files as text. It uses a single space for the delimiter. It
-does not align cols.
+Yata outputs 2da-files as UTF-8 encoded textfiles. It uses a single space (by
+default) for the delimiter. It can however output files with aligned cols if
+"alignoutput=" is set to "true" or "tabs" in Settings.Cfg - but neither is
+recommended since tabs can break other applications while true will cause
+padding to inflate the filesize.
 
 
 Appendix E: how to use Info paths
