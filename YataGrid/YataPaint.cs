@@ -9,7 +9,7 @@ using yata.Properties;
 namespace yata
 {
 	/// <summary>
-	/// Handles painting various controls on a YataGrid.
+	/// Handles painting various controls on this <c>YataGrid</c>.
 	/// </summary>
 	sealed partial class YataGrid
 	{
@@ -440,7 +440,7 @@ namespace yata
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					rect.X = _padHori - 1; // NOTE: -1 is a padding tweak.
+					rect.X = _padHori - 1; // -1 is a padding tweak.
 
 					row = Rows[r];
 					for (c = 0; c != FrozenCount; ++c)
