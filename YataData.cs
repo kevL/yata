@@ -178,7 +178,7 @@ namespace yata
 					else
 						YataForm.that.EnableGotoLoadchanged(YataForm.Table.anyLoadchanged());
 				}
-				// else selecting the tab at initial load deters 'it_GotoLoadchanged.Enabled'.
+				// else selecting the tab at initial load/reload deters 'it_GotoLoadchanged.Enabled'.
 			}
 		}
 
@@ -256,8 +256,8 @@ namespace yata
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
-			cell.loadchanged = loadchanged;
-			cell._widthtext  = _widthtext;
+			cell._loadchanged = loadchanged; // don't set 'loadchanged' w/ the property setter.
+			cell._widthtext   = _widthtext;
 
 			return cell;
 		}
