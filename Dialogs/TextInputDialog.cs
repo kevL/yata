@@ -63,16 +63,6 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Handles a click on the Cancel button. Closes this dialog harmlessly.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void click_Cancel(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		/// <summary>
 		/// Handles a click on the Okay button.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -89,12 +79,11 @@ namespace yata
 			{
 				_f._copytext = new string[,] {{ tb_Input.Text }};
 				DialogResult = DialogResult.OK;
-				Close();
 			}
 		}
 
 		/// <summary>
-		/// 
+		/// Clears warn-state when user inputs text.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -150,7 +139,6 @@ namespace yata
 			this.bu_Cancel.TabIndex = 1;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
-			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// bu_Okay
 			// 

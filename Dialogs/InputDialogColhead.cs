@@ -51,26 +51,6 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Handles a click on the Cancel button. Closes this dialog harmlessly.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void click_Cancel(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Cancel;
-		}
-
-		/// <summary>
-		/// Handles a click on the Okay button.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void click_Okay(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.OK;
-		}
-
-		/// <summary>
 		/// Handles text-input in the TextBox.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -144,11 +124,11 @@ namespace yata
 			this.bu_Cancel.TabIndex = 1;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
-			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// bu_Okay
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.bu_Okay.Location = new System.Drawing.Point(154, 25);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
@@ -156,7 +136,6 @@ namespace yata
 			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "APPLY";
 			this.bu_Okay.UseVisualStyleBackColor = true;
-			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);
 			// 
 			// InputDialogColhead
 			// 
