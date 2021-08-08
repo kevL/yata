@@ -1490,7 +1490,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click to save the current Table.
+		/// Handles several it-clicks that write a <c><see cref="YataGrid"/></c>
+		/// to a 2da-file.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
