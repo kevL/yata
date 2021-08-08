@@ -15,8 +15,7 @@ namespace yata
 	/// Yata ....
 	/// </summary>
 	sealed partial class YataForm
-		:
-			Form
+		: Form
 	{
 		#region Enumerators
 		/// <summary>
@@ -150,7 +149,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Works in conjunction w/ <c><see cref="YataGrid"></see>.OnResize()</c>.
+		/// Works in conjunction w/
+		/// <c><see cref="YataGrid"></see>.OnResize()</c>.
 		/// </summary>
 		internal bool IsMin;
 
@@ -335,7 +335,7 @@ namespace yata
 
 
 			if (Settings._recent != 0)
-				CreateRecentfilesSubmenuItems(); // init recents before (potentially) loading a table from FileExplorer
+				CreateRecentsSubits(); // init recents before (potentially) loading a table from FileExplorer
 
 			if (File.Exists(pfe_load)) // load file from FileExplorer ...
 				CreatePage(pfe_load);
@@ -361,7 +361,7 @@ namespace yata
 		/// Initializes the recent-files list from entries in the user-file
 		/// "recent.cfg".
 		/// </summary>
-		void CreateRecentfilesSubmenuItems()
+		void CreateRecentsSubits()
 		{
 			string dir = Application.StartupPath;
 			string pfe = Path.Combine(dir, "recent.cfg");
@@ -396,22 +396,21 @@ namespace yata
 		/// <param name="e"></param>
 		void t1_Tick(object sender, EventArgs e)
 		{
-			if (_track_x != -1 && !YataGrid._init && Table != null) // && Tabs.TabCount != 0
+			if (Table != null && _track_x != -1 && !YataGrid._init)
 				Table.MouseLeaveTicker();
 		}
 
 
 		#region Events (override)
 		/// <summary>
-		/// Sends (unhandled) mousewheel events on the Form to the table.
+		/// Sends the <c>MouseWheel</c> event to the active
+		/// <c><see cref="YataGrid"/></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			if (Table != null)
 				Table.Scroll(e);
-
-//			base.OnMouseWheel(e);
 		}
 
 
@@ -644,7 +643,7 @@ namespace yata
 		/// <summary>
 		/// TODO: This funct is obsolete; tables that are
 		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
-		/// not fire events that can change the table at all.
+		/// not enable operations that can change the table at all.
 		/// </summary>
 		void ReadonlyError()
 		{
@@ -1076,9 +1075,10 @@ namespace yata
 
 		/// <summary>
 		/// Disposes a tab's table's <c><see cref="FileWatcher"/></c> before a
-		/// specified tab-page is removed from the tab-collection.
+		/// specified <c>TabPage</c> is removed from the
+		/// <c>TabPageCollection</c>.
 		/// </summary>
-		/// <param name="tab">the tab-page with which to deal</param>
+		/// <param name="tab">the <c>TabPage</c> with which to deal</param>
 		void ClosePage(TabPage tab)
 		{
 			_table = tab.Tag as YataGrid;
@@ -1482,6 +1482,8 @@ namespace yata
 		{
 			it_Save   .Enabled = !(Table.Readonly = it_Readonly.Checked);
 			it_SaveAll.Enabled = AllowSaveAll();
+
+			EnableCelleditOperations();
 
 			Tabs.Invalidate();
 		}
@@ -2984,7 +2986,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editrows_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				if (Table._editor.Visible)
 				{
@@ -2993,7 +2995,7 @@ namespace yata
 				}
 
 				bool isrowselected = Table.getSelectedRow() != -1;
-				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
+//				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
 				it_CopyRange  .Enabled = isrowselected;
 				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
 				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
@@ -3002,7 +3004,7 @@ namespace yata
 			}
 			else
 			{
-				it_CutRange   .Enabled =
+//				it_CutRange   .Enabled =
 				it_CopyRange  .Enabled =
 				it_PasteRange .Enabled =
 				it_DeleteRange.Enabled =
@@ -3015,8 +3017,12 @@ namespace yata
 		/// <summary>
 		/// Cuts a range of rows.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CutRange"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>
+		/// <list type="bullet">
+		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c></item>
+		/// </list></remarks>
 		void editrowsclick_CutRange(object sender, EventArgs e)
 		{
 			if (!Table.Readonly)
