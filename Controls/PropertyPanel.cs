@@ -545,6 +545,7 @@ namespace yata
 					{
 						sel.selected = false;
 						_grid[_r,_c].selected = true;
+//						_grid._f.EnableCelleditOperations(); // should be no need to re-deter cell-operations here.
 					}
 
 					if (_c >= _grid.FrozenCount)
@@ -591,7 +592,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Paints this property panel.
+		/// Paints this <c>PropertyPanel</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)

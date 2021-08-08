@@ -54,6 +54,24 @@ namespace yata
 		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
 
 		/// <summary>
+		/// A 2d-array of strings used for copy/paste cell.
+		/// </summary>
+		/// <remarks>A cell's text shall never be null or blank, therefore
+		/// <c>_copytext</c> shall never be null or blank.</remarks>
+		internal string[,] _copytext = {{ gs.Stars }};
+
+		/// <summary>
+		/// The count of rows in <c><see cref="_copytext"/></c>.
+		/// </summary>
+		internal int _copyvert;
+
+		/// <summary>
+		/// The count of cols in <c><see cref="_copytext"/></c>.
+		/// </summary>
+		internal int _copyhori;
+
+
+		/// <summary>
 		/// A list used for copy/paste row(s).
 		/// </summary>
 		List<string[]> _copyr = new List<string[]>();
@@ -63,12 +81,6 @@ namespace yata
 		/// </summary>
 		List<string> _copyc = new List<string>();
 
-		/// <summary>
-		/// A string used for Copy/PasteCell.
-		/// </summary>
-		/// <remarks>A cell's text shall never be null or blank, therefore
-		/// <c>_copytext</c> shall never be null or blank.</remarks>
-		internal string[,] _copytext = {{ gs.Stars }};
 
 		string _preset = String.Empty;
 
@@ -720,13 +732,9 @@ namespace yata
 		/// <c><see cref="GropeLabels()">GropeLabels()</see></c>.</remarks>
 		void CreatePage(string pfe, bool read = false)
 		{
-			//logfile.Log("CreatePage() pfe= " + pfe);
-
 			if (File.Exists(pfe)													// safety (probably).
 				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))	// what idjut would ... oh, wait.
 			{
-				//logfile.Log(". File Ok");
-
 				if (Settings._recent != 0)
 				{
 					ToolStripItemCollection recents = it_Recent.DropDownItems;
@@ -847,16 +855,6 @@ namespace yata
 //				HideEditor();
 				// NOTE: Appears to no longer be needed.
 
-				// NOTE: Subits under Menuits don't really need to be detered
-				// here; they all shall have dropdowns that deter their needs
-				// and if they have hotkeys the handlers shall be conditioned to
-				// bypass if an operation is in/valid in current state.
-				//
-				// NOTE: Subits that are un/checked shall be consistent since
-				// they could be used to deter state.
-				//
-				// NOTE: its that are disabled to not fire on their hotkey-presses(!)
-
 				Cell sel = Table.getSelectedCell();
 
 				btn_ProPanel      .Visible = true;
@@ -883,14 +881,7 @@ namespace yata
 				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 
-				bool oneSelected = sel != null;
-				it_CutCell        .Enabled =
-				it_CopyCell       .Enabled = oneSelected;
-				it_PasteCell      .Enabled = oneSelected && !Table.Readonly;
-				it_DeleteCell     .Enabled =
-				it_Lower          .Enabled =
-				it_Upper          .Enabled = 
-				it_Apply          .Enabled = !Table.Readonly && Table.anyCellSelected();
+				EnableCelleditOperations();
 
 				bool isrowselected = Table.getSelectedRow() != -1;
 				it_CutRange       .Enabled = !Table.Readonly && isrowselected;
@@ -2348,12 +2339,12 @@ namespace yata
 						}
 					}
 				}
+				else // not found ->
+					Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
 
-
-				// else not found ->
-				Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
-
-				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
+				int invalid = YataGrid.INVALID_GRID
+							| YataGrid.INVALID_FROZ
+							| YataGrid.INVALID_ROWS;
 				if (Table.Propanel != null && Table.Propanel.Visible)
 					invalid |= YataGrid.INVALID_PROP;
 
@@ -2592,68 +2583,60 @@ namespace yata
 
 		#region Events (editcells)
 		/// <summary>
-		/// Handles opening the EditCellsMenu, determines if various items ought
-		/// be enabled.
+		/// Cuts an only selected cell or cells in a contiguous block.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void editcells_dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				bool oneSelected = (Table.getSelectedCell() != null);
-				it_CutCell   .Enabled = oneSelected && !Table.Readonly;
-				it_CopyCell  .Enabled = oneSelected;
-				it_PasteCell .Enabled = oneSelected && !Table.Readonly && _copytext.Length == 1;
-				it_DeleteCell.Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled =
-				it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
-			}
-			else
-			{
-				it_CutCell   .Enabled =
-				it_CopyCell  .Enabled =
-				it_PasteCell .Enabled =
-				it_DeleteCell.Enabled =
-				it_Lower     .Enabled =
-				it_Upper     .Enabled =
-				it_Apply     .Enabled = false;
-			}
-		}
-
-
-		/// <summary>
-		/// Cuts an only selected cell.
-		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CutCell"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_CutCell"/></c> - Menu|Cells|Cut</item>
+		/// <item>Cells|Cut <c>[Ctrl+x]</c></item>
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly)
+				if (!Table.Readonly) // safety and should be taken out
 				{
-					Cell sel = Table.getSelectedCell();
-					if (sel != null)
+					if (Table.areSelectedCellsContiguous()) // safety and should be taken out
 					{
-						_copytext = new string[,] {{ sel.text }};
+						Cell cell;
 
-						if (sel.text != gs.Stars || sel.loadchanged)
-							Table.ChangeCellText(sel, gs.Stars); // does not do a text-check
+						Cell sel = Table.getFirstSelectedCell();
+						if (sel != null) // safety and should be taken out
+						{
+							int invalid = -1;
+
+							_copytext = new string[_copyvert, _copyhori];
+
+							int i = -1, j;
+							for (int r = sel.y; r != sel.y + _copyvert; ++r)
+							{
+								++i; j = -1;
+								for (int c = sel.x; c != sel.x + _copyhori; ++c)
+								{
+									_copytext[i, ++j] = (cell = Table[r,c]).text;
+
+									if (cell.text != gs.Stars)
+									{
+										Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
+										invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+									}
+									else if (cell.loadchanged)
+									{
+										cell.loadchanged = false;
+
+										if (invalid == -1)
+											invalid = YataGrid.INVALID_GRID;
+									}
+								}
+							}
+
+							if (invalid == YataGrid.INVALID_GRID)
+								Table.Invalidator(invalid);
+						}
 					}
 					else
-						CopyPasteCellError();
+						CopyPasteCellError("Select one cell or a contiguous block of cells.");
 				}
 				else
 					ReadonlyError();
@@ -2661,36 +2644,57 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Copies an only selected cell.
+		/// Copies an only selected cell or cells in a contiguous block.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CopyCell"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_CopyCell"/></c> - Menu|Cells|Copy</item>
+		/// <item>Cells|Copy <c>[Ctrl+c]</c></item>
 		/// </list></remarks>
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety and should be taken out
 			{
-				Cell sel = Table.getSelectedCell();
-				if (sel != null)
+				if (Table.areSelectedCellsContiguous()) // safety and should be taken out
 				{
-					_copytext = new string[,] {{ sel.text }};
+					Cell sel = Table.getFirstSelectedCell();
+					if (sel != null) // safety and should be taken out
+					{
+						_copytext = new string[_copyvert, _copyhori];
+
+						int i = -1, j;
+						for (int r = sel.y; r != sel.y + _copyvert; ++r)
+						{
+							++i; j = -1;
+							for (int c = sel.x; c != sel.x + _copyhori; ++c)
+							{
+								_copytext[i, ++j] = Table[r,c].text;
+							}
+						}
+					}
 				}
 				else
-					CopyPasteCellError();
+					CopyPasteCellError("Select one cell or a contiguous block of cells.");
 			}
 		}
 
 		/// <summary>
-		/// Pastes to an only selected cell.
+		/// Pastes to an only selected cell. If more than one field is in
+		/// <c><see cref="_copytext">_copytext[,]</see></c> then the only
+		/// selected cell will be the top-left corner of the paste-block; fields
+		/// that overflow the table to right or bottom shall be ignored.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_PasteCell"/></c></item>
+		/// <item><c><see cref="it_cellPaste"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_PasteCell"/></c> - Menu|Cells|Paste</item>
+		/// <item>Cells|Paste <c>[Ctrl+v]</c></item>
+		/// <item>cell|Paste</item>
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
@@ -2702,18 +2706,45 @@ namespace yata
 			{
 				SetTextboxText(tb_Search);
 			}
-			else if (Table != null)
+			else if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly)
+				if (!Table.Readonly) // safety and should be taken out
 				{
 					Cell sel = Table.getSelectedCell();
-					if (sel != null && _copytext.Length == 1)
+					if (sel != null) // safety and should be taken out
 					{
-						if (sel.text != _copytext[0,0] || sel.loadchanged)
-							Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
+						Cell cell; string text;
+						int invalid = -1;
+
+						for (int i = 0; i != _copytext.GetLength(0) && i + sel.y != Table.RowCount; ++i)
+						for (int j = 0; j != _copytext.GetLength(1) && j + sel.x != Table.ColCount; ++j)
+						{
+							cell = Table[i + sel.y,
+										 j + sel.x];
+
+							cell.selected = true;
+
+							if ((text = _copytext[i,j]) != cell.text)
+							{
+								Table.ChangeCellText(cell, text);	// does not do a text-check
+								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+							}
+							else if (cell.loadchanged)
+							{
+								cell.loadchanged = false;
+
+								if (invalid == -1)
+									invalid = YataGrid.INVALID_GRID;
+							}
+						}
+
+						if (invalid == YataGrid.INVALID_GRID)
+							Table.Invalidator(invalid);
+
+						EnableCelleditOperations();
 					}
 					else
-						CopyPasteCellError();
+						CopyPasteCellError("Select one cell.");
 				}
 				else
 					ReadonlyError();
@@ -2723,7 +2754,7 @@ namespace yata
 		/// <summary>
 		/// Sets the text of a given textbox.
 		/// </summary>
-		/// <param name="tb"></param>
+		/// <param name="tb"><c><see cref="tb_Goto"/></c> or <c><see cref="tb_Search"/></c></param>
 		/// <remarks>Helper for
 		/// <c><see cref="editcellsclick_PasteCell()">editcellsclick_PasteCell()</see></c>.</remarks>
 		void SetTextboxText(ToolStripItem tb)
@@ -2733,7 +2764,7 @@ namespace yata
 				tb.Text = Clipboard.GetText(TextDataFormat.Text);
 			}
 			else if (_copytext.Length == 1
-				&& (_copytext[0,0] != gs.Stars || tb == tb_Search))
+				&& (tb == tb_Search || _copytext[0,0] != gs.Stars))
 			{
 				tb.Text = _copytext[0,0];
 			}
@@ -2742,12 +2773,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Shows user and error if there is not a single cell selected when
-		/// copying or pasting a cell.
+		/// Shows user an error if there is not a single cell or not a
+		/// contiguous block of cells selected when copying or pasting a cell.
 		/// </summary>
-		void CopyPasteCellError()
+		void CopyPasteCellError(string head) // TODO: make this obsolete
 		{
-			MessageBox.Show("Select one (1) cell.",
+			MessageBox.Show(head,
 							" burp",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Exclamation,
@@ -2758,29 +2789,43 @@ namespace yata
 		/// <summary>
 		/// Pastes "****" to all selected cells.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_DeleteCell"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_DeleteCell"/></c> - Menu|Cells|Delete</item>
-		/// <item><c><see cref="YataGrid"/>.Delete()</c></item>
+		/// <item>Cells|Delete <c>[Delete]</c></item>
 		/// </list></remarks>
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly)
+				if (!Table.Readonly) // safety and should be taken out
 				{
 					Cell sel;
+					int invalid = -1;
+
 					foreach (var row in Table.Rows)
 					for (int c = 0; c != Table.ColCount; ++c)
 					{
-						if ((sel = row[c]).selected
-							&& (sel.text != gs.Stars || sel.loadchanged))
+						if ((sel = row[c]).selected)
 						{
-							Table.ChangeCellText(sel, gs.Stars); // TODO: Optimize that for multiple cells.
+							if (sel.text != gs.Stars)
+							{
+								Table.ChangeCellText(sel, gs.Stars);	// does not do a text-check
+								invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+							}
+							else if (sel.loadchanged)
+							{
+								sel.loadchanged = false;
+
+								if (invalid == -1)
+									invalid = YataGrid.INVALID_GRID;
+							}
 						}
 					}
+
+					if (invalid == YataGrid.INVALID_GRID)
+						Table.Invalidator(invalid);
 				}
 				else
 					ReadonlyError();
@@ -2790,47 +2835,77 @@ namespace yata
 		/// <summary>
 		/// Converts all selected cells to lowercase.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Lower"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_Lower"/></c> - Menu|Cells|Lowercase</item>
+		/// <item>Cells|Lowercase</item>
 		/// </list></remarks>
 		void editcellsclick_Lower(object sender, EventArgs e)
 		{
 			Cell sel;
+			int invalid = -1;
+
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				if ((sel = row[c]).selected
-					&& (sel.text != sel.text.ToLower() || sel.loadchanged))
+				if ((sel = row[c]).selected)
 				{
-					Table.ChangeCellText(sel, sel.text.ToLower()); // TODO: Optimize that for multiple cells.
+					if (sel.text != sel.text.ToLower())
+					{
+						Table.ChangeCellText(sel, sel.text.ToLower());	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;				// ChangeCellText() will run the Invalidator.
+					}
+					else if (sel.loadchanged)
+					{
+						sel.loadchanged = false;
+
+						if (invalid == -1)
+							invalid = YataGrid.INVALID_GRID;
+					}
 				}
 			}
+
+			if (invalid == YataGrid.INVALID_GRID)
+				Table.Invalidator(invalid);
 		}
 
 		/// <summary>
 		/// Converts all selected cells to uppercase.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Upper"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_Upper"/></c> - Menu|Cells|Uppercase</item>
+		/// <item>Cells|Uppercase</item>
 		/// </list></remarks>
 		void editcellsclick_Upper(object sender, EventArgs e)
 		{
 			Cell sel;
+			int invalid = -1;
+
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				if ((sel = row[c]).selected
-					&& (sel.text != sel.text.ToUpper() || sel.loadchanged))
+				if ((sel = row[c]).selected)
 				{
-					Table.ChangeCellText(sel, sel.text.ToUpper()); // TODO: Optimize that for multiple cells.
+					if (sel.text != sel.text.ToUpper())
+					{
+						Table.ChangeCellText(sel, sel.text.ToUpper());	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;				// ChangeCellText() will run the Invalidator.
+					}
+					else if (sel.loadchanged)
+					{
+						sel.loadchanged = false;
+
+						if (invalid == -1)
+							invalid = YataGrid.INVALID_GRID;
+					}
 				}
 			}
+
+			if (invalid == YataGrid.INVALID_GRID)
+				Table.Invalidator(invalid);
 		}
 
 		/// <summary>
@@ -2848,23 +2923,56 @@ namespace yata
 			{
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
-					if (_copytext.Length == 1)
+					Cell sel;
+					int invalid = -1;
+
+					foreach (var row in Table.Rows)
+					for (int c = 0; c != Table.ColCount; ++c)
 					{
-						Cell sel;
-						foreach (var row in Table.Rows)
-						for (int c = 0; c != Table.ColCount; ++c)
+						if ((sel = row[c]).selected)
 						{
-							if ((sel = row[c]).selected
-								&& (sel.text != _copytext[0,0] || sel.loadchanged))
+							if (sel.text != _copytext[0,0])
 							{
-								Table.ChangeCellText(sel, _copytext[0,0]); // does not do a text-check
+								Table.ChangeCellText(sel, _copytext[0,0]);	// does not do a text-check
+								invalid = YataGrid.INVALID_NONE;			// ChangeCellText() will run the Invalidator.
+							}
+							else if (sel.loadchanged)
+							{
+								sel.loadchanged = false;
+		
+								if (invalid == -1)
+									invalid = YataGrid.INVALID_GRID;
 							}
 						}
 					}
+
+					if (invalid == YataGrid.INVALID_GRID)
+						Table.Invalidator(invalid);
 				}
 			}
 		}
 		#endregion Events (editcells)
+
+
+		#region Methods (editcells)
+		/// <summary>
+		/// Determines the dis/enabled states of cell-edit operations.
+		/// </summary>
+		internal void EnableCelleditOperations()
+		{
+			bool contiguous = Table.areSelectedCellsContiguous();
+			it_CutCell   .Enabled = !Table.Readonly && contiguous;
+			it_CopyCell  .Enabled = contiguous;
+
+			bool oneSelected = Table.getSelectedCell() != null;
+			it_PasteCell .Enabled = !Table.Readonly && oneSelected;
+
+			it_DeleteCell.Enabled = // TODO: if any selected cell is not 'gs.Stars'
+			it_Lower     .Enabled = // TODO: if any selected cell is not lowercase
+			it_Upper     .Enabled = // TODO: if any selected cell is not uppercase
+			it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
+		}
+		#endregion Methods (editcells)
 
 
 		#region Events (editrows)
@@ -4233,10 +4341,12 @@ namespace yata
 
 		#region Methods (tab)
 		/// <summary>
-		/// Helper for tabclick_DiffReset().
-		/// @note Check that 'table' is not null before call.
+		/// Helper for
+		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
 		/// </summary>
-		/// <param name="table"></param>
+		/// <param name="table"><c><see cref="YataGrid"/></c></param>
+		/// <remarks>Check that <paramref name="table"/> is not null before
+		/// call.</remarks>
 		void DiffReset(YataGrid table)
 		{
 			for (int r = 0; r != table.RowCount; ++r)
@@ -4254,11 +4364,11 @@ namespace yata
 		/// <summary>
 		/// The yata-diff routine.
 		/// </summary>
-		/// <returns>true if differences are found</returns>
+		/// <returns><c>true</c> if differences are found</returns>
 		bool doDiff()
 		{
-			_diff1.ClearSelects();
-			_diff2.ClearSelects();
+			_diff1.ClearSelects(true);
+			_diff2.ClearSelects(); // <- current Table
 
 
 			bool isDiff = false;
@@ -4434,9 +4544,10 @@ namespace yata
 		/// <summary>
 		/// Selects the next diffed cell in the table (or both tables if both
 		/// are valid).
-		/// @note Frozen cells will be selected but they don't respect
-		/// EnsureDisplayed(). They get no respect ...
 		/// </summary>
+		/// <remarks>Frozen cells will be selected but they don't respect
+		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
+		/// They get no respect ...</remarks>
 		internal void GotoDiffCell()
 		{
 			if (WindowState == FormWindowState.Minimized)
@@ -4470,7 +4581,7 @@ namespace yata
 				Table.ClearSelects();
 
 				if (table != null)
-					table.ClearSelects();
+					table.ClearSelects(true);
 
 				int r,c;
 
@@ -4577,10 +4688,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for GotoDiffCell().
+		/// Helper for <c><see cref="GotoDiffCell()">GotoDiffCell()</see></c>.
 		/// </summary>
-		/// <param name="sel">cell in the current table</param>
-		/// <param name="table">the other table</param>
+		/// <param name="sel"><c><see cref="Cell"/></c> in the current table</param>
+		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
 		void gotodiff(Cell sel, YataGrid table)
 		{
 			Table.SelectCell(sel, false);
@@ -4594,11 +4705,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Syncs two diffed tables when a cell or row gets selected.
+		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
+		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets selected.
 		/// </summary>
-		/// <param name="sel"></param>
+		/// <param name="sel"><c><see cref="Cell"/></c> in the current table -
+		/// can be <c>null</c></param>
 		/// <param name="r"></param>
-		/// <returns>true if diff-tables are valid</returns>
+		/// <returns><c>true</c> if diff-tables are valid</returns>
+		/// <remarks><c><see cref="_table"/></c> is the other synced
+		/// <c><see cref="YataGrid"/></c></remarks>
 		internal bool SyncSelect(Cell sel = null, int r = -1)
 		{
 			if (_diff1 != null && _diff2 != null)
@@ -4607,7 +4722,7 @@ namespace yata
 				else if (Table == _diff2) _table = _diff1;
 				else return false;
 
-				_table.ClearSelects();
+				_table.ClearSelects(true);
 				if (sel != null)
 				{
 					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
@@ -4811,15 +4926,12 @@ namespace yata
 		/// </summary>
 		internal void popupCellmenu()
 		{
-			_sel = Table.getSelectedCell();
+			_sel = Table.getSelectedCell(); // '_sel' shall be valid due to rightclick
 
 			it_cellEdit   .Enabled = !Table.Readonly;
 
 			it_cellCut    .Enabled = !Table.Readonly;
-//			it_cellCopy   .Enabled = true; // always enabled here.
-			it_cellPaste  .Enabled = !Table.Readonly
-								  && _copytext.Length == 1
-								  && (_sel.text != _copytext[0,0] || _sel.loadchanged);
+			it_cellPaste  .Enabled = !Table.Readonly;
 			it_cellDelete .Enabled = !Table.Readonly
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 
@@ -4835,22 +4947,24 @@ namespace yata
 
 			switch (Table.Info)
 			{
-//				default: // NOTE: The default cases are disabled but will be visible.
 				case YataGrid.InfoType.INFO_NONE:
 				case YataGrid.InfoType.INFO_CRAFT:
-					it_cellInput.Text    = "InfoInput";
+					it_cellInput.Visible =
 					it_cellInput.Enabled = false;
 					break;
 
-				// TODO: If Readonly allow viewing the InfoInput dialog but disable its controls ->
+				// TODO: If table is Readonly allow viewing the InfoInput dialog
+				// but disable its controls ->
 
 				case YataGrid.InfoType.INFO_SPELL:
 					it_cellInput.Text    = "InfoInput (spells.2da)";
+					it_cellInput.Visible = true;
 					it_cellInput.Enabled = !Table.Readonly && isSpellsInfoInputCol();
 					break;
 
 				case YataGrid.InfoType.INFO_FEAT:
 					it_cellInput.Text    = "InfoInput (feat.2da)";
+					it_cellInput.Visible = true;
 					it_cellInput.Enabled = !Table.Readonly && isFeatInfoInputCol();
 					break;
 			}
@@ -4862,18 +4976,19 @@ namespace yata
 		/// <summary>
 		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
-		/// <returns><c>true</c> if Merge (cell or row) will be enabled</returns>
+		/// <returns><c>true</c> if merge operations (cell or row) will be
+		/// enabled</returns>
 		bool isMergeEnabled()
 		{
 			if (_sel.diff && _diff1 != null && _diff2 != null)
 			{
-				YataGrid destTable = null;
-				if      (Table == _diff1) destTable = _diff2;
-				else if (Table == _diff2) destTable = _diff1;
+				YataGrid table = null;
+				if      (Table == _diff1) table = _diff2;
+				else if (Table == _diff2) table = _diff1;
 
-				return (destTable != null && !destTable.Readonly
-					 && destTable.ColCount > _sel.x
-					 && destTable.RowCount > _sel.y);
+				return (table != null && !table.Readonly
+					 && table.ColCount > _sel.x
+					 && table.RowCount > _sel.y);
 			}
 			return false;
 		}
@@ -4881,7 +4996,8 @@ namespace yata
 		/// <summary>
 		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><c>true</c> if the InfoInput operation will show for
+		/// Spells.2da.</returns>
 		bool isSpellsInfoInputCol()
 		{
 			switch (_sel.x)
@@ -4916,7 +5032,8 @@ namespace yata
 		/// <summary>
 		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><c>true</c> if the InfoInput operation will show for
+		/// Feat.2da.</returns>
 		bool isFeatInfoInputCol()
 		{
 			switch (_sel.x)
@@ -5016,8 +5133,15 @@ namespace yata
 		{
 			_copytext = new string[,] {{ _sel.text }};
 
-			if (_sel.text != gs.Stars || _sel.loadchanged)
-				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+			if (_sel.text != gs.Stars)
+			{
+				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
+			}
+			else if (_sel.loadchanged)
+			{
+				_sel.loadchanged = false;
+				Table.Invalidator(YataGrid.INVALID_GRID);
+			}
 		}
 
 		/// <summary>
@@ -5031,23 +5155,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles cell-click paste.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void cellclick_Paste(object sender, EventArgs e)
-		{
-			Table.ChangeCellText(_sel, _copytext[0,0]); // does not do a text-check
-		}
-
-		/// <summary>
 		/// Handles cell-click delete.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void cellclick_Delete(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
 		}
 
 		/// <summary>
@@ -5057,7 +5171,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Lower(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, _sel.text.ToLower()); // does not do a text-check
+			Table.ChangeCellText(_sel, _sel.text.ToLower()); // does not do a text-check, does Invalidate
 		}
 
 		/// <summary>
@@ -5067,7 +5181,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Upper(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, _sel.text.ToUpper()); // does not do a text-check
+			Table.ChangeCellText(_sel, _sel.text.ToUpper()); // does not do a text-check, does Invalidate
 		}
 
 		/// <summary>
@@ -5077,15 +5191,15 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_MergeCe(object sender, EventArgs e)
 		{
-			YataGrid destTable;
-			if (Table == _diff1) destTable = _diff2;
-			else                 destTable = _diff1;
+			YataGrid table;
+			if (Table == _diff1) table = _diff2;
+			else                 table = _diff1;
 
 			int r = _sel.y;
 			int c = _sel.x;
 
-			Cell dst = destTable[r,c];
-			destTable.ChangeCellText(dst, _sel.text); // does not do a text-check
+			Cell dst = table[r,c];
+			table.ChangeCellText(dst, _sel.text); // does not do a text-check, does Invalidate
 
 			_diff1[r,c].diff =
 			_diff2[r,c].diff = false;
@@ -5098,33 +5212,33 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_MergeRo(object sender, EventArgs e)
 		{
-			YataGrid destTable;
-			if (Table == _diff1) destTable = _diff2;
-			else                 destTable = _diff1;
+			YataGrid table;
+			if (Table == _diff1) table = _diff2;
+			else                 table = _diff1;
 
 			int r = _sel.y;
 
 			// - store the row's current state to 'rPre' in the Restorable
-			Restorable rest = UndoRedo.createRow(destTable.Rows[r]);
+			Restorable rest = UndoRedo.createRow(table.Rows[r]);
 
 			int c = 0;
-			for (; c != destTable.ColCount && c != Table.ColCount; ++c)
+			for (; c != table.ColCount && c != Table.ColCount; ++c)
 			{
-				destTable[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
-				destTable[r,c].diff = false;
+				table[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
+				table[r,c].diff = false;
 
 				Table[r,c].diff = false;
 			}
 
-			if (destTable.ColCount > Table.ColCount)
+			if (table.ColCount > Table.ColCount)
 			{
-				for (; c != destTable.ColCount; ++c)
+				for (; c != table.ColCount; ++c)
 				{
-					destTable[r,c].text = gs.Stars;
-					destTable[r,c].diff = false;
+					table[r,c].text = gs.Stars;
+					table[r,c].diff = false;
 				}
 			}
-			else if (destTable.ColCount < Table.ColCount)
+			else if (table.ColCount < Table.ColCount)
 			{
 				for (; c != Table.ColCount; ++c)
 					Table[r,c].diff = false;
@@ -5132,15 +5246,15 @@ namespace yata
 
 			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
-			if (!destTable.Changed)
+			if (!table.Changed)
 			{
-				destTable.Changed = true;
+				table.Changed = true;
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 
 			// - store the row's changed state to 'rPos' in the Restorable
-			rest.rPos = destTable.Rows[r].Clone() as Row;
-			destTable._ur.Push(rest);
+			rest.rPos = table.Rows[r].Clone() as Row;
+			table._ur.Push(rest);
 		}
 
 
@@ -5227,35 +5341,37 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for cellclick_InfoInput()
+		/// - helper for
+		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
 		/// </summary>
 		void doIntInputSpells()
 		{
-			using (var f = new InfoInputSpells(Table, _sel))
-			{
-				doIntInput(f);
-			}
+			using (var iis = new InfoInputSpells(Table, _sel))
+				doIntInput(iis);
 		}
 
 		/// <summary>
-		/// - helper for cellclick_InfoInput()
+		/// - helper for
+		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
 		/// </summary>
 		void doIntInputFeat()
 		{
-			using (var f = new InfoInputFeat(Table, _sel))
-			{
-				doIntInput(f);
-			}
+			using (var iif = new InfoInputFeat(Table, _sel))
+				doIntInput(iif);
 		}
 
 		/// <summary>
 		/// Shows an InfoInput dialog and handles its return.
-		/// - helper for doIntInputSpells() and doIntInputFeat().
 		/// </summary>
-		/// <param name="f"></param>
-		void doIntInput(Form f)
+		/// <param name="dialog"></param>
+		/// <remarks>- helper for
+		/// <list type="bullet">
+		/// <item><c><see cref="doIntInputSpells()">doIntInputSpells()</see></c></item>
+		/// <item><c><see cref="doIntInputFeat()">doIntInputFeat()</see></c></item>
+		/// </list></remarks>
+		void doIntInput(Form dialog)
 		{
-			if (f.ShowDialog(this) == DialogResult.OK
+			if (dialog.ShowDialog(this) == DialogResult.OK
 				&& int1 != int0)
 			{
 				string val;
@@ -5268,7 +5384,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Handler for the cell-context's sub "STRREF" DropDownOpening event.
+		/// Handler for the cell-context's sub "STRREF" <c>DropDownOpening</c>
+		/// event.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

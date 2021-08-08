@@ -159,7 +159,13 @@ namespace yata
 		internal bool selected
 		{
 			get { return _selected; }
-			set { _selected = value; SetState(); }
+			set
+			{
+				_selected = value;
+				SetState();
+
+//				YataForm.that.EnableCelleditOperations();
+			}
 		}
 
 		bool _loadchanged;

@@ -41,10 +41,10 @@ namespace yata
 		ToolStripMenuItem it_GotoLoadchanged;
 
 		ToolStripMenuItem it_MenuCells;
-		internal ToolStripMenuItem it_CutCell;
-		internal ToolStripMenuItem it_CopyCell;
-		internal ToolStripMenuItem it_PasteCell;
-		internal ToolStripMenuItem it_DeleteCell;
+		ToolStripMenuItem it_CutCell;
+		ToolStripMenuItem it_CopyCell;
+		ToolStripMenuItem it_PasteCell;
+		ToolStripMenuItem it_DeleteCell;
 		ToolStripMenuItem it_Lower;
 		ToolStripMenuItem it_Upper;
 		ToolStripMenuItem it_Apply;
@@ -743,7 +743,7 @@ namespace yata
 			this.it_MenuCells.Name = "it_MenuCells";
 			this.it_MenuCells.Size = new System.Drawing.Size(47, 20);
 			this.it_MenuCells.Text = "&Cells";
-			this.it_MenuCells.DropDownOpening += new System.EventHandler(this.editcells_dropdownopening);
+			this.it_MenuCells.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_CutCell
 			// 
@@ -1616,7 +1616,7 @@ namespace yata
 			this.it_cellPaste.Name = "it_cellPaste";
 			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
 			this.it_cellPaste.Text = "paste";
-			this.it_cellPaste.Click += new System.EventHandler(this.cellclick_Paste);
+			this.it_cellPaste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
 			// it_cellDelete
 			// 

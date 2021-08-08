@@ -522,9 +522,11 @@ namespace yata
 			_grid.Colwidth(c,r);
 			_grid.metricFrozenControls(c);
 
-			_grid.ClearSelects();
+			_grid.ClearSelects(true);
 			cell.selected = true;
 			_grid.EnsureDisplayed(cell);
+
+			_grid._f.EnableCelleditOperations();
 
 
 			int invalid = YataGrid.INVALID_GRID
