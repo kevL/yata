@@ -10,13 +10,12 @@ namespace yata
 	/// A panel for the col heads.
 	/// </summary>
 	sealed class YataPanelCols
-		:
-			Panel
+		: Panel
 	{
 		readonly YataGrid _grid;
 
 		/// <summary>
-		/// cTor for col-panel.
+		/// cTor.
 		/// </summary>
 		/// <param name="grid"></param>
 		internal YataPanelCols(YataGrid grid)
@@ -34,7 +33,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the resize event.
+		/// Overrides the <c>Resize</c> event on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
@@ -45,7 +44,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the paint event.
+		/// Overrides the <c>Paint</c> event on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -77,6 +76,7 @@ namespace yata
 		int _grabStart;
 
 		/// <summary>
+		/// Overrides the <c>MouseMove</c> event on this <c>YataPanelCols</c>.
 		/// Changes cursor to a vertical splitter near the right edge of each
 		/// unfrozen colhead.
 		/// </summary>
@@ -110,7 +110,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the mousedown event.
+		/// Overrides the <c>MouseDown</c> event on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -129,7 +129,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the mouseup event.
+		/// Overrides the <c>MouseUp</c> event on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseUp(MouseEventArgs e)
@@ -172,17 +172,17 @@ namespace yata
 		}
 	}
 
+
 	/// <summary>
 	/// A panel for the row heads.
 	/// </summary>
 	sealed class YataPanelRows
-		:
-			Panel
+		: Panel
 	{
 		readonly YataGrid _grid;
 
 		/// <summary>
-		/// cTor for row-panel.
+		/// cTor.
 		/// </summary>
 		/// <param name="grid"></param>
 		internal YataPanelRows(YataGrid grid)
@@ -198,7 +198,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the paint event.
+		/// Overrides the <c>Paint</c> event on this <c>YataPanelRows</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -218,17 +218,17 @@ namespace yata
 		}
 	}
 
+
 	/// <summary>
 	/// A panel for the id-col and any frozen cols that follow it.
 	/// </summary>
 	sealed class YataPanelFrozen
-		:
-			Panel
+		: Panel
 	{
 		readonly YataGrid _grid;
 
 		/// <summary>
-		/// cTor for frozen-panel.
+		/// cTor.
 		/// </summary>
 		/// <param name="grid"></param>
 		/// <param name="w"></param>
@@ -245,7 +245,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the paint event.
+		/// Overrides the <c>Paint</c> event on this <c>YataPanelFrozen</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -259,7 +259,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles a mouseclick on the frozen-panel.
+		/// Overrides the <c>MouseClick</c> event on this
+		/// <c>YataPanelFrozen</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
