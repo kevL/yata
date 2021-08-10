@@ -556,7 +556,7 @@ namespace yata
 			for (int c = 0; c != row.Length; ++c)
 				_grid[r,c].loadchanged = row[c].loadchanged;
 
-			_grid.ClearSelects();
+			_grid.ClearSelects(false, true);
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
@@ -608,7 +608,7 @@ namespace yata
 			_grid.Rows[r] = row.Clone() as Row;
 			_grid.Calibrate(r);
 
-			_grid.ClearSelects();
+			_grid.ClearSelects(false, true);
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
@@ -646,7 +646,7 @@ namespace yata
 			_grid.Calibrate(0, _grid.RowCount - 1);
 
 
-			_grid.ClearSelects();
+			_grid.ClearSelects(false, true);
 			int r = _it.array[0]._id;
 			_grid.Rows[r].selected = true;
 //			_grid.RangeSelect = _it.array.Length - 1;	// that's problematic ... wrt/ re-Sorted cols

@@ -10,6 +10,10 @@ namespace yata
 	sealed class Col
 	{
 		internal string text; // the colhead text
+
+		/// <summary>
+		/// Only 1 <c>Col</c> shall ever be <c>selected</c>.
+		/// </summary>
 		internal bool selected;
 
 		int _width;
@@ -54,6 +58,14 @@ namespace yata
 			ICloneable
 	{
 		#region Fields and Properties
+		/// <summary>
+		/// Set <c>_bypassEnableRowedit</c> <c>true</c> when clearing
+		/// <c><see cref="selected"/></c> for a synced
+		/// <c><see cref="YataGrid"/></c> so that the Rowedit its don't go
+		/// borky.
+		/// </summary>
+		internal static bool _bypassEnableRowedit;
+
 		internal int _id;
 		internal int _id_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
 
@@ -76,6 +88,9 @@ namespace yata
 		internal Brush _brush;
 
 		bool _selected;
+		/// <summary>
+		/// Only 1 <c>Row</c> shall ever be <c>selected</c>.
+		/// </summary>
 		internal bool selected
 		{
 			get { return _selected; }
@@ -84,7 +99,8 @@ namespace yata
 				_selected = value;
 				_grid.RangeSelect = 0;
 
-				_grid._f.EnableCopyRange(_selected); // NOTE to Self: I should code in C since encapsulation is shot.
+				if (!_bypassEnableRowedit)
+					_grid._f.EnableRoweditOperations();
 			}
 		}
 		#endregion Fields and Properties

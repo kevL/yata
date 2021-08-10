@@ -50,10 +50,10 @@ namespace yata
 		ToolStripMenuItem it_Apply;
 
 		ToolStripMenuItem it_MenuRows;
-		internal ToolStripMenuItem it_CutRange;
-		internal ToolStripMenuItem it_CopyRange;
+		ToolStripMenuItem it_CutRange;
+		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRange;
-		internal ToolStripMenuItem it_DeleteRange;
+		ToolStripMenuItem it_DeleteRange;
 		ToolStripMenuItem it_CreateRows;
 
 		ToolStripMenuItem it_MenuCol;
@@ -828,7 +828,7 @@ namespace yata
 			this.it_MenuRows.Name = "it_MenuRows";
 			this.it_MenuRows.Size = new System.Drawing.Size(49, 20);
 			this.it_MenuRows.Text = "&Rows";
-			this.it_MenuRows.DropDownOpening += new System.EventHandler(this.editrows_dropdownopening);
+			this.it_MenuRows.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_CutRange
 			// 

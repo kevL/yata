@@ -882,12 +882,7 @@ namespace yata
 
 				EnableCelleditOperations();
 
-				bool isrowselected = Table.getSelectedRow() != -1;
-				it_CutRange       .Enabled = !Table.Readonly && isrowselected;
-				it_CopyRange      .Enabled = isrowselected;
-				it_PasteRange     .Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_DeleteRange    .Enabled = !Table.Readonly && isrowselected;
-				it_CreateRows     .Enabled = !Table.Readonly;
+				EnableRoweditOperations();
 
 				it_OrderRows      .Enabled = !Table.Readonly;
 				it_CheckRows      .Enabled =
@@ -1484,6 +1479,7 @@ namespace yata
 			it_SaveAll.Enabled = AllowSaveAll();
 
 			EnableCelleditOperations();
+			EnableRoweditOperations();
 
 			Tabs.Invalidate();
 		}
@@ -2980,94 +2976,70 @@ namespace yata
 
 		#region Events (editrows)
 		/// <summary>
-		/// Handles opening the EditRowsMenu, determines if various items ought
-		/// be enabled.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void editrows_dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				bool isrowselected = Table.getSelectedRow() != -1;
-//				it_CutRange   .Enabled = !Table.Readonly && isrowselected;
-				it_CopyRange  .Enabled = isrowselected;
-				it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
-				it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
-
-				it_CreateRows .Enabled = !Table.Readonly;
-			}
-			else
-			{
-//				it_CutRange   .Enabled =
-				it_CopyRange  .Enabled =
-				it_PasteRange .Enabled =
-				it_DeleteRange.Enabled =
-
-				it_CreateRows .Enabled = false;
-			}
-		}
-
-
-		/// <summary>
 		/// Cuts a range of rows.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CutRange"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>
+		/// <remarks>handles
 		/// <list type="bullet">
 		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c></item>
 		/// </list></remarks>
 		void editrowsclick_CutRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+			if (!Table.Readonly) // safety and should be taken out
 			{
-				editrowsclick_CopyRange(null, EventArgs.Empty);
-				editrowsclick_DeleteRange(null, EventArgs.Empty);
+				editrowsclick_CopyRange(  sender, e);
+				editrowsclick_DeleteRange(sender, e);
 			}
 			else
 				ReadonlyError();
 		}
 
 		/// <summary>
-		/// Copies a range of rows.
+		/// Copies a range of rows and enables
+		/// <c><see cref="it_PasteRange"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_CopyRange"/></c></item>
+		/// <item><c><see cref="it_CutRange"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>handles
+		/// <list type="bullet">
+		/// <item>Rows|Copy <c>[Ctrl+Shift+c]</c></item>
+		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c>
+		/// <c><see cref="editrowsclick_CutRange()">editrowsclick_CutRange()</see></c></item>
+		/// </list></remarks>
 		void editrowsclick_CopyRange(object sender, EventArgs e)
 		{
 			_copyr.Clear();
 
 			int selr = Table.getSelectedRow();
 
-			int rFirst, rLast;
+			int start, stop;
 			if (Table.RangeSelect > 0)
 			{
-				rFirst = selr;
-				rLast  = selr + Table.RangeSelect;
+				start = selr;
+				stop  = selr + Table.RangeSelect;
 			}
 			else
 			{
-				rFirst = selr + Table.RangeSelect;
-				rLast  = selr;
+				start = selr + Table.RangeSelect;
+				stop  = selr;
 			}
 
 			string[] fields;
-			while (rFirst <= rLast)
+			do
 			{
 				fields = new string[Table.ColCount];
 				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = Table[rFirst,c].text;
+					fields[c] = Table[start, c].text;
 
 				_copyr.Add(fields);
-				++rFirst;
+				++start;
 			}
+			while (start <= stop);
 
 			if (!Table.Readonly)
 				it_PasteRange.Enabled = true;
@@ -3076,11 +3048,15 @@ namespace yata
 		/// <summary>
 		/// Pastes a range of rows.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PasteRange"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>handles
+		/// <list type="bullet">
+		/// <item>Rows|Paste <c>[Ctrl+Shift+v]</c></item>
+		/// </list></remarks>
 		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+			if (!Table.Readonly) // safety and should be taken out
 			{
 				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
@@ -3101,7 +3077,7 @@ namespace yata
 
 				Table.Calibrate(selr, _copyr.Count - 1); // paste range
 
-				Table.ClearSelects();
+				Table.ClearSelects(false, true);
 				Table.Rows[selr].selected = true;
 				Table.RangeSelect = _copyr.Count - 1;
 				Table.EnsureDisplayedRow(selr);
@@ -3125,11 +3101,21 @@ namespace yata
 		/// <summary>
 		/// Deletes a range of rows.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_DeleteRange"/></c></item>
+		/// <item><c><see cref="it_CutRange"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>handles
+		/// <list type="bullet">
+		/// <item>Rows|Delete <c>[Shift+Delete]</c></item>
+		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c>
+		/// <c><see cref="editrowsclick_CutRange()">editrowsclick_CutRange()</see></c></item>
+		/// </list></remarks>
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+			if (!Table.Readonly) // safety and should be taken out
 			{
 				int selr = Table.getSelectedRow();
 				if (selr != -1)
@@ -3144,13 +3130,17 @@ namespace yata
 		/// Instantiates <c><see cref="RowCreatorDialog"/></c> for
 		/// inserting/creating multiple rows.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CreateRows"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>handles
+		/// <list type="bullet">
+		/// <item>Rows|Create ... <c>[F2]</c></item>
+		/// </list></remarks>
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly)
+				if (!Table.Readonly) // safety and should be taken out
 				{
 					int selr = Table.getSelectedRow();
 
@@ -3199,7 +3189,7 @@ namespace yata
 
 							Table.Calibrate(_startCr, _lengthCr - 1); // insert range
 
-							Table.ClearSelects();
+							Table.ClearSelects(false, true);
 							Table.Rows[_startCr].selected = true;
 							Table.RangeSelect = _lengthCr - 1;
 							Table.EnsureDisplayedRow(_startCr);
@@ -3227,13 +3217,18 @@ namespace yata
 
 		#region Methods (editrows)
 		/// <summary>
-		/// Enables/disables the copy-rows it.
+		/// Determines the dis/enabled states of row-edit operations.
 		/// </summary>
-		/// <param name="enabled"></param>
-		/// <remarks>Is called by <c>Row.selected</c>.</remarks>
-		internal void EnableCopyRange(bool enabled)
+		internal void EnableRoweditOperations()
 		{
-			it_CopyRange.Enabled = enabled;
+			bool isrowselected = Table.getSelectedRow() != -1;
+
+			it_CutRange   .Enabled = !Table.Readonly && isrowselected;
+			it_CopyRange  .Enabled = isrowselected;
+			it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
+			it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
+
+			it_CreateRows .Enabled = !Table.Readonly;
 		}
 		#endregion Methods (editrows)
 
@@ -4374,8 +4369,8 @@ namespace yata
 		/// <returns><c>true</c> if differences are found</returns>
 		bool doDiff()
 		{
-			_diff1.ClearSelects(true);
-			_diff2.ClearSelects(); // <- current Table
+			_diff1.ClearSelects(true, true);	// sync table
+			_diff2.ClearSelects();				// current table
 
 
 			bool isDiff = false;
@@ -4588,7 +4583,7 @@ namespace yata
 				Table.ClearSelects();
 
 				if (table != null)
-					table.ClearSelects(true);
+					table.ClearSelects(true, true);
 
 				int r,c;
 
@@ -4729,7 +4724,7 @@ namespace yata
 				else if (Table == _diff2) _table = _diff1;
 				else return false;
 
-				_table.ClearSelects(true);
+				_table.ClearSelects(true, true);
 				if (sel != null)
 				{
 					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
