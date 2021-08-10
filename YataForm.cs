@@ -2980,7 +2980,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CutRange"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>handles
+		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c></item>
 		/// </list></remarks>
@@ -3005,7 +3005,7 @@ namespace yata
 		/// <item><c><see cref="it_CutRange"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks>handles
+		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Copy <c>[Ctrl+Shift+c]</c></item>
 		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c>
@@ -3050,7 +3050,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PasteRange"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>handles
+		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Paste <c>[Ctrl+Shift+v]</c></item>
 		/// </list></remarks>
@@ -3107,7 +3107,7 @@ namespace yata
 		/// <item><c><see cref="it_CutRange"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks>handles
+		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Delete <c>[Shift+Delete]</c></item>
 		/// <item>Rows|Cut <c>[Ctrl+Shift+x]</c>
@@ -3132,7 +3132,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CreateRows"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>handles
+		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Create ... <c>[F2]</c></item>
 		/// </list></remarks>
