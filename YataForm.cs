@@ -487,7 +487,7 @@ namespace yata
 			switch (e.KeyData)
 			{
 				case Keys.Enter: // do this here to get rid of the beep.
-					if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+					if (Table != null)
 					{
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 							_dontbeep = DONTBEEP_SEARCH;
@@ -1558,20 +1558,17 @@ namespace yata
 							if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
 																//               *as itself* it loses its Readonly flag.
 
-							if (_table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
-							{
-								_table.Changed = false;
-								_table._ur.ResetSaved();
+							_table.Changed = false;
+							_table._ur.ResetSaved();
 
-								foreach (var row in _table.Rows)
-								for (int c = 0; c != _table.ColCount; ++c)
-									row[c].loadchanged = false;
+							foreach (var row in _table.Rows)
+							for (int c = 0; c != _table.ColCount; ++c)
+								row[c].loadchanged = false;
 
-								if (_table == Table)
-									_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+							if (_table == Table)
+								_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
-								FileOutput.Write(_table);
-							}
+							FileOutput.Write(_table);
 						}
 //						}
 					}
@@ -3242,7 +3239,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editcol_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				if (Table._editor.Visible)
 				{
@@ -3608,7 +3605,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				if (!Table.Readonly)
 				{
@@ -3663,7 +3660,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_TestOrder(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				var list = new List<string>();
 
@@ -3790,7 +3787,7 @@ namespace yata
 		/// <param name="e"></param>
 		void opsclick_Recolor(object sender, EventArgs e)
 		{
-			if (Table != null && Table.RowCount != 0) // NOTE: 'RowCount' shall never be 0
+			if (Table != null)
 			{
 				Row row;
 				Brush brush;

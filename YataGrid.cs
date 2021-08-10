@@ -4176,13 +4176,14 @@ namespace yata
 		/// <param name="col"></param>
 		void labelSort(int col)
 		{
-			if (RowCount != 0 && ModifierKeys == Keys.Shift) // NOTE: 'RowCount' shall never be 0
+			if (ModifierKeys == Keys.Shift)
 			{
 				_editor.Visible = false;
 				Select();
 
 				ColSort(col);
 				EnsureDisplayed();
+
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
 						  | INVALID_COLS
