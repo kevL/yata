@@ -105,7 +105,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_f.Clip_uncheck();
+			_f.ClipEditor_uncheck();
 
 			_x = Left;
 			_y = Top;

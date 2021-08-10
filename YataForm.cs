@@ -3517,10 +3517,10 @@ namespace yata
 
 		#region Methods (clipboard)
 		/// <summary>
-		/// Clears the check on the clipboard-it when the clipboard-dialog
-		/// closes.
+		/// Clears the check on <c><see cref="it_OpenClipEditor"/></c> and nulls
+		/// <c><see cref="_fclip"/></c> when the clipboard-dialog closes.
 		/// </summary>
-		internal void Clip_uncheck()
+		internal void ClipEditor_uncheck()
 		{
 			it_OpenClipEditor.Checked = false;
 			_fclip = null;
