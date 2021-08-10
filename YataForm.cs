@@ -3232,10 +3232,10 @@ namespace yata
 
 		#region Events (editcol)
 		/// <summary>
-		/// Handles opening the EditcolMenu, determines if various items ought
-		/// be enabled.
+		/// Handles the <c>DropDownOpening</c> event for
+		/// <c><see cref="it_MenuCol"/></c>. Deters if subits ought be enabled.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c>it_MenuCol</c></param>
 		/// <param name="e"></param>
 		void editcol_dropdownopening(object sender, EventArgs e)
 		{
@@ -3247,7 +3247,7 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				bool isColSelected = (Table.getSelectedCol() > 0); // id-col is disallowed
+				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
 
 				it_CreateHead .Enabled = !Table.Readonly;
 				it_DeleteHead .Enabled =
@@ -3271,82 +3271,64 @@ namespace yata
 		/// Opens a text-input dialog for creating a col at a selected col-id or
 		/// at the far right if no col is selected.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CreateHead"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			using (var f = new InputDialogColhead())
 			{
-				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
+				if (f.ShowDialog(this) == DialogResult.OK
+					&& InputDialogColhead._text.Length != 0)
 				{
-					using (var f = new InputDialogColhead())
-					{
-						if (f.ShowDialog(this) == DialogResult.OK
-							&& InputDialogColhead._text.Length != 0)
-						{
-							Obfuscate();
-							DrawingControl.SuspendDrawing(Table);
+					Obfuscate();
+					DrawingControl.SuspendDrawing(Table);
 
-							int selc = Table.getSelectedCol();		// create at far right if no col selected or id-col is selected
-							if (selc < 1) selc = Table.ColCount;	// - not sure that id-col could ever be selected
+					int selc = Table.getSelectedCol();		// create at far right if no col selected or id-col is selected
+					if (selc < 1) selc = Table.ColCount;	// - not sure that id-col could ever be selected
 
-							steadystate();
+					steadystate();
 
-							Table.CreateCol(selc);
+					Table.CreateCol(selc);
 
-							DrawingControl.ResumeDrawing(Table);
-							Obfuscate(false);
+					it_freeze1.Enabled = Table.ColCount > 1;
+					it_freeze2.Enabled = Table.ColCount > 2;
 
-							it_freeze1.Enabled = Table.ColCount > 1;
-							it_freeze2.Enabled = Table.ColCount > 2;
-						}
-					}
+					DrawingControl.ResumeDrawing(Table);
+					Obfuscate(false);
 				}
-				else
-					ReadonlyError();
 			}
 		}
 
 		/// <summary>
 		/// Deletes a selected col w/ confirmation.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_DeleteHead"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_DeleteHead(object sender, EventArgs e)
 		{
-			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			int selc = Table.getSelectedCol();
+
+			if (MessageBox.Show("Are you sure you want to delete the selected col"
+									+ Environment.NewLine + Environment.NewLine
+									+ "\t" + Table.Fields[selc - 1],
+								" Delete colhead",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Warning,
+								MessageBoxDefaultButton.Button2,
+								0) == DialogResult.Yes)
 			{
-				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
-				{
-					int selc = Table.getSelectedCol();
-					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
-					{
-						if (MessageBox.Show("Are you sure you want to delete the selected col"
-												+ Environment.NewLine + Environment.NewLine
-												+ "\t" + Table.Fields[selc - 1],
-											" Delete colhead",
-											MessageBoxButtons.YesNo,
-											MessageBoxIcon.Warning,
-											MessageBoxDefaultButton.Button2,
-											0) == DialogResult.Yes)
-						{
-							Obfuscate();
-							DrawingControl.SuspendDrawing(Table);
+				Obfuscate();
+				DrawingControl.SuspendDrawing(Table);
 
-							steadystate();
+				steadystate();
 
-							Table.DeleteCol(selc);
+				Table.DeleteCol(selc);
 
-							DrawingControl.ResumeDrawing(Table);
-							Obfuscate(false);
+				it_freeze1.Enabled = Table.ColCount > 1;
+				it_freeze2.Enabled = Table.ColCount > 2;
 
-							it_freeze1.Enabled = Table.ColCount > 1;
-							it_freeze2.Enabled = Table.ColCount > 2;
-						}
-					}
-				}
-				else
-					ReadonlyError();
+				DrawingControl.ResumeDrawing(Table);
+				Obfuscate(false);
 			}
 		}
 
@@ -3373,7 +3355,6 @@ namespace yata
 
 			if (Table.Propanel != null && Table.Propanel.Visible)
 			{
-				// TODO: close pp-editor if visible (check code for that generally)
 				Table.Propanel.Hide();
 				it_ppLocation.Enabled = false;
 			}
@@ -3384,32 +3365,22 @@ namespace yata
 		/// <summary>
 		/// Relabels the colhead of a selected col.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_RelabelHead"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_RelabelHead(object sender, EventArgs e)
 		{
-			if (Table != null) // safety. Is checked in editcol_dropdownopening()
+			int selc = Table.getSelectedCol();
+
+			string head = Table.Fields[selc - 1];
+			InputDialogColhead._text = head;
+			using (var f = new InputDialogColhead())
 			{
-				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
+				if (f.ShowDialog(this) == DialogResult.OK
+					&& InputDialogColhead._text.Length != 0
+					&& InputDialogColhead._text != head)
 				{
-					int selc = Table.getSelectedCol();
-					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
-					{
-						string head = Table.Fields[selc - 1];
-						InputDialogColhead._text = head;
-						using (var f = new InputDialogColhead())
-						{
-							if (f.ShowDialog(this) == DialogResult.OK
-								&& InputDialogColhead._text.Length != 0
-								&& InputDialogColhead._text != head)
-							{
-								Table.RelabelCol(selc);
-							}
-						}
-					}
+					Table.RelabelCol(selc);
 				}
-				else
-					ReadonlyError();
 			}
 		}
 
@@ -3417,70 +3388,55 @@ namespace yata
 		/// Copies all cell-fields in a selected col to
 		/// <c><see cref="_copyc"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CopyCol"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_CopyCol(object sender, EventArgs e)
 		{
-			if (Table != null) // safety. Is checked in editcol_dropdownopening()
-			{
-				int selc = Table.getSelectedCol();
-				if (selc > 0) // safety. Is checked in editcol_dropdownopening()
-				{
-					_copyc.Clear();
+			int selc = Table.getSelectedCol();
 
-					for (int r = 0; r != Table.RowCount; ++r)
-						_copyc.Add(Table[r, selc].text);
-				}
-			}
+			_copyc.Clear();
+
+			for (int r = 0; r != Table.RowCount; ++r)
+				_copyc.Add(Table[r, selc].text);
 		}
 
 		/// <summary>
 		/// Pastes <c><see cref="_copyc"/></c> to the cell-fields of a selected
 		/// col.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PasteCol"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_PasteCol(object sender, EventArgs e)
 		{
-			if (Table != null && _copyc.Count != 0) // safety. Is checked in editcol_dropdownopening()
+			int selc = Table.getSelectedCol();
+
+			string warn = String.Empty;
+			if (Table.RowCount < _copyc.Count)
 			{
-				if (!Table.Readonly) // safety. Is checked in editcol_dropdownopening()
-				{
-					int selc = Table.getSelectedCol();
-					if (selc > 0) // safety. Is checked in editcol_dropdownopening()
-					{
-						string sWarn = String.Empty;
-						if (Table.RowCount < _copyc.Count)
-						{
-							int diff = _copyc.Count - Table.RowCount;
-							sWarn = "The table has " + diff + " less row(s) than the copy.";
-						}
-						else if (Table.RowCount > _copyc.Count)
-						{
-							int diff = Table.RowCount - _copyc.Count;
-							sWarn = "The copy has " + diff + " less row(s) than the table.";
-						}
+				int diff = _copyc.Count - Table.RowCount;
+				warn = "The table has " + diff + " less row(s) than the copy.";
+			}
+			else if (Table.RowCount > _copyc.Count)
+			{
+				int diff = Table.RowCount - _copyc.Count;
+				warn = "The copy has " + diff + " less row(s) than the table.";
+			}
 
-						if (sWarn.Length == 0
-							|| MessageBox.Show(sWarn + " Do you want to continue",
-												" Count mismatch",
-												MessageBoxButtons.YesNo,
-												MessageBoxIcon.Warning,
-												MessageBoxDefaultButton.Button2,
-												0) == DialogResult.Yes)
-						{
-							Obfuscate();
-							DrawingControl.SuspendDrawing(Table);
+			if (warn.Length == 0
+				|| MessageBox.Show(warn + " Do you want to continue",
+									" Count mismatch",
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Warning,
+									MessageBoxDefaultButton.Button2,
+									0) == DialogResult.Yes)
+			{
+				Obfuscate();
+				DrawingControl.SuspendDrawing(Table);
 
-							Table.PasteCol(selc, _copyc);
+				Table.PasteCol(selc, _copyc);
 
-							DrawingControl.ResumeDrawing(Table);
-							Obfuscate(false);
-						}
-					}
-				}
-				else
-					ReadonlyError();
+				DrawingControl.ResumeDrawing(Table);
+				Obfuscate(false);
 			}
 		}
 		#endregion Events (editcol)
