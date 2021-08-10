@@ -53,6 +53,11 @@ namespace yata
 		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
 
 		/// <summary>
+		/// The clipboard editor.
+		/// </summary>
+		ClipboardF _fclip;
+
+		/// <summary>
 		/// A 2d-array of strings used for copy/paste cell.
 		/// </summary>
 		/// <remarks>A cell's text shall never be null or blank, therefore
@@ -3490,19 +3495,20 @@ namespace yata
 		/// Displays contents of the clipboard (if text) in an editable
 		/// output-box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_OpenClipEditor"/></c></param>
 		/// <param name="e"></param>
 		void clipclick_ViewClipboard(object sender, EventArgs e)
 		{
-			var f = Application.OpenForms["ClipboardF"];
-			if (f == null)
+//			var f = Application.OpenForms["ClipboardF"]; // oh fuck off.
+
+			if (_fclip == null)
 			{
 				it_OpenClipEditor.Checked = true;
-				f = new ClipboardF(this);
-				f.Show(this); // will be disposed auto.
+				_fclip = new ClipboardF(this);
+				_fclip.Show(this); // will be disposed auto.
 			}
 			else
-				f.BringToFront();
+				_fclip.BringToFront();
 		}
 		#endregion Events (clipboard)
 
@@ -3515,6 +3521,7 @@ namespace yata
 		internal void Clip_uncheck()
 		{
 			it_OpenClipEditor.Checked = false;
+			_fclip = null;
 		}
 		#endregion Methods (clipboard)
 

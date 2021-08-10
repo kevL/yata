@@ -5,8 +5,7 @@ using System.Windows.Forms;
 namespace yata
 {
 	sealed partial class ClipboardF
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		static int _x = -1;
