@@ -3449,9 +3449,10 @@ namespace yata
 
 		#region Events (clipboard)
 		/// <summary>
-		/// Outputs the current contents of '_copyr' to the Windows clipboard.
+		/// Outputs the current contents of <c><see cref="_copyr"/></c> to the
+		/// Windows clipboard.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_ClipExport"/></c></param>
 		/// <param name="e"></param>
 		void clipclick_ExportCopy(object sender, EventArgs e)
 		{
@@ -3467,13 +3468,14 @@ namespace yata
 				if (i != _copyr.Count - 1)
 					clip += Environment.NewLine;
 			}
-			ClipboardAssistant.SetText(clip);
+			ClipAssist.SetText(clip);
 		}
 
 		/// <summary>
-		/// Imports the current contents of the Windows clipboard to '_copyr'.
+		/// Imports the current contents of the Windows clipboard to
+		/// <c><see cref="_copyr"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_ClipImport"/></c></param>
 		/// <param name="e"></param>
 		void clipclick_ImportCopy(object sender, EventArgs e)
 		{
@@ -3493,7 +3495,7 @@ namespace yata
 
 		/// <summary>
 		/// Displays contents of the clipboard (if text) in an editable
-		/// output-box.
+		/// input/output dialog.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_OpenClipEditor"/></c></param>
 		/// <param name="e"></param>

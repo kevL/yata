@@ -149,7 +149,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Set(object sender, EventArgs e)
 		{
-			ClipboardAssistant.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
+			ClipAssist.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
 		}
 		#endregion Events
 	}
@@ -159,7 +159,7 @@ namespace yata
 	/// <summary>
 	/// https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879
 	/// </summary>
-	static class ClipboardAssistant
+	static class ClipAssist
 	{
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		static extern IntPtr GetOpenClipboardWindow();
@@ -170,6 +170,11 @@ namespace yata
 		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
 		static extern bool CloseClipboard();
 
+		/// <summary>
+		/// Sets a string of text to the Windows Clipboard after ensuring that
+		/// the Clipboard's handle has been freed.
+		/// </summary>
+		/// <param name="text">the text to set</param>
 		internal static void SetText(string text)
 		{
 			if (GetOpenClipboardWindow() != IntPtr.Zero)
