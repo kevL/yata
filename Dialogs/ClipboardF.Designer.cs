@@ -57,7 +57,7 @@ namespace yata
 			this.btn_Done.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Done.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Done.Location = new System.Drawing.Point(85, 0);
+			this.btn_Done.Location = new System.Drawing.Point(86, 0);
 			this.btn_Done.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Done.Name = "btn_Done";
 			this.btn_Done.Size = new System.Drawing.Size(370, 30);
@@ -69,7 +69,7 @@ namespace yata
 			// btn_Set
 			// 
 			this.btn_Set.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Set.Location = new System.Drawing.Point(455, 0);
+			this.btn_Set.Location = new System.Drawing.Point(457, 0);
 			this.btn_Set.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Set.Name = "btn_Set";
 			this.btn_Set.Size = new System.Drawing.Size(80, 30);
@@ -96,7 +96,7 @@ namespace yata
 			this.Controls.Add(this.rtb_Clip);
 			this.Controls.Add(this.panel1);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
-			this.MinimumSize = new System.Drawing.Size(230, 0);
+			this.MinimumSize = new System.Drawing.Size(250, 0);
 			this.Name = "ClipboardF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
