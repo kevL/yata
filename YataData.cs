@@ -12,8 +12,9 @@ namespace yata
 		internal string text; // the colhead text
 
 		/// <summary>
-		/// Only 1 <c>Col</c> shall ever be <c>selected</c>.
+		/// Flags this <c>Col</c> as selected.
 		/// </summary>
+		/// <remarks>Only 1 <c>Col</c> shall ever be <c>selected</c>.</remarks>
 		internal bool selected;
 
 		int _width;
@@ -89,8 +90,13 @@ namespace yata
 
 		bool _selected;
 		/// <summary>
-		/// Only 1 <c>Row</c> shall ever be <c>selected</c>.
+		/// Flags this <c>Row</c> as selected. The setter clears
+		/// <c><see cref="YataGrid.RangeSelect">YataGrid.RangeSelect</see></c>
+		/// and calls
+		/// <c><see cref="YataForm.EnableRoweditOperations()">YataForm.EnableRoweditOperations()</see></c>
+		/// iff <c><see cref="_bypassEnableRowedit"/></c> is <c>false</c>.
 		/// </summary>
+		/// <remarks>Only 1 <c>Row</c> shall ever be <c>selected</c>.</remarks>
 		internal bool selected
 		{
 			get { return _selected; }
@@ -185,6 +191,10 @@ namespace yata
 		}
 
 		bool _loadchanged;
+		/// <summary>
+		/// Flags this <c>Cell</c> as loadchanged. The setter can call
+		/// <c><see cref="YataForm.EnableGotoLoadchanged()">YataForm.EnableGotoLoadchanged()</see></c>.
+		/// </summary>
 		internal bool loadchanged
 		{
 			get { return _loadchanged; }
@@ -275,6 +285,10 @@ namespace yata
 
 
 		#region ICloneable requirements
+		/// <summary>
+		/// Clones this <c>Cell</c>.
+		/// </summary>
+		/// <returns>a cloned <c>Cell</c> as an <c>object</c></returns>
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
