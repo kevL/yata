@@ -1479,7 +1479,7 @@ namespace yata
 
 			EnableCelleditOperations();
 			EnableRoweditOperations();
-			Enable2daOperations();
+			Enable2daOperations_readonlychanged();
 
 			Tabs.Invalidate();
 		}
@@ -3955,6 +3955,17 @@ namespace yata
 			it_Propanel   .Checked = Table.Propanel != null && Table.Propanel.Visible;
 
 			it_ExternDiff .Enabled = File.Exists(Settings._diff);
+		}
+
+		/// <summary>
+		/// Determines the dis/enabled states of 2daOps operations that can
+		/// change when
+		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c>
+		/// changes.
+		/// </summary>
+		void Enable2daOperations_readonlychanged()
+		{
+			it_OrderRows.Enabled = !Table.Readonly;
 		}
 		#endregion Methods (2daOps)
 
