@@ -3631,7 +3631,7 @@ namespace yata
 						stop = true;
 						break;
 					}
-					list.Add("id " + r + " is not an integer");
+					list.Add("ID @ " + r + " is not an integer.");
 				}
 				else if (result != r)
 				{
@@ -3640,7 +3640,7 @@ namespace yata
 						stop = true;
 						break;
 					}
-					list.Add("id " + r + " is out of order");
+					list.Add("ID @ " + r + " is out of order.");
 				}
 			}
 
@@ -3661,7 +3661,7 @@ namespace yata
 				if (!Table.Readonly)
 				{
 					info += Environment.NewLine + Environment.NewLine
-						  + "Do you want to auto-order the ID fields?";
+						  + "Do you want to auto-order the ID fields";
 
 					if (MessageBox.Show(info,
 										" burp",
