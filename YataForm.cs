@@ -3570,6 +3570,8 @@ namespace yata
 				}
 			}
 
+			string info;
+
 			if (changed != 0)
 			{
 				Table.Changed = true;
@@ -3589,24 +3591,19 @@ namespace yata
 
 				Table.Invalidator(invalid);
 
-				string info;
 				if (changed == 1)
 					info = "1 row ID corrected.";
 				else
 					info = changed + " row IDs corrected.";
-
-				MessageBox.Show(info,
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1);
 			}
 			else
-				MessageBox.Show("Row order is Okay - no change.",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1);
+				info = "Row order is Okay - no change.";
+
+			MessageBox.Show(info,
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Information,
+							MessageBoxDefaultButton.Button1);
 		}
 
 		/// <summary>
