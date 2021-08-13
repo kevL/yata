@@ -3557,7 +3557,7 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			bool changed = false;
+			int changed = 0;
 
 			int result;
 			for (int r = 0; r != Table.RowCount; ++r)
@@ -3566,11 +3566,11 @@ namespace yata
 					|| result != r)
 				{
 					Table[r,0].text = r.ToString();
-					changed = true;
+					++changed;
 				}
 			}
 
-			if (changed)
+			if (changed != 0)
 			{
 				Table.Changed = true;
 				Table._ur.ResetSaved(true);
@@ -3588,7 +3588,25 @@ namespace yata
 					invalid |= YataGrid.INVALID_PROP;
 
 				Table.Invalidator(invalid);
+
+				string info;
+				if (changed == 1)
+					info = "1 row ID corrected.";
+				else
+					info = changed + " row IDs corrected.";
+
+				MessageBox.Show(info,
+								" burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information,
+								MessageBoxDefaultButton.Button1);
 			}
+			else
+				MessageBox.Show("Row order is Okay - no change.",
+								" burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information,
+								MessageBoxDefaultButton.Button1);
 		}
 
 		/// <summary>
