@@ -705,13 +705,11 @@ namespace yata
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		/// <remarks>This is a generic handler that should be invoked when
-		/// opening a menu on the menubar (iff the menu doesn't have its own
-		/// dropdown-handler).
+		/// opening a menu on the menubar.
 		/// 
 		/// 
-		/// Note that the
-		/// <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c> does
-		/// not need to be hidden here since it gets hidden when the
+		/// The <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c>
+		/// does not need to be hidden here since it gets hidden when the
 		/// <c>Propanel</c> loses focus.</remarks>
 		void dropdownopening(object sender, EventArgs e)
 		{
@@ -1280,18 +1278,9 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null)
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
+			dropdownopening(sender, e);
 
-				it_Reload.Enabled = File.Exists(Table.Fullpath);
-			}
-			else
-				it_Reload.Enabled = false;
+			it_Reload.Enabled = Table != null && File.Exists(Table.Fullpath);
 
 
 			// directory presets ->
@@ -3238,14 +3227,10 @@ namespace yata
 		/// <param name="e"></param>
 		void editcol_dropdownopening(object sender, EventArgs e)
 		{
+			dropdownopening(sender, e);
+
 			if (Table != null)
 			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
 				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
 
 				it_CreateHead .Enabled = !Table.Readonly;
@@ -3528,15 +3513,9 @@ namespace yata
 		/// <param name="e"></param>
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			bool valid = Table != null;
+			dropdownopening(sender, e);
 
-			if (valid && Table._editor.Visible)
-			{
-				Table._editor.Visible = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
-
-			it_ClearUr.Enabled = valid && (Table._ur.CanUndo || Table._ur.CanRedo);
+			it_ClearUr.Enabled = Table != null && (Table._ur.CanUndo || Table._ur.CanRedo);
 		}
 
 
