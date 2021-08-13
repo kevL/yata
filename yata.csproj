@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\PropertyPanel.cs" />
+    <Compile Include="Controls\PropertyPanelButton.cs" />
     <Compile Include="Controls\YataPanels.cs" />
     <Compile Include="Controls\YataTabs.cs" />
     <Compile Include="Dialogs\About.cs" />

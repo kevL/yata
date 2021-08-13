@@ -7,106 +7,11 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// The button in the upper-right corner of Yata that opens/cycles the
-	/// PropertyPanel.
+	/// Yata's <c>PropertyPanel</c>.
 	/// </summary>
-	sealed class PropertyPanelButton
-		:
-			Button
-	{
-		#region Fields (static)
-		internal static int HEIGHT = 20;
-		#endregion Fields (static)
-
-
-		#region Fields
-		readonly Rectangle _rectBg;
-		readonly Rectangle _rectGr;
-		#endregion Fields
-
-
-		#region Properties
-		internal bool Depressed
-		{ get; set; }
-		#endregion Properties
-
-
-		#region cTor
-		/// <summary>
-		/// cTor.
-		/// </summary>
-		internal PropertyPanelButton()
-		{
-			DrawingControl.SetDoubleBuffered(this);
-
-			// NOTE: .NET is using the default vals for button's Width/Height
-			// here. So set it explicitly.
-			Width  =
-			Height = HEIGHT;
-
-			_rectBg = new Rectangle(0,0, Width, Height);
-			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);
-
-
-			Name     = "btn_PropertyPanel";
-			TabIndex = 4;
-			TabStop  = false;
-
-			Visible = false;
-
-			Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			UseVisualStyleBackColor = true;
-
-			Margin = new Padding(0);
-		}
-		#endregion cTor
-
-
-		#region Events (override)
-		/// <summary>
-		/// Since right-click on a button does not visually depress it do this.
-		/// </summary>
-		/// <param name="pevent"></param>
-		protected override void OnPaint(PaintEventArgs pevent)
-		{
-			YataGrid.graphics = pevent.Graphics;
-			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-			// and you know it don't come easy - Ringo
-			YataGrid.graphics.FillRectangle(Brushes.PropanelButton, _rectBg);
-
-			if (Depressed)
-			{
-				YataGrid.graphics.FillRectangle(Gradients.PropanelButton, _rectGr);
-
-				var pen1 = Pens.Black;
-				var pen2 = Pencils.DarkLine;
-
-				YataGrid.graphics.DrawLine(pen1, 2, 2,          Width - 2, 2);			// hori top
-				YataGrid.graphics.DrawLine(pen2, 2, 3,          Width - 2, 3);
-
-				YataGrid.graphics.DrawLine(pen1, 2, Height - 1, Width - 2, Height - 1);	// hori bot
-				YataGrid.graphics.DrawLine(pen2, 2, Height - 2, Width - 3, Height - 2);
-
-				YataGrid.graphics.DrawLine(pen1, 2, 2,          2, Height - 2);			// vert left
-				YataGrid.graphics.DrawLine(pen2, 3, 2,          3, Height - 2);
-
-				YataGrid.graphics.DrawLine(pen1, Width - 1, 2,  Width - 1, Height - 2);	// vert right
-				YataGrid.graphics.DrawLine(pen2, Width - 2, 2,  Width - 2, Height - 2);
-			}
-			else
-				base.OnPaint(pevent);
-		}
-		#endregion Events (override)
-	}
-
-
-	/// <summary>
-	/// Yata's PropertyPanel. Each tabbed table gets its own Propanel.
-	/// </summary>
+	/// <remarks> Each tabbed table gets its own.</remarks>
 	sealed class PropertyPanel
-		:
-			Control
+		: Control
 	{
 		#region Enums
 		internal enum DockState
@@ -275,7 +180,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the 'Width', 'Left', and 'Height' values of this property panel.
+		/// Sets the <c>Width</c>/<c>Left</c>/<c>Height</c> values of this
+		/// <c>PropertyPanel</c>.
 		/// </summary>
 		internal void telemetric()
 		{
@@ -325,7 +231,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Scrolls this property panel (vertical only).
+		/// Scrolls this <c>PropertyPanel</c> (vertical only).
 		/// </summary>
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
@@ -350,8 +256,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Ensures that a selected field is displayed within this panel's
-		/// visible height.
+		/// Ensures that a selected field is displayed within this
+		/// <c>PropertyPanel's</c> visible height.
 		/// <param name="c">the col in the table, the row in the panel</param>
 		/// </summary>
 		internal void EnsureDisplayed(int c)
@@ -423,7 +329,7 @@ namespace yata
 
 		#region Events (scroll)
 		/// <summary>
-		/// Hides the editor when this panel is scrolled.
+		/// Hides the editor when this <c>PropertyPanel</c> is scrolled.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -436,36 +342,24 @@ namespace yata
 
 		#region Events (editor)
 		/// <summary>
-		/// Handles keydown events in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Alt is pressed.
+		/// Handles the cell-editor's <c>KeyDown</c> event.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// <remarks>Works around dweeby .NET behavior if <c>[Alt]</c> is
+		/// pressed.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
 			if (e.Alt) lostfocus_Editor(null, EventArgs.Empty);
 		}
 
 		/// <summary>
-		/// Handles the editor losing focus.
-		/// @note This funct is a partial catchall for other places where the
-		/// editor needs to hide.
+		/// Handles the cell-editor's <c>Leave</c> event.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void lostfocus_Editor(object sender, EventArgs e)
-		{
-			_editor.Visible = false;
-			_grid.Invalidator(YataGrid.INVALID_PROP);
-		}
-
-		/// <summary>
-		/// Handles leave event in the cell-editor.
-		/// @note Works around dweeby .NET behavior if Ctrl+PageUp/Down is
-		/// pressed.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
+		/// <remarks>Works around dweeby .NET behavior if <c>[Ctrl+PageUp]</c>
+		/// or <c>[Ctrl+PageDown]</c> is pressed.</remarks>
 		void leave_Editor(object sender, EventArgs e)
 		{
 			if (_editor.Visible
@@ -474,13 +368,26 @@ namespace yata
 				_editor.Focus(); // ie. don't leave editor.
 			}
 		}
+
+		/// <summary>
+		/// Handles the cell-editor's <c>LostFocus</c> event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>This funct is a partial catchall for other places where the
+		/// cell-editor needs to hide.</remarks>
+		void lostfocus_Editor(object sender, EventArgs e)
+		{
+			_editor.Visible = false;
+			_grid.Invalidator(YataGrid.INVALID_PROP);
+		}
 		#endregion Events (editor)
 
 
 		#region Events (override)
 		/// <summary>
-		/// Handles ending editing a cell by pressing Enter or Escape/Tab - this
-		/// fires during edit or so.
+		/// Handles ending editing a cell by pressing <c>[Enter]</c> or
+		/// <c>[Escape]</c>/<c>[Tab]</c> - this fires during edit or so.
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
@@ -512,8 +419,6 @@ namespace yata
 		protected override void OnMouseEnter(EventArgs e)
 		{
 			_grid._f.PrintInfo(); // clear
-
-//			base.OnMouseEnter(e);
 		}
 
 
@@ -521,8 +426,8 @@ namespace yata
 		int _c; // -> the col in the table, the row in the panel.
 
 		/// <summary>
-		/// Handles a mouse-click event. Selects the row clicked, starts or
-		/// applies/cancels edit.
+		/// Overrides the <c>MouseClick</c> event. Selects the row clicked,
+		/// starts or applies/cancels edit.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
@@ -586,8 +491,6 @@ namespace yata
 				lostfocus_Editor(null, EventArgs.Empty);
 				_grid.Select();
 			}
-
-//			base.OnMouseClick(e);
 		}
 
 
@@ -694,8 +597,6 @@ namespace yata
 										  YataGraphics.flags);
 				}
 			}
-
-//			base.OnPaint(e);
 		}
 		#endregion Events (override)
 	}
