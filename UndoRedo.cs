@@ -73,12 +73,12 @@ namespace yata
 		#region Properties
 		internal bool CanUndo
 		{
-			get { return (Undoables.Count != 0); }
+			get { return Undoables.Count != 0; }
 		}
 
 		internal bool CanRedo
 		{
-			get { return (Redoables.Count != 0); }
+			get { return Redoables.Count != 0; }
 		}
 		#endregion Properties
 
