@@ -50,7 +50,7 @@ namespace yata
 
 
 		#region Fields
-		readonly PropertyPanelButton btn_ProPanel = new PropertyPanelButton();
+		readonly PropertyPanelButton btn_Propanel = new PropertyPanelButton();
 
 		/// <summary>
 		/// The clipboard editor.
@@ -213,11 +213,11 @@ namespace yata
 
 			Controls.Add(Tabs);
 
-			// init 'btn_ProPanel' ->
-			btn_ProPanel.MouseDown += mousedown_btnPropertyPanel;
-			btn_ProPanel.MouseUp   += mouseup_btnPropertyPanel;
+			// init 'btn_Propanel' ->
+			btn_Propanel.MouseDown += mousedown_btnPropertyPanel;
+			btn_Propanel.MouseUp   += mouseup_btnPropertyPanel;
 
-			Controls.Add(btn_ProPanel);
+			Controls.Add(btn_Propanel);
 
 			InitializeComponent();
 
@@ -335,8 +335,8 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
-			btn_ProPanel.Left = ClientSize.Width - PropertyPanelButton.HEIGHT + 1;
-			btn_ProPanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
+			btn_Propanel.Left = ClientSize.Width - btn_Propanel.Width + 1;
+			btn_Propanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
 			if (Settings._recent != 0)
@@ -445,32 +445,34 @@ namespace yata
 		{
 			//logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 
-			switch (keyData)
+			if (Table != null)
 			{
-				case Keys.Control | Keys.X: // bypass Ctrl+x, Ctrl+c, Ctrl+v if the editor is visible.
-				case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
-				case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
-				case Keys.Delete:
-//				case Keys.Delete | Keys.Shift: // appears to not be used by textboxes.
-					if (Table != null
-						&& (Table._editor.Visible
-							|| (Table.Propanel != null && Table.Propanel._editor.Visible)))
-					{
-						return false;
-					}
-					break;
+				switch (keyData)
+				{
+					case Keys.Control | Keys.X: // bypass [Ctrl+x] [Ctrl+c] [Ctrl+v] [Del] if the editor is visible.
+					case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
+					case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
+					case Keys.Delete:
+//					case Keys.Delete | Keys.Shift: // appears to not be hooked by textboxes.
+						if (Table._editor.Visible
+							|| (Table.Propanel != null && Table.Propanel._editor.Visible))
+						{
+							return false;
+						}
+						break;
 
-				case Keys.Shift | Keys.F3:					// reverse search
-					editclick_SearchNext(null, EventArgs.Empty);
-					return true;
+					case Keys.Shift | Keys.F3:					// reverse search
+						editclick_SearchNext(null, EventArgs.Empty);
+						return true;
 
-				case Keys.Shift | Keys.Control | Keys.N:	// reverse gotoloadchanged
-					editclick_GotoLoadchanged(null, EventArgs.Empty);
-					return true;
+					case Keys.Shift | Keys.Control | Keys.N:	// reverse gotoloadchanged
+						editclick_GotoLoadchanged(null, EventArgs.Empty);
+						return true;
 
-				case Keys.Shift | Keys.F8:					// reverse propanel location cycle
-					opsclick_PropertyPanelLocation(null, EventArgs.Empty);
-					return true;
+					case Keys.Shift | Keys.F8:					// reverse cycle propanel location
+						opsclick_PropertyPanelLocation(null, EventArgs.Empty);
+						return true;
+				}
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -511,7 +513,7 @@ namespace yata
 
 				case Keys.Escape:
 					if (Table != null
-						&& (Tabs.Focused || btn_ProPanel.Focused)) // btn -> jic.
+						&& (Tabs.Focused || btn_Propanel.Focused)) // btn -> jic.
 					{
 						e.SuppressKeyPress = true;
 						Table.Select();
@@ -861,7 +863,7 @@ namespace yata
 
 				Cell sel = Table.getSelectedCell();
 
-				btn_ProPanel      .Visible = true;
+				btn_Propanel      .Visible = true;
 				it_MenuPaths      .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
 
@@ -886,19 +888,8 @@ namespace yata
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 
 				EnableCelleditOperations();
-
 				EnableRoweditOperations();
-
-				it_OrderRows      .Enabled = !Table.Readonly;
-				it_CheckRows      .Enabled =
-				it_ColorRows      .Enabled =
-				it_AutoCols       .Enabled =
-				it_ppOnOff        .Enabled = true;
-				it_ppLocation     .Enabled = Table.Propanel != null && Table.Propanel.Visible;
-				it_ExternDiff     .Enabled = File.Exists(Settings._diff);
-
-				it_freeze1        .Enabled = Table.ColCount > 1;
-				it_freeze2        .Enabled = Table.ColCount > 2;
+				Enable2daOperations();
 
 
 				if (Table.Propanel != null && Table.Propanel.Visible)
@@ -921,15 +912,19 @@ namespace yata
 
 				Obfuscate();
 
-				btn_ProPanel      .Visible =
+				// Visible ->
+
+				btn_Propanel      .Visible =
 				it_MenuPaths      .Visible =
 
+				// Checked ->
 
 				it_freeze1        .Checked =
 				it_freeze2        .Checked =
-
+				it_Propanel       .Checked =
 				it_Readonly       .Checked =
 
+				// Enabled ->
 
 				it_Undo           .Enabled =
 				it_Redo           .Enabled =
@@ -963,12 +958,11 @@ namespace yata
 				it_CheckRows      .Enabled =
 				it_ColorRows      .Enabled =
 				it_AutoCols       .Enabled =
-				it_ppOnOff        .Enabled =
-				it_ppLocation     .Enabled =
-				it_ExternDiff     .Enabled =
-
 				it_freeze1        .Enabled =
-				it_freeze2        .Enabled = false;
+				it_freeze2        .Enabled =
+				it_Propanel       .Enabled =
+				it_PropanelLoc    .Enabled =
+				it_ExternDiff     .Enabled = false;
 
 				_fdiffer = null;
 			}
@@ -1485,6 +1479,7 @@ namespace yata
 
 			EnableCelleditOperations();
 			EnableRoweditOperations();
+			Enable2daOperations();
 
 			Tabs.Invalidate();
 		}
@@ -1566,9 +1561,7 @@ namespace yata
 							_table.Changed = false;
 							_table._ur.ResetSaved();
 
-							foreach (var row in _table.Rows)
-							for (int c = 0; c != _table.ColCount; ++c)
-								row[c].loadchanged = false;
+							_table.ClearLoadchanged();
 
 							if (_table == Table)
 								_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
@@ -1857,7 +1850,7 @@ namespace yata
 					if (c < _copyr[0].Length)
 						field = _copyr[0][c];
 					else
-						field = gs.Stars;
+						field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
 
 					row[c].text = field;
 					row[c].diff =
@@ -3351,17 +3344,14 @@ namespace yata
 			Table.FrozenCount = YataGrid.FreezeId;
 
 			Table.ClearSelects();
-
-			foreach (var row in Table.Rows)
-			for (int c = 0; c != Table.ColCount; ++c)
-				row[c].loadchanged = false;
+			Table.ClearLoadchanged();
 
 			tabclick_DiffReset(null, EventArgs.Empty);
 
 			if (Table.Propanel != null && Table.Propanel.Visible)
 			{
 				Table.Propanel.Hide();
-				it_ppLocation.Enabled = false;
+				it_PropanelLoc.Enabled = false;
 			}
 
 			Table._ur.Clear(); // TODO: request confirmation
@@ -3537,322 +3527,298 @@ namespace yata
 		/// <param name="e"></param>
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			bool valid = (Table != null);
+			bool valid = Table != null;
 
-			it_OrderRows .Enabled = valid && !Table.Readonly;
-			it_CheckRows .Enabled =
-			it_ColorRows .Enabled =
-			it_AutoCols  .Enabled =
-			it_ppOnOff   .Enabled = valid;
-			it_ppLocation.Enabled = valid && Table.Propanel != null && Table.Propanel.Visible;
-
-			it_freeze1   .Enabled = valid && Table.ColCount > 1;
-			it_freeze2   .Enabled = valid && Table.ColCount > 2;
-
-			it_ExternDiff.Enabled = valid && File.Exists(Settings._diff);
-			it_ClearUr   .Enabled = valid && (Table._ur.CanUndo || Table._ur.CanRedo);
-
-			if (valid)
+			if (valid && Table._editor.Visible)
 			{
 				Table._editor.Visible = false;
 				Table.Invalidator(YataGrid.INVALID_GRID);
-
-				it_ppOnOff.Checked = Table.Propanel != null && Table.Propanel.Visible;
 			}
-			else
-				it_ppOnOff.Checked = false;
+
+			it_ClearUr.Enabled = valid && (Table._ur.CanUndo || Table._ur.CanRedo);
 		}
+
 
 		/// <summary>
 		/// Handles it-click to order row-ids.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_OrderRows"/></c></item>
+		/// <item><c><see cref="it_CheckRows"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Order rows <c>[Ctrl+d]</c></item>
+		/// <item>2daOps|Test rows <c>[Ctrl+t]</c>
+		/// <c><see cref="opsclick_TestOrder()">opsclick_TestOrder()</see></c></item>
+		/// </list></remarks>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			if (Table != null)
+			bool changed = false;
+
+			int result;
+			for (int r = 0; r != Table.RowCount; ++r)
 			{
-				if (!Table.Readonly)
+				if (!Int32.TryParse(Table[r,0].text, out result)
+					|| result != r)
 				{
-					bool changed = false;
-
-					string val;
-					int result;
-
-					for (int r = 0; r != Table.RowCount; ++r)
-					{
-						if (String.IsNullOrEmpty(val = Table[r,0].text)
-							|| !Int32.TryParse(val, out result)
-							|| result != r)
-						{
-							Table[r,0].text = r.ToString();
-							changed = true;
-						}
-					}
-
-					if (changed)
-					{
-						Table.Changed = true;
-						Table._ur.ResetSaved(true);
-					}
-
-					if (changed)
-					{
-						if      (Table == _diff1) _diff1 = null;
-						else if (Table == _diff2) _diff2 = null;
-
-						Table.Colwidth(0, 0, Table.RowCount - 1);
-						Table.metricFrozenControls(0);
-
-						Table.InitScroll();
-
-						int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-						if (Table.Propanel != null && Table.Propanel.Visible)
-							invalid |= YataGrid.INVALID_PROP;
-
-						Table.Invalidator(invalid);
-					}
+					Table[r,0].text = r.ToString();
+					changed = true;
 				}
-				else
-					ReadonlyError();
+			}
+
+			if (changed)
+			{
+				Table.Changed = true;
+				Table._ur.ResetSaved(true);
+
+				if      (Table == _diff1) _diff1 = null;
+				else if (Table == _diff2) _diff2 = null;
+
+				Table.Colwidth(0, 0, Table.RowCount - 1);
+				Table.metricFrozenControls(0);
+
+				Table.InitScroll();
+
+				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
+
+				Table.Invalidator(invalid);
 			}
 		}
 
 		/// <summary>
 		/// Handles it-click to test row-ids.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_CheckRows"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Test rows <c>[Ctrl+t]</c></item>
+		/// </list></remarks>
 		void opsclick_TestOrder(object sender, EventArgs e)
 		{
-			if (Table != null)
+			var list = new List<string>();
+
+			bool stop = false;
+
+			int result;
+			for (int r = 0; r != Table.RowCount; ++r)
 			{
-				var list = new List<string>();
-
-				string val;
-				int result;
-
-				bool stop = false;
-
-				for (int id = 0; id != Table.RowCount; ++id)
+				if (!Int32.TryParse(Table[r,0].text, out result))
 				{
-					if (String.IsNullOrEmpty(val = Table[id,0].text))
+					if (list.Count == 16) // stop this Madness
 					{
-						if (list.Count == 16) // stop this Madness
-						{
-							stop = true;
-							break;
-						}
-						list.Add("id " + id + " is not valid");
+						stop = true;
+						break;
 					}
-					else if (!Int32.TryParse(val, out result))
+					list.Add("id " + r + " is not an integer");
+				}
+				else if (result != r)
+				{
+					if (list.Count == 16) // stop this Madness
 					{
-						if (list.Count == 16)
-						{
-							stop = true;
-							break;
-						}
-						list.Add("id " + id + " is not an integer");
+						stop = true;
+						break;
 					}
-					else if (result != id)
-					{
-						if (list.Count == 16)
-						{
-							stop = true;
-							break;
-						}
-						list.Add("id " + id + " is out of order");
-					}
+					list.Add("id " + r + " is out of order");
+				}
+			}
+
+			if (list.Count != 0)
+			{
+				string info = String.Empty;
+				foreach (string it in list)
+				{
+					info += it + Environment.NewLine;
 				}
 
-				if (list.Count != 0)
+				if (stop)
 				{
-					string info = String.Empty;
-					foreach (string it in list)
-					{
-						info += it + Environment.NewLine;
-					}
+					info += Environment.NewLine
+						  + "The check has been stopped at 16 borks.";
+				}
 
-					if (stop)
-					{
-						info += Environment.NewLine
-							  + "The check has been stopped at 16 borks.";
-					}
+				if (!Table.Readonly)
+				{
+					info += Environment.NewLine + Environment.NewLine
+						  + "Do you want to auto-order the ID fields?";
 
-					if (!Table.Readonly)
-					{
-						info += Environment.NewLine + Environment.NewLine
-							  + "Do you want to auto-order the ID fields?";
-
-						if (MessageBox.Show(info,
-											" burp",
-											MessageBoxButtons.YesNo,
-											MessageBoxIcon.Exclamation,
-											MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-						{
-							opsclick_Order(null, EventArgs.Empty);
-						}
-					}
-					else
-						MessageBox.Show(info,
+					if (MessageBox.Show(info,
 										" burp",
-										MessageBoxButtons.OK,
+										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Exclamation,
-										MessageBoxDefaultButton.Button1);
+										MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+					{
+						opsclick_Order(sender, e);
+					}
 				}
 				else
-					MessageBox.Show("Row order is Okay.",
+					MessageBox.Show(info,
 									" burp",
 									MessageBoxButtons.OK,
-									MessageBoxIcon.Information,
+									MessageBoxIcon.Exclamation,
 									MessageBoxDefaultButton.Button1);
 			}
+			else
+				MessageBox.Show("Row order is Okay.",
+								" burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information,
+								MessageBoxDefaultButton.Button1);
 		}
 
+
+		/// <summary>
+		/// Handles it-click to recolor rows. Also clears all
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> flags.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_ColorRows"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Recolor rows <c>[Ctrl+l]</c></item>
+		/// </list></remarks>
+		void opsclick_Recolor(object sender, EventArgs e)
+		{
+			for (int r = 0; r != Table.RowCount; ++r)
+			{
+				Table.Rows[r]._brush = (r % 2 == 0) ? Brushes.Alice
+													: Brushes.Bob;
+			}
+			Table.ClearLoadchanged();
+
+			Table.Invalidator(YataGrid.INVALID_GRID);
+		}
 
 		/// <summary>
 		/// Handles it-click to autosize cols.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_AutoCols"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Autosize cols <c>[Ctrl+i]</c></item>
+		/// <item><c><see cref="DiffReset()">DiffReset()</see></c></item>
+		/// </list></remarks>
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
-			if (Table != null)
-			{
-				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
+			Obfuscate();
+			DrawingControl.SuspendDrawing(Table);
 
-				AutosizeCols(Table);
+			AutosizeCols(Table);
 
-				Obfuscate(false);
-				DrawingControl.ResumeDrawing(Table);
-			}
+			DrawingControl.ResumeDrawing(Table);
+			Obfuscate(false);
 		}
 
 		/// <summary>
-		/// Autosizes all cols of a given table.
+		/// Autosizes all cols of a given <c><see cref="YataGrid"/></c>.
 		/// </summary>
 		/// <param name="table"></param>
 		/// <remarks>Helper for
 		/// <c><see cref="opsclick_AutosizeCols()">opsclick_AutosizeCols()</see></c>
-		/// but is also called by
-		/// <c><see cref="DiffReset()">DiffReset()</see></c>.</remarks>
+		/// and <c><see cref="DiffReset()">DiffReset()</see></c>.</remarks>
 		void AutosizeCols(YataGrid table)
 		{
 			foreach (var col in table.Cols)
 				col.UserSized = false;
 
-			table.Calibrate(0, table.RowCount - 1); // autosize
-		}
-
-		/// <summary>
-		/// Handles it-click to recolor rows.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void opsclick_Recolor(object sender, EventArgs e)
-		{
-			if (Table != null)
-			{
-				Row row;
-				Brush brush;
-
-				for (int id = 0; id != Table.RowCount; ++id)
-				{
-					brush = (id % 2 == 0) ? Brushes.Alice
-										  : Brushes.Bob;
-
-					(row = Table.Rows[id])._brush = brush;
-
-					for (int c = 0; c != Table.ColCount; ++c)
-						row[c].loadchanged = false;
-				}
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
+			table.Calibrate(0, table.RowCount - 1);
 		}
 
 
 		/// <summary>
 		/// Handles it-click to freeze first col.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_freeze1"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Freeze 1st col <c>[F5]</c></item>
+		/// </list></remarks>
 		void opsclick_Freeze1stCol(object sender, EventArgs e)
 		{
-			if (Table != null && Table.ColCount > 1)
+			Table.Select();
+
+			it_freeze2.Checked = false;
+
+			if (it_freeze1.Checked = !it_freeze1.Checked)
 			{
-				Table.Select();
-
-				it_freeze2.Checked = false;
-
-				if (it_freeze1.Checked = !it_freeze1.Checked)
+				var col = Table.Cols[1];
+				if (col.UserSized)
 				{
-					var col = Table.Cols[1];
-					if (col.UserSized)
-					{
-						col.UserSized = false;
-						Table.Colwidth(1);
-					}
-					Table.FrozenCount = YataGrid.FreezeFirst;
+					col.UserSized = false;
+					Table.Colwidth(1);
 				}
-				else
-					Table.FrozenCount = YataGrid.FreezeId;
+				Table.FrozenCount = YataGrid.FreezeFirst;
 			}
+			else
+				Table.FrozenCount = YataGrid.FreezeId;
 		}
 
 		/// <summary>
 		/// Handles it-click to freeze second col.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_freeze2"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Freeze 2nd col <c>[F6]</c></item>
+		/// </list></remarks>
 		void opsclick_Freeze2ndCol(object sender, EventArgs e)
 		{
-			if (Table != null && Table.ColCount > 2)
+			Table.Select();
+
+			it_freeze1.Checked = false;
+
+			if (it_freeze2.Checked = !it_freeze2.Checked)
 			{
-				Table.Select();
-
-				it_freeze1.Checked = false;
-
-				if (it_freeze2.Checked = !it_freeze2.Checked)
+				var col = Table.Cols[1];
+				if (col.UserSized)
 				{
-					var col = Table.Cols[1];
-					if (col.UserSized)
-					{
-						col.UserSized = false;
-						Table.Colwidth(1);
-					}
-
-					col = Table.Cols[2];
-					if (col.UserSized)
-					{
-						col.UserSized = false;
-						Table.Colwidth(2);
-					}
-
-					Table.FrozenCount = YataGrid.FreezeSecond;
+					col.UserSized = false;
+					Table.Colwidth(1);
 				}
-				else
-					Table.FrozenCount = YataGrid.FreezeId;
+
+				col = Table.Cols[2];
+				if (col.UserSized)
+				{
+					col.UserSized = false;
+					Table.Colwidth(2);
+				}
+
+				Table.FrozenCount = YataGrid.FreezeSecond;
 			}
+			else
+				Table.FrozenCount = YataGrid.FreezeId;
 		}
 
 
 		/// <summary>
-		/// Handler for the PropertyPanel's visibility.
+		/// Toggles the <c><see cref="PropertyPanel"/></c> of the current
+		/// <c><see cref="Table"/></c> - creates a <c>PropertyPanel</c> if
+		/// required.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Propanel"/></c></item>
+		/// <item><c><see cref="btn_Propanel"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
-		/// <seealso cref="mouseup_btnPropertyPanel()"><c>mouseup_btnPropertyPanel()</c></seealso>
-		void opsclick_PropertyPanelOnOff(object sender, EventArgs e)
-		{
-			if (Table != null) togglePropanel();
-		}
-
-		/// <summary>
-		/// Toggles visibility of the PropertyPanel - instantiates a
-		/// PropertyPanel if required.
-		/// </summary>
-		void togglePropanel()
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|PropertyPanel <c>[F7]</c></item>
+		/// <item><c><see cref="mouseup_btnPropertyPanel()">mouseup_btnPropertyPanel()</see></c></item>
+		/// </list></remarks>
+		void opsclick_PropertyPanel(object sender, EventArgs e)
 		{
 			if (Table.Propanel == null
 				|| (Table.Propanel.Visible = !Table.Propanel.Visible))
@@ -3867,51 +3833,72 @@ namespace yata
 
 				Table.Propanel.Dockstate = Table.Propanel.Dockstate;
 
-				it_ppLocation.Enabled = true;
+				it_Propanel   .Checked =
+				it_PropanelLoc.Enabled = true;
 			}
 			else
 			{
 				Table.Propanel.Hide();
-				it_ppLocation.Enabled = false;
+
+				it_Propanel   .Checked =
+				it_PropanelLoc.Enabled = false;
 			}
 		}
 
 		/// <summary>
-		/// Handler for the PropertyPanel's position.
+		/// Cycles the location of the <c><see cref="PropertyPanel"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_PropanelLoc"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|PropertyPanel location <c>[F8]</c></item>
+		/// <item><c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> <c>[Shift+F8]</c></item>
+		/// </list></remarks>
 		/// <seealso cref="mouseup_btnPropertyPanel()"><c>mouseup_btnPropertyPanel()</c></seealso>
 		void opsclick_PropertyPanelLocation(object sender, EventArgs e)
 		{
-			if (Table != null && Table.Propanel != null && Table.Propanel.Visible)
+			if (Table.Propanel != null && Table.Propanel.Visible)
 				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
 		}
 
 
 		/// <summary>
 		/// Starts an external diff/merger program with the two diffed files
-		/// opened. Usually WinMerge.
+		/// opened. Usually WinMerge although kdiff3 and perhaps other
+		/// file-comparision utilities - their first 2 commandline arguments
+		/// must be the fullpaths of the files to compare. If
+		/// <c><see cref="_diff1"/></c> or <c><see cref="_diff2"/></c> doesn't
+		/// exist then try to start the app with the current
+		/// <c><see cref="Table"/></c> loaded.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_ExternDiff"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|External diff <c>[Ctrl+m]</c></item>
+		/// </list></remarks>
 		void opsclick_ExternalDiff(object sender, EventArgs e)
 		{
 			if (File.Exists(Settings._diff))
 			{
-				var diff = new Process();
-				diff.StartInfo.FileName = Settings._diff;
+				var differ = new Process();
+				differ.StartInfo.FileName = Settings._diff;
 
 				if (_diff1 != null && _diff2 != null
 					&& File.Exists(_diff1.Fullpath)
 					&& File.Exists(_diff2.Fullpath))
 				{
-					diff.StartInfo.Arguments = " \"" + _diff1.Fullpath + "\" \"" + _diff2.Fullpath + "\"";
+					differ.StartInfo.Arguments = " \"" + _diff1.Fullpath + "\" \"" + _diff2.Fullpath + "\"";
 				}
 				else
-					diff.StartInfo.Arguments = " \"" + Table.Fullpath + "\"";
+					differ.StartInfo.Arguments = " \"" + Table.Fullpath + "\"";
 
-				diff.Start();
+				differ.Start();
 			}
 		}
 
@@ -3919,8 +3906,12 @@ namespace yata
 		/// <summary>
 		/// Clears the Undo/Redo stacks.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_ClearUr"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>2daOps|Clear undo/redo</item>
+		/// </list></remarks>
 		void opsclick_ClearUr(object sender, EventArgs e)
 		{
 			if (Table != null)
@@ -3942,6 +3933,30 @@ namespace yata
 			}
 		}
 		#endregion Events (2daOps)
+
+
+		#region Methods (2daOps)
+		/// <summary>
+		/// Determines the dis/enabled states of 2daOps operations.
+		/// </summary>
+		void Enable2daOperations()
+		{
+			it_OrderRows  .Enabled = !Table.Readonly;
+			it_CheckRows  .Enabled =
+
+			it_ColorRows  .Enabled =
+			it_AutoCols   .Enabled = true;
+
+			it_freeze1    .Enabled = Table.ColCount > 1;
+			it_freeze2    .Enabled = Table.ColCount > 2;
+
+			it_Propanel   .Enabled = true;
+			it_PropanelLoc.Enabled =
+			it_Propanel   .Checked = Table.Propanel != null && Table.Propanel.Visible;
+
+			it_ExternDiff .Enabled = File.Exists(Settings._diff);
+		}
+		#endregion Methods (2daOps)
 
 
 		#region Events (font)
@@ -4833,52 +4848,51 @@ namespace yata
 
 		#region Events (propanel)
 		/// <summary>
-		/// Handler for MouseDown on the PropertyPanel button.
+		/// Handler for <c>MouseDown</c> on the
+		/// <c><see cref="PropertyPanelButton"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <c><see cref="Table"/></c> is invalid</remarks>
 		void mousedown_btnPropertyPanel(object sender, MouseEventArgs e)
 		{
-			if (Table != null)
+			if (    e.Button == MouseButtons.Left
+				|| (e.Button == MouseButtons.Right
+					&& Table.Propanel != null && Table.Propanel.Visible))
 			{
-				if (    e.Button == MouseButtons.Left
-					|| (e.Button == MouseButtons.Right
-						&& Table.Propanel != null && Table.Propanel.Visible))
-				{
-					btn_ProPanel.Depressed = true;
-					btn_ProPanel.Invalidate();
-				}
+				btn_Propanel.SetDepressed(true);
 			}
 		}
 
 		/// <summary>
-		/// Handler for <c>MouseUp</c> on the PropertyPanel button.
+		/// Handler for <c>MouseUp</c> on the
+		/// <c><see cref="PropertyPanelButton"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
 		/// <param name="e"></param>
-		/// <seealso cref="opsclick_PropertyPanelOnOff()"><c>opsclick_PropertyPanelOnOff()</c></seealso>
+		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <c><see cref="Table"/></c> is invalid</remarks>
+		/// <seealso cref="opsclick_PropertyPanel()"><c>opsclick_PropertyPanel()</c></seealso>
 		/// <seealso cref="opsclick_PropertyPanelLocation()"><c>opsclick_PropertyPanelLocation()</c></seealso>
 		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
 		{
-			if (Table != null)
+			Table.Select();
+
+			switch (e.Button)
 			{
-				Table.Select();
+				case MouseButtons.Left:
+					btn_Propanel.SetDepressed(false);
+					opsclick_PropertyPanel(sender, e);
+					break;
 
-				if (e.Button == MouseButtons.Left)
-				{
-					btn_ProPanel.Depressed = false;
-					btn_ProPanel.Invalidate();
-
-					togglePropanel();
-				}
-				else if (e.Button == MouseButtons.Right
-					&& Table.Propanel != null && Table.Propanel.Visible)
-				{
-					btn_ProPanel.Depressed = false;
-					btn_ProPanel.Invalidate();
-
-					Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
-				}
+				case MouseButtons.Right:
+					if (Table.Propanel != null && Table.Propanel.Visible)
+					{
+						btn_Propanel.SetDepressed(false);
+						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
+					}
+					break;
 			}
 		}
 		#endregion Events (propanel)

@@ -80,8 +80,8 @@ namespace yata
 		ToolStripMenuItem it_AutoCols;
 		ToolStripMenuItem it_freeze1;
 		ToolStripMenuItem it_freeze2;
-		ToolStripMenuItem it_ppOnOff;
-		ToolStripMenuItem it_ppLocation;
+		ToolStripMenuItem it_Propanel;
+		ToolStripMenuItem it_PropanelLoc;
 		ToolStripMenuItem it_ExternDiff;
 		ToolStripMenuItem it_ClearUr;
 
@@ -291,14 +291,14 @@ namespace yata
 			this.it_OrderRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CheckRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_11 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ColorRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_AutoCols = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_12 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_freeze1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_freeze2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_17 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_ppOnOff = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_ppLocation = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Propanel = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PropanelLoc = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_25 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ExternDiff = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_21 = new System.Windows.Forms.ToolStripSeparator();
@@ -1020,14 +1020,14 @@ namespace yata
 			this.it_OrderRows,
 			this.it_CheckRows,
 			this.separator_11,
-			this.it_AutoCols,
 			this.it_ColorRows,
+			this.it_AutoCols,
 			this.separator_12,
 			this.it_freeze1,
 			this.it_freeze2,
 			this.separator_17,
-			this.it_ppOnOff,
-			this.it_ppLocation,
+			this.it_Propanel,
+			this.it_PropanelLoc,
 			this.separator_25,
 			this.it_ExternDiff,
 			this.separator_21,
@@ -1061,15 +1061,6 @@ namespace yata
 			this.separator_11.Name = "separator_11";
 			this.separator_11.Size = new System.Drawing.Size(233, 6);
 			// 
-			// it_AutoCols
-			// 
-			this.it_AutoCols.Enabled = false;
-			this.it_AutoCols.Name = "it_AutoCols";
-			this.it_AutoCols.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-			this.it_AutoCols.Size = new System.Drawing.Size(236, 22);
-			this.it_AutoCols.Text = "Autos&ize cols";
-			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
-			// 
 			// it_ColorRows
 			// 
 			this.it_ColorRows.Enabled = false;
@@ -1078,6 +1069,15 @@ namespace yata
 			this.it_ColorRows.Size = new System.Drawing.Size(236, 22);
 			this.it_ColorRows.Text = "Reco&lor rows";
 			this.it_ColorRows.Click += new System.EventHandler(this.opsclick_Recolor);
+			// 
+			// it_AutoCols
+			// 
+			this.it_AutoCols.Enabled = false;
+			this.it_AutoCols.Name = "it_AutoCols";
+			this.it_AutoCols.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+			this.it_AutoCols.Size = new System.Drawing.Size(236, 22);
+			this.it_AutoCols.Text = "Autos&ize cols";
+			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// separator_12
 			// 
@@ -1107,23 +1107,23 @@ namespace yata
 			this.separator_17.Name = "separator_17";
 			this.separator_17.Size = new System.Drawing.Size(233, 6);
 			// 
-			// it_ppOnOff
+			// it_Propanel
 			// 
-			this.it_ppOnOff.Enabled = false;
-			this.it_ppOnOff.Name = "it_ppOnOff";
-			this.it_ppOnOff.ShortcutKeys = System.Windows.Forms.Keys.F7;
-			this.it_ppOnOff.Size = new System.Drawing.Size(236, 22);
-			this.it_ppOnOff.Text = "&PropertyPanel";
-			this.it_ppOnOff.Click += new System.EventHandler(this.opsclick_PropertyPanelOnOff);
+			this.it_Propanel.Enabled = false;
+			this.it_Propanel.Name = "it_Propanel";
+			this.it_Propanel.ShortcutKeys = System.Windows.Forms.Keys.F7;
+			this.it_Propanel.Size = new System.Drawing.Size(236, 22);
+			this.it_Propanel.Text = "&PropertyPanel";
+			this.it_Propanel.Click += new System.EventHandler(this.opsclick_PropertyPanel);
 			// 
-			// it_ppLocation
+			// it_PropanelLoc
 			// 
-			this.it_ppLocation.Enabled = false;
-			this.it_ppLocation.Name = "it_ppLocation";
-			this.it_ppLocation.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.it_ppLocation.Size = new System.Drawing.Size(236, 22);
-			this.it_ppLocation.Text = "PropertyPanel l&ocation";
-			this.it_ppLocation.Click += new System.EventHandler(this.opsclick_PropertyPanelLocation);
+			this.it_PropanelLoc.Enabled = false;
+			this.it_PropanelLoc.Name = "it_PropanelLoc";
+			this.it_PropanelLoc.ShortcutKeys = System.Windows.Forms.Keys.F8;
+			this.it_PropanelLoc.Size = new System.Drawing.Size(236, 22);
+			this.it_PropanelLoc.Text = "PropertyPanel l&ocation";
+			this.it_PropanelLoc.Click += new System.EventHandler(this.opsclick_PropertyPanelLocation);
 			// 
 			// separator_25
 			// 

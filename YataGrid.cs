@@ -1475,25 +1475,28 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Creates the rows and adds cells to each row. Also determines each
-		/// cell's 'loadchanged' bool.
+		/// Creates the <c><see cref="Row">Rows</see></c> and adds
+		/// <c><see cref="Cell">Cells</see></c> to each <c>Row</c>. Also sets
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> if a
+		/// cell-field's text was altered/corrected while loading the 2da for
+		/// this <c>YataGrid</c>.
 		/// </summary>
 		void CreateRows()
 		{
 			RowCount = _rows.Count;
 
-			string text = String.Empty;
-			Brush brush;
-			bool loadchanged, changed = false;
+			bool changed = false, loadchanged; string text;
 
 			for (int r = 0; r != RowCount; ++r)
 			{
 				changed = changed || (_rows[r].Length > ColCount); // flag Changed if any field(s) get cut off.
 
-				brush = (r % 2 == 0) ? Brushes.Alice
-									 : Brushes.Bob;
+				Rows.Add(new Row(r,
+								 ColCount,
+								 (r % 2 == 0) ? Brushes.Alice
+											  : Brushes.Bob,
+								 this));
 
-				Rows.Add(new Row(r, ColCount, brush, this));
 				for (int c = 0; c != ColCount; ++c)
 				{
 					loadchanged = false;
@@ -3349,6 +3352,26 @@ namespace yata
 					return true;
 			}
 			return false;
+		}
+
+
+		/// <summary>
+		/// Clears all cells'
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> flags
+		/// without resetting the GotoLoadchanged it repeatedly.
+		/// </summary>
+		internal void ClearLoadchanged()
+		{
+			YataGrid._init = true;
+
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			if (row[c].loadchanged)
+				row[c].loadchanged = false;
+
+			YataGrid._init = false;
+
+			_f.EnableGotoLoadchanged(false);
 		}
 
 
