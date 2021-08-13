@@ -1458,11 +1458,19 @@ namespace yata
 		{
 			ClearSelects(true);
 
+			bool changed = false;
+
+			Cell cell;
 			for (int r = 0; r != RowCount && r != copyc.Count; ++r)
 			{
-				var cell = this[r, selc];
-				cell.text = copyc[r];
+				cell = this[r, selc];
 				cell.selected = true;
+
+				if (cell.text != copyc[r])
+				{
+					cell.text = copyc[r];
+					changed = true;
+				}
 			}
 
 			Colwidth(selc, 0, RowCount - 1);
@@ -1471,7 +1479,7 @@ namespace yata
 
 			_f.EnableCelleditOperations();
 
-			if (!Changed) Changed = true;
+			if (changed && !Changed) Changed = true;
 		}
 
 		/// <summary>
