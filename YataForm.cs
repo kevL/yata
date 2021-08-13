@@ -873,9 +873,6 @@ namespace yata
 				it_Readonly       .Checked = Table.Readonly;
 
 
-				it_Undo           .Enabled = Table._ur.CanUndo;
-				it_Redo           .Enabled = Table._ur.CanRedo;
-
 				it_Reload         .Enabled = File.Exists(Table.Fullpath);
 				it_Save           .Enabled = !Table.Readonly;
 				it_SaveAll        .Enabled = AllowSaveAll();
@@ -883,6 +880,9 @@ namespace yata
 				it_Readonly       .Enabled =
 				it_Close          .Enabled =
 				it_CloseAll       .Enabled = true;
+
+				it_Undo           .Enabled = Table._ur.CanUndo;
+				it_Redo           .Enabled = Table._ur.CanRedo;
 
 				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
@@ -1479,7 +1479,8 @@ namespace yata
 
 			EnableCelleditOperations();
 			EnableRoweditOperations();
-			Enable2daOperations_readonlychanged();
+
+			it_OrderRows.Enabled = !Table.Readonly;
 
 			Tabs.Invalidate();
 		}
@@ -3955,17 +3956,6 @@ namespace yata
 			it_Propanel   .Checked = Table.Propanel != null && Table.Propanel.Visible;
 
 			it_ExternDiff .Enabled = File.Exists(Settings._diff);
-		}
-
-		/// <summary>
-		/// Determines the dis/enabled states of 2daOps operations that can
-		/// change when
-		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c>
-		/// changes.
-		/// </summary>
-		void Enable2daOperations_readonlychanged()
-		{
-			it_OrderRows.Enabled = !Table.Readonly;
 		}
 		#endregion Methods (2daOps)
 
