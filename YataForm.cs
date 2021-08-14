@@ -3505,8 +3505,6 @@ namespace yata
 		/// <param name="e"></param>
 		void clipclick_ViewClipboard(object sender, EventArgs e)
 		{
-//			var f = Application.OpenForms["ClipboardF"]; // oh fuck off.
-
 			if (_fclip == null)
 			{
 				it_OpenClipEditor.Checked = true;
@@ -3987,28 +3985,27 @@ namespace yata
 		/// Handles opening the FontMenu, determines if various items ought be
 		/// enabled.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_MenuFont"/></c></param>
 		/// <param name="e"></param>
 		void font_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null && Table._editor.Visible)
-			{
-				Table._editor.Visible = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
+			dropdownopening(sender, e);
 
-			it_FontDefault.Enabled = !Font.Equals(FontDefault)
-								  && !it_Font.Checked;
+			it_FontDefault.Enabled = !it_Font.Checked
+								  && !Font.Equals(FontDefault);
 		}
 
 		/// <summary>
 		/// Opens the FontPicker form.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Font"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Font|Font...be patient</item>
+		/// </list></remarks>
 		void fontclick_Font(object sender, EventArgs e)
 		{
-			// var f = Application.OpenForms["FontF"];
 			if (_fontF == null)
 			{
 				it_Font.Checked = true;
@@ -4030,12 +4027,19 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the form's font to the default Font.
-		/// @note The item will be disabled if the FontPicker is open or if the
-		/// form's current Font is equal to the FontDefault font.
+		/// Sets Yata's <c>Font</c> to <c><see cref="FontDefault"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_FontDefault"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Font|Load default font</item>
+		/// </list>
+		/// 
+		/// 
+		/// The item will be disabled if the <c><see cref="FontF"/></c> dialog
+		/// is open or if Yata's current <c>Font</c> is
+		/// <c><see cref="FontDefault"/></c>.</remarks>
 		void fontclick_Default(object sender, EventArgs e)
 		{
 			doFont(FontDefault.Clone() as Font);
@@ -4046,17 +4050,19 @@ namespace yata
 		#region Methods (font)
 		/// <summary>
 		/// Dechecks the "Font ... be patient" menuitem and re-enables the "Load
-		/// default font" menuitem when the font-dialog closes.
-		/// @note The latter item is disabled while the font dialog is open.
+		/// default font" menuitem when the <c><see cref="FontF"/></c> dialog
+		/// closes.
 		/// </summary>
+		/// <remarks>The latter item is disabled while the <c>FontF</c> dialog
+		/// is open.</remarks>
 		internal void FontF_closing()
 		{
-			_fontF = null;
 			it_Font.Checked = false;
+			_fontF = null;
 		}
 
 		/// <summary>
-		/// Applies a specified font to the Form.
+		/// Applies a specified <c>Font</c> to Yata.
 		/// </summary>
 		/// <param name="font"></param>
 		internal void doFont(Font font)
@@ -4132,8 +4138,12 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to open ReadMe.txt.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_ReadMe"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Help|ReadMe.txt <c>[F1]</c></item>
+		/// </list></remarks>
 		void helpclick_Help(object sender, EventArgs e)
 		{
 			string path = Path.Combine(Application.StartupPath, "ReadMe.txt");
@@ -4150,8 +4160,12 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to open the About box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_About"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Help|About</item>
+		/// </list></remarks>
 		void helpclick_About(object sender, EventArgs e)
 		{
 			using (var f = new About())
