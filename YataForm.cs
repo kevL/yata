@@ -3456,7 +3456,8 @@ namespace yata
 		/// <summary>
 		/// Imports the current contents of the Windows clipboard to
 		/// <c><see cref="_copyr"/></c> and enables
-		/// <c><see cref="it_PasteRange"/></c>.
+		/// <c><see cref="it_PasteRange"/></c> and
+		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_ClipImport"/></c></param>
 		/// <param name="e"></param>
@@ -3474,6 +3475,7 @@ namespace yata
 					_copyr.Add(fields);
 				}
 				it_PasteRange.Enabled = !Table.Readonly;
+				it_ClipExport.Enabled = true;
 			}
 		}
 
