@@ -12,8 +12,7 @@ using Microsoft.Win32;
 namespace yata
 {
 	sealed partial class FontF
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		static string LAZYDOG = "01234567890 `~!@#$%^&*()_+-=\\|[]{};:'\",<.>/?" + Environment.NewLine
