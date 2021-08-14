@@ -1297,7 +1297,7 @@ namespace yata
 			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
 			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_On&HitSpell.2da";
-			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpells2da);
+			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpell2da);
 			// 
 			// it_PathIprpSpells2da
 			// 

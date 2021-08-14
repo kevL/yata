@@ -70,7 +70,7 @@ namespace yata
 		internal static List<string> diseaseLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for onhitspells in Iprp_OnHitSpell.2da.
+		/// A list that holds labels for onhitspell in Iprp_OnHitSpell.2da.
 		/// - optional
 		/// </summary>
 		internal static List<string> iphitspellLabels = new List<string>();
@@ -95,6 +95,12 @@ namespace yata
 		// NOTE: Also uses Feat.2da for feat-id feat-labels.
 
 		/// <summary>
+		/// A list that holds labels for categories in Categories.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> categoryLabels = new List<string>();
+
+		/// <summary>
 		/// A list that holds labels for spell-ranges in Ranges.2da.
 		/// - optional
 		/// </summary>
@@ -105,12 +111,6 @@ namespace yata
 		/// - optional
 		/// </summary>
 		internal static List<int> rangeRanges = new List<int>();
-
-		/// <summary>
-		/// A list that holds labels for categories in Categories.2da.
-		/// - optional
-		/// </summary>
-		internal static List<string> categoryLabels = new List<string>();
 
 		/// <summary>
 		/// A list that holds labels for spell-targets in SpellTarget.2da.
@@ -3058,7 +3058,7 @@ namespace yata
 				// when a successful strike is made, or (when applied to armor) is struck by an opponent.
 				// - nSpell uses the IP_CONST_ONHIT_CASTSPELL_* constants
 				// itemproperty ItemPropertyOnHitCastSpell(int nSpell, int nLevel);
-				// Iprp_OnHitSpells.2da
+				// Iprp_OnHitSpell.2da
 				case 82: // ITEM_PROPERTY_ONHITCASTSPELL
 					info += "[2](";
 					if ((par = GetPar(pars, 0)) != -1)

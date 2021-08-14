@@ -100,7 +100,7 @@ namespace yata
 								if (Int32.TryParse(array[i], out result)
 									&& result > -1)
 								{
-									if (result < Info.tagLabels.Count) //&& it_PathBaseItems2da.Checked <- redundant
+									if (result < Info.tagLabels.Count)
 									{
 										info += Info.tagLabels[result];
 									}
@@ -246,9 +246,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathBaseItems menuitem.
-		/// Intended to add labels from BaseItems.2da to the 'tagLabels' list.
+		/// Intended to add labels from BaseItems.2da to the
+		/// <c><see cref="Info.tagLabels">Info.tagLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathBaseItems2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathBaseItems2da(object sender, EventArgs e)
 		{
@@ -277,9 +278,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathFeat menuitem.
-		/// Intended to add labels from Feat.2da to the 'featsLabels' list.
+		/// Intended to add labels from Feat.2da to the
+		/// <c><see cref="Info.featLabels">Info.featLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathFeat2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathFeat2da(object sender, EventArgs e)
 		{
@@ -308,9 +310,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathItemPropDef menuitem.
-		/// Intended to add labels from ItemPropDef.2da to the 'ipLabels' list.
+		/// Intended to add labels from ItemPropDef.2da to the
+		/// <c><see cref="Info.ipLabels">Info.ipLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathItemPropDef2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathItemPropDef2da(object sender, EventArgs e)
 		{
@@ -339,9 +342,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathSkills menuitem.
-		/// Intended to add labels from Skills.2da to the 'skillLabels' list.
+		/// Intended to add labels from Skills.2da to the
+		/// <c><see cref="Info.skillLabels">Info.skillLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathSkills2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathSkills2da(object sender, EventArgs e)
 		{
@@ -370,9 +374,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathSpells menuitem.
-		/// Intended to add labels from Spells.2da to the 'spellLabels' list.
+		/// Intended to add labels from Spells.2da to the
+		/// <c><see cref="Info.spellLabels">Info.spellLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathSpells2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathSpells2da(object sender, EventArgs e)
 		{
@@ -404,9 +409,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathClasses menuitem.
-		/// Intended to add labels from Classes.2da to the 'classLabels' list.
+		/// Intended to add labels from Classes.2da to the
+		/// <c><see cref="Info.classLabels">Info.classLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathClasses2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathClasses2da(object sender, EventArgs e)
 		{
@@ -435,9 +441,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathDisease menuitem.
-		/// Intended to add labels from Disease.2da to the 'diseaseLabels' list.
+		/// Intended to add labels from Disease.2da to the
+		/// <c><see cref="Info.diseaseLabels">Info.diseaseLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathDisease2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathDisease2da(object sender, EventArgs e)
 		{
@@ -466,9 +473,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpAmmoCost menuitem.
-		/// Intended to add labels from Iprp_AmmoCost.2da to the 'ipammoLabels' list.
+		/// Intended to add labels from Iprp_AmmoCost.2da to the
+		/// <c><see cref="Info.ipammoLabels">Info.ipammoLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathIprpAmmoCost2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathIprpAmmoCost2da(object sender, EventArgs e)
 		{
@@ -497,9 +505,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpFeats menuitem.
-		/// Intended to add labels from Iprp_Feats.2da to the 'ipfeatsLabels' list.
+		/// Intended to add labels from Iprp_Feats.2da to the
+		/// <c><see cref="Info.ipfeatLabels">Info.ipfeatLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathIprpFeats2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathIprpFeats2da(object sender, EventArgs e)
 		{
@@ -527,19 +536,20 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles clicking the PathIprpOnHitSpells menuitem.
-		/// Intended to add labels from Iprp_OnHitSpells.2da to the
-		/// 'iphitspellsLabels' list.
+		/// Handles clicking the PathIprpOnHitSpell menuitem.
+		/// Intended to add labels from Iprp_OnHitSpell.2da to the
+		/// <c><see cref="Info.iphitspellLabels">Info.iphitspellLabels</see></c>
+		/// list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathIprpOnHitSpell2da"/></c></param>
 		/// <param name="e"></param>
-		void itclick_PathIprpOnHitSpells2da(object sender, EventArgs e)
+		void itclick_PathIprpOnHitSpell2da(object sender, EventArgs e)
 		{
 			if (!it_PathIprpOnHitSpell2da.Checked)
 			{
 				using (var ofd = new OpenFileDialog())
 				{
-					ofd.Title  = "Select Iprp_OnHitSpells.2da";
+					ofd.Title  = "Select Iprp_OnHitSpell.2da";
 					ofd.Filter = Get2daFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
@@ -561,9 +571,11 @@ namespace yata
 		/// <summary>
 		/// Handles clicking the PathIprpSpells menuitem.
 		/// Intended to add labels and levels from Iprp_Spells.2da to the
-		/// 'ipspellsLabels' and 'ipspellsLevels' lists.
+		/// <c><see cref="Info.ipspellLabels">Info.ipspellLabels</see></c> and
+		/// <c><see cref="Info.ipspellLevels">Info.ipspellLevels</see></c>
+		/// lists.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathIprpSpells2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathIprpSpells2da(object sender, EventArgs e)
 		{
@@ -595,9 +607,10 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathRaces menuitem.
-		/// Intended to add labels from RacialTypes.2da to the 'raceLabels' list.
+		/// Intended to add labels from RacialTypes.2da to the
+		/// <c><see cref="Info.raceLabels">Info.raceLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathRaces2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathRaces2da(object sender, EventArgs e)
 		{
@@ -1245,11 +1258,46 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles clicking the PathRanges menuitem.
-		/// Intended to add labels from Ranges.2da to the 'rangeLabels' list and
-		/// ranges to the 'rangeRanges' list.
+		/// Handles clicking the PathCategories menuitem.
+		/// Intended to add labels from Categories.2da to the
+		/// <c><see cref="Info.categoryLabels">Info.categoryLabels</see></c>
+		/// list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathCategories2da"/></c></param>
+		/// <param name="e"></param>
+		void itclick_PathCategories2da(object sender, EventArgs e)
+		{
+			if (!it_PathCategories2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Categories.2da";
+					ofd.Filter = Get2daFilter();
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.categoryLabels,
+										 it_PathCategories2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathCategories2da.Checked = false;
+				Info.categoryLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathRanges menuitem.
+		/// Intended to add labels from Ranges.2da to the
+		/// <c><see cref="Info.rangeLabels">Info.rangeLabels</see></c> list and
+		/// ranges to the
+		/// <c><see cref="Info.rangeRanges">Info.rangeRanges</see></c> list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathRanges2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathRanges2da(object sender, EventArgs e)
 		{
@@ -1280,43 +1328,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles clicking the PathCategories menuitem.
-		/// Intended to add labels from Categories.2da to the 'categoryLabels'
-		/// list.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void itclick_PathCategories2da(object sender, EventArgs e)
-		{
-			if (!it_PathCategories2da.Checked)
-			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = "Select Categories.2da";
-					ofd.Filter = Get2daFilter();
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-					{
-						Info.GropeLabels(ofd.FileName,
-										 Info.categoryLabels,
-										 it_PathCategories2da,
-										 1);
-					}
-				}
-			}
-			else
-			{
-				it_PathCategories2da.Checked = false;
-				Info.categoryLabels.Clear();
-			}
-		}
-
-		/// <summary>
 		/// Handles clicking the PathSpellTarget menuitem.
-		/// Intended to add labels from SpellTarget.2da to the 'targetLabels'
-		/// list.
+		/// Intended to add labels from SpellTarget.2da to the
+		/// <c><see cref="Info.targetLabels">Info.targetLabels</see></c> list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathSpellTarget2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathSpellTarget2da(object sender, EventArgs e)
 		{
@@ -1555,10 +1571,11 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathMasterFeats menuitem.
-		/// Intended to add labels from MasterFeats.2da to the 'masterfeatLabels'
+		/// Intended to add labels from MasterFeats.2da to the
+		/// <c><see cref="Info.masterfeatLabels">Info.masterfeatLabels</see></c>
 		/// list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathMasterFeats2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathMasterFeats2da(object sender, EventArgs e)
 		{
@@ -1587,10 +1604,11 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathCombatModes menuitem.
-		/// Intended to add labels from CombatModes.2da to the 'combatmodeLabels'
+		/// Intended to add labels from CombatModes.2da to the
+		/// <c><see cref="Info.combatmodeLabels">Info.combatmodeLabels</see></c>
 		/// list.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathCombatModes2da"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathCombatModes2da(object sender, EventArgs e)
 		{
@@ -1623,7 +1641,7 @@ namespace yata
 		/// <summary>
 		/// Opens a <c>FolderBrowserDialog</c> for groping.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathAll"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathAll(object sender, EventArgs e)
 		{
