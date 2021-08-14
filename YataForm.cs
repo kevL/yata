@@ -1593,12 +1593,12 @@ namespace yata
 					else
 					{
 						string dir = Path.GetDirectoryName(Table.Fullpath);
-						if (!String.IsNullOrEmpty(dir)
-							&& Directory.Exists(_lastSaveasDirectory))
+						if (Directory.Exists(dir))
 						{
 							sfd.InitialDirectory = dir;
 						}
 					}
+					// else default InitialDirectory.
 
 
 					if (sfd.ShowDialog() == DialogResult.OK)
