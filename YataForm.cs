@@ -3480,7 +3480,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Displays contents of the clipboard (if text) in an editable
+		/// Displays contents of the Windows clipboard (if text) in an editable
 		/// input/output dialog.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_OpenClipEditor"/></c></param>
