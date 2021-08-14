@@ -63,7 +63,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles the <c>Load</c> event.
+		/// Overrides the <c>Load</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
@@ -74,7 +74,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the <c>Resize</c> event.
+		/// Overrides the <c>Resize</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
@@ -100,7 +100,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the <c>FormClosing</c> event.
+		/// Overrides the <c>FormClosing</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -119,9 +119,9 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Handles click on the Done button.
+		/// Handles <c>Click</c> on the Done button.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Done"/></c></param>
 		/// <param name="e"></param>
 		void click_Done(object sender, EventArgs e)
 		{
@@ -129,23 +129,23 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles click on the Get button.
+		/// Handles <c>Click</c> on the Get button.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="btn_Get"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
-		void click_Get(object sender, EventArgs e)
+		internal void click_Get(object sender, EventArgs e)
 		{
-			string clip = Clipboard.GetText(TextDataFormat.Text).Trim();
-			if (!String.IsNullOrEmpty(clip))
-				rtb_Clip.Text = clip;
-			else
-				rtb_Clip.Text = String.Empty;
+			rtb_Clip.Text = ClipAssist.GetText().Trim();
 		}
 
 		/// <summary>
-		/// Handles click on the Set button.
+		/// Handles <c>Click</c> on the Set button.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Set"/></c></param>
 		/// <param name="e"></param>
 		void click_Set(object sender, EventArgs e)
 		{
@@ -157,8 +157,9 @@ namespace yata
 
 	#region Clipboard
 	/// <summary>
-	/// https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879
+	/// Sends text to the Windows Clipboard.
 	/// </summary>
+	/// <remarks>https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879</remarks>
 	static class ClipAssist
 	{
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -171,11 +172,11 @@ namespace yata
 		static extern bool CloseClipboard();
 
 		/// <summary>
-		/// Sets a string of text to the Windows Clipboard after ensuring that
-		/// the Clipboard's handle has been freed.
+		/// Sets a <c>string</c> to the Windows Clipboard after ensuring that
+		/// the Clipboard's process has been released by other apps.
 		/// </summary>
-		/// <param name="text">the text to set</param>
-		internal static void SetText(string text)
+		/// <param name="clip">the text to set</param>
+		internal static void SetText(string clip)
 		{
 			if (GetOpenClipboardWindow() != IntPtr.Zero)
 			{
@@ -183,10 +184,26 @@ namespace yata
 				CloseClipboard();
 			}
 
-			if (!String.IsNullOrEmpty(text))
-				Clipboard.SetText(text);
+			if (!String.IsNullOrEmpty(clip))
+				Clipboard.SetText(clip);
 			else
 				Clipboard.Clear();
+		}
+
+		/// <summary>
+		/// Gets a <c>string</c> from the Windows Clipboard after ensuring that
+		/// the Clipboard's process has been released by other apps.
+		/// </summary>
+		/// <returns>the Clipboard's text</returns>
+		internal static string GetText()
+		{
+			if (GetOpenClipboardWindow() != IntPtr.Zero)
+			{
+				OpenClipboard(IntPtr.Zero);
+				CloseClipboard();
+			}
+
+			return Clipboard.GetText(TextDataFormat.Text);
 		}
 	}
 	#endregion Clipboard

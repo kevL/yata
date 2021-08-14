@@ -53,15 +53,15 @@ namespace yata
 		readonly PropertyPanelButton btn_Propanel = new PropertyPanelButton();
 
 		/// <summary>
-		/// The clipboard editor.
+		/// The <c><see cref="ClipboardF"/></c> dialog/editor.
 		/// </summary>
 		ClipboardF _fclip;
 
 		/// <summary>
-		/// A 2d-array of strings used for copy/paste cell.
+		/// A 2d-array of <c>strings</c> used for copy/paste cell.
 		/// </summary>
-		/// <remarks>A cell's text shall never be null or blank, therefore
-		/// <c>_copytext</c> shall never be null or blank.</remarks>
+		/// <remarks>A cell's text shall never be null or blank therefore
+		/// <c>_copytext</c> shall never be <c>null</c> or blank.</remarks>
 		internal string[,] _copytext = {{ gs.Stars }};
 
 		/// <summary>
@@ -76,12 +76,12 @@ namespace yata
 
 
 		/// <summary>
-		/// A list used for copy/paste row(s).
+		/// A <c>List</c> of <c>string[]</c> arrays used for copy/paste row(s).
 		/// </summary>
 		List<string[]> _copyr = new List<string[]>();
 
 		/// <summary>
-		/// A list used for copy/paste col.
+		/// A <c>List</c> of <c>strings</c> used for copy/paste col.
 		/// </summary>
 		List<string> _copyc = new List<string>();
 
@@ -2682,15 +2682,16 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
-			if (tb_Goto.Focused)
-			{
-				SetTextboxText(tb_Goto);
-			}
-			else if (tb_Search.Focused)
-			{
-				SetTextboxText(tb_Search);
-			}
-			else if (Table != null) // safety and should be taken out
+//			if (tb_Goto.Focused)
+//			{
+//				SetTextboxText(tb_Goto);
+//			}
+//			else if (tb_Search.Focused)
+//			{
+//				SetTextboxText(tb_Search);
+//			}
+//			else
+			if (Table != null) // safety and should be taken out
 			{
 				if (!Table.Readonly) // safety and should be taken out
 				{
@@ -2735,7 +2736,7 @@ namespace yata
 			}
 		}
 
-		/// <summary>
+/*		/// <summary>
 		/// Sets the text of a given textbox.
 		/// </summary>
 		/// <param name="tb"><c><see cref="tb_Goto"/></c> or <c><see cref="tb_Search"/></c></param>
@@ -2743,18 +2744,19 @@ namespace yata
 		/// <c><see cref="editcellsclick_PasteCell()">editcellsclick_PasteCell()</see></c>.</remarks>
 		void SetTextboxText(ToolStripItem tb)
 		{
-			if (Clipboard.ContainsText(TextDataFormat.Text))
+			string clip = ClipAssist.GetText().Trim();
+			if (!String.IsNullOrEmpty(clip))
 			{
-				tb.Text = Clipboard.GetText(TextDataFormat.Text);
+				tb.Text = clip;
 			}
 			else if (_copytext.Length == 1
-				&& (tb == tb_Search || _copytext[0,0] != gs.Stars))
+				&& (tb == tb_Search || _copytext[0,0] != gs.Stars)) // do Int32.TryParse()
 			{
 				tb.Text = _copytext[0,0];
 			}
 			else
 				tb.Text = String.Empty;
-		}
+		} */
 
 		/// <summary>
 		/// Shows user an error if there is not a single cell or not a
@@ -2982,7 +2984,8 @@ namespace yata
 
 		/// <summary>
 		/// Copies a range of rows and enables
-		/// <c><see cref="it_PasteRange"/></c>.
+		/// <c><see cref="it_PasteRange"/></c> and
+		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -3026,8 +3029,8 @@ namespace yata
 			}
 			while (start <= stop);
 
-			if (!Table.Readonly)
-				it_PasteRange.Enabled = true;
+			it_PasteRange.Enabled = !Table.Readonly;
+			it_ClipExport.Enabled = true;
 		}
 
 		/// <summary>
@@ -3445,11 +3448,15 @@ namespace yata
 					clip += Environment.NewLine;
 			}
 			ClipAssist.SetText(clip);
+
+			if (_fclip != null)
+				_fclip.click_Get(null, EventArgs.Empty);
 		}
 
 		/// <summary>
 		/// Imports the current contents of the Windows clipboard to
-		/// <c><see cref="_copyr"/></c>.
+		/// <c><see cref="_copyr"/></c> and enables
+		/// <c><see cref="it_PasteRange"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_ClipImport"/></c></param>
 		/// <param name="e"></param>
@@ -3457,7 +3464,7 @@ namespace yata
 		{
 			_copyr.Clear();
 
-			string clip = Clipboard.GetText(TextDataFormat.Text);
+			string clip = ClipAssist.GetText().Trim();
 			if (!String.IsNullOrEmpty(clip))
 			{
 				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
@@ -3466,6 +3473,7 @@ namespace yata
 					string[] fields = YataGrid.ParseTableRow(lines[i]);
 					_copyr.Add(fields);
 				}
+				it_PasteRange.Enabled = !Table.Readonly;
 			}
 		}
 
