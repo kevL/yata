@@ -1747,9 +1747,9 @@ namespace yata
 
 		#region Talkfile
 		/// <summary>
-		/// Handles click to load Dialog.Tlk file.
+		/// Handles <c>Click</c> to load <c>Dialog.Tlk</c> file.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathTalkD"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathTalkD(object sender, EventArgs e)
 		{
@@ -1772,9 +1772,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles click to load a special Talkfile.
+		/// Handles <c>Click</c> to load an alternate Talkfile.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_PathTalkC"/></c></param>
 		/// <param name="e"></param>
 		void itclick_PathTalkC(object sender, EventArgs e)
 		{
