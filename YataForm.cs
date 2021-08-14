@@ -87,6 +87,7 @@ namespace yata
 
 
 		string _preset = String.Empty;
+		string _lastSaveasDirectory;
 
 		internal int _startCr, _lengthCr;
 		internal CrFillType _fillCr;
@@ -1585,8 +1586,25 @@ namespace yata
 					sfd.Filter   = Get2daFilter();
 					sfd.FileName = Path.GetFileName(Table.Fullpath);
 
+					if (Directory.Exists(_lastSaveasDirectory))
+					{
+						sfd.InitialDirectory = _lastSaveasDirectory;
+					}
+					else
+					{
+						string dir = Path.GetDirectoryName(Table.Fullpath);
+						if (!String.IsNullOrEmpty(dir)
+							&& Directory.Exists(_lastSaveasDirectory))
+						{
+							sfd.InitialDirectory = dir;
+						}
+					}
+
+
 					if (sfd.ShowDialog() == DialogResult.OK)
 					{
+						_lastSaveasDirectory = Path.GetDirectoryName(sfd.FileName);
+
 						_pfeT = sfd.FileName;
 						fileclick_Save(sender, e);
 					}
