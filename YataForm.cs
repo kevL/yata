@@ -1567,7 +1567,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click on file SaveAs.
+		/// Handles it-click on File|SaveAs.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_SaveAs"/></c></param>
 		/// <param name="e"></param>
@@ -1595,7 +1595,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click on file SaveAll.
+		/// Handles it-click on File|SaveAll.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_SaveAll"/></c></param>
 		/// <param name="e"></param>
@@ -1637,7 +1637,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click on file Close.
+		/// Handles it-click on File|Close.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -1673,7 +1673,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click on file CloseAll.
+		/// Handles it-click on File|CloseAll.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -1697,7 +1697,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click on file Quit.
+		/// Handles it-click on File|Quit.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Quit"/></c></param>
 		/// <param name="e"></param>
