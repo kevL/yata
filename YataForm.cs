@@ -407,7 +407,95 @@ namespace yata
 		}
 
 
+		#region Methods (close)
+		/// <summary>
+		/// Checks if any currently opened tables have their
+		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
+		/// </summary>
+		/// <param name="info">"close" files or "quit" Yata</param>
+		/// <param name="excludecurrent"><c>true</c> to exclude the current
+		/// table - used by CloseAllOtherTables</param>
+		/// <returns><c>true</c> if there are any changed tables and user
+		/// chooses to cancel</returns>
+		bool CheckChangedTables(string info, bool excludecurrent = false)
+		{
+			string tables = String.Empty;
+
+			YataGrid table;
+			foreach (TabPage page in Tabs.TabPages)
+			{
+				if ((table = page.Tag as YataGrid).Changed
+					&& (!excludecurrent || table != Table))
+				{
+					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant()
+							+ Environment.NewLine;
+				}
+			}
+
+			if (tables.Length != 0)
+			{
+				return MessageBox.Show("Data has changed."
+									  + Environment.NewLine + Environment.NewLine
+									  + tables
+									  + Environment.NewLine
+									  + "Okay to " + info + " ...",
+									  " warning",
+									  MessageBoxButtons.YesNo,
+									  MessageBoxIcon.Warning,
+									  MessageBoxDefaultButton.Button2) == DialogResult.No;
+			}
+			return false;
+		}
+		#endregion Methods (close)
+
+
 		#region Events (override)
+		/// <summary>
+		/// Overrides Yata's <c>FormClosing</c> handler. Requests
+		/// user-confirmation if data has changed and writes a recent-files list
+		/// if appropriate.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			if (Tabs.TabPages.Count != 0)
+			{
+				if (Tabs.TabPages.Count == 1)
+				{
+					e.Cancel = Table.Changed
+							&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to quit ...",
+											   " warning",
+											   MessageBoxButtons.YesNo,
+											   MessageBoxIcon.Warning,
+											   MessageBoxDefaultButton.Button2) == DialogResult.No;
+				}
+				else
+					e.Cancel = CheckChangedTables("quit");
+			}
+
+			if (!e.Cancel && Settings._recent != 0)
+			{
+				int i = -1;
+				var recents = new string[it_Recent.DropDownItems.Count];
+				foreach (ToolStripItem recent in it_Recent.DropDownItems)
+					recents[++i] = recent.Text;
+
+				string dir = Application.StartupPath;
+				string pfe = Path.Combine(dir, "recent.cfg");
+				try
+				{
+					File.WriteAllLines(pfe, recents);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+
+			base.OnFormClosing(e);
+		}
+
+
 		/// <summary>
 		/// Sends the <c>MouseWheel</c> event to the active
 		/// <c><see cref="YataGrid"/></c>.
@@ -1026,33 +1114,6 @@ namespace yata
 
 		#region Methods (tabs)
 		/// <summary>
-		/// Sets the width of the tabs on <c><see cref="YataTabs"/></c>.
-		/// </summary>
-		void SetTabSize()
-		{
-			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls to OnResize().
-
-			if (Tabs.TabCount != 0)
-			{
-				Size size;
-				int w = 25, wT, h = 10, hT;
-				for (int tab = 0; tab != Tabs.TabCount; ++tab)
-				{
-					size = YataGraphics.MeasureSize(Tabs.TabPages[tab].Text, FontAccent);
-					if ((wT = size.Width) > w)
-						w = wT;
-
-					if ((hT = size.Height) > h)
-						h = hT;
-				}
-				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
-//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
-			}
-
-			YataGrid.BypassInitScroll = false;
-		}
-
-		/// <summary>
 		/// Disposes a tab's table's <c><see cref="FileWatcher"/></c> before a
 		/// specified <c>TabPage</c> is removed from the
 		/// <c>TabPageCollection</c>. The <c>TabPage</c> and its
@@ -1077,6 +1138,33 @@ namespace yata
 			_table = null;
 
 			YataGrid.metricStaticHeads(this);
+		}
+
+		/// <summary>
+		/// Sets the width of the tabs on <c><see cref="YataTabs"/></c>.
+		/// </summary>
+		void SetTabSize()
+		{
+			YataGrid.BypassInitScroll = true; // ie. foff with your 50 bazillion behind-the-scene calls to OnResize().
+
+			if (Tabs.TabCount != 0)
+			{
+				Size size;
+				int w = 25, wT, h = 10, hT;
+				for (int tab = 0; tab != Tabs.TabCount; ++tab)
+				{
+					size = YataGraphics.MeasureSize(Tabs.TabPages[tab].Text, FontAccent);
+					if ((wT = size.Width) > w)
+						w = wT;
+
+					if ((hT = size.Height) > h)
+						h = hT;
+				}
+				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
+//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
+			}
+
+			YataGrid.BypassInitScroll = false;
 		}
 
 		/// <summary>
@@ -1167,96 +1255,6 @@ namespace yata
 			return true;
 		}
 		#endregion Methods (save)
-
-
-		#region Events (close)
-		/// <summary>
-		/// Overrides Yata's <c>FormClosing</c> handler. Requests
-		/// user-confirmation if data has changed and writes a recent-files list
-		/// if appropriate.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnFormClosing(FormClosingEventArgs e)
-		{
-			if (Tabs.TabPages.Count != 0)
-			{
-				if (Tabs.TabPages.Count == 1)
-				{
-					e.Cancel = Table.Changed
-							&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to quit ...",
-											   " warning",
-											   MessageBoxButtons.YesNo,
-											   MessageBoxIcon.Warning,
-											   MessageBoxDefaultButton.Button2) == DialogResult.No;
-				}
-				else
-					e.Cancel = CheckChangedTables("quit");
-			}
-
-			if (!e.Cancel && Settings._recent != 0)
-			{
-				int i = -1;
-				var recents = new string[it_Recent.DropDownItems.Count];
-				foreach (ToolStripItem recent in it_Recent.DropDownItems)
-					recents[++i] = recent.Text;
-
-				string dir = Application.StartupPath;
-				string pfe = Path.Combine(dir, "recent.cfg");
-				try
-				{
-					File.WriteAllLines(pfe, recents);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message);
-				}
-			}
-
-			base.OnFormClosing(e);
-		}
-		#endregion Events (close)
-
-
-		#region Methods (close)
-		/// <summary>
-		/// Checks if any currently opened tables have their
-		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
-		/// </summary>
-		/// <param name="info">"close" files or "quit" Yata</param>
-		/// <param name="excludecurrent"><c>true</c> to exclude the current
-		/// table - used by CloseAllOtherTables</param>
-		/// <returns><c>true</c> if there are any changed tables and user
-		/// chooses to cancel</returns>
-		bool CheckChangedTables(string info, bool excludecurrent = false)
-		{
-			string tables = String.Empty;
-
-			YataGrid table;
-			foreach (TabPage page in Tabs.TabPages)
-			{
-				if ((table = page.Tag as YataGrid).Changed
-					&& (!excludecurrent || table != Table))
-				{
-					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant()
-							+ Environment.NewLine;
-				}
-			}
-
-			if (tables.Length != 0)
-			{
-				return MessageBox.Show("Data has changed."
-									  + Environment.NewLine + Environment.NewLine
-									  + tables
-									  + Environment.NewLine
-									  + "Okay to " + info + " ...",
-									  " warning",
-									  MessageBoxButtons.YesNo,
-									  MessageBoxIcon.Warning,
-									  MessageBoxDefaultButton.Button2) == DialogResult.No;
-			}
-			return false;
-		}
-		#endregion Methods (close)
 
 
 		#region Events
