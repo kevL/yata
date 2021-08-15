@@ -401,7 +401,7 @@ namespace yata
 			this.menubar.Location = new System.Drawing.Point(0, 0);
 			this.menubar.Name = "menubar";
 			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(842, 24);
+			this.menubar.Size = new System.Drawing.Size(867, 24);
 			this.menubar.TabIndex = 0;
 			// 
 			// it_MenuFile
@@ -1425,9 +1425,9 @@ namespace yata
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.statbar_lblCords,
 			this.statbar_lblInfo});
-			this.statusbar.Location = new System.Drawing.Point(0, 432);
+			this.statusbar.Location = new System.Drawing.Point(0, 477);
 			this.statusbar.Name = "statusbar";
-			this.statusbar.Size = new System.Drawing.Size(842, 22);
+			this.statusbar.Size = new System.Drawing.Size(867, 22);
 			this.statusbar.TabIndex = 1;
 			// 
 			// statbar_lblCords
@@ -1445,7 +1445,7 @@ namespace yata
 			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblInfo.Name = "statbar_lblInfo";
-			this.statbar_lblInfo.Size = new System.Drawing.Size(667, 17);
+			this.statbar_lblInfo.Size = new System.Drawing.Size(692, 17);
 			this.statbar_lblInfo.Spring = true;
 			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1455,7 +1455,7 @@ namespace yata
 			this.panel_ColorFill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_ColorFill.Location = new System.Drawing.Point(0, 24);
 			this.panel_ColorFill.Name = "panel_ColorFill";
-			this.panel_ColorFill.Size = new System.Drawing.Size(842, 408);
+			this.panel_ColorFill.Size = new System.Drawing.Size(867, 453);
 			this.panel_ColorFill.TabIndex = 2;
 			// 
 			// ContextCell
@@ -1712,7 +1712,7 @@ namespace yata
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(842, 454);
+			this.ClientSize = new System.Drawing.Size(867, 499);
 			this.Controls.Add(this.panel_ColorFill);
 			this.Controls.Add(this.menubar);
 			this.Controls.Add(this.statusbar);
