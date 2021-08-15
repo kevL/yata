@@ -134,9 +134,16 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="btn_Get"/></c></item>
+		/// <item><c><see cref="YataForm"/>.it_ClipExport</c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Get button</item>
+		/// <item><c><see cref="YataForm"/>.clipclick_ExportCopy()</c></item>
+		/// <item>cTor</item>
+		/// </list></remarks>
 		internal void click_Get(object sender, EventArgs e)
 		{
 			rtb_Clip.Text = ClipAssist.GetText().Trim();
