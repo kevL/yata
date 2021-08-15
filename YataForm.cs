@@ -2703,9 +2703,8 @@ namespace yata
 					fields[c] = Table[start, c].text;
 
 				_copyr.Add(fields);
-				++start;
 			}
-			while (start <= stop);
+			while (++start <= stop);
 
 			it_PasteRange.Enabled = !Table.Readonly;
 			it_ClipExport.Enabled = true;
@@ -3128,7 +3127,7 @@ namespace yata
 			ClipAssist.SetText(clip);
 
 			if (_fclip != null)
-				_fclip.click_Get(null, EventArgs.Empty);
+				_fclip.click_Get(sender, e);
 		}
 
 		/// <summary>
@@ -3900,7 +3899,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to copy a row.
+		/// Handles context-click to copy a row and enables
+		/// <c><see cref="it_PasteRange"/></c> and
+		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Copy"/></c></param>
 		/// <param name="e"></param>
@@ -3913,6 +3914,9 @@ namespace yata
 				fields[c] = Table[_r,c].text;
 
 			_copyr.Add(fields);
+
+			it_PasteRange.Enabled = !Table.Readonly;
+			it_ClipExport.Enabled = true;
 		}
 
 		/// <summary>
