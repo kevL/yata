@@ -1885,7 +1885,7 @@ namespace yata
 					search = search.ToLower();
 
 					Cell sel = Table.getSelectedCell();
-					int rStart = Table.getSelectedRow();
+					int selr = Table.getSelectedRow();
 
 					Table.ClearSelects();
 
@@ -1898,14 +1898,14 @@ namespace yata
 
 					if ((ModifierKeys & Keys.Shift) == 0) // forward search ->
 					{
-						if (sel != null) { c = sel.x; rStart = sel.y; }
+						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
 						{
 							c = -1;
-							if (rStart == -1) rStart = 0;
+							if (selr == -1) selr = 0;
 						}
 
-						for (r = rStart; r != Table.RowCount; ++r)
+						for (r = selr; r != Table.RowCount; ++r)
 						{
 							if (start)
 							{
@@ -1936,7 +1936,7 @@ namespace yata
 						}
 
 						// TODO: tighten exact start/end-cells
-						for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+						for (r = 0; r != selr + 1;       ++r) // quick and dirty wrap ->
 						for (c = 0; c != Table.ColCount; ++c)
 						{
 							if (c != 0 // don't search the id-col
@@ -1950,14 +1950,14 @@ namespace yata
 					}
 					else // backward search ->
 					{
-						if (sel != null) { c = sel.x; rStart = sel.y; }
+						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
 						{
 							c = Table.ColCount;
-							if (rStart == -1) rStart = Table.RowCount - 1;
+							if (selr == -1) selr = Table.RowCount - 1;
 						}
 
-						for (r = rStart; r != -1; --r)
+						for (r = selr; r != -1; --r)
 						{
 							if (start)
 							{
@@ -1988,8 +1988,8 @@ namespace yata
 						}
 
 						// TODO: tighten exact start/end-cells
-						for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-						for (c = Table.ColCount - 1; c != -1;         --c)
+						for (r = Table.RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+						for (c = Table.ColCount - 1; c != -1;       --c)
 						{
 							if (c != 0 // don't search the id-col
 								&& ((text = Table[r,c].text.ToLower()) == search
@@ -2104,7 +2104,7 @@ namespace yata
 				Table.Select();
 
 				Cell sel = Table.getSelectedCell();
-				int rStart = Table.getSelectedRow();
+				int selr = Table.getSelectedRow();
 
 				Table.ClearSelects();
 
@@ -2114,14 +2114,14 @@ namespace yata
 
 				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
 				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
+					if (sel != null) { c = sel.x; selr = sel.y; }
 					else
 					{
 						c = -1;
-						if (rStart == -1) rStart = 0;
+						if (selr == -1) selr = 0;
 					}
 
-					for (r = rStart; r != Table.RowCount; ++r)
+					for (r = selr; r != Table.RowCount; ++r)
 					{
 						if (start)
 						{
@@ -2150,7 +2150,7 @@ namespace yata
 					}
 
 					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+					for (r = 0; r != selr + 1;       ++r) // quick and dirty wrap ->
 					for (c = 0; c != Table.ColCount; ++c)
 					{
 						if ((sel = Table[r,c]).loadchanged)
@@ -2162,14 +2162,14 @@ namespace yata
 				}
 				else // backward goto ->
 				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
+					if (sel != null) { c = sel.x; selr = sel.y; }
 					else
 					{
 						c = Table.ColCount;
-						if (rStart == -1) rStart = Table.RowCount - 1;
+						if (selr == -1) selr = Table.RowCount - 1;
 					}
 
-					for (r = rStart; r != -1; --r)
+					for (r = selr; r != -1; --r)
 					{
 						if (start)
 						{
@@ -2198,8 +2198,8 @@ namespace yata
 					}
 
 					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;         --c)
+					for (r = Table.RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;       --c)
 					{
 						if ((sel = Table[r,c]).loadchanged)
 						{
