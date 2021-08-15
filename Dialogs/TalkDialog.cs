@@ -120,7 +120,7 @@ namespace yata
 			Top  = _y;
 
 
-			PokeUi(_dict.Count != 0);
+			pokeUi(_dict.Count != 0);
 
 			tb_Strref.BackColor = Colors.TextboxBackground; // <- won't work right in the designer.
 
@@ -134,7 +134,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles this dialog's load event. Niceties ...
+		/// Overrides the <c>Load</c> handler. Niceties ...
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
@@ -149,6 +149,10 @@ namespace yata
 			rtb_Copyable.Select();
 		}
 
+		/// <summary>
+		/// Overrides the <c>Resize</c> handler.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
 			pnl_Copyable.Height = ClientSize.Height
@@ -159,8 +163,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles this dialog's closing event. Sets the static location and
-		/// nulls the differ in 'YataForm'.
+		/// Overrides the <c>FormClosing</c> handler. Sets the static location.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -168,7 +171,6 @@ namespace yata
 			_x = Left;
 			_y = Top;
 
-			this.Dispose(true); // <- probably unnecessary.
 			base.OnFormClosing(e);
 		}
 		#endregion Events (override)
@@ -178,7 +180,7 @@ namespace yata
 		/// <summary>
 		/// Handles the textchanged event of the strref-box.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Strref"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Strref(object sender, EventArgs e)
 		{
@@ -210,7 +212,7 @@ namespace yata
 		/// <summary>
 		/// Handles a click on the Cancel button. Closes this dialog harmlessly.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Cancel"/></c></param>
 		/// <param name="e"></param>
 		void click_btnCancel(object sender, EventArgs e)
 		{
@@ -221,7 +223,7 @@ namespace yata
 		/// Handles a click on the Select button. Passes the current strref to
 		/// YataForm and closes this dialog.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_btnSelect(object sender, EventArgs e)
 		{
@@ -247,7 +249,7 @@ namespace yata
 		/// <summary>
 		/// Handles a click on the Load ... button.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Load"/></c></param>
 		/// <param name="e"></param>
 		void click_btnLoad(object sender, EventArgs e)
 		{
@@ -280,7 +282,7 @@ namespace yata
 				hi = TalkReader.hiCusto;
 			}
 
-			PokeUi(_dict.Count != 0);
+			pokeUi(_dict.Count != 0);
 
 			if (_dict.ContainsKey(_eId))
 				rtb_Copyable.Text = _dict[_eId];
@@ -298,7 +300,7 @@ namespace yata
 		/// Handles a click on the Prevert button. Reverts the strref to its
 		/// initial val.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Prevert"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPrevert(object sender, EventArgs e)
 		{
@@ -309,7 +311,7 @@ namespace yata
 		/// Handles a click on the Pre button. Steps backward to the antecedent
 		/// dialog-entry.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Backward"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPre(object sender, EventArgs e)
 		{
@@ -331,7 +333,7 @@ namespace yata
 		/// Handles a click on the Pos button. Steps forward to the posterior
 		/// dialog-entry.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Forward"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPos(object sender, EventArgs e)
 		{
@@ -351,9 +353,9 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Does a jig.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cb_Custo"/></c></param>
 		/// <param name="e"></param>
 		void checkchanged_Custo(object sender, EventArgs e)
 		{
@@ -372,7 +374,7 @@ namespace yata
 					hi = TalkReader.hiCusto;
 				}
 
-				PokeUi(_dict.Count != 0);
+				pokeUi(_dict.Count != 0);
 
 				if (_dict.ContainsKey(_eId))
 					rtb_Copyable.Text = _dict[_eId];
@@ -385,7 +387,7 @@ namespace yata
 		/// <summary>
 		/// Draws a 1px border around the copyable-panel.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="pnl_Copyable"/></c></param>
 		/// <param name="e"></param>
 		void paint_CopyPanel(object sender, PaintEventArgs e)
 		{
@@ -442,8 +444,9 @@ namespace yata
 		/// Sets UI elements depending on whether there are any entries in the
 		/// current TalkTable's dictionary.
 		/// </summary>
-		/// <param name="enabled">true if the current dictionary has entries</param>
-		void PokeUi(bool enabled)
+		/// <param name="enabled"><c>true</c> if the current dictionary has
+		/// entries</param>
+		void pokeUi(bool enabled)
 		{
 			Color color;
 			if (btn_Backward.Enabled =
@@ -475,7 +478,7 @@ namespace yata
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of
-		/// this method with the code editor.
+		/// this method with the code editor. Or else POW! RIGHT IN THE KISSER
 		/// </summary>
 		private void InitializeComponent()
 		{
