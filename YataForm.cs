@@ -503,8 +503,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			if (Table != null)
-				Table.Scroll(e);
+			if (Table != null) Table.Scroll(e);
 		}
 
 
