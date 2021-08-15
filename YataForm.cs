@@ -5420,21 +5420,21 @@ namespace yata
 		/// Handles dragging a file onto Yata.
 		/// </summary>
 		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		internal void yata_DragEnter(object sender, DragEventArgs e)
+		/// <param name="drgevent"></param>
+		internal void yata_DragEnter(object sender, DragEventArgs drgevent)
 		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-				e.Effect = DragDropEffects.Copy;
+			if (drgevent.Data.GetDataPresent(DataFormats.FileDrop))
+				drgevent.Effect = DragDropEffects.Copy;
 		}
 
 		/// <summary>
 		/// Handles dropping a file(s) onto Yata.
 		/// </summary>
 		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		internal void yata_DragDrop(object sender, DragEventArgs e)
+		/// <param name="drgevent"></param>
+		internal void yata_DragDrop(object sender, DragEventArgs drgevent)
 		{
-			var paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+			var paths = (string[])drgevent.Data.GetData(DataFormats.FileDrop);
 			foreach (string pfe in paths)
 				CreatePage(pfe);
 		}
