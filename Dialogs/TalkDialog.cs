@@ -43,11 +43,12 @@ namespace yata
 		#region cTor
 		/// <summary>
 		/// cTor.
-		/// @note Check that the cell's text parses to a valid value - see
-		/// YataForm.popupCellmenu() and YataForm.dropdownopening_Strref()).
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <param name="f"></param>
+		/// <remarks>Check that the <c><see cref="Cell.text">Cell.text</see></c>
+		/// of <paramref name="cell"/> parses to a valid value before invoking
+		/// this <c>TalkDialog</c>.</remarks>
 		internal TalkDialog(Cell cell, YataForm f)
 		{
 			InitializeComponent();
