@@ -4604,14 +4604,14 @@ namespace yata
 
 
 		/// <summary>
-		/// Handler for the cell-context's sub "STRREF" <c>DropDownOpening</c>
+		/// Handler for the cell-context's subit "STRREF" <c>DropDownOpening</c>
 		/// event.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Strref"/></c></param>
 		/// <param name="e"></param>
 		void dropdownopening_Strref(object sender, EventArgs e)
 		{
-			bool invalid = (_strInt == TalkReader.invalid);
+			bool invalid = _strInt == TalkReader.invalid;
 
 			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
 				cellit_Strref_custom.Text = "set Custom";
@@ -4638,9 +4638,9 @@ namespace yata
 		{
 			_strref = _sel.text;
 
-			using (var f = new TalkDialog(_sel, this))
+			using (var td = new TalkDialog(_sel, this))
 			{
-				if (f.ShowDialog(this) == DialogResult.OK
+				if (td.ShowDialog(this) == DialogResult.OK
 					&& _strref != _sel.text)
 				{
 					Table.ChangeCellText(_sel, _strref); // does not do a text-check
@@ -4724,16 +4724,15 @@ namespace yata
 			if (found)
 			{
 				tabit_CloseAll      .Enabled =
-				tabit_CloseAllOthers.Enabled = (Tabs.TabCount != 1);
+				tabit_CloseAllOthers.Enabled = Tabs.TabCount != 1;
 
 				tabit_Save          .Enabled = !Table.Readonly;
 
 				tabit_Reload        .Enabled = File.Exists(Table.Fullpath);
 
-				// NOTE: 'tabit_Diff1' is always enabled.
-				tabit_Diff2    .Enabled = (_diff1 != null && _diff1 != Table);
-				tabit_DiffReset.Enabled = (_diff1 != null || _diff2 != null);
-				tabit_DiffSync .Enabled = (_diff1 != null && _diff2 != null);
+				tabit_Diff2    .Enabled = _diff1 != null && _diff1 != Table;
+				tabit_DiffReset.Enabled = _diff1 != null || _diff2 != null;
+				tabit_DiffSync .Enabled = _diff1 != null && _diff2 != null;
 
 				if (_diff1 != null)
 					tabit_Diff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
