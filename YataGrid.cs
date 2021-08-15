@@ -344,8 +344,6 @@ namespace yata
 			Controls.Add(_editor);
 
 			AllowDrop = true;
-			DragEnter += grid_DragEnter;
-			DragDrop  += grid_DragDrop;
 
 			_ur = new UndoRedo(this);
 
@@ -483,7 +481,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the resize event.
+		/// Overrides the <c>Resize</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>This fires whenever a fly sneezes.</remarks>
@@ -4612,21 +4610,19 @@ namespace yata
 		/// <summary>
 		/// Handles dragging a file onto the grid.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void grid_DragEnter(object sender, DragEventArgs e)
+		/// <param name="drgevent"></param>
+		protected override void OnDragEnter(DragEventArgs drgevent)
 		{
-			_f.yata_DragEnter(sender, e);
+			_f.yata_DragEnter(null, drgevent);
 		}
 
 		/// <summary>
 		/// Handles dropping a file onto the grid.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void grid_DragDrop(object sender, DragEventArgs e)
+		/// <param name="drgevent"></param>
+		protected override void OnDragDrop(DragEventArgs drgevent)
 		{
-			_f.yata_DragDrop(sender, e);
+			_f.yata_DragDrop(null, drgevent);
 		}
 		#endregion DragDrop file(s)
 	}
