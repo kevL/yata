@@ -4153,13 +4153,10 @@ namespace yata
 
 			cellit_Cut    .Enabled = !Table.Readonly;
 			cellit_Paste  .Enabled = !Table.Readonly;
-			cellit_Delete .Enabled = !Table.Readonly
-								  && (_sel.text != gs.Stars || _sel.loadchanged);
+			cellit_Delete .Enabled = !Table.Readonly && (_sel.text != gs.Stars || _sel.loadchanged);
 
-			cellit_Lower  .Enabled = !Table.Readonly
-								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
-			cellit_Upper  .Enabled = !Table.Readonly
-								  && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
+			cellit_Lower  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
+			cellit_Upper  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
 
 			cellit_MergeCe.Enabled =
 			cellit_MergeRo.Enabled = isMergeEnabled();
@@ -4190,8 +4187,7 @@ namespace yata
 					break;
 			}
 
-			Point loc = Table.PointToClient(Cursor.Position);
-			ContextCell.Show(Table, loc);
+			ContextCell.Show(Table, Table.PointToClient(Cursor.Position));
 		}
 
 		/// <summary>
@@ -4208,9 +4204,9 @@ namespace yata
 				if      (Table == _diff1) table = _diff2;
 				else if (Table == _diff2) table = _diff1;
 
-				return (table != null && !table.Readonly
-					 && table.ColCount > _sel.x
-					 && table.RowCount > _sel.y);
+				return table != null && !table.Readonly
+					&& table.ColCount > _sel.x
+					&& table.RowCount > _sel.y;
 			}
 			return false;
 		}
@@ -4341,7 +4337,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click edit.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Edit"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Edit(object sender, EventArgs e)
 		{
@@ -4351,7 +4347,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click cut.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Cut"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Cut(object sender, EventArgs e)
 		{
@@ -4371,7 +4367,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click copy.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Copy"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Copy(object sender, EventArgs e)
 		{
@@ -4381,7 +4377,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click delete.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Delete"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Delete(object sender, EventArgs e)
 		{
@@ -4391,7 +4387,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click lowercase.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Lower"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Lower(object sender, EventArgs e)
 		{
@@ -4401,7 +4397,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click uppercase.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Upper"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Upper(object sender, EventArgs e)
 		{
@@ -4411,7 +4407,7 @@ namespace yata
 		/// <summary>
 		/// Handles a single-cell merge operation.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_MergeCe"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_MergeCe(object sender, EventArgs e)
 		{
@@ -4432,7 +4428,7 @@ namespace yata
 		/// <summary>
 		/// Handles a single-row merge operation.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_MergeRo"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_MergeRo(object sender, EventArgs e)
 		{
@@ -4485,7 +4481,7 @@ namespace yata
 		/// <summary>
 		/// Handles cell-click InfoInput dialog.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Input"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_InfoInput(object sender, EventArgs e)
 		{
@@ -4611,7 +4607,7 @@ namespace yata
 		/// Handler for the cell-context's sub "STRREF" <c>DropDownOpening</c>
 		/// event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="cellit_Strref"/></c></param>
 		/// <param name="e"></param>
 		void dropdownopening_Strref(object sender, EventArgs e)
 		{
@@ -4758,7 +4754,7 @@ namespace yata
 		/// Closes all other tables when a tab's context-closeall item is
 		/// clicked.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tabit_CloseAllOthers"/></c></param>
 		/// <param name="e"></param>
 		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
 		{
@@ -4786,18 +4782,18 @@ namespace yata
 		/// <summary>
 		/// Selects <c><see cref="_diff1"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tabit_Diff1"/></c></param>
 		/// <param name="e"></param>
 		void tabclick_Diff1(object sender, EventArgs e)
 		{
-			tabclick_DiffReset(null, EventArgs.Empty);
+			tabclick_DiffReset(sender, e);
 			_diff1 = Table;
 		}
 
 		/// <summary>
 		/// Selects <c><see cref="_diff2"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tabit_Diff2"/></c></param>
 		/// <param name="e"></param>
 		void tabclick_Diff2(object sender, EventArgs e)
 		{
@@ -4806,7 +4802,7 @@ namespace yata
 
 			_diff2 = Table;
 			if (doDiff())
-				tabclick_DiffSync(null, EventArgs.Empty);
+				tabclick_DiffSync(sender, e);
 			else
 				_diff1 = _diff2 = null;
 		}
@@ -4814,8 +4810,22 @@ namespace yata
 		/// <summary>
 		/// Clears all diffed cells and nulls any pointers to diffed tables.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="tabit_DiffReset"/></c></item>
+		/// <item><c><see cref="DifferDialog"/>.btn_Reset</c></item>
+		/// <item><c><see cref="tabit_Diff1"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>tab|Diff reset</item>
+		/// <item><c><see cref="DifferDialog"/>.click_btnReset()</c></item>
+		/// <item><c><see cref="tabclick_Diff1()">tabclick_Diff1()</see></c></item>
+		/// <item><c><see cref="steadystate()">steadystate()</see></c></item>
+		/// <item><c><see cref="YataGrid"/>.ColSort()</c></item>
+		/// </list></remarks>
 		internal void tabclick_DiffReset(object sender, EventArgs e)
 		{
 			if (_fdiffer != null) _fdiffer.Close();
@@ -4838,8 +4848,17 @@ namespace yata
 		/// <summary>
 		/// Aligns the two diffed tables for easy switching back and forth.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="tabit_DiffSync"/></c></item>
+		/// <item><c><see cref="tabit_Diff2"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>tab|Diff sync tables</item>
+		/// <item><c><see cref="tabclick_Diff2()">tabclick_Diff2()</see></c></item>
+		/// </list></remarks>
 		void tabclick_DiffSync(object sender, EventArgs e)
 		{
 			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
@@ -4886,7 +4905,7 @@ namespace yata
 		/// Helper for
 		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
 		/// </summary>
-		/// <param name="table"><c><see cref="YataGrid"/></c></param>
+		/// <param name="table">a <c><see cref="YataGrid"/></c></param>
 		/// <remarks>Check that <paramref name="table"/> is not null before
 		/// call.</remarks>
 		void DiffReset(YataGrid table)
@@ -5232,7 +5251,7 @@ namespace yata
 		/// <summary>
 		/// Helper for <c><see cref="GotoDiffCell()">GotoDiffCell()</see></c>.
 		/// </summary>
-		/// <param name="sel"><c><see cref="Cell"/></c> in the current table</param>
+		/// <param name="sel">a <c><see cref="Cell"/></c> in the current table</param>
 		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
 		void gotodiff(Cell sel, YataGrid table)
 		{
@@ -5250,9 +5269,9 @@ namespace yata
 		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
 		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets selected.
 		/// </summary>
-		/// <param name="sel"><c><see cref="Cell"/></c> in the current table -
+		/// <param name="sel"><c>a <see cref="Cell"/></c> in the current table -
 		/// can be <c>null</c></param>
-		/// <param name="r">row-id in the current table iff
+		/// <param name="r">a row-id in the current table iff
 		/// <paramref name="sel"/> is <c>null</c></param>
 		/// <returns><c>true</c> if diff-tables are valid</returns>
 		/// <remarks><c><see cref="_table"/></c> is the other synced
