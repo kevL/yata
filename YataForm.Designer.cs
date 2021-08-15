@@ -1722,7 +1722,6 @@ namespace yata
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";
 			this.Text = " Yata";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.yata_Closing);
 			this.Load += new System.EventHandler(this.yata_Load);
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.yata_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.yata_DragEnter);

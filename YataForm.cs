@@ -699,30 +699,6 @@ namespace yata
 		#endregion Methods
 
 
-		#region Events
-		/// <summary>
-		/// Hides the <c><see cref="YataGrid._editor">YataGrid._editor</see></c>.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		/// <remarks>This is a generic handler that should be invoked when
-		/// opening a menu on the menubar.
-		/// 
-		/// 
-		/// The <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c>
-		/// does not need to be hidden here since it gets hidden when the
-		/// <c>Propanel</c> loses focus.</remarks>
-		void dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null && Table._editor.Visible)
-			{
-				Table._editor.Visible = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
-		}
-		#endregion Events
-
-
 		#region Methods (create)
 		/// <summary>
 		/// Creates a tab-page and instantiates a table-grid for it.
@@ -842,8 +818,18 @@ namespace yata
 		/// <summary>
 		/// Handles tab-selection/deselection.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="Tabs"/></c></item>
+		/// <item><c>null</c></item>
+		/// </list>
+		/// </param>
 		/// <param name="e"></param>
+		/// <remarks>Invoked by
+		/// <list type="bullet">
+		/// <item>Tab click</item>
+		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
+		/// </list></remarks>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			//logfile.Log("YataForm.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
@@ -972,7 +958,7 @@ namespace yata
 		/// <summary>
 		/// Draws the tab-text in Bold iff selected.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="Tabs"/></c></param>
 		/// <param name="e"></param>
 		void tab_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -1185,12 +1171,12 @@ namespace yata
 
 		#region Events (close)
 		/// <summary>
-		/// Handles Yata's <c>FormClosing</c> event. Requests user-confirmation
-		/// if data has changed and writes a recent-files list if appropriate.
+		/// Overrides Yata's <c>FormClosing</c> handler. Requests
+		/// user-confirmation if data has changed and writes a recent-files list
+		/// if appropriate.
 		/// </summary>
-		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void yata_Closing(object sender, CancelEventArgs e)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			if (Tabs.TabPages.Count != 0)
 			{
@@ -1225,6 +1211,8 @@ namespace yata
 					MessageBox.Show(ex.Message);
 				}
 			}
+
+			base.OnFormClosing(e);
 		}
 		#endregion Events (close)
 
@@ -1269,6 +1257,30 @@ namespace yata
 			return false;
 		}
 		#endregion Methods (close)
+
+
+		#region Events
+		/// <summary>
+		/// Hides the <c><see cref="YataGrid._editor">YataGrid._editor</see></c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>This is a generic handler that should be invoked when
+		/// opening a menu on the menubar.
+		/// 
+		/// 
+		/// The <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c>
+		/// does not need to be hidden here since it gets hidden when the
+		/// <c>Propanel</c> loses focus.</remarks>
+		void dropdownopening(object sender, EventArgs e)
+		{
+			if (Table != null && Table._editor.Visible)
+			{
+				Table._editor.Visible = false;
+				Table.Invalidator(YataGrid.INVALID_GRID);
+			}
+		}
+		#endregion Events
 
 
 		#region Events (file)
