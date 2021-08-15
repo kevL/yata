@@ -1379,7 +1379,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Reload"/></c></item>
-		/// <item><c><see cref="it_tabReload"/></c></item>
+		/// <item><c><see cref="tabit_Reload"/></c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
@@ -1484,7 +1484,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Save"/></c></item>
-		/// <item><c><see cref="it_tabSave"/></c></item>
+		/// <item><c><see cref="tabit_Save"/></c></item>
 		/// <item><c><see cref="it_SaveAs"/></c></item>
 		/// <item><c><see cref="it_SaveAll"/></c></item>
 		/// <item><c>null</c></item>
@@ -1524,7 +1524,7 @@ namespace yata
 					_pfeT = _table.Fullpath;
 					force = false;
 
-					if (sender == it_Save || sender == it_tabSave)
+					if (sender == it_Save || sender == tabit_Save)
 						bypassReadonly = false;
 					else
 						bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
@@ -1661,9 +1661,9 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Close"/></c></item>
-		/// <item><c><see cref="it_tabClose"/></c></item>
+		/// <item><c><see cref="tabit_Close"/></c></item>
 		/// <item><c><see cref="it_Reload"/></c></item>
-		/// <item><c><see cref="it_tabReload"/></c></item>
+		/// <item><c><see cref="tabit_Reload"/></c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
@@ -1697,7 +1697,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_CloseAll"/></c></item>
-		/// <item><c><see cref="it_tabCloseAll"/></c></item>
+		/// <item><c><see cref="tabit_CloseAll"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
@@ -2350,7 +2350,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_PasteCell"/></c></item>
-		/// <item><c><see cref="it_cellPaste"/></c></item>
+		/// <item><c><see cref="cellit_Paste"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
@@ -4149,44 +4149,44 @@ namespace yata
 		{
 			_sel = Table.getSelectedCell(); // '_sel' shall be valid due to rightclick
 
-			it_cellEdit   .Enabled = !Table.Readonly;
+			cellit_Edit   .Enabled = !Table.Readonly;
 
-			it_cellCut    .Enabled = !Table.Readonly;
-			it_cellPaste  .Enabled = !Table.Readonly;
-			it_cellDelete .Enabled = !Table.Readonly
+			cellit_Cut    .Enabled = !Table.Readonly;
+			cellit_Paste  .Enabled = !Table.Readonly;
+			cellit_Delete .Enabled = !Table.Readonly
 								  && (_sel.text != gs.Stars || _sel.loadchanged);
 
-			it_cellLower  .Enabled = !Table.Readonly
+			cellit_Lower  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
-			it_cellUpper  .Enabled = !Table.Readonly
+			cellit_Upper  .Enabled = !Table.Readonly
 								  && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
 
-			it_cellMergeCe.Enabled =
-			it_cellMergeRo.Enabled = isMergeEnabled();
+			cellit_MergeCe.Enabled =
+			cellit_MergeRo.Enabled = isMergeEnabled();
 
-			it_cellStrref .Enabled = isStrrefEnabled();
+			cellit_Strref .Enabled = isStrrefEnabled();
 
 			switch (Table.Info)
 			{
 				case YataGrid.InfoType.INFO_NONE:
 				case YataGrid.InfoType.INFO_CRAFT:
-					it_cellInput.Visible =
-					it_cellInput.Enabled = false;
+					cellit_Input.Visible =
+					cellit_Input.Enabled = false;
 					break;
 
 				// TODO: If table is Readonly allow viewing the InfoInput dialog
 				// but disable its controls ->
 
 				case YataGrid.InfoType.INFO_SPELL:
-					it_cellInput.Text    = "InfoInput (spells.2da)";
-					it_cellInput.Visible = true;
-					it_cellInput.Enabled = !Table.Readonly && isSpellsInfoInputCol();
+					cellit_Input.Text    = "InfoInput (spells.2da)";
+					cellit_Input.Visible = true;
+					cellit_Input.Enabled = !Table.Readonly && isSpellsInfoInputCol();
 					break;
 
 				case YataGrid.InfoType.INFO_FEAT:
-					it_cellInput.Text    = "InfoInput (feat.2da)";
-					it_cellInput.Visible = true;
-					it_cellInput.Enabled = !Table.Readonly && isFeatInfoInputCol();
+					cellit_Input.Text    = "InfoInput (feat.2da)";
+					cellit_Input.Visible = true;
+					cellit_Input.Enabled = !Table.Readonly && isFeatInfoInputCol();
 					break;
 			}
 
@@ -4618,12 +4618,12 @@ namespace yata
 			bool invalid = (_strInt == TalkReader.invalid);
 
 			if (invalid || (_strInt & TalkReader.bitCusto) == 0)
-				it_cellStrref_custom.Text = "set Custom";
+				cellit_Strref_custom.Text = "set Custom";
 			else
-				it_cellStrref_custom.Text = "clear Custom";
+				cellit_Strref_custom.Text = "clear Custom";
 
-			it_cellStrref_custom .Enabled =
-			it_cellStrref_invalid.Enabled = !Table.Readonly && !invalid;
+			cellit_Strref_custom .Enabled =
+			cellit_Strref_invalid.Enabled = !Table.Readonly && !invalid;
 		}
 
 		/// <summary>
@@ -4632,7 +4632,7 @@ namespace yata
 		/// corresponding Dialog.Tlk or special entry in a readonly
 		/// <c>RichTextBox</c> for the user's investigation and/or copying.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_cellStrref_talktable"/></c></param>
+		/// <param name="sender"><c><see cref="cellit_Strref_talktable"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger else disable the context it.</remarks>
@@ -4657,7 +4657,7 @@ namespace yata
 		/// Handler for cell-context "set/clear Custom" click. Toggles the
 		/// custom-bit flag.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_cellStrref_custom"/></c></param>
+		/// <param name="sender"><c><see cref="cellit_Strref_custom"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger else disable the context it.
@@ -4686,7 +4686,7 @@ namespace yata
 		/// Handler for cell-context "set Invalid (-1)" click. Sets a strref to
 		/// "-1" if not already.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_cellStrref_invalid"/></c></param>
+		/// <param name="sender"><c><see cref="cellit_Strref_invalid"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Check that the cell's text parses to a valid value before
 		/// allowing the event to trigger else disable the context it.</remarks>
@@ -4727,27 +4727,27 @@ namespace yata
 
 			if (found)
 			{
-				it_tabCloseAll      .Enabled =
-				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
+				tabit_CloseAll      .Enabled =
+				tabit_CloseAllOthers.Enabled = (Tabs.TabCount != 1);
 
-				it_tabSave          .Enabled = !Table.Readonly;
+				tabit_Save          .Enabled = !Table.Readonly;
 
-				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
+				tabit_Reload        .Enabled = File.Exists(Table.Fullpath);
 
-				// NOTE: 'it_tabDiff1' is always enabled.
-				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
-				it_tabDiffReset.Enabled = (_diff1 != null || _diff2 != null);
-				it_tabDiffSync .Enabled = (_diff1 != null && _diff2 != null);
+				// NOTE: 'tabit_Diff1' is always enabled.
+				tabit_Diff2    .Enabled = (_diff1 != null && _diff1 != Table);
+				tabit_DiffReset.Enabled = (_diff1 != null || _diff2 != null);
+				tabit_DiffSync .Enabled = (_diff1 != null && _diff2 != null);
 
 				if (_diff1 != null)
-					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
+					tabit_Diff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
 				else
-					it_tabDiff1.Text = "Select diff1";
+					tabit_Diff1.Text = "Select diff1";
 
 				if (_diff2 != null)
-					it_tabDiff2.Text = "diff2 - " + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
+					tabit_Diff2.Text = "diff2 - " + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
 				else
-					it_tabDiff2.Text = "Select diff2";
+					tabit_Diff2.Text = "Select diff2";
 			}
 			else
 				e.Cancel = true;

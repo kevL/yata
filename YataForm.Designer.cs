@@ -162,31 +162,31 @@ namespace yata
 		ToolStripMenuItem rowit_Delete;
 
 		internal ContextMenuStrip ContextCell;
-		ToolStripMenuItem it_cellEdit;
-		ToolStripMenuItem it_cellCut;
-		ToolStripMenuItem it_cellCopy;
-		ToolStripMenuItem it_cellPaste;
-		ToolStripMenuItem it_cellDelete;
-		ToolStripMenuItem it_cellLower;
-		ToolStripMenuItem it_cellUpper;
-		ToolStripMenuItem it_cellMergeCe;
-		ToolStripMenuItem it_cellMergeRo;
-		ToolStripMenuItem it_cellInput;
-		ToolStripMenuItem it_cellStrref;
-		ToolStripMenuItem it_cellStrref_talktable;
-		ToolStripMenuItem it_cellStrref_custom;
-		ToolStripMenuItem it_cellStrref_invalid;
+		ToolStripMenuItem cellit_Edit;
+		ToolStripMenuItem cellit_Cut;
+		ToolStripMenuItem cellit_Copy;
+		ToolStripMenuItem cellit_Paste;
+		ToolStripMenuItem cellit_Delete;
+		ToolStripMenuItem cellit_Lower;
+		ToolStripMenuItem cellit_Upper;
+		ToolStripMenuItem cellit_MergeCe;
+		ToolStripMenuItem cellit_MergeRo;
+		ToolStripMenuItem cellit_Input;
+		ToolStripMenuItem cellit_Strref;
+		ToolStripMenuItem cellit_Strref_talktable;
+		ToolStripMenuItem cellit_Strref_custom;
+		ToolStripMenuItem cellit_Strref_invalid;
 
 		internal ContextMenuStrip ContextTab;
-		ToolStripMenuItem it_tabClose;
-		ToolStripMenuItem it_tabCloseAll;
-		ToolStripMenuItem it_tabCloseAllOthers;
-		ToolStripMenuItem it_tabSave;
-		ToolStripMenuItem it_tabReload;
-		ToolStripMenuItem it_tabDiff1;
-		ToolStripMenuItem it_tabDiff2;
-		ToolStripMenuItem it_tabDiffReset;
-		ToolStripMenuItem it_tabDiffSync;
+		ToolStripMenuItem tabit_Close;
+		ToolStripMenuItem tabit_CloseAll;
+		ToolStripMenuItem tabit_CloseAllOthers;
+		ToolStripMenuItem tabit_Save;
+		ToolStripMenuItem tabit_Reload;
+		ToolStripMenuItem tabit_Diff1;
+		ToolStripMenuItem tabit_Diff2;
+		ToolStripMenuItem tabit_DiffReset;
+		ToolStripMenuItem tabit_DiffSync;
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statbar_lblCords;
@@ -342,37 +342,37 @@ namespace yata
 			this.statbar_lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this.ContextCell = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.it_cellEdit = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Edit = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_27 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_cellCut = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellCopy = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellPaste = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Cut = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Paste = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_cellLower = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellUpper = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Lower = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Upper = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_24 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_cellMergeCe = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellMergeRo = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_MergeCe = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_MergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_cellStrref = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellStrref_talktable = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellStrref_custom = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellStrref_invalid = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_cellInput = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Strref = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Strref_talktable = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Strref_custom = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Strref_invalid = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Input = new System.Windows.Forms.ToolStripMenuItem();
 			this.ContextTab = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.it_tabClose = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabCloseAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabCloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_Close = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_CloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_14 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_tabSave = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_Save = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_26 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_tabReload = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_Reload = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_23 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_tabDiff1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiff2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiffReset = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_tabDiffSync = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_Diff1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_Diff2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_DiffReset = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabit_DiffSync = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar.SuspendLayout();
 			this.ContextRow.SuspendLayout();
 			this.statusbar.SuspendLayout();
@@ -1462,251 +1462,251 @@ namespace yata
 			// 
 			this.ContextCell.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ContextCell.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_cellEdit,
+			this.cellit_Edit,
 			this.separator_27,
-			this.it_cellCut,
-			this.it_cellCopy,
-			this.it_cellPaste,
-			this.it_cellDelete,
+			this.cellit_Cut,
+			this.cellit_Copy,
+			this.cellit_Paste,
+			this.cellit_Delete,
 			this.separator_16,
-			this.it_cellLower,
-			this.it_cellUpper,
+			this.cellit_Lower,
+			this.cellit_Upper,
 			this.separator_24,
-			this.it_cellMergeCe,
-			this.it_cellMergeRo,
+			this.cellit_MergeCe,
+			this.cellit_MergeRo,
 			this.separator_28,
-			this.it_cellStrref,
-			this.it_cellInput});
+			this.cellit_Strref,
+			this.cellit_Input});
 			this.ContextCell.Name = "ContextCell";
 			this.ContextCell.ShowImageMargin = false;
 			this.ContextCell.Size = new System.Drawing.Size(165, 270);
 			// 
-			// it_cellEdit
+			// cellit_Edit
 			// 
-			this.it_cellEdit.Name = "it_cellEdit";
-			this.it_cellEdit.Size = new System.Drawing.Size(164, 22);
-			this.it_cellEdit.Text = "edit";
-			this.it_cellEdit.Click += new System.EventHandler(this.cellclick_Edit);
+			this.cellit_Edit.Name = "cellit_Edit";
+			this.cellit_Edit.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Edit.Text = "edit";
+			this.cellit_Edit.Click += new System.EventHandler(this.cellclick_Edit);
 			// 
 			// separator_27
 			// 
 			this.separator_27.Name = "separator_27";
 			this.separator_27.Size = new System.Drawing.Size(161, 6);
 			// 
-			// it_cellCut
+			// cellit_Cut
 			// 
-			this.it_cellCut.Name = "it_cellCut";
-			this.it_cellCut.Size = new System.Drawing.Size(164, 22);
-			this.it_cellCut.Text = "cut";
-			this.it_cellCut.Click += new System.EventHandler(this.cellclick_Cut);
+			this.cellit_Cut.Name = "cellit_Cut";
+			this.cellit_Cut.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Cut.Text = "cut";
+			this.cellit_Cut.Click += new System.EventHandler(this.cellclick_Cut);
 			// 
-			// it_cellCopy
+			// cellit_Copy
 			// 
-			this.it_cellCopy.Name = "it_cellCopy";
-			this.it_cellCopy.Size = new System.Drawing.Size(164, 22);
-			this.it_cellCopy.Text = "copy";
-			this.it_cellCopy.Click += new System.EventHandler(this.cellclick_Copy);
+			this.cellit_Copy.Name = "cellit_Copy";
+			this.cellit_Copy.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Copy.Text = "copy";
+			this.cellit_Copy.Click += new System.EventHandler(this.cellclick_Copy);
 			// 
-			// it_cellPaste
+			// cellit_Paste
 			// 
-			this.it_cellPaste.Name = "it_cellPaste";
-			this.it_cellPaste.Size = new System.Drawing.Size(164, 22);
-			this.it_cellPaste.Text = "paste";
-			this.it_cellPaste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
+			this.cellit_Paste.Name = "cellit_Paste";
+			this.cellit_Paste.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Paste.Text = "paste";
+			this.cellit_Paste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
-			// it_cellDelete
+			// cellit_Delete
 			// 
-			this.it_cellDelete.Name = "it_cellDelete";
-			this.it_cellDelete.Size = new System.Drawing.Size(164, 22);
-			this.it_cellDelete.Text = "delete";
-			this.it_cellDelete.Click += new System.EventHandler(this.cellclick_Delete);
+			this.cellit_Delete.Name = "cellit_Delete";
+			this.cellit_Delete.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Delete.Text = "delete";
+			this.cellit_Delete.Click += new System.EventHandler(this.cellclick_Delete);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
 			this.separator_16.Size = new System.Drawing.Size(161, 6);
 			// 
-			// it_cellLower
+			// cellit_Lower
 			// 
-			this.it_cellLower.Name = "it_cellLower";
-			this.it_cellLower.Size = new System.Drawing.Size(164, 22);
-			this.it_cellLower.Text = "lowercase";
-			this.it_cellLower.Click += new System.EventHandler(this.cellclick_Lower);
+			this.cellit_Lower.Name = "cellit_Lower";
+			this.cellit_Lower.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Lower.Text = "lowercase";
+			this.cellit_Lower.Click += new System.EventHandler(this.cellclick_Lower);
 			// 
-			// it_cellUpper
+			// cellit_Upper
 			// 
-			this.it_cellUpper.Name = "it_cellUpper";
-			this.it_cellUpper.Size = new System.Drawing.Size(164, 22);
-			this.it_cellUpper.Text = "uppercase";
-			this.it_cellUpper.Click += new System.EventHandler(this.cellclick_Upper);
+			this.cellit_Upper.Name = "cellit_Upper";
+			this.cellit_Upper.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Upper.Text = "uppercase";
+			this.cellit_Upper.Click += new System.EventHandler(this.cellclick_Upper);
 			// 
 			// separator_24
 			// 
 			this.separator_24.Name = "separator_24";
 			this.separator_24.Size = new System.Drawing.Size(161, 6);
 			// 
-			// it_cellMergeCe
+			// cellit_MergeCe
 			// 
-			this.it_cellMergeCe.Name = "it_cellMergeCe";
-			this.it_cellMergeCe.Size = new System.Drawing.Size(164, 22);
-			this.it_cellMergeCe.Text = "merge to other - Ce";
-			this.it_cellMergeCe.Click += new System.EventHandler(this.cellclick_MergeCe);
+			this.cellit_MergeCe.Name = "cellit_MergeCe";
+			this.cellit_MergeCe.Size = new System.Drawing.Size(164, 22);
+			this.cellit_MergeCe.Text = "merge to other - Ce";
+			this.cellit_MergeCe.Click += new System.EventHandler(this.cellclick_MergeCe);
 			// 
-			// it_cellMergeRo
+			// cellit_MergeRo
 			// 
-			this.it_cellMergeRo.Name = "it_cellMergeRo";
-			this.it_cellMergeRo.Size = new System.Drawing.Size(164, 22);
-			this.it_cellMergeRo.Text = "merge to other - Ro";
-			this.it_cellMergeRo.Click += new System.EventHandler(this.cellclick_MergeRo);
+			this.cellit_MergeRo.Name = "cellit_MergeRo";
+			this.cellit_MergeRo.Size = new System.Drawing.Size(164, 22);
+			this.cellit_MergeRo.Text = "merge to other - Ro";
+			this.cellit_MergeRo.Click += new System.EventHandler(this.cellclick_MergeRo);
 			// 
 			// separator_28
 			// 
 			this.separator_28.Name = "separator_28";
 			this.separator_28.Size = new System.Drawing.Size(161, 6);
 			// 
-			// it_cellStrref
+			// cellit_Strref
 			// 
-			this.it_cellStrref.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_cellStrref_talktable,
-			this.it_cellStrref_custom,
-			this.it_cellStrref_invalid});
-			this.it_cellStrref.Name = "it_cellStrref";
-			this.it_cellStrref.Size = new System.Drawing.Size(164, 22);
-			this.it_cellStrref.Text = "STRREF";
-			this.it_cellStrref.DropDownOpening += new System.EventHandler(this.dropdownopening_Strref);
+			this.cellit_Strref.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.cellit_Strref_talktable,
+			this.cellit_Strref_custom,
+			this.cellit_Strref_invalid});
+			this.cellit_Strref.Name = "cellit_Strref";
+			this.cellit_Strref.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Strref.Text = "STRREF";
+			this.cellit_Strref.DropDownOpening += new System.EventHandler(this.dropdownopening_Strref);
 			// 
-			// it_cellStrref_talktable
+			// cellit_Strref_talktable
 			// 
-			this.it_cellStrref_talktable.Name = "it_cellStrref_talktable";
-			this.it_cellStrref_talktable.Size = new System.Drawing.Size(160, 22);
-			this.it_cellStrref_talktable.Text = "TalkTable";
-			this.it_cellStrref_talktable.Click += new System.EventHandler(this.cellclick_Strref_talktable);
+			this.cellit_Strref_talktable.Name = "cellit_Strref_talktable";
+			this.cellit_Strref_talktable.Size = new System.Drawing.Size(160, 22);
+			this.cellit_Strref_talktable.Text = "TalkTable";
+			this.cellit_Strref_talktable.Click += new System.EventHandler(this.cellclick_Strref_talktable);
 			// 
-			// it_cellStrref_custom
+			// cellit_Strref_custom
 			// 
-			this.it_cellStrref_custom.Name = "it_cellStrref_custom";
-			this.it_cellStrref_custom.Size = new System.Drawing.Size(160, 22);
-			this.it_cellStrref_custom.Text = "set Custom";
-			this.it_cellStrref_custom.Click += new System.EventHandler(this.cellclick_Strref_custom);
+			this.cellit_Strref_custom.Name = "cellit_Strref_custom";
+			this.cellit_Strref_custom.Size = new System.Drawing.Size(160, 22);
+			this.cellit_Strref_custom.Text = "set Custom";
+			this.cellit_Strref_custom.Click += new System.EventHandler(this.cellclick_Strref_custom);
 			// 
-			// it_cellStrref_invalid
+			// cellit_Strref_invalid
 			// 
-			this.it_cellStrref_invalid.Name = "it_cellStrref_invalid";
-			this.it_cellStrref_invalid.Size = new System.Drawing.Size(160, 22);
-			this.it_cellStrref_invalid.Text = "set Invalid (-1)";
-			this.it_cellStrref_invalid.Click += new System.EventHandler(this.cellclick_Strref_invalid);
+			this.cellit_Strref_invalid.Name = "cellit_Strref_invalid";
+			this.cellit_Strref_invalid.Size = new System.Drawing.Size(160, 22);
+			this.cellit_Strref_invalid.Text = "set Invalid (-1)";
+			this.cellit_Strref_invalid.Click += new System.EventHandler(this.cellclick_Strref_invalid);
 			// 
-			// it_cellInput
+			// cellit_Input
 			// 
-			this.it_cellInput.Name = "it_cellInput";
-			this.it_cellInput.Size = new System.Drawing.Size(164, 22);
-			this.it_cellInput.Text = "InfoInput";
-			this.it_cellInput.Click += new System.EventHandler(this.cellclick_InfoInput);
+			this.cellit_Input.Name = "cellit_Input";
+			this.cellit_Input.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Input.Text = "InfoInput";
+			this.cellit_Input.Click += new System.EventHandler(this.cellclick_InfoInput);
 			// 
 			// ContextTab
 			// 
 			this.ContextTab.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ContextTab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.it_tabClose,
-			this.it_tabCloseAll,
-			this.it_tabCloseAllOthers,
+			this.tabit_Close,
+			this.tabit_CloseAll,
+			this.tabit_CloseAllOthers,
 			this.separator_14,
-			this.it_tabSave,
+			this.tabit_Save,
 			this.separator_26,
-			this.it_tabReload,
+			this.tabit_Reload,
 			this.separator_23,
-			this.it_tabDiff1,
-			this.it_tabDiff2,
-			this.it_tabDiffReset,
-			this.it_tabDiffSync});
+			this.tabit_Diff1,
+			this.tabit_Diff2,
+			this.tabit_DiffReset,
+			this.tabit_DiffSync});
 			this.ContextTab.Name = "ContextTab";
 			this.ContextTab.ShowImageMargin = false;
 			this.ContextTab.Size = new System.Drawing.Size(139, 220);
 			this.ContextTab.Opening += new System.ComponentModel.CancelEventHandler(this.ContextTab_opening);
 			// 
-			// it_tabClose
+			// tabit_Close
 			// 
-			this.it_tabClose.Name = "it_tabClose";
-			this.it_tabClose.Size = new System.Drawing.Size(138, 22);
-			this.it_tabClose.Text = "Close";
-			this.it_tabClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabClose.Click += new System.EventHandler(this.fileclick_ClosePage);
+			this.tabit_Close.Name = "tabit_Close";
+			this.tabit_Close.Size = new System.Drawing.Size(138, 22);
+			this.tabit_Close.Text = "Close";
+			this.tabit_Close.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.tabit_Close.Click += new System.EventHandler(this.fileclick_ClosePage);
 			// 
-			// it_tabCloseAll
+			// tabit_CloseAll
 			// 
-			this.it_tabCloseAll.Name = "it_tabCloseAll";
-			this.it_tabCloseAll.Size = new System.Drawing.Size(138, 22);
-			this.it_tabCloseAll.Text = "Close all";
-			this.it_tabCloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabCloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
+			this.tabit_CloseAll.Name = "tabit_CloseAll";
+			this.tabit_CloseAll.Size = new System.Drawing.Size(138, 22);
+			this.tabit_CloseAll.Text = "Close all";
+			this.tabit_CloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.tabit_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
-			// it_tabCloseAllOthers
+			// tabit_CloseAllOthers
 			// 
-			this.it_tabCloseAllOthers.Name = "it_tabCloseAllOthers";
-			this.it_tabCloseAllOthers.Size = new System.Drawing.Size(138, 22);
-			this.it_tabCloseAllOthers.Text = "Close all others";
-			this.it_tabCloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.it_tabCloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
+			this.tabit_CloseAllOthers.Name = "tabit_CloseAllOthers";
+			this.tabit_CloseAllOthers.Size = new System.Drawing.Size(138, 22);
+			this.tabit_CloseAllOthers.Text = "Close all others";
+			this.tabit_CloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.tabit_CloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
 			// 
 			// separator_14
 			// 
 			this.separator_14.Name = "separator_14";
 			this.separator_14.Size = new System.Drawing.Size(135, 6);
 			// 
-			// it_tabSave
+			// tabit_Save
 			// 
-			this.it_tabSave.Name = "it_tabSave";
-			this.it_tabSave.Size = new System.Drawing.Size(138, 22);
-			this.it_tabSave.Text = "Save";
-			this.it_tabSave.Click += new System.EventHandler(this.fileclick_Save);
+			this.tabit_Save.Name = "tabit_Save";
+			this.tabit_Save.Size = new System.Drawing.Size(138, 22);
+			this.tabit_Save.Text = "Save";
+			this.tabit_Save.Click += new System.EventHandler(this.fileclick_Save);
 			// 
 			// separator_26
 			// 
 			this.separator_26.Name = "separator_26";
 			this.separator_26.Size = new System.Drawing.Size(135, 6);
 			// 
-			// it_tabReload
+			// tabit_Reload
 			// 
-			this.it_tabReload.Name = "it_tabReload";
-			this.it_tabReload.Size = new System.Drawing.Size(138, 22);
-			this.it_tabReload.Text = "Reload";
-			this.it_tabReload.Click += new System.EventHandler(this.fileclick_Reload);
+			this.tabit_Reload.Name = "tabit_Reload";
+			this.tabit_Reload.Size = new System.Drawing.Size(138, 22);
+			this.tabit_Reload.Text = "Reload";
+			this.tabit_Reload.Click += new System.EventHandler(this.fileclick_Reload);
 			// 
 			// separator_23
 			// 
 			this.separator_23.Name = "separator_23";
 			this.separator_23.Size = new System.Drawing.Size(135, 6);
 			// 
-			// it_tabDiff1
+			// tabit_Diff1
 			// 
-			this.it_tabDiff1.Name = "it_tabDiff1";
-			this.it_tabDiff1.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiff1.Text = "Select diff1";
-			this.it_tabDiff1.Click += new System.EventHandler(this.tabclick_Diff1);
+			this.tabit_Diff1.Name = "tabit_Diff1";
+			this.tabit_Diff1.Size = new System.Drawing.Size(138, 22);
+			this.tabit_Diff1.Text = "Select diff1";
+			this.tabit_Diff1.Click += new System.EventHandler(this.tabclick_Diff1);
 			// 
-			// it_tabDiff2
+			// tabit_Diff2
 			// 
-			this.it_tabDiff2.Enabled = false;
-			this.it_tabDiff2.Name = "it_tabDiff2";
-			this.it_tabDiff2.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiff2.Text = "Select diff2";
-			this.it_tabDiff2.Click += new System.EventHandler(this.tabclick_Diff2);
+			this.tabit_Diff2.Enabled = false;
+			this.tabit_Diff2.Name = "tabit_Diff2";
+			this.tabit_Diff2.Size = new System.Drawing.Size(138, 22);
+			this.tabit_Diff2.Text = "Select diff2";
+			this.tabit_Diff2.Click += new System.EventHandler(this.tabclick_Diff2);
 			// 
-			// it_tabDiffReset
+			// tabit_DiffReset
 			// 
-			this.it_tabDiffReset.Enabled = false;
-			this.it_tabDiffReset.Name = "it_tabDiffReset";
-			this.it_tabDiffReset.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiffReset.Text = "Reset diffs";
-			this.it_tabDiffReset.Click += new System.EventHandler(this.tabclick_DiffReset);
+			this.tabit_DiffReset.Enabled = false;
+			this.tabit_DiffReset.Name = "tabit_DiffReset";
+			this.tabit_DiffReset.Size = new System.Drawing.Size(138, 22);
+			this.tabit_DiffReset.Text = "Reset diffs";
+			this.tabit_DiffReset.Click += new System.EventHandler(this.tabclick_DiffReset);
 			// 
-			// it_tabDiffSync
+			// tabit_DiffSync
 			// 
-			this.it_tabDiffSync.Enabled = false;
-			this.it_tabDiffSync.Name = "it_tabDiffSync";
-			this.it_tabDiffSync.Size = new System.Drawing.Size(138, 22);
-			this.it_tabDiffSync.Text = "Sync tables";
-			this.it_tabDiffSync.Click += new System.EventHandler(this.tabclick_DiffSync);
+			this.tabit_DiffSync.Enabled = false;
+			this.tabit_DiffSync.Name = "tabit_DiffSync";
+			this.tabit_DiffSync.Size = new System.Drawing.Size(138, 22);
+			this.tabit_DiffSync.Text = "Sync tables";
+			this.tabit_DiffSync.Click += new System.EventHandler(this.tabclick_DiffSync);
 			// 
 			// YataForm
 			// 
