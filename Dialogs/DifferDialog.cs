@@ -9,8 +9,7 @@ namespace yata
 	/// A dialog for the 2da-differ.
 	/// </summary>
 	sealed class DifferDialog
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		const int WIDTH_Min = 325;
@@ -94,7 +93,7 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles this dialog's load event. Niceties ...
+		/// Overrides this dialog's <c>Load</c> handler. Niceties ...
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
@@ -105,8 +104,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles this dialog's closing event. Sets the static location and
-		/// nulls the differ in 'YataForm'.
+		/// Overrides this dialog's <c>FormClosing</c> handler. Sets the static
+		/// location and nulls the differ in <c><see cref="YataForm"/></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -136,13 +135,13 @@ namespace yata
 
 		/// <summary>
 		/// Handles a click on the Reset button. Clears and desyncs the diff'd
-		/// tables. Closes this dialog via 'YataForm'.
+		/// tables. Closes this dialog via <c><see cref="YataForm"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_btnReset(object sender, EventArgs e)
 		{
-			_f.tabclick_DiffReset(null, EventArgs.Empty);
+			_f.tabclick_DiffReset(sender, e);
 		}
 
 		/// <summary>
