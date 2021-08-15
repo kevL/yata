@@ -15,7 +15,7 @@ namespace yata
 		internal static Font _font;			// the grid's font
 		internal static Font _fontdialog;	// the font to be used in all dialogs unless '_font2dialog' is valid.
 
-		internal static Font _font2;		// menubar, ContextEditor, statusbar , tabmenu, cellmenu
+		internal static Font _font2;		// menubar, ContextRow, ContextCell, ContextTab, statusbar
 		internal static Font _font2dialog;	// all dialogs if valid.
 
 		internal static Font _font3;		// propanel

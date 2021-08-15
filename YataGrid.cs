@@ -399,13 +399,13 @@ namespace yata
 
 		#region Scrollbars
 		/// <summary>
-		/// Closes the RMB context-menus for (1) tabs, (2) cells, and (3) rows.
+		/// Hides the RMB-contexts for (1) rows, (2) cells, and/or (3) tabs.
 		/// </summary>
-		void closeContexts()
+		void hideContexts()
 		{
-			if (_f.tabMenu       != null) _f.tabMenu      .Close();
-			if (_f.cellMenu      != null) _f.cellMenu     .Close();
-			if (_f.ContextEditor != null) _f.ContextEditor.Close();
+			if      (_f.ContextRow .Visible) _f.ContextRow .Visible = false;
+			else if (_f.ContextCell.Visible) _f.ContextCell.Visible = false;
+			else if (_f.ContextTab .Visible) _f.ContextTab .Visible = false;
 		}
 
 		/// <summary>
@@ -415,7 +415,7 @@ namespace yata
 		/// <param name="e"></param>
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
-			closeContexts();
+			hideContexts();
 
 			if (_table == null) _table = this;
 
@@ -433,8 +433,8 @@ namespace yata
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
-			Point pt = PointToClient(Cursor.Position);
-			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
+			Point loc = PointToClient(Cursor.Position);
+			var args = new MouseEventArgs(MouseButtons.Left, 1, loc.X, loc.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
 			if (_table == YataForm.Table
@@ -452,7 +452,7 @@ namespace yata
 		/// <param name="e"></param>
 		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
-			closeContexts();
+			hideContexts();
 
 			if (_table == null) _table = this;
 
@@ -470,8 +470,8 @@ namespace yata
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
-			Point pt = PointToClient(Cursor.Position);
-			var args = new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0); // clicks,x,y,delta
+			Point loc = PointToClient(Cursor.Position);
+			var args = new MouseEventArgs(MouseButtons.Left, 1, loc.X, loc.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
 			if (_table == YataForm.Table
@@ -3020,7 +3020,7 @@ namespace yata
 									  | INVALID_FROZ
 									  | INVALID_ROWS
 									  | EnsureDisplayed(_cell));
-							_f.popupCellmenu();
+							_f.ShowCellContext();
 						}
 						else
 							Select();
@@ -3689,6 +3689,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelRows"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
+		/// than <c>LMB</c> or <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
 			if ((ModifierKeys & Keys.Alt) == 0)
@@ -3857,27 +3859,28 @@ namespace yata
 						}
 
 						case MouseButtons.Right:
-						{
-							_editor.Visible = false;
-							ClearSelects();
+							if ((ModifierKeys & (Keys.Shift | Keys.Control)) == 0)
+							{
+								_editor.Visible = false;
+								ClearSelects();
 
-							SelectRow(r);
-							EnsureDisplayedRow(r);
+								SelectRow(r);
+								EnsureDisplayedRow(r);
 
-							int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
-							if (Propanel != null && Propanel.Visible)
-								invalid |= INVALID_PROP;
+								int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+								if (Propanel != null && Propanel.Visible)
+									invalid |= INVALID_PROP;
 
-							Invalidator(invalid);
+								Invalidator(invalid);
 
-							_f.context_(r);
-
+								_f.ShowRowContext(r);
+							}
 							break;
-						}
 					}
 				}
-				else // click below the last entry ->
+				else if ((ModifierKeys & (Keys.Shift | Keys.Control)) == 0) // click below the last entry ->
 				{
+					_editor.Visible = false;
 					ClearSelects();
 					_f.SyncSelect();
 
@@ -3911,6 +3914,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelCols"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
+		/// than <c>LMB</c> or <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
 			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == 0)

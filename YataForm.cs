@@ -222,7 +222,7 @@ namespace yata
 
 			InitializeComponent();
 
-			Tabs.ContextMenuStrip = tabMenu;
+			Tabs.ContextMenuStrip = ContextTab;
 
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -262,16 +262,16 @@ namespace yata
 			{
 				// Relative Font-sizes (as defined in the Designer):
 				//
-				// menubar, ContextEditor, statusbar, tabMenu, cellMenu = unity.
-				// context_it_Header     = +0.75
+				// menubar, ContextRow, ContextCell, ContextTab, statusbar = unity.
+				// rowit_Header          = +0.75
 				// statusbar_label_Cords = -0.75
 				// statusbar_label_Info  = +1.50
 
 				menubar.Font.Dispose();
 				menubar.Font = Settings._font2;
 
-				ContextEditor.Font.Dispose();
-				ContextEditor.Font = Settings._font2;
+				ContextRow.Font.Dispose();
+				ContextRow.Font = Settings._font2;
 
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
@@ -293,16 +293,16 @@ namespace yata
 				statbar_lblCords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblCords.Font) + 20;
 
 
-				context_it_Header.Font.Dispose();
-				context_it_Header.Font = new Font(Settings._font2.FontFamily,
-												  Settings._font2.SizeInPoints + 0.75f,
-												  getStyleAccented(Settings._font2.FontFamily));
+				rowit_Header.Font.Dispose();
+				rowit_Header.Font = new Font(Settings._font2.FontFamily,
+											 Settings._font2.SizeInPoints + 0.75f,
+											 getStyleAccented(Settings._font2.FontFamily));
 
-				tabMenu.Font.Dispose();
-				tabMenu.Font = Settings._font2;
+				ContextTab.Font.Dispose();
+				ContextTab.Font = Settings._font2;
 
-				cellMenu.Font.Dispose();
-				cellMenu.Font = Settings._font2;
+				ContextCell.Font.Dispose();
+				ContextCell.Font = Settings._font2;
 			}
 
 			int
@@ -1069,7 +1069,8 @@ namespace yata
 		/// <summary>
 		/// Disposes a tab's table's <c><see cref="FileWatcher"/></c> before a
 		/// specified <c>TabPage</c> is removed from the
-		/// <c>TabPageCollection</c>.
+		/// <c>TabPageCollection</c>. The <c>TabPage</c> and its
+		/// <c><see cref="YataGrid"/></c> are then <c>Disposed()</c>.
 		/// </summary>
 		/// <param name="tab">the <c>TabPage</c> with which to deal</param>
 		void ClosePage(TabPage tab)
@@ -1728,347 +1729,6 @@ namespace yata
 			Close(); // let yata_Closing() handle it ...
 		}
 		#endregion Events (file)
-
-
-		#region Methods (context)
-		/// <summary>
-		/// Opens the context for single-row editing.
-		/// </summary>
-		/// <param name="r"></param>
-		internal void context_(int r)
-		{
-			_r = r;
-
-			context_it_Header.Text = "_row @ id " + _r;
-
-			context_it_PasteAbove .Enabled =
-			context_it_Paste      .Enabled =
-			context_it_PasteBelow .Enabled = !Table.Readonly && _copyr.Count != 0;
-
-			context_it_Cut        .Enabled =
-			context_it_CreateAbove.Enabled =
-			context_it_ClearRow   .Enabled =
-			context_it_CreateBelow.Enabled =
-			context_it_DeleteRow  .Enabled = !Table.Readonly;
-
-			Point loc;
-			if (Settings._context)							// static location
-			{
-				loc = new Point(YataGrid.WidthRowhead,
-								YataGrid.HeightColhead);
-			}
-			else											// vanilla location
-				loc = Table.PointToClient(Cursor.Position);
-
-			ContextEditor.Show(Table, loc);
-		}
-		#endregion Methods (context)
-
-
-		#region Events (context)
-		/// <summary>
-		/// Handles context-click on the context-header.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_Header(object sender, EventArgs e)
-		{
-			ContextEditor.Hide();
-		}
-
-		/// <summary>
-		/// Handles context-click to copy a row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditCopy(object sender, EventArgs e)
-		{
-			_copyr.Clear();
-
-			var fields = new string[Table.ColCount];
-			for (int c = 0; c != Table.ColCount; ++c)
-				fields[c] = Table[_r,c].text;
-
-			_copyr.Add(fields);
-		}
-
-		/// <summary>
-		/// Handles context-click to cut a row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditCut(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				contextclick_EditCopy(  null, EventArgs.Empty);
-				contextclick_EditDelete(null, EventArgs.Empty);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to paste above the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditPasteAbove(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				Table.Insert(_r, _copyr[0]);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to paste into the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditPaste(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				// - store the row's current state to 'rPre' in the Restorable
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
-
-
-				Row row = Table.Rows[_r];
-				string field;
-				for (int c = 0; c != Table.ColCount; ++c)
-				{
-					if (c < _copyr[0].Length)
-						field = _copyr[0][c];
-					else
-						field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
-
-					row[c].text = field;
-					row[c].diff =
-					row[c].loadchanged = false;
-				}
-				row._brush = Brushes.Created;
-
-				Table.Calibrate(_r);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-				Table.Invalidator(YataGrid.INVALID_GRID);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-
-				// - store the row's changed state to 'rPos' in the Restorable
-				rest.rPos = Table.Rows[_r].Clone() as Row;
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to paste below the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditPasteBelow(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				Table.Insert(_r + 1, _copyr[0]);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to create a row above the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditCreateAbove(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				var fields = new string[Table.ColCount];
-				fields[0] = _r.ToString();
-				for (int c = 1; c != Table.ColCount; ++c)
-				{
-					fields[c] = gs.Stars;
-				}
-				Table.Insert(_r, fields);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to clear the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditClear(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				// - store the row's current state to 'rPre' in the Restorable
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
-
-
-				for (int c = 1; c != Table.ColCount; ++c)
-				{
-					Table[_r,c].text = gs.Stars;
-					Table[_r,c].diff =
-					Table[_r,c].loadchanged = false;
-				}
-				Table.Rows[_r]._brush = Brushes.Created;
-
-				Table.Calibrate(_r);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-				Table.Invalidator(YataGrid.INVALID_GRID);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-
-				// - store the row's changed state to 'rPos' in the Restorable
-				rest.rPos = Table.Rows[_r].Clone() as Row;
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to create a row below the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditCreateBelow(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				var fields = new string[Table.ColCount];
-				fields[0] = (_r + 1).ToString();
-				for (int c = 1; c != Table.ColCount; ++c)
-				{
-					fields[c] = gs.Stars;
-				}
-				Table.Insert(_r + 1, fields);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-
-		/// <summary>
-		/// Handles context-click to delete the current row.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void contextclick_EditDelete(object sender, EventArgs e)
-		{
-			if (!Table.Readonly)
-			{
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
-
-
-				Table.Insert(_r);
-
-//				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS);
-//				if (Table.Propanel != null && Table.Propanel.Visible)
-//					invalid |= YataGrid.INVALID_PROP;
-//
-//				Table.Invalidator(invalid);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-			}
-			else
-				ReadonlyError();
-		}
-		#endregion Events (context)
 
 
 		#region Events (edit)
@@ -4174,772 +3834,318 @@ namespace yata
 		#endregion Events (help)
 
 
-		#region Events (tab)
+		#region Methods (row)
 		/// <summary>
-		/// Sets the selected tab when a right-click on a tab is about to open
-		/// the context.
+		/// Shows the RMB-context on the rowhead for single-row edit operations.
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabMenu_Opening(object sender, CancelEventArgs e)
-		{
-			Table._editor.Visible = false;
-			Table.Invalidator(YataGrid.INVALID_GRID);
-
-			bool found = false;
-
-			var pt = Tabs.PointToClient(Cursor.Position); // select the Tab itself ->
-			for (int tab = 0; tab != Tabs.TabCount; ++tab)
-			{
-				if (Tabs.GetTabRect(tab).Contains(pt))
-				{
-					Tabs.SelectedIndex = tab;
-					found = true;
-					break;
-				}
-			}
-
-			if (found)
-			{
-				it_tabCloseAll      .Enabled =
-				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
-
-				it_tabSave          .Enabled = !Table.Readonly;
-
-				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
-
-				// NOTE: 'it_tabDiff1' is always enabled.
-				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
-				it_tabDiffReset.Enabled = (_diff1 != null || _diff2 != null);
-				it_tabDiffSync .Enabled = (_diff1 != null && _diff2 != null);
-
-				if (_diff1 != null)
-					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
-				else
-					it_tabDiff1.Text = "Select diff1";
-
-				if (_diff2 != null)
-					it_tabDiff2.Text = "diff2 - " + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
-				else
-					it_tabDiff2.Text = "Select diff2";
-			}
-			else
-				e.Cancel = true;
-		}
-
-		/// <summary>
-		/// Closes all other tables when a tab's context-closeall item is
-		/// clicked.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
-		{
-			if (!CheckChangedTables("close", true))
-			{
-				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
-
-				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-				{
-					if (tab != Tabs.SelectedIndex)
-						ClosePage(Tabs.TabPages[tab]);
-				}
-
-				SetTabSize();
-
-				it_SaveAll.Enabled = AllowSaveAll();
-
-				DrawingControl.ResumeDrawing(this);
-			}
-		}
-
-
-		// TODO: FreezeFirst/Second, gotoloadchanged, etc.
-
-
-		/// <summary>
-		/// Selects <c><see cref="_diff1"/></c>.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_Diff1(object sender, EventArgs e)
-		{
-			tabclick_DiffReset(null, EventArgs.Empty);
-			_diff1 = Table;
-		}
-
-		/// <summary>
-		/// Selects <c><see cref="_diff2"/></c>.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_Diff2(object sender, EventArgs e)
-		{
-			if (_fdiffer != null) _fdiffer.Close();
-			if (_diff2   != null) DiffReset(_diff2);
-
-			_diff2 = Table;
-			if (doDiff())
-				tabclick_DiffSync(null, EventArgs.Empty);
-			else
-				_diff1 = _diff2 = null;
-		}
-
-		/// <summary>
-		/// Clears all diffed cells and nulls any pointers to diffed tables.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		internal void tabclick_DiffReset(object sender, EventArgs e)
-		{
-			if (_fdiffer != null) _fdiffer.Close();
-
-			if (_diff1 != null)
-			{
-				DiffReset(_diff1);
-				_diff1 = null;
-			}
-
-			if (_diff2 != null)
-			{
-				DiffReset(_diff2);
-				_diff2 = null;
-			}
-
-			Table.Select();
-		}
-
-		/// <summary>
-		/// Aligns the two diffed tables for easy switching back and forth.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void tabclick_DiffSync(object sender, EventArgs e)
-		{
-			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
-			int w1, w2;
-
-			for (int c = 0; c != cols; ++c)
-			{
-				w1 = _diff1.Cols[c].width();
-				w2 = _diff2.Cols[c].width();
-
-				if      (w1 > w2) _diff2.Cols[c].width(w1, true);
-				else if (w2 > w1) _diff1.Cols[c].width(w2, true);
-			}
-
-			cols = Math.Min(YataGrid.FreezeSecond, _diff1.ColCount);
-			for (int c = 0; c != cols; ++c)
-				_diff1.metricFrozenControls(c);
-
-			cols = Math.Min(YataGrid.FreezeSecond, _diff2.ColCount);
-			for (int c = 0; c != cols; ++c)
-				_diff2.metricFrozenControls(c);
-
-			_diff1._scrollVert.Value =
-			_diff1._scrollHori.Value =
-			_diff2._scrollVert.Value =
-			_diff2._scrollHori.Value = 0; // keep it simple stupid.
-
-			_diff1.InitScroll();
-			_diff2.InitScroll();
-
-			YataGrid table;
-			if      (_diff1 == Table) table = _diff1;
-			else if (_diff2 == Table) table = _diff2;
-			else                      table = null;
-
-			if (table != null)
-				table.Invalidator(YataGrid.INVALID_GRID);
-		}
-		#endregion Events (tab)
-
-
-		#region Methods (tab)
-		/// <summary>
-		/// Helper for
-		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
-		/// </summary>
-		/// <param name="table"><c><see cref="YataGrid"/></c></param>
-		/// <remarks>Check that <paramref name="table"/> is not null before
-		/// call.</remarks>
-		void DiffReset(YataGrid table)
-		{
-			for (int r = 0; r != table.RowCount; ++r)
-			for (int c = 0; c != table.ColCount; ++c)
-			{
-				table[r,c].diff = false;
-			}
-
-			if (table == Table)
-				opsclick_AutosizeCols(null, EventArgs.Empty);
-			else
-				AutosizeCols(table);
-		}
-
-		/// <summary>
-		/// The yata-diff routine.
-		/// </summary>
-		/// <returns><c>true</c> if differences are found</returns>
-		bool doDiff()
-		{
-			_diff1.ClearSelects(true, true);	// sync table
-			_diff2.ClearSelects();				// current table
-
-
-			bool isDiff = false;
-
-			string copyable = String.Empty;
-
-			int fields1 = _diff1.Fields.Length;				// check colhead count ->
-			int fields2 = _diff2.Fields.Length;
-			if (fields1 != fields2)
-			{
-				isDiff = true;
-				copyable = "Head count: (a) " + fields1 + "  (b) " + fields2;
-			}
-
-			int fields = Math.Min(fields1, fields2);		// diff fields ->
-			for (int f = 0; f != fields; ++f)
-			{
-				if (_diff1.Fields[f] != _diff2.Fields[f])
-				{
-					isDiff = true;
-					if (!String.IsNullOrEmpty(copyable))
-						copyable += Environment.NewLine;
-
-					copyable += "Head #" + f + ": (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
-				}
-			}
-
-
-			bool prelinedone = false;
-
-			int cols1 = _diff1.ColCount;					// check col count ->
-			int cols2 = _diff2.ColCount;
-			if (cols1 != cols2)
-			{
-				isDiff = true;
-				if (!String.IsNullOrEmpty(copyable))
-				{
-					copyable += Environment.NewLine + Environment.NewLine;
-					prelinedone = true;
-				}
-				copyable += "Col count: (a) " + cols1 + "  (b) " + cols2;
-			}
-
-			int rows1 = _diff1.RowCount;					// check row count ->
-			int rows2 = _diff2.RowCount;
-			if (rows1 != rows2)
-			{
-				isDiff = true;
-				if (!String.IsNullOrEmpty(copyable))
-				{
-					copyable += Environment.NewLine;
-					if (!prelinedone)
-						copyable += Environment.NewLine;
-				}
-				copyable += "Row count: (a) " + rows1 + "  (b) " + rows2;
-			}
-
-
-			prelinedone = false;
-
-			int celldiffs = 0;
-
-			int cols = Math.Min(cols1, cols2);				// diff cells ->
-			int rows = Math.Min(rows1, rows2);
-			for (int r = 0; r != rows; ++r)
-			for (int c = 0; c != cols; ++c)
-			{
-				if (_diff1[r,c].text != _diff2[r,c].text)
-				{
-					++celldiffs;
-
-					_diff1[r,c].diff =
-					_diff2[r,c].diff = true;
-				}
-			}
-
-			bool @goto = false;
-			if (celldiffs != 0)
-			{
-				@goto = true;
-				if (!String.IsNullOrEmpty(copyable))
-				{
-					copyable += Environment.NewLine + Environment.NewLine;
-					prelinedone = true;
-				}
-				copyable += "Cell texts: " + celldiffs + " (inclusive)";
-			}
-
-			celldiffs = 0;
-
-			if (cols1 > cols2)								// diff cols of the wider table ->
-			{
-				for (int c = cols2; c != cols1; ++c)
-				for (int r = 0;     r != rows1; ++r)
-				{
-					++celldiffs;
-					_diff1[r,c].diff = true;
-				}
-			}
-			else if (cols2 > cols1)
-			{
-				for (int c = cols1; c != cols2; ++c)
-				for (int r = 0;     r != rows2; ++r)
-				{
-					++celldiffs;
-					_diff2[r,c].diff = true;
-				}
-			}
-
-			if (rows1 > rows2)								// diff rows of the longer table ->
-			{
-				for (int c = 0;     c != cols;  ++c)
-				for (int r = rows2; r != rows1; ++r)
-				{
-					++celldiffs;
-					_diff1[r,c].diff = true;
-				}
-			}
-			else if (rows2 > rows1)
-			{
-				for (int c = 0;     c != cols;  ++c)
-				for (int r = rows1; r != rows2; ++r)
-				{
-					++celldiffs;
-					_diff2[r,c].diff = true;
-				}
-			}
-
-			if (celldiffs != 0)
-			{
-				@goto = true;
-				if (!String.IsNullOrEmpty(copyable))
-				{
-					copyable += Environment.NewLine;
-					if (!prelinedone)
-						copyable += Environment.NewLine;
-				}
-				copyable += "Cell texts: " + celldiffs + " (exclusive)";
-			}
-
-
-			string label;
-			Color color;
-			if (String.IsNullOrEmpty(copyable))
-			{
-				label = "Tables are identical.";
-				color = Colors.Text;
-			}
-			else
-			{
-				label = "Tables are different.";
-				color = Color.Firebrick;
-			}
-
-			string title = " diff (a) "
-						 + Path.GetFileNameWithoutExtension(_diff1.Fullpath)
-						 + " - (b) "
-						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
-
-			_fdiffer = new DifferDialog(title,
-										label,
-										copyable,
-										this);
-			_fdiffer.SetLabelColor(color);
-			if (@goto)           _fdiffer.ShowGotoButton();
-			if (@goto || isDiff) _fdiffer.ShowResetButton();
-
-			_fdiffer.Show(); // is not owned, will be disposed auto.
-
-			return isDiff || @goto;
-		}
-
-		/// <summary>
-		/// Selects the next diffed cell in the table (or both tables if both
-		/// are valid).
-		/// </summary>
-		/// <remarks>Frozen cells will be selected but they don't respect
-		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
-		/// They get no respect ...</remarks>
-		internal void GotoDiffCell()
-		{
-			if (WindowState == FormWindowState.Minimized)
-				WindowState  = FormWindowState.Normal;
-			else
-			{
-				TopMost = true;
-				TopMost = false;
-			}
-
-			if (Table != null
-				&& (_diff1 != null  || _diff2 != null)
-				&& (Table == _diff1 || Table == _diff2))
-			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-				Table.Select();
-
-				YataGrid table; // the other table - can be null.
-
-				if (Table == _diff1) table = _diff2;
-				else                 table = _diff1;
-
-				Cell sel = Table.getSelectedCell();
-				int rStart = Table.getSelectedRow();
-
-				Table.ClearSelects();
-
-				if (table != null)
-					table.ClearSelects(true, true);
-
-				int r,c;
-
-				bool start = true;
-
-				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = -1;
-						if (rStart == -1) rStart = 0;
-					}
-
-					for (r = rStart; r != Table.RowCount; ++r)
-					{
-						if (start)
-						{
-							start = false;
-							if (++c == Table.ColCount)		// if starting on the last cell of a row
-							{
-								c = 0;
-
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-									++r;
-								else						// or to the top of the table if on the last row
-									r = 0;
-							}
-						}
-						else
-							c = 0;
-
-						for (; c != Table.ColCount; ++c)
-						{
-							if ((sel = Table[r,c]).diff)
-							{
-								gotodiff(sel, table);
-								return;
-							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
-					for (c = 0; c != Table.ColCount; ++c)
-					{
-						if ((sel = Table[r,c]).diff)
-						{
-							gotodiff(sel, table);
-							return;
-						}
-					}
-				}
-				else // backward goto ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = Table.ColCount;
-						if (rStart == -1) rStart = Table.RowCount - 1;
-					}
-
-					for (r = rStart; r != -1; --r)
-					{
-						if (start)
-						{
-							start = false;
-							if (--c == -1)	// if starting on the first cell of a row
-							{
-								c = Table.ColCount - 1;
-
-								if (r > 0)	// jump to the last cell of the previous row
-									--r;
-								else		// or to the bottom of the table if on the first row
-									r = Table.RowCount - 1;
-							}
-						}
-						else
-							c = Table.ColCount - 1;
-
-						for (; c != -1; --c)
-						{
-							if ((sel = Table[r,c]).diff)
-							{
-								gotodiff(sel, table);
-								return;
-							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;         --c)
-					{
-						if ((sel = Table[r,c]).diff)
-						{
-							gotodiff(sel, table);
-							return;
-						}
-					}
-				}
-			}
-			_fdiffer.EnableGotoButton(false);
-		}
-
-		/// <summary>
-		/// Helper for <c><see cref="GotoDiffCell()">GotoDiffCell()</see></c>.
-		/// </summary>
-		/// <param name="sel"><c><see cref="Cell"/></c> in the current table</param>
-		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
-		void gotodiff(Cell sel, YataGrid table)
-		{
-			Table.SelectCell(sel, false);
-
-			if (table != null
-				&& sel.x < table.ColCount
-				&& sel.y < table.RowCount)
-			{
-				table[sel.y, sel.x].selected = true;
-			}
-		}
-
-		/// <summary>
-		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
-		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets selected.
-		/// </summary>
-		/// <param name="sel"><c><see cref="Cell"/></c> in the current table -
-		/// can be <c>null</c></param>
 		/// <param name="r"></param>
-		/// <returns><c>true</c> if diff-tables are valid</returns>
-		/// <remarks><c><see cref="_table"/></c> is the other synced
-		/// <c><see cref="YataGrid"/></c></remarks>
-		internal bool SyncSelect(Cell sel = null, int r = -1)
+		/// <remarks><c>ContextRow</c> is *not* assigned to a
+		/// <c><see cref="YataGrid"/>._panelRows'</c> <c>ContextMenuStrip</c>
+		/// or <c>ContextMenu</c>.</remarks>
+		internal void ShowRowContext(int r)
 		{
-			if (_diff1 != null && _diff2 != null)
-			{
-				if      (Table == _diff1) _table = _diff2;
-				else if (Table == _diff2) _table = _diff1;
-				else return false;
+			_r = r;
 
-				_table.ClearSelects(true, true);
-				if (sel != null)
+			rowit_Header.Text = "_row @ id " + _r;
+
+			rowit_PasteAbove .Enabled =
+			rowit_Paste      .Enabled =
+			rowit_PasteBelow .Enabled = !Table.Readonly && _copyr.Count != 0;
+
+			rowit_Cut        .Enabled =
+			rowit_CreateAbove.Enabled =
+			rowit_Clear      .Enabled =
+			rowit_CreateBelow.Enabled =
+			rowit_Delete     .Enabled = !Table.Readonly;
+
+			Point loc;
+			if (Settings._context)							// static location
+			{
+				loc = new Point(YataGrid.WidthRowhead,
+								YataGrid.HeightColhead);
+			}
+			else											// cursor location
+				loc = Table.PointToClient(Cursor.Position);
+
+			ContextRow.Show(Table, loc);
+		}
+		#endregion Methods (row)
+
+
+		#region Events (row)
+		/// <summary>
+		/// Handles context-click on the context-header.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Header"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Header(object sender, EventArgs e)
+		{
+			ContextRow.Hide();
+		}
+
+		/// <summary>
+		/// Handles context-click to cut a row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Cut"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Cut(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				rowclick_Copy(  null, EventArgs.Empty);
+				rowclick_Delete(null, EventArgs.Empty);
+			}
+			else
+				ReadonlyError();
+		}
+
+		/// <summary>
+		/// Handles context-click to copy a row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Copy"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Copy(object sender, EventArgs e)
+		{
+			_copyr.Clear();
+
+			var fields = new string[Table.ColCount];
+			for (int c = 0; c != Table.ColCount; ++c)
+				fields[c] = Table[_r,c].text;
+
+			_copyr.Add(fields);
+		}
+
+		/// <summary>
+		/// Handles context-click to paste above the current row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_PasteAbove"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_PasteAbove(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				Table.Insert(_r, _copyr[0]);
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
+				if (!Table.Changed)
 				{
-					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
-						_table[sel.y, sel.x].selected = true;
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
-				else if (r != -1 && r < _table.RowCount)
+				Table._ur.Push(rest);
+			}
+			else
+				ReadonlyError();
+		}
+
+		/// <summary>
+		/// Handles context-click to paste into the current row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Paste"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Paste(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				// - store the row's current state to 'rPre' in the Restorable
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
+				Row row = Table.Rows[_r];
+				string field;
+				for (int c = 0; c != Table.ColCount; ++c)
 				{
-					// Do not call _table.SelectRow() since that's a recursion.
-					Row row = _table.Rows[r];
-					row.selected = true;
-					for (int c = 0; c != _table.ColCount; ++c)
-						row[c].selected = true;
+					if (c < _copyr[0].Length)
+						field = _copyr[0][c];
+					else
+						field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
+
+					row[c].text = field;
+					row[c].diff =
+					row[c].loadchanged = false;
 				}
-				_table = null;
-				return true;
-			}
-			return false;
-		}
-		#endregion Methods (tab)
+				row._brush = Brushes.Created;
+
+				Table.Calibrate(_r);
+
+				Table.Invalidator(YataGrid.INVALID_GRID);
 
 
-		#region Methods (statusbar)
-		/// <summary>
-		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
-		/// a relevant 2da (eg. Crafting, Spells, Feat) is loaded.
-		/// </summary>
-		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
-		internal void PrintInfo(Point? cords = null)
-		{
-			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
-			{
-				var cord = (Point)cords;
-				int c = cord.X;
-				int r = cord.Y;
-
-				if (r < Table.RowCount && c < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
+				if (!Table.Changed)
 				{
-					if (c != _track_x || r != _track_y)
-					{
-						_track_x = c; _track_y = r;
-
-						statbar_lblCords.Text = " id= " + r + "  col= " + c;
-
-						if (c != 0 && Strrefheads.Contains(Table.Fields[c - 1]))
-						{
-							string text = null;
-
-							string strref = Table[r,c].text;
-							if (strref == gs.Stars) strref = "0";
-
-							int result;
-							if (Int32.TryParse(strref, out result)
-								&& result >=  TalkReader.invalid
-								&& result <= (TalkReader.bitCusto | TalkReader.strref))
-							{
-								if (result == TalkReader.invalid)
-								{
-									text = gs.Space;
-								}
-								else
-								{
-									bool alt = ((result & TalkReader.bitCusto) != 0);
-									result &= TalkReader.strref;
-
-									if (!alt)
-									{
-										if (TalkReader.DictDialo.ContainsKey(result))
-											text = TalkReader.DictDialo[result];
-									}
-									else if (TalkReader.DictCusto.ContainsKey(result))
-										text = TalkReader.DictCusto[result];
-								}
-							}
-
-							if (!String.IsNullOrEmpty(text))
-							{
-								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
-
-								text = array[0];
-								if      (text .Length > 99) text = text.Substring(0, 99) + " ...";
-								else if (array.Length >  1) text += " ...";
-
-								statbar_lblInfo.Text = text;
-							}
-							else
-								statbar_lblInfo.Text = gs.non;
-						}
-						else
-						{
-							switch (Table.Info)
-							{
-								case YataGrid.InfoType.INFO_CRAFT:
-									statbar_lblInfo.Text = getCraftInfo(r,c);
-									break;
-								case YataGrid.InfoType.INFO_SPELL:
-									statbar_lblInfo.Text = getSpellInfo(r,c);
-									break;
-								case YataGrid.InfoType.INFO_FEAT:
-									statbar_lblInfo.Text = getFeatInfo(r,c);
-									break;
-
-								default:
-									statbar_lblInfo.Text = String.Empty;
-									break;
-							}
-						}
-					}
-					return;
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 				}
+
+				// - store the row's changed state to 'rPos' in the Restorable
+				rest.rPos = Table.Rows[_r].Clone() as Row;
+				Table._ur.Push(rest);
 			}
-
-			_track_x = _track_y = -1;
-			statbar_lblCords.Text =
-			statbar_lblInfo .Text = String.Empty;
-		}
-		#endregion Methods (statusbar)
-
-
-		#region Events (dragdrop)
-		/// <summary>
-		/// Handles dragging a file onto Yata.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		internal void yata_DragEnter(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-				e.Effect = DragDropEffects.Copy;
+			else
+				ReadonlyError();
 		}
 
 		/// <summary>
-		/// Handles dropping a file(s) onto Yata.
+		/// Handles context-click to paste below the current row.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="rowit_PasteBelow"/></c></param>
 		/// <param name="e"></param>
-		internal void yata_DragDrop(object sender, DragEventArgs e)
+		void rowclick_PasteBelow(object sender, EventArgs e)
 		{
-			var paths = (string[])e.Data.GetData(DataFormats.FileDrop);
-			foreach (string pfe in paths)
-				CreatePage(pfe);
-		}
-		#endregion Events (dragdrop)
-
-
-		#region Events (propanel)
-		/// <summary>
-		/// Handler for <c>MouseDown</c> on the
-		/// <c><see cref="PropertyPanelButton"/></c>.
-		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
-		/// <param name="e"></param>
-		/// <remarks><c>btn_Propanel</c> is not visible if
-		/// <c><see cref="Table"/></c> is invalid</remarks>
-		void mousedown_btnPropertyPanel(object sender, MouseEventArgs e)
-		{
-			if (    e.Button == MouseButtons.Left
-				|| (e.Button == MouseButtons.Right
-					&& Table.Propanel != null && Table.Propanel.Visible))
+			if (!Table.Readonly)
 			{
-				btn_Propanel.SetDepressed(true);
+				Table.Insert(_r + 1, _copyr[0]);
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				Table._ur.Push(rest);
 			}
+			else
+				ReadonlyError();
 		}
 
 		/// <summary>
-		/// Handler for <c>MouseUp</c> on the
-		/// <c><see cref="PropertyPanelButton"/></c>.
+		/// Handles context-click to create a row above the current row.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
+		/// <param name="sender"><c><see cref="rowit_CreateAbove"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks><c>btn_Propanel</c> is not visible if
-		/// <c><see cref="Table"/></c> is invalid</remarks>
-		/// <seealso cref="opsclick_PropertyPanel()"><c>opsclick_PropertyPanel()</c></seealso>
-		/// <seealso cref="opsclick_PropertyPanelLocation()"><c>opsclick_PropertyPanelLocation()</c></seealso>
-		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
+		void rowclick_CreateAbove(object sender, EventArgs e)
 		{
-			Table.Select();
-
-			switch (e.Button)
+			if (!Table.Readonly)
 			{
-				case MouseButtons.Left:
-					btn_Propanel.SetDepressed(false);
-					opsclick_PropertyPanel(sender, e);
-					break;
+				var fields = new string[Table.ColCount];
+				fields[0] = _r.ToString();
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					fields[c] = gs.Stars;
+				}
+				Table.Insert(_r, fields);
 
-				case MouseButtons.Right:
-					if (Table.Propanel != null && Table.Propanel.Visible)
-					{
-						btn_Propanel.SetDepressed(false);
-						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
-					}
-					break;
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				Table._ur.Push(rest);
 			}
+			else
+				ReadonlyError();
 		}
-		#endregion Events (propanel)
+
+		/// <summary>
+		/// Handles context-click to clear the current row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Clear"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Clear(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				// - store the row's current state to 'rPre' in the Restorable
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					Table[_r,c].text = gs.Stars;
+					Table[_r,c].diff =
+					Table[_r,c].loadchanged = false;
+				}
+				Table.Rows[_r]._brush = Brushes.Created;
+
+				Table.Calibrate(_r);
+
+				Table.Invalidator(YataGrid.INVALID_GRID);
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+
+				// - store the row's changed state to 'rPos' in the Restorable
+				rest.rPos = Table.Rows[_r].Clone() as Row;
+				Table._ur.Push(rest);
+			}
+			else
+				ReadonlyError();
+		}
+
+		/// <summary>
+		/// Handles context-click to create a row below the current row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_CreateBelow"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_CreateBelow(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				var fields = new string[Table.ColCount];
+				fields[0] = (_r + 1).ToString();
+				for (int c = 1; c != Table.ColCount; ++c)
+				{
+					fields[c] = gs.Stars;
+				}
+				Table.Insert(_r + 1, fields);
+
+
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				Table._ur.Push(rest);
+			}
+			else
+				ReadonlyError();
+		}
+
+		/// <summary>
+		/// Handles context-click to delete the current row.
+		/// </summary>
+		/// <param name="sender"><c><see cref="rowit_Delete"/></c></param>
+		/// <param name="e"></param>
+		void rowclick_Delete(object sender, EventArgs e)
+		{
+			if (!Table.Readonly)
+			{
+				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
+
+
+				Table.Insert(_r);
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				Table._ur.Push(rest);
+			}
+			else
+				ReadonlyError();
+		}
+		#endregion Events (row)
 
 
 		#region Methods (cell)
 		/// <summary>
-		/// Shows the cell popup menu.
+		/// Shows the RMB-context on a cell for single-cell edit operations.
 		/// </summary>
-		internal void popupCellmenu()
+		/// <remarks><c>ContextCell</c> is *not* assigned to a
+		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>ContextMenuStrip</c>
+		/// or <c>ContextMenu</c>.</remarks>
+		internal void ShowCellContext()
 		{
 			_sel = Table.getSelectedCell(); // '_sel' shall be valid due to rightclick
 
@@ -4985,11 +4191,12 @@ namespace yata
 			}
 
 			Point loc = Table.PointToClient(Cursor.Position);
-			cellMenu.Show(Table, loc);
+			ContextCell.Show(Table, loc);
 		}
 
 		/// <summary>
-		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
+		/// Helper for
+		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if merge operations (cell or row) will be
 		/// enabled</returns>
@@ -5009,7 +4216,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
+		/// Helper for
+		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// Spells.2da.</returns>
@@ -5045,7 +4253,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <c><see cref="popupCellmenu()">popupCellmenu()</see></c>.
+		/// Helper for
+		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// Feat.2da.</returns>
@@ -5418,15 +4627,17 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "STRREF" click. Opens a 'TalkDialog' that
-		/// displays the text's corresponding Dialog.Tlk or special entry in a
-		/// readonly RichTextBox for the user's investigation and/or copying.
-		/// @note Check that the cell's text parses to a valid value before
-		/// allowing the event to trigger (ie, else disable the context it - see
-		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
+		/// Handler for cell-context "STRREF" click. Opens
+		/// <c><see cref="TalkDialog"/></c> that displays the text's
+		/// corresponding Dialog.Tlk or special entry in a readonly
+		/// <c>RichTextBox</c> for the user's investigation and/or copying.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_cellStrref_talktable"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger else disable the context it.</remarks>
+		/// <seealso cref="ShowCellContext()"><c>ShowCellContext()</c></seealso>
+		/// <seealso cref="dropdownopening_Strref()"><c>dropdownopening_Strref()</c></seealso>
 		void cellclick_Strref_talktable(object sender, EventArgs e)
 		{
 			_strref = _sel.text;
@@ -5445,13 +4656,17 @@ namespace yata
 		/// <summary>
 		/// Handler for cell-context "set/clear Custom" click. Toggles the
 		/// custom-bit flag.
-		/// @note Check that the cell's text parses to a valid value before
-		/// allowing the event to trigger (ie, else disable the context it - see
-		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_cellStrref_custom"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>The invalid strref (-1) cannot be toggled.</remarks>
+		/// <remarks>Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger else disable the context it.
+		/// 
+		/// 
+		/// The invalid strref (-1) cannot be toggled.
+		/// </remarks>
+		/// <seealso cref="ShowCellContext()"><c>ShowCellContext()</c></seealso>
+		/// <seealso cref="dropdownopening_Strref()"><c>dropdownopening_Strref()</c></seealso>
 		void cellclick_Strref_custom(object sender, EventArgs e)
 		{
 			if ((_strInt & TalkReader.bitCusto) != 0)
@@ -5470,17 +4685,781 @@ namespace yata
 		/// <summary>
 		/// Handler for cell-context "set Invalid (-1)" click. Sets a strref to
 		/// "-1" if not already.
-		/// @note Check that the cell's text parses to a valid value before
-		/// allowing the event to trigger (ie, else disable the context it - see
-		/// <see cref="popupCellmenu"/> and <see cref="dropdownopening_Strref"/>).
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_cellStrref_invalid"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Check that the cell's text parses to a valid value before
+		/// allowing the event to trigger else disable the context it.</remarks>
+		/// <seealso cref="ShowCellContext()"><c>ShowCellContext()</c></seealso>
+		/// <seealso cref="dropdownopening_Strref()"><c>dropdownopening_Strref()</c></seealso>
 		void cellclick_Strref_invalid(object sender, EventArgs e)
 		{
 			Table.ChangeCellText(_sel, gs.Invalid); // does not do a text-check
 		}
 		#endregion Events (cell)
+
+
+		#region Events (tab)
+		/// <summary>
+		/// Sets the selected tab when a right-click on a tab is about to open
+		/// the context.
+		/// </summary>
+		/// <param name="sender"><c><see cref="ContextTab"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks><c>ContextTab</c> is assigned to
+		/// <c><see cref="Tabs"/>.ContextMenuStrip</c>.</remarks>
+		void ContextTab_opening(object sender, CancelEventArgs e)
+		{
+			dropdownopening(sender, e);
+
+			bool found = false;
+
+			Point loc = Tabs.PointToClient(Cursor.Position); // activate the Tab ->
+			for (int tab = 0; tab != Tabs.TabCount; ++tab)
+			{
+				if (Tabs.GetTabRect(tab).Contains(loc))
+				{
+					Tabs.SelectedIndex = tab;
+					found = true;
+					break;
+				}
+			}
+
+			if (found)
+			{
+				it_tabCloseAll      .Enabled =
+				it_tabCloseAllOthers.Enabled = (Tabs.TabCount != 1);
+
+				it_tabSave          .Enabled = !Table.Readonly;
+
+				it_tabReload        .Enabled = File.Exists(Table.Fullpath);
+
+				// NOTE: 'it_tabDiff1' is always enabled.
+				it_tabDiff2    .Enabled = (_diff1 != null && _diff1 != Table);
+				it_tabDiffReset.Enabled = (_diff1 != null || _diff2 != null);
+				it_tabDiffSync .Enabled = (_diff1 != null && _diff2 != null);
+
+				if (_diff1 != null)
+					it_tabDiff1.Text = "diff1 - " + Path.GetFileNameWithoutExtension(_diff1.Fullpath);
+				else
+					it_tabDiff1.Text = "Select diff1";
+
+				if (_diff2 != null)
+					it_tabDiff2.Text = "diff2 - " + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
+				else
+					it_tabDiff2.Text = "Select diff2";
+			}
+			else
+				e.Cancel = true;
+		}
+
+
+		/// <summary>
+		/// Closes all other tables when a tab's context-closeall item is
+		/// clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
+		{
+			if (!CheckChangedTables("close", true))
+			{
+				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
+
+				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+				{
+					if (tab != Tabs.SelectedIndex)
+						ClosePage(Tabs.TabPages[tab]);
+				}
+
+				SetTabSize();
+
+				it_SaveAll.Enabled = AllowSaveAll();
+
+				DrawingControl.ResumeDrawing(this);
+			}
+		}
+
+		// TODO: FreezeFirst/Second, gotoloadchanged, etc.
+
+
+		/// <summary>
+		/// Selects <c><see cref="_diff1"/></c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void tabclick_Diff1(object sender, EventArgs e)
+		{
+			tabclick_DiffReset(null, EventArgs.Empty);
+			_diff1 = Table;
+		}
+
+		/// <summary>
+		/// Selects <c><see cref="_diff2"/></c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void tabclick_Diff2(object sender, EventArgs e)
+		{
+			if (_fdiffer != null) _fdiffer.Close();
+			if (_diff2   != null) DiffReset(_diff2);
+
+			_diff2 = Table;
+			if (doDiff())
+				tabclick_DiffSync(null, EventArgs.Empty);
+			else
+				_diff1 = _diff2 = null;
+		}
+
+		/// <summary>
+		/// Clears all diffed cells and nulls any pointers to diffed tables.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		internal void tabclick_DiffReset(object sender, EventArgs e)
+		{
+			if (_fdiffer != null) _fdiffer.Close();
+
+			if (_diff1 != null)
+			{
+				DiffReset(_diff1);
+				_diff1 = null;
+			}
+
+			if (_diff2 != null)
+			{
+				DiffReset(_diff2);
+				_diff2 = null;
+			}
+
+			Table.Select();
+		}
+
+		/// <summary>
+		/// Aligns the two diffed tables for easy switching back and forth.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void tabclick_DiffSync(object sender, EventArgs e)
+		{
+			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
+			int w1, w2;
+
+			for (int c = 0; c != cols; ++c)
+			{
+				w1 = _diff1.Cols[c].width();
+				w2 = _diff2.Cols[c].width();
+
+				if      (w1 > w2) _diff2.Cols[c].width(w1, true);
+				else if (w2 > w1) _diff1.Cols[c].width(w2, true);
+			}
+
+			cols = Math.Min(YataGrid.FreezeSecond, _diff1.ColCount);
+			for (int c = 0; c != cols; ++c)
+				_diff1.metricFrozenControls(c);
+
+			cols = Math.Min(YataGrid.FreezeSecond, _diff2.ColCount);
+			for (int c = 0; c != cols; ++c)
+				_diff2.metricFrozenControls(c);
+
+			_diff1._scrollVert.Value =
+			_diff1._scrollHori.Value =
+			_diff2._scrollVert.Value =
+			_diff2._scrollHori.Value = 0; // keep it simple stupid.
+
+			_diff1.InitScroll();
+			_diff2.InitScroll();
+
+			YataGrid table;
+			if      (_diff1 == Table) table = _diff1;
+			else if (_diff2 == Table) table = _diff2;
+			else                      table = null;
+
+			if (table != null)
+				table.Invalidator(YataGrid.INVALID_GRID);
+		}
+		#endregion Events (tab)
+
+
+		#region Methods (tab)
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
+		/// </summary>
+		/// <param name="table"><c><see cref="YataGrid"/></c></param>
+		/// <remarks>Check that <paramref name="table"/> is not null before
+		/// call.</remarks>
+		void DiffReset(YataGrid table)
+		{
+			for (int r = 0; r != table.RowCount; ++r)
+			for (int c = 0; c != table.ColCount; ++c)
+			{
+				table[r,c].diff = false;
+			}
+
+			if (table == Table)
+				opsclick_AutosizeCols(null, EventArgs.Empty);
+			else
+				AutosizeCols(table);
+		}
+
+		/// <summary>
+		/// The yata-diff routine.
+		/// </summary>
+		/// <returns><c>true</c> if differences are found</returns>
+		bool doDiff()
+		{
+			_diff1.ClearSelects(true, true);	// sync table
+			_diff2.ClearSelects();				// currently active table
+
+
+			bool isDiff = false;
+
+			string copyable = String.Empty;
+
+			int fields1 = _diff1.Fields.Length;				// check colhead count ->
+			int fields2 = _diff2.Fields.Length;
+			if (fields1 != fields2)
+			{
+				isDiff = true;
+				copyable = "Head count: (a) " + fields1 + "  (b) " + fields2;
+			}
+
+			int fields = Math.Min(fields1, fields2);		// diff fields ->
+			for (int f = 0; f != fields; ++f)
+			{
+				if (_diff1.Fields[f] != _diff2.Fields[f])
+				{
+					isDiff = true;
+					if (!String.IsNullOrEmpty(copyable))
+						copyable += Environment.NewLine;
+
+					copyable += "Head #" + f + ": (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
+				}
+			}
+
+
+			bool prelinedone = false;
+
+			int cols1 = _diff1.ColCount;					// check col count ->
+			int cols2 = _diff2.ColCount;
+			if (cols1 != cols2)
+			{
+				isDiff = true;
+				if (!String.IsNullOrEmpty(copyable))
+				{
+					copyable += Environment.NewLine + Environment.NewLine;
+					prelinedone = true;
+				}
+				copyable += "Col count: (a) " + cols1 + "  (b) " + cols2;
+			}
+
+			int rows1 = _diff1.RowCount;					// check row count ->
+			int rows2 = _diff2.RowCount;
+			if (rows1 != rows2)
+			{
+				isDiff = true;
+				if (!String.IsNullOrEmpty(copyable))
+				{
+					copyable += Environment.NewLine;
+					if (!prelinedone)
+						copyable += Environment.NewLine;
+				}
+				copyable += "Row count: (a) " + rows1 + "  (b) " + rows2;
+			}
+
+
+			prelinedone = false;
+
+			int celldiffs = 0;
+
+			int cols = Math.Min(cols1, cols2);				// diff cells ->
+			int rows = Math.Min(rows1, rows2);
+			for (int r = 0; r != rows; ++r)
+			for (int c = 0; c != cols; ++c)
+			{
+				if (_diff1[r,c].text != _diff2[r,c].text)
+				{
+					++celldiffs;
+
+					_diff1[r,c].diff =
+					_diff2[r,c].diff = true;
+				}
+			}
+
+			bool @goto = false;
+			if (celldiffs != 0)
+			{
+				@goto = true;
+				if (!String.IsNullOrEmpty(copyable))
+				{
+					copyable += Environment.NewLine + Environment.NewLine;
+					prelinedone = true;
+				}
+				copyable += "Cell texts: " + celldiffs + " (inclusive)";
+			}
+
+			celldiffs = 0;
+
+			if (cols1 > cols2)								// diff cols of the wider table ->
+			{
+				for (int c = cols2; c != cols1; ++c)
+				for (int r = 0;     r != rows1; ++r)
+				{
+					++celldiffs;
+					_diff1[r,c].diff = true;
+				}
+			}
+			else if (cols2 > cols1)
+			{
+				for (int c = cols1; c != cols2; ++c)
+				for (int r = 0;     r != rows2; ++r)
+				{
+					++celldiffs;
+					_diff2[r,c].diff = true;
+				}
+			}
+
+			if (rows1 > rows2)								// diff rows of the longer table ->
+			{
+				for (int c = 0;     c != cols;  ++c)
+				for (int r = rows2; r != rows1; ++r)
+				{
+					++celldiffs;
+					_diff1[r,c].diff = true;
+				}
+			}
+			else if (rows2 > rows1)
+			{
+				for (int c = 0;     c != cols;  ++c)
+				for (int r = rows1; r != rows2; ++r)
+				{
+					++celldiffs;
+					_diff2[r,c].diff = true;
+				}
+			}
+
+			if (celldiffs != 0)
+			{
+				@goto = true;
+				if (!String.IsNullOrEmpty(copyable))
+				{
+					copyable += Environment.NewLine;
+					if (!prelinedone)
+						copyable += Environment.NewLine;
+				}
+				copyable += "Cell texts: " + celldiffs + " (exclusive)";
+			}
+
+
+			string label;
+			Color color;
+			if (String.IsNullOrEmpty(copyable))
+			{
+				label = "Tables are identical.";
+				color = Colors.Text;
+			}
+			else
+			{
+				label = "Tables are different.";
+				color = Color.Firebrick;
+			}
+
+			string title = " diff (a) "
+						 + Path.GetFileNameWithoutExtension(_diff1.Fullpath)
+						 + " - (b) "
+						 + Path.GetFileNameWithoutExtension(_diff2.Fullpath);
+
+			_fdiffer = new DifferDialog(title,
+										label,
+										copyable,
+										this);
+			_fdiffer.SetLabelColor(color);
+			if (@goto)           _fdiffer.ShowGotoButton();
+			if (@goto || isDiff) _fdiffer.ShowResetButton();
+
+			_fdiffer.Show(); // is not owned, will be disposed auto.
+
+			return isDiff || @goto;
+		}
+
+		/// <summary>
+		/// Selects the next diffed cell in the table (or both tables if both
+		/// are valid).
+		/// </summary>
+		/// <remarks>Frozen cells will be selected but they don't respect
+		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
+		/// They get no respect ...</remarks>
+		internal void GotoDiffCell()
+		{
+			if (WindowState == FormWindowState.Minimized)
+				WindowState  = FormWindowState.Normal;
+			else
+			{
+				TopMost = true;
+				TopMost = false;
+			}
+
+			if (Table != null
+				&& (_diff1 != null  || _diff2 != null)
+				&& (Table == _diff1 || Table == _diff2))
+			{
+				if (Table._editor.Visible)
+				{
+					Table._editor.Visible = false;
+					Table.Invalidator(YataGrid.INVALID_GRID);
+				}
+
+				Table.Select();
+
+				YataGrid table; // the other table - can be null.
+
+				if (Table == _diff1) table = _diff2;
+				else                 table = _diff1;
+
+				Cell sel = Table.getSelectedCell();
+				int rStart = Table.getSelectedRow();
+
+				Table.ClearSelects();
+
+				if (table != null)
+					table.ClearSelects(true, true);
+
+				int r,c;
+
+				bool start = true;
+
+				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
+				{
+					if (sel != null) { c = sel.x; rStart = sel.y; }
+					else
+					{
+						c = -1;
+						if (rStart == -1) rStart = 0;
+					}
+
+					for (r = rStart; r != Table.RowCount; ++r)
+					{
+						if (start)
+						{
+							start = false;
+							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							{
+								c = 0;
+
+								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+									++r;
+								else						// or to the top of the table if on the last row
+									r = 0;
+							}
+						}
+						else
+							c = 0;
+
+						for (; c != Table.ColCount; ++c)
+						{
+							if ((sel = Table[r,c]).diff)
+							{
+								gotodiff(sel, table);
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+					for (c = 0; c != Table.ColCount; ++c)
+					{
+						if ((sel = Table[r,c]).diff)
+						{
+							gotodiff(sel, table);
+							return;
+						}
+					}
+				}
+				else // backward goto ->
+				{
+					if (sel != null) { c = sel.x; rStart = sel.y; }
+					else
+					{
+						c = Table.ColCount;
+						if (rStart == -1) rStart = Table.RowCount - 1;
+					}
+
+					for (r = rStart; r != -1; --r)
+					{
+						if (start)
+						{
+							start = false;
+							if (--c == -1)	// if starting on the first cell of a row
+							{
+								c = Table.ColCount - 1;
+
+								if (r > 0)	// jump to the last cell of the previous row
+									--r;
+								else		// or to the bottom of the table if on the first row
+									r = Table.RowCount - 1;
+							}
+						}
+						else
+							c = Table.ColCount - 1;
+
+						for (; c != -1; --c)
+						{
+							if ((sel = Table[r,c]).diff)
+							{
+								gotodiff(sel, table);
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+					for (c = Table.ColCount - 1; c != -1;         --c)
+					{
+						if ((sel = Table[r,c]).diff)
+						{
+							gotodiff(sel, table);
+							return;
+						}
+					}
+				}
+			}
+			_fdiffer.EnableGotoButton(false);
+		}
+
+		/// <summary>
+		/// Helper for <c><see cref="GotoDiffCell()">GotoDiffCell()</see></c>.
+		/// </summary>
+		/// <param name="sel"><c><see cref="Cell"/></c> in the current table</param>
+		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
+		void gotodiff(Cell sel, YataGrid table)
+		{
+			Table.SelectCell(sel, false);
+
+			if (table != null
+				&& sel.x < table.ColCount
+				&& sel.y < table.RowCount)
+			{
+				table[sel.y, sel.x].selected = true;
+			}
+		}
+
+		/// <summary>
+		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
+		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets selected.
+		/// </summary>
+		/// <param name="sel"><c><see cref="Cell"/></c> in the current table -
+		/// can be <c>null</c></param>
+		/// <param name="r">row-id in the current table iff
+		/// <paramref name="sel"/> is <c>null</c></param>
+		/// <returns><c>true</c> if diff-tables are valid</returns>
+		/// <remarks><c><see cref="_table"/></c> is the other synced
+		/// <c><see cref="YataGrid"/></c></remarks>
+		internal bool SyncSelect(Cell sel = null, int r = -1)
+		{
+			if (_diff1 != null && _diff2 != null)
+			{
+				if      (Table == _diff1) _table = _diff2;
+				else if (Table == _diff2) _table = _diff1;
+				else return false;
+
+				_table.ClearSelects(true, true);
+				if (sel != null)
+				{
+					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
+						_table[sel.y, sel.x].selected = true;
+				}
+				else if (r != -1 && r < _table.RowCount)
+				{
+					// Do not call _table.SelectRow() since that's a recursion.
+					Row row = _table.Rows[r];
+					row.selected = true;
+					for (int c = 0; c != _table.ColCount; ++c)
+						row[c].selected = true;
+				}
+				_table = null;
+				return true;
+			}
+			return false;
+		}
+		#endregion Methods (tab)
+
+
+		#region Methods (statusbar)
+		/// <summary>
+		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
+		/// a relevant 2da (eg. Crafting, Spells, Feat) is loaded.
+		/// </summary>
+		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
+		internal void PrintInfo(Point? cords = null)
+		{
+			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
+			{
+				var cord = (Point)cords;
+				int c = cord.X;
+				int r = cord.Y;
+
+				if (r < Table.RowCount && c < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
+				{
+					if (c != _track_x || r != _track_y)
+					{
+						_track_x = c; _track_y = r;
+
+						statbar_lblCords.Text = " id= " + r + "  col= " + c;
+
+						if (c != 0 && Strrefheads.Contains(Table.Fields[c - 1]))
+						{
+							string text = null;
+
+							string strref = Table[r,c].text;
+							if (strref == gs.Stars) strref = "0";
+
+							int result;
+							if (Int32.TryParse(strref, out result)
+								&& result >=  TalkReader.invalid
+								&& result <= (TalkReader.bitCusto | TalkReader.strref))
+							{
+								if (result == TalkReader.invalid)
+								{
+									text = gs.Space;
+								}
+								else
+								{
+									bool alt = ((result & TalkReader.bitCusto) != 0);
+									result &= TalkReader.strref;
+
+									if (!alt)
+									{
+										if (TalkReader.DictDialo.ContainsKey(result))
+											text = TalkReader.DictDialo[result];
+									}
+									else if (TalkReader.DictCusto.ContainsKey(result))
+										text = TalkReader.DictCusto[result];
+								}
+							}
+
+							if (!String.IsNullOrEmpty(text))
+							{
+								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
+
+								text = array[0];
+								if      (text .Length > 99) text = text.Substring(0, 99) + " ...";
+								else if (array.Length >  1) text += " ...";
+
+								statbar_lblInfo.Text = text;
+							}
+							else
+								statbar_lblInfo.Text = gs.non;
+						}
+						else
+						{
+							switch (Table.Info)
+							{
+								case YataGrid.InfoType.INFO_CRAFT:
+									statbar_lblInfo.Text = getCraftInfo(r,c);
+									break;
+								case YataGrid.InfoType.INFO_SPELL:
+									statbar_lblInfo.Text = getSpellInfo(r,c);
+									break;
+								case YataGrid.InfoType.INFO_FEAT:
+									statbar_lblInfo.Text = getFeatInfo(r,c);
+									break;
+
+								default:
+									statbar_lblInfo.Text = String.Empty;
+									break;
+							}
+						}
+					}
+					return;
+				}
+			}
+
+			_track_x = _track_y = -1;
+			statbar_lblCords.Text =
+			statbar_lblInfo .Text = String.Empty;
+		}
+		#endregion Methods (statusbar)
+
+
+		#region Events (dragdrop)
+		/// <summary>
+		/// Handles dragging a file onto Yata.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		internal void yata_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				e.Effect = DragDropEffects.Copy;
+		}
+
+		/// <summary>
+		/// Handles dropping a file(s) onto Yata.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		internal void yata_DragDrop(object sender, DragEventArgs e)
+		{
+			var paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+			foreach (string pfe in paths)
+				CreatePage(pfe);
+		}
+		#endregion Events (dragdrop)
+
+
+		#region Events (propanel)
+		/// <summary>
+		/// Handler for <c>MouseDown</c> on the
+		/// <c><see cref="PropertyPanelButton"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <c><see cref="Table"/></c> is invalid</remarks>
+		void mousedown_btnPropertyPanel(object sender, MouseEventArgs e)
+		{
+			if (    e.Button == MouseButtons.Left
+				|| (e.Button == MouseButtons.Right
+					&& Table.Propanel != null && Table.Propanel.Visible))
+			{
+				btn_Propanel.SetDepressed(true);
+			}
+		}
+
+		/// <summary>
+		/// Handler for <c>MouseUp</c> on the
+		/// <c><see cref="PropertyPanelButton"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <c><see cref="Table"/></c> is invalid</remarks>
+		/// <seealso cref="opsclick_PropertyPanel()"><c>opsclick_PropertyPanel()</c></seealso>
+		/// <seealso cref="opsclick_PropertyPanelLocation()"><c>opsclick_PropertyPanelLocation()</c></seealso>
+		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
+		{
+			Table.Select();
+
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+					btn_Propanel.SetDepressed(false);
+					opsclick_PropertyPanel(sender, e);
+					break;
+
+				case MouseButtons.Right:
+					if (Table.Propanel != null && Table.Propanel.Visible)
+					{
+						btn_Propanel.SetDepressed(false);
+						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
+					}
+					break;
+			}
+		}
+		#endregion Events (propanel)
 	}
 
 
