@@ -41,7 +41,7 @@ namespace yata
 		const string TITLE    = " Yata";
 		const string ASTERICS = " *";
 
-		internal static string pfe_load; // cl arg
+		internal static string PfeLoad; // cl arg
 
 		internal static bool IsSaveAll;
 
@@ -343,8 +343,8 @@ namespace yata
 			if (Settings._recent != 0)
 				CreateRecentsSubits(); // init recents before (potentially) loading a table from FileExplorer
 
-			if (File.Exists(pfe_load)) // load file from FileExplorer ...
-				CreatePage(pfe_load);
+			if (File.Exists(PfeLoad)) // load file from FileExplorer ...
+				CreatePage(PfeLoad);
 			else
 				Obfuscate();
 
@@ -641,17 +641,14 @@ namespace yata
 					break;
 			}
 		}
-		#endregion Events (override)
 
 
-		#region Receive Message (pfe)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 		/// </summary>
-		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void yata_Load(object sender, EventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
 			var filter = new Crap.CHANGEFILTERSTRUCT();
 			filter.size = (uint)Marshal.SizeOf(filter);
@@ -664,7 +661,10 @@ namespace yata
 				MessageBox.Show(String.Format("An error occurred: {0}", Marshal.GetLastWin32Error()));
 			}
 		}
+		#endregion Events (override)
 
+
+		#region Receive Message (pfe)
 		/// <summary>
 		/// Receives data via WM_COPYDATA from other applications/processes.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
@@ -678,9 +678,9 @@ namespace yata
 				int dataType = (int)copyData.dwData;
 				if (dataType == Crap.CopyDataStructType) // extract the file-string ->
 				{
-					pfe_load = Marshal.PtrToStringAnsi(copyData.lpData);
-					if (File.Exists(pfe_load))
-						CreatePage(pfe_load);
+					PfeLoad = Marshal.PtrToStringAnsi(copyData.lpData);
+					if (File.Exists(PfeLoad))
+						CreatePage(PfeLoad);
 				}
 			}
 			else

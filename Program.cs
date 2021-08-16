@@ -120,7 +120,7 @@ namespace yata
 				if (args.Length != 0)
 				{
 					//logfile.Log(". pass arg to new instance");
-					YataForm.pfe_load = args[0];
+					YataForm.PfeLoad = args[0];
 				}
 				//else logfile.Log(". no args - start new instance");
 
@@ -129,7 +129,7 @@ namespace yata
 																		// perhaps depends on the Control that's being drawn)
 				Application.Run(new YataForm());
 
-				YataForm.pfe_load = null;
+				YataForm.PfeLoad = null;
 			}
 		}
 	}
