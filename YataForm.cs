@@ -641,8 +641,10 @@ namespace yata
 					break;
 			}
 		}
+		#endregion Events (override)
 
 
+		#region Events (override -  Receive Message - PfeLoad arg)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
@@ -661,10 +663,7 @@ namespace yata
 				MessageBox.Show(String.Format("An error occurred: {0}", Marshal.GetLastWin32Error()));
 			}
 		}
-		#endregion Events (override)
 
-
-		#region Receive Message (pfe)
 		/// <summary>
 		/// Receives data via WM_COPYDATA from other applications/processes.
 		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
@@ -686,7 +685,7 @@ namespace yata
 			else
 				base.WndProc(ref m);
 		}
-		#endregion Receive Message (pfe)
+		#endregion Events (override -  Receive Message - PfeLoad arg)
 
 
 		#region Methods (static)
