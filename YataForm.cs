@@ -416,7 +416,8 @@ namespace yata
 		/// <param name="excludecurrent"><c>true</c> to exclude the current
 		/// table - used by CloseAllOtherTables</param>
 		/// <returns><c>true</c> if there are any changed tables and user
-		/// chooses to cancel</returns>
+		/// chooses to cancel; <c>false</c> if there are no changed tables or
+		/// user chooses to close/quit anyway</returns>
 		bool CheckChangedTables(string info, bool excludecurrent = false)
 		{
 			string tables = String.Empty;
@@ -506,7 +507,6 @@ namespace yata
 			if (Table != null) Table.Scroll(e);
 		}
 
-
 		/// <summary>
 		/// Sets 'IsMin' true so that when the form is minimized then restored/
 		/// maximized the ensure-displayed call(s) are bypassed by the tables'
@@ -522,6 +522,7 @@ namespace yata
 
 			base.OnResize(e);
 		}
+
 
 		/// <summary>
 		/// Processes so-called commandkey combinations.
@@ -565,7 +566,6 @@ namespace yata
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
-
 		/// <summary>
 		/// Handles the <c>KeyDown</c> event at the form-level.
 		/// </summary>
@@ -579,11 +579,11 @@ namespace yata
 		{
 			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			switch (e.KeyData)
+			if (Table != null)
 			{
-				case Keys.Enter: // do this here to get rid of the beep.
-					if (Table != null)
-					{
+				switch (e.KeyData)
+				{
+					case Keys.Enter: // do this here to get rid of the beep.
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 							_dontbeep = DONTBEEP_SEARCH;
 						else if (tb_Goto.Focused)
@@ -596,27 +596,25 @@ namespace yata
 							e.SuppressKeyPress = true;
 							BeginInvoke(DontBeepEvent);
 						}
-					}
-					break;
+						break;
 
-				case Keys.Escape:
-					if (Table != null
-						&& (Tabs.Focused || btn_Propanel.Focused)) // btn -> jic.
-					{
-						e.SuppressKeyPress = true;
-						Table.Select();
-					}
-					break;
+					case Keys.Escape:
+						if (Tabs.Focused || btn_Propanel.Focused) // btn -> jic.
+						{
+							e.SuppressKeyPress = true;
+							Table.Select();
+						}
+						break;
 
-				case Keys.Space:
-					if (Table != null
-						&& !Table._editor.Visible
-						&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
-					{
-						e.SuppressKeyPress = true;
-						Table.SelectFirstCell();
-					}
-					break;
+					case Keys.Space:
+						if (!Table._editor.Visible
+							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
+						{
+							e.SuppressKeyPress = true;
+							Table.SelectFirstCell();
+						}
+						break;
+				}
 			}
 			base.OnKeyDown(e);
 		}
@@ -732,20 +730,6 @@ namespace yata
 		{
 			if (obscure) panel_ColorFill.BringToFront();
 			else         panel_ColorFill.SendToBack();
-		}
-
-		/// <summary>
-		/// TODO: This funct is obsolete; tables that are
-		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
-		/// not enable operations that can change the table at all.
-		/// </summary>
-		void ReadonlyError()
-		{
-			MessageBox.Show("The 2da-file is opened as readonly.",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Hand,
-							MessageBoxDefaultButton.Button1);
 		}
 
 		/// <summary>
@@ -1077,16 +1061,18 @@ namespace yata
 
 				Color color;
 
-				// NOTE: The tag (and text...) can be null when the tabcontrol needs
-				// to extend down to create another row. Go figur.
-				// Fortunately the text of a table that is opened as readonly will
-				// still appear in the TextReadonly color because .net tends to be
-				// redundant and so this draw routine gets a second call right away
-				// with its Tag/table valid.
-				// Note that this is one of those null-errors that the debugger will
-				// slough off ....
-				var table = tab.Tag as YataGrid;
-				if (table.Readonly) //table != null && // 'table' better not be null.
+				// NOTE: The Tag can be null when the tabcontrol needs to extend
+				// down to create another row. Go figur.
+				//
+				// Fortunately the text of a table that is opened as readonly
+				// will still appear in the TextReadonly color because .net
+				// tends to be redundant and so this draw routine gets a second
+				// call right away with its Tag/table valid.
+				//
+				// Note that this is one of those null-errors that the debugger
+				// will slough off ....
+
+				if (tab.Tag != null && (tab.Tag as YataGrid).Readonly)
 					color = Colors.TextReadonly;
 				else
 					color = Colors.Text;
@@ -1158,8 +1144,7 @@ namespace yata
 					if ((hT = size.Height) > h)
 						h = hT;
 				}
-				Tabs.ItemSize = new Size(w + 10, h + 4); // w/ pad
-//				Tabs.Refresh(); // prevent text-drawing glitches ... I can't see any glitches.
+				Tabs.ItemSize = new Size(w + 10, h + 4);
 			}
 
 			YataGrid.BypassInitScroll = false;
@@ -1211,48 +1196,6 @@ namespace yata
 			DrawingControl.ResumeDrawing(this);
 		}
 		#endregion Methods (tabs)
-
-
-		#region Methods (save)
-		/// <summary>
-		/// Requests user-confirmation when saving a file when readonly or when
-		/// faulty IDs get detected.
-		/// </summary>
-		/// <param name="info"></param>
-		/// <returns></returns>
-		DialogResult SaveWarning(string info)
-		{
-			_warned = true;
-			return MessageBox.Show(info
-								   + Environment.NewLine + Environment.NewLine
-								   + "Save anyway ...",
-								   " burp",
-								   MessageBoxButtons.YesNo,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
-		}
-
-		/// <summary>
-		/// Checks the row-order before save.
-		/// </summary>
-		/// <returns><c>true</c> if row-order is okay</returns>
-		bool CheckRowOrder()
-		{
-			string val;
-			int result;
-
-			for (int id = 0; id != Table.RowCount; ++id)
-			{
-				if (String.IsNullOrEmpty(val = Table[id,0].text)
-					|| !Int32.TryParse(val, out result)
-					|| result != id)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-		#endregion Methods (save)
 
 
 		#region Events
@@ -1508,7 +1451,7 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
-			if (Table != null) // safety.
+//			if (Table != null) // safety.
 			{
 				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 				bool bypassReadonly;
@@ -1574,6 +1517,59 @@ namespace yata
 						ReadonlyError();
 				}
 			}
+		}
+
+		/// <summary>
+		/// TODO: This funct is obsolete; tables that are
+		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
+		/// not enable operations that can change the table at all.
+		/// </summary>
+		void ReadonlyError()
+		{
+			MessageBox.Show("The 2da-file is opened as readonly.",
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Hand,
+							MessageBoxDefaultButton.Button1);
+		}
+
+		/// <summary>
+		/// Requests user-confirmation when saving a file when readonly or when
+		/// faulty IDs get detected.
+		/// </summary>
+		/// <param name="info"></param>
+		/// <returns></returns>
+		DialogResult SaveWarning(string info)
+		{
+			_warned = true;
+			return MessageBox.Show(info
+								   + Environment.NewLine + Environment.NewLine
+								   + "Save anyway ...",
+								   " burp",
+								   MessageBoxButtons.YesNo,
+								   MessageBoxIcon.Exclamation,
+								   MessageBoxDefaultButton.Button2);
+		}
+
+		/// <summary>
+		/// Checks the row-order before save.
+		/// </summary>
+		/// <returns><c>true</c> if row-order is okay</returns>
+		bool CheckRowOrder()
+		{
+			string val;
+			int result;
+
+			for (int id = 0; id != Table.RowCount; ++id)
+			{
+				if (String.IsNullOrEmpty(val = Table[id,0].text)
+					|| !Int32.TryParse(val, out result)
+					|| result != id)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -1751,7 +1747,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Undo(object sender, EventArgs e)
 		{
-			if (Table != null)
+//			if (Table != null)
 			{
 				Table._ur.Undo();
 				it_Undo.Enabled = Table._ur.CanUndo;
@@ -1770,7 +1766,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Redo(object sender, EventArgs e)
 		{
-			if (Table != null)
+//			if (Table != null)
 			{
 				Table._ur.Redo();
 				it_Redo.Enabled = Table._ur.CanRedo;
@@ -1851,7 +1847,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			if (Table != null)
+//			if (Table != null)
 			{
 				Table.Select();
 				Search();
@@ -2100,7 +2096,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if (Table != null && Table.anyLoadchanged()
+			if (Table.anyLoadchanged() // Table != null && 
 				&& (ModifierKeys & Keys.Alt) == 0)
 			{
 				if (Table._editor.Visible)
@@ -2263,11 +2259,11 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
-			if (Table != null) // safety and should be taken out
+//			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly) // safety and should be taken out
+//				if (!Table.Readonly) // safety and should be taken out
 				{
-					if (Table.areSelectedCellsContiguous()) // safety and should be taken out
+//					if (Table.areSelectedCellsContiguous()) // safety and should be taken out
 					{
 						Cell cell;
 
@@ -2305,11 +2301,11 @@ namespace yata
 								Table.Invalidator(invalid);
 						}
 					}
-					else
-						CopyPasteCellError("Select one cell or a contiguous block of cells.");
+//					else
+//						CopyPasteCellError("Select one cell or a contiguous block of cells.");
 				}
-				else
-					ReadonlyError();
+//				else
+//					ReadonlyError();
 			}
 		}
 
@@ -2324,9 +2320,9 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
-			if (Table != null) // safety and should be taken out
+//			if (Table != null) // safety and should be taken out
 			{
-				if (Table.areSelectedCellsContiguous()) // safety and should be taken out
+//				if (Table.areSelectedCellsContiguous()) // safety and should be taken out
 				{
 					Cell sel = Table.getFirstSelectedCell();
 					if (sel != null) // safety and should be taken out
@@ -2344,8 +2340,8 @@ namespace yata
 						}
 					}
 				}
-				else
-					CopyPasteCellError("Select one cell or a contiguous block of cells.");
+//				else
+//					CopyPasteCellError("Select one cell or a contiguous block of cells.");
 			}
 		}
 
@@ -2377,12 +2373,12 @@ namespace yata
 //				SetTextboxText(tb_Search);
 //			}
 //			else
-			if (Table != null) // safety and should be taken out
+//			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly) // safety and should be taken out
+//				if (!Table.Readonly) // safety and should be taken out
 				{
 					Cell sel = Table.getSelectedCell();
-					if (sel != null) // safety and should be taken out
+//					if (sel != null) // safety and should be taken out
 					{
 						Cell cell; string text;
 						int invalid = -1;
@@ -2414,11 +2410,11 @@ namespace yata
 
 						EnableCelleditOperations();
 					}
-					else
-						CopyPasteCellError("Select one cell.");
+//					else
+//						CopyPasteCellError("Select one cell.");
 				}
-				else
-					ReadonlyError();
+//				else
+//					ReadonlyError();
 			}
 		}
 
@@ -2444,7 +2440,7 @@ namespace yata
 				tb.Text = String.Empty;
 		} */
 
-		/// <summary>
+/*		/// <summary>
 		/// Shows user an error if there is not a single cell or not a
 		/// contiguous block of cells selected when copying or pasting a cell.
 		/// </summary>
@@ -2455,7 +2451,7 @@ namespace yata
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Exclamation,
 							MessageBoxDefaultButton.Button1);
-		}
+		} */
 
 
 		/// <summary>
@@ -2469,9 +2465,9 @@ namespace yata
 		/// </list></remarks>
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
-			if (Table != null) // safety and should be taken out
+//			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly) // safety and should be taken out
+//				if (!Table.Readonly) // safety and should be taken out
 				{
 					Cell sel;
 					int invalid = -1;
@@ -2499,8 +2495,8 @@ namespace yata
 					if (invalid == YataGrid.INVALID_GRID)
 						Table.Invalidator(invalid);
 				}
-				else
-					ReadonlyError();
+//				else
+//					ReadonlyError();
 			}
 		}
 
@@ -2659,13 +2655,13 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CutRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly) // safety and should be taken out
+//			if (!Table.Readonly) // safety and should be taken out
 			{
 				editrowsclick_CopyRange(  sender, e);
 				editrowsclick_DeleteRange(sender, e);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -2729,7 +2725,7 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly) // safety and should be taken out
+//			if (!Table.Readonly) // safety and should be taken out
 			{
 				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
@@ -2767,8 +2763,8 @@ namespace yata
 				Obfuscate(false);
 				DrawingControl.ResumeDrawing(Table);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -2788,14 +2784,14 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
-			if (!Table.Readonly) // safety and should be taken out
+//			if (!Table.Readonly) // safety and should be taken out
 			{
 				int selr = Table.getSelectedRow();
 				if (selr != -1)
 					Table.DeleteRows(selr);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 
@@ -2811,9 +2807,9 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
-			if (Table != null) // safety and should be taken out
+//			if (Table != null) // safety and should be taken out
 			{
-				if (!Table.Readonly) // safety and should be taken out
+//				if (!Table.Readonly) // safety and should be taken out
 				{
 					int selr = Table.getSelectedRow();
 
@@ -2881,8 +2877,8 @@ namespace yata
 						}
 					}
 				}
-				else
-					ReadonlyError();
+//				else
+//					ReadonlyError();
 			}
 		}
 		#endregion Events (editrows)
@@ -3602,7 +3598,7 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_ClearUr(object sender, EventArgs e)
 		{
-			if (Table != null)
+//			if (Table != null)
 			{
 				Table._ur.Clear();
 
@@ -3897,13 +3893,13 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Cut(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				rowclick_Copy(  null, EventArgs.Empty);
 				rowclick_Delete(null, EventArgs.Empty);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -3934,7 +3930,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteAbove(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				Table.Insert(_r, _copyr[0]);
 
@@ -3947,8 +3943,8 @@ namespace yata
 				}
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -3958,7 +3954,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Paste(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				// - store the row's current state to 'rPre' in the Restorable
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
@@ -3994,8 +3990,8 @@ namespace yata
 				rest.rPos = Table.Rows[_r].Clone() as Row;
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -4005,7 +4001,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteBelow(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				Table.Insert(_r + 1, _copyr[0]);
 
@@ -4018,8 +4014,8 @@ namespace yata
 				}
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -4029,7 +4025,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_CreateAbove(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				var fields = new string[Table.ColCount];
 				fields[0] = _r.ToString();
@@ -4048,8 +4044,8 @@ namespace yata
 				}
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -4059,7 +4055,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Clear(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				// - store the row's current state to 'rPre' in the Restorable
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
@@ -4088,8 +4084,8 @@ namespace yata
 				rest.rPos = Table.Rows[_r].Clone() as Row;
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -4099,7 +4095,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_CreateBelow(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				var fields = new string[Table.ColCount];
 				fields[0] = (_r + 1).ToString();
@@ -4118,8 +4114,8 @@ namespace yata
 				}
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 
 		/// <summary>
@@ -4129,7 +4125,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Delete(object sender, EventArgs e)
 		{
-			if (!Table.Readonly)
+//			if (!Table.Readonly)
 			{
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
@@ -4144,8 +4140,8 @@ namespace yata
 				}
 				Table._ur.Push(rest);
 			}
-			else
-				ReadonlyError();
+//			else
+//				ReadonlyError();
 		}
 		#endregion Events (row)
 
