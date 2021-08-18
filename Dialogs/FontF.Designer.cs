@@ -302,9 +302,6 @@ namespace yata
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Choose Font ... be patient";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
-			this.Load += new System.EventHandler(this.OnLoad);
-			this.Resize += new System.EventHandler(this.OnResize);
 			this.gb_Text.ResumeLayout(false);
 			this.gb_Style.ResumeLayout(false);
 			this.pa_Right.ResumeLayout(false);

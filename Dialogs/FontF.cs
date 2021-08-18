@@ -24,10 +24,8 @@ namespace yata
 									  + "choose a different style ...";
 		const  string ERROR_FONTSIZE = "Point size too small.";
 
-		static int _x = -1;
-		static int _y = -1;
-		static int _w = -1;
-		static int _h = -1;
+		static int _x = -1, _y;
+		static int _w = -1, _h;
 
 		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
 
@@ -54,7 +52,22 @@ namespace yata
 		readonly List<Font> _fonts = new List<Font>();
 
 		readonly YataForm _f;
+
+		/// <summary>
+		/// Bypasses the <c><see cref="fontchanged()">fontchanged()</see>
+		/// routine.</c>
+		/// </summary>
 		bool _init;
+
+		/// <summary>
+		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
+		/// when this <c>FontF</c> dialog instantiates. Otherwise when .net
+		/// automatically fires the <c>Resize</c> event during instantiation the
+		/// values get set in a way that renders the
+		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
+		/// why I like Cherios!
+		/// </summary>
+		bool _bypassResizeStatics = true;
 
 		/// <summary>
 		/// Tracks the current index of <c><see cref="list_Font"/></c> because
@@ -70,14 +83,13 @@ namespace yata
 		#endregion Fields
 
 
-		#region Properties
+		#region Properties (static)
 		/// <summary>
-		/// Tracks if user had this <c>FontF</c> dialog maximized before
-		/// minimizing it.
+		/// Tracks if user has this <c>FontF</c> dialog maximized.
 		/// </summary>
-		internal bool Maximized
+		internal static bool Maximized
 		{ get; private set; }
-		#endregion Properties
+		#endregion Properties (static)
 
 
 		#region cTor
@@ -99,8 +111,11 @@ namespace yata
 			tb_FontSize  .BackColor = Color.White;
 			tb_FontString.BackColor = Colors.TextboxBackground;
 
-			if (_x == -1) _x = _f.Left + 20;
-			if (_y == -1) _y = _f.Top  + 20;
+			if (_x == -1)
+			{
+				_x = Math.Max(0, _f.Left + 20);
+				_y = Math.Max(0, _f.Top  + 20);
+			}
 
 			Left = _x;
 			Top  = _y;
@@ -178,20 +193,24 @@ namespace yata
 			_init = false;
 
 			fontchanged(list_Font, EventArgs.Empty);
+
+			if (Maximized)
+				WindowState = FormWindowState.Maximized;
+
+			_bypassResizeStatics = false;
 		}
 		#endregion cTor
 
 
-		#region Events
+		#region Events (override)
 		/// <summary>
 		/// Handles the <c>Load</c> event. This ought ensure that the FontPicker
 		/// appears on top. If a user has a lot of fonts installed on their
 		/// system the FontPicker takes a while to load ... if so it tends to
 		/// get hidden beneath main.
 		/// </summary>
-		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void OnLoad(object sender, EventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
 			TopMost = true;
 			TopMost = false;
@@ -200,29 +219,27 @@ namespace yata
 		/// <summary>
 		/// Handles the <c>FormClosing</c> event.
 		/// </summary>
-		/// <param name="sender"><c>this</c></param>
 		/// <param name="e"></param>
-		void OnClosing(object sender, FormClosingEventArgs e)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			if (WindowState == FormWindowState.Normal)
 			{
-				_x = Left;
-				_y = Top;
-				_w = ClientSize.Width;
-				_h = ClientSize.Height;
+				_x = Math.Max(0, Left);
+				_y = Math.Max(0, Top);
 			}
 
 			_f.FontF_closing();
 
 			lbl_Lazydog.Font.Dispose();
+
+			base.OnFormClosing(e);
 		}
 
 		/// <summary>
 		/// Handles the <c>Resize</c> event.
 		/// </summary>
-		/// <param name="sender"><c>this</c></param>
 		/// <param name="e"></param>
-		void OnResize(object sender, EventArgs e)
+		protected override void OnResize(EventArgs e)
 		{
 			if (WindowState != FormWindowState.Minimized)
 			{
@@ -231,18 +248,25 @@ namespace yata
 
 				list_Font.TopIndex = list_Font.SelectedIndex;
 
-				if (WindowState == FormWindowState.Normal)
+				if (!_bypassResizeStatics)
 				{
-					_w = ClientSize.Width;
-					_h = ClientSize.Height;
+					if (WindowState == FormWindowState.Normal)
+					{
+						_w = ClientSize.Width;
+						_h = ClientSize.Height;
 
-					Maximized = false;
+						Maximized = false;
+					}
+					else
+						Maximized = true;
 				}
-				else
-					Maximized = true;
 			}
+			base.OnResize(e);
 		}
+		#endregion Events (override)
 
+
+		#region Events
 		/// <summary>
 		/// Keeps the selected font-id in view when the splitter is moved.
 		/// </summary>
@@ -314,12 +338,12 @@ namespace yata
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
-		/// <item><c><see cref="list_Font"/></c></item>
-		/// <item><c><see cref="tb_FontSize"/></c></item>
-		/// <item><c><see cref="cb_Strk"/></c></item>
-		/// <item><c><see cref="cb_Undr"/></c></item>
-		/// <item><c><see cref="cb_Ital"/></c></item>
-		/// <item><c><see cref="cb_Bold"/></c></item>
+		/// <item><c><see cref="list_Font"/></c> - <c>SelectedIndexChanged</c> and cTor</item>
+		/// <item><c><see cref="tb_FontSize"/></c> - <c>TextChanged</c></item>
+		/// <item><c><see cref="cb_Strk"/></c> - <c>CheckedChanged</c></item>
+		/// <item><c><see cref="cb_Undr"/></c> - <c>CheckedChanged</c></item>
+		/// <item><c><see cref="cb_Ital"/></c> - <c>CheckedChanged</c></item>
+		/// <item><c><see cref="cb_Bold"/></c> - <c>CheckedChanged</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		void fontchanged(object sender, EventArgs e)
@@ -417,10 +441,10 @@ namespace yata
 			if (_id != -1) // safety.
 			{
 				float size;
-				if (float.TryParse(tb_FontSize.Text, out size)
+				if (Single.TryParse(tb_FontSize.Text, out size)
 					&& size >= 1F)
 				{
-					var style = FontStyle.Regular;						// =0
+					FontStyle style = FontStyle.Regular;				// =0
 					if (cb_Bold.Checked) style |= FontStyle.Bold;		// =1
 					if (cb_Ital.Checked) style |= FontStyle.Italic;		// =2
 					if (cb_Undr.Checked) style |= FontStyle.Underline;	// =4
