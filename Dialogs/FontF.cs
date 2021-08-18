@@ -204,16 +204,30 @@ namespace yata
 
 		#region Events (override)
 		/// <summary>
-		/// Handles the <c>Load</c> event. This ought ensure that the FontPicker
-		/// appears on top. If a user has a lot of fonts installed on their
-		/// system the FontPicker takes a while to load ... if so it tends to
-		/// get hidden beneath main.
+		/// Handles the <c>Load</c> event.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>This ought ensure that the FontPicker appears on top. If a
+		/// user has a lot of fonts installed on their system the FontPicker
+		/// takes a while to load ... if so it tends to get hidden beneath main.
+		/// 
+		/// 
+		/// There are a bazillion ways to accomplish that. Getting one to work
+		/// consistently is a dice roll.
+		/// <list type="bullet">
+		/// <item><c>BringToFront()</c></item>
+		/// <item><c>TopMost</c> <c>true</c>/<c>false</c></item>
+		/// <item><c>Activate()</c></item>
+		/// <item><c>Focus()</c></item>
+		/// <item><c>Select()</c></item>
+		/// <item><c>FormWindowState.Minimized</c>/<c>FormWindowState.Normal</c>
+		/// or <c>.Maximized</c> (as detered by the
+		/// <c><see cref="Maximized"/></c> <c>bool</c>)</item>
+		/// <item>etc.</item>
+		/// </list></remarks>
 		protected override void OnLoad(EventArgs e)
 		{
-			TopMost = true;
-			TopMost = false;
+			BringToFront();
 		}
 
 		/// <summary>
@@ -291,8 +305,7 @@ namespace yata
 			bu_Apply.Enabled = false;
 			_f.doFont(lbl_Lazydog.Font.Clone() as Font);
 
-			TopMost = true; // see OnLoad() doc
-			TopMost = false;
+			BringToFront(); // see OnLoad() doc
 		}
 
 		/// <summary>
