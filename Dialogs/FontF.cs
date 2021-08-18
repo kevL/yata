@@ -27,6 +27,13 @@ namespace yata
 		static int _x = -1, _y;
 		static int _w = -1, _h;
 
+		/// <summary>
+		/// The distance of <c><see cref="sc_Hori"/></c> between the font-list
+		/// and the lazydog-text from the top of the <c>ClientRectangle</c>.
+		/// </summary>
+		/// <remarks>The initial value shall be the value set in the designer.</remarks>
+		static int _scDistance = 246;
+
 		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
 
 		/* GdiPlus.dll - gdiplusheaders.h (#include Gdiplus.h)
@@ -197,6 +204,8 @@ namespace yata
 			if (Maximized)
 				WindowState = FormWindowState.Maximized;
 
+			sc_Hori.SplitterDistance = _scDistance;
+
 			_bypassResizeStatics = false;
 		}
 		#endregion cTor
@@ -282,12 +291,14 @@ namespace yata
 
 		#region Events
 		/// <summary>
-		/// Keeps the selected font-id in view when the splitter is moved.
+		/// Stores <c>SplitterDistance</c> as a static and keeps the selected
+		/// font-id in view when the splitter is moved.
 		/// </summary>
 		/// <param name="sender"><c><see cref="sc_Hori"/></c></param>
 		/// <param name="e"></param>
 		void OnSplitterMoved(object sender, SplitterEventArgs e)
 		{
+			_scDistance = sc_Hori.SplitterDistance;
 			list_Font.TopIndex = list_Font.SelectedIndex;
 		}
 		#endregion Events
