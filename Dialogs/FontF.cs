@@ -15,9 +15,9 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
-		static string LAZYDOG = "01234567890 `~!@#$%^&*()_+-=\\|[]{};:'\",<.>/?" + Environment.NewLine
-							  + "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
-							  + "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
+		static string stLAZYDOG = "01234567890 `~!@#$%^&*()_+-=\\|[]{};:'\",<.>/?" + Environment.NewLine
+								+ "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
+								+ "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
 		static string ERROR_FONTSTYLE = " does not support the Regular style."
 									  + Environment.NewLine + Environment.NewLine
@@ -45,18 +45,36 @@ namespace yata
 
 
 		#region Fields
-		readonly List<FontFamily> _ffs   = new List<FontFamily>();
-		readonly List<Font>       _fonts = new List<Font>(); // all fonts used to render the listbox will be disposed
+		readonly List<FontFamily> _ffs = new List<FontFamily>();
+
+		/// <summary>
+		/// All fonts used to render <c><see cref="list_Font"/></c> will be
+		/// disposed.
+		/// </summary>
+		readonly List<Font> _fonts = new List<Font>();
 
 		readonly YataForm _f;
 		bool _init;
 
-		int  _id = -1;	// tracks the current index of the fontlist because .net will treat it as changed when it didn't.
-		bool _regular;	// true if the currently chosen font's Regular style is available
+		/// <summary>
+		/// Tracks the current index of <c><see cref="list_Font"/></c> because
+		/// .net will treat it as changed when it didn't.
+		/// </summary>
+		int _id = -1;
+
+		/// <summary>
+		/// <c>true</c> if the currently chosen font's Regular <c>FontStyle</c>
+		/// is available.
+		/// </summary>
+		bool _regular;
 		#endregion Fields
 
 
 		#region Properties
+		/// <summary>
+		/// Tracks if user had this <c>FontF</c> dialog maximized before
+		/// minimizing it.
+		/// </summary>
 		internal bool Maximized
 		{ get; private set; }
 		#endregion Properties
@@ -64,9 +82,9 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor. Instantiates this font-dialog.
+		/// cTor.
 		/// </summary>
-		/// <param name="f">the form that owns this dialog</param>
+		/// <param name="f"><c><see cref="YataForm"/></c></param>
 		internal FontF(YataForm f)
 		{
 			InitializeComponent();
@@ -164,12 +182,12 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Events
 		/// <summary>
-		/// Handles the load-event. This ought ensure that the FontPicker
+		/// Handles the <c>Load</c> event. This ought ensure that the FontPicker
 		/// appears on top. If a user has a lot of fonts installed on their
-		/// system the FontPicker takes a while to load ... and if so it tends
-		/// to get hidden beneath main.
+		/// system the FontPicker takes a while to load ... if so it tends to
+		/// get hidden beneath main.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -180,9 +198,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the form-closing event.
+		/// Handles the <c>FormClosing</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c>this</c></param>
 		/// <param name="e"></param>
 		void OnClosing(object sender, FormClosingEventArgs e)
 		{
@@ -200,9 +218,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the form-resize event.
+		/// Handles the <c>Resize</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c>this</c></param>
 		/// <param name="e"></param>
 		void OnResize(object sender, EventArgs e)
 		{
@@ -225,19 +243,24 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Keeps the selected font-id in view when the splitter is moved.
+		/// </summary>
+		/// <param name="sender"><c><see cref="sc_Hori"/></c></param>
+		/// <param name="e"></param>
 		void OnSplitterMoved(object sender, SplitterEventArgs e)
 		{
 			list_Font.TopIndex = list_Font.SelectedIndex;
 		}
-		#endregion Events (override)
+		#endregion Events
 
 
 		#region button handlers
 		/// <summary>
-		/// Applies the font that currently displays the text but does not close
-		/// this dialog.
+		/// Applies the <c>Font</c> that Yata uses but does not close this
+		/// <c>FontF</c> dialog.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="bu_Apply"/></c></param>
 		/// <param name="e"></param>
 		void click_Apply(object sender, EventArgs e)
 		{
@@ -249,9 +272,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Closes this dialog. See <see cref="OnClosing"/>.
+		/// Closes this <c>FontF</c> dialog.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="bu_Cancel"/></c></param>
 		/// <param name="e"></param>
 		void click_Close(object sender, EventArgs e)
 		{
@@ -262,9 +285,10 @@ namespace yata
 
 		#region font list/size/style handlers
 		/// <summary>
-		/// Draws the font labels in the font list.
+		/// Draws the font-entries in <c><see cref="list_Font"/></c> with their
+		/// own <c>Font</c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="list_Font"/></c></param>
 		/// <param name="e"></param>
 		void fontList_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -286,9 +310,17 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Fired by any control that causes the text to change.
+		/// Fired by any control that causes the lazydog-text to change.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="list_Font"/></c></item>
+		/// <item><c><see cref="tb_FontSize"/></c></item>
+		/// <item><c><see cref="cb_Strk"/></c></item>
+		/// <item><c><see cref="cb_Undr"/></c></item>
+		/// <item><c><see cref="cb_Ital"/></c></item>
+		/// <item><c><see cref="cb_Bold"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void fontchanged(object sender, EventArgs e)
 		{
@@ -324,12 +356,12 @@ namespace yata
 		/// Increases or decreases the pointsize with the mousewheel when the
 		/// size-box has focus.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_FontSize"/></c></param>
 		/// <param name="e"></param>
 		void size_mousewheel(object sender, MouseEventArgs e)
 		{
 			float size;
-			if (float.TryParse(tb_FontSize.Text, out size))
+			if (Single.TryParse(tb_FontSize.Text, out size))
 			{
 				if (e.Delta > 0)
 				{
@@ -347,7 +379,7 @@ namespace yata
 		/// <summary>
 		/// Focuses the size-box when the size-label is clicked.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="lbl_Size"/></c></param>
 		/// <param name="e"></param>
 		void click_pointlabel(object sender, EventArgs e)
 		{
@@ -359,25 +391,26 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Gets the first available style in a given FontFamily.
-		/// NOTE: ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net! .not
+		/// Gets the first available <c>FontStyle</c> in a given
+		/// <c>FontFamily</c>.
 		/// </summary>
-		/// <param name="ff">a FontFamily</param>
-		/// <returns>the first FontStyle found else FontStyleInvalid</returns>
+		/// <param name="ff">a <c>FontFamily</c></param>
+		/// <returns>the first <c>FontStyle</c> found else
+		/// <c><see cref="FontStyleInvalid"/></c></returns>
+		/// <remarks>ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net! .not</remarks>
 		FontStyle getStyle(FontFamily ff)
 		{
 			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
-			{
-				if (ff.IsStyleAvailable(style))
-					return style;
-			}
+			if (ff.IsStyleAvailable(style))
+				return style;
+
 			return FontStyleInvalid; // yes this can happen.
 		}
 
 		/// <summary>
-		/// Creates the lazydog font from the dialog's current values and prints
-		/// the preview text in that font. Also decides whether the Apply button
-		/// is enabled.
+		/// Creates the <c>Font</c> for <c><see cref="stLAZYDOG"/></c> from the
+		/// dialog's current values and prints the preview text in that font.
+		/// Also decides whether the Apply button is enabled.
 		/// </summary>
 		void CreateLazydog()
 		{
@@ -403,7 +436,7 @@ namespace yata
 
 					lbl_Lazydog.ForeColor = SystemColors.ControlText;
 					lbl_Lazydog.Font = new Font(_ffs[_id].Name, size, style);
-					lbl_Lazydog.Text = LAZYDOG;
+					lbl_Lazydog.Text = stLAZYDOG;
 
 					printstring();
 				}
@@ -419,8 +452,8 @@ namespace yata
 		/// <summary>
 		/// Handles lazydog errors.
 		/// </summary>
-		/// <param name="size">true if error is generated by a point-size error
-		/// else error is a font-style error</param>
+		/// <param name="size"><c>true</c> if error is generated by a point-size
+		/// error; <c>false</c> if error is a font-style error</param>
 		void ErrorLazydog(bool size = false)
 		{
 			lbl_Lazydog.ForeColor = Color.Crimson;
@@ -437,13 +470,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Compares two fonts for a reasonable identity.
-		/// @note .net's Equals() check compares a bunch of stuff that's
-		/// irrelevant here.
+		/// Compares two <c>Fonts</c> for a reasonable identity.
 		/// </summary>
-		/// <param name="font1">first font</param>
-		/// <param name="font2">second font</param>
-		/// <returns>true if 'font1' and 'font2' are reasonably identical</returns>
+		/// <param name="font1">first <c>Font</c></param>
+		/// <param name="font2">second <c>Font</c></param>
+		/// <returns>true if <paramref name="font1"/> and
+		/// <paramref name="font2"/> are reasonably identical</returns>
+		/// <remarks>.net's Equals() check compares a bunch of stuff that's
+		/// irrelevant here.</remarks>
 		static bool copulate(Font font1, Font font2)
 		{
 			return font1.Name  == font2.Name
@@ -452,9 +486,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Prints the .NET font-string of the currently chosen font (for user
-		/// to use in Settings.Cfg).
+		/// Prints the .NET font-string of the currently chosen <c>Font</c>.
 		/// </summary>
+		/// <remarks>For user to use in Settings.Cfg.</remarks>
 		void printstring()
 		{
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
@@ -464,7 +498,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Disposes the fonts in the fontList.
+		/// Disposes the <c>Fonts</c> in <c><see cref="_fonts"/></c>.
 		/// </summary>
 		void DisposeFonts()
 		{
