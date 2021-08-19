@@ -14,7 +14,7 @@ namespace yata
 	sealed partial class YataGrid
 	{
 		/// <summary>
-		/// Handles the Paint event for the table itself.
+		/// Overrides the <c>Paint</c> handler for the table itself.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -43,7 +43,7 @@ namespace yata
 				Row row;
 
 				rect.Height = HeightRow;
-				int left = WidthRowhead - offsetHori + _padHori - 1; // NOTE: -1 is a padding tweak.
+				int left = WidthRowhead - offsetHori + _padHori - 1;
 
 				int yOffset = HeightColhead - offsetVert;
 				for (r = offsetVert / HeightRow; r != RowCount; ++r)
@@ -120,15 +120,12 @@ namespace yata
 										  x, Bottom);
 				}
 			}
-
-//			base.OnPaint(e);
 		}
 
 		/// <summary>
 		/// Labels the colheads.
-		/// @note Called by OnPaint of the top-panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
+		/// <remarks>Called by <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
 		internal void LabelColheads()
 		{
 			if (ColCount != 0) // safety.
@@ -191,9 +188,8 @@ namespace yata
 
 		/// <summary>
 		/// Labels the rowheads.
-		/// @note Called by OnPaint of the left-panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
+		/// <remarks>Called by <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
 		internal void LabelRowheads()
 		{
 			if (RowCount != 0) // safety - ought be checked in calling funct.
@@ -246,6 +242,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Paints the frozen-id <c>Label</c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="_labelid"/></c></param>
+		/// <param name="e"></param>
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -310,6 +311,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Paints the frozen-first <c>Label</c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="_labelfirst"/></c></param>
+		/// <param name="e"></param>
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -361,6 +367,11 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Paints the frozen-second <c>Label</c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="_labelsecond"/></c></param>
+		/// <param name="e"></param>
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -415,9 +426,8 @@ namespace yata
 
 		/// <summary>
 		/// Paints the frozen-panel.
-		/// @note Called by OnPaint of the frozen-panel.
-		/// @note OnPaint() doesn't want to use the class_var '_graphics'.
 		/// </summary>
+		/// <remarks>Called by <c><see cref="YataPanelFrozen"/>.OnPaint()</c>.</remarks>
 		internal void PaintFrozenPanel()
 		{
 			if (RowCount != 0) // safety.
