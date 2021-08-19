@@ -66,7 +66,7 @@ namespace yata
 		internal static int HeightRow;
 
 		/// <summary>
-		/// Is used only for painting in all the various OnPaint events.
+		/// Is used only for painting in all the various <c>Paint</c> events.
 		/// </summary>
 		internal static Graphics graphics;
 
@@ -1495,7 +1495,8 @@ namespace yata
 
 			for (int r = 0; r != RowCount; ++r)
 			{
-				changed = changed || (_rows[r].Length > ColCount); // flag Changed if any field(s) get cut off.
+				changed = changed
+					   || _rows[r].Length > ColCount; // flag Changed if any field(s) get cut off.
 
 				Rows.Add(new Row(r,
 								 ColCount,
@@ -2336,9 +2337,9 @@ namespace yata
 		{
 			Cell sel;
 
-			for (int r = 0; r != RowCount; ++r)
+			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
-				if ((sel = this[r,c]).selected)
+				if ((sel = row[c]).selected)
 					return sel;
 
 			return null;
@@ -3953,13 +3954,11 @@ namespace yata
 						if (!shft) // select if any of the col's cells are not selected ->
 						{
 							@select = false;
-							for (int r = 0; r != RowCount; ++r)
+							foreach (var row in Rows)
+							if (!row[c].selected)
 							{
-								if (!this[r,c].selected)
-								{
-									@select = true;
-									break;
-								}
+								@select = true;
+								break;
 							}
 						}
 						else				// [Shift] only selects cells - never selects col but
@@ -4053,10 +4052,9 @@ namespace yata
 										while (start != stop + 1)
 										{
 											if (start != c) // done below
-											{
-												for (int r = 0; r != table.RowCount; ++r)
-													table[r,start].selected = true;
-											}
+											foreach (var row in table.Rows)
+												row[start].selected = true;
+
 											++start;
 										}
 									}
@@ -4068,10 +4066,9 @@ namespace yata
 								while (start != stop + 1)
 								{
 									if (start != c) // done below
-									{
-										for (int r = 0; r != RowCount; ++r)
-											this[r,start].selected = true;
-									}
+									foreach (var row in Rows)
+										row[start].selected = true;
+
 									++start;
 								}
 							}
@@ -4080,14 +4077,12 @@ namespace yata
 						if (@select)
 							EnsureDisplayedCol(c);
 
-						for (int r = 0; r != RowCount; ++r) // select or deselect col-cells
-							this[r,c].selected = @select;
+						foreach (var row in Rows) // select or deselect col-cells
+							row[c].selected = @select;
 
 						if (table != null && c < table.ColCount) // sync table
-						{
-							for (int r = 0; r != table.RowCount; ++r) // select or deselect col-cells
-								table[r,c].selected = @select;
-						}
+						foreach (var row in table.Rows) // select or deselect col-cells
+							row[c].selected = @select;
 
 						Invalidator(invalid);
 
@@ -4148,10 +4143,9 @@ namespace yata
 		internal int getSelectedCol()
 		{
 			for (int c = 0; c != ColCount; ++c)
-			{
-				if (Cols[c].selected)
-					return c;
-			}
+			if (Cols[c].selected)
+				return c;
+
 			return -1;
 		}
 
@@ -4230,10 +4224,13 @@ namespace yata
 		/// Inserts/deletes a row into the table.
 		/// </summary>
 		/// <param name="id">row-id to insert at or to delete</param>
-		/// <param name="fields">null to delete the row</param>
-		/// <param name="calibrate">true to re-layout the grid</param>
+		/// <param name="fields"><c>null</c> to delete the row</param>
+		/// <param name="calibrate"><c>true</c> to re-layout the grid</param>
 		/// <param name="brush">a brush to use for Undo/Redo</param>
-		internal void Insert(int id, string[] fields = null, bool calibrate = true, Brush brush = null)
+		internal void Insert(int      id,
+							 string[] fields    = null,
+							 bool     calibrate = true,
+							 Brush    brush     = null)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
