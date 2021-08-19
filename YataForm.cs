@@ -2473,7 +2473,7 @@ namespace yata
 					int invalid = -1;
 
 					foreach (var row in Table.Rows)
-					for (int c = 1; c != Table.ColCount; ++c)
+					for (int c = 0; c != Table.ColCount; ++c)
 					{
 						if ((sel = row[c]).selected)
 						{
@@ -4028,11 +4028,10 @@ namespace yata
 //			if (!Table.Readonly)
 			{
 				var fields = new string[Table.ColCount];
-				fields[0] = _r.ToString();
-				for (int c = 1; c != Table.ColCount; ++c)
-				{
+//				fields[0] = _r.ToString();
+				for (int c = 0; c != Table.ColCount; ++c)
 					fields[c] = gs.Stars;
-				}
+
 				Table.Insert(_r, fields);
 
 
@@ -4061,7 +4060,7 @@ namespace yata
 				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
-				for (int c = 1; c != Table.ColCount; ++c)
+				for (int c = 0; c != Table.ColCount; ++c)
 				{
 					Table[_r,c].text = gs.Stars;
 					Table[_r,c].diff =
@@ -4098,11 +4097,10 @@ namespace yata
 //			if (!Table.Readonly)
 			{
 				var fields = new string[Table.ColCount];
-				fields[0] = (_r + 1).ToString();
-				for (int c = 1; c != Table.ColCount; ++c)
-				{
+//				fields[0] = (_r + 1).ToString();
+				for (int c = 0; c != Table.ColCount; ++c)
 					fields[c] = gs.Stars;
-				}
+
 				Table.Insert(_r + 1, fields);
 
 
@@ -5347,11 +5345,7 @@ namespace yata
 								&& result >=  TalkReader.invalid
 								&& result <= (TalkReader.bitCusto | TalkReader.strref))
 							{
-								if (result == TalkReader.invalid)
-								{
-									text = gs.Space;
-								}
-								else
+								if (result != TalkReader.invalid)
 								{
 									bool alt = ((result & TalkReader.bitCusto) != 0);
 									result &= TalkReader.strref;
@@ -5364,6 +5358,8 @@ namespace yata
 									else if (TalkReader.DictCusto.ContainsKey(result))
 										text = TalkReader.DictCusto[result];
 								}
+								else
+									text = gs.Space;
 							}
 
 							if (!String.IsNullOrEmpty(text))
