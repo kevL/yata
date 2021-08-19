@@ -2473,7 +2473,7 @@ namespace yata
 					int invalid = -1;
 
 					foreach (var row in Table.Rows)
-					for (int c = 0; c != Table.ColCount; ++c)
+					for (int c = 1; c != Table.ColCount; ++c)
 					{
 						if ((sel = row[c]).selected)
 						{
@@ -2918,7 +2918,7 @@ namespace yata
 				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
 
 				it_CreateHead .Enabled = !Table.Readonly;
-				it_DeleteHead .Enabled =
+				it_DeleteHead .Enabled = !Table.Readonly && isColSelected && Table.ColCount > 2;
 				it_RelabelHead.Enabled = !Table.Readonly && isColSelected;
 
 				it_CopyCol    .Enabled = isColSelected;
