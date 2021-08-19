@@ -65,7 +65,7 @@ namespace yata
 			this.list_Font.Location = new System.Drawing.Point(0, 0);
 			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
 			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(396, 284);
+			this.list_Font.Size = new System.Drawing.Size(396, 283);
 			this.list_Font.TabIndex = 0;
 			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_DrawItem);
 			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.fontchanged);
@@ -112,10 +112,10 @@ namespace yata
 			// 
 			this.lbl_Lazydog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lbl_Lazydog.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 16);
+			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 14);
 			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Lazydog.Name = "lbl_Lazydog";
-			this.lbl_Lazydog.Size = new System.Drawing.Size(480, 47);
+			this.lbl_Lazydog.Size = new System.Drawing.Size(480, 50);
 			this.lbl_Lazydog.TabIndex = 0;
 			// 
 			// tb_FontSize
@@ -135,8 +135,8 @@ namespace yata
 			this.gb_Text.Location = new System.Drawing.Point(0, 0);
 			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Text.Name = "gb_Text";
-			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 3, 2, 2);
-			this.gb_Text.Size = new System.Drawing.Size(492, 65);
+			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 1, 2, 2);
+			this.gb_Text.Size = new System.Drawing.Size(492, 66);
 			this.gb_Text.TabIndex = 2;
 			this.gb_Text.TabStop = false;
 			// 
@@ -231,7 +231,7 @@ namespace yata
 			this.pa_Right.Location = new System.Drawing.Point(396, 0);
 			this.pa_Right.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Right.Name = "pa_Right";
-			this.pa_Right.Size = new System.Drawing.Size(96, 284);
+			this.pa_Right.Size = new System.Drawing.Size(96, 283);
 			this.pa_Right.TabIndex = 1;
 			// 
 			// gb_Size
@@ -267,7 +267,7 @@ namespace yata
 			this.sc_Hori.Panel2.Controls.Add(this.gb_Text);
 			this.sc_Hori.Panel2MinSize = 0;
 			this.sc_Hori.Size = new System.Drawing.Size(492, 352);
-			this.sc_Hori.SplitterDistance = 284;
+			this.sc_Hori.SplitterDistance = 283;
 			this.sc_Hori.SplitterWidth = 3;
 			this.sc_Hori.TabIndex = 4;
 			this.sc_Hori.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
