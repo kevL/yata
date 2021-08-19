@@ -31,7 +31,9 @@ namespace yata
 		/// Caches <c><see cref="sc_Hori"/>.SplitterDistance</c>
 		/// between instantiations.
 		/// </summary>
-		static int _scDistance = -1;
+		/// <remarks>The designer arbitrarily increments the value of
+		/// <c>SplitterDistance</c> so initialize it here.</remarks>
+		static int _scDistance = 283;
 
 		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
 
@@ -224,10 +226,9 @@ namespace yata
 		/// </list></remarks>
 		protected override void OnLoad(EventArgs e)
 		{
-			BringToFront();
+			sc_Hori.SplitterDistance = _scDistance;
 
-			if (_scDistance != -1)
-				sc_Hori.SplitterDistance = _scDistance;
+			BringToFront();
 		}
 
 		/// <summary>
@@ -273,6 +274,27 @@ namespace yata
 
 
 		#region Events
+		/// <summary>
+		/// lol bongo.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>Fixes the glitch that occurs if
+		/// <c><see cref="sc_Hori"/>.Panel1</c> is at
+		/// <c><see cref="sc_Hori"/>.Panel1MinSize</c> and user resizes this
+		/// <c>FontF</c> dialog to lessen its <c>Height</c>.
+		/// <c><see cref="sc_Hori"/>.Panel2</c> fails to figure out that it
+		/// needs to decrease in height and overflows off under
+		/// <c><see cref="tb_FontString"/></c> and off below the
+		/// <c><see cref="Form.ClientRectangle"/></c>. Touching
+		/// <c><see cref="sc_Hori"/>.SplitterDistance</c> forces the
+		/// <c>SplitContainer</c> to recalc ...</remarks>
+		void OnSplitContainerResize(object sender, EventArgs e)
+		{
+			sc_Hori.SplitterDistance = sc_Hori.SplitterDistance + 1;
+			sc_Hori.SplitterDistance = sc_Hori.SplitterDistance - 1;
+		}
+
 		/// <summary>
 		/// Stores <c>SplitterDistance</c> as a static and keeps the selected
 		/// font-id in view when the splitter is moved.

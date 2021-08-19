@@ -271,6 +271,7 @@ namespace yata
 			this.sc_Hori.SplitterWidth = 3;
 			this.sc_Hori.TabIndex = 4;
 			this.sc_Hori.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
+			this.sc_Hori.Resize += new System.EventHandler(this.OnSplitContainerResize);
 			// 
 			// FontF
 			// 
