@@ -28,11 +28,10 @@ namespace yata
 		static int _w = -1, _h;
 
 		/// <summary>
-		/// The distance of <c><see cref="sc_Hori"/></c> between the font-list
-		/// and the lazydog-text from the top of the <c>ClientRectangle</c>.
+		/// Caches <c><see cref="sc_Hori"/>.SplitterDistance</c>
+		/// between instantiations.
 		/// </summary>
-		/// <remarks>The initial value shall be the value set in the designer.</remarks>
-		static int _scDistance = 246;
+		static int _scDistance = -1;
 
 		const FontStyle FontStyleInvalid = (FontStyle)16; // .net doesn't define Invalid.
 
@@ -62,19 +61,14 @@ namespace yata
 
 		/// <summary>
 		/// Bypasses the <c><see cref="fontchanged()">fontchanged()</see>
-		/// routine.</c>
-		/// </summary>
-		bool _init;
-
-		/// <summary>
-		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
-		/// when this <c>FontF</c> dialog instantiates. Otherwise when .net
-		/// automatically fires the <c>Resize</c> event during instantiation the
-		/// values get set in a way that renders the
+		/// routine. Bypasses setting <c><see cref="_w"/></c> and
+		/// <c><see cref="_h"/></c> when this <c>FontF</c> dialog instantiates.
+		/// Otherwise when .net automatically fires the <c>Resize</c> event
+		/// during instantiation the values get set in a way that renders the
 		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
-		/// why I like Cherios!
+		/// why I like Cherios!</c>
 		/// </summary>
-		bool _bypassResizeStatics = true;
+		bool _init = true;
 
 		/// <summary>
 		/// Tracks the current index of <c><see cref="list_Font"/></c> because
@@ -130,13 +124,8 @@ namespace yata
 			if (_w != -1)
 				ClientSize = new Size(_w,_h);
 
-			MinimumSize = new Size(Width  - ClientSize.Width  + 300,
-								   Height - ClientSize.Height + 240);
-
-
 			// Safely ensure that Yata's current font is good to go
 			// else set defaults ->
-			_init = true;
 
 			int fontList_init = -1; // for showing the initial font's characteristics in the list ->
 			int fontList_test = -1;
@@ -197,16 +186,15 @@ namespace yata
 			tb_FontSize.Text = size_init.ToString();
 			tb_FontSize.MouseWheel += size_mousewheel; // NOTE: Mousewheel event is not shown in the designer.
 
+			if (Maximized)
+				WindowState = FormWindowState.Maximized;
+
 			_init = false;
 
 			fontchanged(list_Font, EventArgs.Empty);
 
-			if (Maximized)
-				WindowState = FormWindowState.Maximized;
-
-			sc_Hori.SplitterDistance = _scDistance;
-
-			_bypassResizeStatics = false;
+			list_Font.TopIndex = list_Font.SelectedIndex;
+			list_Font.Select();
 		}
 		#endregion cTor
 
@@ -237,6 +225,9 @@ namespace yata
 		protected override void OnLoad(EventArgs e)
 		{
 			BringToFront();
+
+			if (_scDistance != -1)
+				sc_Hori.SplitterDistance = _scDistance;
 		}
 
 		/// <summary>
@@ -250,6 +241,7 @@ namespace yata
 				_x = Math.Max(0, Left);
 				_y = Math.Max(0, Top);
 			}
+			_scDistance = sc_Hori.SplitterDistance;
 
 			_f.FontF_closing();
 
@@ -264,25 +256,16 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
-			if (WindowState != FormWindowState.Minimized)
+			list_Font.TopIndex = list_Font.SelectedIndex;
+
+			if (   !_init &&     WindowState != FormWindowState.Minimized
+				&& !(Maximized = WindowState == FormWindowState.Maximized))
 			{
-				if (sc_Hori.SplitterDistance > ClientSize.Height - 24)
-					sc_Hori.SplitterDistance = Math.Max(0, ClientSize.Height - 24);
+				// coding for .net is inelegant ... but I try.
+				// Imagine a figure skater doing a triple-axial and flying into the boards.
 
-				list_Font.TopIndex = list_Font.SelectedIndex;
-
-				if (!_bypassResizeStatics)
-				{
-					if (WindowState == FormWindowState.Normal)
-					{
-						_w = ClientSize.Width;
-						_h = ClientSize.Height;
-
-						Maximized = false;
-					}
-					else
-						Maximized = true;
-				}
+				_w = ClientSize.Width;
+				_h = ClientSize.Height;
 			}
 			base.OnResize(e);
 		}
@@ -298,7 +281,6 @@ namespace yata
 		/// <param name="e"></param>
 		void OnSplitterMoved(object sender, SplitterEventArgs e)
 		{
-			_scDistance = sc_Hori.SplitterDistance;
 			list_Font.TopIndex = list_Font.SelectedIndex;
 		}
 		#endregion Events
@@ -396,7 +378,7 @@ namespace yata
 
 					_regular = ff.IsStyleAvailable(FontStyle.Regular);
 				}
-				CreateLazydog();
+				CreateLazydogFont();
 			}
 		}
 
@@ -460,7 +442,7 @@ namespace yata
 		/// dialog's current values and prints the preview text in that font.
 		/// Also decides whether the Apply button is enabled.
 		/// </summary>
-		void CreateLazydog()
+		void CreateLazydogFont()
 		{
 			if (_id != -1) // safety.
 			{
