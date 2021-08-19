@@ -172,7 +172,12 @@ namespace yata
 			LoadChanged,
 			Diff
 		}
-		internal CellState state; // is used by YataGrid.OnPaint()
+
+		/// <summary>
+		/// <c><see cref="state"/></c> is used only for priority of brush-color
+		/// by <c><see cref="getBrush()">getBrush()</see></c>.
+		/// </summary>
+		internal CellState state;
 
 
 		internal string text; // the cell's text
@@ -244,34 +249,38 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// <c><see cref="state"/></c> is used only for priority of color by
-		/// <c><see cref="YataGrid"/>.OnPaint()</c>.
+		/// Sets <c><see cref="state"/></c> - priority of background
+		/// brush-color.
 		/// </summary>
 		void SetState()
 		{
-			if      (selected)    state = CellState.Selected;
-			else if (diff)        state = CellState.Diff;
-			else if (loadchanged) state = CellState.LoadChanged;
-			else                  state = CellState.Default;
+			if      (selected)    state = CellState.Selected;		// highest priority
+			else if (diff)        state = CellState.Diff;			// 2nd priority
+			else if (loadchanged) state = CellState.LoadChanged;	// 3rd priority
+			else                  state = CellState.Default;		// default.
 		}
 
 		/// <summary>
 		/// Gets a brush for the background color of this <c>Cell</c>.
 		/// </summary>
-		/// <param name="edit"><c>true</c> if cell is in editmode</param>
+		/// <param name="edit"><c>true</c> if cell is in edit</param>
 		/// <returns></returns>
 		/// <remarks>Check that <c><see cref="state"/></c> is not
-		/// <c><see cref="CellState.Default"></see></c> before
-		/// call.</remarks>
+		/// <c><see cref="CellState.Default">CellState.Default</see></c> before
+		/// call.
+		/// 
+		/// 
+		/// Called by
+		/// <list type="bullet">
+		/// <item><c><see cref="YataGrid"/>.OnPaint()</c></item>
+		/// <item><c><see cref="YataGrid.PaintFrozenPanel()">YataGrid.PaintFrozenPanel()</see></c></item>
+		/// </list></remarks>
 		internal Brush getBrush(bool edit = false)
 		{
 			switch (state)
 			{
-//				case CellState.Selected:
-				default:
-					if (edit)
-						return Brushes.Editor;
-
+				case CellState.Selected:
+					if (edit) return Brushes.Editor;
 					return Brushes.Selected;
 
 				case CellState.Diff:
@@ -280,6 +289,7 @@ namespace yata
 				case CellState.LoadChanged:
 					return Brushes.LoadChanged;
 			}
+			return null; // shall never happen.
 		}
 		#endregion Methods
 
