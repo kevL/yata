@@ -33,7 +33,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>Resize</c> event on this <c>YataPanelCols</c>.
+		/// Overrides the <c>Resize</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
@@ -44,7 +44,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>Paint</c> event on this <c>YataPanelCols</c>.
+		/// Overrides the <c>Paint</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -76,7 +76,7 @@ namespace yata
 		int _grabStart;
 
 		/// <summary>
-		/// Overrides the <c>MouseMove</c> event on this <c>YataPanelCols</c>.
+		/// Overrides the <c>MouseMove</c> handler on this <c>YataPanelCols</c>.
 		/// Changes cursor to a vertical splitter near the right edge of each
 		/// unfrozen colhead.
 		/// </summary>
@@ -110,7 +110,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>MouseDown</c> event on this <c>YataPanelCols</c>.
+		/// Overrides the <c>MouseDown</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -129,7 +129,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>MouseUp</c> event on this <c>YataPanelCols</c>.
+		/// Overrides the <c>MouseUp</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseUp(MouseEventArgs e)
@@ -198,7 +198,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>Paint</c> event on this <c>YataPanelRows</c>.
+		/// Overrides the <c>Paint</c> handler on this <c>YataPanelRows</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -245,7 +245,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>Paint</c> event on this <c>YataPanelFrozen</c>.
+		/// Overrides the <c>Paint</c> handler on this <c>YataPanelFrozen</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
@@ -259,7 +259,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>MouseClick</c> event on this
+		/// Overrides the <c>MouseClick</c> handler on this
 		/// <c>YataPanelFrozen</c>.
 		/// </summary>
 		/// <param name="e"></param>
