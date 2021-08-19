@@ -4511,8 +4511,8 @@ namespace yata
 					result = _ai.CompareTo(_bi);
 				}
 				else if (!_a.Contains(",") && !_b.Contains(",") // NOTE: ... how any library can convert (eg) "1,8,0,0,0" into "18000" and "0,3,10,0,0" to "31000" ...
-					&& float.TryParse(_a, out _af) // try float comparison
-					&& float.TryParse(_b, out _bf))
+					&& Single.TryParse(_a, out _af) // try float comparison
+					&& Single.TryParse(_b, out _bf))
 				{
 					result = _af.CompareTo(_bf);
 				}
