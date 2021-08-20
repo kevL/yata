@@ -222,7 +222,7 @@ namespace yata
 		internal InfoType Info
 		{ get; set; }
 
-		int _frozenCount = FreezeId; // starts out w/ id-col only.
+		int _frozenCount = FreezeId; // initialized w/ id-col only.
 		internal int FrozenCount
 		{
 			get { return _frozenCount; }
@@ -262,18 +262,18 @@ namespace yata
 						}
 					}
 				}
-				else // clear any selected cells that have become frozen ->
-				{
-					for (int r = 0; r != RowCount;     ++r)
-					for (int c = 0; c != _frozenCount; ++c)
-					{
-						if ((sel = this[r,c]).selected)
-						{
-							sel.selected = false;
-							invalid |= INVALID_GRID;
-						}
-					}
-				}
+//				else // clear any selected cells that have become frozen ->
+//				{
+//					for (int r = 0; r != RowCount;     ++r)
+//					for (int c = 0; c != _frozenCount; ++c)
+//					{
+//						if ((sel = this[r,c]).selected)
+//						{
+//							sel.selected = false;
+//							invalid |= INVALID_GRID;
+//						}
+//					}
+//				}
 
 				if ((invalid & INVALID_GRID) != 0)
 					_f.EnableCelleditOperations();
@@ -2348,7 +2348,7 @@ namespace yata
 		/// <summary>
 		/// Deletes a single or multiple rows.
 		/// </summary>
-		/// <param name="selr">the currently selected row</param>
+		/// <param name="selr">the currently selected <c><see cref="Row"/></c></param>
 		/// <remarks>Called by
 		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
 		internal void DeleteRows(int selr)
