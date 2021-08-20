@@ -19,7 +19,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (!_init && RowCount != 0)
+			if (!_init) // && RowCount != 0
 			{
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -128,7 +128,7 @@ namespace yata
 		/// <remarks>Called by <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
 		internal void LabelColheads()
 		{
-			if (ColCount != 0) // safety.
+//			if (ColCount != 0) // safety.
 			{
 				var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0,
 										 0, HeightColhead);
@@ -192,7 +192,7 @@ namespace yata
 		/// <remarks>Called by <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
 		internal void LabelRowheads()
 		{
-			if (RowCount != 0) // safety - ought be checked in calling funct.
+//			if (RowCount != 0) // safety - ought be checked in calling funct.
 			{
 				var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
 																								//       (w)-1 accounts for the double vertical line
@@ -269,13 +269,10 @@ namespace yata
 				}
 				else
 				{
-					Color color;
 					if (_sortcol == 0 && _sortdir == SORT_ASC)
-						color = Colors.FrozenHead;
+						_labelid.BackColor = Colors.FrozenHead;
 					else
-						color = Colors.LabelSorted;
-
-					_labelid.BackColor = color;
+						_labelid.BackColor = Colors.LabelSorted;
 				}
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
@@ -298,13 +295,13 @@ namespace yata
 				}
 				else if (_sortcol == 0)
 				{
-					Bitmap sort;
+					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
-						sort = Resources.asc_16px;
+						sorticon = Resources.asc_16px;
 					else
-						sort = Resources.des_16px;
+						sorticon = Resources.des_16px;
 
-					graphics.DrawImage(sort,
+					graphics.DrawImage(sorticon,
 									   rect.X               - _offsetHoriSort,
 									   rect.Y + rect.Height - _offsetVertSort);
 				}
@@ -336,18 +333,18 @@ namespace yata
 
 				if (_sortdir != SORT_NOT && _sortcol == 1)
 				{
-					Bitmap sort;
+					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color = Colors.TextColSorted_asc;
-						sort  = Resources.asc_16px;
+						color    = Colors.TextColSorted_asc;
+						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color = Colors.TextColSorted_des;
-						sort  = Resources.des_16px;
+						color    = Colors.TextColSorted_des;
+						sorticon = Resources.des_16px;
 					}
-					graphics.DrawImage(sort,
+					graphics.DrawImage(sorticon,
 									   rect.X + rect.Width  - _offsetHoriSort,
 									   rect.Y + rect.Height - _offsetVertSort);
 				}
@@ -392,19 +389,19 @@ namespace yata
 
 				if (_sortdir != SORT_NOT && _sortcol == 2)
 				{
-					Bitmap sort;
+					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color = Colors.TextColSorted_asc;
-						sort  = Resources.asc_16px;
+						color    = Colors.TextColSorted_asc;
+						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color = Colors.TextColSorted_des;
-						sort  = Resources.des_16px;
+						color    = Colors.TextColSorted_des;
+						sorticon = Resources.des_16px;
 					}
 
-					graphics.DrawImage(sort,
+					graphics.DrawImage(sorticon,
 									   rect.X + rect.Width  - _offsetHoriSort,
 									   rect.Y + rect.Height - _offsetVertSort);
 				}
@@ -430,7 +427,7 @@ namespace yata
 		/// <remarks>Called by <c><see cref="YataPanelFrozen"/>.OnPaint()</c>.</remarks>
 		internal void PaintFrozenPanel()
 		{
-			if (RowCount != 0) // safety.
+//			if (RowCount != 0) // safety.
 			{
 				int x = 0;
 				int c = 0;
@@ -444,21 +441,20 @@ namespace yata
 
 				var rect = new Rectangle(0,0, 0, HeightRow);
 
-				Row row;
+				Row row; Cell cell;
 				for (int r = offsetVert / HeightRow; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r - offsetVert) > Height)
 						break;
 
-					rect.X = _padHori - 1; // -1 is a padding tweak.
+					rect.X = _padHori - 1;
 
 					row = Rows[r];
 					for (c = 0; c != FrozenCount; ++c)
 					{
 						rect.Width = Cols[c].width();
 
-						Cell cell = row[c];
-						if (cell.state != Cell.CellState.Default)
+						if ((cell = row[c]).state != Cell.CellState.Default)
 						{
 							rect.X     -= _padHori - 1;
 							rect.Width -= 1;
