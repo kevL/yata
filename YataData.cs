@@ -302,7 +302,7 @@ namespace yata
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
-			cell._loadchanged = loadchanged; // don't set 'loadchanged' w/ the property setter.
+			cell._loadchanged = _loadchanged; // don't set 'loadchanged' w/ the property setter.
 			cell._widthtext   = _widthtext;
 
 			return cell;
