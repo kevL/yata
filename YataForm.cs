@@ -1606,34 +1606,31 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_SaveAll(object sender, EventArgs e)
 		{
-			if (AllowSaveAll())
+			IsSaveAll = true;
+
+			bool changed = false;
+			for (int i = 0; i != Tabs.TabCount; ++i)
 			{
-				IsSaveAll = true;
-
-				bool changed = false;
-				for (int i = 0; i != Tabs.TabCount; ++i)
+				_table = Tabs.TabPages[i].Tag as YataGrid;
+				if (!_table.Readonly)
 				{
-					_table = Tabs.TabPages[i].Tag as YataGrid;
-					if (!_table.Readonly)
-					{
-						_table.Watcher.Enabled = false;
+					_table.Watcher.Enabled = false;
 
-						if (_table.Changed)
-							changed = true;
+					if (_table.Changed)
+						changed = true;
 
-						_pfeT = _table.Fullpath;
-						fileclick_Save(sender, e);
+					_pfeT = _table.Fullpath;
+					fileclick_Save(sender, e);
 
-						_table.Watcher.Enabled = true;
-					}
+					_table.Watcher.Enabled = true;
 				}
-				_table = null;
-
-				if (changed)
-					SetAllTabTexts();
-
-				IsSaveAll = false;
 			}
+			_table = null;
+
+			if (changed)
+				SetAllTabTexts();
+
+			IsSaveAll = false;
 		}
 
 
