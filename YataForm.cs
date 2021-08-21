@@ -734,8 +734,9 @@ namespace yata
 		/// order to hide unsightly .NET spaz-attacks (despite double-buffering
 		/// etc).
 		/// </summary>
-		/// <param name="obscure"><c>true</c> to bring the color-panel to front
-		/// or <c>false</c> to send the color-panel to back</param>
+		/// <param name="obscure"><c>true</c> to bring
+		/// <c><see cref="panel_ColorFill"/></c> to front or <c>false</c> to
+		/// send it to back</param>
 		internal void Obfuscate(bool obscure = true)
 		{
 			if (obscure) panel_ColorFill.BringToFront();
@@ -753,12 +754,10 @@ namespace yata
 		{
 			YataGrid table;
 			for (int i = 0; i != Tabs.TabCount; ++i)
+			if ((table = Tabs.TabPages[i].Tag as YataGrid)._editor.Visible)
 			{
-				if ((table = Tabs.TabPages[i].Tag as YataGrid)._editor.Visible)
-				{
-					table._editor.Visible = false;
-					break;
-				}
+				table._editor.Visible = false;
+				break;
 			}
 		} */
 		#endregion Methods
@@ -778,8 +777,8 @@ namespace yata
 		/// <c><see cref="GropeLabels()">GropeLabels()</see></c>.</remarks>
 		void CreatePage(string pfe, bool read = false)
 		{
-			if (File.Exists(pfe)													// safety (probably).
-				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe)))	// what idjut would ... oh, wait.
+			if (File.Exists(pfe))												// safety (probably).
+//				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe))	// what idjut would ... oh, wait.
 			{
 				if (Settings._recent != 0)
 				{
