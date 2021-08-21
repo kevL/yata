@@ -1277,10 +1277,11 @@ namespace yata
 
 			if (Settings._recent != 0) // recent files ->
 			{
+				ToolStripItem it;
 				ToolStripItemCollection recents = it_Recent.DropDownItems;
-				foreach (ToolStripItem it in recents)
+				for (int i = recents.Count - 1; i != -1; --i)
 				{
-					if (!File.Exists(it.Text))
+					if (!File.Exists((it = recents[i]).Text))
 					{
 						recents.Remove(it);
 						it.Dispose();
@@ -1358,7 +1359,10 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
-			if (Table != null && File.Exists(Table.Fullpath)
+			// NOTE: This needs to check Table.Fullpath in case user presses
+			// [Ctrl+r] after deleting the 2da-file on his/her hardrive.
+
+			if (File.Exists(Table.Fullpath)
 				&& (!Table.Changed
 					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to reload ...",
 									   " warning",
