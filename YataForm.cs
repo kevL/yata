@@ -3088,44 +3088,15 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			int changed = 0;
-
-			int result;
-			for (int r = 0; r != Table.RowCount; ++r)
-			{
-				if (!Int32.TryParse(Table[r,0].text, out result)
-					|| result != r)
-				{
-					Table[r,0].text = r.ToString();
-					++changed;
-				}
-			}
-
 			string info;
 
+			int changed = order();
 			if (changed != 0)
 			{
-				Table.Changed = true;
-				Table._ur.ResetSaved(true);
+				layout();
 
-				if      (Table == _diff1) _diff1 = null;
-				else if (Table == _diff2) _diff2 = null;
-
-				Table.Colwidth(0, 0, Table.RowCount - 1);
-				Table.metricFrozenControls(0);
-
-				Table.InitScroll();
-
-				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid);
-
-				if (changed == 1)
-					info = "1 row ID corrected.";
-				else
-					info = changed + " row IDs corrected.";
+				if (changed == 1) info = "1 row ID corrected.";
+				else              info = changed + " row IDs corrected.";
 			}
 			else
 				info = "Row order is Okay - no change.";
@@ -3135,6 +3106,56 @@ namespace yata
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Information,
 							MessageBoxDefaultButton.Button1);
+		}
+
+		/// <summary>
+		/// Orders row-ids.
+		/// </summary>
+		/// <returns>the count of changed row-ids</returns>
+		int order()
+		{
+			int changed = 0;
+
+			int result;
+			for (int r = 0; r != Table.RowCount; ++r)
+			if (!Int32.TryParse(Table[r,0].text, out result)
+				|| result != r)
+			{
+				Table[r,0].text = r.ToString();
+				++changed;
+			}
+			return changed;
+		}
+
+		/// <summary>
+		/// Lays out table after rows are ordered.
+		/// </summary>
+		void layout()
+		{
+			DrawingControl.SuspendDrawing(this);
+
+
+			if (!Table.Changed)
+				 Table.Changed = true;
+
+			Table._ur.ResetSaved(true);
+
+			if      (Table == _diff1) _diff1 = null;
+			else if (Table == _diff2) _diff2 = null;
+
+			Table.Colwidth(0, 0, Table.RowCount - 1);
+			Table.metricFrozenControls(0);
+
+			Table.InitScroll();
+
+			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			if (Table.Propanel != null && Table.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			Table.Invalidator(invalid);
+
+
+			DrawingControl.ResumeDrawing(this);
 		}
 
 		/// <summary>
