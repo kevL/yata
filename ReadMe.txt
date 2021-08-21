@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 august 1
+2021 august 20
 kevL's
 ver 4.2.0.0
 
@@ -42,39 +42,49 @@ Edit
 - Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
                              Load)
 
-- Copy cell  : Ctrl+c (copies a single cell if only 1 cell is selected)
-- Paste cell : Ctrl+v (pastes a single cell if only 1 cell is selected)
+Cells
+- Cut    : Ctrl+x (cuts selected cell(s) if they are in a contiguous block)
+- Copy   : Ctrl+c (copies selected cell(s) if they are in a contiguous block)
+- Paste  : Ctrl+v (pastes copied cell(s) if only 1 cell is selected; that cell
+                   will be at the top left if pasting a block of cells; pasted
+                   cells that don't fit in the table get discarded)
+- Delete : Delete (deletes selected cell(s))
 
-- ****                       : replaces all selected cells with "****"
-- Lowercase                  : converts all selected cells to lowercase
-- Uppercase                  : converts all selected cells to uppercase
-- Apply text to selected ... : opens a dialog that replaces all selected cells
+- Lowercase : converts selected cell(s) to lowercase
+- Uppercase : converts selected cell(s) to uppercase
 
-- Copy row(s)  : Shift+Ctrl+c (copies a selected row or range of rows)
-- Paste row(s) : Shift+Ctrl+v (pastes a copied row or range of copied rows)
-
-- Create row(s) : F2 (opens a dialog that inserts 1+ rows at a given id with
-                      options to use (a) a selected row or (b) the first of any
-                      currently copied rows or (c) "****" to fill the fields)
+- Apply text ... : opens a dialog that replaces selected cell(s)
 
 
-Editcol
+Rows
+- Cut    : Shift+Ctrl+x (cuts selected row and any selected subrow(s))
+- Copy   : Shift+Ctrl+c (copies selected row and any selected subrow(s))
+- Paste  : Shift+Ctrl+v (pastes copied row(s))
+- Delete : Shift+Delete (deletes selected row and any selected subrow(s))
+
+- Create ... : F2 (opens a dialog that inserts 1+ rows with options to fill the
+                   fields. (a) selected row (b) first copied row (c) ****)
+
+
+Col
 - create head ...  : creates a col. This clears Undo/Redo, etc. The col will be
                      created at the position of a selected col, shifting the
                      table to the right; press [Esc] to deselect any selected
                      col to create a col at the far right of the table
-- delete head ...  : deletes a selected col. This clears Undo/Redo, etc.
+- delete head ...  : deletes a selected col. This clears Undo/Redo, etc. This
+                     operation is disabled if the table has only 1 colhead.
 - relabel head ... : relabels the head of a selected col
 
 - copy col  : copies the cells of a selected col
 - paste col : pastes copied cells into a selected col
 
 
-Goto box (type a row ID and press Enter)
+Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto")
 
 
-Search box (type a string to search for and press Enter or F3. Note that Enter
-            keeps the searchbox focused while F3 switches focus to the table)
+Search box (type a string to search for and press [Enter] or [F3]. Note that
+            [Enter] keeps the searchbox focused while [F3] switches focus to the
+            table
 Search options dropdown (substring or wholeword)
 
 
@@ -86,18 +96,18 @@ Clipboard
                               your clipboard contains valid 2da-row data)
 
 - Open clip editor : F11 (accesses the Windows Clipboard for viewing/editing -
-                          only clips in text format are displayed or handled)
+                          only clips in text format are available)
 
 
 2da Ops
 - Order row ids  : Ctrl+d (auto-orders the IDs of the currently displayed 2da)
 - Test row order : Ctrl+t (tests the row-order of the currently displayed 2da)
 
-- Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 - Recolor rows  : Ctrl+l (tables show with alternating row-colors. When rows are
                   inserted/deleted (or sorted) the colors go out of sync to aid
                   understanding of what just happened. The "recolor rows"
                   operation makes row-colors alternate as usual)
+- Autosize cols : Ctrl+i (recalculates the display-width of all cols)
 
 - Freeze 1st col : F5 (causes the first col after the ID-col to remain
                    stationary)
@@ -164,7 +174,7 @@ Left/Right/Up/Down arrows - selects next cell in the direction
 Shift+Left                - selects cell left by visible width
 Shift+Right               - selects cell right by visible width
 
-- w/out 1 cell selected (or more than one cell is selected)
+- w/out 1 cell selected (or more than one cell selected)
 Home                      - scrolls table all the way left
 End                       - scrolls table all the way right
 PageUp                    - scrolls table a page up
@@ -197,12 +207,12 @@ Enter - starts editing a cell if the table has focus and only one cell is
       - performs search if the Search box or Search Options dropdown has focus
       - performs goto if the Goto box has focus
 
-Delete - when a row is selected (as indicated with a green field at the far left
-         of a row) the Delete-key deletes that row. Use Shift+LMB on another
-         row, above or below the selected row, to select a range of rows to
-         delete. If all rows of a table are deleted a single default row will be
-         created.
-       - if a row is not selected, Delete clears the text of selected cells
+Delete       - clears the text of selected cells
+Shift+Delete - when a row is selected (as indicated with a green field at the
+               far left of a row) [Shift+Delete] deletes that row. Use Shift+LMB
+               on another row, above or below the selected row, to select a
+               range of rows to delete. If all rows of a table are deleted a
+               single default row will be created.
 
 Space - focuses the table and selects the first cell. If cell(s) are already
         selected the table will scroll to ensure that the first selected cell is
@@ -237,18 +247,21 @@ RMB+Shift - sorts the table by the col either ascending or descending (Note that
 
 click on the rowheads
 RMB - opens the context for single-row editing (This handles single-row editing
-      only - for multi-row editing see the Edit menu.)
+      only - for multi-row editing see the Rows menu.)
 
 click on a table-cell
 LMB       - selects a cell or if already selected then starts the cell-editor,
             or if editing a cell then a left-click on a different part of the
             table either inside or outside the grid accepts the edit
+doubleLMB - selects a cell and starts the cell-editor (If a different cell is
+            already in edit, changes to that cell are accepted.)
 LMB+Ctrl  - adds or subtracts a cell from the currently selected cells
-LMB+Shift - selects a block of cells if there is only one currently selected
-            cell
+LMB+Shift - selects a block of contiguous cells if there is only one currently
+            selected cell (A contiguous block is required for multicell cut or
+            copy operations.)
 RMB       - selects a cell and opens the cell context (Note that if editing a
             cell then a right-click on a different part of the table either
-            inside or outside the grid also cancels the edit.)
+            inside or outside the grid cancels the edit.)
 
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a
@@ -261,7 +274,8 @@ you're dealing with three items: cells, rows, and cols.
 
 OPERATIONS THAT REFORMAT LARGE TABLES (tens of thousands of Rows) TAKE TIME.
 Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
-takes ~20 seconds on my decently fast computer.
+takes ~20 seconds on my decently fast computer. Fortunately this has been
+reduced to ~4 seconds if a table has a lot of **** fields.
 
 
 Settings.Cfg file (do not use double-quotes)
@@ -397,34 +411,34 @@ edit-operations that are possible on a single row are shown on the popup.
 Edits that involve more than one row are more complicated. First you need to get
 familiar with these facts: (a) only one row can ever be currently selected (as
 indicated with a green field at the far left of that row), (b) to flag multiple
-rows for copying (or deleting w/ the Delete key) hold down Shift and click at
-the far left of another row (Control will not work for this, although such
-row(s)'s cells would appear to be selected; a row of selected cells is *not*
-necessarily/technically a selected or flagged row itself!), (c) to copy a range
-of rows (a selected row along with its flagged rows) choose "copy range" on the
-Edit menu.
+rows for cutting/copying or deleting w/ [Shift+Delete] hold down [Shift] and
+click at the far left of another row - [Control] will not work for this,
+although such row(s)'s cells would appear to be selected; a row of selected
+cells is not necessarily/technically a selected or flagged row itself! (c) to
+cut/copy/delete a range of rows (a selected row along with its flagged rows) use
+the Rows menu or its keyboard shortcuts.
 
 Currently flagged rows are indicated with a pale green field at the far left of
 their rows.
 
-Copying rows does not use the Windows Clipboard. The copy of such data is
-instead maintained internally by Yata. If you want this data on the Clipboard
-for whatever reason choose "Export copied row(s)" on the Clipboard menu. To get
-data that's on the Clipboard back into Yata's internal format choose "Import
-copied row(s)" on the Clipboard menu - but be warned that such data from the
-Clipboard is not checked and could be garbage as far as a 2da is concerned, so
-it's up to you to decide whether or not to proceed at that point. The contents
-of the Clipboard can be viewed and edited by choosing "Open clip editor" on the
-Clipboard menu.
+Cutting/copying/pasting rows does not use the Windows Clipboard. The copy of
+such data is instead maintained internally by Yata. If you want this data on the
+Clipboard for whatever reason choose "Export copied row(s)" on the Clipboard
+menu. To get data that's on the Clipboard back into Yata's internal format
+choose "Import clipboard row(s)" on the Clipboard menu - but be warned that such
+data from the Clipboard is not checked and could be garbage as far as a 2da is
+concerned, so it's up to you to decide whether or not to proceed at that point.
+The contents of the Clipboard can be viewed and edited by choosing "Open clip
+editor" on the Clipboard menu.
 
 Once a range of rows has been copied it can be pasted into a table by choosing
-"Paste row(s)" on the Edit menu. Its first row will be pasted at the currently
-selected row, pushing that row along with all following rows down such that they
-appear beneath the range that is pasted. Note that pasting rows never replaces
+"Paste" on the Rows menu. The first row will be pasted at the currently selected
+row, pushing that row along with all following rows down such that they get
+shifted beneath the range that is pasted. Note that pasting rows never replaces
 any row(s). To replace rows with a copied range of rows, use paste, re-select,
-then delete or vice versa. And to paste rows after the last row, choose "Paste
-row(s)" without having a currently selected row - pressing the Escape key will
-clear all selections of rows and cells.
+then delete or vice versa. And to paste rows after the last row, choose "Paste"
+without having a currently selected row - pressing [Esc] will clear all
+selections of rows, cols, and cells.
 
 
 Appendix D: output
@@ -432,8 +446,8 @@ Appendix D: output
 Yata outputs 2da-files as UTF-8 encoded textfiles. It uses a single space (by
 default) for the delimiter. It can however output files with aligned cols if
 "alignoutput=" is set to "true" or "tabs" in Settings.Cfg - but neither is
-recommended since tabs can break other applications while true will cause
-padding to inflate the filesize.
+recommended since tabs can break other applications while spaces will inflate
+the filesize.
 
 
 Appendix E: how to use Info paths
@@ -503,8 +517,8 @@ This is to say that the 2da-files that are part of the stock installation are
 invalid targets; the files first need to be copied out of the /Data folder to a
 different directory (ie, as unarchived/uncompressed files).
 
-If you have custom versions of those files they should be groped *after* the
-stock files.
+If you have custom versions of those files they should be groped after the stock
+files.
 
 
 Appendix F: creating a 2da-file
@@ -535,7 +549,8 @@ Note that when opening multiple files from Windows Explorer either by selecting
 and pressing Enter or with right-click and Open on the contextmenu that appears,
 the files will open in separate instances of Yata if there is not a running
 instance of Yata. If there is one or more running instances of Yata they will
-open in the earliest instance. This is a .NET/Windows Explorer/OS limitation.
+open in the earliest instance. This is a .NET/Windows Explorer/Windows OS
+limitation.
 
 IT IS HIGHLY RECOMMENDED TO OPEN ONLY ONE FILE AT A TIME FROM WINDOWS EXPLORER.
 To open multiple files from Windows Explorer reliably would require a special
@@ -561,8 +576,8 @@ and close the Property Panel.
 
 Cell-values can be edited in the Property Panel by left-clicking a value field.
 To accept an edit, press Enter or left-click on the panel; to cancel an edit,
-press Escape or right-click on the panel. Note that clicking elsewhere on the
-app causes the panel to lose focus and cancel your current edit.
+press Escape or right-click on the panel. Note that clicking elsewhere causes
+the panel to lose focus and cancel your current edit.
 
 Advanced: Note that it is possible to change the ID-value of a row in the
 Property Panel. It is recommended however to use 2da Ops->Order row ids instead
@@ -572,7 +587,7 @@ changed by unfreezing the col and editing the cell directly).
 
 A right-click on the Property Panel button will cycle the panel's docked
 location through the four corners of the page in a clockwise direction, or
-counter-clockwise if the Shift key is pressed. If the height of the panel is
+counter-clockwise if [Shift] is pressed. If the height of the panel is
 greater than the height of the page, the panel simply shifts to the left or
 right side instead.
 
@@ -604,7 +619,7 @@ popup with several operations including these four:
                 sizing cols yourself)
 
 Notes: diff1 must be selected before diff2. Diff2 can be re-selected, but
-re-selecting diff1 causes diff2 to be cleared; diff2 must be selected *after*
+re-selecting diff1 causes diff2 to be cleared; diff2 must be selected after
 diff1. Reloading or sorting a 2da causes its diff to be cleared.
 
 Select diff2 causes four noticable things to happen:
@@ -628,7 +643,7 @@ these two:
                        other table)
 
 The selected cell's position (x/y) must be present in both tables. Rows do not
-have to be the same length; any cells that overflow will be filled with "****".
+have to be the same length; any cells that overflow will be filled with ****.
 
 Merges of multiple cells or rows is not allowed. That's what Appendix M:
 WinMerge is for ...
@@ -667,13 +682,13 @@ Appendix N: Codepages
 
 UTF-8 and ASCII encoded textfiles ought be interpreted by .NET easily. But if
 text was encoded with any of the extended-ASCII (aka ANSI) charactersets then it
-becomes an issue since there is no way to rigorously determine what encoding was
-used. Yata uses a very basic detection routine - it decodes text as UTF-8 and
-searches for � - if that character is found then a dialog appears asking what
-codepage should be used to interpret the 2da's encoding. If a valid codepage is
-specified in Settings.Cfg then that codepage will appear in the dialog; if not
-then your machine's default encoding/characterset will appear in the dialog
-instead.
+can become an issue since there is no way to rigorously determine what encoding
+was used. Yata uses a very basic detection routine - it decodes text as UTF-8
+and searches for � - if that character is found then a dialog appears asking
+what codepage should be used to interpret the 2da's encoding. If a valid
+codepage is specified in Settings.Cfg then that codepage will appear in the
+dialog; if not then your machine's default encoding/characterset will appear in
+the dialog instead.
 
 In either case the desired codepage for loading a 2da file can be specified in
 that dialog.
