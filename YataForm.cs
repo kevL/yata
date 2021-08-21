@@ -2239,41 +2239,38 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
+			Cell sel = Table.getFirstSelectedCell();
 			Cell cell;
 
-			Cell sel = Table.getFirstSelectedCell();
-			if (sel != null) // safety and should be taken out
+			int invalid = -1;
+
+			_copytext = new string[_copyvert, _copyhori];
+
+			int i = -1, j;
+			for (int r = sel.y; r != sel.y + _copyvert; ++r)
 			{
-				int invalid = -1;
-
-				_copytext = new string[_copyvert, _copyhori];
-
-				int i = -1, j;
-				for (int r = sel.y; r != sel.y + _copyvert; ++r)
+				++i; j = -1;
+				for (int c = sel.x; c != sel.x + _copyhori; ++c)
 				{
-					++i; j = -1;
-					for (int c = sel.x; c != sel.x + _copyhori; ++c)
+					_copytext[i, ++j] = (cell = Table[r,c]).text;
+
+					if (cell.text != gs.Stars)
 					{
-						_copytext[i, ++j] = (cell = Table[r,c]).text;
+						Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+					}
+					else if (cell.loadchanged)
+					{
+						cell.loadchanged = false;
 
-						if (cell.text != gs.Stars)
-						{
-							Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
-							invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
-						}
-						else if (cell.loadchanged)
-						{
-							cell.loadchanged = false;
-
-							if (invalid == -1)
-								invalid = YataGrid.INVALID_GRID;
-						}
+						if (invalid == -1)
+							invalid = YataGrid.INVALID_GRID;
 					}
 				}
-
-				if (invalid == YataGrid.INVALID_GRID)
-					Table.Invalidator(invalid);
 			}
+
+			if (invalid == YataGrid.INVALID_GRID)
+				Table.Invalidator(invalid);
 		}
 
 		/// <summary>
@@ -2288,18 +2285,16 @@ namespace yata
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
 			Cell sel = Table.getFirstSelectedCell();
-			if (sel != null) // safety and should be taken out
-			{
-				_copytext = new string[_copyvert, _copyhori];
 
-				int i = -1, j;
-				for (int r = sel.y; r != sel.y + _copyvert; ++r)
+			_copytext = new string[_copyvert, _copyhori];
+
+			int i = -1, j;
+			for (int r = sel.y; r != sel.y + _copyvert; ++r)
+			{
+				++i; j = -1;
+				for (int c = sel.x; c != sel.x + _copyhori; ++c)
 				{
-					++i; j = -1;
-					for (int c = sel.x; c != sel.x + _copyhori; ++c)
-					{
-						_copytext[i, ++j] = Table[r,c].text;
-					}
+					_copytext[i, ++j] = Table[r,c].text;
 				}
 			}
 		}
@@ -2325,6 +2320,7 @@ namespace yata
 		{
 			Cell sel = Table.getSelectedCell();
 			Cell cell; string text;
+
 			int invalid = -1;
 
 			for (int i = 0; i != _copytext.GetLength(0) && i + sel.y != Table.RowCount; ++i)
@@ -2354,42 +2350,6 @@ namespace yata
 
 			EnableCelleditOperations();
 		}
-
-/*		/// <summary>
-		/// Sets the text of a given textbox.
-		/// </summary>
-		/// <param name="tb"><c><see cref="tb_Goto"/></c> or <c><see cref="tb_Search"/></c></param>
-		/// <remarks>Helper for
-		/// <c><see cref="editcellsclick_PasteCell()">editcellsclick_PasteCell()</see></c>.</remarks>
-		void SetTextboxText(ToolStripItem tb)
-		{
-			string clip = ClipAssist.GetText().Trim();
-			if (!String.IsNullOrEmpty(clip))
-			{
-				tb.Text = clip;
-			}
-			else if (_copytext.Length == 1
-				&& (tb == tb_Search || _copytext[0,0] != gs.Stars)) // do Int32.TryParse()
-			{
-				tb.Text = _copytext[0,0];
-			}
-			else
-				tb.Text = String.Empty;
-		} */
-
-/*		/// <summary>
-		/// Shows user an error if there is not a single cell or not a
-		/// contiguous block of cells selected when copying or pasting a cell.
-		/// </summary>
-		void CopyPasteCellError(string head) // TODO: make this obsolete
-		{
-			MessageBox.Show(head,
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Exclamation,
-							MessageBoxDefaultButton.Button1);
-		} */
-
 
 		/// <summary>
 		/// Pastes "****" to all selected cells.
@@ -2721,9 +2681,9 @@ namespace yata
 		{
 			int selr = Table.getSelectedRow();
 
-			using (var f = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
+			using (var rcd = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
 			{
-				if (f.ShowDialog(this) == DialogResult.OK)
+				if (rcd.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
 					DrawingControl.SuspendDrawing(Table);
@@ -2847,9 +2807,9 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			using (var f = new InputDialogColhead())
+			using (var idc = new InputDialogColhead())
 			{
-				if (f.ShowDialog(this) == DialogResult.OK
+				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0)
 				{
 					Obfuscate();
@@ -2942,9 +2902,9 @@ namespace yata
 
 			string head = Table.Fields[selc - 1];
 			InputDialogColhead._text = head;
-			using (var f = new InputDialogColhead())
+			using (var idc = new InputDialogColhead())
 			{
-				if (f.ShowDialog(this) == DialogResult.OK
+				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0
 					&& InputDialogColhead._text != head)
 				{
@@ -2961,9 +2921,9 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CopyCol(object sender, EventArgs e)
 		{
-			int selc = Table.getSelectedCol();
-
 			_copyc.Clear();
+
+			int selc = Table.getSelectedCol();
 
 			for (int r = 0; r != Table.RowCount; ++r)
 				_copyc.Add(Table[r, selc].text);
@@ -2977,8 +2937,6 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_PasteCol(object sender, EventArgs e)
 		{
-			int selc = Table.getSelectedCol();
-
 			string warn = String.Empty;
 			if (Table.RowCount < _copyc.Count)
 			{
@@ -3002,6 +2960,7 @@ namespace yata
 				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
+				int selc = Table.getSelectedCol();
 				Table.PasteCol(selc, _copyc);
 
 				DrawingControl.ResumeDrawing(Table);
