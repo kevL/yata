@@ -1566,13 +1566,9 @@ namespace yata
 		{
 			int result;
 			for (int r = 0; r != Table.RowCount; ++r)
-			{
-				if (!Int32.TryParse(Table[r,0].text, out result)
-					|| result != r)
-				{
-					return false;
-				}
-			}
+			if (!Int32.TryParse(Table[r,0].text, out result) || result != r)
+				return false;
+
 			return true;
 		}
 
