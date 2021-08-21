@@ -43,8 +43,6 @@ namespace yata
 
 		internal static string PfeLoad; // cl arg
 
-		internal static bool IsSaveAll;
-
 		static Graphics graphics;
 		#endregion Fields (static)
 
@@ -197,6 +195,9 @@ namespace yata
 
 		FontF _fontF
 		{ get; set; }
+
+		internal bool IsSaveAll
+		{ get; private set; }
 		#endregion Properties
 
 
@@ -739,21 +740,6 @@ namespace yata
 		{
 			if (obscure) panel_ColorFill.BringToFront();
 			else         panel_ColorFill.SendToBack();
-		}
-
-		/// <summary>
-		/// Checks if there is a non-readonly table open and optionally calls
-		/// all tables' <c>Leave</c> event handler.
-		/// </summary>
-		/// <returns><c>true</c> if SaveAll is allowed</returns>
-		bool AllowSaveAll()
-		{
-			for (int i = 0; i != Tabs.TabCount; ++i)
-			{
-				if (!(Tabs.TabPages[i].Tag as YataGrid).Readonly)
-					return true;
-			}
-			return false;
 		}
 
 /*		/// <summary>
@@ -1583,36 +1569,28 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
-			if (Table != null)
+			using (var sfd = new SaveFileDialog())
 			{
-				using (var sfd = new SaveFileDialog())
+				sfd.Title    = "Save as ...";
+				sfd.Filter   = Get2daFilter();
+				sfd.FileName = Path.GetFileName(Table.Fullpath);
+
+				if (Directory.Exists(_lastSaveasDirectory))
+					sfd.InitialDirectory = _lastSaveasDirectory;
+				else
 				{
-					sfd.Title    = "Save as ...";
-					sfd.Filter   = Get2daFilter();
-					sfd.FileName = Path.GetFileName(Table.Fullpath);
-
-					if (Directory.Exists(_lastSaveasDirectory))
-					{
-						sfd.InitialDirectory = _lastSaveasDirectory;
-					}
-					else
-					{
-						string dir = Path.GetDirectoryName(Table.Fullpath);
-						if (Directory.Exists(dir))
-						{
-							sfd.InitialDirectory = dir;
-						}
-					}
-					// else default InitialDirectory.
+					string dir = Path.GetDirectoryName(Table.Fullpath);
+					if (Directory.Exists(dir))
+						sfd.InitialDirectory = dir;
+				}
 
 
-					if (sfd.ShowDialog() == DialogResult.OK)
-					{
-						_lastSaveasDirectory = Path.GetDirectoryName(sfd.FileName);
+				if (sfd.ShowDialog() == DialogResult.OK)
+				{
+					_lastSaveasDirectory = Path.GetDirectoryName(sfd.FileName);
 
-						_pfeT = sfd.FileName;
-						fileclick_Save(sender, e);
-					}
+					_pfeT = sfd.FileName;
+					fileclick_Save(sender, e);
 				}
 			}
 		}
@@ -1733,6 +1711,22 @@ namespace yata
 			Close(); // let yata_Closing() handle it ...
 		}
 		#endregion Events (file)
+
+
+		#region Methods (file)
+		/// <summary>
+		/// Checks if there is a non-readonly table open.
+		/// </summary>
+		/// <returns><c>true</c> if SaveAll is allowed</returns>
+		bool AllowSaveAll()
+		{
+			for (int i = 0; i != Tabs.TabCount; ++i)
+			if (!(Tabs.TabPages[i].Tag as YataGrid).Readonly)
+				return true;
+
+			return false;
+		}
+		#endregion Methods (file)
 
 
 		#region Events (edit)
