@@ -90,6 +90,12 @@ namespace yata
 		internal int _startCr, _lengthCr;
 		internal CrFillType _fillCr;
 
+		/// <summary>
+		/// The <c><see cref="FontF"/></c> dialog/FontPicker.
+		/// </summary>
+		FontF _fontF;
+
+		Font FontDefault;
 		internal Font FontAccent;
 
 		internal bool _isEnterkeyedSearch;
@@ -189,12 +195,6 @@ namespace yata
 		readonly YataTabs tabControl = new YataTabs();
 		internal YataTabs Tabs
 		{ get { return tabControl; } }
-
-		Font FontDefault
-		{ get; set; }
-
-		FontF _fontF
-		{ get; set; }
 
 		internal bool IsSaveAll
 		{ get; private set; }
