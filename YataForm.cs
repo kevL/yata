@@ -1640,7 +1640,7 @@ namespace yata
 					_table = Tabs.TabPages[i].Tag as YataGrid;
 					if (!_table.Readonly)
 					{
-						_table.Watcher.Enabled = false; // TODO. wut
+						_table.Watcher.Enabled = false;
 
 						if (_table.Changed)
 							changed = true;
@@ -1749,12 +1749,9 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Undo(object sender, EventArgs e)
 		{
-//			if (Table != null)
-			{
-				Table._ur.Undo();
-				it_Undo.Enabled = Table._ur.CanUndo;
-				it_Redo.Enabled = true;
-			}
+			Table._ur.Undo();
+			it_Undo.Enabled = Table._ur.CanUndo;
+			it_Redo.Enabled = true;
 		}
 
 		/// <summary>
@@ -1768,12 +1765,9 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Redo(object sender, EventArgs e)
 		{
-//			if (Table != null)
-			{
-				Table._ur.Redo();
-				it_Redo.Enabled = Table._ur.CanRedo;
-				it_Undo.Enabled = true;
-			}
+			Table._ur.Redo();
+			it_Redo.Enabled = Table._ur.CanRedo;
+			it_Undo.Enabled = true;
 		}
 
 
@@ -1849,11 +1843,8 @@ namespace yata
 		/// </list></remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-//			if (Table != null)
-			{
-				Table.Select();
-				Search();
-			}
+			Table.Select();
+			Search();
 		}
 
 		/// <summary>
@@ -2098,7 +2089,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if (Table.anyLoadchanged() // Table != null && 
+			if (Table.anyLoadchanged()
 				&& (ModifierKeys & Keys.Alt) == 0)
 			{
 				if (Table._editor.Visible)
@@ -2261,53 +2252,40 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
-//			if (Table != null) // safety and should be taken out
+			Cell cell;
+
+			Cell sel = Table.getFirstSelectedCell();
+			if (sel != null) // safety and should be taken out
 			{
-//				if (!Table.Readonly) // safety and should be taken out
+				int invalid = -1;
+
+				_copytext = new string[_copyvert, _copyhori];
+
+				int i = -1, j;
+				for (int r = sel.y; r != sel.y + _copyvert; ++r)
 				{
-//					if (Table.areSelectedCellsContiguous()) // safety and should be taken out
+					++i; j = -1;
+					for (int c = sel.x; c != sel.x + _copyhori; ++c)
 					{
-						Cell cell;
+						_copytext[i, ++j] = (cell = Table[r,c]).text;
 
-						Cell sel = Table.getFirstSelectedCell();
-						if (sel != null) // safety and should be taken out
+						if (cell.text != gs.Stars)
 						{
-							int invalid = -1;
+							Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
+							invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+						}
+						else if (cell.loadchanged)
+						{
+							cell.loadchanged = false;
 
-							_copytext = new string[_copyvert, _copyhori];
-
-							int i = -1, j;
-							for (int r = sel.y; r != sel.y + _copyvert; ++r)
-							{
-								++i; j = -1;
-								for (int c = sel.x; c != sel.x + _copyhori; ++c)
-								{
-									_copytext[i, ++j] = (cell = Table[r,c]).text;
-
-									if (cell.text != gs.Stars)
-									{
-										Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
-										invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
-									}
-									else if (cell.loadchanged)
-									{
-										cell.loadchanged = false;
-
-										if (invalid == -1)
-											invalid = YataGrid.INVALID_GRID;
-									}
-								}
-							}
-
-							if (invalid == YataGrid.INVALID_GRID)
-								Table.Invalidator(invalid);
+							if (invalid == -1)
+								invalid = YataGrid.INVALID_GRID;
 						}
 					}
-//					else
-//						CopyPasteCellError("Select one cell or a contiguous block of cells.");
 				}
-//				else
-//					ReadonlyError();
+
+				if (invalid == YataGrid.INVALID_GRID)
+					Table.Invalidator(invalid);
 			}
 		}
 
@@ -2322,28 +2300,20 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_CopyCell(object sender, EventArgs e)
 		{
-//			if (Table != null) // safety and should be taken out
+			Cell sel = Table.getFirstSelectedCell();
+			if (sel != null) // safety and should be taken out
 			{
-//				if (Table.areSelectedCellsContiguous()) // safety and should be taken out
-				{
-					Cell sel = Table.getFirstSelectedCell();
-					if (sel != null) // safety and should be taken out
-					{
-						_copytext = new string[_copyvert, _copyhori];
+				_copytext = new string[_copyvert, _copyhori];
 
-						int i = -1, j;
-						for (int r = sel.y; r != sel.y + _copyvert; ++r)
-						{
-							++i; j = -1;
-							for (int c = sel.x; c != sel.x + _copyhori; ++c)
-							{
-								_copytext[i, ++j] = Table[r,c].text;
-							}
-						}
+				int i = -1, j;
+				for (int r = sel.y; r != sel.y + _copyvert; ++r)
+				{
+					++i; j = -1;
+					for (int c = sel.x; c != sel.x + _copyhori; ++c)
+					{
+						_copytext[i, ++j] = Table[r,c].text;
 					}
 				}
-//				else
-//					CopyPasteCellError("Select one cell or a contiguous block of cells.");
 			}
 		}
 
@@ -2366,58 +2336,36 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
-//			if (tb_Goto.Focused)
-//			{
-//				SetTextboxText(tb_Goto);
-//			}
-//			else if (tb_Search.Focused)
-//			{
-//				SetTextboxText(tb_Search);
-//			}
-//			else
-//			if (Table != null) // safety and should be taken out
+			Cell sel = Table.getSelectedCell();
+			Cell cell; string text;
+			int invalid = -1;
+
+			for (int i = 0; i != _copytext.GetLength(0) && i + sel.y != Table.RowCount; ++i)
+			for (int j = 0; j != _copytext.GetLength(1) && j + sel.x != Table.ColCount; ++j)
 			{
-//				if (!Table.Readonly) // safety and should be taken out
+				cell = Table[i + sel.y,
+							 j + sel.x];
+
+				cell.selected = true;
+
+				if ((text = _copytext[i,j]) != cell.text)
 				{
-					Cell sel = Table.getSelectedCell();
-//					if (sel != null) // safety and should be taken out
-					{
-						Cell cell; string text;
-						int invalid = -1;
-
-						for (int i = 0; i != _copytext.GetLength(0) && i + sel.y != Table.RowCount; ++i)
-						for (int j = 0; j != _copytext.GetLength(1) && j + sel.x != Table.ColCount; ++j)
-						{
-							cell = Table[i + sel.y,
-										 j + sel.x];
-
-							cell.selected = true;
-
-							if ((text = _copytext[i,j]) != cell.text)
-							{
-								Table.ChangeCellText(cell, text);	// does not do a text-check
-								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
-							}
-							else if (cell.loadchanged)
-							{
-								cell.loadchanged = false;
-
-								if (invalid == -1)
-									invalid = YataGrid.INVALID_GRID;
-							}
-						}
-
-						if (invalid == YataGrid.INVALID_GRID)
-							Table.Invalidator(invalid);
-
-						EnableCelleditOperations();
-					}
-//					else
-//						CopyPasteCellError("Select one cell.");
+					Table.ChangeCellText(cell, text);	// does not do a text-check
+					invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 				}
-//				else
-//					ReadonlyError();
+				else if (cell.loadchanged)
+				{
+					cell.loadchanged = false;
+
+					if (invalid == -1)
+						invalid = YataGrid.INVALID_GRID;
+				}
 			}
+
+			if (invalid == YataGrid.INVALID_GRID)
+				Table.Invalidator(invalid);
+
+			EnableCelleditOperations();
 		}
 
 /*		/// <summary>
@@ -2467,39 +2415,31 @@ namespace yata
 		/// </list></remarks>
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
-//			if (Table != null) // safety and should be taken out
+			Cell sel;
+			int invalid = -1;
+
+			foreach (var row in Table.Rows)
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-//				if (!Table.Readonly) // safety and should be taken out
+				if ((sel = row[c]).selected)
 				{
-					Cell sel;
-					int invalid = -1;
-
-					foreach (var row in Table.Rows)
-					for (int c = 0; c != Table.ColCount; ++c)
+					if (sel.text != gs.Stars)
 					{
-						if ((sel = row[c]).selected)
-						{
-							if (sel.text != gs.Stars)
-							{
-								Table.ChangeCellText(sel, gs.Stars);	// does not do a text-check
-								invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
-							}
-							else if (sel.loadchanged)
-							{
-								sel.loadchanged = false;
-
-								if (invalid == -1)
-									invalid = YataGrid.INVALID_GRID;
-							}
-						}
+						Table.ChangeCellText(sel, gs.Stars);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
 					}
+					else if (sel.loadchanged)
+					{
+						sel.loadchanged = false;
 
-					if (invalid == YataGrid.INVALID_GRID)
-						Table.Invalidator(invalid);
+						if (invalid == -1)
+							invalid = YataGrid.INVALID_GRID;
+					}
 				}
-//				else
-//					ReadonlyError();
 			}
+
+			if (invalid == YataGrid.INVALID_GRID)
+				Table.Invalidator(invalid);
 		}
 
 		/// <summary>
@@ -2657,13 +2597,8 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CutRange(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly) // safety and should be taken out
-			{
-				editrowsclick_CopyRange(  sender, e);
-				editrowsclick_DeleteRange(sender, e);
-			}
-//			else
-//				ReadonlyError();
+			editrowsclick_CopyRange(  sender, e);
+			editrowsclick_DeleteRange(sender, e);
 		}
 
 		/// <summary>
@@ -2727,46 +2662,41 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly) // safety and should be taken out
+			Obfuscate();
+			DrawingControl.SuspendDrawing(Table);
+
+
+			Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
+
+			int selr = Table.getSelectedRow();
+			if (selr == -1)
+				selr = Table.RowCount;
+
+			int r = selr;
+			for (int i = 0; i != _copyr.Count; ++i, ++r)
 			{
-				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
-
-
-				Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
-
-				int selr = Table.getSelectedRow();
-				if (selr == -1)
-					selr = Table.RowCount;
-
-				int r = selr;
-				for (int i = 0; i != _copyr.Count; ++i, ++r)
-				{
-					Table.Insert(r, _copyr[i], false);
-					rest.array[i] = Table.Rows[r].Clone() as Row;
-				}
-
-				Table.Calibrate(selr, _copyr.Count - 1); // paste range
-
-				Table.ClearSelects(false, true);
-				Table.Rows[selr].selected = true;
-				Table.RangeSelect = _copyr.Count - 1;
-				Table.EnsureDisplayedRow(selr);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
-
-
-				Obfuscate(false);
-				DrawingControl.ResumeDrawing(Table);
+				Table.Insert(r, _copyr[i], false);
+				rest.array[i] = Table.Rows[r].Clone() as Row;
 			}
-//			else
-//				ReadonlyError();
+
+			Table.Calibrate(selr, _copyr.Count - 1); // paste range
+
+			Table.ClearSelects(false, true);
+			Table.Rows[selr].selected = true;
+			Table.RangeSelect = _copyr.Count - 1;
+			Table.EnsureDisplayedRow(selr);
+
+
+			if (!Table.Changed)
+			{
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			Table._ur.Push(rest);
+
+
+			Obfuscate(false);
+			DrawingControl.ResumeDrawing(Table);
 		}
 
 		/// <summary>
@@ -2786,14 +2716,9 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly) // safety and should be taken out
-			{
-				int selr = Table.getSelectedRow();
-				if (selr != -1)
-					Table.DeleteRows(selr);
-			}
-//			else
-//				ReadonlyError();
+			int selr = Table.getSelectedRow();
+			if (selr != -1)
+				Table.DeleteRows(selr);
 		}
 
 
@@ -2809,78 +2734,70 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
-//			if (Table != null) // safety and should be taken out
+			int selr = Table.getSelectedRow();
+
+			using (var f = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
 			{
-//				if (!Table.Readonly) // safety and should be taken out
+				if (f.ShowDialog(this) == DialogResult.OK)
 				{
-					int selr = Table.getSelectedRow();
+					Obfuscate();
+					DrawingControl.SuspendDrawing(Table);
 
-					using (var f = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
+
+					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
+
+					var cells = new string[Table.ColCount];
+					switch (_fillCr)
 					{
-						if (f.ShowDialog(this) == DialogResult.OK)
-						{
-							Obfuscate();
-							DrawingControl.SuspendDrawing(Table);
+						case CrFillType.Stars:
+							for (int i = 0; i != Table.ColCount; ++i)
+								cells[i] = gs.Stars;
+							break;
 
+						case CrFillType.Selected:
+							for (int i = 0; i != Table.ColCount; ++i)
+								cells[i] = Table[selr, i].text;
+							break;
 
-							Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
-
-							var cells = new string[Table.ColCount];
-							switch (_fillCr)
+						case CrFillType.Copied:
+							for (int i = 0; i != Table.ColCount; ++i)
 							{
-								case CrFillType.Stars:
-									for (int i = 0; i != Table.ColCount; ++i)
-										cells[i] = gs.Stars;
-									break;
-
-								case CrFillType.Selected:
-									for (int i = 0; i != Table.ColCount; ++i)
-										cells[i] = Table[selr, i].text;
-									break;
-
-								case CrFillType.Copied:
-									for (int i = 0; i != Table.ColCount; ++i)
-									{
-										if (i < _copyr[0].Length)
-											cells[i] = _copyr[0][i];
-										else
-											cells[i] = gs.Stars;
-									}
-									break;
+								if (i < _copyr[0].Length)
+									cells[i] = _copyr[0][i];
+								else
+									cells[i] = gs.Stars;
 							}
-
-							int r = _startCr;
-							for (int i = 0; i != _lengthCr; ++i, ++r)
-							{
-								cells[0] = r.ToString();
-
-								Table.Insert(r, cells, false);
-								rest.array[i] = Table.Rows[r].Clone() as Row;
-							}
-
-							Table.Calibrate(_startCr, _lengthCr - 1); // insert range
-
-							Table.ClearSelects(false, true);
-							Table.Rows[_startCr].selected = true;
-							Table.RangeSelect = _lengthCr - 1;
-							Table.EnsureDisplayedRow(_startCr);
-
-
-							if (!Table.Changed)
-							{
-								Table.Changed = true;
-								rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-							}
-							Table._ur.Push(rest);
-
-
-							Obfuscate(false);
-							DrawingControl.ResumeDrawing(Table);
-						}
+							break;
 					}
+
+					int r = _startCr;
+					for (int i = 0; i != _lengthCr; ++i, ++r)
+					{
+						cells[0] = r.ToString();
+
+						Table.Insert(r, cells, false);
+						rest.array[i] = Table.Rows[r].Clone() as Row;
+					}
+
+					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+
+					Table.ClearSelects(false, true);
+					Table.Rows[_startCr].selected = true;
+					Table.RangeSelect = _lengthCr - 1;
+					Table.EnsureDisplayedRow(_startCr);
+
+
+					if (!Table.Changed)
+					{
+						Table.Changed = true;
+						rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+					}
+					Table._ur.Push(rest);
+
+
+					Obfuscate(false);
+					DrawingControl.ResumeDrawing(Table);
 				}
-//				else
-//					ReadonlyError();
 			}
 		}
 		#endregion Events (editrows)
@@ -3600,23 +3517,20 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_ClearUr(object sender, EventArgs e)
 		{
-//			if (Table != null)
-			{
-				Table._ur.Clear();
+			Table._ur.Clear();
 
-				// force GC
-				long bytes = GC.GetTotalMemory(false);
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
+			// force GC
+			long bytes = GC.GetTotalMemory(false);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 
-				bytes -= GC.GetTotalMemory(true);
+			bytes -= GC.GetTotalMemory(true);
 
-				MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1);
-			}
+			MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
+							" burp",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Information,
+							MessageBoxDefaultButton.Button1);
 		}
 		#endregion Events (2daOps)
 
@@ -3661,7 +3575,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens the FontPicker form.
+		/// Opens the FontPicker dialog - <c><see cref="FontF"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Font"/></c></param>
 		/// <param name="e"></param>
@@ -3714,12 +3628,9 @@ namespace yata
 
 		#region Methods (font)
 		/// <summary>
-		/// Dechecks the "Font ... be patient" menuitem and re-enables the "Load
-		/// default font" menuitem when the <c><see cref="FontF"/></c> dialog
-		/// closes.
+		/// Dechecks the "Font ... be patient" it when the
+		/// <c><see cref="FontF"/></c> dialog closes.
 		/// </summary>
-		/// <remarks>The latter item is disabled while the <c>FontF</c> dialog
-		/// is open.</remarks>
 		internal void FontF_closing()
 		{
 			it_Font.Checked = false;
@@ -3895,13 +3806,8 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Cut(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
-			{
-				rowclick_Copy(  null, EventArgs.Empty);
-				rowclick_Delete(null, EventArgs.Empty);
-			}
-//			else
-//				ReadonlyError();
+			rowclick_Copy(  null, EventArgs.Empty);
+			rowclick_Delete(null, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -3932,21 +3838,16 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteAbove(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			Table.Insert(_r, _copyr[0]);
+
+
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
+			if (!Table.Changed)
 			{
-				Table.Insert(_r, _copyr[0]);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-//			else
-//				ReadonlyError();
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -3956,44 +3857,39 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Paste(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			// - store the row's current state to 'rPre' in the Restorable
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
+			Row row = Table.Rows[_r];
+			string field;
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				// - store the row's current state to 'rPre' in the Restorable
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+				if (c < _copyr[0].Length)
+					field = _copyr[0][c];
+				else
+					field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
 
-
-				Row row = Table.Rows[_r];
-				string field;
-				for (int c = 0; c != Table.ColCount; ++c)
-				{
-					if (c < _copyr[0].Length)
-						field = _copyr[0][c];
-					else
-						field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
-
-					row[c].text = field;
-					row[c].diff =
-					row[c].loadchanged = false;
-				}
-				row._brush = Brushes.Created;
-
-				Table.Calibrate(_r);
-
-				Table.Invalidator(YataGrid.INVALID_GRID);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-
-				// - store the row's changed state to 'rPos' in the Restorable
-				rest.rPos = Table.Rows[_r].Clone() as Row;
-				Table._ur.Push(rest);
+				row[c].text = field;
+				row[c].diff =
+				row[c].loadchanged = false;
 			}
-//			else
-//				ReadonlyError();
+			row._brush = Brushes.Created;
+
+			Table.Calibrate(_r);
+
+			Table.Invalidator(YataGrid.INVALID_GRID);
+
+
+			if (!Table.Changed)
+			{
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+
+			// - store the row's changed state to 'rPos' in the Restorable
+			rest.rPos = Table.Rows[_r].Clone() as Row;
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -4003,21 +3899,16 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteBelow(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			Table.Insert(_r + 1, _copyr[0]);
+
+
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
+			if (!Table.Changed)
 			{
-				Table.Insert(_r + 1, _copyr[0]);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-//			else
-//				ReadonlyError();
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -4027,26 +3918,21 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_CreateAbove(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			var fields = new string[Table.ColCount];
+//			fields[0] = _r.ToString();
+			for (int c = 0; c != Table.ColCount; ++c)
+				fields[c] = gs.Stars;
+
+			Table.Insert(_r, fields);
+
+
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
+			if (!Table.Changed)
 			{
-				var fields = new string[Table.ColCount];
-//				fields[0] = _r.ToString();
-				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = gs.Stars;
-
-				Table.Insert(_r, fields);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-//			else
-//				ReadonlyError();
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -4056,37 +3942,32 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Clear(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			// - store the row's current state to 'rPre' in the Restorable
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
+
+
+			for (int c = 0; c != Table.ColCount; ++c)
 			{
-				// - store the row's current state to 'rPre' in the Restorable
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
-
-
-				for (int c = 0; c != Table.ColCount; ++c)
-				{
-					Table[_r,c].text = gs.Stars;
-					Table[_r,c].diff =
-					Table[_r,c].loadchanged = false;
-				}
-				Table.Rows[_r]._brush = Brushes.Created;
-
-				Table.Calibrate(_r);
-
-				Table.Invalidator(YataGrid.INVALID_GRID);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-
-				// - store the row's changed state to 'rPos' in the Restorable
-				rest.rPos = Table.Rows[_r].Clone() as Row;
-				Table._ur.Push(rest);
+				Table[_r,c].text = gs.Stars;
+				Table[_r,c].diff =
+				Table[_r,c].loadchanged = false;
 			}
-//			else
-//				ReadonlyError();
+			Table.Rows[_r]._brush = Brushes.Created;
+
+			Table.Calibrate(_r);
+
+			Table.Invalidator(YataGrid.INVALID_GRID);
+
+
+			if (!Table.Changed)
+			{
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+
+			// - store the row's changed state to 'rPos' in the Restorable
+			rest.rPos = Table.Rows[_r].Clone() as Row;
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -4096,26 +3977,21 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_CreateBelow(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			var fields = new string[Table.ColCount];
+//			fields[0] = (_r + 1).ToString();
+			for (int c = 0; c != Table.ColCount; ++c)
+				fields[c] = gs.Stars;
+
+			Table.Insert(_r + 1, fields);
+
+
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
+			if (!Table.Changed)
 			{
-				var fields = new string[Table.ColCount];
-//				fields[0] = (_r + 1).ToString();
-				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = gs.Stars;
-
-				Table.Insert(_r + 1, fields);
-
-
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-//			else
-//				ReadonlyError();
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -4125,23 +4001,18 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Delete(object sender, EventArgs e)
 		{
-//			if (!Table.Readonly)
+			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
+
+
+			Table.Insert(_r);
+
+
+			if (!Table.Changed)
 			{
-				Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
-
-
-				Table.Insert(_r);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
-//			else
-//				ReadonlyError();
+			Table._ur.Push(rest);
 		}
 		#endregion Events (row)
 
@@ -5316,9 +5187,10 @@ namespace yata
 		#region Methods (statusbar)
 		/// <summary>
 		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
-		/// a relevant 2da (eg. Crafting, Spells, Feat) is loaded.
+		/// a relevant 2da (ie. Crafting, Spells, Feat) is loaded.
 		/// </summary>
-		/// <param name="cords">null to clear statusbar-cords and -pathinfo</param>
+		/// <param name="cords"><c>null</c> to clear statusbar-cords and
+		/// -pathinfo</param>
 		internal void PrintInfo(Point? cords = null)
 		{
 			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
