@@ -2347,64 +2347,6 @@ namespace yata
 			return null;
 		}
 
-		/// <summary>
-		/// Deletes a single or multiple rows.
-		/// </summary>
-		/// <param name="selr">the currently selected <c><see cref="Row"/></c></param>
-		/// <remarks>Called by
-		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
-		internal void DeleteRows(int selr)
-		{
-			_f.Obfuscate();
-			DrawingControl.SuspendDrawing(this);
-
-
-			int range = Math.Abs(RangeSelect);
-			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
-
-			int rFirst, rLast;
-			if (RangeSelect > 0)
-			{
-				rFirst = selr;
-				rLast  = selr + RangeSelect;
-			}
-			else
-			{
-				rFirst = selr + RangeSelect;
-				rLast  = selr;
-			}
-
-			while (rLast >= rFirst) // reverse delete.
-			{
-				rest.array[range--] = Rows[rLast].Clone() as Row;
-				Insert(rLast, null, false);
-
-				--rLast;
-			}
-
-			if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
-				rLast = 0;
-			else
-				rLast = -1; // calibrate all extant rows.
-
-			Calibrate(rLast); // delete key
-
-			if (selr < RowCount)
-				EnsureDisplayedRow(selr);
-
-
-			if (!Changed)
-			{
-				Changed = true;
-				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-			}
-			_ur.Push(rest);
-
-
-			_f.Obfuscate(false);
-			DrawingControl.ResumeDrawing(this);
-		}
-
 
 		/// <summary>
 		/// Handles <c>KeyDown</c> events for the <c><see cref="_editor"/></c>.
@@ -4308,6 +4250,64 @@ namespace yata
 
 				DrawingControl.ResumeDrawing(this);
 			}
+		}
+
+		/// <summary>
+		/// Deletes a single or multiple rows.
+		/// </summary>
+		/// <param name="selr">the currently selected row-id</param>
+		/// <remarks>Called by
+		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
+		internal void DeleteRows(int selr)
+		{
+			_f.Obfuscate();
+			DrawingControl.SuspendDrawing(this);
+
+
+			int range = Math.Abs(RangeSelect);
+			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
+
+			int rFirst, rLast;
+			if (RangeSelect > 0)
+			{
+				rFirst = selr;
+				rLast  = selr + RangeSelect;
+			}
+			else
+			{
+				rFirst = selr + RangeSelect;
+				rLast  = selr;
+			}
+
+			while (rLast >= rFirst) // reverse delete.
+			{
+				rest.array[range--] = Rows[rLast].Clone() as Row;
+				Insert(rLast, null, false);
+
+				--rLast;
+			}
+
+			if (RowCount == 1 && rLast == -1) // ie. if grid was blanked -> ID #0 was auto-inserted.
+				rLast = 0;
+			else
+				rLast = -1; // calibrate all extant rows.
+
+			Calibrate(rLast); // delete key
+
+			if (selr < RowCount)
+				EnsureDisplayedRow(selr);
+
+
+			if (!Changed)
+			{
+				Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			_ur.Push(rest);
+
+
+			_f.Obfuscate(false);
+			DrawingControl.ResumeDrawing(this);
 		}
 
 
