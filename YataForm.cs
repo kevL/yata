@@ -1387,8 +1387,8 @@ namespace yata
 
 				if (Table != null)
 				{
-					Obfuscate(false);
 					DrawingControl.ResumeDrawing(Table);
+					Obfuscate(false);
 
 					Table.Watcher.BypassFileChanged = true;
 				}
@@ -2683,8 +2683,8 @@ namespace yata
 			Table._ur.Push(rest);
 
 
-			Obfuscate(false);
 			DrawingControl.ResumeDrawing(Table);
+			Obfuscate(false);
 		}
 
 		/// <summary>
@@ -2704,8 +2704,7 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
-			int selr = Table.getSelectedRow();
-			Table.DeleteRows(selr);
+			Table.DeleteRows();
 		}
 
 
@@ -2782,8 +2781,8 @@ namespace yata
 					Table._ur.Push(rest);
 
 
-					Obfuscate(false);
 					DrawingControl.ResumeDrawing(Table);
+					Obfuscate(false);
 				}
 			}
 		}

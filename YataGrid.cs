@@ -4278,14 +4278,15 @@ namespace yata
 		/// <summary>
 		/// Deletes a single or multiple rows.
 		/// </summary>
-		/// <param name="selr">the currently selected row-id</param>
 		/// <remarks>Called by
 		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
-		internal void DeleteRows(int selr)
+		internal void DeleteRows()
 		{
 			_f.Obfuscate();
 			DrawingControl.SuspendDrawing(this);
 
+
+			int selr = getSelectedRow();
 
 			int range = Math.Abs(RangeSelect);
 			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
@@ -4329,8 +4330,8 @@ namespace yata
 			_ur.Push(rest);
 
 
-			_f.Obfuscate(false);
 			DrawingControl.ResumeDrawing(this);
+			_f.Obfuscate(false);
 		}
 
 

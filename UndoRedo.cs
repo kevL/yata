@@ -662,8 +662,8 @@ namespace yata
 			// NOTE: Does not select the row's cells.
 
 
-			_grid._f.Obfuscate(false);
 			DrawingControl.ResumeDrawing(_grid);
+			_grid._f.Obfuscate(false);
 		}
 
 		/// <summary>
@@ -691,8 +691,8 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			_grid._f.Obfuscate(false);
 			DrawingControl.ResumeDrawing(_grid);
+			_grid._f.Obfuscate(false);
 		}
 		#endregion Methods (actions)
 
