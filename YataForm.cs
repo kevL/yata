@@ -3794,8 +3794,8 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Cut(object sender, EventArgs e)
 		{
-			rowclick_Copy(  null, EventArgs.Empty);
-			rowclick_Delete(null, EventArgs.Empty);
+			rowclick_Copy(  sender, e);
+			rowclick_Delete(sender, e);
 		}
 
 		/// <summary>
@@ -3803,7 +3803,11 @@ namespace yata
 		/// <c><see cref="it_PasteRange"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="rowit_Copy"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="rowit_Copy"/></c></item>
+		/// <item><c><see cref="rowit_Cut"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void rowclick_Copy(object sender, EventArgs e)
 		{
@@ -3985,7 +3989,11 @@ namespace yata
 		/// <summary>
 		/// Handles context-click to delete the current row.
 		/// </summary>
-		/// <param name="sender"><c><see cref="rowit_Delete"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="rowit_Delete"/></c></item>
+		/// <item><c><see cref="rowit_Cut"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void rowclick_Delete(object sender, EventArgs e)
 		{
