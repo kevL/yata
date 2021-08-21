@@ -1249,13 +1249,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Re-layouts the table when Font changes or on Autosize cols or when
-		/// row(s) are inserted/deleted.
+		/// Lays out this <c>YataGrid</c> per
+		/// <c><see cref="YataForm.doFont()">YataForm.doFont()</see></c> or
+		/// <c><see cref="YataForm"/>.AutosizeCols()</c> or when row(s) are
+		/// inserted, deleted, or cleared.
 		/// </summary>
-		/// <param name="r">first row to consider as changed (default <c>-1</c>
-		/// if deleting rows)</param>
-		/// <param name="range">range of rows to consider as changed (default
-		/// <c>0</c> for single row)</param>
+		/// <param name="r">first row to consider as changed (<c>-1</c> if
+		/// deleting rows)</param>
+		/// <param name="range">range of rows to consider as changed (<c>0</c>
+		/// for single row)</param>
 		internal void Calibrate(int r = -1, int range = 0)
 		{
 			_init = true;
