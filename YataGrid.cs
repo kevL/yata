@@ -3369,14 +3369,14 @@ namespace yata
 		/// </summary>
 		internal void ClearLoadchanged()
 		{
-			YataGrid._init = true;
+			_init = true;
 
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
 			if (row[c].loadchanged)
 				row[c].loadchanged = false;
 
-			YataGrid._init = false;
+			_init = false;
 
 			_f.EnableGotoLoadchanged(false);
 		}
