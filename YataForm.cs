@@ -4000,7 +4000,7 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
 
-			Table.Insert(_r);
+			Table.Delete(_r);
 
 
 			if (!Table.Changed)

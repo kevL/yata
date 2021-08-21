@@ -584,7 +584,7 @@ namespace yata
 		{
 			int r = _it.r._id;
 
-			_grid.Insert(r);
+			_grid.Delete(r);
 
 			_grid.ClearSelects();
 			if (r >= _grid.RowCount)
@@ -679,7 +679,7 @@ namespace yata
 
 			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
 			{
-				_grid.Insert(_it.array[a]._id, null, false);
+				_grid.Delete(_it.array[a]._id, false);
 			}
 
 			_grid.Calibrate();

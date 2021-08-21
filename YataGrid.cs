@@ -4165,28 +4165,28 @@ namespace yata
 
 
 		/// <summary>
-		/// Inserts/deletes a row into the table.
+		/// Inserts a row into the table.
 		/// </summary>
-		/// <param name="id">row-id to insert at or to delete</param>
-		/// <param name="fields"><c>null</c> to delete the row</param>
-		/// <param name="calibrate"><c>true</c> to re-layout the grid</param>
-		/// <param name="brush">a brush to use for Undo/Redo</param>
+		/// <param name="id">row-id to insert at</param>
+		/// <param name="fields">an array of fields</param>
+		/// <param name="calibrate"><c>true</c> to re-layout the grid or
+		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
+		/// will be done by the caller</param>
+		/// <param name="brush">a <c>Brush</c> to use for Undo/Redo</param>
 		internal void Insert(int      id,
-							 string[] fields    = null,
+							 string[] fields,
 							 bool     calibrate = true,
 							 Brush    brush     = null)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
 
-			Row row;
-
 			if (fields != null)
 			{
 				if (brush == null)
 					brush = Brushes.Created;
 
-				row = new Row(id, ColCount, brush, this);
+				var row = new Row(id, ColCount, brush, this);
 
 				string field;
 				for (int c = 0; c != ColCount; ++c)
@@ -4209,41 +4209,64 @@ namespace yata
 						++row[c].y;
 				}
 			}
-			else // delete 'id'
+
+			if (calibrate) // is only 1 row (no range) via context single-row edit
 			{
-				Rows.Remove(Rows[id]);
-				--RowCount;
+				Calibrate(id);
 
-				for (int r = id; r != RowCount; ++r) // straighten out row._id and cell.y ->
+				if (id < RowCount)
+					EnsureDisplayedRow(id);
+
+				DrawingControl.ResumeDrawing(this);
+			}
+		}
+
+		/// <summary>
+		/// Deletes a row from the table.
+		/// </summary>
+		/// <param name="id">row-id to delete</param>
+		/// <param name="calibrate"><c>true</c> to re-layout the grid or
+		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
+		/// will be done by the caller</param>
+		internal void Delete(int id, bool calibrate = true)
+		{
+			if (calibrate)
+				DrawingControl.SuspendDrawing(this);
+
+			Row row;
+
+			Rows.Remove(Rows[id]);
+			--RowCount;
+
+			for (int r = id; r != RowCount; ++r) // straighten out row._id and cell.y ->
+			{
+				--(row = Rows[r])._id;
+				for (int c = 0; c != ColCount; ++c)
+					--row[c].y;
+			}
+
+			if (RowCount == 0) // add a row of stars so grid is not left blank ->
+			{
+				++RowCount;
+
+				row = new Row(id, ColCount, Brushes.Created, this);
+				for (int c = 0; c != ColCount; ++c)
+					row[c] = new Cell(id, c, gs.Stars);
+
+				Rows.Add(row);
+
+				if (calibrate)
 				{
-					--(row = Rows[r])._id;
-					for (int c = 0; c != ColCount; ++c)
-						--row[c].y;
-				}
+					Calibrate(0);
+					DrawingControl.ResumeDrawing(this);
 
-				if (RowCount == 0) // add a row of stars so grid is not left blank ->
-				{
-					++RowCount;
-
-					row = new Row(id, ColCount, Brushes.Created, this);
-					for (int c = 0; c != ColCount; ++c)
-						row[c] = new Cell(id, c, gs.Stars);
-
-					Rows.Add(row);
-
-					if (calibrate)
-					{
-						Calibrate(0);
-						DrawingControl.ResumeDrawing(this);
-
-						return;
-					}
+					return;
 				}
 			}
 
 			if (calibrate) // is only 1 row (no range) via context single-row edit
 			{
-				Calibrate((fields != null) ? id : -1); // insert()
+				Calibrate();
 
 				if (id < RowCount)
 					EnsureDisplayedRow(id);
@@ -4282,7 +4305,7 @@ namespace yata
 			while (rLast >= rFirst) // reverse delete.
 			{
 				rest.array[range--] = Rows[rLast].Clone() as Row;
-				Insert(rLast, null, false);
+				Delete(rLast, false);
 
 				--rLast;
 			}
