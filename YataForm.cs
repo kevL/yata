@@ -904,7 +904,12 @@ namespace yata
 		/// </list>
 		/// </param>
 		/// <param name="e"></param>
-		/// <remarks>Invoked by
+		/// <remarks>This should be bypassed when a page other than tabid #0 is
+		/// active and user closes all other tabs - if tabid #0 is already
+		/// active the selected-id does not change.
+		/// 
+		/// 
+		/// Invoked by
 		/// <list type="bullet">
 		/// <item>Tab click</item>
 		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
@@ -1237,7 +1242,7 @@ namespace yata
 		#region Events (file)
 		/// <summary>
 		/// Handles opening the File menu along with the preset-dirs and
-		/// recent-files submenus.
+		/// recent-files subits.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_MenuFile"/></c></param>
 		/// <param name="e"></param>
@@ -1248,8 +1253,7 @@ namespace yata
 			it_Reload.Enabled = Table != null && File.Exists(Table.Fullpath);
 
 
-			// directory presets ->
-			if (Settings._dirpreset.Count != 0)
+			if (Settings._dirpreset.Count != 0) // directory presets ->
 			{
 				_preset = String.Empty;
 
