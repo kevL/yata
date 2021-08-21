@@ -686,6 +686,11 @@ namespace yata
 
 
 		#region Methods (static)
+		/// <summary>
+		/// Gets a standard-ish <c>FontStyle</c> given a <c>FontFamily</c>.
+		/// </summary>
+		/// <param name="ff"><c>FontFamily</c></param>
+		/// <returns><c>FontStyle</c></returns>
 		internal static FontStyle getStyleStandard(FontFamily ff)
 		{
 			if (ff.IsStyleAvailable(FontStyle.Regular)) return FontStyle.Regular;
@@ -700,6 +705,11 @@ namespace yata
 			return FontStyle.Regular; // this ought never happen.
 		}
 
+		/// <summary>
+		/// Gets an accented-ish <c>FontStyle</c> given a <c>FontFamily</c>.
+		/// </summary>
+		/// <param name="ff"><c>FontFamily</c></param>
+		/// <returns><c>FontStyle</c></returns>
 		static FontStyle getStyleAccented(FontFamily ff)
 		{
 			if (ff.IsStyleAvailable(FontStyle.Bold))      return FontStyle.Bold;
