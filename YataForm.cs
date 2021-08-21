@@ -349,7 +349,6 @@ namespace yata
 				Obfuscate();
 
 			_t1.Interval = 223;
-			_t1.Enabled = true; // TODO: stop Timer when no table is loaded /shrug.
 			_t1.Tick += t1_Tick;
 
 			DontBeepEvent += HandleDontBeepEvent;
@@ -402,7 +401,7 @@ namespace yata
 		/// <param name="e"></param>
 		void t1_Tick(object sender, EventArgs e)
 		{
-			if (Table != null && _track_x != -1 && !YataGrid._init)
+			if (_track_x != -1)
 				Table.MouseLeaveTicker();
 		}
 
@@ -959,13 +958,16 @@ namespace yata
 
 				SetTabSize();
 
+				if (!_t1.Enabled) _t1.Enabled = true;
+
 				Obfuscate(false);
 			}
 			else
 			{
-				Table = null;
-
 				Obfuscate();
+
+				_t1.Enabled = false;
+				Table = null;
 
 				// Visible ->
 
