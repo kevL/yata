@@ -1658,13 +1658,12 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_ClosePage(object sender, EventArgs e)
 		{
-			if (Table != null
-				&& (!Table.Changed
-					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to close ...",
-									   " warning",
-									   MessageBoxButtons.YesNo,
-									   MessageBoxIcon.Warning,
-									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
+			if (!Table.Changed
+				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to close ...",
+								   " warning",
+								   MessageBoxButtons.YesNo,
+								   MessageBoxIcon.Warning,
+								   MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 			{
 				ClosePage(Tabs.SelectedTab);
 			}
