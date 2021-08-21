@@ -71,11 +71,17 @@ namespace yata
 
 
 		#region Properties
+		/// <summary>
+		/// Checks if the Undo operation is allowed.
+		/// </summary>
 		internal bool CanUndo
 		{
 			get { return Undoables.Count != 0; }
 		}
 
+		/// <summary>
+		/// Checks if the Redo operation is allowed.
+		/// </summary>
 		internal bool CanRedo
 		{
 			get { return Redoables.Count != 0; }

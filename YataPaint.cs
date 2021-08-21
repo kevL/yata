@@ -31,7 +31,8 @@ namespace yata
 				// NOTE: Paint backgrounds full-height/width of table ->
 
 				// rows background - scrollable
-				var rect = new Rectangle(Left, HeightColhead - offsetVert, WidthTable, HeightRow);
+				var rect = new Rectangle(Left,       HeightColhead - offsetVert,
+										 WidthTable, HeightRow);
 
 				for (r = 0; r != RowCount; ++r)
 				{
@@ -129,7 +130,7 @@ namespace yata
 		internal void LabelColheads()
 		{
 			var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0,
-									 0, HeightColhead);
+									 0,                                    HeightColhead);
 
 			int clip;
 			Color color;
