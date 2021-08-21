@@ -2705,8 +2705,7 @@ namespace yata
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
 			int selr = Table.getSelectedRow();
-			if (selr != -1)
-				Table.DeleteRows(selr);
+			Table.DeleteRows(selr);
 		}
 
 
