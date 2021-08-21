@@ -1471,77 +1471,71 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
-//			if (Table != null) // safety.
+			bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
+			bool bypassReadonly;
+
+			if (sender == it_SaveAs)
 			{
-				bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
-				bool bypassReadonly;
+				_table = Table;
+				// '_pfeT' is set by caller
+				force = (_pfeT == _table.Fullpath);
+				bypassReadonly = false;
+			}
+			else if (sender == it_SaveAll)
+			{
+				// '_table' and '_pfeT' are set by caller
+				force = false;
+				bypassReadonly = false;
+			}
+			else // is rego-save or tab-save or 'FileWatcherDialog' save
+			{
+				_table = Table;
+				_pfeT = _table.Fullpath;
+				force = false;
 
-				if (sender == it_SaveAs)
-				{
-					_table = Table;
-					// '_pfeT' is set by caller
-					force = (_pfeT == _table.Fullpath);
+				if (sender == it_Save || sender == tabit_Save)
 					bypassReadonly = false;
-				}
-				else if (sender == it_SaveAll)
+				else
+					bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
+			}
+
+			_warned = false;
+
+			if (!_table.Readonly || bypassReadonly
+				|| (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
+			{
+//				if ((_table._sortcol == 0 && _table._sortdir == YataGrid.SORT_ASC)
+//					|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
+//				{
+				if (CheckRowOrder()
+					|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
 				{
-					// '_table' and '_pfeT' are set by caller
-					force = false;
-					bypassReadonly = false;
+					_table.Fullpath = _pfeT;
+
+					SetTitlebarText();
+
+					if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
+														//               *as itself* it loses its Readonly flag.
+
+					_table.Changed = false;
+					_table._ur.ResetSaved();
+
+					_table.ClearLoadchanged();
+
+					if (_table == Table)
+						_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+
+					FileOutput.Write(_table);
 				}
-				else // is rego-save or tab-save or 'FileWatcherDialog' save
-				{
-					_table = Table;
-					_pfeT = _table.Fullpath;
-					force = false;
-
-					if (sender == it_Save || sender == tabit_Save)
-						bypassReadonly = false;
-					else
-						bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
-				}
-
-				if (!String.IsNullOrEmpty(_pfeT)) // safety.
-				{
-					_warned = false;
-
-					if (!_table.Readonly || bypassReadonly
-						|| (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
-					{
-//						if ((_table._sortcol == 0 && _table._sortdir == YataGrid.SORT_ASC)
-//							|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
-//						{
-						if (CheckRowOrder()
-							|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
-						{
-							_table.Fullpath = _pfeT;
-
-							SetTitlebarText();
-
-							if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
-																//               *as itself* it loses its Readonly flag.
-
-							_table.Changed = false;
-							_table._ur.ResetSaved();
-
-							_table.ClearLoadchanged();
-
-							if (_table == Table)
-								_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-
-							FileOutput.Write(_table);
-						}
-//						}
-					}
-					else if (!_warned)
-					{
-						MessageBox.Show("The 2da-file is opened as readonly.",
-										" burp",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Hand,
-										MessageBoxDefaultButton.Button1);
-					}
-				}
+//				}
+			}
+			else if (!_warned)
+			{
+				MessageBox.Show("The 2da-file is opened as readonly.",
+								" burp",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Hand,
+								MessageBoxDefaultButton.Button1);
 			}
 		}
 
