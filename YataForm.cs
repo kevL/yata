@@ -1526,31 +1526,24 @@ namespace yata
 //						}
 					}
 					else if (!_warned)
-						ReadonlyError();
+					{
+						MessageBox.Show("The 2da-file is opened as readonly.",
+										" burp",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Hand,
+										MessageBoxDefaultButton.Button1);
+					}
 				}
 			}
 		}
 
 		/// <summary>
-		/// TODO: This funct is obsolete; tables that are
-		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c> shall
-		/// not enable operations that can change the table at all.
-		/// </summary>
-		void ReadonlyError()
-		{
-			MessageBox.Show("The 2da-file is opened as readonly.",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Hand,
-							MessageBoxDefaultButton.Button1);
-		}
-
-		/// <summary>
 		/// Requests user-confirmation when saving a file when readonly or when
-		/// faulty IDs get detected.
+		/// faulty IDs are detected.
 		/// </summary>
 		/// <param name="info"></param>
-		/// <returns></returns>
+		/// <returns><c>DialogResult.Yes</c> to proceed - <c>DialogResult.No</c>
+		/// to stop</returns>
 		DialogResult SaveWarning(string info)
 		{
 			_warned = true;
@@ -1569,14 +1562,11 @@ namespace yata
 		/// <returns><c>true</c> if row-order is okay</returns>
 		bool CheckRowOrder()
 		{
-			string val;
 			int result;
-
-			for (int id = 0; id != Table.RowCount; ++id)
+			for (int r = 0; r != Table.RowCount; ++r)
 			{
-				if (String.IsNullOrEmpty(val = Table[id,0].text)
-					|| !Int32.TryParse(val, out result)
-					|| result != id)
+				if (!Int32.TryParse(Table[r,0].text, out result)
+					|| result != r)
 				{
 					return false;
 				}
