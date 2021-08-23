@@ -287,6 +287,8 @@ namespace yata
 				_grid.ChangeCellText(cell, _editor); // does a text-check
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
+			else if (cell.loadchanged)
+				_grid.ClearLoadchanged(cell);
 		}
 
 		/// <summary>

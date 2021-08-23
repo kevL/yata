@@ -58,7 +58,7 @@ namespace yata
 		/// <summary>
 		/// A 2d-array of <c>strings</c> used for copy/paste cell.
 		/// </summary>
-		/// <remarks>A cell's text shall never be null or blank therefore
+		/// <remarks>A cell's text shall never be <c>null</c> or blank therefore
 		/// <c>_copytext</c> shall never be <c>null</c> or blank.</remarks>
 		internal string[,] _copytext = {{ gs.Stars }};
 
@@ -2240,7 +2240,7 @@ namespace yata
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
 			Cell sel = Table.getFirstSelectedCell();
-			Cell cell;
+			Cell cell; string text;
 
 			int invalid = -1;
 
@@ -2254,10 +2254,15 @@ namespace yata
 				{
 					_copytext[i, ++j] = (cell = Table[r,c]).text;
 
-					if (cell.text != gs.Stars)
+					if (c == 0 && Settings._autorder)
+						text = r.ToString();
+					else
+						text = gs.Stars;
+
+					if (cell.text != text)
 					{
-						Table.ChangeCellText(cell, gs.Stars);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(cell, text);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else if (cell.loadchanged)
 					{
@@ -2314,7 +2319,7 @@ namespace yata
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Cells|Paste <c>[Ctrl+v]</c></item>
-		/// <item>cell|Paste</item>
+		/// <item>cell|Paste <c><see cref="cellclick_Paste()">cellclick_Paste()</see></c></item>
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
@@ -2323,15 +2328,20 @@ namespace yata
 
 			int invalid = -1;
 
-			for (int i = 0; i != _copytext.GetLength(0) && i + sel.y != Table.RowCount; ++i)
-			for (int j = 0; j != _copytext.GetLength(1) && j + sel.x != Table.ColCount; ++j)
+			for (int r = 0; r != _copytext.GetLength(0) && r + sel.y != Table.RowCount; ++r)
+			for (int c = 0; c != _copytext.GetLength(1) && c + sel.x != Table.ColCount; ++c)
 			{
-				cell = Table[i + sel.y,
-							 j + sel.x];
+				cell = Table[r + sel.y,
+							 c + sel.x];
 
 				cell.selected = true;
 
-				if ((text = _copytext[i,j]) != cell.text)
+				if (cell.x == 0 && Settings._autorder)
+					text = cell.y.ToString();
+				else
+					text = _copytext[r,c];
+
+				if (text != cell.text)
 				{
 					Table.ChangeCellText(cell, text);	// does not do a text-check
 					invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
@@ -2362,7 +2372,7 @@ namespace yata
 		/// </list></remarks>
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
-			Cell sel;
+			Cell sel; string text;
 			int invalid = -1;
 
 			foreach (var row in Table.Rows)
@@ -2370,10 +2380,15 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (sel.text != gs.Stars)
+					if (c == 0 && Settings._autorder)
+						text = sel.y.ToString();
+					else
+						text = gs.Stars;
+
+					if (sel.text != text)
 					{
-						Table.ChangeCellText(sel, gs.Stars);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;		// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else if (sel.loadchanged)
 					{
@@ -2400,7 +2415,7 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_Lower(object sender, EventArgs e)
 		{
-			Cell sel;
+			Cell sel; string text;
 			int invalid = -1;
 
 			foreach (var row in Table.Rows)
@@ -2408,10 +2423,10 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (sel.text != sel.text.ToLower())
+					if (sel.text != (text = sel.text.ToLower()))
 					{
-						Table.ChangeCellText(sel, sel.text.ToLower());	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;				// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else if (sel.loadchanged)
 					{
@@ -2438,7 +2453,7 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_Upper(object sender, EventArgs e)
 		{
-			Cell sel;
+			Cell sel; string text;
 			int invalid = -1;
 
 			foreach (var row in Table.Rows)
@@ -2446,10 +2461,10 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (sel.text != sel.text.ToUpper())
+					if (sel.text != (text = sel.text.ToUpper()))
 					{
-						Table.ChangeCellText(sel, sel.text.ToUpper());	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;				// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else if (sel.loadchanged)
 					{
@@ -2480,7 +2495,7 @@ namespace yata
 			{
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
-					Cell sel;
+					Cell sel; string text;
 					int invalid = -1;
 
 					foreach (var row in Table.Rows)
@@ -2488,10 +2503,15 @@ namespace yata
 					{
 						if ((sel = row[c]).selected)
 						{
-							if (sel.text != _copytext[0,0])
+							if (c == 0 && Settings._autorder)
+								text = sel.y.ToString();
+							else
+								text = _copytext[0,0];
+
+							if (sel.text != text)
 							{
-								Table.ChangeCellText(sel, _copytext[0,0]);	// does not do a text-check
-								invalid = YataGrid.INVALID_NONE;			// ChangeCellText() will run the Invalidator.
+								Table.ChangeCellText(sel, text);	// does not do a text-check
+								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 							}
 							else if (sel.loadchanged)
 							{
@@ -2524,9 +2544,9 @@ namespace yata
 			bool oneSelected = Table.getSelectedCell() != null;
 			it_PasteCell .Enabled = !Table.Readonly && oneSelected;
 
-			it_DeleteCell.Enabled = // TODO: if any selected cell is not 'gs.Stars'
-			it_Lower     .Enabled = // TODO: if any selected cell is not lowercase
-			it_Upper     .Enabled = // TODO: if any selected cell is not uppercase
+			it_DeleteCell.Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
+			it_Lower     .Enabled = // TODO: if any selected cell is not lowercase or loadchanged
+			it_Upper     .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
 			it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
 		}
 		#endregion Methods (editcells)
@@ -2644,6 +2664,8 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(Table);
 			Obfuscate(false);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -2664,6 +2686,10 @@ namespace yata
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
 			Table.DeleteRows();
+
+			EnableRoweditOperations();
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 
@@ -2742,6 +2768,8 @@ namespace yata
 
 					DrawingControl.ResumeDrawing(Table);
 					Obfuscate(false);
+
+					if (Settings._autorder && order() != 0) layout();
 				}
 			}
 		}
@@ -3112,7 +3140,7 @@ namespace yata
 		/// Orders row-ids.
 		/// </summary>
 		/// <returns>the count of changed row-ids</returns>
-		int order()
+		internal int order()
 		{
 			int changed = 0;
 
@@ -3130,7 +3158,7 @@ namespace yata
 		/// <summary>
 		/// Lays out table after rows are ordered.
 		/// </summary>
-		void layout()
+		internal void layout()
 		{
 			DrawingControl.SuspendDrawing(this);
 
@@ -3720,7 +3748,7 @@ namespace yata
 		/// Shows the RMB-context on the rowhead for single-row edit operations.
 		/// </summary>
 		/// <param name="r"></param>
-		/// <remarks><c>ContextRow</c> is *not* assigned to a
+		/// <remarks><c><see cref="ContextRow"/></c> is not assigned to a
 		/// <c><see cref="YataGrid"/>._panelRows'</c> <c>ContextMenuStrip</c>
 		/// or <c>ContextMenu</c>.</remarks>
 		internal void ShowRowContext(int r)
@@ -3817,6 +3845,8 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -3830,20 +3860,34 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
+			YataGrid._init = true; // bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
+
 			Row row = Table.Rows[_r];
-			string field;
-			for (int c = 0; c != Table.ColCount; ++c)
+
+			int c = 0;
+			if (Settings._autorder)
+			{
+				row[c].text = _r.ToString();
+				row[c].diff =
+				row[c].loadchanged = false;
+
+				++c;
+			}
+
+			for (; c != Table.ColCount; ++c)
 			{
 				if (c < _copyr[0].Length)
-					field = _copyr[0][c];
+					row[c].text = _copyr[0][c];
 				else
-					field = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
+					row[c].text = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
 
-				row[c].text = field;
 				row[c].diff =
 				row[c].loadchanged = false;
 			}
 			row._brush = Brushes.Created;
+
+			YataGrid._init = false;
+			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 			Table.Calibrate(_r);
 
@@ -3878,6 +3922,8 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -3888,7 +3934,6 @@ namespace yata
 		void rowclick_CreateAbove(object sender, EventArgs e)
 		{
 			var fields = new string[Table.ColCount];
-//			fields[0] = _r.ToString();
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
@@ -3902,6 +3947,8 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -3915,13 +3962,30 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
-			for (int c = 0; c != Table.ColCount; ++c)
+			YataGrid._init = true; // bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
+
+			Row row = Table.Rows[_r];
+
+			int c = 0;
+			if (Settings._autorder)
 			{
-				Table[_r,c].text = gs.Stars;
-				Table[_r,c].diff =
-				Table[_r,c].loadchanged = false;
+				row[c].text = _r.ToString();
+				row[c].diff =
+				row[c].loadchanged = false;
+
+				++c;
 			}
-			Table.Rows[_r]._brush = Brushes.Created;
+
+			for (; c != Table.ColCount; ++c)
+			{
+				row[c].text = gs.Stars;
+				row[c].diff =
+				row[c].loadchanged = false;
+			}
+			row._brush = Brushes.Created;
+
+			YataGrid._init = false;
+			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 			Table.Calibrate(_r);
 
@@ -3947,7 +4011,6 @@ namespace yata
 		void rowclick_CreateBelow(object sender, EventArgs e)
 		{
 			var fields = new string[Table.ColCount];
-//			fields[0] = (_r + 1).ToString();
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
@@ -3961,6 +4024,8 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -3986,6 +4051,8 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (Settings._autorder && order() != 0) layout();
 		}
 		#endregion Events (row)
 
@@ -3994,7 +4061,7 @@ namespace yata
 		/// <summary>
 		/// Shows the RMB-context on a cell for single-cell edit operations.
 		/// </summary>
-		/// <remarks><c>ContextCell</c> is *not* assigned to a
+		/// <remarks><c><see cref="ContextCell"/></c> is not assigned to a
 		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>ContextMenuStrip</c>
 		/// or <c>ContextMenu</c>.</remarks>
 		internal void ShowCellContext()
@@ -4187,7 +4254,7 @@ namespace yata
 
 		#region Events (cell)
 		/// <summary>
-		/// Handles cell-click edit.
+		/// Handles singlecell-click edit.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Edit"/></c></param>
 		/// <param name="e"></param>
@@ -4197,29 +4264,24 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles cell-click cut.
+		/// Handles singlecell-click cut.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Cut"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Cut(object sender, EventArgs e)
 		{
-			_copytext = new string[,] {{ _sel.text }};
-
-			if (_sel.text != gs.Stars)
-			{
-				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
-			}
-			else if (_sel.loadchanged)
-			{
-				_sel.loadchanged = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
+			cellclick_Copy(  sender, e);
+			cellclick_Delete(sender, e);
 		}
 
 		/// <summary>
-		/// Handles cell-click copy.
+		/// Handles singlecell-click copy.
 		/// </summary>
-		/// <param name="sender"><c><see cref="cellit_Copy"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="cellit_Copy"/></c></item>
+		/// <item><c><see cref="cellit_Cut"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void cellclick_Copy(object sender, EventArgs e)
 		{
@@ -4227,33 +4289,68 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles cell-click delete.
+		/// Handles singlecell-click paste.
 		/// </summary>
-		/// <param name="sender"><c><see cref="cellit_Delete"/></c></param>
+		/// <param name="sender"><c><see cref="cellit_Paste"/></c></param>
 		/// <param name="e"></param>
-		void cellclick_Delete(object sender, EventArgs e)
+		/// <remarks>Pass this on to the Cells|Paste handler since this shall
+		/// allow pasting of a contiguous block.</remarks>
+		void cellclick_Paste(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
+			if (_copytext.Length == 1)
+			{
+				if (_sel.text != _copytext[0,0])
+					Table.ChangeCellText(_sel, _copytext[0,0]);
+				else if (_sel.loadchanged)
+					Table.ClearLoadchanged(_sel);
+			}
+			else
+				editcellsclick_PasteCell(sender, e);
 		}
 
 		/// <summary>
-		/// Handles cell-click lowercase.
+		/// Handles singlecell-click delete.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="cellit_Delete"/></c></item>
+		/// <item><c><see cref="cellit_Cut"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void cellclick_Delete(object sender, EventArgs e)
+		{
+			if (_sel.text != gs.Stars)
+				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
+			else if (_sel.loadchanged)
+				Table.ClearLoadchanged(_sel);
+		}
+
+		/// <summary>
+		/// Handles singlecell-click lowercase.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Lower"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Lower(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, _sel.text.ToLower()); // does not do a text-check, does Invalidate
+			string text = _sel.text.ToLower();
+			if (_sel.text != text)
+				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
+			else if (_sel.loadchanged)
+				Table.ClearLoadchanged(_sel);
 		}
 
 		/// <summary>
-		/// Handles cell-click uppercase.
+		/// Handles singlecell-click uppercase.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Upper"/></c></param>
 		/// <param name="e"></param>
 		void cellclick_Upper(object sender, EventArgs e)
 		{
-			Table.ChangeCellText(_sel, _sel.text.ToUpper()); // does not do a text-check, does Invalidate
+			string text = _sel.text.ToUpper();
+			if (_sel.text != text)
+				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
+			else if (_sel.loadchanged)
+				Table.ClearLoadchanged(_sel);
 		}
 
 		/// <summary>
@@ -4270,8 +4367,8 @@ namespace yata
 			int r = _sel.y;
 			int c = _sel.x;
 
-			Cell dst = table[r,c];
-			table.ChangeCellText(dst, _sel.text); // does not do a text-check, does Invalidate
+			Cell cell = table[r,c];
+			table.ChangeCellText(cell, _sel.text); // does not do a text-check, does Invalidate
 
 			_diff1[r,c].diff =
 			_diff2[r,c].diff = false;
@@ -4293,15 +4390,19 @@ namespace yata
 			// - store the row's current state to 'rPre' in the Restorable
 			Restorable rest = UndoRedo.createRow(table.Rows[r]);
 
+
 			int c = 0;
 			for (; c != table.ColCount && c != Table.ColCount; ++c)
 			{
-				table[r,c].text = Table[r,c].text; // NOTE: Strings are immutable so no need for copy/clone - is done auto.
+				table[r,c].text = Table[r,c].text;
 				table[r,c].diff = false;
 
 				Table[r,c].diff = false;
 			}
 
+			if (Settings._autorder)
+				table[r,0].text = table[r,0].y.ToString();	// not likely to happen. user'd have to load a table w/
+															// an out of order id then merge that row to another table.
 			if (table.ColCount > Table.ColCount)
 			{
 				for (; c != table.ColCount; ++c)
@@ -4318,6 +4419,9 @@ namespace yata
 
 			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 
+			// TODO: test if this funct needs to re-width a bunch of stuff
+
+
 			if (!table.Changed)
 			{
 				table.Changed = true;
@@ -4331,7 +4435,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles cell-click InfoInput dialog.
+		/// Handles singlecell-click InfoInput dialog.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Input"/></c></param>
 		/// <param name="e"></param>
@@ -4456,8 +4560,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Handler for the cell-context's subit "STRREF" <c>DropDownOpening</c>
-		/// event.
+		/// Handler for the singlecell-context's subit "STRREF"
+		/// <c>DropDownOpening</c> event.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Strref"/></c></param>
 		/// <param name="e"></param>
@@ -4475,7 +4579,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "STRREF" click. Opens
+		/// Handler for singlecell-context "STRREF" click. Opens
 		/// <c><see cref="TalkDialog"/></c> that displays the text's
 		/// corresponding Dialog.Tlk or special entry in a readonly
 		/// <c>RichTextBox</c> for the user's investigation and/or copying.
@@ -4502,7 +4606,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "set/clear Custom" click. Toggles the
+		/// Handler for singlecell-context "set/clear Custom" click. Toggles the
 		/// custom-bit flag.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Strref_custom"/></c></param>
@@ -4531,8 +4635,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for cell-context "set Invalid (-1)" click. Sets a strref to
-		/// "-1" if not already.
+		/// Handler for singlecell-context "set Invalid (-1)" click. Sets a
+		/// strref to <c>-1</c> if not already.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Strref_invalid"/></c></param>
 		/// <param name="e"></param>

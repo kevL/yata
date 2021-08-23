@@ -311,7 +311,7 @@ namespace yata
 		{
 			if (Undoables.Count != 0)
 			{
-				var u = Undoables.ToArray();
+				Restorable[] u = Undoables.ToArray();
 
 				ResetY(ref u);
 
@@ -322,7 +322,7 @@ namespace yata
 
 			if (Redoables.Count != 0)
 			{
-				var r = Redoables.ToArray();
+				Restorable[] r = Redoables.ToArray();
 
 				ResetY(ref r);
 
@@ -517,6 +517,8 @@ namespace yata
 		/// </summary>
 		void RestoreCell()
 		{
+			//logfile.Log("UndoRedo.RestoreCell()");
+
 			var cell = _it.cell.Clone() as Cell;
 
 			int
@@ -550,6 +552,8 @@ namespace yata
 		/// </summary>
 		void InsertRow()
 		{
+			//logfile.Log("UndoRedo.InsertRow()");
+
 			Row row = _it.r;
 
 			var fields = new string[row.Length];
@@ -574,6 +578,8 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
+
+			if (Settings._autorder && _grid._f.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -582,6 +588,8 @@ namespace yata
 		/// </summary>
 		void DeleteRow()
 		{
+			//logfile.Log("UndoRedo.DeleteRow()");
+
 			int r = _it.r._id;
 
 			_grid.Delete(r);
@@ -599,6 +607,8 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			_grid.Invalidator(invalid);
+
+			if (Settings._autorder && _grid._f.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -608,6 +618,8 @@ namespace yata
 		/// </summary>
 		void Overwrite()
 		{
+			//logfile.Log("UndoRedo.Overwrite()");
+
 			Row row = _it.r;
 			int r = row._id;
 
@@ -621,6 +633,8 @@ namespace yata
 
 			_grid.Invalidator(YataGrid.INVALID_GRID
 							| YataGrid.INVALID_ROWS);
+
+			if (Settings._autorder && _grid._f.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -630,6 +644,8 @@ namespace yata
 		/// </summary>
 		void InsertArray()
 		{
+			//logfile.Log("UndoRedo.InsertArray()");
+
 			_grid._f.Obfuscate();
 			DrawingControl.SuspendDrawing(_grid);
 
@@ -664,6 +680,8 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
+
+			if (Settings._autorder && _grid._f.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -673,6 +691,8 @@ namespace yata
 		/// </summary>
 		void DeleteArray()
 		{
+			//logfile.Log("UndoRedo.DeleteArray()");
+
 			_grid._f.Obfuscate();
 			DrawingControl.SuspendDrawing(_grid);
 
@@ -693,6 +713,8 @@ namespace yata
 
 			DrawingControl.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
+
+			if (Settings._autorder && _grid._f.order() != 0) _grid._f.layout();
 		}
 		#endregion Methods (actions)
 

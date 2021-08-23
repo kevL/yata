@@ -1512,7 +1512,7 @@ namespace yata
 			this.cellit_Paste.Name = "cellit_Paste";
 			this.cellit_Paste.Size = new System.Drawing.Size(164, 22);
 			this.cellit_Paste.Text = "paste";
-			this.cellit_Paste.Click += new System.EventHandler(this.editcellsclick_PasteCell);
+			this.cellit_Paste.Click += new System.EventHandler(this.cellclick_Paste);
 			// 
 			// cellit_Delete
 			// 

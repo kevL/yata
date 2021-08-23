@@ -1830,7 +1830,7 @@ namespace yata
 		/// <summary>
 		/// Re-widths any frozen-labels and the frozen-panel if they need it.
 		/// </summary>
-		/// <param name="c">col that changed its width</param>
+		/// <param name="c">col-id that changed its width</param>
 		internal void metricFrozenControls(int c)
 		{
 			if (c < FreezeSecond)
@@ -2444,6 +2444,8 @@ namespace yata
 				if (Propanel != null && Propanel.Visible)
 					Invalidator(INVALID_PROP);
 			}
+			else if (_editcell.loadchanged)
+				ClearLoadchanged(_editcell);
 		}
 
 		/// <summary>
@@ -3323,6 +3325,18 @@ namespace yata
 			_init = false;
 
 			_f.EnableGotoLoadchanged(false);
+		}
+
+		/// <summary>
+		/// Clears <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c>
+		/// from a specified <c><see cref="Cell"/></c>.
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <remarks>Check <c>Cell.loadchanged</c> before call.</remarks>
+		internal void ClearLoadchanged(Cell cell)
+		{
+			cell.loadchanged = false;
+			Invalidator(YataGrid.INVALID_GRID);
 		}
 
 
