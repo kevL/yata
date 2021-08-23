@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 august 20
+2021 august 22
 kevL's
 ver 4.2.0.0
 
@@ -355,6 +355,12 @@ alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
              tab-characters in 2da files is not officially supported and could
              break in other applications
 codepage=    (integer) see Appendix N: Codepages
+autorder=    "true" (without quotes) to automatically reorder row-ids after row
+             and cell alterations. Note that since ordering row-ids is not
+             tracked by Undo/Redo the Changed asterisk will not be cleared when
+             undoing or redoing to the table's saved state; also note that the
+             PropertyPanel ignores this rule in case you want to force a row to
+             have a specific id for whatever reason
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

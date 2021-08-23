@@ -37,6 +37,7 @@ namespace yata
 		internal static bool _maximized;
 		internal static bool _instantgoto;
 		internal static bool _casesort;
+		internal static bool _autorder;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -270,6 +271,11 @@ namespace yata
 							{
 								_codepage = result;
 							}
+						}
+						else if (line.StartsWith("autorder=", StringComparison.InvariantCulture))
+						{
+							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && line == "true");
 						}
 					}
 				}
