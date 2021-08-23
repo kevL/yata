@@ -277,7 +277,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Applies a text-edit via the editbox.
+		/// Applies a text-edit via <c><see cref="_editor"/></c>.
 		/// </summary>
 		void ApplyCellEdit()
 		{
@@ -287,6 +287,15 @@ namespace yata
 				_grid.ChangeCellText(cell, _editor); // does a text-check
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
+		}
+
+		/// <summary>
+		/// Hides the <c><see cref="_editor"/></c>.
+		/// </summary>
+		void hideEditor()
+		{
+			_editor.Visible = false;
+			_grid.Invalidator(YataGrid.INVALID_PROP);
 		}
 
 		/// <summary>
@@ -331,11 +340,11 @@ namespace yata
 		/// <summary>
 		/// Hides the editor when this <c>PropertyPanel</c> is scrolled.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_scroll"/></c></param>
 		/// <param name="e"></param>
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
-			lostfocus_Editor(null, EventArgs.Empty);
+			hideEditor();
 		}
 		#endregion Events (scroll)
 
@@ -344,19 +353,19 @@ namespace yata
 		/// <summary>
 		/// Handles the cell-editor's <c>KeyDown</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Works around dweeby .NET behavior if <c>[Alt]</c> is
 		/// pressed.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
-			if (e.Alt) lostfocus_Editor(null, EventArgs.Empty);
+			if (e.Alt) hideEditor();
 		}
 
 		/// <summary>
 		/// Handles the cell-editor's <c>Leave</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Works around dweeby .NET behavior if <c>[Ctrl+PageUp]</c>
 		/// or <c>[Ctrl+PageDown]</c> is pressed.</remarks>
@@ -372,14 +381,11 @@ namespace yata
 		/// <summary>
 		/// Handles the cell-editor's <c>LostFocus</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>This funct is a partial catchall for other places where the
-		/// cell-editor needs to hide.</remarks>
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
-			_editor.Visible = false;
-			_grid.Invalidator(YataGrid.INVALID_PROP);
+			hideEditor();
 		}
 		#endregion Events (editor)
 
@@ -403,7 +409,7 @@ namespace yata
 
 					case Keys.Escape:
 					case Keys.Tab:
-						lostfocus_Editor(null, EventArgs.Empty);
+						hideEditor();
 						_grid.Select();
 						return true;
 				}
@@ -488,7 +494,7 @@ namespace yata
 				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
 					ApplyCellEdit();
 
-				lostfocus_Editor(null, EventArgs.Empty);
+				hideEditor();
 				_grid.Select();
 			}
 		}
