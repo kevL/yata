@@ -126,7 +126,7 @@ namespace yata
 			this.Controls.Add(this.pnl_Top);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(350, 105);
+			this.MinimumSize = new System.Drawing.Size(350, 110);
 			this.Name = "FileWatcherDialog";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
