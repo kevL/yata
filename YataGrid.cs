@@ -160,15 +160,22 @@ namespace yata
 		Label _labelsecond = new Label();
 
 		/// <summary>
-		/// The text-edit box. Note there is only one (1) editor that floats to
-		/// wherever it's required.
+		/// The text-edit box. Note there is only one (1) <c>TextBox</c> that
+		/// floats to wherever it's required.
 		/// </summary>
 		internal readonly TextBox _editor = new TextBox(); // TODO: static
 
 		/// <summary>
-		/// The cell that's currently under the editbox.
+		/// The <c><see cref="Cell"/></c> that's currently under the
+		/// <c><see cref="_editor"/></c>.
 		/// </summary>
 		Cell _editcell;
+
+		/// <summary>
+		/// Tracks the currently anchored <c><see cref="Cell"/></c> for
+		/// selection of multiple cells by <c>[Shift]</c> + keyboard.
+		/// </summary>
+		Cell _cell_anchorshift;
 
 		/// <summary>
 		/// The currently sorted col. Default is #0 "id" col.
@@ -2056,6 +2063,62 @@ namespace yata
 						EnsureDisplayedRow(selr);
 						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
+					else if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+					{
+						if (areSelectedCellsContiguous())
+						{
+							if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
+							{
+								if (sel != null)
+								{
+									_cell_anchorshift = sel;
+								}
+
+								if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
+								{
+									Cell[] cells;
+
+									bool clear = false;
+									if (this[_cell_anchorshift.y - 1,
+											 _cell_anchorshift.x].selected)
+									{
+										clear = true;
+										cells = Rows[_cell_anchorshift.y]._cells; // de-select current row-cells
+										foreach (var cell in cells)
+											cell.selected = false;
+									}
+
+									_cell_anchorshift = this[_cell_anchorshift.y - 1,
+															 _cell_anchorshift.x];
+
+									if (!clear)
+									{
+										cells = Rows[_cell_anchorshift.y]._cells; // select current row-cells
+
+										int start, stop; // start/stop cols
+
+										if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y + 1,
+																						_cell_anchorshift.x - 1].selected)
+										{
+											start = _cell_anchorshift.x;
+											stop  = _cell_anchorshift.x + (_f._copyhori - 1);
+										}
+										else
+										{
+											start = _cell_anchorshift.x - (_f._copyhori - 1);
+											stop  = _cell_anchorshift.x;
+										}
+
+										for (int r = start; r <= stop; ++r)
+											cells[r].selected = true;
+									}
+								}
+
+								sel = _cell_anchorshift;
+								display = true;
+							}
+						}
+					}
 					else if (sel != null) // selection to the cell above
 					{
 						if (sel.y != 0 && sel.x >= FrozenCount)
@@ -2088,6 +2151,62 @@ namespace yata
 						EnsureDisplayedRow(selr);
 						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
+					else if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+					{
+						if (areSelectedCellsContiguous())
+						{
+							if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
+							{
+								if (sel != null)
+								{
+									_cell_anchorshift = sel;
+								}
+
+								if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
+								{
+									Cell[] cells;
+
+									bool clear = false;
+									if (this[_cell_anchorshift.y + 1,
+											 _cell_anchorshift.x].selected)
+									{
+										clear = true;
+										cells = Rows[_cell_anchorshift.y]._cells; // de-select current row-cells
+										foreach (var cell in cells)
+											cell.selected = false;
+									}
+
+									_cell_anchorshift = this[_cell_anchorshift.y + 1,
+															 _cell_anchorshift.x];
+
+									if (!clear)
+									{
+										cells = Rows[_cell_anchorshift.y]._cells; // select current row-cells
+
+										int start, stop; // start/stop cols
+
+										if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y - 1,
+																						_cell_anchorshift.x - 1].selected)
+										{
+											start = _cell_anchorshift.x;
+											stop  = _cell_anchorshift.x + (_f._copyhori - 1);
+										}
+										else
+										{
+											start = _cell_anchorshift.x - (_f._copyhori - 1);
+											stop  = _cell_anchorshift.x;
+										}
+
+										for (int r = start; r <= stop; ++r)
+											cells[r].selected = true;
+									}
+								}
+
+								sel = _cell_anchorshift;
+								display = true;
+							}
+						}
+					}
 					else if (sel != null) // selection to the cell below
 					{
 						if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
@@ -2109,29 +2228,88 @@ namespace yata
 				case Keys.Left: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page left
 					{
-						if (sel != null)
+/*						if (sel != null)
 						{
+//							if (sel.x > FrozenCount)
+//							{
+//								sel.selected = false;
+//
+//								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+//								var pt = getColBounds(sel.x);
+//								pt.X += offsetHori - w;
+//
+//								int c = -1, tally = 0;
+//								while ((tally += Cols[++c].width()) < pt.X)
+//								{}
+//
+//								if (++c >= sel.x)
+//									c = sel.x - 1;
+//
+//								if (c < FrozenCount)
+//									c = FrozenCount;
+//
+//								(sel = this[sel.y, c]).selected = true;
+//							}
 							if (sel.x > FrozenCount)
 							{
-								sel.selected = false;
-
-								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-								var pt = getColBounds(sel.x);
-								pt.X += offsetHori - w;
-
-								int c = -1, tally = 0;
-								while ((tally += Cols[++c].width()) < pt.X)
-								{}
-
-								if (++c >= sel.x)
-									c = sel.x - 1;
-
-								if (c < FrozenCount)
-									c = FrozenCount;
-
-								(sel = this[sel.y, c]).selected = true;
+								if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
+								{
+//									sel.selected = false;
+									(sel = this[sel.y, sel.x - 1]).selected = true;
+								}
 							}
 							display = true;
+						} */
+						if (areSelectedCellsContiguous())
+						{
+							if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
+							{
+								if (sel != null)
+								{
+									_cell_anchorshift = sel;
+								}
+
+								if (_cell_anchorshift.x > FrozenCount)
+								{
+									bool clearcol = false;
+
+									if (this[_cell_anchorshift.y,
+											 _cell_anchorshift.x - 1].selected)
+									{
+										clearcol = true;
+
+										foreach (var row in Rows) // de-select current col-cells
+											row[_cell_anchorshift.x].selected = false;
+									}
+
+									_cell_anchorshift = this[_cell_anchorshift.y,
+															 _cell_anchorshift.x - 1];
+
+									if (!clearcol)
+									{
+										// select current col-cells ->
+										int start, stop; // start/stop cols
+
+										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
+																			  _cell_anchorshift.x + 1].selected)
+										{
+											start = _cell_anchorshift.y;
+											stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+										}
+										else
+										{
+											start = _cell_anchorshift.y - (_f._copyvert - 1);
+											stop  = _cell_anchorshift.y;
+										}
+
+										for (int r = start; r <= stop; ++r)
+											this[r, _cell_anchorshift.x].selected = true;
+									}
+								}
+
+								sel = _cell_anchorshift;
+								display = true;
+							}
 						}
 						else if (_visHori)
 						{
@@ -2163,7 +2341,7 @@ namespace yata
 				case Keys.Right: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
 					{
-						if (sel != null)
+/*						if (sel != null)
 						{
 							if (sel.x != ColCount - 1)
 							{
@@ -2186,6 +2364,59 @@ namespace yata
 								(sel = this[sel.y, c]).selected = true;
 							}
 							display = true;
+						} */
+						if (areSelectedCellsContiguous())
+						{
+							//logfile.Log("right - cells contiguous");
+							if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
+							{
+								if (sel != null)
+								{
+									//logfile.Log(". assign _cell_anchorshift");
+									_cell_anchorshift = sel;
+								}
+
+								if (_cell_anchorshift.x != ColCount - 1)
+								{
+									bool clearcol = false;
+									//logfile.Log(". not far right");
+									if (this[_cell_anchorshift.y,
+											 _cell_anchorshift.x + 1].selected)
+									{
+										clearcol = true;
+										//logfile.Log(". . deselect col-cells");
+										foreach (var row in Rows) // de-select current col-cells
+											row[_cell_anchorshift.x].selected = false;
+									}
+
+									_cell_anchorshift = this[_cell_anchorshift.y,
+															 _cell_anchorshift.x + 1];
+
+									if (!clearcol)
+									{
+										// select current col-cells ->
+										int start, stop; // start/stop cols
+
+										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
+																			  _cell_anchorshift.x - 1].selected)
+										{
+											start = _cell_anchorshift.y;
+											stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+										}
+										else
+										{
+											start = _cell_anchorshift.y - (_f._copyvert - 1);
+											stop  = _cell_anchorshift.y;
+										}
+
+										for (int r = start; r <= stop; ++r)
+											this[r, _cell_anchorshift.x].selected = true;
+									}
+								}
+
+								sel = _cell_anchorshift;
+								display = true;
+							}
 						}
 						else if (_visHori)
 						{
