@@ -2526,39 +2526,39 @@ namespace yata
 			Select(); // focus table
 
 			Cell sel = getFirstSelectedCell();
-			if (sel == null)
-			{
-				foreach (var row in Rows)
-				if (row.selected)
-				{
-					row.selected = false;
-					break;
-				}
 
-				foreach (var col in Cols)
-				if (col.selected)
-				{
-					col.selected = false;
-					break;
-				}
+			ClearSelects(true);
 
-				if (ColCount > FrozenCount)
-				{
-					sel = this[0, FrozenCount];
-					sel.selected = true;
-
-					_f.EnableCelleditOperations();
-				}
-			}
-			_f.SyncSelect(sel);
-
+			int r,c;
 			if (sel != null)
 			{
-				Invalidator(INVALID_GRID
-						  | INVALID_FROZ
-						  | INVALID_ROWS
-						  | EnsureDisplayed(sel));
+				r = sel.y;
+				c = Math.Max(FrozenCount, sel.x);
 			}
+			else
+			{
+				r = 0;
+				c = FrozenCount;
+			}
+
+			if (c < ColCount)
+			{
+				sel = this[r,c];
+				sel.selected = true;
+				_f.SyncSelect(sel);
+			}
+			else
+			{
+				sel = this[r,0]; // just a cell to pass to EnsureDisplayed() below.
+				_f.SyncSelect(null);
+			}
+
+			_f.EnableCelleditOperations();
+
+			Invalidator(INVALID_GRID
+					  | INVALID_FROZ
+					  | INVALID_ROWS
+					  | EnsureDisplayed(sel));
 		}
 
 		/// <summary>
@@ -3696,7 +3696,7 @@ namespace yata
 
 			if (cell.x >= FrozenCount)
 			{
-				var rect = getCellRectangle(cell);
+				Rectangle rect = getCellRectangle(cell);
 
 				int left = getLeft();
 				int bar;
