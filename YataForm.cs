@@ -5240,6 +5240,7 @@ namespace yata
 				else return false;
 
 				_table.ClearSelects(true, true);
+
 				if (sel != null)
 				{
 					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
@@ -5253,6 +5254,7 @@ namespace yata
 					for (int c = 0; c != _table.ColCount; ++c)
 						row[c].selected = true;
 				}
+
 				_table = null;
 				return true;
 			}
