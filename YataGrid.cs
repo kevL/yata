@@ -2085,8 +2085,7 @@ namespace yata
 								{
 									cells = Rows[_cell_anchorshift.y - 1]._cells;	// select row-cells
 
-									int start, stop; // start/stop cols
-
+									int start, stop;
 									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
 																					_cell_anchorshift.x - 1].selected)
 									{
@@ -2115,9 +2114,6 @@ namespace yata
 					{
 						if (sel.y != 0 && sel.x >= FrozenCount)
 						{
-							// TODO: Multi-selecting cells w/ keyboard would require tracking a "current" cell.
-//							cell.selected &= ((ModifierKeys & Keys.Control) == Keys.Control);
-
 							sel.selected = false;
 							(sel = this[sel.y - 1, sel.x]).selected = true;
 						}
@@ -2166,7 +2162,6 @@ namespace yata
 									cells = Rows[_cell_anchorshift.y + 1]._cells;	// select row-cells
 
 									int start, stop;
-
 									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
 																					_cell_anchorshift.x - 1].selected)
 									{
@@ -2212,8 +2207,8 @@ namespace yata
 				case Keys.Left: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift)
 					{
-/*						if (sel != null)
-						{
+//						if (sel != null)
+//						{
 //							if (sel.x > FrozenCount)
 //							{
 //								sel.selected = false;
@@ -2234,16 +2229,9 @@ namespace yata
 //
 //								(sel = this[sel.y, c]).selected = true;
 //							}
-							if (sel.x > FrozenCount)
-							{
-								if (this != _f._diff1 && this != _f._diff2) // don't allow multiple-cell selection if sync'd
-								{
-//									sel.selected = false;
-									(sel = this[sel.y, sel.x - 1]).selected = true;
-								}
-							}
-							display = true;
-						} */
+//							display = true;
+//						}
+
 						if (areSelectedCellsContiguous())
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
@@ -2261,7 +2249,6 @@ namespace yata
 									else							// select col-cells ->
 									{
 										int start, stop;
-
 										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
 																			  _cell_anchorshift.x].selected)
 										{
@@ -2316,30 +2303,31 @@ namespace yata
 				case Keys.Right: // NOTE: needs to bypass KeyPreview
 					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
 					{
-/*						if (sel != null)
-						{
-							if (sel.x != ColCount - 1)
-							{
-								sel.selected = false;
+//						if (sel != null)
+//						{
+//							if (sel.x != ColCount - 1)
+//							{
+//								sel.selected = false;
+//
+//								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+//								var pt = getColBounds(sel.x);
+//								pt.X += offsetHori + w;
+//
+//								int c = -1, tally = 0;
+//								while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
+//								{}
+//
+//								if (--c <= sel.x)
+//									c = sel.x + 1;
+//
+//								if (c > ColCount - 1)
+//									c = ColCount - 1;
+//
+//								(sel = this[sel.y, c]).selected = true;
+//							}
+//							display = true;
+//						}
 
-								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-								var pt = getColBounds(sel.x);
-								pt.X += offsetHori + w;
-
-								int c = -1, tally = 0;
-								while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
-								{}
-
-								if (--c <= sel.x)
-									c = sel.x + 1;
-
-								if (c > ColCount - 1)
-									c = ColCount - 1;
-
-								(sel = this[sel.y, c]).selected = true;
-							}
-							display = true;
-						} */
 						if (areSelectedCellsContiguous())
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
@@ -2357,7 +2345,6 @@ namespace yata
 									else							// select col-cells ->
 									{
 										int start, stop;
-
 										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
 																			  _cell_anchorshift.x].selected)
 										{
