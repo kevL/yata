@@ -172,6 +172,8 @@ Ctrl+Home                 - selects first cell in the table
 Ctrl+End                  - selects first cell in the last row of the table
 Left/Right/Up/Down arrows - selects next cell in the direction
 Shift+arrows              - adds next cell in direction to selected cells
+Shift+Home                - adds cells to the left to selected cells
+Shift+End                 - adds cells to the right to selected cells
 
 - w/out 1 cell selected (or more than one cell selected)
 Home                      - scrolls table all the way left
@@ -182,10 +184,14 @@ Ctrl+Home                 - scrolls table to top
 Ctrl+End                  - scrolls table to bottom
 Left/Right/Up/Down arrows - scrolls table in the direction
 Shift+Left                - scrolls table left by visible width if no cell is
-                            selected or selection is contiguous
+                            selected or selection is not contiguous
 Shift+Right               - scrolls table right by visible width if no cell is
-                            selected or selection is contiguous
+                            selected or selection is not contiguous
 Shift+arrows              - adds next cells in direction to selected cells if
+                            selection is contiguous
+Shift+Home                - adds cells to the left to selected cells if
+                            selection is contiguous
+Shift+End                 - adds cells to the right to selected cells if
                             selection is contiguous
 
 - w/ row selected

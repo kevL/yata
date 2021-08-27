@@ -1900,21 +1900,55 @@ namespace yata
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
-					if (sft) return;
-
 					if (selr != -1)
 					{
-						if (ctr)
+						if (!sft)
 						{
-							if (selr > 0)
+							if (ctr)
 							{
-								ClearSelects(true);
-								SelectRow(0);
+								if (selr > 0)
+								{
+									ClearSelects(true);
+									SelectRow(0);
+								}
+								EnsureDisplayedRow(0);
+								invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 							}
-							EnsureDisplayedRow(0);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							else if (_visHori) _scrollHori.Value = 0;
 						}
-						else if (_visHori) _scrollHori.Value = 0;
+					}
+					else if (sft)
+					{
+						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+							&& areSelectedCellsContiguous())
+						{
+							if (sel != null) _cell_anchorshift = sel;
+
+							if (_cell_anchorshift.x > FrozenCount) // select col-cells ->
+							{
+								int start, stop;
+								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
+																	  _cell_anchorshift.x].selected)
+								{
+									start = _cell_anchorshift.y;
+									stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+								}
+								else
+								{
+									start = _cell_anchorshift.y - (_f._copyvert - 1);
+									stop  = _cell_anchorshift.y;
+								}
+
+								for (int r = start; r <= stop; ++r)
+								for (int c = _cell_anchorshift.x - 1; c != FrozenCount - 1; --c)
+									this[r,c].selected = true;
+
+								_cell_anchorshift = this[_cell_anchorshift.y, FrozenCount];
+							}
+
+							sel = _cell_anchorshift;
+							display = true;
+						}
 					}
 					else if (ctr)
 					{
@@ -1942,21 +1976,55 @@ namespace yata
 					break;
 
 				case Keys.End:
-					if (sft) return;
-
 					if (selr != -1)
 					{
-						if (ctr)
+						if (!sft)
 						{
-							if (selr != RowCount - 1)
+							if (ctr)
 							{
-								ClearSelects(true);
-								SelectRow(RowCount - 1);
+								if (selr != RowCount - 1)
+								{
+									ClearSelects(true);
+									SelectRow(RowCount - 1);
+								}
+								EnsureDisplayedRow(RowCount - 1);
+								invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 							}
-							EnsureDisplayedRow(RowCount - 1);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							else if (_visHori) _scrollHori.Value = MaxHori;
 						}
-						else if (_visHori) _scrollHori.Value = MaxHori;
+					}
+					else if (sft)
+					{
+						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+							&& areSelectedCellsContiguous())
+						{
+							if (sel != null) _cell_anchorshift = sel;
+
+							if (_cell_anchorshift.x != ColCount - 1) // select col-cells ->
+							{
+								int start, stop;
+								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
+																	  _cell_anchorshift.x].selected)
+								{
+									start = _cell_anchorshift.y;
+									stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+								}
+								else
+								{
+									start = _cell_anchorshift.y - (_f._copyvert - 1);
+									stop  = _cell_anchorshift.y;
+								}
+
+								for (int r = start; r <= stop; ++r)
+								for (int c = _cell_anchorshift.x + 1; c != ColCount; ++c)
+									this[r,c].selected = true;
+
+								_cell_anchorshift = this[_cell_anchorshift.y, ColCount - 1];
+							}
+
+							sel = _cell_anchorshift;
+							display = true;
+						}
 					}
 					else if (ctr)
 					{
