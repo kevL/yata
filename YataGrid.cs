@@ -1882,20 +1882,29 @@ namespace yata
 		{
 			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
+			if ((e.Modifiers & Keys.Alt) != 0)
+				return;
+
+
+			bool ctr = (e.Modifiers & Keys.Control) != 0;
+			bool sft = (e.Modifiers & Keys.Shift)   != 0;
+
+			int invalid = INVALID_NONE;
+			bool display = false;
+
 			Cell sel = getSelectedCell();
 			int selr = getSelectedRow();
 
 			// TODO: change selected col perhaps
 
-			int invalid = INVALID_NONE;
-			bool display = false;
-
 			switch (e.KeyCode)
 			{
 				case Keys.Home:
+					if (sft) return;
+
 					if (selr != -1)
 					{
-						if ((e.Modifiers & Keys.Control) == Keys.Control)
+						if (ctr)
 						{
 							if (selr > 0)
 							{
@@ -1907,7 +1916,7 @@ namespace yata
 						}
 						else if (_visHori) _scrollHori.Value = 0;
 					}
-					else if ((e.Modifiers & Keys.Control) == Keys.Control)
+					else if (ctr)
 					{
 						if (sel != null)
 						{
@@ -1933,9 +1942,11 @@ namespace yata
 					break;
 
 				case Keys.End:
+					if (sft) return;
+
 					if (selr != -1)
 					{
-						if ((e.Modifiers & Keys.Control) == Keys.Control)
+						if (ctr)
 						{
 							if (selr != RowCount - 1)
 							{
@@ -1947,7 +1958,7 @@ namespace yata
 						}
 						else if (_visHori) _scrollHori.Value = MaxHori;
 					}
-					else if ((e.Modifiers & Keys.Control) == Keys.Control)
+					else if (ctr)
 					{
 						if (sel != null)
 						{
@@ -1973,6 +1984,8 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
+					if (ctr || sft) return;
+
 					if (selr != -1)
 					{
 						if (selr > 0)
@@ -2013,6 +2026,8 @@ namespace yata
 					break;
 
 				case Keys.PageDown:
+					if (ctr || sft) return;
+
 					if (selr != -1)
 					{
 						if (selr != RowCount - 1)
@@ -2053,6 +2068,8 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: needs to bypass KeyPreview
+					if (ctr) return;
+
 					if (selr != -1)
 					{
 						if (selr != 0)
@@ -2063,7 +2080,7 @@ namespace yata
 						EnsureDisplayedRow(selr);
 						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
-					else if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+					else if (sft)
 					{
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
@@ -2129,6 +2146,8 @@ namespace yata
 					break;
 
 				case Keys.Down: // NOTE: needs to bypass KeyPreview
+					if (ctr) return;
+
 					if (selr != -1)
 					{
 						if (selr != RowCount - 1)
@@ -2139,7 +2158,7 @@ namespace yata
 						EnsureDisplayedRow(selr);
 						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
-					else if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+					else if (sft)
 					{
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
@@ -2205,7 +2224,9 @@ namespace yata
 					break;
 
 				case Keys.Left: // NOTE: needs to bypass KeyPreview
-					if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+					if (ctr) return;
+
+					if (sft)
 					{
 //						if (sel != null)
 //						{
@@ -2301,7 +2322,9 @@ namespace yata
 					break;
 
 				case Keys.Right: // NOTE: needs to bypass KeyPreview
-					if ((e.Modifiers & Keys.Shift) == Keys.Shift) // shift grid 1 page right
+					if (ctr) return;
+
+					if (sft)
 					{
 //						if (sel != null)
 //						{
@@ -2369,7 +2392,7 @@ namespace yata
 								display = true;
 							}
 						}
-						else if (_visHori)
+						else if (_visHori) // shift grid 1 page right
 						{
 							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 							if (_scrollHori.Value + w > MaxHori)
@@ -2397,6 +2420,8 @@ namespace yata
 					break;
 
 				case Keys.Escape: // NOTE: needs to bypass KeyPreview
+					if (ctr || sft) return;
+
 					ClearSelects(true);
 					_f.SyncSelect();
 					invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
