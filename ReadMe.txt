@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 august 23
+2021 august 26
 kevL's
-ver 4.2.0.0
+ver 4.2.1.0
 
 
 File
@@ -171,8 +171,7 @@ PageDown                  - selects cell a page below
 Ctrl+Home                 - selects first cell in the table
 Ctrl+End                  - selects first cell in the last row of the table
 Left/Right/Up/Down arrows - selects next cell in the direction
-Shift+Left                - selects cell left by visible width
-Shift+Right               - selects cell right by visible width
+Shift+arrows              - adds next cell in direction to selected cells
 
 - w/out 1 cell selected (or more than one cell selected)
 Home                      - scrolls table all the way left
@@ -182,8 +181,12 @@ PageDown                  - scrolls table a page down
 Ctrl+Home                 - scrolls table to top
 Ctrl+End                  - scrolls table to bottom
 Left/Right/Up/Down arrows - scrolls table in the direction
-Shift+Left                - scrolls table left by visible width
-Shift+Right               - scrolls table right by visible width
+Shift+Left                - scrolls table left by visible width if no cell is
+                            selected or selection is contiguous
+Shift+Right               - scrolls table right by visible width if no cell is
+                            selected or selection is contiguous
+Shift+arrows              - adds next cells in direction to selected cells if
+                            selection is contiguous
 
 - w/ row selected
 Home              - scrolls table all the way left
@@ -215,8 +218,9 @@ Shift+Delete - when a row is selected (as indicated with a green field at the
                single default row will be created.
 
 Space - focuses the table and selects the first cell. If cell(s) are already
-        selected the table will scroll to ensure that the first selected cell is
-        visible.
+        selected all cells but the first will be deselected and the table will
+        scroll to ensure that the first selected cell is visible.
+
 
 MOUSE:
 wheel - scrolls up/down if the vertical scrollbar is visible and either of
@@ -257,7 +261,7 @@ doubleLMB - selects a cell and starts the cell-editor (If a different cell is
             already in edit, changes to that cell are accepted.)
 LMB+Ctrl  - adds or subtracts a cell from the currently selected cells
 LMB+Shift - selects a block of contiguous cells if there is only one currently
-            selected cell (A contiguous block is required for multicell cut or
+            selected cell (A contiguous block is required for multicell cut and
             copy operations.)
 RMB       - selects a cell and opens the cell context (Note that if editing a
             cell then a right-click on a different part of the table either
