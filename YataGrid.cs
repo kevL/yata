@@ -2052,22 +2052,83 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
-					if (ctr || sft) return;
+					if (ctr) return;
 
 					if (selr != -1)
 					{
-						if (selr > 0)
+						if (!sft)
 						{
-							ClearSelects(true);
+							if (selr > 0)
+							{
+								ClearSelects(true);
 
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-							if (selr < shift) selr  = 0;
-							else              selr -= shift;
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (selr < shift) selr  = 0;
+								else              selr -= shift;
 
-							SelectRow(selr);
+								SelectRow(selr);
+							}
+							EnsureDisplayedRow(selr);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
-						EnsureDisplayedRow(selr);
-						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+					}
+					else if (sft)
+					{
+						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+							&& areSelectedCellsContiguous())
+						{
+							if (sel != null) _cell_anchorshift = sel;
+
+							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
+							{
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (_cell_anchorshift.y - shift < 0) selr = 0;
+								else                                 selr = _cell_anchorshift.y - shift;
+
+								int colstrt, colstop;
+								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
+																				_cell_anchorshift.x - 1].selected)
+								{
+									colstrt = _cell_anchorshift.x;
+									colstop = _cell_anchorshift.x + (_f._copyhori - 1);
+								}
+								else
+								{
+									colstrt = _cell_anchorshift.x - (_f._copyhori - 1);
+									colstop = _cell_anchorshift.x;
+								}
+
+								int anchor = _cell_anchorshift.y;
+
+								bool early1 = false;
+								bool early2 = false;
+
+								for (int r = _cell_anchorshift.y; r >= selr && !early2; --r)
+								for (int c = colstrt;             c <= colstop;         ++c)
+								{
+									if (early1 && !this[r - 1, c].selected)
+									{
+										early2 = true;
+										break;
+									}
+
+									if (r != selr && r != 0 && this[r - 1, c].selected)
+									{
+										this[r,c].selected = false;
+										anchor = r - 1;
+										early1 = true;
+									}
+									else
+									{
+										this[r,c].selected = true;
+										anchor = r;
+									}
+								}
+								_cell_anchorshift = this[anchor, _cell_anchorshift.x];
+							}
+							sel = _cell_anchorshift;
+							display = true;
+						}
 					}
 					else if (sel != null)
 					{
@@ -2094,22 +2155,83 @@ namespace yata
 					break;
 
 				case Keys.PageDown:
-					if (ctr || sft) return;
+					if (ctr) return;
 
 					if (selr != -1)
 					{
-						if (selr != RowCount - 1)
+						if (!sft)
 						{
-							ClearSelects(true);
+							if (selr != RowCount - 1)
+							{
+								ClearSelects(true);
 
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-							if (selr > RowCount - 1 - shift) selr  = RowCount - 1;
-							else                             selr += shift;
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (selr > RowCount - 1 - shift) selr  = RowCount - 1;
+								else                             selr += shift;
 
-							SelectRow(selr);
+								SelectRow(selr);
+							}
+							EnsureDisplayedRow(selr);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
-						EnsureDisplayedRow(selr);
-						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+					}
+					else if (sft)
+					{
+						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+							&& areSelectedCellsContiguous())
+						{
+							if (sel != null) _cell_anchorshift = sel;
+
+							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
+							{
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (_cell_anchorshift.y + shift >= RowCount) selr = RowCount - 1;
+								else                                         selr = _cell_anchorshift.y + shift;
+
+								int colstrt, colstop;
+								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
+																				_cell_anchorshift.x - 1].selected)
+								{
+									colstrt = _cell_anchorshift.x;
+									colstop = _cell_anchorshift.x + (_f._copyhori - 1);
+								}
+								else
+								{
+									colstrt = _cell_anchorshift.x - (_f._copyhori - 1);
+									colstop = _cell_anchorshift.x;
+								}
+
+								int anchor = _cell_anchorshift.y;
+
+								bool early1 = false; // force an early row-stoppage
+								bool early2 = false; // breaks the outer loop
+
+								for (int r = _cell_anchorshift.y; r <= selr && !early2; ++r)
+								for (int c = colstrt;             c <= colstop;         ++c)
+								{
+									if (early1 && !this[r + 1, c].selected)
+									{
+										early2 = true;
+										break;
+									}
+
+									if (r != selr && r != RowCount - 1 && this[r + 1, c].selected)
+									{
+										this[r,c].selected = false;
+										anchor = r + 1;
+										early1 = true;
+									}
+									else
+									{
+										this[r,c].selected = true;
+										anchor = r;
+									}
+								}
+								_cell_anchorshift = this[anchor, _cell_anchorshift.x];
+							}
+							sel = _cell_anchorshift;
+							display = true;
+						}
 					}
 					else if (sel != null)
 					{
@@ -2168,8 +2290,6 @@ namespace yata
 								}
 								else
 								{
-									cells = Rows[_cell_anchorshift.y - 1]._cells;	// select row-cells
-
 									int start, stop;
 									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
 																					_cell_anchorshift.x - 1].selected)
@@ -2183,8 +2303,10 @@ namespace yata
 										stop  = _cell_anchorshift.x;
 									}
 
-									for (int r = start; r <= stop; ++r)
-										cells[r].selected = true;
+									cells = Rows[_cell_anchorshift.y - 1]._cells;	// select row-cells
+
+									for (int c = start; c <= stop; ++c)
+										cells[c].selected = true;
 								}
 
 								_cell_anchorshift = this[_cell_anchorshift.y - 1,
@@ -2246,8 +2368,6 @@ namespace yata
 								}
 								else
 								{
-									cells = Rows[_cell_anchorshift.y + 1]._cells;	// select row-cells
-
 									int start, stop;
 									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
 																					_cell_anchorshift.x - 1].selected)
@@ -2261,8 +2381,10 @@ namespace yata
 										stop  = _cell_anchorshift.x;
 									}
 
-									for (int r = start; r <= stop; ++r)
-										cells[r].selected = true;
+									cells = Rows[_cell_anchorshift.y + 1]._cells;	// select row-cells
+
+									for (int c = start; c <= stop; ++c)
+										cells[c].selected = true;
 								}
 
 								_cell_anchorshift = this[_cell_anchorshift.y + 1,
