@@ -1926,26 +1926,29 @@ namespace yata
 
 							if (_cell_anchorshift.x > FrozenCount) // select col-cells ->
 							{
-								int start, stop;
+								int rowstrt, rowstop;
 								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
 																	  _cell_anchorshift.x].selected)
 								{
-									start = _cell_anchorshift.y;
-									stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+									if (!ctr) rowstrt = _cell_anchorshift.y;
+									else      rowstrt = 0;
+
+									rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
 								}
 								else
 								{
-									start = _cell_anchorshift.y - (_f._copyvert - 1);
-									stop  = _cell_anchorshift.y;
+									if (!ctr) rowstrt = _cell_anchorshift.y - (_f._copyvert - 1);
+									else      rowstrt = 0;
+
+									rowstop = _cell_anchorshift.y;
 								}
 
-								for (int r = start; r <= stop; ++r)
-								for (int c = _cell_anchorshift.x - 1; c != FrozenCount - 1; --c)
+								for (int r = rowstrt; r <= rowstop; ++r)
+								for (int c = _cell_anchorshift.x; c != FrozenCount - 1; --c)
 									this[r,c].selected = true;
 
-								_cell_anchorshift = this[_cell_anchorshift.y, FrozenCount];
+								_cell_anchorshift = this[rowstrt, FrozenCount];
 							}
-
 							sel = _cell_anchorshift;
 							display = true;
 						}
@@ -2002,26 +2005,33 @@ namespace yata
 
 							if (_cell_anchorshift.x != ColCount - 1) // select col-cells ->
 							{
-								int start, stop;
+								int rowstrt, rowstop;
 								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
 																	  _cell_anchorshift.x].selected)
 								{
-									start = _cell_anchorshift.y;
-									stop  = _cell_anchorshift.y + (_f._copyvert - 1);
+									rowstrt = _cell_anchorshift.y;
+
+									if (!ctr)
+										rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
+									else
+										rowstop = RowCount - 1;
 								}
 								else
 								{
-									start = _cell_anchorshift.y - (_f._copyvert - 1);
-									stop  = _cell_anchorshift.y;
+									rowstrt = _cell_anchorshift.y - (_f._copyvert - 1);
+
+									if (!ctr)
+										rowstop = _cell_anchorshift.y;
+									else
+										rowstop = RowCount - 1;
 								}
 
-								for (int r = start; r <= stop; ++r)
-								for (int c = _cell_anchorshift.x + 1; c != ColCount; ++c)
+								for (int r = rowstrt; r <= rowstop; ++r)
+								for (int c = _cell_anchorshift.x; c != ColCount; ++c)
 									this[r,c].selected = true;
 
-								_cell_anchorshift = this[_cell_anchorshift.y, ColCount - 1];
+								_cell_anchorshift = this[rowstop, ColCount - 1];
 							}
-
 							sel = _cell_anchorshift;
 							display = true;
 						}

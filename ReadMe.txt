@@ -176,6 +176,8 @@ Shift+Home                - adds cells to the left to selected cells
 Shift+End                 - adds cells to the right to selected cells
 Shift+PageUp              - adds visible cells above to selected cells
 Shift+PageDown            - adds visible cells below to selected cells
+Ctrl+Shift+Home           - adds cells left and above to selected cells
+Ctrl+Shift+End            - adds cells right and below to selected cells
 
 - w/out 1 cell selected (or more than one cell selected)
 Home                      - scrolls table all the way left
@@ -198,6 +200,10 @@ Shift+End                 - adds cells to the right to selected cells if
 Shift+PageUp              - adds visible cells above to selected cells if
                             selection is contiguous
 Shift+PageDown            - adds visible cells below to selected cells if
+                            selection is contiguous
+Ctrl+Shift+Home           - adds cells left and above to selected cells if
+                            selection is contiguous
+Ctrl+Shift+End            - adds cells right and below to selected cells if
                             selection is contiguous
 
 - w/ row selected
