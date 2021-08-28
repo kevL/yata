@@ -2061,8 +2061,7 @@ namespace yata
 								ClearSelects(true);
 
 								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (selr < shift) selr  = 0;
-								else              selr -= shift;
+								if ((selr -= shift) < 0) selr = 0;
 
 								SelectRow(selr);
 							}
@@ -2082,9 +2081,7 @@ namespace yata
 								if (!ctr)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
-									if (_cell_anchorshift.y - shift < 0) selr = 0;
-									else                                 selr = _cell_anchorshift.y - shift;
+									if ((selr = _cell_anchorshift.y - shift) < 0) selr = 0;
 								}
 								else
 									selr = 0;
@@ -2143,8 +2140,7 @@ namespace yata
 								sel.selected = false;
 
 								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (sel.y < shift) selr = 0;
-								else               selr = sel.y - shift;
+								if ((selr = sel.y - shift) < 0) selr = 0;
 
 								(sel = this[selr, sel.x]).selected = true;
 							}
@@ -2171,8 +2167,7 @@ namespace yata
 								ClearSelects(true);
 
 								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (selr > RowCount - 1 - shift) selr  = RowCount - 1;
-								else                             selr += shift;
+								if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
 
 								SelectRow(selr);
 							}
@@ -2192,9 +2187,7 @@ namespace yata
 								if (!ctr)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-
-									if (_cell_anchorshift.y + shift >= RowCount) selr = RowCount - 1;
-									else                                         selr = _cell_anchorshift.y + shift;
+									if ((selr = _cell_anchorshift.y + shift) > RowCount - 1) selr = RowCount - 1;
 								}
 								else
 									selr = RowCount - 1;
@@ -2253,8 +2246,7 @@ namespace yata
 								sel.selected = false;
 
 								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (sel.y > RowCount - 1 - shift) selr = RowCount - 1;
-								else                              selr = sel.y + shift;
+								if ((selr = sel.y + shift) > RowCount - 1) selr = RowCount - 1;
 
 								(sel = this[selr, sel.x]).selected = true;
 							}
