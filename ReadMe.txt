@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 august 26
+2021 august 27
 kevL's
 ver 4.2.1.0
 
@@ -174,6 +174,8 @@ Left/Right/Up/Down arrows - selects next cell in the direction
 Shift+arrows              - adds next cell in direction to selected cells
 Shift+Home                - adds cells to the left to selected cells
 Shift+End                 - adds cells to the right to selected cells
+Shift+PageUp              - adds visible cells above to selected cells
+Shift+PageDown            - adds visible cells below to selected cells
 
 - w/out 1 cell selected (or more than one cell selected)
 Home                      - scrolls table all the way left
@@ -192,6 +194,10 @@ Shift+arrows              - adds next cells in direction to selected cells if
 Shift+Home                - adds cells to the left to selected cells if
                             selection is contiguous
 Shift+End                 - adds cells to the right to selected cells if
+                            selection is contiguous
+Shift+PageUp              - adds visible cells above to selected cells if
+                            selection is contiguous
+Shift+PageDown            - adds visible cells below to selected cells if
                             selection is contiguous
 
 - w/ row selected
