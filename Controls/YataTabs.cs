@@ -9,8 +9,7 @@ namespace yata
 	/// Theirs was fucked so I figured it out. Tks
 	/// </summary>
 	sealed class YataTabs
-		:
-			TabControl
+		: TabControl
 	{
 		// DoDragDrop/OnDragEnter/OnDragOver/OnDragDrop/OnDragLeave
 		// NOTE: The MouseUp event does NOT fire when a drag-drop is released.
@@ -70,6 +69,29 @@ namespace yata
 
 
 		#region Events (override)
+		/// <summary>
+		/// Bypasses <c>[Ctrl+Shift+PageUp/Down]</c> that would change the
+		/// active tab so that <c><see cref="YataGrid"/>.OnKeyDown()</c> can
+		/// handle it.
+		/// </summary>
+		/// <remarks><c>[Ctrl+PageUp/Down]</c> as well as <c>[Ctrl+Tab]</c> w/
+		/// or w/out <c>[Shift]</c> still work to change tabpages.</remarks>
+		protected override void OnKeyDown(KeyEventArgs ke)
+		{
+			switch (ke.KeyData)
+			{
+				case Keys.Shift | Keys.Control | Keys.PageUp:
+				case Keys.Shift | Keys.Control | Keys.PageDown:
+					return;
+			}
+//			ke.Control && (ke.KeyCode == Keys.Tab
+//						|| ke.KeyCode == Keys.Next
+//						|| ke.KeyCode == Keys.Prior)
+
+			base.OnKeyDown(ke);
+		}
+
+
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left
