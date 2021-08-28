@@ -1882,7 +1882,7 @@ namespace yata
 		{
 			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			if ((e.Modifiers & Keys.Alt) != 0)
+			if ((e.Modifiers & Keys.Alt) != 0) // ~redundant
 				return;
 
 
@@ -2052,11 +2052,9 @@ namespace yata
 					break;
 
 				case Keys.PageUp:
-					if (ctr) return;
-
 					if (selr != -1)
 					{
-						if (!sft)
+						if (!ctr && !sft)
 						{
 							if (selr > 0)
 							{
@@ -2081,9 +2079,15 @@ namespace yata
 
 							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
 							{
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (_cell_anchorshift.y - shift < 0) selr = 0;
-								else                                 selr = _cell_anchorshift.y - shift;
+								if (!ctr)
+								{
+									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+
+									if (_cell_anchorshift.y - shift < 0) selr = 0;
+									else                                 selr = _cell_anchorshift.y - shift;
+								}
+								else
+									selr = 0;
 
 								int colstrt, colstop;
 								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
@@ -2100,13 +2104,13 @@ namespace yata
 
 								int anchor = _cell_anchorshift.y;
 
-								bool early1 = false;
-								bool early2 = false;
+								bool early1 = false; // force an early row-stop
+								bool early2 = false; // breaks the outer loop
 
 								for (int r = _cell_anchorshift.y; r >= selr && !early2; --r)
 								for (int c = colstrt;             c <= colstop;         ++c)
 								{
-									if (early1 && !this[r - 1, c].selected)
+									if (early1 && r != 0 && !this[r - 1, c].selected)
 									{
 										early2 = true;
 										break;
@@ -2130,36 +2134,37 @@ namespace yata
 							display = true;
 						}
 					}
-					else if (sel != null)
+					else if (!ctr)
 					{
-						if (sel.y != 0 && sel.x >= FrozenCount)
+						if (sel != null)
 						{
-							sel.selected = false;
+							if (sel.y != 0 && sel.x >= FrozenCount)
+							{
+								sel.selected = false;
 
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-							if (sel.y < shift) selr = 0;
-							else               selr = sel.y - shift;
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (sel.y < shift) selr = 0;
+								else               selr = sel.y - shift;
 
-							(sel = this[selr, sel.x]).selected = true;
+								(sel = this[selr, sel.x]).selected = true;
+							}
+							display = true;
 						}
-						display = true;
-					}
-					else if (_visVert)
-					{
-						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-						if (_scrollVert.Value - h < 0)
-							_scrollVert.Value = 0;
-						else
-							_scrollVert.Value -= h;
+						else if (_visVert)
+						{
+							int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+							if (_scrollVert.Value - h < 0)
+								_scrollVert.Value = 0;
+							else
+								_scrollVert.Value -= h;
+						}
 					}
 					break;
 
 				case Keys.PageDown:
-					if (ctr) return;
-
 					if (selr != -1)
 					{
-						if (!sft)
+						if (!ctr && !sft)
 						{
 							if (selr != RowCount - 1)
 							{
@@ -2184,9 +2189,15 @@ namespace yata
 
 							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
 							{
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if (_cell_anchorshift.y + shift >= RowCount) selr = RowCount - 1;
-								else                                         selr = _cell_anchorshift.y + shift;
+								if (!ctr)
+								{
+									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+
+									if (_cell_anchorshift.y + shift >= RowCount) selr = RowCount - 1;
+									else                                         selr = _cell_anchorshift.y + shift;
+								}
+								else
+									selr = RowCount - 1;
 
 								int colstrt, colstop;
 								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
@@ -2203,13 +2214,13 @@ namespace yata
 
 								int anchor = _cell_anchorshift.y;
 
-								bool early1 = false; // force an early row-stoppage
+								bool early1 = false; // force an early row-stop
 								bool early2 = false; // breaks the outer loop
 
 								for (int r = _cell_anchorshift.y; r <= selr && !early2; ++r)
 								for (int c = colstrt;             c <= colstop;         ++c)
 								{
-									if (early1 && !this[r + 1, c].selected)
+									if (early1 && r != RowCount - 1 && !this[r + 1, c].selected)
 									{
 										early2 = true;
 										break;
@@ -2233,27 +2244,30 @@ namespace yata
 							display = true;
 						}
 					}
-					else if (sel != null)
+					else if (!ctr)
 					{
-						if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
+						if (sel != null)
 						{
-							sel.selected = false;
+							if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
+							{
+								sel.selected = false;
 
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-							if (sel.y > RowCount - 1 - shift) selr = RowCount - 1;
-							else                              selr = sel.y + shift;
+								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+								if (sel.y > RowCount - 1 - shift) selr = RowCount - 1;
+								else                              selr = sel.y + shift;
 
-							(sel = this[selr, sel.x]).selected = true;
+								(sel = this[selr, sel.x]).selected = true;
+							}
+							display = true;
 						}
-						display = true;
-					}
-					else if (_visVert)
-					{
-						int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-						if (_scrollVert.Value + h > MaxVert)
-							_scrollVert.Value = MaxVert;
-						else
-							_scrollVert.Value += h;
+						else if (_visVert)
+						{
+							int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+							if (_scrollVert.Value + h > MaxVert)
+								_scrollVert.Value = MaxVert;
+							else
+								_scrollVert.Value += h;
+						}
 					}
 					break;
 
