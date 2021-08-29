@@ -55,8 +55,7 @@ namespace yata
 	/// Contains data about a row.
 	/// </summary>
 	sealed class Row
-		:
-			ICloneable
+		: ICloneable
 	{
 		#region Fields and Properties
 		/// <summary>
@@ -162,8 +161,7 @@ namespace yata
 	/// Contains data about a cell.
 	/// </summary>
 	sealed class Cell
-		:
-			ICloneable
+		: ICloneable
 	{
 		internal enum CellState
 		{
