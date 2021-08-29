@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 august 27
+2021 august 28
 kevL's
 ver 4.2.1.0
 
@@ -163,48 +163,8 @@ Help
 
 
 KEYBOARD:
-- w/ only 1 cell selected
-Home                      - selects cell at start of the row
-End                       - selects cell at the end of the row
-PageUp                    - selects cell a page above
-PageDown                  - selects cell a page below
-Ctrl+Home                 - selects first cell in the table
-Ctrl+End                  - selects first cell in the last row of the table
-Left/Right/Up/Down arrows - selects next cell in the direction
-Shift+arrows              - adds next cell in direction to selected cells
-Shift+Home                - adds cells to the left to selected cells
-Shift+End                 - adds cells to the right to selected cells
-Shift+PageUp              - adds visible cells above to selected cells
-Shift+PageDown            - adds visible cells below to selected cells
-Ctrl+Shift+Home           - adds cells left and above to selected cells
-Ctrl+Shift+End            - adds cells right and below to selected cells
 
-- w/out 1 cell selected (or more than one cell selected)
-Home                      - scrolls table all the way left
-End                       - scrolls table all the way right
-PageUp                    - scrolls table a page up
-PageDown                  - scrolls table a page down
-Ctrl+Home                 - scrolls table to top
-Ctrl+End                  - scrolls table to bottom
-Left/Right/Up/Down arrows - scrolls table in the direction
-Shift+Left                - scrolls table left by visible width if no cell is
-                            selected or selection is not contiguous
-Shift+Right               - scrolls table right by visible width if no cell is
-                            selected or selection is not contiguous
-Shift+arrows              - adds next cells in direction to selected cells if
-                            selection is contiguous
-Shift+Home                - adds cells to the left to selected cells if
-                            selection is contiguous
-Shift+End                 - adds cells to the right to selected cells if
-                            selection is contiguous
-Shift+PageUp              - adds visible cells above to selected cells if
-                            selection is contiguous
-Shift+PageDown            - adds visible cells below to selected cells if
-                            selection is contiguous
-Ctrl+Shift+Home           - adds cells left and above to selected cells if
-                            selection is contiguous
-Ctrl+Shift+End            - adds cells right and below to selected cells if
-                            selection is contiguous
+If a row is selected then key-input for rows takes precedence.
 
 - w/ row selected
 Home              - scrolls table all the way left
@@ -217,6 +177,52 @@ Up/Down arrows    - selects the row in the direction
 Left/Right arrows - scrolls table in the direction
 Shift+Left        - scrolls table left by visible width
 Shift+Right       - scrolls table right by visible width
+
+- w/ only 1 cell selected
+Home                      - selects cell at start of the row
+End                       - selects cell at the end of the row
+PageUp                    - selects cell a page above
+PageDown                  - selects cell a page below
+Ctrl+Home                 - selects first cell in the table
+Ctrl+End                  - selects first cell in last row of the table
+Left/Right/Up/Down arrows - selects next cell in the direction
+
+- w/out cell selected or 2+ cells selected
+Home                      - scrolls table all the way left
+End                       - scrolls table all the way right
+PageUp                    - scrolls table a page up
+PageDown                  - scrolls table a page down
+Ctrl+Home                 - scrolls table to top
+Ctrl+End                  - scrolls table to bottom
+Left/Right/Up/Down arrows - scrolls table in the direction
+Shift+Left                - scrolls table left by visible width if no cell is
+                            selected or selection is not contiguous
+Shift+Right               - scrolls table right by visible width if no cell is
+                            selected or selection is not contiguous
+
+- extended keyboard handling when only 1 cell is selected or if selection is a
+  contiguous block of cells
+Shift+arrows              - adds/subtracts cells in direction if selection is
+                            contiguous
+Shift+Home                - adds/subtracts row-cells left if selection is
+                            contiguous
+Shift+End                 - adds/subtracts row-cells right if selection is
+                            contiguous
+Ctrl+Shift+Home           - adds cells left and above if selection is contiguous
+Ctrl+Shift+End            - adds cells right and below if selection is
+                            contiguous
+Shift+PageUp              - adds/subtracts visible col-cells above if selection
+                            is contiguous
+Shift+PageDown            - adds/subtracts visible col-cells below if selection
+                            is contiguous
+Ctrl+Shift+PageUp         - adds/subtracts col-cells above if selection is
+                            contiguous
+Ctrl+Shift+PageDown       - adds/subtracts col-cells below if selection is
+                            contiguous
+
+Space - focuses the table and selects the first cell. If cell(s) are already
+        selected all cells but the first will be deselected and the table will
+        scroll to ensure that the first selected cell is visible.
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
@@ -235,9 +241,8 @@ Shift+Delete - when a row is selected (as indicated with a green field at the
                range of rows to delete. If all rows of a table are deleted a
                single default row will be created.
 
-Space - focuses the table and selects the first cell. If cell(s) are already
-        selected all cells but the first will be deselected and the table will
-        scroll to ensure that the first selected cell is visible.
+Note that Cut, Copy, Paste operations have their keys listed under the Cells and
+Rows descriptions above. The Col operations do not have shortcuts.
 
 
 MOUSE:
