@@ -2777,7 +2777,11 @@ namespace yata
 		{
 			Select(); // focus table
 
-			Cell sel = getFirstSelectedCell();
+			Cell sel;
+			if (_cell_anchorshift != null && _cell_anchorshift.selected) // TODO: not sure that's wanted <-
+				sel = _cell_anchorshift;
+			else
+				sel = getFirstSelectedCell();
 
 			ClearSelects(true);
 
@@ -3566,6 +3570,8 @@ namespace yata
 		/// being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		internal void ClearSelects(bool bypassEnableCelledit = false, bool bypassEnableRowedit = false)
 		{
+			_cell_anchorshift = null; // ~safety.
+
 			foreach (var col in Cols)
 			if (col.selected)
 			{
