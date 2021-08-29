@@ -84,10 +84,6 @@ namespace yata
 				case Keys.Shift | Keys.Control | Keys.PageDown:
 					return;
 			}
-//			ke.Control && (ke.KeyCode == Keys.Tab
-//						|| ke.KeyCode == Keys.Next
-//						|| ke.KeyCode == Keys.Prior)
-
 			base.OnKeyDown(ke);
 		}
 
