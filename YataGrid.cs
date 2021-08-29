@@ -1922,10 +1922,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.x > FrozenCount) // select col-cells ->
 							{
@@ -2033,10 +2030,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.x != ColCount - 1) // select col-cells ->
 							{
@@ -2144,10 +2138,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2253,10 +2244,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2357,10 +2345,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2438,10 +2423,7 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null)
-								_cell_anchorshift = sel;
-							else if (_cell_anchorshift == null)
-								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+							assignAnchorCell(sel);
 
 							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2535,10 +2517,7 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								if (sel != null)
-									_cell_anchorshift = sel;
-								else if (_cell_anchorshift == null)
-									_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+								assignAnchorCell(sel);
 
 								if (_cell_anchorshift.x > FrozenCount)
 								{
@@ -2636,10 +2615,7 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								if (sel != null)
-									_cell_anchorshift = sel;
-								else if (_cell_anchorshift == null)
-									_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
+								assignAnchorCell(sel);
 
 								if (_cell_anchorshift.x != ColCount - 1)
 								{
@@ -2728,6 +2704,22 @@ namespace yata
 			}
 
 			_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
+		}
+
+		/// <summary>
+		/// Assigns the current <c><see cref="_cell_anchorshift"/></c>.
+		/// </summary>
+		/// <param name="sel">the currently selected <c><see cref="Cell"/></c></param>
+		/// <remarks>Helper for
+		/// <c><see cref="OnKeyDown()">OnKeyDown()</see></c>.</remarks>
+		void assignAnchorCell(Cell sel)
+		{
+			if (sel != null)
+				_cell_anchorshift = sel;
+			else if (_cell_anchorshift == null || !_cell_anchorshift.selected)
+				_cell_anchorshift = getFirstSelectedCell();
+
+			// TODO: get an anchorcell close to the previous anchorcell if !selected
 		}
 
 		/// <summary>
