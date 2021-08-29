@@ -1922,7 +1922,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.x > FrozenCount) // select col-cells ->
 							{
@@ -1943,11 +1946,40 @@ namespace yata
 									rowstop = _cell_anchorshift.y;
 								}
 
-								for (int r = rowstrt; r <= rowstop; ++r)
-								for (int c = _cell_anchorshift.x; c != FrozenCount - 1; --c)
-									this[r,c].selected = true;
+								int anchor = _cell_anchorshift.x;
 
-								_cell_anchorshift = this[rowstrt, FrozenCount];
+								bool early1 = false; // force an early col-stop
+								bool early2 = false; // breaks the outer loop
+
+								for (int c = _cell_anchorshift.x; c >= FrozenCount && !early2; --c) // do cols first
+								for (int r = rowstrt;             r <= rowstop;                ++r)
+								{
+									if (ctr) // bypass the funky left/right deters
+									{
+										this[r,c].selected = true;
+									}
+									else
+									{
+										if (early1 && c != FrozenCount && !this[r, c - 1].selected)
+										{
+											early2 = true;
+											break;
+										}
+
+										if (c != FrozenCount && this[r, c - 1].selected)
+										{
+											this[r,c].selected = false;
+											anchor = c - 1;
+											early1 = true;
+										}
+										else
+										{
+											this[r,c].selected = true;
+											anchor = c;
+										}
+									}
+								}
+								_cell_anchorshift = this[rowstrt, anchor];
 							}
 							sel = _cell_anchorshift;
 							display = true;
@@ -2001,7 +2033,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.x != ColCount - 1) // select col-cells ->
 							{
@@ -2011,26 +2046,51 @@ namespace yata
 								{
 									rowstrt = _cell_anchorshift.y;
 
-									if (!ctr)
-										rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
-									else
-										rowstop = RowCount - 1;
+									if (!ctr) rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
+									else      rowstop = RowCount - 1;
 								}
 								else
 								{
 									rowstrt = _cell_anchorshift.y - (_f._copyvert - 1);
 
-									if (!ctr)
-										rowstop = _cell_anchorshift.y;
-									else
-										rowstop = RowCount - 1;
+									if (!ctr) rowstop = _cell_anchorshift.y;
+									else      rowstop = RowCount - 1;
 								}
 
-								for (int r = rowstrt; r <= rowstop; ++r)
-								for (int c = _cell_anchorshift.x; c != ColCount; ++c)
-									this[r,c].selected = true;
+								int anchor = _cell_anchorshift.x;
 
-								_cell_anchorshift = this[rowstop, ColCount - 1];
+								bool early1 = false; // force an early col-stop
+								bool early2 = false; // breaks the outer loop
+
+								for (int c = _cell_anchorshift.x; c != ColCount && !early2; ++c) // do cols first
+								for (int r = rowstrt;             r <= rowstop;             ++r)
+								{
+									if (ctr) // bypass the funky left/right deters
+									{
+										this[r,c].selected = true;
+									}
+									else
+									{
+										if (early1 && c != ColCount - 1 && !this[r, c + 1].selected)
+										{
+											early2 = true;
+											break;
+										}
+
+										if (c != ColCount - 1 && this[r, c + 1].selected)
+										{
+											this[r,c].selected = false;
+											anchor = c + 1;
+											early1 = true;
+										}
+										else
+										{
+											this[r,c].selected = true;
+											anchor = c;
+										}
+									}
+								}
+								_cell_anchorshift = this[rowstrt, anchor];
 							}
 							sel = _cell_anchorshift;
 							display = true;
@@ -2084,7 +2144,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2190,7 +2253,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2291,7 +2357,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2369,7 +2438,10 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							if (sel != null) _cell_anchorshift = sel;
+							if (sel != null)
+								_cell_anchorshift = sel;
+							else if (_cell_anchorshift == null)
+								_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
 							{
@@ -2463,7 +2535,10 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								if (sel != null) _cell_anchorshift = sel;
+								if (sel != null)
+									_cell_anchorshift = sel;
+								else if (_cell_anchorshift == null)
+									_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 								if (_cell_anchorshift.x > FrozenCount)
 								{
@@ -2561,7 +2636,10 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								if (sel != null) _cell_anchorshift = sel;
+								if (sel != null)
+									_cell_anchorshift = sel;
+								else if (_cell_anchorshift == null)
+									_cell_anchorshift = getFirstSelectedCell(); // TODO: get a better anchorcell perhaps.
 
 								if (_cell_anchorshift.x != ColCount - 1)
 								{
