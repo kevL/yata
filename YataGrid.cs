@@ -2777,11 +2777,11 @@ namespace yata
 		{
 			Select(); // focus table
 
-			Cell sel;
+			Cell sel = getFirstSelectedCell();
 //			if (_cell_anchorshift != null && _cell_anchorshift.selected) // TODO: not sure that's wanted <-
 //				sel = _cell_anchorshift;
 //			else
-			sel = getFirstSelectedCell();
+//				sel = getFirstSelectedCell();
 
 			ClearSelects(true);
 
