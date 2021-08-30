@@ -1924,7 +1924,7 @@ namespace yata
 						{
 							assignAnchorCell(sel);
 
-							if (_cell_anchorshift.x > FrozenCount) // select col-cells ->
+							if (ctr || _cell_anchorshift.x > FrozenCount)
 							{
 								int rowstrt, rowstop;
 								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
@@ -2032,7 +2032,7 @@ namespace yata
 						{
 							assignAnchorCell(sel);
 
-							if (_cell_anchorshift.x != ColCount - 1) // select col-cells ->
+							if (ctr || _cell_anchorshift.x != ColCount - 1)
 							{
 								int rowstrt, rowstop;
 								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
@@ -3548,6 +3548,8 @@ namespace yata
 		/// after it deters required cell-selects.</remarks>
 		void ClearCellSelects()
 		{
+//			_cell_anchorshift = null; // ~safety. Would need to go through all select patterns.
+
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
 				row[c].selected = false;
@@ -3570,7 +3572,7 @@ namespace yata
 		/// being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		internal void ClearSelects(bool bypassEnableCelledit = false, bool bypassEnableRowedit = false)
 		{
-			_cell_anchorshift = null; // ~safety.
+//			_cell_anchorshift = null; // ~safety. Would need to go through all select patterns.
 
 			foreach (var col in Cols)
 			if (col.selected)
