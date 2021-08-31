@@ -11,7 +11,7 @@ namespace yata
 	{
 		#region Enumerators
 		enum StartType
-		{ non, Add, Insert }
+		{ Add, Insert }
 
 		enum StopType
 		{ non, Finish, Count }
@@ -19,8 +19,8 @@ namespace yata
 
 
 		#region Fields (static)
-		static StartType _start = StartType.non;
-		static StopType  _stop  = StopType .non;
+		static StartType _start;
+		static StopType  _stop = StopType.non;
 
 		static string _count = "1";
 
@@ -80,6 +80,8 @@ namespace yata
 			}
 			else
 			{
+				_start = StartType.Add;
+
 				rb_FillSelected.Enabled = false;
 				la_FillSelected.ForeColor = SystemColors.GrayText;
 			}
@@ -95,16 +97,10 @@ namespace yata
 
 			switch (_start)
 			{
-				case StartType.non:
-					rb_StartAdd   .Checked =
-					tb_StartAdd   .Enabled = r == -1;
-					rb_StartInsert.Checked =
-					tb_StartInsert.Enabled = r != -1;
-					break;
-
 				case StartType.Add:
 					rb_StartAdd   .Checked =
 					tb_StartAdd   .Enabled = true;
+
 					rb_StartInsert.Checked =
 					tb_StartInsert.Enabled = false;
 					break;
@@ -112,6 +108,7 @@ namespace yata
 				case StartType.Insert:
 					rb_StartAdd   .Checked =
 					tb_StartAdd   .Enabled = false;
+
 					rb_StartInsert.Checked =
 					tb_StartInsert.Enabled = true;
 					break;
@@ -121,14 +118,16 @@ namespace yata
 			{
 				case StopType.non:
 					rb_StopFinish.Checked =
-					tb_StopFinish.Enabled =  rb_StartAdd.Checked;
+					tb_StopFinish.Enabled = _start == StartType.Add;
+
 					rb_StopCount .Checked =
-					tb_StopCount .Enabled = !rb_StartAdd.Checked;
+					tb_StopCount .Enabled = _start == StartType.Insert;
 					break;
 
 				case StopType.Finish:
 					rb_StopFinish.Checked =
 					tb_StopFinish.Enabled = true;
+
 					rb_StopCount .Checked =
 					tb_StopCount .Enabled = false;
 					break;
@@ -136,6 +135,7 @@ namespace yata
 				case StopType.Count:
 					rb_StopFinish.Checked =
 					tb_StopFinish.Enabled = false;
+
 					rb_StopCount .Checked =
 					tb_StopCount .Enabled = true;
 					break;
