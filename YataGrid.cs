@@ -4344,8 +4344,8 @@ namespace yata
 		/// <summary>
 		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>.
 		/// </summary>
-		/// <returns>the currently selected row-id; <c>-1</c> if no row is
-		/// currently selected</returns>
+		/// <returns>the currently selected row-id; <c>-1</c> if no <c>Row</c>
+		/// is currently selected</returns>
 		internal int getSelectedRow()
 		{
 			for (int r = 0; r != RowCount; ++r)
@@ -4354,6 +4354,32 @@ namespace yata
 					return r;
 			}
 			return -1;
+		}
+
+		/// <summary>
+		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>
+		/// or a row-id that has <c><see cref="Cell">Cells</see></c> selected
+		/// iff only that <c>Row</c> has <c>Cells</c> selected.
+		/// </summary>
+		/// <returns>the currently selected row-id or the row-id that has
+		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is currently valid</returns>
+		internal int getRowOrCellsSelected()
+		{
+			int selr = getSelectedRow();
+			if (selr == -1)
+			{
+				Cell sel = getFirstSelectedCell();
+				if (sel != null)
+				{
+					selr = sel.y;
+
+					for (int r = sel.y + 1; r != RowCount; ++r)
+					for (int c = 0; c != ColCount; ++c)
+						if (this[r,c].selected)
+							return -1;
+				}
+			}
+			return selr;
 		}
 
 		/// <summary>
