@@ -183,6 +183,9 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <PostBuildEvent>copy /y C:\GIT\yata\bin\Release\yata.exe "C:\Program Files\Yata\"
 copy /y C:\GIT\yata\ReadMe.txt "C:\Program Files\Yata\"
+copy /y C:\GIT\yata\bin\Release\yata.exe "C:\GIT\yata\bin\Yata\"
+copy /y C:\GIT\yata\ReadMe.txt "C:\GIT\yata\bin\Yata\"
+copy /y C:\GIT\yata\settings.cfg "C:\GIT\yata\bin\Yata\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
