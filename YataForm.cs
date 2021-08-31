@@ -2706,8 +2706,14 @@ namespace yata
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
 			int selr = Table.getSelectedRow();
+			if (selr == -1)
+			{
+				Cell sel = Table.getSelectedCell();
+				if (sel != null)
+					selr = sel.y;
+			}
 
-			using (var rcd = new RowCreatorDialog(this, selr + 1, _copyr.Count != 0))
+			using (var rcd = new RowCreatorDialog(this, selr, _copyr.Count != 0))
 			{
 				if (rcd.ShowDialog(this) == DialogResult.OK)
 				{

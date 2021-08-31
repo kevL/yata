@@ -41,10 +41,12 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f"></param>
-		/// <param name="r"></param>
-		/// <param name="copyfill"></param>
-		internal RowCreatorDialog(YataForm f, int r, bool copyfill)
+		/// <param name="f">the <c><see cref="YataForm"/></c></param>
+		/// <param name="r">the currently selected row-id</param>
+		/// <param name="copyfillenabled"><c>true</c> if at least one
+		/// <c><see cref="Row"/></c> has been copied into
+		/// <c><see cref="YataForm"/>._copyr</c></param>
+		internal RowCreatorDialog(YataForm f, int r, bool copyfillenabled)
 		{
 			InitializeComponent();
 
@@ -71,14 +73,23 @@ namespace yata
 			}
 
 
-			rb_FillSelected.Enabled = (r != 0);
-			rb_FillCopied  .Enabled = copyfill;
-
-			if (r != 0)
+			if (r != -1)
 			{
 				_start = StartType.Insert;
-				_stop  = StopType.Count;
+				_stop  = StopType .Count;
 			}
+			else
+			{
+				rb_FillSelected.Enabled = false;
+				la_FillSelected.ForeColor = SystemColors.GrayText;
+			}
+
+			if (!copyfillenabled)
+			{
+				rb_FillCopied.Enabled = false;
+				la_FillCopied.ForeColor = SystemColors.ControlDark;
+			}
+
 
 			_init = true;
 
@@ -86,9 +97,9 @@ namespace yata
 			{
 				case StartType.non:
 					rb_StartAdd   .Checked =
-					tb_StartAdd   .Enabled = (r == 0);
+					tb_StartAdd   .Enabled = r == -1;
 					rb_StartInsert.Checked =
-					tb_StartInsert.Enabled = (r != 0);
+					tb_StartInsert.Enabled = r != -1;
 					break;
 
 				case StartType.Add:
@@ -131,13 +142,16 @@ namespace yata
 			}
 
 			tb_StartAdd   .Text = YataForm.Table.Rows.Count.ToString();
-			tb_StartInsert.Text = r.ToString();
+			tb_StartInsert.Text = (r + 1).ToString();
 
-			int result = Int32.Parse(_count); // shall be valid and greater than 0.
-			if (rb_StartAdd.Checked)
-				tb_StopFinish.Text = (Int32.Parse(tb_StartAdd   .Text) + result - 1).ToString(); // readonly - shall be valid.
-			else //if (rb_StartInsert.Checked)
-				tb_StopFinish.Text = (Int32.Parse(tb_StartInsert.Text) + result - 1).ToString(); // shall be valid.
+			int result = Int32.Parse(_count);	// shall be valid and greater than 0.
+			Control tb;
+			if (rb_StartAdd.Checked)			// readonly - shall be valid.
+				tb = tb_StartAdd;
+			else // rb_StartInsert.Checked		// shall be valid.
+				tb = tb_StartInsert;
+
+			tb_StopFinish.Text = (Int32.Parse(tb.Text) + result - 1).ToString();
 
 			tb_StopCount.Text = _count;
 
@@ -146,7 +160,7 @@ namespace yata
 
 			if (rb_StartAdd.Checked)
 				btn_Accept.Text = ADD;
-			else //if (rb_StartInsert.Checked)
+			else // rb_StartInsert.Checked
 				btn_Accept.Text = INSERT;
 
 			tb_StartAdd.BackColor = Colors.TextboxReadonly;
@@ -161,7 +175,7 @@ namespace yata
 				tb_StopFinish.BackColor = Colors.TextboxSelected;
 				tb_StopCount .BackColor = Colors.TextboxBackground;
 			}
-			else //if (rb_StopCount.Checked)
+			else // rb_StopCount.Checked
 			{
 				tb_StopFinish.BackColor = Colors.TextboxBackground;
 				tb_StopCount .BackColor = Colors.TextboxSelected;
@@ -171,18 +185,22 @@ namespace yata
 
 
 		#region Events (override)
+		/// <summary>
+		/// Overrides the <c>FormClosing</c> handler.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			if (!(e.Cancel = _cancel))
 			{
 				if (rb_StartAdd.Checked)
 					_start = StartType.Add;
-				else //if (rb_StartInsert.Checked)
+				else // rb_StartInsert.Checked
 					_start = StartType.Insert;
 
 				if (rb_StopCount.Checked)
 					_stop = StopType.Count;
-				else //if (rb_StopFinish.Checked)
+				else // rb_StopFinish.Checked
 					_stop = StopType.Finish;
 
 				int result;
@@ -203,7 +221,16 @@ namespace yata
 
 
 		#region Events
-		void checkchanged(object sender, EventArgs e)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="rb_StartAdd"/></c></item>
+		/// <item><c><see cref="rb_StopFinish"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void checkedchanged(object sender, EventArgs e)
 		{
 			if (!_init)
 			{
@@ -211,70 +238,69 @@ namespace yata
 
 				if (rb == rb_StartAdd)
 				{
+					Control tb;
+
 					if (tb_StartAdd.Enabled = rb.Checked)
+					{
 						btn_Accept.Text = ADD;
 
-					tb_StartInsert.Enabled = !rb.Checked;
+						tb = tb_StartAdd;
 
-					tb_StartInsert.BackColor = Colors.TextboxBackground;
-
-					int result2;
-					if (Int32.TryParse(tb_StopCount.Text, out result2)
-						&& result2 > 0)
-					{
-						int result = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
-						tb_StopFinish.Text = (result + result2 - 1).ToString();
+						tb_StartInsert.BackColor = Colors.TextboxBackground;
+						tb_StartInsert.Enabled   = false;
 					}
-				}
-				else if (rb == rb_StartInsert)
-				{
-					tb_StartAdd .Enabled = !rb.Checked;
-
-					if (tb_StartInsert.Enabled = rb.Checked)
+					else
+					{
 						btn_Accept.Text = INSERT;
 
-					tb_StartInsert.BackColor = Colors.TextboxSelected;
+						(tb = tb_StartInsert).BackColor = Colors.TextboxSelected;
+						 tb                  .Enabled   = true;
+					}
 
 					int result2;
 					if (Int32.TryParse(tb_StopCount.Text, out result2)
 						&& result2 > 0)
 					{
 						int result;
-						if (Int32.TryParse(tb_StartInsert.Text, out result))
+						if (Int32.TryParse(tb.Text, out result)
+							&& result > -1 && result <= YataForm.Table.RowCount)
+						{
 							tb_StopFinish.Text = (result + result2 - 1).ToString();
+						}
 					}
 				}
-				else if (rb == rb_StopFinish)
+				else // rb == rb_StopFinish
 				{
 					if (tb_StopFinish.Enabled = rb.Checked)
 					{
 						tb_StopFinish.BackColor = Colors.TextboxSelected;
+						tb_StopFinish.Enabled   = true;
+
 						tb_StopCount .BackColor = Colors.TextboxBackground;
+						tb_StopCount .Enabled   = false;
 					}
 					else
 					{
 						tb_StopFinish.BackColor = Colors.TextboxBackground;
+						tb_StopFinish.Enabled   = false;
+
 						tb_StopCount .BackColor = Colors.TextboxSelected;
+						tb_StopCount .Enabled   = true;
 					}
-					tb_StopCount.Enabled = !rb.Checked;
-				}
-				else //if (rb == rb_StopCount)
-				{
-					if (tb_StopCount.Enabled = rb.Checked)
-					{
-						tb_StopFinish.BackColor = Colors.TextboxBackground;
-						tb_StopCount .BackColor = Colors.TextboxSelected;
-					}
-					else
-					{
-						tb_StopFinish.BackColor = Colors.TextboxSelected;
-						tb_StopCount .BackColor = Colors.TextboxBackground;
-					}
-					tb_StopFinish.Enabled = !rb.Checked;
 				}
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <list type="bullet">
+		/// <item>tb_StartInsert</item>
+		/// <item>tb_StopCount</item>
+		/// <item>tb_StopFinish</item>
+		/// </list>
+		/// <param name="e"></param>
 		void textchanged(object sender, EventArgs e)
 		{
 			if (!_init)
@@ -283,10 +309,10 @@ namespace yata
 
 				int result;
 				if (Int32.TryParse(tb.Text, out result)
-					&& (result > 0 || (tb != tb_StopCount && result > -1)))
+					&& (result > 0 || (result > -1 && tb != tb_StopCount)))
 				{
 					int result2;
-					if (tb == tb_StartInsert) // result
+					if (tb == tb_StartInsert)
 					{
 						if (result > YataForm.Table.Rows.Count)
 						{
@@ -305,7 +331,7 @@ namespace yata
 							}
 						}
 					}
-					else if (tb == tb_StopFinish) // result
+					else if (tb == tb_StopFinish)
 					{
 						if (rb_StartAdd.Checked)
 						{
@@ -323,7 +349,7 @@ namespace yata
 								tb_StopCount.Text = (result - result2 + 1).ToString();
 							}
 						}
-						else //if (rb_StartInsert.Checked)
+						else // rb_StartInsert.Checked
 						{
 							if (!Int32.TryParse(tb_StartInsert.Text, out result2)
 								|| result < result2)
@@ -340,7 +366,7 @@ namespace yata
 							}
 						}
 					}
-					else //if (tb == tb_StopCount) // result
+					else // tb == tb_StopCount
 					{
 						tb_StopCount.ForeColor = SystemColors.WindowText;
 						la_StopCount.ForeColor = SystemColors.ControlText;
@@ -350,7 +376,7 @@ namespace yata
 							result2 = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
 							tb_StopFinish.Text = (result + result2 - 1).ToString();
 						}
-						else //if (rb_StartInsert.Checked)
+						else // rb_StartInsert.Checked
 						{
 							if (Int32.TryParse(tb_StartInsert.Text, out result2))
 								tb_StopFinish.Text = (result + result2 - 1).ToString();
@@ -369,7 +395,7 @@ namespace yata
 						tb_StopFinish.ForeColor =
 						la_StopFinish.ForeColor = Color.Firebrick;
 					}
-					else //if (tb == tb_StopCount)
+					else // tb == tb_StopCount
 					{
 						tb_StopCount.ForeColor =
 						la_StopCount.ForeColor = Color.Firebrick;
@@ -382,11 +408,11 @@ namespace yata
 		/// <summary>
 		/// Fires when user clicks Ok. Let the chips fly.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_Ok(object sender, EventArgs e)
 		{
-			_cancel = false;
+			_cancel = true;
 
 			int result;
 			if (rb_StartAdd.Checked)
@@ -395,58 +421,48 @@ namespace yata
 
 				if (rb_StopFinish.Checked)
 				{
-					if (Int32.TryParse(tb_StopFinish.Text, out result))
+					if (Int32.TryParse(tb_StopFinish.Text, out result)
+						&& (_f._lengthCr = result - _f._startCr + 1) > 0)
 					{
-						_f._lengthCr = result - _f._startCr + 1;
+						_cancel = false;
 					}
-					else
-						_cancel = true;
 				}
-				else //if (rb_StopCount.Checked)
+				else // rb_StopCount.Checked
 				{
-					if (Int32.TryParse(tb_StopCount.Text, out result))
+					if (Int32.TryParse(tb_StopCount.Text, out result)
+						&& (_f._lengthCr = result) > 0)
 					{
-						_f._lengthCr = result;
+						_cancel = false;
 					}
-					else
-						_cancel = true;
 				}
 			}
-			else //if (rb_StartInsert.Checked)
+			else // rb_StartInsert.Checked
 			{
-				if (Int32.TryParse(tb_StartInsert.Text, out result))
+				if (Int32.TryParse(tb_StartInsert.Text, out result)
+					&& (_f._startCr = result) > -1
+					&&  _f._startCr <= YataForm.Table.RowCount)
 				{
-					_f._startCr = result;
-
 					if (rb_StopFinish.Checked)
 					{
-						if (Int32.TryParse(tb_StopFinish.Text, out result))
+						if (Int32.TryParse(tb_StopFinish.Text, out result)
+							&& (_f._lengthCr = result - _f._startCr + 1) > 0)
 						{
-							_f._lengthCr = result - _f._startCr + 1;
+							_cancel = false;
 						}
-						else
-							_cancel = true;
 					}
-					else //if (rb_StopCount.Checked)
+					else // rb_StopCount.Checked
 					{
-						if (Int32.TryParse(tb_StopCount.Text, out result))
+						if (Int32.TryParse(tb_StopCount.Text, out result)
+							&& (_f._lengthCr = result) > 0)
 						{
-							_f._lengthCr = result;
+							_cancel = false;
 						}
-						else
-							_cancel = true;
 					}
 				}
-				else
-					_cancel = true;
 			}
 
-			if (_cancel
-				|| _f._startCr < 0
-				|| _f._startCr > YataForm.Table.RowCount
-				|| _f._lengthCr < 1)
+			if (_cancel)
 			{
-				_cancel = true;
 				MessageBox.Show(GetDarthQuote(),
 								" Error",
 								MessageBoxButtons.OK,
@@ -457,6 +473,39 @@ namespace yata
 			else if (rb_FillCopied  .Checked) _f._fillCr = YataForm.CrFillType.Copied;
 			else if (rb_FillSelected.Checked) _f._fillCr = YataForm.CrFillType.Selected;
 			else                              _f._fillCr = YataForm.CrFillType.Stars; // rb_FillStars.Checked
+		}
+
+
+		/// <summary>
+		/// Enables a fillstyle <c>RadioButton</c> when its corresponding
+		/// <c>Label</c> is clicked.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="la_FillCopied"/></c></item>
+		/// <item><c><see cref="la_FillSelected"/></c></item>
+		/// <item><c><see cref="la_FillStars"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void click_Fill(object sender, EventArgs e)
+		{
+			var la = sender as Label;
+
+			if (la == la_FillCopied)
+			{
+				if (rb_FillCopied.Enabled && !rb_FillCopied.Checked)
+					rb_FillCopied.Checked = true;
+			}
+			else if (la == la_FillSelected)
+			{
+				if (rb_FillSelected.Enabled && !rb_FillSelected.Checked)
+					rb_FillSelected.Checked = true;
+			}
+			else // la == la_FillStars
+			{
+				if (!rb_FillStars.Checked)
+					 rb_FillStars.Checked = true;
+			}
 		}
 		#endregion Events
 

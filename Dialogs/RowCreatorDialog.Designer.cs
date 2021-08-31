@@ -26,6 +26,9 @@ namespace yata
 		RadioButton rb_FillCopied;
 		RadioButton rb_FillStars;
 		RadioButton rb_FillSelected;
+		Label la_FillCopied;
+		Label la_FillSelected;
+		Label la_FillStars;
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -52,6 +55,9 @@ namespace yata
 			this.la_StopCount = new System.Windows.Forms.Label();
 			this.rb_StopCount = new System.Windows.Forms.RadioButton();
 			this.gb_Fillstyle = new System.Windows.Forms.GroupBox();
+			this.la_FillCopied = new System.Windows.Forms.Label();
+			this.la_FillSelected = new System.Windows.Forms.Label();
+			this.la_FillStars = new System.Windows.Forms.Label();
 			this.rb_FillSelected = new System.Windows.Forms.RadioButton();
 			this.rb_FillCopied = new System.Windows.Forms.RadioButton();
 			this.rb_FillStars = new System.Windows.Forms.RadioButton();
@@ -93,7 +99,7 @@ namespace yata
 			this.rb_StartAdd.TabIndex = 0;
 			this.rb_StartAdd.Text = "Add row(s)";
 			this.rb_StartAdd.UseVisualStyleBackColor = true;
-			this.rb_StartAdd.CheckedChanged += new System.EventHandler(this.checkchanged);
+			this.rb_StartAdd.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// rb_StartInsert
 			// 
@@ -104,7 +110,6 @@ namespace yata
 			this.rb_StartInsert.TabIndex = 3;
 			this.rb_StartInsert.Text = "Insert row(s)";
 			this.rb_StartInsert.UseVisualStyleBackColor = true;
-			this.rb_StartInsert.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
 			// gb_Start
 			// 
@@ -229,6 +234,7 @@ namespace yata
 			this.rb_StopFinish.TabIndex = 0;
 			this.rb_StopFinish.Text = "row Finish";
 			this.rb_StopFinish.UseVisualStyleBackColor = true;
+			this.rb_StopFinish.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// la_StopCount
 			// 
@@ -249,10 +255,12 @@ namespace yata
 			this.rb_StopCount.TabIndex = 3;
 			this.rb_StopCount.Text = "row Count";
 			this.rb_StopCount.UseVisualStyleBackColor = true;
-			this.rb_StopCount.CheckedChanged += new System.EventHandler(this.checkchanged);
 			// 
 			// gb_Fillstyle
 			// 
+			this.gb_Fillstyle.Controls.Add(this.la_FillCopied);
+			this.gb_Fillstyle.Controls.Add(this.la_FillSelected);
+			this.gb_Fillstyle.Controls.Add(this.la_FillStars);
 			this.gb_Fillstyle.Controls.Add(this.rb_FillSelected);
 			this.gb_Fillstyle.Controls.Add(this.rb_FillCopied);
 			this.gb_Fillstyle.Controls.Add(this.rb_FillStars);
@@ -264,26 +272,55 @@ namespace yata
 			this.gb_Fillstyle.TabStop = false;
 			this.gb_Fillstyle.Text = " Fields ";
 			// 
+			// la_FillCopied
+			// 
+			this.la_FillCopied.Location = new System.Drawing.Point(25, 54);
+			this.la_FillCopied.Margin = new System.Windows.Forms.Padding(0);
+			this.la_FillCopied.Name = "la_FillCopied";
+			this.la_FillCopied.Size = new System.Drawing.Size(215, 20);
+			this.la_FillCopied.TabIndex = 5;
+			this.la_FillCopied.Text = "use Copied row";
+			this.la_FillCopied.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_FillCopied.Click += new System.EventHandler(this.click_Fill);
+			// 
+			// la_FillSelected
+			// 
+			this.la_FillSelected.Location = new System.Drawing.Point(25, 34);
+			this.la_FillSelected.Margin = new System.Windows.Forms.Padding(0);
+			this.la_FillSelected.Name = "la_FillSelected";
+			this.la_FillSelected.Size = new System.Drawing.Size(215, 20);
+			this.la_FillSelected.TabIndex = 3;
+			this.la_FillSelected.Text = "use Selected row";
+			this.la_FillSelected.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_FillSelected.Click += new System.EventHandler(this.click_Fill);
+			// 
+			// la_FillStars
+			// 
+			this.la_FillStars.Location = new System.Drawing.Point(25, 16);
+			this.la_FillStars.Margin = new System.Windows.Forms.Padding(0);
+			this.la_FillStars.Name = "la_FillStars";
+			this.la_FillStars.Size = new System.Drawing.Size(215, 20);
+			this.la_FillStars.TabIndex = 1;
+			this.la_FillStars.Text = "****";
+			this.la_FillStars.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_FillStars.Click += new System.EventHandler(this.click_Fill);
+			// 
 			// rb_FillSelected
 			// 
-			this.rb_FillSelected.Enabled = false;
 			this.rb_FillSelected.Location = new System.Drawing.Point(10, 35);
 			this.rb_FillSelected.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillSelected.Name = "rb_FillSelected";
-			this.rb_FillSelected.Size = new System.Drawing.Size(230, 20);
-			this.rb_FillSelected.TabIndex = 1;
-			this.rb_FillSelected.Text = "use Selected row";
+			this.rb_FillSelected.Size = new System.Drawing.Size(15, 20);
+			this.rb_FillSelected.TabIndex = 2;
 			this.rb_FillSelected.UseVisualStyleBackColor = true;
 			// 
 			// rb_FillCopied
 			// 
-			this.rb_FillCopied.Enabled = false;
 			this.rb_FillCopied.Location = new System.Drawing.Point(10, 55);
 			this.rb_FillCopied.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillCopied.Name = "rb_FillCopied";
-			this.rb_FillCopied.Size = new System.Drawing.Size(230, 20);
-			this.rb_FillCopied.TabIndex = 2;
-			this.rb_FillCopied.Text = "use Copied row";
+			this.rb_FillCopied.Size = new System.Drawing.Size(15, 20);
+			this.rb_FillCopied.TabIndex = 4;
 			this.rb_FillCopied.UseVisualStyleBackColor = true;
 			// 
 			// rb_FillStars
@@ -292,10 +329,9 @@ namespace yata
 			this.rb_FillStars.Location = new System.Drawing.Point(10, 15);
 			this.rb_FillStars.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_FillStars.Name = "rb_FillStars";
-			this.rb_FillStars.Size = new System.Drawing.Size(230, 20);
+			this.rb_FillStars.Size = new System.Drawing.Size(15, 20);
 			this.rb_FillStars.TabIndex = 0;
 			this.rb_FillStars.TabStop = true;
-			this.rb_FillStars.Text = "****";
 			this.rb_FillStars.UseVisualStyleBackColor = true;
 			// 
 			// RowCreatorDialog
