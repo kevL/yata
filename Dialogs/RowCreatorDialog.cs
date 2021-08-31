@@ -217,6 +217,21 @@ namespace yata
 			else
 				_cancel = false;
 		}
+
+
+		/// <summary>
+		/// Overrides the <c>KeyDown</c> handler. <c>[F2]</c> closes this
+		/// <c>RowCreatorDialog</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyData == Keys.F2)
+				Close();
+
+			base.OnKeyDown(e);
+		}
 		#endregion Events (override)
 
 
