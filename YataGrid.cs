@@ -2720,6 +2720,7 @@ namespace yata
 				_cell_anchorshift = getFirstSelectedCell();
 
 			// TODO: get an anchorcell close to the previous anchorcell if !selected
+			//       Or even get the LAST selected cell ...
 		}
 
 		/// <summary>
@@ -3546,7 +3547,7 @@ namespace yata
 		/// <remarks>The caller shall call
 		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
 		/// after it deters required cell-selects.</remarks>
-		void ClearCellSelects()
+		internal void ClearCellSelects()
 		{
 //			_cell_anchorshift = null; // ~safety. Would need to go through all select patterns.
 

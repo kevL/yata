@@ -43,6 +43,8 @@ Edit
                              Load)
 
 Cells
+- Deselect : deselects selected cells
+
 - Cut    : Ctrl+x (cuts selected cell(s) if they are in a contiguous block)
 - Copy   : Ctrl+c (copies selected cell(s) if they are in a contiguous block)
 - Paste  : Ctrl+v (pastes copied cell(s) if only 1 cell is selected; that cell
@@ -57,6 +59,9 @@ Cells
 
 
 Rows
+- Deselect : deselects selected row and any subselected rows as well as selected
+             cells in the frozen panel
+
 - Cut    : Shift+Ctrl+x (cuts selected row and any selected subrow(s))
 - Copy   : Shift+Ctrl+c (copies selected row and any selected subrow(s))
 - Paste  : Shift+Ctrl+v (pastes copied row(s))
@@ -67,6 +72,8 @@ Rows
 
 
 Col
+- deselect : deselects selected col
+
 - create head ...  : creates a col. This clears Undo/Redo, etc. The col will be
                      created at the position of a selected col, shifting the
                      table to the right; press [Esc] to deselect any selected

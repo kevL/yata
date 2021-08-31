@@ -997,6 +997,7 @@ namespace yata
 				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled =
 
+				it_DeselectCell   .Enabled =
 				it_CutCell        .Enabled =
 				it_CopyCell       .Enabled =
 				it_PasteCell      .Enabled =
@@ -1005,6 +1006,7 @@ namespace yata
 				it_Upper          .Enabled =
 				it_Apply          .Enabled =
 
+				it_DeselectRows   .Enabled =
 				it_CutRange       .Enabled =
 				it_CopyRange      .Enabled =
 				it_PasteRange     .Enabled =
@@ -2229,6 +2231,21 @@ namespace yata
 
 		#region Events (editcells)
 		/// <summary>
+		/// Deselects all <c><see cref="Cell">Cells</see></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_DeselectCell"/></c></param>
+		/// <param name="e"></param>
+		void editcellsclick_Deselect(object sender, EventArgs e)
+		{
+			Table.ClearCellSelects();
+			EnableCelleditOperations();
+
+			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			// TODO: not sure why but that deselects and invalidates a Propanel select also.
+		}
+
+
+		/// <summary>
 		/// Cuts an only selected cell or cells in a contiguous block.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CutCell"/></c></param>
@@ -2537,22 +2554,50 @@ namespace yata
 		/// </summary>
 		internal void EnableCelleditOperations()
 		{
+			bool anyselected = Table.anyCellSelected();
+			it_DeselectCell.Enabled = anyselected;
+
 			bool contiguous = Table.areSelectedCellsContiguous();
-			it_CutCell   .Enabled = !Table.Readonly && contiguous;
-			it_CopyCell  .Enabled = contiguous;
+			it_CutCell     .Enabled = !Table.Readonly && contiguous;
+			it_CopyCell    .Enabled = contiguous;
 
-			bool oneSelected = Table.getSelectedCell() != null;
-			it_PasteCell .Enabled = !Table.Readonly && oneSelected;
+			it_PasteCell   .Enabled = !Table.Readonly && Table.getSelectedCell() != null;
 
-			it_DeleteCell.Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
-			it_Lower     .Enabled = // TODO: if any selected cell is not lowercase or loadchanged
-			it_Upper     .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
-			it_Apply     .Enabled = !Table.Readonly && Table.anyCellSelected();
+			it_DeleteCell  .Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
+			it_Lower       .Enabled = // TODO: if any selected cell is not lowercase or loadchanged
+			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
+			it_Apply       .Enabled = !Table.Readonly && anyselected;
 		}
 		#endregion Methods (editcells)
 
 
 		#region Events (editrows)
+		/// <summary>
+		/// Deselects all <c><see cref="Row">Rows</see></c> and subrows as well
+		/// as all <c><see cref="Cell">Cells</see></c> in
+		/// <c><see cref="YataGrid.FrozenPanel">YataGrid.FrozenPanel</see></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_DeselectRows"/></c></param>
+		/// <param name="e"></param>
+		void editrowsclick_Deselect(object sender, EventArgs e)
+		{
+			Table.RangeSelect = 0;
+
+			foreach (var row in Table.Rows)
+			{
+				if (row.selected)
+					row.selected = false;
+
+				for (int c = 0; c != Table.FrozenCount; ++c)
+					row[c].selected = false;
+			}
+
+			EnableCelleditOperations();
+
+			Table.Invalidator(YataGrid.INVALID_ROWS| YataGrid.INVALID_FROZ);
+		}
+
+
 		/// <summary>
 		/// Cuts a range of rows.
 		/// </summary>
@@ -2784,12 +2829,14 @@ namespace yata
 		{
 			bool isrowselected = Table.getSelectedRow() != -1;
 
-			it_CutRange   .Enabled = !Table.Readonly && isrowselected;
-			it_CopyRange  .Enabled = isrowselected;
-			it_PasteRange .Enabled = !Table.Readonly && _copyr.Count != 0;
-			it_DeleteRange.Enabled = !Table.Readonly && isrowselected;
+			it_DeselectRows.Enabled = isrowselected;
 
-			it_CreateRows .Enabled = !Table.Readonly;
+			it_CutRange    .Enabled = !Table.Readonly && isrowselected;
+			it_CopyRange   .Enabled = isrowselected;
+			it_PasteRange  .Enabled = !Table.Readonly && _copyr.Count != 0;
+			it_DeleteRange .Enabled = !Table.Readonly && isrowselected;
+
+			it_CreateRows  .Enabled = !Table.Readonly;
 		}
 		#endregion Methods (editrows)
 
@@ -2809,6 +2856,8 @@ namespace yata
 			{
 				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
 
+				it_DeselectCol.Enabled = isColSelected;
+
 				it_CreateHead .Enabled = !Table.Readonly;
 				it_DeleteHead .Enabled = !Table.Readonly && isColSelected && Table.ColCount > 2;
 				it_RelabelHead.Enabled = !Table.Readonly && isColSelected;
@@ -2818,12 +2867,30 @@ namespace yata
 			}
 			else
 			{
+				it_DeselectCol.Enabled =
+
 				it_CreateHead .Enabled =
 				it_DeleteHead .Enabled =
 				it_RelabelHead.Enabled =
 
 				it_CopyCol    .Enabled =
 				it_PasteCol   .Enabled = false;
+			}
+		}
+
+
+		/// <summary>
+		/// Deselects <c><see cref="Col">Col</see></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_DeselectCol"/></c></param>
+		/// <param name="e"></param>
+		void editcolclick_Deselect(object sender, EventArgs e)
+		{
+			foreach (var col in Table.Cols)
+			if (col.selected)
+			{
+				col.selected = false;
+				break;
 			}
 		}
 

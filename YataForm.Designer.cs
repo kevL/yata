@@ -41,6 +41,7 @@ namespace yata
 		ToolStripMenuItem it_GotoLoadchanged;
 
 		ToolStripMenuItem it_MenuCells;
+		ToolStripMenuItem it_DeselectCell;
 		ToolStripMenuItem it_CutCell;
 		ToolStripMenuItem it_CopyCell;
 		ToolStripMenuItem it_PasteCell;
@@ -50,6 +51,7 @@ namespace yata
 		ToolStripMenuItem it_Apply;
 
 		ToolStripMenuItem it_MenuRows;
+		ToolStripMenuItem it_DeselectRows;
 		ToolStripMenuItem it_CutRange;
 		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRange;
@@ -57,6 +59,7 @@ namespace yata
 		ToolStripMenuItem it_CreateRows;
 
 		ToolStripMenuItem it_MenuCol;
+		ToolStripMenuItem it_DeselectCol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
 		ToolStripMenuItem it_RelabelHead;
@@ -146,8 +149,11 @@ namespace yata
 		ToolStripSeparator separator_27;
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
+		ToolStripSeparator separator_30;
 		ToolStripSeparator separator_31;
 		ToolStripSeparator separator_32;
+		ToolStripSeparator separator_33;
+		ToolStripSeparator separator_34;
 
 		internal ContextMenuStrip ContextRow;
 		ToolStripMenuItem rowit_Header;
@@ -243,6 +249,8 @@ namespace yata
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuCells = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_DeselectCell = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_30 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CutCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCell = new System.Windows.Forms.ToolStripMenuItem();
@@ -253,6 +261,8 @@ namespace yata
 			this.separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Apply = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_DeselectRows = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_33 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CutRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
@@ -260,6 +270,8 @@ namespace yata
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuCol = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_DeselectCol = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_34 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeleteHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RelabelHead = new System.Windows.Forms.ToolStripMenuItem();
@@ -626,6 +638,8 @@ namespace yata
 			// 
 			this.it_MenuCells.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuCells.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_DeselectCell,
+			this.separator_30,
 			this.it_CutCell,
 			this.it_CopyCell,
 			this.it_PasteCell,
@@ -639,6 +653,19 @@ namespace yata
 			this.it_MenuCells.Size = new System.Drawing.Size(47, 20);
 			this.it_MenuCells.Text = "&Cells";
 			this.it_MenuCells.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			// 
+			// it_DeselectCell
+			// 
+			this.it_DeselectCell.Enabled = false;
+			this.it_DeselectCell.Name = "it_DeselectCell";
+			this.it_DeselectCell.Size = new System.Drawing.Size(150, 22);
+			this.it_DeselectCell.Text = "De&select";
+			this.it_DeselectCell.Click += new System.EventHandler(this.editcellsclick_Deselect);
+			// 
+			// separator_30
+			// 
+			this.separator_30.Name = "separator_30";
+			this.separator_30.Size = new System.Drawing.Size(147, 6);
 			// 
 			// it_CutCell
 			// 
@@ -714,6 +741,8 @@ namespace yata
 			// 
 			this.it_MenuRows.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuRows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_DeselectRows,
+			this.separator_33,
 			this.it_CutRange,
 			this.it_CopyRange,
 			this.it_PasteRange,
@@ -724,6 +753,19 @@ namespace yata
 			this.it_MenuRows.Size = new System.Drawing.Size(49, 20);
 			this.it_MenuRows.Text = "&Rows";
 			this.it_MenuRows.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			// 
+			// it_DeselectRows
+			// 
+			this.it_DeselectRows.Enabled = false;
+			this.it_DeselectRows.Name = "it_DeselectRows";
+			this.it_DeselectRows.Size = new System.Drawing.Size(185, 22);
+			this.it_DeselectRows.Text = "De&select";
+			this.it_DeselectRows.Click += new System.EventHandler(this.editrowsclick_Deselect);
+			// 
+			// separator_33
+			// 
+			this.separator_33.Name = "separator_33";
+			this.separator_33.Size = new System.Drawing.Size(182, 6);
 			// 
 			// it_CutRange
 			// 
@@ -781,6 +823,8 @@ namespace yata
 			// it_MenuCol
 			// 
 			this.it_MenuCol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_DeselectCol,
+			this.separator_34,
 			this.it_CreateHead,
 			this.it_DeleteHead,
 			this.it_RelabelHead,
@@ -792,25 +836,37 @@ namespace yata
 			this.it_MenuCol.Text = "C&ol";
 			this.it_MenuCol.DropDownOpening += new System.EventHandler(this.editcol_dropdownopening);
 			// 
+			// it_DeselectCol
+			// 
+			this.it_DeselectCol.Name = "it_DeselectCol";
+			this.it_DeselectCol.Size = new System.Drawing.Size(161, 22);
+			this.it_DeselectCol.Text = "de&select";
+			this.it_DeselectCol.Click += new System.EventHandler(this.editcolclick_Deselect);
+			// 
+			// separator_34
+			// 
+			this.separator_34.Name = "separator_34";
+			this.separator_34.Size = new System.Drawing.Size(158, 6);
+			// 
 			// it_CreateHead
 			// 
 			this.it_CreateHead.Name = "it_CreateHead";
 			this.it_CreateHead.Size = new System.Drawing.Size(161, 22);
-			this.it_CreateHead.Text = "create head ...";
+			this.it_CreateHead.Text = "c&reate head ...";
 			this.it_CreateHead.Click += new System.EventHandler(this.editcolclick_CreateHead);
 			// 
 			// it_DeleteHead
 			// 
 			this.it_DeleteHead.Name = "it_DeleteHead";
 			this.it_DeleteHead.Size = new System.Drawing.Size(161, 22);
-			this.it_DeleteHead.Text = "delete head ...";
+			this.it_DeleteHead.Text = "&delete head ...";
 			this.it_DeleteHead.Click += new System.EventHandler(this.editcolclick_DeleteHead);
 			// 
 			// it_RelabelHead
 			// 
 			this.it_RelabelHead.Name = "it_RelabelHead";
 			this.it_RelabelHead.Size = new System.Drawing.Size(161, 22);
-			this.it_RelabelHead.Text = "relabel head ...";
+			this.it_RelabelHead.Text = "re&label head ...";
 			this.it_RelabelHead.Click += new System.EventHandler(this.editcolclick_RelabelHead);
 			// 
 			// separator_32
@@ -822,14 +878,14 @@ namespace yata
 			// 
 			this.it_CopyCol.Name = "it_CopyCol";
 			this.it_CopyCol.Size = new System.Drawing.Size(161, 22);
-			this.it_CopyCol.Text = "copy col";
+			this.it_CopyCol.Text = "&copy col";
 			this.it_CopyCol.Click += new System.EventHandler(this.editcolclick_CopyCol);
 			// 
 			// it_PasteCol
 			// 
 			this.it_PasteCol.Name = "it_PasteCol";
 			this.it_PasteCol.Size = new System.Drawing.Size(161, 22);
-			this.it_PasteCol.Text = "paste col";
+			this.it_PasteCol.Text = "&paste col";
 			this.it_PasteCol.Click += new System.EventHandler(this.editcolclick_PasteCol);
 			// 
 			// tb_Goto
