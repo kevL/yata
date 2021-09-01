@@ -2614,8 +2614,6 @@ namespace yata
 		/// <param name="e"></param>
 		void editrowsclick_Deselect(object sender, EventArgs e)
 		{
-			Table.RangeSelect = 0;
-
 			foreach (var row in Table.Rows)
 			{
 				if (row.selected)
