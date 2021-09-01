@@ -3448,7 +3448,7 @@ namespace yata
 
 			if (it_freeze1.Checked = !it_freeze1.Checked)
 			{
-				var col = Table.Cols[1];
+				Col col = Table.Cols[1];
 				if (col.UserSized)
 				{
 					col.UserSized = false;
@@ -3477,7 +3477,7 @@ namespace yata
 
 			if (it_freeze2.Checked = !it_freeze2.Checked)
 			{
-				var col = Table.Cols[1];
+				Col col = Table.Cols[1];
 				if (col.UserSized)
 				{
 					col.UserSized = false;
