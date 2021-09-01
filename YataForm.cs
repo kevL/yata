@@ -2917,12 +2917,22 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_Deselect(object sender, EventArgs e)
 		{
-			foreach (var col in Table.Cols)
-			if (col.selected)
+			int selc = Table.getSelectedCol();
+			Table.Cols[selc].selected = false;
+
+			int selr = Table.getSelectedRow();
+			for (int r = 0; r != Table.RowCount; ++r)
 			{
-				col.selected = false;
-				break;
+				if (   (r > selr && r > selr + Table.RangeSelect)
+					|| (r < selr && r < selr + Table.RangeSelect))
+				{
+					Table[r, selc].selected = false;
+				}
 			}
+
+			EnableCelleditOperations();
+
+			Table.Invalidator(YataGrid.INVALID_GRID);// | YataGrid.INVALID_COLS // qua - not needed
 		}
 
 		/// <summary>
