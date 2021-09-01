@@ -2932,7 +2932,7 @@ namespace yata
 
 			EnableCelleditOperations();
 
-			Table.Invalidator(YataGrid.INVALID_GRID);// | YataGrid.INVALID_COLS // qua - not needed
+			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS); // NOTE: INVALID_COLS does not appear to be needed.
 		}
 
 		/// <summary>
