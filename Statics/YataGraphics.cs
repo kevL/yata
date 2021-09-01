@@ -124,6 +124,7 @@ namespace yata
 		internal static readonly Color Text              = SystemColors.ControlText;
 		internal static readonly Color TextReadonly      = Color.Firebrick;
 
+		internal static readonly Color TextColSelected   = Color.White;
 		internal static readonly Color TextColSized      = Color.Olive;
 		internal static readonly Color TextColSorted_asc = Color.CadetBlue;
 		internal static readonly Color TextColSorted_des = Color.RosyBrown;

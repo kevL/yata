@@ -134,10 +134,12 @@ namespace yata
 
 			int clip;
 			Color color;
+			Col col;
 
 			for (int c = 0; c != ColCount; ++c)
 			{
-				if (rect.X + (rect.Width = Cols[c].width()) > Left)
+				col = Cols[c];
+				if (rect.X + (rect.Width = col.width()) > Left)
 				{
 					if (_sortdir != SORT_NOT && c == _sortcol)
 					{
@@ -161,7 +163,7 @@ namespace yata
 					}
 					else
 					{
-						if (Cols[c].UserSized)
+						if (col.UserSized)
 							color = Colors.TextColSized;
 						else
 							color = Colors.Text;
@@ -169,9 +171,12 @@ namespace yata
 						clip = 7;
 					}
 
+					if (col.selected)
+						color = Colors.TextColSelected; // takes priority.
+
 					rect.Width -= clip;
 					TextRenderer.DrawText(graphics,
-										  Cols[c].text,
+										  col.text,
 										  _f.FontAccent,
 										  rect,
 										  color,
