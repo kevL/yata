@@ -35,6 +35,8 @@ Edit
 - Undo : Ctrl+z
 - Redo : Ctrl+y
 
+- Deselect : deselects selected cells, rows, and cols
+
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3 (key Shift to find previous)
 
@@ -59,8 +61,8 @@ Cells
 
 
 Rows
-- Deselect : deselects selected row and any subselected rows as well as selected
-             cells in the frozen panel
+- Deselect : deselects selected row and any subselected rows along with their
+             selected cells
 
 - Cut    : Shift+Ctrl+x (cuts selected row and any selected subrow(s))
 - Copy   : Shift+Ctrl+c (copies selected row and any selected subrow(s))
@@ -72,7 +74,7 @@ Rows
 
 
 Col
-- deselect : deselects selected col
+- deselect : deselects selected col and its selected cells
 
 - create head ...  : creates a col. This clears Undo/Redo, etc. The col will be
                      created at the position of a selected col, shifting the
