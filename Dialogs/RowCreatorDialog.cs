@@ -83,13 +83,13 @@ namespace yata
 				_start = StartType.Add;
 
 				rb_FillSelected.Enabled = false;
-				la_FillSelected.ForeColor = SystemColors.ControlDark;
+				la_FillSelected.ForeColor = SystemColors.GrayText;
 			}
 
 			if (!copyfillenabled)
 			{
 				rb_FillCopied.Enabled = false;
-				la_FillCopied.ForeColor = SystemColors.ControlDark;
+				la_FillCopied.ForeColor = SystemColors.GrayText;
 			}
 
 
