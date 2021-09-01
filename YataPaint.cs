@@ -141,7 +141,7 @@ namespace yata
 				col = Cols[c];
 				if (rect.X + (rect.Width = col.width()) > Left)
 				{
-					if (_sortdir != SORT_NOT && c == _sortcol)
+					if (c == _sortcol)
 					{
 						Bitmap sort;
 						if (_sortdir == SORT_ASC)
@@ -331,7 +331,7 @@ namespace yata
 				Color color;
 				rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
 
-				if (_sortdir != SORT_NOT && _sortcol == 1)
+				if (_sortcol == 1)
 				{
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
@@ -387,7 +387,7 @@ namespace yata
 				Color color;
 				rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
 
-				if (_sortdir != SORT_NOT && _sortcol == 2)
+				if (_sortcol == 2)
 				{
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)

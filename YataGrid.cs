@@ -57,7 +57,6 @@ namespace yata
 
 		#region Fields (static)
 		internal const int SORT_DES = -1;
-		internal const int SORT_NOT =  0;
 		internal const int SORT_ASC =  1;
 
 		internal static int WidthRowhead;
