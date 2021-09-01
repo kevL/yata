@@ -38,8 +38,7 @@ namespace yata
 	/// returned (iff user clicks the Accept button) in the combobox itself.
 	/// </summary>
 	sealed partial class InfoInputSpells
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		internal const int School         =  4; // col in Spells.2da ->

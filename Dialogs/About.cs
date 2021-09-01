@@ -10,8 +10,7 @@ namespace yata
 	/// The About box. Stops the dang beep.
 	/// </summary>
 	sealed class About
-		:
-			Form
+		: Form
 	{
 		#region cTor
 		internal About()

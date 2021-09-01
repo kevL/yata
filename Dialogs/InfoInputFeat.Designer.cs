@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	partial class InfoInputFeat
+	sealed partial class InfoInputFeat
 	{
 		Label lbl_Val;
 		ComboBox cbx_Val;

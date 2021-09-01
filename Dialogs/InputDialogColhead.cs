@@ -8,8 +8,7 @@ namespace yata
 	/// A dialog for colhead-text entry.
 	/// </summary>
 	sealed class InputDialogColhead
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		internal static string _text = String.Empty;

@@ -10,8 +10,7 @@ namespace yata
 	/// A dialog that displays entries of TalkTable(s).
 	/// </summary>
 	sealed class TalkDialog
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		const int WIDTH_Min = 325;

@@ -5,8 +5,7 @@ using System.Windows.Forms;
 namespace yata
 {
 	sealed partial class FileWatcherDialog
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		internal const int FILE_DEL = 0; // file's not there, Jim.

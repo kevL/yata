@@ -11,8 +11,7 @@ namespace yata
 	/// <remarks>Call <c>Dispose()</c> when it goes out of scope. See
 	/// <c><see cref="YataForm"/>.ClosePage()</c>.</remarks>
 	sealed class FileWatcher
-		:
-			Timer
+		: Timer
 	{
 		#region Fields
 		readonly YataGrid _grid;

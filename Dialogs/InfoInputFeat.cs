@@ -5,11 +5,11 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// <see cref="InfoInputSpells" />
+	/// 
 	/// </summary>
+	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
 	sealed partial class InfoInputFeat
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		internal const int Category        = 25; // col in Feat.2da ->
