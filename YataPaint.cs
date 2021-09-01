@@ -287,13 +287,7 @@ namespace yata
 								  _labelid.Width, _labelid.Top,
 								  _labelid.Width, _labelid.Bottom);
 
-				if (_sortcol == -1) // draw an asc-arrow on the ID frozenlabel when the table loads
-				{
-					graphics.DrawImage(Resources.asc_16px,
-									   rect.X               - _offsetHoriSort,
-									   rect.Y + rect.Height - _offsetVertSort);
-				}
-				else if (_sortcol == 0)
+				if (_sortcol == 0)
 				{
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
