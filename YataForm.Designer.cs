@@ -35,6 +35,7 @@ namespace yata
 		ToolStripMenuItem it_MenuEdit;
 		ToolStripMenuItem it_Undo;
 		ToolStripMenuItem it_Redo;
+		ToolStripMenuItem it_DeselectAll;
 		ToolStripMenuItem it_Search;
 		ToolStripMenuItem it_Searchnext;
 		ToolStripMenuItem it_Goto;
@@ -154,6 +155,7 @@ namespace yata
 		ToolStripSeparator separator_32;
 		ToolStripSeparator separator_33;
 		ToolStripSeparator separator_34;
+		ToolStripSeparator separator_35;
 
 		internal ContextMenuStrip ContextRow;
 		ToolStripMenuItem rowit_Header;
@@ -242,6 +244,8 @@ namespace yata
 			this.it_MenuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Undo = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Redo = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_35 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_DeselectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchnext = new System.Windows.Forms.ToolStripMenuItem();
@@ -560,6 +564,8 @@ namespace yata
 			this.it_MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_Undo,
 			this.it_Redo,
+			this.separator_35,
+			this.it_DeselectAll,
 			this.separator_18,
 			this.it_Search,
 			this.it_Searchnext,
@@ -570,7 +576,7 @@ namespace yata
 			this.it_MenuEdit.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuEdit.Size = new System.Drawing.Size(36, 20);
 			this.it_MenuEdit.Text = "&Edit";
-			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.dropdownopening);
+			this.it_MenuEdit.DropDownOpening += new System.EventHandler(this.edit_dropdownopening);
 			// 
 			// it_Undo
 			// 
@@ -589,6 +595,20 @@ namespace yata
 			this.it_Redo.Size = new System.Drawing.Size(222, 22);
 			this.it_Redo.Text = "&Redo";
 			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
+			// 
+			// separator_35
+			// 
+			this.separator_35.Name = "separator_35";
+			this.separator_35.Size = new System.Drawing.Size(219, 6);
+			// 
+			// it_DeselectAll
+			// 
+			this.it_DeselectAll.Enabled = false;
+			this.it_DeselectAll.Name = "it_DeselectAll";
+			this.it_DeselectAll.ShortcutKeyDisplayString = "Esc";
+			this.it_DeselectAll.Size = new System.Drawing.Size(222, 22);
+			this.it_DeselectAll.Text = "De&select";
+			this.it_DeselectAll.Click += new System.EventHandler(this.editclick_Deselect);
 			// 
 			// separator_18
 			// 

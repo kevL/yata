@@ -1728,6 +1728,21 @@ namespace yata
 
 		#region Events (edit)
 		/// <summary>
+		/// Handles the <c>DropDownOpening</c> event for
+		/// <c><see cref="it_MenuEdit"/></c>. Deters if
+		/// <c><see cref="it_DeselectAll"/></c> ought be enabled.
+		/// </summary>
+		/// <param name="sender"><c>it_MenuEdit</c></param>
+		/// <param name="e"></param>
+		void edit_dropdownopening(object sender, EventArgs e)
+		{
+			dropdownopening(sender, e);
+
+			it_DeselectAll.Enabled = Table != null && Table.anySelected();
+		}
+
+
+		/// <summary>
 		/// Handles it-click to undo the previous operation if possible.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Undo"/></c></param>
@@ -1757,6 +1772,24 @@ namespace yata
 			Table._ur.Redo();
 			it_Redo.Enabled = Table._ur.CanRedo;
 			it_Undo.Enabled = true;
+		}
+
+
+		/// <summary>
+		/// Deselects all <c><see cref="Cell">Cells</see></c>/
+		/// <c><see cref="Row">Rows</see></c>/
+		/// <c><see cref="Col">Cols</see></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_DeselectAll"/></c></param>
+		/// <param name="e"></param>
+		void editclick_Deselect(object sender, EventArgs e)
+		{
+			Table.ClearSelects();
+
+			Table.Invalidator(YataGrid.INVALID_GRID
+							| YataGrid.INVALID_FROZ
+							| YataGrid.INVALID_ROWS
+							| YataGrid.INVALID_COLS);
 		}
 
 

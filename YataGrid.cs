@@ -3783,6 +3783,27 @@ namespace yata
 			return false;
 		}
 
+		/// <summary>
+		/// Checks if any <c><see cref="Cell"/></c>/ <c><see cref="Row"/></c>/
+		/// <c><see cref="Col"/></c> is currently selected.
+		/// </summary>
+		/// <returns><c>true</c> if a <c>Cell</c>/ <c>Row</c>/ <c>Col</c> is
+		/// selected</returns>
+		internal bool anySelected()
+		{
+			foreach (var row in Rows)
+			{
+				if (row.selected)
+					return true;
+
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if (Cols[c].selected || row[c].selected)
+						return true;
+				}
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// Checks if any <c><see cref="Cell"/></c> is currently loadchanged.
