@@ -131,27 +131,29 @@ namespace yata
 		{
 			var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0,
 									 0,                                    HeightColhead);
-
 			int clip;
 			Color color;
 			Col col;
 
 			for (int c = 0; c != ColCount; ++c)
 			{
-				col = Cols[c];
-				if (rect.X + (rect.Width = col.width()) > Left)
+				if (rect.X + (rect.Width = (col = Cols[c]).width()) > Left)
 				{
 					if (c == _sortcol)
 					{
 						Bitmap sort;
 						if (_sortdir == SORT_ASC)
 						{
-							color = Colors.TextColSorted_asc;
+							if (col.selected) color = Colors.TextColSelected;
+							else              color = Colors.TextColSorted_asc;
+
 							sort  = Resources.asc_16px;
 						}
 						else
 						{
-							color = Colors.TextColSorted_des;
+							if (col.selected) color = Colors.TextColSelected;
+							else              color = Colors.TextColSorted_des;
+
 							sort  = Resources.des_16px;
 						}
 
@@ -163,16 +165,12 @@ namespace yata
 					}
 					else
 					{
-						if (col.UserSized)
-							color = Colors.TextColSized;
-						else
-							color = Colors.Text;
-
 						clip = 7;
-					}
 
-					if (col.selected)
-						color = Colors.TextColSelected; // takes priority.
+						if      (col.selected)  color = Colors.TextColSelected;
+						else if (col.UserSized) color = Colors.TextColSized;
+						else                    color = Colors.Text;
+					}
 
 					rect.Width -= clip;
 					TextRenderer.DrawText(graphics,
@@ -197,7 +195,6 @@ namespace yata
 		{
 			var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
 																							//       (w)-1 accounts for the double vertical line
-
 			int selr = getSelectedRow();
 			Brush brush;
 
@@ -208,8 +205,6 @@ namespace yata
 
 				if (selr != -1)
 				{
-					brush = null;
-
 					if (r == selr)
 						brush = Brushes.Selected;
 					else if ((r < selr && r >= selr + RangeSelect)
@@ -217,6 +212,8 @@ namespace yata
 					{
 						brush = Brushes.SubSelected;
 					}
+					else
+						brush = null;
 
 					if (brush != null)
 					{
@@ -267,13 +264,10 @@ namespace yata
 					rect = new Rectangle(0,0, _labelid.Width, _labelid.Height);
 					graphics.FillRectangle(grad, rect);
 				}
+				else if (_sortcol == 0 && _sortdir == SORT_ASC)
+					_labelid.BackColor = Colors.FrozenHead;
 				else
-				{
-					if (_sortcol == 0 && _sortdir == SORT_ASC)
-						_labelid.BackColor = Colors.FrozenHead;
-					else
-						_labelid.BackColor = Colors.LabelSorted;
-				}
+					_labelid.BackColor = Colors.LabelSorted;
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
 				TextRenderer.DrawText(graphics,
