@@ -125,9 +125,9 @@ namespace yata
 		internal static readonly Color TextReadonly      = Color.Firebrick;
 
 		internal static readonly Color TextColSelected   = Color.White;
-		internal static readonly Color TextColSized      = Color.Olive;
-		internal static readonly Color TextColSorted_asc = Color.CadetBlue;
-		internal static readonly Color TextColSorted_des = Color.RosyBrown;
+		internal static readonly Color TextColSized      = Color.LightSeaGreen;
+		internal static readonly Color TextColSorted_asc = Color.SteelBlue;
+		internal static readonly Color TextColSorted_des = Color.DarkGoldenrod;
 
 		internal static readonly Color TextboxBackground = Color.WhiteSmoke;
 		internal static readonly Color TextboxSelected   = Color.FloralWhite;
