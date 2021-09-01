@@ -1785,6 +1785,7 @@ namespace yata
 		void editclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearSelects();
+			SyncSelect();
 
 			Table.Invalidator(YataGrid.INVALID_GRID
 							| YataGrid.INVALID_FROZ
@@ -2021,7 +2022,10 @@ namespace yata
 					}
 				}
 				else // not found ->
+				{
 					Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
+					SyncSelect();
+				}
 
 				int invalid = YataGrid.INVALID_GRID
 							| YataGrid.INVALID_FROZ
@@ -2271,6 +2275,8 @@ namespace yata
 		void editcellsclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearCellSelects();
+			SyncSelect();
+
 			EnableCelleditOperations();
 
 			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
@@ -2619,13 +2625,43 @@ namespace yata
 				if (row.selected)
 					row.selected = false;
 
-				for (int c = 0; c != Table.FrozenCount; ++c)
-					row[c].selected = false;
+				for (int c = 0; c != Table.ColCount; ++c)
+				{
+					if (!Table.Cols[c].selected)
+						row[c].selected = false;
+				}
+			}
+
+			YataGrid table; // do special SyncSelect() ->
+
+			if      (Table == _diff1) table = _diff2;
+			else if (Table == _diff2) table = _diff1;
+			else                      table = null;
+
+			if (table != null)
+			{
+				foreach (var row in table.Rows)
+				{
+					if (row.selected)
+					{
+						Row._bypassEnableRowedit = true;
+						row.selected = false;
+						Row._bypassEnableRowedit = false;
+					}
+	
+					for (int c = 0; c != table.ColCount; ++c)
+					{
+						if (!table.Cols[c].selected)
+							row[c].selected = false;
+					}
+				}
 			}
 
 			EnableCelleditOperations();
 
-			Table.Invalidator(YataGrid.INVALID_ROWS| YataGrid.INVALID_FROZ);
+			Table.Invalidator(YataGrid.INVALID_GRID
+							| YataGrid.INVALID_FROZ
+							| YataGrid.INVALID_ROWS);
 		}
 
 
@@ -2927,6 +2963,28 @@ namespace yata
 					|| (r < selr && r < selr + Table.RangeSelect))
 				{
 					Table[r, selc].selected = false;
+				}
+			}
+
+			YataGrid table; // do special SyncSelect() ->
+
+			if      (Table == _diff1) table = _diff2;
+			else if (Table == _diff2) table = _diff1;
+			else                      table = null;
+
+			if (table != null)
+			{
+				selc = table.getSelectedCol();
+				table.Cols[selc].selected = false;
+
+				selr = table.getSelectedRow();
+				for (int r = 0; r != table.RowCount; ++r)
+				{
+					if (   (r > selr && r > selr + table.RangeSelect)
+						|| (r < selr && r < selr + table.RangeSelect))
+					{
+						table[r, selc].selected = false;
+					}
 				}
 			}
 
