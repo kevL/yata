@@ -12,8 +12,16 @@ namespace yata
 	sealed class YataPanelCols
 		: Panel
 	{
+		#region Fields
 		readonly YataGrid _grid;
 
+		internal bool Grab;
+		int _grabCol;
+		int _grabStart;
+		#endregion Fields
+
+
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -31,13 +39,19 @@ namespace yata
 
 			MouseClick += _grid.click_ColheadPanel;
 		}
+		#endregion cTor
 
+
+		#region Events (override)
 		/// <summary>
 		/// Overrides the <c>Resize</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
 		{
+			if (Gradients.ColheadPanel != null)
+				Gradients.ColheadPanel.Dispose();
+
 			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
 															 new Point(0, Height),
 															 Color.Lavender, Color.MediumOrchid);
@@ -70,10 +84,6 @@ namespace yata
 			}
 		}
 
-
-		internal bool Grab;
-		int _grabCol;
-		int _grabStart;
 
 		/// <summary>
 		/// Overrides the <c>MouseMove</c> handler on this <c>YataPanelCols</c>.
@@ -170,6 +180,7 @@ namespace yata
 			}
 			_grid.Select();
 		}
+		#endregion Events (override)
 	}
 
 

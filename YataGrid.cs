@@ -4660,12 +4660,20 @@ namespace yata
 			if (_heightColheadCached != HeightColhead)
 			{
 				_heightColheadCached = HeightColhead;
+
+				if (Gradients.FrozenLabel != null)
+					Gradients.FrozenLabel.Dispose();
+
 				Gradients.FrozenLabel = new LinearGradientBrush(new Point(0, 0),
 																new Point(0, HeightColhead),
 																Color.Cornsilk, Color.BurlyWood);
-				Gradients.Disordered  = new LinearGradientBrush(new Point(0, 0),
-																new Point(0, HeightColhead),
-																Color.LightCoral, Color.Lavender);
+
+				if (Gradients.Disordered != null)
+					Gradients.Disordered.Dispose();
+
+				Gradients.Disordered = new LinearGradientBrush(new Point(0, 0),
+															   new Point(0, HeightColhead),
+															   Color.LightCoral, Color.Lavender);
 			}
 		}
 
