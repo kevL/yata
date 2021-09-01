@@ -268,18 +268,26 @@ namespace yata
 						}
 					}
 				}
-//				else // clear any selected cells that have become frozen ->
-//				{
-//					for (int r = 0; r != RowCount;     ++r)
-//					for (int c = 0; c != _frozenCount; ++c)
-//					{
-//						if ((sel = this[r,c]).selected)
-//						{
-//							sel.selected = false;
-//							invalid |= INVALID_GRID;
-//						}
-//					}
-//				}
+				else // clear any selected cells that have become frozen unless the row is selected or subselected ->
+				{
+					int selr = getSelectedRow();
+
+					for (int r = 0; r != RowCount; ++r)
+					{
+						if (   (r > selr && r > selr + RangeSelect)
+							|| (r < selr && r < selr + RangeSelect))
+						{
+							for (int c = 0; c != _frozenCount; ++c)
+							{
+								if ((sel = this[r,c]).selected)
+								{
+									sel.selected = false;
+									invalid |= INVALID_GRID;
+								}
+							}
+						}
+					}
+				}
 
 				if ((invalid & INVALID_GRID) != 0)
 					_f.EnableCelleditOperations();
