@@ -190,8 +190,12 @@ namespace yata
 	sealed class YataPanelRows
 		: Panel
 	{
+		#region Fields
 		readonly YataGrid _grid;
+		#endregion Fields
 
+
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -207,7 +211,10 @@ namespace yata
 
 			MouseClick += _grid.click_RowheadPanel;
 		}
+		#endregion cTor
 
+
+		#region Events (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelRows</c>.
 		/// </summary>
@@ -227,6 +234,7 @@ namespace yata
 				_grid.LabelRowheads();
 			}
 		}
+		#endregion Events (override)
 	}
 
 
@@ -236,8 +244,12 @@ namespace yata
 	sealed class YataPanelFrozen
 		: Panel
 	{
+		#region Fields
 		readonly YataGrid _grid;
+		#endregion Fields
 
+
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -254,7 +266,10 @@ namespace yata
 
 			Width = w;
 		}
+		#endregion cTor
 
+
+		#region Events (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelFrozen</c>.
 		/// </summary>
@@ -283,5 +298,6 @@ namespace yata
 			}
 			_grid.Select();
 		}
+		#endregion Events (override)
 	}
 }
