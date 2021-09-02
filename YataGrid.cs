@@ -3262,17 +3262,19 @@ namespace yata
 
 
 		/// <summary>
-		/// <c>true</c> allows the
-		/// <c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>
-		/// handler.
+		/// <c>true</c> allows
+		/// <c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>.
 		/// </summary>
 		bool _double;
 
 		/// <summary>
 		/// The clicked cell.
 		/// </summary>
-		/// <remarks><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>
-		/// can use this.</remarks>
+		/// <remarks>Used by
+		/// <list type="bullet">
+		/// <item><c><see cref="OnMouseClick()">OnMouseClick()</see></c></item>
+		/// <item><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c></item>
+		/// </list></remarks>
 		Cell _cell;
 
 		/// <summary>
@@ -3318,7 +3320,7 @@ namespace yata
 						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 						{
 							//logfile.Log(". cell valid");
-							foreach (var col in Cols) // always clear col-select
+							foreach (var col in Cols) // always clear col-select - why.
 							if (col.selected)
 							{
 								col.selected = false;
