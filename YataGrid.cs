@@ -2202,8 +2202,14 @@ namespace yata
 							display = true;
 						}
 					}
-//					else if (ctr) // don't use [Ctrl+PageUp] since it is used/consumed by the tabcontrol
-//					{}
+//					else if (ctr)
+//					{
+						// don't use [Ctrl+PageUp] since it is used/consumed by the tabcontrol
+						//
+						// Note that can be bypassed in YataTabs.OnKeyDown() -
+						// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
+						// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
+//					}
 					else if (!ctr)
 					{
 						if (sel != null)
@@ -2310,8 +2316,14 @@ namespace yata
 							display = true;
 						}
 					}
-//					else if (ctr) // don't use [Ctrl+PageDown] since it is used/consumed by the tabcontrol
-//					{}
+//					else if (ctr)
+//					{
+						// don't use [Ctrl+PageDown] since it is used/consumed by the tabcontrol
+						//
+						// Note that can be bypassed in YataTabs.OnKeyDown() -
+						// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
+						// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
+//					}
 					else if (!ctr)
 					{
 						if (sel != null)
