@@ -91,13 +91,11 @@ namespace yata
 			else
 				BackColor = Color.LightBlue;
 
-			ForeColor = Colors.Text;
-
 			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
 
 			if (Settings._font3 != null)
 			{
-//				Font.Dispose(); // NOTE: Don't dispose that; it will be needed when another PropertyPanel instantiates.
+				Font.Dispose();
 				Font = Settings._font3;
 			}
 			else
