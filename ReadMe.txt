@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 1
+2021 september 2
 kevL's
 ver 4.2.3.0
 
@@ -195,6 +195,8 @@ PageDown                  - selects cell a page below
 Ctrl+Home                 - selects first cell in the table
 Ctrl+End                  - selects first cell in last row of the table
 Left/Right/Up/Down arrows - selects next cell in the direction
+Ctrl+Up                   - selects first cell in the col
+Ctrl+Down                 - selects last cell in the col
 
 - w/out cell selected or 2+ cells selected
 Home                      - scrolls table all the way left

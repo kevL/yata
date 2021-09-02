@@ -1865,7 +1865,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			//logfile.Log("");
+			//logfile.Log();
 			//logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
 
 			switch (e.KeyCode)
@@ -2202,6 +2202,8 @@ namespace yata
 							display = true;
 						}
 					}
+//					else if (ctr) // don't use [Ctrl+PageUp] since it is used/consumed by the tabcontrol
+//					{}
 					else if (!ctr)
 					{
 						if (sel != null)
@@ -2308,6 +2310,8 @@ namespace yata
 							display = true;
 						}
 					}
+//					else if (ctr) // don't use [Ctrl+PageDown] since it is used/consumed by the tabcontrol
+//					{}
 					else if (!ctr)
 					{
 						if (sel != null)
@@ -2335,19 +2339,20 @@ namespace yata
 					break;
 
 				case Keys.Up: // NOTE: needs to bypass KeyPreview
-					if (ctr) return;
-
 					if (selr != -1)
 					{
-						if (selr != 0)
+						if (!ctr)
 						{
-							ClearSelects(true);
-							SelectRow(--selr);
+							if (selr != 0)
+							{
+								ClearSelects(true);
+								SelectRow(--selr);
+							}
+							EnsureDisplayedRow(selr);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
-						EnsureDisplayedRow(selr);
-						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
-					else if (sft)
+					else if (sft && !ctr)
 					{
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
@@ -2394,6 +2399,18 @@ namespace yata
 							display = true;
 						}
 					}
+					else if (ctr) // selection to abovest cell
+					{
+						if (sel != null)
+						{
+							if (sel.y != 0 && sel.x >= FrozenCount)
+							{
+								sel.selected = false;
+								(sel = this[0, sel.x]).selected = true;
+							}
+							display = true;
+						}
+					}
 					else if (sel != null) // selection to the cell above
 					{
 						if (sel.y != 0 && sel.x >= FrozenCount)
@@ -2413,19 +2430,20 @@ namespace yata
 					break;
 
 				case Keys.Down: // NOTE: needs to bypass KeyPreview
-					if (ctr) return;
-
 					if (selr != -1)
 					{
-						if (selr != RowCount - 1)
+						if (!ctr)
 						{
-							ClearSelects(true);
-							SelectRow(++selr);
+							if (selr != RowCount - 1)
+							{
+								ClearSelects(true);
+								SelectRow(++selr);
+							}
+							EnsureDisplayedRow(selr);
+							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 						}
-						EnsureDisplayedRow(selr);
-						invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					}
-					else if (sft)
+					else if (sft && !ctr)
 					{
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
@@ -2469,6 +2487,18 @@ namespace yata
 							}
 
 							sel = _cell_anchorshift;
+							display = true;
+						}
+					}
+					else if (ctr) // selection to belowest cell
+					{
+						if (sel != null)
+						{
+							if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
+							{
+								sel.selected = false;
+								(sel = this[RowCount - 1, sel.x]).selected = true;
+							}
 							display = true;
 						}
 					}
@@ -2520,7 +2550,7 @@ namespace yata
 //							display = true;
 //						}
 
-						if (areSelectedCellsContiguous())
+						if (selr == -1 && areSelectedCellsContiguous())
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
@@ -2618,7 +2648,7 @@ namespace yata
 //							display = true;
 //						}
 
-						if (areSelectedCellsContiguous())
+						if (selr == -1 && areSelectedCellsContiguous())
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
