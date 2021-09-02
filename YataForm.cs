@@ -5227,10 +5227,13 @@ namespace yata
 		/// Selects the next diffed cell in the table (or both tables if both
 		/// are valid).
 		/// </summary>
+		/// <param name="bypassFocus"><c>true</c> to not select the
+		/// <c><see cref="Table"/></c></param>
 		/// <remarks>Frozen cells will be selected but they don't respect
 		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
-		/// They get no respect ...</remarks>
-		internal void GotoDiffCell()
+		/// They get no respect ...
+		/// </remarks>
+		internal void GotoDiffCell(bool bypassFocus)
 		{
 			if (WindowState == FormWindowState.Minimized)
 				WindowState  = FormWindowState.Normal;
@@ -5239,6 +5242,9 @@ namespace yata
 				TopMost = true;
 				TopMost = false;
 			}
+
+			if (bypassFocus) _fdiffer.Activate();
+
 
 			if (Table != null
 				&& (_diff1 != null  || _diff2 != null)
@@ -5250,7 +5256,8 @@ namespace yata
 					Table.Invalidator(YataGrid.INVALID_GRID);
 				}
 
-				Table.Select();
+				if (!bypassFocus) Table.Select();
+
 
 				YataGrid table; // the other table - can be null.
 

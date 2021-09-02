@@ -115,8 +115,28 @@ namespace yata
 
 			_f._fdiffer = null;
 
-			this.Dispose(true); // <- probably unnecessary.
 			base.OnFormClosing(e);
+		}
+
+
+		/// <summary>
+		/// Passes <c>[Enter]</c> etc. to
+		/// <c><see cref="click_btnGoto()">click_btnGoto()</see></c>
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Enter:
+				case Keys.Enter | Keys.Control:
+				case Keys.Enter | Keys.Control | Keys.Shift:
+					e.Handled = e.SuppressKeyPress = true;
+					click_btnGoto(null, EventArgs.Empty);
+					break;
+			}
+			base.OnKeyDown(e);
 		}
 		#endregion Events (override)
 
@@ -146,13 +166,15 @@ namespace yata
 
 		/// <summary>
 		/// Handles a click on the Goto button. Goes to the next diff'd cell or
-		/// the previous diff'd cell if [Shift] is depressed.
+		/// the previous diff'd cell if <c>[Shift]</c> is depressed.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="btn_Goto"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
+		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			_f.GotoDiffCell();
+			_f.GotoDiffCell((ModifierKeys & Keys.Control) != 0);
 		}
 		#endregion Events
 
@@ -330,7 +352,6 @@ namespace yata
 			// 
 			// DifferDialog
 			// 
-			this.AcceptButton = this.btn_Goto;
 			this.AutoScroll = true;
 			this.CancelButton = this.btn_Okay;
 			this.ClientSize = new System.Drawing.Size(494, 169);
@@ -339,6 +360,7 @@ namespace yata
 			this.Controls.Add(this.btn_Goto);
 			this.Controls.Add(this.pnl_Copyable);
 			this.Controls.Add(this.lbl_Info);
+			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "DifferDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
