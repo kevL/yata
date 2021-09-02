@@ -105,7 +105,7 @@ namespace yata
 		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
 
 		// propanel
-		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
+//		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
 		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
 	}
 
@@ -143,6 +143,6 @@ namespace yata
 
 		internal static readonly LinearGradientBrush PropanelButton = new LinearGradientBrush(new Point(0, 0),
 																							  new Point(0, PropertyPanelButton.HEIGHT),
-																							  Color.PaleGreen, Color.Olive);
+																							  Color.White, Color.CornflowerBlue);
 	}
 }
