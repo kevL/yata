@@ -4211,7 +4211,7 @@ namespace yata
 		/// <param name="sender"><c><see cref="_panelRows"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
-		/// than <c>LMB</c> or <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
+		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
 			if ((ModifierKeys & Keys.Alt) == 0)
@@ -4462,7 +4462,7 @@ namespace yata
 		/// <param name="sender"><c><see cref="_panelCols"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
-		/// than <c>LMB</c> or <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
+		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
 			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == 0)
@@ -4622,7 +4622,7 @@ namespace yata
 						break;
 
 					case MouseButtons.Right:
-						if (ModifierKeys == Keys.Shift) // Shift+RMB = sort by col
+						if (ModifierKeys == Keys.Shift) // sort by col ->
 						{
 							_editor.Visible = false;
 							Select();
@@ -4630,7 +4630,7 @@ namespace yata
 							if ((c = getClickedCol(e.X)) != -1)
 							{
 								ColSort(c);
-								EnsureDisplayed();
+								EnsureDisplayedCol(c);
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
 										  | INVALID_COLS
