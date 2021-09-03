@@ -265,14 +265,14 @@ Shift+wheel - scrolls the table by its visible height/width if applicable; the
               Ctrl-key is also respected
 
 click on the colheads or rowheads
-LMB            - selects the col or row
-LMB+Ctrl       - adds or subtracts a col/row from the currently selected cells
+LMB            - selects or deselects the col/row and clears other cells
+LMB+Ctrl       - selects or deselects the col/row
 LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
 
 click on the colheads
 LMB       - click-drag col-boundary to re-width a col (The text of a colhead
-            ought appear slightly grayed if its col has been user-sized.)
+            will appear dark green if its col has been user-sized.)
 RMB       - click a col-boundary to auto-width a col (Note that frozen cols
             can't be re-sized.)
 RMB+Shift - sorts the table by the col either ascending or descending (Note that

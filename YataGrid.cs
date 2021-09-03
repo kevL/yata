@@ -1889,12 +1889,12 @@ namespace yata
 		{
 			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			if ((e.Modifiers & Keys.Alt) != 0) // ~redundant
+			if ((e.Modifiers & Keys.Alt) != 0)
 				return;
 
 
-			bool ctr = (e.Modifiers & Keys.Control) != 0;
-			bool sft = (e.Modifiers & Keys.Shift)   != 0;
+			bool ctr = (e.Modifiers & Keys.Control) != 0,
+				 sft = (e.Modifiers & Keys.Shift)   != 0;
 
 			int invalid = INVALID_NONE;
 			bool display = false;
@@ -2729,11 +2729,12 @@ namespace yata
 					break;
 
 				case Keys.Escape: // NOTE: needs to bypass KeyPreview
-					if (ctr || sft) return;
-
-					ClearSelects(true);
-					_f.SyncSelect();
-					invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+					if (!ctr && !sft)
+					{
+						ClearSelects(true);
+						_f.SyncSelect();
+						invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+					}
 					break;
 			}
 
@@ -3328,140 +3329,140 @@ namespace yata
 		/// or left panels.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			//logfile.Log("OnMouseClick()");
+			if ((ModifierKeys & Keys.Alt) != 0)
+				return;
+
+
 			_double = false;
 
 			if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
 			{
-				if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
+				if ((ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
 				{
-//					if (e.Button == MouseButtons.Left) // apply edit only on LMB.
-					ApplyCellEdit();
-					_editor.Visible = false;
-					Invalidator(INVALID_GRID);
-				}
-				Select();
+					if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
+					{
+//						if (e.Button == MouseButtons.Left) // apply edit only on LMB.
+						ApplyCellEdit();
+						_editor.Visible = false;
+						Invalidator(INVALID_GRID);
+					}
+					Select();
 
-//				else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
-//				{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
-//					foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
-//						col.selected = false;
+//					else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
+//					{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
+//						foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
+//							col.selected = false;
 //
-//					foreach (var row in Rows)
-//						row.selected = false;
+//						foreach (var row in Rows)
+//							row.selected = false;
 //
-//					ClearCellSelects();
-//					Invalidator();
-//				}
+//						ClearCellSelects();
+//						Invalidator();
+//					}
+				}
 			}
 			else
 			{
+				bool ctr = (ModifierKeys & Keys.Control) != 0,
+					 sft = (ModifierKeys & Keys.Shift)   != 0;
+
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
 						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 						{
-							//logfile.Log(". cell valid");
-							foreach (var col in Cols) // always clear col-select - why.
-							if (col.selected)
-							{
-								col.selected = false;
-								break;
-							}
+//							foreach (var col in Cols) // always clear col-select - why.
+//							if (col.selected)
+//							{
+//								col.selected = false;
+//								break;
+//							}
 
 							if (_editor.Visible)
 							{
-								//logfile.Log(". . editor Visible");
-								if (_cell != _editcell)
+								if (!ctr && !sft)
 								{
-									_double = true;
+									if (_cell != _editcell)
+									{
+										_double = true;
 
-									ApplyCellEdit();
-									_editor.Visible = false;
-									Invalidator(INVALID_GRID);
-									Select();
+										ApplyCellEdit();
+										_editor.Visible = false;
+										Invalidator(INVALID_GRID);
+										Select();
+									}
+									else					// NOTE: There's a clickable fringe around the editor.
+										_editor.Focus();	// so just refocus the editor if the fringe is clicked
 								}
-								else					// NOTE: There's a clickable fringe around the editor.
-									_editor.Focus();	// so just refocus the editor if the fringe is clicked
 							}
 							else
 							{
-								//logfile.Log(". . editor NOT Visible");
 								Select();
 
-								bool ctrl  = (ModifierKeys & Keys.Control) != 0;
-								bool shift = (ModifierKeys & Keys.Shift)   != 0;
-								bool alt   = (ModifierKeys & Keys.Alt)     != 0;
-
-								if (ctrl || shift || alt) // safety. Ensure that modifiers are treated exclusively and independently in what follows
+								if (ctr) // select/unselect single cell ->
 								{
-									//logfile.Log(". . . Modifier key");
-									if (!alt) // [Alt] is unused so ignore it here.
+									if (!sft)
 									{
-										if (ctrl && !shift) // select/unselect single cell ->
+										if (_cell.selected = !_cell.selected)
 										{
-											if (_cell.selected = !_cell.selected)
+											if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
 											{
-												if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
-												{
-													ClearSelects(true);
-													_cell.selected = true;
-												}
-												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-											}															//    selectedcell is not the only selected cell
-											else
-												_f.SyncSelect();
+												ClearSelects(true);
+												_cell.selected = true;
+											}
+											EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+										}															//    selectedcell is not the only selected cell
+										else
+											_f.SyncSelect();
 
+										int invalid = INVALID_GRID;
+										if (Propanel != null && Propanel.Visible)
+											invalid |= INVALID_PROP;
+
+										Invalidator(invalid);
+									}
+								}
+								else if (sft) // do block selection ->
+								{
+									if (!_cell.selected)
+									{
+										Cell sel = null;
+
+										if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
+										{
+											ClearSelects(true);
+											_cell.selected = true;
+
+											EnsureDisplayed(sel = _cell);
+										}
+										else if ((sel = getSelectedCell()) != null)
+										{
+											ClearSelects(true);
+
+											int strt_r = Math.Min(sel.y, _cell.y);
+											int stop_r = Math.Max(sel.y, _cell.y);
+											int strt_c = Math.Min(sel.x, _cell.x);
+											int stop_c = Math.Max(sel.x, _cell.x);
+
+											for (int r = strt_r; r <= stop_r; ++r)
+											for (int c = strt_c; c <= stop_c; ++c)
+												this[r,c].selected = true;
+
+											EnsureDisplayed(_cell, true);
+										}
+
+										if (sel != null)
+										{
 											int invalid = INVALID_GRID;
 											if (Propanel != null && Propanel.Visible)
 												invalid |= INVALID_PROP;
 
 											Invalidator(invalid);
 										}
-										else if (shift && !ctrl) // do block selection ->
-										{
-											if (!_cell.selected)
-											{
-												Cell sel = null;
-
-												if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
-												{
-													ClearSelects(true);
-													_cell.selected = true;
-
-													EnsureDisplayed(sel = _cell);
-												}
-												else if ((sel = getSelectedCell()) != null)
-												{
-													ClearSelects(true);
-
-													int strt_r = Math.Min(sel.y, _cell.y);
-													int stop_r = Math.Max(sel.y, _cell.y);
-													int strt_c = Math.Min(sel.x, _cell.x);
-													int stop_c = Math.Max(sel.x, _cell.x);
-
-													for (int r = strt_r; r <= stop_r; ++r)
-													for (int c = strt_c; c <= stop_c; ++c)
-														this[r,c].selected = true;
-
-													EnsureDisplayed(_cell, true);
-												}
-
-												if (sel != null)
-												{
-													int invalid = INVALID_GRID;
-													if (Propanel != null && Propanel.Visible)
-														invalid |= INVALID_PROP;
-
-													Invalidator(invalid);
-												}
-											}
-										}
 									}
 								}
 								else if (!_cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
 								{
-									//logfile.Log(". . . cell is not selected or it's not the only selected cell");
 									_double = true;
 
 									foreach (var row in Rows)
@@ -3482,32 +3483,37 @@ namespace yata
 								}
 								else if (!Readonly) // cell is already selected
 								{
-									//logfile.Log(". . . cell is already selected");
 									_editcell = _cell;
 									Celledit();
 									Invalidator(INVALID_GRID);
 								}
 							}
 						}
-						else
+						else if (!ctr && !sft)
+						{
 							Select();
+						}
 						break;
 
 					case MouseButtons.Right:
-						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
+						if (!ctr && !sft)
 						{
-							ClearSelects(true);
-							_cell.selected = true;
-							_f.SyncSelect(_cell);
+							if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
+							{
+								ClearSelects(true);
+								_cell.selected = true;
+								_f.SyncSelect(_cell);
 
-							Invalidator(INVALID_GRID
-									  | INVALID_FROZ
-									  | INVALID_ROWS
-									  | EnsureDisplayed(_cell));
-							_f.ShowCellContext();
+								Invalidator(INVALID_GRID
+										  | INVALID_FROZ
+										  | INVALID_ROWS
+										  | EnsureDisplayed(_cell));
+
+								_f.ShowCellContext();
+							}
+							else
+								Select();
 						}
-						else
-							Select();
 						break;
 				}
 
@@ -4467,7 +4473,7 @@ namespace yata
 		{
 			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == 0)
 			{
-				int c;
+				int col;
 
 				switch (e.Button)
 				{
@@ -4475,147 +4481,140 @@ namespace yata
 						_editor.Visible = false;
 						Select();
 
-						if ((c = getClickedCol(e.X)) != -1)
+						if ((col = getClickedCol(e.X)) != -1)
 						{
-							bool @select;
+							YataGrid table;
+							if      (this == _f._diff1) table = _f._diff2;
+							else if (this == _f._diff2) table = _f._diff1;
+							else                        table = null;
 
-							bool shft = ((ModifierKeys & Keys.Shift)   != 0),
-								 ctrl = ((ModifierKeys & Keys.Control) != 0);
+							int selrsync = (table != null) ? table.getSelectedRow() : -1;
+							int selcsync = (table != null) ? table.getSelectedCol() : -1;
 
-							if (!shft) // select if any of the col's cells are not selected ->
+
+							bool ctr = (ModifierKeys & Keys.Control) != 0,
+								 sft = (ModifierKeys & Keys.Shift)   != 0;
+
+
+							bool display = false;
+
+							int selr = getSelectedRow();
+							int selc = getSelectedCol();
+
+							if (!ctr) // clear all other col's cells ->
 							{
-								@select = false;
-								foreach (var row in Rows)
-								if (!row[c].selected)
+								for (int r = 0; r != RowCount; ++r)
+								for (int c = 0; c != ColCount; ++c)
 								{
-									@select = true;
-									break;
-								}
-							}
-							else				// [Shift] only selects cells - never selects col but
-								@select = true; // can subselect col if there is already a selected col.
-
-
-							YataGrid table = null; // NOTE: It'd probly not be wise to use '_table' here.
-							if (_f._diff1 != null && _f._diff2 != null)
-							{
-								if      (YataForm.Table == _f._diff1) table = _f._diff2;
-								else if (YataForm.Table == _f._diff2) table = _f._diff1;
-							}
-
-							int invalid = INVALID_GRID;
-
-							if (!ctrl) // clear all cells and rows if not [Ctrl] ->
-							{
-								for (int i = 0; i != RowCount && !@select; ++i) // if another col's cells are already selected
-								for (int j = 0; j != ColCount && !@select; ++j) // force the col to select after clearing all selects.
-								{
-									if (j != c && this[i,j].selected)
-										@select = true;
-								}
-
-								ClearCellSelects();
-								foreach (var row in Rows)
-								if (row.selected)
-								{
-									row.selected = false;
-									break;
-								}
-
-								if (table != null) // sync table
-								{
-									table.ClearCellSelects();
-
-									foreach (var row in table.Rows)
-									if (row.selected)
+									if (c != col
+										&&     (r > selr && r > selr + RangeSelect)
+											|| (r < selr && r < selr + RangeSelect))
 									{
-										Row._bypassEnableRowedit = true;
-										row.selected = false;
-										Row._bypassEnableRowedit = false;
-										break;
+										this[r,c].selected = false;
 									}
 								}
 
-								invalid |= (INVALID_FROZ | INVALID_ROWS);
-								if (Propanel != null && Propanel.Visible)
-									invalid |= INVALID_PROP;
-							}
-
-							if (!shft) // select or deselect col ->
-							{
-								foreach (var col in Cols)
-								if (col.selected)
+								if (table != null) // && selc < table.ColCount)
 								{
-									col.selected = false;
-									break;
-								}
-
-								Cols[c].selected = @select;
-
-								if (table != null) // sync table
-								{
-									foreach (var col in table.Cols)
-									if (col.selected)
+									for (int r = 0; r != table.RowCount; ++r)
+									for (int c = 0; c != table.ColCount; ++c)
 									{
-										col.selected = false;
-										break;
-									}
-
-									if (c < table.ColCount)
-										table.Cols[c].selected = @select;
-								}
-							}
-							else // subselect col-cells iff there is already a selected col ->
-							{
-								int selc = getSelectedCol();
-								if (selc != -1)
-								{
-									int start, stop;
-
-									if (table != null) // sync table
-									{
-										int selc2 = table.getSelectedCol();
-										if (selc2 != -1 && c < table.ColCount)
+										if (c != col
+											&&     (r > selrsync && r > selrsync + table.RangeSelect)
+												|| (r < selrsync && r < selrsync + table.RangeSelect))
 										{
-											if (selc2 < c) { start = selc2; stop = c; }
-											else           { start = c; stop = selc2; }
-
-											while (start != stop + 1)
-											{
-												if (start != c) // done below
-												foreach (var row in table.Rows)
-													row[start].selected = true;
-
-												++start;
-											}
+											table[r,c].selected = false;
 										}
 									}
+								}
+							}
 
-									if (selc < c) { start = selc; stop = c; }
-									else          { start = c; stop = selc; }
+							if (!sft)
+							{
+								if (selc != -1 && selc != col) // clear any other selected col ->
+									Cols[selc].selected = false;
 
-									while (start != stop + 1)
+								if (table != null && selcsync != -1 && selcsync != col)
+									table.Cols[selcsync].selected = false;
+
+
+								bool allcellsselected = true;
+								foreach (var row in Rows)
+								if (!row[col].selected)
+								{
+									allcellsselected = false;
+									break;
+								}
+
+								bool @select = !Cols[col].selected || !allcellsselected;
+
+								Cols[col].selected = @select;
+
+								for (int r = 0; r != RowCount; ++r)
+								{
+									if (@select
+										|| (r > selr && r > selr + RangeSelect)
+										|| (r < selr && r < selr + RangeSelect))
 									{
-										if (start != c) // done below
-										foreach (var row in Rows)
-											row[start].selected = true;
+										this[r,col].selected = @select;
+									}
+								}
 
-										++start;
+								if (table != null && col < table.ColCount)
+								{
+									table.Cols[col].selected = @select;
+
+									for (int r = 0; r != table.RowCount; ++r)
+									{
+										if (@select
+											|| (r > selrsync && r > selrsync + table.RangeSelect)
+											|| (r < selrsync && r < selrsync + table.RangeSelect))
+										{
+											table[r,col].selected = @select;
+										}
+									}
+								}
+
+								display = @select;
+							}
+							else if (selc != -1)
+							{
+								int delta = col - selc;
+								if (delta != 0)
+								{
+									display = true;
+
+									int start, stop;
+									if (delta > 0)
+									{
+										start = selc; stop = col;
+									}
+									else
+									{
+										start = col; stop = selc;
+									}
+
+									for (int r = 0; r != RowCount; ++r)
+									for (int c = start; c <= stop; ++c)
+									{
+										this[r,c].selected = true;
+									}
+
+									if (table != null && start < table.ColCount)
+									{
+										for (int r = 0; r != table.RowCount; ++r)
+										for (int c = start; c <= stop && c != table.ColCount; ++c)
+										{
+											table[r,c].selected = true;
+										}
 									}
 								}
 							}
 
-							if (@select)
-								EnsureDisplayedCol(c);
 
-							foreach (var row in Rows) // select or deselect col-cells
-								row[c].selected = @select;
+							if (display) EnsureDisplayedCol(col);
 
-							if (table != null && c < table.ColCount) // sync table
-							foreach (var row in table.Rows) // select or deselect col-cells
-								row[c].selected = @select;
-
-							Invalidator(invalid);
+							Invalidator(INVALID_COLS | INVALID_GRID);
 
 							_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
 						}
@@ -4627,10 +4626,10 @@ namespace yata
 							_editor.Visible = false;
 							Select();
 
-							if ((c = getClickedCol(e.X)) != -1)
+							if ((col = getClickedCol(e.X)) != -1)
 							{
-								ColSort(c);
-								EnsureDisplayedCol(c);
+								ColSort(col);
+								EnsureDisplayedCol(col);
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
 										  | INVALID_COLS
