@@ -91,11 +91,11 @@ namespace yata
 			else
 				BackColor = Color.LightBlue;
 
-			Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom);
+			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 
 			if (Settings._font3 != null)
 			{
-				Font.Dispose();
+				Font.Dispose(); // be wary. Be very wary.
 				Font = Settings._font3;
 			}
 			else
