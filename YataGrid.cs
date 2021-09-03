@@ -4489,7 +4489,6 @@ namespace yata
 							else                        table = null;
 
 							int selrsync = (table != null) ? table.getSelectedRow() : -1;
-							int selcsync = (table != null) ? table.getSelectedCol() : -1;
 
 
 							bool ctr = (ModifierKeys & Keys.Control) != 0,
@@ -4534,8 +4533,12 @@ namespace yata
 								if (selc != -1 && selc != col) // clear any other selected col ->
 									Cols[selc].selected = false;
 
-								if (table != null && selcsync != -1 && selcsync != col)
-									table.Cols[selcsync].selected = false;
+								if (table != null)
+								{
+									int selcsync = table.getSelectedCol();
+									if (selcsync != -1 && selcsync != col)
+										table.Cols[selcsync].selected = false;
+								}
 
 
 								bool allcellsselected = true;
