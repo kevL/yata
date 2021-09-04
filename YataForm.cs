@@ -5423,7 +5423,11 @@ namespace yata
 				{
 					// Do not call _table.SelectRow() since that's a recursion.
 					Row row = _table.Rows[r];
+
+					Row._bypassEnableRowedit = true;
 					row.selected = true;
+					Row._bypassEnableRowedit = false;
+
 					for (int c = 0; c != _table.ColCount; ++c)
 						row[c].selected = true;
 				}
