@@ -117,8 +117,8 @@ namespace yata
 		string _pfeT = String.Empty;
 
 		/// <summary>
-		/// A pointer to a <c><see cref="YataGrid"/></c> table that will be used
-		/// during the save-routine (and other places where it's convenient). Is
+		/// A pointer to a <c><see cref="YataGrid"/></c> that shall be used
+		/// during the save-routine. Is
 		/// required because it can't be assumed that the current
 		/// <c><see cref="Table"/></c> is the table being saved; that is, the
 		/// SaveAll operation needs to cycle through all tables.
@@ -1110,20 +1110,19 @@ namespace yata
 		/// <param name="tab">the <c>TabPage</c> with which to deal</param>
 		void ClosePage(TabPage tab)
 		{
-			_table = tab.Tag as YataGrid;
+			var table = tab.Tag as YataGrid;
 
-			_table.DisposeWatcher();
-			_table.Dispose();
+			table.DisposeWatcher();
+			table.Dispose();
 
-			if      (_table == _diff1) _diff1 = null;
-			else if (_table == _diff2) _diff2 = null;
+			if      (table == _diff1) _diff1 = null;
+			else if (table == _diff2) _diff2 = null;
 
-			if (_diff1 == null && _diff2 == null && _fdiffer != null)
+			if (_fdiffer != null && _diff1 == null && _diff2 == null)
 				_fdiffer.Close();
 
 			Tabs.TabPages.Remove(tab);
 			tab.Dispose();
-			_table = null;
 
 			YataGrid.metricStaticHeads(this);
 		}
@@ -1187,14 +1186,13 @@ namespace yata
 		{
 			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
-			string asterics;
+			YataGrid table;
 			foreach (TabPage tab in Tabs.TabPages)
 			{
-				_table = tab.Tag as YataGrid;
-				asterics = _table.Changed ? ASTERICS : String.Empty;
-				tab.Text = Path.GetFileNameWithoutExtension(_table.Fullpath) + asterics;
+				table = tab.Tag as YataGrid;
+				tab.Text = Path.GetFileNameWithoutExtension(table.Fullpath)
+						 + (table.Changed ? ASTERICS : String.Empty);
 			}
-			_table = null;
 			SetTabSize();
 
 			DrawingControl.ResumeDrawing(this);
@@ -1626,10 +1624,8 @@ namespace yata
 					_table.Watcher.Enabled = true;
 				}
 			}
-			_table = null;
 
-			if (changed)
-				SetAllTabTexts();
+			if (changed) SetAllTabTexts();
 
 			IsSaveAll = false;
 		}
@@ -5395,43 +5391,44 @@ namespace yata
 
 		/// <summary>
 		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
-		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets selected.
+		/// specified <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets
+		/// selected.
 		/// </summary>
-		/// <param name="sel"><c>a <see cref="Cell"/></c> in the current table -
-		/// can be <c>null</c></param>
+		/// <param name="sel"><c>a <see cref="Cell"/></c> in the current table</param>
 		/// <param name="r">a row-id in the current table iff
 		/// <paramref name="sel"/> is <c>null</c></param>
-		/// <returns><c>true</c> if diff-tables are valid</returns>
-		/// <remarks><c><see cref="_table"/></c> is the other synced
-		/// <c><see cref="YataGrid"/></c></remarks>
+		/// <returns><c>true</c> if both diff-tables are valid</returns>
+		/// <remarks>Call with default <paramref name="sel"/> and
+		/// <paramref name="r"/> values to clear all selects in the sync-table.</remarks>
 		internal bool SyncSelect(Cell sel = null, int r = -1)
 		{
-			if      (Table == _diff1) _table = _diff2;
-			else if (Table == _diff2) _table = _diff1;
+			YataGrid table;
+			if      (Table == _diff1) table = _diff2;
+			else if (Table == _diff2) table = _diff1;
+			else                      table = null;
 
-			if (_table != null)
+			if (table != null)
 			{
-				_table.ClearSelects(true, true);
+				table.ClearSelects(true, true);
 
 				if (sel != null)
 				{
-					if (sel.y < _table.RowCount && sel.x < _table.ColCount)
-						_table[sel.y, sel.x].selected = true;
+					if (sel.y < table.RowCount && sel.x < table.ColCount)
+						table[sel.y, sel.x].selected = true;
 				}
-				else if (r != -1 && r < _table.RowCount)
+				else if (r != -1 && r < table.RowCount)
 				{
-					// Do not call _table.SelectRow() since that's a recursion.
-					Row row = _table.Rows[r];
+					// Do not call table.SelectRow() since that's a recursion.
+
+					Row row = table.Rows[r];
 
 					Row._bypassEnableRowedit = true;
 					row.selected = true;
 					Row._bypassEnableRowedit = false;
 
-					for (int c = 0; c != _table.ColCount; ++c)
+					for (int c = 0; c != table.ColCount; ++c)
 						row[c].selected = true;
 				}
-
-				_table = null;
 				return true;
 			}
 			return false;
