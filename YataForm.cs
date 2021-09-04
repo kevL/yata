@@ -5406,12 +5406,11 @@ namespace yata
 		/// <c><see cref="YataGrid"/></c></remarks>
 		internal bool SyncSelect(Cell sel = null, int r = -1)
 		{
-			if (_diff1 != null && _diff2 != null)
-			{
-				if      (Table == _diff1) _table = _diff2;
-				else if (Table == _diff2) _table = _diff1;
-				else return false;
+			if      (Table == _diff1) _table = _diff2;
+			else if (Table == _diff2) _table = _diff1;
 
+			if (_table != null)
+			{
 				_table.ClearSelects(true, true);
 
 				if (sel != null)
