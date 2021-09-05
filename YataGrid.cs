@@ -4247,13 +4247,23 @@ namespace yata
 
 							int selc = getSelectedCol(); // do not clear cell-selects in a selected col
 
+							// if cells in another row are currently selected and a
+							// row that is already selected is clicked just clear those
+							// extraneous cells (instead of deselecting the clicked row)
+							bool celldeselected = false;
+
 							if (!ctr) // clear all other row's cells ->
 							{
+								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
-									if (r != row && c != selc)
-										this[r,c].selected = false;
+									if (r != row && c != selc
+										&& (cell = this[r,c]).selected)
+									{
+										cell.selected = false;
+										celldeselected = true;
+									}
 								}
 
 								if (table != null)
@@ -4296,9 +4306,10 @@ namespace yata
 								}
 
 								// select the clicked row if
-								// (a) it is not selected else clear
+								// (a) it is not currently selected
 								// (b) or not all cells in the clicked row are currently selected
-								bool @select = !Rows[row].selected || !allcellsselected;
+								// (c) or cells not in the clicked row got deselected above
+								bool @select = !Rows[row].selected || !allcellsselected || celldeselected;
 
 								Rows[row].selected = @select;
 
@@ -4480,16 +4491,24 @@ namespace yata
 
 							int selr = getSelectedRow(); // do not clear cell-selects in a selected row
 
+							// if cells in another col are currently selected and a
+							// col that is already selected is clicked just clear those
+							// extraneous cells (instead of deselecting the clicked col)
+							bool celldeselected = false;
+
 							if (!ctr) // clear all other col's cells ->
 							{
+								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
 									if (c != col
-										&&     (r > selr && r > selr + RangeSelect)
+										&& (   (r > selr && r > selr + RangeSelect)
 											|| (r < selr && r < selr + RangeSelect))
+										&& (cell = this[r,c]).selected)
 									{
 										this[r,c].selected = false;
+										celldeselected = true;
 									}
 								}
 
@@ -4499,8 +4518,8 @@ namespace yata
 									for (int c = 0; c != table.ColCount; ++c)
 									{
 										if (c != col
-											&&     (r > selrsync && r > selrsync + table.RangeSelect)
-												|| (r < selrsync && r < selrsync + table.RangeSelect))
+											&& (   (r > selrsync && r > selrsync + table.RangeSelect)
+												|| (r < selrsync && r < selrsync + table.RangeSelect)))
 										{
 											table[r,c].selected = false;
 										}
@@ -4535,9 +4554,10 @@ namespace yata
 								}
 
 								// select the clicked col if
-								// (a) it is not selected else clear
+								// (a) it is not currently selected
 								// (b) or not all cells in the clicked col are currently selected
-								bool @select = !Cols[col].selected || !allcellsselected;
+								// (c) or cells not in the clicked col got deselected above
+								bool @select = !Cols[col].selected || !allcellsselected || celldeselected;
 
 								Cols[col].selected = @select;
 
