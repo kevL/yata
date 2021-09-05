@@ -4240,11 +4240,6 @@ namespace yata
 							int selcsync = (table != null) ? table.getSelectedCol() : -1;
 
 
-							// get keyboard Modifiers
-							bool ctr = (ModifierKeys & Keys.Control) != 0,
-								 sft = (ModifierKeys & Keys.Shift)   != 0;
-
-
 							int selc = getSelectedCol(); // do not clear cell-selects in a selected col
 
 							// if cells in another row are currently selected and a
@@ -4252,7 +4247,7 @@ namespace yata
 							// extraneous cells (instead of deselecting the clicked row)
 							bool celldeselected = false;
 
-							if (!ctr) // clear all other row's cells ->
+							if ((ModifierKeys & Keys.Control) == 0) // clear all other row's cells ->
 							{
 								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
@@ -4284,7 +4279,7 @@ namespace yata
 
 							int selr = getSelectedRow();
 
-							if (!sft) // select only the clicked row ->
+							if ((ModifierKeys & Keys.Shift) == 0) // select only the clicked row ->
 							{
 								if (selr != -1 && selr != row) // clear any other selected row ->
 									Rows[selr].selected = false;
@@ -4484,11 +4479,6 @@ namespace yata
 							int selrsync = (table != null) ? table.getSelectedRow() : -1;
 
 
-							// get keyboard Modifiers
-							bool ctr = (ModifierKeys & Keys.Control) != 0,
-								 sft = (ModifierKeys & Keys.Shift)   != 0;
-
-
 							int selr = getSelectedRow(); // do not clear cell-selects in a selected row
 
 							// if cells in another col are currently selected and a
@@ -4496,7 +4486,7 @@ namespace yata
 							// extraneous cells (instead of deselecting the clicked col)
 							bool celldeselected = false;
 
-							if (!ctr) // clear all other col's cells ->
+							if ((ModifierKeys & Keys.Control) == 0) // clear all other col's cells ->
 							{
 								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
@@ -4532,7 +4522,7 @@ namespace yata
 
 							int selc = getSelectedCol();
 
-							if (!sft)
+							if ((ModifierKeys & Keys.Shift) == 0)
 							{
 								if (selc != -1 && selc != col) // clear any other selected col ->
 									Cols[selc].selected = false;
