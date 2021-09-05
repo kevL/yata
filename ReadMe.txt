@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 2
+2021 september 5
 kevL's
 ver 4.2.3.0
 
@@ -455,12 +455,12 @@ edit-operations that are possible on a single row are shown on the popup.
 Edits that involve more than one row are more complicated. First you need to get
 familiar with these facts: (a) only one row can ever be currently selected (as
 indicated with a green field at the far left of that row), (b) to flag multiple
-rows for cutting/copying or deleting w/ [Shift+Delete] hold down [Shift] and
-click at the far left of another row - [Control] will not work for this,
-although such row(s)'s cells would appear to be selected; a row of selected
-cells is not necessarily/technically a selected or flagged row itself! (c) to
-cut/copy/delete a range of rows (a selected row along with its flagged rows) use
-the Rows menu or its keyboard shortcuts.
+rows for cutting/copying or deleting w/ Shift+Delete hold down Shift and click
+at the far left of another row - Control will not work for this, although such
+row(s)'s cells would appear to be selected; a row of selected cells is not
+necessarily/technically a selected or flagged row itself! (c) to cut/copy/delete
+a range of rows (a selected row along with its flagged rows) use the Rows menu
+or its keyboard shortcuts.
 
 Currently flagged rows are indicated with a pale green field at the far left of
 their rows.
@@ -479,10 +479,10 @@ Once a range of rows has been copied it can be pasted into a table by choosing
 "Paste" on the Rows menu. The first row will be pasted at the currently selected
 row, pushing that row along with all following rows down such that they get
 shifted beneath the range that is pasted. Note that pasting rows never replaces
-any row(s). To replace rows with a copied range of rows, use paste, re-select,
-then delete or vice versa. And to paste rows after the last row, choose "Paste"
-without having a currently selected row - pressing [Esc] will clear all
-selections of rows, cols, and cells.
+any row(s). To replace rows with a copied range of rows, paste your copied rows
+then delete the rows you want deleted, or vice versa. And to paste rows after
+the last row, choose "Paste" without having a currently selected row - pressing
+Escape will clear all selections of rows, cols, and cells.
 
 
 Appendix D: output
