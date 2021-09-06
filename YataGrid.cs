@@ -3337,7 +3337,9 @@ namespace yata
 
 			if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
 			{
-				if ((ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
+				Select();
+
+				if (ModifierKeys == Keys.None)
 				{
 					if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
 					{
@@ -3346,7 +3348,6 @@ namespace yata
 						_editor.Visible = false;
 						Invalidator(INVALID_GRID);
 					}
-					Select();
 
 //					else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
 //					{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
@@ -3386,26 +3387,29 @@ namespace yata
 									{
 										_double = true;
 
+										Select();
+
 										ApplyCellEdit();
 										_editor.Visible = false;
 										Invalidator(INVALID_GRID);
-										Select();
 									}
 									else					// NOTE: There's a clickable fringe around the editor.
 										_editor.Focus();	// so just refocus the editor if the fringe is clicked
 								}
+								else
+									Select();
 							}
 							else
 							{
 								Select();
 
-								if (ctr) // select/unselect single cell ->
+								if (ctr) // select/deselect single cell ->
 								{
 									if (!sft)
 									{
 										if (_cell.selected = !_cell.selected)
 										{
-											if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
+											if (_f.SyncSelect(_cell)) // disallow multi-cell selection if sync'd
 											{
 												ClearSelects(true);
 												_cell.selected = true;
@@ -3428,7 +3432,7 @@ namespace yata
 									{
 										Cell sel = null;
 
-										if (_f.SyncSelect(_cell)) // don't allow multiple-cell selection if sync'd
+										if (_f.SyncSelect(_cell)) // disallow multi-cell selection if sync'd
 										{
 											ClearSelects(true);
 											_cell.selected = true;
@@ -3461,18 +3465,11 @@ namespace yata
 										}
 									}
 								}
-								else if (!_cell.selected || getSelectedCell() == null) // cell is not selected or it's not the only selected cell
+								else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
 								{
 									_double = true;
 
-									foreach (var row in Rows)
-									if (row.selected)
-									{
-										row.selected = false;
-										break;
-									}
-
-									ClearCellSelects();
+									ClearSelects(true);
 									_cell.selected = true;
 									_f.SyncSelect(_cell);
 
@@ -3489,10 +3486,9 @@ namespace yata
 								}
 							}
 						}
-						else if (!ctr && !sft)
-						{
+						else
 							Select();
-						}
+
 						break;
 
 					case MouseButtons.Right:
