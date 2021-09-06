@@ -1781,7 +1781,7 @@ namespace yata
 		void editclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearSelects();
-			SyncSelect();
+			ClearSyncSelects();
 
 			Table.Invalidator(YataGrid.INVALID_GRID
 							| YataGrid.INVALID_FROZ
@@ -2020,7 +2020,7 @@ namespace yata
 				else // not found ->
 				{
 					Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
-					SyncSelect();
+					ClearSyncSelects();
 				}
 
 				int invalid = YataGrid.INVALID_GRID
@@ -2271,7 +2271,7 @@ namespace yata
 		void editcellsclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearCellSelects();
-			SyncSelect();
+			ClearSyncSelects();
 
 			EnableCelleditOperations();
 
@@ -2628,7 +2628,7 @@ namespace yata
 				}
 			}
 
-			YataGrid table; // do special SyncSelect() ->
+			YataGrid table; // do special sync ->
 
 			if      (Table == _diff1) table = _diff2;
 			else if (Table == _diff2) table = _diff1;
@@ -2962,7 +2962,7 @@ namespace yata
 				}
 			}
 
-			YataGrid table; // do special SyncSelect() ->
+			YataGrid table; // do special sync ->
 
 			if      (Table == _diff1) table = _diff2;
 			else if (Table == _diff2) table = _diff1;
@@ -5382,25 +5382,20 @@ namespace yata
 			Table.SelectCell(sel, false);
 
 			if (table != null
-				&& sel.x < table.ColCount
-				&& sel.y < table.RowCount)
+				&& sel.y < table.RowCount
+				&& sel.x < table.ColCount)
 			{
 				table[sel.y, sel.x].selected = true;
 			}
 		}
 
+
 		/// <summary>
-		/// Syncs two diffed <c><see cref="YataGrid">YataGrids</see></c> when a
-		/// specified <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> gets
-		/// selected.
+		/// Clears all selects on a sync-table if that table is valid.
 		/// </summary>
-		/// <param name="sel"><c>a <see cref="Cell"/></c> in the current table</param>
-		/// <param name="r">a row-id in the current table iff
-		/// <paramref name="sel"/> is <c>null</c></param>
-		/// <returns><c>true</c> if both diff-tables are valid</returns>
-		/// <remarks>Call with default <paramref name="sel"/> and
-		/// <paramref name="r"/> values to clear all selects in the sync-table.</remarks>
-		internal bool SyncSelect(Cell sel = null, int r = -1)
+		/// <returns>the sync'd <c><see cref="YataGrid"/></c> if a sync-table is
+		/// valid</returns>
+		internal YataGrid ClearSyncSelects()
 		{
 			YataGrid table;
 			if      (Table == _diff1) table = _diff2;
@@ -5410,25 +5405,26 @@ namespace yata
 			if (table != null)
 			{
 				table.ClearSelects(true, true);
+				return table;
+			}
+			return null;
+		}
 
-				if (sel != null)
-				{
-					if (sel.y < table.RowCount && sel.x < table.ColCount)
-						table[sel.y, sel.x].selected = true;
-				}
-				else if (r != -1 && r < table.RowCount)
-				{
-					// Do not call table.SelectRow() since that's a recursion.
+		/// <summary>
+		/// Selects a specified <c><see cref="Cell">Cell's</see></c>
+		/// corresponding <c>Cell</c> in a sync-table.
+		/// </summary>
+		/// <param name="sel">a <c>Cell</c> in the current table</param>
+		/// <returns><c>true</c> if a sync-table is valid</returns>
+		/// <remarks>Ensure <paramref name="sel"/> is valid before call.</remarks>
+		internal bool SyncSelectCell(Cell sel)
+		{
+			YataGrid table = ClearSyncSelects();
+			if (table != null)
+			{
+				if (sel.y < table.RowCount && sel.x < table.ColCount)
+					table[sel.y, sel.x].selected = true;
 
-					Row row = table.Rows[r];
-
-					Row._bypassEnableRowedit = true;
-					row.selected = true;
-					Row._bypassEnableRowedit = false;
-
-					for (int c = 0; c != table.ColCount; ++c)
-						row[c].selected = true;
-				}
 				return true;
 			}
 			return false;

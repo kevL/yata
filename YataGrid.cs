@@ -1919,7 +1919,7 @@ namespace yata
 									SelectRow(0);
 								}
 								EnsureDisplayedRow(0);
-								invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 							else if (_visHori) _scrollHori.Value = 0;
 						}
@@ -2027,7 +2027,7 @@ namespace yata
 									SelectRow(RowCount - 1);
 								}
 								EnsureDisplayedRow(RowCount - 1);
-								invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 							else if (_visHori) _scrollHori.Value = MaxHori;
 						}
@@ -2137,7 +2137,7 @@ namespace yata
 								SelectRow(selr);
 							}
 							EnsureDisplayedRow(selr);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
 					else if (sft)
@@ -2251,7 +2251,7 @@ namespace yata
 								SelectRow(selr);
 							}
 							EnsureDisplayedRow(selr);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
 					else if (sft)
@@ -2361,7 +2361,7 @@ namespace yata
 								SelectRow(--selr);
 							}
 							EnsureDisplayedRow(selr);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
 					else if (sft && !ctr)
@@ -2452,7 +2452,7 @@ namespace yata
 								SelectRow(++selr);
 							}
 							EnsureDisplayedRow(selr);
-							invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
 					else if (sft && !ctr)
@@ -2732,7 +2732,7 @@ namespace yata
 					if (!ctr && !sft)
 					{
 						ClearSelects(true);
-						_f.SyncSelect();
+						_f.ClearSyncSelects();
 						invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 					}
 					break;
@@ -2747,7 +2747,7 @@ namespace yata
 			}
 			else if (display)				// -> is a Cell operation
 			{
-				_f.SyncSelect(sel);
+				_f.SyncSelectCell(sel);
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
 						  | EnsureDisplayed(sel));
@@ -2778,17 +2778,27 @@ namespace yata
 		/// </summary>
 		/// <param name="r">row-id</param>
 		/// <remarks>Check that <paramref name="r"/> doesn't over/underflow
-		/// <c><see cref="RowCount"/></c> before call.
-		/// 
-		/// 
-		/// Calls <c><see cref="YataForm.SyncSelect()">YataForm.SyncSelect()</see></c>.
-		/// </remarks>
+		/// <c><see cref="RowCount"/></c> before call.</remarks>
 		internal void SelectRow(int r)
 		{
-			_f.SyncSelect(null, r);
+			Row row;
 
-			Row row = Rows[r];
+			YataGrid table = _f.ClearSyncSelects();
+			if (table != null)
+			{
+				row = table.Rows[r];
+
+				Row._bypassEnableRowedit = true;
+				row.selected = true;
+				Row._bypassEnableRowedit = false;
+
+				for (int c = 0; c != table.ColCount; ++c)
+					row[c].selected = true;
+			}
+
+			row = Rows[r];
 			row.selected = true;
+
 			for (int c = 0; c != ColCount; ++c)
 				row[c].selected = true;
 
@@ -2806,7 +2816,7 @@ namespace yata
 		/// <c>YataForm.gotodiff()</c>.</remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
 		{
-			if (sync) _f.SyncSelect(cell);
+			if (sync) _f.SyncSelectCell(cell);
 
 			cell.selected = true;
 			Invalidator(INVALID_GRID
@@ -2852,12 +2862,12 @@ namespace yata
 			{
 				sel = this[r,c];
 				sel.selected = true;
-				_f.SyncSelect(sel);
+				_f.SyncSelectCell(sel);
 			}
 			else
 			{
 				sel = this[r,0]; // just a cell (for its row-id) to pass to EnsureDisplayed() below.
-				_f.SyncSelect(null);
+				_f.ClearSyncSelects();
 			}
 
 			Invalidator(INVALID_GRID
@@ -3372,13 +3382,6 @@ namespace yata
 					case MouseButtons.Left:
 						if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 						{
-//							foreach (var col in Cols) // always clear col-select - why.
-//							if (col.selected)
-//							{
-//								col.selected = false;
-//								break;
-//							}
-
 							if (_editor.Visible)
 							{
 								if (!ctr && !sft)
@@ -3409,7 +3412,7 @@ namespace yata
 									{
 										if (_cell.selected = !_cell.selected)
 										{
-											if (_f.SyncSelect(_cell)) // disallow multi-cell selection if sync'd
+											if (_f.SyncSelectCell(_cell)) // disallow multi-cell selection if sync'd
 											{
 												ClearSelects(true);
 												_cell.selected = true;
@@ -3417,7 +3420,7 @@ namespace yata
 											EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
 										}															//    selectedcell is not the only selected cell
 										else
-											_f.SyncSelect();
+											_f.ClearSyncSelects();
 
 										int invalid = INVALID_GRID;
 										if (Propanel != null && Propanel.Visible)
@@ -3432,7 +3435,7 @@ namespace yata
 									{
 										Cell sel = null;
 
-										if (_f.SyncSelect(_cell)) // disallow multi-cell selection if sync'd
+										if (_f.SyncSelectCell(_cell)) // disallow multi-cell selection if sync'd
 										{
 											ClearSelects(true);
 											_cell.selected = true;
@@ -3471,7 +3474,7 @@ namespace yata
 
 									ClearSelects(true);
 									_cell.selected = true;
-									_f.SyncSelect(_cell);
+									_f.SyncSelectCell(_cell);
 
 									Invalidator(INVALID_GRID
 											  | INVALID_FROZ
@@ -3498,7 +3501,7 @@ namespace yata
 							{
 								ClearSelects(true);
 								_cell.selected = true;
-								_f.SyncSelect(_cell);
+								_f.SyncSelectCell(_cell);
 
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
@@ -4394,7 +4397,7 @@ namespace yata
 				else if (ModifierKeys == Keys.None) // click below the last entry ->
 				{
 					ClearSelects();
-					_f.SyncSelect();
+					_f.ClearSyncSelects();
 
 					int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 					if (Propanel != null && Propanel.Visible)
