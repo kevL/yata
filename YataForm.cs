@@ -5223,83 +5223,99 @@ namespace yata
 		/// Selects the next diffed cell in the table (or both tables if both
 		/// are valid).
 		/// </summary>
-		/// <param name="bypassFocus"><c>true</c> to not select the
-		/// <c><see cref="Table"/></c></param>
 		/// <remarks>Frozen cells will be selected but they don't respect
 		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
 		/// They get no respect ...
-		/// </remarks>
-		internal void GotoDiffCell(bool bypassFocus)
+		/// 
+		/// 
+		/// Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
+		/// is depressed.</remarks>
+		internal void GotoDiffCell()
 		{
-			if (WindowState == FormWindowState.Minimized)
-				WindowState  = FormWindowState.Normal;
-			else
+			if ((ModifierKeys & Keys.Alt) == 0)
 			{
-				TopMost = true;
-				TopMost = false;
-			}
-
-			if (bypassFocus) _fdiffer.Activate();
-
-
-			if (Table != null
-				&& (_diff1 != null  || _diff2 != null)
-				&& (Table == _diff1 || Table == _diff2))
-			{
-				if (Table._editor.Visible)
+				if (WindowState == FormWindowState.Minimized)
+					WindowState  = FormWindowState.Normal;
+				else
 				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
+					TopMost = true;
+					TopMost = false;
 				}
 
-				if (!bypassFocus) Table.Select();
+				bool bypassFocus = (ModifierKeys & Keys.Control) != 0;
+				if (bypassFocus) _fdiffer.Activate();
 
 
-				YataGrid table; // the other table - can be null.
-
-				if (Table == _diff1) table = _diff2;
-				else                 table = _diff1;
-
-				Cell sel = Table.getSelectedCell();
-				int rStart = Table.getSelectedRow();
-
-				Table.ClearSelects();
-
-				if (table != null)
-					table.ClearSelects(true, true);
-
-				int r,c;
-
-				bool start = true;
-
-				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
+				if (Table != null
+					&& (_diff1 != null  || _diff2 != null)
+					&& (Table == _diff1 || Table == _diff2))
 				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
+					if (Table._editor.Visible)
 					{
-						c = -1;
-						if (rStart == -1) rStart = 0;
+						Table._editor.Visible = false;
+						Table.Invalidator(YataGrid.INVALID_GRID);
 					}
 
-					for (r = rStart; r != Table.RowCount; ++r)
+					if (!bypassFocus) Table.Select();
+
+
+					YataGrid table; // the other table - can be null.
+
+					if (Table == _diff1) table = _diff2;
+					else                 table = _diff1;
+
+					Cell sel = Table.getSelectedCell();
+					int rStart = Table.getSelectedRow();
+
+					Table.ClearSelects();
+
+					if (table != null)
+						table.ClearSelects(true, true);
+
+					int r,c;
+
+					bool start = true;
+
+					if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
 					{
-						if (start)
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							start = false;
-							if (++c == Table.ColCount)		// if starting on the last cell of a row
+							c = -1;
+							if (rStart == -1) rStart = 0;
+						}
+
+						for (r = rStart; r != Table.RowCount; ++r)
+						{
+							if (start)
 							{
+								start = false;
+								if (++c == Table.ColCount)		// if starting on the last cell of a row
+								{
+									c = 0;
+
+									if (r < Table.RowCount - 1)	// jump to the first cell of the next row
+										++r;
+									else						// or to the top of the table if on the last row
+										r = 0;
+								}
+							}
+							else
 								c = 0;
 
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-									++r;
-								else						// or to the top of the table if on the last row
-									r = 0;
+							for (; c != Table.ColCount; ++c)
+							{
+								if ((sel = Table[r,c]).diff)
+								{
+									gotodiff(sel, table);
+									return;
+								}
 							}
 						}
-						else
-							c = 0;
 
-						for (; c != Table.ColCount; ++c)
+						// TODO: tighten exact start/end-cells
+						for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
+						for (c = 0; c != Table.ColCount; ++c)
 						{
 							if ((sel = Table[r,c]).diff)
 							{
@@ -5308,63 +5324,52 @@ namespace yata
 							}
 						}
 					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != rStart + 1;     ++r) // quick and dirty wrap ->
-					for (c = 0; c != Table.ColCount; ++c)
+					else // backward goto ->
 					{
-						if ((sel = Table[r,c]).diff)
+						if (sel != null) { c = sel.x; rStart = sel.y; }
+						else
 						{
-							gotodiff(sel, table);
-							return;
+							c = Table.ColCount;
+							if (rStart == -1) rStart = Table.RowCount - 1;
 						}
-					}
-				}
-				else // backward goto ->
-				{
-					if (sel != null) { c = sel.x; rStart = sel.y; }
-					else
-					{
-						c = Table.ColCount;
-						if (rStart == -1) rStart = Table.RowCount - 1;
-					}
 
-					for (r = rStart; r != -1; --r)
-					{
-						if (start)
+						for (r = rStart; r != -1; --r)
 						{
-							start = false;
-							if (--c == -1)	// if starting on the first cell of a row
+							if (start)
 							{
+								start = false;
+								if (--c == -1)	// if starting on the first cell of a row
+								{
+									c = Table.ColCount - 1;
+
+									if (r > 0)	// jump to the last cell of the previous row
+										--r;
+									else		// or to the bottom of the table if on the first row
+										r = Table.RowCount - 1;
+								}
+							}
+							else
 								c = Table.ColCount - 1;
 
-								if (r > 0)	// jump to the last cell of the previous row
-									--r;
-								else		// or to the bottom of the table if on the first row
-									r = Table.RowCount - 1;
+							for (; c != -1; --c)
+							{
+								if ((sel = Table[r,c]).diff)
+								{
+									gotodiff(sel, table);
+									return;
+								}
 							}
 						}
-						else
-							c = Table.ColCount - 1;
 
-						for (; c != -1; --c)
+						// TODO: tighten exact start/end-cells
+						for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
+						for (c = Table.ColCount - 1; c != -1;         --c)
 						{
 							if ((sel = Table[r,c]).diff)
 							{
 								gotodiff(sel, table);
 								return;
 							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != rStart - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;         --c)
-					{
-						if ((sel = Table[r,c]).diff)
-						{
-							gotodiff(sel, table);
-							return;
 						}
 					}
 				}

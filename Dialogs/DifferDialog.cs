@@ -188,7 +188,7 @@ namespace yata
 		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			_f.GotoDiffCell((ModifierKeys & Keys.Control) != 0);
+			_f.GotoDiffCell();
 		}
 		#endregion Events
 
