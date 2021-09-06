@@ -80,8 +80,22 @@ namespace yata
 			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
 								  lbl_Info.Height + pnl_Copyable.Height + btn_Okay.Height);
 
-			if (_x == -1) _x = _f.Left + 50;
-			if (_y == -1) _y = _f.Top  + 50;
+			if (_x == -1)
+			{
+				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width,
+													_f.Top  + 20));
+
+				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
+				_y = loc.Y;
+
+				Screen screen = Screen.FromControl(_f);
+				if (screen.Bounds.Contains(new Point(loc.X + Width, loc.Y)))
+				{
+					_x = loc.X;
+				}
+				else
+					_x = loc.X - Width;
+			}
 
 			Left = _x;
 			Top  = _y;
@@ -110,8 +124,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_x = Left;
-			_y = Top;
+			_x = Math.Max(0, Left);
+			_y = Math.Max(0, Top);
 
 			_f._fdiffer = null;
 
