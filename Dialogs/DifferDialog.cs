@@ -93,6 +93,10 @@ namespace yata
 				{
 					_x = loc.X;
 				}
+				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y)))
+				{
+					_x = _f.Left - Width;
+				}
 				else
 					_x = loc.X - Width;
 			}
