@@ -2111,8 +2111,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if ((ModifierKeys & (Keys.Alt | Keys.Control)) == 0
-				&& Table.anyLoadchanged())
+			if ((ModifierKeys & Keys.Alt) == 0 && Table.anyLoadchanged())
 			{
 				if (Table._editor.Visible)
 				{
