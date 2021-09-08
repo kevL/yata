@@ -262,8 +262,8 @@ namespace yata
 
 						if (ColCount > _frozenCount)
 						{
-							sel = this[sel.y, _frozenCount];
-							sel.selected = true;
+							(sel = _anchorcell = this[sel.y, _frozenCount]).selected = true;
+
 							EnsureDisplayed(sel);
 							invalid |= INVALID_GRID;
 						}
