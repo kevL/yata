@@ -1890,222 +1890,395 @@ namespace yata
 		{
 			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
-			if ((e.Modifiers & Keys.Alt) != 0)
-				return;
-
-
-			bool ctr = (e.Modifiers & Keys.Control) != 0,
-				 sft = (e.Modifiers & Keys.Shift)   != 0;
-
-			int invalid  = INVALID_NONE;
-			bool display = false;
-			bool anchor  = false;
-
-			Cell sel = getSelectedCell();
-			int selr = getSelectedRow();
-
-			// TODO: change selected col perhaps
-
-			switch (e.KeyCode)
+			if ((e.Modifiers & Keys.Alt) == 0)
 			{
-				case Keys.Home:
-					if (selr != -1)
-					{
-						if (!sft)
+				bool ctr = (e.Modifiers & Keys.Control) != 0,
+					 sft = (e.Modifiers & Keys.Shift)   != 0;
+
+				int invalid  = INVALID_NONE;
+				bool display = false;
+				bool anchor  = false;
+
+				Cell sel = getSelectedCell();
+				int selr = getSelectedRow();
+
+				// TODO: change selected col perhaps
+
+				switch (e.KeyCode)
+				{
+					case Keys.Home:
+						if (selr != -1)
 						{
-							if (ctr)
+							if (!sft)
+							{
+								if (ctr)
+								{
+									if (selr > 0)
+									{
+										ClearSelects(true);
+										SelectRow(0);
+									}
+									EnsureDisplayedRow(0);
+									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+								}
+								else if (_visHori) _scrollHori.Value = 0;
+							}
+						}
+						else if (sft)
+						{
+							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
+							{
+								if (ctr)
+								{
+									ClearCellSelects();
+
+									for (int r = 0; r <= _anchorcell.y; ++r)
+									for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[0, FrozenCount];
+								}
+								else
+								{
+									int strt_r, stop_r;
+									int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+									ClearCellSelects();
+
+									for (int r = strt_r;      r <= stop_r;        ++r)
+									for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[sel_r, FrozenCount];
+								}
+								anchor = true;
+							}
+						}
+						else if (ctr)
+						{
+							if (sel != null)
+							{
+								if (sel.x != FrozenCount || sel.y != 0)
+								{
+									sel.selected = false;
+									(sel = this[0, FrozenCount]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visVert) _scrollVert.Value = 0;
+						}
+						else if (sel != null)
+						{
+							if (sel.x != FrozenCount)
+							{
+								sel.selected = false;
+								(sel = this[sel.y, FrozenCount]).selected = true;
+							}
+							display = true;
+						}
+						else if (_visHori) _scrollHori.Value = 0;
+						break;
+
+					case Keys.End:
+						if (selr != -1)
+						{
+							if (!sft)
+							{
+								if (ctr)
+								{
+									if (selr != RowCount - 1)
+									{
+										ClearSelects(true);
+										SelectRow(RowCount - 1);
+									}
+									EnsureDisplayedRow(RowCount - 1);
+									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+								}
+								else if (_visHori) _scrollHori.Value = MaxHori;
+							}
+						}
+						else if (sft)
+						{
+							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
+							{
+								if (ctr)
+								{
+									ClearCellSelects();
+
+									for (int r = _anchorcell.y; r != RowCount; ++r)
+									for (int c = _anchorcell.x; c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[RowCount - 1, ColCount - 1];
+								}
+								else
+								{
+									int strt_r, stop_r;
+									int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+									ClearCellSelects();
+
+									for (int r = strt_r;        r <= stop_r;   ++r)
+									for (int c = _anchorcell.x; c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[sel_r, ColCount - 1];
+								}
+								anchor = true;
+							}
+						}
+						else if (ctr)
+						{
+							if (sel != null)
+							{
+								if (sel.x != FrozenCount || sel.y != RowCount - 1)
+								{
+									sel.selected = false;
+									(sel = this[RowCount - 1, FrozenCount]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visVert) _scrollVert.Value = MaxVert;
+						}
+						else if (sel != null)
+						{
+							if (sel.x != ColCount - 1)
+							{
+								sel.selected = false;
+								(sel = this[sel.y, ColCount - 1]).selected = true;
+							}
+							display = true;
+						}
+						else if (_visHori) _scrollHori.Value = MaxHori;
+						break;
+
+					case Keys.PageUp:
+						if (selr != -1)
+						{
+							if (!ctr && !sft)
 							{
 								if (selr > 0)
 								{
 									ClearSelects(true);
-									SelectRow(0);
+
+									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									if ((selr -= shift) < 0) selr = 0;
+
+									SelectRow(selr);
 								}
-								EnsureDisplayedRow(0);
+								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
-							else if (_visHori) _scrollHori.Value = 0;
 						}
-					}
-					else if (sft)
-					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
+						else if (sft)
 						{
-							if (ctr)
+							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
 							{
-								ClearCellSelects();
-
-								for (int r = 0; r <= _anchorcell.y; ++r)
-								for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+								if (ctr)
 								{
-									this[r,c].selected = true;
+									int strt_c, stop_c;
+									int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+									ClearCellSelects();
+
+									for (int r = 0;      r <= _anchorcell.y; ++r)
+									for (int c = strt_c; c <= stop_c;        ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[0, sel_c];
+									anchor = true;
 								}
-								sel = this[0, FrozenCount];
-							}
-							else
-							{
-								int strt_r, stop_r;
-								int sel_r = asStartStop_row(out strt_r, out stop_r);
-
-								ClearCellSelects();
-
-								for (int r = strt_r;      r <= stop_r;        ++r)
-								for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+								else
 								{
-									this[r,c].selected = true;
-								}
-								sel = this[sel_r, FrozenCount];
-							}
-							anchor = true;
-						}
-					}
-					else if (ctr)
-					{
-						if (sel != null)
-						{
-							if (sel.x != FrozenCount || sel.y != 0)
-							{
-								sel.selected = false;
-								(sel = this[0, FrozenCount]).selected = true;
-							}
-							display = true;
-						}
-						else if (_visVert) _scrollVert.Value = 0;
-					}
-					else if (sel != null)
-					{
-						if (sel.x != FrozenCount)
-						{
-							sel.selected = false;
-							(sel = this[sel.y, FrozenCount]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visHori) _scrollHori.Value = 0;
-					break;
+									int sel_r = getAnchorRangedRowid();
+									if (sel_r != 0)
+									{
+										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										sel_r = Math.Max(0, sel_r - shift);
 
-				case Keys.End:
-					if (selr != -1)
-					{
-						if (!sft)
+										int strt_r = Math.Min(sel_r, _anchorcell.y);
+										int stop_r = Math.Max(sel_r, _anchorcell.y);
+
+										int strt_c, stop_c;
+										int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+										ClearCellSelects();
+
+										for (int r = strt_r; r <= stop_r; ++r)
+										for (int c = strt_c; c <= stop_c; ++c)
+										{
+											this[r,c].selected = true;
+										}
+										sel = this[sel_r, sel_c];
+										anchor = true;
+									}
+								}
+							}
+						}
+//						else if (ctr)
+//						{
+							// don't use [Ctrl+PageUp] since it is used/consumed by the tabcontrol
+							//
+							// Note that can be bypassed in YataTabs.OnKeyDown() -
+							// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
+							// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
+//						}
+						else if (!ctr)
 						{
-							if (ctr)
+							if (sel != null)
+							{
+								if (sel.y != 0 && sel.x >= FrozenCount)
+								{
+									sel.selected = false;
+
+									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									if ((selr = sel.y - shift) < 0) selr = 0;
+
+									(sel = this[selr, sel.x]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visVert)
+							{
+								int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+								if (_scrollVert.Value - h < 0)
+									_scrollVert.Value = 0;
+								else
+									_scrollVert.Value -= h;
+							}
+						}
+						break;
+
+					case Keys.PageDown:
+						if (selr != -1)
+						{
+							if (!ctr && !sft)
 							{
 								if (selr != RowCount - 1)
 								{
 									ClearSelects(true);
-									SelectRow(RowCount - 1);
+
+									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
+
+									SelectRow(selr);
 								}
-								EnsureDisplayedRow(RowCount - 1);
+								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
-							else if (_visHori) _scrollHori.Value = MaxHori;
 						}
-					}
-					else if (sft)
-					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
+						else if (sft)
 						{
-							if (ctr)
+							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
 							{
-								ClearCellSelects();
-
-								for (int r = _anchorcell.y; r != RowCount; ++r)
-								for (int c = _anchorcell.x; c != ColCount; ++c)
+								if (ctr)
 								{
-									this[r,c].selected = true;
+									int strt_c, stop_c;
+									int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+									ClearCellSelects();
+
+									for (int r = _anchorcell.y; r != RowCount; ++r)
+									for (int c = strt_c;        c <= stop_c;   ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[RowCount - 1, sel_c];
+									anchor = true;
 								}
-								sel = this[RowCount - 1, ColCount - 1];
-							}
-							else
-							{
-								int strt_r, stop_r;
-								int sel_r = asStartStop_row(out strt_r, out stop_r);
-
-								ClearCellSelects();
-
-								for (int r = strt_r;        r <= stop_r;   ++r)
-								for (int c = _anchorcell.x; c != ColCount; ++c)
+								else
 								{
-									this[r,c].selected = true;
+									int sel_r = getAnchorRangedRowid();
+									if (sel_r != RowCount - 1)
+									{
+										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										sel_r = Math.Min(RowCount - 1, sel_r + shift);
+
+										int strt_r = Math.Min(sel_r, _anchorcell.y);
+										int stop_r = Math.Max(sel_r, _anchorcell.y);
+
+										int strt_c, stop_c;
+										int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+										ClearCellSelects();
+
+										for (int r = strt_r; r <= stop_r; ++r)
+										for (int c = strt_c; c <= stop_c; ++c)
+										{
+											this[r,c].selected = true;
+										}
+										sel = this[sel_r, sel_c];
+										anchor = true;
+									}
 								}
-								sel = this[sel_r, ColCount - 1];
 							}
-							anchor = true;
 						}
-					}
-					else if (ctr)
-					{
-						if (sel != null)
+//						else if (ctr)
+//						{
+							// don't use [Ctrl+PageDown] since it is used/consumed by the tabcontrol
+							//
+							// Note that can be bypassed in YataTabs.OnKeyDown() -
+							// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
+							// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
+//						}
+						else if (!ctr)
 						{
-							if (sel.x != FrozenCount || sel.y != RowCount - 1)
+							if (sel != null)
 							{
-								sel.selected = false;
-								(sel = this[RowCount - 1, FrozenCount]).selected = true;
-							}
-							display = true;
-						}
-						else if (_visVert) _scrollVert.Value = MaxVert;
-					}
-					else if (sel != null)
-					{
-						if (sel.x != ColCount - 1)
-						{
-							sel.selected = false;
-							(sel = this[sel.y, ColCount - 1]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visHori) _scrollHori.Value = MaxHori;
-					break;
-
-				case Keys.PageUp:
-					if (selr != -1)
-					{
-						if (!ctr && !sft)
-						{
-							if (selr > 0)
-							{
-								ClearSelects(true);
-
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if ((selr -= shift) < 0) selr = 0;
-
-								SelectRow(selr);
-							}
-							EnsureDisplayedRow(selr);
-							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
-						}
-					}
-					else if (sft)
-					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
-						{
-							if (ctr)
-							{
-								int strt_c, stop_c;
-								int sel_c = asStartStop_col(out strt_c, out stop_c);
-
-								ClearCellSelects();
-
-								for (int r = 0;      r <= _anchorcell.y; ++r)
-								for (int c = strt_c; c <= stop_c;        ++c)
+								if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
 								{
-									this[r,c].selected = true;
-								}
-								sel = this[0, sel_c];
-								anchor = true;
-							}
-							else
-							{
-								int sel_r = getAnchorRangedRowid();
-								if (sel_r != 0)
-								{
+									sel.selected = false;
+
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									sel_r = Math.Max(0, sel_r - shift);
+									if ((selr = sel.y + shift) > RowCount - 1) selr = RowCount - 1;
 
+									(sel = this[selr, sel.x]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visVert)
+							{
+								int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
+								if (_scrollVert.Value + h > MaxVert)
+									_scrollVert.Value = MaxVert;
+								else
+									_scrollVert.Value += h;
+							}
+						}
+						break;
+
+					case Keys.Up: // NOTE: needs to bypass KeyPreview
+						if (selr != -1)
+						{
+							if (!ctr && !sft)
+							{
+								if (selr != 0)
+								{
+									ClearSelects(true);
+									SelectRow(--selr);
+								}
+								EnsureDisplayedRow(selr);
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+							}
+						}
+						else if (sft)
+						{
+							if (!ctr
+								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
+							{
+								int sel_r = getAnchorRangedRowid() - 1;
+								if (sel_r >= 0)
+								{
 									int strt_r = Math.Min(sel_r, _anchorcell.y);
 									int stop_r = Math.Max(sel_r, _anchorcell.y);
 
@@ -2124,87 +2297,59 @@ namespace yata
 								}
 							}
 						}
-					}
-//					else if (ctr)
-//					{
-						// don't use [Ctrl+PageUp] since it is used/consumed by the tabcontrol
-						//
-						// Note that can be bypassed in YataTabs.OnKeyDown() -
-						// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
-						// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
-//					}
-					else if (!ctr)
-					{
-						if (sel != null)
+						else if (ctr) // selection to abovest cell
+						{
+							if (sel != null)
+							{
+								if (sel.y != 0 && sel.x >= FrozenCount)
+								{
+									sel.selected = false;
+									(sel = this[0, sel.x]).selected = true;
+								}
+								display = true;
+							}
+						}
+						else if (sel != null) // selection to the cell above
 						{
 							if (sel.y != 0 && sel.x >= FrozenCount)
 							{
 								sel.selected = false;
-
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if ((selr = sel.y - shift) < 0) selr = 0;
-
-								(sel = this[selr, sel.x]).selected = true;
+								(sel = this[sel.y - 1, sel.x]).selected = true;
 							}
 							display = true;
 						}
 						else if (_visVert)
 						{
-							int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-							if (_scrollVert.Value - h < 0)
+							if (_scrollVert.Value - _scrollVert.LargeChange < 0)
 								_scrollVert.Value = 0;
 							else
-								_scrollVert.Value -= h;
+								_scrollVert.Value -= _scrollVert.LargeChange;
 						}
-					}
-					break;
+						break;
 
-				case Keys.PageDown:
-					if (selr != -1)
-					{
-						if (!ctr && !sft)
+					case Keys.Down: // NOTE: needs to bypass KeyPreview
+						if (selr != -1)
 						{
-							if (selr != RowCount - 1)
+							if (!ctr && !sft)
 							{
-								ClearSelects(true);
-
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
-
-								SelectRow(selr);
-							}
-							EnsureDisplayedRow(selr);
-							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
-						}
-					}
-					else if (sft)
-					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
-						{
-							if (ctr)
-							{
-								int strt_c, stop_c;
-								int sel_c = asStartStop_col(out strt_c, out stop_c);
-
-								ClearCellSelects();
-
-								for (int r = _anchorcell.y; r != RowCount; ++r)
-								for (int c = strt_c;        c <= stop_c;   ++c)
+								if (selr != RowCount - 1)
 								{
-									this[r,c].selected = true;
+									ClearSelects(true);
+									SelectRow(++selr);
 								}
-								sel = this[RowCount - 1, sel_c];
-								anchor = true;
+								EnsureDisplayedRow(selr);
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
-							else
+						}
+						else if (sft)
+						{
+							if (!ctr
+								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& areSelectedCellsContiguous())
 							{
-								int sel_r = getAnchorRangedRowid();
-								if (sel_r != RowCount - 1)
+								int sel_r = getAnchorRangedRowid() + 1;
+								if (sel_r < RowCount)
 								{
-									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									sel_r = Math.Min(RowCount - 1, sel_r + shift);
-
 									int strt_r = Math.Min(sel_r, _anchorcell.y);
 									int stop_r = Math.Max(sel_r, _anchorcell.y);
 
@@ -2223,381 +2368,237 @@ namespace yata
 								}
 							}
 						}
-					}
-//					else if (ctr)
-//					{
-						// don't use [Ctrl+PageDown] since it is used/consumed by the tabcontrol
-						//
-						// Note that can be bypassed in YataTabs.OnKeyDown() -
-						// which is how [Ctrl+Shift+PageUp/Down] work for selecting contiguous blocks.
-						// but I'd prefer to keep [Ctrl+PageUp/Down] for actually changing tabpages
-//					}
-					else if (!ctr)
-					{
-						if (sel != null)
+						else if (ctr) // selection to belowest cell
+						{
+							if (sel != null)
+							{
+								if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
+								{
+									sel.selected = false;
+									(sel = this[RowCount - 1, sel.x]).selected = true;
+								}
+								display = true;
+							}
+						}
+						else if (sel != null) // selection to the cell below
 						{
 							if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
 							{
 								sel.selected = false;
-
-								int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-								if ((selr = sel.y + shift) > RowCount - 1) selr = RowCount - 1;
-
-								(sel = this[selr, sel.x]).selected = true;
+								(sel = this[sel.y + 1, sel.x]).selected = true;
 							}
 							display = true;
 						}
 						else if (_visVert)
 						{
-							int h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
-							if (_scrollVert.Value + h > MaxVert)
+							if (_scrollVert.Value + _scrollVert.LargeChange > MaxVert)
 								_scrollVert.Value = MaxVert;
 							else
-								_scrollVert.Value += h;
+								_scrollVert.Value += _scrollVert.LargeChange;
 						}
-					}
-					break;
+						break;
 
-				case Keys.Up: // NOTE: needs to bypass KeyPreview
-					if (selr != -1)
-					{
+					case Keys.Left: // NOTE: needs to bypass KeyPreview
+						if (!ctr)
+						{
+							if (sft)
+							{
+//								if (sel != null)
+//								{
+//									if (sel.x > FrozenCount)
+//									{
+//										sel.selected = false;
+//
+//										int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+//										var pt = getColBounds(sel.x);
+//										pt.X += offsetHori - w;
+//
+//										int c = -1, tally = 0;
+//										while ((tally += Cols[++c].width()) < pt.X)
+//										{}
+//
+//										if (++c >= sel.x)
+//											c = sel.x - 1;
+//
+//										if (c < FrozenCount)
+//											c = FrozenCount;
+//
+//										(sel = this[sel.y, c]).selected = true;
+//									}
+//									display = true;
+//								}
+
+								if (selr == -1 && areSelectedCellsContiguous())
+								{
+									if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
+									{
+										int sel_c = getAnchorRangedColid() - 1;
+										if (sel_c >= FrozenCount)
+										{
+											int strt_c = Math.Min(sel_c, _anchorcell.x);
+											int stop_c = Math.Max(sel_c, _anchorcell.x);
+
+											int strt_r, stop_r;
+											int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+											ClearCellSelects();
+
+											for (int r = strt_r; r <= stop_r; ++r)
+											for (int c = strt_c; c <= stop_c; ++c)
+											{
+												this[r,c].selected = true;
+											}
+											sel = this[sel_r, sel_c];
+											anchor = true;
+										}
+									}
+								}
+								else if (_visHori) // shift grid 1 page left
+								{
+									int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+									if (_scrollHori.Value - w < 0)
+										_scrollHori.Value = 0;
+									else
+										_scrollHori.Value -= w;
+								}
+							}
+							else if (sel != null) // selection to the cell left
+							{
+								if (sel.x > FrozenCount)
+								{
+									sel.selected = false;
+									(sel = this[sel.y, sel.x - 1]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visHori)
+							{
+								if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+									_scrollHori.Value = 0;
+								else
+									_scrollHori.Value -= _scrollHori.LargeChange;
+							}
+						}
+						break;
+
+					case Keys.Right: // NOTE: needs to bypass KeyPreview
+						if (!ctr)
+						{
+							if (sft)
+							{
+//								if (sel != null)
+//								{
+//									if (sel.x != ColCount - 1)
+//									{
+//										sel.selected = false;
+//
+//										int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+//										var pt = getColBounds(sel.x);
+//										pt.X += offsetHori + w;
+//
+//										int c = -1, tally = 0;
+//										while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
+//										{}
+//
+//										if (--c <= sel.x)
+//											c = sel.x + 1;
+//
+//										if (c > ColCount - 1)
+//											c = ColCount - 1;
+//
+//										(sel = this[sel.y, c]).selected = true;
+//									}
+//									display = true;
+//								}
+
+								if (selr == -1 && areSelectedCellsContiguous())
+								{
+									if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
+									{
+										int sel_c = getAnchorRangedColid() + 1;
+										if (sel_c < ColCount)
+										{
+											int strt_c = Math.Min(sel_c, _anchorcell.x);
+											int stop_c = Math.Max(sel_c, _anchorcell.x);
+
+											int strt_r, stop_r;
+											int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+											ClearCellSelects();
+
+											for (int r = strt_r; r <= stop_r; ++r)
+											for (int c = strt_c; c <= stop_c; ++c)
+											{
+												this[r,c].selected = true;
+											}
+											sel = this[sel_r, sel_c];
+											anchor = true;
+										}
+									}
+								}
+								else if (_visHori) // shift grid 1 page right
+								{
+									int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
+									if (_scrollHori.Value + w > MaxHori)
+										_scrollHori.Value = MaxHori;
+									else
+										_scrollHori.Value += w;
+								}
+							}
+							else if (sel != null) // selection to the cell right
+							{
+								if (sel.x != ColCount - 1)
+								{
+									sel.selected = false;
+									(sel = this[sel.y, sel.x + 1]).selected = true;
+								}
+								display = true;
+							}
+							else if (_visHori)
+							{
+								if (_scrollHori.Value + _scrollHori.LargeChange > MaxHori)
+									_scrollHori.Value = MaxHori;
+								else
+									_scrollHori.Value += _scrollHori.LargeChange;
+							}
+						}
+						break;
+
+					case Keys.Escape: // NOTE: needs to bypass KeyPreview
 						if (!ctr && !sft)
 						{
-							if (selr != 0)
-							{
-								ClearSelects(true);
-								SelectRow(--selr);
-							}
-							EnsureDisplayedRow(selr);
+							ClearSelects(true);
+							_f.ClearSyncSelects();
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
-					}
-					else if (sft)
-					{
-						if (!ctr
-							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
-						{
-							int sel_r = getAnchorRangedRowid() - 1;
-							if (sel_r >= 0)
-							{
-								int strt_r = Math.Min(sel_r, _anchorcell.y);
-								int stop_r = Math.Max(sel_r, _anchorcell.y);
+						break;
+				}
 
-								int strt_c, stop_c;
-								int sel_c = asStartStop_col(out strt_c, out stop_c);
+				if (invalid != INVALID_NONE)	// -> is a Row operation or [Esc]
+				{
+					if (Propanel != null && Propanel.Visible)
+						invalid |= INVALID_PROP;
 
-								ClearCellSelects();
+					Invalidator(invalid);
+				}
+				else if (display)				// -> is a Cell operation
+				{
+					_anchorcell = sel;
 
-								for (int r = strt_r; r <= stop_r; ++r)
-								for (int c = strt_c; c <= stop_c; ++c)
-								{
-									this[r,c].selected = true;
-								}
-								sel = this[sel_r, sel_c];
-								anchor = true;
-							}
-						}
-					}
-					else if (ctr) // selection to abovest cell
-					{
-						if (sel != null)
-						{
-							if (sel.y != 0 && sel.x >= FrozenCount)
-							{
-								sel.selected = false;
-								(sel = this[0, sel.x]).selected = true;
-							}
-							display = true;
-						}
-					}
-					else if (sel != null) // selection to the cell above
-					{
-						if (sel.y != 0 && sel.x >= FrozenCount)
-						{
-							sel.selected = false;
-							(sel = this[sel.y - 1, sel.x]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visVert)
-					{
-						if (_scrollVert.Value - _scrollVert.LargeChange < 0)
-							_scrollVert.Value = 0;
-						else
-							_scrollVert.Value -= _scrollVert.LargeChange;
-					}
-					break;
+					_f.SyncSelectCell(sel);
 
-				case Keys.Down: // NOTE: needs to bypass KeyPreview
-					if (selr != -1)
-					{
-						if (!ctr && !sft)
-						{
-							if (selr != RowCount - 1)
-							{
-								ClearSelects(true);
-								SelectRow(++selr);
-							}
-							EnsureDisplayedRow(selr);
-							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
-						}
-					}
-					else if (sft)
-					{
-						if (!ctr
-							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-							&& areSelectedCellsContiguous())
-						{
-							int sel_r = getAnchorRangedRowid() + 1;
-							if (sel_r < RowCount)
-							{
-								int strt_r = Math.Min(sel_r, _anchorcell.y);
-								int stop_r = Math.Max(sel_r, _anchorcell.y);
+					Invalidator(INVALID_GRID
+							  | INVALID_FROZ
+							  | EnsureDisplayed(sel));
+				}
+				else if (anchor)				// -> is a block-select operation
+				{
+					Invalidator(INVALID_GRID
+							  | EnsureDisplayed(sel));
+				}
 
-								int strt_c, stop_c;
-								int sel_c = asStartStop_col(out strt_c, out stop_c);
-
-								ClearCellSelects();
-
-								for (int r = strt_r; r <= stop_r; ++r)
-								for (int c = strt_c; c <= stop_c; ++c)
-								{
-									this[r,c].selected = true;
-								}
-								sel = this[sel_r, sel_c];
-								anchor = true;
-							}
-						}
-					}
-					else if (ctr) // selection to belowest cell
-					{
-						if (sel != null)
-						{
-							if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
-							{
-								sel.selected = false;
-								(sel = this[RowCount - 1, sel.x]).selected = true;
-							}
-							display = true;
-						}
-					}
-					else if (sel != null) // selection to the cell below
-					{
-						if (sel.y != RowCount - 1 && sel.x >= FrozenCount)
-						{
-							sel.selected = false;
-							(sel = this[sel.y + 1, sel.x]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visVert)
-					{
-						if (_scrollVert.Value + _scrollVert.LargeChange > MaxVert)
-							_scrollVert.Value = MaxVert;
-						else
-							_scrollVert.Value += _scrollVert.LargeChange;
-					}
-					break;
-
-				case Keys.Left: // NOTE: needs to bypass KeyPreview
-					if (ctr) return;
-
-					if (sft)
-					{
-//						if (sel != null)
-//						{
-//							if (sel.x > FrozenCount)
-//							{
-//								sel.selected = false;
-//
-//								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-//								var pt = getColBounds(sel.x);
-//								pt.X += offsetHori - w;
-//
-//								int c = -1, tally = 0;
-//								while ((tally += Cols[++c].width()) < pt.X)
-//								{}
-//
-//								if (++c >= sel.x)
-//									c = sel.x - 1;
-//
-//								if (c < FrozenCount)
-//									c = FrozenCount;
-//
-//								(sel = this[sel.y, c]).selected = true;
-//							}
-//							display = true;
-//						}
-
-						if (selr == -1 && areSelectedCellsContiguous())
-						{
-							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
-							{
-								int sel_c = getAnchorRangedColid() - 1;
-								if (sel_c >= FrozenCount)
-								{
-									int strt_c = Math.Min(sel_c, _anchorcell.x);
-									int stop_c = Math.Max(sel_c, _anchorcell.x);
-
-									int strt_r, stop_r;
-									int sel_r = asStartStop_row(out strt_r, out stop_r);
-
-									ClearCellSelects();
-
-									for (int r = strt_r; r <= stop_r; ++r)
-									for (int c = strt_c; c <= stop_c; ++c)
-									{
-										this[r,c].selected = true;
-									}
-									sel = this[sel_r, sel_c];
-									anchor = true;
-								}
-							}
-						}
-						else if (_visHori) // shift grid 1 page left
-						{
-							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-							if (_scrollHori.Value - w < 0)
-								_scrollHori.Value = 0;
-							else
-								_scrollHori.Value -= w;
-						}
-					}
-					else if (sel != null) // selection to the cell left
-					{
-						if (sel.x > FrozenCount)
-						{
-							sel.selected = false;
-							(sel = this[sel.y, sel.x - 1]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visHori)
-					{
-						if (_scrollHori.Value - _scrollHori.LargeChange < 0)
-							_scrollHori.Value = 0;
-						else
-							_scrollHori.Value -= _scrollHori.LargeChange;
-					}
-					break;
-
-				case Keys.Right: // NOTE: needs to bypass KeyPreview
-					if (ctr) return;
-
-					if (sft)
-					{
-//						if (sel != null)
-//						{
-//							if (sel.x != ColCount - 1)
-//							{
-//								sel.selected = false;
-//
-//								int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-//								var pt = getColBounds(sel.x);
-//								pt.X += offsetHori + w;
-//
-//								int c = -1, tally = 0;
-//								while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
-//								{}
-//
-//								if (--c <= sel.x)
-//									c = sel.x + 1;
-//
-//								if (c > ColCount - 1)
-//									c = ColCount - 1;
-//
-//								(sel = this[sel.y, c]).selected = true;
-//							}
-//							display = true;
-//						}
-
-						if (selr == -1 && areSelectedCellsContiguous())
-						{
-							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
-							{
-								int sel_c = getAnchorRangedColid() + 1;
-								if (sel_c < ColCount)
-								{
-									int strt_c = Math.Min(sel_c, _anchorcell.x);
-									int stop_c = Math.Max(sel_c, _anchorcell.x);
-
-									int strt_r, stop_r;
-									int sel_r = asStartStop_row(out strt_r, out stop_r);
-
-									ClearCellSelects();
-
-									for (int r = strt_r; r <= stop_r; ++r)
-									for (int c = strt_c; c <= stop_c; ++c)
-									{
-										this[r,c].selected = true;
-									}
-									sel = this[sel_r, sel_c];
-									anchor = true;
-								}
-							}
-						}
-						else if (_visHori) // shift grid 1 page right
-						{
-							int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
-							if (_scrollHori.Value + w > MaxHori)
-								_scrollHori.Value = MaxHori;
-							else
-								_scrollHori.Value += w;
-						}
-					}
-					else if (sel != null) // selection to the cell right
-					{
-						if (sel.x != ColCount - 1)
-						{
-							sel.selected = false;
-							(sel = this[sel.y, sel.x + 1]).selected = true;
-						}
-						display = true;
-					}
-					else if (_visHori)
-					{
-						if (_scrollHori.Value + _scrollHori.LargeChange > MaxHori)
-							_scrollHori.Value = MaxHori;
-						else
-							_scrollHori.Value += _scrollHori.LargeChange;
-					}
-					break;
-
-				case Keys.Escape: // NOTE: needs to bypass KeyPreview
-					if (!ctr && !sft)
-					{
-						ClearSelects(true);
-						_f.ClearSyncSelects();
-						invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
-					}
-					break;
+				_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
 			}
-
-			if (invalid != INVALID_NONE)	// -> is a Row operation or [Esc]
-			{
-				if (Propanel != null && Propanel.Visible)
-					invalid |= INVALID_PROP;
-
-				Invalidator(invalid);
-			}
-			else if (display)				// -> is a Cell operation
-			{
-				_anchorcell = sel;
-
-				_f.SyncSelectCell(sel);
-
-				Invalidator(INVALID_GRID
-						  | INVALID_FROZ
-						  | EnsureDisplayed(sel));
-			}
-			else if (anchor)				// -> is a block-select operation
-			{
-				Invalidator(INVALID_GRID
-						  | EnsureDisplayed(sel));
-			}
-
-			_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
 		}
 
 		/// <summary>
@@ -2849,13 +2850,15 @@ namespace yata
 		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
 		/// <c>null</c>.
 		/// </summary>
-		/// <returns></returns>
-		internal Cell getFirstSelectedCell()
+		/// <param name="strt_c">start col-id usually either 0 (includes frozen
+		/// cols) or <c><see cref="FrozenCount"/></c></param>
+		/// <returns>the first <c>Cell</c> found</returns>
+		internal Cell getFirstSelectedCell(int strt_c = 0)
 		{
 			Cell sel;
 
 			foreach (var row in Rows)
-			for (int c = 0; c != ColCount; ++c)
+			for (int c = strt_c; c != ColCount; ++c)
 				if ((sel = row[c]).selected)
 					return sel;
 
@@ -3402,6 +3405,9 @@ namespace yata
 											&& areSelectedCellsContiguous()			// else do nothing if no cells are selected or selected cells are not in a contiguous block
 											&& _cell != getSelectedCell())			// else do nothing if clicked cell is the only selected cell
 										{
+//											if (_anchorcell == null)
+//												_anchorcell = getFirstSelectedCell(FrozenCount);
+
 											ClearSelects(true);
 
 											int strt_r = Math.Min(_anchorcell.y, _cell.y);
@@ -4386,8 +4392,8 @@ namespace yata
 		/// iff only that <c>Row</c> has <c>Cells</c> selected.
 		/// </summary>
 		/// <returns>the currently selected row-id or the row-id that has
-		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is currently valid</returns>
-		internal int getRowOrCellsSelected()
+		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is applicable</returns>
+		internal int getSelectedRowOrCells()
 		{
 			int selr = getSelectedRow();
 			if (selr == -1)

@@ -2812,7 +2812,7 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
-			int selr = Table.getRowOrCellsSelected();
+			int selr = Table.getSelectedRowOrCells();
 
 			using (var rcd = new RowCreatorDialog(this, selr, _copyr.Count != 0))
 			{
