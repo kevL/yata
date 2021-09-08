@@ -172,8 +172,8 @@ namespace yata
 
 		/// <summary>
 		/// Tracks the currently anchored <c><see cref="Cell"/></c> for
-		/// selection of multiple cells by <c>[Shift]</c> + click or
-		/// <c>[Shift]</c> + keyboard.
+		/// selection of multiple cells by <c>[Shift]</c>+click or
+		/// <c>[Shift]</c>+keyboard.
 		/// </summary>
 		Cell _anchorcell;
 
@@ -1954,7 +1954,7 @@ namespace yata
 								{
 									this[r,c].selected = true;
 								}
-								sel = this[sel_r, 0];
+								sel = this[sel_r, FrozenCount];
 							}
 							anchor = true;
 						}
@@ -2100,14 +2100,14 @@ namespace yata
 							}
 							else
 							{
-								int row = getAnchorRangedRowid();
-								if (row != 0)
+								int sel_r = getAnchorRangedRowid();
+								if (sel_r != 0)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									row = Math.Max(0, row - shift);
+									sel_r = Math.Max(0, sel_r - shift);
 
-									int strt_r = Math.Min(row, _anchorcell.y);
-									int stop_r = Math.Max(row, _anchorcell.y);
+									int strt_r = Math.Min(sel_r, _anchorcell.y);
+									int stop_r = Math.Max(sel_r, _anchorcell.y);
 
 									int strt_c, stop_c;
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
@@ -2119,7 +2119,7 @@ namespace yata
 									{
 										this[r,c].selected = true;
 									}
-									sel = this[row, sel_c];
+									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
 							}
@@ -2199,14 +2199,14 @@ namespace yata
 							}
 							else
 							{
-								int row = getAnchorRangedRowid();
-								if (row != RowCount - 1)
+								int sel_r = getAnchorRangedRowid();
+								if (sel_r != RowCount - 1)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									row = Math.Min(RowCount - 1, row + shift);
+									sel_r = Math.Min(RowCount - 1, sel_r + shift);
 
-									int strt_r = Math.Min(row, _anchorcell.y);
-									int stop_r = Math.Max(row, _anchorcell.y);
+									int strt_r = Math.Min(sel_r, _anchorcell.y);
+									int stop_r = Math.Max(sel_r, _anchorcell.y);
 
 									int strt_c, stop_c;
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
@@ -2218,7 +2218,7 @@ namespace yata
 									{
 										this[r,c].selected = true;
 									}
-									sel = this[row, sel_c];
+									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
 							}
@@ -2278,11 +2278,11 @@ namespace yata
 							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							int row = getAnchorRangedRowid() - 1;
-							if (row >= 0)
+							int sel_r = getAnchorRangedRowid() - 1;
+							if (sel_r >= 0)
 							{
-								int strt_r = Math.Min(row, _anchorcell.y);
-								int stop_r = Math.Max(row, _anchorcell.y);
+								int strt_r = Math.Min(sel_r, _anchorcell.y);
+								int stop_r = Math.Max(sel_r, _anchorcell.y);
 
 								int strt_c, stop_c;
 								int sel_c = asStartStop_col(out strt_c, out stop_c);
@@ -2294,7 +2294,7 @@ namespace yata
 								{
 									this[r,c].selected = true;
 								}
-								sel = this[row, sel_c];
+								sel = this[sel_r, sel_c];
 								anchor = true;
 							}
 						}
@@ -2349,11 +2349,11 @@ namespace yata
 							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							int row = getAnchorRangedRowid() + 1;
-							if (row < RowCount)
+							int sel_r = getAnchorRangedRowid() + 1;
+							if (sel_r < RowCount)
 							{
-								int strt_r = Math.Min(row, _anchorcell.y);
-								int stop_r = Math.Max(row, _anchorcell.y);
+								int strt_r = Math.Min(sel_r, _anchorcell.y);
+								int stop_r = Math.Max(sel_r, _anchorcell.y);
 
 								int strt_c, stop_c;
 								int sel_c = asStartStop_col(out strt_c, out stop_c);
@@ -2365,7 +2365,7 @@ namespace yata
 								{
 									this[r,c].selected = true;
 								}
-								sel = this[row, sel_c];
+								sel = this[sel_r, sel_c];
 								anchor = true;
 							}
 						}
@@ -2434,11 +2434,11 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								int col = getAnchorRangedColid() - 1;
-								if (col >= FrozenCount)
+								int sel_c = getAnchorRangedColid() - 1;
+								if (sel_c >= FrozenCount)
 								{
-									int strt_c = Math.Min(col, _anchorcell.x);
-									int stop_c = Math.Max(col, _anchorcell.x);
+									int strt_c = Math.Min(sel_c, _anchorcell.x);
+									int stop_c = Math.Max(sel_c, _anchorcell.x);
 
 									int strt_r, stop_r;
 									int sel_r = asStartStop_row(out strt_r, out stop_r);
@@ -2450,7 +2450,7 @@ namespace yata
 									{
 										this[r,c].selected = true;
 									}
-									sel = this[sel_r, col];
+									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
 							}
@@ -2516,11 +2516,11 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								int col = getAnchorRangedColid() + 1;
-								if (col < ColCount)
+								int sel_c = getAnchorRangedColid() + 1;
+								if (sel_c < ColCount)
 								{
-									int strt_c = Math.Min(col, _anchorcell.x);
-									int stop_c = Math.Max(col, _anchorcell.x);
+									int strt_c = Math.Min(sel_c, _anchorcell.x);
+									int stop_c = Math.Max(sel_c, _anchorcell.x);
 
 									int strt_r, stop_r;
 									int sel_r = asStartStop_row(out strt_r, out stop_r);
@@ -2532,7 +2532,7 @@ namespace yata
 									{
 										this[r,c].selected = true;
 									}
-									sel = this[sel_r, col];
+									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
 							}
