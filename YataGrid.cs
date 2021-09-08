@@ -175,7 +175,7 @@ namespace yata
 		/// selection of multiple cells by <c>[Shift]</c>+click or
 		/// <c>[Shift]</c>+keyboard.
 		/// </summary>
-		Cell _anchorcell;
+		internal Cell _anchorcell;
 
 		/// <summary>
 		/// The currently sorted col. Default is #0 "id" col.
@@ -3049,7 +3049,7 @@ namespace yata
 		/// for single row)</param>
 		internal void Colwidth(int c, int r = -1, int range = 0)
 		{
-			var col = Cols[c];
+			Col col = Cols[c];
 
 			int colwidth = col._widthtext + _padHoriSort;
 			int widthtext;

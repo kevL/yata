@@ -455,7 +455,9 @@ namespace yata
 					if (sel != null)
 					{
 						sel.selected = false;
-						_grid[_r,_c].selected = true;
+
+						(_grid._anchorcell = _grid[_r,_c]).selected = true;
+
 //						_grid._f.EnableCelleditOperations(); // should be no need to re-deter cell-operations here.
 					}
 
@@ -484,7 +486,9 @@ namespace yata
 					else
 						_grid.Select();
 
-					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_PROP);
+					_grid.Invalidator(YataGrid.INVALID_GRID
+									| YataGrid.INVALID_FROZ
+									| YataGrid.INVALID_PROP);
 				}
 				else
 					_grid.Select();
