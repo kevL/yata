@@ -260,7 +260,7 @@ namespace yata
 						sel.selected =
 						_editor.Visible = false;
 
-						if (ColCount > _frozenCount)
+						if (_frozenCount < ColCount)
 						{
 							(_anchorcell = this[sel.y, _frozenCount]).selected = true;
 
@@ -1917,6 +1917,9 @@ namespace yata
 									{
 										ClearSelects(true);
 										SelectRow(0);
+
+//										if (FrozenCount < ColCount)
+//											_anchorcell = this[0, FrozenCount];
 									}
 									EnsureDisplayedRow(0);
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -1927,13 +1930,14 @@ namespace yata
 						else if (sft)
 						{
 							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								if (ctr)
 								{
 									ClearCellSelects();
 
-									for (int r = 0; r <= _anchorcell.y; ++r)
+									for (int r = 0;           r <= _anchorcell.y; ++r)
 									for (int c = FrozenCount; c <= _anchorcell.x; ++c)
 									{
 										this[r,c].selected = true;
@@ -2003,6 +2007,7 @@ namespace yata
 						else if (sft)
 						{
 							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								if (ctr)
@@ -2079,6 +2084,7 @@ namespace yata
 						else if (sft)
 						{
 							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								if (ctr)
@@ -2178,6 +2184,7 @@ namespace yata
 						else if (sft)
 						{
 							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								if (ctr)
@@ -2274,6 +2281,7 @@ namespace yata
 						{
 							if (!ctr
 								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								int sel_r = getAnchorRangedRowid() - 1;
@@ -2345,6 +2353,7 @@ namespace yata
 						{
 							if (!ctr
 								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 								&& areSelectedCellsContiguous())
 							{
 								int sel_r = getAnchorRangedRowid() + 1;
@@ -2430,7 +2439,8 @@ namespace yata
 
 								if (selr == -1 && areSelectedCellsContiguous())
 								{
-									if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
+									if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+										&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null))
 									{
 										int sel_c = getAnchorRangedColid() - 1;
 										if (sel_c >= FrozenCount)
@@ -2513,7 +2523,8 @@ namespace yata
 
 								if (selr == -1 && areSelectedCellsContiguous())
 								{
-									if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
+									if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+										&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null))
 									{
 										int sel_c = getAnchorRangedColid() + 1;
 										if (sel_c < ColCount)
@@ -3402,12 +3413,10 @@ namespace yata
 									else if (sft) // do block selection ->
 									{
 										if (this != _f._diff1 && this != _f._diff2	// disallow multi-cell select if sync'd
-											&& areSelectedCellsContiguous()			// else do nothing if no cells are selected or selected cells are not in a contiguous block
-											&& _cell != getSelectedCell())			// else do nothing if clicked cell is the only selected cell
+											&& _cell != getSelectedCell()			// else do nothing if clicked cell is the only selected cell
+											&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
+											&& areSelectedCellsContiguous())		// else do nothing if no cells are selected or selected cells are not in a contiguous block
 										{
-//											if (_anchorcell == null)
-//												_anchorcell = getFirstSelectedCell(FrozenCount);
-
 											ClearSelects(true);
 
 											int strt_r = Math.Min(_anchorcell.y, _cell.y);
@@ -4160,7 +4169,7 @@ namespace yata
 				SelectRow(r);
 				EnsureDisplayedRow(r);
 
-				int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+				int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 				if (Propanel != null && Propanel.Visible)
 					invalid |= INVALID_PROP;
 
@@ -4268,7 +4277,7 @@ namespace yata
 								// (c) or cells not in the clicked row got deselected above
 								bool @select = !Rows[row].selected || !allcellsselected || celldeselected;
 
-								if (Rows[row].selected = @select && FrozenCount < ColCount)
+								if ((Rows[row].selected = @select) && FrozenCount < ColCount)
 									_anchorcell = this[row, FrozenCount];
 
 								for (int c = 0; c != ColCount; ++c) // select or deselect cells in the clicked row ->
@@ -4328,7 +4337,7 @@ namespace yata
 
 							if (display) EnsureDisplayedRow(row);
 
-							int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+							int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							if (Propanel != null && Propanel.Visible)
 								invalid |= INVALID_PROP;
 
@@ -4347,7 +4356,7 @@ namespace yata
 								SelectRow(row);
 								EnsureDisplayedRow(row);
 
-								int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+								int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								if (Propanel != null && Propanel.Visible)
 									invalid |= INVALID_PROP;
 
@@ -4363,7 +4372,7 @@ namespace yata
 					ClearSelects();
 					_f.ClearSyncSelects();
 
-					int invalid = (INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
+					int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 					if (Propanel != null && Propanel.Visible)
 						invalid |= INVALID_PROP;
 
