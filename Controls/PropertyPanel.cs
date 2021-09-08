@@ -121,7 +121,7 @@ namespace yata
 			_scroll.LargeChange = _heightr;
 			_scroll.ValueChanged += OnScrollValueChanged;
 
-			rewidthValfield();
+			widthValcol();
 
 			Controls.Add(_scroll);
 
@@ -143,9 +143,9 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Determines required width for the value-fields.
+		/// Determines required width for the value-fields col.
 		/// </summary>
-		internal void rewidthValfield()
+		internal void widthValcol()
 		{
 //			for (int r = 0; r != _grid.RowCount; ++r)
 //			for (int c = 0; c != _grid.ColCount; ++c)

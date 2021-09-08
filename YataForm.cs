@@ -3583,7 +3583,7 @@ namespace yata
 				if (Table.Propanel == null)
 					Table.Propanel = new PropertyPanel(Table);
 				else
-					Table.Propanel.rewidthValfield();
+					Table.Propanel.widthValcol();
 
 				Table.Propanel.Show();
 				Table.Propanel.BringToFront();

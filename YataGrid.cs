@@ -3104,7 +3104,7 @@ namespace yata
 			}
 
 			if (Propanel != null && Propanel.Visible)
-				Propanel.rewidthValfield(); // TODO: Re-calc the 'c' col only.
+				Propanel.widthValcol(); // TODO: Re-calc the 'c' col only.
 		}
 
 		/// <summary>
