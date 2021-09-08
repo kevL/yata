@@ -172,9 +172,10 @@ namespace yata
 
 		/// <summary>
 		/// Tracks the currently anchored <c><see cref="Cell"/></c> for
-		/// selection of multiple cells by <c>[Shift]</c> + keyboard.
+		/// selection of multiple cells by <c>[Shift]</c> + click or
+		/// <c>[Shift]</c> + keyboard.
 		/// </summary>
-		Cell _cell_anchorshift;
+		Cell _anchorcell;
 
 		/// <summary>
 		/// The currently sorted col. Default is #0 "id" col.
@@ -1896,8 +1897,9 @@ namespace yata
 			bool ctr = (e.Modifiers & Keys.Control) != 0,
 				 sft = (e.Modifiers & Keys.Shift)   != 0;
 
-			int invalid = INVALID_NONE;
+			int invalid  = INVALID_NONE;
 			bool display = false;
+			bool anchor  = false;
 
 			Cell sel = getSelectedCell();
 			int selr = getSelectedRow();
@@ -1929,64 +1931,32 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (ctr || _cell_anchorshift.x > FrozenCount)
+							if (ctr)
 							{
-								int rowstrt, rowstop;
-								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
-																	  _cell_anchorshift.x].selected)
+								ClearCellSelects();
+
+								for (int r = 0; r <= _anchorcell.y; ++r)
+								for (int c = FrozenCount; c <= _anchorcell.x; ++c)
 								{
-									if (!ctr) rowstrt = _cell_anchorshift.y;
-									else      rowstrt = 0;
-
-									rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
+									this[r,c].selected = true;
 								}
-								else
-								{
-									if (!ctr) rowstrt = _cell_anchorshift.y - (_f._copyvert - 1);
-									else      rowstrt = 0;
-
-									rowstop = _cell_anchorshift.y;
-								}
-
-								int anchor = _cell_anchorshift.x;
-
-								bool early1 = false; // force an early col-stop
-								bool early2 = false; // breaks the outer loop
-
-								for (int c = _cell_anchorshift.x; c >= FrozenCount && !early2; --c) // do cols first
-								for (int r = rowstrt;             r <= rowstop;                ++r)
-								{
-									if (ctr) // bypass the funky left/right deters
-									{
-										this[r,c].selected = true;
-									}
-									else
-									{
-										if (early1 && c != FrozenCount && !this[r, c - 1].selected)
-										{
-											early2 = true;
-											break;
-										}
-
-										if (c != FrozenCount && this[r, c - 1].selected)
-										{
-											this[r,c].selected = false;
-											anchor = c - 1;
-											early1 = true;
-										}
-										else
-										{
-											this[r,c].selected = true;
-											anchor = c;
-										}
-									}
-								}
-								_cell_anchorshift = this[rowstrt, anchor];
+								sel = this[0, FrozenCount];
 							}
-							sel = _cell_anchorshift;
-							display = true;
+							else
+							{
+								int strt_r, stop_r;
+								int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+								ClearCellSelects();
+
+								for (int r = strt_r;      r <= stop_r;        ++r)
+								for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+								{
+									this[r,c].selected = true;
+								}
+								sel = this[sel_r, 0];
+							}
+							anchor = true;
 						}
 					}
 					else if (ctr)
@@ -2037,64 +2007,32 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (ctr || _cell_anchorshift.x != ColCount - 1)
+							if (ctr)
 							{
-								int rowstrt, rowstop;
-								if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
-																	  _cell_anchorshift.x].selected)
+								ClearCellSelects();
+
+								for (int r = _anchorcell.y; r != RowCount; ++r)
+								for (int c = _anchorcell.x; c != ColCount; ++c)
 								{
-									rowstrt = _cell_anchorshift.y;
-
-									if (!ctr) rowstop = _cell_anchorshift.y + (_f._copyvert - 1);
-									else      rowstop = RowCount - 1;
+									this[r,c].selected = true;
 								}
-								else
-								{
-									rowstrt = _cell_anchorshift.y - (_f._copyvert - 1);
-
-									if (!ctr) rowstop = _cell_anchorshift.y;
-									else      rowstop = RowCount - 1;
-								}
-
-								int anchor = _cell_anchorshift.x;
-
-								bool early1 = false; // force an early col-stop
-								bool early2 = false; // breaks the outer loop
-
-								for (int c = _cell_anchorshift.x; c != ColCount && !early2; ++c) // do cols first
-								for (int r = rowstrt;             r <= rowstop;             ++r)
-								{
-									if (ctr) // bypass the funky left/right deters
-									{
-										this[r,c].selected = true;
-									}
-									else
-									{
-										if (early1 && c != ColCount - 1 && !this[r, c + 1].selected)
-										{
-											early2 = true;
-											break;
-										}
-
-										if (c != ColCount - 1 && this[r, c + 1].selected)
-										{
-											this[r,c].selected = false;
-											anchor = c + 1;
-											early1 = true;
-										}
-										else
-										{
-											this[r,c].selected = true;
-											anchor = c;
-										}
-									}
-								}
-								_cell_anchorshift = this[rowstrt, anchor];
+								sel = this[RowCount - 1, ColCount - 1];
 							}
-							sel = _cell_anchorshift;
-							display = true;
+							else
+							{
+								int strt_r, stop_r;
+								int sel_r = asStartStop_row(out strt_r, out stop_r);
+
+								ClearCellSelects();
+
+								for (int r = strt_r;        r <= stop_r;   ++r)
+								for (int c = _anchorcell.x; c != ColCount; ++c)
+								{
+									this[r,c].selected = true;
+								}
+								sel = this[sel_r, ColCount - 1];
+							}
+							anchor = true;
 						}
 					}
 					else if (ctr)
@@ -2145,61 +2083,46 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
+							if (ctr)
 							{
-								if (!ctr)
+								int strt_c, stop_c;
+								int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+								ClearCellSelects();
+
+								for (int r = 0;      r <= _anchorcell.y; ++r)
+								for (int c = strt_c; c <= stop_c;        ++c)
+								{
+									this[r,c].selected = true;
+								}
+								sel = this[0, sel_c];
+								anchor = true;
+							}
+							else
+							{
+								int row = getAnchorRangedRowid();
+								if (row != 0)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									if ((selr = _cell_anchorshift.y - shift) < 0) selr = 0;
-								}
-								else
-									selr = 0;
+									row = Math.Max(0, row - shift);
 
-								int colstrt, colstop;
-								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
-																				_cell_anchorshift.x - 1].selected)
-								{
-									colstrt = _cell_anchorshift.x;
-									colstop = _cell_anchorshift.x + (_f._copyhori - 1);
-								}
-								else
-								{
-									colstrt = _cell_anchorshift.x - (_f._copyhori - 1);
-									colstop = _cell_anchorshift.x;
-								}
+									int strt_r = Math.Min(row, _anchorcell.y);
+									int stop_r = Math.Max(row, _anchorcell.y);
 
-								int anchor = _cell_anchorshift.y;
+									int strt_c, stop_c;
+									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
-								bool early1 = false; // force an early row-stop
-								bool early2 = false; // breaks the outer loop
+									ClearCellSelects();
 
-								for (int r = _cell_anchorshift.y; r >= selr && !early2; --r)
-								for (int c = colstrt;             c <= colstop;         ++c)
-								{
-									if (early1 && r != 0 && !this[r - 1, c].selected)
-									{
-										early2 = true;
-										break;
-									}
-
-									if (r != selr && r != 0 && this[r - 1, c].selected)
-									{
-										this[r,c].selected = false;
-										anchor = r - 1;
-										early1 = true;
-									}
-									else
+									for (int r = strt_r; r <= stop_r; ++r)
+									for (int c = strt_c; c <= stop_c; ++c)
 									{
 										this[r,c].selected = true;
-										anchor = r;
 									}
+									sel = this[row, sel_c];
+									anchor = true;
 								}
-								_cell_anchorshift = this[anchor, _cell_anchorshift.x];
 							}
-							sel = _cell_anchorshift;
-							display = true;
 						}
 					}
 //					else if (ctr)
@@ -2259,61 +2182,46 @@ namespace yata
 						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
+							if (ctr)
 							{
-								if (!ctr)
+								int strt_c, stop_c;
+								int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+								ClearCellSelects();
+
+								for (int r = _anchorcell.y; r != RowCount; ++r)
+								for (int c = strt_c;        c <= stop_c;   ++c)
+								{
+									this[r,c].selected = true;
+								}
+								sel = this[RowCount - 1, sel_c];
+								anchor = true;
+							}
+							else
+							{
+								int row = getAnchorRangedRowid();
+								if (row != RowCount - 1)
 								{
 									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									if ((selr = _cell_anchorshift.y + shift) > RowCount - 1) selr = RowCount - 1;
-								}
-								else
-									selr = RowCount - 1;
+									row = Math.Min(RowCount - 1, row + shift);
 
-								int colstrt, colstop;
-								if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
-																				_cell_anchorshift.x - 1].selected)
-								{
-									colstrt = _cell_anchorshift.x;
-									colstop = _cell_anchorshift.x + (_f._copyhori - 1);
-								}
-								else
-								{
-									colstrt = _cell_anchorshift.x - (_f._copyhori - 1);
-									colstop = _cell_anchorshift.x;
-								}
+									int strt_r = Math.Min(row, _anchorcell.y);
+									int stop_r = Math.Max(row, _anchorcell.y);
 
-								int anchor = _cell_anchorshift.y;
+									int strt_c, stop_c;
+									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
-								bool early1 = false; // force an early row-stop
-								bool early2 = false; // breaks the outer loop
+									ClearCellSelects();
 
-								for (int r = _cell_anchorshift.y; r <= selr && !early2; ++r)
-								for (int c = colstrt;             c <= colstop;         ++c)
-								{
-									if (early1 && r != RowCount - 1 && !this[r + 1, c].selected)
-									{
-										early2 = true;
-										break;
-									}
-
-									if (r != selr && r != RowCount - 1 && this[r + 1, c].selected)
-									{
-										this[r,c].selected = false;
-										anchor = r + 1;
-										early1 = true;
-									}
-									else
+									for (int r = strt_r; r <= stop_r; ++r)
+									for (int c = strt_c; c <= stop_c; ++c)
 									{
 										this[r,c].selected = true;
-										anchor = r;
 									}
+									sel = this[row, sel_c];
+									anchor = true;
 								}
-								_cell_anchorshift = this[anchor, _cell_anchorshift.x];
 							}
-							sel = _cell_anchorshift;
-							display = true;
 						}
 					}
 //					else if (ctr)
@@ -2353,7 +2261,7 @@ namespace yata
 				case Keys.Up: // NOTE: needs to bypass KeyPreview
 					if (selr != -1)
 					{
-						if (!ctr)
+						if (!ctr && !sft)
 						{
 							if (selr != 0)
 							{
@@ -2364,51 +2272,31 @@ namespace yata
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
-					else if (sft && !ctr)
+					else if (sft)
 					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+						if (!ctr
+							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (_cell_anchorshift.y != 0 && _cell_anchorshift.x >= FrozenCount)
+							int row = getAnchorRangedRowid() - 1;
+							if (row >= 0)
 							{
-								Cell[] cells;
+								int strt_r = Math.Min(row, _anchorcell.y);
+								int stop_r = Math.Max(row, _anchorcell.y);
 
-								if (this[_cell_anchorshift.y - 1,
-										 _cell_anchorshift.x].selected)
+								int strt_c, stop_c;
+								int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+								ClearCellSelects();
+
+								for (int r = strt_r; r <= stop_r; ++r)
+								for (int c = strt_c; c <= stop_c; ++c)
 								{
-									cells = Rows[_cell_anchorshift.y]._cells;		// de-select row-cells
-									foreach (var cell in cells)
-										cell.selected = false;
+									this[r,c].selected = true;
 								}
-								else
-								{
-									int start, stop;
-									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
-																					_cell_anchorshift.x - 1].selected)
-									{
-										start = _cell_anchorshift.x;
-										stop  = _cell_anchorshift.x + (_f._copyhori - 1);
-									}
-									else
-									{
-										start = _cell_anchorshift.x - (_f._copyhori - 1);
-										stop  = _cell_anchorshift.x;
-									}
-
-									cells = Rows[_cell_anchorshift.y - 1]._cells;	// select row-cells
-
-									for (int c = start; c <= stop; ++c)
-										cells[c].selected = true;
-								}
-
-								_cell_anchorshift = this[_cell_anchorshift.y - 1,
-														 _cell_anchorshift.x];
+								sel = this[row, sel_c];
+								anchor = true;
 							}
-
-							sel = _cell_anchorshift;
-							display = true;
 						}
 					}
 					else if (ctr) // selection to abovest cell
@@ -2444,7 +2332,7 @@ namespace yata
 				case Keys.Down: // NOTE: needs to bypass KeyPreview
 					if (selr != -1)
 					{
-						if (!ctr)
+						if (!ctr && !sft)
 						{
 							if (selr != RowCount - 1)
 							{
@@ -2455,51 +2343,31 @@ namespace yata
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 					}
-					else if (sft && !ctr)
+					else if (sft)
 					{
-						if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
+						if (!ctr
+							&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
 							&& areSelectedCellsContiguous())
 						{
-							assignAnchorCell(sel);
-
-							if (_cell_anchorshift.y != RowCount - 1 && _cell_anchorshift.x >= FrozenCount)
+							int row = getAnchorRangedRowid() + 1;
+							if (row < RowCount)
 							{
-								Cell[] cells;
+								int strt_r = Math.Min(row, _anchorcell.y);
+								int stop_r = Math.Max(row, _anchorcell.y);
 
-								if (this[_cell_anchorshift.y + 1,
-										 _cell_anchorshift.x].selected)
+								int strt_c, stop_c;
+								int sel_c = asStartStop_col(out strt_c, out stop_c);
+
+								ClearCellSelects();
+
+								for (int r = strt_r; r <= stop_r; ++r)
+								for (int c = strt_c; c <= stop_c; ++c)
 								{
-									cells = Rows[_cell_anchorshift.y]._cells;		// de-select row-cells
-									foreach (var cell in cells)
-										cell.selected = false;
+									this[r,c].selected = true;
 								}
-								else
-								{
-									int start, stop;
-									if (_cell_anchorshift.x == FrozenCount || !this[_cell_anchorshift.y,
-																					_cell_anchorshift.x - 1].selected)
-									{
-										start = _cell_anchorshift.x;
-										stop  = _cell_anchorshift.x + (_f._copyhori - 1);
-									}
-									else
-									{
-										start = _cell_anchorshift.x - (_f._copyhori - 1);
-										stop  = _cell_anchorshift.x;
-									}
-
-									cells = Rows[_cell_anchorshift.y + 1]._cells;	// select row-cells
-
-									for (int c = start; c <= stop; ++c)
-										cells[c].selected = true;
-								}
-
-								_cell_anchorshift = this[_cell_anchorshift.y + 1,
-														 _cell_anchorshift.x];
+								sel = this[row, sel_c];
+								anchor = true;
 							}
-
-							sel = _cell_anchorshift;
-							display = true;
 						}
 					}
 					else if (ctr) // selection to belowest cell
@@ -2566,41 +2434,25 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								assignAnchorCell(sel);
-
-								if (_cell_anchorshift.x > FrozenCount)
+								int col = getAnchorRangedColid() - 1;
+								if (col >= FrozenCount)
 								{
-									if (this[_cell_anchorshift.y,
-											 _cell_anchorshift.x - 1].selected)
-									{
-										foreach (var row in Rows)	// de-select col-cells
-											row[_cell_anchorshift.x].selected = false;
-									}
-									else							// select col-cells ->
-									{
-										int start, stop;
-										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
-																			  _cell_anchorshift.x].selected)
-										{
-											start = _cell_anchorshift.y;
-											stop  = _cell_anchorshift.y + (_f._copyvert - 1);
-										}
-										else
-										{
-											start = _cell_anchorshift.y - (_f._copyvert - 1);
-											stop  = _cell_anchorshift.y;
-										}
+									int strt_c = Math.Min(col, _anchorcell.x);
+									int stop_c = Math.Max(col, _anchorcell.x);
 
-										for (int r = start; r <= stop; ++r)
-											this[r, _cell_anchorshift.x - 1].selected = true;
-									}
+									int strt_r, stop_r;
+									int sel_r = asStartStop_row(out strt_r, out stop_r);
 
-									_cell_anchorshift = this[_cell_anchorshift.y,
-															 _cell_anchorshift.x - 1];
+									ClearCellSelects();
+
+									for (int r = strt_r; r <= stop_r; ++r)
+									for (int c = strt_c; c <= stop_c; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[sel_r, col];
+									anchor = true;
 								}
-
-								sel = _cell_anchorshift;
-								display = true;
 							}
 						}
 						else if (_visHori) // shift grid 1 page left
@@ -2664,41 +2516,25 @@ namespace yata
 						{
 							if (this != _f._diff1 && this != _f._diff2) // don't allow multi-cell select if sync'd
 							{
-								assignAnchorCell(sel);
-
-								if (_cell_anchorshift.x != ColCount - 1)
+								int col = getAnchorRangedColid() + 1;
+								if (col < ColCount)
 								{
-									if (this[_cell_anchorshift.y,
-											 _cell_anchorshift.x + 1].selected)
-									{
-										foreach (var row in Rows)	// de-select col-cells
-											row[_cell_anchorshift.x].selected = false;
-									}
-									else							// select col-cells ->
-									{
-										int start, stop;
-										if (_cell_anchorshift.y == 0 || !this[_cell_anchorshift.y - 1,
-																			  _cell_anchorshift.x].selected)
-										{
-											start = _cell_anchorshift.y;
-											stop  = _cell_anchorshift.y + (_f._copyvert - 1);
-										}
-										else
-										{
-											start = _cell_anchorshift.y - (_f._copyvert - 1);
-											stop  = _cell_anchorshift.y;
-										}
+									int strt_c = Math.Min(col, _anchorcell.x);
+									int stop_c = Math.Max(col, _anchorcell.x);
 
-										for (int r = start; r <= stop; ++r)
-											this[r, _cell_anchorshift.x + 1].selected = true;
-									}
+									int strt_r, stop_r;
+									int sel_r = asStartStop_row(out strt_r, out stop_r);
 
-									_cell_anchorshift = this[_cell_anchorshift.y,
-															 _cell_anchorshift.x + 1];
+									ClearCellSelects();
+
+									for (int r = strt_r; r <= stop_r; ++r)
+									for (int c = strt_c; c <= stop_c; ++c)
+									{
+										this[r,c].selected = true;
+									}
+									sel = this[sel_r, col];
+									anchor = true;
 								}
-
-								sel = _cell_anchorshift;
-								display = true;
 							}
 						}
 						else if (_visHori) // shift grid 1 page right
@@ -2738,7 +2574,7 @@ namespace yata
 					break;
 			}
 
-			if (invalid != INVALID_NONE)	// -> is a Row operation or ClearSelects()
+			if (invalid != INVALID_NONE)	// -> is a Row operation or [Esc]
 			{
 				if (Propanel != null && Propanel.Visible)
 					invalid |= INVALID_PROP;
@@ -2747,9 +2583,17 @@ namespace yata
 			}
 			else if (display)				// -> is a Cell operation
 			{
+				_anchorcell = sel;
+
 				_f.SyncSelectCell(sel);
+
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
+						  | EnsureDisplayed(sel));
+			}
+			else if (anchor)				// -> is a block-select operation
+			{
+				Invalidator(INVALID_GRID
 						  | EnsureDisplayed(sel));
 			}
 
@@ -2757,20 +2601,123 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Assigns the current <c><see cref="_cell_anchorshift"/></c>.
+		/// Assigns the start and stop row-ids that shall be used as a range of
+		/// <c><see cref="Row">Rows</see></c> that need to be selected during a
+		/// horizontal contiguous block selection.
 		/// </summary>
-		/// <param name="sel">the currently selected <c><see cref="Cell"/></c></param>
-		/// <remarks>Helper for
-		/// <c><see cref="OnKeyDown()">OnKeyDown()</see></c>.</remarks>
-		void assignAnchorCell(Cell sel)
+		/// <param name="strt">ref that holds the start row-id</param>
+		/// <param name="stop">ref that holds the stop row-id</param>
+		/// <returns>the row-id of a <c><see cref="Cell"/></c> that shall be
+		/// displayed</returns>
+		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
+		/// contiguous block selection (horizontal).</remarks>
+		int asStartStop_row(out int strt, out int stop)
 		{
-			if (sel != null)
-				_cell_anchorshift = sel;
-			else if (_cell_anchorshift == null || !_cell_anchorshift.selected)
-				_cell_anchorshift = getFirstSelectedCell();
+			if (_f._copyvert == 1
+				|| _anchorcell.y == 0
+				|| !this[_anchorcell.y - 1, _anchorcell.x].selected)
+			{
+				strt = _anchorcell.y;
+				stop = _anchorcell.y + _f._copyvert - 1;
 
-			// TODO: get an anchorcell close to the previous anchorcell if !selected
-			//       Or even get the LAST selected cell ...
+				return stop;
+			}
+
+			strt = _anchorcell.y - _f._copyvert + 1;
+			stop = _anchorcell.y;
+
+			return strt;
+		}
+
+		/// <summary>
+		/// Assigns the start and stop col-ids that shall be used as a range of
+		/// <c><see cref="Col">Cols</see></c> that need to be selected during a
+		/// vertical contiguous block selection.
+		/// </summary>
+		/// <param name="strt">ref that holds the start col-id</param>
+		/// <param name="stop">ref that holds the stop col-id</param>
+		/// <returns>the col-id of a <c><see cref="Cell"/></c> that shall be
+		/// displayed</returns>
+		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
+		/// contiguous block selection (vertical).</remarks>
+		int asStartStop_col(out int strt, out int stop)
+		{
+			if (_f._copyhori == 1
+				|| _anchorcell.x == FrozenCount
+				|| !this[_anchorcell.y, _anchorcell.x - 1].selected)
+			{
+				strt = _anchorcell.x;
+				stop = _anchorcell.x + _f._copyhori - 1;
+
+				return stop;
+			}
+
+			strt = _anchorcell.x - _f._copyhori + 1;
+			stop = _anchorcell.x;
+
+			return strt;
+		}
+
+		/// <summary>
+		/// Gets the col-id with selected cell that is furthest away from the
+		/// current <c><see cref="_anchorcell">_anchorcell's</see></c>
+		/// <c><see cref="Col"/></c>. Can return the col-id of the
+		/// <c>_anchorcell</c> itself.
+		/// </summary>
+		/// <returns>col-id</returns>
+		int getAnchorRangedColid()
+		{
+			int col = _anchorcell.x;
+
+			for (int c = ColCount - 1; c >= _anchorcell.x; --c)
+			if (this[_anchorcell.y, c].selected)
+			{
+				col = c;
+				break;
+			}
+
+			if (col == _anchorcell.x)
+			{
+				for (int c = FrozenCount; c <= _anchorcell.x; ++c)
+				if (this[_anchorcell.y, c].selected)
+				{
+					col = c;
+					break;
+				}
+			}
+
+			return col;
+		}
+
+		/// <summary>
+		/// Gets the row-id with selected cell that is furthest away from the
+		/// current <c><see cref="_anchorcell">_anchorcell's</see></c>
+		/// <c><see cref="Row"/></c>. Can return the row-id of the
+		/// <c>_anchorcell</c> itself.
+		/// </summary>
+		/// <returns>row-id</returns>
+		int getAnchorRangedRowid()
+		{
+			int row = _anchorcell.y;
+
+			for (int r = RowCount - 1; r >= _anchorcell.y; --r)
+			if (this[r, _anchorcell.x].selected)
+			{
+				row = r;
+				break;
+			}
+
+			if (row == _anchorcell.y)
+			{
+				for (int r = 0; r <= _anchorcell.y; ++r)
+				if (this[r, _anchorcell.x].selected)
+				{
+					row = r;
+					break;
+				}
+			}
+
+			return row;
 		}
 
 		/// <summary>
@@ -2828,9 +2775,17 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Focuses the table and selects the first cell in table if no cell is
-		/// selected or if cells are selected deselects all except the first
-		/// selected cell.
+		/// Focuses the table and selects only one of
+		/// <list type="bullet">
+		/// <item>the first <c><see cref="Cell"/></c> in table if no cell is
+		/// selected</item>
+		/// <item>the <c><see cref="_anchorcell"/></c> if valid</item>
+		/// <item>the first selected <c>Cell</c> if multiple cells are currently
+		/// selected</item>
+		/// </list>
+		/// 
+		/// 
+		/// No change if only one <c>Cell</c> is currently selected.
 		/// </summary>
 		/// <remarks>Called at the form-level by
 		/// <c><see cref="YataForm"/>.OnKeyDown()</c> <c>[Space]</c>.</remarks>
@@ -2838,44 +2793,56 @@ namespace yata
 		{
 			Select(); // focus table
 
-			Cell sel = getFirstSelectedCell();
-//			if (_cell_anchorshift != null && _cell_anchorshift.selected) // TODO: not sure that's wanted <-
-//				sel = _cell_anchorshift;
-//			else
-//				sel = getFirstSelectedCell();
-
-			ClearSelects(true);
-
-			int r,c;
-			if (sel != null)
+			Cell sel = getSelectedCell();
+			if (sel == null)
 			{
-				r = sel.y;
-				c = Math.Max(FrozenCount, sel.x);
-			}
-			else
-			{
-				r = 0;
-				c = FrozenCount;
+				if (_anchorcell != null && areSelectedCellsContiguous())
+				{
+					sel = _anchorcell;
+				}
+				else
+					sel = getFirstSelectedCell();
+
+				int r,c;
+				if (sel != null)
+				{
+					r = sel.y;
+					c = Math.Max(FrozenCount, sel.x);
+				}
+				else
+				{
+					r = 0;
+					c = FrozenCount;
+				}
+
+				ClearSelects(true);
+
+				if (c < ColCount)
+				{
+					sel = this[r,c];
+					sel.selected = true;
+					_f.SyncSelectCell(sel);
+
+					_anchorcell = sel;
+				}
+				else
+				{
+					sel = this[r,0]; // just a cell (for its row-id) to pass to EnsureDisplayed() below.
+					_f.ClearSyncSelects();
+
+					_anchorcell = null;
+				}
+
+				Invalidator(INVALID_GRID
+						  | INVALID_FROZ
+						  | INVALID_ROWS
+						  | EnsureDisplayed(sel));
+
+				_f.EnableCelleditOperations();
 			}
 
-			if (c < ColCount)
-			{
-				sel = this[r,c];
-				sel.selected = true;
-				_f.SyncSelectCell(sel);
-			}
-			else
-			{
-				sel = this[r,0]; // just a cell (for its row-id) to pass to EnsureDisplayed() below.
-				_f.ClearSyncSelects();
-			}
-
-			Invalidator(INVALID_GRID
-					  | INVALID_FROZ
-					  | INVALID_ROWS
-					  | EnsureDisplayed(sel));
-
-			_f.EnableCelleditOperations();
+			if (sel == null || sel.x >= FrozenCount)
+				_anchorcell = sel;
 		}
 
 		/// <summary>
@@ -3410,13 +3377,15 @@ namespace yata
 										{
 											if (_cell.selected = !_cell.selected)
 											{
-												if (_f.SyncSelectCell(_cell)) // disallow multi-cell selection if sync'd
+												if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
 												{
 													ClearSelects(true);
 													_cell.selected = true;
 												}
 												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
-											}															//    selectedcell is not the only selected cell
+																										//    selectedcell is not the only selected cell
+												_anchorcell = _cell;
+											}
 											else
 												_f.ClearSyncSelects();
 
@@ -3429,45 +3398,34 @@ namespace yata
 									}
 									else if (sft) // do block selection ->
 									{
-										if (!_cell.selected)
+										if (this != _f._diff1 && this != _f._diff2	// disallow multi-cell select if sync'd
+											&& areSelectedCellsContiguous()			// else do nothing if no cells are selected or selected cells are not in a contiguous block
+											&& _cell != getSelectedCell())			// else do nothing if clicked cell is the only selected cell
 										{
-											Cell sel = null;
+											ClearSelects(true);
 
-											if (_f.SyncSelectCell(_cell)) // disallow multi-cell selection if sync'd
-											{
-												ClearSelects(true);
-												_cell.selected = true;
+											int strt_r = Math.Min(_anchorcell.y, _cell.y);
+											int stop_r = Math.Max(_anchorcell.y, _cell.y);
+											int strt_c = Math.Min(_anchorcell.x, _cell.x);
+											int stop_c = Math.Max(_anchorcell.x, _cell.x);
 
-												EnsureDisplayed(sel = _cell);
-											}
-											else if ((sel = getSelectedCell()) != null)
-											{
-												ClearSelects(true);
+											for (int r = strt_r; r <= stop_r; ++r)
+											for (int c = strt_c; c <= stop_c; ++c)
+												this[r,c].selected = true;
 
-												int strt_r = Math.Min(sel.y, _cell.y);
-												int stop_r = Math.Max(sel.y, _cell.y);
-												int strt_c = Math.Min(sel.x, _cell.x);
-												int stop_c = Math.Max(sel.x, _cell.x);
+											EnsureDisplayed(_cell, true);
 
-												for (int r = strt_r; r <= stop_r; ++r)
-												for (int c = strt_c; c <= stop_c; ++c)
-													this[r,c].selected = true;
+											int invalid = INVALID_GRID;
+											if (Propanel != null && Propanel.Visible)
+												invalid |= INVALID_PROP;
 
-												EnsureDisplayed(_cell, true);
-											}
-
-											if (sel != null)
-											{
-												int invalid = INVALID_GRID;
-												if (Propanel != null && Propanel.Visible)
-													invalid |= INVALID_PROP;
-
-												Invalidator(invalid);
-											}
+											Invalidator(invalid);
 										}
 									}
 									else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
 									{
+										_anchorcell = _cell;
+
 										_double = true;
 
 										ClearSelects(true);
