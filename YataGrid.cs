@@ -4268,7 +4268,8 @@ namespace yata
 								// (c) or cells not in the clicked row got deselected above
 								bool @select = !Rows[row].selected || !allcellsselected || celldeselected;
 
-								Rows[row].selected = @select;
+								if (Rows[row].selected = @select && FrozenCount < ColCount)
+									_anchorcell = this[row, FrozenCount];
 
 								for (int c = 0; c != ColCount; ++c) // select or deselect cells in the clicked row ->
 								{
@@ -4511,7 +4512,8 @@ namespace yata
 								// (c) or cells not in the clicked col got deselected above
 								bool @select = !Cols[col].selected || !allcellsselected || celldeselected;
 
-								Cols[col].selected = @select;
+								if (Cols[col].selected = @select)
+									_anchorcell = this[0, col];
 
 								for (int r = 0; r != RowCount; ++r) // select or deselect cells in the clicked col ->
 								{
