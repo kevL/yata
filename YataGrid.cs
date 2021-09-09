@@ -1918,8 +1918,8 @@ namespace yata
 										ClearSelects(true);
 										SelectRow(0);
 
-//										if (FrozenCount < ColCount)
-//											_anchorcell = this[0, FrozenCount];
+										if (FrozenCount < ColCount)
+											_anchorcell = this[0, FrozenCount];
 									}
 									EnsureDisplayedRow(0);
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -1997,6 +1997,9 @@ namespace yata
 									{
 										ClearSelects(true);
 										SelectRow(RowCount - 1);
+
+										if (FrozenCount < ColCount)
+											_anchorcell = this[RowCount - 1, FrozenCount];
 									}
 									EnsureDisplayedRow(RowCount - 1);
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2076,6 +2079,9 @@ namespace yata
 									if ((selr -= shift) < 0) selr = 0;
 
 									SelectRow(selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
 								}
 								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2176,6 +2182,9 @@ namespace yata
 									if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
 
 									SelectRow(selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
 								}
 								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2272,6 +2281,9 @@ namespace yata
 								{
 									ClearSelects(true);
 									SelectRow(--selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
 								}
 								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2344,6 +2356,9 @@ namespace yata
 								{
 									ClearSelects(true);
 									SelectRow(++selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
 								}
 								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
