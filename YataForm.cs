@@ -850,6 +850,11 @@ namespace yata
 
 					DrawingControl.ResumeDrawing(Table);
 				}
+				else
+				{
+					table.DisposeWatcher();
+					table.Dispose();
+				}
 
 				tab_SelectedIndexChanged(null, EventArgs.Empty);
 			}
