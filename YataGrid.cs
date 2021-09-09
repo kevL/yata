@@ -305,7 +305,7 @@ namespace yata
 		/// currently selected row.
 		/// </summary>
 		/// <remarks>The value will be negative if the range of subselected rows
-		/// is above the currently selected row - else positive.</remarks>
+		/// is above the currently selected row.</remarks>
 		internal int RangeSelect
 		{ get; set; }
 
@@ -451,7 +451,7 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 
 			if (_table == YataForm.Table
-				&& _f._diff1 != null && _f._diff2 != null
+				&&  _f._diff1 != null   && _f._diff2 != null
 				&& (_f._diff1 == _table || _f._diff2 == _table))
 			{
 				SyncDiffedGrids();
@@ -488,7 +488,7 @@ namespace yata
 			OnMouseMove(args); // update coords on the Statusbar
 
 			if (_table == YataForm.Table
-				&& _f._diff1 != null && _f._diff2 != null
+				&&  _f._diff1 != null   && _f._diff2 != null
 				&& (_f._diff1 == _table || _f._diff2 == _table))
 			{
 				SyncDiffedGrids();
@@ -534,7 +534,7 @@ namespace yata
 						if (!_f.IsMin) _table.EnsureDisplayed();
 
 						if (!doneSync
-							&& _f._diff1 != null && _f._diff2 != null
+							&&  _f._diff1 != null   && _f._diff2 != null
 							&& (_f._diff1 == _table || _f._diff2 == _table))
 						{
 							doneSync = true;
@@ -624,8 +624,8 @@ namespace yata
 				// NOTE: Height/Width *includes* the height/width of the relevant
 				// scrollbar(s) and panel(s).
 
-				bool visVert = HeightTable > Height;	// NOTE: Do not refactor this ->
-				bool visHori = WidthTable  > Width;		// don't even ask. It works as-is. Be happy. Be very happy.
+				bool needsVertbar = HeightTable > Height;	// NOTE: Do not refactor this ->
+				bool needsHoribar = WidthTable  > Width;	// don't even ask. It works as-is. Be happy. Be very happy.
 
 				_visVert = false; // again don't ask. Be happy.
 				_visHori = false;
@@ -633,47 +633,68 @@ namespace yata
 				_scrollVert.Visible =
 				_scrollHori.Visible = false;
 
-				if (visVert && visHori)
+				if (needsVertbar && needsHoribar)
 				{
 					_visVert =
 					_visHori = true;
+
 					_scrollVert.Visible =
 					_scrollHori.Visible = true;
 				}
-				else if (visVert)
+				else if (needsVertbar)
 				{
 					_visVert = true;
-					_visHori = (WidthTable > Width - _scrollVert.Width);
+					_visHori = WidthTable > Width - _scrollVert.Width;
+
 					_scrollVert.Visible = true;
 					_scrollHori.Visible = _visHori;
 				}
-				else if (visHori)
+				else if (needsHoribar)
 				{
-					_visVert = (HeightTable > Height - _scrollHori.Height);
+					_visVert = HeightTable > Height - _scrollHori.Height;
 					_visHori = true;
+
 					_scrollVert.Visible = _visVert;
 					_scrollHori.Visible = true;
 				}
+
+
+				// Do not use .LargeChange in what follows. Use HeightRow instead.
+				// If a table does not have a scrollbar and user resizes it such
+				// that it needs one .LargeChange is 1 and things go bork.
+				// .LargeChange shall be set to HeightRow period.
+				//
+				// but think .LargeChange ...
+				//
+				// - not that that helps since gettin' .net scrollbars to behave
+				// properly for anything nontrivial is so fuckin' frustratin'.
+				//
+				// Don't even try setting .LargeChange to HeightRow in this
+				// funct since it won't stick if the scrollbar is not visible.
 
 				if (_visVert)
 				{
 					// NOTE: Do not set Maximum until after deciding whether
 					// or not max < 0. 'Cause it fucks everything up. bingo.
 					int vert = HeightTable - Height
-							 + (_scrollVert.LargeChange - 1)
+							 + (HeightRow - 1)
 							 + (_visHori ? _scrollHori.Height : 0);
 
-					if (vert < _scrollVert.LargeChange)
+					if (vert < HeightRow)
+					{
 						_scrollVert.Maximum = MaxVert = 0; // TODO: Perhaps that should zero the Value and recurse.
+					}
 					else
 					{
-						MaxVert = (_scrollVert.Maximum = vert) - (_scrollVert.LargeChange - 1);
+						MaxVert = (_scrollVert.Maximum = vert) - (HeightRow - 1);
 
 						// handle .NET OnResize anomaly ->
 						// keep the bottom of the table snuggled against the bottom
 						// of the visible area when resize enlarges the area
 						if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
+						{
 							_scrollVert.Value = MaxVert;
+						}
 					}
 				}
 				else
@@ -684,16 +705,16 @@ namespace yata
 					// NOTE: Do not set Maximum until after deciding whether
 					// or not max < 0. 'Cause it fucks everything up. bingo.
 					int hori = WidthTable - Width
-							 + (_scrollHori.LargeChange - 1)
+							 + (HeightRow - 1)
 							 + (_visVert ? _scrollVert.Width : 0);
 
-					if (hori < _scrollHori.LargeChange)
+					if (hori < HeightRow)
 					{
 						_scrollHori.Maximum = MaxHori = 0; // TODO: Perhaps that should zero the Value and recurse.
 					}
 					else
 					{
-						MaxHori = (_scrollHori.Maximum = hori) - (_scrollHori.LargeChange - 1);
+						MaxHori = (_scrollHori.Maximum = hori) - (HeightRow - 1);
 
 						// handle .NET OnResize anomaly ->
 						// keep the right of the table snuggled against the right of
@@ -709,11 +730,11 @@ namespace yata
 
 		/// <summary>
 		/// Scrolls the table by the mousewheel.
-		/// @note Fired from the form's OnMouseWheel event to catch all
-		/// unhandled MouseWheel events hovered on the app (without firing
-		/// twice).
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Fired from the form's <c>MouseWheel</c> event to catch all
+		/// unhandled <c>MouseWheel</c> events hovered on the app (without
+		/// firing twice).</remarks>
 		internal void Scroll(MouseEventArgs e)
 		{
 			if ((ModifierKeys & Keys.Alt) == 0)
@@ -733,7 +754,7 @@ namespace yata
 							h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 						}
 						else
-							h = _scrollVert.LargeChange;
+							h = HeightRow;
 
 						if (e.Delta > 0)
 						{
@@ -758,7 +779,7 @@ namespace yata
 							w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 						}
 						else
-							w = _scrollHori.LargeChange;
+							w = HeightRow;
 
 						if (e.Delta > 0)
 						{
@@ -1913,18 +1934,52 @@ namespace yata
 							{
 								if (ctr)
 								{
-									if (selr > 0)
-									{
-										ClearSelects(true);
-										SelectRow(0);
+									selr = 0;
 
-										if (FrozenCount < ColCount)
-											_anchorcell = this[0, FrozenCount];
-									}
-									EnsureDisplayedRow(0);
+									ClearSelects(true);
+									SelectRow(selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
+
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								}
 								else if (_visHori) _scrollHori.Value = 0;
+							}
+							else if (!ctr)
+							{
+								RangeSelect = -selr;
+
+								ClearCellSelects();
+
+								for (int r = 0; r <= selr; ++r)
+								for (int c = 0; c != ColCount; ++c)
+								{
+									this[r,c].selected = true;
+								}
+
+								YataGrid table;
+								if      (this == _f._diff1) table = _f._diff2;
+								else if (this == _f._diff2) table = _f._diff1;
+								else                        table = null;
+
+								if (table != null)
+								{
+									table.ClearCellSelects();
+
+									if (selr < table.RowCount)
+									{
+										table.RangeSelect = -selr;
+
+										for (int r = 0; r <= selr;           ++r)
+										for (int c = 0; c != table.ColCount; ++c)
+										{
+											table[r,c].selected = true;
+										}
+									}
+								}
+								selr = 0;
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
 						else if (sft)
@@ -1993,18 +2048,52 @@ namespace yata
 							{
 								if (ctr)
 								{
-									if (selr != RowCount - 1)
-									{
-										ClearSelects(true);
-										SelectRow(RowCount - 1);
+									selr = RowCount - 1;
 
-										if (FrozenCount < ColCount)
-											_anchorcell = this[RowCount - 1, FrozenCount];
-									}
-									EnsureDisplayedRow(RowCount - 1);
+									ClearSelects(true);
+									SelectRow(selr);
+
+									if (FrozenCount < ColCount)
+										_anchorcell = this[selr, FrozenCount];
+
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								}
 								else if (_visHori) _scrollHori.Value = MaxHori;
+							}
+							else if (!ctr)
+							{
+								RangeSelect = RowCount - selr - 1;
+
+								ClearCellSelects();
+
+								for (int r = selr; r != RowCount; ++r)
+								for (int c = 0;    c != ColCount; ++c)
+								{
+									this[r,c].selected = true;
+								}
+
+								YataGrid table;
+								if      (this == _f._diff1) table = _f._diff2;
+								else if (this == _f._diff2) table = _f._diff1;
+								else                        table = null;
+
+								if (table != null)
+								{
+									table.ClearCellSelects();
+
+									if (selr < table.RowCount)
+									{
+										table.RangeSelect = table.RowCount - selr - 1;
+
+										for (int r = selr; r != table.RowCount; ++r)
+										for (int c = 0;    c != table.ColCount; ++c)
+										{
+											table[r,c].selected = true;
+										}
+									}
+								}
+								selr = RowCount - 1;
+								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
 						else if (sft)
@@ -2083,7 +2172,6 @@ namespace yata
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
 								}
-								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
@@ -2186,7 +2274,6 @@ namespace yata
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
 								}
-								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
@@ -2285,7 +2372,6 @@ namespace yata
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
 								}
-								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
@@ -2340,10 +2426,10 @@ namespace yata
 						}
 						else if (_visVert)
 						{
-							if (_scrollVert.Value - _scrollVert.LargeChange < 0)
+							if (_scrollVert.Value - HeightRow < 0)
 								_scrollVert.Value = 0;
 							else
-								_scrollVert.Value -= _scrollVert.LargeChange;
+								_scrollVert.Value -= HeightRow;
 						}
 						break;
 
@@ -2360,7 +2446,6 @@ namespace yata
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
 								}
-								EnsureDisplayedRow(selr);
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
 						}
@@ -2415,10 +2500,10 @@ namespace yata
 						}
 						else if (_visVert)
 						{
-							if (_scrollVert.Value + _scrollVert.LargeChange > MaxVert)
+							if (_scrollVert.Value + HeightRow > MaxVert)
 								_scrollVert.Value = MaxVert;
 							else
-								_scrollVert.Value += _scrollVert.LargeChange;
+								_scrollVert.Value += HeightRow;
 						}
 						break;
 
@@ -2498,10 +2583,10 @@ namespace yata
 							}
 							else if (_visHori)
 							{
-								if (_scrollHori.Value - _scrollHori.LargeChange < 0)
+								if (_scrollHori.Value - HeightRow < 0)
 									_scrollHori.Value = 0;
 								else
-									_scrollHori.Value -= _scrollHori.LargeChange;
+									_scrollHori.Value -= HeightRow;
 							}
 						}
 						break;
@@ -2582,10 +2667,10 @@ namespace yata
 							}
 							else if (_visHori)
 							{
-								if (_scrollHori.Value + _scrollHori.LargeChange > MaxHori)
+								if (_scrollHori.Value + HeightRow > MaxHori)
 									_scrollHori.Value = MaxHori;
 								else
-									_scrollHori.Value += _scrollHori.LargeChange;
+									_scrollHori.Value += HeightRow;
 							}
 						}
 						break;
@@ -2595,6 +2680,8 @@ namespace yata
 						{
 							ClearSelects(true);
 							_f.ClearSyncSelects();
+
+							selr = -1;
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 						break;
@@ -2602,6 +2689,8 @@ namespace yata
 
 				if (invalid != INVALID_NONE)	// -> is a Row operation or [Esc]
 				{
+					if (selr != -1) EnsureDisplayedRow(selr);
+
 					if (Propanel != null && Propanel.Visible)
 						invalid |= INVALID_PROP;
 
@@ -2755,10 +2844,16 @@ namespace yata
 		/// <c><see cref="RowCount"/></c> before call.</remarks>
 		internal void SelectRow(int r)
 		{
-			Row row;
+			Row row = Rows[r];
+
+			row.selected = true;
+
+			for (int c = 0; c != ColCount; ++c)
+				row[c].selected = true;
+
 
 			YataGrid table = _f.ClearSyncSelects();
-			if (table != null)
+			if (table != null && r < table.RowCount)
 			{
 				row = table.Rows[r];
 
@@ -2769,12 +2864,6 @@ namespace yata
 				for (int c = 0; c != table.ColCount; ++c)
 					row[c].selected = true;
 			}
-
-			row = Rows[r];
-			row.selected = true;
-
-			for (int c = 0; c != ColCount; ++c)
-				row[c].selected = true;
 
 			_f.EnableCelleditOperations();
 		}
@@ -3557,7 +3646,7 @@ namespace yata
 		{
 			EnsureDisplayed(_editcell);
 
-			var rect = getCellRectangle(_editcell); // align the editbox over the text ->
+			Rectangle rect = getCellRectangle(_editcell); // align the editbox over the text ->
 			_editor.Left   = rect.X + 5;
 			_editor.Top    = rect.Y + 4;
 			_editor.Width  = rect.Width - 6;
@@ -3592,7 +3681,7 @@ namespace yata
 		/// after it deters required cell-selects.</remarks>
 		internal void ClearCellSelects()
 		{
-//			_cell_anchorshift = null; // ~safety. Would need to go through all select patterns.
+//			_anchorcell = null; // ~safety. Would need to go through all select patterns.
 
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
@@ -3616,7 +3705,7 @@ namespace yata
 		/// being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		internal void ClearSelects(bool bypassEnableCelledit = false, bool bypassEnableRowedit = false)
 		{
-//			_cell_anchorshift = null; // ~safety. Would need to go through all select patterns.
+//			_anchorcell = null; // ~safety. Would need to go through all select patterns.
 
 			foreach (var col in Cols)
 			if (col.selected)
@@ -3956,40 +4045,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Not really a <c>Point</c> but the left and right bounds of a
-		/// <c><see cref="Col"/></c>.
-		/// </summary>
-		/// <param name="c">col-id</param>
-		/// <returns></returns>
-		Point getColBounds(int c)
-		{
-			var bounds = new Point();
-
-			bounds.X = WidthRowhead - offsetHori;
-			for (int col = 0; col != c; ++col)
-				bounds.X += Cols[col].width();
-
-			bounds.Y = (bounds.X + Cols[c].width());
-
-			return bounds;
-		}
-
-		/// <summary>
-		/// Not really a <c>Point</c> but the upper and lower bounds of a
-		/// <c><see cref="Row"/></c>.
-		/// </summary>
-		/// <param name="r">row-id</param>
-		/// <returns></returns>
-		Point getRowBounds(int r)
-		{
-			var bounds = new Point();
-			bounds.X = HeightColhead + HeightRow * r - offsetVert;
-			bounds.Y = bounds.X + HeightRow;
-
-			return bounds;
-		}
-
-		/// <summary>
 		/// Gets the x-pos of the right edge of the frozen-panel; ie. the left
 		/// edge of the visible/editable area of this <c>YataGrid</c>.
 		/// </summary>
@@ -4107,25 +4162,30 @@ namespace yata
 		/// Scrolls the table so that a given <c><see cref="Row"/></c> is (more
 		/// or less) completely displayed.
 		/// </summary>
-		/// <param name="r">the row-id to display</param>
+		/// <param name="rowid">the row-id to display</param>
 		/// <returns>a bitwise <c>int</c> defining controls that need to be
 		/// invalidated</returns>
-		internal int EnsureDisplayedRow(int r)
+		internal int EnsureDisplayedRow(int rowid)
 		{
-			Point bounds = getRowBounds(r);
-			if (bounds.X != HeightColhead)
+			int posT = HeightColhead + HeightRow * rowid - offsetVert;
+			if (posT != HeightColhead)
 			{
-				if (bounds.X < HeightColhead)
+				if (posT < HeightColhead)
 				{
-					_scrollVert.Value -= HeightColhead - bounds.X;
-					return (INVALID_GRID | INVALID_FROZ | INVALID_ROWS); // TODO: All those might not be needed ...
+					_scrollVert.Value -= HeightColhead - posT;
+					return INVALID_GRID
+						 | INVALID_FROZ
+						 | INVALID_ROWS; // TODO: All those might not be needed ...
 				}
 
-				int bar = (_visHori ? _scrollHori.Height : 0);
-				if (bounds.Y + bar > Height)
+				int posB = posT + HeightRow;
+				int bar  = (_visHori ? _scrollHori.Height : 0);
+				if (posB + bar > Height)
 				{
-					_scrollVert.Value += bounds.Y + bar - Height;
-					return (INVALID_GRID | INVALID_FROZ | INVALID_ROWS); // TODO: All those might not be needed ...
+					_scrollVert.Value += posB + bar - Height;
+					return INVALID_GRID
+						 | INVALID_FROZ
+						 | INVALID_ROWS; // TODO: All those might not be needed ...
 				}
 			}
 
@@ -4137,29 +4197,32 @@ namespace yata
 		/// Scrolls the table so that a given <c><see cref="Col"/></c> is (more
 		/// or less) completely displayed.
 		/// </summary>
-		/// <param name="c">the col-id to display</param>
-		internal void EnsureDisplayedCol(int c)
+		/// <param name="colid">the col-id to display</param>
+		internal void EnsureDisplayedCol(int colid)
 		{
-			Point bounds = getColBounds(c);
+			int posL = WidthRowhead - offsetHori;
+			for (int c = 0; c != colid; ++c)
+				posL += Cols[c].width();
+
+			int posR = posL + Cols[colid].width();
 
 			int left = getLeft();
-
-			if (bounds.X != left)
+			if (posL != left)
 			{
 				int bar = (_visVert ? _scrollVert.Width : 0);
 				int right = Width - bar;
 
-				int width = bounds.Y - bounds.X;
+				int width = posR - posL;
 
-				if (bounds.X < left
+				if (posL < left
 					|| (width > right - left
-						&& (bounds.X > right || bounds.X + left > (right - left) / 2)))
+						&& (posL > right || posL + left > (right - left) / 2)))
 				{
-					_scrollHori.Value -= left - bounds.X;
+					_scrollHori.Value -= left - posL;
 				}
-				else if (bounds.Y > right && width < right - left)
+				else if (posR > right && width < right - left)
 				{
-					_scrollHori.Value += bounds.X + width + bar - Width;
+					_scrollHori.Value += posR + bar - Width;
 				}
 			}
 		}
