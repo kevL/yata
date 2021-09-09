@@ -1952,7 +1952,7 @@ namespace yata
 
 								ClearCellSelects();
 
-								for (int r = 0; r <= selr; ++r)
+								for (int r = 0; r <= selr;     ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
 									this[r,c].selected = true;
@@ -2362,15 +2362,75 @@ namespace yata
 					case Keys.Up: // NOTE: needs to bypass KeyPreview
 						if (selr != -1)
 						{
-							if (!ctr && !sft)
+							if (!ctr)
 							{
-								if (selr != 0)
+								if (!sft)
 								{
+									if (selr != 0) --selr;
+
 									ClearSelects(true);
-									SelectRow(--selr);
+									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
+								}
+								else
+								{
+									if (selr + RangeSelect != 0) --RangeSelect;
+
+									ClearCellSelects();
+
+									int strt_r, stop_r;
+									if (RangeSelect < 0)
+									{
+										strt_r = selr + RangeSelect;
+										stop_r = selr;
+									}
+									else
+									{
+										strt_r = selr;
+										stop_r = selr + RangeSelect;
+									}
+
+									for (int r = strt_r; r <= stop_r;   ++r)
+									for (int c = 0;      c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+
+									YataGrid table;
+									if      (this == _f._diff1) table = _f._diff2;
+									else if (this == _f._diff2) table = _f._diff1;
+									else                        table = null;
+
+									if (table != null)
+									{
+										table.ClearCellSelects();
+
+										if (selr < table.RowCount)
+										{
+											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
+												table.RangeSelect = table.RowCount - selr - 1;
+
+											if (table.RangeSelect < 0)
+											{
+												strt_r = selr + table.RangeSelect;
+												stop_r = selr;
+											}
+											else
+											{
+												strt_r = selr;
+												stop_r = selr + table.RangeSelect;
+											}
+
+											for (int r = strt_r; r <= stop_r;         ++r)
+											for (int c = 0;      c != table.ColCount; ++c)
+											{
+												table[r,c].selected = true;
+											}
+										}
+									}
+									selr += RangeSelect;
 								}
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
@@ -2436,15 +2496,75 @@ namespace yata
 					case Keys.Down: // NOTE: needs to bypass KeyPreview
 						if (selr != -1)
 						{
-							if (!ctr && !sft)
+							if (!ctr)
 							{
-								if (selr != RowCount - 1)
+								if (!sft)
 								{
+									if (selr != RowCount - 1) ++selr;
+
 									ClearSelects(true);
-									SelectRow(++selr);
+									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
+								}
+								else
+								{
+									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
+
+									ClearCellSelects();
+
+									int strt_r, stop_r;
+									if (RangeSelect < 0)
+									{
+										strt_r = selr + RangeSelect;
+										stop_r = selr;
+									}
+									else
+									{
+										strt_r = selr;
+										stop_r = selr + RangeSelect;
+									}
+
+									for (int r = strt_r; r <= stop_r;   ++r)
+									for (int c = 0;      c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+
+									YataGrid table;
+									if      (this == _f._diff1) table = _f._diff2;
+									else if (this == _f._diff2) table = _f._diff1;
+									else                        table = null;
+
+									if (table != null)
+									{
+										table.ClearCellSelects();
+
+										if (selr < table.RowCount)
+										{
+											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
+												table.RangeSelect = table.RowCount - selr - 1;
+
+											if (table.RangeSelect < 0)
+											{
+												strt_r = selr + table.RangeSelect;
+												stop_r = selr;
+											}
+											else
+											{
+												strt_r = selr;
+												stop_r = selr + table.RangeSelect;
+											}
+
+											for (int r = strt_r; r <= stop_r;         ++r)
+											for (int c = 0;      c != table.ColCount; ++c)
+											{
+												table[r,c].selected = true;
+											}
+										}
+									}
+									selr += RangeSelect;
 								}
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
