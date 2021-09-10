@@ -119,7 +119,10 @@
     <Compile Include="YataData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YataPaint.cs">
+    <Compile Include="YataGrid_keys.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataGrid_paint.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="YataPaths.cs">
