@@ -106,7 +106,7 @@ namespace yata
 			switch (DialogResult)
 			{
 				default:
-				case DialogResult.Cancel:	// btn_Cancel
+//				case DialogResult.Cancel:	// btn_Cancel
 					_grid.Readonly = false;
 					_grid.Changed = true;
 					break;
