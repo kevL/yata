@@ -1934,9 +1934,11 @@ namespace yata
 							{
 								if (ctr)
 								{
+									Rows[selr].selected = false;
+
 									selr = 0;
 
-									ClearSelects(true);
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
@@ -2048,9 +2050,11 @@ namespace yata
 							{
 								if (ctr)
 								{
+									Rows[selr].selected = false;
+
 									selr = RowCount - 1;
 
-									ClearSelects(true);
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
@@ -2162,7 +2166,7 @@ namespace yata
 							{
 								if (!sft)
 								{
-									ClearSelects(true);
+									Rows[selr].selected = false;
 
 									if (selr != 0)
 									{
@@ -2170,6 +2174,7 @@ namespace yata
 										if ((selr -= shift) < 0) selr = 0;
 									}
 
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
@@ -2329,7 +2334,7 @@ namespace yata
 							{
 								if (!sft)
 								{
-									ClearSelects(true);
+									Rows[selr].selected = false;
 
 									if (selr != RowCount - 1)
 									{
@@ -2337,6 +2342,7 @@ namespace yata
 										if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
 									}
 
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
@@ -2496,9 +2502,11 @@ namespace yata
 							{
 								if (!sft)
 								{
+									Rows[selr].selected = false;
+
 									if (selr != 0) --selr;
 
-									ClearSelects(true);
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
@@ -2630,9 +2638,11 @@ namespace yata
 							{
 								if (!sft)
 								{
+									Rows[selr].selected = false;
+
 									if (selr != RowCount - 1) ++selr;
 
-									ClearSelects(true);
+									ClearCellSelects(true);
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
