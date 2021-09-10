@@ -176,66 +176,70 @@ KEYBOARD:
 If a row is selected then key-input for rows takes precedence.
 
 - w/ row selected
-Home              - scrolls table all the way left
-End               - scrolls table all the way right
-PageUp            - selects the row a page above
-PageDown          - selects the row a page below
-Ctrl+Home         - selects the top row
-Shift+Home        - subselects rows to the top of the table
-Ctrl+End          - selects the bottom row
-Shift+End         - subselects rows to the bottom of the table
-Up/Down arrows    - selects the row in the direction
-Left/Right arrows - scrolls table in the direction
-Shift+Left        - scrolls table left by visible width
-Shift+Right       - scrolls table right by visible width
+Home          - scrolls table all the way left
+End           - scrolls table all the way right
+PageUp        - selects the row a page above
+PageDown      - selects the row a page below
+Ctrl+Home     - selects the top row
+Shift+Home    - subselects rows to the top of the table
+Ctrl+End      - selects the bottom row
+Shift+End     - subselects rows to the bottom of the table
+Up/Down       - selects the row in the direction
+Shift+Up/Down - adds/subtracts subselects in the direction
+Left/Right    - scrolls table in the direction
+Shift+Left    - scrolls table left by visible width
+Shift+Right   - scrolls table right by visible width
 
 - w/ only 1 cell selected
-Home                      - selects cell at start of the row
-End                       - selects cell at the end of the row
-PageUp                    - selects cell a page above
-PageDown                  - selects cell a page below
-Ctrl+Home                 - selects first cell in the table
-Ctrl+End                  - selects first cell in last row of the table
-Left/Right/Up/Down arrows - selects next cell in the direction
-Ctrl+Up                   - selects first cell in the col
-Ctrl+Down                 - selects last cell in the col
+Home               - selects cell at start of the row
+End                - selects cell at the end of the row
+PageUp             - selects cell a page above
+PageDown           - selects cell a page below
+Ctrl+Home          - selects first cell in the table
+Ctrl+End           - selects first cell in last row of the table
+Left/Right/Up/Down - selects next cell in the direction
+Ctrl+Up            - selects first cell in the col
+Ctrl+Down          - selects last cell in the col
 
 - w/out cell selected or 2+ cells selected
-Home                      - scrolls table all the way left
-End                       - scrolls table all the way right
-PageUp                    - scrolls table a page up
-PageDown                  - scrolls table a page down
-Ctrl+Home                 - scrolls table to top
-Ctrl+End                  - scrolls table to bottom
-Left/Right/Up/Down arrows - scrolls table in the direction
-Shift+Left                - scrolls table left by visible width if no cell is
-                            selected or selection is not contiguous
-Shift+Right               - scrolls table right by visible width if no cell is
-                            selected or selection is not contiguous
+Home               - scrolls table all the way left
+End                - scrolls table all the way right
+PageUp             - scrolls table a page up
+PageDown           - scrolls table a page down
+Ctrl+Home          - scrolls table to top
+Ctrl+End           - scrolls table to bottom
+Left/Right/Up/Down - scrolls table in the direction
+Shift+Left         - scrolls table left by visible width if no cell is selected
+                     or selection is not contiguous
+Shift+Right        - scrolls table right by visible width if no cell is selected
+                     or selection is not contiguous
 
 - extended keyboard handling when only 1 cell is selected or if selection is a
   contiguous block of cells
-Shift+arrows              - adds/subtracts cells in direction if selection is
-                            contiguous
-Shift+Home                - adds/subtracts row-cells left if selection is
-                            contiguous
-Shift+End                 - adds/subtracts row-cells right if selection is
-                            contiguous
-Ctrl+Shift+Home           - adds cells left and above if selection is contiguous
-Ctrl+Shift+End            - adds cells right and below if selection is
-                            contiguous
-Shift+PageUp              - adds/subtracts visible col-cells above if selection
-                            is contiguous
-Shift+PageDown            - adds/subtracts visible col-cells below if selection
-                            is contiguous
-Ctrl+Shift+PageUp         - adds/subtracts col-cells above if selection is
-                            contiguous
-Ctrl+Shift+PageDown       - adds/subtracts col-cells below if selection is
-                            contiguous
+Shift+Left/Right/Up/Down - adds/subtracts cells in direction if selection is
+                           contiguous
+Shift+Home               - adds/subtracts row-cells left if selection is
+                           contiguous
+Shift+End                - adds/subtracts row-cells right if selection is
+                           contiguous
+Ctrl+Shift+Home          - adds cells left and above if selection is contiguous
+Ctrl+Shift+End           - adds cells right and below if selection is
+                           contiguous
+Shift+PageUp             - adds/subtracts visible col-cells above if selection
+                           is contiguous
+Shift+PageDown           - adds/subtracts visible col-cells below if selection
+                           is contiguous
+Ctrl+Shift+PageUp        - adds/subtracts col-cells above if selection is
+                           contiguous
+Ctrl+Shift+PageDown      - adds/subtracts col-cells below if selection is
+                           contiguous
 
-Space - focuses the table and selects the first cell. If cell(s) are already
-        selected all cells but the first will be deselected and the table will
-        scroll to ensure that the first selected cell is visible.
+Space - focuses the table and selects the first cell if no cells are currently
+        selected. If cell(s) are already selected all cells except the
+        anchorcell will be deselected and the table will scroll to ensure that
+        the anchorcell is visible. An anchorcell is used to determine the area
+        of a contiguous block of selected cells; technically the anchorcell can
+        be invalid in which case the first selected cell shall take its place.
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
