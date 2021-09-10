@@ -146,7 +146,7 @@ namespace yata
 		/// </list></remarks>
 		internal void click_Get(object sender, EventArgs e)
 		{
-			rtb_Clip.Text = ClipAssist.GetText().Trim();
+			rtb_Clip.Text = ClipboardService.GetText().Trim();
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Set(object sender, EventArgs e)
 		{
-			ClipAssist.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
+			ClipboardService.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
 		}
 		#endregion Events
 	}
@@ -164,10 +164,10 @@ namespace yata
 
 	#region Clipboard
 	/// <summary>
-	/// Sends text to the Windows Clipboard.
+	/// Gets/Sets text per the Windows Clipboard.
 	/// </summary>
 	/// <remarks>https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879</remarks>
-	static class ClipAssist
+	static class ClipboardService
 	{
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		static extern IntPtr GetOpenClipboardWindow();

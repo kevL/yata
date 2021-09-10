@@ -3185,7 +3185,7 @@ namespace yata
 				if (i != _copyr.Count - 1)
 					clip += Environment.NewLine;
 			}
-			ClipAssist.SetText(clip);
+			ClipboardService.SetText(clip);
 
 			if (_fclip != null)
 				_fclip.click_Get(sender, e);
@@ -3203,7 +3203,7 @@ namespace yata
 		{
 			_copyr.Clear();
 
-			string clip = ClipAssist.GetText().Trim();
+			string clip = ClipboardService.GetText().Trim();
 			if (!String.IsNullOrEmpty(clip))
 			{
 				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
