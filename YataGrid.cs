@@ -3834,6 +3834,8 @@ namespace yata
 							{
 								if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
 								{
+									_anchorcell = _cell;
+
 									ClearSelects(true);
 									_cell.selected = true;
 									_f.SyncSelectCell(_cell);
