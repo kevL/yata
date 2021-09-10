@@ -1950,7 +1950,7 @@ namespace yata
 							{
 								RangeSelect = -selr;
 
-								ClearCellSelects();
+								ClearCellSelects(true);
 
 								for (int r = 0; r <= selr;     ++r)
 								for (int c = 0; c != ColCount; ++c)
@@ -1965,7 +1965,7 @@ namespace yata
 
 								if (table != null)
 								{
-									table.ClearCellSelects();
+									table.ClearCellSelects(true);
 
 									if (selr < table.RowCount)
 									{
@@ -2064,7 +2064,7 @@ namespace yata
 							{
 								RangeSelect = RowCount - selr - 1;
 
-								ClearCellSelects();
+								ClearCellSelects(true);
 
 								for (int r = selr; r != RowCount; ++r)
 								for (int c = 0;    c != ColCount; ++c)
@@ -2079,7 +2079,7 @@ namespace yata
 
 								if (table != null)
 								{
-									table.ClearCellSelects();
+									table.ClearCellSelects(true);
 
 									if (selr < table.RowCount)
 									{
@@ -2158,19 +2158,84 @@ namespace yata
 					case Keys.PageUp:
 						if (selr != -1)
 						{
-							if (!ctr && !sft)
+							if (!ctr)
 							{
-								if (selr > 0)
+								if (!sft)
 								{
 									ClearSelects(true);
 
-									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									if ((selr -= shift) < 0) selr = 0;
+									if (selr != 0)
+									{
+										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										if ((selr -= shift) < 0) selr = 0;
+									}
 
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
+								}
+								else
+								{
+									int range = -(Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										range += RangeSelect;
+
+									if (selr + range < 0) RangeSelect = 0 - selr;
+									else                  RangeSelect = range;
+
+									ClearCellSelects(true);
+
+									int strt_r, stop_r;
+									if (RangeSelect < 0)
+									{
+										strt_r = selr + RangeSelect;
+										stop_r = selr;
+									}
+									else
+									{
+										strt_r = selr;
+										stop_r = selr + RangeSelect;
+									}
+
+									for (int r = strt_r; r <= stop_r;   ++r)
+									for (int c = 0;      c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+
+									YataGrid table;
+									if      (this == _f._diff1) table = _f._diff2;
+									else if (this == _f._diff2) table = _f._diff1;
+									else                        table = null;
+
+									if (table != null)
+									{
+										table.ClearCellSelects(true);
+
+										if (selr < table.RowCount)
+										{
+											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
+												table.RangeSelect = table.RowCount - selr - 1;
+
+											if (table.RangeSelect < 0)
+											{
+												strt_r = selr + table.RangeSelect;
+												stop_r = selr;
+											}
+											else
+											{
+												strt_r = selr;
+												stop_r = selr + table.RangeSelect;
+											}
+
+											for (int r = strt_r; r <= stop_r;         ++r)
+											for (int c = 0;      c != table.ColCount; ++c)
+											{
+												table[r,c].selected = true;
+											}
+										}
+									}
+									selr += RangeSelect;
 								}
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
@@ -2260,19 +2325,84 @@ namespace yata
 					case Keys.PageDown:
 						if (selr != -1)
 						{
-							if (!ctr && !sft)
+							if (!ctr)
 							{
-								if (selr != RowCount - 1)
+								if (!sft)
 								{
 									ClearSelects(true);
 
-									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-									if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
+									if (selr != RowCount - 1)
+									{
+										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
+									}
 
 									SelectRow(selr);
 
 									if (FrozenCount < ColCount)
 										_anchorcell = this[selr, FrozenCount];
+								}
+								else
+								{
+									int range = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										range += RangeSelect;
+
+									if (selr + range >= RowCount) RangeSelect = RowCount - selr - 1;
+									else                          RangeSelect = range;
+
+									ClearCellSelects(true);
+
+									int strt_r, stop_r;
+									if (RangeSelect < 0)
+									{
+										strt_r = selr + RangeSelect;
+										stop_r = selr;
+									}
+									else
+									{
+										strt_r = selr;
+										stop_r = selr + RangeSelect;
+									}
+
+									for (int r = strt_r; r <= stop_r;   ++r)
+									for (int c = 0;      c != ColCount; ++c)
+									{
+										this[r,c].selected = true;
+									}
+
+									YataGrid table;
+									if      (this == _f._diff1) table = _f._diff2;
+									else if (this == _f._diff2) table = _f._diff1;
+									else                        table = null;
+
+									if (table != null)
+									{
+										table.ClearCellSelects(true);
+
+										if (selr < table.RowCount)
+										{
+											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
+												table.RangeSelect = table.RowCount - selr - 1;
+
+											if (table.RangeSelect < 0)
+											{
+												strt_r = selr + table.RangeSelect;
+												stop_r = selr;
+											}
+											else
+											{
+												strt_r = selr;
+												stop_r = selr + table.RangeSelect;
+											}
+
+											for (int r = strt_r; r <= stop_r;         ++r)
+											for (int c = 0;      c != table.ColCount; ++c)
+											{
+												table[r,c].selected = true;
+											}
+										}
+									}
+									selr += RangeSelect;
 								}
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							}
@@ -2378,7 +2508,7 @@ namespace yata
 								{
 									if (selr + RangeSelect != 0) --RangeSelect;
 
-									ClearCellSelects();
+									ClearCellSelects(true);
 
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
@@ -2405,7 +2535,7 @@ namespace yata
 
 									if (table != null)
 									{
-										table.ClearCellSelects();
+										table.ClearCellSelects(true);
 
 										if (selr < table.RowCount)
 										{
@@ -2512,7 +2642,7 @@ namespace yata
 								{
 									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
 
-									ClearCellSelects();
+									ClearCellSelects(true);
 
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
@@ -2539,7 +2669,7 @@ namespace yata
 
 									if (table != null)
 									{
-										table.ClearCellSelects();
+										table.ClearCellSelects(true);
 
 										if (selr < table.RowCount)
 										{
@@ -3796,15 +3926,17 @@ namespace yata
 		/// Clears all <c><see cref="Cell">Cells</see></c> that are currently
 		/// selected.
 		/// </summary>
+		/// <param name="bypassCol"><c>true</c> to not clear selected col-cells</param>
 		/// <remarks>The caller shall call
 		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
 		/// after it deters required cell-selects.</remarks>
-		internal void ClearCellSelects()
+		internal void ClearCellSelects(bool bypassCol = false)
 		{
 //			_anchorcell = null; // ~safety. Would need to go through all select patterns.
 
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
+			if (!bypassCol || !Cols[c].selected)
 				row[c].selected = false;
 		}
 
