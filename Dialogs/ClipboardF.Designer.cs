@@ -96,6 +96,7 @@ namespace yata
 			this.Controls.Add(this.rtb_Clip);
 			this.Controls.Add(this.panel1);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(250, 0);
 			this.Name = "ClipboardF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

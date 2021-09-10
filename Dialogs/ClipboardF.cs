@@ -74,6 +74,22 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Overrides the <c>FormClosing</c> eventhandler.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			_f.ClipEditor_uncheck();
+
+			_x = Left;
+			_y = Top;
+			_w = Width;
+			_h = Height;
+
+			base.OnFormClosing(e);
+		}
+
+		/// <summary>
 		/// Overrides the <c>Resize</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
@@ -100,19 +116,18 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>FormClosing</c> eventhandler.
+		/// Closes this <c>ClipboardF</c> on [F11].
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnFormClosing(FormClosingEventArgs e)
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			_f.ClipEditor_uncheck();
-
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
-
-			base.OnFormClosing(e);
+			if (e.KeyData == Keys.F11)
+			{
+				e.Handled = e.SuppressKeyPress = true;
+				Close();
+			}
+			base.OnKeyDown(e);
 		}
 		#endregion Events (override)
 
