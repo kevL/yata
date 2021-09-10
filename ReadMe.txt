@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 9
+2021 september 10
 kevL's
 ver 4.2.3.0
 
@@ -173,73 +173,94 @@ Help
 
 KEYBOARD:
 
-If a row is selected then key-input for rows takes precedence.
+If a row is selected then key-input for rows takes precedence. Else cells.
 
-- w/ row selected
-Home          - scrolls table all the way left
-End           - scrolls table all the way right
-PageUp        - selects the row a page above
-PageDown      - selects the row a page below
-Ctrl+Home     - selects the top row
-Shift+Home    - subselects rows to the top of the table
-Ctrl+End      - selects the bottom row
-Shift+End     - subselects rows to the bottom of the table
-Up/Down       - selects the row in the direction
-Shift+Up/Down - adds/subtracts subselects in the direction
-Left/Right    - scrolls table in the direction
-Shift+Left    - scrolls table left by visible width
-Shift+Right   - scrolls table right by visible width
+- w/ row selected -
+Up             - selects the row above
+Down           - selects the row below
+PageUp         - selects the row a page above
+PageDown       - selects the row a page below
 
-- w/ only 1 cell selected
-Home               - selects cell at start of the row
-End                - selects cell at the end of the row
-PageUp             - selects cell a page above
-PageDown           - selects cell a page below
-Ctrl+Home          - selects first cell in the table
-Ctrl+End           - selects first cell in last row of the table
-Left/Right/Up/Down - selects next cell in the direction
-Ctrl+Up            - selects first cell in the col
-Ctrl+Down          - selects last cell in the col
+Ctrl+Home      - selects the top row
+Ctrl+End       - selects the bottom row
 
-- w/out cell selected or 2+ cells selected
-Home               - scrolls table all the way left
-End                - scrolls table all the way right
-PageUp             - scrolls table a page up
-PageDown           - scrolls table a page down
-Ctrl+Home          - scrolls table to top
-Ctrl+End           - scrolls table to bottom
-Left/Right/Up/Down - scrolls table in the direction
-Shift+Left         - scrolls table left by visible width if no cell is selected
-                     or selection is not contiguous
-Shift+Right        - scrolls table right by visible width if no cell is selected
-                     or selection is not contiguous
+Shift+Home     - subselects rows to the top of the table
+Shift+End      - subselects rows to the bottom of the table
+Shift+Up       - adjusts subselected rows up
+Shift+Down     - adjusts subselected rows down
+Shift+PageUp   - adjusts subselected rows up by visible height
+Shift+PageDown - adjusts subselected rows down by visible height
 
-- extended keyboard handling when only 1 cell is selected or if selection is a
-  contiguous block of cells
-Shift+Left/Right/Up/Down - adds/subtracts cells in direction if selection is
-                           contiguous
-Shift+Home               - adds/subtracts row-cells left if selection is
-                           contiguous
-Shift+End                - adds/subtracts row-cells right if selection is
-                           contiguous
-Ctrl+Shift+Home          - adds cells left and above if selection is contiguous
-Ctrl+Shift+End           - adds cells right and below if selection is
-                           contiguous
-Shift+PageUp             - adds/subtracts visible col-cells above if selection
-                           is contiguous
-Shift+PageDown           - adds/subtracts visible col-cells below if selection
-                           is contiguous
-Ctrl+Shift+PageUp        - adds/subtracts col-cells above if selection is
-                           contiguous
-Ctrl+Shift+PageDown      - adds/subtracts col-cells below if selection is
-                           contiguous
+Left           - scrolls table left
+Right          - scrolls table right
+Shift+Left     - scrolls table left by visible width
+Shift+Right    - scrolls table right by visible width
+Home           - scrolls table all the way left
+End            - scrolls table all the way right
+
+- w/ only 1 cell selected -
+Left           - selects cell to the left
+Right          - selects cell to the right
+Up             - selects cell above
+Down           - selects cell below
+PageUp         - selects cell a page above
+PageDown       - selects cell a page below
+Home           - selects cell at start of the row
+End            - selects cell at the end of the row
+
+Ctrl+Up        - selects first cell in the col
+Ctrl+Down      - selects last cell in the col
+Ctrl+Home      - selects first cell in the table
+Ctrl+End       - selects first cell in last row of the table
+
+- w/out cell selected or 2+ cells selected -
+Left           - scrolls table left
+Right          - scrolls table right
+Up             - scrolls table up
+Down           - scrolls table down
+PageUp         - scrolls table a page up
+PageDown       - scrolls table a page down
+Home           - scrolls table all the way left
+End            - scrolls table all the way right
+
+Ctrl+Home      - scrolls table to top
+Ctrl+End       - scrolls table to bottom
+
+Shift+Left     - scrolls table left by visible width if no cell is selected
+                 or selected cells are not contiguous
+Shift+Right    - scrolls table right by visible width if no cell is selected
+                 or selected cells are not contiguous
+
+- extended keyboard handling when only 1 cell is selected or if selected cells
+  are in a contiguous block. These operations are based on an anchorcell ... the
+  primary methods of choosing an anchorcell is to click on a cell to select it
+  or press [Space] -
+
+Shift+Left          - adjusts selection left
+Shift+Right         - adjusts selection right
+Shift+Up            - adjusts selection up
+Shift+Down          - adjusts selection down
+
+Shift+PageUp        - adjusts selection up by visible height
+Shift+PageDown      - adjusts selection down by visible height
+
+Shift+Ctrl+PageUp   - selects all cells above
+Shift+Ctrl+PageDown - selects all cells below
+
+Shift+Home          - selects all cells left
+Shift+End           - selects all cells right
+
+Shift+Ctrl+Home     - selects all cells to the top-left cell
+Shift+Ctrl+End      - selects all cells to the bottom-right cell
+
 
 Space - focuses the table and selects the first cell if no cells are currently
         selected. If cell(s) are already selected all cells except the
         anchorcell will be deselected and the table will scroll to ensure that
         the anchorcell is visible. An anchorcell is used to determine the area
         of a contiguous block of selected cells; technically the anchorcell can
-        be invalid in which case the first selected cell shall take its place.
+        be invalid in which case the first selected cell shall be set as the
+        anchorcell.
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
@@ -270,13 +291,13 @@ wheel - scrolls up/down if the vertical scrollbar is visible and either of
 Shift+wheel - scrolls the table by its visible height/width if applicable; the
               Ctrl-key is also respected
 
-click on the colheads or rowheads
+- click on the colheads or rowheads -
 LMB            - selects or deselects the col/row and clears other cells
 LMB+Ctrl       - selects or deselects the col/row
 LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
 
-click on the colheads
+- click on the colheads -
 LMB       - click-drag col-boundary to re-width a col (The text of a colhead
             will appear dark green if its col has been user-sized.)
 RMB       - click a col-boundary to auto-width a col (Note that frozen cols
@@ -289,11 +310,11 @@ RMB+Shift - sorts the table by the col either ascending or descending (Note that
             back into its correct order. Tables are saved in the order that they
             are sorted.)
 
-click on the rowheads
+- click on the rowheads -
 RMB - opens the context for single-row editing (This handles single-row editing
       only - for multi-row editing see the Rows menu.)
 
-click on a table-cell
+- click on a table-cell -
 LMB       - selects a cell or if already selected then starts the cell-editor,
             or if editing a cell then a left-click on a different part of the
             table either inside or outside the grid accepts the edit
@@ -310,11 +331,11 @@ RMB       - selects a cell and opens the cell context (Note that if editing a
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a
 col or row; instead, Shift-clicking on a colhead or rowhead always selects the
-cells in that col or row, and will select a range of cols or rows if there is
-already another selected col or row. Pressing Ctrl, or Ctrl+Shift, when clicking
-a colhead or rowhead lends yet more permutations. But it's really not that
-complicated: just start clicking with or without Ctrl and Shift ... technically
-you're dealing with three items: cells, rows, and cols.
+cells in that col or row, and will subselect a range of rows if there is already
+another selected row. Pressing Ctrl, or Ctrl+Shift, when clicking a colhead or
+rowhead lends yet more permutations. But it's really not that complicated: just
+start clicking with or without Ctrl and Shift ... technically you're dealing
+with three items: cells, rows, and cols.
 
 OPERATIONS THAT REFORMAT LARGE TABLES (tens of thousands of Rows) TAKE TIME.
 Example: loading or changing the table-font of Placeables.2da with ~25,000 rows
