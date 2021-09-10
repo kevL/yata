@@ -1934,16 +1934,7 @@ namespace yata
 							{
 								if (ctr)
 								{
-									Rows[selr].selected = false;
-
-									selr = 0;
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
-
+									selr = row_SelectRow(selr, 0);
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								}
 								else if (_visHori) _scrollHori.Value = 0;
@@ -2050,16 +2041,7 @@ namespace yata
 							{
 								if (ctr)
 								{
-									Rows[selr].selected = false;
-
-									selr = RowCount - 1;
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
-
+									selr = row_SelectRow(selr, RowCount - 1);
 									invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								}
 								else if (_visHori) _scrollHori.Value = MaxHori;
@@ -2166,19 +2148,13 @@ namespace yata
 							{
 								if (!sft)
 								{
-									Rows[selr].selected = false;
-
-									if (selr != 0)
+									int r = selr;
+									if (r != 0)
 									{
 										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-										if ((selr -= shift) < 0) selr = 0;
+										if ((r -= shift) < 0) r = 0;
 									}
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
+									selr = row_SelectRow(selr, r);
 								}
 								else
 								{
@@ -2334,19 +2310,13 @@ namespace yata
 							{
 								if (!sft)
 								{
-									Rows[selr].selected = false;
-
-									if (selr != RowCount - 1)
+									int r = selr;
+									if (r != RowCount - 1)
 									{
 										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
-										if ((selr += shift) > RowCount - 1) selr = RowCount - 1;
+										if ((r += shift) > RowCount - 1) r = RowCount - 1;
 									}
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
+									selr = row_SelectRow(selr, r);
 								}
 								else
 								{
@@ -2502,15 +2472,7 @@ namespace yata
 							{
 								if (!sft)
 								{
-									Rows[selr].selected = false;
-
-									if (selr != 0) --selr;
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
+									selr = row_SelectRow(selr, Math.Max(0, selr - 1));
 								}
 								else
 								{
@@ -2638,15 +2600,7 @@ namespace yata
 							{
 								if (!sft)
 								{
-									Rows[selr].selected = false;
-
-									if (selr != RowCount - 1) ++selr;
-
-									ClearCellSelects(true);
-									SelectRow(selr);
-
-									if (FrozenCount < ColCount)
-										_anchorcell = this[selr, FrozenCount];
+									selr = row_SelectRow(selr, Math.Min(RowCount - 1, selr + 1));
 								}
 								else
 								{
