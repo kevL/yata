@@ -51,9 +51,9 @@ namespace yata
 		readonly PropertyPanelButton btn_Propanel = new PropertyPanelButton();
 
 		/// <summary>
-		/// The <c><see cref="ClipboardF"/></c> dialog/editor.
+		/// The <c><see cref="ClipboardEditor"/></c> dialog/editor.
 		/// </summary>
-		ClipboardF _fclip;
+		ClipboardEditor _fclip;
 
 		/// <summary>
 		/// A 2d-array of <c>strings</c> used for copy/paste cell.
@@ -3228,7 +3228,7 @@ namespace yata
 			if (_fclip == null)
 			{
 				it_OpenClipEditor.Checked = true;
-				_fclip = new ClipboardF(this);
+				_fclip = new ClipboardEditor(this);
 				_fclip.Show(this); // will be disposed auto.
 			}
 			else

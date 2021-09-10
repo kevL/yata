@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ClipboardF
+	sealed partial class ClipboardEditor
 	{
 		RichTextBox rtb_Clip;
 		Panel panel1;
@@ -89,7 +89,7 @@ namespace yata
 			this.btn_Get.UseVisualStyleBackColor = true;
 			this.btn_Get.Click += new System.EventHandler(this.click_Get);
 			// 
-			// ClipboardF
+			// ClipboardEditor
 			// 
 			this.CancelButton = this.btn_Done;
 			this.ClientSize = new System.Drawing.Size(542, 124);
@@ -98,7 +98,7 @@ namespace yata
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(250, 0);
-			this.Name = "ClipboardF";
+			this.Name = "ClipboardEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
 			this.panel1.ResumeLayout(false);

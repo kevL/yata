@@ -66,9 +66,9 @@
     <Compile Include="Controls\YataPanels.cs" />
     <Compile Include="Controls\YataTabs.cs" />
     <Compile Include="Dialogs\About.cs" />
-    <Compile Include="Dialogs\ClipboardF.cs" />
-    <Compile Include="Dialogs\ClipboardF.Designer.cs">
-      <DependentUpon>ClipboardF.cs</DependentUpon>
+    <Compile Include="Dialogs\ClipboardEditor.cs" />
+    <Compile Include="Dialogs\ClipboardEditor.Designer.cs">
+      <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\CodePageDialog.cs" />
     <Compile Include="Dialogs\CodePageList.cs" />
@@ -130,8 +130,8 @@
     <EmbeddedResource Include="Dialogs\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ClipboardF.resx">
-      <DependentUpon>ClipboardF.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\ClipboardEditor.resx">
+      <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\CodePageDialog.resx">
       <DependentUpon>CodePageDialog.cs</DependentUpon>

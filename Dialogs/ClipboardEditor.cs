@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ClipboardF
+	sealed partial class ClipboardEditor
 		: Form
 	{
 		#region Fields (static)
@@ -24,7 +24,7 @@ namespace yata
 		/// <summary>
 		/// cTor. Instantiates Yata's clipboard dialog.
 		/// </summary>
-		internal ClipboardF(YataForm f)
+		internal ClipboardEditor(YataForm f)
 		{
 			InitializeComponent();
 
@@ -116,7 +116,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Closes this <c>ClipboardF</c> on [F11].
+		/// Closes this <c>ClipboardEditor</c> on [F11].
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
@@ -127,7 +127,6 @@ namespace yata
 				e.Handled = e.SuppressKeyPress = true;
 				Close();
 			}
-			base.OnKeyDown(e);
 		}
 		#endregion Events (override)
 
