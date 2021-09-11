@@ -6,6 +6,27 @@ namespace yata
 	sealed partial class YataGrid
 	{
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="selr"></param>
+		/// <param name="range"></param>
+		/// <param name="strt_r"></param>
+		/// <param name="stop_r"></param>
+		void asStartStop(int selr, int range, out int strt_r, out int stop_r)
+		{
+			if (range < 0)
+			{
+				strt_r = selr + RangeSelect;
+				stop_r = selr;
+			}
+			else
+			{
+				strt_r = selr;
+				stop_r = selr + RangeSelect;
+			}
+		}
+
+		/// <summary>
 		/// Gets the sync-table of this <c>YataGrid</c>.
 		/// </summary>
 		/// <returns><c>null</c> if there is no valid sync-table</returns>

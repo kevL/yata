@@ -2133,17 +2133,7 @@ namespace yata
 									else                  RangeSelect = range;
 
 									int strt_r, stop_r;
-									if (RangeSelect < 0)
-									{
-										strt_r = selr + RangeSelect;
-										stop_r = selr;
-									}
-									else
-									{
-										strt_r = selr;
-										stop_r = selr + RangeSelect;
-									}
-
+									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
 									row_RangeSelect(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2153,17 +2143,7 @@ namespace yata
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
 												table.RangeSelect = table.RowCount - selr - 1;
 
-											if (table.RangeSelect < 0)
-											{
-												strt_r = selr + table.RangeSelect;
-												stop_r = selr;
-											}
-											else
-											{
-												strt_r = selr;
-												stop_r = selr + table.RangeSelect;
-											}
-
+											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
 										}
 										else
@@ -2280,17 +2260,7 @@ namespace yata
 									else                          RangeSelect = range;
 
 									int strt_r, stop_r;
-									if (RangeSelect < 0)
-									{
-										strt_r = selr + RangeSelect;
-										stop_r = selr;
-									}
-									else
-									{
-										strt_r = selr;
-										stop_r = selr + RangeSelect;
-									}
-
+									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
 									row_RangeSelect(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2300,17 +2270,7 @@ namespace yata
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
 												table.RangeSelect = table.RowCount - selr - 1;
 
-											if (table.RangeSelect < 0)
-											{
-												strt_r = selr + table.RangeSelect;
-												stop_r = selr;
-											}
-											else
-											{
-												strt_r = selr;
-												stop_r = selr + table.RangeSelect;
-											}
-
+											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
 										}
 										else
@@ -2417,17 +2377,7 @@ namespace yata
 									if (selr + RangeSelect != 0) --RangeSelect;
 
 									int strt_r, stop_r;
-									if (RangeSelect < 0)
-									{
-										strt_r = selr + RangeSelect;
-										stop_r = selr;
-									}
-									else
-									{
-										strt_r = selr;
-										stop_r = selr + RangeSelect;
-									}
-
+									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
 									row_RangeSelect(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2437,17 +2387,7 @@ namespace yata
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
 												table.RangeSelect = table.RowCount - selr - 1;
 
-											if (table.RangeSelect < 0)
-											{
-												strt_r = selr + table.RangeSelect;
-												stop_r = selr;
-											}
-											else
-											{
-												strt_r = selr;
-												stop_r = selr + table.RangeSelect;
-											}
-
+											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
 										}
 										else
@@ -2530,17 +2470,7 @@ namespace yata
 									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
 
 									int strt_r, stop_r;
-									if (RangeSelect < 0)
-									{
-										strt_r = selr + RangeSelect;
-										stop_r = selr;
-									}
-									else
-									{
-										strt_r = selr;
-										stop_r = selr + RangeSelect;
-									}
-
+									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
 									row_RangeSelect(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2550,17 +2480,7 @@ namespace yata
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
 												table.RangeSelect = table.RowCount - selr - 1;
 
-											if (table.RangeSelect < 0)
-											{
-												strt_r = selr + table.RangeSelect;
-												stop_r = selr;
-											}
-											else
-											{
-												strt_r = selr;
-												stop_r = selr + table.RangeSelect;
-											}
-
+											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
 										}
 										else
