@@ -6,12 +6,25 @@ namespace yata
 	sealed partial class YataGrid
 	{
 		/// <summary>
-		/// 
+		/// Sets this <c>YataGrid's</c> <c><see cref="RangeSelect"/></c> and
+		/// ensures that it does not exceed <c><see cref="RowCount"/></c>.
 		/// </summary>
-		/// <param name="selr"></param>
-		/// <param name="range"></param>
-		/// <param name="strt_r"></param>
-		/// <param name="stop_r"></param>
+		/// <param name="selr">the currently selected row-id</param>
+		/// <param name="range">the range of row-ids to select (+/-)</param>
+		/// <remarks>Used for a sync-table.</remarks>
+		void setRangeSelect(int selr, int range)
+		{
+			if (selr + (RangeSelect = range) >= RowCount)
+				RangeSelect = RowCount - selr - 1;
+		}
+
+		/// <summary>
+		/// Assigns row-id start/stop values.
+		/// </summary>
+		/// <param name="selr">the currently selected row-id</param>
+		/// <param name="range">the range of row-ids to select (+/-)</param>
+		/// <param name="strt_r">ref to start row-id</param>
+		/// <param name="stop_r">ref to stop row-id</param>
 		void asStartStop(int selr, int range, out int strt_r, out int stop_r)
 		{
 			if (range < 0)
@@ -60,8 +73,8 @@ namespace yata
 		/// <summary>
 		/// Subselects a range of <c><see cref="Row">Rows</see></c>.
 		/// </summary>
-		/// <param name="strt_r"></param>
-		/// <param name="stop_r"></param>
+		/// <param name="strt_r">start row-id</param>
+		/// <param name="stop_r">stop row-id</param>
 		void row_RangeSelect(int strt_r, int stop_r)
 		{
 			ClearCellSelects(true);

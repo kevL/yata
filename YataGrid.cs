@@ -1943,15 +1943,15 @@ namespace yata
 							}
 							else if (!ctr)
 							{
-								row_RangeSelect(0, selr);
 								RangeSelect = -selr;
+								row_RangeSelect(0, selr);
 
 								if ((table = getSynctable()) != null)
 								{
 									if (selr < table.RowCount)
 									{
-										table.row_RangeSelect(0, selr);
 										table.RangeSelect = -selr;
+										table.row_RangeSelect(0, selr);
 									}
 									else
 										table.RangeSelect = 0;
@@ -2033,15 +2033,15 @@ namespace yata
 							}
 							else if (!ctr)
 							{
-								row_RangeSelect(selr, RowCount - 1);
 								RangeSelect = RowCount - selr - 1;
+								row_RangeSelect(selr, RowCount - 1);
 
 								if ((table = getSynctable()) != null)
 								{
 									if (selr < table.RowCount)
 									{
-										table.row_RangeSelect(selr, table.RowCount - 1);
 										table.RangeSelect = table.RowCount - selr - 1;
+										table.row_RangeSelect(selr, table.RowCount - 1);
 									}
 									else
 										table.RangeSelect = 0;
@@ -2140,8 +2140,7 @@ namespace yata
 									{
 										if (selr < table.RowCount)
 										{
-											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
-												table.RangeSelect = table.RowCount - selr - 1;
+											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
@@ -2267,8 +2266,7 @@ namespace yata
 									{
 										if (selr < table.RowCount)
 										{
-											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
-												table.RangeSelect = table.RowCount - selr - 1;
+											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
@@ -2384,8 +2382,7 @@ namespace yata
 									{
 										if (selr < table.RowCount)
 										{
-											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
-												table.RangeSelect = table.RowCount - selr - 1;
+											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
@@ -2477,8 +2474,7 @@ namespace yata
 									{
 										if (selr < table.RowCount)
 										{
-											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
-												table.RangeSelect = table.RowCount - selr - 1;
+											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
 											table.row_RangeSelect(strt_r, stop_r);
