@@ -1925,6 +1925,8 @@ namespace yata
 
 				// TODO: change selected col perhaps
 
+				YataGrid table; // sync-table
+
 				switch (e.KeyCode)
 				{
 					case Keys.Home:
@@ -1941,35 +1943,18 @@ namespace yata
 							}
 							else if (!ctr)
 							{
+								row_RangeSelect(0, selr);
 								RangeSelect = -selr;
 
-								ClearCellSelects(true);
-
-								for (int r = 0; r <= selr;     ++r)
-								for (int c = 0; c != ColCount; ++c)
+								if ((table = getSynctable()) != null)
 								{
-									this[r,c].selected = true;
-								}
-
-								YataGrid table;
-								if      (this == _f._diff1) table = _f._diff2;
-								else if (this == _f._diff2) table = _f._diff1;
-								else                        table = null;
-
-								if (table != null)
-								{
-									table.ClearCellSelects(true);
-
 									if (selr < table.RowCount)
 									{
+										table.row_RangeSelect(0, selr);
 										table.RangeSelect = -selr;
-
-										for (int r = 0; r <= selr;           ++r)
-										for (int c = 0; c != table.ColCount; ++c)
-										{
-											table[r,c].selected = true;
-										}
 									}
+									else
+										table.RangeSelect = 0;
 								}
 								selr = 0;
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2048,35 +2033,18 @@ namespace yata
 							}
 							else if (!ctr)
 							{
+								row_RangeSelect(selr, RowCount - 1);
 								RangeSelect = RowCount - selr - 1;
 
-								ClearCellSelects(true);
-
-								for (int r = selr; r != RowCount; ++r)
-								for (int c = 0;    c != ColCount; ++c)
+								if ((table = getSynctable()) != null)
 								{
-									this[r,c].selected = true;
-								}
-
-								YataGrid table;
-								if      (this == _f._diff1) table = _f._diff2;
-								else if (this == _f._diff2) table = _f._diff1;
-								else                        table = null;
-
-								if (table != null)
-								{
-									table.ClearCellSelects(true);
-
 									if (selr < table.RowCount)
 									{
+										table.row_RangeSelect(selr, table.RowCount - 1);
 										table.RangeSelect = table.RowCount - selr - 1;
-
-										for (int r = selr; r != table.RowCount; ++r)
-										for (int c = 0;    c != table.ColCount; ++c)
-										{
-											table[r,c].selected = true;
-										}
 									}
+									else
+										table.RangeSelect = 0;
 								}
 								selr = RowCount - 1;
 								invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -2164,8 +2132,6 @@ namespace yata
 									if (selr + range < 0) RangeSelect = 0 - selr;
 									else                  RangeSelect = range;
 
-									ClearCellSelects(true);
-
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
 									{
@@ -2178,21 +2144,10 @@ namespace yata
 										stop_r = selr + RangeSelect;
 									}
 
-									for (int r = strt_r; r <= stop_r;   ++r)
-									for (int c = 0;      c != ColCount; ++c)
+									row_RangeSelect(strt_r, stop_r);
+
+									if ((table = getSynctable()) != null)
 									{
-										this[r,c].selected = true;
-									}
-
-									YataGrid table;
-									if      (this == _f._diff1) table = _f._diff2;
-									else if (this == _f._diff2) table = _f._diff1;
-									else                        table = null;
-
-									if (table != null)
-									{
-										table.ClearCellSelects(true);
-
 										if (selr < table.RowCount)
 										{
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
@@ -2209,12 +2164,10 @@ namespace yata
 												stop_r = selr + table.RangeSelect;
 											}
 
-											for (int r = strt_r; r <= stop_r;         ++r)
-											for (int c = 0;      c != table.ColCount; ++c)
-											{
-												table[r,c].selected = true;
-											}
+											table.row_RangeSelect(strt_r, stop_r);
 										}
+										else
+											table.RangeSelect = 0;
 									}
 									selr += RangeSelect;
 								}
@@ -2326,8 +2279,6 @@ namespace yata
 									if (selr + range >= RowCount) RangeSelect = RowCount - selr - 1;
 									else                          RangeSelect = range;
 
-									ClearCellSelects(true);
-
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
 									{
@@ -2340,21 +2291,10 @@ namespace yata
 										stop_r = selr + RangeSelect;
 									}
 
-									for (int r = strt_r; r <= stop_r;   ++r)
-									for (int c = 0;      c != ColCount; ++c)
+									row_RangeSelect(strt_r, stop_r);
+
+									if ((table = getSynctable()) != null)
 									{
-										this[r,c].selected = true;
-									}
-
-									YataGrid table;
-									if      (this == _f._diff1) table = _f._diff2;
-									else if (this == _f._diff2) table = _f._diff1;
-									else                        table = null;
-
-									if (table != null)
-									{
-										table.ClearCellSelects(true);
-
 										if (selr < table.RowCount)
 										{
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
@@ -2371,12 +2311,10 @@ namespace yata
 												stop_r = selr + table.RangeSelect;
 											}
 
-											for (int r = strt_r; r <= stop_r;         ++r)
-											for (int c = 0;      c != table.ColCount; ++c)
-											{
-												table[r,c].selected = true;
-											}
+											table.row_RangeSelect(strt_r, stop_r);
 										}
+										else
+											table.RangeSelect = 0;
 									}
 									selr += RangeSelect;
 								}
@@ -2478,8 +2416,6 @@ namespace yata
 								{
 									if (selr + RangeSelect != 0) --RangeSelect;
 
-									ClearCellSelects(true);
-
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
 									{
@@ -2492,21 +2428,10 @@ namespace yata
 										stop_r = selr + RangeSelect;
 									}
 
-									for (int r = strt_r; r <= stop_r;   ++r)
-									for (int c = 0;      c != ColCount; ++c)
+									row_RangeSelect(strt_r, stop_r);
+
+									if ((table = getSynctable()) != null)
 									{
-										this[r,c].selected = true;
-									}
-
-									YataGrid table;
-									if      (this == _f._diff1) table = _f._diff2;
-									else if (this == _f._diff2) table = _f._diff1;
-									else                        table = null;
-
-									if (table != null)
-									{
-										table.ClearCellSelects(true);
-
 										if (selr < table.RowCount)
 										{
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
@@ -2523,12 +2448,10 @@ namespace yata
 												stop_r = selr + table.RangeSelect;
 											}
 
-											for (int r = strt_r; r <= stop_r;         ++r)
-											for (int c = 0;      c != table.ColCount; ++c)
-											{
-												table[r,c].selected = true;
-											}
+											table.row_RangeSelect(strt_r, stop_r);
 										}
+										else
+											table.RangeSelect = 0;
 									}
 									selr += RangeSelect;
 								}
@@ -2606,8 +2529,6 @@ namespace yata
 								{
 									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
 
-									ClearCellSelects(true);
-
 									int strt_r, stop_r;
 									if (RangeSelect < 0)
 									{
@@ -2620,21 +2541,10 @@ namespace yata
 										stop_r = selr + RangeSelect;
 									}
 
-									for (int r = strt_r; r <= stop_r;   ++r)
-									for (int c = 0;      c != ColCount; ++c)
+									row_RangeSelect(strt_r, stop_r);
+
+									if ((table = getSynctable()) != null)
 									{
-										this[r,c].selected = true;
-									}
-
-									YataGrid table;
-									if      (this == _f._diff1) table = _f._diff2;
-									else if (this == _f._diff2) table = _f._diff1;
-									else                        table = null;
-
-									if (table != null)
-									{
-										table.ClearCellSelects(true);
-
 										if (selr < table.RowCount)
 										{
 											if (selr + (table.RangeSelect = RangeSelect) >= table.RowCount)
@@ -2651,12 +2561,10 @@ namespace yata
 												stop_r = selr + table.RangeSelect;
 											}
 
-											for (int r = strt_r; r <= stop_r;         ++r)
-											for (int c = 0;      c != table.ColCount; ++c)
-											{
-												table[r,c].selected = true;
-											}
+											table.row_RangeSelect(strt_r, stop_r);
 										}
+										else
+											table.RangeSelect = 0;
 									}
 									selr += RangeSelect;
 								}
@@ -4369,9 +4277,9 @@ namespace yata
 			if (sel != null)
 				return EnsureDisplayed(sel);
 
-			int r = getSelectedRow();
-			if (r != -1)
-				return EnsureDisplayedRow(r);
+			int selr = getSelectedRow();
+			if (selr != -1)
+				return EnsureDisplayedRow(selr);
 
 			return INVALID_NONE;
 		}
@@ -4455,15 +4363,15 @@ namespace yata
 		/// <c>YataGrid</c></param>
 		internal void doGoto(string text, bool selectTable)
 		{
-			int r;
-			if (Int32.TryParse(text, out r)
-				&& r > -1 && r < RowCount)
+			int selr;
+			if (Int32.TryParse(text, out selr)
+				&& selr > -1 && selr < RowCount)
 			{
 				_editor.Visible = false;
 				ClearSelects();
 
-				SelectRow(r);
-				EnsureDisplayedRow(r);
+				SelectRow(selr);
+				EnsureDisplayedRow(selr);
 
 				int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 				if (Propanel != null && Propanel.Visible)
@@ -4491,8 +4399,8 @@ namespace yata
 			{
 				Select();
 
-				int row = (e.Y + offsetVert) / HeightRow;
-				if (row < RowCount)
+				int click_r = (e.Y + offsetVert) / HeightRow;
+				if (click_r < RowCount)
 				{
 					switch (e.Button)
 					{
@@ -4520,7 +4428,7 @@ namespace yata
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
-									if (r != row && c != selc
+									if (r != click_r && c != selc
 										&& (cell = this[r,c]).selected)
 									{
 										cell.selected = false;
@@ -4533,7 +4441,7 @@ namespace yata
 									for (int r = 0; r != table.RowCount; ++r)
 									for (int c = 0; c != table.ColCount; ++c)
 									{
-										if (r != row && c != selcsync)
+										if (r != click_r && c != selcsync)
 											table[r,c].selected = false;
 									}
 								}
@@ -4548,19 +4456,19 @@ namespace yata
 
 							if ((ModifierKeys & Keys.Shift) == 0) // select only the clicked row ->
 							{
-								if (selr != -1 && selr != row) // clear any other selected row ->
+								if (selr != -1 && selr != click_r) // clear any other selected row ->
 									Rows[selr].selected = false;
 
 								if (table != null)
 								{
 									int selrsync = table.getSelectedRow();
-									if (selrsync != -1 && selrsync != row)
+									if (selrsync != -1 && selrsync != click_r)
 										table.Rows[selrsync].selected = false;
 								}
 
 
 								bool allcellsselected = true;
-								foreach (var cell in Rows[row]._cells)
+								foreach (var cell in Rows[click_r]._cells)
 								if (!cell.selected)
 								{
 									allcellsselected = false;
@@ -4571,25 +4479,25 @@ namespace yata
 								// (a) it is not currently selected
 								// (b) or not all cells in the clicked row are currently selected
 								// (c) or cells not in the clicked row got deselected above
-								bool @select = !Rows[row].selected || !allcellsselected || celldeselected;
+								bool @select = !Rows[click_r].selected || !allcellsselected || celldeselected;
 
-								if ((Rows[row].selected = @select) && FrozenCount < ColCount)
-									_anchorcell = this[row, FrozenCount];
+								if ((Rows[click_r].selected = @select) && FrozenCount < ColCount)
+									_anchorcell = this[click_r, FrozenCount];
 
 								for (int c = 0; c != ColCount; ++c) // select or deselect cells in the clicked row ->
 								{
 									if (@select || c != selc)
-										this[row,c].selected = @select;
+										this[click_r,c].selected = @select;
 								}
 
-								if (table != null && row < table.RowCount) // select or deselect cells in a sync-table's row ->
+								if (table != null && click_r < table.RowCount) // select or deselect cells in a sync-table's row ->
 								{
-									table.Rows[row].selected = @select;
+									table.Rows[click_r].selected = @select;
 
 									for (int c = 0; c != table.ColCount; ++c)
 									{
 										if (@select || c != selcsync)
-											table[row,c].selected = @select;
+											table[click_r,c].selected = @select;
 									}
 								}
 
@@ -4597,7 +4505,7 @@ namespace yata
 							}
 							else if (selr != -1) // subselect a range of rows ->
 							{
-								RangeSelect = row - selr;
+								RangeSelect = click_r - selr;
 								if (RangeSelect != 0)
 								{
 									display = true;
@@ -4605,11 +4513,11 @@ namespace yata
 									int start, stop;
 									if (RangeSelect > 0)
 									{
-										start = selr; stop = row;
+										start = selr; stop = click_r;
 									}
 									else
 									{
-										start = row; stop = selr;
+										start = click_r; stop = selr;
 									}
 
 									for (int r = start; r <= stop; ++r) // select subselected rows' cells ->
@@ -4631,7 +4539,7 @@ namespace yata
 
 							Row._bypassEnableRowedit = false;
 
-							if (display) EnsureDisplayedRow(row);
+							if (display) EnsureDisplayedRow(click_r);
 
 							int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 							if (Propanel != null && Propanel.Visible)
@@ -4649,8 +4557,8 @@ namespace yata
 							{
 								ClearSelects();
 
-								SelectRow(row);
-								EnsureDisplayedRow(row);
+								SelectRow(click_r);
+								EnsureDisplayedRow(click_r);
 
 								int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 								if (Propanel != null && Propanel.Visible)
@@ -4658,7 +4566,7 @@ namespace yata
 
 								Invalidator(invalid);
 
-								_f.ShowRowContext(row);
+								_f.ShowRowContext(click_r);
 							}
 							break;
 					}
@@ -4732,11 +4640,11 @@ namespace yata
 			{
 				Select();
 
-				int col;
+				int click_c;
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
-						if ((col = getClickedCol(e.X)) != -1)
+						if ((click_c = getClickedCol(e.X)) != -1)
 						{
 							// get the sync-table if one exists
 							YataGrid table;
@@ -4760,7 +4668,7 @@ namespace yata
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
-									if (c != col
+									if (c != click_c
 										&& (   (r > selr && r > selr + RangeSelect)
 											|| (r < selr && r < selr + RangeSelect))
 										&& (cell = this[r,c]).selected)
@@ -4775,7 +4683,7 @@ namespace yata
 									for (int r = 0; r != table.RowCount; ++r)
 									for (int c = 0; c != table.ColCount; ++c)
 									{
-										if (c != col
+										if (c != click_c
 											&& (   (r > selrsync && r > selrsync + table.RangeSelect)
 												|| (r < selrsync && r < selrsync + table.RangeSelect)))
 										{
@@ -4792,20 +4700,20 @@ namespace yata
 
 							if ((ModifierKeys & Keys.Shift) == 0)
 							{
-								if (selc != -1 && selc != col) // clear any other selected col ->
+								if (selc != -1 && selc != click_c) // clear any other selected col ->
 									Cols[selc].selected = false;
 
 								if (table != null)
 								{
 									int selcsync = table.getSelectedCol();
-									if (selcsync != -1 && selcsync != col)
+									if (selcsync != -1 && selcsync != click_c)
 										table.Cols[selcsync].selected = false;
 								}
 
 
 								bool allcellsselected = true;
 								foreach (var row in Rows)
-								if (!row[col].selected)
+								if (!row[click_c].selected)
 								{
 									allcellsselected = false;
 									break;
@@ -4815,10 +4723,10 @@ namespace yata
 								// (a) it is not currently selected
 								// (b) or not all cells in the clicked col are currently selected
 								// (c) or cells not in the clicked col got deselected above
-								bool @select = !Cols[col].selected || !allcellsselected || celldeselected;
+								bool @select = !Cols[click_c].selected || !allcellsselected || celldeselected;
 
-								if (Cols[col].selected = @select)
-									_anchorcell = this[0, col];
+								if (Cols[click_c].selected = @select)
+									_anchorcell = this[0, click_c];
 
 								for (int r = 0; r != RowCount; ++r) // select or deselect cells in the clicked col ->
 								{
@@ -4826,13 +4734,13 @@ namespace yata
 										|| (r > selr && r > selr + RangeSelect)
 										|| (r < selr && r < selr + RangeSelect))
 									{
-										this[r,col].selected = @select;
+										this[r,click_c].selected = @select;
 									}
 								}
 
-								if (table != null && col < table.ColCount) // select or deselect cells in a sync-table's col ->
+								if (table != null && click_c < table.ColCount) // select or deselect cells in a sync-table's col ->
 								{
-									table.Cols[col].selected = @select;
+									table.Cols[click_c].selected = @select;
 
 									for (int r = 0; r != table.RowCount; ++r)
 									{
@@ -4840,7 +4748,7 @@ namespace yata
 											|| (r > selrsync && r > selrsync + table.RangeSelect)
 											|| (r < selrsync && r < selrsync + table.RangeSelect))
 										{
-											table[r,col].selected = @select;
+											table[r,click_c].selected = @select;
 										}
 									}
 								}
@@ -4849,7 +4757,7 @@ namespace yata
 							}
 							else if (selc != -1) // subselect a range of cols ->
 							{
-								int delta = col - selc;
+								int delta = click_c - selc;
 								if (delta != 0)
 								{
 									display = true;
@@ -4857,11 +4765,11 @@ namespace yata
 									int start, stop;
 									if (delta > 0)
 									{
-										start = selc; stop = col;
+										start = selc; stop = click_c;
 									}
 									else
 									{
-										start = col; stop = selc;
+										start = click_c; stop = selc;
 									}
 
 									for (int r = 0; r != RowCount; ++r) // select range-selected cols' cells ->
@@ -4882,7 +4790,7 @@ namespace yata
 							}
 
 
-							if (display) EnsureDisplayedCol(col);
+							if (display) EnsureDisplayedCol(click_c);
 
 //							invalid |= INVALID_FROZ;					// <- doesn't seem to be needed.
 //							if (Propanel != null && Propanel.Visible)
@@ -4897,10 +4805,10 @@ namespace yata
 					case MouseButtons.Right:
 						if (ModifierKeys == Keys.Shift) // sort by col ->
 						{
-							if ((col = getClickedCol(e.X)) != -1)
+							if ((click_c = getClickedCol(e.X)) != -1)
 							{
-								ColSort(col);
-								EnsureDisplayedCol(col);
+								ColSort(click_c);
+								EnsureDisplayedCol(click_c);
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
 										  | INVALID_COLS
@@ -5036,13 +4944,13 @@ namespace yata
 		/// <summary>
 		/// Inserts a row into the table.
 		/// </summary>
-		/// <param name="id">row-id to insert at</param>
+		/// <param name="rowid">row-id to insert at</param>
 		/// <param name="fields">an array of fields</param>
 		/// <param name="calibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
 		/// <param name="brush">a <c>Brush</c> to use for Undo/Redo</param>
-		internal void Insert(int      id,
+		internal void Insert(int      rowid,
 							 string[] fields,
 							 bool     calibrate = true,
 							 Brush    brush     = null)
@@ -5055,7 +4963,7 @@ namespace yata
 				if (brush == null)
 					brush = Brushes.Created;
 
-				var row = new Row(id, ColCount, brush, this);
+				var row = new Row(rowid, ColCount, brush, this);
 
 				string field;
 				for (int c = 0; c != ColCount; ++c)
@@ -5065,13 +4973,13 @@ namespace yata
 					else
 						field = gs.Stars;
 
-					row[c] = new Cell(id, c, field);
+					row[c] = new Cell(rowid, c, field);
 				}
 
-				Rows.Insert(id, row);
+				Rows.Insert(rowid, row);
 				++RowCount;
 
-				for (int r = id + 1; r != RowCount; ++r) // straighten out row._id and cell.y ->
+				for (int r = rowid + 1; r != RowCount; ++r) // straighten out row._id and cell.y ->
 				{
 					++(row = Rows[r])._id;
 					for (int c = 0; c != ColCount; ++c)
@@ -5081,10 +4989,10 @@ namespace yata
 
 			if (calibrate) // is only 1 row (no range) via context single-row edit
 			{
-				Calibrate(id);
+				Calibrate(rowid);
 
-				if (id < RowCount)
-					EnsureDisplayedRow(id);
+				if (rowid < RowCount)
+					EnsureDisplayedRow(rowid);
 
 				DrawingControl.ResumeDrawing(this);
 			}
@@ -5093,21 +5001,21 @@ namespace yata
 		/// <summary>
 		/// Deletes a row from the table.
 		/// </summary>
-		/// <param name="id">row-id to delete</param>
+		/// <param name="rowid">row-id to delete</param>
 		/// <param name="calibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
-		internal void Delete(int id, bool calibrate = true)
+		internal void Delete(int rowid, bool calibrate = true)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
 
 			Row row;
 
-			Rows.Remove(Rows[id]);
+			Rows.Remove(Rows[rowid]);
 			--RowCount;
 
-			for (int r = id; r != RowCount; ++r) // straighten out row._id and cell.y ->
+			for (int r = rowid; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
 				--(row = Rows[r])._id;
 				for (int c = 0; c != ColCount; ++c)
@@ -5118,9 +5026,9 @@ namespace yata
 			{
 				++RowCount;
 
-				row = new Row(id, ColCount, Brushes.Created, this);
+				row = new Row(rowid, ColCount, Brushes.Created, this);
 				for (int c = 0; c != ColCount; ++c)
-					row[c] = new Cell(id, c, gs.Stars);
+					row[c] = new Cell(rowid, c, gs.Stars);
 
 				Rows.Add(row);
 
@@ -5137,8 +5045,8 @@ namespace yata
 			{
 				Calibrate();
 
-				if (id < RowCount)
-					EnsureDisplayedRow(id);
+				if (rowid < RowCount)
+					EnsureDisplayedRow(rowid);
 
 				DrawingControl.ResumeDrawing(this);
 			}
