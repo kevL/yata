@@ -233,8 +233,9 @@ Shift+Right    - scrolls table right by visible width if no cell is selected
 
 - extended keyboard handling when only 1 cell is selected or if selected cells
   are in a contiguous block. These operations are based on an anchorcell ... the
-  primary methods of choosing an anchorcell is to click on a cell to select it
-  or press [Space] -
+  primary method of choosing an anchorcell is to click on a cell to select it or
+  press [Space]. Or when a row/col is selected the first cell in the row/col
+  replaces the current anchorcell -
 
 Shift+Left          - adjusts selection left
 Shift+Right         - adjusts selection right
@@ -250,8 +251,8 @@ Shift+Ctrl+PageDown - selects all cells below
 Shift+Home          - selects all cells left
 Shift+End           - selects all cells right
 
-Shift+Ctrl+Home     - selects all cells to the top-left cell
-Shift+Ctrl+End      - selects all cells to the bottom-right cell
+Shift+Ctrl+Home     - selects all cells to the first cell in the table
+Shift+Ctrl+End      - selects all cells to the last cell in the table
 
 
 Space - focuses the table and selects the first cell if no cells are currently
