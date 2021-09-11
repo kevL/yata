@@ -1944,14 +1944,14 @@ namespace yata
 							else if (!ctr)
 							{
 								RangeSelect = -selr;
-								row_RangeSelect(0, selr);
+								row_SelectRangeCells(0, selr);
 
 								if ((table = getSynctable()) != null)
 								{
 									if (selr < table.RowCount)
 									{
 										table.RangeSelect = -selr;
-										table.row_RangeSelect(0, selr);
+										table.row_SelectRangeCells(0, selr);
 									}
 									else
 										table.RangeSelect = 0;
@@ -2032,14 +2032,14 @@ namespace yata
 							else if (!ctr)
 							{
 								RangeSelect = RowCount - selr - 1;
-								row_RangeSelect(selr, RowCount - 1);
+								row_SelectRangeCells(selr, RowCount - 1);
 
 								if ((table = getSynctable()) != null)
 								{
 									if (selr < table.RowCount)
 									{
 										table.RangeSelect = table.RowCount - selr - 1;
-										table.row_RangeSelect(selr, table.RowCount - 1);
+										table.row_SelectRangeCells(selr, table.RowCount - 1);
 									}
 									else
 										table.RangeSelect = 0;
@@ -2130,7 +2130,7 @@ namespace yata
 
 									int strt_r, stop_r;
 									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
-									row_RangeSelect(strt_r, stop_r);
+									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
 									{
@@ -2139,7 +2139,7 @@ namespace yata
 											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
-											table.row_RangeSelect(strt_r, stop_r);
+											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
 											table.RangeSelect = 0;
@@ -2254,7 +2254,7 @@ namespace yata
 
 									int strt_r, stop_r;
 									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
-									row_RangeSelect(strt_r, stop_r);
+									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
 									{
@@ -2263,7 +2263,7 @@ namespace yata
 											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
-											table.row_RangeSelect(strt_r, stop_r);
+											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
 											table.RangeSelect = 0;
@@ -2368,7 +2368,7 @@ namespace yata
 
 									int strt_r, stop_r;
 									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
-									row_RangeSelect(strt_r, stop_r);
+									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
 									{
@@ -2377,7 +2377,7 @@ namespace yata
 											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
-											table.row_RangeSelect(strt_r, stop_r);
+											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
 											table.RangeSelect = 0;
@@ -2457,7 +2457,7 @@ namespace yata
 
 									int strt_r, stop_r;
 									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
-									row_RangeSelect(strt_r, stop_r);
+									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
 									{
@@ -2466,7 +2466,7 @@ namespace yata
 											table.setRangeSelect(selr, RangeSelect);
 
 											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
-											table.row_RangeSelect(strt_r, stop_r);
+											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
 											table.RangeSelect = 0;

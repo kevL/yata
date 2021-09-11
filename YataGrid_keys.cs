@@ -54,7 +54,7 @@ namespace yata
 		/// </summary>
 		/// <param name="strt_r">start row-id</param>
 		/// <param name="stop_r">stop row-id</param>
-		void row_RangeSelect(int strt_r, int stop_r)
+		void row_SelectRangeCells(int strt_r, int stop_r)
 		{
 			ClearCellSelects(true);
 
