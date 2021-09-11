@@ -1962,9 +1962,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (allowContiguous() && areSelectedCellsContiguous())
 							{
 								if (ctr)
 								{
@@ -2052,9 +2050,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (allowContiguous() && areSelectedCellsContiguous())
 							{
 								if (ctr)
 								{
@@ -2155,9 +2151,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (allowContiguous() && areSelectedCellsContiguous())
 							{
 								if (ctr)
 								{
@@ -2281,9 +2275,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (allowContiguous() && areSelectedCellsContiguous())
 							{
 								if (ctr)
 								{
@@ -2397,10 +2389,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (!ctr
-								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (!ctr && allowContiguous() && areSelectedCellsContiguous())
 							{
 								int sel_r = getAnchorRangedRowid() - 1;
 								if (sel_r >= 0)
@@ -2489,10 +2478,7 @@ namespace yata
 						}
 						else if (sft)
 						{
-							if (!ctr
-								&& this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-								&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-								&& areSelectedCellsContiguous())
+							if (!ctr && allowContiguous() && areSelectedCellsContiguous())
 							{
 								int sel_r = getAnchorRangedRowid() + 1;
 								if (sel_r < RowCount)
@@ -2577,8 +2563,7 @@ namespace yata
 
 								if (selr == -1 && areSelectedCellsContiguous())
 								{
-									if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-										&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null))
+									if (allowContiguous())
 									{
 										int sel_c = getAnchorRangedColid() - 1;
 										if (sel_c >= FrozenCount)
@@ -2661,8 +2646,7 @@ namespace yata
 
 								if (selr == -1 && areSelectedCellsContiguous())
 								{
-									if (this != _f._diff1 && this != _f._diff2 // don't allow multi-cell select if sync'd
-										&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null))
+									if (allowContiguous())
 									{
 										int sel_c = getAnchorRangedColid() + 1;
 										if (sel_c < ColCount)
