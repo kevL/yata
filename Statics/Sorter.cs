@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace yata
 {
+	/// <summary>
+	/// A static service that sorts the <c><see cref="Row">Rows</see></c> of a
+	/// <c><see cref="YataGrid"/></c> given a col-id and a sort-direction.
+	/// </summary>
 	static class Sorter
 	{
 		#region Fields (static)
@@ -45,8 +49,10 @@ namespace yata
 		/// to sort</param>
 		/// <param name="beg">the start row-id</param>
 		/// <param name="end">the stop row-Id</param>
-		/// <param name="insitu">the list of <c>Rows</c> that sorted items get
-		/// placed into</param>
+		/// <param name="insitu">the <c>List</c> of <c>Rows</c> that sorted
+		/// entries get placed into</param>
+		/// <remarks>Note that <paramref name="r"/> and
+		/// <paramref name="insitu"/> toggle back and forth.</remarks>
 		static void TopDownSplitMerge(IList<Row> r, int beg, int end, IList<Row> insitu)
 		{
 			if (end - beg >= 2)
@@ -63,13 +69,13 @@ namespace yata
 		/// <summary>
 		/// Shuffles through the <c>Lists</c> using spooky action at a distance.
 		/// </summary>
-		/// <param name="r">the list of <c><see cref="Row">Rows</see></c> to
-		/// examine</param>
+		/// <param name="r">a <c>List</c> of <c><see cref="Row">Rows</see></c>
+		/// to sort</param>
 		/// <param name="beg">row-id</param>
 		/// <param name="mid">row-id</param>
 		/// <param name="end">row-id</param>
-		/// <param name="insitu">the list of <c>Rows</c> that sorted items get
-		/// placed into</param>
+		/// <param name="insitu">the <c>List</c> of <c>Rows</c> that sorted
+		/// entries get placed into</param>
 		static void TopDownMerge(IList<Row> r, int beg, int mid, int end, IList<Row> insitu)
 		{
 			int i0 = beg, i1 = mid;
