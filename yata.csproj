@@ -106,6 +106,7 @@
     <Compile Include="Statics\Info.cs" />
     <Compile Include="Statics\logger.cs" />
     <Compile Include="Statics\Settings.cs" />
+    <Compile Include="Statics\Sorter.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataForm.cs" />
