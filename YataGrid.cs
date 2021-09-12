@@ -180,12 +180,12 @@ namespace yata
 		/// <summary>
 		/// The currently sorted col. Default is #0 "id" col.
 		/// </summary>
-		internal int _sortcol;
+		int _sortcol;
 
 		/// <summary>
 		/// The current sort direction. Default is sorted ascending.
 		/// </summary>
-		internal int _sortdir = SORT_ASC;
+		int _sortdir = SORT_ASC;
 
 		internal PropertyPanel Propanel;
 
