@@ -2038,8 +2038,8 @@ namespace yata
 								{
 									if (selr < table.RowCount)
 									{
-										table.RangeSelect = table.RowCount - selr - 1;
-										table.row_SelectRangeCells(selr, table.RowCount - 1);
+										table.setRangeSelect(selr, RangeSelect);
+										table.row_SelectRangeCells(selr, selr + table.RangeSelect);
 									}
 									else
 										table.RangeSelect = 0;
@@ -2129,7 +2129,7 @@ namespace yata
 									else                  RangeSelect = range;
 
 									int strt_r, stop_r;
-									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
+									asStartStop(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2138,7 +2138,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
+											table.asStartStop(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2253,7 +2253,7 @@ namespace yata
 									else                          RangeSelect = range;
 
 									int strt_r, stop_r;
-									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
+									asStartStop(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2262,7 +2262,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
+											table.asStartStop(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2367,7 +2367,7 @@ namespace yata
 									if (selr + RangeSelect != 0) --RangeSelect;
 
 									int strt_r, stop_r;
-									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
+									asStartStop(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2376,7 +2376,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
+											table.asStartStop(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2456,7 +2456,7 @@ namespace yata
 									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
 
 									int strt_r, stop_r;
-									asStartStop(selr, RangeSelect, out strt_r, out stop_r);
+									asStartStop(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2465,7 +2465,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											asStartStop(selr, table.RangeSelect, out strt_r, out stop_r);
+											table.asStartStop(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2739,126 +2739,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Assigns the start and stop row-ids that shall be used as a range of
-		/// <c><see cref="Row">Rows</see></c> that need to be selected during a
-		/// horizontal contiguous block selection.
-		/// </summary>
-		/// <param name="strt">ref that holds the start row-id</param>
-		/// <param name="stop">ref that holds the stop row-id</param>
-		/// <returns>the row-id of a <c><see cref="Cell"/></c> that shall be
-		/// displayed</returns>
-		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
-		/// contiguous block selection (horizontal).</remarks>
-		int asStartStop_row(out int strt, out int stop)
-		{
-			if (_f._copyvert == 1
-				|| _anchorcell.y == 0
-				|| !this[_anchorcell.y - 1, _anchorcell.x].selected)
-			{
-				strt = _anchorcell.y;
-				stop = _anchorcell.y + _f._copyvert - 1;
-
-				return stop;
-			}
-
-			strt = _anchorcell.y - _f._copyvert + 1;
-			stop = _anchorcell.y;
-
-			return strt;
-		}
-
-		/// <summary>
-		/// Assigns the start and stop col-ids that shall be used as a range of
-		/// <c><see cref="Col">Cols</see></c> that need to be selected during a
-		/// vertical contiguous block selection.
-		/// </summary>
-		/// <param name="strt">ref that holds the start col-id</param>
-		/// <param name="stop">ref that holds the stop col-id</param>
-		/// <returns>the col-id of a <c><see cref="Cell"/></c> that shall be
-		/// displayed</returns>
-		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
-		/// contiguous block selection (vertical).</remarks>
-		int asStartStop_col(out int strt, out int stop)
-		{
-			if (_f._copyhori == 1
-				|| _anchorcell.x == FrozenCount
-				|| !this[_anchorcell.y, _anchorcell.x - 1].selected)
-			{
-				strt = _anchorcell.x;
-				stop = _anchorcell.x + _f._copyhori - 1;
-
-				return stop;
-			}
-
-			strt = _anchorcell.x - _f._copyhori + 1;
-			stop = _anchorcell.x;
-
-			return strt;
-		}
-
-		/// <summary>
-		/// Gets the col-id with selected cell that is furthest away from the
-		/// current <c><see cref="_anchorcell">_anchorcell's</see></c>
-		/// <c><see cref="Col"/></c>. Can return the col-id of the
-		/// <c>_anchorcell</c> itself.
-		/// </summary>
-		/// <returns>col-id</returns>
-		int getAnchorRangedColid()
-		{
-			int col = _anchorcell.x;
-
-			for (int c = ColCount - 1; c >= _anchorcell.x; --c)
-			if (this[_anchorcell.y, c].selected)
-			{
-				col = c;
-				break;
-			}
-
-			if (col == _anchorcell.x)
-			{
-				for (int c = FrozenCount; c <= _anchorcell.x; ++c)
-				if (this[_anchorcell.y, c].selected)
-				{
-					col = c;
-					break;
-				}
-			}
-
-			return col;
-		}
-
-		/// <summary>
-		/// Gets the row-id with selected cell that is furthest away from the
-		/// current <c><see cref="_anchorcell">_anchorcell's</see></c>
-		/// <c><see cref="Row"/></c>. Can return the row-id of the
-		/// <c>_anchorcell</c> itself.
-		/// </summary>
-		/// <returns>row-id</returns>
-		int getAnchorRangedRowid()
-		{
-			int row = _anchorcell.y;
-
-			for (int r = RowCount - 1; r >= _anchorcell.y; --r)
-			if (this[r, _anchorcell.x].selected)
-			{
-				row = r;
-				break;
-			}
-
-			if (row == _anchorcell.y)
-			{
-				for (int r = 0; r <= _anchorcell.y; ++r)
-				if (this[r, _anchorcell.x].selected)
-				{
-					row = r;
-					break;
-				}
-			}
-
-			return row;
-		}
-
-		/// <summary>
 		/// Selects a specified row by Id and flags its cells selected.
 		/// </summary>
 		/// <param name="r">row-id</param>
@@ -2913,6 +2793,25 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
+		/// <c>null</c>.
+		/// </summary>
+		/// <param name="strt_c">start col-id usually either 0 (includes frozen
+		/// cols) or <c><see cref="FrozenCount"/></c></param>
+		/// <returns>the first <c>Cell</c> found</returns>
+		internal Cell getFirstSelectedCell(int strt_c = 0)
+		{
+			Cell sel;
+
+			foreach (var row in Rows)
+			for (int c = strt_c; c != ColCount; ++c)
+				if ((sel = row[c]).selected)
+					return sel;
+
+			return null;
+		}
+
+		/// <summary>
 		/// Focuses the table and selects only one of
 		/// <list type="bullet">
 		/// <item>the first <c><see cref="Cell"/></c> in table if no cell is
@@ -2929,7 +2828,7 @@ namespace yata
 		/// <c><see cref="YataForm"/>.OnKeyDown()</c> <c>[Space]</c>.</remarks>
 		internal void SelectFirstCell()
 		{
-			Select(); // focus table
+			Select();
 
 			Cell sel = getSelectedCell();
 			if (sel == null)
@@ -2984,22 +2883,32 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
-		/// <c>null</c>.
+		/// Focuses the table and clears all selects and
+		/// <list type="bullet">
+		/// <item>selects the first <c><see cref="Row"/></c> in table if no row
+		/// is selected</item>
+		/// <item>scrolls to the selected <c>Row</c> if a row is selected</item>
+		/// </list>
 		/// </summary>
-		/// <param name="strt_c">start col-id usually either 0 (includes frozen
-		/// cols) or <c><see cref="FrozenCount"/></c></param>
-		/// <returns>the first <c>Cell</c> found</returns>
-		internal Cell getFirstSelectedCell(int strt_c = 0)
+		/// <remarks>Called at the form-level by
+		/// <c><see cref="YataForm"/>.OnKeyDown()</c> <c>[Ctrl+Space]</c>.</remarks>
+		internal void SelectFirstRow()
 		{
-			Cell sel;
+			Select();
 
-			foreach (var row in Rows)
-			for (int c = strt_c; c != ColCount; ++c)
-				if ((sel = row[c]).selected)
-					return sel;
+			int selr = getSelectedRow();
+			if (selr == -1) selr = 0;
 
-			return null;
+			ClearSelects();
+
+			SelectRow(selr);
+			EnsureDisplayedRow(selr);
+
+			int invalid = YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS;
+			if (Propanel != null && Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			Invalidator(invalid);
 		}
 
 

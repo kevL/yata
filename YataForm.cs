@@ -614,6 +614,15 @@ namespace yata
 							Table.SelectFirstCell();
 						}
 						break;
+
+					case Keys.Control | Keys.Space:
+						if (!Table._editor.Visible
+							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
+						{
+							e.SuppressKeyPress = true;
+							Table.SelectFirstRow();
+						}
+						break;
 				}
 			}
 			base.OnKeyDown(e);

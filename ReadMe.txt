@@ -263,6 +263,10 @@ Space - focuses the table and selects the first cell if no cells are currently
         be invalid in which case the first selected cell shall be set as the
         anchorcell.
 
+Ctrl+Space - focuses the table, clears all selects, and either selects the first
+             row or if a row is already selected the table scrolls to ensure the
+             row is visible.
+
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field
        - if the tabcontrol is focused it switches focus to the table
