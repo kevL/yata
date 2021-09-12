@@ -228,6 +228,23 @@ namespace yata
 
 			return rowid;
 		}
+
+
+		/// <summary>
+		/// Selects <c><see cref="Cell">Cells</see> in a contiguous block.</c>
+		/// </summary>
+		/// <param name="strt_r">the start row-id</param>
+		/// <param name="stop_r">the stop row-id</param>
+		/// <param name="strt_c">the start col-id</param>
+		/// <param name="stop_c">the stop col-id</param>
+		void SelectCellBlock(int strt_r, int stop_r, int strt_c, int stop_c)
+		{
+			for (int r = strt_r; r <= stop_r; ++r)
+			for (int c = strt_c; c <= stop_c; ++c)
+			{
+				this[r,c].selected = true;
+			}
+		}
 		#endregion contiguous cell selection
 	}
 }

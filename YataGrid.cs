@@ -1967,12 +1967,9 @@ namespace yata
 								if (ctr)
 								{
 									ClearCellSelects();
+									SelectCellBlock(0,           _anchorcell.y,
+													FrozenCount, _anchorcell.x);
 
-									for (int r = 0;           r <= _anchorcell.y; ++r)
-									for (int c = FrozenCount; c <= _anchorcell.x; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[0, FrozenCount];
 								}
 								else
@@ -1981,12 +1978,9 @@ namespace yata
 									int sel_r = asStartStop_row(out strt_r, out stop_r);
 
 									ClearCellSelects();
+									SelectCellBlock(strt_r,      stop_r,
+													FrozenCount, _anchorcell.x);
 
-									for (int r = strt_r;      r <= stop_r;        ++r)
-									for (int c = FrozenCount; c <= _anchorcell.x; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[sel_r, FrozenCount];
 								}
 								anchor = true;
@@ -2055,12 +2049,9 @@ namespace yata
 								if (ctr)
 								{
 									ClearCellSelects();
+									SelectCellBlock(_anchorcell.y, RowCount - 1,
+													_anchorcell.x, ColCount - 1);
 
-									for (int r = _anchorcell.y; r != RowCount; ++r)
-									for (int c = _anchorcell.x; c != ColCount; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[RowCount - 1, ColCount - 1];
 								}
 								else
@@ -2069,12 +2060,9 @@ namespace yata
 									int sel_r = asStartStop_row(out strt_r, out stop_r);
 
 									ClearCellSelects();
+									SelectCellBlock(strt_r,        stop_r,
+													_anchorcell.x, ColCount - 1);
 
-									for (int r = strt_r;        r <= stop_r;   ++r)
-									for (int c = _anchorcell.x; c != ColCount; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[sel_r, ColCount - 1];
 								}
 								anchor = true;
@@ -2159,12 +2147,9 @@ namespace yata
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 									ClearCellSelects();
+									SelectCellBlock(0,      _anchorcell.y,
+													strt_c, stop_c);
 
-									for (int r = 0;      r <= _anchorcell.y; ++r)
-									for (int c = strt_c; c <= stop_c;        ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[0, sel_c];
 									anchor = true;
 								}
@@ -2183,12 +2168,9 @@ namespace yata
 										int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 										ClearCellSelects();
+										SelectCellBlock(strt_r, stop_r,
+														strt_c, stop_c);
 
-										for (int r = strt_r; r <= stop_r; ++r)
-										for (int c = strt_c; c <= stop_c; ++c)
-										{
-											this[r,c].selected = true;
-										}
 										sel = this[sel_r, sel_c];
 										anchor = true;
 									}
@@ -2283,12 +2265,9 @@ namespace yata
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 									ClearCellSelects();
+									SelectCellBlock(_anchorcell.y, RowCount - 1,
+													strt_c,        stop_c);
 
-									for (int r = _anchorcell.y; r != RowCount; ++r)
-									for (int c = strt_c;        c <= stop_c;   ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[RowCount - 1, sel_c];
 									anchor = true;
 								}
@@ -2307,12 +2286,9 @@ namespace yata
 										int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 										ClearCellSelects();
+										SelectCellBlock(strt_r, stop_r,
+														strt_c, stop_c);
 
-										for (int r = strt_r; r <= stop_r; ++r)
-										for (int c = strt_c; c <= stop_c; ++c)
-										{
-											this[r,c].selected = true;
-										}
 										sel = this[sel_r, sel_c];
 										anchor = true;
 									}
@@ -2401,12 +2377,9 @@ namespace yata
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 									ClearCellSelects();
+									SelectCellBlock(strt_r, stop_r,
+													strt_c, stop_c);
 
-									for (int r = strt_r; r <= stop_r; ++r)
-									for (int c = strt_c; c <= stop_c; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
@@ -2490,12 +2463,9 @@ namespace yata
 									int sel_c = asStartStop_col(out strt_c, out stop_c);
 
 									ClearCellSelects();
+									SelectCellBlock(strt_r, stop_r,
+													strt_c, stop_c);
 
-									for (int r = strt_r; r <= stop_r; ++r)
-									for (int c = strt_c; c <= stop_c; ++c)
-									{
-										this[r,c].selected = true;
-									}
 									sel = this[sel_r, sel_c];
 									anchor = true;
 								}
@@ -2575,12 +2545,9 @@ namespace yata
 											int sel_r = asStartStop_row(out strt_r, out stop_r);
 
 											ClearCellSelects();
+											SelectCellBlock(strt_r, stop_r,
+															strt_c, stop_c);
 
-											for (int r = strt_r; r <= stop_r; ++r)
-											for (int c = strt_c; c <= stop_c; ++c)
-											{
-												this[r,c].selected = true;
-											}
 											sel = this[sel_r, sel_c];
 											anchor = true;
 										}
@@ -2658,12 +2625,9 @@ namespace yata
 											int sel_r = asStartStop_row(out strt_r, out stop_r);
 
 											ClearCellSelects();
+											SelectCellBlock(strt_r, stop_r,
+															strt_c, stop_c);
 
-											for (int r = strt_r; r <= stop_r; ++r)
-											for (int c = strt_c; c <= stop_c; ++c)
-											{
-												this[r,c].selected = true;
-											}
 											sel = this[sel_r, sel_c];
 											anchor = true;
 										}
