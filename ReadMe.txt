@@ -257,15 +257,18 @@ Shift+Ctrl+End      - selects all cells to the last cell in the table
 
 Space - focuses the table and selects the first cell if no cells are currently
         selected. If cell(s) are already selected all cells except the
-        anchorcell will be deselected and the table will scroll to ensure that
-        the anchorcell is visible. An anchorcell is used to determine the area
-        of a contiguous block of selected cells; technically the anchorcell can
-        be invalid in which case the first selected cell shall be set as the
-        anchorcell.
+        anchorcell will be deselected. An anchorcell is used to determine the
+        area of a contiguous block of selected cells; technically the anchorcell
+        can be invalid in which case the cell that gets selected shall be set as
+        the anchorcell. The table will scroll to ensure that the cell that gets
+        selected is visible.
 
-Ctrl+Space - focuses the table, clears all selects, and either selects the first
-             row or if a row is already selected the table scrolls to ensure the
-             row is visible.
+Ctrl+Space - focuses the table and selects the first row if no rows or cells are
+             currently selected. If a row is already selected all cells that are
+             not in the row will be deselected. If a row is not already selected
+             and there are any cell(s) currently selected, the row of the first
+             selected cell will be selected. The table will scroll to ensure
+             that the row that gets selected is visible.
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
        - if editing a cell it escapes the edit without changing the field

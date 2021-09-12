@@ -36,7 +36,7 @@ namespace yata
 		/// <param name="stop_r">ref to stop row-id</param>
 		/// <remarks>Ensure that <c><see cref="RangeSelect"/></c> has been set
 		/// properly before call.</remarks>
-		void asStartStop(int selr, out int strt_r, out int stop_r)
+		void asStartStop_range(int selr, out int strt_r, out int stop_r)
 		{
 			if (RangeSelect < 0)
 			{
@@ -114,28 +114,28 @@ namespace yata
 		/// <c><see cref="Row">Rows</see></c> that need to be selected during a
 		/// horizontal contiguous block selection.
 		/// </summary>
-		/// <param name="strt">ref that holds the start row-id</param>
-		/// <param name="stop">ref that holds the stop row-id</param>
+		/// <param name="strt_r">ref that holds the start row-id</param>
+		/// <param name="stop_r">ref that holds the stop row-id</param>
 		/// <returns>the row-id of a <c><see cref="Cell"/></c> that shall be
 		/// displayed</returns>
 		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
 		/// contiguous block selection (horizontal).</remarks>
-		int asStartStop_row(out int strt, out int stop)
+		int asStartStop_row(out int strt_r, out int stop_r)
 		{
 			if (_f._copyvert == 1
 				|| _anchorcell.y == 0
 				|| !this[_anchorcell.y - 1, _anchorcell.x].selected)
 			{
-				strt = _anchorcell.y;
-				stop = _anchorcell.y + _f._copyvert - 1;
+				strt_r = _anchorcell.y;
+				stop_r = _anchorcell.y + _f._copyvert - 1;
 
-				return stop;
+				return stop_r;
 			}
 
-			strt = _anchorcell.y - _f._copyvert + 1;
-			stop = _anchorcell.y;
+			strt_r = _anchorcell.y - _f._copyvert + 1;
+			stop_r = _anchorcell.y;
 
-			return strt;
+			return strt_r;
 		}
 
 		/// <summary>
@@ -143,28 +143,28 @@ namespace yata
 		/// <c><see cref="Col">Cols</see></c> that need to be selected during a
 		/// vertical contiguous block selection.
 		/// </summary>
-		/// <param name="strt">ref that holds the start col-id</param>
-		/// <param name="stop">ref that holds the stop col-id</param>
+		/// <param name="strt_c">ref that holds the start col-id</param>
+		/// <param name="stop_c">ref that holds the stop col-id</param>
 		/// <returns>the col-id of a <c><see cref="Cell"/></c> that shall be
 		/// displayed</returns>
 		/// <remarks>Helper for <c><see cref="OnKeyDown()">OnKeyDown()</see></c>
 		/// contiguous block selection (vertical).</remarks>
-		int asStartStop_col(out int strt, out int stop)
+		int asStartStop_col(out int strt_c, out int stop_c)
 		{
 			if (_f._copyhori == 1
 				|| _anchorcell.x == FrozenCount
 				|| !this[_anchorcell.y, _anchorcell.x - 1].selected)
 			{
-				strt = _anchorcell.x;
-				stop = _anchorcell.x + _f._copyhori - 1;
+				strt_c = _anchorcell.x;
+				stop_c = _anchorcell.x + _f._copyhori - 1;
 
-				return stop;
+				return stop_c;
 			}
 
-			strt = _anchorcell.x - _f._copyhori + 1;
-			stop = _anchorcell.x;
+			strt_c = _anchorcell.x - _f._copyhori + 1;
+			stop_c = _anchorcell.x;
 
-			return strt;
+			return strt_c;
 		}
 
 		/// <summary>
@@ -176,26 +176,26 @@ namespace yata
 		/// <returns>col-id</returns>
 		int getAnchorRangedColid()
 		{
-			int col = _anchorcell.x;
+			int colid = _anchorcell.x;
 
 			for (int c = ColCount - 1; c >= _anchorcell.x; --c)
 			if (this[_anchorcell.y, c].selected)
 			{
-				col = c;
+				colid = c;
 				break;
 			}
 
-			if (col == _anchorcell.x)
+			if (colid == _anchorcell.x)
 			{
 				for (int c = FrozenCount; c <= _anchorcell.x; ++c)
 				if (this[_anchorcell.y, c].selected)
 				{
-					col = c;
+					colid = c;
 					break;
 				}
 			}
 
-			return col;
+			return colid;
 		}
 
 		/// <summary>
@@ -207,26 +207,26 @@ namespace yata
 		/// <returns>row-id</returns>
 		int getAnchorRangedRowid()
 		{
-			int row = _anchorcell.y;
+			int rowid = _anchorcell.y;
 
 			for (int r = RowCount - 1; r >= _anchorcell.y; --r)
 			if (this[r, _anchorcell.x].selected)
 			{
-				row = r;
+				rowid = r;
 				break;
 			}
 
-			if (row == _anchorcell.y)
+			if (rowid == _anchorcell.y)
 			{
 				for (int r = 0; r <= _anchorcell.y; ++r)
 				if (this[r, _anchorcell.x].selected)
 				{
-					row = r;
+					rowid = r;
 					break;
 				}
 			}
 
-			return row;
+			return rowid;
 		}
 		#endregion contiguous cell selection
 	}

@@ -2129,7 +2129,7 @@ namespace yata
 									else                  RangeSelect = range;
 
 									int strt_r, stop_r;
-									asStartStop(selr, out strt_r, out stop_r);
+									asStartStop_range(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2138,7 +2138,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											table.asStartStop(selr, out strt_r, out stop_r);
+											table.asStartStop_range(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2253,7 +2253,7 @@ namespace yata
 									else                          RangeSelect = range;
 
 									int strt_r, stop_r;
-									asStartStop(selr, out strt_r, out stop_r);
+									asStartStop_range(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2262,7 +2262,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											table.asStartStop(selr, out strt_r, out stop_r);
+											table.asStartStop_range(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2367,7 +2367,7 @@ namespace yata
 									if (selr + RangeSelect != 0) --RangeSelect;
 
 									int strt_r, stop_r;
-									asStartStop(selr, out strt_r, out stop_r);
+									asStartStop_range(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2376,7 +2376,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											table.asStartStop(selr, out strt_r, out stop_r);
+											table.asStartStop_range(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2456,7 +2456,7 @@ namespace yata
 									if (selr + RangeSelect != RowCount - 1) ++RangeSelect;
 
 									int strt_r, stop_r;
-									asStartStop(selr, out strt_r, out stop_r);
+									asStartStop_range(selr, out strt_r, out stop_r);
 									row_SelectRangeCells(strt_r, stop_r);
 
 									if ((table = getSynctable()) != null)
@@ -2465,7 +2465,7 @@ namespace yata
 										{
 											table.setRangeSelect(selr, RangeSelect);
 
-											table.asStartStop(selr, out strt_r, out stop_r);
+											table.asStartStop_range(selr, out strt_r, out stop_r);
 											table.row_SelectRangeCells(strt_r, stop_r);
 										}
 										else
@@ -2738,36 +2738,24 @@ namespace yata
 			}
 		}
 
+
 		/// <summary>
-		/// Selects a specified row by Id and flags its cells selected.
+		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
+		/// <c>null</c>.
 		/// </summary>
-		/// <param name="r">row-id</param>
-		/// <remarks>Check that <paramref name="r"/> doesn't over/underflow
-		/// <c><see cref="RowCount"/></c> before call.</remarks>
-		internal void SelectRow(int r)
+		/// <param name="strt_c">start col-id usually either 0 (includes frozen
+		/// cols) or <c><see cref="FrozenCount"/></c></param>
+		/// <returns>the first <c>Cell</c> found else <c>null</c></returns>
+		internal Cell getFirstSelectedCell(int strt_c = 0)
 		{
-			Row row = Rows[r];
+			Cell sel;
 
-			row.selected = true;
+			foreach (var row in Rows)
+			for (int c = strt_c; c != ColCount; ++c)
+				if ((sel = row[c]).selected)
+					return sel;
 
-			for (int c = 0; c != ColCount; ++c)
-				row[c].selected = true;
-
-
-			YataGrid table = _f.ClearSyncSelects();
-			if (table != null && r < table.RowCount)
-			{
-				row = table.Rows[r];
-
-				Row._bypassEnableRowedit = true;
-				row.selected = true;
-				Row._bypassEnableRowedit = false;
-
-				for (int c = 0; c != table.ColCount; ++c)
-					row[c].selected = true;
-			}
-
-			_f.EnableCelleditOperations();
+			return null;
 		}
 
 		/// <summary>
@@ -2790,25 +2778,6 @@ namespace yata
 					  | EnsureDisplayed(cell));
 
 			_f.EnableCelleditOperations();
-		}
-
-		/// <summary>
-		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
-		/// <c>null</c>.
-		/// </summary>
-		/// <param name="strt_c">start col-id usually either 0 (includes frozen
-		/// cols) or <c><see cref="FrozenCount"/></c></param>
-		/// <returns>the first <c>Cell</c> found</returns>
-		internal Cell getFirstSelectedCell(int strt_c = 0)
-		{
-			Cell sel;
-
-			foreach (var row in Rows)
-			for (int c = strt_c; c != ColCount; ++c)
-				if ((sel = row[c]).selected)
-					return sel;
-
-			return null;
 		}
 
 		/// <summary>
@@ -2883,6 +2852,38 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Selects a specified row by Id and flags its cells selected.
+		/// </summary>
+		/// <param name="r">row-id</param>
+		/// <remarks>Check that <paramref name="r"/> doesn't over/underflow
+		/// <c><see cref="RowCount"/></c> before call.</remarks>
+		internal void SelectRow(int r)
+		{
+			Row row = Rows[r];
+
+			row.selected = true;
+
+			for (int c = 0; c != ColCount; ++c)
+				row[c].selected = true;
+
+
+			YataGrid table = _f.ClearSyncSelects();
+			if (table != null && r < table.RowCount)
+			{
+				row = table.Rows[r];
+
+				Row._bypassEnableRowedit = true;
+				row.selected = true;
+				Row._bypassEnableRowedit = false;
+
+				for (int c = 0; c != table.ColCount; ++c)
+					row[c].selected = true;
+			}
+
+			_f.EnableCelleditOperations();
+		}
+
+		/// <summary>
 		/// Focuses the table and clears all selects and
 		/// <list type="bullet">
 		/// <item>selects the first <c><see cref="Row"/></c> in table if no row
@@ -2897,14 +2898,22 @@ namespace yata
 			Select();
 
 			int selr = getSelectedRow();
-			if (selr == -1) selr = 0;
+			if (selr == -1)
+			{
+				Cell cell = getFirstSelectedCell();
+				if (cell != null) selr = cell.y;
+				else              selr = 0;
+			}
 
 			ClearSelects();
 
 			SelectRow(selr);
 			EnsureDisplayedRow(selr);
 
-			int invalid = YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ | YataGrid.INVALID_ROWS;
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS;
+
 			if (Propanel != null && Propanel.Visible)
 				invalid |= YataGrid.INVALID_PROP;
 
