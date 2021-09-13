@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -10,14 +11,33 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
-		static int _x = -1;
-		static int _y = -1;
-		static int _w = -1;
-		static int _h = -1;
+		static int _x = -1, _y;
+		static int _w = -1, _h;
 		#endregion Fields (static)
 
 
+		#region Fields
 		YataForm _f;
+
+		/// <summary>
+		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
+		/// when this <c>FontF</c> dialog instantiates. Otherwise when .net
+		/// automatically fires the <c>Resize</c> event during instantiation the
+		/// values get set in a way that renders the
+		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
+		/// why I like Cherios!
+		/// </summary>
+		bool _init = true;
+		#endregion Fields
+
+
+		#region Properties (static)
+		/// <summary>
+		/// Tracks if user has this <c>SettingsEditor</c> dialog maximized.
+		/// </summary>
+		internal static bool Maximized
+		{ get; private set; }
+		#endregion Properties (static)
 
 
 		#region cTor
@@ -45,15 +65,29 @@ namespace yata
 				rtb_Settings.Font = Settings._fontf_tb;
 			}
 
-			if (_x == -1) _x = _f.Left + 20;
-			if (_y == -1) _y = _f.Top  + 20;
+			if (_x == -1)
+			{
+				_x = Math.Max(0, _f.Left + 20);
+				_y = Math.Max(0, _f.Top  + 20);
+			}
 
 			Left = _x;
 			Top  = _y;
 
-			if (_w != -1) Width  = _w;
-			if (_h != -1) Height = _h;
+			if (_w != -1)
+				ClientSize = new Size(_w,_h);
 
+			Screen screen = Screen.FromPoint(new Point(Left, Top));
+			if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
+				Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
+
+			if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
+				Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
+
+			if (Maximized)
+				WindowState = FormWindowState.Maximized;
+
+			_init = false;
 
 			if (lines.Length != 0)
 			{
@@ -64,7 +98,7 @@ namespace yata
 				rtb_Settings.Text = sb.ToString();
 			}
 
-			Show(); // no owner.
+			Show(_f); // Yata is owner.
 		}
 		#endregion cTor
 
@@ -89,12 +123,31 @@ namespace yata
 		{
 			_f.CloseSettingsEditor();
 
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
+			if (WindowState == FormWindowState.Normal)
+			{
+				_x = Math.Max(0, Left);
+				_y = Math.Max(0, Top);
+			}
 
 			base.OnFormClosing(e);
+		}
+
+		/// <summary>
+		/// Handles the <c>Resize</c> event.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnResize(EventArgs e)
+		{
+			if (   !_init &&     WindowState != FormWindowState.Minimized
+				&& !(Maximized = WindowState == FormWindowState.Maximized))
+			{
+				// coding for .net is inelegant ... but I try.
+				// Imagine a figure skater doing a triple-axial and flying into the boards.
+
+				_w = ClientSize.Width;
+				_h = ClientSize.Height;
+			}
+			base.OnResize(e);
 		}
 		#endregion Handlers (override)
 
@@ -233,6 +286,7 @@ namespace yata
 			this.ClientSize = new System.Drawing.Size(592, 474);
 			this.Controls.Add(this.rtb_Settings);
 			this.Controls.Add(this.pa_Buttons);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "SettingsEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Settings.Cfg";

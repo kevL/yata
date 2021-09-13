@@ -3760,9 +3760,8 @@ namespace yata
 		{
 			if (_ffont == null)
 			{
-				it_Font.Checked = true;
-
 				_ffont = new FontF(this);
+				it_Font.Checked = true;
 			}
 			else
 			{
@@ -4016,7 +4015,16 @@ namespace yata
 				}
 			}
 			else
+			{
+				if (_fsettings.WindowState == FormWindowState.Minimized)
+				{
+					if (SettingsEditor.Maximized)
+						_fsettings.WindowState = FormWindowState.Maximized;
+					else
+						_fsettings.WindowState = FormWindowState.Normal;
+				}
 				_fsettings.BringToFront();
+			}
 		}
 		#endregion Events (help)
 

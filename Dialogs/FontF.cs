@@ -62,13 +62,13 @@ namespace yata
 		readonly YataForm _f;
 
 		/// <summary>
-		/// Bypasses the <c><see cref="fontchanged()">fontchanged()</see>
+		/// Bypasses the <c><see cref="fontchanged()">fontchanged()</see></c>
 		/// routine. Bypasses setting <c><see cref="_w"/></c> and
 		/// <c><see cref="_h"/></c> when this <c>FontF</c> dialog instantiates.
 		/// Otherwise when .net automatically fires the <c>Resize</c> event
 		/// during instantiation the values get set in a way that renders the
 		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
-		/// why I like Cherios!</c>
+		/// why I like Cherios!
 		/// </summary>
 		bool _init = true;
 
@@ -125,6 +125,17 @@ namespace yata
 
 			if (_w != -1)
 				ClientSize = new Size(_w,_h);
+
+			Screen screen = Screen.FromPoint(new Point(Left, Top));
+			if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
+				Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
+
+			if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
+				Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
+
+			if (Maximized)
+				WindowState = FormWindowState.Maximized;
+
 
 			// Safely ensure that Yata's current font is good to go
 			// else set defaults ->
@@ -188,9 +199,6 @@ namespace yata
 			tb_FontSize.Text = size_init.ToString();
 			tb_FontSize.MouseWheel += size_mousewheel; // NOTE: Mousewheel event is not shown in the designer.
 
-			if (Maximized)
-				WindowState = FormWindowState.Maximized;
-
 			_init = false;
 
 			fontchanged(list_Font, EventArgs.Empty);
@@ -239,14 +247,14 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			_f.CloseFontDialog();
+
 			if (WindowState == FormWindowState.Normal)
 			{
 				_x = Math.Max(0, Left);
 				_y = Math.Max(0, Top);
 			}
 			_scDistance = sc_Hori.SplitterDistance;
-
-			_f.CloseFontDialog();
 
 			lbl_Lazydog.Font.Dispose();
 
