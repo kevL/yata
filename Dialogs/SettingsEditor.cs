@@ -226,7 +226,6 @@ namespace yata
 		void click_Insert(object sender, EventArgs e)
 		{
 			bu_Insert.Visible = false;
-			rtb_Settings.Focus();
 
 			string text = rtb_Settings.Text;
 
@@ -247,6 +246,8 @@ namespace yata
 				}
 			}
 			rtb_Settings.Text = text;
+			rtb_Settings.SelectionStart = rtb_Settings.Text.Length;
+			rtb_Settings.Focus();
 		}
 		#endregion Handlers
 
