@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -22,15 +22,8 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			walkabout();
-		}
-		#endregion cTor
 
-
-		#region Methods
-		void walkabout()
-		{
-			var an = Assembly.GetExecutingAssembly().GetName();
+			AssemblyName an = Assembly.GetExecutingAssembly().GetName();
 			string ver = "Ver "
 					   + an.Version.Major + "."
 					   + an.Version.Minor + "."
@@ -41,7 +34,8 @@ namespace yata
 #else
 			ver += " - release";
 #endif
-			DateTime dt = Assembly.GetExecutingAssembly().GetLinkerTime();
+			DateTime dt = Assembly.GetExecutingAssembly().GetLinkerTime(true);
+
 			ver += Environment.NewLine + Environment.NewLine
 				 + String.Format(System.Globalization.CultureInfo.CurrentCulture,
 								 "{0:yyyy MMM d}  {0:HH}:{0:mm}:{0:ss} UTC", // {0:zzz}
@@ -58,7 +52,20 @@ namespace yata
 
 			la_Text.Text = ver;
 		}
-		#endregion Methods
+		#endregion cTor
+
+
+		#region Handlers (override)
+		/// <summary>
+		/// Draws a nice border.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.DrawLine(Pens.Black, 0,0, ClientSize.Width, 0);
+			e.Graphics.DrawLine(Pens.Black, 0,0, 0, ClientSize.Height);
+		}
+		#endregion Handlers (override)
 
 
 		#region Designer
@@ -103,6 +110,7 @@ namespace yata
 			this.Controls.Add(this.la_Text);
 			this.Controls.Add(this.btn_Close);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "About";
@@ -114,38 +122,5 @@ namespace yata
 
 		}
 		#endregion Designer
-	}
-
-
-	/// <summary>
-	/// Lifted from StackOverflow.com:
-	/// https://stackoverflow.com/questions/1600962/displaying-the-build-date#answer-1600990
-	/// - what a fucking pain in the ass.
-	/// </summary>
-	static class DateTimeExtension
-	{
-		internal static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
-		{
-			var filePath = assembly.Location;
-			const int c_PeHeaderOffset = 60;
-			const int c_LinkerTimestampOffset = 8;
-
-			var buffer = new byte[2048];
-
-			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-				stream.Read(buffer, 0, 2048);
-
-			var offset = BitConverter.ToInt32(buffer, c_PeHeaderOffset);
-			var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-			return epoch.AddSeconds(secondsSince1970);
-/*			var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
-
-			var tz = target ?? TimeZoneInfo.Local;
-			var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
-
-			return localTime; */
-		}
 	}
 }
