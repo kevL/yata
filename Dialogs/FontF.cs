@@ -244,7 +244,7 @@ namespace yata
 			}
 			_scDistance = sc_Hori.SplitterDistance;
 
-			_f.FontF_closing();
+			_f.CloseFontDialog();
 
 			lbl_Lazydog.Font.Dispose();
 

@@ -98,7 +98,7 @@ namespace yata
 		/// <summary>
 		/// The <c><see cref="FontF"/></c> dialog/FontPicker.
 		/// </summary>
-		FontF _fontF;
+		FontF _ffont;
 
 		Font FontDefault;
 		internal Font FontAccent;
@@ -3758,23 +3758,23 @@ namespace yata
 		/// </list></remarks>
 		void fontclick_Font(object sender, EventArgs e)
 		{
-			if (_fontF == null)
+			if (_ffont == null)
 			{
 				it_Font.Checked = true;
 
-				_fontF = new FontF(this);
-				_fontF.Show(this);
+				_ffont = new FontF(this);
+				_ffont.Show(this);
 			}
 			else
 			{
-				if (_fontF.WindowState == FormWindowState.Minimized)
+				if (_ffont.WindowState == FormWindowState.Minimized)
 				{
 					if (FontF.Maximized)
-						_fontF.WindowState = FormWindowState.Maximized;
+						_ffont.WindowState = FormWindowState.Maximized;
 					else
-						_fontF.WindowState = FormWindowState.Normal;
+						_ffont.WindowState = FormWindowState.Normal;
 				}
-				_fontF.BringToFront();
+				_ffont.BringToFront();
 			}
 		}
 
@@ -3804,10 +3804,10 @@ namespace yata
 		/// Dechecks the "Font ... be patient" it when the
 		/// <c><see cref="FontF"/></c> dialog closes.
 		/// </summary>
-		internal void FontF_closing()
+		internal void CloseFontDialog()
 		{
+			_ffont = null;
 			it_Font.Checked = false;
-			_fontF = null;
 		}
 
 		/// <summary>
@@ -3876,8 +3876,8 @@ namespace yata
 				DrawingControl.ResumeDrawing(Table);
 				Obfuscate(false);
 
-				if (_fontF != null)			// layout for big tables will send the Font dialog below the form ->
-					_fontF.BringToFront();	// (although it should never be behind the form because its owner IS the form)
+				if (_ffont != null)			// layout for big tables will send the Font dialog below the form ->
+					_ffont.BringToFront();	// (although it should never be behind the form because its owner IS the form)
 			}
 		}
 		#endregion Methods (font)
