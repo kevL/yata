@@ -51,6 +51,11 @@ namespace yata
 		readonly PropertyPanelButton btn_Propanel = new PropertyPanelButton();
 
 		/// <summary>
+		/// The <c><see cref="SettingsEditor"/></c> dialog/editor.
+		/// </summary>
+		SettingsEditor _fsettings;
+
+		/// <summary>
 		/// The <c><see cref="ClipboardEditor"/></c> dialog/editor.
 		/// </summary>
 		ClipboardEditor _fclip;
@@ -3251,10 +3256,10 @@ namespace yata
 		/// Clears the check on <c><see cref="it_OpenClipEditor"/></c> and nulls
 		/// <c><see cref="_fclip"/></c> when the clipboard-dialog closes.
 		/// </summary>
-		internal void ClipEditor_uncheck()
+		internal void CloseClipEditor()
 		{
-			it_OpenClipEditor.Checked = false;
 			_fclip = null;
+			it_OpenClipEditor.Checked = false;
 		}
 		#endregion Methods (clipboard)
 
@@ -3915,7 +3920,119 @@ namespace yata
 			using (var f = new About())
 				f.ShowDialog(this);
 		}
+
+
+		/// <summary>
+		/// Handles it-click to open the <c><see cref="SettingsEditor"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Settings"/></c></param>
+		/// <param name="e"></param>
+		void helpclick_Settings(object sender, EventArgs e)
+		{
+			if (_fsettings == null)
+			{
+				string pfe = Path.Combine(Application.StartupPath, "settings.cfg");
+
+				if (!File.Exists(pfe))
+				{
+					if (MessageBox.Show("The Settings.cfg file does not exist in the application"
+									  + " directory. Do you want to create one ...",
+										" Create file",
+										MessageBoxButtons.YesNo,
+										MessageBoxIcon.Question,
+										MessageBoxDefaultButton.Button1,
+										0) == DialogResult.Yes)
+					{
+						try
+						{
+							using (var sw = new StreamWriter(File.Open(pfe,
+																	   FileMode.Create,
+																	   FileAccess.Write,
+																	   FileShare.None)))
+							{
+								sw.WriteLine("# ReadMe.txt describes these settings.");
+								sw.WriteLine("");
+								sw.WriteLine("font=");
+								sw.WriteLine("font2=");
+								sw.WriteLine("font3=");
+								sw.WriteLine("fontf=");
+								sw.WriteLine("pathall=");
+								sw.WriteLine("pathall=");
+								sw.WriteLine("pathall=");
+								sw.WriteLine("dirpreset=");
+								sw.WriteLine("dirpreset=");
+								sw.WriteLine("dirpreset=");
+								sw.WriteLine("x=");
+								sw.WriteLine("y=");
+								sw.WriteLine("w=");
+								sw.WriteLine("h=");
+								sw.WriteLine("strict=");
+								sw.WriteLine("gradient=");
+								sw.WriteLine("context=");
+								sw.WriteLine("recent=");
+								sw.WriteLine("diff=");
+								sw.WriteLine("dialog=");
+								sw.WriteLine("dialogalt=");
+								sw.WriteLine("maximized=");
+								sw.WriteLine("instantgoto=");
+								sw.WriteLine("casesort=");
+								sw.WriteLine("alignoutput=");
+								sw.WriteLine("codepage=");
+								sw.WriteLine("autorder=");
+							}
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show("The Settings.cfg file could not be created."
+										  + Environment.NewLine + Environment.NewLine
+										  + ex,
+											" Error",
+											MessageBoxButtons.OK,
+											MessageBoxIcon.Error,
+											MessageBoxDefaultButton.Button1,
+											0);
+						}
+					}
+				}
+
+				if (File.Exists(pfe))
+				{
+					try
+					{
+						string[] lines = File.ReadAllLines(pfe);
+						_fsettings = new SettingsEditor(this, lines);
+						it_Settings.Checked = true;
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("The Settings.cfg file could not be read."
+									  + Environment.NewLine + Environment.NewLine
+									  + ex,
+										" Error",
+										MessageBoxButtons.OK,
+										MessageBoxIcon.Error,
+										MessageBoxDefaultButton.Button1,
+										0);
+					}
+				}
+			}
+			else
+				_fsettings.BringToFront();
+		}
 		#endregion Events (help)
+
+
+		#region Methods (help)
+		/// <summary>
+		/// Clears the check on <c><see cref="it_Settings"/></c> and nulls
+		/// <c><see cref="_fsettings"/></c> when the settings-editor closes.
+		/// </summary>
+		internal void CloseSettingsEditor()
+		{
+			_fsettings = null;
+			it_Settings.Checked = false;
+		}
+		#endregion Methods (help)
 
 
 		#region Methods (row)

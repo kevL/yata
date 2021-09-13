@@ -96,6 +96,7 @@
     <Compile Include="Dialogs\RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SettingsEditor.cs" />
     <Compile Include="Dialogs\TalkDialog.cs" />
     <Compile Include="Dialogs\TalkReader.cs" />
     <Compile Include="Dialogs\TextInputDialog.cs" />
@@ -163,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SettingsEditor.resx">
+      <DependentUpon>SettingsEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\TalkDialog.resx">
       <DependentUpon>TalkDialog.cs</DependentUpon>
