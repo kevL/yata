@@ -3948,8 +3948,7 @@ namespace yata
 																	   FileAccess.Write,
 																	   FileShare.None)))
 							{
-								sw.WriteLine("# ReadMe.txt describes these settings.");
-								sw.WriteLine("");
+								sw.WriteLine("#ReadMe.txt describes these settings.");
 
 								if (Settings.options == null)
 									Settings.CreateOptions();
