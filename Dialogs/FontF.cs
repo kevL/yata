@@ -197,6 +197,8 @@ namespace yata
 
 			list_Font.TopIndex = list_Font.SelectedIndex;
 			list_Font.Select();
+
+			Show(_f); // Yata is owner.
 		}
 		#endregion cTor
 
@@ -247,6 +249,9 @@ namespace yata
 			_f.CloseFontDialog();
 
 			lbl_Lazydog.Font.Dispose();
+
+			foreach (var font in _fonts)
+				font.Dispose();
 
 			base.OnFormClosing(e);
 		}
@@ -546,16 +551,6 @@ namespace yata
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 			tb_FontString.Text = tc.ConvertToString(lbl_Lazydog.Font);
 			tb_FontString.SelectionStart = tb_FontString.Text.Length;
-		}
-
-
-		/// <summary>
-		/// Disposes the <c>Fonts</c> in <c><see cref="_fonts"/></c>.
-		/// </summary>
-		void DisposeFonts()
-		{
-			foreach (var font in _fonts)
-				font.Dispose();
 		}
 		#endregion Methods
 

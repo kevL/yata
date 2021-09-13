@@ -3763,7 +3763,6 @@ namespace yata
 				it_Font.Checked = true;
 
 				_ffont = new FontF(this);
-				_ffont.Show(this);
 			}
 			else
 			{
