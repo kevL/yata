@@ -10,7 +10,21 @@ namespace yata
 {
 	static class Settings
 	{
-		const string FE = "settings.cfg";
+		internal const string FE = "settings.cfg";
+
+		/// <summary>
+		/// An array of all <c><see cref="options"/></c> <c>strings</c> that are
+		/// recognized in the Settings.Cfg file.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal static string[] options;
+
+		/// <summary>
+		/// The count of options in <c><see cref="options"/></c>.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal const int ids = 23;
+
 
 		internal static Font _font;			// the grid's font
 		internal static Font _fontdialog;	// the font to be used in all dialogs unless '_font2dialog' is valid.
@@ -306,6 +320,41 @@ namespace yata
 				fontdialog = new Font(label, pts -= 0.75F, style);
 			}
 			return fontdialog;
+		}
+
+
+		/// <summary>
+		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
+		/// that are recognized in the Settings.Cfg file.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal static void CreateOptions()
+		{
+			options = new string[ids];
+
+			options[ 0] = "font=";
+			options[ 1] = "font2=";
+			options[ 2] = "font3=";
+			options[ 3] = "fontf=";
+			options[ 4] = "pathall=";
+			options[ 5] = "dirpreset=";
+			options[ 6] = "x=";
+			options[ 7] = "y=";
+			options[ 8] = "w=";
+			options[ 9] = "h=";
+			options[10] = "strict=";
+			options[11] = "gradient=";
+			options[12] = "context=";
+			options[13] = "recent=";
+			options[14] = "diff=";
+			options[15] = "dialog=";
+			options[16] = "dialogalt=";
+			options[17] = "maximized=";
+			options[18] = "instantgoto=";
+			options[19] = "casesort=";
+			options[20] = "alignoutput=";
+			options[21] = "codepage=";
+			options[22] = "autorder=";
 		}
 	}
 }

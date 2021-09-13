@@ -3929,7 +3929,7 @@ namespace yata
 		{
 			if (_fsettings == null)
 			{
-				string pfe = Path.Combine(Application.StartupPath, "settings.cfg");
+				string pfe = Path.Combine(Application.StartupPath, Settings.FE);
 
 				if (!File.Exists(pfe))
 				{
@@ -3950,33 +3950,12 @@ namespace yata
 							{
 								sw.WriteLine("# ReadMe.txt describes these settings.");
 								sw.WriteLine("");
-								sw.WriteLine("font=");
-								sw.WriteLine("font2=");
-								sw.WriteLine("font3=");
-								sw.WriteLine("fontf=");
-								sw.WriteLine("pathall=");
-								sw.WriteLine("pathall=");
-								sw.WriteLine("pathall=");
-								sw.WriteLine("dirpreset=");
-								sw.WriteLine("dirpreset=");
-								sw.WriteLine("dirpreset=");
-								sw.WriteLine("x=");
-								sw.WriteLine("y=");
-								sw.WriteLine("w=");
-								sw.WriteLine("h=");
-								sw.WriteLine("strict=");
-								sw.WriteLine("gradient=");
-								sw.WriteLine("context=");
-								sw.WriteLine("recent=");
-								sw.WriteLine("diff=");
-								sw.WriteLine("dialog=");
-								sw.WriteLine("dialogalt=");
-								sw.WriteLine("maximized=");
-								sw.WriteLine("instantgoto=");
-								sw.WriteLine("casesort=");
-								sw.WriteLine("alignoutput=");
-								sw.WriteLine("codepage=");
-								sw.WriteLine("autorder=");
+
+								if (Settings.options == null)
+									Settings.CreateOptions();
+
+								for (int i = 0; i != Settings.ids; ++i)
+									sw.WriteLine(Settings.options[i]);
 							}
 						}
 						catch (Exception ex)
