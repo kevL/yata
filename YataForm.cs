@@ -266,18 +266,15 @@ namespace yata
 
 			if (Settings._font2 != null)
 			{
-				// Relative Font-sizes (as defined in the Designer):
+				// Relative Font-sizes (as defined in the Designers):
 				//
-				// menubar, ContextRow, ContextCell, ContextTab, statusbar = unity.
-				// rowit_Header          = +0.75
-				// statusbar_label_Cords = -0.75
-				// statusbar_label_Info  = +1.50
+				// menubar, statusbar, ContextTab, ContextRow, ContextCell = all unity.
+				// rowit_Header     = +0.75
+				// statbar_lblCords = -0.75
+				// statbar_lblInfo  = +1.50
 
 				menubar.Font.Dispose();
 				menubar.Font = Settings._font2;
-
-				ContextRow.Font.Dispose();
-				ContextRow.Font = Settings._font2;
 
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
@@ -306,6 +303,9 @@ namespace yata
 
 				ContextTab.Font.Dispose();
 				ContextTab.Font = Settings._font2;
+
+				ContextRow.Font.Dispose();
+				ContextRow.Font = Settings._font2;
 
 				ContextCell.Font.Dispose();
 				ContextCell.Font = Settings._font2;
