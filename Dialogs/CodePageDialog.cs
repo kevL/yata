@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -10,17 +11,14 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
-		static int _x = -1;
-		static int _y = -1;
-		static int _w = -1;
-		static int _h = -1;
+		static int _x = -1, _y;
+		static int _w = -1, _h;
 		#endregion Fields (static)
 
 
-		#region Properties
-		internal CodePageList List
-		{ get; set; }
-		#endregion Properties
+		#region Fields
+		CodePageList _cpList;
+		#endregion Fields
 
 
 		#region cTor
@@ -30,6 +28,8 @@ namespace yata
 		internal CodePageDialog(YataForm f, Encoding enc)
 		{
 			InitializeComponent();
+
+			tb_Codepage.BackColor = Colors.TextboxBackground;
 
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
@@ -42,16 +42,25 @@ namespace yata
 				tb_Codepage.Font = Settings._fontf_tb;
 			}
 
-			tb_Codepage.BackColor = Colors.TextboxBackground;
-
-			if (_x == -1) _x = f.Left + 20;
-			if (_y == -1) _y = f.Top  + 20;
+			if (_x == -1)
+			{
+				_x = Math.Max(0, f.Left + 20);
+				_y = Math.Max(0, f.Top  + 20);
+			}
 
 			Left = _x;
 			Top  = _y;
 
-			if (_w != -1) Width  = _w;
-			if (_h != -1) Height = _h;
+			if (_w != -1)
+				ClientSize = new Size(_w,_h);
+
+			Screen screen = Screen.FromPoint(new Point(Left, Top));
+			if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
+				Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
+
+			if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
+				Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
+
 
 			string head = "The 2da file appears to have ANSI encoding."
 						+ " Please enter the codepage of its text.";
@@ -90,10 +99,11 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
+			WindowState = FormWindowState.Normal;
+			_x = Math.Max(0, Left);
+			_y = Math.Max(0, Top);
+			_w = ClientSize.Width;
+			_h = ClientSize.Height;
 
 			base.OnFormClosing(e);
 		}
@@ -188,12 +198,12 @@ namespace yata
 		/// <param name="e"></param>
 		void bu_List_click(object sender, EventArgs e)
 		{
-			if (List == null)
-				List = new CodePageList(this);
+			if (_cpList == null)
+				_cpList = new CodePageList(this);
 			else
 			{
-				List.Close();
-				List = null;
+				_cpList.Close();
+				_cpList = null;
 			}
 		}
 		#endregion Handlers
@@ -207,6 +217,14 @@ namespace yata
 		internal string GetCodePage()
 		{
 			return tb_Codepage.Text;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		internal void CloseCodepageList()
+		{
+			_cpList = null;
 		}
 		#endregion Methods
 
@@ -379,12 +397,13 @@ namespace yata
 			this.Controls.Add(this.la_CodepageInfo);
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.bu_Accept);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(435, 225);
 			this.Name = "CodePageDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "Choose a codepage";
+			this.Text = " yata - Choose codepage";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

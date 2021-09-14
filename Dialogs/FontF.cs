@@ -63,12 +63,7 @@ namespace yata
 
 		/// <summary>
 		/// Bypasses the <c><see cref="fontchanged()">fontchanged()</see></c>
-		/// routine. Bypasses setting <c><see cref="_w"/></c> and
-		/// <c><see cref="_h"/></c> when this <c>FontF</c> dialog instantiates.
-		/// Otherwise when .net automatically fires the <c>Resize</c> event
-		/// during instantiation the values get set in a way that renders the
-		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
-		/// why I like Cherios!
+		/// routine.
 		/// </summary>
 		bool _init = true;
 
@@ -102,8 +97,9 @@ namespace yata
 		/// <param name="f"><c><see cref="YataForm"/></c></param>
 		internal FontF(YataForm f)
 		{
-			InitializeComponent();
 			_f = f;
+
+			InitializeComponent();
 
 			if (Settings._fontf_tb != null)
 			{
@@ -249,39 +245,22 @@ namespace yata
 		{
 			_f.CloseFontDialog();
 
-			if (WindowState == FormWindowState.Normal)
-			{
-				_x = Math.Max(0, Left);
-				_y = Math.Max(0, Top);
-			}
 			_scDistance = sc_Hori.SplitterDistance;
 
-			lbl_Lazydog.Font.Dispose();
+			Maximized = WindowState == FormWindowState.Maximized;
 
+			WindowState = FormWindowState.Normal;
+			_x = Math.Max(0, Left);
+			_y = Math.Max(0, Top);
+			_w = ClientSize.Width;
+			_h = ClientSize.Height;
+
+
+			lbl_Lazydog.Font.Dispose();
 			foreach (var font in _fonts)
 				font.Dispose();
 
 			base.OnFormClosing(e);
-		}
-
-		/// <summary>
-		/// Handles the <c>Resize</c> event.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnResize(EventArgs e)
-		{
-			list_Font.TopIndex = list_Font.SelectedIndex;
-
-			if (   !_init &&     WindowState != FormWindowState.Minimized
-				&& !(Maximized = WindowState == FormWindowState.Maximized))
-			{
-				// coding for .net is inelegant ... but I try.
-				// Imagine a figure skater doing a triple-axial and flying into the boards.
-
-				_w = ClientSize.Width;
-				_h = ClientSize.Height;
-			}
-			base.OnResize(e);
 		}
 		#endregion Events (override)
 

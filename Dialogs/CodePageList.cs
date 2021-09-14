@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -9,10 +10,8 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
-		static int _x = -1;
-		static int _y = -1;
-		static int _w = -1;
-		static int _h = -1;
+		static int _x = -1, _y;
+		static int _w = -1, _h;
 		#endregion Fields (static)
 
 
@@ -24,9 +23,9 @@ namespace yata
 		#region cTor
 		internal CodePageList(CodePageDialog cpd)
 		{
-			InitializeComponent();
-
 			_cpd = cpd;
+
+			InitializeComponent();
 
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
@@ -39,14 +38,25 @@ namespace yata
 				tb_List.Font = Settings._fontf_tb;
 			}
 
-			if (_x == -1) _x = _cpd.Left + 20;
-			if (_y == -1) _y = _cpd.Top  + 20;
+			if (_x == -1)
+			{
+				_x = Math.Max(0, cpd.Left + 20);
+				_y = Math.Max(0, cpd.Top  + 20);
+			}
 
 			Left = _x;
 			Top  = _y;
 
-			if (_w != -1) Width  = _w;
-			if (_h != -1) Height = _h;
+			if (_w != -1)
+				ClientSize = new Size(_w,_h);
+
+			Screen screen = Screen.FromPoint(new Point(Left, Top));
+			if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
+				Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
+
+			if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
+				Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
+
 
 			var sb = new StringBuilder();
 
@@ -76,12 +86,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_cpd.List = null;
+			_cpd.CloseCodepageList();
 
-			_x = Left;
-			_y = Top;
-			_w = Width;
-			_h = Height;
+			_x = Math.Max(0, Left);
+			_y = Math.Max(0, Top);
+			_w = ClientSize.Width;
+			_h = ClientSize.Height;
 
 			base.OnFormClosing(e);
 		}
@@ -103,6 +113,7 @@ namespace yata
 				Close();
 		}
 		#endregion Handlers (override)
+
 
 
 		#region Designer
@@ -131,10 +142,11 @@ namespace yata
 			// 
 			this.ClientSize = new System.Drawing.Size(312, 429);
 			this.Controls.Add(this.tb_List);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.Name = "CodePageList";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = ".net Codepages";
+			this.Text = " yata - .net Codepages";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

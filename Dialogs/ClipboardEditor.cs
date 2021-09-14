@@ -112,10 +112,14 @@ namespace yata
 		{
 			_f.CloseClipEditor();
 
+			Maximized = WindowState == FormWindowState.Maximized;
+
 			_init = true;
 			WindowState = FormWindowState.Normal;
 			_x = Math.Max(0, Left);
 			_y = Math.Max(0, Top);
+			_w = ClientSize.Width;
+			_h = ClientSize.Height;
 
 			base.OnFormClosing(e);
 		}
@@ -146,16 +150,6 @@ namespace yata
 
 				rtb_Clip.SelectionStart  = pos;
 				rtb_Clip.SelectionLength = len;
-
-				if (WindowState != FormWindowState.Minimized
-					&& !(Maximized = WindowState == FormWindowState.Maximized))
-				{
-					// coding for .net is inelegant ... but I try.
-					// Imagine a figure skater doing a triple-axial and flying into the boards.
-
-					_w = ClientSize.Width;
-					_h = ClientSize.Height;
-				}
 			}
 		}
 
