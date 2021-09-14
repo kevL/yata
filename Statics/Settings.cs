@@ -315,7 +315,7 @@ namespace yata
 			// with the SAME pointsize as it appears on the table ...
 
 			float pts = fontdialog.SizeInPoints;
-			while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault + 1)
+			while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
 			{
 				fontdialog.Dispose();
 				fontdialog = new Font(label, pts -= 0.75F, style);
