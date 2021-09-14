@@ -6,22 +6,22 @@ namespace yata
 {
 	sealed partial class FontF
 	{
+		SplitContainer sc_Hori;
 		ListBox list_Font;
-		Button bu_Apply;
-		Button bu_Cancel;
-		Label lbl_Size;
-		Label lbl_Lazydog;
+		Panel pa_Right;
+		GroupBox gb_Size;
 		TextBox tb_FontSize;
-		GroupBox gb_Text;
+		Label lbl_FontSize;
+		GroupBox gb_Style;
 		CheckBox cb_Bold;
 		CheckBox cb_Ital;
 		CheckBox cb_Undr;
 		CheckBox cb_Strk;
+		Button bu_Apply;
+		Button bu_Cancel;
+		GroupBox gb_Text;
+		Label lbl_Lazydog;
 		TextBox tb_FontString;
-		GroupBox gb_Style;
-		Panel pa_Right;
-		SplitContainer sc_Hori;
-		GroupBox gb_Size;
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -31,221 +31,30 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.sc_Hori = new System.Windows.Forms.SplitContainer();
 			this.list_Font = new System.Windows.Forms.ListBox();
-			this.bu_Apply = new System.Windows.Forms.Button();
+			this.pa_Right = new System.Windows.Forms.Panel();
 			this.bu_Cancel = new System.Windows.Forms.Button();
-			this.lbl_Size = new System.Windows.Forms.Label();
-			this.lbl_Lazydog = new System.Windows.Forms.Label();
-			this.tb_FontSize = new System.Windows.Forms.TextBox();
-			this.gb_Text = new System.Windows.Forms.GroupBox();
-			this.tb_FontString = new System.Windows.Forms.TextBox();
+			this.bu_Apply = new System.Windows.Forms.Button();
 			this.gb_Style = new System.Windows.Forms.GroupBox();
 			this.cb_Strk = new System.Windows.Forms.CheckBox();
 			this.cb_Undr = new System.Windows.Forms.CheckBox();
 			this.cb_Ital = new System.Windows.Forms.CheckBox();
 			this.cb_Bold = new System.Windows.Forms.CheckBox();
-			this.pa_Right = new System.Windows.Forms.Panel();
 			this.gb_Size = new System.Windows.Forms.GroupBox();
-			this.sc_Hori = new System.Windows.Forms.SplitContainer();
-			this.gb_Text.SuspendLayout();
-			this.gb_Style.SuspendLayout();
-			this.pa_Right.SuspendLayout();
-			this.gb_Size.SuspendLayout();
+			this.tb_FontSize = new System.Windows.Forms.TextBox();
+			this.lbl_FontSize = new System.Windows.Forms.Label();
+			this.gb_Text = new System.Windows.Forms.GroupBox();
+			this.lbl_Lazydog = new System.Windows.Forms.Label();
+			this.tb_FontString = new System.Windows.Forms.TextBox();
 			this.sc_Hori.Panel1.SuspendLayout();
 			this.sc_Hori.Panel2.SuspendLayout();
 			this.sc_Hori.SuspendLayout();
+			this.pa_Right.SuspendLayout();
+			this.gb_Style.SuspendLayout();
+			this.gb_Size.SuspendLayout();
+			this.gb_Text.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// list_Font
-			// 
-			this.list_Font.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.list_Font.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.list_Font.IntegralHeight = false;
-			this.list_Font.ItemHeight = 20;
-			this.list_Font.Location = new System.Drawing.Point(0, 0);
-			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
-			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(396, 283);
-			this.list_Font.TabIndex = 0;
-			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_DrawItem);
-			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// bu_Apply
-			// 
-			this.bu_Apply.Dock = System.Windows.Forms.DockStyle.Top;
-			this.bu_Apply.Enabled = false;
-			this.bu_Apply.Location = new System.Drawing.Point(0, 135);
-			this.bu_Apply.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Apply.Name = "bu_Apply";
-			this.bu_Apply.Size = new System.Drawing.Size(96, 35);
-			this.bu_Apply.TabIndex = 3;
-			this.bu_Apply.Text = "— apply —";
-			this.bu_Apply.UseVisualStyleBackColor = true;
-			this.bu_Apply.Click += new System.EventHandler(this.click_Apply);
-			// 
-			// bu_Cancel
-			// 
-			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.bu_Cancel.Location = new System.Drawing.Point(0, 170);
-			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(96, 35);
-			this.bu_Cancel.TabIndex = 4;
-			this.bu_Cancel.Text = "— close —";
-			this.bu_Cancel.UseVisualStyleBackColor = true;
-			this.bu_Cancel.Click += new System.EventHandler(this.click_Close);
-			// 
-			// lbl_Size
-			// 
-			this.lbl_Size.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_Size.Location = new System.Drawing.Point(49, 13);
-			this.lbl_Size.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Size.Name = "lbl_Size";
-			this.lbl_Size.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-			this.lbl_Size.Size = new System.Drawing.Size(45, 23);
-			this.lbl_Size.TabIndex = 2;
-			this.lbl_Size.Text = "pt";
-			this.lbl_Size.Click += new System.EventHandler(this.click_pointlabel);
-			// 
-			// lbl_Lazydog
-			// 
-			this.lbl_Lazydog.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_Lazydog.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 14);
-			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Lazydog.Name = "lbl_Lazydog";
-			this.lbl_Lazydog.Size = new System.Drawing.Size(480, 50);
-			this.lbl_Lazydog.TabIndex = 0;
-			// 
-			// tb_FontSize
-			// 
-			this.tb_FontSize.Dock = System.Windows.Forms.DockStyle.Left;
-			this.tb_FontSize.Location = new System.Drawing.Point(7, 13);
-			this.tb_FontSize.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_FontSize.Name = "tb_FontSize";
-			this.tb_FontSize.Size = new System.Drawing.Size(42, 20);
-			this.tb_FontSize.TabIndex = 1;
-			this.tb_FontSize.TextChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// gb_Text
-			// 
-			this.gb_Text.Controls.Add(this.lbl_Lazydog);
-			this.gb_Text.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gb_Text.Location = new System.Drawing.Point(0, 0);
-			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Text.Name = "gb_Text";
-			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 1, 2, 2);
-			this.gb_Text.Size = new System.Drawing.Size(492, 66);
-			this.gb_Text.TabIndex = 2;
-			this.gb_Text.TabStop = false;
-			// 
-			// tb_FontString
-			// 
-			this.tb_FontString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_FontString.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tb_FontString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tb_FontString.HideSelection = false;
-			this.tb_FontString.Location = new System.Drawing.Point(0, 352);
-			this.tb_FontString.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_FontString.Name = "tb_FontString";
-			this.tb_FontString.ReadOnly = true;
-			this.tb_FontString.Size = new System.Drawing.Size(492, 22);
-			this.tb_FontString.TabIndex = 3;
-			this.tb_FontString.WordWrap = false;
-			// 
-			// gb_Style
-			// 
-			this.gb_Style.Controls.Add(this.cb_Strk);
-			this.gb_Style.Controls.Add(this.cb_Undr);
-			this.gb_Style.Controls.Add(this.cb_Ital);
-			this.gb_Style.Controls.Add(this.cb_Bold);
-			this.gb_Style.Dock = System.Windows.Forms.DockStyle.Top;
-			this.gb_Style.Location = new System.Drawing.Point(0, 38);
-			this.gb_Style.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Style.Name = "gb_Style";
-			this.gb_Style.Padding = new System.Windows.Forms.Padding(8, 0, 2, 0);
-			this.gb_Style.Size = new System.Drawing.Size(96, 97);
-			this.gb_Style.TabIndex = 3;
-			this.gb_Style.TabStop = false;
-			// 
-			// cb_Strk
-			// 
-			this.cb_Strk.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cb_Strk.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Strk.Location = new System.Drawing.Point(8, 73);
-			this.cb_Strk.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Strk.Name = "cb_Strk";
-			this.cb_Strk.Size = new System.Drawing.Size(86, 20);
-			this.cb_Strk.TabIndex = 3;
-			this.cb_Strk.Text = "strikeout";
-			this.cb_Strk.UseVisualStyleBackColor = true;
-			this.cb_Strk.CheckedChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// cb_Undr
-			// 
-			this.cb_Undr.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cb_Undr.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Undr.Location = new System.Drawing.Point(8, 53);
-			this.cb_Undr.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Undr.Name = "cb_Undr";
-			this.cb_Undr.Size = new System.Drawing.Size(86, 20);
-			this.cb_Undr.TabIndex = 2;
-			this.cb_Undr.Text = "underline";
-			this.cb_Undr.UseVisualStyleBackColor = true;
-			this.cb_Undr.CheckedChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// cb_Ital
-			// 
-			this.cb_Ital.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cb_Ital.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Ital.Location = new System.Drawing.Point(8, 33);
-			this.cb_Ital.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Ital.Name = "cb_Ital";
-			this.cb_Ital.Size = new System.Drawing.Size(86, 20);
-			this.cb_Ital.TabIndex = 1;
-			this.cb_Ital.Text = "italic";
-			this.cb_Ital.UseVisualStyleBackColor = true;
-			this.cb_Ital.CheckedChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// cb_Bold
-			// 
-			this.cb_Bold.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cb_Bold.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cb_Bold.Location = new System.Drawing.Point(8, 13);
-			this.cb_Bold.Margin = new System.Windows.Forms.Padding(0);
-			this.cb_Bold.Name = "cb_Bold";
-			this.cb_Bold.Size = new System.Drawing.Size(86, 20);
-			this.cb_Bold.TabIndex = 0;
-			this.cb_Bold.Text = "bold";
-			this.cb_Bold.UseVisualStyleBackColor = true;
-			this.cb_Bold.CheckedChanged += new System.EventHandler(this.fontchanged);
-			// 
-			// pa_Right
-			// 
-			this.pa_Right.Controls.Add(this.bu_Cancel);
-			this.pa_Right.Controls.Add(this.bu_Apply);
-			this.pa_Right.Controls.Add(this.gb_Style);
-			this.pa_Right.Controls.Add(this.gb_Size);
-			this.pa_Right.Dock = System.Windows.Forms.DockStyle.Right;
-			this.pa_Right.Location = new System.Drawing.Point(396, 0);
-			this.pa_Right.Margin = new System.Windows.Forms.Padding(0);
-			this.pa_Right.Name = "pa_Right";
-			this.pa_Right.Size = new System.Drawing.Size(96, 283);
-			this.pa_Right.TabIndex = 1;
-			// 
-			// gb_Size
-			// 
-			this.gb_Size.Controls.Add(this.lbl_Size);
-			this.gb_Size.Controls.Add(this.tb_FontSize);
-			this.gb_Size.Dock = System.Windows.Forms.DockStyle.Top;
-			this.gb_Size.Location = new System.Drawing.Point(0, 0);
-			this.gb_Size.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Size.Name = "gb_Size";
-			this.gb_Size.Padding = new System.Windows.Forms.Padding(7, 0, 2, 2);
-			this.gb_Size.Size = new System.Drawing.Size(96, 38);
-			this.gb_Size.TabIndex = 5;
-			this.gb_Size.TabStop = false;
 			// 
 			// sc_Hori
 			// 
@@ -267,11 +76,201 @@ namespace yata
 			this.sc_Hori.Panel2.Controls.Add(this.gb_Text);
 			this.sc_Hori.Panel2MinSize = 0;
 			this.sc_Hori.Size = new System.Drawing.Size(492, 352);
-			this.sc_Hori.SplitterDistance = 283;
+			this.sc_Hori.SplitterDistance = 291;
 			this.sc_Hori.SplitterWidth = 3;
-			this.sc_Hori.TabIndex = 4;
-			this.sc_Hori.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
+			this.sc_Hori.TabIndex = 0;
 			this.sc_Hori.Resize += new System.EventHandler(this.OnSplitContainerResize);
+			// 
+			// list_Font
+			// 
+			this.list_Font.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.list_Font.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.list_Font.IntegralHeight = false;
+			this.list_Font.ItemHeight = 20;
+			this.list_Font.Location = new System.Drawing.Point(0, 0);
+			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
+			this.list_Font.Name = "list_Font";
+			this.list_Font.Size = new System.Drawing.Size(396, 291);
+			this.list_Font.TabIndex = 0;
+			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_drawitem);
+			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.changefont);
+			// 
+			// pa_Right
+			// 
+			this.pa_Right.Controls.Add(this.bu_Cancel);
+			this.pa_Right.Controls.Add(this.bu_Apply);
+			this.pa_Right.Controls.Add(this.gb_Style);
+			this.pa_Right.Controls.Add(this.gb_Size);
+			this.pa_Right.Dock = System.Windows.Forms.DockStyle.Right;
+			this.pa_Right.Location = new System.Drawing.Point(396, 0);
+			this.pa_Right.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_Right.Name = "pa_Right";
+			this.pa_Right.Size = new System.Drawing.Size(96, 291);
+			this.pa_Right.TabIndex = 1;
+			// 
+			// bu_Cancel
+			// 
+			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Dock = System.Windows.Forms.DockStyle.Top;
+			this.bu_Cancel.Location = new System.Drawing.Point(0, 170);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Cancel.Name = "bu_Cancel";
+			this.bu_Cancel.Size = new System.Drawing.Size(96, 35);
+			this.bu_Cancel.TabIndex = 3;
+			this.bu_Cancel.Text = "— close —";
+			this.bu_Cancel.UseVisualStyleBackColor = true;
+			this.bu_Cancel.Click += new System.EventHandler(this.click_Close);
+			// 
+			// bu_Apply
+			// 
+			this.bu_Apply.Dock = System.Windows.Forms.DockStyle.Top;
+			this.bu_Apply.Enabled = false;
+			this.bu_Apply.Location = new System.Drawing.Point(0, 135);
+			this.bu_Apply.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Apply.Name = "bu_Apply";
+			this.bu_Apply.Size = new System.Drawing.Size(96, 35);
+			this.bu_Apply.TabIndex = 2;
+			this.bu_Apply.Text = "— apply —";
+			this.bu_Apply.UseVisualStyleBackColor = true;
+			this.bu_Apply.Click += new System.EventHandler(this.click_Apply);
+			// 
+			// gb_Style
+			// 
+			this.gb_Style.Controls.Add(this.cb_Strk);
+			this.gb_Style.Controls.Add(this.cb_Undr);
+			this.gb_Style.Controls.Add(this.cb_Ital);
+			this.gb_Style.Controls.Add(this.cb_Bold);
+			this.gb_Style.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gb_Style.Location = new System.Drawing.Point(0, 38);
+			this.gb_Style.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Style.Name = "gb_Style";
+			this.gb_Style.Padding = new System.Windows.Forms.Padding(8, 0, 2, 0);
+			this.gb_Style.Size = new System.Drawing.Size(96, 97);
+			this.gb_Style.TabIndex = 1;
+			this.gb_Style.TabStop = false;
+			// 
+			// cb_Strk
+			// 
+			this.cb_Strk.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cb_Strk.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Strk.Location = new System.Drawing.Point(8, 73);
+			this.cb_Strk.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Strk.Name = "cb_Strk";
+			this.cb_Strk.Size = new System.Drawing.Size(86, 20);
+			this.cb_Strk.TabIndex = 3;
+			this.cb_Strk.Text = "strikeout";
+			this.cb_Strk.UseVisualStyleBackColor = true;
+			this.cb_Strk.CheckedChanged += new System.EventHandler(this.changefont);
+			// 
+			// cb_Undr
+			// 
+			this.cb_Undr.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cb_Undr.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Undr.Location = new System.Drawing.Point(8, 53);
+			this.cb_Undr.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Undr.Name = "cb_Undr";
+			this.cb_Undr.Size = new System.Drawing.Size(86, 20);
+			this.cb_Undr.TabIndex = 2;
+			this.cb_Undr.Text = "underline";
+			this.cb_Undr.UseVisualStyleBackColor = true;
+			this.cb_Undr.CheckedChanged += new System.EventHandler(this.changefont);
+			// 
+			// cb_Ital
+			// 
+			this.cb_Ital.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cb_Ital.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Ital.Location = new System.Drawing.Point(8, 33);
+			this.cb_Ital.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Ital.Name = "cb_Ital";
+			this.cb_Ital.Size = new System.Drawing.Size(86, 20);
+			this.cb_Ital.TabIndex = 1;
+			this.cb_Ital.Text = "italic";
+			this.cb_Ital.UseVisualStyleBackColor = true;
+			this.cb_Ital.CheckedChanged += new System.EventHandler(this.changefont);
+			// 
+			// cb_Bold
+			// 
+			this.cb_Bold.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cb_Bold.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cb_Bold.Location = new System.Drawing.Point(8, 13);
+			this.cb_Bold.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Bold.Name = "cb_Bold";
+			this.cb_Bold.Size = new System.Drawing.Size(86, 20);
+			this.cb_Bold.TabIndex = 0;
+			this.cb_Bold.Text = "bold";
+			this.cb_Bold.UseVisualStyleBackColor = true;
+			this.cb_Bold.CheckedChanged += new System.EventHandler(this.changefont);
+			// 
+			// gb_Size
+			// 
+			this.gb_Size.Controls.Add(this.tb_FontSize);
+			this.gb_Size.Controls.Add(this.lbl_FontSize);
+			this.gb_Size.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gb_Size.Location = new System.Drawing.Point(0, 0);
+			this.gb_Size.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Size.Name = "gb_Size";
+			this.gb_Size.Padding = new System.Windows.Forms.Padding(7, 0, 2, 2);
+			this.gb_Size.Size = new System.Drawing.Size(96, 38);
+			this.gb_Size.TabIndex = 0;
+			this.gb_Size.TabStop = false;
+			// 
+			// tb_FontSize
+			// 
+			this.tb_FontSize.Dock = System.Windows.Forms.DockStyle.Left;
+			this.tb_FontSize.Location = new System.Drawing.Point(7, 13);
+			this.tb_FontSize.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_FontSize.Name = "tb_FontSize";
+			this.tb_FontSize.Size = new System.Drawing.Size(39, 20);
+			this.tb_FontSize.TabIndex = 0;
+			this.tb_FontSize.TextChanged += new System.EventHandler(this.changefont);
+			// 
+			// lbl_FontSize
+			// 
+			this.lbl_FontSize.Location = new System.Drawing.Point(46, 14);
+			this.lbl_FontSize.Margin = new System.Windows.Forms.Padding(0);
+			this.lbl_FontSize.Name = "lbl_FontSize";
+			this.lbl_FontSize.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.lbl_FontSize.Size = new System.Drawing.Size(45, 19);
+			this.lbl_FontSize.TabIndex = 1;
+			this.lbl_FontSize.Text = "pt";
+			this.lbl_FontSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lbl_FontSize.Click += new System.EventHandler(this.click_pointlabel);
+			// 
+			// gb_Text
+			// 
+			this.gb_Text.Controls.Add(this.lbl_Lazydog);
+			this.gb_Text.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gb_Text.Location = new System.Drawing.Point(0, 0);
+			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Text.Name = "gb_Text";
+			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 1, 2, 2);
+			this.gb_Text.Size = new System.Drawing.Size(492, 58);
+			this.gb_Text.TabIndex = 0;
+			this.gb_Text.TabStop = false;
+			// 
+			// lbl_Lazydog
+			// 
+			this.lbl_Lazydog.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lbl_Lazydog.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 14);
+			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
+			this.lbl_Lazydog.Name = "lbl_Lazydog";
+			this.lbl_Lazydog.Size = new System.Drawing.Size(480, 42);
+			this.lbl_Lazydog.TabIndex = 0;
+			// 
+			// tb_FontString
+			// 
+			this.tb_FontString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_FontString.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.tb_FontString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tb_FontString.HideSelection = false;
+			this.tb_FontString.Location = new System.Drawing.Point(0, 352);
+			this.tb_FontString.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_FontString.Name = "tb_FontString";
+			this.tb_FontString.ReadOnly = true;
+			this.tb_FontString.Size = new System.Drawing.Size(492, 22);
+			this.tb_FontString.TabIndex = 1;
+			this.tb_FontString.WordWrap = false;
 			// 
 			// FontF
 			// 
@@ -290,14 +289,14 @@ namespace yata
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Choose Font ... be patient";
-			this.gb_Text.ResumeLayout(false);
-			this.gb_Style.ResumeLayout(false);
-			this.pa_Right.ResumeLayout(false);
-			this.gb_Size.ResumeLayout(false);
-			this.gb_Size.PerformLayout();
 			this.sc_Hori.Panel1.ResumeLayout(false);
 			this.sc_Hori.Panel2.ResumeLayout(false);
 			this.sc_Hori.ResumeLayout(false);
+			this.pa_Right.ResumeLayout(false);
+			this.gb_Style.ResumeLayout(false);
+			this.gb_Size.ResumeLayout(false);
+			this.gb_Size.PerformLayout();
+			this.gb_Text.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
