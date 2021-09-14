@@ -311,11 +311,12 @@ namespace yata
 			string label = fontdialog.Name;
 			FontStyle style = YataForm.getStyleStandard(fontdialog.FontFamily);
 
-			float pts;
-			while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault)
-			{
-				pts = fontdialog.SizeInPoints;
+			// the font as it appears in a dialog is smaller than the same font
+			// with the SAME pointsize as it appears on the table ...
 
+			float pts = fontdialog.SizeInPoints;
+			while (YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, fontdialog) > YataGraphics.hFontDefault + 1)
+			{
 				fontdialog.Dispose();
 				fontdialog = new Font(label, pts -= 0.75F, style);
 			}
