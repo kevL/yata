@@ -126,11 +126,10 @@ namespace yata
 		{
 			_f.CloseSettingsEditor();
 
-			if (WindowState == FormWindowState.Normal)
-			{
-				_x = Math.Max(0, Left);
-				_y = Math.Max(0, Top);
-			}
+			_init = true;
+			WindowState = FormWindowState.Normal;
+			_x = Math.Max(0, Left);
+			_y = Math.Max(0, Top);
 
 			base.OnFormClosing(e);
 		}
@@ -141,16 +140,37 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
-			if (   !_init &&     WindowState != FormWindowState.Minimized
-				&& !(Maximized = WindowState == FormWindowState.Maximized))
-			{
-				// coding for .net is inelegant ... but I try.
-				// Imagine a figure skater doing a triple-axial and flying into the boards.
+			base.OnResize(e); // before cursor shenanigans
 
-				_w = ClientSize.Width;
-				_h = ClientSize.Height;
+			if (!_init)
+			{
+				// If the vertical scrollbar is visible and user pulls the bottom of
+				// the window down past the end of the text -> keep the last line of
+				// the text snuggled against the bottom of the window. Thanks.
+				//
+				// The following code forces the scrollbar/text to re-layout which
+				// is all that's needed to keep the last line snuggled against the
+				// bottom of the control.
+
+				int pos = rtb_Settings.SelectionStart;
+				int len = rtb_Settings.SelectionLength;
+
+				rtb_Settings.SelectionStart  =
+				rtb_Settings.SelectionLength = 0;
+
+				rtb_Settings.SelectionStart  = pos;
+				rtb_Settings.SelectionLength = len;
+
+				if (WindowState != FormWindowState.Minimized
+					&& !(Maximized = WindowState == FormWindowState.Maximized))
+				{
+					// coding for .net is inelegant ... but I try.
+					// Imagine a figure skater doing a triple-axial and flying into the boards.
+
+					_w = ClientSize.Width;
+					_h = ClientSize.Height;
+				}
 			}
-			base.OnResize(e);
 		}
 		#endregion Handlers (override)
 
@@ -364,7 +384,7 @@ namespace yata
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "SettingsEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "Settings.Cfg";
+			this.Text = " yata - Settings.Cfg";
 			this.pa_Buttons.ResumeLayout(false);
 			this.ResumeLayout(false);
 

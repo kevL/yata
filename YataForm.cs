@@ -3241,12 +3241,20 @@ namespace yata
 		{
 			if (_fclip == null)
 			{
-				it_OpenClipEditor.Checked = true;
 				_fclip = new ClipboardEditor(this);
-				_fclip.Show(this); // will be disposed auto.
+				it_OpenClipEditor.Checked = true;
 			}
 			else
+			{
+				if (_fclip.WindowState == FormWindowState.Minimized)
+				{
+					if (ClipboardEditor.Maximized)
+						_fclip.WindowState = FormWindowState.Maximized;
+					else
+						_fclip.WindowState = FormWindowState.Normal;
+				}
 				_fclip.BringToFront();
+			}
 		}
 		#endregion Events (clipboard)
 
