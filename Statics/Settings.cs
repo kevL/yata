@@ -357,5 +357,27 @@ namespace yata
 			options[21] = "codepage=";
 			options[22] = "autorder=";
 		}
+
+
+		/// <summary>
+		/// Sets <c>Fonts</c> for a dialog.
+		/// </summary>
+		/// <param name="f">the dialog <c>Form</c></param>
+		/// <param name="tb">the dialog's <c>TextBoxBase</c></param>
+		internal static void SetFonts(Control f, Control tb)
+		{
+			if (_font2dialog != null)
+				f.Font = _font2dialog;
+			else
+				f.Font = _fontdialog;
+
+			if (_fontf_tb != null)
+			{
+				tb.Font.Dispose();
+				if      (tb is RichTextBox) tb.Font = _fontf;
+				else if (tb is TextBox)     tb.Font = _fontf_tb;
+			}
+			tb.BackColor = Colors.TextboxBackground;
+		}
 	}
 }
