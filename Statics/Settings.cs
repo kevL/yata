@@ -372,7 +372,7 @@ namespace yata
 			else
 				f.Font = _fontdialog;
 
-			if (_fontf_tb != null)
+			if (_fontf != null)
 			{
 				tb.Font.Dispose();
 				if      (tb is RichTextBox) tb.Font = _fontf;
