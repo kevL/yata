@@ -40,7 +40,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Settings.SetFonts(this, _rtb = rtb_Copyable, false);
+			Settings.SetFonts(this, _tbb = rtb_Copyable, false);
 
 			Text = title;
 
@@ -120,7 +120,7 @@ namespace yata
 			_x = Math.Max(0, Left);
 			_y = Math.Max(0, Top);
 
-			_f._fdiffer = null;
+			(_f as YataForm)._fdiffer = null;
 
 			base.OnFormClosing(e);
 		}
@@ -157,7 +157,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnReset(object sender, EventArgs e)
 		{
-			_f.tabclick_DiffReset(sender, e);
+			(_f as YataForm).tabclick_DiffReset(sender, e);
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace yata
 		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			_f.GotoDiffCell();
+			(_f as YataForm).GotoDiffCell();
 		}
 		#endregion Handlers
 

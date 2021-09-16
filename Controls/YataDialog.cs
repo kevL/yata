@@ -57,8 +57,8 @@ namespace yata
 
 
 		#region Fields
-		protected YataForm _f;
-		protected RichTextBox _rtb;
+		protected Control _f;
+		protected TextBoxBase _tbb;
 
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
@@ -110,8 +110,17 @@ namespace yata
 				if (Maximized)
 					WindowState = FormWindowState.Maximized;
 
-				_rtb.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
-				_rtb.Select();
+				var rtb = _tbb as RichTextBox;
+				if (rtb != null)
+				{
+					rtb.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
+				}
+				else // is TextBox
+				{
+					_tbb.SelectionStart  =
+					_tbb.SelectionLength = 0;
+				}
+				_tbb.Select();
 			}
 		}
 
@@ -208,13 +217,14 @@ namespace yata
 		/// <summary>
 		/// Forces <c>ClientSize</c> back to what it should be after
 		/// <c>InitializeComponent()</c> runs. Also sets fonts and
-		/// <c><see cref="_rtb"/></c>.
+		/// <c><see cref="_tbb"/></c>.
 		/// </summary>
-		protected void Initialize(RichTextBox rtb)
+		/// <param name="tbb"><c>TextBoxBase</c></param>
+		protected void Initialize(TextBoxBase tbb)
 		{
 			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
 
-			Settings.SetFonts(this, _rtb = rtb);
+			Settings.SetFonts(this, _tbb = tbb);
 
 //			_init = false;
 		}

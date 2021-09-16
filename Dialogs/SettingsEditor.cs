@@ -46,7 +46,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_f.CloseSettingsEditor();
+			(_f as YataForm).CloseSettingsEditor();
 			base.OnFormClosing(e);
 		}
 		#endregion Handlers (override)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -7,56 +6,25 @@ using System.Windows.Forms;
 namespace yata
 {
 	sealed class CodePageList
-		: Form
+		: YataDialog
 	{
-		#region Fields (static)
-		static int _x = -1, _y;
-		static int _w = -1, _h;
-		#endregion Fields (static)
-
-
-		#region Fields
-		CodePageDialog _cpd;
-		#endregion Fields
-
-
 		#region cTor
-		internal CodePageList(CodePageDialog cpd)
+		/// <summary>
+		/// A window that lists all codepages that are recognized by the user's
+		/// OS.
+		/// </summary>
+		/// <param name="f"><c><see cref="CodePageDialog"/></c></param>
+		/// <remarks>This dialog shall be allowed to remain open even if its
+		/// caller <c>CodePageDialog</c> is closed.</remarks>
+		internal CodePageList(CodePageDialog f)
 		{
-			_cpd = cpd;
+			// WARNING: CodePageList will hold a pointer to CodePageDialog even
+			// if CodePageDialog is closed. The pointer will be released when
+			// CodePageList is closed also.
+			_f = f;
 
 			InitializeComponent();
-
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf_tb != null)
-			{
-				tb_List.Font.Dispose();
-				tb_List.Font = Settings._fontf_tb;
-			}
-
-			if (_x == -1)
-			{
-				_x = Math.Max(0, cpd.Left + 20);
-				_y = Math.Max(0, cpd.Top  + 20);
-			}
-
-			Left = _x;
-			Top  = _y;
-
-			if (_w != -1)
-				ClientSize = new Size(_w,_h);
-
-			Screen screen = Screen.FromPoint(new Point(Left, Top));
-			if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
-				Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
-
-			if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
-				Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
-
+			Initialize(tb_Codepages);
 
 			var sb = new StringBuilder();
 
@@ -69,10 +37,7 @@ namespace yata
 				sb.AppendLine(encs[i].DisplayName);
 				sb.AppendLine(encs[i].CodePage.ToString());
 			}
-			tb_List.Text = sb.ToString();
-
-			tb_List.SelectionLength =
-			tb_List.SelectionStart  = 0;
+			tb_Codepages.Text = sb.ToString();
 
 			Show(); // no owner.
 		}
@@ -86,16 +51,9 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_cpd.CloseCodepageList();
-
-			_x = Math.Max(0, Left);
-			_y = Math.Max(0, Top);
-			_w = ClientSize.Width;
-			_h = ClientSize.Height;
-
+			(_f as CodePageDialog).CloseCodepageList();
 			base.OnFormClosing(e);
 		}
-
 
 		/// <summary>
 		/// Closes this <c>CodePageList</c> when <c>[Esc]</c> is pressed.
@@ -106,7 +64,7 @@ namespace yata
 		/// <c><see cref="CodePageDialog"/></c> would then close also.
 		/// 
 		/// 
-		/// Requires <c>KeyPreview</c>.</remarks>
+		/// Requires <c>KeyPreview</c> <c>true</c>.</remarks>
 		protected override void OnKeyUp(KeyEventArgs e)
 		{
 			if (e.KeyData == Keys.Escape)
@@ -117,31 +75,31 @@ namespace yata
 
 
 		#region Designer
-		TextBox tb_List;
+		TextBox tb_Codepages;
 
 		void InitializeComponent()
 		{
-			this.tb_List = new System.Windows.Forms.TextBox();
+			this.tb_Codepages = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// tb_List
+			// tb_Codepages
 			// 
-			this.tb_List.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tb_List.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tb_List.Location = new System.Drawing.Point(0, 0);
-			this.tb_List.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_List.Multiline = true;
-			this.tb_List.Name = "tb_List";
-			this.tb_List.ReadOnly = true;
-			this.tb_List.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.tb_List.Size = new System.Drawing.Size(312, 429);
-			this.tb_List.TabIndex = 0;
-			this.tb_List.WordWrap = false;
+			this.tb_Codepages.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tb_Codepages.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tb_Codepages.Location = new System.Drawing.Point(0, 0);
+			this.tb_Codepages.Margin = new System.Windows.Forms.Padding(0);
+			this.tb_Codepages.Multiline = true;
+			this.tb_Codepages.Name = "tb_Codepages";
+			this.tb_Codepages.ReadOnly = true;
+			this.tb_Codepages.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.tb_Codepages.Size = new System.Drawing.Size(312, 429);
+			this.tb_Codepages.TabIndex = 0;
+			this.tb_Codepages.WordWrap = false;
 			// 
 			// CodePageList
 			// 
 			this.ClientSize = new System.Drawing.Size(312, 429);
-			this.Controls.Add(this.tb_List);
+			this.Controls.Add(this.tb_Codepages);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.Name = "CodePageList";

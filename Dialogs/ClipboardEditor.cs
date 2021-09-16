@@ -32,7 +32,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_f.CloseClipEditor();
+			(_f as YataForm).CloseClipEditor();
 			base.OnFormClosing(e);
 		}
 
