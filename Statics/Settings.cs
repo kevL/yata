@@ -364,7 +364,8 @@ namespace yata
 		/// </summary>
 		/// <param name="f">the dialog <c>Form</c></param>
 		/// <param name="tb">the dialog's <c>TextBoxBase</c></param>
-		internal static void SetFonts(Control f, Control tb)
+		/// <param name="color"></param>
+		internal static void SetFonts(Control f, TextBoxBase tb, bool color = true)
 		{
 			if (_font2dialog != null)
 				f.Font = _font2dialog;
@@ -377,7 +378,9 @@ namespace yata
 				if      (tb is RichTextBox) tb.Font = _fontf;
 				else if (tb is TextBox)     tb.Font = _fontf_tb;
 			}
-			tb.BackColor = Colors.TextboxBackground;
+
+			if (color)
+				tb.BackColor = Colors.TextboxBackground;
 		}
 	}
 }

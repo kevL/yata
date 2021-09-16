@@ -9,19 +9,11 @@ namespace yata
 	/// A dialog for the 2da-differ.
 	/// </summary>
 	sealed class DifferDialog
-		: Form
+		: YataDialog
 	{
 		#region Fields (static)
 		const int WIDTH_Min = 325;
-
-		static int _x = -1;
-		static int _y = -1;
 		#endregion Fields (static)
-
-
-		#region Fields
-		readonly YataForm _f;
-		#endregion Fields
 
 
 		#region cTor
@@ -45,20 +37,10 @@ namespace yata
 				bool @goto,
 				bool reset)
 		{
-			InitializeComponent();
-
 			_f = f;
 
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf != null)
-			{
-				rtb_Copyable.Font.Dispose();
-				rtb_Copyable.Font = Settings._fontf;
-			}
+			InitializeComponent();
+			Settings.SetFonts(this, _rtb = rtb_Copyable, false);
 
 			Text = title;
 
@@ -121,16 +103,18 @@ namespace yata
 		#endregion
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
-		/// Overrides this dialog's <c>Load</c> handler. Niceties ...
+		/// Overrides <c><see cref="YataDialog"/>.OnLoad()</c>. Niceties ...
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
 			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
-			rtb_Copyable.Select();
-			rtb_Copyable.SelectionStart = rtb_Copyable.Text.Length;
+
+			if      (btn_Goto .Visible) btn_Goto .Select();
+			else if (btn_Reset.Visible) btn_Reset.Select();
+			else                        btn_Okay .Select();
 		}
 
 		/// <summary>
@@ -162,27 +146,16 @@ namespace yata
 				case Keys.Enter:
 				case Keys.Enter | Keys.Control:
 				case Keys.Enter | Keys.Control | Keys.Shift:
-					e.Handled = e.SuppressKeyPress = true;
+					e.SuppressKeyPress = true;
 					click_btnGoto(null, EventArgs.Empty);
 					break;
 			}
 			base.OnKeyDown(e);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
-		#region Events
-		/// <summary>
-		/// Handles a click on the Okay button. Closes this dialog without doing
-		/// anything else.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void click_btnOkay(object sender, EventArgs e)
-		{
-			Close();
-		}
-
+		#region Handlers
 		/// <summary>
 		/// Handles a click on the Reset button. Clears and desyncs the diff'd
 		/// tables. Closes this dialog via <c><see cref="YataForm"/></c>.
@@ -206,7 +179,7 @@ namespace yata
 		{
 			_f.GotoDiffCell();
 		}
-		#endregion Events
+		#endregion Handlers
 
 
 		#region Methods
@@ -243,31 +216,6 @@ namespace yata
 
 
 		/// <summary>
-		/// Sets the text-color of the info.
-		/// </summary>
-		/// <param name="color"></param>
-		internal void SetLabelColor(Color color)
-		{
-			lbl_Info.ForeColor = color;
-		}
-
-		/// <summary>
-		/// Visibles the reset button.
-		/// </summary>
-		internal void ShowResetButton()
-		{
-			btn_Reset.Visible = true;
-		}
-
-		/// <summary>
-		/// Visibles the goto button.
-		/// </summary>
-		internal void ShowGotoButton()
-		{
-			btn_Goto.Visible = true;
-		}
-
-		/// <summary>
 		/// Enables/disables the goto button.
 		/// </summary>
 		/// <param name="enabled">true to enable</param>
@@ -278,7 +226,8 @@ namespace yata
 		#endregion Methods
 
 
-		#region Windows Form Designer generated code
+
+		#region Designer
 		Label lbl_Info;
 		RichTextBox rtb_Copyable;
 		Panel pnl_Copyable;
@@ -364,7 +313,7 @@ namespace yata
 			this.btn_Okay.TabIndex = 4;
 			this.btn_Okay.Text = "ok";
 			this.btn_Okay.UseVisualStyleBackColor = true;
-			this.btn_Okay.Click += new System.EventHandler(this.click_btnOkay);
+			this.btn_Okay.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// btn_Reset
 			// 
@@ -394,11 +343,10 @@ namespace yata
 			this.MaximizeBox = false;
 			this.Name = "DifferDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.TopMost = true;
 			this.pnl_Copyable.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
-		#endregion
+		#endregion Designer
 	}
 }
