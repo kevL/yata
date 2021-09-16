@@ -14,7 +14,9 @@ namespace yata
 	/// <summary>
 	/// Yata ....
 	/// </summary>
-	sealed partial class YataForm
+	/// <remarks>Public access is required for the pointers in
+	/// <c><see cref="YataDialog"/></c>.</remarks>
+	public sealed partial class YataForm
 		: Form
 	{
 		#region Enumerators
@@ -5332,13 +5334,10 @@ namespace yata
 			_fdiffer = new DifferDialog(title,
 										label,
 										copyable,
-										this);
-			_fdiffer.SetLabelColor(color);
-			if (@goto)           _fdiffer.ShowGotoButton();
-			if (@goto || isDiff) _fdiffer.ShowResetButton();
-
-			_fdiffer.Show(); // is not owned, will be disposed auto.
-
+										this,
+										color,
+										@goto,
+										@goto || isDiff);
 			return isDiff || @goto;
 		}
 

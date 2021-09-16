@@ -32,12 +32,18 @@ namespace yata
 		/// <param name="label">info to be displayed with a proportional font</param>
 		/// <param name="copyable">info to be displayed with a fixed font in a
 		/// RichTextBox so it can be copied</param>
-		/// <param name="f">caller</param>
+		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
+		/// <param name="color"></param>
+		/// <param name="goto"></param>
+		/// <param name="reset"></param>
 		internal DifferDialog(
 				string title,
 				string label,
 				string copyable,
-				YataForm f)
+				YataForm f,
+				Color color,
+				bool @goto,
+				bool reset)
 		{
 			InitializeComponent();
 
@@ -56,6 +62,10 @@ namespace yata
 
 			Text = title;
 
+			btn_Goto .Visible = @goto;
+			btn_Reset.Visible = reset;
+
+			lbl_Info.ForeColor = color;
 			lbl_Info.Height = YataGraphics.MeasureHeight(label, Font) + 15; // +15 = label's pad top+bot +5
 			lbl_Info.Text = label;
 
@@ -105,6 +115,8 @@ namespace yata
 			Top  = _y;
 
 			MinimumSize = new Size(Width, Height);
+
+			Show(_f); // Yata is owner.
 		}
 		#endregion
 
