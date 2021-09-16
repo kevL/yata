@@ -64,7 +64,7 @@ namespace yata
 			this.btn_Done.TabIndex = 1;
 			this.btn_Done.Text = "begone foul demon";
 			this.btn_Done.UseVisualStyleBackColor = true;
-			this.btn_Done.Click += new System.EventHandler(this.click_Done);
+			this.btn_Done.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// btn_Set
 			// 
