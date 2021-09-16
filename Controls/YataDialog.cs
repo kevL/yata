@@ -7,8 +7,8 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// Base class for a nonmodal dialogs in Yata. Tracks telemetry, assigns
-	/// fonts, defines cancel-handler, etc.
+	/// Base class for nonmodal dialogs in Yata. Assigns fonts, tracks
+	/// telemetry, defines cancel-handler, etc.
 	/// </summary>
 	public class YataDialog
 		: Form
@@ -58,7 +58,6 @@ namespace yata
 
 		#region Fields
 		protected YataForm _f;
-
 		protected RichTextBox _rtb;
 
 /*		/// <summary>
@@ -87,32 +86,14 @@ namespace yata
 		/// Overrides the <c>Load</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>The <c><see cref="DifferDialog"/></c> overrides
+		/// <c>OnLoad()</c>.</remarks>
 		protected override void OnLoad(EventArgs e)
 		{
 			if (!DesignMode) // else the Designer(s) bork out.
 			{
-//				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width,
-//													_f.Top  + 20));
-
-				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
-//				_y = loc.Y;
-
 				if (_x == -1)
 				{
-//					Screen screen = Screen.FromControl(_f);
-/*					Screen screen = Screen.FromPoint(new Point(Left, Top));
-					if (screen.Bounds.Contains(new Point(loc.X + Width, loc.Y)))
-					{
-						_x = loc.X;
-					}
-					else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y)))
-					{
-						_x = _f.Left - Width;
-					}
-					else
-						_x = loc.X - Width; */
-
-
 					_x = Math.Max(0, _f.Left + 20);
 					_y = Math.Max(0, _f.Top  + 20);
 				}

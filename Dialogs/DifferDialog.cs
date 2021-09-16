@@ -72,30 +72,6 @@ namespace yata
 			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
 								  lbl_Info.Height + pnl_Copyable.Height + btn_Okay.Height);
 
-			if (_x == -1)
-			{
-				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width,
-													_f.Top  + 20));
-
-				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
-				_y = loc.Y;
-
-				Screen screen = Screen.FromControl(_f);
-				if (screen.Bounds.Contains(new Point(loc.X + Width, loc.Y)))
-				{
-					_x = loc.X;
-				}
-				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y)))
-				{
-					_x = _f.Left - Width;
-				}
-				else
-					_x = loc.X - Width;
-			}
-
-			Left = _x;
-			Top  = _y;
-
 			MinimumSize = new Size(Width, Height);
 
 			Show(_f); // Yata is owner.
@@ -110,6 +86,23 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
+			if (_x == -1)
+			{
+				int fborder = (_f.Width - _f.ClientSize.Width) / 2;
+				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width + fborder,
+													_f.Top  + 20));
+
+				Screen screen = Screen.FromControl(_f);
+				if      (screen.Bounds.Contains(new Point( loc.X  + Width, loc.Y))) _x =  loc.X;
+				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y))) _x = _f.Left - Width;
+				else                                                                _x =  loc.X  - Width;
+
+				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
+				_y = loc.Y;
+			}
+			Left = _x;
+			Top  = _y;
+
 			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
 
 			if      (btn_Goto .Visible) btn_Goto .Select();
