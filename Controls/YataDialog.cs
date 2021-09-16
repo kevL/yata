@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,16 +13,53 @@ namespace yata
 	public class YataDialog
 		: Form
 	{
-		#region Fields (static)
-		static int _x = -1, _y;
-		static int _w = -1, _h;
-		#endregion Fields (static)
+		#region Properties (static)
+		static Dictionary<object, int> x = new Dictionary<object, int>();
+		/// <summary>
+		/// <c>Dictionary</c> that holds x-locations of dialogs.
+		/// </summary>
+		protected int _x
+		{
+			get { return x.ContainsKey(GetType()) ? x[GetType()] : -1; }
+			set { x[GetType()] = value; }
+		}
+
+		static Dictionary<object, int> y = new Dictionary<object, int>();
+		/// <summary>
+		/// <c>Dictionary</c> that holds y-locations of dialogs.
+		/// </summary>
+		protected int _y
+		{
+			get { return y.ContainsKey(GetType()) ? y[GetType()] : -1; }
+			set { y[GetType()] = value; }
+		}
+
+		static Dictionary<object, int> w = new Dictionary<object, int>();
+		/// <summary>
+		/// <c>Dictionary</c> that holds client-widths of dialogs.
+		/// </summary>
+		int _w
+		{
+			get { return w.ContainsKey(GetType()) ? w[GetType()] : -1; }
+			set { w[GetType()] = value; }
+		}
+
+		static Dictionary<object, int> h = new Dictionary<object, int>();
+		/// <summary>
+		/// <c>Dictionary</c> that holds client-heights of dialogs.
+		/// </summary>
+		int _h
+		{
+			get { return h.ContainsKey(GetType()) ? h[GetType()] : -1; }
+			set { h[GetType()] = value; }
+		}
+		#endregion Properties (static)
 
 
 		#region Fields
 		protected YataForm _f;
 
-		RichTextBox _rtb;
+		protected RichTextBox _rtb;
 
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
@@ -53,8 +91,28 @@ namespace yata
 		{
 			if (!DesignMode) // else the Designer(s) bork out.
 			{
+//				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width,
+//													_f.Top  + 20));
+
+				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
+//				_y = loc.Y;
+
 				if (_x == -1)
 				{
+//					Screen screen = Screen.FromControl(_f);
+/*					Screen screen = Screen.FromPoint(new Point(Left, Top));
+					if (screen.Bounds.Contains(new Point(loc.X + Width, loc.Y)))
+					{
+						_x = loc.X;
+					}
+					else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y)))
+					{
+						_x = _f.Left - Width;
+					}
+					else
+						_x = loc.X - Width; */
+
+
 					_x = Math.Max(0, _f.Left + 20);
 					_y = Math.Max(0, _f.Top  + 20);
 				}
