@@ -117,7 +117,7 @@ namespace yata
 				}
 				else // is TextBox
 				{
-					_tbb.SelectionStart  =
+					_tbb.SelectionStart =
 					_tbb.SelectionLength = 0;
 				}
 				_tbb.Select();

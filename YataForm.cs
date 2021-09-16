@@ -2563,9 +2563,9 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_Apply(object sender, EventArgs e)
 		{
-			using (var f = new TextInputDialog(this))
+			using (var tid = new TextInputDialog(this))
 			{
-				if (f.ShowDialog(this) == DialogResult.OK)
+				if (tid.ShowDialog(this) == DialogResult.OK)
 				{
 					Cell sel; string text;
 					int invalid = -1;
@@ -4737,9 +4737,9 @@ namespace yata
 						case InfoInputSpells.Range:
 						case InfoInputSpells.ImmunityType:
 						case InfoInputSpells.UserType:
-							using (var f = new InfoInputSpells(Table, _sel))
+							using (var iis = new InfoInputSpells(Table, _sel))
 							{
-								if (f.ShowDialog(this) == DialogResult.OK
+								if (iis.ShowDialog(this) == DialogResult.OK
 									&& str1 != str0)
 								{
 									Table.ChangeCellText(_sel, str1); // does not do a text-check
@@ -4750,9 +4750,9 @@ namespace yata
 						case InfoInputSpells.MetaMagic: // HEX Input ->
 						case InfoInputSpells.TargetType:
 						case InfoInputSpells.AsMetaMagic:
-							using (var f = new InfoInputSpells(Table, _sel))
+							using (var iis = new InfoInputSpells(Table, _sel))
 							{
-								if (f.ShowDialog(this) == DialogResult.OK
+								if (iis.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
 								{
 									if (int1 == II_ASSIGN_STARS)
@@ -4789,9 +4789,9 @@ namespace yata
 							break;
 
 						case InfoInputFeat.ToolsCategories:
-							using (var f = new InfoInputFeat(Table, _sel))
+							using (var iif = new InfoInputFeat(Table, _sel))
 							{
-								if (f.ShowDialog(this) == DialogResult.OK
+								if (iif.ShowDialog(this) == DialogResult.OK
 									&& str1 != str0)
 								{
 									Table.ChangeCellText(_sel, str1); // does not do a text-check

@@ -31,6 +31,11 @@ namespace yata
 
 
 		#region cTor
+		/// <summary>
+		/// A dialog for the user to input <c>Feat.2da</c> info.
+		/// </summary>
+		/// <param name="grid"></param>
+		/// <param name="cell"></param>
 		internal InfoInputFeat(YataGrid grid, Cell cell)
 		{
 			InitializeComponent();
