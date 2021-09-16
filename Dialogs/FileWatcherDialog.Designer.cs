@@ -124,6 +124,7 @@ namespace yata
 			this.ClientSize = new System.Drawing.Size(342, 84);
 			this.Controls.Add(this.pnl_Bot);
 			this.Controls.Add(this.pnl_Top);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(350, 110);
