@@ -9,8 +9,7 @@ namespace yata
 	/// A dialog for cell-text entry.
 	/// </summary>
 	sealed class TextInputDialog
-		:
-			Form
+		: Form
 	{
 		#region Fields (static)
 		const string head = "Apply sets the copy cell text and applies it to selected cells.";
