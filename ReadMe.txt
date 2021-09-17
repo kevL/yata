@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 13
+2021 september 17
 kevL's
 ver 4.3.2.0
 
@@ -355,6 +355,18 @@ reduced to ~4 seconds if a table has a lot of **** fields.
 
 
 Settings.Cfg file (do not use double-quotes)
+
+The file Settings.Cfg is not distributed; the package contains only the
+executable and help files. see Help|Options file. If Settings.Cfg is not found
+in the application directory you're asked if you want to create one; if the file
+is found an internal texteditor opens where edits can be done. If I hardcode
+additional settings for a new release a button appears in the lower left corner
+of the editor that adds any variables that are not found to the text.
+
+Note that your OS could throw a hissy fit depending on its security settings. If
+so you have two options: install Yata to a directory that you have read/write
+privileges for, or create and/or edit Settings.Cfg by hand in your favorite
+text editor.
 
 Any change to settings requires a restart.
 
