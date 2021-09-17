@@ -648,6 +648,7 @@ namespace yata
 			this.Controls.Add(this.btn_Cancel);
 			this.Controls.Add(this.pnl_Copyable);
 			this.Controls.Add(this.pnl_Head);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "TalkDialog";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

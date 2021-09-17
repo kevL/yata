@@ -500,6 +500,7 @@ namespace yata
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.gb_MetaGroups);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;

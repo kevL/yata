@@ -144,12 +144,13 @@ namespace yata
 			this.Controls.Add(this.bu_Okay);
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.tb_Input);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.Name = "InputDialogColhead";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Colhead text";
+			this.Text = " yata - Colhead text";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

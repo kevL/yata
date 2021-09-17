@@ -171,12 +171,13 @@ namespace yata
 			this.Controls.Add(this.bu_Okay);
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.tb_Input);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.Name = "TextInputDialog";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Text input";
+			this.Text = " yata - Text input";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
