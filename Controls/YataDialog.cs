@@ -7,8 +7,8 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// Base class for nonmodal dialogs in Yata. Assigns fonts, tracks
-	/// telemetry, defines cancel-handler, etc.
+	/// Base class for dialogs in Yata. Assigns fonts, tracks telemetry, defines
+	/// cancel-handler, etc.
 	/// </summary>
 	public class YataDialog
 		: Form
@@ -83,7 +83,7 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// Overrides the <c>Load</c> eventhandler.
+		/// Overrides the <c>Load</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>The <c><see cref="DifferDialog"/></c> overrides
@@ -111,20 +111,24 @@ namespace yata
 					WindowState = FormWindowState.Maximized;
 
 				var rtb = _tbb as RichTextBox;
-				if (rtb != null)
+				if (rtb != null)	// is RichTextBox ->
 				{
 					rtb.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
 				}
-				else // is TextBox
+				else				// is TextBox ->
 				{
-					_tbb.SelectionStart =
-					_tbb.SelectionLength = 0;
+					_tbb.SelectionStart = 0;
+					
+					if (_tbb.Multiline)
+						_tbb.SelectionLength = 0;
+					else
+						_tbb.SelectionLength = _tbb.Text.Length;
 				}
 			}
 		}
 
 		/// <summary>
-		/// Overrides the <c>FormClosing</c> eventhandler.
+		/// Overrides the <c>FormClosing</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -142,6 +146,42 @@ namespace yata
 
 			base.OnFormClosing(e);
 		}
+		#endregion Handlers (override)
+
+
+		#region Handlers
+		/// <summary>
+		/// Closes this <c>YataDialog</c> harmlessly.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>Used only for nonmodal dialogs. Use <c>DialogResult</c>
+		/// instead if a dialog is modal.</remarks>
+		protected void click_Cancel(object sender, EventArgs e)
+		{
+			Close();
+		}
+		#endregion Handlers
+
+
+		#region Methods
+		/// <summary>
+		/// Forces <c>ClientSize</c> back to what it should be after
+		/// <c>InitializeComponent()</c> runs. Also sets fonts and
+		/// <c><see cref="_tbb"/></c>.
+		/// </summary>
+		/// <param name="tbb"><c>TextBoxBase</c></param>
+		protected void Initialize(TextBoxBase tbb)
+		{
+			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
+
+			Settings.SetFonts(this, _tbb = tbb);
+
+//			_init = false;
+		}
+		#endregion Methods
+	}
+}
 
 
 //		[System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -196,37 +236,3 @@ namespace yata
 //				var isAtBottom = rt.GetPositionFromCharIndex(rt.Text.Length).Y < rt.Height;
 			}
 		} */
-		#endregion Handlers (override)
-
-
-		#region Handlers
-		/// <summary>
-		/// Closes this <c>YataDialog</c> harmlessly.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		protected void click_Cancel(object sender, EventArgs e)
-		{
-			Close();
-		}
-		#endregion Handlers
-
-
-		#region Methods
-		/// <summary>
-		/// Forces <c>ClientSize</c> back to what it should be after
-		/// <c>InitializeComponent()</c> runs. Also sets fonts and
-		/// <c><see cref="_tbb"/></c>.
-		/// </summary>
-		/// <param name="tbb"><c>TextBoxBase</c></param>
-		protected void Initialize(TextBoxBase tbb)
-		{
-			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
-
-			Settings.SetFonts(this, _tbb = tbb);
-
-//			_init = false;
-		}
-		#endregion Methods
-	}
-}

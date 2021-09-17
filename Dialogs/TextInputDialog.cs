@@ -9,16 +9,14 @@ namespace yata
 	/// A dialog for cell-text entry.
 	/// </summary>
 	sealed class TextInputDialog
-		: Form
+		: YataDialog
 	{
 		#region Fields (static)
-		const string head = "Apply sets the copy cell text and applies it to selected cells.";
+		const string HEAD = "Apply sets the copy cell text and applies it to selected cells.";
 		#endregion Fields (static)
 
 
 		#region Fields
-		YataForm _f;
-
 		bool _readyTextchanged;
 		#endregion Fields
 
@@ -27,44 +25,28 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f"></param>
+		/// <param name="f"><c><see cref="YataForm"/></c></param>
 		internal TextInputDialog(YataForm f)
 		{
-			InitializeComponent();
-
 			_f = f;
 
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
+			InitializeComponent();
+			Initialize(tb_Input);
 
-			if (Settings._fontf_tb != null)
-			{
-				tb_Input.Font.Dispose();
-				tb_Input.Font = Settings._fontf_tb;
-			}
+			la_Head.Text = HEAD;
 
-			tb_Input.BackColor = Colors.TextboxBackground;
+			tb_Input.Text = (_f as YataForm)._copytext[0,0];
 
-			la_Head.Text = head;
-
-			if (_f._copytext.Length == 1)
-				tb_Input.Text = _f._copytext[0,0];
-			else
-				tb_Input.Text = String.Empty;
-
-			tb_Input.SelectionStart = 0;
-			tb_Input.SelectionLength = tb_Input.Text.Length;
+			tb_Input.Select();
 		}
 		#endregion cTor
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Handles a click on the Okay button.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="bu_Okay"/></c></param>
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
@@ -76,7 +58,7 @@ namespace yata
 			}
 			else
 			{
-				_f._copytext = new string[,] {{ tb_Input.Text }};
+				(_f as YataForm)._copytext = new string[,] {{ tb_Input.Text }};
 				DialogResult = DialogResult.OK;
 			}
 		}
@@ -84,7 +66,7 @@ namespace yata
 		/// <summary>
 		/// Clears warn-state when user inputs text.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Input"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Input(object sender, EventArgs e)
 		{
@@ -92,13 +74,14 @@ namespace yata
 			{
 				_readyTextchanged = false;
 				la_Head.ForeColor = SystemColors.WindowText;
-				la_Head.Text = head;
+				la_Head.Text = HEAD;
 			}
 		}
-		#endregion Events
+		#endregion Handlers
 
 
-		#region Windows Form Designer generated code
+
+		#region Designer
 		TextBox tb_Input;
 		Button bu_Cancel;
 		Button bu_Okay;
@@ -176,13 +159,13 @@ namespace yata
 			this.Name = "TextInputDialog";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Text input";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
-		#endregion Windows Form Designer generated code
+		#endregion Designer
 	}
 }
 
