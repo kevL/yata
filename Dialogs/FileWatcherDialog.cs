@@ -22,7 +22,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor. Instantiates a FileWatcherDialog.
+		/// cTor. Instantiates this <c>FileWatcherDialog</c>.
 		/// </summary>
 		/// <param name="grid"></param>
 		/// <param name="fwdType"></param>
@@ -30,22 +30,10 @@ namespace yata
 				YataGrid grid,
 				int fwdType)
 		{
-			InitializeComponent();
-
 			_grid = grid;
 
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf_tb != null)
-			{
-				tb_Pfe.Font.Dispose();
-				tb_Pfe.Font = Settings._fontf_tb;
-			}
-
-			tb_Pfe.BackColor = Colors.TextboxBackground;
+			InitializeComponent();
+			Settings.SetFonts(this, tb_Pfe);
 
 			YataTabs tabs = _grid._f.Tabs;
 			for (int i = 0; i != tabs.TabCount; ++i)
@@ -84,9 +72,9 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
-		/// Handles the <c>Resize</c> event.
+		/// Overrides the <c>Resize</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
@@ -98,7 +86,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the <c>FormClosing</c> event.
+		/// Overrides the <c>FormClosing</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -134,6 +122,6 @@ namespace yata
 
 			base.OnFormClosing(e);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }
