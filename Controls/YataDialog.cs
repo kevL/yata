@@ -60,9 +60,6 @@ namespace yata
 		protected Control _f;
 		protected TextBoxBase _tbb;
 
-		protected Control _activecontrol;
-
-
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
 		/// when this <c>FontF</c> dialog instantiates. Otherwise when .net
@@ -123,8 +120,6 @@ namespace yata
 					_tbb.SelectionStart =
 					_tbb.SelectionLength = 0;
 				}
-
-				_activecontrol.Select();
 			}
 		}
 

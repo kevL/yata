@@ -24,7 +24,6 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			_activecontrol = tb_Codepages;
 			Initialize(tb_Codepages);
 
 			var sb = new StringBuilder();
@@ -40,6 +39,7 @@ namespace yata
 			}
 			tb_Codepages.Text = sb.ToString();
 
+			tb_Codepages.Select();
 			Show(); // no owner.
 		}
 		#endregion cTor

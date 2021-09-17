@@ -21,7 +21,6 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			_activecontrol = rtb_Settings;
 			Initialize(rtb_Settings);
 
 			if (lines.Length != 0)
@@ -35,6 +34,7 @@ namespace yata
 
 			bu_Insert.Visible = CheckInsertVisible();
 
+			rtb_Settings.Select();
 			Show(_f); // Yata is owner.
 		}
 		#endregion cTor

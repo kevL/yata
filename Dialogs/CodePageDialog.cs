@@ -23,7 +23,6 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			_activecontrol = bu_Accept;
 			Initialize(tb_Codepage);
 
 			string head = "The 2da file appears to have ANSI encoding."
@@ -39,6 +38,8 @@ namespace yata
 
 			_pre = enc.CodePage;
 			tb_Codepage.Text = enc.CodePage.ToString();
+
+			bu_Accept.Select();
 		}
 		// "The text encoding of the 2da file could not be determined. It
 		// appears to contain characters that .NET cannot interpret accurately.
