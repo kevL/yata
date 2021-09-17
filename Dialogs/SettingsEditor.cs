@@ -21,6 +21,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
+			_activecontrol = rtb_Settings;
 			Initialize(rtb_Settings);
 
 			if (lines.Length != 0)

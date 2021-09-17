@@ -16,6 +16,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
+			_activecontrol = rtb_Clip;
 			Initialize(rtb_Clip);
 
 			click_Get(null, EventArgs.Empty);

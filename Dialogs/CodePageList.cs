@@ -24,6 +24,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
+			_activecontrol = tb_Codepages;
 			Initialize(tb_Codepages);
 
 			var sb = new StringBuilder();
