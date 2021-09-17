@@ -99,7 +99,6 @@
     </Compile>
     <Compile Include="Dialogs\SettingsEditor.cs" />
     <Compile Include="Dialogs\TalkDialog.cs" />
-    <Compile Include="Dialogs\TalkReader.cs" />
     <Compile Include="Dialogs\TextInputDialog.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
@@ -110,6 +109,7 @@
     <Compile Include="Statics\logger.cs" />
     <Compile Include="Statics\Settings.cs" />
     <Compile Include="Statics\Sorter.cs" />
+    <Compile Include="Statics\TalkReader.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="YataForm.cs" />
