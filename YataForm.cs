@@ -661,9 +661,9 @@ namespace yata
 		#region Events (override -  Receive Message - PfeLoad arg)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
-		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs</remarks>
 		protected override void OnLoad(EventArgs e)
 		{
 			var filter = new Crap.CHANGEFILTERSTRUCT();
@@ -680,16 +680,15 @@ namespace yata
 
 		/// <summary>
 		/// Receives data via WM_COPYDATA from other applications/processes.
-		/// https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs
 		/// </summary>
 		/// <param name="m"></param>
+		/// <remarks>https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs</remarks>
 		protected override void WndProc(ref Message m)
 		{
 			if (m.Msg == Crap.WM_COPYDATA)
 			{
 				var copyData = (Crap.COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, typeof(Crap.COPYDATASTRUCT));
-				int dataType = (int)copyData.dwData;
-				if (dataType == Crap.CopyDataStructType) // extract the file-string ->
+				if ((int)copyData.dwData == Crap.CopyDataStructType) // extract the file-string ->
 				{
 					PfeLoad = Marshal.PtrToStringAnsi(copyData.lpData);
 					if (File.Exists(PfeLoad))
