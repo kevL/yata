@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -10,6 +11,8 @@ namespace yata
 		#region Fields (static)
 		internal const int FILE_DEL = 0; // file's not there, Jim.
 		internal const int FILE_WSC = 1; // file's writestamp changed
+
+		const int WIDTH_Min = 363;
 		#endregion Fields (static)
 
 
@@ -45,8 +48,8 @@ namespace yata
 				}
 			}
 
-			tb_Pfe.Text = _grid.Fullpath;
-			Width = YataGraphics.MeasureWidth(tb_Pfe.Text, tb_Pfe.Font) + 28;
+			// TODO: what if user changes 2+ files on the hardrive ...
+
 
 			string text = String.Empty;
 			switch (_fwdType = fwdType)
@@ -66,6 +69,16 @@ namespace yata
 				text += " CANCEL DISABLES THE READONLY FLAG.";
 
 			lbl_Info.Text = text;
+			int wInfo = YataGraphics.MeasureWidth(lbl_Info.Text, lbl_Info.Font);
+
+			tb_Pfe.Text = _grid.Fullpath;
+			int wPfe = YataGraphics.MeasureWidth(tb_Pfe.Text, tb_Pfe.Font);
+
+			ClientSize = new Size(Math.Max(wInfo, wPfe) + 20, ClientSize.Height);
+
+			MaximumSize = new Size(Int32.MaxValue,             Height);
+			MinimumSize = new Size(Math.Max(WIDTH_Min, Width), Height);
+
 
 			btn_Action.Select();
 		}
@@ -96,7 +109,7 @@ namespace yata
 				default:
 //				case DialogResult.Cancel:	// btn_Cancel
 					_grid.Readonly = false;
-					_grid.Changed = true;
+					_grid.Changed  = true;
 					break;
 
 				case DialogResult.Abort:	// btn_Close2da
