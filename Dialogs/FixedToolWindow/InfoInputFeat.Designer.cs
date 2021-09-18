@@ -193,8 +193,6 @@ namespace yata
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "InfoInputFeat";
-			this.ShowInTaskbar = false;
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.ResumeLayout(false);
 

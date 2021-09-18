@@ -348,10 +348,7 @@ namespace yata
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "RowCreatorDialog";
-			this.ShowInTaskbar = false;
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = " yata - Create rows";
 			this.gb_Start.ResumeLayout(false);

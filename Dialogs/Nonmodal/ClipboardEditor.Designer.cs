@@ -99,6 +99,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(250, 0);
 			this.Name = "ClipboardEditor";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
 			this.panel1.ResumeLayout(false);
