@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class FontF
+	sealed partial class FontDialog
 	{
 		SplitContainer sc_Hori;
 		ListBox list_Font;
@@ -272,7 +272,7 @@ namespace yata
 			this.tb_FontString.TabIndex = 1;
 			this.tb_FontString.WordWrap = false;
 			// 
-			// FontF
+			// FontDialog
 			// 
 			this.AcceptButton = this.bu_Apply;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -285,7 +285,7 @@ namespace yata
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.MinimumSize = new System.Drawing.Size(320, 306);
-			this.Name = "FontF";
+			this.Name = "FontDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Choose Font ... be patient";

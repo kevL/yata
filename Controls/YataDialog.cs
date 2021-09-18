@@ -62,7 +62,7 @@ namespace yata
 
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
-		/// when this <c>FontF</c> dialog instantiates. Otherwise when .net
+		/// when this <c>FontDialog</c> instantiates. Otherwise when .net
 		/// automatically fires the <c>Resize</c> event during instantiation the
 		/// values get set in a way that renders the
 		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is

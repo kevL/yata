@@ -98,9 +98,9 @@ namespace yata
 		internal CrFillType _fillCr;
 
 		/// <summary>
-		/// The <c><see cref="FontF"/></c> dialog/FontPicker.
+		/// The <c><see cref="FontDialog"/></c> font-picker.
 		/// </summary>
-		FontF _ffont;
+		FontDialog _ffont;
 
 		Font FontDefault;
 		internal Font FontAccent;
@@ -3757,7 +3757,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Opens the FontPicker dialog - <c><see cref="FontF"/></c>.
+		/// Opens the font-picker dialog - <c><see cref="FontDialog"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Font"/></c></param>
 		/// <param name="e"></param>
@@ -3769,14 +3769,14 @@ namespace yata
 		{
 			if (_ffont == null)
 			{
-				_ffont = new FontF(this);
+				_ffont = new FontDialog(this);
 				it_Font.Checked = true;
 			}
 			else
 			{
 				if (_ffont.WindowState == FormWindowState.Minimized)
 				{
-					if (FontF.Maximized)
+					if (FontDialog.Maximized)
 						_ffont.WindowState = FormWindowState.Maximized;
 					else
 						_ffont.WindowState = FormWindowState.Normal;
@@ -3796,8 +3796,8 @@ namespace yata
 		/// </list>
 		/// 
 		/// 
-		/// The item will be disabled if the <c><see cref="FontF"/></c> dialog
-		/// is open or if Yata's current <c>Font</c> is
+		/// The item will be disabled if <c><see cref="FontDialog"/></c> is open
+		/// or if Yata's current <c>Font</c> is
 		/// <c><see cref="FontDefault"/></c>.</remarks>
 		void fontclick_Default(object sender, EventArgs e)
 		{
@@ -3808,8 +3808,8 @@ namespace yata
 
 		#region Methods (font)
 		/// <summary>
-		/// Dechecks the "Font ... be patient" it when the
-		/// <c><see cref="FontF"/></c> dialog closes.
+		/// Dechecks the "Font ... be patient" it when
+		/// <c><see cref="FontDialog"/></c> closes.
 		/// </summary>
 		internal void CloseFontDialog()
 		{

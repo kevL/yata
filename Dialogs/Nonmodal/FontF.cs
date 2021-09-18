@@ -11,7 +11,7 @@ using Microsoft.Win32;
 
 namespace yata
 {
-	sealed partial class FontF
+	sealed partial class FontDialog
 		: Form
 	{
 		#region Fields (static)
@@ -90,7 +90,7 @@ namespace yata
 
 		#region Properties (static)
 		/// <summary>
-		/// Tracks if user has this <c>FontF</c> dialog maximized.
+		/// Tracks if user has this <c>FontDialog</c> maximized.
 		/// </summary>
 		internal static bool Maximized
 		{ get; private set; }
@@ -102,7 +102,7 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f"><c><see cref="YataForm"/></c></param>
-		internal FontF(YataForm f)
+		internal FontDialog(YataForm f)
 		{
 			_f = f;
 
@@ -303,7 +303,7 @@ namespace yata
 		/// <remarks>Fixes the glitch that occurs if
 		/// <c><see cref="sc_Hori"/>.Panel1</c> is at
 		/// <c><see cref="sc_Hori"/>.Panel1MinSize</c> and user resizes this
-		/// <c>FontF</c> dialog to lessen its <c>Height</c>.
+		/// <c>FontDialog</c> to lessen its <c>Height</c>.
 		/// <c><see cref="sc_Hori"/>.Panel2</c> fails to figure out that it
 		/// needs to decrease in height and overflows off under
 		/// <c><see cref="tb_FontString"/></c> and off below the
@@ -342,7 +342,7 @@ namespace yata
 		#region button handlers
 		/// <summary>
 		/// Applies the <c>Font</c> that Yata uses but does not close this
-		/// <c>FontF</c> dialog.
+		/// <c>FontDialog</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Apply"/></c></param>
 		/// <param name="e"></param>
@@ -355,7 +355,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Closes this <c>FontF</c> dialog.
+		/// Closes this <c>FontDialog</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Cancel"/></c></param>
 		/// <param name="e"></param>
