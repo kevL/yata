@@ -74,10 +74,6 @@
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\FixedSingle\TextInputDialog.cs" />
-    <Compile Include="Dialogs\FixedSingle\TextInputDialog.Designer.cs">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\FixedToolWindow\InfoInputFeat.cs" />
     <Compile Include="Dialogs\FixedToolWindow\InfoInputFeat.Designer.cs">
       <DependentUpon>InfoInputFeat.cs</DependentUpon>
@@ -87,41 +83,45 @@
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\FixedToolWindow\InfoInputTui.cs" />
-    <Compile Include="Dialogs\Nonmodal\ClipboardEditor.cs" />
-    <Compile Include="Dialogs\Nonmodal\ClipboardEditor.Designer.cs">
+    <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Nonmodal\DifferDialog.cs" />
-    <Compile Include="Dialogs\Nonmodal\DifferDialog.Designer.cs">
+    <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.Designer.cs">
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Nonmodal\FontF.cs" />
-    <Compile Include="Dialogs\Nonmodal\FontF.Designer.cs">
-      <DependentUpon>FontF.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable_nonmodal\FontDialog.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\FontDialog.Designer.cs">
+      <DependentUpon>FontDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Nonmodal\SettingsEditor.cs" />
-    <Compile Include="Dialogs\Nonmodal\SettingsEditor.Designer.cs">
+    <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.Designer.cs">
       <DependentUpon>SettingsEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\CodePageDialog.cs" />
     <Compile Include="Dialogs\Sizable\CodePageDialog.Designer.cs">
       <DependentUpon>CodePageDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable\CodePageList.cs" />
-    <Compile Include="Dialogs\Sizable\CodePageList.Designer.cs">
-      <DependentUpon>CodePageList.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable\CodePageListDialog.cs" />
+    <Compile Include="Dialogs\Sizable\CodePageListDialog.Designer.cs">
+      <DependentUpon>CodePageListDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\FileWatcherDialog.cs" />
     <Compile Include="Dialogs\Sizable\FileWatcherDialog.Designer.cs">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable\InputDialogColhead.cs" />
-    <Compile Include="Dialogs\Sizable\InputDialogColhead.Designer.cs">
-      <DependentUpon>InputDialogColhead.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable\InputColheadDialog.cs" />
+    <Compile Include="Dialogs\Sizable\InputColheadDialog.Designer.cs">
+      <DependentUpon>InputColheadDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\TalkDialog.cs" />
     <Compile Include="Dialogs\Sizable\TalkDialog.Designer.cs">
       <DependentUpon>TalkDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Sizable\TextInputDialog.cs" />
+    <Compile Include="Dialogs\Sizable\TextInputDialog.Designer.cs">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="Statics\Crap.cs" />
@@ -164,41 +164,41 @@
     <EmbeddedResource Include="Dialogs\FixedSingle\RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FixedSingle\TextInputDialog.resx">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputFeat.resx">
       <DependentUpon>InfoInputFeat.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputSpells.resx">
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Nonmodal\ClipboardEditor.resx">
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Nonmodal\DifferDialog.resx">
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Nonmodal\FontF.resx">
-      <DependentUpon>FontF.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\FontDialog.resx">
+      <DependentUpon>FontDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Nonmodal\SettingsEditor.resx">
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\SettingsEditor.resx">
       <DependentUpon>SettingsEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\CodePageDialog.resx">
       <DependentUpon>CodePageDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable\CodePageList.resx">
-      <DependentUpon>CodePageList.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable\CodePageListDialog.resx">
+      <DependentUpon>CodePageListDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\FileWatcherDialog.resx">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable\InputDialogColhead.resx">
-      <DependentUpon>InputDialogColhead.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable\InputColheadDialog.resx">
+      <DependentUpon>InputColheadDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\TalkDialog.resx">
       <DependentUpon>TalkDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Sizable\TextInputDialog.resx">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -214,7 +214,7 @@
     <Folder Include="Dialogs\FixedToolWindow" />
     <Folder Include="Dialogs\FixedSingle" />
     <Folder Include="Dialogs\Sizable" />
-    <Folder Include="Dialogs\Nonmodal" />
+    <Folder Include="Dialogs\Sizable_nonmodal" />
     <Folder Include="Statics" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
