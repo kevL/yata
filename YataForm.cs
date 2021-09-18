@@ -3249,7 +3249,7 @@ namespace yata
 			{
 				if (_fclip.WindowState == FormWindowState.Minimized)
 				{
-					if (ClipboardEditor.Maximized)
+					if (_fclip.Maximized)
 						_fclip.WindowState = FormWindowState.Maximized;
 					else
 						_fclip.WindowState = FormWindowState.Normal;
@@ -4005,7 +4005,7 @@ namespace yata
 			{
 				if (_fsettings.WindowState == FormWindowState.Minimized)
 				{
-					if (SettingsEditor.Maximized)
+					if (_fsettings.Maximized)
 						_fsettings.WindowState = FormWindowState.Maximized;
 					else
 						_fsettings.WindowState = FormWindowState.Normal;

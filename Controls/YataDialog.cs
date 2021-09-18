@@ -13,7 +13,37 @@ namespace yata
 	public class YataDialog
 		: Form
 	{
+		#region Fields
+		/// <summary>
+		/// The parent of this <c>YataDialog</c>.
+		/// </summary>
+		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
+		protected Control _f;
+
+		/// <summary>
+		/// A <c>List</c> of <c>TextBoxBases</c> to initialize w/ consistent
+		/// values and behaviors. <c>_tbbs</c> is populated by
+		/// <c><see cref="Initialize()"/></c>.
+		/// </summary>
+		/// <remarks><c>_tbbs</c> can be empty.</remarks>
+		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
+
+/*		/// <summary>
+		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
+		/// when this <c>FontDialog</c> instantiates. Otherwise when .net
+		/// automatically fires the <c>Resize</c> event during instantiation the
+		/// values get set in a way that renders the
+		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
+		/// why I like Cherios!
+		/// </summary>
+		protected bool _init = true; */
+		#endregion Fields
+
+
 		#region Properties (static)
+		// Static vars in a base class are NOT unique to each instantiation.
+		// hence ->
+
 		static Dictionary<object, int> x = new Dictionary<object, int>();
 		/// <summary>
 		/// <c>Dictionary</c> that holds x-locations of dialogs.
@@ -53,42 +83,17 @@ namespace yata
 			get { return h.ContainsKey(GetType()) ? h[GetType()] : -1; }
 			set { h[GetType()] = value; }
 		}
-		#endregion Properties (static)
 
-
-		#region Fields
+		static Dictionary<object, bool> _maximized = new Dictionary<object, bool>();
 		/// <summary>
-		/// The parent of this <c>YataDialog</c>.
+		/// <c>Dictionary</c> that tracks if user has the inherited dialog
+		/// maximized.
 		/// </summary>
-		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
-		protected Control _f;
-
-		/// <summary>
-		/// A <c>List</c> of <c>TextBoxBases</c> to initialize w/ consistent
-		/// values and behaviors. <c>_tbbs</c> is populated by
-		/// <c><see cref="Initialize()"/></c>.
-		/// </summary>
-		/// <remarks><c>_tbbs</c> can be empty.</remarks>
-		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
-
-/*		/// <summary>
-		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
-		/// when this <c>FontDialog</c> instantiates. Otherwise when .net
-		/// automatically fires the <c>Resize</c> event during instantiation the
-		/// values get set in a way that renders the
-		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
-		/// why I like Cherios!
-		/// </summary>
-		protected bool _init = true; */
-		#endregion Fields
-
-
-		#region Properties (static)
-		/// <summary>
-		/// Tracks if user has this <c>YataDialog</c> dialog maximized.
-		/// </summary>
-		internal static bool Maximized
-		{ get; private set; }
+		internal bool Maximized
+		{
+			get { return _maximized.ContainsKey(GetType()) && _maximized[GetType()]; }
+			private set { _maximized[GetType()] = value; }
+		}
 		#endregion Properties (static)
 
 
@@ -192,7 +197,7 @@ namespace yata
 		{
 			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
 
-			PopTbList(this);
+			PopTextboxList(this);
 			Settings.SetFonts(this);
 
 //			_init = false;
@@ -204,7 +209,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f">a <c>Control</c> to investigate</param>
 		/// <returns>a <c>List</c> of <c>TextBoxBases</c></returns>
-		void PopTbList(Control f)
+		void PopTextboxList(Control f)
 		{
 			TextBoxBase tbb;
 			foreach (Control control in f.Controls)
@@ -212,7 +217,7 @@ namespace yata
 				if ((tbb = control as TextBoxBase) != null)
 					_tbbs.Add(tbb);
 				else
-					PopTbList(control);
+					PopTextboxList(control);
 			}
 		}
 		#endregion Methods
