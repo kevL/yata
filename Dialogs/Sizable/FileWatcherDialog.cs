@@ -36,7 +36,7 @@ namespace yata
 			_grid = grid;
 
 			InitializeComponent();
-			Settings.SetFonts(this, tb_Pfe);
+			Settings.SetFonts(this);
 
 			YataTabs tabs = _grid._f.Tabs;
 			for (int i = 0; i != tabs.TabCount; ++i)

@@ -363,24 +363,52 @@ namespace yata
 		/// Sets <c>Fonts</c> for a dialog.
 		/// </summary>
 		/// <param name="f">the dialog <c>Form</c></param>
-		/// <param name="tb">the dialog's <c>TextBoxBase</c></param>
-		/// <param name="color"></param>
-		internal static void SetFonts(Control f, TextBoxBase tb, bool color = true)
+		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
+		/// <c>BackColor</c> to the Yata-default.</param>
+		internal static void SetFonts(Control f, bool color = true)
 		{
 			if (_font2dialog != null)
 				f.Font = _font2dialog;
 			else
 				f.Font = _fontdialog;
 
-			if (_fontf != null)
+			var dialog = f as YataDialog;
+			foreach (var tbb in dialog._tbbs)
 			{
-				tb.Font.Dispose();
-				if      (tb is RichTextBox) tb.Font = _fontf;
-				else if (tb is TextBox)     tb.Font = _fontf_tb;
-			}
+				if (_fontf != null)
+				{
+					tbb.Font.Dispose();
 
-			if (color)
-				tb.BackColor = Colors.TextboxBackground;
+					if (tbb is RichTextBox) tbb.Font = _fontf;
+					else                    tbb.Font = _fontf_tb; // is TextBox
+				}
+
+				if (color)
+					tbb.BackColor = Colors.TextboxBackground;
+			}
 		}
+
+/*		/// <summary>
+		/// Recursive funct that gets all <c>Controls</c> of a specified
+		/// <c>Type</c> in a specified <c>Control</c>.
+		/// </summary>
+		/// <typeparam name="T">the <c>Type</c> of <c>Control</c> to get a list
+		/// of instances of</typeparam>
+		/// <param name="f">a <c>Control</c> to investigate</param>
+		/// <returns>a <c>List</c> of <c>Controls</c> of <c>Type</c></returns>
+		static IList<T> GetAllControls<T>(Control f) where T : Control
+		{
+			var controls = new List<T>();
+
+			T ctr;
+			foreach (Control control in f.Controls)
+			{
+				if ((ctr = control as T) != null)
+					controls.Add(ctr);
+				else
+					controls.AddRange(GetAllControls<T>(control));
+			}
+			return controls;
+		} */
 	}
 }

@@ -3924,7 +3924,7 @@ namespace yata
 		/// </list></remarks>
 		void helpclick_About(object sender, EventArgs e)
 		{
-			using (var f = new About())
+			using (var f = new About(this))
 				f.ShowDialog(this);
 		}
 

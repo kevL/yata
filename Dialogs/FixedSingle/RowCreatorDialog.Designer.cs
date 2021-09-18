@@ -68,7 +68,6 @@ namespace yata
 			// 
 			// btn_Cancel
 			// 
-			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_Cancel.Location = new System.Drawing.Point(10, 200);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
@@ -80,7 +79,6 @@ namespace yata
 			// 
 			// btn_Accept
 			// 
-			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btn_Accept.Location = new System.Drawing.Point(125, 200);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
@@ -130,12 +128,12 @@ namespace yata
 			// tb_StartInsert
 			// 
 			this.tb_StartInsert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StartInsert.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StartInsert.Enabled = false;
+			this.tb_StartInsert.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_StartInsert.Location = new System.Drawing.Point(125, 35);
 			this.tb_StartInsert.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StartInsert.Name = "tb_StartInsert";
-			this.tb_StartInsert.Size = new System.Drawing.Size(60, 20);
+			this.tb_StartInsert.Size = new System.Drawing.Size(60, 22);
 			this.tb_StartInsert.TabIndex = 4;
 			this.tb_StartInsert.WordWrap = false;
 			this.tb_StartInsert.TextChanged += new System.EventHandler(this.textchanged);
@@ -163,13 +161,13 @@ namespace yata
 			// tb_StartAdd
 			// 
 			this.tb_StartAdd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StartAdd.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StartAdd.Enabled = false;
+			this.tb_StartAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_StartAdd.Location = new System.Drawing.Point(125, 14);
 			this.tb_StartAdd.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StartAdd.Name = "tb_StartAdd";
 			this.tb_StartAdd.ReadOnly = true;
-			this.tb_StartAdd.Size = new System.Drawing.Size(60, 20);
+			this.tb_StartAdd.Size = new System.Drawing.Size(60, 22);
 			this.tb_StartAdd.TabIndex = 1;
 			this.tb_StartAdd.WordWrap = false;
 			// 
@@ -192,12 +190,12 @@ namespace yata
 			// tb_StopCount
 			// 
 			this.tb_StopCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StopCount.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StopCount.Enabled = false;
+			this.tb_StopCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_StopCount.Location = new System.Drawing.Point(125, 35);
 			this.tb_StopCount.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StopCount.Name = "tb_StopCount";
-			this.tb_StopCount.Size = new System.Drawing.Size(60, 20);
+			this.tb_StopCount.Size = new System.Drawing.Size(60, 22);
 			this.tb_StopCount.TabIndex = 4;
 			this.tb_StopCount.WordWrap = false;
 			this.tb_StopCount.TextChanged += new System.EventHandler(this.textchanged);
@@ -215,12 +213,12 @@ namespace yata
 			// tb_StopFinish
 			// 
 			this.tb_StopFinish.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_StopFinish.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.tb_StopFinish.Enabled = false;
+			this.tb_StopFinish.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_StopFinish.Location = new System.Drawing.Point(125, 14);
 			this.tb_StopFinish.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_StopFinish.Name = "tb_StopFinish";
-			this.tb_StopFinish.Size = new System.Drawing.Size(60, 20);
+			this.tb_StopFinish.Size = new System.Drawing.Size(60, 22);
 			this.tb_StopFinish.TabIndex = 1;
 			this.tb_StopFinish.WordWrap = false;
 			this.tb_StopFinish.TextChanged += new System.EventHandler(this.textchanged);
@@ -349,7 +347,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "RowCreatorDialog";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Create rows";
 			this.gb_Start.ResumeLayout(false);
 			this.gb_Start.PerformLayout();

@@ -40,7 +40,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Settings.SetFonts(this, _tbb = rtb_Copyable, false);
+			Settings.SetFonts(this, false);
 
 			Text = title;
 

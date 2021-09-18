@@ -31,7 +31,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(tb_Input);
+			Initialize();
 
 			la_Head.Text = HEAD;
 

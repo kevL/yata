@@ -10,18 +10,19 @@ namespace yata
 	/// The About box. Stops the dang beep.
 	/// </summary>
 	sealed partial class About
-		: Form
+		: YataDialog
 	{
 		#region cTor
-		internal About()
+		/// <summary>
+		/// About dialog.
+		/// </summary>
+		/// <param name="f">parent</param>
+		internal About(YataForm f)
 		{
+			_f = f;
+
 			InitializeComponent();
-
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
+			Settings.SetFonts(this);
 
 			AssemblyName an = Assembly.GetExecutingAssembly().GetName();
 			string ver = "Ver "
@@ -51,6 +52,8 @@ namespace yata
 				 + "Executive Producer: Arnie the stuffed armadillo";
 
 			la_Text.Text = ver;
+
+			btn_Close.Select();
 		}
 		#endregion cTor
 

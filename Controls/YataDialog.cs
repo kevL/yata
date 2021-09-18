@@ -57,8 +57,19 @@ namespace yata
 
 
 		#region Fields
+		/// <summary>
+		/// The parent of this <c>YataDialog</c>.
+		/// </summary>
+		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
 		protected Control _f;
-		protected TextBoxBase _tbb;
+
+		/// <summary>
+		/// A <c>List</c> of <c>TextBoxBases</c> to initialize w/ consistent
+		/// values and behaviors. <c>_tbbs</c> is populated by
+		/// <c><see cref="Initialize()"/></c>.
+		/// </summary>
+		/// <remarks><c>_tbbs</c> can be empty.</remarks>
+		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
 
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
@@ -110,19 +121,23 @@ namespace yata
 				if (Maximized)
 					WindowState = FormWindowState.Maximized;
 
-				var rtb = _tbb as RichTextBox;
-				if (rtb != null)	// is RichTextBox ->
+
+				RichTextBox rtb;
+				foreach (var tbb in _tbbs)
 				{
-					rtb.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
-				}
-				else				// is TextBox ->
-				{
-					_tbb.SelectionStart = 0;
-					
-					if (_tbb.Multiline)
-						_tbb.SelectionLength = 0;
-					else
-						_tbb.SelectionLength = _tbb.Text.Length;
+					if ((rtb = tbb as RichTextBox) != null)	// is RichTextBox ->
+					{
+						rtb.AutoWordSelection = false; // <- needs to be here not in the designer or cTor to work right.
+					}
+					else									// is TextBox ->
+					{
+						tbb.SelectionStart = 0;
+						
+						if (tbb.Multiline)
+							tbb.SelectionLength = 0;
+						else
+							tbb.SelectionLength = tbb.Text.Length;
+					}
 				}
 			}
 		}
@@ -167,17 +182,38 @@ namespace yata
 		#region Methods
 		/// <summary>
 		/// Forces <c>ClientSize</c> back to what it should be after
-		/// <c>InitializeComponent()</c> runs. Also sets fonts and
-		/// <c><see cref="_tbb"/></c>.
+		/// <c>InitializeComponent()</c> runs. Also sets fonts.
 		/// </summary>
-		/// <param name="tbb"><c>TextBoxBase</c></param>
-		protected void Initialize(TextBoxBase tbb)
+		/// <remarks>Call this only for <c>Sizable</c> dialogs. For fixed-size
+		/// dialogs call
+		/// <c><see cref="Settings.SetFonts()">Settings.SetFonts()</see></c>
+		/// directly instead.</remarks>
+		protected void Initialize()
 		{
 			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
 
-			Settings.SetFonts(this, _tbb = tbb);
+			PopTbList(this);
+			Settings.SetFonts(this);
 
 //			_init = false;
+		}
+
+		/// <summary>
+		/// Recursive funct that gets all <c>TextBoxBases</c> in a specified
+		/// <c>Control</c>.
+		/// </summary>
+		/// <param name="f">a <c>Control</c> to investigate</param>
+		/// <returns>a <c>List</c> of <c>TextBoxBases</c></returns>
+		void PopTbList(Control f)
+		{
+			TextBoxBase tbb;
+			foreach (Control control in f.Controls)
+			{
+				if ((tbb = control as TextBoxBase) != null)
+					_tbbs.Add(tbb);
+				else
+					PopTbList(control);
+			}
 		}
 		#endregion Methods
 	}

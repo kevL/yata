@@ -6,10 +6,10 @@ using System.Windows.Forms;
 namespace yata
 {
 	sealed partial class RowCreatorDialog
-		: Form
+		: YataDialog
 	{
 		#region Enumerators
-		enum StartType
+		enum StrtType
 		{ Add, Insert }
 
 		enum StopType
@@ -18,8 +18,8 @@ namespace yata
 
 
 		#region Fields (static)
-		static StartType _start;
-		static StopType  _stop = StopType.non;
+		static StrtType _strt;
+		static StopType _stop = StopType.non;
 
 		static string _count = "1";
 
@@ -31,8 +31,7 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
-		bool _cancel, _init;
+		bool _init, _cancel;
 		#endregion Fields
 
 
@@ -47,39 +46,19 @@ namespace yata
 		/// <c><see cref="YataForm"/>._copyr</c></param>
 		internal RowCreatorDialog(YataForm f, int r, bool copyfillenabled)
 		{
-			InitializeComponent();
-
 			_f = f;
 
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf_tb != null)
-			{
-				tb_StartAdd   .Font =
-				tb_StartInsert.Font =
-				tb_StopFinish .Font =
-				tb_StopCount  .Font = Settings._fontf_tb;
-			}
-			else
-			{
-				tb_StartAdd   .Font =
-				tb_StartInsert.Font =
-				tb_StopFinish .Font =
-				tb_StopCount  .Font = new Font("Consolas", 9F); // rely on GC for disposal.
-			}
-
+			InitializeComponent();
+			Settings.SetFonts(this, false);
 
 			if (r != -1)
 			{
-				_start = StartType.Insert;
-				_stop  = StopType .Count;
+				_strt = StrtType.Insert;
+				_stop = StopType .Count;
 			}
 			else
 			{
-				_start = StartType.Add;
+				_strt = StrtType.Add;
 
 				rb_FillSelected.Enabled = false;
 				la_FillSelected.ForeColor = SystemColors.GrayText;
@@ -94,9 +73,9 @@ namespace yata
 
 			_init = true;
 
-			switch (_start)
+			switch (_strt)
 			{
-				case StartType.Add:
+				case StrtType.Add:
 					rb_StartAdd   .Checked =
 					tb_StartAdd   .Enabled = true;
 
@@ -104,7 +83,7 @@ namespace yata
 					tb_StartInsert.Enabled = false;
 					break;
 
-				case StartType.Insert:
+				case StrtType.Insert:
 					rb_StartAdd   .Checked =
 					tb_StartAdd   .Enabled = false;
 
@@ -117,10 +96,10 @@ namespace yata
 			{
 				case StopType.non:
 					rb_StopFinish.Checked =
-					tb_StopFinish.Enabled = _start == StartType.Add;
+					tb_StopFinish.Enabled = _strt == StrtType.Add;
 
 					rb_StopCount .Checked =
-					tb_StopCount .Enabled = _start == StartType.Insert;
+					tb_StopCount .Enabled = _strt == StrtType.Insert;
 					break;
 
 				case StopType.Finish:
@@ -146,21 +125,20 @@ namespace yata
 			int result = Int32.Parse(_count);	// shall be valid and greater than 0.
 			Control tb;
 			if (rb_StartAdd.Checked)			// readonly - shall be valid.
+			{
 				tb = tb_StartAdd;
+				btn_Accept.Text = ADD;
+			}
 			else // rb_StartInsert.Checked		// shall be valid.
+			{
 				tb = tb_StartInsert;
+				btn_Accept.Text = INSERT;
+			}
 
 			tb_StopFinish.Text = (Int32.Parse(tb.Text) + result - 1).ToString();
-
-			tb_StopCount.Text = _count;
+			tb_StopCount .Text = _count;
 
 			_init = false;
-
-
-			if (rb_StartAdd.Checked)
-				btn_Accept.Text = ADD;
-			else // rb_StartInsert.Checked
-				btn_Accept.Text = INSERT;
 
 			tb_StartAdd.BackColor = Colors.TextboxReadonly;
 
@@ -179,11 +157,13 @@ namespace yata
 				tb_StopFinish.BackColor = Colors.TextboxBackground;
 				tb_StopCount .BackColor = Colors.TextboxSelected;
 			}
+
+			btn_Accept.Select();
 		}
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>FormClosing</c> handler.
 		/// </summary>
@@ -193,9 +173,9 @@ namespace yata
 			if (!(e.Cancel = _cancel))
 			{
 				if (rb_StartAdd.Checked)
-					_start = StartType.Add;
+					_strt = StrtType.Add;
 				else // rb_StartInsert.Checked
-					_start = StartType.Insert;
+					_strt = StrtType.Insert;
 
 				if (rb_StopCount.Checked)
 					_stop = StopType.Count;
@@ -231,12 +211,13 @@ namespace yata
 
 			base.OnKeyDown(e);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
-		/// 
+		/// Handles <c>CheckChanged</c> for the <c>RadioButtons</c>. Changes
+		/// <c>TextBox</c> values to reflect the current <c>RadioButton</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -306,7 +287,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles <c>TextChanged</c> for the <c>TextBoxes</c>. Changes other
+		/// <c>TextBox's</c> values to reflect the current text.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <list type="bullet">
@@ -428,15 +410,17 @@ namespace yata
 		{
 			_cancel = true;
 
+			var f = _f as YataForm;
+
 			int result;
 			if (rb_StartAdd.Checked)
 			{
-				_f._startCr = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
+				f._startCr = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
 
 				if (rb_StopFinish.Checked)
 				{
 					if (Int32.TryParse(tb_StopFinish.Text, out result)
-						&& (_f._lengthCr = result - _f._startCr + 1) > 0)
+						&& (f._lengthCr = result - f._startCr + 1) > 0)
 					{
 						_cancel = false;
 					}
@@ -444,7 +428,7 @@ namespace yata
 				else // rb_StopCount.Checked
 				{
 					if (Int32.TryParse(tb_StopCount.Text, out result)
-						&& (_f._lengthCr = result) > 0)
+						&& (f._lengthCr = result) > 0)
 					{
 						_cancel = false;
 					}
@@ -453,13 +437,13 @@ namespace yata
 			else // rb_StartInsert.Checked
 			{
 				if (Int32.TryParse(tb_StartInsert.Text, out result)
-					&& (_f._startCr = result) > -1
-					&&  _f._startCr <= YataForm.Table.RowCount)
+					&& (f._startCr = result) > -1
+					&&  f._startCr <= YataForm.Table.RowCount)
 				{
 					if (rb_StopFinish.Checked)
 					{
 						if (Int32.TryParse(tb_StopFinish.Text, out result)
-							&& (_f._lengthCr = result - _f._startCr + 1) > 0)
+							&& (f._lengthCr = result - f._startCr + 1) > 0)
 						{
 							_cancel = false;
 						}
@@ -467,7 +451,7 @@ namespace yata
 					else // rb_StopCount.Checked
 					{
 						if (Int32.TryParse(tb_StopCount.Text, out result)
-							&& (_f._lengthCr = result) > 0)
+							&& (f._lengthCr = result) > 0)
 						{
 							_cancel = false;
 						}
@@ -484,9 +468,9 @@ namespace yata
 								MessageBoxDefaultButton.Button1,
 								0);
 			}
-			else if (rb_FillCopied  .Checked) _f._fillCr = YataForm.CrFillType.Copied;
-			else if (rb_FillSelected.Checked) _f._fillCr = YataForm.CrFillType.Selected;
-			else                              _f._fillCr = YataForm.CrFillType.Stars; // rb_FillStars.Checked
+			else if (rb_FillCopied  .Checked) f._fillCr = YataForm.CrFillType.Copied;
+			else if (rb_FillSelected.Checked) f._fillCr = YataForm.CrFillType.Selected;
+			else                              f._fillCr = YataForm.CrFillType.Stars; // rb_FillStars.Checked
 		}
 
 
@@ -521,14 +505,14 @@ namespace yata
 					 rb_FillStars.Checked = true;
 			}
 		}
-		#endregion Events
+		#endregion Handlers
 
 
 		#region Methods (static)
 		/// <summary>
 		/// Gets a Darth Vader quote.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>a Darth Vader quote</returns>
 		static string GetDarthQuote()
 		{
 			string quote = String.Empty;
