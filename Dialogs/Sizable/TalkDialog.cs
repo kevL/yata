@@ -10,7 +10,7 @@ namespace yata
 	/// A dialog that displays entries of TalkTable(s).
 	/// </summary>
 	sealed partial class TalkDialog
-		: Form
+		: YataDialog
 	{
 		#region Fields (static)
 		const int WIDTH_Min = 325;
@@ -20,15 +20,10 @@ namespace yata
 
 		const int pad_HORI = 20; // pad real and imagined
 		const int pad_VERT = 10; // pad above Cancel button
-
-		static int _x = -1;
-		static int _y = -1;
 		#endregion Fields (static)
 
 
 		#region Fields
-		YataForm _f;
-
 		int _eId; // talktable's EntryId
 		int _eId_init;
 
@@ -50,9 +45,10 @@ namespace yata
 		/// this <c>TalkDialog</c>.</remarks>
 		internal TalkDialog(Cell cell, YataForm f)
 		{
-			InitializeComponent();
-
 			_f = f;
+
+			InitializeComponent();
+			Initialize(YataDialog.METRIC_LOC);
 
 			string strref = cell.text;
 			if (strref == gs.Stars) strref = "0";
@@ -81,24 +77,29 @@ namespace yata
 			if (_eId_init != TalkReader.invalid)
 				_eId_init &= TalkReader.strref;
 
+
 			tb_Strref.Text = _eId_init.ToString(); // <- sets '_eId' and 'rtb_Copyable.Text'
 
 
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
+			if (TalkReader.AltLabel != null)
+				cb_Custo.Text = TalkReader.AltLabel;
+
+
+			if ((btn_Accept.Enabled = !YataForm.Table.Readonly))
+				btn_Accept.Select();
 			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf != null)
-			{
-				rtb_Copyable.Font.Dispose();
-				rtb_Copyable.Font = Settings._fontf;
-
-				tb_Strref.Font.Dispose();
-				tb_Strref.Font = Settings._fontf_tb;
-			}
+				btn_Cancel.Select();
+		}
+		#endregion cTor
 
 
+		#region Handlers (override)
+		/// <summary>
+		/// Overrides the <c>Load</c> handler. Niceties ...
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnLoad(EventArgs e)
+		{
 			int w = GetWidth(rtb_Copyable.Text) + 30;					// +30 = parent panel's pad left+right +5
 			pnl_Copyable.Height = GetHeight(rtb_Copyable.Text) + 20;	// +20 = parent panel's pad top+bot +5
 
@@ -112,40 +113,16 @@ namespace yata
 			ClientSize = new Size(w + pad_HORI,
 								  h + pad_VERT);
 
-			if (_x == -1) _x = _f.Left + 30;
-			if (_y == -1) _y = _f.Top  + 30;
-
-			Left = _x;
-			Top  = _y;
-
-
 			pokeUi(_dict.Count != 0);
 
-			tb_Strref.BackColor = Colors.TextboxBackground; // <- won't work right in the designer.
 
-			if (TalkReader.AltLabel != null)
-				cb_Custo.Text = TalkReader.AltLabel;
-
-			btn_Accept.Enabled = !YataForm.Table.Readonly;
-		}
-		#endregion
-
-
-		#region Events (override)
-		/// <summary>
-		/// Overrides the <c>Load</c> handler. Niceties ...
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnLoad(EventArgs e)
-		{
 			int widthborder = (Width  - ClientSize.Width) / 2;
 			int heighttitle = (Height - ClientSize.Height - 2 * widthborder);
 
 			MinimumSize = new Size(WIDTH_Min + pad_HORI + 2 * widthborder,
 								   HIGHT_Min + pad_VERT + 2 * widthborder + heighttitle);
 
-			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the cTor for designer to work right.
-			rtb_Copyable.Select();
+			base.OnLoad(e);
 		}
 
 		/// <summary>
@@ -160,22 +137,10 @@ namespace yata
 			base.OnResize(e);
 			pnl_Copyable.Invalidate();
 		}
-
-		/// <summary>
-		/// Overrides the <c>FormClosing</c> handler. Sets the static location.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnFormClosing(FormClosingEventArgs e)
-		{
-			_x = Left;
-			_y = Top;
-
-			base.OnFormClosing(e);
-		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Handles the textchanged event of the strref-box.
 		/// </summary>
@@ -209,16 +174,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles a click on the Cancel button. Closes this dialog harmlessly.
-		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Cancel"/></c></param>
-		/// <param name="e"></param>
-		void click_btnCancel(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		/// <summary>
 		/// Handles a click on the Select button. Passes the current strref to
 		/// YataForm and closes this dialog.
 		/// </summary>
@@ -240,7 +195,7 @@ namespace yata
 				if (_eId != TalkReader.invalid && cb_Custo.Checked)
 					_eId |= TalkReader.bitCusto;
 
-				_f._strref = _eId.ToString();
+				(_f as YataForm)._strref = _eId.ToString();
 				Close();
 			}
 		}
@@ -260,7 +215,7 @@ namespace yata
 					ofd.Filter = YataForm.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, _f.it_PathTalkD);
+						TalkReader.Load(ofd.FileName, (_f as YataForm).it_PathTalkD);
 				}
 
 				lo = TalkReader.loDialo;
@@ -274,12 +229,13 @@ namespace yata
 					ofd.Filter = YataForm.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, _f.it_PathTalkC, true);
+						TalkReader.Load(ofd.FileName, (_f as YataForm).it_PathTalkC, true);
 				}
 
 				lo = TalkReader.loCusto;
 				hi = TalkReader.hiCusto;
 			}
+
 
 			pokeUi(_dict.Count != 0);
 
@@ -360,7 +316,7 @@ namespace yata
 		{
 			if (!_init)
 			{
-				if (!((CheckBox)sender).Checked)
+				if (!cb_Custo.Checked)
 				{
 					_dict = TalkReader.DictDialo;
 					lo = TalkReader.loDialo;
@@ -372,6 +328,7 @@ namespace yata
 					lo = TalkReader.loCusto;
 					hi = TalkReader.hiCusto;
 				}
+
 
 				pokeUi(_dict.Count != 0);
 
@@ -398,13 +355,13 @@ namespace yata
 			var br = new Point(w, h);
 			var bl = new Point(0, h);
 
-			var graphics = e.Graphics;
+			Graphics graphics = e.Graphics;
 			graphics.DrawLine(Pencils.DarkLine, tl, tr);
 			graphics.DrawLine(Pencils.DarkLine, tr, br);
 			graphics.DrawLine(Pencils.DarkLine, br, bl);
 			graphics.DrawLine(Pencils.DarkLine, bl, tl);
 		}
-		#endregion Events
+		#endregion Handlers
 
 
 		#region Methods
