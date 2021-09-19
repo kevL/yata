@@ -365,6 +365,12 @@ namespace yata
 		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
 		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
 		/// <c>BackColor</c> to the Yata-default.</param>
+		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
+		/// <c>TextBoxBases</c> ARE INSTANTIATED in the Designer - this funct
+		/// will <c>Dispose()</c> those <c>Fonts</c>. If a <c>TextBoxBase</c>
+		/// happens to use the .net default <c>Font</c> it will get disposed and
+		/// then the app is borked since the .net default <c>Font</c> will no
+		/// longer be available at all.</remarks>
 		internal static void SetFonts(YataDialog f, bool color)
 		{
 			if (_font2dialog != null)
