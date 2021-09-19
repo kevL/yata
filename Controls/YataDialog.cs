@@ -23,10 +23,39 @@ namespace yata
 		/// <summary>
 		/// A <c>List</c> of <c>TextBoxBases</c> to initialize w/ consistent
 		/// values and behaviors. <c>_tbbs</c> is populated by
-		/// <c><see cref="Initialize()"/></c>.
+		/// <c><see cref="Initialize()">Initialize()</see></c>.
 		/// </summary>
 		/// <remarks><c>_tbbs</c> can be empty.</remarks>
 		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
+
+		/// <summary>
+		/// The type of telemetry that this <c>YataDialog</c> respects.
+		/// <list type="bullet">
+		/// <item><c><see cref="METRIC_NON"/></c> - do not respect telemetry</item>
+		/// <item><c><see cref="METRIC_LOC"/></c> - respect location</item>
+		/// <item><c><see cref="METRIC_FUL"/></c> - respect location and size</item>
+		/// </list>
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Initialize()">Initialize()</see></c>.</remarks>
+		int Metric;
+
+		/// <summary>
+		/// Do not respect Telemetry. Location and Size is detered by the
+		/// inherited class.
+		/// </summary>
+		internal const int METRIC_NON = 0;
+
+		/// <summary>
+		/// Respect only location Telemetry. Size is detered by the inherited
+		/// class.
+		/// </summary>
+		internal const int METRIC_LOC = 1;
+
+		/// <summary>
+		/// Respect both location and size Telemetry.
+		/// </summary>
+		internal const int METRIC_FUL = 2;
 
 /*		/// <summary>
 		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
@@ -108,24 +137,26 @@ namespace yata
 		{
 			if (!DesignMode) // else the Designer(s) bork out.
 			{
-				if (_x == -1)
+				if (Metric != METRIC_NON)
 				{
-					_x = Math.Max(0, _f.Left + 20);
-					_y = Math.Max(0, _f.Top  + 20);
+					if (_x == -1)
+					{
+						_x = Math.Max(0, _f.Left + 20);
+						_y = Math.Max(0, _f.Top  + 20);
+					}
+					Left = _x;
+					Top  = _y;
+
+					Screen screen = Screen.FromPoint(new Point(Left, Top));
+					if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
+						Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
+
+					if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
+						Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
+
+					if (Maximized)
+						WindowState = FormWindowState.Maximized;
 				}
-				Left = _x;
-				Top  = _y;
-
-				Screen screen = Screen.FromPoint(new Point(Left, Top));
-				if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
-					Left = screen.Bounds.Width - Width; // window off the left edge of the screen.
-
-				if (screen.Bounds.Height < Top + Height) // TODO: decrease Height if this shifts the
-					Top = screen.Bounds.Height - Height; // window off the top edge of the screen.
-
-				if (Maximized)
-					WindowState = FormWindowState.Maximized;
-
 
 				RichTextBox rtb;
 				foreach (var tbb in _tbbs)
@@ -153,17 +184,23 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			Maximized = WindowState == FormWindowState.Maximized;
+			if (Metric != METRIC_NON)
+			{
+				Maximized = WindowState == FormWindowState.Maximized;
 
-//			_init = true;
+//				_init = true;
 
-			SuspendLayout();
-			WindowState = FormWindowState.Normal;
-			_x = Math.Max(0, Left);
-			_y = Math.Max(0, Top);
-			_w = ClientSize.Width;
-			_h = ClientSize.Height;
+				SuspendLayout();
+				WindowState = FormWindowState.Normal;
+				_x = Math.Max(0, Left);
+				_y = Math.Max(0, Top);
 
+				if (Metric == METRIC_FUL)
+				{
+					_w = ClientSize.Width;
+					_h = ClientSize.Height;
+				}
+			}
 			base.OnFormClosing(e);
 		}
 		#endregion Handlers (override)
@@ -189,16 +226,22 @@ namespace yata
 		/// Forces <c>ClientSize</c> back to what it should be after
 		/// <c>InitializeComponent()</c> runs. Also sets fonts.
 		/// </summary>
-		/// <remarks>Call this only for <c>Sizable</c> dialogs. For fixed-size
-		/// dialogs call
-		/// <c><see cref="Settings.SetFonts()">Settings.SetFonts()</see></c>
-		/// directly instead.</remarks>
-		protected void Initialize()
+		/// <param name="metric">the type of telemetry that this
+		/// <c>YataDialog</c> respects
+		/// <list type="bullet">
+		/// <item><c><see cref="METRIC_NON"/></c> - do not store telemetry</item>
+		/// <item><c><see cref="METRIC_LOC"/></c> - store location</item>
+		/// <item><c><see cref="METRIC_FUL"/></c> - store location and size</item>
+		/// </list></param>
+		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
+		/// <c>BackColor</c> to the Yata-default.</param>
+		protected void Initialize(int metric, bool color = true)
 		{
-			if (_w != -1) ClientSize = new Size(_w,_h); // foff .net
+			if ((Metric = metric) == METRIC_FUL && _w != -1)
+				ClientSize = new Size(_w,_h); // foff .net
 
-			PopTextboxList(this);
-			Settings.SetFonts(this);
+			PopulateTextboxbaseList(this);
+			Settings.SetFonts(this, color);
 
 //			_init = false;
 		}
@@ -209,7 +252,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f">a <c>Control</c> to investigate</param>
 		/// <returns>a <c>List</c> of <c>TextBoxBases</c></returns>
-		void PopTextboxList(Control f)
+		void PopulateTextboxbaseList(Control f)
 		{
 			TextBoxBase tbb;
 			foreach (Control control in f.Controls)
@@ -217,7 +260,7 @@ namespace yata
 				if ((tbb = control as TextBoxBase) != null)
 					_tbbs.Add(tbb);
 				else
-					PopTextboxList(control);
+					PopulateTextboxbaseList(control);
 			}
 		}
 		#endregion Methods

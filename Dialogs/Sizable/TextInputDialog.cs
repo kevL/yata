@@ -31,7 +31,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize();
+			Initialize(YataDialog.METRIC_FUL);
 
 			la_Head.Text = HEAD;
 

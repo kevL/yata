@@ -362,18 +362,17 @@ namespace yata
 		/// <summary>
 		/// Sets <c>Fonts</c> for a dialog.
 		/// </summary>
-		/// <param name="f">the dialog <c>Form</c></param>
+		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
 		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
 		/// <c>BackColor</c> to the Yata-default.</param>
-		internal static void SetFonts(Control f, bool color = true)
+		internal static void SetFonts(YataDialog f, bool color)
 		{
 			if (_font2dialog != null)
 				f.Font = _font2dialog;
 			else
 				f.Font = _fontdialog;
 
-			var dialog = f as YataDialog;
-			foreach (var tbb in dialog._tbbs)
+			foreach (var tbb in f._tbbs)
 			{
 				if (_fontf != null)
 				{

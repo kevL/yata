@@ -21,7 +21,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize();
+			Initialize(YataDialog.METRIC_FUL);
 
 			if (lines.Length != 0)
 			{

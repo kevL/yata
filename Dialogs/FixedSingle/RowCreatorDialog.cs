@@ -49,7 +49,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Settings.SetFonts(this, false);
+			Initialize(YataDialog.METRIC_LOC, false);
 
 			if (r != -1)
 			{
