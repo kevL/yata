@@ -21,11 +21,11 @@ namespace yata
 		protected Control _f;
 
 		/// <summary>
-		/// A <c>List</c> of <c>TextBoxBases</c> to initialize w/ consistent
-		/// values and behaviors. <c>_tbbs</c> is populated by
-		/// <c><see cref="Initialize()">Initialize()</see></c>.
+		/// A <c>List</c> of <c>TextBoxBases</c> that shall be initialized w/
+		/// consistent values and behaviors.
 		/// </summary>
-		/// <remarks><c>_tbbs</c> can be empty.</remarks>
+		/// <remarks><c>_tbbs</c> is populated by
+		/// <c><see cref="Initialize()">Initialize()</see></c> and can be empty.</remarks>
 		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
 
 		/// <summary>
@@ -42,12 +42,12 @@ namespace yata
 
 		/// <summary>
 		/// Do not respect Telemetry. Location and Size is detered by the
-		/// inherited class.
+		/// derived class.
 		/// </summary>
 		internal const int METRIC_NON = 0;
 
 		/// <summary>
-		/// Respect only location Telemetry. Size is detered by the inherited
+		/// Respect only location Telemetry. Size is detered by the derived
 		/// class.
 		/// </summary>
 		internal const int METRIC_LOC = 1;
@@ -115,8 +115,7 @@ namespace yata
 
 		static Dictionary<object, bool> _maximized = new Dictionary<object, bool>();
 		/// <summary>
-		/// <c>Dictionary</c> that tracks if user has the inherited dialog
-		/// maximized.
+		/// <c>Dictionary</c> that tracks if user has the dialog-type maximized.
 		/// </summary>
 		internal bool Maximized
 		{
