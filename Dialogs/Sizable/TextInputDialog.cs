@@ -37,6 +37,7 @@ namespace yata
 
 			tb_Input.Text = (_f as YataForm)._copytext[0,0];
 
+
 			tb_Input.Select();
 		}
 		#endregion cTor

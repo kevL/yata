@@ -26,6 +26,7 @@ namespace yata
 			// 
 			// tb_Input
 			// 
+			this.tb_Input.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Input.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tb_Input.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_Input.Location = new System.Drawing.Point(0, 0);
