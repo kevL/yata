@@ -58,6 +58,7 @@ namespace yata
 			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "APPLY";
 			this.bu_Okay.UseVisualStyleBackColor = true;
+			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);
 			// 
 			// InputDialogColhead
 			// 

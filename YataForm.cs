@@ -3016,7 +3016,8 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			using (var idc = new InputDialogColhead(this))
+			int selc = Table.getSelectedCol();
+			using (var idc = new InputDialogColhead(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0)
@@ -3024,8 +3025,9 @@ namespace yata
 					Obfuscate();
 					DrawingControl.SuspendDrawing(Table);
 
-					int selc = Table.getSelectedCol();		// create at far right if no col selected or id-col is selected
-					if (selc < 1) selc = Table.ColCount;	// - not sure that id-col could ever be selected
+					// create at far right if no col selected or id-col is selected
+					// - not sure that id-col could ever be selected ->
+					if (selc < 1) selc = Table.ColCount;
 
 					steadystate();
 
@@ -3111,7 +3113,7 @@ namespace yata
 
 			string head = Table.Fields[selc - 1];
 			InputDialogColhead._text = head;
-			using (var idc = new InputDialogColhead(this))
+			using (var idc = new InputDialogColhead(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0

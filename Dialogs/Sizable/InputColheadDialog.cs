@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 
 namespace yata
@@ -15,7 +16,10 @@ namespace yata
 
 
 		#region Fields
+		int _selc;
+
 		bool _bypasstextchanged;
+		bool _cancel;
 		#endregion Fields
 
 
@@ -24,9 +28,11 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
-		internal InputDialogColhead(YataForm f)
+		/// <param name="selc">the currently selected col-id</param>
+		internal InputDialogColhead(YataForm f, int selc)
 		{
 			_f = f;
+			_selc = selc;
 
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
@@ -36,6 +42,21 @@ namespace yata
 			tb_Input.Select();
 		}
 		#endregion cTor
+
+
+		#region Handlers (override)
+		/// <summary>
+		/// Cancels close if <c><see cref="_cancel"/></c> is <c>true</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			if (e.Cancel = _cancel)
+				_cancel = false;
+			else
+				base.OnFormClosing(e);
+		}
+		#endregion Handlers (override)
 
 
 		#region Handlers
@@ -72,8 +93,33 @@ namespace yata
 				_text = tb_Input.Text;
 			}
 		}
+
+		/// <summary>
+		/// Cancels close if the input-text is already taken by another colhead.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_Okay(object sender, EventArgs e)
+		{
+			string[] fields = YataForm.Table.Fields;
+			for (int i = 0; i != fields.Length; ++i)
+			{
+				if ((_selc == -1 || _selc != i + 1)
+					&& String.Equals(fields[i],
+									 tb_Input.Text,
+									 StringComparison.OrdinalIgnoreCase))
+				{
+					MessageBox.Show(this,
+									"That label is already used by another colhead.",
+									" Error",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Error,
+									MessageBoxDefaultButton.Button1,
+									0);
+					_cancel = true;
+				}
+			}
+		}
 		#endregion Handlers
 	}
 }
-
-
