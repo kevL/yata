@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 
 namespace yata
@@ -8,7 +7,7 @@ namespace yata
 	/// A dialog for colhead-text entry.
 	/// </summary>
 	sealed partial class InputDialogColhead
-		: Form
+		: YataDialog
 	{
 		#region Fields (static)
 		internal static string _text = String.Empty;
@@ -24,26 +23,17 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal InputDialogColhead()
+		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
+		internal InputDialogColhead(YataForm f)
 		{
+			_f = f;
+
 			InitializeComponent();
-
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
-			else
-				Font = Settings._fontdialog;
-
-			if (Settings._fontf_tb != null)
-			{
-				tb_Input.Font.Dispose();
-				tb_Input.Font = Settings._fontf_tb;
-			}
-
-			tb_Input.BackColor = Colors.TextboxBackground;
+			Initialize(YataDialog.METRIC_FUL);
 
 			tb_Input.Text = _text;
-			tb_Input.SelectionStart = 0;
-			tb_Input.SelectionLength = tb_Input.Text.Length;
+
+			tb_Input.Select();
 		}
 		#endregion cTor
 

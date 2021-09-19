@@ -24,6 +24,7 @@ namespace yata
 			// 
 			// tb_Input
 			// 
+			this.tb_Input.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_Input.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tb_Input.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_Input.Location = new System.Drawing.Point(0, 0);
@@ -31,6 +32,7 @@ namespace yata
 			this.tb_Input.Name = "tb_Input";
 			this.tb_Input.Size = new System.Drawing.Size(292, 22);
 			this.tb_Input.TabIndex = 0;
+			this.tb_Input.WordWrap = false;
 			this.tb_Input.TextChanged += new System.EventHandler(this.textchanged_Input);
 			// 
 			// bu_Cancel
@@ -69,7 +71,7 @@ namespace yata
 			this.MaximizeBox = false;
 			this.Name = "InputDialogColhead";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Colhead text";
 			this.ResumeLayout(false);
 			this.PerformLayout();

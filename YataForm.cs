@@ -3016,7 +3016,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			using (var idc = new InputDialogColhead())
+			using (var idc = new InputDialogColhead(this))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0)
@@ -3111,7 +3111,7 @@ namespace yata
 
 			string head = Table.Fields[selc - 1];
 			InputDialogColhead._text = head;
-			using (var idc = new InputDialogColhead())
+			using (var idc = new InputDialogColhead(this))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialogColhead._text.Length != 0
