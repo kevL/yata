@@ -117,11 +117,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_x = Math.Max(0, Left);
-			_y = Math.Max(0, Top);
-
 			(_f as YataForm)._fdiffer = null;
-
 			base.OnFormClosing(e);
 		}
 
