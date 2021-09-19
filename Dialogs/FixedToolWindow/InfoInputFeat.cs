@@ -38,18 +38,18 @@ namespace yata
 		/// <param name="cell"></param>
 		internal InfoInputFeat(YataGrid grid, Cell cell)
 		{
-			InitializeComponent();
-
 			_grid = grid;
 			_f    = grid._f;
 			_cell = cell;
+
+			InitializeComponent();
 
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
 			else
 				Font = Settings._fontdialog;
 
-			initdialog();
+			init();
 		}
 		#endregion cTor
 
@@ -58,59 +58,59 @@ namespace yata
 		/// <summary>
 		/// Initializes the dialog based on the current 2da col.
 		/// </summary>
-		void initdialog()
+		void init()
 		{
 			_init = true;
 
 			string val = _cell.text;
-			if (!String.IsNullOrEmpty(val)) // safety.
+			switch (_cell.x)
 			{
-				switch (_cell.x)
-				{
-					case Category: // int-val,dropdown,unique
-						list_Categories();
+				case Category: // int-val,dropdown,unique
+					list_Categories();
 
-						initintvals(val);
-						break;
+					initintvals(val);
+					break;
 
-					case MasterFeat: // int-val,dropdown,unique
-						list_Masterfeats();
+				case MasterFeat: // int-val,dropdown,unique
+					list_Masterfeats();
 
-						initintvals(val);
-						break;
+					initintvals(val);
+					break;
 
-					case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
-						_f.str0 = _f.str1 = val;
-						vis_ToolsCategories();
+				case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					vis_ToolsCategories();
 
-						switch (val)
-						{
-							case "0": cb_00.Checked = true; break;
-							case "1": cb_01.Checked = true; break;
-							case "2": cb_02.Checked = true; break;
-							case "3": cb_03.Checked = true; break;
-							case "4": cb_04.Checked = true; break;
-							case "5": cb_05.Checked = true; break;
-							case "6": cb_06.Checked = true; break;
+					switch (val)
+					{
+						case "0": cb_00.Checked = true; break;
+						case "1": cb_01.Checked = true; break;
+						case "2": cb_02.Checked = true; break;
+						case "3": cb_03.Checked = true; break;
+						case "4": cb_04.Checked = true; break;
+						case "5": cb_05.Checked = true; break;
+						case "6": cb_06.Checked = true; break;
 
-							case gs.Stars: break;
+						case gs.Stars: break;
 
-							default: _f.str1 = gs.Stars; break;
-						}
-						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
-						break;
+						default: _f.str1 = gs.Stars; break;
+					}
+					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					break;
 
-					case ToggleMode:
-						list_CombatModes();
+				case ToggleMode:
+					list_CombatModes();
 
-						initintvals(val);
-						break;
-				}
+					initintvals(val);
+					break;
 			}
 			_init = false;
 		}
 
 
+		/// <summary>
+		/// Visibles ToolsCategories.
+		/// </summary>
 		void vis_ToolsCategories()
 		{
 			Text = " ToolsCategories";
@@ -171,6 +171,10 @@ namespace yata
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
 
+		/// <summary>
+		/// Adds allowable entries for "" (.2da) to the
+		/// combobox along with a final stars item.
+		/// </summary>
 		void list_CombatModes()
 		{
 			Text = " ToggleMode";
@@ -216,7 +220,7 @@ namespace yata
 		#endregion init
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Handles user changing a checkbox.
 		/// </summary>
@@ -236,7 +240,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_ToolsCategories()
 		{
@@ -372,18 +377,10 @@ namespace yata
 					break;
 			}
 		}
+		#endregion Handlers
 
 
-//		void click_Accept(object sender, EventArgs e)
-//		{}
-		#endregion Events
-
-
-		#region Methods
-		#endregion Methods
-
-
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Closes the dialog on [Esc].
 		/// </summary>
@@ -395,6 +392,6 @@ namespace yata
 			else
 				base.OnKeyDown(e);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }
