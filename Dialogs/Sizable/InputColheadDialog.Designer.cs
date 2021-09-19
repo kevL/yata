@@ -30,7 +30,7 @@ namespace yata
 			this.tb_Input.Location = new System.Drawing.Point(0, 0);
 			this.tb_Input.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Input.Name = "tb_Input";
-			this.tb_Input.Size = new System.Drawing.Size(292, 22);
+			this.tb_Input.Size = new System.Drawing.Size(267, 22);
 			this.tb_Input.TabIndex = 0;
 			this.tb_Input.WordWrap = false;
 			this.tb_Input.TextChanged += new System.EventHandler(this.textchanged_Input);
@@ -39,10 +39,10 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(4, 25);
+			this.bu_Cancel.Location = new System.Drawing.Point(6, 25);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(135, 25);
+			this.bu_Cancel.Size = new System.Drawing.Size(125, 25);
 			this.bu_Cancel.TabIndex = 1;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
@@ -51,10 +51,10 @@ namespace yata
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Okay.Location = new System.Drawing.Point(154, 25);
+			this.bu_Okay.Location = new System.Drawing.Point(136, 25);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
-			this.bu_Okay.Size = new System.Drawing.Size(135, 25);
+			this.bu_Okay.Size = new System.Drawing.Size(125, 25);
 			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "APPLY";
 			this.bu_Okay.UseVisualStyleBackColor = true;
@@ -64,7 +64,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Okay;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(292, 54);
+			this.ClientSize = new System.Drawing.Size(267, 54);
 			this.Controls.Add(this.bu_Okay);
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.tb_Input);

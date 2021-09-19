@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -45,6 +46,18 @@ namespace yata
 
 
 		#region Handlers (override)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnLoad(EventArgs e)
+		{
+			MinimumSize = new Size(Width,          Height);
+			MaximumSize = new Size(Int32.MaxValue, Height);
+
+			base.OnLoad(e);
+		}
+
 		/// <summary>
 		/// Cancels close if <c><see cref="_cancel"/></c> is <c>true</c>.
 		/// </summary>
