@@ -35,8 +35,7 @@ namespace yata
 			// 
 			// btn_Cancel
 			// 
-			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_Cancel.Location = new System.Drawing.Point(340, 4);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
@@ -48,8 +47,7 @@ namespace yata
 			// 
 			// btn_Action
 			// 
-			this.btn_Action.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left)));
+			this.btn_Action.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.btn_Action.DialogResult = System.Windows.Forms.DialogResult.Yes;
 			this.btn_Action.Location = new System.Drawing.Point(15, 4);
 			this.btn_Action.Margin = new System.Windows.Forms.Padding(0);
@@ -71,9 +69,7 @@ namespace yata
 			// 
 			// btn_Close2da
 			// 
-			this.btn_Close2da.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Close2da.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Close2da.DialogResult = System.Windows.Forms.DialogResult.Abort;
 			this.btn_Close2da.Location = new System.Drawing.Point(120, 4);
 			this.btn_Close2da.Margin = new System.Windows.Forms.Padding(0);

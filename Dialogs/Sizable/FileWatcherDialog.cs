@@ -5,8 +5,12 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// A dialog that asks user what to do when a loaded 2da-file is changed or
+	/// deleted from the hardrive.
+	/// </summary>
 	sealed partial class FileWatcherDialog
-		: Form
+		: YataDialog
 	{
 		#region Fields (static)
 		internal const int FILE_DEL = 0; // file's not there, Jim.
@@ -27,16 +31,18 @@ namespace yata
 		/// <summary>
 		/// cTor. Instantiates this <c>FileWatcherDialog</c>.
 		/// </summary>
-		/// <param name="grid"></param>
-		/// <param name="fwdType"></param>
+		/// <param name="grid">a <c><see cref="YataGrid"/></c></param>
+		/// <param name="fwdType">the <c>FileWatcherDialog</c> type:
+		/// <c><see cref="FILE_DEL"/></c> or <c><see cref="FILE_WSC"/></c></param>
 		internal FileWatcherDialog(
 				YataGrid grid,
 				int fwdType)
 		{
 			_grid = grid;
+			_f = _grid._f;
 
 			InitializeComponent();
-			Settings.SetFonts(this);
+			Initialize(YataDialog.METRIC_NON);
 
 			YataTabs tabs = _grid._f.Tabs;
 			for (int i = 0; i != tabs.TabCount; ++i)
