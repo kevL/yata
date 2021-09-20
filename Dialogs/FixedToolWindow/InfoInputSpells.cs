@@ -81,12 +81,14 @@ namespace yata
 		/// <param name="cell"></param>
 		internal InfoInputSpells(YataGrid grid, Cell cell)
 		{
-			InitializeComponent();
-
 			_grid = grid;
 			_f    = grid._f;
 			_cell = cell;
 
+			InitializeComponent();
+
+			// NOTE: Don't bother inheriting from YataDialog since setting the
+			// font is the only benefit ->
 			if (Settings._font2dialog != null)
 				Font = Settings._font2dialog;
 			else
