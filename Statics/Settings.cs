@@ -363,7 +363,7 @@ namespace yata
 		/// Sets <c>Fonts</c> for a dialog.
 		/// </summary>
 		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
-		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
+		/// <param name="bypassColor"><c>true</c> to set the <c>TextBoxBase's</c>
 		/// <c>BackColor</c> to the Yata-default.</param>
 		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
 		/// <c>Font</c></param>
@@ -373,7 +373,7 @@ namespace yata
 		/// happens to use the .net default <c>Font</c> it will get disposed and
 		/// then the app is borked since the .net default <c>Font</c> will no
 		/// longer be available at all.</remarks>
-		internal static void SetFonts(YataDialog f, bool color, bool bypassFont)
+		internal static void SetFonts(YataDialog f, bool bypassColor, bool bypassFont)
 		{
 			if (!bypassFont)
 			{
@@ -393,7 +393,7 @@ namespace yata
 					else                    tbb.Font = _fontf_tb; // is TextBox
 				}
 
-				if (color)
+				if (!bypassColor)
 					tbb.BackColor = Colors.TextboxBackground;
 			}
 		}

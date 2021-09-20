@@ -232,17 +232,17 @@ namespace yata
 		/// <item><c><see cref="METRIC_LOC"/></c> - store location</item>
 		/// <item><c><see cref="METRIC_FUL"/></c> - store location and size</item>
 		/// </list></param>
-		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
+		/// <param name="bypassColor"><c>true</c> to set the <c>TextBoxBase's</c>
 		/// <c>BackColor</c> to the Yata-default.</param>
 		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
 		/// <c>Font</c></param>
-		protected void Initialize(int metric, bool color = true, bool bypassFont = false)
+		protected void Initialize(int metric, bool bypassColor = false, bool bypassFont = false)
 		{
 			if ((Metric = metric) == METRIC_FUL && _w != -1)
 				ClientSize = new Size(_w,_h); // foff .net
 
 			PopulateTextboxbaseList(this);
-			Settings.SetFonts(this, color, bypassFont);
+			Settings.SetFonts(this, bypassColor, bypassFont);
 
 //			_init = false;
 		}
