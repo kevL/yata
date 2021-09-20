@@ -3778,7 +3778,7 @@ namespace yata
 			{
 				if (_ffont.WindowState == FormWindowState.Minimized)
 				{
-					if (FontDialog.Maximized)
+					if (_ffont.Maximized)
 						_ffont.WindowState = FormWindowState.Maximized;
 					else
 						_ffont.WindowState = FormWindowState.Normal;

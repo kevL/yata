@@ -234,13 +234,15 @@ namespace yata
 		/// </list></param>
 		/// <param name="color"><c>true</c> to set the <c>TextBoxBase's</c>
 		/// <c>BackColor</c> to the Yata-default.</param>
-		protected void Initialize(int metric, bool color = true)
+		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
+		/// <c>Font</c></param>
+		protected void Initialize(int metric, bool color = true, bool bypassFont = false)
 		{
 			if ((Metric = metric) == METRIC_FUL && _w != -1)
 				ClientSize = new Size(_w,_h); // foff .net
 
 			PopulateTextboxbaseList(this);
-			Settings.SetFonts(this, color);
+			Settings.SetFonts(this, color, bypassFont);
 
 //			_init = false;
 		}
