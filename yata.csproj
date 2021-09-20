@@ -83,6 +83,10 @@
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\FixedToolWindow\InfoInputTui.cs" />
+    <Compile Include="Dialogs\Infobox.cs" />
+    <Compile Include="Dialogs\Infobox.Designer.cs">
+      <DependentUpon>Infobox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
@@ -169,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputSpells.resx">
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Infobox.resx">
+      <DependentUpon>Infobox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
