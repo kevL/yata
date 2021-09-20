@@ -11,30 +11,38 @@ namespace yata
 	/// allow the user to select multiple choices or checkboxes that act like
 	/// radiobuttons if only a unique choice is allowed; alternately the dialog
 	/// can load as a combobox with a list of unique choices. The return to
-	/// YataForm can be a string, an int, or a hexadecimal int.
+	/// YataForm can be a <c>string</c>, an <c>int</c>, or a hexadecimal
+	/// <c>int</c>.
 	/// 
-	/// Two YataForm variables shall be initialized: either YataForm.int0 and
-	/// YataForm.int1, or YataForm.str0 and YataForm.str1, according to whether
-	/// the return will be an integer or a string. 'int0' or 'str0' is the
-	/// initial value that was passed into this dialog; 'int1' or 'str1' will be
-	/// the return value to YataForm itself. Two conditions must be met before
-	/// YataForm does anything with a return: (1) the user must click the Accept
-	/// button, (2) the return value must be different than the value that was
-	/// passed into the dialog.
 	/// 
-	/// If a value is passed in from YataForm that this dialog does not
+	/// Two <c><see cref="YataForm"/></c> variables shall be initialized: either
+	/// <c><see cref="YataForm.int0"/></c> and
+	/// <c><see cref="YataForm.int1"/></c> or <c><see cref="YataForm.str0"/></c>
+	/// and <c><see cref="YataForm.str1"/></c> according to whether the return
+	/// will be an <c>int</c> or a <c>string</c>. <c>int0</c> or <c>str0</c> is
+	/// the initial value that was passed into this dialog; <c>int1</c> or
+	/// <c>str1</c> will be the return value to <c>YataForm</c> itself. Two
+	/// conditions must be met before <c>YataForm</c> does anything with a
+	/// return: (1) the user must click the Accept button (2) the return value
+	/// must be different than the value that was passed into this dialog.
+	/// 
+	/// 
+	/// If a value is passed in from <c>YataForm</c> that this dialog does not
 	/// recognize as valid (ie. the value is not listed as any of the choices
-	/// that user can select) then default values shall be assigned to the '0'
-	/// and '1' variables. 'str0' and 'str1' are initialized with the passed in
-	/// value unless the passed in value is considered invalid, for which 'str1'
-	/// will be initialzed to "****"; if not, the user needs to choose a
-	/// different string-value to return or else YataForm won't bother with it.
+	/// that user can select) then default values shall be assigned to the
+	/// <c>0</c> and <c>1</c> variables. <c>str0</c> and <c>str1</c> are
+	/// initialized with the passed in value unless the passed in value is
+	/// considered invalid, for which <c>str1</c> will be initialzed to
+	/// <c>****</c>; if not the user needs to choose a different string-value to
+	/// return or else <c>YataForm</c> won't bother with it.
+	/// 
 	/// 
 	/// Integer returns, however, are trickier. Very tricky ...
 	/// 
+	/// 
 	/// The value displayed at the top of a checkbox-configuration shall be the
-	/// value that will be returned to YataForm iff user clicks the Accept
-	/// button. A combobox-configuration displays the value that will be
+	/// value that will be returned to <c>YataForm</c> iff user clicks the
+	/// Accept button. A combobox-configuration displays the value that will be
 	/// returned (iff user clicks the Accept button) in the combobox itself.
 	/// </summary>
 	sealed partial class InfoInputSpells
@@ -84,7 +92,7 @@ namespace yata
 			else
 				Font = Settings._fontdialog;
 
-			initdialog();
+			init();
 		}
 		#endregion cTor
 
@@ -93,294 +101,292 @@ namespace yata
 		/// <summary>
 		/// Initializes the dialog based on the current 2da col.
 		/// </summary>
-		void initdialog()
+		void init()
 		{
 			_init = true;
 
 			string val = _cell.text;
-			if (!String.IsNullOrEmpty(val)) // safety.
+
+			int result;
+			switch (_cell.x)
 			{
-				int result;
-				switch (_cell.x)
-				{
-					case School: // string-val,checkbox,unique // TODO: change 'School' to string-val,dropdown,unique
-						_f.str0 = _f.str1 = val;
-						vis_Schools();
+				case School: // string-val,checkbox,unique // TODO: change 'School' to string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					vis_Schools();
 
-						switch (val)
+					switch (val)
+					{
+						case "A": cb_00.Checked = true; break;
+						case "C": cb_01.Checked = true; break;
+						case "D": cb_02.Checked = true; break;
+						case "E": cb_03.Checked = true; break;
+						case "I": cb_04.Checked = true; break;
+						case "N": cb_05.Checked = true; break;
+						case "T": cb_06.Checked = true; break;
+						case "V": cb_07.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case Range: // string-val,checkbox,unique // TODO: change 'Range' to string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					vis_Ranges();
+
+					switch (val)
+					{
+						case "P": cb_00.Checked = true; break;
+						case "T": cb_01.Checked = true; break;
+						case "S": cb_02.Checked = true; break;
+						case "M": cb_03.Checked = true; break;
+						case "L": cb_04.Checked = true; break;
+						case "I": cb_05.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case MetaMagic: // int-val(hex),checkbox,multiple
+					// NOTE: Types that bitwise multiple values shall assign
+					// a default value of "0x00" instead of the usual "****"
+					// when the value passed into this dialog is considered
+					// invalid.
+
+					vis_MetaMagics();
+
+					if (val.Length > 2 && val.Substring(0,2) == "0x"
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						cb_00.Checked = ((result & YataForm.META_EMPOWER)            != 0); // standard ->
+						cb_01.Checked = ((result & YataForm.META_EXTEND)             != 0);
+						cb_02.Checked = ((result & YataForm.META_MAXIMIZE)           != 0);
+						cb_03.Checked = ((result & YataForm.META_QUICKEN)            != 0);
+						cb_04.Checked = ((result & YataForm.META_SILENT)             != 0);
+						cb_05.Checked = ((result & YataForm.META_STILL)              != 0);
+						cb_06.Checked = ((result & YataForm.META_PERSISTENT)         != 0);
+						cb_07.Checked = ((result & YataForm.META_PERMANENT)          != 0);
+
+						cb_08.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0); // Eldritch Essences ->
+						cb_09.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
+						cb_10.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
+						cb_11.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
+						cb_12.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0);
+						cb_13.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
+						cb_14.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
+						cb_15.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
+						cb_16.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
+						cb_17.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
+						cb_18.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
+
+						cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0); // Blast Shapes ->
+						cb_20.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
+						cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
+						cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0);
+						cb_23.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
+
+						metamagicGroups(result);
+
+						// TODO: There is an issue. If an unconventional value is passed
+						// in from YataForm it could have bits for both standard metamagic
+						// and invocation metamagic which should be disallowed here.
+						// The initialization routine will then check disabled checkboxes,
+						// which should never happen ...
+						//
+						// It's not a major concern but it's definitely awkward. The
+						// problem is I'd have to ask the user which set he/she wants
+						// to keep: standard or invocation ... and I don't want to
+						// set that up.
+
+						if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0) // invalid - bits outside allowed range
 						{
-							case "A": cb_00.Checked = true; break;
-							case "C": cb_01.Checked = true; break;
-							case "D": cb_02.Checked = true; break;
-							case "E": cb_03.Checked = true; break;
-							case "I": cb_04.Checked = true; break;
-							case "N": cb_05.Checked = true; break;
-							case "T": cb_06.Checked = true; break;
-							case "V": cb_07.Checked = true; break;
-
-							case gs.Stars: break;
-
-							default: _f.str1 = gs.Stars; break;
+							_f.int0 = result;
+							// crop 'result' so 'int1' differs from 'int0' ->
+							printHexString(_f.int1 = (result &= (YataForm.META_STANDARD | YataForm.META_I_ALL)));
 						}
-						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
-						break;
+						else
+							printHexString(_f.int0 = _f.int1 = result);
 
-					case Range: // string-val,checkbox,unique // TODO: change 'Range' to string-val,dropdown,unique
-						_f.str0 = _f.str1 = val;
-						vis_Ranges();
+						btn_Clear.Enabled = (result != 0);
+					}
+					else // is not a valid hex-value ->
+					{
+						_f.int0 = YataForm.II_INIT_INVALID;
+						printHexString(_f.int1 = 0);
+						btn_Clear.Enabled = false;
+					}
+					break;
 
-						switch (val)
+				case TargetType: // int-val(hex),checkbox,multiple
+					// NOTE: Types that bitwise multiple values shall assign
+					// a default value of "0x00" instead of the usual "****"
+					// when the value passed into this dialog is considered
+					// invalid.
+
+					vis_TargetTypes();
+
+					if (val.Length > 2 && val.Substring(0,2) == "0x"
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						cb_00.Checked = ((result & YataForm.TARGET_SELF)       != 0);
+						cb_01.Checked = ((result & YataForm.TARGET_CREATURE)   != 0);
+						cb_02.Checked = ((result & YataForm.TARGET_GROUND)     != 0);
+						cb_03.Checked = ((result & YataForm.TARGET_ITEMS)      != 0);
+						cb_04.Checked = ((result & YataForm.TARGET_DOORS)      != 0);
+						cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
+						cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
+
+						if ((result & ~YataForm.TARGET_TOTAL) != 0)
 						{
-							case "P": cb_00.Checked = true; break;
-							case "T": cb_01.Checked = true; break;
-							case "S": cb_02.Checked = true; break;
-							case "M": cb_03.Checked = true; break;
-							case "L": cb_04.Checked = true; break;
-							case "I": cb_05.Checked = true; break;
-
-							case gs.Stars: break;
-
-							default: _f.str1 = gs.Stars; break;
+							_f.int0 = result;
+							printHexString(_f.int1 = (result &= YataForm.TARGET_TOTAL));
 						}
-						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+						else
+							printHexString(_f.int0 = _f.int1 = result);
+
+						btn_Clear.Enabled = (result != 0);
+					}
+					else // is not a valid hex-value ->
+					{
+						_f.int0 = YataForm.II_INIT_INVALID;
+						printHexString(_f.int1 = 0);
+						btn_Clear.Enabled = false;
+					}
+					break;
+
+				case ImmunityType: // string-val,dropdown,unique
+					// NOTE: ImmunityTypes are not used by the NwN2 engine but their
+					// string-values can be accessed by script regardless. What follows
+					// are generally accepted values but they do not correspond exactly
+					// to the IMMUNITY_TYPE_* constants in NwScript.nss.
+
+					_f.str0 = _f.str1 = val;
+					list_ImmunityTypes();
+
+					switch (val)
+					{
+						case gs.Acid:           cbx_Val.SelectedIndex =  0; break; // sub
+						case gs.Cold:           cbx_Val.SelectedIndex =  1; break; // sub
+						case gs.Death:          cbx_Val.SelectedIndex =  2; break;
+						case gs.Disease:        cbx_Val.SelectedIndex =  3; break;
+						case gs.Divine:         cbx_Val.SelectedIndex =  4; break; // sub
+						case gs.Electricity:    cbx_Val.SelectedIndex =  5; break; // sub
+						case gs.Evil:           cbx_Val.SelectedIndex =  6; break; // non-standard
+						case gs.Fear:           cbx_Val.SelectedIndex =  7; break;
+						case gs.Fire:           cbx_Val.SelectedIndex =  8; break; // sub
+						case gs.Magical:        cbx_Val.SelectedIndex =  9; break; // sub
+						case gs.Mind_Affecting: cbx_Val.SelectedIndex = 10; break;
+						case gs.Negative:       cbx_Val.SelectedIndex = 11; break; // sub
+						case gs.Paralysis:      cbx_Val.SelectedIndex = 12; break;
+						case gs.Poison:         cbx_Val.SelectedIndex = 13; break;
+						case gs.Positive:       cbx_Val.SelectedIndex = 14; break; // sub
+						case gs.Sonic:          cbx_Val.SelectedIndex = 15; break; // sub
+						case gs.Constitution:   cbx_Val.SelectedIndex = 16; break; // non-standard
+						case gs.Water:          cbx_Val.SelectedIndex = 17; break; // non-standard
+
+						case gs.Stars:          cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case Category: // int-val,dropdown,unique
+					list_Categories();
+
+					initintvals(val);
+					break;
+
+				case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					vis_UserTypes();
+
+					switch (val)
+					{
+						case "1": cb_00.Checked = true; break;
+						case "2": cb_01.Checked = true; break;
+						case "3": cb_02.Checked = true; break;
+						case "4": cb_03.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case SpontCastClass: // int-val,dropdown,unique
+					list_SpontCastClasses();
+
+					initintvals(val);
+					break;
+
+				case AsMetaMagic: // int-val(hex),dropdown,unique
+					list_AsMetaMagics();
+
+					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+
+					if (val == gs.Stars)
+					{
+						_f.int0 = _f.int1 = YataForm.II_ASSIGN_STARS;
+						btn_Clear.Enabled = false;
 						break;
+					}
 
-					case MetaMagic: // int-val(hex),checkbox,multiple
-						// NOTE: Types that bitwise multiple values shall assign
-						// a default value of "0x00" instead of the usual "****"
-						// when the value passed into this dialog is considered
-						// invalid.
-
-						vis_MetaMagics();
-
-						if (val.Length > 2 && val.Substring(0,2) == "0x"
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+					if (val.Length > 2 && val.Substring(0,2) == "0x"
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							cb_00.Checked = ((result & YataForm.META_EMPOWER)            != 0); // standard ->
-							cb_01.Checked = ((result & YataForm.META_EXTEND)             != 0);
-							cb_02.Checked = ((result & YataForm.META_MAXIMIZE)           != 0);
-							cb_03.Checked = ((result & YataForm.META_QUICKEN)            != 0);
-							cb_04.Checked = ((result & YataForm.META_SILENT)             != 0);
-							cb_05.Checked = ((result & YataForm.META_STILL)              != 0);
-							cb_06.Checked = ((result & YataForm.META_PERSISTENT)         != 0);
-							cb_07.Checked = ((result & YataForm.META_PERMANENT)          != 0);
+							case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
+							case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
+							case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
+							case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
+							case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
+							case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
+							case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
+							case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
+							case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
+							case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
+							case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
 
-							cb_08.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0); // Eldritch Essences ->
-							cb_09.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
-							cb_10.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
-							cb_11.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
-							cb_12.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0);
-							cb_13.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
-							cb_14.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
-							cb_15.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
-							cb_16.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
-							cb_17.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
-							cb_18.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
-
-							cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0); // Blast Shapes ->
-							cb_20.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
-							cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
-							cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0);
-							cb_23.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
-
-							metamagicGroups(result);
-
-							// TODO: There is an issue. If an unconventional value is passed
-							// in from YataForm it could have bits for both standard metamagic
-							// and invocation metamagic which should be disallowed here.
-							// The initialization routine will then check disabled checkboxes,
-							// which should never happen ...
-							//
-							// It's not a major concern but it's definitely awkward. The
-							// problem is I'd have to ask the user which set he/she wants
-							// to keep: standard or invocation ... and I don't want to
-							// set that up.
-
-							if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0) // invalid - bits outside allowed range
-							{
-								_f.int0 = result;
-								// crop 'result' so 'int1' differs from 'int0' ->
-								printHexString(_f.int1 = (result &= (YataForm.META_STANDARD | YataForm.META_I_ALL)));
-							}
-							else
-								printHexString(_f.int0 = _f.int1 = result);
-
-							btn_Clear.Enabled = (result != 0);
+							case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Blast Shapes ->
+							case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
+							case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
+							case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
+							case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
 						}
-						else // is not a valid hex-value ->
+
+						if (cbx_Val.SelectedIndex != cbx_Val.Items.Count - 1)
 						{
-							_f.int0 = YataForm.II_INIT_INVALID;
-							printHexString(_f.int1 = 0);
-							btn_Clear.Enabled = false;
-						}
-						break;
-
-					case TargetType: // int-val(hex),checkbox,multiple
-						// NOTE: Types that bitwise multiple values shall assign
-						// a default value of "0x00" instead of the usual "****"
-						// when the value passed into this dialog is considered
-						// invalid.
-
-						vis_TargetTypes();
-
-						if (val.Length > 2 && val.Substring(0,2) == "0x"
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
-						{
-							cb_00.Checked = ((result & YataForm.TARGET_SELF)       != 0);
-							cb_01.Checked = ((result & YataForm.TARGET_CREATURE)   != 0);
-							cb_02.Checked = ((result & YataForm.TARGET_GROUND)     != 0);
-							cb_03.Checked = ((result & YataForm.TARGET_ITEMS)      != 0);
-							cb_04.Checked = ((result & YataForm.TARGET_DOORS)      != 0);
-							cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
-							cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
-
-							if ((result & ~YataForm.TARGET_TOTAL) != 0)
-							{
-								_f.int0 = result;
-								printHexString(_f.int1 = (result &= YataForm.TARGET_TOTAL));
-							}
-							else
-								printHexString(_f.int0 = _f.int1 = result);
-
-							btn_Clear.Enabled = (result != 0);
-						}
-						else // is not a valid hex-value ->
-						{
-							_f.int0 = YataForm.II_INIT_INVALID;
-							printHexString(_f.int1 = 0);
-							btn_Clear.Enabled = false;
-						}
-						break;
-
-					case ImmunityType: // string-val,dropdown,unique
-						// NOTE: ImmunityTypes are not used by the NwN2 engine but their
-						// string-values can be accessed by script regardless. What follows
-						// are generally accepted values but they do not correspond exactly
-						// to the IMMUNITY_TYPE_* constants in NwScript.nss.
-
-						_f.str0 = _f.str1 = val;
-						list_ImmunityTypes();
-
-						switch (val)
-						{
-							case gs.Acid:           cbx_Val.SelectedIndex =  0; break; // sub
-							case gs.Cold:           cbx_Val.SelectedIndex =  1; break; // sub
-							case gs.Death:          cbx_Val.SelectedIndex =  2; break;
-							case gs.Disease:        cbx_Val.SelectedIndex =  3; break;
-							case gs.Divine:         cbx_Val.SelectedIndex =  4; break; // sub
-							case gs.Electricity:    cbx_Val.SelectedIndex =  5; break; // sub
-							case gs.Evil:           cbx_Val.SelectedIndex =  6; break; // non-standard
-							case gs.Fear:           cbx_Val.SelectedIndex =  7; break;
-							case gs.Fire:           cbx_Val.SelectedIndex =  8; break; // sub
-							case gs.Magical:        cbx_Val.SelectedIndex =  9; break; // sub
-							case gs.Mind_Affecting: cbx_Val.SelectedIndex = 10; break;
-							case gs.Negative:       cbx_Val.SelectedIndex = 11; break; // sub
-							case gs.Paralysis:      cbx_Val.SelectedIndex = 12; break;
-							case gs.Poison:         cbx_Val.SelectedIndex = 13; break;
-							case gs.Positive:       cbx_Val.SelectedIndex = 14; break; // sub
-							case gs.Sonic:          cbx_Val.SelectedIndex = 15; break; // sub
-							case gs.Constitution:   cbx_Val.SelectedIndex = 16; break; // non-standard
-							case gs.Water:          cbx_Val.SelectedIndex = 17; break; // non-standard
-
-							case gs.Stars:          cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; break;
-
-							default: _f.str1 = gs.Stars; goto case gs.Stars;
-						}
-						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
-						break;
-
-					case Category: // int-val,dropdown,unique
-						list_Categories();
-
-						initintvals(val);
-						break;
-
-					case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
-						_f.str0 = _f.str1 = val;
-						vis_UserTypes();
-
-						switch (val)
-						{
-							case "1": cb_00.Checked = true; break;
-							case "2": cb_01.Checked = true; break;
-							case "3": cb_02.Checked = true; break;
-							case "4": cb_03.Checked = true; break;
-
-							case gs.Stars: break;
-
-							default: _f.str1 = gs.Stars; break;
-						}
-						btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
-						break;
-
-					case SpontCastClass: // int-val,dropdown,unique
-						list_SpontCastClasses();
-
-						initintvals(val);
-						break;
-
-					case AsMetaMagic: // int-val(hex),dropdown,unique
-						list_AsMetaMagics();
-
-						cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
-
-						if (val == gs.Stars)
-						{
-							_f.int0 = _f.int1 = YataForm.II_ASSIGN_STARS;
-							btn_Clear.Enabled = false;
+							_f.int0 = _f.int1 = result;
 							break;
 						}
+					}
 
-						if (val.Length > 2 && val.Substring(0,2) == "0x"
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
-						{
-							switch (result)
-							{
-								case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
-								case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
-								case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
-								case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
-								case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
-								case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
-								case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
-								case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
-								case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
-								case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
-								case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
+					_f.int0 = YataForm.II_INIT_INVALID;
+					_f.int1 = YataForm.II_ASSIGN_STARS;
+					break;
 
-								case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Blast Shapes ->
-								case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
-								case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
-								case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
-								case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
-							}
+				case TargetingUI: // int-val,dropdown,unique
+					list_Targeters();
 
-							if (cbx_Val.SelectedIndex != cbx_Val.Items.Count - 1)
-							{
-								_f.int0 = _f.int1 = result;
-								break;
-							}
-						}
-
-						_f.int0 = YataForm.II_INIT_INVALID;
-						_f.int1 = YataForm.II_ASSIGN_STARS;
-						break;
-
-					case TargetingUI: // int-val,dropdown,unique
-						list_Targeters();
-
-						initintvals(val);
-						break;
-				}
+					initintvals(val);
+					break;
 			}
 			_init = false;
 		}
@@ -679,7 +685,7 @@ namespace yata
 		#endregion init
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Handles user changing a checkbox.
 		/// </summary>
@@ -1313,11 +1319,7 @@ namespace yata
 					break;
 			}
 		}
-
-
-//		void click_Accept(object sender, EventArgs e)
-//		{}
-		#endregion Events
+		#endregion Handlers
 
 
 		#region Methods
