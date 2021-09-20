@@ -82,8 +82,8 @@ namespace yata
 
 			ClientSize = new Size(Math.Max(wInfo, wPfe) + 20, ClientSize.Height);
 
-			MaximumSize = new Size(Int32.MaxValue,             Height);
 			MinimumSize = new Size(Math.Max(WIDTH_Min, Width), Height);
+			MaximumSize = new Size(Int32.MaxValue,             Height);
 
 
 			btn_Action.Select();
