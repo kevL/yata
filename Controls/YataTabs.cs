@@ -68,7 +68,7 @@ namespace yata
 		#endregion Methods
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Bypasses <c>[Ctrl+Shift+PageUp/Down]</c> that would change the
 		/// active tab so that <c><see cref="YataGrid"/>.OnKeyDown()</c> can
@@ -158,7 +158,7 @@ namespace yata
 //		{
 //			base.OnDragLeave(e);
 //		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
 		#region OnePage no tabs

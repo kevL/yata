@@ -40,8 +40,7 @@ namespace yata
 
 			if (args.Length != 0) // else always start a new instance of Yata
 			{
-				var current  = Process.GetCurrentProcess();
-				string label = current.ProcessName;
+				string label = Process.GetCurrentProcess().ProcessName;
 
 				//int id = current.Id;
 				//logfile.Log(". current process= " + id + " : " + label + " h= " + current.Handle);
@@ -103,10 +102,13 @@ namespace yata
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(ex.ToString(),
-									" Yata",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Error);
+					using (var ib = new Infobox(gs.InfoboxTitle_excep,
+												"Failed to send file to Yata.",
+												ex.ToString(),
+												InfoboxType.Error))
+					{
+						ib.ShowDialog(); // this better not throw ...
+					}
 				}
 				finally
 				{

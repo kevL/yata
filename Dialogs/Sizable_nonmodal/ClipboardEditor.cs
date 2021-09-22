@@ -53,7 +53,7 @@ namespace yata
 		#endregion Handlers (override)
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Handles <c>Click</c> on the Get button.
 		/// </summary>
@@ -84,7 +84,7 @@ namespace yata
 		{
 			ClipboardService.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine).Trim());
 		}
-		#endregion Events
+		#endregion Handlers
 	}
 
 

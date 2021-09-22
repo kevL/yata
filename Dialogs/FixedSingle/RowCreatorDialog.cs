@@ -461,12 +461,13 @@ namespace yata
 
 			if (_cancel)
 			{
-				MessageBox.Show(GetDarthQuote(),
-								" Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error,
-								MessageBoxDefaultButton.Button1,
-								0);
+				using (var ib = new Infobox(gs.InfoboxTitle_error,
+											GetDarthQuote(),
+											null,
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
 			}
 			else if (rb_FillCopied  .Checked) f._fillCr = YataForm.CrFillType.Copied;
 			else if (rb_FillSelected.Checked) f._fillCr = YataForm.CrFillType.Selected;

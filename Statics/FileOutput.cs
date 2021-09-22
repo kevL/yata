@@ -12,7 +12,7 @@ namespace yata
 			{
 				using (var sw = new StreamWriter(table.Fullpath))
 				{
-					sw.WriteLine("2DA V2.0");						// header ->
+					sw.WriteLine(gs.TwodaVer);						// header ->
 					sw.WriteLine();
 
 					string line = String.Empty;
@@ -73,7 +73,7 @@ namespace yata
 				{
 					using (var sw = new StreamWriter(table.Fullpath))
 					{
-						sw.WriteLine("2DA V2.0");						// header ->
+						sw.WriteLine(gs.TwodaVer);						// header ->
 						sw.WriteLine();
 
 						string line = String.Empty;
@@ -123,7 +123,7 @@ namespace yata
 
 					using (var sw = new StreamWriter(table.Fullpath))
 					{
-						sw.WriteLine("2DA V2.0");						// header ->
+						sw.WriteLine(gs.TwodaVer);						// header ->
 						sw.WriteLine();
 
 						var tabstops = new int[table.ColCount];

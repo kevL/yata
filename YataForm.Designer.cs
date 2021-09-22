@@ -176,7 +176,7 @@ namespace yata
 		ToolStripMenuItem cellit_Cut;
 		ToolStripMenuItem cellit_Copy;
 		ToolStripMenuItem cellit_Paste;
-		ToolStripMenuItem cellit_Delete;
+		ToolStripMenuItem cellit_Clear;
 		ToolStripMenuItem cellit_Lower;
 		ToolStripMenuItem cellit_Upper;
 		ToolStripMenuItem cellit_MergeCe;
@@ -367,7 +367,7 @@ namespace yata
 			this.cellit_Cut = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Copy = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Paste = new System.Windows.Forms.ToolStripMenuItem();
-			this.cellit_Delete = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_16 = new System.Windows.Forms.ToolStripSeparator();
 			this.cellit_Lower = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Upper = new System.Windows.Forms.ToolStripMenuItem();
@@ -682,21 +682,21 @@ namespace yata
 			// 
 			this.it_DeselectCell.Enabled = false;
 			this.it_DeselectCell.Name = "it_DeselectCell";
-			this.it_DeselectCell.Size = new System.Drawing.Size(150, 22);
+			this.it_DeselectCell.Size = new System.Drawing.Size(152, 22);
 			this.it_DeselectCell.Text = "De&select";
 			this.it_DeselectCell.Click += new System.EventHandler(this.editcellsclick_Deselect);
 			// 
 			// separator_30
 			// 
 			this.separator_30.Name = "separator_30";
-			this.separator_30.Size = new System.Drawing.Size(147, 6);
+			this.separator_30.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_CutCell
 			// 
 			this.it_CutCell.Enabled = false;
 			this.it_CutCell.Name = "it_CutCell";
 			this.it_CutCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.it_CutCell.Size = new System.Drawing.Size(150, 22);
+			this.it_CutCell.Size = new System.Drawing.Size(152, 22);
 			this.it_CutCell.Text = "Cu&t";
 			this.it_CutCell.Click += new System.EventHandler(this.editcellsclick_CutCell);
 			// 
@@ -705,7 +705,7 @@ namespace yata
 			this.it_CopyCell.Enabled = false;
 			this.it_CopyCell.Name = "it_CopyCell";
 			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.it_CopyCell.Size = new System.Drawing.Size(150, 22);
+			this.it_CopyCell.Size = new System.Drawing.Size(152, 22);
 			this.it_CopyCell.Text = "&Copy";
 			this.it_CopyCell.Click += new System.EventHandler(this.editcellsclick_CopyCell);
 			// 
@@ -714,7 +714,7 @@ namespace yata
 			this.it_PasteCell.Enabled = false;
 			this.it_PasteCell.Name = "it_PasteCell";
 			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.it_PasteCell.Size = new System.Drawing.Size(150, 22);
+			this.it_PasteCell.Size = new System.Drawing.Size(152, 22);
 			this.it_PasteCell.Text = "&Paste";
 			this.it_PasteCell.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
@@ -723,20 +723,20 @@ namespace yata
 			this.it_DeleteCell.Enabled = false;
 			this.it_DeleteCell.Name = "it_DeleteCell";
 			this.it_DeleteCell.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.it_DeleteCell.Size = new System.Drawing.Size(150, 22);
+			this.it_DeleteCell.Size = new System.Drawing.Size(152, 22);
 			this.it_DeleteCell.Text = "Clea&r";
 			this.it_DeleteCell.Click += new System.EventHandler(this.editcellsclick_Delete);
 			// 
 			// separator_20
 			// 
 			this.separator_20.Name = "separator_20";
-			this.separator_20.Size = new System.Drawing.Size(147, 6);
+			this.separator_20.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Lower
 			// 
 			this.it_Lower.Enabled = false;
 			this.it_Lower.Name = "it_Lower";
-			this.it_Lower.Size = new System.Drawing.Size(150, 22);
+			this.it_Lower.Size = new System.Drawing.Size(152, 22);
 			this.it_Lower.Text = "&Lowercase";
 			this.it_Lower.Click += new System.EventHandler(this.editcellsclick_Lower);
 			// 
@@ -744,20 +744,20 @@ namespace yata
 			// 
 			this.it_Upper.Enabled = false;
 			this.it_Upper.Name = "it_Upper";
-			this.it_Upper.Size = new System.Drawing.Size(150, 22);
+			this.it_Upper.Size = new System.Drawing.Size(152, 22);
 			this.it_Upper.Text = "&Uppercase";
 			this.it_Upper.Click += new System.EventHandler(this.editcellsclick_Upper);
 			// 
 			// separator_4
 			// 
 			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(147, 6);
+			this.separator_4.Size = new System.Drawing.Size(149, 6);
 			// 
 			// it_Apply
 			// 
 			this.it_Apply.Enabled = false;
 			this.it_Apply.Name = "it_Apply";
-			this.it_Apply.Size = new System.Drawing.Size(150, 22);
+			this.it_Apply.Size = new System.Drawing.Size(152, 22);
 			this.it_Apply.Text = "&Apply text ...";
 			this.it_Apply.Click += new System.EventHandler(this.editcellsclick_Apply);
 			// 
@@ -1561,7 +1561,7 @@ namespace yata
 			this.cellit_Cut,
 			this.cellit_Copy,
 			this.cellit_Paste,
-			this.cellit_Delete,
+			this.cellit_Clear,
 			this.separator_16,
 			this.cellit_Lower,
 			this.cellit_Upper,
@@ -1608,12 +1608,12 @@ namespace yata
 			this.cellit_Paste.Text = "paste";
 			this.cellit_Paste.Click += new System.EventHandler(this.cellclick_Paste);
 			// 
-			// cellit_Delete
+			// cellit_Clear
 			// 
-			this.cellit_Delete.Name = "cellit_Delete";
-			this.cellit_Delete.Size = new System.Drawing.Size(164, 22);
-			this.cellit_Delete.Text = "delete";
-			this.cellit_Delete.Click += new System.EventHandler(this.cellclick_Delete);
+			this.cellit_Clear.Name = "cellit_Clear";
+			this.cellit_Clear.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Clear.Text = "clear";
+			this.cellit_Clear.Click += new System.EventHandler(this.cellclick_Delete);
 			// 
 			// separator_16
 			// 

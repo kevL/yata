@@ -42,7 +42,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>Resize</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
@@ -180,7 +180,7 @@ namespace yata
 			}
 			_grid.Select();
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 
 
@@ -214,7 +214,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelRows</c>.
 		/// </summary>
@@ -234,7 +234,7 @@ namespace yata
 				_grid.LabelRowheads();
 			}
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 
 
@@ -269,7 +269,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelFrozen</c>.
 		/// </summary>
@@ -298,6 +298,6 @@ namespace yata
 			}
 			_grid.Select();
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }

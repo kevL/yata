@@ -1340,7 +1340,7 @@ namespace yata
 		#endregion Methods
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Closes the dialog on [Esc].
 		/// </summary>
@@ -1352,7 +1352,7 @@ namespace yata
 			else
 				base.OnKeyDown(e);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }
 /*

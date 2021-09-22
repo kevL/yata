@@ -11,7 +11,8 @@ namespace yata
 	/// A generic outputbox for Info/Warnings/Errors.
 	/// </summary>
 	/// <remarks>The point is to stop wrapping long path-strings like the stock
-	/// .NET MessageBox does. And to stop beeps. And to make it look nicer.</remarks>
+	/// .NET <c>MessageBox</c> does. And to stop beeps. And to make it look a
+	/// bit nicer.</remarks>
 	sealed partial class Infobox
 		: Form
 	{
@@ -41,7 +42,7 @@ namespace yata
 		/// keep this brief</param>
 		/// <param name="copyable">info to be displayed in a fixed-width font as
 		/// readily copyable text</param>
-		/// <param name="bt">an <c><see cref="InfoboxType"/></c> to deter the
+		/// <param name="ibt">an <c><see cref="InfoboxType"/></c> to deter the
 		/// head's backcolor - is valid only with head-text specified</param>
 		/// <param name="buttons"><c><see cref="InfoboxButtons"/></c> to show</param>
 		/// <remarks>Limit the length of 'head' to ~100 chars max or break it
@@ -51,7 +52,7 @@ namespace yata
 				string title,
 				string head,
 				string copyable = null,
-				InfoboxType bt = InfoboxType.Info,
+				InfoboxType ibt = InfoboxType.Info,
 				InfoboxButtons buttons = InfoboxButtons.Cancel)
 		{
 			// TODO: Store static location and size of the Infobox (if shown non-modally).
@@ -78,6 +79,16 @@ namespace yata
 				case InfoboxButtons.CancelYesNo:
 					bu_Okay .Text = "yes";
 					bu_Retry.Text = "no";
+					goto case InfoboxButtons.CancelOkayRetry;
+
+				case InfoboxButtons.CancelYes:
+					bu_Okay.Text = "yes";
+					bu_Okay.Visible = true;
+					break;
+
+				case InfoboxButtons.CancelLoadNext:
+					bu_Okay .Text = "load";
+					bu_Retry.Text = "next";
 					goto case InfoboxButtons.CancelOkayRetry;
 			}
 
@@ -138,18 +149,16 @@ namespace yata
 			lbl_Head.TextAlign = ContentAlignment.MiddleLeft;
 			lbl_Head.TabIndex  = 0;
 			lbl_Head.Paint += OnPaintHead;
-			Controls.Add(this.lbl_Head);
+			Controls.Add(lbl_Head);
 
-			switch (bt)
+			switch (ibt)
 			{
 				case InfoboxType.Info:  lbl_Head.BackColor = Color.Lavender;   break;
 				case InfoboxType.Warn:  lbl_Head.BackColor = Color.Moccasin;   break;
 				case InfoboxType.Error: lbl_Head.BackColor = Color.SandyBrown; break;
 			}
 
-			lbl_Head.Text = head;
-
-			size = TextRenderer.MeasureText(head, lbl_Head.Font);
+			size = TextRenderer.MeasureText((lbl_Head.Text = head), lbl_Head.Font);
 			lbl_Head.Height = size.Height + 10;
 
 			if (size.Width + lbl_Head.Padding.Horizontal + widthScroller > width)
@@ -180,7 +189,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>Load</c> handler.
 		/// </summary>
@@ -233,10 +242,10 @@ namespace yata
 		{
 			e.Graphics.DrawLine(Pens.Black, 0,0, 0, Height - 1);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Paints border lines left/top on the head.
 		/// </summary>
@@ -258,7 +267,7 @@ namespace yata
 			e.Graphics.DrawLine(Pens.Black, 0,0, 0, pa_Copyable.Height - 1);
 			e.Graphics.DrawLine(Pens.Black, 1,0, pa_Copyable.Width - 1, 0);
 		}
-		#endregion Events
+		#endregion Handlers
 
 
 		#region Methods (static)
@@ -271,7 +280,7 @@ namespace yata
 		/// <param name="width">desired width in chars - lines of output shall
 		/// not exceed width</param>
 		/// <returns>text split into lines no longer than width</returns>
-		public static string SplitString(string text, int width = 60)
+		internal static string SplitString(string text, int width = 80)
 		{
 			string[] array = text.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
 			var words = new List<string>(array);
@@ -306,13 +315,4 @@ namespace yata
 		}
 		#endregion Methods (static)
 	}
-
-
-	#region Enums (internal)
-	enum InfoboxType
-	{ Info, Warn, Error }
-
-	enum InfoboxButtons
-	{ Cancel, CancelOkay, CancelOkayRetry, CancelYesNo }
-	#endregion Enums (internal)
 }

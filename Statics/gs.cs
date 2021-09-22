@@ -53,6 +53,14 @@
 
 
 		internal static string[] SEPARATORS = { "\r\n", "\r", "\n" };
+
+		internal const string InfoboxTitle_info  = " info";
+		internal const string InfoboxTitle_warn  = " burp";
+		internal const string InfoboxTitle_error = " aargh!";
+		internal const string InfoboxTitle_excep = " Exception";
+		internal const string InfoboxTitle_alert = " Alert"; // <- for save routines only.
+
+		internal const string TwodaVer = "2DA V2.0";
 	}
 
 
@@ -65,4 +73,18 @@
 		internal const float epsilon = 0.00001F;
 	}
 	#endregion Constants
+
+
+	#region Util
+	static class Util
+	{
+		internal static bool isAlphanumeric(char character)
+		{
+			int c = character;
+			return (c >= 48 && c <=  57)
+				|| (c >= 65 && c <=  90)
+				|| (c >= 97 && c <= 122);
+		}
+	}
+	#endregion Util
 }

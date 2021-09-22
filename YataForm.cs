@@ -419,13 +419,14 @@ namespace yata
 		/// Checks if any currently opened tables have their
 		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
 		/// </summary>
-		/// <param name="info">"close" files or "quit" Yata</param>
+		/// <param name="descriptor">"close" files or "quit" Yata</param>
 		/// <param name="excludecurrent"><c>true</c> to exclude the current
-		/// table - used by CloseAllOtherTables</param>
+		/// table - used by
+		/// <c><see cref="tabclick_CloseAllOtherTabs()">tabclick_CloseAllOtherTabs()</see></c></param>
 		/// <returns><c>true</c> if there are any changed tables and user
 		/// chooses to cancel; <c>false</c> if there are no changed tables or
 		/// user chooses to close/quit anyway</returns>
-		bool CheckChangedTables(string info, bool excludecurrent = false)
+		bool CancelChangedTables(string descriptor, bool excludecurrent = false)
 		{
 			string tables = String.Empty;
 
@@ -435,29 +436,28 @@ namespace yata
 				if ((table = page.Tag as YataGrid).Changed
 					&& (!excludecurrent || table != Table))
 				{
-					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant()
-							+ Environment.NewLine;
+					if (tables.Length != 0) tables += Environment.NewLine;
+					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant();
 				}
 			}
 
 			if (tables.Length != 0)
 			{
-				return MessageBox.Show("Data has changed."
-									  + Environment.NewLine + Environment.NewLine
-									  + tables
-									  + Environment.NewLine
-									  + "Okay to " + info + " ...",
-									  " warning",
-									  MessageBoxButtons.YesNo,
-									  MessageBoxIcon.Warning,
-									  MessageBoxDefaultButton.Button2) == DialogResult.No;
+				using (var ib = new Infobox(gs.InfoboxTitle_alert,
+											"Data has changed. Okay to " + descriptor + " ...",
+											tables,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelYes))
+				{
+					return ib.ShowDialog(this) == DialogResult.Cancel;
+				}
 			}
 			return false;
 		}
 		#endregion Methods (close)
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides Yata's <c>FormClosing</c> handler. Requests
 		/// user-confirmation if data has changed and writes a recent-files list
@@ -470,15 +470,20 @@ namespace yata
 			{
 				if (Tabs.TabPages.Count == 1)
 				{
-					e.Cancel = Table.Changed
-							&& MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to quit ...",
-											   " warning",
-											   MessageBoxButtons.YesNo,
-											   MessageBoxIcon.Warning,
-											   MessageBoxDefaultButton.Button2) == DialogResult.No;
+					if (e.Cancel = Table.Changed)
+					{
+						using (var ib = new Infobox(gs.InfoboxTitle_alert,
+													"Data has changed. Okay to quit ...",
+													null,
+													InfoboxType.Warn,
+													InfoboxButtons.CancelYes))
+						{
+							e.Cancel = ib.ShowDialog() == DialogResult.Cancel;
+						}
+					}
 				}
 				else
-					e.Cancel = CheckChangedTables("quit");
+					e.Cancel = CancelChangedTables("quit");
 			}
 
 			if (!e.Cancel && Settings._recent != 0)
@@ -488,15 +493,20 @@ namespace yata
 				foreach (ToolStripItem recent in it_Recent.DropDownItems)
 					recents[++i] = recent.Text;
 
-				string dir = Application.StartupPath;
-				string pfe = Path.Combine(dir, "recent.cfg");
+				string pfe = Path.Combine(Application.StartupPath, "recent.cfg");
 				try
 				{
 					File.WriteAllLines(pfe, recents);
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(ex.Message);
+					using (var ib = new Infobox(gs.InfoboxTitle_excep,
+												"Failed to write Recent.cfg to the application directory.",
+												ex.ToString(),
+												InfoboxType.Error))
+					{
+						ib.ShowDialog(this);
+					}
 				}
 			}
 
@@ -655,10 +665,10 @@ namespace yata
 					break;
 			}
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 
 
-		#region Events (override -  Receive Message - PfeLoad arg)
+		#region Handlers (override -  Receive Message - PfeLoad arg)
 		/// <summary>
 		/// Disables message-blocking in Vista+ 64-bit systems.
 		/// </summary>
@@ -666,6 +676,9 @@ namespace yata
 		/// <remarks>https://www.codeproject.com/Tips/1017834/How-to-Send-Data-from-One-Process-to-Another-in-Cs</remarks>
 		protected override void OnLoad(EventArgs e)
 		{
+			GC.Collect(); // .net appears to load ~38mb of garbage at program start.
+			GC.WaitForPendingFinalizers();
+
 			var filter = new Crap.CHANGEFILTERSTRUCT();
 			filter.size = (uint)Marshal.SizeOf(filter);
 			filter.info = 0;
@@ -674,7 +687,13 @@ namespace yata
 												  Crap.ChangeWindowMessageFilterExAction.Allow,
 												  ref filter))
 			{
-				MessageBox.Show(String.Format("An error occurred: {0}", Marshal.GetLastWin32Error()));
+				using (var ib = new Infobox(gs.InfoboxTitle_error,
+											"The MessageFilter could not be changed.",
+											"LastWin32Error " + Marshal.GetLastWin32Error(),
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
 			}
 		}
 
@@ -698,7 +717,7 @@ namespace yata
 			else
 				base.WndProc(ref m);
 		}
-		#endregion Events (override -  Receive Message - PfeLoad arg)
+		#endregion Handlers (override -  Receive Message - PfeLoad arg)
 
 
 		#region Methods (static)
@@ -898,7 +917,7 @@ namespace yata
 		#endregion Methods (create)
 
 
-		#region Events (tabs)
+		#region Handlers (tabs)
 		/// <summary>
 		/// Handles tab-selection/deselection.
 		/// </summary>
@@ -1117,7 +1136,7 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (tabs)
+		#endregion Handlers (tabs)
 
 
 		#region Methods (tabs)
@@ -1220,7 +1239,7 @@ namespace yata
 		#endregion Methods (tabs)
 
 
-		#region Events
+		#region Handlers
 		/// <summary>
 		/// Hides the <c><see cref="YataGrid._editor">YataGrid._editor</see></c>.
 		/// </summary>
@@ -1241,10 +1260,10 @@ namespace yata
 				Table.Invalidator(YataGrid.INVALID_GRID);
 			}
 		}
-		#endregion Events
+		#endregion Handlers
 
 
-		#region Events (file)
+		#region Handlers (file)
 		/// <summary>
 		/// Handles opening the File menu along with the preset-dirs and
 		/// recent-files subits.
@@ -1367,49 +1386,59 @@ namespace yata
 			// NOTE: This needs to check Table.Fullpath in case user presses
 			// [Ctrl+r] after deleting the 2da-file on his/her hardrive.
 
-			if (File.Exists(Table.Fullpath)
-				&& (!Table.Changed
-					|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to reload ...",
-									   " warning",
-									   MessageBoxButtons.YesNo,
-									   MessageBoxIcon.Warning,
-									   MessageBoxDefaultButton.Button2) == DialogResult.Yes))
+			if (File.Exists(Table.Fullpath))
 			{
-				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
-
-				if      (Table == _diff1) _diff1 = null;
-				else if (Table == _diff2) _diff2 = null;
-
-
-				int result = Table.LoadTable();
-				if (result != YataGrid.LOADRESULT_FALSE)
+				bool reload = !Table.Changed;
+				if (!reload)
 				{
-					Table._ur.Clear();
-
-					it_freeze1.Checked =
-					it_freeze2.Checked = false;
-
-					Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
-
-					if (Table.Propanel != null)
+					using (var ib = new Infobox(gs.InfoboxTitle_alert,
+												"Data has changed. Okay to reload ...",
+												null,
+												InfoboxType.Warn,
+												InfoboxButtons.CancelYes))
 					{
-						Table.Controls.Remove(Table.Propanel);
-						Table.Propanel = null;
+						reload = ib.ShowDialog(this) == DialogResult.OK;
 					}
 				}
-				else
-				{
-					Table.Changed = false; // bypass the close-tab warning.
-					fileclick_ClosePage(sender, e);
-				}
 
-				if (Table != null)
+				if (reload)
 				{
-					DrawingControl.ResumeDrawing(Table);
-					Obfuscate(false);
+					Obfuscate();
+					DrawingControl.SuspendDrawing(Table);
 
-					Table.Watcher.BypassFileChanged = true;
+					if      (Table == _diff1) _diff1 = null;
+					else if (Table == _diff2) _diff2 = null;
+
+
+					int result = Table.LoadTable();
+					if (result != YataGrid.LOADRESULT_FALSE)
+					{
+						Table._ur.Clear();
+
+						it_freeze1.Checked =
+						it_freeze2.Checked = false;
+
+						Table.Init(result == YataGrid.LOADRESULT_CHANGED, true);
+
+						if (Table.Propanel != null)
+						{
+							Table.Controls.Remove(Table.Propanel);
+							Table.Propanel = null;
+						}
+					}
+					else
+					{
+						Table.Changed = false; // bypass the close-tab warning.
+						fileclick_ClosePage(sender, e);
+					}
+
+					if (Table != null)
+					{
+						DrawingControl.ResumeDrawing(Table);
+						Obfuscate(false);
+
+						Table.Watcher.BypassFileChanged = true;
+					}
 				}
 			}
 		}
@@ -1476,27 +1505,27 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
-			bool force; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
+			bool overwrite; // force a Readonly file to overwrite itself (only if invoked by SaveAs)
 			bool bypassReadonly;
 
 			if (sender == it_SaveAs)
 			{
 				_table = Table;
 				// '_pfeT' is set by caller
-				force = (_pfeT == _table.Fullpath);
+				overwrite = (_pfeT == _table.Fullpath);
 				bypassReadonly = false;
 			}
 			else if (sender == it_SaveAll)
 			{
 				// '_table' and '_pfeT' are set by caller
-				force = false;
+				overwrite = false;
 				bypassReadonly = false;
 			}
 			else // is rego-save or tab-save or 'FileWatcherDialog' save
 			{
 				_table = Table;
 				_pfeT = _table.Fullpath;
-				force = false;
+				overwrite = false;
 
 				if (sender == it_Save || sender == tabit_Save)
 					bypassReadonly = false;
@@ -1507,20 +1536,19 @@ namespace yata
 			_warned = false;
 
 			if (!_table.Readonly || bypassReadonly
-				|| (force && SaveWarning("The 2da-file is opened as readonly.") == DialogResult.Yes))
+				|| (overwrite && SaveWarning("The 2da-file is opened as readonly.")))
 			{
 //				if ((_table._sortcol == 0 && _table._sortdir == YataGrid.SORT_ASC)
-//					|| SaveWarning("The 2da is not sorted by ascending ID.") == DialogResult.Yes)
+//					|| SaveWarning("The 2da is not sorted by ascending ID."))
 //				{
-				if (CheckRowOrder()
-					|| SaveWarning("Faulty row IDs are detected.") == DialogResult.Yes)
+				if (CheckRowOrder() || SaveWarning("Faulty row ids are detected."))
 				{
 					_table.Fullpath = _pfeT;
 
 					SetTitlebarText();
 
-					if (force) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
-														//               *as itself* it loses its Readonly flag.
+					if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
+															//               *as itself* it loses its Readonly flag.
 
 					_table.Changed = false;
 					_table._ur.ResetSaved();
@@ -1536,31 +1564,33 @@ namespace yata
 			}
 			else if (!_warned)
 			{
-				MessageBox.Show("The 2da-file is opened as readonly.",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Hand,
-								MessageBoxDefaultButton.Button1);
+				using (var ib = new Infobox(gs.InfoboxTitle_error,
+											"The 2da-file is opened as readonly.",
+											null,
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
 			}
 		}
 
 		/// <summary>
 		/// Requests user-confirmation when saving a file when readonly or when
-		/// faulty IDs are detected.
+		/// a faulty row-id is detected.
 		/// </summary>
-		/// <param name="info"></param>
-		/// <returns><c>DialogResult.Yes</c> to proceed - <c>DialogResult.No</c>
-		/// to stop</returns>
-		DialogResult SaveWarning(string info)
+		/// <param name="head"></param>
+		/// <returns><c>true</c> to proceed - <c>false</c> to stop</returns>
+		bool SaveWarning(string head)
 		{
 			_warned = true;
-			return MessageBox.Show(info
-								   + Environment.NewLine + Environment.NewLine
-								   + "Save anyway ...",
-								   " burp",
-								   MessageBoxButtons.YesNo,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
+			using (var ib = new Infobox(gs.InfoboxTitle_alert,
+										head + " Save anyway ...",
+										null,
+										InfoboxType.Warn,
+										InfoboxButtons.CancelYes))
+			{
+				return ib.ShowDialog(this) == DialogResult.OK;
+			}
 		}
 
 		/// <summary>
@@ -1675,15 +1705,20 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_ClosePage(object sender, EventArgs e)
 		{
-			if (!Table.Changed
-				|| MessageBox.Show("Data has changed." + Environment.NewLine + "Okay to close ...",
-								   " warning",
-								   MessageBoxButtons.YesNo,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+			bool close = !Table.Changed;
+			if (!close)
 			{
-				ClosePage(Tabs.SelectedTab);
+				using (var ib = new Infobox(gs.InfoboxTitle_alert,
+											"Data has changed. Okay to close ...",
+											null,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelYes))
+				{
+					close = ib.ShowDialog(this) == DialogResult.OK;
+				}
 			}
+
+			if (close) ClosePage(Tabs.SelectedTab);
 		}
 
 		/// <summary>
@@ -1702,7 +1737,7 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_CloseAllTabs(object sender, EventArgs e)
 		{
-			if (!CheckChangedTables("close"))
+			if (!CancelChangedTables("close"))
 			{
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 					ClosePage(Tabs.TabPages[tab]);
@@ -1723,7 +1758,7 @@ namespace yata
 		{
 			Close(); // let yata_Closing() handle it ...
 		}
-		#endregion Events (file)
+		#endregion Handlers (file)
 
 
 		#region Methods (file)
@@ -1742,7 +1777,7 @@ namespace yata
 		#endregion Methods (file)
 
 
-		#region Events (edit)
+		#region Handlers (edit)
 		/// <summary>
 		/// Handles the <c>DropDownOpening</c> event for
 		/// <c><see cref="it_MenuEdit"/></c>. Deters if
@@ -2248,7 +2283,7 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (edit)
+		#endregion Handlers (edit)
 
 
 		#region Methods (edit)
@@ -2281,7 +2316,7 @@ namespace yata
 		#endregion Methods (edit)
 
 
-		#region Events (editcells)
+		#region Handlers (editcells)
 		/// <summary>
 		/// Deselects all <c><see cref="Cell">Cells</see></c>.
 		/// </summary>
@@ -2599,7 +2634,7 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (editcells)
+		#endregion Handlers (editcells)
 
 
 		#region Methods (editcells)
@@ -2625,7 +2660,7 @@ namespace yata
 		#endregion Methods (editcells)
 
 
-		#region Events (editrows)
+		#region Handlers (editrows)
 		/// <summary>
 		/// Deselects all <c><see cref="Row">Rows</see></c> and subrows as well
 		/// as all <c><see cref="Cell">Cells</see></c> in
@@ -2900,7 +2935,7 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (editrows)
+		#endregion Handlers (editrows)
 
 
 		#region Methods (editrows)
@@ -2923,7 +2958,7 @@ namespace yata
 		#endregion Methods (editrows)
 
 
-		#region Events (editcol)
+		#region Handlers (editcol)
 		/// <summary>
 		/// Handles the <c>DropDownOpening</c> event for
 		/// <c><see cref="it_MenuCol"/></c>. Deters if subits ought be enabled.
@@ -3051,27 +3086,28 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
-			if (MessageBox.Show("Are you sure you want to delete the selected col"
-									+ Environment.NewLine + Environment.NewLine
-									+ "\t" + Table.Fields[selc - 1],
-								" Delete colhead",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Warning,
-								MessageBoxDefaultButton.Button2,
-								0) == DialogResult.Yes)
+			using (var ib = new Infobox(gs.InfoboxTitle_warn,
+										Infobox.SplitString("This operation cannot be undone. Are you sure"
+														  + " you want to delete the selected col ..."),
+										Table.Fields[selc - 1],
+										InfoboxType.Warn,
+										InfoboxButtons.CancelYes))
 			{
-				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
+				if (ib.ShowDialog(this) == DialogResult.OK)
+				{
+					Obfuscate();
+					DrawingControl.SuspendDrawing(Table);
 
-				steadystate();
+					steadystate();
 
-				Table.DeleteCol(selc);
+					Table.DeleteCol(selc);
 
-				it_freeze1.Enabled = Table.ColCount > 1;
-				it_freeze2.Enabled = Table.ColCount > 2;
+					it_freeze1.Enabled = Table.ColCount > 1;
+					it_freeze2.Enabled = Table.ColCount > 2;
 
-				DrawingControl.ResumeDrawing(Table);
-				Obfuscate(false);
+					DrawingControl.ResumeDrawing(Table);
+					Obfuscate(false);
+				}
 			}
 		}
 
@@ -3148,40 +3184,47 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_PasteCol(object sender, EventArgs e)
 		{
-			string warn = String.Empty;
+			int diff; string head;
 			if (Table.RowCount < _copyc.Count)
 			{
-				int diff = _copyc.Count - Table.RowCount;
-				warn = "The table has " + diff + " less row(s) than the copy.";
+				diff = _copyc.Count - Table.RowCount;
+				head = "The table has " + diff + " less row" + (diff == 1 ? String.Empty : "s") + " than the copy.";
 			}
 			else if (Table.RowCount > _copyc.Count)
 			{
-				int diff = Table.RowCount - _copyc.Count;
-				warn = "The copy has " + diff + " less row(s) than the table.";
+				diff = Table.RowCount - _copyc.Count;
+				head = "The copy has " + diff + " less row" + (diff == 1 ? String.Empty : "s") + " than the table.";
+			}
+			else { diff = 0; head = null; }
+
+			if (diff != 0)
+			{
+				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+											head + " Proceed ...",
+											null,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelYes))
+				{
+					if (ib.ShowDialog(this) == DialogResult.OK)
+						diff = 0;
+				}
 			}
 
-			if (warn.Length == 0
-				|| MessageBox.Show(warn + " Do you want to continue",
-									" Count mismatch",
-									MessageBoxButtons.YesNo,
-									MessageBoxIcon.Warning,
-									MessageBoxDefaultButton.Button2,
-									0) == DialogResult.Yes)
+			if (diff == 0)
 			{
 				Obfuscate();
 				DrawingControl.SuspendDrawing(Table);
 
-				int selc = Table.getSelectedCol();
-				Table.PasteCol(selc, _copyc);
+				Table.PasteCol(_copyc);
 
 				DrawingControl.ResumeDrawing(Table);
 				Obfuscate(false);
 			}
 		}
-		#endregion Events (editcol)
+		#endregion Handlers (editcol)
 
 
-		#region Events (clipboard)
+		#region Handlers (clipboard)
 		/// <summary>
 		/// Outputs the current contents of <c><see cref="_copyr"/></c> to the
 		/// Windows clipboard.
@@ -3259,7 +3302,7 @@ namespace yata
 				_fclip.BringToFront();
 			}
 		}
-		#endregion Events (clipboard)
+		#endregion Handlers (clipboard)
 
 
 		#region Methods (clipboard)
@@ -3275,7 +3318,7 @@ namespace yata
 		#endregion Methods (clipboard)
 
 
-		#region Events (2daOps)
+		#region Handlers (2daOps)
 		/// <summary>
 		/// Handles opening the 2daOpsMenu, determines if various items ought be
 		/// enabled.
@@ -3286,7 +3329,8 @@ namespace yata
 		{
 			dropdownopening(sender, e);
 
-			it_ClearUr.Enabled = Table != null && (Table._ur.CanUndo || Table._ur.CanRedo);
+			it_ClearUr.Enabled =  Table != null
+							  && (Table._ur.CanUndo || Table._ur.CanRedo);
 		}
 
 
@@ -3307,24 +3351,31 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_Order(object sender, EventArgs e)
 		{
-			string info;
+			string title, head; InfoboxType ibt;
 
 			int changed = order();
 			if (changed != 0)
 			{
 				layout();
 
-				if (changed == 1) info = "1 row ID corrected.";
-				else              info = changed + " row IDs corrected.";
+				title = gs.InfoboxTitle_warn;
+				head  = changed + " id" + (changed == 1 ? String.Empty : "s") + " corrected.";
+				ibt   = InfoboxType.Warn;
 			}
 			else
-				info = "Row order is Okay - no change.";
+			{
+				title = gs.InfoboxTitle_info;
+				head  = "Row order is Okay - no change.";
+				ibt   = InfoboxType.Info;
+			}
 
-			MessageBox.Show(info,
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Information,
-							MessageBoxDefaultButton.Button1);
+			using (var ib = new Infobox(title,
+										head,
+										null,
+										ibt))
+			{
+				ib.ShowDialog(this);
+			}
 		}
 
 		/// <summary>
@@ -3388,7 +3439,7 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_TestOrder(object sender, EventArgs e)
 		{
-			var list = new List<string>();
+			var borks = new List<string>();
 
 			bool stop = false;
 
@@ -3397,65 +3448,59 @@ namespace yata
 			{
 				if (!Int32.TryParse(Table[r,0].text, out result))
 				{
-					if (list.Count == 16) // stop this Madness
+					if (borks.Count == 16) // stop this Madness
 					{
 						stop = true;
 						break;
 					}
-					list.Add("ID @ " + r + " is not an integer.");
+					borks.Add("id " + r + " is not an integer");
 				}
 				else if (result != r)
 				{
-					if (list.Count == 16) // stop this Madness
+					if (borks.Count == 16) // stop this Madness
 					{
 						stop = true;
 						break;
 					}
-					list.Add("ID @ " + r + " is out of order.");
+					borks.Add("id " + r + " is out of order");
 				}
 			}
 
-			if (list.Count != 0)
+			string title, head;
+			string copy = String.Empty;
+			InfoboxType ibt;
+
+			if (borks.Count != 0)
 			{
-				string info = String.Empty;
-				foreach (string it in list)
+				foreach (string bork in borks)
 				{
-					info += it + Environment.NewLine;
+					if (copy.Length != 0) copy += Environment.NewLine;
+					copy += bork;
 				}
 
-				if (stop)
-				{
-					info += Environment.NewLine
-						  + "The check has been stopped at 16 borks.";
-				}
+				title = gs.InfoboxTitle_warn;
+				head  = "Row order is borked.";
+				ibt   = InfoboxType.Warn;
 
 				if (!Table.Readonly)
-				{
-					info += Environment.NewLine + Environment.NewLine
-						  + "Do you want to auto-order the ID fields";
-
-					if (MessageBox.Show(info,
-										" burp",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Exclamation,
-										MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-					{
-						opsclick_Order(sender, e);
-					}
-				}
-				else
-					MessageBox.Show(info,
-									" burp",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Exclamation,
-									MessageBoxDefaultButton.Button1);
+					head += " Do you want to auto-order the ids ...";
 			}
 			else
-				MessageBox.Show("Row order is Okay.",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1);
+			{
+				title = gs.InfoboxTitle_info;
+				head  = "Row order is Okay.";
+				ibt   = InfoboxType.Info;
+			}
+
+			using (var ib = new Infobox(title,
+										(stop ? "The test has been stopped at 16 borks. " : String.Empty) + head,
+										(copy.Length != 0 ? copy + (stop ? Environment.NewLine + "..." : String.Empty) : null),
+										ibt,
+										(copy.Length != 0 && !Table.Readonly ? InfoboxButtons.CancelYes : InfoboxButtons.Cancel)))
+			{
+				if (ib.ShowDialog(this) == DialogResult.OK)
+					opsclick_Order(sender, e);
+			}
 		}
 
 
@@ -3701,22 +3746,23 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_ClearUr(object sender, EventArgs e)
 		{
+			// after first run (clears ~300..500kb) this appears to clear
+			// exactly 0 bytes per Clear.
+
+			long bytes = GetUsage();
+
 			Table._ur.Clear();
 
-			// force GC
-			long bytes = GC.GetTotalMemory(false);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
 
-			bytes -= GC.GetTotalMemory(true);
+			bytes -= GetUsage();
 
-			MessageBox.Show("Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes",
-							" burp",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Information,
-							MessageBoxDefaultButton.Button1);
+			string head = "Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes";
+			using (var ib = new Infobox(gs.InfoboxTitle_info, head))
+				ib.ShowDialog(this);
 		}
-		#endregion Events (2daOps)
+		#endregion Handlers (2daOps)
 
 
 		#region Methods (2daOps)
@@ -3740,10 +3786,29 @@ namespace yata
 
 			it_ExternDiff .Enabled = File.Exists(Settings._diff);
 		}
+
+		/// <summary>
+		/// Gets Yata's current memory usage in bytes.
+		/// </summary>
+		/// <returns></returns>
+		long GetUsage()
+		{
+			long bytes;
+			using (Process proc = Process.GetCurrentProcess())
+			{
+				// The proc.PrivateMemorySize64 will returns the private memory usage in byte.
+				// Would like to Convert it to Megabyte? divide it by 2^20
+				bytes = proc.PrivateMemorySize64; // / (1024*1024);
+
+//				using (var ib = new Infobox(" bytes used", String.Format("{0:n0}", bytes)))
+//					ib.ShowDialog(this);
+			}
+			return bytes;
+		}
 		#endregion Methods (2daOps)
 
 
-		#region Events (font)
+		#region Handlers (font)
 		/// <summary>
 		/// Handles opening the FontMenu, determines if various items ought be
 		/// enabled.
@@ -3805,7 +3870,7 @@ namespace yata
 		{
 			doFont(FontDefault.Clone() as Font);
 		}
-		#endregion Events (font)
+		#endregion Handlers (font)
 
 
 		#region Methods (font)
@@ -3892,7 +3957,7 @@ namespace yata
 		#endregion Methods (font)
 
 
-		#region Events (help)
+		#region Handlers (help)
 		/// <summary>
 		/// Handles it-click to open ReadMe.txt.
 		/// </summary>
@@ -3904,15 +3969,19 @@ namespace yata
 		/// </list></remarks>
 		void helpclick_Help(object sender, EventArgs e)
 		{
-			string path = Path.Combine(Application.StartupPath, "ReadMe.txt");
-			if (File.Exists(path))
-				Process.Start(path);
+			string pfe = Path.Combine(Application.StartupPath, "ReadMe.txt");
+			if (File.Exists(pfe))
+				Process.Start(pfe);
 			else
-				MessageBox.Show("ReadMe.txt was not found in the application directory.",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error,
-								MessageBoxDefaultButton.Button1);
+			{
+				using (var ib = new Infobox(gs.InfoboxTitle_error,
+											"ReadMe.txt was not found in the application directory.",
+											null,
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
+			}
 		}
 
 		/// <summary>
@@ -3944,40 +4013,41 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					if (MessageBox.Show("The Settings.cfg file does not exist in the application"
-									  + " directory. Do you want to create one ...",
-										" Create file",
-										MessageBoxButtons.YesNo,
-										MessageBoxIcon.Question,
-										MessageBoxDefaultButton.Button1,
-										0) == DialogResult.Yes)
+					using (var ib = new Infobox(gs.InfoboxTitle_warn,
+												Infobox.SplitString("The Settings.cfg file does not exist in the application"
+																  + " directory. Do you want to create one ..."),
+												null,
+												InfoboxType.Warn,
+												InfoboxButtons.CancelYes))
 					{
-						try
+						if (ib.ShowDialog(this) == DialogResult.OK)
 						{
-							using (var sw = new StreamWriter(File.Open(pfe,
-																	   FileMode.Create,
-																	   FileAccess.Write,
-																	   FileShare.None)))
+							try
 							{
-								sw.WriteLine("#ReadMe.txt describes these settings.");
+								using (var sw = new StreamWriter(File.Open(pfe,
+																		   FileMode.Create,
+																		   FileAccess.Write,
+																		   FileShare.None)))
+								{
+									sw.WriteLine("#Help|ReadMe.txt describes these settings.");
 
-								if (Settings.options == null)
-									Settings.CreateOptions();
+									if (Settings.options == null)
+										Settings.CreateOptions();
 
-								for (int i = 0; i != Settings.ids; ++i)
-									sw.WriteLine(Settings.options[i]);
+									for (int i = 0; i != Settings.ids; ++i)
+										sw.WriteLine(Settings.options[i]);
+								}
 							}
-						}
-						catch (Exception ex)
-						{
-							MessageBox.Show("The Settings.cfg file could not be created."
-										  + Environment.NewLine + Environment.NewLine
-										  + ex,
-											" Error",
-											MessageBoxButtons.OK,
-											MessageBoxIcon.Error,
-											MessageBoxDefaultButton.Button1,
-											0);
+							catch (Exception ex)
+							{
+								using (var ibo = new Infobox(gs.InfoboxTitle_excep,
+															"The Settings.cfg file could not be created in the application directory.",
+															ex.ToString(),
+															InfoboxType.Error))
+								{
+									ibo.ShowDialog(this);
+								}
+							}
 						}
 					}
 				}
@@ -3992,14 +4062,13 @@ namespace yata
 					}
 					catch (Exception ex)
 					{
-						MessageBox.Show("The Settings.cfg file could not be read."
-									  + Environment.NewLine + Environment.NewLine
-									  + ex,
-										" Error",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Error,
-										MessageBoxDefaultButton.Button1,
-										0);
+						using (var ib = new Infobox(gs.InfoboxTitle_excep,
+													"The Settings.cfg file could not be read.",
+													ex.ToString(),
+													InfoboxType.Error))
+						{
+							ib.ShowDialog(this);
+						}
 					}
 				}
 			}
@@ -4015,7 +4084,7 @@ namespace yata
 				_fsettings.BringToFront();
 			}
 		}
-		#endregion Events (help)
+		#endregion Handlers (help)
 
 
 		#region Methods (help)
@@ -4069,7 +4138,7 @@ namespace yata
 		#endregion Methods (row)
 
 
-		#region Events (row)
+		#region Handlers (row)
 		/// <summary>
 		/// Handles context-click on the context-header.
 		/// </summary>
@@ -4342,7 +4411,7 @@ namespace yata
 
 			if (Settings._autorder && order() != 0) layout();
 		}
-		#endregion Events (row)
+		#endregion Handlers (row)
 
 
 		#region Methods (cell)
@@ -4360,7 +4429,7 @@ namespace yata
 
 			cellit_Cut    .Enabled = !Table.Readonly;
 			cellit_Paste  .Enabled = !Table.Readonly;
-			cellit_Delete .Enabled = !Table.Readonly && (_sel.text != gs.Stars || _sel.loadchanged);
+			cellit_Clear  .Enabled = !Table.Readonly && (_sel.text != gs.Stars || _sel.loadchanged);
 
 			cellit_Lower  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
 			cellit_Upper  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
@@ -4540,7 +4609,7 @@ namespace yata
 		#endregion Methods (cell)
 
 
-		#region Events (cell)
+		#region Handlers (cell)
 		/// <summary>
 		/// Handles singlecell-click edit.
 		/// </summary>
@@ -4601,7 +4670,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
-		/// <item><c><see cref="cellit_Delete"/></c></item>
+		/// <item><c><see cref="cellit_Clear"/></c></item>
 		/// <item><c><see cref="cellit_Cut"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
@@ -4936,10 +5005,10 @@ namespace yata
 		{
 			Table.ChangeCellText(_sel, gs.Invalid); // does not do a text-check
 		}
-		#endregion Events (cell)
+		#endregion Handlers (cell)
 
 
-		#region Events (tab)
+		#region Handlers (tab)
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
 		/// the context.
@@ -5001,7 +5070,7 @@ namespace yata
 		/// <param name="e"></param>
 		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
 		{
-			if (!CheckChangedTables("close", true))
+			if (!CancelChangedTables("close", true))
 			{
 				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
@@ -5140,7 +5209,7 @@ namespace yata
 			if (table != null)
 				table.Invalidator(YataGrid.INVALID_GRID);
 		}
-		#endregion Events (tab)
+		#endregion Handlers (tab)
 
 
 		#region Methods (tab)
@@ -5656,7 +5725,7 @@ namespace yata
 		#endregion Methods (statusbar)
 
 
-		#region Events (dragdrop)
+		#region Handlers (dragdrop)
 		/// <summary>
 		/// Handles dragging a file onto Yata.
 		/// </summary>
@@ -5679,10 +5748,10 @@ namespace yata
 			foreach (string pfe in paths)
 				CreatePage(pfe);
 		}
-		#endregion Events (dragdrop)
+		#endregion Handlers (dragdrop)
 
 
-		#region Events (propanel)
+		#region Handlers (propanel)
 		/// <summary>
 		/// Handler for <c>MouseDown</c> on the
 		/// <c><see cref="PropertyPanelButton"/></c>.
@@ -5731,7 +5800,7 @@ namespace yata
 					break;
 			}
 		}
-		#endregion Events (propanel)
+		#endregion Handlers (propanel)
 	}
 
 

@@ -78,25 +78,23 @@ namespace yata
 					{
 						File.Delete(pfeT);
 
-						MessageBox.Show("Yata must be reloaded before changes take effect.",
-										" Settings changed",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Information,
-										MessageBoxDefaultButton.Button1,
-										0);
+						using (var ib = new Infobox(gs.InfoboxTitle_info,
+													"Yata must be reloaded before any changes take effect."))
+						{
+							ib.ShowDialog(this);
+						}
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("The Settings.cfg file could not be written."
-							  + Environment.NewLine + Environment.NewLine
-							  + ex,
-								" Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error,
-								MessageBoxDefaultButton.Button1,
-								0);
+				using (var ib = new Infobox(gs.InfoboxTitle_excep,
+											"The Settings.cfg file could not be written to the application directory.",
+											ex.ToString(),
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
 			}
 			finally
 			{

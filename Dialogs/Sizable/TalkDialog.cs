@@ -175,22 +175,29 @@ namespace yata
 
 		/// <summary>
 		/// Handles a click on the Select button. Passes the current strref to
-		/// YataForm and closes this dialog.
+		/// <c>YataForm</c> and closes this dialog.
 		/// </summary>
 		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_btnSelect(object sender, EventArgs e)
 		{
-			if (_eId == TalkReader.invalid
-				|| _dict.Count == 0			// -> talkfile not loaded, therefore user knows what he/she
-				|| _dict.ContainsKey(_eId)	// is doing (ie, red panel BG) so let it go through.
-				|| MessageBox.Show(this,
-								   "Entry not found.",
-								   " Bad Strref",
-								   MessageBoxButtons.OKCancel,
-								   MessageBoxIcon.Warning,
-								   MessageBoxDefaultButton.Button2,
-								   0) == DialogResult.OK)
+			bool proceed = _eId == TalkReader.invalid
+						|| _dict.Count == 0			// -> talkfile not loaded, therefore user knows what he/she
+						|| _dict.ContainsKey(_eId);	// is doing (ie, red panel BG) so let it go through.
+
+			if (!proceed)
+			{
+				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+											"Entry not found in the .tlk file. Proceed ...",
+											null,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelOkay))
+				{
+					proceed = ib.ShowDialog(this) == DialogResult.OK;
+				}
+			}
+
+			if (proceed)
 			{
 				if (_eId != TalkReader.invalid && cb_Custo.Checked)
 					_eId |= TalkReader.bitCusto;

@@ -336,7 +336,7 @@ namespace yata
 		#endregion Methods
 
 
-		#region Events (scroll)
+		#region Handlers (scroll)
 		/// <summary>
 		/// Hides the editor when this <c>PropertyPanel</c> is scrolled.
 		/// </summary>
@@ -346,10 +346,10 @@ namespace yata
 		{
 			hideEditor();
 		}
-		#endregion Events (scroll)
+		#endregion Handlers (scroll)
 
 
-		#region Events (editor)
+		#region Handlers (editor)
 		/// <summary>
 		/// Handles the cell-editor's <c>KeyDown</c> event.
 		/// </summary>
@@ -387,10 +387,10 @@ namespace yata
 		{
 			hideEditor();
 		}
-		#endregion Events (editor)
+		#endregion Handlers (editor)
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Handles ending editing a cell by pressing <c>[Enter]</c> or
 		/// <c>[Escape]</c>/<c>[Tab]</c> - this fires during edit or so.
@@ -608,6 +608,6 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }

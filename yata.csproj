@@ -87,6 +87,7 @@
     <Compile Include="Dialogs\Infobox.Designer.cs">
       <DependentUpon>Infobox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\Infobox_enum.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>

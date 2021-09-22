@@ -122,13 +122,13 @@ namespace yata
 									 tb_Input.Text,
 									 StringComparison.OrdinalIgnoreCase))
 				{
-					MessageBox.Show(this,
-									"That label is already used by another colhead.",
-									" Error",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Error,
-									MessageBoxDefaultButton.Button1,
-									0);
+					using (var ib = new Infobox(gs.InfoboxTitle_error,
+												"That label is already used by another colhead.",
+												null,
+												InfoboxType.Error))
+					{
+						ib.ShowDialog(this);
+					}
 					_cancel = true;
 				}
 			}

@@ -65,7 +65,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Since right-click on a button does not visually depress it do this.
 		/// </summary>
@@ -103,6 +103,6 @@ namespace yata
 			else
 				base.OnPaint(pevent);
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }

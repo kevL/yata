@@ -173,7 +173,7 @@ namespace yata
 				string[] lines = File.ReadAllLines(pfe2da);
 
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
-				if (!hasQuote(lines))
+				if (!hasQuote(lines, pfe2da))
 				{
 					string line;
 					string[] fields;
@@ -239,7 +239,7 @@ namespace yata
 				string[] lines = File.ReadAllLines(pfe2da);
 
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
-				if (!hasQuote(lines))
+				if (!hasQuote(lines, pfe2da))
 				{
 					string line;
 					string[] fields;
@@ -291,26 +291,27 @@ namespace yata
 		/// user.
 		/// </summary>
 		/// <param name="lines">an array of strings</param>
-		/// <returns>true if a quote character is found</returns>
-		static bool hasQuote(string[] lines)
+		/// <param name="pfe2da">the fullpath of the 2da-file</param>
+		/// <returns><c>true</c> if a quote character is found</returns>
+		static bool hasQuote(string[] lines, string pfe2da)
 		{
 			foreach (string line in lines)
+			foreach (char c in line)
 			{
-				foreach (char c in line)
+				if (c == '"')
 				{
-					if (c == '"')
+					const string head = "The 2da-file contains double-quotes. Although that can be"
+									  + " valid in a 2da-file Yata's 2da Info-grope is not coded to cope."
+									  + " Format the 2da-file (in a texteditor) to not use double-quotes"
+									  + " if you want to access it for 2da Info.";
+					using (var ib = new Infobox(gs.InfoboxTitle_error,
+												Infobox.SplitString(head),
+												pfe2da,
+												InfoboxType.Error))
 					{
-						const string info = "The 2da-file contains double-quotes. Although that can be"
-										  + " valid in a 2da-file this function is not coded to cope."
-										  + " Format the 2da-file to not use double-quotes if you want"
-										  + " to access it here.";
-						MessageBox.Show(info,
-										" burp",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Error,
-										MessageBoxDefaultButton.Button1);
-						return true;
+						ib.ShowDialog(YataForm.that);
 					}
+					return true;
 				}
 			}
 			return false;

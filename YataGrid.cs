@@ -543,11 +543,13 @@ namespace yata
 					}
 //					else // this is not reliable either ->
 //					{
-//						MessageBox.Show("A table failed to open. Windows failed to send a file to Yata.",
-//										" burp",
-//										MessageBoxButtons.OK,
-//										MessageBoxIcon.Error,
-//										MessageBoxDefaultButton.Button1);
+//						using (var ib = new Infobox(gs.InfoboxTitle_error,
+//													"A table failed to open. Windows failed to send a file to Yata.",
+//													null,
+//													InfoboxType.Error))
+//						{
+//							ib.ShowDialog(_f);
+//						}
 //					}
 				}
 				_table = null;
@@ -902,7 +904,7 @@ namespace yata
 
 			int id = -1;
 
-			string line = String.Empty;
+			string line;
 
 			int total = lines.Length;
 			if (total < LINE_COLHEADS + 1) total = LINE_COLHEADS + 1;
@@ -923,51 +925,49 @@ namespace yata
 
 						if (!ignoreErrors)
 						{
-							string info = String.Empty;
+							string head;
 
 							int result;
 							if (!Int32.TryParse(fields[0], out result))
-								info = "The 2da-file contains an ID that is not an integer.";
+								head = "The 2da-file contains an id that is not an integer.";
 							else if (result != id)
-								info = "The 2da-file contains an ID that is out of order.";
+								head = "The 2da-file contains an id that is out of order.";
+							else
+								head = null;
 
-							if (!String.IsNullOrEmpty(info))
+							if (head != null)
 							{
-								string error = info
-											 + Environment.NewLine + Environment.NewLine
-											 + Fullpath
-											 + Environment.NewLine + Environment.NewLine
-											 + id + " / " + fields[0];
-								switch (ShowLoadError(error))
+								string copy = Fullpath + Environment.NewLine + Environment.NewLine
+											+ "id " + id + " \u2192 " + fields[0];
+
+								switch (ShowLoadWarning(head, copy))
 								{
-									case DialogResult.Abort:
+									case DialogResult.Cancel:
 										_init = false;
 										return LOADRESULT_FALSE;
-									case DialogResult.Retry:
-										break;
-									case DialogResult.Ignore:
+
+									case DialogResult.OK:
 										ignoreErrors = true;
 										break;
 								}
 							}
 						}
 
-						// test for matching fields under columns
+						// test for matching fields under cols
 						if (!ignoreErrors && fields.Length != Fields.Length + 1)
 						{
-							string error = "The 2da-file contains fields that do not align with its cols."
-										 + Environment.NewLine + Environment.NewLine
-										 + Fullpath
-										 + Environment.NewLine + Environment.NewLine
-										 + "id " + id;
-							switch (ShowLoadError(error))
+							const string head = "The 2da-file contains fields that do not align with its cols.";
+							string copy = Fullpath + Environment.NewLine + Environment.NewLine
+										+ "Colcount " + (Fields.Length + 1) + Environment.NewLine
+										+ "id " + id + " fields \u2192 " + fields.Length;
+
+							switch (ShowLoadWarning(head, copy))
 							{
-								case DialogResult.Abort:
+								case DialogResult.Cancel:
 									_init = false;
 									return LOADRESULT_FALSE;
-								case DialogResult.Retry:
-									break;
-								case DialogResult.Ignore:
+
+								case DialogResult.OK:
 									ignoreErrors = true;
 									break;
 							}
@@ -985,19 +985,17 @@ namespace yata
 
 							if (quotes % 2 == 1)
 							{
-								string error = "A row contains an odd quantity of double-quote characters."
-											 + Environment.NewLine + Environment.NewLine
-											 + Fullpath
-											 + Environment.NewLine + Environment.NewLine
-											 + "id " + id;
-								switch (ShowLoadError(error))
+								const string head = "A row contains an odd quantity of double-quote characters.";
+								string copy = Fullpath + Environment.NewLine + Environment.NewLine
+											+ "id " + id;
+
+								switch (ShowLoadWarning(head, copy))
 								{
-									case DialogResult.Abort:
+									case DialogResult.Cancel:
 										_init = false;
 										return LOADRESULT_FALSE;
-									case DialogResult.Retry:
-										break;
-									case DialogResult.Ignore:
+
+									case DialogResult.OK:
 										ignoreErrors = true;
 										break;
 								}
@@ -1012,15 +1010,19 @@ namespace yata
 				}
 				else if (i == LINE_COLHEADS)
 				{
-					if (String.IsNullOrEmpty(line))
+					if (line.Length == 0)
 					{
-						MessageBox.Show("The 2da-file does not have any fields."
-										+ Environment.NewLine
-										+ "Yata requires that a file has at least one field on its 3rd line.",
-										" burp",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Error,
-										MessageBoxDefaultButton.Button1);
+						const string head = "The 2da-file does not have any fields. Yata requires"
+										  + " that a file has at least one field on its 3rd line.";
+						string copy = Fullpath;
+
+						using (var ib = new Infobox(gs.InfoboxTitle_error,
+													Infobox.SplitString(head),
+													copy,
+													InfoboxType.Error))
+						{
+							ib.ShowDialog(_f);
+						}
 						_init = false;
 						return LOADRESULT_FALSE;
 					}
@@ -1029,27 +1031,37 @@ namespace yata
 					{
 						foreach (char character in line)
 						{
-							if (character == '"' // <- always bork on a double-quote
-								|| (Settings._strict
-									&& !char.IsWhiteSpace(character)
-									&& !char.IsLetterOrDigit(character)
-									&& character != '_'))
+							//logfile.Log("character= " + character);
+//							if (character == '"' // <- always bork on a double-quote
+//							    || Char.IsControl(character)
+//							    || Char.is
+//								|| (Settings._strict
+//									&& character != ' '
+//									&& character != '_'
+//									&& !Util.isAlphanumeric(character)
+//									&& !Char.IsSymbol(character)))
+//									&& (character == '\t'
+//										|| (   character != ' '
+//											&& character != '_'
+//											&& !Util.isAlphanumeric(character)))))
+							if (   character != ' '
+								&& character != '_'
+								&& !Util.isAlphanumeric(character))
 							{
-								string error = "Column headers should contain only alpha-numeric characters and underscores."
-											 + Environment.NewLine + Environment.NewLine
-											 + Fullpath;
-								switch (ShowLoadError(error))
+								const string head = "Col headers should contain only alpha-numeric characters and underscores.";
+								string copy = Fullpath + Environment.NewLine + Environment.NewLine
+											+ "char \u2192 " + (character == '\t' ? "TAB" : character.ToString());
+
+								switch (ShowLoadWarning(head, copy))
 								{
-									case DialogResult.Abort:
+									case DialogResult.Cancel:
 										_init = false;
 										return LOADRESULT_FALSE;
-									case DialogResult.Retry:
-										break;
-									case DialogResult.Ignore:
+
+									case DialogResult.OK:
 										ignoreErrors = true;
 										break;
 								}
-								break;
 							}
 						}
 					}
@@ -1057,21 +1069,19 @@ namespace yata
 				}
 				else if (i == LINE_VALTYPE)
 				{
-					if (!ignoreErrors && Settings._strict && !String.IsNullOrEmpty(line)) // test for blank 2nd line
+					if (!ignoreErrors && Settings._strict && line.Length != 0) // test for blank 2nd line
 					{
-						string error = "The 2nd line in the 2da should be blank."
-									 + Environment.NewLine
-									 + "This editor does not support default value-types."
-									 + Environment.NewLine + Environment.NewLine
-									 + Fullpath;
-						switch (ShowLoadError(error))
+						string head = Infobox.SplitString("The 2nd line in the 2da should be blank. This"
+														+ " editor does not support default value-types.");
+						string copy = Fullpath;
+
+						switch (ShowLoadWarning(head, copy))
 						{
-							case DialogResult.Abort:
+							case DialogResult.Cancel:
 								_init = false;
 								return LOADRESULT_FALSE;
-							case DialogResult.Retry:
-								break;
-							case DialogResult.Ignore:
+
+							case DialogResult.OK:
 								ignoreErrors = true;
 								break;
 						}
@@ -1079,34 +1089,36 @@ namespace yata
 				}
 				else //if (i == LINE_HEADER) // test version header
 				{
-					if (String.IsNullOrEmpty(line))
+					if (line.Length == 0)
 					{
-						MessageBox.Show("The 2da-file does not have a header on its first line."
-										+ Environment.NewLine + Environment.NewLine
-										+ "2DA V2.0",
-										" burp",
-										MessageBoxButtons.OK,
-										MessageBoxIcon.Error,
-										MessageBoxDefaultButton.Button1);
+						const string head = "The 2da-file does not have a header on its first line.";
+						string copy = Fullpath + Environment.NewLine + Environment.NewLine
+									+ gs.TwodaVer;
+
+						using (var ib = new Infobox(gs.InfoboxTitle_error,
+													head,
+													copy,
+													InfoboxType.Error))
+						{
+							ib.ShowDialog(_f);
+						}
 						_init = false;
 						return LOADRESULT_FALSE;
 					}
 
-					if (line != "2DA V2.0" && (Settings._strict || line != "2DA\tV2.0"))
+					if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0"))
 					{
-						string error = "The 2da-file contains an incorrect version header."
-									 + Environment.NewLine
-									 + "It will be replaced by the standard header if the file is saved."
-									 + Environment.NewLine + Environment.NewLine
-									 + Fullpath;
-						switch (ShowLoadError(error))
+						string head = Infobox.SplitString("The 2da-file contains an incorrect version header. It will"
+														+ " be replaced by the standard header if the file is saved.");
+						string copy = Fullpath;
+
+						switch (ShowLoadWarning(head, copy))
 						{
-							case DialogResult.Abort:
+							case DialogResult.Cancel:
 								_init = false;
 								return LOADRESULT_FALSE;
-							case DialogResult.Retry:
-								break;
-							case DialogResult.Ignore:
+
+							case DialogResult.OK:
 								ignoreErrors = true;
 								break;
 						}
@@ -1128,21 +1140,26 @@ namespace yata
 		}
 
 		/// <summary>
-		/// A generic error-box if something goes wrong while loading a 2da file.
+		/// A generic warn-box if something goes wonky while loading a 2da-file.
 		/// </summary>
-		/// <param name="error"></param>
-		static DialogResult ShowLoadError(string error)
+		/// <param name="head">the warning</param>
+		/// <param name="copy">copyable text</param>
+		/// <returns>a <c>DialogResult</c>
+		/// <list type="bullet">
+		/// <item><c>Cancel</c> - abort load</item>
+		/// <item><c>OK</c> - ignore further errors and try to load the 2da-file</item>
+		/// <item><c>Retry</c> - check for next error</item>
+		/// </list></returns>
+		static DialogResult ShowLoadWarning(string head, string copy)
 		{
-			error += Environment.NewLine + Environment.NewLine
-				   + "abort\t- stop loading"         + Environment.NewLine
-				   + "retry\t- check for next error" + Environment.NewLine
-				   + "ignore\t- just load the file";
-
-			return MessageBox.Show(error,
-								   " burp",
-								   MessageBoxButtons.AbortRetryIgnore,
-								   MessageBoxIcon.Exclamation,
-								   MessageBoxDefaultButton.Button2);
+			using (var ib = new Infobox(gs.InfoboxTitle_warn,
+										head,
+										copy,
+										InfoboxType.Warn,
+										InfoboxButtons.CancelLoadNext))
+			{
+				return ib.ShowDialog(YataForm.that);
+			}
 		}
 
 		/// <summary>
@@ -1237,7 +1254,7 @@ namespace yata
 			}
 			else
 			{
-				switch (Path.GetFileNameWithoutExtension(Fullpath).ToLower())
+				switch (Path.GetFileNameWithoutExtension(Fullpath).ToLowerInvariant())
 				{
 					case "crafting":
 						Info = InfoType.INFO_CRAFT;
@@ -1488,11 +1505,16 @@ namespace yata
 		/// <summary>
 		/// Pastes cell-texts into a col.
 		/// </summary>
-		/// <param name="selc"></param>
 		/// <param name="copyc"></param>
-		internal void PasteCol(int selc, IList<string> copyc)
+		internal void PasteCol(IList<string> copyc)
 		{
+			// TODO: do sync-table
+
+			int selc = getSelectedCol(); // 'selc' shall be valid here.
+
 			ClearSelects(true);
+
+			Cols[selc].selected = true;
 
 			bool changed = false;
 
@@ -3006,12 +3028,15 @@ namespace yata
 			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			if (CheckTextEdit(tb))
-				MessageBox.Show("The text that was submitted has been altered.",
-								" burp",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation,
-								MessageBoxDefaultButton.Button1);
-
+			{
+				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+											"The text that was submitted has been altered.",
+											null,
+											InfoboxType.Warn))
+				{
+					ib.ShowDialog(_f);
+				}
+			}
 			cell.text = tb.Text;
 
 			Colwidth(cell.x, cell.y);
@@ -3141,7 +3166,7 @@ namespace yata
 
 			string field = tb.Text.Trim();
 
-			if (String.IsNullOrEmpty(field))
+			if (field.Length == 0)
 			{
 				tb.Text = gs.Stars;
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
@@ -3155,7 +3180,7 @@ namespace yata
 			if (quoteFirst && quoteLast)
 			{
 				if (   field.Length < 3
-					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
+					|| field.Substring(1, field.Length - 2).Trim().Length == 0)
 				{
 					tb.Text = gs.Stars;
 					return true;
@@ -3241,7 +3266,7 @@ namespace yata
 			if (quoteFirst && quoteLast)
 			{
 				if (   field.Length < 3
-					|| field.Substring(1, field.Length - 2).Trim() == String.Empty)
+					|| field.Substring(1, field.Length - 2).Trim().Length == 0)
 				{
 					field = gs.Stars;
 					return true;

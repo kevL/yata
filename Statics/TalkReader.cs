@@ -13,8 +13,8 @@ namespace yata
 		/// <summary>
 		/// The dialog-dictionary. The dictionary does not contain unassigned
 		/// entries so check if a key is valid before trying to get its value.
-		/// @note Does not really need to be "Sorted" ...
 		/// </summary>
+		/// <remarks>Does not really need to be "Sorted" ...</remarks>
 		internal static SortedDictionary<int, string> DictDialo =
 					new SortedDictionary<int, string>();
 
@@ -49,13 +49,13 @@ namespace yata
 
 		#region Methods (static)
 		/// <summary>
-		/// Adds key-value pairs [(int)strref, (string)text] to 'DictDialo' or
-		/// 'DictCusto'.
-		/// @note See description of .tlk Format at the bot of this file.
+		/// Adds key-value pairs [(int)strref, (string)text] to
+		/// <c><see cref="DictDialo"/></c> or <c><see cref="DictCusto"/></c>.
 		/// </summary>
 		/// <param name="pfeTlk">fullpath of a talktable</param>
 		/// <param name="it">a menuitem to check/uncheck</param>
 		/// <param name="alt">true if loading a custom table</param>
+		/// <remarks>See description of .tlk Format at the bot of this file.</remarks>
 		internal static void Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
 		{
 			SortedDictionary<int, string> dict;
@@ -73,7 +73,7 @@ namespace yata
 			{
 //				using (FileStream fs = File.OpenRead(pfeTlk)){}
 
-				if (alt) AltLabel = Path.GetFileNameWithoutExtension(pfeTlk).ToUpper();
+				if (alt) AltLabel = Path.GetFileNameWithoutExtension(pfeTlk).ToUpperInvariant();
 
 				byte[] bytes = File.ReadAllBytes(pfeTlk);
 

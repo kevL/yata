@@ -48,7 +48,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region Events (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Handels this <c>FileWatcher's</c> <c>Tick</c> event in C#.
 		/// </summary>
@@ -88,6 +88,6 @@ namespace yata
 				}
 			}
 		}
-		#endregion Events (override)
+		#endregion Handlers (override)
 	}
 }
