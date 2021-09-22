@@ -4063,7 +4063,7 @@ namespace yata
 					catch (Exception ex)
 					{
 						using (var ib = new Infobox(gs.InfoboxTitle_excep,
-													"The Settings.cfg file could not be read.",
+													"The Settings.cfg file could not be read in the application directory.",
 													ex.ToString(),
 													InfoboxType.Error))
 						{
