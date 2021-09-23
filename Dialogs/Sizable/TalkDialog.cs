@@ -191,7 +191,7 @@ namespace yata
 											"Entry not found in the .tlk file. Proceed ...",
 											null,
 											InfoboxType.Warn,
-											InfoboxButtons.CancelOkay))
+											InfoboxButtons.CancelYes))
 				{
 					proceed = ib.ShowDialog(this) == DialogResult.OK;
 				}

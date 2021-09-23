@@ -43,32 +43,6 @@ namespace yata
 		/// <item><c>DialogResult.OK</c></item>
 		/// </list>
 		/// </summary>
-		CancelOkay,
-		/// <summary>
-		/// returns
-		/// <list type="bullet">
-		/// <item><c>DialogResult.Cancel</c></item>
-		/// <item><c>DialogResult.OK</c></item>
-		/// <item><c>DialogResult.Retry</c></item>
-		/// </list>
-		/// </summary>
-		CancelOkayRetry,
-		/// <summary>
-		/// returns
-		/// <list type="bullet">
-		/// <item><c>DialogResult.Cancel</c></item>
-		/// <item><c>DialogResult.OK</c></item>
-		/// <item><c>DialogResult.Retry</c></item>
-		/// </list>
-		/// </summary>
-		CancelYesNo,
-		/// <summary>
-		/// returns
-		/// <list type="bullet">
-		/// <item><c>DialogResult.Cancel</c></item>
-		/// <item><c>DialogResult.OK</c></item>
-		/// </list>
-		/// </summary>
 		CancelYes,
 		/// <summary>
 		/// returns
@@ -79,6 +53,33 @@ namespace yata
 		/// </list>
 		/// </summary>
 		CancelLoadNext
+
+/*		/// <summary>
+		/// returns
+		/// <list type="bullet">
+		/// <item><c>DialogResult.Cancel</c></item>
+		/// <item><c>DialogResult.OK</c></item>
+		/// </list>
+		/// </summary>
+		CancelOkay, */
+/*		/// <summary>
+		/// returns
+		/// <list type="bullet">
+		/// <item><c>DialogResult.Cancel</c></item>
+		/// <item><c>DialogResult.OK</c></item>
+		/// <item><c>DialogResult.Retry</c></item>
+		/// </list>
+		/// </summary>
+		CancelOkayRetry, */
+/*		/// <summary>
+		/// returns
+		/// <list type="bullet">
+		/// <item><c>DialogResult.Cancel</c></item>
+		/// <item><c>DialogResult.OK</c></item>
+		/// <item><c>DialogResult.Retry</c></item>
+		/// </list>
+		/// </summary>
+		CancelYesNo, */
 	}
 	#endregion Enums (internal)
 }

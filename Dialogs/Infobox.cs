@@ -67,20 +67,6 @@ namespace yata
 					bu_Cancel.Text = "ok";
 					break;
 
-				case InfoboxButtons.CancelOkay:
-					bu_Okay.Visible = true;
-					break;
-
-				case InfoboxButtons.CancelOkayRetry:
-					bu_Okay .Visible =
-					bu_Retry.Visible = true;
-					break;
-
-				case InfoboxButtons.CancelYesNo:
-					bu_Okay .Text = "yes";
-					bu_Retry.Text = "no";
-					goto case InfoboxButtons.CancelOkayRetry;
-
 				case InfoboxButtons.CancelYes:
 					bu_Okay.Text = "yes";
 					bu_Okay.Visible = true;
@@ -89,7 +75,27 @@ namespace yata
 				case InfoboxButtons.CancelLoadNext:
 					bu_Okay .Text = "load";
 					bu_Retry.Text = "next";
-					goto case InfoboxButtons.CancelOkayRetry;
+
+					bu_Okay .Visible =
+					bu_Retry.Visible = true;
+					break;
+
+//				case InfoboxButtons.CancelOkay:
+//					bu_Okay.Visible = true;
+//					break;
+
+//				case InfoboxButtons.CancelOkayRetry:
+//					bu_Okay .Visible =
+//					bu_Retry.Visible = true;
+//					break;
+
+//				case InfoboxButtons.CancelYesNo:
+//					bu_Okay .Text = "yes";
+//					bu_Retry.Text = "no";
+//
+//					bu_Okay .Visible =
+//					bu_Retry.Visible = true;
+//					break;
 			}
 
 
