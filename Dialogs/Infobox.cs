@@ -65,6 +65,18 @@ namespace yata
 
 			InitializeComponent();
 
+			if (Settings._fonti != null)
+			{
+				Font.Dispose();
+				Font = Settings._fonti;
+			}
+
+			if (Settings._fontf != null)
+			{
+				rt_Copyable.Font.Dispose();
+				rt_Copyable.Font = Settings._fontf;
+			}
+
 			Text = title;
 
 			switch (buttons)

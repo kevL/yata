@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 19
+2021 september 22
 kevL's
 ver 4.3.2.0
 
@@ -375,14 +375,16 @@ the following variables ought be respected:
 font=        a .NET string that represents the desired table-font (see Font->
              Font ... be patient)
 font2=       a .NET string that represents a desired (usually smaller) font for
-             menus (Yata needs to be reloaded before it will display a changed
-             menu-font)
+             Menus (Yata needs to be reloaded before it will display a changed
+             Menu font)
 font3=       a .NET string that represents a desired font for the PropertyPanel
              (Yata needs to be reloaded before it will display a changed
              PropertyPanel font)
 fontf=       a .NET string that represents a desired fixed-width font (Yata
              needs to be reloaded before it will display a changed fixed-width
              font)
+fonti=       a .NET string that represents a desired font for the Infobox (Yata
+             needs to be reloaded before it will display a changed Infobox font)
 pathall=     a path without quotes to a valid directory to grope for 2da info
              for Crafting.2da, Spells.2da, or Feat.2da (see Appendix E: how to
              use Info paths)

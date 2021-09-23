@@ -10,21 +10,8 @@ namespace yata
 {
 	static class Settings
 	{
+		#region Fields (static)
 		internal const string FE = "settings.cfg";
-
-		/// <summary>
-		/// An array of all <c><see cref="options"/></c> <c>strings</c> that are
-		/// recognized in the Settings.Cfg file.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal static string[] options;
-
-		/// <summary>
-		/// The count of options in <c><see cref="options"/></c>.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 23;
-
 
 		internal static Font _font;			// the grid's font
 		internal static Font _fontdialog;	// the font to be used in all dialogs unless '_font2dialog' is valid.
@@ -36,6 +23,8 @@ namespace yata
 
 		internal static Font _fontf;		// richtextboxes (preferably fixed-font)
 		internal static Font _fontf_tb;		// textboxes (preferably fixed-font)
+
+		internal static Font _fonti;		// infobox heads
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
@@ -65,8 +54,10 @@ namespace yata
 		internal const int AoFalse = 0; // Align_Output vals ->
 		internal const int AoTrue  = 1;
 		internal const int AoTabs  = 2;
+		#endregion Fields (static)
 
 
+		#region Methods (static)
 		internal static void ScanSettings()
 		{
 			int result;
@@ -156,6 +147,24 @@ namespace yata
 								}
 								else
 									_fontf_tb = CreateDialogFont(_fontf);
+							}
+						}
+						else if (line.StartsWith("fonti=", StringComparison.InvariantCulture))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							{
+								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
+								_fonti = tc.ConvertFromInvariantString(line) as Font;
+
+								int pos = line.IndexOf(',');
+								if (pos == -1)
+									pos = line.Length;
+
+								if (line.Substring(0, pos) != _fonti.Name)
+								{
+									_fonti.Dispose(); // NOTE: Fail silently.
+									_fonti = null;
+								}
 							}
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
@@ -296,7 +305,6 @@ namespace yata
 			}
 		}
 
-
 		/// <summary>
 		/// Clones a specified <c>Font</c> and reduces it in size (if necessary)
 		/// to fit in dialogs.
@@ -325,42 +333,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
-		/// that are recognized in the Settings.Cfg file.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal static void CreateOptions()
-		{
-			options = new string[ids];
-
-			options[ 0] = "font=";
-			options[ 1] = "font2=";
-			options[ 2] = "font3=";
-			options[ 3] = "fontf=";
-			options[ 4] = "pathall=";
-			options[ 5] = "dirpreset=";
-			options[ 6] = "x=";
-			options[ 7] = "y=";
-			options[ 8] = "w=";
-			options[ 9] = "h=";
-			options[10] = "strict=";
-			options[11] = "gradient=";
-			options[12] = "context=";
-			options[13] = "recent=";
-			options[14] = "diff=";
-			options[15] = "dialog=";
-			options[16] = "dialogalt=";
-			options[17] = "maximized=";
-			options[18] = "instantgoto=";
-			options[19] = "casesort=";
-			options[20] = "alignoutput=";
-			options[21] = "codepage=";
-			options[22] = "autorder=";
-		}
-
-
-		/// <summary>
-		/// Sets <c>Fonts</c> for a dialog.
+		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
 		/// </summary>
 		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
 		/// <param name="bypassColor"><c>true</c> to set the <c>TextBoxBase's</c>
@@ -397,6 +370,58 @@ namespace yata
 					tbb.BackColor = Colors.TextboxBackground;
 			}
 		}
+		#endregion Methods (static)
+
+
+		#region options (static)
+		/// <summary>
+		/// An array of all <c><see cref="options"/></c> <c>strings</c> that are
+		/// recognized in the Settings.Cfg file.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal static string[] options;
+
+		/// <summary>
+		/// The count of options in <c><see cref="options"/></c>.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal const int ids = 24;
+
+		/// <summary>
+		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
+		/// that are recognized in the Settings.Cfg file.
+		/// </summary>
+		/// <remarks>Update if options are added to Yata.</remarks>
+		internal static void CreateOptions()
+		{
+			options = new string[ids];
+
+			options[ 0] = "font=";
+			options[ 1] = "font2=";
+			options[ 2] = "font3=";
+			options[ 3] = "fontf=";
+			options[ 4] = "fonti=";
+			options[ 5] = "pathall=";
+			options[ 6] = "dirpreset=";
+			options[ 7] = "x=";
+			options[ 8] = "y=";
+			options[ 9] = "w=";
+			options[10] = "h=";
+			options[11] = "strict=";
+			options[12] = "gradient=";
+			options[13] = "context=";
+			options[14] = "recent=";
+			options[15] = "diff=";
+			options[16] = "dialog=";
+			options[17] = "dialogalt=";
+			options[18] = "maximized=";
+			options[19] = "instantgoto=";
+			options[20] = "casesort=";
+			options[21] = "alignoutput=";
+			options[22] = "codepage=";
+			options[23] = "autorder=";
+		}
+		#endregion options (static)
 
 /*		/// <summary>
 		/// Recursive funct that gets all <c>Controls</c> of a specified
