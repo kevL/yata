@@ -805,7 +805,7 @@ namespace yata
 
 
 		#region Load
-//		const int LINE_HEADER   = 0;
+		const int LINE_HEADER   = 0;
 		const int LINE_VALTYPE  = 1;
 		const int LINE_COLHEADS = 2;
 
@@ -916,50 +916,31 @@ namespace yata
 				else
 					line = String.Empty;
 
-				if (i > LINE_COLHEADS)
+				switch (i)
 				{
-					string[] fields = ParseTableRow(line);
-					if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
-					{
-						++id; // test for well-formed, consistent IDs
-
-						if (!ignoreErrors)
+					case LINE_HEADER: // line #0
+						if (line.Length == 0)
 						{
-							string head;
+							const string head = "The 2da-file does not have a header on its first line.";
+							string copy = Fullpath + Environment.NewLine + Environment.NewLine
+										+ gs.TwodaVer;
 
-							int result;
-							if (!Int32.TryParse(fields[0], out result))
-								head = "The 2da-file contains an id that is not an integer.";
-							else if (result != id)
-								head = "The 2da-file contains an id that is out of order.";
-							else
-								head = null;
-
-							if (head != null)
+							using (var ib = new Infobox(Infobox.Title_error,
+														head,
+														copy,
+														InfoboxType.Error))
 							{
-								string copy = Fullpath + Environment.NewLine + Environment.NewLine
-											+ "id " + id + " \u2192 " + fields[0];
-
-								switch (ShowLoadWarning(head, copy))
-								{
-									case DialogResult.Cancel:
-										_init = false;
-										return LOADRESULT_FALSE;
-
-									case DialogResult.OK:
-										ignoreErrors = true;
-										break;
-								}
+								ib.ShowDialog(_f);
 							}
+							_init = false;
+							return LOADRESULT_FALSE;
 						}
 
-						// test for matching fields under cols
-						if (!ignoreErrors && fields.Length != Fields.Length + 1)
+						if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0"))
 						{
-							const string head = "The 2da-file contains fields that do not align with its cols.";
-							string copy = Fullpath + Environment.NewLine + Environment.NewLine
-										+ "Colcount " + (Fields.Length + 1) + Environment.NewLine
-										+ "id " + id + " fields \u2192 " + fields.Length;
+							string head = Infobox.SplitString("The 2da-file contains an incorrect version header. It will"
+															+ " be replaced by the standard header if the file is saved.");
+							string copy = Fullpath;
 
 							switch (ShowLoadWarning(head, copy))
 							{
@@ -972,22 +953,131 @@ namespace yata
 									break;
 							}
 						}
+						break;
 
-						// test for an odd quantity of double-quote characters
+					case LINE_VALTYPE: // line #1
+						if (!ignoreErrors && Settings._strict && line.Length != 0) // test for blank 2nd line
+						{
+							string head = Infobox.SplitString("The 2nd line in the 2da should be blank. This"
+															+ " editor does not support default value-types.");
+							string copy = Fullpath;
+
+							switch (ShowLoadWarning(head, copy))
+							{
+								case DialogResult.Cancel:
+									_init = false;
+									return LOADRESULT_FALSE;
+
+								case DialogResult.OK:
+									ignoreErrors = true;
+									break;
+							}
+						}
+						break;
+
+					case LINE_COLHEADS: // line #2
+						if (line.Length == 0)
+						{
+							const string head = "The 2da-file does not have any fields. Yata requires"
+											  + " that a file has at least one field on its 3rd line.";
+							string copy = Fullpath;
+
+							using (var ib = new Infobox(Infobox.Title_error,
+														Infobox.SplitString(head),
+														copy,
+														InfoboxType.Error))
+							{
+								ib.ShowDialog(_f);
+							}
+							_init = false;
+							return LOADRESULT_FALSE;
+						}
+
 						if (!ignoreErrors)
 						{
-							int quotes = 0;
 							foreach (char character in line)
 							{
-								if (character == '"')
-									++quotes;
+								//logfile.Log("character= " + character);
+//								if (character == '"' // <- always bork on a double-quote
+//								    || Char.IsControl(character)
+//								    || Char.is
+//									|| (Settings._strict
+//										&& character != ' '
+//										&& character != '_'
+//										&& !Util.isAlphanumeric(character)
+//										&& !Char.IsSymbol(character)))
+//										&& (character == '\t'
+//											|| (   character != ' '
+//												&& character != '_'
+//												&& !Util.isAlphanumeric(character)))))
+								if (   character != ' '
+									&& character != '_'
+									&& !Util.isAlphanumeric(character))
+								{
+									const string head = "Col headers should contain only alpha-numeric characters and underscores.";
+									string copy = Fullpath + Environment.NewLine + Environment.NewLine
+												+ "char \u2192 " + (character == '\t' ? "TAB" : character.ToString());
+
+									switch (ShowLoadWarning(head, copy))
+									{
+										case DialogResult.Cancel:
+											_init = false;
+											return LOADRESULT_FALSE;
+
+										case DialogResult.OK:
+											ignoreErrors = true;
+											break;
+									}
+								}
+							}
+						}
+						Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+						break;
+
+					default: // line #3+
+					{
+						string[] fields = ParseTableRow(line);
+						if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
+						{
+							++id; // test for well-formed, consistent IDs
+
+							if (!ignoreErrors)
+							{
+								string head;
+
+								int result;
+								if (!Int32.TryParse(fields[0], out result))
+									head = "The 2da-file contains an id that is not an integer.";
+								else if (result != id)
+									head = "The 2da-file contains an id that is out of order.";
+								else
+									head = null;
+
+								if (head != null)
+								{
+									string copy = Fullpath + Environment.NewLine + Environment.NewLine
+												+ "id " + id + " \u2192 " + fields[0];
+
+									switch (ShowLoadWarning(head, copy))
+									{
+										case DialogResult.Cancel:
+											_init = false;
+											return LOADRESULT_FALSE;
+
+										case DialogResult.OK:
+											ignoreErrors = true;
+											break;
+									}
+								}
 							}
 
-							if (quotes % 2 == 1)
+							// test for matching fields under cols
+							if (!ignoreErrors && fields.Length != Fields.Length + 1)
 							{
-								const string head = "A row contains an odd quantity of double-quote characters.";
+								const string head = "The 2da-file contains fields that do not align with its cols.";
 								string copy = Fullpath + Environment.NewLine + Environment.NewLine
-											+ "id " + id;
+											+ "Colcount " + (Fields.Length + 1) + Environment.NewLine
+											+ "id " + id + " fields \u2192 " + fields.Length;
 
 								switch (ShowLoadWarning(head, copy))
 								{
@@ -1000,128 +1090,42 @@ namespace yata
 										break;
 								}
 							}
-						}
 
-						// NOTE: Tests for well-formed fields will be done later so that their
-						// respective cells can be flagged as 'loadchanged' (if applicable).
-
-						_rows.Add(fields);
-					}
-				}
-				else if (i == LINE_COLHEADS)
-				{
-					if (line.Length == 0)
-					{
-						const string head = "The 2da-file does not have any fields. Yata requires"
-										  + " that a file has at least one field on its 3rd line.";
-						string copy = Fullpath;
-
-						using (var ib = new Infobox(Infobox.Title_error,
-													Infobox.SplitString(head),
-													copy,
-													InfoboxType.Error))
-						{
-							ib.ShowDialog(_f);
-						}
-						_init = false;
-						return LOADRESULT_FALSE;
-					}
-
-					if (!ignoreErrors)
-					{
-						foreach (char character in line)
-						{
-							//logfile.Log("character= " + character);
-//							if (character == '"' // <- always bork on a double-quote
-//							    || Char.IsControl(character)
-//							    || Char.is
-//								|| (Settings._strict
-//									&& character != ' '
-//									&& character != '_'
-//									&& !Util.isAlphanumeric(character)
-//									&& !Char.IsSymbol(character)))
-//									&& (character == '\t'
-//										|| (   character != ' '
-//											&& character != '_'
-//											&& !Util.isAlphanumeric(character)))))
-							if (   character != ' '
-								&& character != '_'
-								&& !Util.isAlphanumeric(character))
+							// test for an odd quantity of double-quote characters
+							if (!ignoreErrors)
 							{
-								const string head = "Col headers should contain only alpha-numeric characters and underscores.";
-								string copy = Fullpath + Environment.NewLine + Environment.NewLine
-											+ "char \u2192 " + (character == '\t' ? "TAB" : character.ToString());
-
-								switch (ShowLoadWarning(head, copy))
+								int quotes = 0;
+								foreach (char character in line)
 								{
-									case DialogResult.Cancel:
-										_init = false;
-										return LOADRESULT_FALSE;
+									if (character == '"')
+										++quotes;
+								}
 
-									case DialogResult.OK:
-										ignoreErrors = true;
-										break;
+								if (quotes % 2 == 1)
+								{
+									const string head = "A row contains an odd quantity of double-quote characters.";
+									string copy = Fullpath + Environment.NewLine + Environment.NewLine
+												+ "id " + id;
+
+									switch (ShowLoadWarning(head, copy))
+									{
+										case DialogResult.Cancel:
+											_init = false;
+											return LOADRESULT_FALSE;
+
+										case DialogResult.OK:
+											ignoreErrors = true;
+											break;
+									}
 								}
 							}
+
+							// NOTE: Tests for well-formed fields will be done later so that their
+							// respective cells can be flagged as 'loadchanged' (if applicable).
+
+							_rows.Add(fields);
 						}
-					}
-					Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-				}
-				else if (i == LINE_VALTYPE)
-				{
-					if (!ignoreErrors && Settings._strict && line.Length != 0) // test for blank 2nd line
-					{
-						string head = Infobox.SplitString("The 2nd line in the 2da should be blank. This"
-														+ " editor does not support default value-types.");
-						string copy = Fullpath;
-
-						switch (ShowLoadWarning(head, copy))
-						{
-							case DialogResult.Cancel:
-								_init = false;
-								return LOADRESULT_FALSE;
-
-							case DialogResult.OK:
-								ignoreErrors = true;
-								break;
-						}
-					}
-				}
-				else //if (i == LINE_HEADER) // test version header
-				{
-					if (line.Length == 0)
-					{
-						const string head = "The 2da-file does not have a header on its first line.";
-						string copy = Fullpath + Environment.NewLine + Environment.NewLine
-									+ gs.TwodaVer;
-
-						using (var ib = new Infobox(Infobox.Title_error,
-													head,
-													copy,
-													InfoboxType.Error))
-						{
-							ib.ShowDialog(_f);
-						}
-						_init = false;
-						return LOADRESULT_FALSE;
-					}
-
-					if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0"))
-					{
-						string head = Infobox.SplitString("The 2da-file contains an incorrect version header. It will"
-														+ " be replaced by the standard header if the file is saved.");
-						string copy = Fullpath;
-
-						switch (ShowLoadWarning(head, copy))
-						{
-							case DialogResult.Cancel:
-								_init = false;
-								return LOADRESULT_FALSE;
-
-							case DialogResult.OK:
-								ignoreErrors = true;
-								break;
-						}
+						break;
 					}
 				}
 			}
