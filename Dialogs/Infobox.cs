@@ -17,6 +17,12 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
+		internal const string Title_info  = " info";
+		internal const string Title_warn  = " burp";
+		internal const string Title_error = " aargh!";
+		internal const string Title_excep = " Exception";
+		internal const string Title_alert = " Alert"; // <- for save routines only.
+
 		const int w_Min = 345;
 		const int h_Max = 470;
 		#endregion Fields (static)

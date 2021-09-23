@@ -102,7 +102,7 @@ namespace yata
 				}
 				catch (Exception ex)
 				{
-					using (var ib = new Infobox(gs.InfoboxTitle_excep,
+					using (var ib = new Infobox(Infobox.Title_excep,
 												"Failed to send file to Yata.",
 												ex.ToString(),
 												InfoboxType.Error))

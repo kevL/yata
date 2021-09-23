@@ -122,7 +122,7 @@ namespace yata
 									 tb_Input.Text,
 									 StringComparison.OrdinalIgnoreCase))
 				{
-					using (var ib = new Infobox(gs.InfoboxTitle_error,
+					using (var ib = new Infobox(Infobox.Title_error,
 												"That label is already used by another colhead.",
 												null,
 												InfoboxType.Error))

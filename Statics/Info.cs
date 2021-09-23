@@ -304,7 +304,7 @@ namespace yata
 									  + " valid in a 2da-file Yata's 2da Info-grope is not coded to cope."
 									  + " Format the 2da-file (in a texteditor) to not use double-quotes"
 									  + " if you want to access it for 2da Info.";
-					using (var ib = new Infobox(gs.InfoboxTitle_error,
+					using (var ib = new Infobox(Infobox.Title_error,
 												Infobox.SplitString(head),
 												pfe2da,
 												InfoboxType.Error))

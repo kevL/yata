@@ -443,7 +443,7 @@ namespace yata
 
 			if (tables.Length != 0)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_alert,
+				using (var ib = new Infobox(Infobox.Title_alert,
 											"Data has changed. Okay to " + descriptor + " ...",
 											tables,
 											InfoboxType.Warn,
@@ -472,7 +472,7 @@ namespace yata
 				{
 					if (e.Cancel = Table.Changed)
 					{
-						using (var ib = new Infobox(gs.InfoboxTitle_alert,
+						using (var ib = new Infobox(Infobox.Title_alert,
 													"Data has changed. Okay to quit ...",
 													null,
 													InfoboxType.Warn,
@@ -500,7 +500,7 @@ namespace yata
 				}
 				catch (Exception ex)
 				{
-					using (var ib = new Infobox(gs.InfoboxTitle_excep,
+					using (var ib = new Infobox(Infobox.Title_excep,
 												"Failed to write Recent.cfg to the application directory.",
 												ex.ToString(),
 												InfoboxType.Error))
@@ -687,7 +687,7 @@ namespace yata
 												  Crap.ChangeWindowMessageFilterExAction.Allow,
 												  ref filter))
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_error,
+				using (var ib = new Infobox(Infobox.Title_error,
 											"The MessageFilter could not be changed.",
 											"LastWin32Error " + Marshal.GetLastWin32Error(),
 											InfoboxType.Error))
@@ -1391,7 +1391,7 @@ namespace yata
 				bool reload = !Table.Changed;
 				if (!reload)
 				{
-					using (var ib = new Infobox(gs.InfoboxTitle_alert,
+					using (var ib = new Infobox(Infobox.Title_alert,
 												"Data has changed. Okay to reload ...",
 												null,
 												InfoboxType.Warn,
@@ -1564,7 +1564,7 @@ namespace yata
 			}
 			else if (!_warned)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_error,
+				using (var ib = new Infobox(Infobox.Title_error,
 											"The 2da-file is opened as readonly.",
 											null,
 											InfoboxType.Error))
@@ -1583,7 +1583,7 @@ namespace yata
 		bool SaveWarning(string head)
 		{
 			_warned = true;
-			using (var ib = new Infobox(gs.InfoboxTitle_alert,
+			using (var ib = new Infobox(Infobox.Title_alert,
 										head + " Save anyway ...",
 										null,
 										InfoboxType.Warn,
@@ -1708,7 +1708,7 @@ namespace yata
 			bool close = !Table.Changed;
 			if (!close)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_alert,
+				using (var ib = new Infobox(Infobox.Title_alert,
 											"Data has changed. Okay to close ...",
 											null,
 											InfoboxType.Warn,
@@ -3086,7 +3086,7 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
-			using (var ib = new Infobox(gs.InfoboxTitle_warn,
+			using (var ib = new Infobox(Infobox.Title_warn,
 										Infobox.SplitString("This operation cannot be undone. Are you sure"
 														  + " you want to delete the selected col ..."),
 										Table.Fields[selc - 1],
@@ -3199,7 +3199,7 @@ namespace yata
 
 			if (diff != 0)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+				using (var ib = new Infobox(Infobox.Title_warn,
 											head + " Proceed ...",
 											null,
 											InfoboxType.Warn,
@@ -3358,13 +3358,13 @@ namespace yata
 			{
 				layout();
 
-				title = gs.InfoboxTitle_warn;
+				title = Infobox.Title_warn;
 				head  = changed + " id" + (changed == 1 ? String.Empty : "s") + " corrected.";
 				ibt   = InfoboxType.Warn;
 			}
 			else
 			{
-				title = gs.InfoboxTitle_info;
+				title = Infobox.Title_info;
 				head  = "Row order is Okay - no change.";
 				ibt   = InfoboxType.Info;
 			}
@@ -3478,7 +3478,7 @@ namespace yata
 					copy += bork;
 				}
 
-				title = gs.InfoboxTitle_warn;
+				title = Infobox.Title_warn;
 				head  = "Row order is borked.";
 				ibt   = InfoboxType.Warn;
 
@@ -3487,7 +3487,7 @@ namespace yata
 			}
 			else
 			{
-				title = gs.InfoboxTitle_info;
+				title = Infobox.Title_info;
 				head  = "Row order is Okay.";
 				ibt   = InfoboxType.Info;
 			}
@@ -3759,7 +3759,7 @@ namespace yata
 			bytes -= GetUsage();
 
 			string head = "Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes";
-			using (var ib = new Infobox(gs.InfoboxTitle_info, head))
+			using (var ib = new Infobox(Infobox.Title_info, head))
 				ib.ShowDialog(this);
 		}
 		#endregion Handlers (2daOps)
@@ -3974,7 +3974,7 @@ namespace yata
 				Process.Start(pfe);
 			else
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_error,
+				using (var ib = new Infobox(Infobox.Title_error,
 											"ReadMe.txt was not found in the application directory.",
 											null,
 											InfoboxType.Error))
@@ -4013,7 +4013,7 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					using (var ib = new Infobox(gs.InfoboxTitle_warn,
+					using (var ib = new Infobox(Infobox.Title_warn,
 												Infobox.SplitString("The Settings.cfg file does not exist in the application"
 																  + " directory. Do you want to create one ..."),
 												null,
@@ -4040,7 +4040,7 @@ namespace yata
 							}
 							catch (Exception ex)
 							{
-								using (var ibo = new Infobox(gs.InfoboxTitle_excep,
+								using (var ibo = new Infobox(Infobox.Title_excep,
 															"The Settings.cfg file could not be created in the application directory.",
 															ex.ToString(),
 															InfoboxType.Error))
@@ -4062,7 +4062,7 @@ namespace yata
 					}
 					catch (Exception ex)
 					{
-						using (var ib = new Infobox(gs.InfoboxTitle_excep,
+						using (var ib = new Infobox(Infobox.Title_excep,
 													"The Settings.cfg file could not be read in the application directory.",
 													ex.ToString(),
 													InfoboxType.Error))

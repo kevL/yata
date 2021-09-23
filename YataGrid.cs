@@ -1016,7 +1016,7 @@ namespace yata
 										  + " that a file has at least one field on its 3rd line.";
 						string copy = Fullpath;
 
-						using (var ib = new Infobox(gs.InfoboxTitle_error,
+						using (var ib = new Infobox(Infobox.Title_error,
 													Infobox.SplitString(head),
 													copy,
 													InfoboxType.Error))
@@ -1095,7 +1095,7 @@ namespace yata
 						string copy = Fullpath + Environment.NewLine + Environment.NewLine
 									+ gs.TwodaVer;
 
-						using (var ib = new Infobox(gs.InfoboxTitle_error,
+						using (var ib = new Infobox(Infobox.Title_error,
 													head,
 													copy,
 													InfoboxType.Error))
@@ -1152,7 +1152,7 @@ namespace yata
 		/// </list></returns>
 		static DialogResult ShowLoadWarning(string head, string copy)
 		{
-			using (var ib = new Infobox(gs.InfoboxTitle_warn,
+			using (var ib = new Infobox(Infobox.Title_warn,
 										head,
 										copy,
 										InfoboxType.Warn,
@@ -3029,7 +3029,7 @@ namespace yata
 
 			if (CheckTextEdit(tb))
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+				using (var ib = new Infobox(Infobox.Title_warn,
 											"The text that was submitted has been altered.",
 											null,
 											InfoboxType.Warn))

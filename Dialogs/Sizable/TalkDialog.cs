@@ -187,7 +187,7 @@ namespace yata
 
 			if (!proceed)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_warn,
+				using (var ib = new Infobox(Infobox.Title_warn,
 											"Entry not found in the .tlk file. Proceed ...",
 											null,
 											InfoboxType.Warn,

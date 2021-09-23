@@ -54,12 +54,6 @@
 
 		internal static string[] SEPARATORS = { "\r\n", "\r", "\n" };
 
-		internal const string InfoboxTitle_info  = " info";
-		internal const string InfoboxTitle_warn  = " burp";
-		internal const string InfoboxTitle_error = " aargh!";
-		internal const string InfoboxTitle_excep = " Exception";
-		internal const string InfoboxTitle_alert = " Alert"; // <- for save routines only.
-
 		internal const string TwodaVer = "2DA V2.0";
 	}
 

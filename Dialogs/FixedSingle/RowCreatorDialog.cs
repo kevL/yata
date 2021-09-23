@@ -461,7 +461,7 @@ namespace yata
 
 			if (_cancel)
 			{
-				using (var ib = new Infobox(gs.InfoboxTitle_error,
+				using (var ib = new Infobox(Infobox.Title_error,
 											GetDarthQuote(),
 											null,
 											InfoboxType.Error))
