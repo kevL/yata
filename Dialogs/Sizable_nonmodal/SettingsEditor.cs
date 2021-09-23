@@ -78,7 +78,7 @@ namespace yata
 					{
 						File.Delete(pfeT);
 
-						using (var ib = new Infobox(Infobox.Title_info,
+						using (var ib = new Infobox(Infobox.Title_infor,
 													"Yata must be reloaded before any changes take effect."))
 						{
 							ib.ShowDialog(this);

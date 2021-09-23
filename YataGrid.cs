@@ -1152,7 +1152,7 @@ namespace yata
 		/// </list></returns>
 		static DialogResult ShowLoadWarning(string head, string copy)
 		{
-			using (var ib = new Infobox(Infobox.Title_warn,
+			using (var ib = new Infobox(Infobox.Title_warni,
 										head,
 										copy,
 										InfoboxType.Warn,
@@ -3029,7 +3029,7 @@ namespace yata
 
 			if (CheckTextEdit(tb))
 			{
-				using (var ib = new Infobox(Infobox.Title_warn,
+				using (var ib = new Infobox(Infobox.Title_warni,
 											"The text that was submitted has been altered.",
 											null,
 											InfoboxType.Warn))

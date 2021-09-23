@@ -17,8 +17,8 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
-		internal const string Title_info  = " info";
-		internal const string Title_warn  = " burp";
+		internal const string Title_infor = " info";
+		internal const string Title_warni = " burp";
 		internal const string Title_error = " aargh!";
 		internal const string Title_excep = " Exception";
 		internal const string Title_alert = " Alert"; // <- for save routines only.

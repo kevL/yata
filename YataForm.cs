@@ -3086,7 +3086,7 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
-			using (var ib = new Infobox(Infobox.Title_warn,
+			using (var ib = new Infobox(Infobox.Title_warni,
 										Infobox.SplitString("This operation cannot be undone. Are you sure"
 														  + " you want to delete the selected col ..."),
 										Table.Fields[selc - 1],
@@ -3199,7 +3199,7 @@ namespace yata
 
 			if (diff != 0)
 			{
-				using (var ib = new Infobox(Infobox.Title_warn,
+				using (var ib = new Infobox(Infobox.Title_warni,
 											head + " Proceed ...",
 											null,
 											InfoboxType.Warn,
@@ -3358,13 +3358,13 @@ namespace yata
 			{
 				layout();
 
-				title = Infobox.Title_warn;
+				title = Infobox.Title_warni;
 				head  = changed + " id" + (changed == 1 ? String.Empty : "s") + " corrected.";
 				ibt   = InfoboxType.Warn;
 			}
 			else
 			{
-				title = Infobox.Title_info;
+				title = Infobox.Title_infor;
 				head  = "Row order is Okay - no change.";
 				ibt   = InfoboxType.Info;
 			}
@@ -3478,7 +3478,7 @@ namespace yata
 					copy += bork;
 				}
 
-				title = Infobox.Title_warn;
+				title = Infobox.Title_warni;
 				head  = "Row order is borked.";
 				ibt   = InfoboxType.Warn;
 
@@ -3487,7 +3487,7 @@ namespace yata
 			}
 			else
 			{
-				title = Infobox.Title_info;
+				title = Infobox.Title_infor;
 				head  = "Row order is Okay.";
 				ibt   = InfoboxType.Info;
 			}
@@ -3759,7 +3759,7 @@ namespace yata
 			bytes -= GetUsage();
 
 			string head = "Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes";
-			using (var ib = new Infobox(Infobox.Title_info, head))
+			using (var ib = new Infobox(Infobox.Title_infor, head))
 				ib.ShowDialog(this);
 		}
 		#endregion Handlers (2daOps)
@@ -4013,7 +4013,7 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					using (var ib = new Infobox(Infobox.Title_warn,
+					using (var ib = new Infobox(Infobox.Title_warni,
 												Infobox.SplitString("The Settings.cfg file does not exist in the application"
 																  + " directory. Do you want to create one ..."),
 												null,
