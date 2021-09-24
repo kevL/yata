@@ -954,16 +954,13 @@ namespace yata
 
 					case LINE_COLHEADS: // line #2
 					{
-						string head = null, copy = null;
-
-						logfile.Log("line[0]= " + ((int)line[0]));
+						string head = null;
 
 						if (line.Length == 0)
 						{
 							head = Infobox.SplitString("The 2da-file does not have any fields. Yata"
 													 + " requires that a file has at least one colhead"
 													 + " (one indented field) on its 3rd line.");
-							copy = Fullpath;
 						}
 						else if (line[0] != 32 // space
 							&& (   Settings._strict
@@ -971,14 +968,13 @@ namespace yata
 								|| line[0] != 9)) // tab
 						{
 							head = "The 3rd line (col labels) is not indented properly.";
-							copy = Fullpath;
 						}
 
 						if (head != null)
 						{
 							using (var ib = new Infobox(Infobox.Title_error,
 														head,
-														copy,
+														Fullpath,
 														InfoboxType.Error,
 														InfoboxButtons.Abort))
 							{
@@ -1007,9 +1003,7 @@ namespace yata
 //						if (Settings._alignoutput != Settings.AoTabs)
 						head += " They will be replaced with space characters if the file is saved.";
 
-						string copy = Fullpath;
-
-						switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
 						{
 							case DialogResult.Cancel:
 								_init = false;
@@ -1044,17 +1038,55 @@ namespace yata
 //						break;
 
 					case LINE_VALTYPE: // line #1
-						if (Settings._defaultval) _defaultval = line;
-						else                      _defaultval = String.Empty;
+					{
+						string head = null;
 
-						if (!ignoreErrors
-							&& !Settings._defaultval
-							&&  Settings._strict
-							&& line.Length != 0) // test for blank 2nd line
+						if (Settings._defaultval)
 						{
-							string head = Infobox.SplitString("The 2nd line in the 2da should be blank. The 2nd"
-															+ " line will be blanked if the file is saved.");
-							string copy = Fullpath;
+							_defaultval = line;
+
+							if (!line.StartsWith("DEFAULT:", StringComparison.Ordinal))
+							{
+								head = "The default variable is incorrect.";
+							}
+							else
+							{
+								string val = line.Substring(8).Trim();
+								if (val.Length == 0)
+								{
+									head = "The default value is incorrect.";
+								}
+								else if ((val.Contains(" ") || val.Contains("\t"))
+									&& (!val.StartsWith("\"", StringComparison.Ordinal) || !val.EndsWith("\"", StringComparison.Ordinal)))
+								{
+									head = "The default value should be enclosed in double-quotes.";
+								}
+							}
+						}
+						else
+						{
+							_defaultval = String.Empty;
+
+							if (line.StartsWith("DEFAULT:", StringComparison.Ordinal)) // test for defaultval on the 2nd line; note this cannot be ignored.
+							{
+								head = Infobox.SplitString("The 2nd line specifies a default value but the 2nd"
+														 + " line will be blanked if the file is saved. To support"
+														 + " default values in 2da files change the defaultval setting"
+														 + " in Settings.Cfg to true.");
+							}
+							else if (!ignoreErrors // test for blank 2nd line
+								&& Settings._strict
+								&& line.Length != 0)
+							{
+								head = Infobox.SplitString("The 2nd line in the 2da should be blank. The 2nd"
+														 + " line will be blanked if the file is saved.");
+							}
+						}
+
+						if (head != null)
+						{
+							string copy = Fullpath + Environment.NewLine + Environment.NewLine
+										+ line;
 
 							switch (ShowLoadWarning(head, copy))
 							{
@@ -1068,6 +1100,7 @@ namespace yata
 							}
 						}
 						break;
+					}
 
 					case LINE_COLHEADS: // line #2
 						if (!ignoreErrors)
