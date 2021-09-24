@@ -87,12 +87,7 @@ namespace yata
 				{
 					for (int i = 0; i != tb_Input.Text.Length; ++i)
 					{
-						int ascii = tb_Input.Text[i];
-						if (ascii != 95
-							&& (    ascii < 48
-								|| (ascii > 57 && ascii < 65)
-								|| (ascii > 90 && ascii < 97)
-								||  ascii > 122))
+						if (!Util.isAsciiAlphanumericOrUnderscore(tb_Input.Text[i]))
 						{
 							_bypasstextchanged = true;
 							tb_Input.Text = _text; // recurse

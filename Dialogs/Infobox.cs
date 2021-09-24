@@ -98,6 +98,10 @@ namespace yata
 					bu_Retry.Visible = true;
 					break;
 
+				case InfoboxButtons.Abort:
+					bu_Cancel.Text = "abort";
+					break;
+
 //				case InfoboxButtons.CancelOkay:
 //					bu_Okay.Visible = true;
 //					break;

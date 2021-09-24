@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 22
+2021 september 23
 kevL's
 ver 4.3.2.0
 
@@ -402,16 +402,22 @@ w=           (integer) the desired starting width of the app on your monitor
 h=           (integer) the desired starting height of the app on your monitor
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
-             notice stuff that is by and large safe to disregard: (1) non alpha-
-             numeric characters (other than underscore) in col headers [note
-             that double-quotes are disallowed in col headers regardless] (2) a
-             character on the 2nd line of a 2da [the 2nd line should be blank as
-             far as Yata goes] (3) a tab-character in the version header instead
-             of a space-character (4) and Strict also suppresses the tooltip
-             that appears when a col is sorted by anything other than ID-
-             ascending ("warn : Table is not sorted by ascending ID") - ie,
-             persons who use Strict don't get a tooltip although the ID-header
-             still turns to a red color regardless of this setting
+             notice stuff that is by and large safe to disregard:
+             (1) warn about tab-characters if the "alignoutput" setting is not
+                 set to "tabs". Note that tabs are generally safe in NwN2 but
+                 not in NwN
+             (2) non alpha-numeric characters (other than underscore) in col
+                 headers [note that double-quotes and non-ASCII characters are
+                 disallowed in col headers regardless]
+             (3) a character on the 2nd line of a 2da [the 2nd line should be
+                 blank as far as Yata goes]
+             (4) a tab-character in the version header instead of a space-
+                 character
+             (5) and Strict also suppresses the tooltip that appears when a col
+                 is sorted by anything other than ID-ascending ("warn : Table is
+                 not sorted by ascending ID") - ie, persons who use Strict don't
+                 get a tooltip although the ID-header still turns to a red color
+                 regardless of this setting
 gradient=    "true" (without quotes) to draw the colhead bar with gradient
              colors
 context=     a right-click on a rowhead displays the contextmenu at the mouse-
@@ -463,6 +469,9 @@ Encoded IPs as readable strings on the statusbar, eg.)
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
 above; any line that doesn't begin exactly with one of those strings is ignored.
+
+If the Settings.Cfg file is deleted Yata should run okay with its default
+settings.
 
 
 Appendix A: note on Load

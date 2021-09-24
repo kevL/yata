@@ -52,7 +52,14 @@ namespace yata
 		/// <item><c>DialogResult.Retry</c></item>
 		/// </list>
 		/// </summary>
-		CancelLoadNext
+		CancelLoadNext,
+		/// <summary>
+		/// returns
+		/// <list type="bullet">
+		/// <item><c>DialogResult.Cancel</c></item>
+		/// </list>
+		/// </summary>
+		Abort
 
 /*		/// <summary>
 		/// returns

@@ -72,12 +72,19 @@
 	#region Util
 	static class Util
 	{
-		internal static bool isAlphanumeric(char character)
+		internal static bool isAsciiAlphanumericOrUnderscore(char character)
 		{
 			int c = character;
-			return (c >= 48 && c <=  57)
-				|| (c >= 65 && c <=  90)
-				|| (c >= 97 && c <= 122);
+			return  c == 95					// _
+				|| (c >= 48 && c <=  57)	// 0..9
+				|| (c >= 65 && c <=  90)	// A..Z
+				|| (c >= 97 && c <= 122);	// a..z
+		}
+
+		internal static bool isPrintableAsciiNotDoublequote(char character)
+		{
+			int c = character;
+			return c != 34 && c >= 32 && c <= 126;
 		}
 	}
 	#endregion Util
