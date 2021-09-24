@@ -1004,8 +1004,8 @@ namespace yata
 					if (lines[i].Contains("\t"))
 					{
 						string head = "Tab characters are detected in the 2da-file.";
-						if (Settings._alignoutput != Settings.AoTabs)
-							head += " They will be replaced with space characters if the file is saved.";
+//						if (Settings._alignoutput != Settings.AoTabs)
+						head += " They will be replaced with space characters if the file is saved.";
 
 						string copy = Fullpath;
 
