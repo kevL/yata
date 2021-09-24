@@ -197,6 +197,8 @@ namespace yata
 
 		internal UndoRedo _ur;
 
+		internal string _defaultval;
+
 //		Bitmap _bluePi = Resources.bluepixel; // NOTE: Image drawing introduces a noticeable latency.
 //		Bitmap _piColhead;
 //		Bitmap _piRowhead;
@@ -1042,11 +1044,16 @@ namespace yata
 //						break;
 
 					case LINE_VALTYPE: // line #1
-						if (!ignoreErrors && Settings._strict && line.Length != 0) // test for blank 2nd line
+						if (Settings._defaultval) _defaultval = line;
+						else                      _defaultval = String.Empty;
+
+						if (!ignoreErrors
+							&& !Settings._defaultval
+							&&  Settings._strict
+							&& line.Length != 0) // test for blank 2nd line
 						{
-							string head = Infobox.SplitString("The 2nd line in the 2da should be blank. This"
-															+ " editor does not support default value-types."
-															+ " The 2nd line will be blanked if the file is saved.");
+							string head = Infobox.SplitString("The 2nd line in the 2da should be blank. The 2nd"
+															+ " line will be blanked if the file is saved.");
 							string copy = Fullpath;
 
 							switch (ShowLoadWarning(head, copy))

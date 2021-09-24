@@ -457,6 +457,8 @@ autorder=    "true" (without quotes) to automatically reorder row-ids after row
              undoing or redoing to the table's saved state; also note that the
              PropertyPanel ignores this rule in case you want to force a row to
              have a specific id for whatever reason
+defaultval=  "true" (without quotes) to support default values that can be
+             specified on the 2nd line of 2da-files
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

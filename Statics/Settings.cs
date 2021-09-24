@@ -41,6 +41,7 @@ namespace yata
 		internal static bool _instantgoto;
 		internal static bool _casesort;
 		internal static bool _autorder;
+		internal static bool _defaultval;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -300,6 +301,11 @@ namespace yata
 							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
 						}
+						else if (line.StartsWith("defaultval=", StringComparison.InvariantCulture))
+						{
+							_defaultval = (!String.IsNullOrEmpty(line = line.Substring(11).Trim())
+									   && line == "true");
+						}
 					}
 				}
 			}
@@ -385,7 +391,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 24;
+		internal const int ids = 25;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -420,6 +426,7 @@ namespace yata
 			options[21] = "alignoutput=";
 			options[22] = "codepage=";
 			options[23] = "autorder=";
+			options[24] = "defaultval=";
 		}
 		#endregion options (static)
 

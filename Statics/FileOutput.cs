@@ -13,7 +13,8 @@ namespace yata
 				using (var sw = new StreamWriter(table.Fullpath))
 				{
 					sw.WriteLine(gs.TwodaVer);						// header ->
-					sw.WriteLine();
+
+					sw.WriteLine(table._defaultval);				// default value ->
 
 					string line = String.Empty;
 					for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
@@ -74,7 +75,8 @@ namespace yata
 					using (var sw = new StreamWriter(table.Fullpath))
 					{
 						sw.WriteLine(gs.TwodaVer);						// header ->
-						sw.WriteLine();
+
+						sw.WriteLine(table._defaultval);				// default value ->
 
 						string line = String.Empty;
 						for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
@@ -124,7 +126,8 @@ namespace yata
 					using (var sw = new StreamWriter(table.Fullpath))
 					{
 						sw.WriteLine(gs.TwodaVer);						// header ->
-						sw.WriteLine();
+
+						sw.WriteLine(table._defaultval);				// default value ->
 
 						var tabstops = new int[table.ColCount];
 						tabstops[0] = 0;
