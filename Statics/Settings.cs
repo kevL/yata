@@ -407,26 +407,26 @@ namespace yata
 			options[ 2] = "font3=";
 			options[ 3] = "fontf=";
 			options[ 4] = "fonti=";
-			options[ 5] = "pathall=";
-			options[ 6] = "dirpreset=";
-			options[ 7] = "x=";
-			options[ 8] = "y=";
-			options[ 9] = "w=";
-			options[10] = "h=";
-			options[11] = "strict=";
-			options[12] = "gradient=";
-			options[13] = "context=";
-			options[14] = "recent=";
-			options[15] = "diff=";
+			options[ 5] = "x=";
+			options[ 6] = "y=";
+			options[ 7] = "w=";
+			options[ 8] = "h=";
+			options[ 9] = "maximized=";
+			options[10] = "alignoutput=";
+			options[11] = "autorder=";
+			options[12] = "casesort=";
+			options[13] = "codepage=";
+			options[14] = "context=";
+			options[15] = "defaultval=";
 			options[16] = "dialog=";
 			options[17] = "dialogalt=";
-			options[18] = "maximized=";
-			options[19] = "instantgoto=";
-			options[20] = "casesort=";
-			options[21] = "alignoutput=";
-			options[22] = "codepage=";
-			options[23] = "autorder=";
-			options[24] = "defaultval=";
+			options[18] = "diff=";
+			options[19] = "dirpreset=";
+			options[20] = "gradient=";
+			options[21] = "instantgoto=";
+			options[22] = "pathall=";
+			options[23] = "recent=";
+			options[24] = "strict=";
 		}
 		#endregion options (static)
 
