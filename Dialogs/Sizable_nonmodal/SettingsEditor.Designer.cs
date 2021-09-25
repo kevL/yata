@@ -31,7 +31,7 @@ namespace yata
 			this.rtb_Settings.Location = new System.Drawing.Point(0, 0);
 			this.rtb_Settings.Margin = new System.Windows.Forms.Padding(0);
 			this.rtb_Settings.Name = "rtb_Settings";
-			this.rtb_Settings.Size = new System.Drawing.Size(592, 389);
+			this.rtb_Settings.Size = new System.Drawing.Size(592, 419);
 			this.rtb_Settings.TabIndex = 0;
 			this.rtb_Settings.Text = "";
 			this.rtb_Settings.WordWrap = false;
@@ -42,7 +42,7 @@ namespace yata
 			this.pa_Buttons.Controls.Add(this.bu_Cancel);
 			this.pa_Buttons.Controls.Add(this.bu_Okay);
 			this.pa_Buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.pa_Buttons.Location = new System.Drawing.Point(0, 389);
+			this.pa_Buttons.Location = new System.Drawing.Point(0, 419);
 			this.pa_Buttons.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Buttons.Name = "pa_Buttons";
 			this.pa_Buttons.Size = new System.Drawing.Size(592, 35);
@@ -53,10 +53,10 @@ namespace yata
 			this.bu_Insert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bu_Insert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.bu_Insert.ForeColor = System.Drawing.Color.RoyalBlue;
-			this.bu_Insert.Location = new System.Drawing.Point(10, 5);
+			this.bu_Insert.Location = new System.Drawing.Point(10, 8);
 			this.bu_Insert.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Insert.Name = "bu_Insert";
-			this.bu_Insert.Size = new System.Drawing.Size(75, 25);
+			this.bu_Insert.Size = new System.Drawing.Size(75, 23);
 			this.bu_Insert.TabIndex = 0;
 			this.bu_Insert.Text = "UPDATE";
 			this.bu_Insert.UseVisualStyleBackColor = true;
@@ -69,9 +69,9 @@ namespace yata
 			this.bu_Cancel.Location = new System.Drawing.Point(430, 5);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(75, 25);
+			this.bu_Cancel.Size = new System.Drawing.Size(75, 26);
 			this.bu_Cancel.TabIndex = 1;
-			this.bu_Cancel.Text = "no";
+			this.bu_Cancel.Text = "cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
@@ -81,7 +81,7 @@ namespace yata
 			this.bu_Okay.Location = new System.Drawing.Point(511, 5);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
-			this.bu_Okay.Size = new System.Drawing.Size(75, 25);
+			this.bu_Okay.Size = new System.Drawing.Size(75, 26);
 			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "Save";
 			this.bu_Okay.UseVisualStyleBackColor = true;
@@ -90,10 +90,11 @@ namespace yata
 			// SettingsEditor
 			// 
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(592, 424);
+			this.ClientSize = new System.Drawing.Size(592, 454);
 			this.Controls.Add(this.rtb_Settings);
 			this.Controls.Add(this.pa_Buttons);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.Name = "SettingsEditor";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

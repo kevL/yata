@@ -50,6 +50,23 @@ namespace yata
 			(_f as YataForm).CloseSettingsEditor();
 			base.OnFormClosing(e);
 		}
+
+		/// <summary>
+		/// Saves current text to Settings.Cfg file when <c>[Ctrl+s]</c> is
+		/// pressed.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyData == (Keys.Control | Keys.S))
+			{
+				e.SuppressKeyPress = true;
+				click_Okay(null, EventArgs.Empty);
+			}
+			else
+				base.OnKeyDown(e);
+		}
 		#endregion Handlers (override)
 
 
@@ -57,7 +74,11 @@ namespace yata
 		/// <summary>
 		/// Writes file and closes this <c>SettingsEditor</c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="bu_Okay"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="bu_Okay"/></c></item>
+		/// <item><c>null</c> - <c>[Ctrl+s]</c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
@@ -98,7 +119,7 @@ namespace yata
 			}
 			finally
 			{
-				Close();
+				if (sender != null) Close();
 			}
 		}
 
