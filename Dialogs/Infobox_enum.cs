@@ -35,7 +35,7 @@ namespace yata
 		/// <item><c>DialogResult.Cancel</c></item>
 		/// </list>
 		/// </summary>
-		Cancel,
+		Okay,
 		/// <summary>
 		/// returns
 		/// <list type="bullet">
@@ -52,7 +52,7 @@ namespace yata
 		/// <item><c>DialogResult.Retry</c></item>
 		/// </list>
 		/// </summary>
-		CancelLoadNext,
+		AbortLoadNext,
 		/// <summary>
 		/// returns
 		/// <list type="bullet">

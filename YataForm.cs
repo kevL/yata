@@ -976,9 +976,9 @@ namespace yata
 
 				it_Undo           .Enabled = Table._ur.CanUndo;
 				it_Redo           .Enabled = Table._ur.CanRedo;
-
 				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
+				it_Defaultval     .Enabled = true;
 
 				EnableCelleditOperations();
 				EnableRoweditOperations();
@@ -1022,9 +1022,6 @@ namespace yata
 
 				// Enabled ->
 
-				it_Undo           .Enabled =
-				it_Redo           .Enabled =
-
 				it_Reload         .Enabled =
 				it_Save           .Enabled =
 				it_SaveAll        .Enabled =
@@ -1033,8 +1030,11 @@ namespace yata
 				it_Close          .Enabled =
 				it_CloseAll       .Enabled =
 
+				it_Undo           .Enabled =
+				it_Redo           .Enabled =
 				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled =
+				it_Defaultval     .Enabled =
 
 				it_DeselectCell   .Enabled =
 				it_CutCell        .Enabled =
@@ -2283,6 +2283,28 @@ namespace yata
 				}
 			}
 		}
+
+		/// <summary>
+		/// Handles it-click to edit the 2da-file's defaultval.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Defaultval"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Default value</item>
+		/// </list></remarks>
+		void editclick_Defaultval(object sender, EventArgs e)
+		{
+			InputDialogColhead._textdefaultval = Table._defaultval;
+			using (var idc = new InputDialogColhead(this))
+			{
+				if (idc.ShowDialog(this) == DialogResult.OK)
+				{
+					Table._defaultval = InputDialogColhead._textdefaultval;
+					if (!Table.Changed) Table.Changed = true;
+				}
+			}
+		}
 		#endregion Handlers (edit)
 
 
@@ -3496,7 +3518,7 @@ namespace yata
 										(stop ? "The test has been stopped at 16 borks. " : String.Empty) + head,
 										(copy.Length != 0 ? copy + (stop ? Environment.NewLine + "..." : String.Empty) : null),
 										ibt,
-										(copy.Length != 0 && !Table.Readonly ? InfoboxButtons.CancelYes : InfoboxButtons.Cancel)))
+										(copy.Length != 0 && !Table.Readonly ? InfoboxButtons.CancelYes : InfoboxButtons.Okay)))
 			{
 				if (ib.ShowDialog(this) == DialogResult.OK)
 					opsclick_Order(sender, e);

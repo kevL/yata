@@ -6,6 +6,8 @@ namespace yata
 {
 	static class FileOutput
 	{
+		internal const string Default = "DEFAULT: ";
+
 		internal static void Write(YataGrid table)
 		{
 			if (Settings._alignoutput == Settings.AoFalse)
@@ -14,7 +16,10 @@ namespace yata
 				{
 					sw.WriteLine(gs.TwodaVer);						// header ->
 
-					sw.WriteLine(table._defaultval);				// default value ->
+					if (table._defaultval.Length != 0)
+						sw.WriteLine(Default + table._defaultval);	// default value ->
+					else
+						sw.WriteLine();
 
 					string line = String.Empty;
 					for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
@@ -76,7 +81,10 @@ namespace yata
 					{
 						sw.WriteLine(gs.TwodaVer);						// header ->
 
-						sw.WriteLine(table._defaultval);				// default value ->
+						if (table._defaultval.Length != 0)
+							sw.WriteLine(Default + table._defaultval);	// default value ->
+						else
+							sw.WriteLine();
 
 						string line = String.Empty;
 						for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
@@ -127,7 +135,10 @@ namespace yata
 					{
 						sw.WriteLine(gs.TwodaVer);						// header ->
 
-						sw.WriteLine(table._defaultval);				// default value ->
+						if (table._defaultval.Length != 0)
+							sw.WriteLine(Default + table._defaultval);	// default value ->
+						else
+							sw.WriteLine();
 
 						var tabstops = new int[table.ColCount];
 						tabstops[0] = 0;

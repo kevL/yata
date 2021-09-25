@@ -869,6 +869,8 @@ namespace yata
 
 			_rows.Clear();
 
+			int loadresult = LOADRESULT_TRUE;
+
 			string[] lines = File.ReadAllLines(Fullpath); // default encoding is UTF-8
 
 			// 0. test character decoding ->
@@ -991,17 +993,17 @@ namespace yata
 
 			bool ignoreErrors = false;
 
-			// 2. if user doesn't have output set to Tabs issue a warning if a Tab
-			//    is found (only if strict) ->
+			// 2. if user doesn't have output set to Tabs issue a warning if a
+			//    Tab is found (only if strict; ignore the Defaultval line) ->
 			if (Settings._strict && Settings._alignoutput != Settings.AoTabs)
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
-					if (lines[i].Contains("\t"))
+					if (i != LINE_VALTYPE && lines[i].Contains("\t"))
 					{
-						string head = "Tab characters are detected in the 2da-file.";
-//						if (Settings._alignoutput != Settings.AoTabs)
-						head += " They will be replaced with space characters if the file is saved.";
+						const string head = "Tab characters are detected in the 2da-file."
+										  + " They will be replaced with space characters"
+										  + " (or deleted) if the file is saved.";
 
 						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
 						{
@@ -1011,6 +1013,10 @@ namespace yata
 
 							case DialogResult.OK:
 								ignoreErrors = true;
+								goto case DialogResult.Retry;
+
+							case DialogResult.Retry:
+								loadresult = LOADRESULT_CHANGED;
 								break;
 						}
 						break;
@@ -1028,7 +1034,7 @@ namespace yata
 			for (int i = LINE_VALTYPE; i != total; ++i)
 			{
 				if (i < lines.Length)
-					line = lines[i].Trim();
+					line = lines[i]; // do not Trim()
 				else
 					line = String.Empty;
 
@@ -1039,27 +1045,77 @@ namespace yata
 
 					case LINE_VALTYPE: // line #1
 					{
-						string head = null;
+						string head = null, copy = null;
 
-						if (Settings._defaultval)
+						if (line.TrimStart().StartsWith("DEFAULT:", StringComparison.Ordinal))
 						{
-							_defaultval = line;
+							_defaultval = line.Trim().Substring(8).TrimStart();
 
-							if (!line.StartsWith("DEFAULT:", StringComparison.Ordinal))
+							if (line.TrimStart() != line)
 							{
-								head = "The default variable is incorrect.";
-							}
-							else
-							{
-								string val = line.Substring(8).Trim();
-								if (val.Length == 0)
+								head = "The Default value should not be indented. It will be corrected if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + line;
+
+								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 								{
-									head = "The default value is incorrect.";
+									case DialogResult.Cancel:
+										_init = false;
+										return LOADRESULT_FALSE;
+	
+									case DialogResult.OK:
+										ignoreErrors = true;
+										goto case DialogResult.Retry;
+	
+									case DialogResult.Retry:
+										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
+										break;
 								}
-								else if ((val.Contains(" ") || val.Contains("\t"))
-									&& (!val.StartsWith("\"", StringComparison.Ordinal) || !val.EndsWith("\"", StringComparison.Ordinal)))
+							}
+
+							if (!ignoreErrors && _defaultval.Length == 0)
+							{
+								head = "The default value is blank. It will be deleted if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + line;
+
+								switch (ShowLoadWarning(head, copy))
 								{
-									head = "The default value should be enclosed in double-quotes.";
+									case DialogResult.Cancel:
+										_init = false;
+										return LOADRESULT_FALSE;
+	
+									case DialogResult.OK:
+										ignoreErrors = true;
+										goto case DialogResult.Retry;
+	
+									case DialogResult.Retry:
+										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
+										break;
+								}
+							}
+
+							if ((CheckLoadField(ref _defaultval)
+									|| (Settings._strict && line != FileOutput.Default + _defaultval))
+								&& !ignoreErrors)
+							{
+								head = "The default value has been changed.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + _defaultval;
+
+								switch (ShowLoadWarning(head, copy))
+								{
+									case DialogResult.Cancel:
+										_init = false;
+										return LOADRESULT_FALSE;
+	
+									case DialogResult.OK:
+										ignoreErrors = true;
+										goto case DialogResult.Retry;
+	
+									case DialogResult.Retry:
+										loadresult = LOADRESULT_CHANGED;
+										break;
 								}
 							}
 						}
@@ -1067,42 +1123,36 @@ namespace yata
 						{
 							_defaultval = String.Empty;
 
-							if (line.StartsWith("DEFAULT:", StringComparison.Ordinal)) // test for defaultval on the 2nd line; note this cannot be ignored.
-							{
-								head = Infobox.SplitString("The 2nd line specifies a default value but the 2nd"
-														 + " line will be blanked if the file is saved. To support"
-														 + " default values in 2da files change the defaultval setting"
-														 + " in Settings.Cfg to true.");
-							}
-							else if (!ignoreErrors // test for blank 2nd line
+							if (!ignoreErrors // test for blank 2nd line
 								&& Settings._strict
 								&& line.Length != 0)
 							{
-								head = Infobox.SplitString("The 2nd line in the 2da should be blank. The 2nd"
-														 + " line will be blanked if the file is saved.");
-							}
-						}
+								head = "The 2nd line in the 2da contains garbage. It will be deleted if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + line.Replace("\t", "\u2192");
 
-						if (head != null)
-						{
-							string copy = Fullpath + Environment.NewLine + Environment.NewLine
-										+ line;
-
-							switch (ShowLoadWarning(head, copy))
-							{
-								case DialogResult.Cancel:
-									_init = false;
-									return LOADRESULT_FALSE;
-
-								case DialogResult.OK:
-									ignoreErrors = true;
-									break;
+								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								{
+									case DialogResult.Cancel:
+										_init = false;
+										return LOADRESULT_FALSE;
+	
+									case DialogResult.OK:
+										ignoreErrors = true;
+										goto case DialogResult.Retry;
+	
+									case DialogResult.Retry:
+										loadresult = LOADRESULT_CHANGED;
+										break;
+								}
 							}
 						}
 						break;
 					}
 
 					case LINE_COLHEADS: // line #2
+						line = line.Trim();
+
 						if (!ignoreErrors)
 						{
 							foreach (char character in line)
@@ -1111,7 +1161,7 @@ namespace yata
 								// to avoid intellectual pretzels ...
 								if (!(  character == 32 // space
 									|| (character == 9 && Settings._alignoutput == Settings.AoTabs) // tab
-									|| (Util.isPrintableAsciiNotDoublequote(character)  && !Settings._strict)
+									|| (Util.isPrintableAsciiNotDoublequote( character) && !Settings._strict)
 									|| (Util.isAsciiAlphanumericOrUnderscore(character) &&  Settings._strict)))
 								{
 									const string head = "Col headers should contain only alpha-numeric characters and underscores.";
@@ -1138,6 +1188,8 @@ namespace yata
 
 					default: // line #3+
 					{
+						line = line.Trim();
+
 						string[] fields = ParseTableRow(line);
 						if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 						{
@@ -1243,7 +1295,7 @@ namespace yata
 				return LOADRESULT_CHANGED; // flag the Table as changed
 			}
 
-			return LOADRESULT_TRUE;
+			return loadresult;
 		}
 
 		/// <summary>
@@ -1263,7 +1315,7 @@ namespace yata
 										head,
 										copy,
 										InfoboxType.Warn,
-										InfoboxButtons.CancelLoadNext))
+										InfoboxButtons.AbortLoadNext))
 			{
 				return ib.ShowDialog(YataForm.that);
 			}
@@ -3264,7 +3316,7 @@ namespace yata
 		/// <summary>
 		/// Checks the text that user submits to a cell.
 		/// </summary>
-		/// <param name="tb"></param>
+		/// <param name="tb">a <c>TextBox</c> in which user is editing the text</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
 		/// <seealso cref="CheckLoadField()"><c>CheckLoadField()</c></seealso>
 		internal static bool CheckTextEdit(Control tb)
@@ -3344,29 +3396,42 @@ namespace yata
 					}
 				}
 			}
+			else if (  field.StartsWith("\"", StringComparison.InvariantCulture)
+					&& field.EndsWith(  "\"", StringComparison.InvariantCulture))
+			{
+				bool preserveQuotes = false;
+
+				char[] chars = field.ToCharArray();
+				for (int pos = 0; pos != chars.Length; ++pos)
+				{
+					if (Char.IsWhiteSpace(chars[pos]))
+					{
+						preserveQuotes = true;
+						break;
+					}
+				}
+
+				if (!preserveQuotes)
+				{
+					changed = true;
+					field = field.Substring(1, field.Length - 2);
+				}
+			}
 
 			tb.Text = field;
 			return changed;
 		}
 
 		/// <summary>
-		/// Checks the text in a cell.
+		/// Checks the text in a cell during file load.
 		/// </summary>
 		/// <param name="field">ref to a text-string</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
+		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
 		/// <seealso cref="CheckTextEdit()"><c>CheckTextEdit()</c></seealso>
 		bool CheckLoadField(ref string field)
 		{
 			bool changed = false;
-
-//			string field = text.Trim(); // this ought be redundant during file-load -->
-//			if (String.IsNullOrEmpty(field))
-//			{
-//				text = gs.Stars;
-//				return true;
-//			}
-//			if (field != text)
-//				changed = true;
 
 			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
 			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
@@ -3428,6 +3493,27 @@ namespace yata
 						field = "\"" + field + "\"";
 						break;
 					}
+				}
+			}
+			else if (  field.StartsWith("\"", StringComparison.InvariantCulture)
+					&& field.EndsWith(  "\"", StringComparison.InvariantCulture))
+			{
+				bool preserveQuotes = false;
+
+				char[] chars = field.ToCharArray();
+				for (int pos = 0; pos != chars.Length; ++pos)
+				{
+					if (Char.IsWhiteSpace(chars[pos]))
+					{
+						preserveQuotes = true;
+						break;
+					}
+				}
+
+				if (!preserveQuotes)
+				{
+					changed = true;
+					field = field.Substring(1, field.Length - 2);
 				}
 			}
 

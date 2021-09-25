@@ -41,7 +41,6 @@ namespace yata
 		internal static bool _instantgoto;
 		internal static bool _casesort;
 		internal static bool _autorder;
-		internal static bool _defaultval;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -301,11 +300,6 @@ namespace yata
 							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
 						}
-						else if (line.StartsWith("defaultval=", StringComparison.InvariantCulture))
-						{
-							_defaultval = (!String.IsNullOrEmpty(line = line.Substring(11).Trim())
-									   && line == "true");
-						}
 					}
 				}
 			}
@@ -391,7 +385,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 25;
+		internal const int ids = 24;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -417,16 +411,15 @@ namespace yata
 			options[12] = "casesort=";
 			options[13] = "codepage=";
 			options[14] = "context=";
-			options[15] = "defaultval=";
-			options[16] = "dialog=";
-			options[17] = "dialogalt=";
-			options[18] = "diff=";
-			options[19] = "dirpreset=";
-			options[20] = "gradient=";
-			options[21] = "instantgoto=";
-			options[22] = "pathall=";
-			options[23] = "recent=";
-			options[24] = "strict=";
+			options[15] = "dialog=";
+			options[16] = "dialogalt=";
+			options[17] = "diff=";
+			options[18] = "dirpreset=";
+			options[19] = "gradient=";
+			options[20] = "instantgoto=";
+			options[21] = "pathall=";
+			options[22] = "recent=";
+			options[23] = "strict=";
 		}
 		#endregion options (static)
 

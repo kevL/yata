@@ -59,7 +59,7 @@ namespace yata
 				string head,
 				string copyable = null,
 				InfoboxType ibt = InfoboxType.Info,
-				InfoboxButtons buttons = InfoboxButtons.Cancel)
+				InfoboxButtons buttons = InfoboxButtons.Okay)
 		{
 			// TODO: Store static location and size of the Infobox (if shown non-modally).
 
@@ -81,7 +81,7 @@ namespace yata
 
 			switch (buttons)
 			{
-				case InfoboxButtons.Cancel:
+				case InfoboxButtons.Okay:
 					bu_Cancel.Text = "ok";
 					break;
 
@@ -90,9 +90,10 @@ namespace yata
 					bu_Okay.Visible = true;
 					break;
 
-				case InfoboxButtons.CancelLoadNext:
-					bu_Okay .Text = "load";
-					bu_Retry.Text = "next";
+				case InfoboxButtons.AbortLoadNext:
+					bu_Cancel.Text = "abort";
+					bu_Okay  .Text = "load";
+					bu_Retry .Text = "next";
 
 					bu_Okay .Visible =
 					bu_Retry.Visible = true;

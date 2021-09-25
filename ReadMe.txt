@@ -4,13 +4,39 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 23
+2021 september 24
 kevL's
 ver 4.3.2.0
 
-c# source .NET 3.5 req'd
+c# source .net3.5
 https://github.com/kevL/yata
 
+
+Table of Contents
+-----------------
+1. MainMenu bar
+2. Keyboard input
+3. Mouse input
+4. Settings.Cfg file
+
+Appendix A: note on Load
+Appendix B: copy/paste range
+Appendix C: edit operations on rows
+Appendix D: output
+Appendix E: how to use Info paths
+Appendix F: creating a 2da-file
+Appendix G: Drag & Drop to open 2da-file(s)
+Appendix H: opening 2da-files as the app starts
+Appendix I: a note on associating file extensions in Windows Explorer
+Appendix J: the Property Panel
+Appendix K: Undo/Redo
+Appendix L: Yata diff
+Appendix M: WinMerge
+Appendix N: Codepages
+
+
+
+1. MainMenu bar
 
 File
 - Open ... @ folder (presets for the Open ... dialog - appears only if at least
@@ -47,6 +73,14 @@ Edit
 - Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
                              Load)
 
+- Default value ... : opens a dialog to edit the 2da-file's Default value (apps
+                      that try to access an invalid row or col should return
+                      failure and use this value as a default string, or convert
+                      it to a default int or float. This is rarely used if ever;
+                      apps typically don't try to access an invalid cell ... or
+                      if they do they specify their own default value)
+
+
 Cells
 - Deselect : deselects selected cells
 
@@ -82,13 +116,18 @@ Col
 - create head ...  : creates a col. This clears Undo/Redo, etc. The col will be
                      created at the position of a selected col, shifting the
                      table to the right; press [Esc] to deselect any selected
-                     col to create a col at the far right of the table
+                     col to create a col at the far right of the table *
 - delete head ...  : deletes a selected col. This clears Undo/Redo, etc. This
                      operation is disabled if the table has only 1 colhead.
-- relabel head ... : relabels the head of a selected col
+- relabel head ... : relabels the head of a selected col *
 
 - copy col  : copies the cells of a selected col
 - paste col : pastes copied cells into a selected col
+
+* Creating or Relabeling a colhead disallows Unicode characters (non-ASCII
+  characters). This is further restricted to only alpha-numeric digits and/or
+  the underscore character if the setting "strict=" is true. The double-quote
+  character is disallowed in a colhead label regardless.
 
 
 Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto")
@@ -174,7 +213,7 @@ Help
 
 
 
-KEYBOARD:
+2. Keyboard input
 
 If a row is selected then key-input for rows takes precedence. Else cells.
 
@@ -294,7 +333,8 @@ Note that Cut, Copy, Paste operations have their keys listed under the Cells and
 Rows descriptions above. The Col operations do not have shortcuts.
 
 
-MOUSE:
+3. Mouse input
+
 wheel - scrolls up/down if the vertical scrollbar is visible and either of
         (a) the horizontal bar is disabled or (b) Ctrl is not pressed
       - scrolls left/right if the horizontal scrollbar is visible and either of
@@ -354,7 +394,7 @@ takes ~20 seconds on my decently fast computer. Fortunately this has been
 reduced to ~4 seconds if a table has a lot of **** fields.
 
 
-Settings.Cfg file (do not use double-quotes)
+4. Settings.Cfg file (do not use double-quotes)
 
 The file Settings.Cfg is not distributed; the package contains only the
 executable and help files. see Help|Options file. If Settings.Cfg is not found
@@ -385,6 +425,45 @@ fontf=       a .NET string that represents a desired fixed-width font (Yata
              font)
 fonti=       a .NET string that represents a desired font for the Infobox (Yata
              needs to be reloaded before it will display a changed Infobox font)
+x=           (integer) the desired x-position to start the app on your monitor
+y=           (integer) the desired y-position to start the app on your monitor
+w=           (integer) the desired starting width of the app on your monitor
+h=           (integer) the desired starting height of the app on your monitor
+maximized=   "true" (without quotes) to start Yata in a maximized window. A true
+             setting takes precedence over the x/y/w/h settings although the
+             latter are recalled if the window is restored
+alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
+             "tabs" (without quotes) to align cols with tabs. Note that using
+             tab-characters in 2da files is not officially supported and could
+             break in other applications
+autorder=    "true" (without quotes) to automatically reorder row-ids after row
+             and cell alterations. Note that since ordering row-ids is not
+             tracked by Undo/Redo the Changed asterisk will not be cleared when
+             undoing or redoing to the table's saved state; also note that the
+             PropertyPanel ignores this rule in case you want to force a row to
+             have a specific id for whatever reason
+casesort=    "true" (without quotes) for case-sensitive sorting
+codepage=    (integer) see Appendix N: Codepages
+context=     a right-click on a rowhead displays the contextmenu at the mouse-
+             cursor's location by default. It can be displayed in a static
+             location at the topleft corner of the table instead of at the
+             mouse-cursor by giving this variable a value of "static" (without
+             quotes)
+dialog=      a path without quotes to your Dialog.Tlk file. Strrefs can often
+             print their string values to the statusbar if Dialog.Tlk has been
+             pathed
+dialogalt=   as "dialog=" but for a custom talktable
+diff=        a path without quotes to your WinMerge executable for diffing and
+             merging two 2da files (if desired). See Appendix L: WinMerge
+dirpreset=   a path without quotes to a valid directory for the
+             Open ... @ folder dialog
+dirpreset=   another path for the Open ... @ folder dialog
+dirpreset=   etc. (there can be as many or as few dirpresets as you like)
+gradient=    "true" (without quotes) to draw the colhead bar with gradient
+             colors
+instantgoto= "true" (without quotes) causes the current table to select a row as
+             digits are typed in the goto-box. If false [Enter] needs to be
+             pressed to select a row after digits are typed
 pathall=     a path without quotes to a valid directory to grope for 2da info
              for Crafting.2da, Spells.2da, or Feat.2da (see Appendix E: how to
              use Info paths)
@@ -392,14 +471,14 @@ pathall=     another path for Crafting, Spells, and Feat info
 pathall=     etc. (the first pathall has lowest priority and any info found will
              be replaced by any info found in subsequent pathall directories;
              there can be as many or as few pathall directories as you like)
-dirpreset=   a path without quotes to a valid directory for the
-             Open ... @ folder dialog
-dirpreset=   another path for the Open ... @ folder dialog
-dirpreset=   etc. (there can be as many or as few dirpresets as you like)
-x=           (integer) the desired x-position to start the app on your monitor
-y=           (integer) the desired y-position to start the app on your monitor
-w=           (integer) the desired starting width of the app on your monitor
-h=           (integer) the desired starting height of the app on your monitor
+recent=      (integer) a count of recently opened file-paths to store. If left
+             blank or a value less than 1 is specified, recently opened files
+             will not be tracked, while 16 is the hardcoded upper limit. SETTING
+             "recent=" TO A VALID VALUE ENABLES YATA TO WRITE THE FILE
+             Recent.Cfg TO ITS APPLICATION DIRECTORY. Recent.Cfg stores
+             filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
+             variety of reasons that I really don't want to be arshed with -
+             hence the option so you can decide if it works on your OS.
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
@@ -418,47 +497,6 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  not sorted by ascending ID") - ie, persons who use Strict don't
                  get a tooltip although the ID-header still turns to a red color
                  regardless of this setting
-gradient=    "true" (without quotes) to draw the colhead bar with gradient
-             colors
-context=     a right-click on a rowhead displays the contextmenu at the mouse-
-             cursor's location by default. It can be displayed in a static
-             location at the topleft corner of the table instead of at the
-             mouse-cursor by giving this variable a value of "static" (without
-             quotes)
-recent=      (integer) a count of recently opened file-paths to store. If left
-             blank or a value less than 1 is specified, recently opened files
-             will not be tracked, while 16 is the hardcoded upper limit. SETTING
-             "recent=" TO A VALID VALUE ENABLES YATA TO WRITE THE FILE
-             Recent.Cfg TO ITS APPLICATION DIRECTORY. Recent.Cfg stores
-             filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
-             variety of reasons that I really don't want to be arshed with -
-             hence the option so you can decide if it works on your OS.
-diff=        a path without quotes to your WinMerge executable for diffing and
-             merging two 2da files (if desired). See Appendix L: WinMerge
-dialog=      a path without quotes to your Dialog.Tlk file. Strrefs can often
-             print their string values to the statusbar if Dialog.Tlk has been
-             pathed
-dialogalt=   as "dialog=" but for a custom talktable
-maximized=   "true" (without quotes) to start Yata in a maximized window. A true
-             setting takes precedence over the x/y/w/h settings although the
-             latter are recalled if the window is restored
-instantgoto= "true" (without quotes) causes the current table to select a row as
-             digits are typed in the goto-box. If false [Enter] needs to be
-             pressed to select a row after digits are typed
-casesort=    "true" (without quotes) for case-sensitive sorting
-alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
-             "tabs" (without quotes) to align cols with tabs. Note that using
-             tab-characters in 2da files is not officially supported and could
-             break in other applications
-codepage=    (integer) see Appendix N: Codepages
-autorder=    "true" (without quotes) to automatically reorder row-ids after row
-             and cell alterations. Note that since ordering row-ids is not
-             tracked by Undo/Redo the Changed asterisk will not be cleared when
-             undoing or redoing to the table's saved state; also note that the
-             PropertyPanel ignores this rule in case you want to force a row to
-             have a specific id for whatever reason
-defaultval=  "true" (without quotes) to support default values that can be
-             specified on the 2nd line of 2da-files
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

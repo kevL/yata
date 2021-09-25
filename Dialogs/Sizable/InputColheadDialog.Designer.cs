@@ -73,7 +73,6 @@ namespace yata
 			this.Name = "InputDialogColhead";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = " yata - Colhead text";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

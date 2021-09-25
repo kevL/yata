@@ -6,13 +6,14 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// A dialog for colhead-text entry.
+	/// A dialog for text entry.
 	/// </summary>
 	sealed partial class InputDialogColhead
 		: YataDialog
 	{
 		#region Fields (static)
-		internal static string _text = String.Empty;
+		internal static string _text           = String.Empty;
+		internal static string _textdefaultval = String.Empty;
 		#endregion Fields (static)
 
 
@@ -29,8 +30,9 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
-		/// <param name="selc">the currently selected col-id</param>
-		internal InputDialogColhead(YataForm f, int selc)
+		/// <param name="selc">the currently selected col-id; default -2 enables
+		/// defaultval input</param>
+		internal InputDialogColhead(YataForm f, int selc = -2)
 		{
 			_f = f;
 			_selc = selc;
@@ -38,7 +40,17 @@ namespace yata
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
 
-			tb_Input.Text = _text;
+			if (_selc != -2)
+			{
+				Text = " yata - Colhead text";
+				tb_Input.Text = _text;
+			}
+			else
+			{
+				Text = " yata - Default value";
+				tb_Input.Text = _textdefaultval;
+			}
+
 
 			tb_Input.Select();
 		}
@@ -47,7 +59,7 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// 
+		/// Sets min/max sizes.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
@@ -74,53 +86,83 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
-		/// Handles text-input in the TextBox.
+		/// Handles <c>TextChanged</c> for the TextBox.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		/// <remarks>Col-head text shall be alphanumeric or underscore.</remarks>
 		void textchanged_Input(object sender, EventArgs e)
 		{
 			if (!_bypasstextchanged)
 			{
 				if (tb_Input.Text.Length != 0)
 				{
-					for (int i = 0; i != tb_Input.Text.Length; ++i)
+					if (_selc != -2) // colhead
 					{
-						if (!Util.isAsciiAlphanumericOrUnderscore(tb_Input.Text[i]))
+						char character;
+						for (int i = 0; i != tb_Input.Text.Length; ++i)
 						{
-							_bypasstextchanged = true;
-							tb_Input.Text = _text; // recurse
-							_bypasstextchanged = false;
+							character = tb_Input.Text[i];
+							if (character == 34 // double-quote
+								|| (    (Settings._strict && !Util.isAsciiAlphanumericOrUnderscore(character))
+									|| (!Settings._strict && !Util.isPrintableAsciiNotDoublequote( character))))
+							{
+								_bypasstextchanged = true;
+								tb_Input.Text = _text; // recurse
+								_bypasstextchanged = false;
 
-							tb_Input.SelectionStart = tb_Input.Text.Length;
-							return;
+								tb_Input.SelectionStart = tb_Input.Text.Length;
+								return;
+							}
 						}
 					}
 				}
-				_text = tb_Input.Text;
+
+				if (_selc != -2)
+					_text = tb_Input.Text;
+				else
+					_textdefaultval = tb_Input.Text;
 			}
 		}
 
 		/// <summary>
-		/// Cancels close if the input-text is already taken by another colhead.
+		/// 1. colhead: Cancels close if the input-text is already taken by
+		/// another colhead.
+		/// 
+		/// 2. defaultval:
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
-			string[] fields = YataForm.Table.Fields;
-			for (int i = 0; i != fields.Length; ++i)
+			if (_selc != -2) // colhead
 			{
-				if ((_selc == -1 || _selc != i + 1)
-					&& String.Equals(fields[i],
-									 tb_Input.Text,
-									 StringComparison.OrdinalIgnoreCase))
+				string[] fields = YataForm.Table.Fields;
+				for (int i = 0; i != fields.Length; ++i)
 				{
-					using (var ib = new Infobox(Infobox.Title_error,
-												"That label is already used by another colhead.",
+					if ((_selc == -1 || _selc != i + 1)
+						&& String.Equals(fields[i],
+										 tb_Input.Text,
+										 StringComparison.OrdinalIgnoreCase))
+					{
+						using (var ib = new Infobox(Infobox.Title_error,
+													"That label is already used by another colhead.",
+													null,
+													InfoboxType.Error))
+						{
+							ib.ShowDialog(this);
+						}
+						_cancel = true;
+					}
+				}
+			}
+			else // defaultval
+			{
+				if (YataGrid.CheckTextEdit(tb_Input))
+				{
+					using (var ib = new Infobox(Infobox.Title_warni,
+												"The text has changed.",
 												null,
-												InfoboxType.Error))
+												InfoboxType.Warn))
 					{
 						ib.ShowDialog(this);
 					}
