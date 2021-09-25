@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 24
+2021 september 25
 kevL's
 ver 4.5.0.0
 
@@ -482,25 +482,36 @@ recent=      (integer) a count of recently opened file-paths to store. If left
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
-             (1) warn about tab-characters if the "alignoutput=" setting is not
-                 set to "tabs". Note that tabs are generally safe in NwN2 but
-                 perhaps not in NwN [that's what they say ...]
-             (2) warn about non alpha-numeric characters (other than underscore)
-                 in col headers [note that double-quotes and non-ASCII
-                 characters are disallowed in col headers regardless]
+             (1) warn about the existance of tab-characters if Alignoutput is
+                 not set to "tabs". Note that tabs are generally safe for NwN2
+                 but perhaps not for NwN ... there is at least one app for NwN2
+                 that fails if tabs delimit the colhead labels (the Players
+                 Handbook recompiler tool)
+             (2) warn about suspicious (non-ASCII) characters in colhead labels.
+                 When labeling a colhead Strict "true" allows only alpha-numeric
+                 characters and the underscore character, while Strict "false"
+                 allows any printable ASCII character except the double-quote.
+                 Note that Yata supports 2da-files with Unicode in their colhead
+                 labels - but if you want to edit such labels use a decent
+                 texteditor (or try a different 2da-editor)
              (3) warn about a garbage Default value on the 2nd line of a
-                 2da-file
+                 2da-file. This will be autocorrected if the file is saved
+                 regardless of the Strict setting
              (4) warn about a tab-character in the version header instead of a
-                 space-character
-             (5) flags the table as Changed if Yata changes whitespace as a file
-                 loads. These changes shall be innocuous; setting the Changed
-                 flag like this is purely to tell purists that a file is not at
-                 peak efficiency
+                 space-character. This will be autocorrected if the file is
+                 saved regardless of the Strict setting
+             (5) "true" will also cause Yata to try to flag the table as Changed
+                 as a notice that saving the table would result in output that
+                 is different than the input file. But this is not rigorous.
+                 Note that any silent changes shall be innocuous (eg. trimming
+                 whitespace from the ends of row-lines); setting the Changed
+                 flag like this is a way to tell purists that a file is not
+                 quite at peak efficiency
              (6) and Strict also suppresses the tooltip that appears when a col
                  is sorted by anything other than ID-ascending ("warn : Table is
                  not sorted by ascending ID") - ie, persons who use Strict don't
-                 get a tooltip although the ID-header still turns to a red color
-                 regardless of this setting
+                 get a tooltip although the head of the id-col still turns to a
+                 red color regardless of this setting
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
