@@ -482,17 +482,21 @@ recent=      (integer) a count of recently opened file-paths to store. If left
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
-             (1) warn about tab-characters if the "alignoutput" setting is not
+             (1) warn about tab-characters if the "alignoutput=" setting is not
                  set to "tabs". Note that tabs are generally safe in NwN2 but
-                 not in NwN
-             (2) non alpha-numeric characters (other than underscore) in col
-                 headers [note that double-quotes and non-ASCII characters are
-                 disallowed in col headers regardless]
-             (3) a character on the 2nd line of a 2da [the 2nd line should be
-                 blank as far as Yata goes]
-             (4) a tab-character in the version header instead of a space-
-                 character
-             (5) and Strict also suppresses the tooltip that appears when a col
+                 perhaps not in NwN [that's what they say ...]
+             (2) warn about non alpha-numeric characters (other than underscore)
+                 in col headers [note that double-quotes and non-ASCII
+                 characters are disallowed in col headers regardless]
+             (3) warn about a garbage Default value on the 2nd line of a
+                 2da-file
+             (4) warn about a tab-character in the version header instead of a
+                 space-character
+             (5) flags the table as Changed if Yata changes whitespace as a file
+                 loads. These changes shall be innocuous; setting the Changed
+                 flag like this is purely to tell purists that a file is not at
+                 peak efficiency
+             (6) and Strict also suppresses the tooltip that appears when a col
                  is sorted by anything other than ID-ascending ("warn : Table is
                  not sorted by ascending ID") - ie, persons who use Strict don't
                  get a tooltip although the ID-header still turns to a red color
