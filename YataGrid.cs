@@ -913,97 +913,68 @@ namespace yata
 			}
 
 
-			string line;
+			string line, head, copy;
 
 			// 1. test for fatal errors first (over the first 3 lines only) ->
-			for (int i = 0; i != 3; ++i)
+			if (lines.Length > LINE_HEADER) line = lines[LINE_HEADER];
+			else                            line = String.Empty;
+
+			if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0")) // note: Errorout even if alignoutput=tabs
 			{
-				if (i == 1) continue; // no tests for #1 LINE_VALTYPE
+				head = Infobox.SplitString("The 2da-file contains an incorrect version header."); //It will be replaced by the standard header if the file is saved.
+				copy = Fullpath + Environment.NewLine + Environment.NewLine;
 
-				if (i < lines.Length)
-					line = lines[i]; // do not Trim()
-				else
-					line = String.Empty;
+				if (line == "2DA\tV2.0") copy += "2DA\u2192V2.0"; // <- TODO autocorrect
+				else                     copy += gs.TwodaVer;
 
-				switch (i)
+				using (var ib = new Infobox(Infobox.Title_error,
+											head,
+											copy,
+											InfoboxType.Error,
+											InfoboxButtons.Abort))
 				{
-					case LINE_HEADER: // line #0
-						if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0")) // note: Errorout even if alignoutput=tabs
-						{
-							string head = Infobox.SplitString("The 2da-file contains an incorrect version header.");
-							//" It will be replaced by the standard header if the file is saved.
-
-							string copy = Fullpath + Environment.NewLine + Environment.NewLine;
-
-							if (line == "2DA\tV2.0") copy += "2DA\u2192V2.0";
-							else                     copy += gs.TwodaVer;
-
-							using (var ib = new Infobox(Infobox.Title_error,
-														head,
-														copy,
-														InfoboxType.Error,
-														InfoboxButtons.Abort))
-							{
-								ib.ShowDialog(_f);
-							}
-							_init = false;
-							return LOADRESULT_FALSE;
-						}
-						break;
-
-//					case LINE_VALTYPE: // line #1
-//						break;
-
-					case LINE_COLHEADS: // line #2
-					{
-						string head = null;
-
-						if (line.Length == 0)
-						{
-							head = Infobox.SplitString("The 2da-file does not have any fields. Yata"
-													 + " requires that a file has at least one colhead"
-													 + " (one indented field) on its 3rd line.");
-						}
-						else if (line[0] != 32 // space
-							&& (   Settings._strict
-								|| Settings._alignoutput != Settings.AoTabs
-								|| line[0] != 9)) // tab
-						{
-							head = "The 3rd line (col labels) is not indented properly.";
-						}
-
-						if (head != null)
-						{
-							using (var ib = new Infobox(Infobox.Title_error,
-														head,
-														Fullpath,
-														InfoboxType.Error,
-														InfoboxButtons.Abort))
-							{
-								ib.ShowDialog(_f);
-							}
-							_init = false;
-							return LOADRESULT_FALSE;
-						}
-						break;
-					}
+					ib.ShowDialog(_f);
 				}
+				_init = false;
+				return LOADRESULT_FALSE;
+			}
+
+
+			if (lines.Length > LINE_COLHEADS) line = lines[LINE_COLHEADS];
+			else                              line = String.Empty;
+
+			if (line.Length == 0)
+			{
+				head = Infobox.SplitString("The 2da-file does not have any fields. Yata"
+										 + " requires that a file has at least one"
+										 + " indented colhead label on its 3rd line.");
+
+				using (var ib = new Infobox(Infobox.Title_error,
+											head,
+											Fullpath,
+											InfoboxType.Error,
+											InfoboxButtons.Abort))
+				{
+					ib.ShowDialog(_f);
+				}
+				_init = false;
+				return LOADRESULT_FALSE;
 			}
 
 
 			bool ignoreErrors = false;
 
 			// 2. if user doesn't have output set to Tabs issue a warning if a
-			//    Tab is found (only if strict; ignore the Defaultval line) ->
-			if (Settings._strict && Settings._alignoutput != Settings.AoTabs)
+			//    Tab is found (only if Strict + ignore the Defaultval line) ->
+			if (Settings._alignoutput != Settings.AoTabs && Settings._strict)
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
 					if (i != LINE_VALTYPE && lines[i].Contains("\t"))
 					{
-						const string head = "Tab characters are detected in the 2da-file."
-										  + " They will be replaced with space characters"
-										  + " (or deleted) if the file is saved.";
+						head = "Tab characters are detected in the 2da-file."
+							 + " They will be replaced with space characters"
+							 + " (or deleted) if the file is saved.";
 
 						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
 						{
@@ -1033,20 +1004,15 @@ namespace yata
 			// 3. test for ignorable errors ->
 			for (int i = LINE_VALTYPE; i != total; ++i)
 			{
-				if (i < lines.Length)
-					line = lines[i]; // do not Trim()
-				else
-					line = String.Empty;
+				if (i < lines.Length) line = lines[i];
+				else                  line = String.Empty;
 
 				switch (i)
 				{
-//					case LINE_HEADER: // line #0 tested above as fatal error
-//						break;
+					case LINE_HEADER: // TODO: autocorrect Tab in version-header
+						break;
 
-					case LINE_VALTYPE: // line #1
-					{
-						string head = null, copy = null;
-
+					case LINE_VALTYPE:
 						if (line.TrimStart().StartsWith("DEFAULT:", StringComparison.Ordinal))
 						{
 							_defaultval = line.Trim().Substring(8).TrimStart();
@@ -1096,7 +1062,7 @@ namespace yata
 							}
 
 							if ((CheckLoadField(ref _defaultval)
-									|| (Settings._strict && line != FileOutput.Default + _defaultval))
+									|| (line != FileOutput.Default + _defaultval && Settings._strict))
 								&& !ignoreErrors)
 							{
 								head = "The default value has been changed.";
@@ -1121,11 +1087,10 @@ namespace yata
 						}
 						else
 						{
-							_defaultval = String.Empty;
+							_defaultval = String.Empty; // NOTE: This is an autocorrecting error.
 
-							if (!ignoreErrors // test for blank 2nd line
-								&& Settings._strict
-								&& line.Length != 0)
+							if (!ignoreErrors
+								&& line.Length != 0 && Settings._strict)
 							{
 								head = "The 2nd line in the 2da contains garbage. It will be deleted if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1148,9 +1113,39 @@ namespace yata
 							}
 						}
 						break;
-					}
 
-					case LINE_COLHEADS: // line #2
+					case LINE_COLHEADS:
+						if (!ignoreErrors
+							&& Settings._strict													// line.Length shall not be 0
+							&&   line[0] != 32													// space
+							&& !(line[0] ==  9 && Settings._alignoutput == Settings.AoTabs))	// tab
+						{
+							// NOTE: This is an autocorrecting error and there was
+							// really no need for the Bioware spec. to indent the 3rd line.
+							// The fact it's the 3rd line alone is enough to signify
+							// that the line is the colhead fields.
+
+							head = "The 3rd line (colhead labels) is not indented properly. It will be corrected if the file is saved.";
+							copy = Fullpath + Environment.NewLine + Environment.NewLine
+								 + line;
+
+							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							{
+								case DialogResult.Cancel:
+									_init = false;
+									return LOADRESULT_FALSE;
+
+								case DialogResult.OK:
+									ignoreErrors = true;
+									goto case DialogResult.Retry;
+
+								case DialogResult.Retry:
+									loadresult = LOADRESULT_CHANGED;
+									break;
+							}
+						}
+
+
 						line = line.Trim();
 
 						if (!ignoreErrors)
@@ -1158,15 +1153,16 @@ namespace yata
 							foreach (char character in line)
 							{
 								// construct this condition in the positive and put a NOT in front of it
-								// to avoid intellectual pretzels ...
+								// to avoid logical pretzels ...
+
 								if (!(  character == 32 // space
-									|| (character == 9 && Settings._alignoutput == Settings.AoTabs) // tab
+									|| (character ==  9 && Settings._alignoutput == Settings.AoTabs) // tab
 									|| (Util.isPrintableAsciiNotDoublequote( character) && !Settings._strict)
 									|| (Util.isAsciiAlphanumericOrUnderscore(character) &&  Settings._strict)))
 								{
-									const string head = "Col headers should contain only alpha-numeric characters and underscores.";
-									string copy = Fullpath + Environment.NewLine + Environment.NewLine
-												+ "char \u2192 " + (character == 9 ? "TAB" : character.ToString());
+									head = "Detected a suspect character in the colhead labels ...";
+									copy = Fullpath + Environment.NewLine + Environment.NewLine
+										 + (character == 9 ? "\u2192" : character.ToString());
 
 									switch (ShowLoadWarning(head, copy))
 									{
@@ -1179,7 +1175,6 @@ namespace yata
 											break;
 									}
 								}
-
 								if (ignoreErrors) break;
 							}
 						}
@@ -1188,6 +1183,9 @@ namespace yata
 
 					default: // line #3+
 					{
+						// TODO: check whitespace against Alignoutput type
+						// flag Changed and show message to user if Strict.
+
 						line = line.Trim();
 
 						string[] fields = ParseTableRow(line);
@@ -1196,8 +1194,6 @@ namespace yata
 							if (!ignoreErrors) // test for well-formed, consistent ids
 							{
 								++id;
-
-								string head;
 
 								int result;
 								if (!Int32.TryParse(fields[0], out result))
@@ -1209,8 +1205,8 @@ namespace yata
 
 								if (head != null)
 								{
-									string copy = Fullpath + Environment.NewLine + Environment.NewLine
-												+ "id " + id + " \u2192 " + fields[0];
+									copy = Fullpath + Environment.NewLine + Environment.NewLine
+										 + "id " + id + " \u2192 " + fields[0];
 
 									switch (ShowLoadWarning(head, copy))
 									{
@@ -1229,9 +1225,9 @@ namespace yata
 									if (fields.Length != Fields.Length + 1)
 									{
 										head = "The 2da-file contains fields that do not align with its cols.";
-										string copy = Fullpath + Environment.NewLine + Environment.NewLine
-													+ "Colcount " + (Fields.Length + 1) + Environment.NewLine
-													+ "id " + id + " fields \u2192 " + fields.Length;
+										copy = Fullpath + Environment.NewLine + Environment.NewLine
+											 + "Colcount " + (Fields.Length + 1) + Environment.NewLine
+											 + "id " + id + " fields \u2192 " + fields.Length;
 
 										switch (ShowLoadWarning(head, copy))
 										{
@@ -1258,8 +1254,8 @@ namespace yata
 									if (quotes % 2 == 1)
 									{
 										head = "A row contains an odd quantity of double-quote characters.";
-										string copy = Fullpath + Environment.NewLine + Environment.NewLine
-													+ "id " + id;
+										copy = Fullpath + Environment.NewLine + Environment.NewLine
+											 + "id " + id;
 
 										switch (ShowLoadWarning(head, copy))
 										{
@@ -1288,7 +1284,12 @@ namespace yata
 			if (_rows.Count == 0) // add a row of stars so grid is not left blank ->
 			{
 				var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
-				for (int c = 0; c <= Fields.Length; ++c)
+
+				int c = 0;
+				if (Settings._autorder)
+					cells[c++] = "0";
+
+				for (; c <= Fields.Length; ++c)
 					cells[c] = gs.Stars;
 
 				_rows.Add(cells);
@@ -5001,21 +5002,21 @@ namespace yata
 		/// <summary>
 		/// Deletes a row from the table.
 		/// </summary>
-		/// <param name="rowid">row-id to delete</param>
+		/// <param name="idr">row-id to delete</param>
 		/// <param name="calibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
-		internal void Delete(int rowid, bool calibrate = true)
+		internal void Delete(int idr, bool calibrate = true)
 		{
 			if (calibrate)
 				DrawingControl.SuspendDrawing(this);
 
 			Row row;
 
-			Rows.Remove(Rows[rowid]);
+			Rows.Remove(Rows[idr]);
 			--RowCount;
 
-			for (int r = rowid; r != RowCount; ++r) // straighten out row._id and cell.y ->
+			for (int r = idr; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
 				--(row = Rows[r])._id;
 				for (int c = 0; c != ColCount; ++c)
@@ -5026,9 +5027,14 @@ namespace yata
 			{
 				++RowCount;
 
-				row = new Row(rowid, ColCount, Brushes.Created, this);
-				for (int c = 0; c != ColCount; ++c)
-					row[c] = new Cell(rowid, c, gs.Stars);
+				row = new Row(0, ColCount, Brushes.Created, this);
+
+				int c = 0;
+				if (Settings._autorder)
+					row[c++] = new Cell(0,0, "0");
+
+				for (; c != ColCount; ++c)
+					row[c] = new Cell(0, c, gs.Stars);
 
 				Rows.Add(row);
 
@@ -5045,8 +5051,8 @@ namespace yata
 			{
 				Calibrate();
 
-				if (rowid < RowCount)
-					EnsureDisplayedRow(rowid);
+				if (idr < RowCount)
+					EnsureDisplayedRow(idr);
 
 				DrawingControl.ResumeDrawing(this);
 			}
