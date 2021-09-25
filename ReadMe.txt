@@ -6,7 +6,7 @@ changed in the Settings.Cfg textfile.
 
 2021 september 24
 kevL's
-ver 4.3.2.0
+ver 4.5.0.0
 
 c# source .net3.5
 https://github.com/kevL/yata
