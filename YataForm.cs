@@ -886,6 +886,8 @@ namespace yata
 				}
 				else
 				{
+					YataGrid._init = false;
+
 					table.DisposeWatcher();
 					table.Dispose();
 				}
@@ -1428,6 +1430,8 @@ namespace yata
 					}
 					else
 					{
+						YataGrid._init = false;
+
 						Table.Changed = false; // bypass the close-tab warning.
 						fileclick_ClosePage(sender, e);
 					}

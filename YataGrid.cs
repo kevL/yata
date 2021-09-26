@@ -871,7 +871,7 @@ namespace yata
 
 			int loadresult = LOADRESULT_TRUE;
 
-			string[] lines = File.ReadAllLines(Fullpath); // default encoding is UTF-8
+			string[] lines = File.ReadAllLines(Fullpath); // default decoding is UTF-8
 
 			// 0. test character decoding ->
 			for (int i = 0; i != lines.Length; ++i)
@@ -902,11 +902,8 @@ namespace yata
 						{
 							lines = File.ReadAllLines(Fullpath, Encoding.GetEncoding(result));
 						}
-						else // silently fail.
-						{
-							_init = false;
-							return LOADRESULT_FALSE;
-						}
+						else
+							return LOADRESULT_FALSE; // silently fail.
 					}
 					break;
 				}
@@ -916,16 +913,14 @@ namespace yata
 			string line, head, copy;
 
 			// 1. test for fatal errors first (over the first 3 lines only) ->
-			if (lines.Length > LINE_HEADER) line = lines[LINE_HEADER];
+			if (lines.Length > LINE_HEADER) line = lines[LINE_HEADER].Trim();
 			else                            line = String.Empty;
 
-			if (line != gs.TwodaVer && (Settings._strict || line != "2DA\tV2.0")) // note: Errorout even if alignoutput=tabs
+			if (line != gs.TwodaVer && line != "2DA\tV2.0") // tab is not fatal - autocorrect it later
 			{
-				head = Infobox.SplitString("The 2da-file contains an incorrect version header."); //It will be replaced by the standard header if the file is saved.
-				copy = Fullpath + Environment.NewLine + Environment.NewLine;
-
-				if (line == "2DA\tV2.0") copy += "2DA\u2192V2.0"; // <- TODO autocorrect
-				else                     copy += gs.TwodaVer;
+				head = "The 2da-file contains an incorrect version header."; //It will be replaced by the standard header if the file is saved.
+				copy = Fullpath + Environment.NewLine + Environment.NewLine
+					 + line;
 
 				using (var ib = new Infobox(Infobox.Title_error,
 											head,
@@ -935,7 +930,6 @@ namespace yata
 				{
 					ib.ShowDialog(_f);
 				}
-				_init = false;
 				return LOADRESULT_FALSE;
 			}
 
@@ -957,7 +951,6 @@ namespace yata
 				{
 					ib.ShowDialog(_f);
 				}
-				_init = false;
 				return LOADRESULT_FALSE;
 			}
 
@@ -979,7 +972,6 @@ namespace yata
 						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
 						{
 							case DialogResult.Cancel:
-								_init = false;
 								return LOADRESULT_FALSE;
 
 							case DialogResult.OK:
@@ -1026,7 +1018,6 @@ namespace yata
 								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 								{
 									case DialogResult.Cancel:
-										_init = false;
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
@@ -1048,7 +1039,6 @@ namespace yata
 								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
-										_init = false;
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
@@ -1072,7 +1062,6 @@ namespace yata
 								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
-										_init = false;
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
@@ -1099,7 +1088,6 @@ namespace yata
 								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 								{
 									case DialogResult.Cancel:
-										_init = false;
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
@@ -1132,7 +1120,6 @@ namespace yata
 							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 							{
 								case DialogResult.Cancel:
-									_init = false;
 									return LOADRESULT_FALSE;
 
 								case DialogResult.OK:
@@ -1167,7 +1154,6 @@ namespace yata
 									switch (ShowLoadWarning(head, copy))
 									{
 										case DialogResult.Cancel:
-											_init = false;
 											return LOADRESULT_FALSE;
 
 										case DialogResult.OK:
@@ -1211,7 +1197,6 @@ namespace yata
 									switch (ShowLoadWarning(head, copy))
 									{
 										case DialogResult.Cancel:
-											_init = false;
 											return LOADRESULT_FALSE;
 
 										case DialogResult.OK:
@@ -1232,7 +1217,6 @@ namespace yata
 										switch (ShowLoadWarning(head, copy))
 										{
 											case DialogResult.Cancel:
-												_init = false;
 												return LOADRESULT_FALSE;
 
 											case DialogResult.OK:
@@ -1260,7 +1244,6 @@ namespace yata
 										switch (ShowLoadWarning(head, copy))
 										{
 											case DialogResult.Cancel:
-												_init = false;
 												return LOADRESULT_FALSE;
 
 											case DialogResult.OK:
