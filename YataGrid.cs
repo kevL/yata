@@ -939,12 +939,10 @@ namespace yata
 
 			if (line.Length == 0)
 			{
-				head = Infobox.SplitString("The 2da-file does not have any fields. Yata"
-										 + " requires that a file has at least one"
-										 + " indented colhead label on its 3rd line.");
+				head = "The 2da-file does not have any fields. Yata wants a file to have at least one colhead label on its 3rd line.";
 
 				using (var ib = new Infobox(Infobox.Title_error,
-											head,
+											Infobox.SplitString(head),
 											Fullpath,
 											InfoboxType.Error,
 											InfoboxButtons.Abort))
@@ -955,7 +953,9 @@ namespace yata
 			}
 
 
-			bool ignoreErrors = false;
+
+			bool quelch = false; // bypass warnings and try to load the file directly.
+
 
 			// 2. if user doesn't have output set to Tabs issue a warning if a
 			//    Tab is found (only if Strict + ignore the Defaultval line) ->
@@ -965,9 +965,7 @@ namespace yata
 				{
 					if (i != LINE_VALTYPE && lines[i].Contains("\t"))
 					{
-						head = "Tab characters are detected in the 2da-file."
-							 + " They will be replaced with space characters"
-							 + " (or deleted) if the file is saved.";
+						head = "Tab characters are detected in the 2da-file. They will be replaced with space characters (or deleted where redundant) if the file is saved.";
 
 						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
 						{
@@ -975,7 +973,7 @@ namespace yata
 								return LOADRESULT_FALSE;
 
 							case DialogResult.OK:
-								ignoreErrors = true;
+								quelch = true;
 								goto case DialogResult.Retry;
 
 							case DialogResult.Retry:
@@ -1021,7 +1019,7 @@ namespace yata
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
-										ignoreErrors = true;
+										quelch = true;
 										goto case DialogResult.Retry;
 	
 									case DialogResult.Retry:
@@ -1030,7 +1028,7 @@ namespace yata
 								}
 							}
 
-							if (!ignoreErrors && _defaultval.Length == 0)
+							if (!quelch && _defaultval.Length == 0)
 							{
 								head = "The default value is blank. It will be deleted if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1042,7 +1040,7 @@ namespace yata
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
-										ignoreErrors = true;
+										quelch = true;
 										goto case DialogResult.Retry;
 	
 									case DialogResult.Retry:
@@ -1053,7 +1051,7 @@ namespace yata
 
 							if ((CheckLoadField(ref _defaultval)
 									|| (line != FileOutput.Default + _defaultval && Settings._strict))
-								&& !ignoreErrors)
+								&& !quelch)
 							{
 								head = "The default value has been changed.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1065,7 +1063,7 @@ namespace yata
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
-										ignoreErrors = true;
+										quelch = true;
 										goto case DialogResult.Retry;
 	
 									case DialogResult.Retry:
@@ -1078,7 +1076,7 @@ namespace yata
 						{
 							_defaultval = String.Empty; // NOTE: This is an autocorrecting error.
 
-							if (!ignoreErrors
+							if (!quelch
 								&& line.Length != 0 && Settings._strict)
 							{
 								head = "The 2nd line in the 2da contains garbage. It will be deleted if the file is saved.";
@@ -1091,7 +1089,7 @@ namespace yata
 										return LOADRESULT_FALSE;
 	
 									case DialogResult.OK:
-										ignoreErrors = true;
+										quelch = true;
 										goto case DialogResult.Retry;
 	
 									case DialogResult.Retry:
@@ -1103,7 +1101,7 @@ namespace yata
 						break;
 
 					case LINE_COLHEADS:
-						if (!ignoreErrors
+						if (!quelch
 							&& Settings._strict													// line.Length shall not be 0
 							&&   line[0] != 32													// space
 							&& !(line[0] ==  9 && Settings._alignoutput == Settings.AoTabs))	// tab
@@ -1123,7 +1121,7 @@ namespace yata
 									return LOADRESULT_FALSE;
 
 								case DialogResult.OK:
-									ignoreErrors = true;
+									quelch = true;
 									goto case DialogResult.Retry;
 
 								case DialogResult.Retry:
@@ -1135,7 +1133,7 @@ namespace yata
 
 						line = line.Trim();
 
-						if (!ignoreErrors)
+						if (!quelch)
 						{
 							foreach (char character in line)
 							{
@@ -1157,11 +1155,11 @@ namespace yata
 											return LOADRESULT_FALSE;
 
 										case DialogResult.OK:
-											ignoreErrors = true;
+											quelch = true;
 											break;
 									}
 								}
-								if (ignoreErrors) break;
+								if (quelch) break;
 							}
 						}
 						Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
@@ -1177,7 +1175,7 @@ namespace yata
 						string[] fields = ParseTableRow(line);
 						if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
 						{
-							if (!ignoreErrors) // test for well-formed, consistent ids
+							if (!quelch) // test for well-formed, consistent ids
 							{
 								++id;
 
@@ -1200,12 +1198,12 @@ namespace yata
 											return LOADRESULT_FALSE;
 
 										case DialogResult.OK:
-											ignoreErrors = true;
+											quelch = true;
 											break;
 									}
 								}
 
-								if (!ignoreErrors) // test for matching fields under cols
+								if (!quelch) // test for matching fields under cols
 								{
 									if (fields.Length != Fields.Length + 1)
 									{
@@ -1220,13 +1218,13 @@ namespace yata
 												return LOADRESULT_FALSE;
 
 											case DialogResult.OK:
-												ignoreErrors = true;
+												quelch = true;
 												break;
 										}
 									}
 								}
 
-								if (!ignoreErrors) // test for an odd quantity of double-quote characters
+								if (!quelch) // test for an odd quantity of double-quote characters
 								{
 									int quotes = 0;
 									foreach (char character in line)
@@ -1247,7 +1245,7 @@ namespace yata
 												return LOADRESULT_FALSE;
 
 											case DialogResult.OK:
-												ignoreErrors = true;
+												quelch = true;
 												break;
 										}
 									}
