@@ -1175,6 +1175,33 @@ namespace yata
 						break;
 
 					case LINE_COLABEL:
+						tr = line.TrimEnd();
+
+						if (!quelch && Settings._strict && line != tr)
+						{
+							head = "The 3nd line has extraneous whitespace. It will be corrected if the file is saved.";
+							copy = Fullpath + Environment.NewLine + Environment.NewLine
+								 + line;
+
+							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							{
+								case DialogResult.Cancel:
+									return LOADRESULT_FALSE;
+
+								case DialogResult.OK:
+									quelch = true;
+									goto case DialogResult.Retry;
+
+								case DialogResult.Retry:
+									loadresult = LOADRESULT_CHANGED;
+									break;
+							}
+						}
+
+						// TODO: check for redundant whitespace at the start of the line also
+						// flag Changed if found ...
+
+
 						if (!quelch
 							&& Settings._strict													// line.Length shall not be 0
 							&&   line[0] != 32													// space
@@ -1204,12 +1231,11 @@ namespace yata
 							}
 						}
 
-
-						line = line.Trim();
+						tr = tr.TrimStart();
 
 						if (!quelch)
 						{
-							foreach (char character in line)
+							foreach (char character in tr)
 							{
 								// construct this condition in the positive and put a NOT in front of it
 								// to avoid logical pretzels ...
@@ -1236,7 +1262,7 @@ namespace yata
 								if (quelch) break;
 							}
 						}
-						Fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+						Fields = tr.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 						break;
 
 					default: // line #3+
