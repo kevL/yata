@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 25
+2021 september 26
 kevL's
 ver 4.5.0.0
 
@@ -77,8 +77,12 @@ Edit
                       that try to access an invalid row or col should return
                       failure and use this value as a default string, or convert
                       it to a default int or float. This is rarely used if ever;
-                      apps typically don't try to access an invalid cell ... or
-                      if they do they specify their own default value)
+                      2da-readers typically don't try to access an invalid cell
+                      ... or if they do they assign their own default value).
+                      Entering a blank string will clear the Default; enter ""
+                      (with quotes) to specify that a blank string should be the
+                      Default value
+- Clear Default     : deletes a 2da's Default value if it exists
 
 
 Cells
