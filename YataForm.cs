@@ -981,6 +981,7 @@ namespace yata
 				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 				it_Defaultval     .Enabled = true;
+				it_Defaultclear   .Enabled = Table._defaultval != String.Empty;
 
 				EnableCelleditOperations();
 				EnableRoweditOperations();
@@ -1037,6 +1038,7 @@ namespace yata
 				it_Searchnext     .Enabled =
 				it_GotoLoadchanged.Enabled =
 				it_Defaultval     .Enabled =
+				it_Defaultclear   .Enabled =
 
 				it_DeselectCell   .Enabled =
 				it_CutCell        .Enabled =
@@ -2302,12 +2304,32 @@ namespace yata
 			InputDialogColhead._textdefaultval = Table._defaultval;
 			using (var idc = new InputDialogColhead(this))
 			{
-				if (idc.ShowDialog(this) == DialogResult.OK)
+				if (idc.ShowDialog(this) == DialogResult.OK
+					&& InputDialogColhead._textdefaultval != Table._defaultval)
 				{
 					Table._defaultval = InputDialogColhead._textdefaultval;
 					if (!Table.Changed) Table.Changed = true;
+
+					it_Defaultclear.Enabled = Table._defaultval != String.Empty;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Handles it-click to clear the 2da-file's defaultval.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Defaultclear"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Clear Default</item>
+		/// </list></remarks>
+		void editclick_Defaultclear(object sender, EventArgs e)
+		{
+			Table._defaultval = String.Empty;
+			if (!Table.Changed) Table.Changed = true;
+
+			it_Defaultclear.Enabled = false;
 		}
 		#endregion Handlers (edit)
 
@@ -3081,7 +3103,7 @@ namespace yata
 			using (var idc = new InputDialogColhead(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialogColhead._text.Length != 0)
+					&& InputDialogColhead._textcolabel.Length != 0)
 				{
 					Obfuscate();
 					DrawingControl.SuspendDrawing(Table);
@@ -3174,12 +3196,12 @@ namespace yata
 			int selc = Table.getSelectedCol();
 
 			string head = Table.Fields[selc - 1];
-			InputDialogColhead._text = head;
+			InputDialogColhead._textcolabel = head;
 			using (var idc = new InputDialogColhead(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialogColhead._text.Length != 0
-					&& InputDialogColhead._text != head)
+					&& InputDialogColhead._textcolabel.Length != 0
+					&& InputDialogColhead._textcolabel != head)
 				{
 					Table.RelabelCol(selc);
 				}

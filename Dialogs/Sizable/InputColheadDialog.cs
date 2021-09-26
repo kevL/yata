@@ -8,11 +8,12 @@ namespace yata
 	/// <summary>
 	/// A dialog for text entry.
 	/// </summary>
+	/// <remarks>Used for default-value as well as colhead labels.</remarks>
 	sealed partial class InputDialogColhead
 		: YataDialog
 	{
 		#region Fields (static)
-		internal static string _text           = String.Empty;
+		internal static string _textcolabel    = String.Empty;
 		internal static string _textdefaultval = String.Empty;
 		#endregion Fields (static)
 
@@ -43,7 +44,7 @@ namespace yata
 			if (_selc != -2)
 			{
 				Text = " yata - Colhead text";
-				tb_Input.Text = _text;
+				tb_Input.Text = _textcolabel;
 			}
 			else
 			{
@@ -94,31 +95,28 @@ namespace yata
 		{
 			if (!_bypasstextchanged)
 			{
-				if (tb_Input.Text.Length != 0)
+				if (tb_Input.Text.Length != 0 && _selc != -2) // colhead
 				{
-					if (_selc != -2) // colhead
+					char character;
+					for (int i = 0; i != tb_Input.Text.Length; ++i)
 					{
-						char character;
-						for (int i = 0; i != tb_Input.Text.Length; ++i)
+						character = tb_Input.Text[i];
+						if (character == 34 // double-quote
+							|| (    (Settings._strict && !Util.isAsciiAlphanumericOrUnderscore(character))
+								|| (!Settings._strict && !Util.isPrintableAsciiNotDoublequote( character))))
 						{
-							character = tb_Input.Text[i];
-							if (character == 34 // double-quote
-								|| (    (Settings._strict && !Util.isAsciiAlphanumericOrUnderscore(character))
-									|| (!Settings._strict && !Util.isPrintableAsciiNotDoublequote( character))))
-							{
-								_bypasstextchanged = true;
-								tb_Input.Text = _text; // recurse
-								_bypasstextchanged = false;
+							_bypasstextchanged = true;
+							tb_Input.Text = _textcolabel; // recurse
+							_bypasstextchanged = false;
 
-								tb_Input.SelectionStart = tb_Input.Text.Length;
-								return;
-							}
+							tb_Input.SelectionStart = tb_Input.Text.Length;
+							return;
 						}
 					}
 				}
 
 				if (_selc != -2)
-					_text = tb_Input.Text;
+					_textcolabel = tb_Input.Text;
 				else
 					_textdefaultval = tb_Input.Text;
 			}
@@ -157,7 +155,8 @@ namespace yata
 			}
 			else // defaultval
 			{
-				if (YataGrid.CheckTextEdit(tb_Input))
+				string val = tb_Input.Text;
+				if (!SpellcheckDefaultval(ref val))
 				{
 					using (var ib = new Infobox(Infobox.Title_warni,
 												"The text has changed.",
@@ -166,10 +165,59 @@ namespace yata
 					{
 						ib.ShowDialog(this);
 					}
+					tb_Input.Text = val;
 					_cancel = true;
 				}
 			}
 		}
 		#endregion Handlers
+
+
+		#region Methods
+		/// <summary>
+		/// Ensures that a Default value is okay.
+		/// </summary>
+		/// <param name="val">ref to the default-value to check</param>
+		/// <param name="forceQuotes"><c>true</c> to assign two double-quotes if
+		/// the <c>string</c> is blanked (used by the load routine)</param>
+		/// <returns><c>true</c> if <paramref name="val"/> is correct as-is</returns>
+		internal static bool SpellcheckDefaultval(ref string val, bool forceQuotes = false)
+		{
+			string val0 = val.Trim();
+
+			if (val0 != "\"\"")
+			{
+				if (val0.StartsWith("\"", StringComparison.Ordinal))
+					val0 = val0.Substring(1);
+
+				if (val0.EndsWith("\"", StringComparison.Ordinal))
+					val0 = val0.Substring(0, val0.Length - 1);
+
+				val0 = val0.Replace("\"", String.Empty);
+			}
+
+			if (val0.Length != 0)
+			{
+				for (int c = 0; c != val0.Length; ++c)
+				if (Char.IsWhiteSpace(val0[c]))
+				{
+					val0 = "\"" + val0 + "\"";
+					break;
+				}
+			}
+			else if (forceQuotes)
+			{
+				val0 = "\"\"";
+			}
+			else
+				val0 = String.Empty;
+
+
+			if (val0 == val) return true;
+
+			val = val0;
+			return false;
+		}
+		#endregion Methods
 	}
 }

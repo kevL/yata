@@ -41,6 +41,7 @@ namespace yata
 		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
 		ToolStripMenuItem it_Defaultval;
+		ToolStripMenuItem it_Defaultclear;
 
 		ToolStripMenuItem it_MenuCells;
 		ToolStripMenuItem it_DeselectCell;
@@ -258,6 +259,7 @@ namespace yata
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_37 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Defaultval = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Defaultclear = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeselectCell = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_30 = new System.Windows.Forms.ToolStripSeparator();
@@ -581,7 +583,8 @@ namespace yata
 			this.it_Goto,
 			this.it_GotoLoadchanged,
 			this.separator_37,
-			this.it_Defaultval});
+			this.it_Defaultval,
+			this.it_Defaultclear});
 			this.it_MenuEdit.Name = "it_MenuEdit";
 			this.it_MenuEdit.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuEdit.Size = new System.Drawing.Size(36, 20);
@@ -676,6 +679,14 @@ namespace yata
 			this.it_Defaultval.Size = new System.Drawing.Size(222, 22);
 			this.it_Defaultval.Text = "Default &value ...";
 			this.it_Defaultval.Click += new System.EventHandler(this.editclick_Defaultval);
+			// 
+			// it_Defaultclear
+			// 
+			this.it_Defaultclear.Enabled = false;
+			this.it_Defaultclear.Name = "it_Defaultclear";
+			this.it_Defaultclear.Size = new System.Drawing.Size(222, 22);
+			this.it_Defaultclear.Text = "&Clear Default";
+			this.it_Defaultclear.Click += new System.EventHandler(this.editclick_Defaultclear);
 			// 
 			// it_MenuCells
 			// 

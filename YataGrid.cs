@@ -813,9 +813,9 @@ namespace yata
 
 
 		#region Load
-		const int LINE_HEADER   = 0;
-		const int LINE_VALTYPE  = 1;
-		const int LINE_COLHEADS = 2;
+		const int LINE_VERSION = 0;
+		const int LINE_DEFAULT = 1;
+		const int LINE_COLABEL = 2;
 
 		internal const int LOADRESULT_FALSE   = 0;
 		internal const int LOADRESULT_TRUE    = 1;
@@ -916,8 +916,8 @@ namespace yata
 
 			// 1. test for fatal errors ->
 
-			if (lines.Length > LINE_HEADER) line = lines[LINE_HEADER].Trim();
-			else                            line = String.Empty;
+			if (lines.Length > LINE_VERSION) line = lines[LINE_VERSION].Trim();
+			else                             line = String.Empty;
 
 			if (line != gs.TwodaVer && line != "2DA\tV2.0") // tab is not fatal - autocorrect it later
 			{
@@ -937,8 +937,8 @@ namespace yata
 			}
 
 
-			if (lines.Length > LINE_COLHEADS) line = lines[LINE_COLHEADS].Trim();
-			else                              line = String.Empty;
+			if (lines.Length > LINE_COLABEL) line = lines[LINE_COLABEL].Trim();
+			else                             line = String.Empty;
 
 			if (line.Length == 0)
 			{
@@ -966,7 +966,7 @@ namespace yata
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
-					if (i != LINE_VALTYPE && lines[i].Contains("\t"))
+					if (i != LINE_DEFAULT && lines[i].Contains("\t"))
 					{
 						head = "Tab characters are detected in the 2da-file. They will be replaced with space characters (or deleted where redundant) if the file is saved.";
 
@@ -994,18 +994,18 @@ namespace yata
 			int id = -1;
 
 			int total = lines.Length;
-			if (total < LINE_COLHEADS + 1) total = LINE_COLHEADS + 1; // scan at least 3 'lines' in the file
+			if (total < LINE_COLABEL + 1) total = LINE_COLABEL + 1; // scan at least 3 'lines' in the file
 
 			// 3. test for ignorable/recoverable errors ->
 
-			for (int i = LINE_HEADER; i != total; ++i)
+			for (int i = LINE_VERSION; i != total; ++i)
 			{
 				if (i < lines.Length) line = lines[i];
 				else                  line = String.Empty;
 
 				switch (i)
 				{
-					case LINE_HEADER:
+					case LINE_VERSION:
 						if (!quelch && Settings._strict)
 						{
 							if (line != (tr = line.Trim()))
@@ -1073,7 +1073,7 @@ namespace yata
 						}
 						break;
 
-					case LINE_VALTYPE:
+					case LINE_DEFAULT:
 						tr = line.Trim();
 
 						if (!quelch && Settings._strict && line != tr)
@@ -1123,26 +1123,7 @@ namespace yata
 							}
 							else
 							{
-								if (_defaultval.StartsWith("\"", StringComparison.Ordinal))
-									_defaultval = _defaultval.Substring(1);
-
-								if (_defaultval.EndsWith("\"", StringComparison.Ordinal))
-									_defaultval = _defaultval.Substring(0, _defaultval.Length - 1);
-
-								_defaultval = _defaultval.Replace("\"", String.Empty);
-
-								if (_defaultval.Length != 0)
-								{
-									for (int c = 0; c != _defaultval.Length; ++c)
-									if (Char.IsWhiteSpace(_defaultval[c]))
-									{
-										_defaultval = "\"" + _defaultval + "\"";
-										break;
-									}
-								}
-								else
-									_defaultval = "\"\"";
-
+								InputDialogColhead.SpellcheckDefaultval(ref _defaultval, true);
 
 								if (!quelch && Settings._strict && tr != FileOutput.Default + _defaultval)
 								{
@@ -1168,9 +1149,9 @@ namespace yata
 						}
 						else
 						{
-							_defaultval = String.Empty; // NOTE: This is an autocorrecting error.
+							_defaultval = String.Empty;
 
-							if (!quelch && Settings._strict && line.Length != 0)
+							if (!quelch && Settings._strict && line.Length != 0) // NOTE: This is an autocorrecting error.
 							{
 								head = "The 2nd line in the 2da contains garbage. It will be cleared if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1193,7 +1174,7 @@ namespace yata
 						}
 						break;
 
-					case LINE_COLHEADS:
+					case LINE_COLABEL:
 						if (!quelch
 							&& Settings._strict													// line.Length shall not be 0
 							&&   line[0] != 32													// space
@@ -1616,10 +1597,10 @@ namespace yata
 				}
 				else if (i == selc)
 				{
-					fields[i] = InputDialogColhead._text;
+					fields[i] = InputDialogColhead._textcolabel;
 
 					var col = new Col();
-					col.text = InputDialogColhead._text;
+					col.text = InputDialogColhead._textcolabel;
 					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
 					col.width(col._widthtext + _padHori * 2 + _padHoriSort);
 					col.selected = true;
@@ -1724,8 +1705,8 @@ namespace yata
 		/// <param name="selc"></param>
 		internal void RelabelCol(int selc)
 		{
-			Fields[selc - 1] = InputDialogColhead._text; // the Field-count is 1 less than the col-count
-			Cols[selc]._widthtext = YataGraphics.MeasureWidth((Cols[selc].text = InputDialogColhead._text),
+			Fields[selc - 1] = InputDialogColhead._textcolabel; // the Field-count is 1 less than the col-count
+			Cols[selc]._widthtext = YataGraphics.MeasureWidth((Cols[selc].text = InputDialogColhead._textcolabel),
 															  _f.FontAccent);
 
 			Colwidth(selc);
