@@ -271,6 +271,25 @@ namespace yata
 		{
 			e.Graphics.DrawLine(Pens.Black, 0,0, 0, Height - 1);
 		}
+
+
+		/// <summary>
+		/// Copies the text of <c><see cref="rt_Copyable"/></c> to the Windows
+		/// Clipboard iff <c>rt_Copyable</c> is not focused.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyData == (Keys.Control | Keys.C)
+				&& !rt_Copyable.Focused)
+			{
+				e.SuppressKeyPress = true;
+				ClipboardService.SetText(rt_Copyable.Text);
+			}
+			else
+				base.OnKeyDown(e);
+		}
 		#endregion Handlers (override)
 
 

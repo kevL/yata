@@ -129,6 +129,7 @@
       <DependentUpon>TextInputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="Statics\ClipboardService.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
     <Compile Include="Statics\DrawingControl.cs" />

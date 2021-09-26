@@ -18,8 +18,6 @@ namespace yata
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
 
-			click_Get(null, EventArgs.Empty);
-
 			rtb_Clip.Select();
 			Show(_f); // Yata is owner.
 		}
@@ -50,6 +48,16 @@ namespace yata
 				Close();
 			}
 		}
+
+		/// <summary>
+		/// Gets the current Windows Clipboard text each time this
+		/// <c>ClipboardEditor's</c> <c>Activated</c> event fires.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnActivated(EventArgs e)
+		{
+			rtb_Clip.Text = ClipboardService.GetText().Trim();
+		}
 		#endregion Handlers (override)
 
 
@@ -61,14 +69,12 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="btn_Get"/></c></item>
 		/// <item><c><see cref="YataForm"/>.it_ClipExport</c></item>
-		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Invoked by
 		/// <list type="bullet">
 		/// <item>Get button</item>
 		/// <item><c><see cref="YataForm"/>.clipclick_ExportCopy()</c></item>
-		/// <item>cTor</item>
 		/// </list></remarks>
 		internal void click_Get(object sender, EventArgs e)
 		{
@@ -86,58 +92,4 @@ namespace yata
 		}
 		#endregion Handlers
 	}
-
-
-	#region Clipboard
-	/// <summary>
-	/// Gets/Sets text per the Windows Clipboard.
-	/// </summary>
-	/// <remarks>https://stackoverflow.com/questions/39832057/using-windows-clipboard#answer-39833879</remarks>
-	static class ClipboardService
-	{
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		static extern IntPtr GetOpenClipboardWindow();
-
-		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-		static extern bool OpenClipboard(IntPtr hWndNewOwner);
-
-		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-		static extern bool CloseClipboard();
-
-		/// <summary>
-		/// Sets a <c>string</c> to the Windows Clipboard after ensuring that
-		/// the Clipboard's process has been released by other apps.
-		/// </summary>
-		/// <param name="clip">the text to set</param>
-		internal static void SetText(string clip)
-		{
-			if (GetOpenClipboardWindow() != IntPtr.Zero)
-			{
-				OpenClipboard(IntPtr.Zero);
-				CloseClipboard();
-			}
-
-			if (!String.IsNullOrEmpty(clip))
-				Clipboard.SetText(clip);
-			else
-				Clipboard.Clear();
-		}
-
-		/// <summary>
-		/// Gets a <c>string</c> from the Windows Clipboard after ensuring that
-		/// the Clipboard's process has been released by other apps.
-		/// </summary>
-		/// <returns>the Clipboard's text</returns>
-		internal static string GetText()
-		{
-			if (GetOpenClipboardWindow() != IntPtr.Zero)
-			{
-				OpenClipboard(IntPtr.Zero);
-				CloseClipboard();
-			}
-
-			return Clipboard.GetText(TextDataFormat.Text);
-		}
-	}
-	#endregion Clipboard
 }
