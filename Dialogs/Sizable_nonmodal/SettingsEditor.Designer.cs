@@ -31,7 +31,7 @@ namespace yata
 			this.rtb_Settings.Location = new System.Drawing.Point(0, 0);
 			this.rtb_Settings.Margin = new System.Windows.Forms.Padding(0);
 			this.rtb_Settings.Name = "rtb_Settings";
-			this.rtb_Settings.Size = new System.Drawing.Size(592, 419);
+			this.rtb_Settings.Size = new System.Drawing.Size(592, 423);
 			this.rtb_Settings.TabIndex = 0;
 			this.rtb_Settings.Text = "";
 			this.rtb_Settings.WordWrap = false;
@@ -42,7 +42,7 @@ namespace yata
 			this.pa_Buttons.Controls.Add(this.bu_Cancel);
 			this.pa_Buttons.Controls.Add(this.bu_Okay);
 			this.pa_Buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.pa_Buttons.Location = new System.Drawing.Point(0, 419);
+			this.pa_Buttons.Location = new System.Drawing.Point(0, 423);
 			this.pa_Buttons.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Buttons.Name = "pa_Buttons";
 			this.pa_Buttons.Size = new System.Drawing.Size(592, 35);
@@ -90,7 +90,7 @@ namespace yata
 			// SettingsEditor
 			// 
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(592, 454);
+			this.ClientSize = new System.Drawing.Size(592, 458);
 			this.Controls.Add(this.rtb_Settings);
 			this.Controls.Add(this.pa_Buttons);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
