@@ -934,7 +934,7 @@ namespace yata
 			}
 
 
-			if (lines.Length > LINE_COLHEADS) line = lines[LINE_COLHEADS];
+			if (lines.Length > LINE_COLHEADS) line = lines[LINE_COLHEADS].Trim();
 			else                              line = String.Empty;
 
 			if (line.Length == 0)
