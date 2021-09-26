@@ -873,7 +873,9 @@ namespace yata
 
 			string[] lines = File.ReadAllLines(Fullpath); // default decoding is UTF-8
 
+
 			// 0. test character decoding ->
+
 			for (int i = 0; i != lines.Length; ++i)
 			{
 				if (lines[i].Contains("�"))
@@ -912,13 +914,14 @@ namespace yata
 
 			string line, head, copy;
 
-			// 1. test for fatal errors first (over the first 3 lines only) ->
+			// 1. test for fatal errors ->
+
 			if (lines.Length > LINE_HEADER) line = lines[LINE_HEADER].Trim();
 			else                            line = String.Empty;
 
 			if (line != gs.TwodaVer && line != "2DA\tV2.0") // tab is not fatal - autocorrect it later
 			{
-				head = "The 2da-file contains an incorrect version header."; //It will be replaced by the standard header if the file is saved.
+				head = "The 2da-file contains an incorrect version header on its 1st line.";
 				copy = Fullpath + Environment.NewLine + Environment.NewLine
 					 + line;
 
@@ -957,9 +960,9 @@ namespace yata
 			bool quelch = false; // bypass warnings and try to load the file directly.
 
 
-			// 2. if user doesn't have output set to Tabs issue a warning if a
-			//    Tab is found (only if Strict + ignore the Defaultval line) ->
-			if (Settings._alignoutput != Settings.AoTabs && Settings._strict)
+			// 2. test for Tabs ->
+
+			if (Settings._strict && Settings._alignoutput != Settings.AoTabs)
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
@@ -986,30 +989,28 @@ namespace yata
 			}
 
 
+			string tr;
+
 			int id = -1;
 
 			int total = lines.Length;
 			if (total < LINE_COLHEADS + 1) total = LINE_COLHEADS + 1; // scan at least 3 'lines' in the file
 
-			// 3. test for ignorable errors ->
-			for (int i = LINE_VALTYPE; i != total; ++i)
+			// 3. test for ignorable/recoverable errors ->
+
+			for (int i = LINE_HEADER; i != total; ++i)
 			{
 				if (i < lines.Length) line = lines[i];
 				else                  line = String.Empty;
 
 				switch (i)
 				{
-					case LINE_HEADER: // TODO: autocorrect Tab in version-header
-						break;
-
-					case LINE_VALTYPE:
-						if (line.TrimStart().StartsWith("DEFAULT:", StringComparison.Ordinal))
+					case LINE_HEADER:
+						if (!quelch && Settings._strict)
 						{
-							_defaultval = line.Trim().Substring(8).TrimStart();
-
-							if (line.TrimStart() != line)
+							if (line != (tr = line.Trim()))
 							{
-								head = "The Default value should not be indented. It will be corrected if the file is saved.";
+								head = "The 1st line has extraneous whitespace. It will be corrected if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line;
 
@@ -1017,58 +1018,151 @@ namespace yata
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
-	
+
 									case DialogResult.OK:
 										quelch = true;
 										goto case DialogResult.Retry;
-	
-									case DialogResult.Retry:
-										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
-										break;
-								}
-							}
 
-							if (!quelch && _defaultval.Length == 0)
-							{
-								head = "The default value is blank. It will be deleted if the file is saved.";
-								copy = Fullpath + Environment.NewLine + Environment.NewLine
-									 + line;
-
-								switch (ShowLoadWarning(head, copy))
-								{
-									case DialogResult.Cancel:
-										return LOADRESULT_FALSE;
-	
-									case DialogResult.OK:
-										quelch = true;
-										goto case DialogResult.Retry;
-	
-									case DialogResult.Retry:
-										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
-										break;
-								}
-							}
-
-							if ((CheckLoadField(ref _defaultval)
-									|| (line != FileOutput.Default + _defaultval && Settings._strict))
-								&& !quelch)
-							{
-								head = "The default value has been changed.";
-								copy = Fullpath + Environment.NewLine + Environment.NewLine
-									 + _defaultval;
-
-								switch (ShowLoadWarning(head, copy))
-								{
-									case DialogResult.Cancel:
-										return LOADRESULT_FALSE;
-	
-									case DialogResult.OK:
-										quelch = true;
-										goto case DialogResult.Retry;
-	
 									case DialogResult.Retry:
 										loadresult = LOADRESULT_CHANGED;
 										break;
+								}
+							}
+
+							if (!quelch && tr.Contains("\t"))
+							{
+								head = "The version header on the 1st line contains a tab-character. It will be corrected if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + tr;
+
+								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								{
+									case DialogResult.Cancel:
+										return LOADRESULT_FALSE;
+
+									case DialogResult.OK:
+										quelch = true;
+										goto case DialogResult.Retry;
+
+									case DialogResult.Retry:
+										loadresult = LOADRESULT_CHANGED;
+										break;
+								}
+							}
+
+//							if (!quelch && tr.Contains("  ")) // don't bother. This is a fatal error above.
+//							{
+//								head = "The header on the first line contains redundant spaces. It will be corrected if the file is saved.";
+//								copy = Fullpath + Environment.NewLine + Environment.NewLine
+//									 + tr;
+//
+//								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+//								{
+//									case DialogResult.Cancel:
+//										return LOADRESULT_FALSE;
+//
+//									case DialogResult.OK:
+//										quelch = true;
+//										goto case DialogResult.Retry;
+//
+//									case DialogResult.Retry:
+//										loadresult = LOADRESULT_CHANGED;
+//										break;
+//								}
+//							}
+						}
+						break;
+
+					case LINE_VALTYPE:
+						tr = line.Trim();
+
+						if (!quelch && Settings._strict && line != tr)
+						{
+							head = "The 2nd line has extraneous whitespace. It will be corrected if the file is saved.";
+							copy = Fullpath + Environment.NewLine + Environment.NewLine
+								 + line;
+
+							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							{
+								case DialogResult.Cancel:
+									return LOADRESULT_FALSE;
+
+								case DialogResult.OK:
+									quelch = true;
+									goto case DialogResult.Retry;
+
+								case DialogResult.Retry:
+									loadresult = LOADRESULT_CHANGED;
+									break;
+							}
+						}
+
+						if (tr.StartsWith("DEFAULT:", StringComparison.Ordinal)) // do not 'strict' this feedback ->
+						{
+							_defaultval = tr.Substring(8).TrimStart();
+
+							if (!quelch && _defaultval.Length == 0)
+							{
+								head = "The Default is blank. The 2nd line will be cleared if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + tr;
+
+								switch (ShowLoadWarning(head, copy))
+								{
+									case DialogResult.Cancel:
+										return LOADRESULT_FALSE;
+
+									case DialogResult.OK:
+										quelch = true;
+										goto case DialogResult.Retry;
+
+									case DialogResult.Retry:
+										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
+										break;
+								}
+							}
+							else
+							{
+								if (_defaultval.StartsWith("\"", StringComparison.Ordinal))
+									_defaultval = _defaultval.Substring(1);
+
+								if (_defaultval.EndsWith("\"", StringComparison.Ordinal))
+									_defaultval = _defaultval.Substring(0, _defaultval.Length - 1);
+
+								_defaultval = _defaultval.Replace("\"", String.Empty);
+
+								if (_defaultval.Length != 0)
+								{
+									for (int c = 0; c != _defaultval.Length; ++c)
+									if (Char.IsWhiteSpace(_defaultval[c]))
+									{
+										_defaultval = "\"" + _defaultval + "\"";
+										break;
+									}
+								}
+								else
+									_defaultval = "\"\"";
+
+
+								if (!quelch && Settings._strict && tr != FileOutput.Default + _defaultval)
+								{
+									head = "The Default on the 2nd line has been changed.";
+									copy = Fullpath + Environment.NewLine + Environment.NewLine
+										 + FileOutput.Default + _defaultval;
+
+									switch (ShowLoadWarning(head, copy))
+									{
+										case DialogResult.Cancel:
+											return LOADRESULT_FALSE;
+
+										case DialogResult.OK:
+											quelch = true;
+											goto case DialogResult.Retry;
+
+										case DialogResult.Retry:
+											loadresult = LOADRESULT_CHANGED;
+											break;
+									}
 								}
 							}
 						}
@@ -1076,22 +1170,21 @@ namespace yata
 						{
 							_defaultval = String.Empty; // NOTE: This is an autocorrecting error.
 
-							if (!quelch
-								&& line.Length != 0 && Settings._strict)
+							if (!quelch && Settings._strict && line.Length != 0)
 							{
-								head = "The 2nd line in the 2da contains garbage. It will be deleted if the file is saved.";
+								head = "The 2nd line in the 2da contains garbage. It will be cleared if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
-									 + line.Replace("\t", "\u2192");
+									 + line; //.Replace("\t", "\u2192")
 
 								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
-	
+
 									case DialogResult.OK:
 										quelch = true;
 										goto case DialogResult.Retry;
-	
+
 									case DialogResult.Retry:
 										loadresult = LOADRESULT_CHANGED;
 										break;
