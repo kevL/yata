@@ -525,7 +525,9 @@ To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
 above; any line that doesn't begin exactly with one of those strings is ignored.
 
-If the Settings.Cfg file is deleted Yata should run okay with its default
+The order of the settings in the file is arbitrary.
+
+If the Settings.Cfg file does not exist Yata should run okay with its default
 settings.
 
 
