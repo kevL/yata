@@ -5803,7 +5803,7 @@ namespace yata
 
 							if (!String.IsNullOrEmpty(text))
 							{
-								string[] array = text.Split(gs.SEPARATORS, StringSplitOptions.None);
+								string[] array = text.Split(gs.CRandorLF, StringSplitOptions.None);
 
 								text = array[0];
 								if      (text .Length > 99) text = text.Substring(0, 99) + " ...";

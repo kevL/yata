@@ -34,7 +34,7 @@ namespace yata
 			this.pa_Copyable.Location = new System.Drawing.Point(0, 0);
 			this.pa_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Copyable.Name = "pa_Copyable";
-			this.pa_Copyable.Padding = new System.Windows.Forms.Padding(17, 9, 0, 5);
+			this.pa_Copyable.Padding = new System.Windows.Forms.Padding(17, 9, 2, 5);
 			this.pa_Copyable.Size = new System.Drawing.Size(394, 130);
 			this.pa_Copyable.TabIndex = 1;
 			this.pa_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintPanel);
@@ -49,8 +49,7 @@ namespace yata
 			this.rt_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.rt_Copyable.Name = "rt_Copyable";
 			this.rt_Copyable.ReadOnly = true;
-			this.rt_Copyable.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.rt_Copyable.Size = new System.Drawing.Size(377, 116);
+			this.rt_Copyable.Size = new System.Drawing.Size(375, 116);
 			this.rt_Copyable.TabIndex = 0;
 			this.rt_Copyable.Text = "";
 			this.rt_Copyable.WordWrap = false;
@@ -60,7 +59,7 @@ namespace yata
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.bu_Cancel.Location = new System.Drawing.Point(296, 150);
-			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(95, 25);
 			this.bu_Cancel.TabIndex = 4;

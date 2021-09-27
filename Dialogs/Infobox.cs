@@ -126,9 +126,6 @@ namespace yata
 
 			Size size;
 
-			int widthBorder = Width  - ClientSize.Width; // grab these before things go wonky
-			int heightTitle = Height - ClientSize.Height - widthBorder;
-
 			int width  = 0;
 			int height = 0;
 
@@ -136,9 +133,7 @@ namespace yata
 
 			if (copyable != null) // deter total width based on longest copyable line
 			{
-				string[] CRandorLF = { "\r\n","\r","\n" };
-
-				string[] lines = copyable.Split(CRandorLF, StringSplitOptions.None);
+				string[] lines = copyable.Split(gs.CRandorLF, StringSplitOptions.None);
 
 				int test;
 				foreach (var line in lines)
@@ -205,10 +200,9 @@ namespace yata
 				height = h_Max;							// because 'pa_Copyable' contains a lot of text.
 			}
 
-			ClientSize = new Size(width, height);
-
-			MinimumSize = new Size(width  + widthBorder,
-								   height + widthBorder + heightTitle);
+			height += 1; // pad
+			ClientSize  = new Size(width, height);
+			MinimumSize = new Size(Width, Height);
 
 			ResumeLayout();
 
@@ -219,6 +213,16 @@ namespace yata
 
 
 		#region Handlers (override)
+		const int WS_HSCROLL = 0x00100000;
+//		const int WS_VSCROLL = 0x00200000;
+		[System.Runtime.InteropServices.DllImport("user32.dll")]
+		extern static int GetWindowLong(IntPtr hWnd, int index);
+		static bool HoriScrollBarVisible(IWin32Window control)
+		{
+			int style = GetWindowLong(control.Handle, -16);
+			return (style & WS_HSCROLL) != 0;
+//			return (style & WS_VSCROLL) != 0;
+		}
 		/// <summary>
 		/// Overrides the <c>Load</c> handler.
 		/// </summary>
@@ -228,6 +232,13 @@ namespace yata
 		protected override void OnLoad(EventArgs e)
 		{
 			rt_Copyable.AutoWordSelection = false;
+
+			if (HoriScrollBarVisible(rt_Copyable))
+			{
+				int hScrolbar = SystemInformation.HorizontalScrollBarHeight;
+				ClientSize  = new Size(ClientSize.Width, ClientSize.Height + hScrolbar);
+				MinimumSize = new Size(Width, Height);
+			}
 
 			CenterToParent();
 //			base.OnLoad(e); // req'd for (StartPosition = FormStartPosition.CenterParent)

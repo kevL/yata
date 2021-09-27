@@ -379,7 +379,7 @@ namespace yata
 		/// <returns></returns>
 		int GetWidth(string text)
 		{
-			string[] lines = text.Split(gs.SEPARATORS, StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = text.Split(gs.CRandorLF, StringSplitOptions.RemoveEmptyEntries);
 
 			int width = 0, test;
 			foreach (var line in lines)
@@ -397,7 +397,7 @@ namespace yata
 		/// <returns></returns>
 		int GetHeight(string text)
 		{
-			string[] lines = text.Split(gs.SEPARATORS, StringSplitOptions.None);
+			string[] lines = text.Split(gs.CRandorLF, StringSplitOptions.None);
 
 			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
 				 * lines.Length;
