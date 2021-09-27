@@ -811,8 +811,8 @@ namespace yata
 		/// <c><see cref="GropeLabels()">GropeLabels()</see></c>.</remarks>
 		void CreatePage(string pfe, bool read = false)
 		{
-			if (File.Exists(pfe))												// safety (probably).
-//				&& !String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(pfe))	// what idjut would ... oh, wait.
+			if (File.Exists(pfe)										// ~safety
+				&& Path.GetFileNameWithoutExtension(pfe).Length != 0)	// what idjut would ... oh wait.
 			{
 				if (Settings._recent != 0)
 				{
@@ -1321,6 +1321,51 @@ namespace yata
 
 
 		/// <summary>
+		/// Handles it-click to create a new 2da.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Create"/></c></param>
+		/// <param name="e"></param>
+		void fileclick_Create(object sender, EventArgs e)
+		{
+			Table = new YataGrid(this, String.Empty, false, true);
+
+			Table.CreateTable(); // <- instead of LoadTable()
+
+			_isCreate = true;
+			fileclick_SaveAs(it_SaveAs, EventArgs.Empty); // shall set Fullpath.
+			_isCreate = false;
+
+			if (File.Exists(Table.Fullpath)) // instead of CreatePage() ->
+			{
+				DrawingControl.SuspendDrawing(Table);
+
+				var tab = new TabPage();
+				Tabs.TabPages.Add(tab);
+
+				tab.Tag = Table;
+
+				tab.Text = Path.GetFileNameWithoutExtension(Table.Fullpath);
+
+				tab.Controls.Add(Table);
+				Tabs.SelectedTab = tab;
+
+				Table.Init();
+
+				Table.Watcher = new FileWatcher(Table);
+
+				DrawingControl.ResumeDrawing(Table);
+			}
+			else
+			{
+				YataGrid._init = false;
+				Table.Dispose();
+			}
+
+			tab_SelectedIndexChanged(null, EventArgs.Empty);
+		}
+		bool _isCreate;
+
+		/// <summary>
 		/// Handles it-click to open a preset folder.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_OpenFolder"/></c> subits</param>
@@ -1556,13 +1601,16 @@ namespace yata
 					if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
 															//               *as itself* it loses its Readonly flag.
 
-					_table.Changed = false;
-					_table._ur.ResetSaved();
+					if (!_isCreate) // stuff that's unneeded and/or unwanted when creating a 2da ->
+					{
+						_table.Changed = false;
+						_table._ur.ResetSaved();
 
-					_table.ClearLoadchanged();
+						_table.ClearLoadchanged(); // this toggles YataGrid._init - don't do that when creating a 2da
 
-					if (_table == Table)
-						_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+						if (_table == Table)
+							_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+					}
 
 					FileOutput.Write(_table);
 				}
@@ -1621,6 +1669,7 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>File|SaveAs <c>[Ctrl+e]</c></item>
+		/// <item>File|Create</item>
 		/// </list></remarks>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
@@ -1632,7 +1681,7 @@ namespace yata
 
 				if (Directory.Exists(_lastSaveasDirectory))
 					sfd.InitialDirectory = _lastSaveasDirectory;
-				else
+				else if (Table.Fullpath.Length != 0)
 				{
 					string dir = Path.GetDirectoryName(Table.Fullpath);
 					if (Directory.Exists(dir))

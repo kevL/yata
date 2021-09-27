@@ -216,9 +216,12 @@ namespace yata
 				}
 			}
 
-			table.Watcher.Pfe = table.Fullpath;
-			table.Watcher.BypassFileDeleted = false;
-			table.Watcher.BypassFileChanged = true;
+			if (table.Watcher != null) // for create 2da - Watcher is not instantiated yet.
+			{
+				table.Watcher.Pfe = table.Fullpath;
+				table.Watcher.BypassFileDeleted = false;
+				table.Watcher.BypassFileChanged = true;
+			}
 		}
 	}
 }

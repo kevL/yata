@@ -197,7 +197,7 @@ namespace yata
 
 		internal UndoRedo _ur;
 
-		internal string _defaultval;
+		internal string _defaultval = String.Empty;
 
 //		Bitmap _bluePi = Resources.bluepixel; // NOTE: Image drawing introduces a noticeable latency.
 //		Bitmap _piColhead;
@@ -318,7 +318,7 @@ namespace yata
 		{ get; set; }
 
 		internal FileWatcher Watcher
-		{ get; private set; }
+		{ get; set; }
 		#endregion Properties
 
 
@@ -329,7 +329,9 @@ namespace yata
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly</param>
-		internal YataGrid(YataForm f, string pfe, bool read)
+		/// <param name="delayWatcher"><c>true</c> to delay insantiating the
+		/// <c><see cref="FileWatcher"/> when creating a new 2da-file</c></param>
+		internal YataGrid(YataForm f, string pfe, bool read, bool delayWatcher = false)
 		{
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -370,7 +372,8 @@ namespace yata
 
 			_ur = new UndoRedo(this);
 
-			Watcher = new FileWatcher(this);
+			if (!delayWatcher)
+				Watcher = new FileWatcher(this);
 		}
 		#endregion cTor
 
@@ -1512,6 +1515,27 @@ namespace yata
 			}
 			return list.ToArray();
 		}
+
+
+		/// <summary>
+		/// Creates a table from scratch w/ 1 row and 1 colhead.
+		/// </summary>
+		internal void CreateTable()
+		{
+			Fields = new[] { "Label" };
+
+			var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
+
+			int c = 0;
+			if (Settings._autorder)
+				cells[c++] = "0";
+
+			for (; c <= Fields.Length; ++c)
+				cells[c] = gs.Stars;
+
+			_rows.Clear();
+			_rows.Add(cells);
+		}
 		#endregion Load
 
 
@@ -1521,7 +1545,7 @@ namespace yata
 		/// </summary>
 		/// <param name="changed"></param>
 		/// <param name="reload"></param>
-		internal void Init(bool changed, bool reload = false)
+		internal void Init(bool changed = false, bool reload = false)
 		{
 			if (reload)
 			{
@@ -4209,10 +4233,9 @@ namespace yata
 		{
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
-			{
-				if (row[c].loadchanged)
-					return true;
-			}
+			if (row[c].loadchanged)
+				return true;
+
 			return false;
 		}
 

@@ -20,6 +20,7 @@ namespace yata
 		MenuStrip menubar;
 
 		ToolStripMenuItem it_MenuFile;
+		ToolStripMenuItem it_Create;
 		ToolStripMenuItem it_OpenFolder;
 		ToolStripMenuItem it_Open;
 		ToolStripMenuItem it_Reload;
@@ -161,6 +162,7 @@ namespace yata
 		ToolStripSeparator separator_35;
 		ToolStripSeparator separator_36;
 		ToolStripSeparator separator_37;
+		ToolStripSeparator separator_38;
 
 		internal ContextMenuStrip ContextRow;
 		ToolStripMenuItem rowit_Header;
@@ -231,6 +233,8 @@ namespace yata
 			this.components = new System.ComponentModel.Container();
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Create = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_38 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Reload = new System.Windows.Forms.ToolStripMenuItem();
@@ -434,6 +438,8 @@ namespace yata
 			// 
 			this.it_MenuFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_Create,
+			this.separator_38,
 			this.it_OpenFolder,
 			this.it_Open,
 			this.it_Reload,
@@ -454,6 +460,18 @@ namespace yata
 			this.it_MenuFile.Size = new System.Drawing.Size(34, 20);
 			this.it_MenuFile.Text = "&File";
 			this.it_MenuFile.DropDownOpening += new System.EventHandler(this.file_dropdownopening);
+			// 
+			// it_Create
+			// 
+			this.it_Create.Name = "it_Create";
+			this.it_Create.Size = new System.Drawing.Size(181, 22);
+			this.it_Create.Text = "Create ...";
+			this.it_Create.Click += new System.EventHandler(this.fileclick_Create);
+			// 
+			// separator_38
+			// 
+			this.separator_38.Name = "separator_38";
+			this.separator_38.Size = new System.Drawing.Size(178, 6);
 			// 
 			// it_OpenFolder
 			// 
@@ -1041,7 +1059,7 @@ namespace yata
 			this.it_Menu2daOps.Name = "it_Menu2daOps";
 			this.it_Menu2daOps.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_Menu2daOps.Size = new System.Drawing.Size(62, 20);
-			this.it_Menu2daOps.Text = "2&da Ops";
+			this.it_Menu2daOps.Text = "2d&a Ops";
 			this.it_Menu2daOps.DropDownOpening += new System.EventHandler(this.ops_dropdownopening);
 			// 
 			// it_OrderRows
@@ -1181,7 +1199,7 @@ namespace yata
 			// 
 			this.it_PathTalkC.Name = "it_PathTalkC";
 			this.it_PathTalkC.Size = new System.Drawing.Size(175, 22);
-			this.it_PathTalkC.Text = "&Path to custom ...";
+			this.it_PathTalkC.Text = "Path to &custom ...";
 			this.it_PathTalkC.Click += new System.EventHandler(this.itclick_PathTalkC);
 			// 
 			// it_MenuPaths
@@ -1247,7 +1265,7 @@ namespace yata
 			// 
 			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
 			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathItemPropDef2da.Text = "path Item&PropDef.2da";
+			this.it_PathItemPropDef2da.Text = "path &ItemPropDef.2da";
 			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
 			// 
 			// it_PathSkills2da
@@ -1372,7 +1390,7 @@ namespace yata
 			this.it_MenuFont.Name = "it_MenuFont";
 			this.it_MenuFont.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuFont.Size = new System.Drawing.Size(39, 20);
-			this.it_MenuFont.Text = "&Font";
+			this.it_MenuFont.Text = "Fo&nt";
 			this.it_MenuFont.DropDownOpening += new System.EventHandler(this.font_dropdownopening);
 			// 
 			// it_Font

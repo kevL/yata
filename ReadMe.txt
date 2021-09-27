@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 26
+2021 september 27
 kevL's
 ver 4.5.0.0
 
@@ -39,6 +39,8 @@ Appendix N: Codepages
 1. MainMenu bar
 
 File
+- Create ... creates a basic 2da table
+
 - Open ... @ folder (presets for the Open ... dialog - appears only if at least
                      one "dirpreset=" has been set in Settings.Cfg - see the
                      Settings.Cfg file options below)
