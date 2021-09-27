@@ -56,8 +56,8 @@ File
 - Save As ... : Ctrl+e
 - Save All    : Ctrl+a
 
-- Close : F4
-- Close all (this is a multi-tabbed application)
+- Close     : F4
+- Close all : Ctrl+F4 (this is a multi-tabbed application)
 
 - Quit : Ctrl+q
 

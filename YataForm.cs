@@ -861,7 +861,7 @@ namespace yata
 					Tabs.TabPages[i].Select();
 
 					using (var ib = new Infobox(Infobox.Title_warni,
-												"The 2da-file is already open. Do you want to another instance ...",
+												"The 2da-file is already open. Do you want another instance ...",
 												null,
 												InfoboxType.Warn,
 												InfoboxButtons.CancelYes))
@@ -1810,7 +1810,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
-		/// <item>File|CloseAll</item>
+		/// <item>File|CloseAll <c>[Ctrl+F4]</c></item>
 		/// <item>tab|CloseAll</item>
 		/// </list></remarks>
 		void fileclick_CloseAllTabs(object sender, EventArgs e)
