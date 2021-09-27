@@ -13,8 +13,8 @@ namespace yata
 		: YataDialog
 	{
 		#region Fields (static)
-		internal static string _textcolabel    = String.Empty;
-		internal static string _textdefaultval = String.Empty;
+		internal static string _colabel    = String.Empty;
+		internal static string _defaultval = String.Empty;
 		#endregion Fields (static)
 
 
@@ -44,12 +44,12 @@ namespace yata
 			if (_selc != -2)
 			{
 				Text = " yata - Colhead text";
-				tb_Input.Text = _textcolabel;
+				tb_Input.Text = _colabel;
 			}
 			else
 			{
 				Text = " yata - Default value";
-				tb_Input.Text = _textdefaultval;
+				tb_Input.Text = _defaultval;
 			}
 
 
@@ -106,7 +106,7 @@ namespace yata
 								|| (!Settings._strict && !Util.isPrintableAsciiNotDoublequote( character))))
 						{
 							_bypasstextchanged = true;
-							tb_Input.Text = _textcolabel; // recurse
+							tb_Input.Text = _colabel; // recurse
 							_bypasstextchanged = false;
 
 							tb_Input.SelectionStart = tb_Input.Text.Length;
@@ -116,9 +116,9 @@ namespace yata
 				}
 
 				if (_selc != -2)
-					_textcolabel = tb_Input.Text;
+					_colabel = tb_Input.Text;
 				else
-					_textdefaultval = tb_Input.Text;
+					_defaultval = tb_Input.Text;
 			}
 		}
 
