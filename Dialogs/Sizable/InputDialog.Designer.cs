@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class InputDialogColhead
+	sealed partial class InputDialog
 	{
 		#region Designer
 		TextBox tb_Input;
@@ -60,7 +60,7 @@ namespace yata
 			this.bu_Okay.UseVisualStyleBackColor = true;
 			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);
 			// 
-			// InputDialogColhead
+			// InputDialog
 			// 
 			this.AcceptButton = this.bu_Okay;
 			this.CancelButton = this.bu_Cancel;
@@ -70,7 +70,7 @@ namespace yata
 			this.Controls.Add(this.tb_Input);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
-			this.Name = "InputDialogColhead";
+			this.Name = "InputDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.ResumeLayout(false);

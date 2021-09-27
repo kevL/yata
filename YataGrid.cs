@@ -1125,7 +1125,7 @@ namespace yata
 							}
 							else
 							{
-								InputDialogColhead.SpellcheckDefaultval(ref _defaultval, true);
+								InputDialog.SpellcheckDefaultval(ref _defaultval, true);
 
 								if (!quelch && Settings._strict && tr != FileOutput.Default + _defaultval)
 								{
@@ -1679,10 +1679,10 @@ namespace yata
 				}
 				else if (i == selc)
 				{
-					fields[i] = InputDialogColhead._textcolabel;
+					fields[i] = InputDialog._textcolabel;
 
 					var col = new Col();
-					col.text = InputDialogColhead._textcolabel;
+					col.text = InputDialog._textcolabel;
 					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
 					col.width(col._widthtext + _padHori * 2 + _padHoriSort);
 					col.selected = true;
@@ -1787,8 +1787,8 @@ namespace yata
 		/// <param name="selc"></param>
 		internal void RelabelCol(int selc)
 		{
-			Fields[selc - 1] = InputDialogColhead._textcolabel; // the Field-count is 1 less than the col-count
-			Cols[selc]._widthtext = YataGraphics.MeasureWidth((Cols[selc].text = InputDialogColhead._textcolabel),
+			Fields[selc - 1] = InputDialog._textcolabel; // the Field-count is 1 less than the col-count
+			Cols[selc]._widthtext = YataGraphics.MeasureWidth((Cols[selc].text = InputDialog._textcolabel),
 															  _f.FontAccent);
 
 			Colwidth(selc);

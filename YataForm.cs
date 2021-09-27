@@ -2301,13 +2301,13 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Defaultval(object sender, EventArgs e)
 		{
-			InputDialogColhead._textdefaultval = Table._defaultval;
-			using (var idc = new InputDialogColhead(this))
+			InputDialog._textdefaultval = Table._defaultval;
+			using (var idc = new InputDialog(this))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialogColhead._textdefaultval != Table._defaultval)
+					&& InputDialog._textdefaultval != Table._defaultval)
 				{
-					Table._defaultval = InputDialogColhead._textdefaultval;
+					Table._defaultval = InputDialog._textdefaultval;
 					if (!Table.Changed) Table.Changed = true;
 
 					it_Defaultclear.Enabled = Table._defaultval != String.Empty;
@@ -3100,10 +3100,10 @@ namespace yata
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
 			int selc = Table.getSelectedCol();
-			using (var idc = new InputDialogColhead(this, selc))
+			using (var idc = new InputDialog(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialogColhead._textcolabel.Length != 0)
+					&& InputDialog._textcolabel.Length != 0)
 				{
 					Obfuscate();
 					DrawingControl.SuspendDrawing(Table);
@@ -3196,12 +3196,12 @@ namespace yata
 			int selc = Table.getSelectedCol();
 
 			string head = Table.Fields[selc - 1];
-			InputDialogColhead._textcolabel = head;
-			using (var idc = new InputDialogColhead(this, selc))
+			InputDialog._textcolabel = head;
+			using (var idc = new InputDialog(this, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialogColhead._textcolabel.Length != 0
-					&& InputDialogColhead._textcolabel != head)
+					&& InputDialog._textcolabel.Length != 0
+					&& InputDialog._textcolabel != head)
 				{
 					Table.RelabelCol(selc);
 				}

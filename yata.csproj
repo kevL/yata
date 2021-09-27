@@ -116,9 +116,9 @@
     <Compile Include="Dialogs\Sizable\FileWatcherDialog.Designer.cs">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable\InputColheadDialog.cs" />
-    <Compile Include="Dialogs\Sizable\InputColheadDialog.Designer.cs">
-      <DependentUpon>InputColheadDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable\InputDialog.cs" />
+    <Compile Include="Dialogs\Sizable\InputDialog.Designer.cs">
+      <DependentUpon>InputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\TalkDialog.cs" />
     <Compile Include="Dialogs\Sizable\TalkDialog.Designer.cs">
@@ -200,8 +200,8 @@
     <EmbeddedResource Include="Dialogs\Sizable\FileWatcherDialog.resx">
       <DependentUpon>FileWatcherDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable\InputColheadDialog.resx">
-      <DependentUpon>InputColheadDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable\InputDialog.resx">
+      <DependentUpon>InputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\TalkDialog.resx">
       <DependentUpon>TalkDialog.cs</DependentUpon>

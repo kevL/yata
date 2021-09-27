@@ -9,7 +9,7 @@ namespace yata
 	/// A dialog for text entry.
 	/// </summary>
 	/// <remarks>Used for default-value as well as colhead labels.</remarks>
-	sealed partial class InputDialogColhead
+	sealed partial class InputDialog
 		: YataDialog
 	{
 		#region Fields (static)
@@ -33,7 +33,7 @@ namespace yata
 		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
 		/// <param name="selc">the currently selected col-id; default -2 enables
 		/// defaultval input</param>
-		internal InputDialogColhead(YataForm f, int selc = -2)
+		internal InputDialog(YataForm f, int selc = -2)
 		{
 			_f = f;
 			_selc = selc;
