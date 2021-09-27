@@ -120,7 +120,7 @@ namespace yata
 			this.bu_List.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_List.Name = "bu_List";
 			this.bu_List.Size = new System.Drawing.Size(75, 22);
-			this.bu_List.TabIndex = 5;
+			this.bu_List.TabIndex = 6;
 			this.bu_List.Text = "List ...";
 			this.toolTip1.SetToolTip(this.bu_List, "Shows a list of codepages supported by .NET");
 			this.bu_List.UseVisualStyleBackColor = true;
@@ -134,18 +134,18 @@ namespace yata
 			this.la_CodepageInfo.Margin = new System.Windows.Forms.Padding(0);
 			this.la_CodepageInfo.Name = "la_CodepageInfo";
 			this.la_CodepageInfo.Size = new System.Drawing.Size(412, 60);
-			this.la_CodepageInfo.TabIndex = 6;
+			this.la_CodepageInfo.TabIndex = 5;
 			this.la_CodepageInfo.Text = "la_CodepageInfo";
 			// 
 			// bu_Cancel
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(268, 157);
+			this.bu_Cancel.Location = new System.Drawing.Point(346, 157);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(75, 26);
-			this.bu_Cancel.TabIndex = 7;
+			this.bu_Cancel.TabIndex = 8;
 			this.bu_Cancel.Text = "cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
@@ -153,11 +153,11 @@ namespace yata
 			// 
 			this.bu_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Accept.Location = new System.Drawing.Point(346, 157);
+			this.bu_Accept.Location = new System.Drawing.Point(268, 157);
 			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Accept.Name = "bu_Accept";
 			this.bu_Accept.Size = new System.Drawing.Size(75, 26);
-			this.bu_Accept.TabIndex = 8;
+			this.bu_Accept.TabIndex = 7;
 			this.bu_Accept.Text = "Try ...";
 			this.bu_Accept.UseVisualStyleBackColor = true;
 			// 

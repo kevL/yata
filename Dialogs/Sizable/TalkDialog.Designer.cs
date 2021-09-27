@@ -148,11 +148,11 @@ namespace yata
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(310, 140);
+			this.btn_Cancel.Location = new System.Drawing.Point(400, 140);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(85, 30);
-			this.btn_Cancel.TabIndex = 3;
+			this.btn_Cancel.TabIndex = 4;
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			// 
@@ -160,11 +160,11 @@ namespace yata
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Accept.Location = new System.Drawing.Point(400, 140);
+			this.btn_Accept.Location = new System.Drawing.Point(310, 140);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(85, 30);
-			this.btn_Accept.TabIndex = 4;
+			this.btn_Accept.TabIndex = 3;
 			this.btn_Accept.Text = "Accept";
 			this.btn_Accept.UseVisualStyleBackColor = true;
 			this.btn_Accept.Click += new System.EventHandler(this.click_btnSelect);

@@ -40,18 +40,18 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(4, 60);
+			this.bu_Cancel.Location = new System.Drawing.Point(154, 60);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(135, 25);
-			this.bu_Cancel.TabIndex = 1;
+			this.bu_Cancel.TabIndex = 3;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
 			// bu_Okay
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Okay.Location = new System.Drawing.Point(154, 60);
+			this.bu_Okay.Location = new System.Drawing.Point(4, 60);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
 			this.bu_Okay.Size = new System.Drawing.Size(135, 25);
@@ -67,7 +67,7 @@ namespace yata
 			this.la_Head.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Head.Name = "la_Head";
 			this.la_Head.Size = new System.Drawing.Size(292, 35);
-			this.la_Head.TabIndex = 3;
+			this.la_Head.TabIndex = 1;
 			this.la_Head.Text = "la_Head";
 			this.la_Head.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 

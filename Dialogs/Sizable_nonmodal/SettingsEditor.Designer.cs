@@ -66,11 +66,11 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(430, 5);
+			this.bu_Cancel.Location = new System.Drawing.Point(511, 5);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(75, 26);
-			this.bu_Cancel.TabIndex = 1;
+			this.bu_Cancel.TabIndex = 2;
 			this.bu_Cancel.Text = "cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
@@ -78,11 +78,11 @@ namespace yata
 			// bu_Okay
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Okay.Location = new System.Drawing.Point(511, 5);
+			this.bu_Okay.Location = new System.Drawing.Point(430, 5);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
 			this.bu_Okay.Size = new System.Drawing.Size(75, 26);
-			this.bu_Okay.TabIndex = 2;
+			this.bu_Okay.TabIndex = 1;
 			this.bu_Okay.Text = "Save";
 			this.bu_Okay.UseVisualStyleBackColor = true;
 			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);
