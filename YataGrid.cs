@@ -329,9 +329,9 @@ namespace yata
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly</param>
-		/// <param name="delayWatcher"><c>true</c> to delay insantiating the
+		/// <param name="created"><c>true</c> to delay insantiating the
 		/// <c><see cref="FileWatcher"/> when creating a new 2da-file</c></param>
-		internal YataGrid(YataForm f, string pfe, bool read, bool delayWatcher = false)
+		internal YataGrid(YataForm f, string pfe, bool read, bool created = false)
 		{
 //			DrawingControl.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -372,7 +372,7 @@ namespace yata
 
 			_ur = new UndoRedo(this);
 
-			if (!delayWatcher)
+			if (!created)
 				Watcher = new FileWatcher(this);
 		}
 		#endregion cTor
@@ -1526,11 +1526,11 @@ namespace yata
 
 			var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 
-			int c = 0;
-			if (Settings._autorder)
-				cells[c++] = "0";
+//			int c = 0;
+//			if (Settings._autorder) // force Autorder
+			cells[0] = "0";
 
-			for (; c <= Fields.Length; ++c)
+			for (int c = 1; c <= Fields.Length; ++c)
 				cells[c] = gs.Stars;
 
 			_rows.Clear();

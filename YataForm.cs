@@ -1332,7 +1332,7 @@ namespace yata
 			Table.CreateTable(); // <- instead of LoadTable()
 
 			_isCreate = true;
-			fileclick_SaveAs(it_SaveAs, EventArgs.Empty); // shall set Fullpath.
+			fileclick_SaveAs(it_SaveAs, EventArgs.Empty); // shall set Fullpath (incl. tab-string).
 			_isCreate = false;
 
 			if (File.Exists(Table.Fullpath)) // instead of CreatePage() ->
@@ -1598,11 +1598,11 @@ namespace yata
 
 					SetTitlebarText();
 
-					if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
-															//               *as itself* it loses its Readonly flag.
-
 					if (!_isCreate) // stuff that's unneeded and/or unwanted when creating a 2da ->
 					{
+						if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
+																//               *as itself* it loses its Readonly flag.
+
 						_table.Changed = false;
 						_table._ur.ResetSaved();
 
@@ -1669,7 +1669,7 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>File|SaveAs <c>[Ctrl+e]</c></item>
-		/// <item>File|Create</item>
+		/// <item>File|Create ...</item>
 		/// </list></remarks>
 		void fileclick_SaveAs(object sender, EventArgs e)
 		{
