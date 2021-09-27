@@ -2645,7 +2645,7 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_Apply(object sender, EventArgs e)
 		{
-			using (var tid = new TextInputDialog(this))
+			using (var tid = new InputCelltextDialog(this))
 			{
 				if (tid.ShowDialog(this) == DialogResult.OK)
 				{

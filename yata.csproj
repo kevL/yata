@@ -124,9 +124,9 @@
     <Compile Include="Dialogs\Sizable\TalkDialog.Designer.cs">
       <DependentUpon>TalkDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable\TextInputDialog.cs" />
-    <Compile Include="Dialogs\Sizable\TextInputDialog.Designer.cs">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable\InputCelltextDialog.cs" />
+    <Compile Include="Dialogs\Sizable\InputCelltextDialog.Designer.cs">
+      <DependentUpon>InputCelltextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="Statics\ClipboardService.cs" />
@@ -206,8 +206,8 @@
     <EmbeddedResource Include="Dialogs\Sizable\TalkDialog.resx">
       <DependentUpon>TalkDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable\TextInputDialog.resx">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable\InputCelltextDialog.resx">
+      <DependentUpon>InputCelltextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

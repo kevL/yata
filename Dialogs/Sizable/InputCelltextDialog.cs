@@ -8,7 +8,7 @@ namespace yata
 	/// <summary>
 	/// A dialog for cell-text entry.
 	/// </summary>
-	sealed partial class TextInputDialog
+	sealed partial class InputCelltextDialog
 		: YataDialog
 	{
 		#region Fields (static)
@@ -26,7 +26,7 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f"><c><see cref="YataForm"/></c></param>
-		internal TextInputDialog(YataForm f)
+		internal InputCelltextDialog(YataForm f)
 		{
 			_f = f;
 

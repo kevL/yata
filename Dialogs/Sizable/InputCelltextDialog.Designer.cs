@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class TextInputDialog
+	sealed partial class InputCelltextDialog
 	{
 		#region Designer
 		TextBox tb_Input;
@@ -71,7 +71,7 @@ namespace yata
 			this.la_Head.Text = "la_Head";
 			this.la_Head.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// TextInputDialog
+			// InputCelltextDialog
 			// 
 			this.AcceptButton = this.bu_Okay;
 			this.CancelButton = this.bu_Cancel;
@@ -82,7 +82,7 @@ namespace yata
 			this.Controls.Add(this.tb_Input);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
-			this.Name = "TextInputDialog";
+			this.Name = "InputCelltextDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Text input";
