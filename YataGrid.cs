@@ -1130,11 +1130,11 @@ namespace yata
 							{
 								InputDialog.SpellcheckDefaultval(ref _defaultval, true);
 
-								if (!quelch && Settings._strict && tr != FileOutput.Default + _defaultval)
+								if (!quelch && Settings._strict && tr != gs.Default + _defaultval)
 								{
 									head = "The Default on the 2nd line has been changed.";
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
-										 + FileOutput.Default + _defaultval;
+										 + gs.Default + _defaultval;
 
 									switch (ShowLoadWarning(head, copy))
 									{

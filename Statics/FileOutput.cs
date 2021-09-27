@@ -6,8 +6,6 @@ namespace yata
 {
 	static class FileOutput
 	{
-		internal const string Default = "DEFAULT: ";
-
 		internal static void Write(YataGrid table)
 		{
 			if (table.RowCount != 0)
@@ -16,15 +14,15 @@ namespace yata
 				{
 					using (var sw = new StreamWriter(table.Fullpath))
 					{
-						sw.WriteLine(gs.TwodaVer);						// header ->
+						sw.WriteLine(gs.TwodaVer);							// header ->
 
 						if (table._defaultval.Length != 0)
-							sw.WriteLine(Default + table._defaultval);	// default value ->
+							sw.WriteLine(gs.Default + table._defaultval);	// default value ->
 						else
 							sw.WriteLine();
 
 						string line = String.Empty;
-						for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
+						for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
 						{
 							line += gs.Space + table.Fields[i];
 						}
@@ -32,7 +30,7 @@ namespace yata
 
 
 						string val;
-						for (int r = 0; r != table.RowCount; ++r)	// row-cells ->
+						for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
 						{
 							line = String.Empty;
 
@@ -81,15 +79,15 @@ namespace yata
 					{
 						using (var sw = new StreamWriter(table.Fullpath))
 						{
-							sw.WriteLine(gs.TwodaVer);						// header ->
+							sw.WriteLine(gs.TwodaVer);							// header ->
 
 							if (table._defaultval.Length != 0)
-								sw.WriteLine(Default + table._defaultval);	// default value ->
+								sw.WriteLine(gs.Default + table._defaultval);	// default value ->
 							else
 								sw.WriteLine();
 
 							string line = String.Empty;
-							for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
+							for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
 							{
 								if (i == 0)
 								for (int j = 0; j != widths[0]; ++j)
@@ -104,7 +102,7 @@ namespace yata
 
 
 							string val;
-							for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
+							for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
 							{
 								line = String.Empty;
 
@@ -135,10 +133,10 @@ namespace yata
 
 						using (var sw = new StreamWriter(table.Fullpath))
 						{
-							sw.WriteLine(gs.TwodaVer);						// header ->
+							sw.WriteLine(gs.TwodaVer);							// header ->
 
 							if (table._defaultval.Length != 0)
-								sw.WriteLine(Default + table._defaultval);	// default value ->
+								sw.WriteLine(gs.Default + table._defaultval);	// default value ->
 							else
 								sw.WriteLine();
 
@@ -158,7 +156,7 @@ namespace yata
 
 
 							string line = String.Empty;
-							for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
+							for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
 							{
 								if (i == 0) // insert whitespace at the start of the colheads ->
 								{
@@ -186,7 +184,7 @@ namespace yata
 
 
 							string val;
-							for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
+							for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
 							{
 								line = String.Empty;
 
