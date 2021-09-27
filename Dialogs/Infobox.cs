@@ -102,23 +102,6 @@ namespace yata
 				case InfoboxButtons.Abort:
 					bu_Cancel.Text = "abort";
 					break;
-
-//				case InfoboxButtons.CancelOkay:
-//					bu_Okay.Visible = true;
-//					break;
-
-//				case InfoboxButtons.CancelOkayRetry:
-//					bu_Okay .Visible =
-//					bu_Retry.Visible = true;
-//					break;
-
-//				case InfoboxButtons.CancelYesNo:
-//					bu_Okay .Text = "yes";
-//					bu_Retry.Text = "no";
-//
-//					bu_Okay .Visible =
-//					bu_Retry.Visible = true;
-//					break;
 			}
 
 
@@ -162,9 +145,6 @@ namespace yata
 				width = w_Min;
 
 
-//			head = head.Trim();
-//			if (!String.IsNullOrEmpty(head))
-//			{
 			lbl_Head = new Label();
 			lbl_Head.Name      = "lbl_Head";
 			lbl_Head.Dock      = DockStyle.Top;
@@ -187,7 +167,6 @@ namespace yata
 
 			if (size.Width + lbl_Head.Padding.Horizontal + widthScroller > width)
 				width = size.Width + lbl_Head.Padding.Horizontal + widthScroller;
-//			}
 
 
 			height = (lbl_Head != null ? lbl_Head.Height : 0)
