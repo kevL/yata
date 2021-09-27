@@ -850,6 +850,29 @@ namespace yata
 					}
 				}
 
+
+				// check if 2da-file is already open ->
+				for (int i = 0; i != Tabs.TabPages.Count; ++i)
+				if ((Tabs.TabPages[i].Tag as YataGrid).Fullpath == pfe)
+				{
+					TopMost = true; // drag&drop from FileExplorer could leave the Infobox hidden behind other windows.
+					TopMost = false;
+
+					Tabs.TabPages[i].Select();
+
+					using (var ib = new Infobox(Infobox.Title_warni,
+												"The 2da-file is already open. Do you want to another instance ...",
+												null,
+												InfoboxType.Warn,
+												InfoboxButtons.CancelYes))
+					{
+						if (ib.ShowDialog(this) == DialogResult.Cancel)
+							return;
+					}
+					break;
+				}
+
+
 				Obfuscate();
 //				Refresh();	// NOTE: If a table is already loaded the color-panel doesn't show
 							// but a refresh turns the client-area gray at least instead of glitchy.
@@ -1366,7 +1389,7 @@ namespace yata
 		bool _isCreate;
 
 		/// <summary>
-		/// Handles it-click to open a preset folder.
+		/// Handles it-click to open a 2da-file in a preset folder.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_OpenFolder"/></c> subits</param>
 		/// <param name="e"></param>
@@ -1377,7 +1400,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to open a folder. Shows an <c>OpenFileDialog</c>.
+		/// Handles it-click to open a 2da-file.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
