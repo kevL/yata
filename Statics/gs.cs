@@ -55,6 +55,7 @@
 		internal static string[] SEPARATORS = { "\r\n", "\r", "\n" };
 
 		internal const string TwodaVer = "2DA V2.0";
+		internal const string DefaultColLabel = "Label";
 	}
 
 

@@ -1522,7 +1522,7 @@ namespace yata
 		/// </summary>
 		internal void CreateTable()
 		{
-			Fields = new[] { "Label" };
+			Fields = new[] { gs.DefaultColLabel };
 
 			var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 

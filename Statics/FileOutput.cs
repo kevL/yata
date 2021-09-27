@@ -10,27 +10,27 @@ namespace yata
 
 		internal static void Write(YataGrid table)
 		{
-			if (Settings._alignoutput == Settings.AoFalse)
+			if (table.RowCount != 0)
 			{
-				using (var sw = new StreamWriter(table.Fullpath))
+				if (Settings._alignoutput == Settings.AoFalse)
 				{
-					sw.WriteLine(gs.TwodaVer);						// header ->
-
-					if (table._defaultval.Length != 0)
-						sw.WriteLine(Default + table._defaultval);	// default value ->
-					else
-						sw.WriteLine();
-
-					string line = String.Empty;
-					for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
+					using (var sw = new StreamWriter(table.Fullpath))
 					{
-						line += gs.Space + table.Fields[i];
-					}
-					sw.WriteLine(line);
+						sw.WriteLine(gs.TwodaVer);						// header ->
+
+						if (table._defaultval.Length != 0)
+							sw.WriteLine(Default + table._defaultval);	// default value ->
+						else
+							sw.WriteLine();
+
+						string line = String.Empty;
+						for (int i = 0; i != table.Fields.Length; ++i)	// col-fields ->
+						{
+							line += gs.Space + table.Fields[i];
+						}
+						sw.WriteLine(line);
 
 
-					if (table.RowCount != 0)
-					{
 						string val;
 						for (int r = 0; r != table.RowCount; ++r)	// row-cells ->
 						{
@@ -50,15 +50,8 @@ namespace yata
 							sw.WriteLine(line);
 						}
 					}
-					else // is freshly Created
-					{
-						sw.WriteLine("0 ****");
-					}
 				}
-			}
-			else
-			{
-				if (table.RowCount != 0)
+				else
 				{
 					// find longest string-width in each col (incl/ colheads)
 					var widths = new int[table.ColCount];
@@ -224,44 +217,37 @@ namespace yata
 						}
 					}
 				}
-				else // is freshly Created
-				{
-					if (Settings._alignoutput == Settings.AoTrue)
-					{
-						using (var sw = new StreamWriter(table.Fullpath))
-						{
-							sw.WriteLine(gs.TwodaVer);	// header ->
-							sw.WriteLine();				// default value ->
 
-//							string line = String.Empty;
-//							for (int i = 0; i != table.Fields.Length; ++i)
-//							{
-//								line += gs.Space + table.Fields[i];
-//							}
-//							sw.WriteLine(line);
-
-							sw.WriteLine("  Label");	// col-fields ->
-							sw.WriteLine("0 ****");		// row-cells ->
-						}
-					}
-					else if (Settings._alignoutput == Settings.AoTabs)
-					{
-						using (var sw = new StreamWriter(table.Fullpath))
-						{
-							sw.WriteLine(gs.TwodaVer);	// header ->
-							sw.WriteLine();				// default value ->
-							sw.WriteLine("\tLabel");	// col-fields ->
-							sw.WriteLine("0\t****");	// row-cells ->
-						}
-					}
-				}
-			}
-
-			if (table.Watcher != null) // for create 2da - Watcher is not instantiated yet.
-			{
+				// not for create 2da -> Watcher would not be instantiated yet.
 				table.Watcher.Pfe = table.Fullpath;
 				table.Watcher.BypassFileDeleted = false;
 				table.Watcher.BypassFileChanged = true;
+			}
+			else // is freshly Created
+			{
+				using (var sw = new StreamWriter(table.Fullpath))
+				{
+					sw.WriteLine(gs.TwodaVer);							// header
+					sw.WriteLine();										// default value
+
+					switch (Settings._alignoutput)
+					{
+						case Settings.AoFalse:
+							sw.WriteLine(" "  + gs.DefaultColLabel);	// col-fields
+							sw.WriteLine("0 " + gs.Stars);				// row-cells
+							break;
+
+						case Settings.AoTrue:
+							sw.WriteLine("  " + gs.DefaultColLabel);
+							sw.WriteLine("0 " + gs.Stars);
+							break;
+
+						case Settings.AoTabs:
+							sw.WriteLine("\t"  + gs.DefaultColLabel);
+							sw.WriteLine("0\t" + gs.Stars);
+							break;
+					}
+				}
 			}
 		}
 	}
