@@ -989,6 +989,8 @@ namespace yata
 			}
 
 
+			bool autordered = false;
+
 			string tr;
 
 			int id = -1;
@@ -1010,7 +1012,7 @@ namespace yata
 						{
 							if (line != (tr = line.Trim()))
 							{
-								head = "The 1st line has extraneous whitespace. It will be corrected if the file is saved.";
+								head = "The 1st line has extraneous whitespace. It will be trimmed if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line;
 
@@ -1078,7 +1080,7 @@ namespace yata
 
 						if (!quelch && Settings._strict && line != tr)
 						{
-							head = "The 2nd line has extraneous whitespace. It will be corrected if the file is saved.";
+							head = "The 2nd line has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
@@ -1179,7 +1181,7 @@ namespace yata
 
 						if (!quelch && Settings._strict && line != tr)
 						{
-							head = "The 3nd line has extraneous whitespace. It will be corrected if the file is saved.";
+							head = "The 3nd line has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
@@ -1265,20 +1267,61 @@ namespace yata
 						Fields = tr.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 						break;
 
-					default: // line #3+
-					{
-						// TODO: check whitespace against Alignoutput type
-						// flag Changed and show message to user if Strict.
+					default: // line #3+ datarows ->
+						tr = line.Trim();
 
-						line = line.Trim();
-
-						string[] fields = ParseTableRow(line);
-						if (fields.Length != 0) // allow blank lines on load - they will be removed if/when file is saved.
+						if (!quelch && Settings._strict && line != tr)
 						{
-							if (!quelch) // test for well-formed, consistent ids
-							{
-								++id;
+							head = "A row has extraneous whitespace. It will be trimmed if the file is saved.";
+							copy = Fullpath + Environment.NewLine + Environment.NewLine
+								 + "id " + id;
 
+							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							{
+								case DialogResult.Cancel:
+									return LOADRESULT_FALSE;
+
+								case DialogResult.OK:
+									quelch = true;
+									goto case DialogResult.Retry;
+
+								case DialogResult.Retry:
+									loadresult = LOADRESULT_CHANGED;
+									break;
+							}
+						}
+
+
+						string[] fields = ParseTableRow(tr);
+
+						if (fields.Length == 0) // test for blank line
+						{
+							if (!quelch && Settings._strict)
+							{
+								head = "A blank row is detected. It will be deleted if the file is saved.";
+								copy = Fullpath;
+
+								switch (ShowLoadWarning(head, copy))
+								{
+									case DialogResult.Cancel:
+										return LOADRESULT_FALSE;
+
+									case DialogResult.OK:
+										quelch = true;
+										goto case DialogResult.Retry;
+
+									case DialogResult.Retry:
+										loadresult = LOADRESULT_CHANGED;
+										break;
+								}
+							}
+						}
+						else
+						{
+							++id;
+
+							if (!quelch) // test for id - show these warnings even if not Strict.
+							{
 								int result;
 								if (!Int32.TryParse(fields[0], out result))
 									head = "The 2da-file contains an id that is not an integer.";
@@ -1292,7 +1335,7 @@ namespace yata
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
 										 + "id " + id + " \u2192 " + fields[0];
 
-									switch (ShowLoadWarning(head, copy))
+									switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 									{
 										case DialogResult.Cancel:
 											return LOADRESULT_FALSE;
@@ -1327,11 +1370,9 @@ namespace yata
 								if (!quelch) // test for an odd quantity of double-quote characters
 								{
 									int quotes = 0;
-									foreach (char character in line)
-									{
-										if (character == '"')
-											++quotes;
-									}
+									foreach (char character in tr)
+									if (character == '"')
+										++quotes;
 
 									if (quotes % 2 == 1)
 									{
@@ -1352,15 +1393,30 @@ namespace yata
 								}
 							}
 
+
+							if (Settings._autorder && id.ToString() != fields[0])
+							{
+								fields[0] = id.ToString();
+								autordered = true;
+							}
+
 							// NOTE: Tests for well-formed fields will be done later so that their
 							// respective cells can be flagged as 'loadchanged' (if applicable).
 
 							_rows.Add(fields);
 						}
 						break;
-					}
 				}
 			}
+
+			if (autordered)
+			{
+				using (var ib = new Infobox(Infobox.Title_infor, "Row ids have been corrected."))
+					ib.ShowDialog(_f);
+
+				loadresult = LOADRESULT_CHANGED;
+			}
+
 
 			if (_rows.Count == 0) // add a row of stars so grid is not left blank ->
 			{
