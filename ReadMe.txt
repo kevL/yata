@@ -694,7 +694,7 @@ Appendix F: creating a 2da-file
 Yata can create a new 2da-file from scratch w/ File|Create .... If you want to
 create a new 2da-file yourself, at a minimum you should use a text-editor to
 specify the 2da version header, followed by a blank line, followed by a line
-with the col labels - look at the top of any valid 2da, in a text-editor, to see
+with a col label - look at the top of any valid 2da, in a text-editor, to see
 what those first three lines should look like. Yata ought then be able to open
 the 2da and assign a first blank row with default cell-values.
 
