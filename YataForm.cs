@@ -4189,6 +4189,15 @@ namespace yata
 					}
 					catch (Exception ex)
 					{
+						// the stock MessageBox 'shall' be used if an exception is going to cause a CTD:
+						// eg. a stock Font was disposed but the SettingsEditor needs it during its
+						// initialization ... The app can't show a Yata-dialog in such a case; but the
+						// stock MessageBox will pop up then ... CTD.
+
+//						MessageBox.Show("The Settings.cfg file could not be read in the application directory."
+//										+ Environment.NewLine + Environment.NewLine
+//										+ ex);
+
 						using (var ib = new Infobox(Infobox.Title_excep,
 													"The Settings.cfg file could not be read in the application directory.",
 													ex.ToString(),

@@ -95,7 +95,11 @@ namespace yata
 
 			if (Settings._font3 != null)
 			{
-				Font.Dispose(); // be wary. Be very wary.
+//				Font.Dispose(); // be wary. Be very wary. -> Do NOT Dispose()
+				// debug builds don't throw
+				// but release builds CTD when invoking the SettingsEditor after
+				// the PropertyPanel has been opened ... eg.
+
 				Font = Settings._font3;
 			}
 			else
