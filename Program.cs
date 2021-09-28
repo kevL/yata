@@ -11,6 +11,7 @@ namespace yata
 	/// </summary>
 	sealed class Program
 	{
+		#region Methods
 		/// <summary>
 		/// Program entry point.
 		/// </summary>
@@ -134,5 +135,6 @@ namespace yata
 				YataForm.PfeLoad = null;
 			}
 		}
+		#endregion Methods
 	}
 }
