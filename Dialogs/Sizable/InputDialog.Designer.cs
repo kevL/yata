@@ -43,7 +43,7 @@ namespace yata
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(125, 25);
-			this.bu_Cancel.TabIndex = 2;
+			this.bu_Cancel.TabIndex = 3;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
@@ -55,7 +55,7 @@ namespace yata
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
 			this.bu_Okay.Size = new System.Drawing.Size(125, 25);
-			this.bu_Okay.TabIndex = 1;
+			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "APPLY";
 			this.bu_Okay.UseVisualStyleBackColor = true;
 			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 
@@ -28,6 +29,8 @@ namespace yata
 
 		bool _bypasstextchanged;
 		bool _cancel;
+
+		CheckBox cb_Punctuation;
 		#endregion Fields
 
 
@@ -51,19 +54,24 @@ namespace yata
 				Text = " yata - Colhead text";
 				tb_Input.Text = _colabel;
 
-				if (Settings._strict) // allow punctuation cb // TODO: impl.
+				if (Settings._strict) // allow punctuation toggle ->
 				{
-					var cb = new CheckBox();
-					cb.Text = "accept punctuation - only ascii";
-					cb.TextAlign = ContentAlignment.BottomLeft;
-					cb.Padding = new Padding(4,0,0,0);
-					cb.Size = new Size(100, hCheckbox);
-					cb.Dock = DockStyle.Top;
+					cb_Punctuation = new CheckBox();
+					cb_Punctuation.Text = "accept punctuation";
+					cb_Punctuation.TextAlign = ContentAlignment.BottomLeft;
+					cb_Punctuation.Padding = new Padding(4,0,0,0);
+					cb_Punctuation.Size = new Size(100, hCheckbox);
+					cb_Punctuation.Dock = DockStyle.Top;
+					cb_Punctuation.TabIndex = 1;
+					cb_Punctuation.Checked = true;
+					cb_Punctuation.CheckedChanged += checkedchanged_Punctuation;
 
-					Controls.Add(cb);
-					cb.BringToFront();
+					Controls.Add(cb_Punctuation);
+					cb_Punctuation.BringToFront();
 
 					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox + hCbPad);
+
+					cb_Punctuation.Checked = false; // clear disallowed punctuation at start.
 				}
 			}
 			else
@@ -105,21 +113,21 @@ namespace yata
 		/// <summary>
 		/// Handles <c>TextChanged</c> for the TextBox.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="tb_Input"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Input(object sender, EventArgs e)
 		{
 			if (!_bypasstextchanged)
 			{
-				if (tb_Input.Text.Length != 0 && _selc != -2) // colhead
+				if (_selc != -2) // colhead
 				{
 					char character;
 					for (int i = 0; i != tb_Input.Text.Length; ++i)
 					{
 						character = tb_Input.Text[i];
-						if (character == 34 // double-quote
-							|| (    (Settings._strict && !Util.isAsciiAlphanumericOrUnderscore(character))
-								|| (!Settings._strict && !Util.isPrintableAsciiNotDoublequote( character))))
+						if (!(Util.isAsciiAlphanumericOrUnderscore(character)
+							|| ((cb_Punctuation == null || cb_Punctuation.Checked)
+								&& Util.isPrintableAsciiNotDoublequote( character))))
 						{
 							_bypasstextchanged = true;
 							tb_Input.Text = _colabel; // recurse
@@ -139,12 +147,41 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Clears punctuation from the textbox if user dechecks
+		/// <c><see cref="cb_Punctuation"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="cb_Punctuation"/></c></param>
+		/// <param name="e"></param>
+		void checkedchanged_Punctuation(object sender, EventArgs e)
+		{
+			if (!cb_Punctuation.Checked)
+			{
+				var sb = new StringBuilder();
+
+				for (int i = 0; i != tb_Input.Text.Length; ++i)
+				if (Util.isAsciiAlphanumericOrUnderscore(tb_Input.Text[i]))
+					sb.Append(tb_Input.Text[i]);
+
+				string text = sb.ToString();
+				if (text != tb_Input.Text)
+				{
+					_bypasstextchanged = true;
+
+					_colabel = (tb_Input.Text = text);
+					tb_Input.SelectionStart = tb_Input.Text.Length;
+
+					_bypasstextchanged = false;
+				}
+			}
+		}
+
+		/// <summary>
 		/// 1. colhead: Cancels close if the input-text is already taken by
 		/// another colhead.
 		/// 
 		/// 2. defaultval:
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="bu_Okay"/></c></param>
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
