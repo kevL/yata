@@ -1,6 +1,8 @@
 using System;
+#if DEBUG
 using System.IO;
 using System.Windows.Forms;
+#endif
 
 
 namespace yata
