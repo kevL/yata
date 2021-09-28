@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 
@@ -35,7 +36,7 @@ namespace yata
 			la_Head.Text = head;
 
 			_pre = enc.CodePage;
-			tb_Codepage.Text = enc.CodePage.ToString();
+			tb_Codepage.Text = enc.CodePage.ToString(CultureInfo.InvariantCulture);
 
 			bu_Accept.Select();
 		}
@@ -65,7 +66,7 @@ namespace yata
 				la_CodepageInfo.Text = String.Empty;
 				_pre = 0;
 			}
-			else if (tb_Codepage.Text.StartsWith("0", StringComparison.InvariantCulture))
+			else if (tb_Codepage.Text.StartsWith("0", StringComparison.Ordinal))
 			{
 				tb_Codepage.Text = tb_Codepage.Text.Substring(1); // recurse
 				tb_Codepage.SelectionStart = tb_Codepage.Text.Length;
@@ -76,7 +77,7 @@ namespace yata
 				if (!Int32.TryParse(tb_Codepage.Text, out result)
 					|| result < 0 || result > 65535)
 				{
-					tb_Codepage.Text = _pre.ToString(); // recurse
+					tb_Codepage.Text = _pre.ToString(CultureInfo.InvariantCulture); // recurse
 					tb_Codepage.SelectionStart = tb_Codepage.Text.Length;
 				}
 				else if (YataGrid.CheckCodepage(_pre = result))
@@ -105,7 +106,7 @@ namespace yata
 		/// <param name="e"></param>
 		void bu_Default_click(object sender, EventArgs e)
 		{
-			tb_Codepage.Text = Encoding.GetEncoding(0).CodePage.ToString();
+			tb_Codepage.Text = Encoding.GetEncoding(0).CodePage.ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
@@ -115,7 +116,7 @@ namespace yata
 		/// <param name="e"></param>
 		void bu_Utf8_click(object sender, EventArgs e)
 		{
-			tb_Codepage.Text = Encoding.UTF8.CodePage.ToString();
+			tb_Codepage.Text = Encoding.UTF8.CodePage.ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
@@ -126,7 +127,7 @@ namespace yata
 		/// <param name="e"></param>
 		void bu_Custom_click(object sender, EventArgs e)
 		{
-			tb_Codepage.Text = Settings._codepage.ToString();
+			tb_Codepage.Text = Settings._codepage.ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 
@@ -119,23 +120,23 @@ namespace yata
 					break;
 			}
 
-			tb_StartAdd   .Text = YataForm.Table.Rows.Count.ToString();
-			tb_StartInsert.Text = (r + 1).ToString();
+			tb_StartAdd   .Text = YataForm.Table.Rows.Count.ToString(CultureInfo.InvariantCulture);
+			tb_StartInsert.Text = (r + 1).ToString(CultureInfo.InvariantCulture);
 
-			int result = Int32.Parse(_count);	// shall be valid and greater than 0.
+			int result = Int32.Parse(_count, CultureInfo.InvariantCulture);	// shall be valid and greater than 0.
 			Control tb;
-			if (rb_StartAdd.Checked)			// readonly - shall be valid.
+			if (rb_StartAdd.Checked)										// readonly - shall be valid.
 			{
 				tb = tb_StartAdd;
 				btn_Accept.Text = ADD;
 			}
-			else // rb_StartInsert.Checked		// shall be valid.
+			else // rb_StartInsert.Checked									// shall be valid.
 			{
 				tb = tb_StartInsert;
 				btn_Accept.Text = INSERT;
 			}
 
-			tb_StopFinish.Text = (Int32.Parse(tb.Text) + result - 1).ToString();
+			tb_StopFinish.Text = (Int32.Parse(tb.Text, CultureInfo.InvariantCulture) + result - 1).ToString(CultureInfo.InvariantCulture);
 			tb_StopCount .Text = _count;
 
 			_init = false;
@@ -260,7 +261,7 @@ namespace yata
 						if (Int32.TryParse(tb.Text, out result)
 							&& result > -1 && result <= YataForm.Table.RowCount)
 						{
-							tb_StopFinish.Text = (result + result2 - 1).ToString();
+							tb_StopFinish.Text = (result + result2 - 1).ToString(CultureInfo.InvariantCulture);
 						}
 					}
 				}
@@ -312,7 +313,7 @@ namespace yata
 					{
 						if (result > YataForm.Table.Rows.Count)
 						{
-							tb_StartInsert.Text = YataForm.Table.Rows.Count.ToString(); // -> recurse
+							tb_StartInsert.Text = YataForm.Table.Rows.Count.ToString(CultureInfo.InvariantCulture); // -> recurse
 							tb_StartInsert.SelectionStart = tb_StartInsert.Text.Length;
 						}
 						else
@@ -323,7 +324,7 @@ namespace yata
 							if (Int32.TryParse(tb_StopCount.Text, out result2)
 								&& result2 > 0)
 							{
-								tb_StopFinish.Text = (result + result2 - 1).ToString();
+								tb_StopFinish.Text = (result + result2 - 1).ToString(CultureInfo.InvariantCulture);
 							}
 						}
 					}
@@ -331,7 +332,7 @@ namespace yata
 					{
 						if (rb_StartAdd.Checked)
 						{
-							result2 = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
+							result2 = Int32.Parse(tb_StartAdd.Text, CultureInfo.InvariantCulture); // readonly - shall be valid.
 							if (result < result2)
 							{
 								tb_StopFinish.ForeColor =
@@ -342,7 +343,7 @@ namespace yata
 								tb_StopFinish.ForeColor = SystemColors.WindowText;
 								la_StopFinish.ForeColor = SystemColors.ControlText;
 
-								tb_StopCount.Text = (result - result2 + 1).ToString();
+								tb_StopCount.Text = (result - result2 + 1).ToString(CultureInfo.InvariantCulture);
 							}
 						}
 						else // rb_StartInsert.Checked
@@ -358,7 +359,7 @@ namespace yata
 								tb_StopFinish.ForeColor = SystemColors.WindowText;
 								la_StopFinish.ForeColor = SystemColors.ControlText;
 
-								tb_StopCount.Text = (result - result2 + 1).ToString();
+								tb_StopCount.Text = (result - result2 + 1).ToString(CultureInfo.InvariantCulture);
 							}
 						}
 					}
@@ -369,13 +370,13 @@ namespace yata
 
 						if (rb_StartAdd.Checked)
 						{
-							result2 = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
-							tb_StopFinish.Text = (result + result2 - 1).ToString();
+							result2 = Int32.Parse(tb_StartAdd.Text, CultureInfo.InvariantCulture); // readonly - shall be valid.
+							tb_StopFinish.Text = (result + result2 - 1).ToString(CultureInfo.InvariantCulture);
 						}
 						else // rb_StartInsert.Checked
 						{
 							if (Int32.TryParse(tb_StartInsert.Text, out result2))
-								tb_StopFinish.Text = (result + result2 - 1).ToString();
+								tb_StopFinish.Text = (result + result2 - 1).ToString(CultureInfo.InvariantCulture);
 						}
 					}
 				}
@@ -415,7 +416,7 @@ namespace yata
 			int result;
 			if (rb_StartAdd.Checked)
 			{
-				f._startCr = Int32.Parse(tb_StartAdd.Text); // readonly - shall be valid.
+				f._startCr = Int32.Parse(tb_StartAdd.Text, CultureInfo.InvariantCulture); // readonly - shall be valid.
 
 				if (rb_StopFinish.Checked)
 				{
