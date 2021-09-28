@@ -67,8 +67,8 @@ namespace yata
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
 		ToolStripMenuItem it_RelabelHead;
-		ToolStripMenuItem it_CopyCol;
-		ToolStripMenuItem it_PasteCol;
+		ToolStripMenuItem it_CopyCells;
+		ToolStripMenuItem it_PasteCells;
 
 		internal ToolStripTextBox tb_Goto;
 
@@ -295,8 +295,8 @@ namespace yata
 			this.it_DeleteHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_RelabelHead = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_32 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_CopyCol = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PasteCol = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_CopyCells = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
@@ -905,8 +905,8 @@ namespace yata
 			this.it_DeleteHead,
 			this.it_RelabelHead,
 			this.separator_32,
-			this.it_CopyCol,
-			this.it_PasteCol});
+			this.it_CopyCells,
+			this.it_PasteCells});
 			this.it_MenuCol.Name = "it_MenuCol";
 			this.it_MenuCol.Size = new System.Drawing.Size(38, 20);
 			this.it_MenuCol.Text = "C&ol";
@@ -950,19 +950,19 @@ namespace yata
 			this.separator_32.Name = "separator_32";
 			this.separator_32.Size = new System.Drawing.Size(158, 6);
 			// 
-			// it_CopyCol
+			// it_CopyCells
 			// 
-			this.it_CopyCol.Name = "it_CopyCol";
-			this.it_CopyCol.Size = new System.Drawing.Size(161, 22);
-			this.it_CopyCol.Text = "&copy col";
-			this.it_CopyCol.Click += new System.EventHandler(this.editcolclick_CopyCol);
+			this.it_CopyCells.Name = "it_CopyCells";
+			this.it_CopyCells.Size = new System.Drawing.Size(161, 22);
+			this.it_CopyCells.Text = "&copy cells";
+			this.it_CopyCells.Click += new System.EventHandler(this.editcolclick_CopyCol);
 			// 
-			// it_PasteCol
+			// it_PasteCells
 			// 
-			this.it_PasteCol.Name = "it_PasteCol";
-			this.it_PasteCol.Size = new System.Drawing.Size(161, 22);
-			this.it_PasteCol.Text = "&paste col";
-			this.it_PasteCol.Click += new System.EventHandler(this.editcolclick_PasteCol);
+			this.it_PasteCells.Name = "it_PasteCells";
+			this.it_PasteCells.Size = new System.Drawing.Size(161, 22);
+			this.it_PasteCells.Text = "&paste cells";
+			this.it_PasteCells.Click += new System.EventHandler(this.editcolclick_PasteCol);
 			// 
 			// tb_Goto
 			// 
