@@ -127,8 +127,8 @@ Col
                      operation is disabled if the table has only 1 colhead.
 - relabel head ... : relabels the head of a selected col *
 
-- copy col  : copies the cells of a selected col
-- paste col : pastes copied cells into a selected col
+- copy cells  : copies the cells of a selected col
+- paste cells : pastes copied cells into a selected col
 
 * Creating or Relabeling a colhead disallows Unicode characters (non-ASCII
   characters). This is further restricted to only alpha-numeric digits and/or
@@ -141,7 +141,7 @@ Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto")
 
 Search box (type a string to search for and press [Enter] or [F3]. Note that
             [Enter] keeps the searchbox focused while [F3] switches focus to the
-            table
+            table. [Shift] reverses the search direction
 Search options dropdown (substring or wholeword)
 
 

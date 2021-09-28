@@ -616,6 +616,15 @@ namespace yata
 						}
 						break;
 
+					case Keys.Shift | Keys.Enter:
+						if (tb_Search.Focused || cb_SearchOption.Focused)
+						{
+							e.SuppressKeyPress = true;
+							_dontbeep = DONTBEEP_SEARCH;
+							BeginInvoke(DontBeepEvent);
+						}
+						break;
+
 					case Keys.Escape:
 						if (Tabs.Focused || btn_Propanel.Focused) // btn -> jic.
 						{
@@ -3095,8 +3104,8 @@ namespace yata
 				it_DeleteHead .Enabled = !Table.Readonly && isColSelected && Table.ColCount > 2;
 				it_RelabelHead.Enabled = !Table.Readonly && isColSelected;
 
-				it_CopyCol    .Enabled = isColSelected;
-				it_PasteCol   .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
+				it_CopyCells    .Enabled = isColSelected;
+				it_PasteCells   .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
 			}
 			else
 			{
@@ -3106,8 +3115,8 @@ namespace yata
 				it_DeleteHead .Enabled =
 				it_RelabelHead.Enabled =
 
-				it_CopyCol    .Enabled =
-				it_PasteCol   .Enabled = false;
+				it_CopyCells    .Enabled =
+				it_PasteCells   .Enabled = false;
 			}
 		}
 
