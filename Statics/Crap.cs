@@ -74,8 +74,7 @@ namespace yata
 		/// Values used in the struct CHANGEFILTERSTRUCT
 		/// </summary>
 		public enum MessageFilterInfo
-			:
-				uint
+			: uint
 		{
 			/// <summary>
 			/// Certain messages whose value is smaller than WM_USER are
@@ -112,8 +111,7 @@ namespace yata
 		/// Values used by ChangeWindowMessageFilterEx
 		/// </summary>
 		public enum ChangeWindowMessageFilterExAction
-			:
-				uint
+			: uint
 		{
 			/// <summary>
 			/// Resets the window message filter for hWnd to the default. Any

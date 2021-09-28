@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 
 namespace yata
@@ -111,8 +112,8 @@ namespace yata
 
 			if (!Settings._casesort)
 			{
-				_a = _a.ToLower();
-				_b = _b.ToLower();
+				_a = _a.ToUpper(CultureInfo.CurrentCulture);
+				_b = _b.ToUpper(CultureInfo.CurrentCulture);
 			}
 
 			int result;

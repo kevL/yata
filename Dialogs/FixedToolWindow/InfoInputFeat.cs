@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 
@@ -21,7 +22,6 @@ namespace yata
 
 		#region Fields
 		YataForm _f;
-		YataGrid _grid;
 		Cell _cell;
 
 		bool _init;
@@ -34,12 +34,11 @@ namespace yata
 		/// <summary>
 		/// A dialog for the user to input <c>Feat.2da</c> info.
 		/// </summary>
-		/// <param name="grid"></param>
+		/// <param name="f"></param>
 		/// <param name="cell"></param>
-		internal InfoInputFeat(YataGrid grid, Cell cell)
+		internal InfoInputFeat(YataForm f, Cell cell)
 		{
-			_grid = grid;
-			_f    = grid._f;
+			_f    = f;
 			_cell = cell;
 
 			InitializeComponent();
@@ -151,7 +150,7 @@ namespace yata
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower()));
+				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower(CultureInfo.InvariantCulture)));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}

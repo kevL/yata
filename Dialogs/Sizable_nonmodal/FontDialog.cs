@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 // DEBUG ->
@@ -158,7 +159,7 @@ namespace yata
 			cb_Undr.Checked = (style_init & FontStyle.Underline) != 0;
 			cb_Strk.Checked = (style_init & FontStyle.Strikeout) != 0;
 
-			tb_FontSize.Text = size_init.ToString();
+			tb_FontSize.Text = size_init.ToString(CultureInfo.InvariantCulture);
 			tb_FontSize.MouseWheel += size_mousewheel; // NOTE: Mousewheel event is not shown in the designer.
 
 			_init = false;
@@ -391,12 +392,12 @@ namespace yata
 				if (e.Delta > 0)
 				{
 					if (size >= 1F)
-						tb_FontSize.Text = (size + 0.75F).ToString();
+						tb_FontSize.Text = (size + 0.75F).ToString(CultureInfo.InvariantCulture);
 				}
 				else if (e.Delta < 0)
 				{
 					if (size >= 1.75F)
-						tb_FontSize.Text = (size - 0.75F).ToString();
+						tb_FontSize.Text = (size - 0.75F).ToString(CultureInfo.InvariantCulture);
 				}
 			}
 		}
@@ -423,7 +424,7 @@ namespace yata
 		/// <returns>the first <c>FontStyle</c> found else
 		/// <c><see cref="FontStyleInvalid"/></c></returns>
 		/// <remarks>ALL STYLES ARE ALWAYS AVAILABLE. Thanks .net! .not</remarks>
-		FontStyle getStyle(FontFamily ff)
+		static FontStyle getStyle(FontFamily ff)
 		{
 			foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
 			if (ff.IsStyleAvailable(style))
@@ -523,11 +524,11 @@ namespace yata
 		#endregion Methods
 
 
-		#region DEBUG
+/*		#region DEBUG
 		/// <summary>
 		/// Debug funct.
 		/// </summary>
-		void LogValidStyles()
+		static void LogValidStyles()
 		{
 			foreach (var ff in FontFamily.Families)
 			{
@@ -569,7 +570,7 @@ namespace yata
 		/// <summary>
 		/// Debug funct.
 		/// </summary>
-		void LogAllFonts()
+		static void LogAllFonts()
 		{
 			using (var ifc = new System.Drawing.Text.InstalledFontCollection())
 			{
@@ -586,7 +587,7 @@ namespace yata
 		/// <summary>
 		/// Debug funct.
 		/// </summary>
-		void LogFontFiles()
+		static void LogFontFiles()
 		{
 			var di = new DirectoryInfo(@"C:\Windows\Fonts");
 
@@ -596,7 +597,7 @@ namespace yata
 			foreach (FileInfo file in files)
 			{
 				logfile.Log(file.Name);
-				ttfFiles.Add(file.Name.ToLower());
+				ttfFiles.Add(file.Name.ToLower(CultureInfo.InvariantCulture));
 			}
 			logfile.Log();
 			logfile.Log("COUNT (ttf)= " + files.Length);
@@ -648,11 +649,11 @@ namespace yata
 				string val = fonts.GetValue(@var) as String;
 				logfile.Log(@var + " : " + val);
 
-				switch (val.Substring(val.Length - 3).ToLower())
+				switch (val.Substring(val.Length - 3).ToLower(CultureInfo.InvariantCulture))
 				{
 					case "ttf":
 						++countTtf;
-						ttfInstalled.Add(val.ToLower());
+						ttfInstalled.Add(val.ToLower(CultureInfo.InvariantCulture));
 						break;
 
 					case "ttc": ++countTtc; break;
@@ -675,6 +676,6 @@ namespace yata
 					logfile.Log("installed does NOT contain : " + val);
 			}
 		}
-		#endregion DEBUG
+		#endregion DEBUG */
 	}
 }

@@ -90,7 +90,7 @@ namespace yata
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
-						if (val.StartsWith("B", StringComparison.InvariantCulture)) // is in BaseItems.2da
+						if (val.StartsWith("B", StringComparison.Ordinal)) // is in BaseItems.2da
 						{
 							info = Table.Cols[col].text + ": [BaseItem] ";
 
@@ -171,7 +171,7 @@ namespace yata
 												info += gs.bork;
 										}
 										else
-											info += result.ToString();
+											info += result.ToString(CultureInfo.InvariantCulture);
 									}
 									else
 										info += gs.bork;
@@ -661,7 +661,7 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						switch (val.ToUpper())
+						switch (val.ToUpper(CultureInfo.InvariantCulture))
 						{
 							case "A": info += "Abjuration";    break;
 							case "C": info += "Conjuration";   break;
@@ -684,7 +684,7 @@ namespace yata
 						info = Table.Cols[col].text + ": ";
 
 						int r;
-						switch (val.ToUpper())
+						switch (val.ToUpper(CultureInfo.InvariantCulture))
 						{
 							case "P": info += "Personal"; r =  0; break; // NOTE: 'rangeLabels' could be used but
 							case "T": info += "Touch";    r =  1; break; // they're abnormal: "SpellRngPers" eg.

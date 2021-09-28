@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Windows.Forms;
 
 using yata.Properties;
@@ -231,7 +232,7 @@ namespace yata
 				}
 
 				TextRenderer.DrawText(graphics,
-									  r.ToString(),
+									  r.ToString(CultureInfo.InvariantCulture),
 									  _f.FontAccent,
 									  rect,
 									  Colors.Text,

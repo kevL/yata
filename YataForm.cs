@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -804,11 +805,6 @@ namespace yata
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read"><c>true</c> to create table as
 		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c></param>
-		/// <remarks>The filename w/out extension must not be blank since
-		/// <c><see cref="YataGrid.Init()">YataGrid.Init()</see></c> is going to
-		/// use blank as a fallthrough while determining the grid's
-		/// <c><see cref="YataGrid.InfoType">YataGrid.InfoType</see></c> to call
-		/// <c><see cref="GropeLabels()">GropeLabels()</see></c>.</remarks>
 		void CreatePage(string pfe, bool read = false)
 		{
 			if (File.Exists(pfe)										// ~safety
@@ -1004,7 +1000,7 @@ namespace yata
 				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 				it_Defaultval     .Enabled = true;
-				it_Defaultclear   .Enabled = Table._defaultval != String.Empty;
+				it_Defaultclear   .Enabled = Table._defaultval.Length != 0;
 
 				EnableCelleditOperations();
 				EnableRoweditOperations();
@@ -1674,7 +1670,7 @@ namespace yata
 		/// Checks the row-order before save.
 		/// </summary>
 		/// <returns><c>true</c> if row-order is okay</returns>
-		bool CheckRowOrder()
+		static bool CheckRowOrder()
 		{
 			int result;
 			for (int r = 0; r != Table.RowCount; ++r)
@@ -2029,9 +2025,9 @@ namespace yata
 
 
 				string search = tb_Search.Text;
-				if (!String.IsNullOrEmpty(search))
+				if (search.Length != 0)
 				{
-					search = search.ToLower();
+					search = search.ToUpper(CultureInfo.CurrentCulture);
 
 					Cell sel = Table.getSelectedCell();
 					int selr = Table.getSelectedRow();
@@ -2075,7 +2071,7 @@ namespace yata
 							for (; c != Table.ColCount; ++c)
 							{
 								if (c != 0 // don't search the id-col
-									&& ((text = Table[r,c].text.ToLower()) == search
+									&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
 										|| (substring && text.Contains(search))))
 								{
 									Table.SelectCell(Table[r,c]);
@@ -2089,7 +2085,7 @@ namespace yata
 						for (c = 0; c != Table.ColCount; ++c)
 						{
 							if (c != 0 // don't search the id-col
-								&& ((text = Table[r,c].text.ToLower()) == search
+								&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
 									|| (substring && text.Contains(search))))
 							{
 								Table.SelectCell(Table[r,c]);
@@ -2127,7 +2123,7 @@ namespace yata
 							for (; c != -1; --c)
 							{
 								if (c != 0 // don't search the id-col
-									&& ((text = Table[r,c].text.ToLower()) == search
+									&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
 										|| (substring && text.Contains(search))))
 								{
 									Table.SelectCell(Table[r,c]);
@@ -2141,7 +2137,7 @@ namespace yata
 						for (c = Table.ColCount - 1; c != -1;       --c)
 						{
 							if (c != 0 // don't search the id-col
-								&& ((text = Table[r,c].text.ToLower()) == search
+								&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
 									|| (substring && text.Contains(search))))
 							{
 								Table.SelectCell(Table[r,c]);
@@ -2382,7 +2378,7 @@ namespace yata
 					Table._defaultval = InputDialog._defaultval;
 					if (!Table.Changed) Table.Changed = true;
 
-					it_Defaultclear.Enabled = Table._defaultval != String.Empty;
+					it_Defaultclear.Enabled = Table._defaultval.Length != 0;
 				}
 			}
 		}
@@ -2481,7 +2477,7 @@ namespace yata
 					_copytext[i, ++j] = (cell = Table[r,c]).text;
 
 					if (c == 0 && Settings._autorder)
-						text = r.ToString();
+						text = r.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
 
@@ -2563,7 +2559,7 @@ namespace yata
 				cell.selected = true;
 
 				if (cell.x == 0 && Settings._autorder)
-					text = cell.y.ToString();
+					text = cell.y.ToString(CultureInfo.InvariantCulture);
 				else
 					text = _copytext[r,c];
 
@@ -2607,7 +2603,7 @@ namespace yata
 				if ((sel = row[c]).selected)
 				{
 					if (c == 0 && Settings._autorder)
-						text = sel.y.ToString();
+						text = sel.y.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
 
@@ -2649,7 +2645,7 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (sel.text != (text = sel.text.ToLower()))
+					if (sel.text != (text = sel.text.ToLower(CultureInfo.CurrentCulture)))
 					{
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
@@ -2687,7 +2683,7 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (sel.text != (text = sel.text.ToUpper()))
+					if (sel.text != (text = sel.text.ToUpper(CultureInfo.CurrentCulture)))
 					{
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
@@ -2730,7 +2726,7 @@ namespace yata
 						if ((sel = row[c]).selected)
 						{
 							if (c == 0 && Settings._autorder)
-								text = sel.y.ToString();
+								text = sel.y.ToString(CultureInfo.InvariantCulture);
 							else
 								text = _copytext[0,0];
 
@@ -3026,7 +3022,7 @@ namespace yata
 					int r = _startCr;
 					for (int i = 0; i != _lengthCr; ++i, ++r)
 					{
-						cells[0] = r.ToString();
+						cells[0] = r.ToString(CultureInfo.InvariantCulture);
 
 						Table.Insert(r, cells, false);
 						rest.array[i] = Table.Rows[r].Clone() as Row;
@@ -3502,7 +3498,7 @@ namespace yata
 		/// Orders row-ids.
 		/// </summary>
 		/// <returns>the count of changed row-ids</returns>
-		internal int order()
+		static internal int order()
 		{
 			int changed = 0;
 
@@ -3511,7 +3507,7 @@ namespace yata
 			if (!Int32.TryParse(Table[r,0].text, out result)
 				|| result != r)
 			{
-				Table[r,0].text = r.ToString();
+				Table[r,0].text = r.ToString(CultureInfo.InvariantCulture);
 				++changed;
 			}
 			return changed;
@@ -3678,7 +3674,7 @@ namespace yata
 		/// <remarks>Helper for
 		/// <c><see cref="opsclick_AutosizeCols()">opsclick_AutosizeCols()</see></c>
 		/// and <c><see cref="DiffReset()">DiffReset()</see></c>.</remarks>
-		void AutosizeCols(YataGrid table)
+		static void AutosizeCols(YataGrid table)
 		{
 			foreach (var col in table.Cols)
 				col.UserSized = false;
@@ -3878,7 +3874,7 @@ namespace yata
 
 			bytes -= GetUsage();
 
-			string head = "Estimated memory freed : " + String.Format("{0:n0}", bytes) + " bytes";
+			string head = "Estimated memory freed : " + String.Format(CultureInfo.InvariantCulture, "{0:n0}", bytes) + " bytes";
 			using (var ib = new Infobox(Infobox.Title_infor, head))
 				ib.ShowDialog(this);
 		}
@@ -3911,7 +3907,7 @@ namespace yata
 		/// Gets Yata's current memory usage in bytes.
 		/// </summary>
 		/// <returns></returns>
-		long GetUsage()
+		static long GetUsage()
 		{
 			long bytes;
 			using (Process proc = Process.GetCurrentProcess())
@@ -4344,7 +4340,7 @@ namespace yata
 			int c = 0;
 			if (Settings._autorder)
 			{
-				row[c].text = _r.ToString();
+				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
 				row[c].diff =
 				row[c].loadchanged = false;
 
@@ -4446,7 +4442,7 @@ namespace yata
 			int c = 0;
 			if (Settings._autorder)
 			{
-				row[c].text = _r.ToString();
+				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
 				row[c].diff =
 				row[c].loadchanged = false;
 
@@ -4551,8 +4547,8 @@ namespace yata
 			cellit_Paste  .Enabled = !Table.Readonly;
 			cellit_Clear  .Enabled = !Table.Readonly && (_sel.text != gs.Stars || _sel.loadchanged);
 
-			cellit_Lower  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToLower() || _sel.loadchanged);
-			cellit_Upper  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToUpper() || _sel.loadchanged);
+			cellit_Lower  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToLower(CultureInfo.CurrentCulture) || _sel.loadchanged);
+			cellit_Upper  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToUpper(CultureInfo.CurrentCulture) || _sel.loadchanged);
 
 			cellit_MergeCe.Enabled =
 			cellit_MergeRo.Enabled = isMergeEnabled();
@@ -4809,7 +4805,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Lower(object sender, EventArgs e)
 		{
-			string text = _sel.text.ToLower();
+			string text = _sel.text.ToLower(CultureInfo.CurrentCulture);
 			if (_sel.text != text)
 				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
 			else if (_sel.loadchanged)
@@ -4823,7 +4819,7 @@ namespace yata
 		/// <param name="e"></param>
 		void cellclick_Upper(object sender, EventArgs e)
 		{
-			string text = _sel.text.ToUpper();
+			string text = _sel.text.ToUpper(CultureInfo.CurrentCulture);
 			if (_sel.text != text)
 				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
 			else if (_sel.loadchanged)
@@ -4878,8 +4874,8 @@ namespace yata
 			}
 
 			if (Settings._autorder)
-				table[r,0].text = table[r,0].y.ToString();	// not likely to happen. user'd have to load a table w/
-															// an out of order id then merge that row to another table.
+				table[r,0].text = table[r,0].y.ToString(CultureInfo.InvariantCulture);	// not likely to happen. user'd have to load a table w/
+																						// an out of order id then merge that row to another table.
 			if (table.ColCount > Table.ColCount)
 			{
 				for (; c != table.ColCount; ++c)
@@ -4927,7 +4923,7 @@ namespace yata
 						case InfoInputSpells.Range:
 						case InfoInputSpells.ImmunityType:
 						case InfoInputSpells.UserType:
-							using (var iis = new InfoInputSpells(Table, _sel))
+							using (var iis = new InfoInputSpells(this, _sel))
 							{
 								if (iis.ShowDialog(this) == DialogResult.OK
 									&& str1 != str0)
@@ -4940,7 +4936,7 @@ namespace yata
 						case InfoInputSpells.MetaMagic: // HEX Input ->
 						case InfoInputSpells.TargetType:
 						case InfoInputSpells.AsMetaMagic:
-							using (var iis = new InfoInputSpells(Table, _sel))
+							using (var iis = new InfoInputSpells(this, _sel))
 							{
 								if (iis.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
@@ -4955,7 +4951,7 @@ namespace yata
 										if (int1 > 0xFF) q = "X6"; // is MetaMagic (invocation)
 										else             q = "X2"; // is MetaMagic (standard) or TargetType
 
-										Table.ChangeCellText(_sel, "0x" + int1.ToString(q)); // does not do a text-check
+										Table.ChangeCellText(_sel, "0x" + int1.ToString(q, CultureInfo.InvariantCulture)); // does not do a text-check
 									}
 								}
 							}
@@ -4979,7 +4975,7 @@ namespace yata
 							break;
 
 						case InfoInputFeat.ToolsCategories:
-							using (var iif = new InfoInputFeat(Table, _sel))
+							using (var iif = new InfoInputFeat(this, _sel))
 							{
 								if (iif.ShowDialog(this) == DialogResult.OK
 									&& str1 != str0)
@@ -4999,7 +4995,7 @@ namespace yata
 		/// </summary>
 		void doIntInputSpells()
 		{
-			using (var iis = new InfoInputSpells(Table, _sel))
+			using (var iis = new InfoInputSpells(this, _sel))
 				doIntInput(iis);
 		}
 
@@ -5009,7 +5005,7 @@ namespace yata
 		/// </summary>
 		void doIntInputFeat()
 		{
-			using (var iif = new InfoInputFeat(Table, _sel))
+			using (var iif = new InfoInputFeat(this, _sel))
 				doIntInput(iif);
 		}
 
@@ -5029,7 +5025,7 @@ namespace yata
 			{
 				string val;
 				if (int1 == II_ASSIGN_STARS) val = gs.Stars;
-				else                         val = int1.ToString();
+				else                         val = int1.ToString(CultureInfo.InvariantCulture);
 
 				Table.ChangeCellText(_sel, val); // does not do a text-check
 			}
@@ -5108,7 +5104,7 @@ namespace yata
 				_strInt |= TalkReader.bitCusto;	// flags 'bitCusto'
 			}
 
-			Table.ChangeCellText(_sel, _strInt.ToString()); // does not do a text-check
+			Table.ChangeCellText(_sel, _strInt.ToString(CultureInfo.InvariantCulture)); // does not do a text-check
 		}
 
 		/// <summary>
@@ -5694,7 +5690,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sel">a <c><see cref="Cell"/></c> in the current table</param>
 		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
-		void gotodiff(Cell sel, YataGrid table)
+		static void gotodiff(Cell sel, YataGrid table)
 		{
 			Table.SelectCell(sel, false);
 

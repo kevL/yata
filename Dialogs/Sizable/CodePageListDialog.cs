@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 
@@ -35,7 +36,7 @@ namespace yata
 
 				sb.AppendLine(encs[i].Name);
 				sb.AppendLine(encs[i].DisplayName);
-				sb.AppendLine(encs[i].CodePage.ToString());
+				sb.AppendLine(encs[i].CodePage.ToString(CultureInfo.InvariantCulture));
 			}
 			tb_Codepages.Text = sb.ToString();
 

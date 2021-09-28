@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -739,7 +740,7 @@ namespace yata
 							info += ipfeatLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -761,7 +762,7 @@ namespace yata
 							info += classLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -802,7 +803,7 @@ namespace yata
 							info += ipspellLabels[par] + " L" + ipspellLevels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -1628,7 +1629,7 @@ namespace yata
 							info += skillLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2431,7 +2432,7 @@ namespace yata
 					info += "[1](";
 					if ((par = GetPar(pars, 0)) > 0 && par < 21)
 					{
-						info += par.ToString();
+						info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2452,7 +2453,7 @@ namespace yata
 							info += skillLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2479,7 +2480,7 @@ namespace yata
 							info += spellLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2670,7 +2671,7 @@ namespace yata
 							info += ipammoLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2715,7 +2716,7 @@ namespace yata
 							info += classLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;
@@ -2735,7 +2736,7 @@ namespace yata
 							info += raceLabels[par];
 						}
 						else
-							info += par.ToString();
+							info += par.ToString(CultureInfo.InvariantCulture);
 					}
 					else
 						info += gs.bork;

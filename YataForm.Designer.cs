@@ -219,6 +219,9 @@ namespace yata
 			if (disposing && components != null)
 				components.Dispose();
 
+			FontDefault.Dispose();
+			FontAccent .Dispose();
+
 			base.Dispose(disposing);
 		}
 

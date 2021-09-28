@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.IO;
 using System.Text;
 //using System.Threading;
@@ -1397,9 +1398,9 @@ namespace yata
 							}
 
 
-							if (Settings._autorder && id.ToString() != fields[0])
+							if (Settings._autorder && id.ToString(CultureInfo.InvariantCulture) != fields[0])
 							{
-								fields[0] = id.ToString();
+								fields[0] = id.ToString(CultureInfo.InvariantCulture);
 								autordered = true;
 							}
 
@@ -1575,24 +1576,25 @@ namespace yata
 			}
 			else
 			{
-				switch (Path.GetFileNameWithoutExtension(Fullpath).ToLowerInvariant())
+				switch (Path.GetFileNameWithoutExtension(Fullpath).ToUpperInvariant())
 				{
-					case "crafting":
+					case "CRAFTING":
 						Info = InfoType.INFO_CRAFT;
-						goto case "";
-
-					case "spells":
-						Info = InfoType.INFO_SPELL;
-						goto case "";
-
-					case "feat":
-						Info = InfoType.INFO_FEAT;
-						goto case "";
-
-					case "":									// NOTE: YataForm.CreatePage() does not allow a blank
-						foreach (var dir in Settings._pathall)	// filename to load so this should be (reasonably) safe.
-							_f.GropeLabels(dir);
 						break;
+
+					case "SPELLS":
+						Info = InfoType.INFO_SPELL;
+						break;
+
+					case "FEAT":
+						Info = InfoType.INFO_FEAT;
+						break;
+				}
+
+				if (Info != InfoType.INFO_NONE)
+				{
+					foreach (var dir in Settings._pathall)
+						_f.GropeLabels(dir);
 				}
 			}
 
@@ -3496,8 +3498,8 @@ namespace yata
 			if (field != tb.Text)
 				changed = true;
 
-			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+			bool quoteFirst = field.StartsWith("\"", StringComparison.Ordinal);
+			bool quoteLast  = field.EndsWith(  "\"", StringComparison.Ordinal);
 			if (quoteFirst && quoteLast)
 			{
 				if (   field.Length < 3
@@ -3558,8 +3560,8 @@ namespace yata
 					}
 				}
 			}
-			else if (  field.StartsWith("\"", StringComparison.InvariantCulture)
-					&& field.EndsWith(  "\"", StringComparison.InvariantCulture))
+			else if (  field.StartsWith("\"", StringComparison.Ordinal)
+					&& field.EndsWith(  "\"", StringComparison.Ordinal))
 			{
 				bool preserveQuotes = false;
 
@@ -3591,12 +3593,12 @@ namespace yata
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
 		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
 		/// <seealso cref="CheckTextEdit()"><c>CheckTextEdit()</c></seealso>
-		bool CheckLoadField(ref string field)
+		static bool CheckLoadField(ref string field)
 		{
 			bool changed = false;
 
-			bool quoteFirst = field.StartsWith("\"", StringComparison.InvariantCulture);
-			bool quoteLast  = field.EndsWith(  "\"", StringComparison.InvariantCulture);
+			bool quoteFirst = field.StartsWith("\"", StringComparison.Ordinal);
+			bool quoteLast  = field.EndsWith(  "\"", StringComparison.Ordinal);
 			if (quoteFirst && quoteLast)
 			{
 				if (   field.Length < 3
@@ -3657,8 +3659,8 @@ namespace yata
 					}
 				}
 			}
-			else if (  field.StartsWith("\"", StringComparison.InvariantCulture)
-					&& field.EndsWith(  "\"", StringComparison.InvariantCulture))
+			else if (  field.StartsWith("\"", StringComparison.Ordinal)
+					&& field.EndsWith(  "\"", StringComparison.Ordinal))
 			{
 				bool preserveQuotes = false;
 
@@ -4296,7 +4298,7 @@ namespace yata
 			var cords = new Point();
 
 			cords.X = FrozenCount;
-			while ((left += Cols[cords.X].width()) < x)
+			while ((l += Cols[cords.X].width()) < x)
 				++cords.X;
 
 			int top = HeightColhead;
@@ -4825,14 +4827,13 @@ namespace yata
 
 							if ((ModifierKeys & Keys.Control) == 0) // clear all other col's cells ->
 							{
-								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
 								{
 									if (c != click_c
 										&& (   (r > selr && r > selr + RangeSelect)
 											|| (r < selr && r < selr + RangeSelect))
-										&& (cell = this[r,c]).selected)
+										&& this[r,c].selected)
 									{
 										this[r,c].selected = false;
 										celldeselected = true;

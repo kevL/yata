@@ -1,7 +1,8 @@
 using System;
-using System.Windows.Forms;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 // https://stackoverflow.com/questions/118528/horrible-redraw-performance-of-the-datagridview-on-one-of-my-two-screens#answer-16625788
 
@@ -33,7 +34,8 @@ namespace yata
 											 						  | BindingFlags.NonPublic,
 											 null,
 											 control,
-											 new object[] { true });
+											 new object[] { true },
+											 CultureInfo.InvariantCulture);
 			}
 		}
 

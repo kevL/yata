@@ -15,12 +15,6 @@ namespace yata
 	{
 		#region Fields
 		/// <summary>
-		/// The parent of this <c>YataDialog</c>.
-		/// </summary>
-		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
-		protected Control _f;
-
-		/// <summary>
 		/// A <c>List</c> of <c>TextBoxBases</c> that shall be initialized w/
 		/// consistent values and behaviors.
 		/// </summary>
@@ -123,6 +117,17 @@ namespace yata
 			private set { _maximized[GetType()] = value; }
 		}
 		#endregion Properties (static)
+
+
+		#region Properties
+		/// <summary>
+		/// The parent of this <c>YataDialog</c>.
+		/// </summary>
+		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
+		protected Control _f
+		{ get; set; }
+
+		#endregion Properties
 
 
 		#region Handlers (override)

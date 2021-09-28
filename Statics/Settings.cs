@@ -71,7 +71,7 @@ namespace yata
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
-						if (line.StartsWith("font=", StringComparison.InvariantCulture))
+						if (line.StartsWith("font=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
@@ -91,7 +91,7 @@ namespace yata
 									_fontdialog = CreateDialogFont(_font);
 							}
 						}
-						else if (line.StartsWith("font2=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("font2=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
 							{
@@ -111,7 +111,7 @@ namespace yata
 									_font2dialog = CreateDialogFont(_font2);
 							}
 						}
-						else if (line.StartsWith("font3=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("font3=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
 							{
@@ -129,7 +129,7 @@ namespace yata
 								}
 							}
 						}
-						else if (line.StartsWith("fontf=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("fontf=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
 							{
@@ -149,7 +149,7 @@ namespace yata
 									_fontf_tb = CreateDialogFont(_fontf);
 							}
 						}
-						else if (line.StartsWith("fonti=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("fonti=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
 							{
@@ -167,7 +167,7 @@ namespace yata
 								}
 							}
 						}
-						else if (line.StartsWith("dirpreset=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("dirpreset=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
 								&& Directory.Exists(line))
@@ -175,7 +175,7 @@ namespace yata
 								_dirpreset.Add(line);
 							}
 						}
-						else if (line.StartsWith("pathall=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("pathall=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
 								&& Directory.Exists(line))
@@ -183,7 +183,7 @@ namespace yata
 								_pathall.Add(line);
 							}
 						}
-						else if (line.StartsWith("x=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("x=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
 								&& Int32.TryParse(line, out result) && result > -1)
@@ -191,7 +191,7 @@ namespace yata
 								_x = result;
 							}
 						}
-						else if (line.StartsWith("y=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("y=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
 								&& Int32.TryParse(line, out result) && result > -1)
@@ -199,7 +199,7 @@ namespace yata
 								_y = result;
 							}
 						}
-						else if (line.StartsWith("w=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("w=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
 								&& Int32.TryParse(line, out result) && result > -1)
@@ -207,7 +207,7 @@ namespace yata
 								_w = result;
 							}
 						}
-						else if (line.StartsWith("h=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("h=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
 								&& Int32.TryParse(line, out result) && result > -1)
@@ -215,22 +215,22 @@ namespace yata
 								_h = result;
 							}
 						}
-						else if (line.StartsWith("strict=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("strict=", StringComparison.Ordinal))
 						{
 							_strict = (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
 								   && line == "true");
 						}
-						else if (line.StartsWith("gradient=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("gradient=", StringComparison.Ordinal))
 						{
 							_gradient = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
 						}
-						else if (line.StartsWith("context=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("context=", StringComparison.Ordinal))
 						{
 							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
 									&& line == "static");
 						}
-						else if (line.StartsWith("recent=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("recent=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
 								&& Int32.TryParse(line, out result) && result > 0)
@@ -239,43 +239,43 @@ namespace yata
 								_recent = result;
 							}
 						}
-						else if (line.StartsWith("diff=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("diff=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
 							{
 								_diff = line;
 							}
 						}
-						else if (line.StartsWith("dialog=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("dialog=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim()))
 							{
 								_dialog = line;
 							}
 						}
-						else if (line.StartsWith("dialogalt=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("dialogalt=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim()))
 							{
 								_dialogalt = line;
 							}
 						}
-						else if (line.StartsWith("maximized=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("maximized=", StringComparison.Ordinal))
 						{
 							_maximized = (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
 									  && line == "true");
 						}
-						else if (line.StartsWith("instantgoto=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("instantgoto=", StringComparison.Ordinal))
 						{
 							_instantgoto = (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
 										&& line == "true");
 						}
-						else if (line.StartsWith("casesort=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("casesort=", StringComparison.Ordinal))
 						{
 							_casesort = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
 						}
-						else if (line.StartsWith("alignoutput=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("alignoutput=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim()))
 							{
@@ -286,7 +286,7 @@ namespace yata
 								}
 							}
 						}
-						else if (line.StartsWith("codepage=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("codepage=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 								&& Int32.TryParse(line, out result)
@@ -295,7 +295,7 @@ namespace yata
 								_codepage = result;
 							}
 						}
-						else if (line.StartsWith("autorder=", StringComparison.InvariantCulture))
+						else if (line.StartsWith("autorder=", StringComparison.Ordinal))
 						{
 							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");

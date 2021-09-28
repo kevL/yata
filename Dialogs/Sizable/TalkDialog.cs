@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 
@@ -55,7 +56,7 @@ namespace yata
 
 			Text = " tlk - " + strref;
 
-			_eId_init = Int32.Parse(strref);
+			_eId_init = Int32.Parse(strref, CultureInfo.InvariantCulture);
 
 			if (_eId_init == TalkReader.invalid || (_eId_init & TalkReader.bitCusto) == 0)
 			{
@@ -78,7 +79,7 @@ namespace yata
 				_eId_init &= TalkReader.strref;
 
 
-			tb_Strref.Text = _eId_init.ToString(); // <- sets '_eId' and 'rtb_Copyable.Text'
+			tb_Strref.Text = _eId_init.ToString(CultureInfo.InvariantCulture); // <- sets '_eId' and 'rtb_Copyable.Text'
 
 
 			if (TalkReader.AltLabel != null)
@@ -158,7 +159,7 @@ namespace yata
 				if (!Int32.TryParse(tb_Strref.Text, out result)
 					|| result < TalkReader.invalid || result > TalkReader.strref)
 				{
-					tb_Strref.Text = _eId_init.ToString();
+					tb_Strref.Text = _eId_init.ToString(CultureInfo.InvariantCulture);
 					tb_Strref.SelectionStart = tb_Strref.Text.Length;
 					return; // recurse.
 				}
@@ -202,7 +203,7 @@ namespace yata
 				if (_eId != TalkReader.invalid && cb_Custo.Checked)
 					_eId |= TalkReader.bitCusto;
 
-				(_f as YataForm)._strref = _eId.ToString();
+				(_f as YataForm)._strref = _eId.ToString(CultureInfo.InvariantCulture);
 				Close();
 			}
 		}
@@ -266,7 +267,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnPrevert(object sender, EventArgs e)
 		{
-			tb_Strref.Text = _eId_init.ToString();
+			tb_Strref.Text = _eId_init.ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
@@ -284,7 +285,7 @@ namespace yata
 
 				if (_dict.ContainsKey(--_eId))
 				{
-					tb_Strref.Text = _eId.ToString();
+					tb_Strref.Text = _eId.ToString(CultureInfo.InvariantCulture);
 					return;
 				}
 			}
@@ -306,7 +307,7 @@ namespace yata
 
 				if (_dict.ContainsKey(++_eId))
 				{
-					tb_Strref.Text = _eId.ToString();
+					tb_Strref.Text = _eId.ToString(CultureInfo.InvariantCulture);
 					return;
 				}
 			}
