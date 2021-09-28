@@ -5,6 +5,10 @@
 	/// </summary>
 	static class gs
 	{
+		internal const string TwodaVer        = "2DA V2.0";
+		internal const string Default         = "DEFAULT: ";
+		internal const string DefaultColLabel = "Label";
+
 		internal const string Stars           = "****";
 		internal const string Invalid         = "-1";
 		internal const string Id              = "id";
@@ -53,10 +57,6 @@
 
 
 		internal static string[] CRandorLF = { "\r\n", "\r", "\n" };
-
-		internal const string TwodaVer        = "2DA V2.0";
-		internal const string Default         = "DEFAULT: ";
-		internal const string DefaultColLabel = "Label";
 	}
 
 
