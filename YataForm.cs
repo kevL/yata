@@ -4140,11 +4140,11 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					using (var ib = new Infobox(Infobox.Title_warni,
-												Infobox.SplitString("The Settings.cfg file does not exist in the application"
+					using (var ib = new Infobox(" File not found",
+												Infobox.SplitString("a Settings.cfg file does not exist in the application"
 																  + " directory. Do you want to create one ..."),
 												null,
-												InfoboxType.Warn,
+												InfoboxType.Info,
 												InfoboxButtons.CancelYes))
 					{
 						if (ib.ShowDialog(this) == DialogResult.OK)
@@ -4168,7 +4168,7 @@ namespace yata
 							catch (Exception ex)
 							{
 								using (var ibo = new Infobox(Infobox.Title_excep,
-															"The Settings.cfg file could not be created in the application directory.",
+															"a Settings.cfg file could not be created in the application directory.",
 															ex.ToString(),
 															InfoboxType.Error))
 								{

@@ -100,7 +100,7 @@ namespace yata
 						File.Delete(pfeT);
 
 						using (var ib = new Infobox(Infobox.Title_infor,
-													"Yata must be reloaded before any changes take effect."))
+													"Yata must be reloaded for any changes to take effect."))
 						{
 							ib.ShowDialog(this);
 						}
@@ -110,7 +110,7 @@ namespace yata
 			catch (Exception ex)
 			{
 				using (var ib = new Infobox(Infobox.Title_excep,
-											"The Settings.cfg file could not be written to the application directory.",
+											"the Settings.cfg file could not be written to the application directory.",
 											ex.ToString(),
 											InfoboxType.Error))
 				{
