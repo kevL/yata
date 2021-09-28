@@ -325,13 +325,13 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor. Instantiates a 2da-file in this YataGrid format/layout.
+		/// cTor. Instantiates a 2da-file in this <c>YataGrid</c> format/layout.
 		/// </summary>
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly</param>
-		/// <param name="created"><c>true</c> to delay insantiating the
-		/// <c><see cref="FileWatcher"/> when creating a new 2da-file</c></param>
+		/// <param name="created"><c>true</c> to delay instantiating a
+		/// <c><see cref="FileWatcher"/></c> when creating a new 2da-file</param>
 		internal YataGrid(YataForm f, string pfe, bool read, bool created = false)
 		{
 //			DrawRegulator.SetDoubleBuffered(this);
