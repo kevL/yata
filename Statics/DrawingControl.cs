@@ -16,7 +16,7 @@ namespace yata
 		const int WM_SETREDRAW = 11;
 
 		/// <summary>
-		/// Some controls, such as the <c>DataGridView</c>, do not allow setting
+		/// Some controls such as the <c>DataGridView</c> do not allow setting
 		/// the <c>DoubleBuffered</c> property. It is set as a protected
 		/// property. This method is a work-around to allow setting it. Call
 		/// this in the constructor just after <c>InitializeComponent()</c>.
@@ -30,8 +30,9 @@ namespace yata
 			{
 				// set instance non-public property with name "DoubleBuffered" to true
 				typeof(Control).InvokeMember("DoubleBuffered",
-											 BindingFlags.SetProperty | BindingFlags.Instance
-											 						  | BindingFlags.NonPublic,
+											 BindingFlags.SetProperty
+										   | BindingFlags.Instance
+										   | BindingFlags.NonPublic,
 											 null,
 											 control,
 											 new object[] { true },
