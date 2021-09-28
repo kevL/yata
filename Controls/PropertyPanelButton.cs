@@ -40,7 +40,7 @@ namespace yata
 		/// </summary>
 		internal PropertyPanelButton()
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			// NOTE: .NET is using the default vals for button's Width/Height
 			// here. So set it explicitly.

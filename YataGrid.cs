@@ -334,7 +334,7 @@ namespace yata
 		/// <c><see cref="FileWatcher"/> when creating a new 2da-file</c></param>
 		internal YataGrid(YataForm f, string pfe, bool read, bool created = false)
 		{
-//			DrawingControl.SetDoubleBuffered(this);
+//			DrawRegulator.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
 				   | ControlStyles.UserPaint
@@ -2072,7 +2072,7 @@ namespace yata
 
 				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated / updated-on-Reload better.
 				{
-					DrawingControl.SetDoubleBuffered(_labelid);
+					DrawRegulator.SetDoubleBuffered(_labelid);
 					_labelid.BackColor = Colors.FrozenHead;
 
 					_labelid.Resize     += label_Resize;
@@ -2089,7 +2089,7 @@ namespace yata
 
 					if (_initFrozenLabels)
 					{
-						DrawingControl.SetDoubleBuffered(_labelfirst);
+						DrawRegulator.SetDoubleBuffered(_labelfirst);
 						_labelfirst.BackColor = Colors.FrozenHead;
 
 						_labelfirst.Resize     += label_Resize;
@@ -2106,7 +2106,7 @@ namespace yata
 
 						if (_initFrozenLabels)
 						{
-							DrawingControl.SetDoubleBuffered(_labelsecond);
+							DrawRegulator.SetDoubleBuffered(_labelsecond);
 							_labelsecond.BackColor = Colors.FrozenHead;
 
 							_labelsecond.Resize     += label_Resize;
@@ -5118,7 +5118,7 @@ namespace yata
 							 Brush    brush     = null)
 		{
 			if (calibrate)
-				DrawingControl.SuspendDrawing(this);
+				DrawRegulator.SuspendDrawing(this);
 
 			if (fields != null)
 			{
@@ -5156,7 +5156,7 @@ namespace yata
 				if (rowid < RowCount)
 					EnsureDisplayedRow(rowid);
 
-				DrawingControl.ResumeDrawing(this);
+				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
@@ -5170,7 +5170,7 @@ namespace yata
 		internal void Delete(int idr, bool calibrate = true)
 		{
 			if (calibrate)
-				DrawingControl.SuspendDrawing(this);
+				DrawRegulator.SuspendDrawing(this);
 
 			Row row;
 
@@ -5202,7 +5202,7 @@ namespace yata
 				if (calibrate)
 				{
 					Calibrate(0);
-					DrawingControl.ResumeDrawing(this);
+					DrawRegulator.ResumeDrawing(this);
 
 					return;
 				}
@@ -5215,7 +5215,7 @@ namespace yata
 				if (idr < RowCount)
 					EnsureDisplayedRow(idr);
 
-				DrawingControl.ResumeDrawing(this);
+				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
@@ -5227,7 +5227,7 @@ namespace yata
 		internal void DeleteRows()
 		{
 			_f.Obfuscate();
-			DrawingControl.SuspendDrawing(this);
+			DrawRegulator.SuspendDrawing(this);
 
 
 			int selr = getSelectedRow();
@@ -5274,7 +5274,7 @@ namespace yata
 			_ur.Push(rest);
 
 
-			DrawingControl.ResumeDrawing(this);
+			DrawRegulator.ResumeDrawing(this);
 			_f.Obfuscate(false);
 		}
 
@@ -5289,7 +5289,7 @@ namespace yata
 		/// <remarks>Performs a mergesort.</remarks>
 		void ColSort(int col)
 		{
-			DrawingControl.SuspendDrawing(_f);
+			DrawRegulator.SuspendDrawing(_f);
 
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
 
@@ -5336,7 +5336,7 @@ namespace yata
 			}
 			_ur.ResetY(); // straighten out row._id and cell.y in UndoRedo's Restorables
 
-			DrawingControl.ResumeDrawing(_f);
+			DrawRegulator.ResumeDrawing(_f);
 		}
 		#endregion Sort
 

@@ -132,7 +132,7 @@
     <Compile Include="Statics\ClipboardService.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
-    <Compile Include="Statics\DrawingControl.cs" />
+    <Compile Include="Statics\DrawRegulator.cs" />
     <Compile Include="Statics\FileOutput.cs" />
     <Compile Include="Statics\gs.cs" />
     <Compile Include="Statics\Info.cs" />

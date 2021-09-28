@@ -233,7 +233,7 @@ namespace yata
 
 			Tabs.ContextMenuStrip = ContextTab;
 
-//			DrawingControl.SetDoubleBuffered(this);
+//			DrawRegulator.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
 				   | ControlStyles.AllPaintingInWmPaint
 				   | ControlStyles.UserPaint
@@ -890,7 +890,7 @@ namespace yata
 				{
 					Table = table; // NOTE: Is done in tab_SelectedIndexChanged() also.
 
-					DrawingControl.SuspendDrawing(Table);
+					DrawRegulator.SuspendDrawing(Table);
 
 					var tab = new TabPage();
 					Tabs.TabPages.Add(tab);
@@ -910,7 +910,7 @@ namespace yata
 					TopMost = true;
 					TopMost = false;
 
-					DrawingControl.ResumeDrawing(Table);
+					DrawRegulator.ResumeDrawing(Table);
 				}
 				else
 				{
@@ -1232,7 +1232,7 @@ namespace yata
 		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> property.</remarks>
 		internal void SetTabText(YataGrid table)
 		{
-			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			string asterics = table.Changed ? ASTERICS : String.Empty;
 			foreach (TabPage tab in Tabs.TabPages)
@@ -1245,7 +1245,7 @@ namespace yata
 			}
 			SetTabSize();
 
-			DrawingControl.ResumeDrawing(this);
+			DrawRegulator.ResumeDrawing(this);
 		}
 
 		/// <summary>
@@ -1255,7 +1255,7 @@ namespace yata
 		/// <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c>.</remarks>
 		void SetAllTabTexts()
 		{
-			DrawingControl.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			YataGrid table;
 			foreach (TabPage tab in Tabs.TabPages)
@@ -1266,7 +1266,7 @@ namespace yata
 			}
 			SetTabSize();
 
-			DrawingControl.ResumeDrawing(this);
+			DrawRegulator.ResumeDrawing(this);
 		}
 		#endregion Methods (tabs)
 
@@ -1365,7 +1365,7 @@ namespace yata
 
 			if (File.Exists(Table.Fullpath)) // instead of CreatePage() ->
 			{
-				DrawingControl.SuspendDrawing(Table);
+				DrawRegulator.SuspendDrawing(Table);
 
 				var tab = new TabPage();
 				Tabs.TabPages.Add(tab);
@@ -1381,7 +1381,7 @@ namespace yata
 
 				Table.Watcher = new FileWatcher(Table);
 
-				DrawingControl.ResumeDrawing(Table);
+				DrawRegulator.ResumeDrawing(Table);
 			}
 			else
 			{
@@ -1481,7 +1481,7 @@ namespace yata
 				if (reload)
 				{
 					Obfuscate();
-					DrawingControl.SuspendDrawing(Table);
+					DrawRegulator.SuspendDrawing(Table);
 
 					if      (Table == _diff1) _diff1 = null;
 					else if (Table == _diff2) _diff2 = null;
@@ -1513,7 +1513,7 @@ namespace yata
 
 					if (Table != null)
 					{
-						DrawingControl.ResumeDrawing(Table);
+						DrawRegulator.ResumeDrawing(Table);
 						Obfuscate(false);
 
 						Table.Watcher.BypassFileChanged = true;
@@ -2917,7 +2917,7 @@ namespace yata
 		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
 			Obfuscate();
-			DrawingControl.SuspendDrawing(Table);
+			DrawRegulator.SuspendDrawing(Table);
 
 
 			Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
@@ -2949,7 +2949,7 @@ namespace yata
 			Table._ur.Push(rest);
 
 
-			DrawingControl.ResumeDrawing(Table);
+			DrawRegulator.ResumeDrawing(Table);
 			Obfuscate(false);
 
 			if (Settings._autorder && order() != 0) layout();
@@ -2999,7 +2999,7 @@ namespace yata
 				if (rcd.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
-					DrawingControl.SuspendDrawing(Table);
+					DrawRegulator.SuspendDrawing(Table);
 
 
 					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
@@ -3053,7 +3053,7 @@ namespace yata
 					Table._ur.Push(rest);
 
 
-					DrawingControl.ResumeDrawing(Table);
+					DrawRegulator.ResumeDrawing(Table);
 					Obfuscate(false);
 
 					if (Settings._autorder && order() != 0) layout();
@@ -3183,7 +3183,7 @@ namespace yata
 					&& InputDialog._colabel.Length != 0)
 				{
 					Obfuscate();
-					DrawingControl.SuspendDrawing(Table);
+					DrawRegulator.SuspendDrawing(Table);
 
 					// create at far right if no col selected or id-col is selected
 					// - not sure that id-col could ever be selected ->
@@ -3196,7 +3196,7 @@ namespace yata
 					it_freeze1.Enabled = Table.ColCount > 1;
 					it_freeze2.Enabled = Table.ColCount > 2;
 
-					DrawingControl.ResumeDrawing(Table);
+					DrawRegulator.ResumeDrawing(Table);
 					Obfuscate(false);
 				}
 			}
@@ -3221,7 +3221,7 @@ namespace yata
 				if (ib.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
-					DrawingControl.SuspendDrawing(Table);
+					DrawRegulator.SuspendDrawing(Table);
 
 					steadystate();
 
@@ -3230,7 +3230,7 @@ namespace yata
 					it_freeze1.Enabled = Table.ColCount > 1;
 					it_freeze2.Enabled = Table.ColCount > 2;
 
-					DrawingControl.ResumeDrawing(Table);
+					DrawRegulator.ResumeDrawing(Table);
 					Obfuscate(false);
 				}
 			}
@@ -3338,11 +3338,11 @@ namespace yata
 			if (diff == 0)
 			{
 				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
+				DrawRegulator.SuspendDrawing(Table);
 
 				Table.PasteCol(_copyc);
 
-				DrawingControl.ResumeDrawing(Table);
+				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 			}
 		}
@@ -3527,7 +3527,7 @@ namespace yata
 		/// </summary>
 		internal void layout()
 		{
-			DrawingControl.SuspendDrawing(this);
+			DrawRegulator.SuspendDrawing(this);
 
 
 			if (!Table.Changed)
@@ -3550,7 +3550,7 @@ namespace yata
 			Table.Invalidator(invalid);
 
 
-			DrawingControl.ResumeDrawing(this);
+			DrawRegulator.ResumeDrawing(this);
 		}
 
 		/// <summary>
@@ -3668,11 +3668,11 @@ namespace yata
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			Obfuscate();
-			DrawingControl.SuspendDrawing(Table);
+			DrawRegulator.SuspendDrawing(Table);
 
 			AutosizeCols(Table);
 
-			DrawingControl.ResumeDrawing(Table);
+			DrawRegulator.ResumeDrawing(Table);
 			Obfuscate(false);
 		}
 
@@ -4041,7 +4041,7 @@ namespace yata
 			if (Table != null)
 			{
 				Obfuscate();
-				DrawingControl.SuspendDrawing(Table);
+				DrawRegulator.SuspendDrawing(Table);
 
 				SetTabSize();
 
@@ -4072,7 +4072,7 @@ namespace yata
 						table.Invalidator(table.EnsureDisplayed());
 				}
 
-				DrawingControl.ResumeDrawing(Table);
+				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 
 				if (_ffont != null)			// layout for big tables will send the Font dialog below the form ->
@@ -5197,7 +5197,7 @@ namespace yata
 		{
 			if (!CancelChangedTables("close", true))
 			{
-				DrawingControl.SuspendDrawing(this); // stops tab-flickering on Remove tab
+				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 				{
@@ -5209,7 +5209,7 @@ namespace yata
 
 				it_SaveAll.Enabled = AllowSaveAll();
 
-				DrawingControl.ResumeDrawing(this);
+				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 

@@ -28,7 +28,7 @@ namespace yata
 		/// <param name="grid"></param>
 		internal YataPanelCols(YataGrid grid)
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			_grid = grid;
 
@@ -202,7 +202,7 @@ namespace yata
 		/// <param name="grid"></param>
 		internal YataPanelRows(YataGrid grid)
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			_grid = grid;
 
@@ -257,7 +257,7 @@ namespace yata
 		/// <param name="w"></param>
 		internal YataPanelFrozen(YataGrid grid, int w)
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			_grid = grid;
 

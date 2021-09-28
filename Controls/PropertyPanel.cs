@@ -82,7 +82,7 @@ namespace yata
 		/// </summary>
 		internal PropertyPanel(YataGrid grid)
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			_grid = grid;
 

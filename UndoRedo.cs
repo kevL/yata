@@ -647,7 +647,7 @@ namespace yata
 			//logfile.Log("UndoRedo.InsertArray()");
 
 			_grid._f.Obfuscate();
-			DrawingControl.SuspendDrawing(_grid);
+			DrawRegulator.SuspendDrawing(_grid);
 
 
 			int cols = _it.array[0].Length;
@@ -678,7 +678,7 @@ namespace yata
 			// NOTE: Does not select the row's cells.
 
 
-			DrawingControl.ResumeDrawing(_grid);
+			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
 
 			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
@@ -694,7 +694,7 @@ namespace yata
 			//logfile.Log("UndoRedo.DeleteArray()");
 
 			_grid._f.Obfuscate();
-			DrawingControl.SuspendDrawing(_grid);
+			DrawRegulator.SuspendDrawing(_grid);
 
 
 			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
@@ -711,7 +711,7 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);
 
 
-			DrawingControl.ResumeDrawing(_grid);
+			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
 
 			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();

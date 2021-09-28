@@ -38,7 +38,7 @@ namespace yata
 		#region cTor
 		internal YataTabs()
 		{
-			DrawingControl.SetDoubleBuffered(this);
+			DrawRegulator.SetDoubleBuffered(this);
 
 			Name     = "Tabs";
 			TabIndex = 3;

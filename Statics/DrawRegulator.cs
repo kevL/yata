@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	static class DrawingControl
+	static class DrawRegulator
 	{
 		[DllImport("user32.dll")]
 		internal static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
