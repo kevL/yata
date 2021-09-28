@@ -44,6 +44,8 @@ namespace yata
 		const string TITLE    = " Yata";
 		const string ASTERICS = " *";
 
+		const string RECENTCFG = "recent.cfg";
+
 		internal static string PfeLoad; // cl arg
 
 		static Graphics graphics;
@@ -378,7 +380,7 @@ namespace yata
 		void CreateRecentsSubits()
 		{
 			string dir = Application.StartupPath;
-			string pfe = Path.Combine(dir, "recent.cfg");
+			string pfe = Path.Combine(dir, RECENTCFG);
 			if (File.Exists(pfe))
 			{
 				ToolStripItemCollection recents = it_Recent.DropDownItems;
@@ -494,7 +496,7 @@ namespace yata
 				foreach (ToolStripItem recent in it_Recent.DropDownItems)
 					recents[++i] = recent.Text;
 
-				string pfe = Path.Combine(Application.StartupPath, "recent.cfg");
+				string pfe = Path.Combine(Application.StartupPath, RECENTCFG);
 				try
 				{
 					File.WriteAllLines(pfe, recents);
