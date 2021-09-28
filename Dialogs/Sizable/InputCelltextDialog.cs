@@ -13,6 +13,8 @@ namespace yata
 	{
 		#region Fields (static)
 		const string HEAD = "Apply sets the copy cell text and applies it to selected cells.";
+
+		const int MIN_w = 300;
 		#endregion Fields (static)
 
 
@@ -36,6 +38,9 @@ namespace yata
 			la_Head.Text = HEAD;
 
 			tb_Input.Text = (_f as YataForm)._copytext[0,0];
+
+			MinimumSize = new Size(MIN_w,          Height);
+			MaximumSize = new Size(Int32.MaxValue, Height);
 
 
 			tb_Input.Select();

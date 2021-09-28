@@ -37,7 +37,7 @@ namespace yata
 			// 
 			// bu_Cancel
 			// 
-			this.bu_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.bu_Cancel.Location = new System.Drawing.Point(136, 25);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
@@ -49,7 +49,7 @@ namespace yata
 			// 
 			// bu_Okay
 			// 
-			this.bu_Okay.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bu_Okay.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.bu_Okay.Location = new System.Drawing.Point(6, 25);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);

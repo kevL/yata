@@ -15,6 +15,11 @@ namespace yata
 		#region Fields (static)
 		internal static string _colabel    = String.Empty;
 		internal static string _defaultval = String.Empty;
+
+		const int MIN_w = 275;
+
+		const int hCheckbox = 22;
+		const int hCbPad    =  1;
 		#endregion Fields (static)
 
 
@@ -45,12 +50,30 @@ namespace yata
 			{
 				Text = " yata - Colhead text";
 				tb_Input.Text = _colabel;
+
+				if (Settings._strict) // allow punctuation cb // TODO: impl.
+				{
+					var cb = new CheckBox();
+					cb.Text = "accept punctuation - only ascii";
+					cb.TextAlign = ContentAlignment.BottomLeft;
+					cb.Padding = new Padding(4,0,0,0);
+					cb.Size = new Size(100, hCheckbox);
+					cb.Dock = DockStyle.Top;
+
+					Controls.Add(cb);
+					cb.BringToFront();
+
+					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox + hCbPad);
+				}
 			}
 			else
 			{
 				Text = " yata - Default value";
 				tb_Input.Text = _defaultval;
 			}
+
+			MinimumSize = new Size(MIN_w,          Height);
+			MaximumSize = new Size(Int32.MaxValue, Height);
 
 
 			tb_Input.Select();
@@ -60,18 +83,6 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// Sets min/max sizes.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnLoad(EventArgs e)
-		{
-			MinimumSize = new Size(Width,          Height);
-			MaximumSize = new Size(Int32.MaxValue, Height);
-
-			base.OnLoad(e);
-		}
-
-		/// <summary>
 		/// Cancels close if <c><see cref="_cancel"/></c> is <c>true</c>.
 		/// </summary>
 		/// <param name="e"></param>
@@ -80,7 +91,12 @@ namespace yata
 			if (e.Cancel = _cancel)
 				_cancel = false;
 			else
+			{
+				if (_selc != -2 && Settings._strict)
+					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox - hCbPad);
+
 				base.OnFormClosing(e);
+			}
 		}
 		#endregion Handlers (override)
 
