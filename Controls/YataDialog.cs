@@ -144,12 +144,12 @@ namespace yata
 				if (Metric != METRIC_NON)
 				{
 					if (_x == -1)
+						CenterToParent();
+					else
 					{
-						_x = Math.Max(0, _f.Left + 20);
-						_y = Math.Max(0, _f.Top  + 20);
+						Left = _x;
+						Top  = _y;
 					}
-					Left = _x;
-					Top  = _y;
 
 					Screen screen = Screen.FromPoint(new Point(Left, Top));
 					if (screen.Bounds.Width < Left + Width) // TODO: decrease Width if this shifts the
