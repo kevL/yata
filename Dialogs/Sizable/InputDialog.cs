@@ -124,10 +124,10 @@ namespace yata
 					char character;
 					for (int i = 0; i != tb_Input.Text.Length; ++i)
 					{
-						character = tb_Input.Text[i];
-						if (!(Util.isAsciiAlphanumericOrUnderscore(character)
-							|| ((cb_Punctuation == null || cb_Punctuation.Checked)
-								&& Util.isPrintableAsciiNotDoublequote( character))))
+						if ((character = tb_Input.Text[i]) == 32
+							|| !(Util.isAsciiAlphanumericOrUnderscore(character)
+								|| ((cb_Punctuation == null || cb_Punctuation.Checked)
+									&& Util.isPrintableAsciiNotDoublequote(character))))
 						{
 							_bypasstextchanged = true;
 							tb_Input.Text = _colabel; // recurse

@@ -1241,15 +1241,21 @@ namespace yata
 
 						if (!quelch)
 						{
+							var chars = new List<char>(); // warn only once per character
+
 							foreach (char character in tr)
 							{
 								// construct this condition in the positive and put a NOT in front of it
 								// to avoid logical pretzels ...
 
-								if (!(  character == 32 // space
-									|| (character ==  9 && Settings._alignoutput == Settings.AoTabs) // tab
-									|| (Util.isPrintableAsciiNotDoublequote( character) && !Settings._strict)
-									|| (Util.isAsciiAlphanumericOrUnderscore(character) &&  Settings._strict)))
+								if (!chars.Contains(character)
+									&& !(   character == 32 // space
+										|| (character ==  9 // tab
+											&& (Settings._alignoutput == Settings.AoTabs
+												|| !Settings._strict))
+										|| Util.isAsciiAlphanumericOrUnderscore(character)
+										|| (!Settings._strict
+											&& Util.isPrintableAsciiNotDoublequote(character))))
 								{
 									head = "Detected a suspect character in the colhead labels ...";
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1262,6 +1268,10 @@ namespace yata
 
 										case DialogResult.OK:
 											quelch = true;
+											break;
+
+										case DialogResult.Retry:
+											chars.Add(character);
 											break;
 									}
 								}
