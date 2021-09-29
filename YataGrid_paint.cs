@@ -31,8 +31,10 @@ namespace yata
 
 				// NOTE: Paint backgrounds full-height/width of table ->
 
+				int offset_y = HeightColhead - OffsetVert;
+
 				// rows background - scrollable
-				var rect = new Rectangle(Left,       HeightColhead - offsetVert,
+				var rect = new Rectangle(Left,       offset_y,
 										 WidthTable, HeightRow);
 
 				for (r = 0; r != RowCount; ++r)
@@ -42,15 +44,13 @@ namespace yata
 				}
 
 				// cell text - scrollable
-				Row row;
+				Row row; Cell cell;
 
-				rect.Height = HeightRow;
-				int left = WidthRowhead - offsetHori + _padHori - 1;
+				int left = WidthRowhead - OffsetHori + _padHori - 1;
 
-				int yOffset = HeightColhead - offsetVert;
-				for (r = offsetVert / HeightRow; r != RowCount; ++r)
+				for (r = OffsetVert / HeightRow; r != RowCount; ++r)
 				{
-					if ((rect.Y = HeightRow * r + yOffset) > Bottom)
+					if ((rect.Y = HeightRow * r + offset_y) > Bottom)
 						break;
 
 					rect.X = left;
@@ -60,8 +60,7 @@ namespace yata
 					{
 						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
 						{
-							Cell cell = row[c];
-							if (cell.state != Cell.CellState.Default)
+							if ((cell = row[c]).state != Cell.CellState.Default)
 							{
 								rect.X -= _padHori;
 								graphics.FillRectangle(cell.getBrush(_editor.Visible && _editcell == cell), rect);
@@ -97,7 +96,7 @@ namespace yata
 				int y;
 				for (r = 1; r != RowCount + 1; ++r)
 				{
-					if ((y = HeightRow * r + yOffset) > Bottom)
+					if ((y = HeightRow * r + offset_y) > Bottom)
 						break;
 
 					if (y > HeightColhead)
@@ -110,7 +109,7 @@ namespace yata
 				// NOTE: Paint vertical lines full-height of table.
 
 				// col lines - scrollable
-				int x = WidthRowhead - offsetHori;
+				int x = WidthRowhead - OffsetHori;
 				for (c = 0; c != ColCount; ++c)
 				{
 					if ((x += Cols[c].width()) > Right)
@@ -130,7 +129,7 @@ namespace yata
 		/// <remarks>Called by <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
 		internal void LabelColheads()
 		{
-			var rect = new Rectangle(WidthRowhead - offsetHori + _padHori, 0,
+			var rect = new Rectangle(WidthRowhead - OffsetHori + _padHori, 0,
 									 0,                                    HeightColhead);
 			int clip;
 			Color color;
@@ -199,9 +198,9 @@ namespace yata
 			int selr = getSelectedRow();
 			Brush brush;
 
-			for (int r = offsetVert / HeightRow; r != RowCount; ++r)
+			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
 			{
-				if ((rect.Y = HeightRow * r - offsetVert) > Height)
+				if ((rect.Y = HeightRow * r - OffsetVert) > Height)
 					break;
 
 				if (selr != -1)
@@ -429,9 +428,9 @@ namespace yata
 			var rect = new Rectangle(0,0, 0, HeightRow);
 
 			Row row; Cell cell;
-			for (int r = offsetVert / HeightRow; r != RowCount; ++r)
+			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
 			{
-				if ((rect.Y = HeightRow * r - offsetVert) > Height)
+				if ((rect.Y = HeightRow * r - OffsetVert) > Height)
 					break;
 
 				rect.X = _padHori - 1;

@@ -150,8 +150,8 @@ namespace yata
 		internal bool _visVert; // Be happy. happy happy
 		internal bool _visHori;
 
-		internal int offsetVert; // TODO: these are redundant w/ the scrollbars' Value ->
-		internal int offsetHori;
+				 int OffsetVert; // TODO: these are redundant w/ the scrollbars' Value ->
+		internal int OffsetHori;
 
 		int HeightTable;
 		int WidthTable;
@@ -450,7 +450,7 @@ namespace yata
 				_table.Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 			}
 
-			_table.offsetVert = _table._scrollVert.Value;
+			_table.OffsetVert = _table._scrollVert.Value;
 
 			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
 				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
@@ -487,7 +487,7 @@ namespace yata
 				_table.Invalidator(INVALID_GRID | INVALID_COLS);
 			}
 
-			_table.offsetHori = _table._scrollHori.Value;
+			_table.OffsetHori = _table._scrollHori.Value;
 
 			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
 				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
@@ -705,7 +705,7 @@ namespace yata
 						// handle .NET OnResize anomaly ->
 						// keep the bottom of the table snuggled against the bottom
 						// of the visible area when resize enlarges the area
-						if (HeightTable < Height + offsetVert - (_visHori ? _scrollHori.Height : 0))
+						if (HeightTable < Height + OffsetVert - (_visHori ? _scrollHori.Height : 0))
 						{
 							_scrollVert.Value = MaxVert;
 						}
@@ -733,7 +733,7 @@ namespace yata
 						// handle .NET OnResize anomaly ->
 						// keep the right of the table snuggled against the right of
 						// the visible area when resize enlarges the area
-						if (WidthTable < Width + offsetHori - (_visVert ? _scrollVert.Width : 0))
+						if (WidthTable < Width + OffsetHori - (_visVert ? _scrollVert.Width : 0))
 							_scrollHori.Value = MaxHori;
 					}
 				}
@@ -2871,7 +2871,7 @@ namespace yata
 //
 //										int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 //										var pt = getColBounds(sel.x);
-//										pt.X += offsetHori - w;
+//										pt.X += OffsetHori - w;
 //
 //										int c = -1, tally = 0;
 //										while ((tally += Cols[++c].width()) < pt.X)
@@ -2951,7 +2951,7 @@ namespace yata
 //
 //										int w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 //										var pt = getColBounds(sel.x);
-//										pt.X += offsetHori + w;
+//										pt.X += OffsetHori + w;
 //
 //										int c = -1, tally = 0;
 //										while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
@@ -3922,10 +3922,10 @@ namespace yata
 		/// <returns></returns>
 		Cell getClickedCell(int x, int y)
 		{
-			y += offsetVert;
+			y += OffsetVert;
 			if (y > HeightColhead && y < HeightTable)
 			{
-				x += offsetHori;
+				x += OffsetHori;
 				if (x < WidthTable)
 				{
 					int left = getLeft();
@@ -4048,10 +4048,10 @@ namespace yata
 				if (   e.X < Width  - (_visVert ? _scrollVert.Width  : 0)
 					&& e.Y < Height - (_visHori ? _scrollHori.Height : 0))
 				{
-					int y = e.Y + offsetVert;
+					int y = e.Y + OffsetVert;
 					if (y > HeightColhead && y < HeightTable)
 					{
-						int x = e.X + offsetHori;
+						int x = e.X + OffsetHori;
 						if (x < WidthTable)
 						{
 							int left = getLeft();
@@ -4333,11 +4333,11 @@ namespace yata
 		{
 			var rect = new Rectangle();
 
-			rect.X = WidthRowhead - offsetHori;
+			rect.X = WidthRowhead - OffsetHori;
 			for (int c = 0; c != cell.x; ++c)
 				rect.X += Cols[c].width();
 
-			rect.Y = HeightColhead - offsetVert;
+			rect.Y = HeightColhead - OffsetVert;
 			for (int r = 0; r != cell.y; ++r)
 				rect.Y += HeightRow;
 
@@ -4470,7 +4470,7 @@ namespace yata
 		/// invalidated</returns>
 		internal int EnsureDisplayedRow(int rowid)
 		{
-			int posT = HeightColhead + HeightRow * rowid - offsetVert;
+			int posT = HeightColhead + HeightRow * rowid - OffsetVert;
 			if (posT != HeightColhead)
 			{
 				if (posT < HeightColhead)
@@ -4503,7 +4503,7 @@ namespace yata
 		/// <param name="colid">the col-id to display</param>
 		internal void EnsureDisplayedCol(int colid)
 		{
-			int posL = WidthRowhead - offsetHori;
+			int posL = WidthRowhead - OffsetHori;
 			for (int c = 0; c != colid; ++c)
 				posL += Cols[c].width();
 
@@ -4576,7 +4576,7 @@ namespace yata
 			{
 				Select();
 
-				int click_r = (e.Y + offsetVert) / HeightRow;
+				int click_r = (e.Y + OffsetVert) / HeightRow;
 				if (click_r < RowCount)
 				{
 					switch (e.Button)
@@ -5009,7 +5009,7 @@ namespace yata
 		/// <returns>col-id or <c>-1</c> if out of bounds</returns>
 		int getClickedCol(int x)
 		{
-			x += offsetHori;
+			x += OffsetHori;
 
 			int left = getLeft();
 			int c = FrozenCount - 1;

@@ -101,7 +101,7 @@ namespace yata
 
 				if (e.X > labels)
 				{
-					int x = YataGrid.WidthRowhead - _grid.offsetHori;
+					int x = YataGrid.WidthRowhead - _grid.OffsetHori;
 					for (int c = 0; c != _grid.ColCount; ++c)
 					{
 						x += _grid.Cols[c].width();
