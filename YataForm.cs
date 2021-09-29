@@ -3390,14 +3390,19 @@ namespace yata
 		{
 			_copyr.Clear();
 
-			string clip = ClipboardService.GetText().Trim();
-			if (!String.IsNullOrEmpty(clip))
+			string clip = ClipboardService.GetText();
+			if (clip.Length != 0)
 			{
 				string[] lines = clip.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
+				string line;
+
 				for (int i = 0; i != lines.Length; ++i)
 				{
-					string[] fields = YataGrid.ParseTableRow(lines[i]);
-					_copyr.Add(fields);
+					if ((line = lines[i].Trim()).Length != 0)
+					{
+						string[] fields = YataGrid.ParseTableRow(lines[i]);
+						_copyr.Add(fields);
+					}
 				}
 				it_PasteRange.Enabled = !Table.Readonly;
 				it_ClipExport.Enabled = true;
