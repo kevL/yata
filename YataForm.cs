@@ -3400,7 +3400,7 @@ namespace yata
 				{
 					if ((line = lines[i].Trim()).Length != 0)
 					{
-						string[] fields = YataGrid.ParseTableRow(lines[i]);
+						string[] fields = YataGrid.ParseTableRow(line);
 						_copyr.Add(fields);
 					}
 				}
