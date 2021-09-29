@@ -24,6 +24,7 @@ namespace yata
 		internal const string Title_alert = " Alert"; // <- for save routines only.
 
 		const int w_Min = 345;
+		const int w_Max = 800;
 		const int h_Max = 470;
 		#endregion Fields (static)
 
@@ -141,8 +142,7 @@ namespace yata
 				rt_Copyable.Visible = false;
 			}
 
-			if (width < w_Min)
-				width = w_Min;
+			if (width < w_Min) width = w_Min;
 
 
 			lbl_Head = new Label();
@@ -167,6 +167,8 @@ namespace yata
 
 			if (size.Width + lbl_Head.Padding.Horizontal + widthScroller > width)
 				width = size.Width + lbl_Head.Padding.Horizontal + widthScroller;
+
+			if (width > w_Max) width = w_Max;
 
 
 			height = (lbl_Head != null ? lbl_Head.Height : 0)
