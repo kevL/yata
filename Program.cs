@@ -39,7 +39,7 @@ namespace yata
 
 			Process proc = null;
 
-			if (args.Length != 0) // else always start a new instance of Yata
+			if (args.Length != 0) // else start a new instance of Yata
 			{
 				string label = Process.GetCurrentProcess().ProcessName;
 
