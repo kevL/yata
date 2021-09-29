@@ -3044,6 +3044,7 @@ namespace yata
 					_anchorcell = sel;
 
 					_f.SyncSelectCell(sel);
+					_f.EnableCelleditOperations();
 
 					Invalidator(INVALID_GRID
 							  | INVALID_FROZ
@@ -3051,11 +3052,13 @@ namespace yata
 				}
 				else if (anchor)				// -> is a block-select operation
 				{
+					_f.EnableCelleditOperations();
+
 					Invalidator(INVALID_GRID
 							  | EnsureDisplayed(sel));
 				}
 
-				_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
+//				_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
 			}
 		}
 
