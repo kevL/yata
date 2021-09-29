@@ -1288,7 +1288,7 @@ namespace yata
 						{
 							head = "A row has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
-								 + "id " + id;
+								 + "id " + (id + 1);
 
 							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 							{
