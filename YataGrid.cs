@@ -994,6 +994,7 @@ namespace yata
 
 
 			bool autordered = false;
+			bool whitespacewarned = false;
 
 			string tr;
 
@@ -1284,13 +1285,12 @@ namespace yata
 					default: // line #3+ datarows ->
 						tr = line.Trim();
 
-						if (!quelch && Settings._strict && line != tr)
+						if (!quelch && Settings._strict && tr.Length == 0)
 						{
-							head = "A row has extraneous whitespace. It will be trimmed if the file is saved.";
-							copy = Fullpath + Environment.NewLine + Environment.NewLine
-								 + "id " + (id + 1);
+							head = "A blank row is detected. It will be deleted if the file is saved.";
+							copy = Fullpath;
 
-							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							switch (ShowLoadWarning(head, copy))
 							{
 								case DialogResult.Cancel:
 									return LOADRESULT_FALSE;
@@ -1304,18 +1304,19 @@ namespace yata
 									break;
 							}
 						}
-
-
-						string[] fields = ParseTableRow(tr);
-
-						if (fields.Length == 0) // test for blank line
+						else
 						{
-							if (!quelch && Settings._strict)
-							{
-								head = "A blank row is detected. It will be deleted if the file is saved.";
-								copy = Fullpath;
+							++id;
 
-								switch (ShowLoadWarning(head, copy))
+							if (!quelch && Settings._strict && !whitespacewarned && line != tr)
+							{
+								whitespacewarned = true;
+
+								head = "At least one row has extraneous whitespace. This will be trimmed if the file is saved.";
+								copy = Fullpath + Environment.NewLine + Environment.NewLine
+									 + "id " + id;
+
+								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
@@ -1329,25 +1330,24 @@ namespace yata
 										break;
 								}
 							}
-						}
-						else
-						{
-							++id;
 
-							if (!quelch) // test for id - show these warnings even if not Strict.
+							string[] celltexts = ParseTableRow(tr);
+
+							if (!quelch) // show these warnings even if not Strict.
 							{
+								// test for id
 								int result;
-								if (!Int32.TryParse(fields[0], out result))
+								if (!Int32.TryParse(celltexts[0], out result))
 									head = "The 2da-file contains an id that is not an integer.";
 								else if (result != id)
 									head = "The 2da-file contains an id that is out of order.";
 								else
 									head = null;
 
-								if (head != null)
+								if (head != null) // show this warning even if Autorder true - table shall be flagged Changed
 								{
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
-										 + "id " + id + " \u2192 " + fields[0];
+										 + "id " + id + " \u2192 " + celltexts[0];
 
 									switch (ShowLoadWarning(Infobox.SplitString(head), copy))
 									{
@@ -1360,14 +1360,15 @@ namespace yata
 									}
 								}
 
-								if (!quelch) // test for matching fields under cols
+								// test for matching cell-fields under cols
+								if (!quelch)
 								{
-									if (fields.Length != Fields.Length + 1)
+									if (celltexts.Length != Fields.Length + 1)
 									{
 										head = "The 2da-file contains fields that do not align with its cols.";
 										copy = Fullpath + Environment.NewLine + Environment.NewLine
 											 + "Colcount " + (Fields.Length + 1) + Environment.NewLine
-											 + "id " + id + " fields \u2192 " + fields.Length;
+											 + "id " + id + " fields \u2192 " + celltexts.Length;
 
 										switch (ShowLoadWarning(head, copy))
 										{
@@ -1381,7 +1382,8 @@ namespace yata
 									}
 								}
 
-								if (!quelch) // test for an odd quantity of double-quote characters
+								// test for an odd quantity of double-quote characters
+								if (!quelch)
 								{
 									int quotes = 0;
 									foreach (char character in tr)
@@ -1390,7 +1392,7 @@ namespace yata
 
 									if (quotes % 2 == 1)
 									{
-										head = "A row contains an odd quantity of double-quote characters.";
+										head = "A row contains an odd quantity of double-quote characters. This is bad ...";
 										copy = Fullpath + Environment.NewLine + Environment.NewLine
 											 + "id " + id;
 
@@ -1408,16 +1410,16 @@ namespace yata
 							}
 
 
-							if (Settings._autorder && id.ToString(CultureInfo.InvariantCulture) != fields[0])
+							if (Settings._autorder && id.ToString(CultureInfo.InvariantCulture) != celltexts[0])
 							{
-								fields[0] = id.ToString(CultureInfo.InvariantCulture);
+								celltexts[0] = id.ToString(CultureInfo.InvariantCulture);
 								autordered = true;
 							}
 
 							// NOTE: Tests for well-formed fields will be done later so that their
-							// respective cells can be flagged as 'loadchanged' (if applicable).
+							//       respective cells can be flagged as loadchanged if applicable.
 
-							_rows.Add(fields);
+							_rows.Add(celltexts);
 						}
 						break;
 				}
