@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -196,7 +197,7 @@ namespace yata
 		#region Handlers (override)
 		const int WS_HSCROLL = 0x00100000;
 //		const int WS_VSCROLL = 0x00200000;
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
+		[DllImport("user32.dll")]
 		extern static int GetWindowLong(IntPtr hWnd, int index);
 		static bool HoriScrollBarVisible(IWin32Window control)
 		{
@@ -221,7 +222,14 @@ namespace yata
 				MinimumSize = new Size(Width, Height);
 			}
 
-			CenterToParent();
+			if (   YataForm.that == null
+				|| YataForm.that.WindowState == FormWindowState.Minimized)
+			{
+				CenterToScreen();
+			}
+			else
+				CenterToParent();
+
 //			base.OnLoad(e); // req'd for (StartPosition = FormStartPosition.CenterParent)
 		}
 

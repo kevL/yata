@@ -107,7 +107,7 @@ namespace yata
 			this.MinimizeBox = false;
 			this.Name = "Infobox";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.pa_Copyable.ResumeLayout(false);
 			this.ResumeLayout(false);
 
