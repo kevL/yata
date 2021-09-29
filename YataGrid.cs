@@ -3979,9 +3979,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Clears all <c><see cref="Col">Cols</see></c>/
+		/// Clears all <c><see cref="Cell">Cells</see></c>/
 		/// <c><see cref="Row">Rows</see></c>/
-		/// <c><see cref="Cell">Cells</see></c> that are currently selected.
+		/// <c><see cref="Col">Cols</see></c> that are currently selected.
 		/// </summary>
 		/// <param name="bypassEnableCelledit"><c>true</c> to bypass
 		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
@@ -4016,6 +4016,8 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 					row[c].selected = false;
 			}
+
+			RangeSelect = 0; // otherwise Undoing the creation of a row-array leaves RangeSelect wonky.
 
 			if (!bypassEnableCelledit)
 				_f.EnableCelleditOperations();
@@ -4756,10 +4758,9 @@ namespace yata
 		internal int getSelectedRow()
 		{
 			for (int r = 0; r != RowCount; ++r)
-			{
-				if (Rows[r].selected)
-					return r;
-			}
+			if (Rows[r].selected)
+				return r;
+
 			return -1;
 		}
 
