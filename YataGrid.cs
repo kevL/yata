@@ -3758,6 +3758,8 @@ namespace yata
 				}
 				else
 				{
+					bool enablecelledit = false;
+
 					bool ctr = (ModifierKeys & Keys.Control) != 0,
 						 sft = (ModifierKeys & Keys.Shift)   != 0;
 
@@ -3780,8 +3782,8 @@ namespace yata
 											_editor.Visible = false;
 											Invalidator(INVALID_GRID);
 										}
-										else					// NOTE: There's a clickable fringe around the editor.
-											_editor.Focus();	// so just refocus the editor if the fringe is clicked
+										else					// NOTE: There's a clickable fringe around the editor so
+											_editor.Focus();	//       just refocus the editor if the fringe is clicked.
 									}
 									else
 										Select();
@@ -3807,6 +3809,8 @@ namespace yata
 											}
 											else
 												_f.ClearSyncSelects();
+
+											enablecelledit = true;
 
 											int invalid = INVALID_GRID;
 											if (Propanel != null && Propanel.Visible)
@@ -3835,6 +3839,8 @@ namespace yata
 
 											EnsureDisplayed(_cell, true);
 
+											enablecelledit = true;
+
 											int invalid = INVALID_GRID;
 											if (Propanel != null && Propanel.Visible)
 												invalid |= INVALID_PROP;
@@ -3851,6 +3857,8 @@ namespace yata
 										ClearSelects(true);
 										_cell.selected = true;
 										_f.SyncSelectCell(_cell);
+
+										enablecelledit = true;
 
 										Invalidator(INVALID_GRID
 												  | INVALID_FROZ
@@ -3881,6 +3889,8 @@ namespace yata
 									_cell.selected = true;
 									_f.SyncSelectCell(_cell);
 
+									enablecelledit = true;
+
 									Invalidator(INVALID_GRID
 											  | INVALID_FROZ
 											  | INVALID_ROWS
@@ -3894,7 +3904,8 @@ namespace yata
 							break;
 					}
 
-					_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
+					if (enablecelledit)
+						_f.EnableCelleditOperations();
 				}
 			}
 		}
