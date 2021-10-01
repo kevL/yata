@@ -3202,9 +3202,9 @@ namespace yata
 							Obfuscate();
 							DrawRegulator.SuspendDrawing(Table);
 
-							// create at far right if no col selected or id-col is selected
-							// - not sure that id-col could ever be selected ->
-							if (selc < 1) selc = Table.ColCount;
+							// create at far right if no col selected
+							if (selc < Table.FrozenCount) // ~safety.
+								selc = Table.ColCount;
 
 							steadystate();
 
