@@ -89,7 +89,7 @@ namespace yata
 		/// </summary>
 		static int _wStars;
 
-		internal const int FreezeId     = 1; // qty of Cols that are frozen ->
+		internal const int FreezeId     = 1; // count of Cols that are frozen ->
 		internal const int FreezeFirst  = 2;
 		internal const int FreezeSecond = 3;
 
