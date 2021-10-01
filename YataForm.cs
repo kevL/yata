@@ -3170,6 +3170,11 @@ namespace yata
 			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS); // NOTE: INVALID_COLS does not appear to be needed.
 		}
 
+
+		string _warnColhead = "This operation cannot be undone. It clears the Undo/Redo stacks." + Environment.NewLine
+							+ "Tip: tidy and save the 2da first."
+							+ Environment.NewLine + Environment.NewLine;
+
 		/// <summary>
 		/// Opens a text-input dialog for creating a col at a selected col-id or
 		/// at the far right if no col is selected.
@@ -3178,12 +3183,12 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			const string head = "This operation cannot be undone. It also clears the Undo/Redo stacks. Are you sure you want to create a col ...";
+			string head = _warnColhead + "Are you sure you want to create a col ...";
 
 			using (var ib = new Infobox(Infobox.Title_warni,
-										Infobox.SplitString(head),
+										head,
 										null,
-										InfoboxType.Warn,
+										InfoboxType.Info,
 										InfoboxButtons.CancelYes))
 			{
 				if (ib.ShowDialog(this) == DialogResult.OK)
@@ -3225,12 +3230,11 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
-			const string head = "This operation cannot be undone. It also clears the Undo/Redo stacks. Are you sure you want to delete the selected col ...";
-
+			string head = _warnColhead + "Are you sure you want to delete the selected col ...";
 			using (var ib = new Infobox(Infobox.Title_warni,
-										Infobox.SplitString(head),
+										head,
 										Table.Fields[selc - 1],
-										InfoboxType.Warn,
+										InfoboxType.Info,
 										InfoboxButtons.CancelYes))
 			{
 				if (ib.ShowDialog(this) == DialogResult.OK)
