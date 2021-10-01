@@ -3106,8 +3106,8 @@ namespace yata
 				it_DeleteHead .Enabled = !Table.Readonly && isColSelected && Table.ColCount > 2;
 				it_RelabelHead.Enabled = !Table.Readonly && isColSelected;
 
-				it_CopyCells    .Enabled = isColSelected;
-				it_PasteCells   .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
+				it_CopyCells  .Enabled = isColSelected;
+				it_PasteCells .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
 			}
 			else
 			{
@@ -3117,8 +3117,8 @@ namespace yata
 				it_DeleteHead .Enabled =
 				it_RelabelHead.Enabled =
 
-				it_CopyCells    .Enabled =
-				it_PasteCells   .Enabled = false;
+				it_CopyCells  .Enabled =
+				it_PasteCells .Enabled = false;
 			}
 		}
 
@@ -3178,28 +3178,40 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			int selc = Table.getSelectedCol();
-			using (var idc = new InputDialog(this, selc))
+			const string head = "This operation cannot be undone. It also clears the Undo/Redo stacks. Are you sure you want to create a col ...";
+
+			using (var ib = new Infobox(Infobox.Title_warni,
+										Infobox.SplitString(head),
+										null,
+										InfoboxType.Warn,
+										InfoboxButtons.CancelYes))
 			{
-				if (idc.ShowDialog(this) == DialogResult.OK
-					&& InputDialog._colabel.Length != 0)
+				if (ib.ShowDialog(this) == DialogResult.OK)
 				{
-					Obfuscate();
-					DrawRegulator.SuspendDrawing(Table);
+					int selc = Table.getSelectedCol();
+					using (var idc = new InputDialog(this, selc))
+					{
+						if (idc.ShowDialog(this) == DialogResult.OK
+							&& InputDialog._colabel.Length != 0)
+						{
+							Obfuscate();
+							DrawRegulator.SuspendDrawing(Table);
 
-					// create at far right if no col selected or id-col is selected
-					// - not sure that id-col could ever be selected ->
-					if (selc < 1) selc = Table.ColCount;
+							// create at far right if no col selected or id-col is selected
+							// - not sure that id-col could ever be selected ->
+							if (selc < 1) selc = Table.ColCount;
 
-					steadystate();
+							steadystate();
 
-					Table.CreateCol(selc);
+							Table.CreateCol(selc);
 
-					it_freeze1.Enabled = Table.ColCount > 1;
-					it_freeze2.Enabled = Table.ColCount > 2;
+							it_freeze1.Enabled = Table.ColCount > 1;
+							it_freeze2.Enabled = Table.ColCount > 2;
 
-					DrawRegulator.ResumeDrawing(Table);
-					Obfuscate(false);
+							DrawRegulator.ResumeDrawing(Table);
+							Obfuscate(false);
+						}
+					}
 				}
 			}
 		}
@@ -3213,9 +3225,10 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
+			const string head = "This operation cannot be undone. It also clears the Undo/Redo stacks. Are you sure you want to delete the selected col ...";
+
 			using (var ib = new Infobox(Infobox.Title_warni,
-										Infobox.SplitString("This operation cannot be undone. Are you sure"
-														  + " you want to delete the selected col ..."),
+										Infobox.SplitString(head),
 										Table.Fields[selc - 1],
 										InfoboxType.Warn,
 										InfoboxButtons.CancelYes))
@@ -3262,7 +3275,7 @@ namespace yata
 				it_PropanelLoc.Enabled = false;
 			}
 
-			Table._ur.Clear(); // TODO: request confirmation
+			Table._ur.Clear();
 		}
 
 		/// <summary>
@@ -3291,7 +3304,7 @@ namespace yata
 		/// Copies all cell-fields in a selected col to
 		/// <c><see cref="_copyc"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_CopyCol"/></c></param>
+		/// <param name="sender"><c><see cref="it_CopyCell"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_CopyCol(object sender, EventArgs e)
 		{
@@ -3307,7 +3320,7 @@ namespace yata
 		/// Pastes <c><see cref="_copyc"/></c> to the cell-fields of a selected
 		/// col.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_PasteCol"/></c></param>
+		/// <param name="sender"><c><see cref="it_PasteCell"/></c></param>
 		/// <param name="e"></param>
 		void editcolclick_PasteCol(object sender, EventArgs e)
 		{
