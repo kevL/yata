@@ -1285,23 +1285,26 @@ namespace yata
 					default: // line #3+ datarows ->
 						tr = line.Trim();
 
-						if (!quelch && Settings._strict && tr.Length == 0)
+						if (tr.Length == 0)
 						{
-							head = "A blank row is detected. It will be deleted if the file is saved.";
-							copy = Fullpath;
-
-							switch (ShowLoadWarning(head, copy))
+							if (!quelch && Settings._strict)
 							{
-								case DialogResult.Cancel:
-									return LOADRESULT_FALSE;
+								head = "A blank row is detected. It will be deleted if the file is saved.";
+								copy = Fullpath;
 
-								case DialogResult.OK:
-									quelch = true;
-									goto case DialogResult.Retry;
+								switch (ShowLoadWarning(head, copy))
+								{
+									case DialogResult.Cancel:
+										return LOADRESULT_FALSE;
 
-								case DialogResult.Retry:
-									loadresult = LOADRESULT_CHANGED;
-									break;
+									case DialogResult.OK:
+										quelch = true;
+										goto case DialogResult.Retry;
+
+									case DialogResult.Retry:
+										loadresult = LOADRESULT_CHANGED;
+										break;
+								}
 							}
 						}
 						else

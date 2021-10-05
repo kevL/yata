@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 september 30
+2021 october 5
 kevL's
-ver 4.5.1.0
+ver 4.5.2.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -136,7 +136,7 @@ Col
   character is disallowed in a colhead label regardless.
 
 
-Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto")
+Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto=")
 
 
 Search box (type a string to search for and press [Enter] or [F3]. Note that
@@ -217,6 +217,7 @@ Help
 - ReadMe.txt : F1 (opens this document in a text-editor)
 - About (displays the version+config of the executable)
 
+- Options file (opens an internal texteditor to edit Settings.Cfg)
 
 
 2. Keyboard input
