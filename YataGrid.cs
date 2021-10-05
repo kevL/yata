@@ -1108,24 +1108,27 @@ namespace yata
 						{
 							_defaultval = tr.Substring(8).TrimStart();
 
-							if (!quelch && _defaultval.Length == 0)
+							if (_defaultval.Length == 0)
 							{
-								head = "The Default is blank. The 2nd line will be cleared if the file is saved.";
-								copy = Fullpath + Environment.NewLine + Environment.NewLine
-									 + tr;
-
-								switch (ShowLoadWarning(head, copy))
+								if (!quelch)
 								{
-									case DialogResult.Cancel:
-										return LOADRESULT_FALSE;
+									head = "The Default is blank. The 2nd line will be cleared if the file is saved.";
+									copy = Fullpath + Environment.NewLine + Environment.NewLine
+										 + tr;
 
-									case DialogResult.OK:
-										quelch = true;
-										goto case DialogResult.Retry;
+									switch (ShowLoadWarning(head, copy))
+									{
+										case DialogResult.Cancel:
+											return LOADRESULT_FALSE;
 
-									case DialogResult.Retry:
-										if (Settings._strict) loadresult = LOADRESULT_CHANGED;
-										break;
+										case DialogResult.OK:
+											quelch = true;
+											goto case DialogResult.Retry;
+
+										case DialogResult.Retry:
+											if (Settings._strict) loadresult = LOADRESULT_CHANGED;
+											break;
+									}
 								}
 							}
 							else
@@ -1184,6 +1187,9 @@ namespace yata
 					case LINE_COLABEL:
 						tr = line.TrimEnd();
 
+						// TODO: check for redundant whitespace at the start of the line also
+						// flag Changed if found ...
+
 						if (!quelch && Settings._strict && line != tr)
 						{
 							head = "The 3nd line has extraneous whitespace. It will be trimmed if the file is saved.";
@@ -1204,10 +1210,6 @@ namespace yata
 									break;
 							}
 						}
-
-						// TODO: check for redundant whitespace at the start of the line also
-						// flag Changed if found ...
-
 
 						if (!quelch
 							&& Settings._strict													// line.Length shall not be 0
@@ -1279,6 +1281,7 @@ namespace yata
 								if (quelch) break;
 							}
 						}
+
 						Fields = tr.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 						break;
 
@@ -1352,7 +1355,7 @@ namespace yata
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
 										 + "id " + id + " \u2192 " + celltexts[0];
 
-									switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+									switch (ShowLoadWarning(head, copy))
 									{
 										case DialogResult.Cancel:
 											return LOADRESULT_FALSE;
