@@ -1850,11 +1850,32 @@ namespace yata
 
 		#region Methods (file)
 		/// <summary>
-		/// Checks if there is a non-readonly table open.
+		/// Checks if there is a non-readonly table open. Also checks if there
+		/// are two non-readonly instances of the same 2da-file open.
 		/// </summary>
 		/// <returns><c>true</c> if SaveAll is allowed</returns>
 		bool AllowSaveAll()
 		{
+			YataGrid table0, table1;
+
+			// iterate through all tables and if a different table has the same
+			// Fullpath and neither table is Readonly return false ->
+			string pfe;
+			for (int i = 0; i != Tabs.TabPages.Count; ++i)
+			if (!(table0 = Tabs.TabPages[i].Tag as YataGrid).Readonly)
+			{
+				pfe = table0.Fullpath;
+				for (int j = 0; j != Tabs.TabPages.Count; ++j)
+				if (j != i
+					&& !(table1 = Tabs.TabPages[j].Tag as YataGrid).Readonly
+					&& table1.Fullpath == pfe)
+				{
+					return false;
+				}
+			}
+
+			// next just iterate over all tables and if any is not Readonly
+			// allow SaveAll ->
 			for (int i = 0; i != Tabs.TabCount; ++i)
 			if (!(Tabs.TabPages[i].Tag as YataGrid).Readonly)
 				return true;
