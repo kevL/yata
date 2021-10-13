@@ -865,7 +865,9 @@ namespace yata
 					TopMost = true; // drag&drop from FileExplorer could leave the Infobox hidden behind other windows.
 					TopMost = false;
 
-					Tabs.TabPages[i].Select();
+					Tabs.SelectedIndex = i;
+
+					if (!Settings._allowdupls) return;
 
 					using (var ib = new Infobox(Infobox.Title_warni,
 												"The 2da-file is already open. Do you want another instance ...",

@@ -41,6 +41,7 @@ namespace yata
 		internal static bool _instantgoto;
 		internal static bool _casesort;
 		internal static bool _autorder;
+		internal static bool _allowdupls;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -300,6 +301,11 @@ namespace yata
 							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
 									 && line == "true");
 						}
+						else if (line.StartsWith("allowdupls=", StringComparison.Ordinal))
+						{
+							_allowdupls = (!String.IsNullOrEmpty(line = line.Substring(11).Trim())
+									   && line == "true");
+						}
 					}
 				}
 			}
@@ -385,7 +391,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 24;
+		internal const int ids = 25;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -396,30 +402,32 @@ namespace yata
 		{
 			options = new string[ids];
 
-			options[ 0] = "font=";
-			options[ 1] = "font2=";
-			options[ 2] = "font3=";
-			options[ 3] = "fontf=";
-			options[ 4] = "fonti=";
-			options[ 5] = "x=";
-			options[ 6] = "y=";
-			options[ 7] = "w=";
-			options[ 8] = "h=";
-			options[ 9] = "maximized=";
-			options[10] = "alignoutput=";
-			options[11] = "autorder=";
-			options[12] = "casesort=";
-			options[13] = "codepage=";
-			options[14] = "context=";
-			options[15] = "dialog=";
-			options[16] = "dialogalt=";
-			options[17] = "diff=";
-			options[18] = "dirpreset=";
-			options[19] = "gradient=";
-			options[20] = "instantgoto=";
-			options[21] = "pathall=";
-			options[22] = "recent=";
-			options[23] = "strict=";
+			int i = -1;
+			options[++i] = "font=";
+			options[++i] = "font2=";
+			options[++i] = "font3=";
+			options[++i] = "fontf=";
+			options[++i] = "fonti=";
+			options[++i] = "x=";
+			options[++i] = "y=";
+			options[++i] = "w=";
+			options[++i] = "h=";
+			options[++i] = "maximized=";
+			options[++i] = "alignoutput=";
+			options[++i] = "allowdupls=";
+			options[++i] = "autorder=";
+			options[++i] = "casesort=";
+			options[++i] = "codepage=";
+			options[++i] = "context=";
+			options[++i] = "dialog=";
+			options[++i] = "dialogalt=";
+			options[++i] = "diff=";
+			options[++i] = "dirpreset=";
+			options[++i] = "gradient=";
+			options[++i] = "instantgoto=";
+			options[++i] = "pathall=";
+			options[++i] = "recent=";
+			options[++i] = "strict=";
 		}
 		#endregion options (static)
 

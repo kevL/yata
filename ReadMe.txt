@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 october 5
+2021 october 12
 kevL's
-ver 4.5.2.0
+ver 4.5.3.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -443,6 +443,18 @@ alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
              "tabs" (without quotes) to align cols with tabs. Note that using
              tab-characters in 2da files is not officially supported and could
              break in other applications
+allowdupls=  "true" (without quotes) to allow Yata to open multiple instances of
+             the same file. By default Yata will activate the tab that already
+             has the file open, but this allows you to keep another instance
+             open for visual comparison when doing particularly intricate 2da
+             changes (without first making a copy of the file on your hardrive
+             and opening that). Note that if the changed instance is saved the
+             FileWatcher will ask what you want to do with the other
+             instance(s). SaveAll will be disabled while multiple instances of a
+             file are open because Yata doesn't know which instance you want to
+             save as the current version. WARNING: Enable this at your peril
+             because it will likely get confusing to have two or more instances
+             of one 2da-file open simultaneously
 autorder=    "true" (without quotes) to automatically reorder row-ids after row
              and cell alterations. Note that since ordering row-ids is not
              tracked by Undo/Redo the Changed asterisk will not be cleared when
