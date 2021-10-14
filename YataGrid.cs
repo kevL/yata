@@ -1911,7 +1911,7 @@ namespace yata
 					if (c < _rows[r].Length)
 					{
 						text = _rows[r][c];
-						if (CheckLoadField(ref text))
+						if (VerifyText(ref text))
 						{
 							changed =
 							loadchanged = true;
@@ -3371,7 +3371,7 @@ namespace yata
 			cell.loadchanged =
 			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
-			if (CheckTextEdit(tb))
+			if (VerifyText_edit(tb))
 			{
 				using (var ib = new Infobox(Infobox.Title_warni,
 											"The text that was submitted has been altered.",
@@ -3500,122 +3500,36 @@ namespace yata
 
 
 		/// <summary>
-		/// Checks the text that user submits to a cell.
+		/// Checks the cell-field text during user-edits.
 		/// </summary>
 		/// <param name="tb">a <c>TextBox</c> in which user is editing the text</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
-		/// <seealso cref="CheckLoadField()"><c>CheckLoadField()</c></seealso>
-		internal static bool CheckTextEdit(Control tb)
+		internal static bool VerifyText_edit(Control tb)
 		{
-			bool changed = false;
-
 			string text = tb.Text.Trim();
-
 			if (text.Length == 0)
 			{
 				tb.Text = gs.Stars;
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
-			if (text != tb.Text)
-				changed = true;
-
-			bool quoteFirst = text.StartsWith("\"", StringComparison.Ordinal);
-			bool quoteLast  = text.EndsWith(  "\"", StringComparison.Ordinal);
-			if (quoteFirst && quoteLast)
-			{
-				if (   text.Length < 3
-					|| text.Substring(1, text.Length - 2).Trim().Length == 0)
-				{
-					tb.Text = gs.Stars;
-					return true;
-				}
-			}
-			else if (( quoteFirst && !quoteLast)
-				||   (!quoteFirst &&  quoteLast))
-			{
-				if (quoteFirst)
-					text = text + "\"";
-				else
-					text = "\"" + text;
-
-				if (text.Length == 2)
-				{
-					tb.Text = gs.Stars;
-					return true;
-				}
-
-				changed = true;
-			}
-
-			if (text.Length > 2) // lol but it works ->
-			{
-				string first = text.Substring(0, 1);
-				string last  = text.Substring(text.Length - 1, 1);
-
-				string test  = text.Substring(1, text.Length - 2);
-
-				while (test.Contains("\""))
-				{
-					changed = true;
-					test = test.Remove(test.IndexOf('"'), 1);
-					text = first + test + last;
-				}
-
-				if (test == gs.Stars)
-				{
-					tb.Text = gs.Stars;
-					return true;
-				}
-			}
-
-			if (!text.Contains("\""))
-			{
-				char[] chars = text.ToCharArray();
-				for (int pos = 0; pos != chars.Length; ++pos)
-				{
-					if (Char.IsWhiteSpace(chars[pos]))
-					{
-						changed = true;
-						text = "\"" + text + "\"";
-						break;
-					}
-				}
-			}
-			else if (  text.StartsWith("\"", StringComparison.Ordinal)
-					&& text.EndsWith(  "\"", StringComparison.Ordinal))
-			{
-				bool preserveQuotes = false;
-
-				char[] chars = text.ToCharArray();
-				for (int pos = 0; pos != chars.Length; ++pos)
-				{
-					if (Char.IsWhiteSpace(chars[pos]))
-					{
-						preserveQuotes = true;
-						break;
-					}
-				}
-
-				if (!preserveQuotes)
-				{
-					changed = true;
-					text = text.Substring(1, text.Length - 2);
-				}
-			}
+			bool changed = text != tb.Text;
+			changed |= VerifyText(ref text); // <- do not short-circuit
 
 			tb.Text = text;
 			return changed;
 		}
 
 		/// <summary>
-		/// Checks the text in a cell during file load.
+		/// Checks a cell-field text. Called during file load by
+		/// <c><see cref="CreateRows()">CreateRows()</see></c> or after
+		/// user-edits by
+		/// <c><see cref="VerifyText_edit()">VerifyText_edit()</see></c>.
 		/// </summary>
 		/// <param name="text">ref to a text-string</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
 		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
-		/// <seealso cref="CheckTextEdit()"><c>CheckTextEdit()</c></seealso>
-		static bool CheckLoadField(ref string text)
+		static bool VerifyText(ref string text)
 		{
 			bool changed = false;
 
@@ -3623,14 +3537,14 @@ namespace yata
 			bool quoteLast  = text.EndsWith(  "\"", StringComparison.Ordinal);
 			if (quoteFirst && quoteLast)
 			{
-				if (   text.Length < 3
-					|| text.Substring(1, text.Length - 2).Trim().Length == 0)
+				if (   text.Length < 3											// ""  -> ****
+					|| text.Substring(1, text.Length - 2).Trim().Length == 0)	// " " -> ****
 				{
 					text = gs.Stars;
 					return true;
 				}
 			}
-			else if (( quoteFirst && !quoteLast)
+			else if (( quoteFirst && !quoteLast)								// " -> ""
 				||   (!quoteFirst &&  quoteLast))
 			{
 				if (quoteFirst)
@@ -3638,7 +3552,7 @@ namespace yata
 				else
 					text = "\"" + text;
 
-				if (text.Length == 2)
+				if (text.Length == 2)											// "" -> ****
 				{
 					text = gs.Stars;
 					return true;
@@ -3649,26 +3563,26 @@ namespace yata
 
 			if (text.Length > 2) // lol but it works ->
 			{
-				string first = text.Substring(0, 1);
-				string last  = text.Substring(text.Length - 1, 1);
+				string frst = text.Substring(0, 1);
+				string last = text.Substring(text.Length - 1, 1);
 
-				string test  = text.Substring(1, text.Length - 2);
+				string test = text.Substring(1, text.Length - 2);
 
-				while (test.Contains("\""))
+				while (test.Contains("\""))										// """ -> ""
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					text = first + test + last;
+					text = frst + test + last;
 				}
 
-				if (test == gs.Stars)
+				if (test == gs.Stars)											// "****" -> ****
 				{
 					text = gs.Stars;
 					return true;
 				}
 			}
 
-			if (!text.Contains("\""))
+			if (!text.Contains("\""))											// [ ] -> " "
 			{
 				char[] chars = text.ToCharArray();
 				for (int pos = 0; pos != chars.Length; ++pos)
@@ -3681,7 +3595,7 @@ namespace yata
 					}
 				}
 			}
-			else if (  text.StartsWith("\"", StringComparison.Ordinal)
+			else if (  text.StartsWith("\"", StringComparison.Ordinal)			// "." -> .
 					&& text.EndsWith(  "\"", StringComparison.Ordinal))
 			{
 				bool preserveQuotes = false;

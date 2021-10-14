@@ -56,7 +56,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
-			if (YataGrid.CheckTextEdit(tb_Input))
+			if (YataGrid.VerifyText_edit(tb_Input))
 			{
 				_readyTextchanged = true;
 				la_Head.ForeColor = Color.Firebrick;
