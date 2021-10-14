@@ -3498,6 +3498,7 @@ namespace yata
 				Propanel.widthValcol(); // TODO: Re-calc the 'c' col only.
 		}
 
+
 		/// <summary>
 		/// Checks the text that user submits to a cell.
 		/// </summary>
