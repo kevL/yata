@@ -1856,21 +1856,25 @@ namespace yata
 		/// <returns><c>true</c> if SaveAll is allowed</returns>
 		bool AllowSaveAll()
 		{
-			YataGrid table0, table1;
-
-			// iterate through all tables and if a different table has the same
-			// Fullpath and neither table is Readonly return false ->
-			string pfe;
-			for (int i = 0; i != Tabs.TabPages.Count; ++i)
-			if (!(table0 = Tabs.TabPages[i].Tag as YataGrid).Readonly)
+			if (Settings._allowdupls)
 			{
-				pfe = table0.Fullpath;
-				for (int j = 0; j != Tabs.TabPages.Count; ++j)
-				if (j != i
-					&& !(table1 = Tabs.TabPages[j].Tag as YataGrid).Readonly
-					&& table1.Fullpath == pfe)
+				// iterate through all tables and if a different table has the
+				// same Fullpath and neither table is Readonly return false ->
+
+				YataGrid table0, table1;
+				string pfe;
+
+				for (int i = 0; i != Tabs.TabPages.Count; ++i)
+				if (!(table0 = Tabs.TabPages[i].Tag as YataGrid).Readonly)
 				{
-					return false;
+					pfe = table0.Fullpath;
+					for (int j = 0; j != Tabs.TabPages.Count; ++j)
+					if (j != i
+						&& !(table1 = Tabs.TabPages[j].Tag as YataGrid).Readonly
+						&& table1.Fullpath == pfe)
+					{
+						return false;
+					}
 				}
 			}
 
