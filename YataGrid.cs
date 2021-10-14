@@ -3509,23 +3509,23 @@ namespace yata
 		{
 			bool changed = false;
 
-			string field = tb.Text.Trim();
+			string text = tb.Text.Trim();
 
-			if (field.Length == 0)
+			if (text.Length == 0)
 			{
 				tb.Text = gs.Stars;
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
-			if (field != tb.Text)
+			if (text != tb.Text)
 				changed = true;
 
-			bool quoteFirst = field.StartsWith("\"", StringComparison.Ordinal);
-			bool quoteLast  = field.EndsWith(  "\"", StringComparison.Ordinal);
+			bool quoteFirst = text.StartsWith("\"", StringComparison.Ordinal);
+			bool quoteLast  = text.EndsWith(  "\"", StringComparison.Ordinal);
 			if (quoteFirst && quoteLast)
 			{
-				if (   field.Length < 3
-					|| field.Substring(1, field.Length - 2).Trim().Length == 0)
+				if (   text.Length < 3
+					|| text.Substring(1, text.Length - 2).Trim().Length == 0)
 				{
 					tb.Text = gs.Stars;
 					return true;
@@ -3535,11 +3535,11 @@ namespace yata
 				||   (!quoteFirst &&  quoteLast))
 			{
 				if (quoteFirst)
-					field = field + "\"";
+					text = text + "\"";
 				else
-					field = "\"" + field;
+					text = "\"" + text;
 
-				if (field.Length == 2)
+				if (text.Length == 2)
 				{
 					tb.Text = gs.Stars;
 					return true;
@@ -3548,18 +3548,18 @@ namespace yata
 				changed = true;
 			}
 
-			if (field.Length > 2) // lol but it works ->
+			if (text.Length > 2) // lol but it works ->
 			{
-				string first = field.Substring(0, 1);
-				string last  = field.Substring(field.Length - 1, 1);
+				string first = text.Substring(0, 1);
+				string last  = text.Substring(text.Length - 1, 1);
 
-				string test  = field.Substring(1, field.Length - 2);
+				string test  = text.Substring(1, text.Length - 2);
 
 				while (test.Contains("\""))
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					field = first + test + last;
+					text = first + test + last;
 				}
 
 				if (test == gs.Stars)
@@ -3569,25 +3569,25 @@ namespace yata
 				}
 			}
 
-			if (!field.Contains("\""))
+			if (!text.Contains("\""))
 			{
-				char[] chars = field.ToCharArray();
+				char[] chars = text.ToCharArray();
 				for (int pos = 0; pos != chars.Length; ++pos)
 				{
 					if (Char.IsWhiteSpace(chars[pos]))
 					{
 						changed = true;
-						field = "\"" + field + "\"";
+						text = "\"" + text + "\"";
 						break;
 					}
 				}
 			}
-			else if (  field.StartsWith("\"", StringComparison.Ordinal)
-					&& field.EndsWith(  "\"", StringComparison.Ordinal))
+			else if (  text.StartsWith("\"", StringComparison.Ordinal)
+					&& text.EndsWith(  "\"", StringComparison.Ordinal))
 			{
 				bool preserveQuotes = false;
 
-				char[] chars = field.ToCharArray();
+				char[] chars = text.ToCharArray();
 				for (int pos = 0; pos != chars.Length; ++pos)
 				{
 					if (Char.IsWhiteSpace(chars[pos]))
@@ -3600,33 +3600,33 @@ namespace yata
 				if (!preserveQuotes)
 				{
 					changed = true;
-					field = field.Substring(1, field.Length - 2);
+					text = text.Substring(1, text.Length - 2);
 				}
 			}
 
-			tb.Text = field;
+			tb.Text = text;
 			return changed;
 		}
 
 		/// <summary>
 		/// Checks the text in a cell during file load.
 		/// </summary>
-		/// <param name="field">ref to a text-string</param>
+		/// <param name="text">ref to a text-string</param>
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
 		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
 		/// <seealso cref="CheckTextEdit()"><c>CheckTextEdit()</c></seealso>
-		static bool CheckLoadField(ref string field)
+		static bool CheckLoadField(ref string text)
 		{
 			bool changed = false;
 
-			bool quoteFirst = field.StartsWith("\"", StringComparison.Ordinal);
-			bool quoteLast  = field.EndsWith(  "\"", StringComparison.Ordinal);
+			bool quoteFirst = text.StartsWith("\"", StringComparison.Ordinal);
+			bool quoteLast  = text.EndsWith(  "\"", StringComparison.Ordinal);
 			if (quoteFirst && quoteLast)
 			{
-				if (   field.Length < 3
-					|| field.Substring(1, field.Length - 2).Trim().Length == 0)
+				if (   text.Length < 3
+					|| text.Substring(1, text.Length - 2).Trim().Length == 0)
 				{
-					field = gs.Stars;
+					text = gs.Stars;
 					return true;
 				}
 			}
@@ -3634,59 +3634,59 @@ namespace yata
 				||   (!quoteFirst &&  quoteLast))
 			{
 				if (quoteFirst)
-					field = field + "\"";
+					text = text + "\"";
 				else
-					field = "\"" + field;
+					text = "\"" + text;
 
-				if (field.Length == 2)
+				if (text.Length == 2)
 				{
-					field = gs.Stars;
+					text = gs.Stars;
 					return true;
 				}
 
 				changed = true;
 			}
 
-			if (field.Length > 2) // lol but it works ->
+			if (text.Length > 2) // lol but it works ->
 			{
-				string first = field.Substring(0, 1);
-				string last  = field.Substring(field.Length - 1, 1);
+				string first = text.Substring(0, 1);
+				string last  = text.Substring(text.Length - 1, 1);
 
-				string test  = field.Substring(1, field.Length - 2);
+				string test  = text.Substring(1, text.Length - 2);
 
 				while (test.Contains("\""))
 				{
 					changed = true;
 					test = test.Remove(test.IndexOf('"'), 1);
-					field = first + test + last;
+					text = first + test + last;
 				}
 
 				if (test == gs.Stars)
 				{
-					field = gs.Stars;
+					text = gs.Stars;
 					return true;
 				}
 			}
 
-			if (!field.Contains("\""))
+			if (!text.Contains("\""))
 			{
-				char[] chars = field.ToCharArray();
+				char[] chars = text.ToCharArray();
 				for (int pos = 0; pos != chars.Length; ++pos)
 				{
 					if (Char.IsWhiteSpace(chars[pos]))
 					{
 						changed = true;
-						field = "\"" + field + "\"";
+						text = "\"" + text + "\"";
 						break;
 					}
 				}
 			}
-			else if (  field.StartsWith("\"", StringComparison.Ordinal)
-					&& field.EndsWith(  "\"", StringComparison.Ordinal))
+			else if (  text.StartsWith("\"", StringComparison.Ordinal)
+					&& text.EndsWith(  "\"", StringComparison.Ordinal))
 			{
 				bool preserveQuotes = false;
 
-				char[] chars = field.ToCharArray();
+				char[] chars = text.ToCharArray();
 				for (int pos = 0; pos != chars.Length; ++pos)
 				{
 					if (Char.IsWhiteSpace(chars[pos]))
@@ -3699,7 +3699,7 @@ namespace yata
 				if (!preserveQuotes)
 				{
 					changed = true;
-					field = field.Substring(1, field.Length - 2);
+					text = text.Substring(1, text.Length - 2);
 				}
 			}
 
