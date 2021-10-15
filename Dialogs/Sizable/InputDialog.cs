@@ -21,10 +21,27 @@ namespace yata
 
 		const int hCheckbox = 22;
 		const int hCbPad    =  1;
+
+		/// <summary>
+		/// This <c>InputDialog</c> is configured to deal with input for the
+		/// Default value text in a 2da-file when <c><see cref="_selc"/></c> is
+		/// set to <c>DEFVAL</c>. This <c>InputDialog</c> is configured to deal
+		/// with input for colhead-label text when <c>_selc</c> is any other
+		/// value.
+		/// </summary>
+		const int DEFVAL = -2;
 		#endregion Fields (static)
 
 
 		#region Fields
+		/// <summary>
+		/// The col-id iff not set to <c><see cref="DEFVAL"/></c>. Can be
+		/// <c>-1</c>.
+		/// </summary>
+		/// <remarks>This <c>InputDialog</c> is configured to deal with input
+		/// for the Default value text in a 2da-file when <c>_selc</c> is set to
+		/// <c>DEFVAL</c>. This <c>InputDialog</c> is configured to deal with
+		/// input for colhead-label text when <c>_selc</c> is any other value.</remarks>
 		int _selc;
 
 		bool _bypasstextchanged;
@@ -41,7 +58,7 @@ namespace yata
 		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
 		/// <param name="selc">the currently selected col-id; default -2 enables
 		/// defaultval input</param>
-		internal InputDialog(YataForm f, int selc = -2)
+		internal InputDialog(YataForm f, int selc = DEFVAL)
 		{
 			_f = f;
 			_selc = selc;
@@ -49,12 +66,12 @@ namespace yata
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
 
-			if (_selc != -2)
+			if (_selc != DEFVAL)
 			{
 				Text = " yata - Colhead text";
 				tb_Input.Text = _colabel;
 
-				if (Settings._strict) // allow punctuation toggle ->
+				if (Settings._strict) // show 'allow extended punctuation' toggle ->
 				{
 					cb_Punctuation = new CheckBox();
 					cb_Punctuation.Text = "accept punctuation";
@@ -100,7 +117,7 @@ namespace yata
 				_cancel = false;
 			else
 			{
-				if (_selc != -2 && Settings._strict)
+				if (_selc != DEFVAL && Settings._strict)
 					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox - hCbPad);
 
 				base.OnFormClosing(e);
@@ -119,7 +136,7 @@ namespace yata
 		{
 			if (!_bypasstextchanged)
 			{
-				if (_selc != -2) // colhead
+				if (_selc != DEFVAL) // colhead
 				{
 					char character;
 					for (int i = 0; i != tb_Input.Text.Length; ++i)
@@ -139,7 +156,7 @@ namespace yata
 					}
 				}
 
-				if (_selc != -2)
+				if (_selc != DEFVAL)
 					_colabel = tb_Input.Text;
 				else
 					_defaultval = tb_Input.Text;
@@ -185,7 +202,7 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
-			if (_selc != -2) // colhead
+			if (_selc != DEFVAL) // colhead
 			{
 				string[] fields = YataForm.Table.Fields;
 				for (int i = 0; i != fields.Length; ++i)
