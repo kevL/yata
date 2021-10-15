@@ -53,7 +53,7 @@ namespace yata
 
 
 		#region Fields
-		readonly PropertyPanelButton btn_Propanel = new PropertyPanelButton();
+		readonly PropanelButton bu_Propanel = new PropanelButton();
 
 		/// <summary>
 		/// The <c><see cref="SettingsEditor"/></c> dialog/editor.
@@ -225,11 +225,11 @@ namespace yata
 
 			Controls.Add(Tabs);
 
-			// init 'btn_Propanel' ->
-			btn_Propanel.MouseDown += mousedown_btnPropertyPanel;
-			btn_Propanel.MouseUp   += mouseup_btnPropertyPanel;
+			// init 'bu_Propanel' ->
+			bu_Propanel.MouseDown += mousedown_buPropanel;
+			bu_Propanel.MouseUp   += mouseup_buPropanel;
 
-			Controls.Add(btn_Propanel);
+			Controls.Add(bu_Propanel);
 
 			InitializeComponent();
 
@@ -347,8 +347,8 @@ namespace yata
 
 			YataGrid.SetStaticMetrics(this);
 
-			btn_Propanel.Left = ClientSize.Width - btn_Propanel.Width + 1;
-			btn_Propanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
+			bu_Propanel.Left = ClientSize.Width - bu_Propanel.Width + 1;
+			bu_Propanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
 			if (Settings._recent != 0)
@@ -579,7 +579,7 @@ namespace yata
 						return true;
 
 					case Keys.Shift | Keys.F8:					// reverse cycle propanel location
-						opsclick_PropertyPanelLocation(null, EventArgs.Empty);
+						opsclick_PropanelLocation(null, EventArgs.Empty);
 						return true;
 				}
 			}
@@ -628,7 +628,7 @@ namespace yata
 						break;
 
 					case Keys.Escape:
-						if (Tabs.Focused || btn_Propanel.Focused) // btn -> jic.
+						if (Tabs.Focused || bu_Propanel.Focused) // btn -> jic.
 						{
 							e.SuppressKeyPress = true;
 							Table.Select();
@@ -990,7 +990,7 @@ namespace yata
 
 				Cell sel = Table.getSelectedCell();
 
-				btn_Propanel      .Visible = true;
+				bu_Propanel       .Visible = true;
 				it_MenuPaths      .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
 
@@ -1045,7 +1045,7 @@ namespace yata
 
 				// Visible ->
 
-				btn_Propanel      .Visible =
+				bu_Propanel       .Visible =
 				it_MenuPaths      .Visible =
 
 				// Checked ->
@@ -3811,28 +3811,28 @@ namespace yata
 
 
 		/// <summary>
-		/// Toggles the <c><see cref="PropertyPanel"/></c> of the current
-		/// <c><see cref="Table"/></c> - creates a <c>PropertyPanel</c> if
+		/// Toggles the <c><see cref="Propanel"/></c> of the current
+		/// <c><see cref="Table"/></c> - creates a <c>Propanel</c> if
 		/// required.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Propanel"/></c></item>
-		/// <item><c><see cref="btn_Propanel"/></c></item>
+		/// <item><c><see cref="bu_Propanel"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item>2daOps|PropertyPanel <c>[F7]</c></item>
-		/// <item><c><see cref="mouseup_btnPropertyPanel()">mouseup_btnPropertyPanel()</see></c></item>
+		/// <item>2daOps|Propanel <c>[F7]</c></item>
+		/// <item><c><see cref="mouseup_buPropanel()">mouseup_buPropanel()</see></c></item>
 		/// </list></remarks>
-		void opsclick_PropertyPanel(object sender, EventArgs e)
+		void opsclick_Propanel(object sender, EventArgs e)
 		{
 			if (Table.Propanel == null
 				|| (Table.Propanel.Visible = !Table.Propanel.Visible))
 			{
 				if (Table.Propanel == null)
-					Table.Propanel = new PropertyPanel(Table);
+					Table.Propanel = new Propanel(Table);
 				else
 					Table.Propanel.widthValcol();
 
@@ -3854,7 +3854,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Cycles the location of the <c><see cref="PropertyPanel"/></c>.
+		/// Cycles the location of the <c><see cref="Propanel"/></c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -3864,11 +3864,11 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item>2daOps|PropertyPanel location <c>[F8]</c></item>
+		/// <item>2daOps|Propanel location <c>[F8]</c></item>
 		/// <item><c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> <c>[Shift+F8]</c></item>
 		/// </list></remarks>
-		/// <seealso cref="mouseup_btnPropertyPanel()"><c>mouseup_btnPropertyPanel()</c></seealso>
-		void opsclick_PropertyPanelLocation(object sender, EventArgs e)
+		/// <seealso cref="mouseup_buPropanel()"><c>mouseup_buPropanel()</c></seealso>
+		void opsclick_PropanelLocation(object sender, EventArgs e)
 		{
 			if (Table.Propanel != null && Table.Propanel.Visible)
 				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
@@ -5939,47 +5939,47 @@ namespace yata
 		#region Handlers (propanel)
 		/// <summary>
 		/// Handler for <c>MouseDown</c> on the
-		/// <c><see cref="PropertyPanelButton"/></c>.
+		/// <c><see cref="PropanelButton"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Propanel"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <remarks><c>bu_Propanel</c> is not visible if
 		/// <c><see cref="Table"/></c> is invalid</remarks>
-		void mousedown_btnPropertyPanel(object sender, MouseEventArgs e)
+		void mousedown_buPropanel(object sender, MouseEventArgs e)
 		{
 			if (    e.Button == MouseButtons.Left
 				|| (e.Button == MouseButtons.Right
 					&& Table.Propanel != null && Table.Propanel.Visible))
 			{
-				btn_Propanel.SetDepressed(true);
+				bu_Propanel.SetDepressed(true);
 			}
 		}
 
 		/// <summary>
 		/// Handler for <c>MouseUp</c> on the
-		/// <c><see cref="PropertyPanelButton"/></c>.
+		/// <c><see cref="PropanelButton"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Propanel"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Propanel"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks><c>btn_Propanel</c> is not visible if
+		/// <remarks><c>bu_Propanel</c> is not visible if
 		/// <c><see cref="Table"/></c> is invalid</remarks>
-		/// <seealso cref="opsclick_PropertyPanel()"><c>opsclick_PropertyPanel()</c></seealso>
-		/// <seealso cref="opsclick_PropertyPanelLocation()"><c>opsclick_PropertyPanelLocation()</c></seealso>
-		void mouseup_btnPropertyPanel(object sender, MouseEventArgs e)
+		/// <seealso cref="opsclick_Propanel()"><c>opsclick_Propanel()</c></seealso>
+		/// <seealso cref="opsclick_PropanelLocation()"><c>opsclick_PropanelLocation()</c></seealso>
+		void mouseup_buPropanel(object sender, MouseEventArgs e)
 		{
 			Table.Select();
 
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
-					btn_Propanel.SetDepressed(false);
-					opsclick_PropertyPanel(sender, e);
+					bu_Propanel.SetDepressed(false);
+					opsclick_Propanel(sender, e);
 					break;
 
 				case MouseButtons.Right:
 					if (Table.Propanel != null && Table.Propanel.Visible)
 					{
-						btn_Propanel.SetDepressed(false);
+						bu_Propanel.SetDepressed(false);
 						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
 					}
 					break;

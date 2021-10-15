@@ -194,7 +194,7 @@ namespace yata
 		/// </summary>
 		int _sortdir = SORT_ASC;
 
-		internal PropertyPanel Propanel;
+		internal Propanel Propanel;
 
 		internal UndoRedo _ur;
 
@@ -363,7 +363,7 @@ namespace yata
 			_editor.BorderStyle = BorderStyle.None;
 			_editor.WordWrap    = false;
 			_editor.Margin      = new Padding(0);
-//			_editor.Height      = cf. the PropertyPanel editor
+//			_editor.Height      = cf. the Propanel editor
 			_editor.KeyDown    += keydown_Editor;
 			_editor.LostFocus  += lostfocus_Editor;
 
@@ -382,7 +382,7 @@ namespace yata
 		#region Invalidate
 		internal const int INVALID_NONE = 0x00;
 		internal const int INVALID_GRID = 0x01; // this table
-		internal const int INVALID_PROP = 0x02; // the PropertyPanel
+		internal const int INVALID_PROP = 0x02; // the Propanel
 		internal const int INVALID_FROZ = 0x04; // the frozen panel (id,1st,2nd)
 		internal const int INVALID_ROWS = 0x08; // the rowhead panel
 		internal const int INVALID_COLS = 0x10; // the colhead panel
@@ -3724,7 +3724,7 @@ namespace yata
 													ClearSelects(true);
 													_cell.selected = true;
 												}
-												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass PropertyPanel.EnsureDisplayed() if
+												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass Propanel.EnsureDisplayed() if
 																										//    selectedcell is not the only selected cell
 												_anchorcell = _cell;
 											}
@@ -4303,11 +4303,11 @@ namespace yata
 		/// </summary>
 		/// <param name="cell">the <c>Cell</c> to display</param>
 		/// <param name="bypassPropanel"><c>true</c> to bypass any
-		/// <c><see cref="PropertyPanel"/></c> considerations</param>
+		/// <c><see cref="Propanel"/></c> considerations</param>
 		/// <returns>a bitwise <c>int</c> defining controls that need to be
-		/// invalidated; note that the <c>PropertyPanel's</c> invalidation bit
-		/// will be flagged as long as the panel is visible regardless of
-		/// whether it really needs to be redrawn</returns>
+		/// invalidated; note that the <c>Propanel's</c> invalidation bit will
+		/// be flagged as long as the panel is visible regardless of whether it
+		/// really needs to be redrawn</returns>
 		internal int EnsureDisplayed(Cell cell, bool bypassPropanel = false)
 		{
 			int invalid = INVALID_NONE;

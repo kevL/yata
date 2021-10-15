@@ -8,8 +8,8 @@ namespace yata
 	sealed partial class YataForm
 	{
 		// okay. Fed up.
-		// YataTabs 'tabControl' and PropertyPanelButton 'btn_PropertyPanel'
-		// have been moved to YataForm.
+		// YataTabs 'tabControl' and PropanelButton 'bu_Propanel' have been
+		// moved to YataForm.
 
 
 		/// <summary>
@@ -1141,8 +1141,8 @@ namespace yata
 			this.it_Propanel.Name = "it_Propanel";
 			this.it_Propanel.ShortcutKeys = System.Windows.Forms.Keys.F7;
 			this.it_Propanel.Size = new System.Drawing.Size(236, 22);
-			this.it_Propanel.Text = "&PropertyPanel";
-			this.it_Propanel.Click += new System.EventHandler(this.opsclick_PropertyPanel);
+			this.it_Propanel.Text = "&Propanel";
+			this.it_Propanel.Click += new System.EventHandler(this.opsclick_Propanel);
 			// 
 			// it_PropanelLoc
 			// 
@@ -1150,8 +1150,8 @@ namespace yata
 			this.it_PropanelLoc.Name = "it_PropanelLoc";
 			this.it_PropanelLoc.ShortcutKeys = System.Windows.Forms.Keys.F8;
 			this.it_PropanelLoc.Size = new System.Drawing.Size(236, 22);
-			this.it_PropanelLoc.Text = "PropertyPanel l&ocation";
-			this.it_PropanelLoc.Click += new System.EventHandler(this.opsclick_PropertyPanelLocation);
+			this.it_PropanelLoc.Text = "Propanel l&ocation";
+			this.it_PropanelLoc.Click += new System.EventHandler(this.opsclick_PropanelLocation);
 			// 
 			// separator_25
 			// 

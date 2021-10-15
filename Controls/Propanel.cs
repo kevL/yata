@@ -7,10 +7,10 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// Yata's <c>PropertyPanel</c>.
+	/// Yata's <c>Propanel</c>.
 	/// </summary>
-	/// <remarks> Each tabbed table gets its own.</remarks>
-	sealed class PropertyPanel
+	/// <remarks>Each tabbed table gets its own.</remarks>
+	sealed class Propanel
 		: Control
 	{
 		#region Enums
@@ -78,9 +78,10 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// cTor. Each tabbed table gets its own Propanel.
+		/// cTor.
 		/// </summary>
-		internal PropertyPanel(YataGrid grid)
+		/// <remarks>Each tabbed table gets its own Propanel.</remarks>
+		internal Propanel(YataGrid grid)
 		{
 			DrawRegulator.SetDoubleBuffered(this);
 
@@ -98,7 +99,7 @@ namespace yata
 //				Font.Dispose(); // be wary. Be very wary. -> Do NOT Dispose()
 				// debug builds don't throw
 				// but release builds CTD when invoking the SettingsEditor after
-				// the PropertyPanel has been opened ... eg.
+				// the Propanel has been opened ... eg.
 
 				Font = Settings._font3;
 			}
@@ -176,14 +177,14 @@ namespace yata
 
 			_widthVals =
 			_editRect.Width = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
-			_editor  .Width = _widthVals - 6; // cf YataGrid.EditCell()
+			_editor  .Width = _widthVals - 6; // cf YataGrid.Celledit()
 
 			telemetric();
 		}
 
 		/// <summary>
 		/// Sets the <c>Width</c>/<c>Left</c>/<c>Height</c> values of this
-		/// <c>PropertyPanel</c>.
+		/// <c>Propanel</c>.
 		/// </summary>
 		internal void telemetric()
 		{
@@ -233,7 +234,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Scrolls this <c>PropertyPanel</c> (vertical only).
+		/// Scrolls this <c>Propanel</c> (vertical only).
 		/// </summary>
 		/// <param name="e"></param>
 		internal void Scroll(MouseEventArgs e)
@@ -259,7 +260,7 @@ namespace yata
 
 		/// <summary>
 		/// Ensures that a selected field is displayed within this
-		/// <c>PropertyPanel's</c> visible height.
+		/// <c>Propanel's</c> visible height.
 		/// <param name="c">the col in the table, the row in the panel</param>
 		/// </summary>
 		internal void EnsureDisplayed(int c)
@@ -342,7 +343,7 @@ namespace yata
 
 		#region Handlers (scroll)
 		/// <summary>
-		/// Hides the editor when this <c>PropertyPanel</c> is scrolled.
+		/// Hides the editor when this <c>Propanel</c> is scrolled.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_scroll"/></c></param>
 		/// <param name="e"></param>
@@ -509,7 +510,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Paints this <c>PropertyPanel</c>.
+		/// Paints this <c>Propanel</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)

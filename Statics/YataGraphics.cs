@@ -14,7 +14,8 @@ namespace yata
 		/// <summary>
 		/// An <c>IDeviceContext</c> used for measuring texts.
 		/// </summary>
-		/// <remarks>Is defined in the YataForm cTor.</remarks>
+		/// <remarks>Is defined in the <c><see cref="YataForm()"/></c>
+		/// <c>cTor</c>.</remarks>
 		internal static Graphics graphics;
 
 		/// <summary>
@@ -141,8 +142,8 @@ namespace yata
 	{
 		internal static LinearGradientBrush ColheadPanel, FrozenLabel, Disordered;
 
-		internal static readonly LinearGradientBrush PropanelButton = new LinearGradientBrush(new Point(0, 0),
-																							  new Point(0, PropertyPanelButton.HEIGHT),
-																							  Color.White, Color.CornflowerBlue);
+		internal static readonly LinearGradientBrush ppBrush = new LinearGradientBrush(new Point(0, 0),
+																					   new Point(0, PropanelButton.HEIGHT),
+																					   Color.White, Color.CornflowerBlue);
 	}
 }

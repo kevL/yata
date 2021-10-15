@@ -8,9 +8,9 @@ namespace yata
 {
 	/// <summary>
 	/// The button in the upper-right corner of Yata that opens/cycles the
-	/// active table's <c><see cref="PropertyPanel"/></c>.
+	/// active table's <c><see cref="Propanel"/></c>.
 	/// </summary>
-	sealed class PropertyPanelButton
+	sealed class PropanelButton
 		: Button
 	{
 		#region Fields (static)
@@ -38,7 +38,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal PropertyPanelButton()
+		internal PropanelButton()
 		{
 			DrawRegulator.SetDoubleBuffered(this);
 
@@ -51,7 +51,7 @@ namespace yata
 			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);
 
 
-			Name     = "btn_PropertyPanel";
+			Name     = "bu_Propanel";
 			TabIndex = 4;
 			TabStop  = false;
 
@@ -83,7 +83,7 @@ namespace yata
 				YataGrid.graphics = pevent.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				YataGrid.graphics.FillRectangle(Gradients.PropanelButton, _rectGr);
+				YataGrid.graphics.FillRectangle(Gradients.ppBrush, _rectGr);
 
 				var pen1 = Pens.Black;
 				var pen2 = Pencils.DarkLine;

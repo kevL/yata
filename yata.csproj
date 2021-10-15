@@ -61,8 +61,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\PropertyPanel.cs" />
-    <Compile Include="Controls\PropertyPanelButton.cs" />
+    <Compile Include="Controls\Propanel.cs" />
+    <Compile Include="Controls\PropanelButton.cs" />
     <Compile Include="Controls\YataDialog.cs" />
     <Compile Include="Controls\YataPanels.cs" />
     <Compile Include="Controls\YataTabs.cs" />
