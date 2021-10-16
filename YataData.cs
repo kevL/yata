@@ -27,17 +27,17 @@ namespace yata
 		/// Sets <c><see cref="_width"/></c>.
 		/// </summary>
 		/// <param name="w">the width in pixels</param>
-		/// <param name="force"><c>true</c> to allow decreasing the width</param>
+		/// <param name="allowDecrease"><c>true</c> to allow decreasing the width</param>
 		/// <remarks>When loading a 2da width is set to the colhead first, but
 		/// then can be replaced by the widest cell-width under it. The col's
 		/// width is thus allowed to only increase when loading a 2da. When a
 		/// cell's text changes however the col-width should be allowed to
 		/// decrease if it's less wide than the current width (but not if it's
 		/// less wide than the colhead's width). Hence the
-		/// <paramref name="force"/> parameter.</remarks>
-		internal void width(int w, bool force = false)
+		/// <paramref name="allowDecrease"/> parameter.</remarks>
+		internal void width(int w, bool allowDecrease = false)
 		{
-			if (force || w > _width)
+			if (allowDecrease || w > _width)
 				_width = w;
 		}
 
