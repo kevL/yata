@@ -1676,11 +1676,12 @@ namespace yata
 		/// <summary>
 		/// Creates the cols and caches the 2da's colhead data.
 		/// </summary>
-		/// <param name="calibrate">true to only adjust (ie. Font changed)</param>
-		internal void CreateCols(bool calibrate = false)
+		/// <param name="rewidthOnly"><c>true</c> to only re-width cols - ie.
+		/// Font changed</param>
+		internal void CreateCols(bool rewidthOnly = false)
 		{
 			int c = 0;
-			if (!calibrate)
+			if (!rewidthOnly)
 			{
 				ColCount = Fields.Length + 1; // 'Fields' does not include rowhead or id-col
 
@@ -1695,13 +1696,13 @@ namespace yata
 			{
 				++c; // start at col 1 - skip id col
 
-				if (!calibrate)
+				if (!rewidthOnly)
 					Cols[c].text = head;
 
 				widthtext = YataGraphics.MeasureWidth(head, _f.FontAccent);
 				Cols[c]._widthtext = widthtext;
 
-				Cols[c].width(widthtext + _padHori * 2 + _padHoriSort, calibrate);
+				Cols[c].width(widthtext + _padHori * 2 + _padHoriSort, rewidthOnly);
 			}
 		}
 
@@ -1893,6 +1894,7 @@ namespace yata
 			RowCount = _rows.Count;
 
 			bool changed = false, loadchanged; string text;
+			bool isLoadchanged = false;
 
 			for (int r = 0; r != RowCount; ++r)
 			{
@@ -1913,19 +1915,23 @@ namespace yata
 						text = _rows[r][c];
 						if (VerifyText(ref text))
 						{
-							changed =
-							loadchanged = true;
+							changed = loadchanged = isLoadchanged = true;
 						}
 					}
 					else
 					{
 						text = gs.Stars;
-						changed =
-						loadchanged = true;
+						changed = loadchanged = isLoadchanged = true;
 					}
 
 					(this[r,c] = new Cell(r,c, text)).loadchanged = loadchanged;
 				}
+			}
+
+			if (isLoadchanged) // inform user regardless of Strict setting ->
+			{
+				using (var ib = new Infobox(Infobox.Title_infor, "Cell-texts changed."))
+					ib.ShowDialog(_f);
 			}
 			Changed |= changed;
 
@@ -3506,15 +3512,14 @@ namespace yata
 		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
 		internal static bool VerifyText_edit(Control tb)
 		{
-			string text = tb.Text.Trim();
+			string text = tb.Text; // allow whitespace - do not Trim()
 			if (text.Length == 0)
 			{
 				tb.Text = gs.Stars;
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
-			bool changed = text != tb.Text;
-			changed |= VerifyText(ref text); // <- do not short-circuit
+			bool changed = VerifyText(ref text); // <- do not short-circuit
 
 			tb.Text = text;
 			return changed;
@@ -3531,91 +3536,34 @@ namespace yata
 		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
 		static bool VerifyText(ref string text)
 		{
-			bool changed = false;
+			var sb = new StringBuilder(text);
 
-			bool quoteFirst = text.StartsWith("\"", StringComparison.Ordinal);
-			bool quoteLast  = text.EndsWith(  "\"", StringComparison.Ordinal);
-			if (quoteFirst && quoteLast)
+			sb = sb.Replace("\"", null);
+
+			if (sb.Length == 0)
 			{
-				if (   text.Length < 3											// ""  -> ****
-					|| text.Substring(1, text.Length - 2).Trim().Length == 0)	// " " -> ****
-				{
-					text = gs.Stars;
-					return true;
-				}
-			}
-			else if (( quoteFirst && !quoteLast)								// " -> ""
-				||   (!quoteFirst &&  quoteLast))
-			{
-				if (quoteFirst)
-					text = text + "\"";
-				else
-					text = "\"" + text;
-
-				if (text.Length == 2)											// "" -> ****
-				{
-					text = gs.Stars;
-					return true;
-				}
-
-				changed = true;
+				text = gs.Stars;
+				return true;
 			}
 
-			if (text.Length > 2) // lol but it works ->
+			var chars = new char[sb.Length];
+			sb.CopyTo(0, chars, 0, sb.Length);
+
+			for (int i = 0; i != chars.Length; ++i)
 			{
-				string frst = text.Substring(0, 1);
-				string last = text.Substring(text.Length - 1, 1);
-
-				string test = text.Substring(1, text.Length - 2);
-
-				while (test.Contains("\""))										// """ -> ""
+				if (Char.IsWhiteSpace(chars[i]))
 				{
-					changed = true;
-					test = test.Remove(test.IndexOf('"'), 1);
-					text = frst + test + last;
-				}
+					sb.Insert(0, "\"", 1);
+					sb.Append('"', 1);
 
-				if (test == gs.Stars)											// "****" -> ****
-				{
-					text = gs.Stars;
+					text = sb.ToString();
 					return true;
 				}
 			}
 
-			if (!text.Contains("\""))											// [ ] -> " "
-			{
-				char[] chars = text.ToCharArray();
-				for (int pos = 0; pos != chars.Length; ++pos)
-				{
-					if (Char.IsWhiteSpace(chars[pos]))
-					{
-						changed = true;
-						text = "\"" + text + "\"";
-						break;
-					}
-				}
-			}
-			else if (  text.StartsWith("\"", StringComparison.Ordinal)			// "." -> .
-					&& text.EndsWith(  "\"", StringComparison.Ordinal))
-			{
-				bool preserveQuotes = false;
-
-				char[] chars = text.ToCharArray();
-				for (int pos = 0; pos != chars.Length; ++pos)
-				{
-					if (Char.IsWhiteSpace(chars[pos]))
-					{
-						preserveQuotes = true;
-						break;
-					}
-				}
-
-				if (!preserveQuotes)
-				{
-					changed = true;
-					text = text.Substring(1, text.Length - 2);
-				}
-			}
+			string sanitized = sb.ToString();
+			bool changed = sanitized != text;
+			text = sanitized;
 
 			return changed;
 		}
