@@ -1913,7 +1913,7 @@ namespace yata
 					if (c < _rows[r].Length)
 					{
 						text = _rows[r][c];
-						if (VerifyText(ref text))
+						if (VerifyText(ref text, true))
 						{
 							changed = loadchanged = isLoadchanged = true;
 						}
@@ -3509,7 +3509,7 @@ namespace yata
 		/// Checks the cell-field text during user-edits.
 		/// </summary>
 		/// <param name="tb">a <c>TextBox</c> in which user is editing the text</param>
-		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
+		/// <returns><c>true</c> to notify user if text changes</returns>
 		internal static bool VerifyText_edit(Control tb)
 		{
 			string text = tb.Text; // allow whitespace - do not Trim()
@@ -3519,7 +3519,7 @@ namespace yata
 				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
 			}
 
-			bool changed = VerifyText(ref text); // <- do not short-circuit
+			bool changed = VerifyText(ref text);
 
 			tb.Text = text;
 			return changed;
@@ -3532,11 +3532,44 @@ namespace yata
 		/// <c><see cref="VerifyText_edit()">VerifyText_edit()</see></c>.
 		/// </summary>
 		/// <param name="text">ref to a text-string</param>
-		/// <returns><c>true</c> if text is changed/fixed/corrected</returns>
-		/// <remarks><c>Trim()</c> is NOT performed.</remarks>
-		static bool VerifyText(ref string text)
+		/// <param name="load"><c>true</c> to return <c>true</c> even if a
+		/// text-change is insignificant</param>
+		/// <returns><c>true</c> if (a) text is changed and user should be
+		/// notified or (b) text is changed and its <c><see cref="Cell"/></c>
+		/// should be flagged as <c><see cref="Cell.loadchanged"/></c> when a
+		/// 2da-file loads</returns>
+		static bool VerifyText(ref string text, bool load = false)
 		{
 			var sb = new StringBuilder(text);
+
+			if (sb.Length != 0
+				&& sb[0] != '"' && sb[sb.Length - 1] != '"')
+			{
+				bool quotes = false;
+
+				char c;
+				for (int i = 0; i != sb.Length; ++i)
+				{
+					c = sb[i];
+					if (c == '"')
+					{
+						quotes = false;
+						break;
+					}
+
+					if (Char.IsWhiteSpace(c))
+						quotes = true;
+				}
+
+				if (quotes)
+				{
+					sb.Insert(0, '"');
+					sb.Append('"');
+
+					text = sb.ToString();
+					return load; // NOTE: Don't bother the user if he/she simply wants auto-quotes.
+				}
+			}
 
 			sb = sb.Replace("\"", null);
 
@@ -3546,24 +3579,21 @@ namespace yata
 				return true;
 			}
 
-			var chars = new char[sb.Length];
-			sb.CopyTo(0, chars, 0, sb.Length);
-
-			for (int i = 0; i != chars.Length; ++i)
+			for (int i = 0; i != sb.Length; ++i)
 			{
-				if (Char.IsWhiteSpace(chars[i]))
+				if (Char.IsWhiteSpace(sb[i]))
 				{
-					sb.Insert(0, "\"", 1);
-					sb.Append('"', 1);
+					sb.Insert(0, '"');
+					sb.Append('"');
 
 					text = sb.ToString();
 					return true;
 				}
 			}
 
-			string sanitized = sb.ToString();
-			bool changed = sanitized != text;
-			text = sanitized;
+			string verified = sb.ToString();
+			bool changed = verified != text;
+			text = verified;
 
 			return changed;
 		}
