@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 october 14
+2021 november 5
 kevL's
 ver 4.5.4.0
 
@@ -531,6 +531,10 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  not sorted by ascending ID") - ie, persons who use Strict don't
                  get a tooltip although the head of the id-col still turns to a
                  red color regardless of this setting
+             (7) when applying celltext that has whitespace but is not double-
+                 quoted Yata will add the quotes and issue a notice that the
+                 text has been changed if "true"; otherwise Yata will add
+                 double-quotes without bothering the user.
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).

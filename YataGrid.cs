@@ -3567,8 +3567,12 @@ namespace yata
 					sb.Append('"');
 
 					text = sb.ToString();
-					return load; // NOTE: Don't bother the user if he/she simply wants auto-quotes.
-				}
+
+					if (load)
+						return true;
+
+					return Settings._strict;	// NOTE: Bother the user if he/she
+				}								// wants auto-quotes only if Strict.
 			}
 
 			sb = sb.Replace("\"", null);
