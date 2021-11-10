@@ -64,8 +64,6 @@ namespace yata
 				{
 					if (!File.Exists(Fullpath))
 					{
-						// TODO: Disable 'it_Reload' but reenable it if user chooses to re-save in FileWatcherDialog.
-
 						BypassFileDeleted = true;
 
 						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
