@@ -1532,7 +1532,6 @@ namespace yata
 					ib.ShowDialog(this);
 				}
 			}
-			// TODO: error file does not exist
 		}
 
 		/// <summary>
