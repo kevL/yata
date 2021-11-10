@@ -1522,6 +1522,16 @@ namespace yata
 					}
 				}
 			}
+			else
+			{
+				using (var ib = new Infobox(Infobox.Title_error,
+											"File does not exist.",
+											Table.Fullpath,
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
+			}
 			// TODO: error file does not exist
 		}
 
@@ -4188,7 +4198,7 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					using (var ib = new Infobox(" File not found",
+					using (var ib = new Infobox(Infobox.Title_infor,
 												Infobox.SplitString("a Settings.cfg file does not exist in the application"
 																  + " directory. Do you want to create one ..."),
 												null,
