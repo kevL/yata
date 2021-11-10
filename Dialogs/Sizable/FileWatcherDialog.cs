@@ -62,20 +62,20 @@ namespace yata
 			{
 				case FILE_DEL:
 					text = "The file cannot be found on disk.";
-					btn_Action.Text = "Resave file";
+					bu_Action.Text = "Resave file";
 					break;
 
 				case FILE_WSC:
 					text = "The file on disk has changed.";
-					btn_Action.Text = "Reload file";
+					bu_Action.Text = "Reload file";
 					break;
 			}
 
 			if (_grid.Readonly)
 				text += " CANCEL DISABLES THE READONLY FLAG.";
 
-			lbl_Info.Text = text;
-			int wInfo = YataGraphics.MeasureWidth(lbl_Info.Text, lbl_Info.Font);
+			la_Info.Text = text;
+			int wInfo = YataGraphics.MeasureWidth(la_Info.Text, la_Info.Font);
 
 			tb_Pfe.Text = _grid.Fullpath;
 			int wPfe = YataGraphics.MeasureWidth(tb_Pfe.Text, tb_Pfe.Font);
@@ -86,7 +86,7 @@ namespace yata
 			MaximumSize = new Size(Int32.MaxValue,             Height);
 
 
-			btn_Action.Select();
+			bu_Action.Select();
 		}
 		#endregion cTor
 
@@ -112,18 +112,17 @@ namespace yata
 		{
 			switch (DialogResult)
 			{
-				default:
-//				case DialogResult.Cancel:	// btn_Cancel
+				default: // case DialogResult.Cancel	// bu_Cancel
 					_grid.Readonly = false;
 					_grid.Changed  = true;
 					break;
 
-				case DialogResult.Abort:	// btn_Close2da
+				case DialogResult.Abort:				// bu_Close2da
 					_grid.Changed = false;
 					_grid._f.fileclick_ClosePage(null, EventArgs.Empty);
 					break;
 
-				case DialogResult.Yes:		// btn_Action
+				case DialogResult.Yes:					// bu_Action
 					_grid.Changed = false;
 
 					switch (_fwdType)

@@ -20,7 +20,7 @@ namespace yata
 
 
 		#region Properties
-		internal string Pfe
+		internal string Fullpath
 		{ private get; set; }
 
 		internal bool BypassFileChanged
@@ -39,8 +39,8 @@ namespace yata
 		internal FileWatcher(YataGrid grid)
 		{
 			_grid = grid;
-			Pfe = _grid.Fullpath;
-			_last = File.GetLastWriteTime(Pfe);
+			Fullpath = _grid.Fullpath;
+			_last = File.GetLastWriteTime(Fullpath);
 
 			Interval = 300;
 			Start();
@@ -62,7 +62,7 @@ namespace yata
 			{
 				if (!BypassFileDeleted)
 				{
-					if (!File.Exists(Pfe))
+					if (!File.Exists(Fullpath))
 					{
 						// TODO: Disable 'it_Reload' but reenable it if user chooses to re-save in FileWatcherDialog.
 
@@ -72,9 +72,9 @@ namespace yata
 							fwd.ShowDialog(_grid._f);
 					}
 					else if (!BypassFileChanged
-						&& File.GetLastWriteTime(Pfe) != _last)
+						&& File.GetLastWriteTime(Fullpath) != _last)
 					{
-						_last = File.GetLastWriteTime(Pfe);
+						_last = File.GetLastWriteTime(Fullpath);
 
 						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
 							fwd.ShowDialog(_grid._f);
@@ -84,7 +84,7 @@ namespace yata
 				if (BypassFileChanged)
 				{
 					BypassFileChanged = false;
-					_last = File.GetLastWriteTime(Pfe);
+					_last = File.GetLastWriteTime(Fullpath);
 				}
 			}
 		}

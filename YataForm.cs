@@ -908,6 +908,8 @@ namespace yata
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED);
 
+					Table.Watcher = new FileWatcher(Table);
+
 					if (WindowState == FormWindowState.Minimized)
 						WindowState  = FormWindowState.Normal;
 
@@ -920,7 +922,6 @@ namespace yata
 				{
 					YataGrid._init = false;
 
-					table.DisposeWatcher();
 					table.Dispose();
 				}
 
@@ -1359,7 +1360,7 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_Create(object sender, EventArgs e)
 		{
-			Table = new YataGrid(this, String.Empty, false, true);
+			Table = new YataGrid(this, String.Empty, false);
 
 			Table.CreateTable(); // <- instead of LoadTable()
 
@@ -1464,10 +1465,7 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
-			// NOTE: This needs to check Table.Fullpath in case user presses
-			// [Ctrl+r] after deleting the 2da-file on his/her hardrive.
-
-			if (File.Exists(Table.Fullpath))
+			if (File.Exists(Table.Fullpath)) // check 'Table.Fullpath' in case user presses [Ctrl+r] after deleting the 2da-file on the hardrive.
 			{
 				bool reload = !Table.Changed;
 				if (!reload)
@@ -1524,6 +1522,7 @@ namespace yata
 					}
 				}
 			}
+			// TODO: error file does not exist
 		}
 
 		/// <summary>

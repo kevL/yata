@@ -217,7 +217,7 @@ namespace yata
 				}
 
 				// not for create 2da -> Watcher would not be instantiated yet.
-				table.Watcher.Pfe = table.Fullpath;
+				table.Watcher.Fullpath = table.Fullpath;
 				table.Watcher.BypassFileDeleted = false;
 				table.Watcher.BypassFileChanged = true;
 			}

@@ -330,9 +330,7 @@ namespace yata
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly</param>
-		/// <param name="created"><c>true</c> to delay instantiating a
-		/// <c><see cref="FileWatcher"/></c> when creating a new 2da-file</param>
-		internal YataGrid(YataForm f, string pfe, bool read, bool created = false)
+		internal YataGrid(YataForm f, string pfe, bool read)
 		{
 //			DrawRegulator.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -372,9 +370,6 @@ namespace yata
 			AllowDrop = true;
 
 			_ur = new UndoRedo(this);
-
-			if (!created)
-				Watcher = new FileWatcher(this);
 		}
 		#endregion cTor
 
@@ -846,7 +841,12 @@ namespace yata
 		/// <summary>
 		/// Tries to load a 2da-file.
 		/// </summary>
-		/// <returns>a LOADRESULT_* val</returns>
+		/// <returns>a <c>LOADRESULT_*</c> val
+		/// <list type="bullet">
+		/// <item><c><see cref="LOADRESULT_FALSE"/></c></item>
+		/// <item><c><see cref="LOADRESULT_TRUE"/></c></item>
+		/// <item><c><see cref="LOADRESULT_CHANGED"/></c></item>
+		/// </list></returns>
 		internal int LoadTable()
 		{
 			// �
