@@ -354,8 +354,8 @@ namespace yata
 			if (Settings._recent != 0)
 				CreateRecentsSubits(); // init recents before (potentially) loading a table from FileExplorer
 
-			if (File.Exists(PfeLoad)) // load file from FileExplorer ...
-				CreatePage(PfeLoad);
+			if (File.Exists(PfeLoad))
+				CreatePage(PfeLoad); // start Yata and load file w/ file-association
 			else
 				Obfuscate();
 
@@ -723,7 +723,7 @@ namespace yata
 				{
 					PfeLoad = Marshal.PtrToStringAnsi(copyData.lpData);
 					if (File.Exists(PfeLoad))
-						CreatePage(PfeLoad);
+						CreatePage(PfeLoad); // load file w/ file-association
 				}
 			}
 			else
@@ -1354,7 +1354,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click to create a new 2da.
+		/// Handles it-click to create a new 2da-file.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Create"/></c></param>
 		/// <param name="e"></param>
@@ -1441,7 +1441,7 @@ namespace yata
 				{
 					bool read = ofd.ReadOnlyChecked;
 					foreach (var pfe in ofd.FileNames)
-						CreatePage(pfe, read);
+						CreatePage(pfe, read); // load 1+ file(s) by openfiledialog
 				}
 			}
 		}
@@ -1542,7 +1542,7 @@ namespace yata
 		/// <remarks>Invalid subits get deleted when dropdown opens.</remarks>
 		void fileclick_Recent(object sender, EventArgs e)
 		{
-			CreatePage((sender as ToolStripItem).Text);
+			CreatePage((sender as ToolStripItem).Text); // load file from recents
 		}
 
 		/// <summary>
@@ -5939,7 +5939,7 @@ namespace yata
 		{
 			var paths = (string[])drgevent.Data.GetData(DataFormats.FileDrop);
 			foreach (string pfe in paths)
-				CreatePage(pfe);
+				CreatePage(pfe); // load 1+ files by drag&drop
 		}
 		#endregion Handlers (dragdrop)
 
