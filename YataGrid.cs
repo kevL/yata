@@ -342,7 +342,6 @@ namespace yata
 
 			Fullpath = pfe;
 			Readonly = read;
-			_init = true;
 
 			Dock = DockStyle.Fill;
 			BackColor = SystemColors.ControlDark;
@@ -4180,7 +4179,7 @@ namespace yata
 		/// </summary>
 		internal void ClearLoadchanged()
 		{
-			_init = true;
+			_init = true; // bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
 
 			foreach (var row in Rows)
 			for (int c = 0; c != ColCount; ++c)
@@ -4188,7 +4187,6 @@ namespace yata
 				row[c].loadchanged = false;
 
 			_init = false;
-
 			_f.EnableGotoLoadchanged(false);
 		}
 

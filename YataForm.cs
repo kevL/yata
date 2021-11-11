@@ -887,7 +887,9 @@ namespace yata
 							// but a refresh turns the client-area gray at least instead of glitchy.
 							// NOTE: It went away; the table-area turns gray.
 
+				YataGrid._init = true;
 				var table = new YataGrid(this, pfe, read);
+//				table.Watcher = new FileWatcher(table);
 
 				int result = table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
@@ -922,6 +924,7 @@ namespace yata
 				{
 					YataGrid._init = false;
 
+//					table.Watcher.Dispose();
 					table.Dispose();
 				}
 
@@ -1360,6 +1363,7 @@ namespace yata
 		/// <param name="e"></param>
 		void fileclick_Create(object sender, EventArgs e)
 		{
+			YataGrid._init = true;
 			Table = new YataGrid(this, String.Empty, false);
 
 			Table.CreateTable(); // <- instead of LoadTable()
@@ -2470,10 +2474,10 @@ namespace yata
 		/// <summary>
 		/// Enables/disables <c><see cref="it_GotoLoadchanged"/></c>.
 		/// </summary>
-		/// <param name="enable"></param>
-		internal void EnableGotoLoadchanged(bool enable)
+		/// <param name="enabled"></param>
+		internal void EnableGotoLoadchanged(bool enabled)
 		{
-			it_GotoLoadchanged.Enabled = enable;
+			it_GotoLoadchanged.Enabled = enabled;
 		}
 		#endregion Methods (edit)
 
