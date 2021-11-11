@@ -208,10 +208,7 @@ namespace yata
 
 				if (!YataGrid._init)
 				{
-					if (_loadchanged)
-						YataForm.that.EnableGotoLoadchanged(true);
-					else
-						YataForm.that.EnableGotoLoadchanged(YataForm.Table.anyLoadchanged());
+					YataForm.that.EnableGotoLoadchanged(_loadchanged || YataForm.Table.anyLoadchanged());
 				}
 				// else selecting the tab at initial load/reload deters 'it_GotoLoadchanged.Enabled'.
 			}
