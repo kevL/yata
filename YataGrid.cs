@@ -343,6 +343,8 @@ namespace yata
 			Fullpath = pfe;
 			Readonly = read;
 
+			_init = true;
+
 			Dock = DockStyle.Fill;
 			BackColor = SystemColors.ControlDark;
 
