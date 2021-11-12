@@ -37,6 +37,13 @@ namespace yata
 		/// open and decides to change or delete the 2da-file from the hardrive.</remarks>
 		internal bool ForceReload
 		{ get; set; }
+
+		/// <summary>
+		/// <c>true</c> if a <c><see cref="FileWatcherDialog"/></c> is currently
+		/// instantiated for this <c>FileWatcher</c>.
+		/// </summary>
+		internal bool Fwd
+		{ get; set; }
 		#endregion Properties
 
 
@@ -79,10 +86,13 @@ namespace yata
 						{
 							ForceReload = true;
 						}
-						else
+						else if (!Fwd)
 						{
-							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
+							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL, this))
+							{
+								Fwd = true;
 								fwd.ShowDialog(_grid._f);
+							}
 						}
 					}
 					else if (!BypassFileChanged
@@ -94,10 +104,13 @@ namespace yata
 						{
 							ForceReload = true;
 						}
-						else
+						else if (!Fwd)
 						{
-							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
+							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC, this))
+							{
+								Fwd = true;
 								fwd.ShowDialog(_grid._f);
+							}
 						}
 					}
 				}

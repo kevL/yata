@@ -24,6 +24,7 @@ namespace yata
 		YataGrid _grid;
 
 		int _fwdType;
+		FileWatcher _watcher;
 		#endregion Fields
 
 
@@ -34,12 +35,15 @@ namespace yata
 		/// <param name="grid">a <c><see cref="YataGrid"/></c></param>
 		/// <param name="fwdType">the <c>FileWatcherDialog</c> type:
 		/// <c><see cref="FILE_DEL"/></c> or <c><see cref="FILE_WSC"/></c></param>
+		/// <param name="watcher"></param>
 		internal FileWatcherDialog(
 				YataGrid grid,
-				int fwdType)
+				int fwdType,
+				FileWatcher watcher)
 		{
 			_grid = grid;
 			_f = _grid._f;
+			_watcher = watcher;
 
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_NON);
@@ -110,6 +114,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			_watcher.Fwd = false;
+
 			switch (DialogResult)
 			{
 				default: // case DialogResult.Cancel	// bu_Cancel
