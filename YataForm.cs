@@ -1480,6 +1480,7 @@ namespace yata
 		/// <item>File|Reload <c>[Ctrl+r]</c></item>
 		/// <item>tab|Reload</item>
 		/// <item><c><see cref="FileWatcherDialog"/>.OnFormClosing()</c></item>
+		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
