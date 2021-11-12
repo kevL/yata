@@ -1219,8 +1219,8 @@ namespace yata
 			table.DisposeWatcher();
 			table.Dispose();
 
-			if      (table == _diff1) _diff1 = null;
-			else if (table == _diff2) _diff2 = null;
+			if      (_diff1 == table) _diff1 = null;
+			else if (_diff2 == table) _diff2 = null;
 
 			if (_fdiffer != null && _diff1 == null && _diff2 == null)
 				_fdiffer.Close();
@@ -1514,8 +1514,8 @@ namespace yata
 					Obfuscate();
 					DrawRegulator.SuspendDrawing(Table);
 
-					if      (Table == _diff1) _diff1 = null;
-					else if (Table == _diff2) _diff2 = null;
+					if      (_diff1 == Table) _diff1 = null;
+					else if (_diff2 == Table) _diff2 = null;
 
 
 					int result = Table.LoadTable();
@@ -3623,8 +3623,8 @@ namespace yata
 
 			Table._ur.ResetSaved(true);
 
-			if      (Table == _diff1) _diff1 = null;
-			else if (Table == _diff2) _diff2 = null;
+			if      (_diff1 == Table) _diff1 = null;
+			else if (_diff2 == Table) _diff2 = null;
 
 			Table.Colwidth(0, 0, Table.RowCount - 1);
 			Table.metricFrozenControls(0);
@@ -5662,7 +5662,7 @@ namespace yata
 
 				if (Table != null
 					&& (_diff1 != null  || _diff2 != null)
-					&& (Table == _diff1 || Table == _diff2))
+					&& (_diff1 == Table || _diff2 == Table))
 				{
 					if (Table._editor.Visible)
 					{
