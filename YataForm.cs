@@ -917,23 +917,7 @@ namespace yata
 
 					DrawRegulator.ResumeDrawing(Table);
 
-					if (Table.Watcher.ForceReload)
-					{
-						Table.Watcher.ForceReload = false;
-
-						using (var ib = new Infobox(Infobox.Title_alert,
-													"The 2da-file was changed on disk. Do you want to reload it ...",
-													Table.Fullpath,
-													InfoboxType.Warn,
-													InfoboxButtons.CancelYes))
-						{
-							if (ib.ShowDialog(this) == DialogResult.OK)
-							{
-								Table.Changed = false; // bypass Close warn.
-								fileclick_Reload(null, EventArgs.Empty);
-							}
-						}
-					}
+					RequestReload();
 				}
 				else
 				{
@@ -944,6 +928,32 @@ namespace yata
 				}
 
 				tab_SelectedIndexChanged(null, EventArgs.Empty);
+			}
+		}
+
+		/// <summary>
+		/// If a 2da-file that is currently being loaded gets changed or deleted
+		/// on disk ask the user if it should reload only after the
+		/// load-sequence is finished.
+		/// </summary>
+		void RequestReload()
+		{
+			if (Table.Watcher.ForceReload)
+			{
+				Table.Watcher.ForceReload = false;
+
+				using (var ib = new Infobox(Infobox.Title_alert,
+											"The 2da-file was changed on disk. Do you want to reload it ...",
+											Table.Fullpath,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelYes))
+				{
+					if (ib.ShowDialog(this) == DialogResult.OK)
+					{
+						Table.Changed = false; // bypass Close warn.
+						fileclick_Reload(null, EventArgs.Empty);
+					}
+				}
 			}
 		}
 
@@ -1480,7 +1490,7 @@ namespace yata
 		/// <item>File|Reload <c>[Ctrl+r]</c></item>
 		/// <item>tab|Reload</item>
 		/// <item><c><see cref="FileWatcherDialog"/>.OnFormClosing()</c></item>
-		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
+		/// <item><c><see cref="RequestReload()">RequestReload()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
@@ -1536,6 +1546,8 @@ namespace yata
 						Obfuscate(false);
 
 						Table.Watcher.BypassFileChanged = true;
+
+						RequestReload();
 					}
 				}
 			}
