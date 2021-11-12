@@ -888,7 +888,7 @@ namespace yata
 							// NOTE: It went away; the table-area turns gray.
 
 				var table = new YataGrid(this, pfe, read);
-//				table.Watcher = new FileWatcher(table);
+				table.Watcher = new FileWatcher(table);
 
 				int result = table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
@@ -909,8 +909,6 @@ namespace yata
 
 					Table.Init(result == YataGrid.LOADRESULT_CHANGED);
 
-					Table.Watcher = new FileWatcher(Table);
-
 					if (WindowState == FormWindowState.Minimized)
 						WindowState  = FormWindowState.Normal;
 
@@ -918,12 +916,30 @@ namespace yata
 					TopMost = false;
 
 					DrawRegulator.ResumeDrawing(Table);
+
+					if (Table.Watcher.ForceReload)
+					{
+						Table.Watcher.ForceReload = false;
+
+						using (var ib = new Infobox(Infobox.Title_alert,
+													"The 2da-file was changed on disk. Do you want to reload it ...",
+													Table.Fullpath,
+													InfoboxType.Warn,
+													InfoboxButtons.CancelYes))
+						{
+							if (ib.ShowDialog(this) == DialogResult.OK)
+							{
+								Table.Changed = false; // bypass Close warn.
+								fileclick_Reload(null, EventArgs.Empty);
+							}
+						}
+					}
 				}
 				else
 				{
 					YataGrid._init = false;
 
-//					table.Watcher.Dispose();
+					table.Watcher.Dispose();
 					table.Dispose();
 				}
 

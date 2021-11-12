@@ -28,6 +28,15 @@ namespace yata
 
 		internal bool BypassFileDeleted
 		{ private get; set; }
+
+		/// <summary>
+		/// Forces user to reload the 2da-file after a load-sequence finishes.
+		/// </summary>
+		/// <remarks>Do not show a <c><see cref="FileWatcherDialog"/></c> while
+		/// loading a 2da-file. It creates issues if the user has that dialog
+		/// open and decides to change or delete the 2da-file from the hardrive.</remarks>
+		internal bool ForceReload
+		{ get; set; }
 		#endregion Properties
 
 
@@ -66,16 +75,30 @@ namespace yata
 					{
 						BypassFileDeleted = true;
 
-						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
-							fwd.ShowDialog(_grid._f);
+						if (YataGrid._init)
+						{
+							ForceReload = true;
+						}
+						else
+						{
+							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_DEL))
+								fwd.ShowDialog(_grid._f);
+						}
 					}
 					else if (!BypassFileChanged
 						&& File.GetLastWriteTime(Fullpath) != _last)
 					{
 						_last = File.GetLastWriteTime(Fullpath);
 
-						using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
-							fwd.ShowDialog(_grid._f);
+						if (YataGrid._init)
+						{
+							ForceReload = true;
+						}
+						else
+						{
+							using (var fwd = new FileWatcherDialog(_grid, FileWatcherDialog.FILE_WSC))
+								fwd.ShowDialog(_grid._f);
+						}
 					}
 				}
 
