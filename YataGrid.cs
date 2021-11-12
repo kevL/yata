@@ -1546,9 +1546,7 @@ namespace yata
 
 			var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 
-//			int c = 0;
-//			if (Settings._autorder) // force Autorder
-			cells[0] = "0";
+			cells[0] = "0"; // force 'Settings._autorder'
 
 			for (int c = 1; c <= Fields.Length; ++c)
 				cells[c] = gs.Stars;
