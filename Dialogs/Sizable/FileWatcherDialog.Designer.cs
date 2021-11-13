@@ -128,7 +128,7 @@ namespace yata
 			this.MinimizeBox = false;
 			this.Name = "FileWatcherDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - File warn";
 			this.pnl_Top.ResumeLayout(false);
 			this.pnl_Top.PerformLayout();

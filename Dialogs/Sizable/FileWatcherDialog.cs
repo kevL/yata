@@ -116,6 +116,16 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
+		/// Overrides the <c>Load</c> handler.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnLoad(EventArgs e)
+		{
+			CenterToParent();
+			base.OnLoad(EventArgs.Empty);
+		}
+
+		/// <summary>
 		/// Overrides the <c>Resize</c> handler.
 		/// </summary>
 		/// <param name="e"></param>
