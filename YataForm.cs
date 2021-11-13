@@ -1545,7 +1545,7 @@ namespace yata
 						DrawRegulator.ResumeDrawing(Table);
 						Obfuscate(false);
 
-						Table.Watcher.BypassFileChanged = true;
+						Table.Watcher.FileChanged = true;
 
 						RequestReload();
 					}

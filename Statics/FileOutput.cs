@@ -4,8 +4,24 @@ using System.IO;
 
 namespace yata
 {
+	/// <summary>
+	/// Static class that writes 2da-files.
+	/// </summary>
 	static class FileOutput
 	{
+		/// <summary>
+		/// Writes a 2da-file to
+		/// <c><see cref="YataGrid.Fullpath">YataGrid.Fullpath</see></c> based
+		/// on user's
+		/// <c><see cref="Settings._alignoutput">Settings._alignoutput</see></c>.
+		/// <list type="bullet">
+		/// <item><c><see cref="Settings.AoFalse">Settings.AoFalse</see></c></item>
+		/// <item><c><see cref="Settings.AoFalse">Settings.AoTrue</see></c></item>
+		/// <item><c><see cref="Settings.AoFalse">Settings.AoTabs</see></c></item>
+		/// </list>
+		/// </summary>
+		/// <param name="table">a <c><see cref="YataGrid"/> to write the data
+		/// for</c></param>
 		internal static void Write(YataGrid table)
 		{
 			if (table.RowCount != 0)
@@ -218,8 +234,8 @@ namespace yata
 
 				// not for create 2da -> Watcher would not be instantiated yet.
 				table.Watcher.Fullpath = table.Fullpath;
-				table.Watcher.BypassFileDeleted = false;
-				table.Watcher.BypassFileChanged = true;
+				table.Watcher.FileDeleted = false;
+				table.Watcher.FileChanged = true;
 			}
 			else // is freshly Created
 			{

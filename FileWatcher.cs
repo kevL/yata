@@ -33,10 +33,10 @@ namespace yata
 		{ private get; set; }
 
 		/// <summary>
-		/// <c>true</c> to bypass the <c><see cref="FileWatcherDialog"/> when
-		/// the file is saved in Yata itself.</c>
+		/// <c>true</c> to bypass the <c><see cref="OnTick()">OnTick()</see></c>
+		/// handler when the 2da-file is saved in Yata itself.
 		/// </summary>
-		internal bool BypassFileChanged
+		internal bool FileChanged
 		{ private get; set; }
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace yata
 		/// <c><see cref="FileWatcherDialog"/></c> if user deletes the file from
 		/// the hardrive.
 		/// </summary>
-		internal bool BypassFileDeleted
+		internal bool FileDeleted
 		{ private get; set; }
 
 		/// <summary>
@@ -86,12 +86,13 @@ namespace yata
 		protected override void OnTick(EventArgs e)
 		{
 			if (_grid != null) // ~safety.
+//				&& Form.ActiveForm != null && (Form.ActiveForm == _grid._f || Form.ActiveForm == _dialog))
 			{
-				if (!BypassFileDeleted)
+				if (!FileDeleted)
 				{
 					if (!File.Exists(Fullpath))
 					{
-						BypassFileDeleted = true;
+						FileDeleted = true;
 
 						if (YataGrid._init)
 						{
@@ -109,7 +110,7 @@ namespace yata
 							_dialog.SetAction(FileWatcherDialog.Fwd.FileDeleted);
 						}
 					}
-					else if (!BypassFileChanged
+					else if (!FileChanged
 						&& File.GetLastWriteTime(Fullpath) != _last)
 					{
 						_last = File.GetLastWriteTime(Fullpath);
@@ -131,13 +132,13 @@ namespace yata
 					&& File.Exists(Fullpath)
 					&& _dialog._fwdType == FileWatcherDialog.Fwd.FileDeleted)
 				{
-					BypassFileDeleted = false;
+					FileDeleted = false;
 					_dialog.SetAction(FileWatcherDialog.Fwd.FileChanged);
 				}
 
-				if (BypassFileChanged)
+				if (FileChanged)
 				{
-					BypassFileChanged = false;
+					FileChanged = false;
 					_last = File.GetLastWriteTime(Fullpath);
 				}
 			}
