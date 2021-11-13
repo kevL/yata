@@ -136,6 +136,8 @@ namespace yata
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>The <c><see cref="DifferDialog"/></c> overrides
+		/// <c>OnLoad()</c>. So do <c><see cref="TalkDialog"/></c> and
+		/// <c><see cref="FileWatcherDialog"/></c> but they then call this
 		/// <c>OnLoad()</c>.</remarks>
 		protected override void OnLoad(EventArgs e)
 		{
@@ -228,7 +230,7 @@ namespace yata
 		#region Methods
 		/// <summary>
 		/// Forces <c>ClientSize</c> back to what it should be after
-		/// <c>InitializeComponent()</c> runs. Also sets fonts.
+		/// <c>InitializeComponent()</c> runs. Also sets <c>Fonts</c>.
 		/// </summary>
 		/// <param name="metric">the type of telemetry that this
 		/// <c>YataDialog</c> respects
@@ -253,8 +255,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Recursive funct that gets all <c>TextBoxBases</c> in a specified
-		/// <c>Control</c>.
+		/// Recursive funct that adds all <c>TextBoxBases</c> in a specified
+		/// <c>Control</c> to <c><see cref="_tbbs"/></c>.
 		/// </summary>
 		/// <param name="f">a <c>Control</c> to investigate</param>
 		/// <returns>a <c>List</c> of <c>TextBoxBases</c></returns>
