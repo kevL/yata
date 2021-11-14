@@ -33,9 +33,20 @@ namespace yata
 		{ private get; set; }
 
 		/// <summary>
-		/// <c>true</c> to bypass the <c><see cref="OnTick()">OnTick()</see></c>
-		/// handler when the 2da-file is saved in Yata itself.
+		/// <c>true</c> to bypass invoking a
+		/// <c><see cref="FileWatcherDialog"/></c> when the 2da-file is saved in
+		/// Yata itself.
 		/// </summary>
+		/// <remarks>Shall be set <c>true</c> by
+		/// <list type="bullet">
+		/// <item><c><see cref="FileOutput.Write()">FileOutput.Write()</see></c></item>
+		/// <item><c><see cref="YataForm.fileclick_Reload()">YataForm.fileclick_Reload()</see></c></item>
+		/// </list>
+		/// 
+		/// 
+		/// The next <c><see cref="OnTick()">OnTick()</see></c> shall set it
+		/// <c>false</c> again.
+		/// </remarks>
 		internal bool FileChanged
 		{ private get; set; }
 
