@@ -1162,7 +1162,7 @@ namespace yata
 						{
 							_defaultval = String.Empty;
 
-							if (!quelch && Settings._strict && line.Length != 0) // NOTE: This is an autocorrecting error.
+							if (!quelch && Settings._strict && tr.Length != 0)
 							{
 								head = "The 2nd line in the 2da contains garbage. It will be cleared if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -1399,7 +1399,7 @@ namespace yata
 
 									if (quotes % 2 == 1)
 									{
-										head = "A row contains an odd quantity of double-quote characters. This is bad ...";
+										head = "A row contains an odd quantity of double-quote characters. This could be bad ...";
 										copy = Fullpath + Environment.NewLine + Environment.NewLine
 											 + "id " + id;
 
