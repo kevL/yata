@@ -196,9 +196,9 @@ namespace yata
 		/// try to invoke another one.
 		/// </summary>
 		/// <remarks>Can also be used to bypass
-		/// <c><see cref="CheckFile()">CheckFile()</see></c> when loading or
-		/// creating a 2da-file.</remarks>
-		bool _bypassWatcher;
+		/// <c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c>
+		/// when loading or creating a 2da-file or closing Yata etc.</remarks>
+		bool _bypassVerifyFile;
 
 		/// <summary>
 		/// A result returned by
@@ -486,23 +486,28 @@ namespace yata
 			if (Table != null)
 			{
 				//logfile.Log("YataForm.OnActivated()");
-				// NOTE: This could cause CheckFile() to run twice if user activates
-				// Yata by clicking on a tab that changes the currently selected tab -
-				// see: tab_SelectedIndexChanged()
-				CheckFile();
+
+				// NOTE: This could cause VerifyCurrentFileState() to run twice
+				// if user activates Yata by clicking on a tab that changes the
+				// currently selected tab - see: tab_SelectedIndexChanged()
+				VerifyCurrentFileState();
 			}
 		}
 
 		/// <summary>
-		/// 
+		/// Checks whether the 2da-file of the current
+		/// <c><see cref="Table">Table's</see></c>
+		/// <c><see cref="YataGrid.Fullpath">YataGrid.Fullpath</see></c> has
+		/// been deleted or overwritten. Invokes a
+		/// <c><see cref="FileWatcherDialog"/></c> if so.
 		/// </summary>
-		internal void CheckFile()
+		void VerifyCurrentFileState()
 		{
-			//logfile.Log("YataForm.CheckFile()");
+			//logfile.Log("YataForm.VerifyCurrentFileState()");
 
-			if (!_bypassWatcher)
+			if (!_bypassVerifyFile)
 			{
-				_bypassWatcher = true; // bypass this funct when the FileWatcherDialog closes and this form's Activate event fires.
+				_bypassVerifyFile = true; // bypass this funct when the FileWatcherDialog closes and this form's Activate event fires.
 
 				_fileresult = FileWatcherDialog.FwdResult.non;
 
@@ -520,9 +525,14 @@ namespace yata
 				//logfile.Log(". _fileresult= " + _fileresult);
 				switch (_fileresult)
 				{
+//					case FileWatcherDialog.FwdResult.non: break;
+
 					case FileWatcherDialog.FwdResult.Cancel:
 						Table.Readonly = false;
 						Table.Changed  = true;
+
+						if (File.Exists(Table.Fullpath))
+							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
 						break;
 
 					case FileWatcherDialog.FwdResult.Close2da:
@@ -533,19 +543,23 @@ namespace yata
 					case FileWatcherDialog.FwdResult.Resave:
 						Table.Changed = false;					// <- bypass Close warn
 						fileclick_Save(null, EventArgs.Empty);
-						if (Table != null) Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+
+						if (File.Exists(Table.Fullpath))
+							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
 						break;
 
 					case FileWatcherDialog.FwdResult.Reload:
 						Table.Changed = false;					// <- bypass Close warn
 						fileclick_Reload(null, EventArgs.Empty);
-						if (Table != null) Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+
+						if (Table != null && File.Exists(Table.Fullpath)) // Table can fail on reload
+							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
 						break;
 				}
 
-				_bypassWatcher = false;
+				_bypassVerifyFile = false;
 			}
-			//else logfile.Log(". _bypassWatcher");
+			//else logfile.Log(". _bypassVerifyFile");
 		}
 
 
@@ -557,7 +571,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_bypassWatcher = true;
+			_bypassVerifyFile = true;
 
 			if (Tabs.TabPages.Count != 0)
 			{
@@ -581,7 +595,8 @@ namespace yata
 
 			if (e.Cancel)
 			{
-				_bypassWatcher = false;
+				_bypassVerifyFile = false;
+				VerifyCurrentFileState();
 			}
 			else if (Settings._recent != 0)
 			{
@@ -983,6 +998,8 @@ namespace yata
 
 				var table = new YataGrid(this, pfe, read);
 
+				_bypassVerifyFile = true;
+
 				int result = table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
 				{
@@ -1016,9 +1033,9 @@ namespace yata
 					table.Dispose();
 				}
 
-				_bypassWatcher = true;
+				_bypassVerifyFile = false;
+
 				tab_SelectedIndexChanged(null, EventArgs.Empty);
-				_bypassWatcher = false;
 			}
 		}
 
@@ -1130,8 +1147,8 @@ namespace yata
 
 				Obfuscate(false);
 
-				//logfile.Log("YataForm.tab_SelectedIndexChanged()");
-				CheckFile();
+				//logfile.Log(". call VerifyCurrentFileState()");
+				VerifyCurrentFileState();
 			}
 			else
 			{
@@ -1487,9 +1504,9 @@ namespace yata
 				Table.Dispose();
 			}
 
-			_bypassWatcher = true;
+			_bypassVerifyFile = true;
 			tab_SelectedIndexChanged(null, EventArgs.Empty);
-			_bypassWatcher = false;
+			_bypassVerifyFile = false;
 		}
 		bool _isCreate;
 
@@ -1556,7 +1573,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>File|Reload <c>[Ctrl+r]</c></item>
 		/// <item>tab|Reload</item>
-		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
+		/// <item><c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
@@ -1578,15 +1595,18 @@ namespace yata
 				if (reload)
 				{
 					Obfuscate();
-					DrawRegulator.SuspendDrawing(Table);
 
 					if      (_diff1 == Table) _diff1 = null;
 					else if (_diff2 == Table) _diff2 = null;
 
 
+					_bypassVerifyFile = true;
+
 					int result = Table.LoadTable();
 					if (result != YataGrid.LOADRESULT_FALSE)
 					{
+						DrawRegulator.SuspendDrawing(Table);
+
 						Table._ur.Clear();
 
 						it_freeze1.Checked =
@@ -1604,11 +1624,17 @@ namespace yata
 					}
 					else
 					{
-						Table.Changed = false; // bypass Close warn.
+						Table.Changed = false; // bypass Close warn
 						fileclick_ClosePage(sender, e);
 					}
 
-					if (Table != null) Obfuscate(false);
+					_bypassVerifyFile = false;
+
+					if (Table != null)
+					{
+						Obfuscate(false);
+						VerifyCurrentFileState();
+					}
 				}
 			}
 			else
@@ -1681,7 +1707,7 @@ namespace yata
 		/// <item>tab|Save</item>
 		/// <item>File|SaveAs <c>[Ctrl+e]</c> <c><see cref="fileclick_SaveAs()">fileclick_SaveAs()</see></c></item>
 		/// <item>File|SaveAll <c>[Ctrl+a]</c> <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c></item>
-		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
+		/// <item><c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
@@ -1710,7 +1736,7 @@ namespace yata
 				if (sender == it_Save || sender == tabit_Save)
 					bypassReadonly = false;
 				else
-					bypassReadonly = true; // only the 'FileWatcherDialog' gets to bypass Readonly.
+					bypassReadonly = true; // only 'VerifyCurrentFileState()' gets to bypass Readonly.
 			}
 
 			_warned = false;
@@ -1881,7 +1907,7 @@ namespace yata
 		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
 		/// <item>tab|Reload 
 		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
-		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
+		/// <item><c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_ClosePage(object sender, EventArgs e)
 		{
@@ -4169,7 +4195,7 @@ namespace yata
 			//
 			// See also SetProcessDPIAware()
 			// NOTE: Apparently setting GraphicsUnit.Pixel when creating new
-			// Font-objects effectively bypasses the OS' DPI user-setting.
+			// Font-objects effectively bypasses the OS's DPI user-setting.
 
 			Font.Dispose();
 			Font = font;
