@@ -231,11 +231,6 @@ namespace yata
 						}
 					}
 				}
-
-				// not for create 2da -> Watcher would not be instantiated yet.
-				table.Watcher.Fullpath = table.Fullpath;
-				table.Watcher.FileDeleted = false;
-				table.Watcher.FileChanged = true;
 			}
 			else // is freshly Created
 			{
@@ -263,6 +258,8 @@ namespace yata
 					}
 				}
 			}
+
+			table.Lastwrite = File.GetLastWriteTime(table.Fullpath);
 		}
 	}
 }

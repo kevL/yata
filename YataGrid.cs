@@ -18,14 +18,12 @@ namespace yata
 	sealed partial class YataGrid
 		: Control
 	{
-		/// <summary>
+/*		/// <summary>
 		/// Do not implement <c>IDisposable</c> here.
 		/// </summary>
 		/// <remarks>Because I hate that 'pattern'.</remarks>
 		internal void DisposeWatcher()
 		{
-			Watcher.Dispose();
-
 //			TooltipSort.Dispose(); // is static.
 
 			// these are added to Controls so shouldn't need to be explicitly disposed ->
@@ -42,7 +40,7 @@ namespace yata
 //			_labelid    .Dispose();
 //			_labelfirst .Dispose();
 //			_labelsecond.Dispose();
-		}
+		} */
 
 
 		#region Enums
@@ -318,7 +316,7 @@ namespace yata
 		internal int RangeSelect
 		{ get; set; }
 
-		internal FileWatcher Watcher
+		internal DateTime Lastwrite
 		{ get; set; }
 		#endregion Properties
 
@@ -871,6 +869,8 @@ namespace yata
 //				logfile.Log(". DisplayName= " + enc.DisplayName);
 //				logfile.Log(". CodePage= " + enc.CodePage);
 //			}
+
+			Lastwrite = File.GetLastWriteTime(Fullpath);
 
 			_rows.Clear();
 
@@ -3068,8 +3068,6 @@ namespace yata
 					Invalidator(INVALID_GRID
 							  | EnsureDisplayed(sel));
 				}
-
-//				_f.EnableCelleditOperations(); // TODO: tighten that to only if necessary.
 			}
 		}
 

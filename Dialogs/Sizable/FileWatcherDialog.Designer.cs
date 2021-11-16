@@ -86,6 +86,7 @@ namespace yata
 			// 
 			this.bu_Action.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.bu_Action.DialogResult = System.Windows.Forms.DialogResult.Yes;
+			this.bu_Action.Enabled = false;
 			this.bu_Action.Location = new System.Drawing.Point(15, 4);
 			this.bu_Action.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Action.Name = "bu_Action";
@@ -97,6 +98,7 @@ namespace yata
 			// 
 			this.bu_Close2da.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Close2da.DialogResult = System.Windows.Forms.DialogResult.Abort;
+			this.bu_Close2da.Enabled = false;
 			this.bu_Close2da.Location = new System.Drawing.Point(120, 4);
 			this.bu_Close2da.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Close2da.Name = "bu_Close2da";
@@ -109,6 +111,7 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Enabled = false;
 			this.bu_Cancel.Location = new System.Drawing.Point(340, 4);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
@@ -127,6 +130,7 @@ namespace yata
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FileWatcherDialog";
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - File warn";

@@ -187,8 +187,24 @@ namespace yata
 		/// cursor leaves the table-area.
 		/// </summary>
 		/// <remarks>Maintain namespace to differentiate
-		/// <c>System.Threading.Timer</c>.</remarks>
+		/// <c>System.Threading.Timer</c>. jic.</remarks>
 		System.Windows.Forms.Timer _t1 = new System.Windows.Forms.Timer();
+
+		/// <summary>
+		/// A <c>bool</c> indicating that a
+		/// <c><see cref="FileWatcherDialog"/></c> is already invoked so don't
+		/// try to invoke another one.
+		/// </summary>
+		/// <remarks>Can also be used to bypass
+		/// <c><see cref="CheckFile()">CheckFile()</see></c> when loading or
+		/// creating a 2da-file.</remarks>
+		bool _bypassWatcher;
+
+		/// <summary>
+		/// A result returned by
+		/// <c><see cref="FileWatcherDialog"/>.OnFormClosing()</c>.
+		/// </summary>
+		internal FileWatcherDialog.FwdResult _fileresult;
 		#endregion Fields
 
 
@@ -462,6 +478,78 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
+		/// Overrides Yata's <c>Activated</c> handler.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnActivated(EventArgs e)
+		{
+			if (Table != null)
+			{
+				//logfile.Log("YataForm.OnActivated()");
+				// NOTE: This could cause CheckFile() to run twice if user activates
+				// Yata by clicking on a tab that changes the currently selected tab -
+				// see: tab_SelectedIndexChanged()
+				CheckFile();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		internal void CheckFile()
+		{
+			//logfile.Log("YataForm.CheckFile()");
+
+			if (!_bypassWatcher)
+			{
+				_bypassWatcher = true; // bypass this funct when the FileWatcherDialog closes and this form's Activate event fires.
+
+				_fileresult = FileWatcherDialog.FwdResult.non;
+
+				if (!File.Exists(Table.Fullpath))
+				{
+					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.FwdType.FileDeleted))
+						fwd.ShowDialog(this);
+				}
+				else if (File.GetLastWriteTime(Table.Fullpath) != Table.Lastwrite)
+				{
+					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.FwdType.FileChanged))
+						fwd.ShowDialog(this);
+				}
+
+				//logfile.Log(". _fileresult= " + _fileresult);
+				switch (_fileresult)
+				{
+					case FileWatcherDialog.FwdResult.Cancel:
+						Table.Readonly = false;
+						Table.Changed  = true;
+						break;
+
+					case FileWatcherDialog.FwdResult.Close2da:
+						Table.Changed = false;					// <- bypass Close warn
+						fileclick_ClosePage(null, EventArgs.Empty);
+						break;
+
+					case FileWatcherDialog.FwdResult.Resave:
+						Table.Changed = false;					// <- bypass Close warn
+						fileclick_Save(null, EventArgs.Empty);
+						if (Table != null) Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+						break;
+
+					case FileWatcherDialog.FwdResult.Reload:
+						Table.Changed = false;					// <- bypass Close warn
+						fileclick_Reload(null, EventArgs.Empty);
+						if (Table != null) Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+						break;
+				}
+
+				_bypassWatcher = false;
+			}
+			//else logfile.Log(". _bypassWatcher");
+		}
+
+
+		/// <summary>
 		/// Overrides Yata's <c>FormClosing</c> handler. Requests
 		/// user-confirmation if data has changed and writes a recent-files list
 		/// if appropriate.
@@ -469,6 +557,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			_bypassWatcher = true;
+
 			if (Tabs.TabPages.Count != 0)
 			{
 				if (Tabs.TabPages.Count == 1)
@@ -489,29 +579,34 @@ namespace yata
 					e.Cancel = CancelChangedTables("quit");
 			}
 
-			if (!e.Cancel && Settings._recent != 0)
+			if (!e.Cancel)
 			{
-				int i = -1;
-				var recents = new string[it_Recent.DropDownItems.Count];
-				foreach (ToolStripItem recent in it_Recent.DropDownItems)
-					recents[++i] = recent.Text;
+				if (Settings._recent != 0)
+				{
+					int i = -1;
+					var recents = new string[it_Recent.DropDownItems.Count];
+					foreach (ToolStripItem recent in it_Recent.DropDownItems)
+						recents[++i] = recent.Text;
 
-				string pfe = Path.Combine(Application.StartupPath, RECENTCFG);
-				try
-				{
-					File.WriteAllLines(pfe, recents);
-				}
-				catch (Exception ex)
-				{
-					using (var ib = new Infobox(Infobox.Title_excep,
-												"Failed to write Recent.cfg to the application directory.",
-												ex.ToString(),
-												InfoboxType.Error))
+					string pfe = Path.Combine(Application.StartupPath, RECENTCFG);
+					try
 					{
-						ib.ShowDialog(this);
+						File.WriteAllLines(pfe, recents);
+					}
+					catch (Exception ex)
+					{
+						using (var ib = new Infobox(Infobox.Title_excep,
+													"Failed to write Recent.cfg to the application directory.",
+													ex.ToString(),
+													InfoboxType.Error))
+						{
+							ib.ShowDialog(this);
+						}
 					}
 				}
 			}
+			else
+				_bypassWatcher = false;
 
 			base.OnFormClosing(e);
 		}
@@ -888,7 +983,6 @@ namespace yata
 							// NOTE: It went away; the table-area turns gray.
 
 				var table = new YataGrid(this, pfe, read);
-				table.Watcher = new FileWatcher(table);
 
 				int result = table.LoadTable();
 				if (result != YataGrid.LOADRESULT_FALSE)
@@ -916,44 +1010,16 @@ namespace yata
 					TopMost = false;
 
 					DrawRegulator.ResumeDrawing(Table);
-
-					RequestReload();
 				}
 				else
 				{
 					YataGrid._init = false;
-
-					table.Watcher.Dispose();
 					table.Dispose();
 				}
 
+				_bypassWatcher = true;
 				tab_SelectedIndexChanged(null, EventArgs.Empty);
-			}
-		}
-
-		/// <summary>
-		/// If a 2da-file that is currently being loaded gets changed or deleted
-		/// on disk ask the user if it should reload only after the
-		/// load-sequence is finished.
-		/// </summary>
-		void RequestReload()
-		{
-			if (Table.Watcher.ForceReload)
-			{
-				Table.Watcher.ForceReload = false;
-
-				using (var ib = new Infobox(Infobox.Title_alert,
-											"The 2da-file was changed on disk. Do you want to reload it ...",
-											Table.Fullpath,
-											InfoboxType.Warn,
-											InfoboxButtons.CancelYes))
-				{
-					if (ib.ShowDialog(this) == DialogResult.OK)
-					{
-						Table.Changed = false; // bypass Close warn.
-						fileclick_Reload(null, EventArgs.Empty);
-					}
-				}
+				_bypassWatcher = false;
 			}
 		}
 
@@ -1064,6 +1130,9 @@ namespace yata
 				if (!_t1.Enabled) _t1.Enabled = true;
 
 				Obfuscate(false);
+
+				//logfile.Log("YataForm.tab_SelectedIndexChanged()");
+				CheckFile();
 			}
 			else
 			{
@@ -1206,17 +1275,16 @@ namespace yata
 
 		#region Methods (tabs)
 		/// <summary>
-		/// Disposes a tab's table's <c><see cref="FileWatcher"/></c> before a
-		/// specified <c>TabPage</c> is removed from the
-		/// <c>TabPageCollection</c>. The <c>TabPage</c> and its
-		/// <c><see cref="YataGrid"/></c> are then <c>Disposed()</c>.
+		/// Disposes a tab's <c><see cref="YataGrid"/></c> before the specified
+		/// <c>TabPage</c> is removed from the <c>TabPageCollection</c>. Closes
+		/// <c><see cref="_fdiffer"/></c> if it's no longer required and the
+		/// <c>TabPage</c> is then <c>Disposed()</c>.
 		/// </summary>
 		/// <param name="tab">the <c>TabPage</c> with which to deal</param>
 		void ClosePage(TabPage tab)
 		{
 			var table = tab.Tag as YataGrid;
 
-			table.DisposeWatcher();
 			table.Dispose();
 
 			if      (_diff1 == table) _diff1 = null;
@@ -1412,8 +1480,6 @@ namespace yata
 
 				Table.Init();
 
-				Table.Watcher = new FileWatcher(Table);
-
 				DrawRegulator.ResumeDrawing(Table);
 			}
 			else
@@ -1422,7 +1488,9 @@ namespace yata
 				Table.Dispose();
 			}
 
+			_bypassWatcher = true;
 			tab_SelectedIndexChanged(null, EventArgs.Empty);
+			_bypassWatcher = false;
 		}
 		bool _isCreate;
 
@@ -1489,8 +1557,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>File|Reload <c>[Ctrl+r]</c></item>
 		/// <item>tab|Reload</item>
-		/// <item><c><see cref="FileWatcherDialog"/>.OnFormClosing()</c></item>
-		/// <item><c><see cref="RequestReload()">RequestReload()</see></c></item>
+		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Reload(object sender, EventArgs e)
 		{
@@ -1533,22 +1600,16 @@ namespace yata
 							Table.Controls.Remove(Table.Propanel);
 							Table.Propanel = null;
 						}
+
+						DrawRegulator.ResumeDrawing(Table);
 					}
 					else
 					{
-						Table.Changed = false; // bypass the close-tab warning.
+						Table.Changed = false; // bypass Close warn.
 						fileclick_ClosePage(sender, e);
 					}
 
-					if (Table != null)
-					{
-						DrawRegulator.ResumeDrawing(Table);
-						Obfuscate(false);
-
-						Table.Watcher.FileChanged = true;
-
-						RequestReload();
-					}
+					if (Table != null) Obfuscate(false);
 				}
 			}
 			else
@@ -1621,7 +1682,7 @@ namespace yata
 		/// <item>tab|Save</item>
 		/// <item>File|SaveAs <c>[Ctrl+e]</c> <c><see cref="fileclick_SaveAs()">fileclick_SaveAs()</see></c></item>
 		/// <item>File|SaveAll <c>[Ctrl+a]</c> <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c></item>
-		/// <item><c><see cref="FileWatcherDialog"></see>.OnFormClosing</c></item>
+		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_Save(object sender, EventArgs e)
 		{
@@ -1787,15 +1848,11 @@ namespace yata
 				_table = Tabs.TabPages[i].Tag as YataGrid;
 				if (!_table.Readonly)
 				{
-					_table.Watcher.Enabled = false;
-
 					if (_table.Changed)
 						changed = true;
 
 					_pfeT = _table.Fullpath;
 					fileclick_Save(sender, e);
-
-					_table.Watcher.Enabled = true;
 				}
 			}
 
@@ -1825,7 +1882,7 @@ namespace yata
 		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
 		/// <item>tab|Reload 
 		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
-		/// <item><c><see cref="FileWatcherDialog"></see>.OnFormClosing</c></item>
+		/// <item><c><see cref="CheckFile()">CheckFile()</see></c></item>
 		/// </list></remarks>
 		internal void fileclick_ClosePage(object sender, EventArgs e)
 		{
@@ -3323,9 +3380,10 @@ namespace yata
 		/// Puts the table in a neutral state.
 		/// </summary>
 		/// <remarks>Helper for
-		/// <c><see cref="editcolclick_CreateHead()">editcolclick_CreateHead()</see></c>
-		/// and
-		/// <c><see cref="editcolclick_DeleteHead()">editcolclick_DeleteHead()</see></c>.</remarks>
+		/// <list type="bullet">
+		/// <item><c><see cref="editcolclick_CreateHead()">editcolclick_CreateHead()</see></c></item>
+		/// <item><c><see cref="editcolclick_DeleteHead()">editcolclick_DeleteHead()</see></c></item>
+		/// </list></remarks>
 		void steadystate()
 		{
 			it_freeze1.Checked =

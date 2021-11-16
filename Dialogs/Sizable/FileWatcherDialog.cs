@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 
@@ -13,10 +14,27 @@ namespace yata
 		: YataDialog
 	{
 		#region Enums
-		internal enum Fwd
+		/// <summary>
+		/// Deters whether this <c>FileWatcherDialog</c> needs to deal with a
+		/// 2da-file that was deleted or changed.
+		/// </summary>
+		internal enum FwdType
 		{
 			FileDeleted,	// file's not there, Jim.
 			FileChanged		// file's writestamp changed
+		}
+
+		/// <summary>
+		/// The result that this <c>FileWatcherDialog</c> returns in
+		/// <c><see cref="OnFormClosing()">OnFormClosing()</see></c>.
+		/// </summary>
+		internal enum FwdResult
+		{
+			non,
+			Cancel,
+			Close2da,
+			Resave,
+			Reload
 		}
 		#endregion Enums
 
@@ -24,7 +42,7 @@ namespace yata
 		#region Fields (static)
 		const int WIDTH_Min = 363;
 
-		const string FILE_Del = "File deleted from hardrive.";
+		const string FILE_Del = "File not found.";
 		const string FILE_Wsc = "Writestamp changed.";
 		#endregion Fields (static)
 
@@ -39,13 +57,25 @@ namespace yata
 		/// Used to deter this <c>FileWatcherDialog's</c> current
 		/// <c><see cref="bu_Action"/></c> operation.
 		/// <list type="bullet">
-		/// <item><c><see cref="Fwd.FileDeleted">Fwd.FileDeleted</see></c> -
+		/// <item><c><see cref="FwdType.FileDeleted">Fwd.FileDeleted</see></c> -
 		/// <c><see cref="YataForm.fileclick_Save()">YataForm.fileclick_Save()</see></c></item>
-		/// <item><c><see cref="Fwd.FileChanged">Fwd.FileChanged</see></c> -
+		/// <item><c><see cref="FwdType.FileChanged">Fwd.FileChanged</see></c> -
 		/// <c><see cref="YataForm.fileclick_Reload()">YataForm.fileclick_Reload()</see></c></item>
 		/// </list>
 		/// </summary>
-		internal Fwd _fwdType;
+		internal FwdType _fwdType;
+
+		/// <summary>
+		/// A <c>Timer</c> that enables the <c>Buttons</c>.
+		/// </summary>
+		/// <seealso cref="t1_OnTick()"><c>t1_OnTick()</c></seealso>
+		Timer _t1 = new Timer();
+
+		/// <summary>
+		/// A <c>Timer</c> that watches for further 2da-file changes while this
+		/// <c>FileWatcherDialog</c> is open.
+		/// </summary>
+		Timer _t2 = new Timer();
 		#endregion Fields
 
 
@@ -54,41 +84,30 @@ namespace yata
 		/// cTor. Instantiates this <c>FileWatcherDialog</c>.
 		/// </summary>
 		/// <param name="grid">the <c><see cref="YataGrid"/></c> being watched</param>
-		/// <param name="fwdType"><c><see cref="Fwd"/></c>
+		/// <param name="fwdType"><c><see cref="FwdType"/></c>
 		/// <list type="bullet">
-		/// <item><c><see cref="Fwd.FileDeleted">Fwd.FileDeleted</see></c></item>
-		/// <item><c><see cref="Fwd.FileChanged">Fwd.FileChanged</see></c></item>
+		/// <item><c><see cref="FwdType.FileDeleted">Fwd.FileDeleted</see></c></item>
+		/// <item><c><see cref="FwdType.FileChanged">Fwd.FileChanged</see></c></item>
 		/// </list></param>
 		internal FileWatcherDialog(
 				YataGrid grid,
-				Fwd fwdType)
+				FwdType fwdType)
 		{
+			//logfile.Log("FileWatcherDialog.cTor()");
 			_f = (_grid = grid)._f; // 'YataDialog._f' is used only to set UI parameters.
 
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_NON);
 
-			YataTabs tabs = _grid._f.Tabs;
-			for (int i = 0; i != tabs.TabCount; ++i)
-			{
-				if (tabs.TabPages[i].Tag as YataGrid == _grid)
-				{
-					tabs.SelectedIndex = i;
-					break;
-				}
-			}
-			// TODO: what if user changes 2+ files on the hardrive ...
-
-
 			string text = String.Empty;
 			switch (_fwdType = fwdType)
 			{
-				case Fwd.FileDeleted:
+				case FwdType.FileDeleted:
 					text           = FILE_Del;
 					bu_Action.Text = "Resave";
 					break;
 
-				case Fwd.FileChanged:
+				case FwdType.FileChanged:
 					text           = FILE_Wsc;
 					bu_Action.Text = "Reload";
 					break;
@@ -109,7 +128,72 @@ namespace yata
 			MaximumSize = new Size(Int32.MaxValue,             Height);
 
 
+			_t1.Tick += t1_OnTick;
+			_t1.Interval = 330; // enable button delay.
+			_t1.Start();
+
+			_t2.Tick += t2_OnTick;
+			_t2.Interval = 300; // watch file period.
+			_t2.Start();
+		}
+
+		/// <summary>
+		/// .net Issue: if user happens to click the parent <c>Form</c> where
+		/// one of the <c>Buttons</c> will appear this <c>FileWatcherDialog</c>
+		/// will accept that as a valid click on the <c>Button</c>. Don't do
+		/// that.
+		/// </summary>
+		/// <param name="sender"><c><see cref="_t1"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks><c>Thread.Sleep()</c> doesn't work for this workaround.</remarks>
+		void t1_OnTick(object sender, EventArgs e)
+		{
+			bu_Cancel  .Enabled =
+			bu_Close2da.Enabled =
+			bu_Action  .Enabled = true;
+
+			_t1.Stop();
+			_t1.Dispose();
+
 			bu_Action.Select();
+		}
+
+		/// <summary>
+		/// Watches the 2da-file on the hardrive for changes while this
+		/// <c>FileWatcherDialog</c> is open and changes
+		/// <c><see cref="_fwdType"/></c> etc as appropriate.
+		/// </summary>
+		/// <param name="sender"><c><see cref="_t2"/></c></param>
+		/// <param name="e"></param>
+		void t2_OnTick(object sender, EventArgs e)
+		{
+			switch (_fwdType)
+			{
+				case FwdType.FileChanged:
+					if (!File.Exists(_grid.Fullpath))
+					{
+						_fwdType = FwdType.FileDeleted;
+
+						la_Info  .Text = FILE_Del;
+						bu_Action.Text = "Resave";
+					}
+					break;
+
+				case FwdType.FileDeleted:
+					if (File.Exists(_grid.Fullpath))
+					{
+						if (File.GetLastWriteTime(_grid.Fullpath) != _grid.Lastwrite)
+						{
+							_fwdType = FwdType.FileChanged;
+
+							la_Info  .Text = FILE_Wsc;
+							bu_Action.Text = "Reload";
+						}
+						else
+							DialogResult = DialogResult.Ignore;
+					}
+					break;
+			}
 		}
 		#endregion cTor
 
@@ -143,29 +227,32 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			//logfile.Log("FileWatcherDialog.OnFormClosing()");
+
+			_t2.Stop();
+			_t2.Dispose();
+
 			switch (DialogResult)
 			{
-				default: // case DialogResult.Cancel	// bu_Cancel
-					_grid.Readonly = false;
-					_grid.Changed  = true;
+//				case DialogResult.Ignore: break;				// t2_OnTick() - 2da-file was moved out and back with the same timestamp.
+
+				case DialogResult.Cancel:						// bu_Cancel
+					_grid._f._fileresult = FwdResult.Cancel;
 					break;
 
-				case DialogResult.Abort:				// bu_Close2da
-					_grid.Changed = false;				// <- bypass Close warn
-					_grid._f.fileclick_ClosePage(null, EventArgs.Empty);
+				case DialogResult.Abort:						// bu_Close2da
+					_grid._f._fileresult = FwdResult.Close2da;
 					break;
 
-				case DialogResult.Yes:					// bu_Action
-					_grid.Changed = false;				// <- bypass Close warn
-
+				case DialogResult.Yes:							// bu_Action
 					switch (_fwdType)
 					{
-						case Fwd.FileDeleted:
-							_grid._f.fileclick_Save(null, EventArgs.Empty);
+						case FwdType.FileDeleted:
+							_grid._f._fileresult = FwdResult.Resave;
 							break;
 
-						case Fwd.FileChanged:
-							_grid._f.fileclick_Reload(null, EventArgs.Empty);
+						case FwdType.FileChanged:
+							_grid._f._fileresult = FwdResult.Reload;
 							break;
 					}
 					break;
@@ -176,27 +263,32 @@ namespace yata
 		#endregion Handlers (override)
 
 
-		#region Methods
+/*		#region Handlers
 		/// <summary>
-		/// Sets <c><see cref="_fwdType"/></c> and <c>Text</c> for
-		/// <c><see cref="la_Info"/></c> and <c><see cref="bu_Action"/></c>
-		/// based on the state of the 2da-file on the hardrive.
+		/// 
 		/// </summary>
-		internal void SetAction(Fwd fwdType)
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>Do not use the <c>Button.DialogResult</c> properties of the
+		/// buttons themselves to set a result and close the <c>Form</c>;
+		/// closing the <c>Form</c> that way tends to leave the parent
+		/// <c>Form</c> in a merely pseudo-active state: its titlebar is colored
+		/// like an active <c>Form</c> should be, but none of its controls show
+		/// focus when mouseovered. Such a pseudo-active <c>Form</c> needs to be
+		/// clicked and user-focused before it becomes truly active.
+		/// 
+		/// 
+		/// Unfortunately this just sloughs off the indeterminate state onto
+		/// the <c><see cref="Infobox"/></c> if one appears to inform user of
+		/// any positive Strict-checks ... but when I implement this pattern for
+		/// the <c>Infobox</c> it doesn't work and the main <c>Form's</c>
+		/// indeterminate state happens regardless.</remarks>
+		void mousedown(object sender, MouseEventArgs e)
 		{
-			switch (_fwdType = fwdType)
-			{
-				case Fwd.FileDeleted:
-					la_Info  .Text = FILE_Del;
-					bu_Action.Text = "Resave";
-					break;
-
-				case Fwd.FileChanged:
-					la_Info  .Text = FILE_Wsc;
-					bu_Action.Text = "Reload";
-					break;
-			}
+			if      (sender == bu_Action)   DialogResult = DialogResult.Yes;
+			else if (sender == bu_Close2da) DialogResult = DialogResult.Abort;
+			else                            DialogResult = DialogResult.Cancel; // sender == bu_Cancel
 		}
-		#endregion Methods
+		#endregion Handlers */
 	}
 }

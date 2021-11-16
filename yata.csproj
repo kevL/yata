@@ -128,7 +128,6 @@
     <Compile Include="Dialogs\Sizable\InputCelltextDialog.Designer.cs">
       <DependentUpon>InputCelltextDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileWatcher.cs" />
     <Compile Include="Statics\ClipboardService.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
