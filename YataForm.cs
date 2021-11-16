@@ -579,34 +579,33 @@ namespace yata
 					e.Cancel = CancelChangedTables("quit");
 			}
 
-			if (!e.Cancel)
+			if (e.Cancel)
 			{
-				if (Settings._recent != 0)
-				{
-					int i = -1;
-					var recents = new string[it_Recent.DropDownItems.Count];
-					foreach (ToolStripItem recent in it_Recent.DropDownItems)
-						recents[++i] = recent.Text;
+				_bypassWatcher = false;
+			}
+			else if (Settings._recent != 0)
+			{
+				int i = -1;
+				var recents = new string[it_Recent.DropDownItems.Count];
+				foreach (ToolStripItem recent in it_Recent.DropDownItems)
+					recents[++i] = recent.Text;
 
-					string pfe = Path.Combine(Application.StartupPath, RECENTCFG);
-					try
+				string pfe = Path.Combine(Application.StartupPath, RECENTCFG);
+				try
+				{
+					File.WriteAllLines(pfe, recents);
+				}
+				catch (Exception ex)
+				{
+					using (var ib = new Infobox(Infobox.Title_excep,
+												"Failed to write Recent.cfg to the application directory.",
+												ex.ToString(),
+												InfoboxType.Error))
 					{
-						File.WriteAllLines(pfe, recents);
-					}
-					catch (Exception ex)
-					{
-						using (var ib = new Infobox(Infobox.Title_excep,
-													"Failed to write Recent.cfg to the application directory.",
-													ex.ToString(),
-													InfoboxType.Error))
-						{
-							ib.ShowDialog(this);
-						}
+						ib.ShowDialog(this);
 					}
 				}
 			}
-			else
-				_bypassWatcher = false;
 
 			base.OnFormClosing(e);
 		}
