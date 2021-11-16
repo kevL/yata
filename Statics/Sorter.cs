@@ -215,7 +215,7 @@ namespace yata
 					if (stop) break;
 				}
 			}
-			else //if (_sortdir == -1)
+			else // _sortdir == -1
 			{
 				for (int sort = 0; sort != RowCount; ++sort)
 				{
