@@ -16,8 +16,8 @@ namespace yata
 		/// <c><see cref="Settings._alignoutput">Settings._alignoutput</see></c>.
 		/// <list type="bullet">
 		/// <item><c><see cref="Settings.AoFalse">Settings.AoFalse</see></c></item>
-		/// <item><c><see cref="Settings.AoFalse">Settings.AoTrue</see></c></item>
-		/// <item><c><see cref="Settings.AoFalse">Settings.AoTabs</see></c></item>
+		/// <item><c><see cref="Settings.AoTrue">Settings.AoTrue</see></c></item>
+		/// <item><c><see cref="Settings.AoTabs">Settings.AoTabs</see></c></item>
 		/// </list>
 		/// </summary>
 		/// <param name="table">a <c><see cref="YataGrid"/> to write the data
