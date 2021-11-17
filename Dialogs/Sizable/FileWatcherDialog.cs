@@ -20,8 +20,8 @@ namespace yata
 		/// </summary>
 		internal enum FwdType
 		{
-			FileDeleted,	// file's not there, Jim.
-			FileChanged		// file's writestamp changed
+			FileDeleted, // file's not there, Jim.
+			FileChanged  // file's writestamp changed
 		}
 
 		/// <summary>
