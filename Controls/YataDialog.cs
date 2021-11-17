@@ -50,16 +50,6 @@ namespace yata
 		/// Respect both location and size Telemetry.
 		/// </summary>
 		internal const int METRIC_FUL = 2;
-
-/*		/// <summary>
-		/// Bypasses setting <c><see cref="_w"/></c> and <c><see cref="_h"/></c>
-		/// when this <c>FontDialog</c> instantiates. Otherwise when .net
-		/// automatically fires the <c>Resize</c> event during instantiation the
-		/// values get set in a way that renders the
-		/// <c>ClientSize.Width/.Height</c> static metrics irrelevant. This is
-		/// why I like Cherios!
-		/// </summary>
-		protected bool _init = true; */
 		#endregion Fields
 
 
@@ -194,8 +184,6 @@ namespace yata
 			{
 				Maximized = WindowState == FormWindowState.Maximized;
 
-//				_init = true;
-
 				SuspendLayout();
 				WindowState = FormWindowState.Normal;
 				_x = Math.Max(0, Left);
@@ -250,8 +238,6 @@ namespace yata
 
 			PopulateTextboxbaseList(this);
 			Settings.SetFonts(this, bypassColor, bypassFont);
-
-//			_init = false;
 		}
 
 		/// <summary>
