@@ -197,7 +197,17 @@ namespace yata
 		/// </summary>
 		/// <remarks>Can also be used to bypass
 		/// <c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c>
-		/// when loading or creating a 2da-file or closing Yata etc.</remarks>
+		/// when loading or creating a 2da-file or closing Yata etc.
+		/// 
+		/// 
+		/// Set <c>true</c> by
+		/// <list type="bullet">
+		/// <item><c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c></item>
+		/// <item><c><see cref="OnFormClosing()">OnFormClosing()</see></c></item>
+		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
+		/// <item><c><see cref="fileclick_Create()">fileclick_Create()</see></c></item>
+		/// <item><c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
+		/// </list></remarks>
 		bool _bypassVerifyFile;
 
 		/// <summary>
@@ -501,6 +511,13 @@ namespace yata
 		/// been deleted or overwritten. Invokes a
 		/// <c><see cref="FileWatcherDialog"/></c> if so.
 		/// </summary>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item><c><see cref="OnActivated()">OnActivated()</see></c></item>
+		/// <item><c><see cref="OnFormClosing()">OnFormClosing()</see></c> - cancelled</item>
+		/// <item><c><see cref="tab_SelectedIndexChanged()">tab_SelectedIndexChanged()</see></c></item>
+		/// <item><c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
+		/// </list></remarks>
 		void VerifyCurrentFileState()
 		{
 			//logfile.Log("YataForm.VerifyCurrentFileState()");
