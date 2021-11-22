@@ -3043,28 +3043,28 @@ namespace yata
 
 			int selr = Table.getSelectedRow();
 
-			int start, stop;
+			int strt, stop;
 			if (Table.RangeSelect > 0)
 			{
-				start = selr;
-				stop  = selr + Table.RangeSelect;
+				strt = selr;
+				stop = selr + Table.RangeSelect;
 			}
 			else
 			{
-				start = selr + Table.RangeSelect;
-				stop  = selr;
+				strt = selr + Table.RangeSelect;
+				stop = selr;
 			}
 
-			string[] fields;
+			string[] celltexts;
 			do
 			{
-				fields = new string[Table.ColCount];
+				celltexts = new string[Table.ColCount];
 				for (int c = 0; c != Table.ColCount; ++c)
-					fields[c] = Table[start, c].text;
+					celltexts[c] = Table[strt, c].text;
 
-				_copyr.Add(fields);
+				_copyr.Add(celltexts);
 			}
-			while (++start <= stop);
+			while (++strt <= stop);
 
 			it_PasteRange.Enabled = !Table.Readonly;
 			it_ClipExport.Enabled = true;
