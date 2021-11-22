@@ -3585,7 +3585,7 @@ namespace yata
 						_copyr.Add(fields);
 					}
 				}
-				it_PasteRange.Enabled = !Table.Readonly;
+				it_PasteRange.Enabled = Table != null && !Table.Readonly;
 				it_ClipExport.Enabled = true;
 			}
 		}
