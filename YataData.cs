@@ -9,6 +9,7 @@ namespace yata
 	/// </summary>
 	sealed class Col
 	{
+		#region Fields
 		internal string text; // the colhead text
 
 		/// <summary>
@@ -19,10 +20,16 @@ namespace yata
 
 		int _width;
 		internal int _widthtext;
+		#endregion Fields
 
+
+		#region Properties
 		internal bool UserSized
 		{ get; set; }
+		#endregion Properties
 
+
+		#region Methods
 		/// <summary>
 		/// Sets <c><see cref="_width"/></c>.
 		/// </summary>
@@ -49,7 +56,10 @@ namespace yata
 		{
 			return _width;
 		}
+		#endregion Methods
 	}
+
+
 
 	/// <summary>
 	/// Contains data about a row.
@@ -57,7 +67,7 @@ namespace yata
 	sealed class Row
 		: ICloneable
 	{
-		#region Fields and Properties
+		#region Fields (static)
 		/// <summary>
 		/// Set <c>_bypassEnableRowedit</c> <c>true</c> when clearing
 		/// <c><see cref="selected"/></c> for a synced
@@ -65,7 +75,10 @@ namespace yata
 		/// borky.
 		/// </summary>
 		internal static bool _bypassEnableRowedit;
+		#endregion Fields (static)
 
+
+		#region Fields
 		internal int _id;
 		internal int _id_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
 
@@ -73,8 +86,13 @@ namespace yata
 
 		internal Cell[] _cells;
 
+		internal Brush _brush;
+		#endregion Fields
+
+
+		#region Properties
 		/// <summary>
-		/// Gets/sets the cell at pos <c>[</c><paramref name="c"/><c>]</c>.
+		/// Gets/sets the <c><see cref="Cell"/></c> at pos <c>[</c><paramref name="c"/><c>]</c>.
 		/// </summary>
 		internal Cell this[int c]
 		{
@@ -82,10 +100,12 @@ namespace yata
 			set { _cells[c] = value; }
 		}
 
+		/// <summary>
+		/// The count of cols in this <c>Row</c>.
+		/// </summary>
 		internal int Length
 		{ get; set; }
 
-		internal Brush _brush;
 
 		bool _selected;
 		/// <summary>
@@ -104,11 +124,10 @@ namespace yata
 				_selected = value;
 				_grid.RangeSelect = 0;
 
-				if (!_bypassEnableRowedit)
-					_grid._f.EnableRoweditOperations();
+				if (!_bypassEnableRowedit) _grid._f.EnableRoweditOperations();
 			}
 		}
-		#endregion Fields and Properties
+		#endregion Properties
 
 
 		#region cTors
@@ -157,12 +176,15 @@ namespace yata
 		#endregion ICloneable requirements
 	}
 
+
+
 	/// <summary>
 	/// Contains data about a cell.
 	/// </summary>
 	sealed class Cell
 		: ICloneable
 	{
+		#region Enums
 		internal enum CellState
 		{
 			Default,
@@ -170,16 +192,30 @@ namespace yata
 			LoadChanged,
 			Diff
 		}
+		#endregion Enums
+
+
+		#region Fields
+		/// <summary>
+		/// This <c>Cell's</c> text.
+		/// </summary>
+		internal string text;
+
+		internal int x;
+		internal int y;
+		internal int y_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
+
+		internal int _widthtext;
 
 		/// <summary>
 		/// <c><see cref="state"/></c> is used only for priority of brush-color
 		/// by <c><see cref="getBrush()">getBrush()</see></c>.
 		/// </summary>
 		internal CellState state;
+		#endregion Fields
 
 
-		internal string text; // the cell's text
-
+		#region Properties
 		bool _selected;
 		internal bool selected
 		{
@@ -220,14 +256,10 @@ namespace yata
 			get { return _diff; }
 			set { _diff = value; SetState(); }
 		}
-
-		internal int x;
-		internal int y;
-		internal int y_presort; // for tracking sorted position by UndoRedo; is set in YataGrid.ColSort()
-
-		internal int _widthtext;
+		#endregion Properties
 
 
+		#region cTor
 		/// <summary>
 		/// cTor.
 		/// </summary>
@@ -240,6 +272,7 @@ namespace yata
 			x = c;
 			text = field;
 		}
+		#endregion cTor
 
 
 		#region Methods
