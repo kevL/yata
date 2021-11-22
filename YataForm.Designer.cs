@@ -1033,7 +1033,7 @@ namespace yata
 			this.it_ClipImport.Name = "it_ClipImport";
 			this.it_ClipImport.ShortcutKeys = System.Windows.Forms.Keys.F10;
 			this.it_ClipImport.Size = new System.Drawing.Size(237, 22);
-			this.it_ClipImport.Text = "&Import clipboard row(s)";
+			this.it_ClipImport.Text = "&Import clipboard text";
 			this.it_ClipImport.Click += new System.EventHandler(this.clipclick_ImportCopy);
 			// 
 			// separator_19
