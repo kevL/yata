@@ -4723,6 +4723,8 @@ namespace yata
 
 			Table.Delete(_r);
 
+			EnableRoweditOperations();
+
 
 			if (!Table.Changed)
 			{
