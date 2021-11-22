@@ -599,6 +599,8 @@ namespace yata
 				r  = _grid.RowCount - 1;
 			_grid.EnsureDisplayedRow(r);
 
+			_grid._f.EnableRoweditOperations();
+
 
 			int invalid = YataGrid.INVALID_GRID
 						| YataGrid.INVALID_FROZ
@@ -709,6 +711,8 @@ namespace yata
 			if (r >= _grid.RowCount)
 				r  = _grid.RowCount - 1;
 			_grid.EnsureDisplayedRow(r);
+
+			_grid._f.EnableRoweditOperations();
 
 
 			DrawRegulator.ResumeDrawing(_grid);
