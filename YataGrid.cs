@@ -3916,9 +3916,9 @@ namespace yata
 		/// are being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		/// <param name="bypassEnableRowedit"><c>true</c> to bypass
 		/// <c><see cref="YataForm.EnableRoweditOperations()">YataForm.EnableRoweditOperations()</see></c>
-		/// - this typically means that the caller shall select a <c>Row</c> and
-		/// call <c>EnableCelleditOperations()</c> itself or that selects are
-		/// being cleared from a synced <c><see cref="YataGrid"/></c></param>
+		/// - this typically means that the caller shall select a <c>Row</c>
+		/// since that calls <c>EnableRoweditOperations()</c> or that selects
+		/// are being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		internal void ClearSelects(bool bypassEnableCelledit = false, bool bypassEnableRowedit = false)
 		{
 //			_anchorcell = null; // ~safety. Would need to go through all select patterns.
