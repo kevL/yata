@@ -160,27 +160,28 @@ namespace yata
 				if (sender == rb_Clipboard)
 				{
 					_current = Current.Clipboard;
-					rtb_Clip.ReadOnly = false;
 					rtb_Clip.Text = ClipboardService.GetText();
 				}
 				else if (sender == rb_RowsBuffer)
 				{
 					_current = Current.RowsBuffer;
-					rtb_Clip.ReadOnly = true;
 					SetRowsBufferText();
 				}
 				else if (sender == rb_ColBuffer)
 				{
 					_current = Current.ColBuffer;
-					rtb_Clip.ReadOnly = true;
 					SetColBufferText();
 				}
 				else // sender == rb_CellsBuffer
 				{
 					_current = Current.CellsBuffer;
-					rtb_Clip.ReadOnly = true;
 					SetCellsBufferText();
 				}
+
+				rtb_Clip.ReadOnly = sender != rb_Clipboard;
+
+				bu_Get.Enabled =
+				bu_Set.Enabled = sender == rb_Clipboard;
 			}
 
 //			rtb_Clip.Select();
