@@ -63,7 +63,7 @@ namespace yata
 		/// <summary>
 		/// The <c><see cref="ClipboardEditor"/></c> dialog/editor.
 		/// </summary>
-		ClipboardEditor _fclip;
+		internal ClipboardEditor _fclip;
 
 		/// <summary>
 		/// A 2d-array of <c>strings</c> used for copy/paste cell.
@@ -86,12 +86,12 @@ namespace yata
 		/// <summary>
 		/// A <c>List</c> of <c>string[]</c> arrays used for copy/paste row(s).
 		/// </summary>
-		List<string[]> _copyr = new List<string[]>();
+		internal List<string[]> _copyr = new List<string[]>();
 
 		/// <summary>
 		/// A <c>List</c> of <c>strings</c> used for copy/paste col.
 		/// </summary>
-		List<string> _copyc = new List<string>();
+		internal List<string> _copyc = new List<string>();
 
 
 		string _preset = String.Empty;
@@ -2670,6 +2670,9 @@ namespace yata
 				}
 			}
 
+			if (_fclip != null)
+				_fclip.SetCellsBufferText();
+
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
 		}
@@ -2698,6 +2701,9 @@ namespace yata
 					_copytext[i, ++j] = Table[r,c].text;
 				}
 			}
+
+			if (_fclip != null)
+				_fclip.SetCellsBufferText();
 		}
 
 		/// <summary>
@@ -3065,6 +3071,9 @@ namespace yata
 				_copyr.Add(celltexts);
 			}
 			while (++strt <= stop);
+
+			if (_fclip != null)
+				_fclip.SetRowsBufferText();
 
 			it_PasteRange.Enabled = !Table.Readonly;
 			it_ClipExport.Enabled = true;
@@ -3482,6 +3491,9 @@ namespace yata
 
 			for (int r = 0; r != Table.RowCount; ++r)
 				_copyc.Add(Table[r, selc].text);
+
+			if (_fclip != null)
+				_fclip.SetColBufferText();
 		}
 
 		/// <summary>
@@ -3578,13 +3590,15 @@ namespace yata
 				string line;
 
 				for (int i = 0; i != lines.Length; ++i)
+				if ((line = lines[i].Trim()).Length != 0)
 				{
-					if ((line = lines[i].Trim()).Length != 0)
-					{
-						string[] fields = YataGrid.ParseTableRow(line);
-						_copyr.Add(fields);
-					}
+					string[] fields = YataGrid.ParseTableRow(line);
+					_copyr.Add(fields);
 				}
+
+				if (_fclip != null)
+					_fclip.SetRowsBufferText();
+
 				it_PasteRange.Enabled = Table != null && !Table.Readonly;
 				it_ClipExport.Enabled = true;
 			}
@@ -4503,6 +4517,9 @@ namespace yata
 
 			_copyr.Add(fields);
 
+			if (_fclip != null)
+				_fclip.SetRowsBufferText();
+
 			it_PasteRange.Enabled = !Table.Readonly;
 			it_ClipExport.Enabled = true;
 		}
@@ -4967,6 +4984,9 @@ namespace yata
 		void cellclick_Copy(object sender, EventArgs e)
 		{
 			_copytext = new string[,] {{ _sel.text }};
+
+			if (_fclip != null)
+				_fclip.SetCellsBufferText();
 		}
 
 		/// <summary>

@@ -64,7 +64,13 @@ namespace yata
 			}
 			else
 			{
-				(_f as YataForm)._copytext = new string[,] {{ tb_Input.Text }};
+				var f = _f as YataForm;
+
+				f._copytext = new string[,] {{ tb_Input.Text }};
+
+				if (f._fclip != null)
+					f._fclip.SetCellsBufferText();
+
 				DialogResult = DialogResult.OK;
 			}
 		}
