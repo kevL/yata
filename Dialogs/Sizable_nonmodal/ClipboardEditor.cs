@@ -67,7 +67,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
-		/// <item><c><see cref="btn_Get"/></c></item>
+		/// <item><c><see cref="bu_Get"/></c></item>
 		/// <item><c><see cref="YataForm"/>.it_ClipExport</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
@@ -84,7 +84,7 @@ namespace yata
 		/// <summary>
 		/// Handles <c>Click</c> on the Set button.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Set"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Set"/></c></param>
 		/// <param name="e"></param>
 		void click_Set(object sender, EventArgs e)
 		{

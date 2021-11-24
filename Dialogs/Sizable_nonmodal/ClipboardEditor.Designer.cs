@@ -7,10 +7,10 @@ namespace yata
 	sealed partial class ClipboardEditor
 	{
 		RichTextBox rtb_Clip;
-		Panel panel1;
-		Button btn_Set;
-		Button btn_Get;
-		Button btn_Done;
+		Panel pa_bot;
+		Button bu_Set;
+		Button bu_Get;
+		Button bu_Done;
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -21,11 +21,11 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.rtb_Clip = new System.Windows.Forms.RichTextBox();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.btn_Done = new System.Windows.Forms.Button();
-			this.btn_Set = new System.Windows.Forms.Button();
-			this.btn_Get = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
+			this.pa_bot = new System.Windows.Forms.Panel();
+			this.bu_Done = new System.Windows.Forms.Button();
+			this.bu_Set = new System.Windows.Forms.Button();
+			this.bu_Get = new System.Windows.Forms.Button();
+			this.pa_bot.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// rtb_Clip
@@ -41,61 +41,61 @@ namespace yata
 			this.rtb_Clip.Text = "";
 			this.rtb_Clip.WordWrap = false;
 			// 
-			// panel1
+			// pa_bot
 			// 
-			this.panel1.Controls.Add(this.btn_Done);
-			this.panel1.Controls.Add(this.btn_Set);
-			this.panel1.Controls.Add(this.btn_Get);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 94);
-			this.panel1.Margin = new System.Windows.Forms.Padding(0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(542, 30);
-			this.panel1.TabIndex = 1;
+			this.pa_bot.Controls.Add(this.bu_Done);
+			this.pa_bot.Controls.Add(this.bu_Set);
+			this.pa_bot.Controls.Add(this.bu_Get);
+			this.pa_bot.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.pa_bot.Location = new System.Drawing.Point(0, 94);
+			this.pa_bot.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_bot.Name = "pa_bot";
+			this.pa_bot.Size = new System.Drawing.Size(542, 30);
+			this.pa_bot.TabIndex = 1;
 			// 
-			// btn_Done
+			// bu_Done
 			// 
-			this.btn_Done.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.bu_Done.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Done.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Done.Location = new System.Drawing.Point(86, 0);
-			this.btn_Done.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Done.Name = "btn_Done";
-			this.btn_Done.Size = new System.Drawing.Size(370, 30);
-			this.btn_Done.TabIndex = 1;
-			this.btn_Done.Text = "begone foul demon";
-			this.btn_Done.UseVisualStyleBackColor = true;
-			this.btn_Done.Click += new System.EventHandler(this.click_Cancel);
+			this.bu_Done.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Done.Location = new System.Drawing.Point(86, 0);
+			this.bu_Done.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Done.Name = "bu_Done";
+			this.bu_Done.Size = new System.Drawing.Size(370, 30);
+			this.bu_Done.TabIndex = 1;
+			this.bu_Done.Text = "begone foul demon";
+			this.bu_Done.UseVisualStyleBackColor = true;
+			this.bu_Done.Click += new System.EventHandler(this.click_Cancel);
 			// 
-			// btn_Set
+			// bu_Set
 			// 
-			this.btn_Set.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Set.Location = new System.Drawing.Point(457, 0);
-			this.btn_Set.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Set.Name = "btn_Set";
-			this.btn_Set.Size = new System.Drawing.Size(80, 30);
-			this.btn_Set.TabIndex = 2;
-			this.btn_Set.Text = "set";
-			this.btn_Set.UseVisualStyleBackColor = true;
-			this.btn_Set.Click += new System.EventHandler(this.click_Set);
+			this.bu_Set.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Set.Location = new System.Drawing.Point(457, 0);
+			this.bu_Set.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Set.Name = "bu_Set";
+			this.bu_Set.Size = new System.Drawing.Size(80, 30);
+			this.bu_Set.TabIndex = 2;
+			this.bu_Set.Text = "set";
+			this.bu_Set.UseVisualStyleBackColor = true;
+			this.bu_Set.Click += new System.EventHandler(this.click_Set);
 			// 
-			// btn_Get
+			// bu_Get
 			// 
-			this.btn_Get.Location = new System.Drawing.Point(5, 0);
-			this.btn_Get.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Get.Name = "btn_Get";
-			this.btn_Get.Size = new System.Drawing.Size(80, 30);
-			this.btn_Get.TabIndex = 0;
-			this.btn_Get.Text = "get";
-			this.btn_Get.UseVisualStyleBackColor = true;
-			this.btn_Get.Click += new System.EventHandler(this.click_Get);
+			this.bu_Get.Location = new System.Drawing.Point(5, 0);
+			this.bu_Get.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Get.Name = "bu_Get";
+			this.bu_Get.Size = new System.Drawing.Size(80, 30);
+			this.bu_Get.TabIndex = 0;
+			this.bu_Get.Text = "get";
+			this.bu_Get.UseVisualStyleBackColor = true;
+			this.bu_Get.Click += new System.EventHandler(this.click_Get);
 			// 
 			// ClipboardEditor
 			// 
-			this.CancelButton = this.btn_Done;
+			this.CancelButton = this.bu_Done;
 			this.ClientSize = new System.Drawing.Size(542, 124);
 			this.Controls.Add(this.rtb_Clip);
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.pa_bot);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(250, 0);
@@ -103,7 +103,7 @@ namespace yata
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Clipboard editor";
-			this.panel1.ResumeLayout(false);
+			this.pa_bot.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
