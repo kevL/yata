@@ -7,10 +7,12 @@ namespace yata
 	sealed partial class ClipboardEditor
 	{
 		Panel pa_top;
+		Label la_Edit;
 		RadioButton rb_Clipboard;
-		RadioButton rb_CellsBuffer;
-		RadioButton rb_ColBuffer;
+		Label la_View;
 		RadioButton rb_RowsBuffer;
+		RadioButton rb_ColBuffer;
+		RadioButton rb_CellsBuffer;
 
 		RichTextBox rtb_Clip;
 
@@ -29,7 +31,9 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.pa_top = new System.Windows.Forms.Panel();
+			this.la_Edit = new System.Windows.Forms.Label();
 			this.rb_Clipboard = new System.Windows.Forms.RadioButton();
+			this.la_View = new System.Windows.Forms.Label();
 			this.rb_RowsBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_ColBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_CellsBuffer = new System.Windows.Forms.RadioButton();
@@ -44,7 +48,9 @@ namespace yata
 			// 
 			// pa_top
 			// 
+			this.pa_top.Controls.Add(this.la_Edit);
 			this.pa_top.Controls.Add(this.rb_Clipboard);
+			this.pa_top.Controls.Add(this.la_View);
 			this.pa_top.Controls.Add(this.rb_RowsBuffer);
 			this.pa_top.Controls.Add(this.rb_ColBuffer);
 			this.pa_top.Controls.Add(this.rb_CellsBuffer);
@@ -56,46 +62,66 @@ namespace yata
 			this.pa_top.TabIndex = 0;
 			this.pa_top.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_Top);
 			// 
+			// la_Edit
+			// 
+			this.la_Edit.Location = new System.Drawing.Point(0, 1);
+			this.la_Edit.Margin = new System.Windows.Forms.Padding(0);
+			this.la_Edit.Name = "la_Edit";
+			this.la_Edit.Size = new System.Drawing.Size(45, 21);
+			this.la_Edit.TabIndex = 0;
+			this.la_Edit.Text = "editor";
+			this.la_Edit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// rb_Clipboard
 			// 
-			this.rb_Clipboard.Location = new System.Drawing.Point(9, 1);
+			this.rb_Clipboard.Location = new System.Drawing.Point(48, 1);
 			this.rb_Clipboard.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Clipboard.Name = "rb_Clipboard";
-			this.rb_Clipboard.Size = new System.Drawing.Size(100, 21);
-			this.rb_Clipboard.TabIndex = 0;
-			this.rb_Clipboard.Text = "clipboard";
+			this.rb_Clipboard.Size = new System.Drawing.Size(95, 21);
+			this.rb_Clipboard.TabIndex = 1;
+			this.rb_Clipboard.Text = "Clipboard";
 			this.rb_Clipboard.UseVisualStyleBackColor = true;
 			this.rb_Clipboard.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
+			// la_View
+			// 
+			this.la_View.Location = new System.Drawing.Point(148, 1);
+			this.la_View.Margin = new System.Windows.Forms.Padding(0);
+			this.la_View.Name = "la_View";
+			this.la_View.Size = new System.Drawing.Size(55, 21);
+			this.la_View.TabIndex = 2;
+			this.la_View.Text = "viewers";
+			this.la_View.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// rb_RowsBuffer
 			// 
-			this.rb_RowsBuffer.Location = new System.Drawing.Point(112, 1);
+			this.rb_RowsBuffer.Location = new System.Drawing.Point(207, 1);
 			this.rb_RowsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_RowsBuffer.Name = "rb_RowsBuffer";
-			this.rb_RowsBuffer.Size = new System.Drawing.Size(100, 21);
-			this.rb_RowsBuffer.TabIndex = 1;
+			this.rb_RowsBuffer.Size = new System.Drawing.Size(95, 21);
+			this.rb_RowsBuffer.TabIndex = 3;
 			this.rb_RowsBuffer.Text = "Rows buffer";
 			this.rb_RowsBuffer.UseVisualStyleBackColor = true;
 			this.rb_RowsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// rb_ColBuffer
 			// 
-			this.rb_ColBuffer.Location = new System.Drawing.Point(215, 1);
+			this.rb_ColBuffer.Location = new System.Drawing.Point(305, 1);
 			this.rb_ColBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_ColBuffer.Name = "rb_ColBuffer";
-			this.rb_ColBuffer.Size = new System.Drawing.Size(100, 21);
-			this.rb_ColBuffer.TabIndex = 2;
+			this.rb_ColBuffer.Size = new System.Drawing.Size(95, 21);
+			this.rb_ColBuffer.TabIndex = 4;
 			this.rb_ColBuffer.Text = "Col buffer";
 			this.rb_ColBuffer.UseVisualStyleBackColor = true;
 			this.rb_ColBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// rb_CellsBuffer
 			// 
-			this.rb_CellsBuffer.Location = new System.Drawing.Point(318, 1);
+			this.rb_CellsBuffer.Location = new System.Drawing.Point(403, 1);
 			this.rb_CellsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_CellsBuffer.Name = "rb_CellsBuffer";
-			this.rb_CellsBuffer.Size = new System.Drawing.Size(100, 21);
-			this.rb_CellsBuffer.TabIndex = 3;
+			this.rb_CellsBuffer.Size = new System.Drawing.Size(95, 21);
+			this.rb_CellsBuffer.TabIndex = 5;
 			this.rb_CellsBuffer.Text = "Cells buffer";
 			this.rb_CellsBuffer.UseVisualStyleBackColor = true;
 			this.rb_CellsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);

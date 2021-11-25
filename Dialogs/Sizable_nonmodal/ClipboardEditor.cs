@@ -46,7 +46,11 @@ namespace yata
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
 
-			rtb_Clip.SelectionTabs = new int[] { 29, 58, 87, 116, 145, 174, 203, 232, 261, 290 };
+			if (Settings._fonti != null)
+			{
+				la_Edit.Font =
+				la_View.Font = Settings._fonti;
+			}
 
 			switch (_current)
 			{
@@ -56,7 +60,6 @@ namespace yata
 				case Current.CellsBuffer: rb_CellsBuffer.Checked = true; break;
 			}
 
-//			rtb_Clip.Select();
 			bu_Begone.Select();
 
 			Show(_f); // Yata is owner.
@@ -123,8 +126,6 @@ namespace yata
 		{
 			if (rb_Clipboard.Checked)
 				rtb_Clip.Text = ClipboardService.GetText();
-
-//			rtb_Clip.Select();
 		}
 
 		/// <summary>
@@ -136,8 +137,6 @@ namespace yata
 		{
 			if (rb_Clipboard.Checked)
 				ClipboardService.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine));
-
-//			rtb_Clip.Select();
 		}
 
 
@@ -183,8 +182,6 @@ namespace yata
 				bu_Get.Enabled =
 				bu_Set.Enabled = sender == rb_Clipboard;
 			}
-
-//			rtb_Clip.Select();
 		}
 
 
