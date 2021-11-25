@@ -55,13 +55,13 @@ namespace yata
 
 
 		#region Fields (static)
-		internal const int SORT_DES = -1;
-		internal const int SORT_ASC =  1;
-
 		internal static int WidthRowhead;
 		internal static int HeightColhead;
 
-		internal static int HeightRow;
+		static int HeightRow;
+
+		const int SORT_DES = -1;
+		const int SORT_ASC =  1;
 
 		/// <summary>
 		/// Is used only for painting in all the various <c>Paint</c> events.
