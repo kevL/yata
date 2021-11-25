@@ -66,6 +66,7 @@ namespace yata
 			// TODO: Store static location and size of the Infobox (if shown non-modally).
 
 			InitializeComponent();
+			YataDialog.SetTabs(rt_Copyable);
 
 			if (Settings._fonti != null)
 			{
@@ -78,6 +79,7 @@ namespace yata
 				rt_Copyable.Font.Dispose();
 				rt_Copyable.Font = Settings._fontf;
 			}
+
 
 			Text = title;
 

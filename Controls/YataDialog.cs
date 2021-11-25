@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -252,12 +253,29 @@ namespace yata
 			foreach (Control control in f.Controls)
 			{
 				if ((tbb = control as TextBoxBase) != null)
+				{
 					_tbbs.Add(tbb);
+					SetTabs(tbb);
+				}
 				else
 					PopulateTextboxbaseList(control);
 			}
 		}
 		#endregion Methods
+
+
+		#region PInvoke
+		// https://stackoverflow.com/questions/2000772/using-c-how-do-i-set-tab-positions-in-a-multiline-textbox#2000835
+		[DllImport("user32.dll")]
+		extern static IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, ref int lParam);
+		internal static void SetTabs(Control control)
+		{
+			//EM_SETTABSTOPS - http://msdn.microsoft.com/en-us/library/bb761663%28VS.85%29.aspx
+			int lParam = 16; // set tabsize to 4 spaces - but not really.
+			SendMessage(control.Handle, 0xCB, new IntPtr(1), ref lParam);
+			control.Invalidate();
+		}
+		#endregion PInvoke
 	}
 }
 
