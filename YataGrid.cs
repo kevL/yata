@@ -3289,8 +3289,8 @@ namespace yata
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>Obsolete: but it doesn't fire if the tabpage changes w/
-		/// <c>[Ctrl+PageUp]/[Ctrl+PageDown]</c>. Lovely /explode - can be fixed
-		/// in <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
+		/// <c>[Ctrl+PageUp/PageDown]</c>. Lovely /explode - can be fixed in
+		/// <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
 		protected override void OnLeave(EventArgs e)
 		{
 			if (_editor.Visible)
@@ -3330,24 +3330,15 @@ namespace yata
 					hideEditor(INVALID_GRID);
 					return true;
 
+
+				// Tab fastedit ->
 				case Keys.Tab:
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
 
 						if (_editcell.x != ColCount - 1)
-						{
-							this[_editcell.y, _editcell.x]    .selected = false;
-							this[_editcell.y, _editcell.x + 1].selected = true;
-
-							_editcell = this[_editcell.y, _editcell.x + 1];
-							Celledit();
-							Invalidator(INVALID_GRID);
-
-							_f.SyncSelectCell(_editcell);
-
-							_anchorcell = _editcell;
-						}
+							startTabedit(+1,0);
 					}
 					return true;
 
@@ -3357,20 +3348,29 @@ namespace yata
 						ApplyCellEdit();
 
 						if (_editcell.x != FrozenCount)
-						{
-							this[_editcell.y, _editcell.x]    .selected = false;
-							this[_editcell.y, _editcell.x - 1].selected = true;
-
-							_editcell = this[_editcell.y, _editcell.x - 1];
-							Celledit();
-							Invalidator(INVALID_GRID);
-
-							_f.SyncSelectCell(_editcell);
-
-							_anchorcell = _editcell;
-						}
+							startTabedit(-1,0);
 					}
 					return true;
+
+				case Keys.Tab | Keys.Control:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						if (_editcell.y != RowCount - 1)
+							startTabedit(0,+1);
+					}
+					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
+
+				case Keys.Tab | Keys.Control | Keys.Shift:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						if (_editcell.y != 0)
+							startTabedit(0,-1);
+					}
+					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
 			}
 			return base.ProcessDialogKey(keyData);
 		}
@@ -3404,6 +3404,25 @@ namespace yata
 			_editor.Visible = false;
 			Invalidator(invalid);
 			Select();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dir_hori"></param>
+		/// <param name="dir_vert"></param>
+		void startTabedit(int dir_hori, int dir_vert)
+		{
+			this[_editcell.y,
+				 _editcell.x].selected = false;
+
+			(_editcell = this[_editcell.y + dir_vert,
+							  _editcell.x + dir_hori]).selected = true;
+
+			Celledit();
+			Invalidator(INVALID_GRID);
+
+			_f.SyncSelectCell(_anchorcell = _editcell);
 		}
 
 		/// <summary>
