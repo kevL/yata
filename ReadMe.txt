@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 november 21
+2021 november 26
 kevL's
 ver 4.6.1.0
 
@@ -71,9 +71,7 @@ Edit
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3 (key Shift to find previous)
 
-- Goto             : Ctrl+g (focuses the Goto box)
-- Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
-                             Load)
+- Goto : Ctrl+g (focuses the Goto box)
 
 - Default value ... : opens a dialog to edit the 2da-file's Default value (apps
                       that try to access an invalid row or col should return
@@ -101,6 +99,9 @@ Cells
 - Uppercase : converts selected cell(s) to uppercase
 
 - Apply text ... : opens a dialog that replaces selected cell(s)
+
+- Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
+                             Load)
 
 
 Rows
