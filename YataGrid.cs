@@ -3316,10 +3316,8 @@ namespace yata
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
-						goto case Keys.Escape;
 					}
-
-					if (!Readonly
+					else if (!Readonly
 						&& (_editcell = getSelectedCell()) != null
 						&& _editcell.x >= FrozenCount)
 					{
@@ -3329,19 +3327,13 @@ namespace yata
 					return true;
 
 				case Keys.Escape:
-					_editor.Visible = false;
-					Invalidator(INVALID_GRID);
-					Select();
+					hideEditor(INVALID_GRID);
 					return true;
 
 				case Keys.Tab:
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
-
-						_editor.Visible = false;
-						Invalidator(INVALID_GRID);
-						Select();
 
 						if (_editcell.x != ColCount - 1)
 						{
@@ -3363,10 +3355,6 @@ namespace yata
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
-
-						_editor.Visible = false;
-						Invalidator(INVALID_GRID);
-						Select();
 
 						if (_editcell.x != FrozenCount)
 						{
@@ -3392,15 +3380,30 @@ namespace yata
 		/// </summary>
 		void ApplyCellEdit()
 		{
+			int invalid = INVALID_GRID;
+
 			if (_editor.Text != _editcell.text)
 			{
 				ChangeCellText(_editcell, _editor); // does a text-check
 
 				if (Propanel != null && Propanel.Visible)
-					Invalidator(INVALID_PROP);
+					invalid |= INVALID_PROP;
 			}
 			else if (_editcell.loadchanged)
 				ClearLoadchanged(_editcell);
+
+			hideEditor(invalid);
+		}
+
+		/// <summary>
+		/// Hides the editor and focuses the table.
+		/// </summary>
+		/// <param name="invalid"></param>
+		void hideEditor(int invalid)
+		{
+			_editor.Visible = false;
+			Invalidator(invalid);
+			Select();
 		}
 
 		/// <summary>
@@ -3688,8 +3691,6 @@ namespace yata
 						{
 //							if (e.Button == MouseButtons.Left) // apply edit only on LMB.
 							ApplyCellEdit();
-							_editor.Visible = false;
-							Invalidator(INVALID_GRID);
 						}
 
 //						else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
@@ -3725,11 +3726,7 @@ namespace yata
 										{
 											_double = true;
 
-											Select();
-
 											ApplyCellEdit();
-											_editor.Visible = false;
-											Invalidator(INVALID_GRID);
 										}
 										else					// NOTE: There's a clickable fringe around the editor so
 											_editor.Focus();	//       just refocus the editor if the fringe is clicked.
