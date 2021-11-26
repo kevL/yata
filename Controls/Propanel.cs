@@ -20,10 +20,20 @@ namespace yata
 
 
 		#region Fields (static)
-		static int _heightr = -1; // height of a row is the same for all propanels
+		/// <summary>
+		/// The height of a row is the same for all <c>Propanels</c>.
+		/// </summary>
+		static int _heightr = -1;
 
-		const int _padHori = 5; // horizontal text padding
-		const int _padVert = 2; // vertical text padding
+		/// <summary>
+		/// horizontal text padding
+		/// </summary>
+		const int _padHori = 5;
+
+		/// <summary>
+		/// vertical text padding
+		/// </summary>
+		const int _padVert = 2;
 		#endregion Fields (static)
 
 
@@ -33,12 +43,43 @@ namespace yata
 		internal readonly ScrollBar _scroll = new VScrollBar();
 		internal readonly TextBox   _editor = new TextBox();
 
-		readonly int HeightProps; // height of the entire panel (incl/ non-displayed top & bot)
+		/// <summary>
+		/// The height of the entire panel (incl/ non-displayed top and bot).
+		/// </summary>
+		readonly int HeightProps;
 
-		readonly int _widthVars;	// left col
-		int _widthVals;				// right col
+		/// <summary>
+		/// The left col in this <c>Propanel</c>.
+		/// </summary>
+		readonly int _widthVars;
 
+		/// <summary>
+		/// The right col in this <c>Propanel</c>.
+		/// </summary>
+		int _widthVals;
+
+		/// <summary>
+		/// The <c>Rectangle</c> on which the <c><see cref="_editor"/></c> shall
+		/// be displayed.
+		/// </summary>
 		Rectangle _editRect;
+
+		/// <summary>
+		/// The currently selected row or row of the currently selected cell in
+		/// the table.
+		/// </summary>
+		int _r;
+
+		/// <summary>
+		/// The col of the currently selected cell in the table - aka the
+		/// corresponding row in this <c>Propanel</c>.
+		/// </summary>
+		int _c;
+
+		/// <summary>
+		/// Overrides <c><see cref="_c"/></c> for Tab fastedit.
+		/// </summary>
+		int _tabOverride = -1;
 		#endregion Fields
 
 
@@ -413,10 +454,49 @@ namespace yata
 						goto case Keys.Escape;
 
 					case Keys.Escape:
-					case Keys.Tab:
 						hideEditor();
 						_grid.Select();
 						return true;
+
+					case Keys.Tab:
+						if (_editor.Visible)
+						{
+							ApplyCellEdit();
+							hideEditor();
+
+							if (_c != _grid.ColCount - 1)
+							{
+								_tabOverride = _c + 1;
+								OnMouseClick(new MouseEventArgs(MouseButtons.Left,
+																1,
+																_widthVars + 1, 0, // fake it ...
+																0));
+								_tabOverride = -1;
+							}
+							else
+								_grid.Select();
+						}
+						break;
+
+					case Keys.Tab | Keys.Shift:
+						if (_editor.Visible)
+						{
+							ApplyCellEdit();
+							hideEditor();
+
+							if (_c != 0)
+							{
+								_tabOverride = _c - 1;
+								OnMouseClick(new MouseEventArgs(MouseButtons.Left,
+																1,
+																_widthVars + 1, 0, // fake it ...
+																0));
+								_tabOverride = -1;
+							}
+							else
+								_grid.Select();
+						}
+						break;
 				}
 			}
 			return base.ProcessDialogKey(keyData);
@@ -433,9 +513,6 @@ namespace yata
 		}
 
 
-		int _r; // -> the row in the table.
-		int _c; // -> the col in the table, the row in the panel.
-
 		/// <summary>
 		/// Overrides the <c>MouseClick</c> event. Selects the row clicked,
 		/// starts or applies/cancels edit.
@@ -443,8 +520,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+			// TODO: no Modifiers
+
 			if (!_editor.Visible)
 			{
+				// TODO: only LMB
+
 				Cell sel = _grid.getSelectedCell();
 				if (sel != null)
 					_r = sel.y;
@@ -455,7 +536,12 @@ namespace yata
 				{
 					_grid._editor.Visible = false;
 
-					_c = (e.Y + _scroll.Value) / _heightr;
+					if (_tabOverride == -1)
+					{
+						_c = (e.Y + _scroll.Value) / _heightr;
+					}
+					else
+						_c = _tabOverride;
 
 					if (sel != null)
 					{
@@ -500,6 +586,8 @@ namespace yata
 			}
 			else // is edit
 			{
+				// TODO: only LMB/RMB
+
 				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
 					ApplyCellEdit();
 
