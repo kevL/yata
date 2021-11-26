@@ -42,7 +42,6 @@ namespace yata
 		internal static bool _casesort;
 		internal static bool _autorder;
 		internal static bool _allowdupls;
-		internal static bool _shafast;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -307,11 +306,6 @@ namespace yata
 							_allowdupls = (!String.IsNullOrEmpty(line = line.Substring(11).Trim())
 									   && line == "true");
 						}
-						else if (line.StartsWith("shafast=", StringComparison.Ordinal))
-						{
-							_shafast = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
-									&& line == "true");
-						}
 					}
 				}
 			}
@@ -397,7 +391,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 26;
+		internal const int ids = 25;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -433,7 +427,6 @@ namespace yata
 			options[++i] = "instantgoto=";
 			options[++i] = "pathall=";
 			options[++i] = "recent=";
-			options[++i] = "shafast=";
 			options[++i] = "strict=";
 		}
 		#endregion options (static)
