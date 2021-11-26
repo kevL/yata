@@ -74,14 +74,17 @@ namespace yata
 		/// active tab so that <c><see cref="YataGrid"/>.OnKeyDown()</c> can
 		/// handle it.
 		/// </summary>
-		/// <remarks><c>[Ctrl+PageUp/Down]</c> as well as <c>[Ctrl+Tab]</c> w/
-		/// or w/out <c>[Shift]</c> still work to change tabpages.</remarks>
+		/// <remarks><c>[Ctrl+PageUp/Down]</c> still work to change tabpages -
+		/// but <c>[Ctrl+Tab]</c> and <c>[Ctrl+Shift+Tab]</c> have been consumed
+		/// by <c>YataGrid.ProcessDialogKey()</c>.</remarks>
 		protected override void OnKeyDown(KeyEventArgs ke)
 		{
 			switch (ke.KeyData)
 			{
-				case Keys.Shift | Keys.Control | Keys.PageUp:
-				case Keys.Shift | Keys.Control | Keys.PageDown:
+				case Keys.Control | Keys.Shift | Keys.PageUp:
+				case Keys.Control | Keys.Shift | Keys.PageDown:
+//				case Keys.Control | Keys.Tab:
+//				case Keys.Control | Keys.Tab | Keys.Shift:
 					return;
 			}
 			base.OnKeyDown(ke);
