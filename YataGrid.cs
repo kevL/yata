@@ -3257,7 +3257,7 @@ namespace yata
 		/// <summary>
 		/// Handles <c>KeyDown</c> events for the <c><see cref="_editor"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Works around dweeby .NET behavior if Alt is pressed while
 		/// editing.</remarks>
@@ -3272,7 +3272,7 @@ namespace yata
 		/// Handles the <c>LostFocus</c> event for the
 		/// <c><see cref="_editor"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>This funct is a partial catchall for other places where the
 		/// <c>_editor</c> needs to hide.</remarks>
@@ -3329,10 +3329,59 @@ namespace yata
 					return true;
 
 				case Keys.Escape:
-				case Keys.Tab:
 					_editor.Visible = false;
 					Invalidator(INVALID_GRID);
 					Select();
+					return true;
+
+				case Keys.Tab:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						_editor.Visible = false;
+						Invalidator(INVALID_GRID);
+						Select();
+
+						if (_editcell.x != ColCount - 1)
+						{
+							this[_editcell.y, _editcell.x]    .selected = false;
+							this[_editcell.y, _editcell.x + 1].selected = true;
+
+							_editcell = this[_editcell.y, _editcell.x + 1];
+							Celledit();
+							Invalidator(INVALID_GRID);
+
+							_f.SyncSelectCell(_editcell);
+
+							_anchorcell = _editcell;
+						}
+					}
+					return true;
+
+				case Keys.Tab | Keys.Shift:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						_editor.Visible = false;
+						Invalidator(INVALID_GRID);
+						Select();
+
+						if (_editcell.x != FrozenCount)
+						{
+							this[_editcell.y, _editcell.x]    .selected = false;
+							this[_editcell.y, _editcell.x - 1].selected = true;
+
+							_editcell = this[_editcell.y, _editcell.x - 1];
+							Celledit();
+							Invalidator(INVALID_GRID);
+
+							_f.SyncSelectCell(_editcell);
+
+							_anchorcell = _editcell;
+						}
+					}
 					return true;
 			}
 			return base.ProcessDialogKey(keyData);
