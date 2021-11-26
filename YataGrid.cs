@@ -3322,7 +3322,6 @@ namespace yata
 						&& _editcell.x >= FrozenCount)
 					{
 						Celledit();
-						Invalidator(INVALID_GRID);
 					}
 					return true;
 
@@ -3420,7 +3419,6 @@ namespace yata
 							  _editcell.x + dir_hori]).selected = true;
 
 			Celledit();
-			Invalidator(INVALID_GRID);
 
 			_f.SyncSelectCell(_anchorcell = _editcell);
 		}
@@ -3834,7 +3832,6 @@ namespace yata
 									{
 										_editcell = _cell;
 										Celledit();
-										Invalidator(INVALID_GRID);
 									}
 								}
 							}
@@ -3938,6 +3935,8 @@ namespace yata
 
 			_editor.Visible = true;
 			_editor.Focus();
+
+			Invalidator(INVALID_GRID);
 		}
 
 		/// <summary>
@@ -3948,7 +3947,6 @@ namespace yata
 		{
 			_editcell = cell;
 			Celledit();
-			Invalidator(INVALID_GRID);
 		}
 
 		/// <summary>
