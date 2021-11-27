@@ -132,7 +132,9 @@ namespace yata
 				width += pa_Copyable.Padding.Horizontal + widthScroller;
 
 				height = rt_Copyable.Font.Height;
-				pa_Copyable.Height = (height - 1) * (lines.Length + 1) + pa_Copyable.Padding.Vertical;
+				pa_Copyable.Height = (height - 1) * (lines.Length + 1)
+								   + pa_Copyable.Padding.Vertical
+								   + 15; // +15 vertpad because .net35 can't always figure an accurate Font.Height value.
 
 				rt_Copyable.Text = copyable + Environment.NewLine; // add a blank line to bot of the copyable text.
 			}
