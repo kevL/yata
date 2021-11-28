@@ -24,21 +24,10 @@ namespace yata
 		internal const string Title_excep = " Exception";
 		internal const string Title_alert = " Alert"; // <- for save routines only.
 
-		const int w_Min = 345;
+		const int w_Min = 350;
 		const int w_Max = 800;
-		const int h_Max = 470;
+		const int h_Max = 475;
 		#endregion Fields (static)
-
-
-		#region Designer (workaround)
-		/// <summary>
-		/// Since the programmers of .net couldn't figure out that when you set
-		/// a label's height to 0 and invisible it ought maintain a height of 0,
-		/// I need to *not* instantiate said label unless it is required.
-		/// </summary>
-		/// <remarks>Don't forget to do null-checks.</remarks>
-		Label lbl_Head;
-		#endregion Designer (workaround)
 
 
 		#region cTor
@@ -118,7 +107,7 @@ namespace yata
 
 			int widthScroller = SystemInformation.VerticalScrollBarWidth;
 
-			if (copyable != null) // deter total width based on longest copyable line
+			if (copyable != null)
 			{
 				string[] lines = copyable.Split(gs.CRandorLF, StringSplitOptions.None);
 
@@ -131,63 +120,45 @@ namespace yata
 				}
 				width += pa_Copyable.Padding.Horizontal + widthScroller;
 
-				height = rt_Copyable.Font.Height;
-				pa_Copyable.Height = (height - 1) * (lines.Length + 1)
-								   + pa_Copyable.Padding.Vertical
-								   + 13; // +vertpad because .net35 can't always figure an accurate Font.Height value.
+				height = rt_Copyable.Font.Height + 1;
+				pa_Copyable.Height = height * (lines.Length + 1)
+								   + pa_Copyable.Padding.Vertical;
 
-				rt_Copyable.Text = copyable + Environment.NewLine; // add a blank line to bot of the copyable text.
+				rt_Copyable.Text = copyable + Environment.NewLine;
 			}
 			else
-			{
-				pa_Copyable.Height =
-				rt_Copyable.Height = 0;
-
-				pa_Copyable.Visible =
-				rt_Copyable.Visible = false;
-			}
+				pa_Copyable.Height = 0;
 
 			if (width < w_Min) width = w_Min;
 
 
-			lbl_Head = new Label();
-			lbl_Head.Name      = "lbl_Head";
-			lbl_Head.Dock      = DockStyle.Top;
-			lbl_Head.Margin    = new Padding(0);
-			lbl_Head.Padding   = new Padding(8,0,0,0);
-			lbl_Head.TextAlign = ContentAlignment.MiddleLeft;
-			lbl_Head.TabIndex  = 0;
-			lbl_Head.Paint += OnPaintHead;
-			Controls.Add(lbl_Head);
-
 			switch (ibt)
 			{
-				case InfoboxType.Info:  lbl_Head.BackColor = Color.Lavender;   break;
-				case InfoboxType.Warn:  lbl_Head.BackColor = Color.Moccasin;   break;
-				case InfoboxType.Error: lbl_Head.BackColor = Color.SandyBrown; break;
+				case InfoboxType.Info:  la_head.BackColor = Color.Lavender;   break;
+				case InfoboxType.Warn:  la_head.BackColor = Color.Moccasin;   break;
+				case InfoboxType.Error: la_head.BackColor = Color.SandyBrown; break;
 			}
 
-			size = TextRenderer.MeasureText((lbl_Head.Text = head), lbl_Head.Font);
-			lbl_Head.Height = size.Height + 10;
+			size = TextRenderer.MeasureText((la_head.Text = head), la_head.Font);
+			la_head.Height = size.Height + 10;
 
-			if (size.Width + lbl_Head.Padding.Horizontal + widthScroller > width)
-				width = size.Width + lbl_Head.Padding.Horizontal + widthScroller;
+			if (size.Width + la_head.Padding.Horizontal + widthScroller > width)
+				width = size.Width + la_head.Padding.Horizontal + widthScroller;
 
 			if (width > w_Max) width = w_Max;
 
 
-			height = (lbl_Head != null ? lbl_Head.Height : 0)
+			height = la_head    .Height
 				   + pa_Copyable.Height
-				   + bu_Cancel  .Height + bu_Cancel.Margin.Vertical;
+				   + pa_buttons .Height;
 
 			if (height > h_Max)
 			{
-				pa_Copyable.Height -= height - h_Max;	// <- The only way that (height > h_Max) is
-				height = h_Max;							// because 'pa_Copyable' contains a lot of text.
+				pa_Copyable.Height -= height - h_Max;
+				height = h_Max;
 			}
 
-			height += 1; // pad
-			ClientSize  = new Size(width, height);
+			ClientSize  = new Size(width, height + 1); // pad
 			MinimumSize = new Size(Width, Height);
 
 			ResumeLayout();
@@ -221,8 +192,8 @@ namespace yata
 
 			if (HoriScrollBarVisible(rt_Copyable))
 			{
-				int hScrolbar = SystemInformation.HorizontalScrollBarHeight;
-				ClientSize  = new Size(ClientSize.Width, ClientSize.Height + hScrolbar);
+				int h = SystemInformation.HorizontalScrollBarHeight;
+				ClientSize  = new Size(ClientSize.Width, ClientSize.Height + h);
 				MinimumSize = new Size(Width, Height);
 			}
 
@@ -245,13 +216,7 @@ namespace yata
 		{
 			base.OnResize(e);
 
-			if (pa_Copyable.Visible)
-			{
-				pa_Copyable.Height = ClientSize.Height
-								   - (lbl_Head != null ? lbl_Head.Height : 0)
-								   - bu_Cancel.Height - bu_Cancel.Margin.Vertical;
-				pa_Copyable.Invalidate();
-			}
+			SuspendLayout();
 
 			int width = ClientSize.Width / 3 - 4; // ~2px padding on both sides of buttons
 
@@ -261,19 +226,7 @@ namespace yata
 			bu_Okay  .Left =  7 + width;
 			bu_Cancel.Left = 10 + width * 2;
 
-			bu_Retry .Top =
-			bu_Okay  .Top =
-			bu_Cancel.Top = ClientSize.Height
-						  - bu_Cancel .Height - bu_Cancel.Margin.Bottom;
-		}
-
-		/// <summary>
-		/// Overrides the <c>Paint</c> handler.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			e.Graphics.DrawLine(Pens.Black, 0,0, 0, Height - 1);
+			ResumeLayout();
 		}
 
 
@@ -294,6 +247,16 @@ namespace yata
 			else
 				base.OnKeyDown(e);
 		}
+
+
+		/// <summary>
+		/// Overrides the <c>Paint</c> handler.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.DrawLine(Pens.Black, 0,0, 0, Height - 1);
+		}
 		#endregion Handlers (override)
 
 
@@ -301,23 +264,41 @@ namespace yata
 		/// <summary>
 		/// Paints border lines left/top on the head.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="la_head"/></c></param>
 		/// <param name="e"></param>
 		void OnPaintHead(object sender, PaintEventArgs e)
 		{
-			e.Graphics.DrawLine(Pens.Black, 0,0, 0, lbl_Head.Height - 1);
-			e.Graphics.DrawLine(Pens.Black, 1,0, lbl_Head.Width - 1, 0);
+			e.Graphics.DrawLine(Pens.Black, 0,0, 0, la_head.Height - 1);
+			e.Graphics.DrawLine(Pens.Black, 1,0, la_head.Width - 1, 0);
 		}
 
 		/// <summary>
 		/// Paints border lines left/top on the copyable panel.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="pa_Copyable"/></c></param>
 		/// <param name="e"></param>
 		void OnPaintPanel(object sender, PaintEventArgs e)
 		{
 			e.Graphics.DrawLine(Pens.Black, 0,0, 0, pa_Copyable.Height - 1);
 			e.Graphics.DrawLine(Pens.Black, 1,0, pa_Copyable.Width - 1, 0);
+
+//			e.Graphics.DrawLine(Pens.Blue, rt_Copyable.Left,  rt_Copyable.Top - 1,
+//										   rt_Copyable.Right, rt_Copyable.Top - 1);
+//			e.Graphics.DrawLine(Pens.Blue, rt_Copyable.Left,  rt_Copyable.Bottom,
+//										   rt_Copyable.Right, rt_Copyable.Bottom);
+//
+//			e.Graphics.DrawLine(Pens.Red, rt_Copyable.Left - 1, rt_Copyable.Top,
+//										  rt_Copyable.Left - 1, rt_Copyable.Top + rt_Copyable.Font.Height);
+		}
+
+		/// <summary>
+		/// Paints border lines left/top on the buttons-panel.
+		/// </summary>
+		/// <param name="sender"><c><see cref="pa_buttons"/></c></param>
+		/// <param name="e"></param>
+		void OnPaintBot(object sender, PaintEventArgs e)
+		{
+			e.Graphics.DrawLine(Pens.Black, 0,0, 0, pa_buttons.Height - 1);
 		}
 		#endregion Handlers
 
