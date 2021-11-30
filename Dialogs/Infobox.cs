@@ -72,6 +72,13 @@ namespace yata
 
 			Text = title;
 
+			switch (ibt)
+			{
+				case InfoboxType.Info:  la_head.BackColor = Color.Lavender;   break;
+				case InfoboxType.Warn:  la_head.BackColor = Color.Moccasin;   break;
+				case InfoboxType.Error: la_head.BackColor = Color.SandyBrown; break;
+			}
+
 			switch (buttons)
 			{
 				case InfoboxButtons.Okay:
@@ -100,28 +107,27 @@ namespace yata
 
 			SuspendLayout();
 
-			Size size;
-
-			int width  = 0;
-			int height = 0;
+			int client_w = 0;
+			int client_h = 0;
 
 			int widthScroller = SystemInformation.VerticalScrollBarWidth;
 
+			string[] lines;
+
 			if (copyable != null)
 			{
-				string[] lines = copyable.Split(gs.CRandorLF, StringSplitOptions.None);
+				lines = copyable.Split(gs.CRandorLF, StringSplitOptions.None);
 
 				int test;
 				foreach (var line in lines)
 				{
-					size = TextRenderer.MeasureText(line, rt_Copyable.Font);
-					if ((test = size.Width) > width)
-						width = test;
+					test = TextRenderer.MeasureText(line, rt_Copyable.Font).Width;
+					if (test > client_w) client_w = test;
 				}
-				width += pa_Copyable.Padding.Horizontal + widthScroller;
+				client_w += pa_Copyable.Padding.Horizontal + widthScroller;
 
-				height = rt_Copyable.Font.Height + 1;
-				pa_Copyable.Height = height * (lines.Length + 1)
+				client_h = rt_Copyable.Font.Height + 1;
+				pa_Copyable.Height = client_h * (lines.Length + 1)
 								   + pa_Copyable.Padding.Vertical;
 
 				rt_Copyable.Text = copyable + Environment.NewLine;
@@ -129,40 +135,44 @@ namespace yata
 			else
 				pa_Copyable.Height = 0;
 
-			if (width < w_Min) width = w_Min;
+			if      (client_w < w_Min) client_w = w_Min;
+			else if (client_w > w_Max) client_w = w_Max;
 
 
-			switch (ibt)
+			int lineshead;
+
+			if (TextRenderer.MeasureText(head, la_head.Font).Width + la_head.Padding.Horizontal > client_w)
 			{
-				case InfoboxType.Info:  la_head.BackColor = Color.Lavender;   break;
-				case InfoboxType.Warn:  la_head.BackColor = Color.Moccasin;   break;
-				case InfoboxType.Error: la_head.BackColor = Color.SandyBrown; break;
+				lines = WrapText(head, client_w - la_head.Padding.Horizontal, la_head.Font);
+
+				lineshead = lines.Length;
+
+				head = String.Empty;
+				for (int i = 0; i != lineshead; ++i)
+				{
+					if (i != 0) head += Environment.NewLine;
+					head += lines[i];
+				}
 			}
+			else
+				lineshead = 1;
 
-			size = TextRenderer.MeasureText((la_head.Text = head), la_head.Font);
-			la_head.Height = size.Height + 10;
+			la_head.Text = head;
 
-			if (size.Width + la_head.Padding.Horizontal + widthScroller > width)
-				width = size.Width + la_head.Padding.Horizontal + widthScroller;
-
-			if (width > w_Max) width = w_Max;
+			client_h = la_head.Font.Height + 1;
+			la_head.Height = client_h * lineshead + la_head.Padding.Vertical + 1;
 
 
-			height = la_head    .Height
-				   + pa_Copyable.Height
-				   + pa_buttons .Height;
+			client_h = la_head    .Height
+					 + pa_Copyable.Height
+					 + pa_buttons .Height;
 
-			if (height > h_Max)
-			{
-				pa_Copyable.Height -= height - h_Max;
-				height = h_Max;
-			}
+			if (client_h > h_Max) client_h = h_Max;
 
-			ClientSize  = new Size(width, height + 1); // pad
+			ClientSize  = new Size(client_w + 40, client_h + 1); // pad.
 			MinimumSize = new Size(Width, Height);
 
 			ResumeLayout();
-
 
 			bu_Cancel.Select();
 		}
@@ -315,7 +325,8 @@ namespace yata
 		/// <returns>text split into lines no longer than width</returns>
 		internal static string SplitString(string text, int width = 80)
 		{
-			string[] array = text.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+			return text;
+/*			string[] array = text.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
 			var words = new List<string>(array);
 
 			var sb = new StringBuilder();
@@ -344,7 +355,48 @@ namespace yata
 					tally = word.Length;
 				}
 			}
-			return sb.ToString();
+			return sb.ToString(); */
+		}
+
+		/// <summary>
+		/// Takes an input-string and splices it with newlines every width in
+		/// pixels.
+		/// </summary>
+		/// <param name="text">input only a single trimmed sentence with no
+		/// newlines and keep words shorter than width</param>
+		/// <param name="width">desired width in pixels - lines of output shall
+		/// not exceed width</param>
+		/// <param name="font"></param>
+		/// <returns>text split into lines no longer than width</returns>
+		static string[] WrapText(string text, int width, Font font)
+		{
+			string[] words = text.Split(new [] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+			var lines = new List<string>();
+
+			var sb = new StringBuilder();
+
+			int w = 0;
+			foreach (var word in words)
+			{
+				sb.Append(word + " ");
+				w += TextRenderer.MeasureText(word, font).Width;
+
+				if (w > width)
+				{
+					sb.Length = sb.Length - 1; // delete " "
+					lines.Add(sb.ToString());
+					sb.Length = w = 0;
+				}
+			}
+
+			if (sb.Length != 0)
+			{
+				sb.Length = sb.Length - 1; // delete " "
+				lines.Add(sb.ToString());
+			}
+
+			return lines.ToArray();
 		}
 		#endregion Methods (static)
 	}

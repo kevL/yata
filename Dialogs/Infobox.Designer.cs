@@ -41,8 +41,8 @@ namespace yata
 			this.la_head.Location = new System.Drawing.Point(0, 0);
 			this.la_head.Margin = new System.Windows.Forms.Padding(0);
 			this.la_head.Name = "la_head";
-			this.la_head.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.la_head.Size = new System.Drawing.Size(394, 20);
+			this.la_head.Padding = new System.Windows.Forms.Padding(7, 4, 5, 4);
+			this.la_head.Size = new System.Drawing.Size(394, 25);
 			this.la_head.TabIndex = 0;
 			this.la_head.Text = "head";
 			this.la_head.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -52,11 +52,11 @@ namespace yata
 			// 
 			this.pa_Copyable.Controls.Add(this.rt_Copyable);
 			this.pa_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pa_Copyable.Location = new System.Drawing.Point(0, 20);
+			this.pa_Copyable.Location = new System.Drawing.Point(0, 25);
 			this.pa_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Copyable.Name = "pa_Copyable";
 			this.pa_Copyable.Padding = new System.Windows.Forms.Padding(17, 9, 2, 5);
-			this.pa_Copyable.Size = new System.Drawing.Size(394, 126);
+			this.pa_Copyable.Size = new System.Drawing.Size(394, 121);
 			this.pa_Copyable.TabIndex = 1;
 			this.pa_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintPanel);
 			// 
@@ -70,7 +70,7 @@ namespace yata
 			this.rt_Copyable.Margin = new System.Windows.Forms.Padding(0);
 			this.rt_Copyable.Name = "rt_Copyable";
 			this.rt_Copyable.ReadOnly = true;
-			this.rt_Copyable.Size = new System.Drawing.Size(375, 112);
+			this.rt_Copyable.Size = new System.Drawing.Size(375, 107);
 			this.rt_Copyable.TabIndex = 0;
 			this.rt_Copyable.Text = "";
 			this.rt_Copyable.WordWrap = false;
