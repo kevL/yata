@@ -143,7 +143,7 @@ namespace yata
 
 			if (TextRenderer.MeasureText(head, la_head.Font).Width + la_head.Padding.Horizontal > client_w)
 			{
-				lines = WrapText(head, client_w - la_head.Padding.Horizontal, la_head.Font);
+				lines = SplitString(head, client_w - la_head.Padding.Horizontal, la_head.Font);
 
 				lineshead = lines.Length;
 
@@ -169,7 +169,7 @@ namespace yata
 
 			if (client_h > h_Max) client_h = h_Max;
 
-			ClientSize  = new Size(client_w + 40, client_h + 1); // pad.
+			ClientSize  = new Size(client_w + 2, client_h + 1); // pad.
 			MinimumSize = new Size(Width, Height);
 
 			ResumeLayout();
@@ -368,26 +368,23 @@ namespace yata
 		/// not exceed width</param>
 		/// <param name="font"></param>
 		/// <returns>text split into lines no longer than width</returns>
-		static string[] WrapText(string text, int width, Font font)
+		static string[] SplitString(string text, int width, Font font)
 		{
-			string[] words = text.Split(new [] { " " }, StringSplitOptions.RemoveEmptyEntries);
+			string[] words = text.Split(new []{ " " }, StringSplitOptions.RemoveEmptyEntries);
 
 			var lines = new List<string>();
 
 			var sb = new StringBuilder();
 
-			int w = 0;
 			foreach (var word in words)
 			{
-				sb.Append(word + " ");
-				w += TextRenderer.MeasureText(word, font).Width;
-
-				if (w > width)
+				if (TextRenderer.MeasureText(sb + word, font).Width > width)
 				{
 					sb.Length = sb.Length - 1; // delete " "
 					lines.Add(sb.ToString());
-					sb.Length = w = 0;
+					sb.Length = 0;
 				}
+				sb.Append(word + " ");
 			}
 
 			if (sb.Length != 0)

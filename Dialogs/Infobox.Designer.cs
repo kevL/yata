@@ -41,7 +41,7 @@ namespace yata
 			this.la_head.Location = new System.Drawing.Point(0, 0);
 			this.la_head.Margin = new System.Windows.Forms.Padding(0);
 			this.la_head.Name = "la_head";
-			this.la_head.Padding = new System.Windows.Forms.Padding(7, 4, 5, 4);
+			this.la_head.Padding = new System.Windows.Forms.Padding(7, 4, 3, 4);
 			this.la_head.Size = new System.Drawing.Size(394, 25);
 			this.la_head.TabIndex = 0;
 			this.la_head.Text = "head";
