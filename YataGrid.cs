@@ -848,6 +848,19 @@ namespace yata
 		/// </list></returns>
 		internal int LoadTable()
 		{
+/*			const string test = "The 2da-file contains double-quotes. Although that can be"
+							  + " valid in a 2da-file Yata's 2da Info-grope is not coded to cope."
+							  + " Format the 2da-file (in a texteditor) to not use double-quotes"
+							  + " if you want to access it for 2da Info.";
+			using (var ib = new Infobox(Infobox.Title_error,
+										test,
+										"A bunch of text. A bunch of text. A bunch of text. A bunch of text."
+										+ " A bunch of text. A bunch of text. A bunch of text. A bunch of text."
+										+ " A bunch of text. A bunch of text.",
+										InfoboxType.Error))
+			{
+				ib.ShowDialog(_f);
+			} */
 			// �
 //			byte[] asciiBytes = Encoding.ASCII.GetBytes("�");
 //			logfile.Log("� = " + asciiBytes);
