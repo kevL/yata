@@ -1018,7 +1018,7 @@ namespace yata
 						{
 							if (line != (tr = line.Trim()))
 							{
-								head = "The 1st line has extraneous whitespace. It will be trimmed if the file is saved.";
+								head = "The 1st line (version header) has extraneous whitespace. It will be trimmed if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line;
 
@@ -1039,7 +1039,7 @@ namespace yata
 
 							if (!quelch && tr.Contains("\t"))
 							{
-								head = "The version header on the 1st line contains a tab-character. It will be corrected if the file is saved.";
+								head = "The 1st line (version header) contains a tab-character. It will be corrected if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + tr;
 
@@ -1086,7 +1086,7 @@ namespace yata
 
 						if (!quelch && Settings._strict && line != tr)
 						{
-							head = "The 2nd line has extraneous whitespace. It will be trimmed if the file is saved.";
+							head = "The 2nd line (default value) has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
@@ -1113,7 +1113,7 @@ namespace yata
 							{
 								if (!quelch)
 								{
-									head = "The Default is blank. The 2nd line will be cleared if the file is saved.";
+									head = "The Default is blank. The 2nd line (default value) will be cleared if the file is saved.";
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
 										 + tr;
 
@@ -1164,7 +1164,7 @@ namespace yata
 
 							if (!quelch && Settings._strict && tr.Length != 0)
 							{
-								head = "The 2nd line in the 2da contains garbage. It will be cleared if the file is saved.";
+								head = "The 2nd line (default value) in the 2da contains garbage. It will be cleared if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line; //.Replace("\t", "\u2192")
 
@@ -1193,7 +1193,7 @@ namespace yata
 
 						if (!quelch && Settings._strict && line != tr)
 						{
-							head = "The 3nd line has extraneous whitespace. It will be trimmed if the file is saved.";
+							head = "The 3nd line (colhead labels) has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
@@ -1263,7 +1263,8 @@ namespace yata
 								{
 									head = "Detected a suspect character in the colhead labels ...";
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
-										 + (character == 9 ? "\u2192" : character.ToString());
+										 + character;
+//										 + (character == 9 ? "\u2192" : character.ToString());
 
 									switch (ShowLoadWarning(head, copy))
 									{
