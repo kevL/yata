@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 november 30
+2021 Dec 1
 kevL's
 ver 4.6.2.0
 
@@ -344,12 +344,12 @@ Rows descriptions above. The Col operations do not have shortcuts.
 
 When a cell is being edited the following keys are accepted.
 
-[Tab]                - accept text and edit the cell to the right
-[Shift + Tab]        - accept text and edit the cell to the left
-[Ctrl + Tab]         - accept text and edit the cell below
-[Ctrl + Shift + Tab] - accept text and edit the cell above
+Tab            - accept text and edit the cell to the right
+Shift+Tab      - accept text and edit the cell to the left
+Ctrl+Tab       - accept text and edit the cell below
+Ctrl+Shift+Tab - accept text and edit the cell above
 
-Note that [Tab] and [Shift + Tab] also work when editing a cell in the
+Note that [Tab] and [Shift+Tab] also work when editing a cell in the
 PropertyPanel.
 
 
