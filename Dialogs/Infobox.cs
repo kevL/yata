@@ -55,18 +55,26 @@ namespace yata
 			// TODO: Store static location and size of the Infobox (if shown non-modally).
 
 			InitializeComponent();
-			YataDialog.SetTabs(rt_Copyable);
+
+			if (copyable != null)
+			{
+				InitializePanel();
+				pa_Copyable.BringToFront();
+				YataDialog.SetTabs(rt_Copyable);
+
+				if (Settings._fontf != null)
+				{
+					rt_Copyable.Font.Dispose();
+					rt_Copyable.Font = Settings._fontf;
+				}
+			}
+			else
+				la_head.Dock = DockStyle.Fill;
 
 			if (Settings._fonti != null)
 			{
 				Font.Dispose();
 				Font = Settings._fonti;
-			}
-
-			if (Settings._fontf != null)
-			{
-				rt_Copyable.Font.Dispose();
-				rt_Copyable.Font = Settings._fontf;
 			}
 
 
@@ -132,8 +140,6 @@ namespace yata
 
 				rt_Copyable.Text = copyable + Environment.NewLine;
 			}
-			else
-				pa_Copyable.Height = 0;
 
 			if      (client_w < w_Min) client_w = w_Min;
 			else if (client_w > w_Max) client_w = w_Max;
@@ -163,9 +169,9 @@ namespace yata
 			la_head.Height = client_h * lineshead + la_head.Padding.Vertical + 1;
 
 
-			client_h = la_head    .Height
-					 + pa_Copyable.Height
-					 + pa_buttons .Height;
+			client_h = la_head.Height
+					 + (pa_Copyable != null ? pa_Copyable.Height : 0)
+					 + pa_buttons.Height;
 
 			if (client_h > h_Max) client_h = h_Max;
 
@@ -198,13 +204,16 @@ namespace yata
 		/// or cTor to work right.</remarks>
 		protected override void OnLoad(EventArgs e)
 		{
-			rt_Copyable.AutoWordSelection = false;
-
-			if (HoriScrollBarVisible(rt_Copyable))
+			if (pa_Copyable != null)
 			{
-				int h = SystemInformation.HorizontalScrollBarHeight;
-				ClientSize  = new Size(ClientSize.Width, ClientSize.Height + h);
-				MinimumSize = new Size(Width, Height);
+				rt_Copyable.AutoWordSelection = false;
+
+				if (HoriScrollBarVisible(rt_Copyable))
+				{
+					int h = SystemInformation.HorizontalScrollBarHeight;
+					ClientSize  = new Size(ClientSize.Width, ClientSize.Height + h);
+					MinimumSize = new Size(Width, Height);
+				}
 			}
 
 			if (   YataForm.that == null
@@ -249,6 +258,7 @@ namespace yata
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			if (e.KeyData == (Keys.Control | Keys.C)
+				&& pa_Copyable != null
 				&& !rt_Copyable.Focused)
 			{
 				e.SuppressKeyPress = true;
@@ -309,6 +319,9 @@ namespace yata
 		void OnPaintBot(object sender, PaintEventArgs e)
 		{
 			e.Graphics.DrawLine(Pens.Black, 0,0, 0, pa_buttons.Height - 1);
+
+			if (pa_Copyable == null)
+				e.Graphics.DrawLine(Pens.Black, 1,0, pa_buttons.Width - 1, 0);
 		}
 		#endregion Handlers
 

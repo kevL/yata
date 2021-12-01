@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -19,19 +20,54 @@ namespace yata
 
 
 		/// <summary>
+		/// Initializes <c><see cref="pa_Copyable"/></c>.
+		/// </summary>
+		/// <remarks>The copy-panel is instantiated only if copyable text is
+		/// passed into <c><see cref="Infobox()">Infobox()</see></c>.</remarks>
+		void InitializePanel()
+		{
+			pa_Copyable = new Panel();
+			rt_Copyable = new RichTextBox();
+			pa_Copyable.SuspendLayout();
+
+			pa_Copyable.Controls.Add(rt_Copyable);
+			pa_Copyable.Dock = DockStyle.Fill;
+			pa_Copyable.Location = new Point(0, 25);
+			pa_Copyable.Margin = new Padding(0);
+			pa_Copyable.Name = "pa_Copyable";
+			pa_Copyable.Padding = new Padding(17, 9, 2, 5);
+			pa_Copyable.Size = new Size(394, 121);
+			pa_Copyable.TabIndex = 1;
+			pa_Copyable.Paint += OnPaintPanel;
+
+			rt_Copyable.BorderStyle = BorderStyle.None;
+			rt_Copyable.Dock = DockStyle.Fill;
+			rt_Copyable.Font = new Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			rt_Copyable.HideSelection = false;
+			rt_Copyable.Location = new Point(17, 9);
+			rt_Copyable.Margin = new Padding(0);
+			rt_Copyable.Name = "rt_Copyable";
+			rt_Copyable.ReadOnly = true;
+			rt_Copyable.Size = new Size(375, 107);
+			rt_Copyable.TabIndex = 0;
+			rt_Copyable.Text = "";
+			rt_Copyable.WordWrap = false;
+
+			Controls.Add(pa_Copyable);
+			pa_Copyable.ResumeLayout(false);
+		}
+
+		/// <summary>
 		/// Required method for Designer support - do not modify the contents of
 		/// this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
 			this.la_head = new System.Windows.Forms.Label();
-			this.pa_Copyable = new System.Windows.Forms.Panel();
-			this.rt_Copyable = new System.Windows.Forms.RichTextBox();
 			this.pa_buttons = new System.Windows.Forms.Panel();
 			this.bu_Retry = new System.Windows.Forms.Button();
 			this.bu_Okay = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
-			this.pa_Copyable.SuspendLayout();
 			this.pa_buttons.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -47,33 +83,6 @@ namespace yata
 			this.la_head.Text = "head";
 			this.la_head.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.la_head.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintHead);
-			// 
-			// pa_Copyable
-			// 
-			this.pa_Copyable.Controls.Add(this.rt_Copyable);
-			this.pa_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pa_Copyable.Location = new System.Drawing.Point(0, 25);
-			this.pa_Copyable.Margin = new System.Windows.Forms.Padding(0);
-			this.pa_Copyable.Name = "pa_Copyable";
-			this.pa_Copyable.Padding = new System.Windows.Forms.Padding(17, 9, 2, 5);
-			this.pa_Copyable.Size = new System.Drawing.Size(394, 121);
-			this.pa_Copyable.TabIndex = 1;
-			this.pa_Copyable.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintPanel);
-			// 
-			// rt_Copyable
-			// 
-			this.rt_Copyable.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rt_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rt_Copyable.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.rt_Copyable.HideSelection = false;
-			this.rt_Copyable.Location = new System.Drawing.Point(17, 9);
-			this.rt_Copyable.Margin = new System.Windows.Forms.Padding(0);
-			this.rt_Copyable.Name = "rt_Copyable";
-			this.rt_Copyable.ReadOnly = true;
-			this.rt_Copyable.Size = new System.Drawing.Size(375, 107);
-			this.rt_Copyable.TabIndex = 0;
-			this.rt_Copyable.Text = "";
-			this.rt_Copyable.WordWrap = false;
 			// 
 			// pa_buttons
 			// 
@@ -127,7 +136,6 @@ namespace yata
 			// 
 			this.CancelButton = this.bu_Cancel;
 			this.ClientSize = new System.Drawing.Size(394, 176);
-			this.Controls.Add(this.pa_Copyable);
 			this.Controls.Add(this.la_head);
 			this.Controls.Add(this.pa_buttons);
 			this.Font = new System.Drawing.Font("Verdana", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -138,7 +146,6 @@ namespace yata
 			this.Name = "Infobox";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.pa_Copyable.ResumeLayout(false);
 			this.pa_buttons.ResumeLayout(false);
 			this.ResumeLayout(false);
 
