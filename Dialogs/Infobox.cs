@@ -36,15 +36,13 @@ namespace yata
 		/// </summary>
 		/// <param name="title">a caption on the titlebar</param>
 		/// <param name="head">info to be displayed with a proportional font -
-		/// keep this brief</param>
+		/// keep this fairly brief</param>
 		/// <param name="copyable">info to be displayed in a fixed-width font as
-		/// readily copyable text</param>
+		/// readily copyable text - can be <c>null</c></param>
 		/// <param name="ibt">an <c><see cref="InfoboxType"/></c> to deter the
-		/// head's backcolor - is valid only with head-text specified</param>
-		/// <param name="buttons"><c><see cref="InfoboxButtons"/></c> to show</param>
-		/// <remarks>Limit the length of 'head' to ~100 chars max or break it
-		/// into lines with <c><see cref="SplitString()">SplitString()</see></c>
-		/// if greater.</remarks>
+		/// backcolor of <c><see cref="la_head"/></c></param>
+		/// <param name="buttons"><c><see cref="InfoboxButtons"/></c> to show to
+		/// the user</param>
 		internal Infobox(
 				string title,
 				string head,
