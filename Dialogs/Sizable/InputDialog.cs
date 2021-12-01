@@ -74,9 +74,9 @@ namespace yata
 				if (Settings._strict) // show 'allow extended punctuation' toggle ->
 				{
 					cb_Punctuation = new CheckBox();
-					cb_Punctuation.Text = "accept punctuation";
-					cb_Punctuation.TextAlign = ContentAlignment.BottomLeft;
-					cb_Punctuation.Padding = new Padding(4,0,0,0);
+					cb_Punctuation.Text = "accept nonstandard punctuation";
+					cb_Punctuation.TextAlign = ContentAlignment.MiddleLeft;
+					cb_Punctuation.Padding = new Padding(8,2,0,0);
 					cb_Punctuation.Size = new Size(100, hCheckbox);
 					cb_Punctuation.Dock = DockStyle.Top;
 					cb_Punctuation.TabIndex = 1;
@@ -88,7 +88,7 @@ namespace yata
 
 					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox + hCbPad);
 
-					cb_Punctuation.Checked = false; // clear disallowed punctuation at start.
+					cb_Punctuation.Checked = false; // call checkedchanged_Punctuation() at start.
 				}
 			}
 			else
