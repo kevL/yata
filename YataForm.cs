@@ -3343,9 +3343,8 @@ namespace yata
 		}
 
 
-		string _warnColhead = "This operation cannot be undone. It clears the Undo/Redo stacks." + Environment.NewLine
-							+ "Tip: tidy and save the 2da first."
-							+ Environment.NewLine + Environment.NewLine;
+		const string _warnColhead = "This operation cannot be undone. It clears the Undo/Redo stacks.";
+//								  + " Tip: tidy and save the 2da first.";
 
 		/// <summary>
 		/// Opens a text-input dialog for creating a col at a selected col-id or
@@ -3355,9 +3354,9 @@ namespace yata
 		/// <param name="e"></param>
 		void editcolclick_CreateHead(object sender, EventArgs e)
 		{
-			string head = _warnColhead + "Are you sure you want to create a col ...";
+			const string head = _warnColhead + " Are you sure you want to create a col ...";
 
-			using (var ib = new Infobox(Infobox.Title_warni,
+			using (var ib = new Infobox(Infobox.Title_infor,
 										head,
 										null,
 										InfoboxType.Info,
@@ -3402,8 +3401,8 @@ namespace yata
 		{
 			int selc = Table.getSelectedCol();
 
-			string head = _warnColhead + "Are you sure you want to delete the selected col ...";
-			using (var ib = new Infobox(Infobox.Title_warni,
+			const string head = _warnColhead + " Are you sure you want to delete the selected col ...";
+			using (var ib = new Infobox(Infobox.Title_infor,
 										head,
 										Table.Fields[selc - 1],
 										InfoboxType.Info,
