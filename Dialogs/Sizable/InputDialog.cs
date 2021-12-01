@@ -19,8 +19,7 @@ namespace yata
 
 		const int MIN_w = 275;
 
-		const int hCheckbox = 22;
-		const int hCbPad    =  1;
+		const int hCheckbox = 20;
 
 		/// <summary>
 		/// This <c>InputDialog</c> is configured to deal with input for the
@@ -76,7 +75,7 @@ namespace yata
 					cb_Punctuation = new CheckBox();
 					cb_Punctuation.Text = "accept nonstandard punctuation";
 					cb_Punctuation.TextAlign = ContentAlignment.MiddleLeft;
-					cb_Punctuation.Padding = new Padding(8,2,0,0);
+					cb_Punctuation.Padding = new Padding(9,2,0,0);
 					cb_Punctuation.Size = new Size(100, hCheckbox);
 					cb_Punctuation.Dock = DockStyle.Top;
 					cb_Punctuation.TabIndex = 1;
@@ -86,7 +85,7 @@ namespace yata
 					Controls.Add(cb_Punctuation);
 					cb_Punctuation.BringToFront();
 
-					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox + hCbPad);
+					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox);
 
 					cb_Punctuation.Checked = false; // call checkedchanged_Punctuation() at start.
 				}
@@ -118,7 +117,7 @@ namespace yata
 			else
 			{
 				if (_selc != DEFVAL && Settings._strict)
-					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox - hCbPad);
+					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox); // conform static telemetry
 
 				base.OnFormClosing(e);
 			}
@@ -243,7 +242,7 @@ namespace yata
 		#endregion Handlers
 
 
-		#region Methods
+		#region Methods (static)
 		/// <summary>
 		/// Ensures that a Default value is okay.
 		/// </summary>
@@ -288,6 +287,6 @@ namespace yata
 			val = val0;
 			return false;
 		}
-		#endregion Methods
+		#endregion Methods (static)
 	}
 }
