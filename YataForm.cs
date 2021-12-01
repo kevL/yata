@@ -4339,9 +4339,10 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
+					const string head = "a Settings.cfg file does not exist in the application directory. Do you want to create one ...";
+
 					using (var ib = new Infobox(Infobox.Title_infor,
-												Infobox.SplitString("a Settings.cfg file does not exist in the application"
-																  + " directory. Do you want to create one ..."),
+												head,
 												null,
 												InfoboxType.Info,
 												InfoboxButtons.CancelYes))

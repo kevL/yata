@@ -327,50 +327,6 @@ namespace yata
 		#region Methods (static)
 		/// <summary>
 		/// Takes an input-string and splices it with newlines every width in
-		/// chars.
-		/// </summary>
-		/// <param name="text">input only a single trimmed sentence with no
-		/// newlines and keep words shorter than width</param>
-		/// <param name="width">desired width in chars - lines of output shall
-		/// not exceed width</param>
-		/// <returns>text split into lines no longer than width</returns>
-		internal static string SplitString(string text, int width = 80)
-		{
-			return text;
-/*			string[] array = text.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
-			var words = new List<string>(array);
-
-			var sb = new StringBuilder();
-
-			int tally = 0;
-
-			string word;
-			for (int i = 0; i != words.Count; ++i)
-			{
-				word = words[i];
-
-				if (i == 0)
-				{
-					sb.Append(word);
-					tally = word.Length;
-				}
-				else if (tally + word.Length < width - 1)
-				{
-					sb.Append(" " + word);
-					tally += word.Length + 1;
-				}
-				else
-				{
-					sb.AppendLine();
-					sb.Append(word);
-					tally = word.Length;
-				}
-			}
-			return sb.ToString(); */
-		}
-
-		/// <summary>
-		/// Takes an input-string and splices it with newlines every width in
 		/// pixels.
 		/// </summary>
 		/// <param name="text">input only a single trimmed sentence with no
@@ -406,6 +362,49 @@ namespace yata
 
 			return lines.ToArray();
 		}
+
+/*		/// <summary>
+		/// Takes an input-string and splices it with newlines every width in
+		/// chars.
+		/// </summary>
+		/// <param name="text">input only a single trimmed sentence with no
+		/// newlines and keep words shorter than width</param>
+		/// <param name="width">desired width in chars - lines of output shall
+		/// not exceed width</param>
+		/// <returns>text split into lines no longer than width</returns>
+		internal static string SplitString(string text, int width = 80)
+		{
+			string[] array = text.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+			var words = new List<string>(array);
+
+			var sb = new StringBuilder();
+
+			int tally = 0;
+
+			string word;
+			for (int i = 0; i != words.Count; ++i)
+			{
+				word = words[i];
+
+				if (i == 0)
+				{
+					sb.Append(word);
+					tally = word.Length;
+				}
+				else if (tally + word.Length < width - 1)
+				{
+					sb.Append(" " + word);
+					tally += word.Length + 1;
+				}
+				else
+				{
+					sb.AppendLine();
+					sb.Append(word);
+					tally = word.Length;
+				}
+			}
+			return sb.ToString();
+		} */
 		#endregion Methods (static)
 	}
 }

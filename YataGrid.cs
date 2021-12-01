@@ -963,7 +963,7 @@ namespace yata
 				head = "The 2da-file does not have any fields. Yata wants a file to have at least one colhead label on its 3rd line.";
 
 				using (var ib = new Infobox(Infobox.Title_error,
-											Infobox.SplitString(head),
+											head,
 											Fullpath,
 											InfoboxType.Error,
 											InfoboxButtons.Abort))
@@ -988,7 +988,7 @@ namespace yata
 					{
 						head = "Tab characters are detected in the 2da-file. They will be replaced with space characters (or deleted where redundant) if the file is saved.";
 
-						switch (ShowLoadWarning(Infobox.SplitString(head), Fullpath))
+						switch (ShowLoadWarning(head, Fullpath))
 						{
 							case DialogResult.Cancel:
 								return LOADRESULT_FALSE;
@@ -1035,7 +1035,7 @@ namespace yata
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line;
 
-								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
@@ -1056,7 +1056,7 @@ namespace yata
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + tr;
 
-								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
@@ -1077,7 +1077,7 @@ namespace yata
 //								copy = Fullpath + Environment.NewLine + Environment.NewLine
 //									 + tr;
 //
-//								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+//								switch (ShowLoadWarning(head, copy))
 //								{
 //									case DialogResult.Cancel:
 //										return LOADRESULT_FALSE;
@@ -1103,7 +1103,7 @@ namespace yata
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
-							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							switch (ShowLoadWarning(head, copy))
 							{
 								case DialogResult.Cancel:
 									return LOADRESULT_FALSE;
@@ -1181,7 +1181,7 @@ namespace yata
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + line; //.Replace("\t", "\u2192")
 
-								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;
@@ -1210,7 +1210,7 @@ namespace yata
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
-							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							switch (ShowLoadWarning(head, copy))
 							{
 								case DialogResult.Cancel:
 									return LOADRESULT_FALSE;
@@ -1239,7 +1239,7 @@ namespace yata
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
 								 + line;
 
-							switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+							switch (ShowLoadWarning(head, copy))
 							{
 								case DialogResult.Cancel:
 									return LOADRESULT_FALSE;
@@ -1337,7 +1337,7 @@ namespace yata
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
 									 + "id " + id;
 
-								switch (ShowLoadWarning(Infobox.SplitString(head), copy))
+								switch (ShowLoadWarning(head, copy))
 								{
 									case DialogResult.Cancel:
 										return LOADRESULT_FALSE;

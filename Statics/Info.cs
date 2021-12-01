@@ -306,7 +306,7 @@ namespace yata
 									  + " Format the 2da-file (in a texteditor) to not use double-quotes"
 									  + " if you want to access it for 2da Info.";
 					using (var ib = new Infobox(Infobox.Title_error,
-												Infobox.SplitString(head),
+												head,
 												pfe2da,
 												InfoboxType.Error))
 					{
