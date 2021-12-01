@@ -340,6 +340,18 @@ Shift+Delete - when a row is selected (as indicated with a green field at the
 Note that Cut, Copy, Paste operations have their keys listed under the Cells and
 Rows descriptions above. The Col operations do not have shortcuts.
 
+- Tab fastedit -
+
+When a cell is being edited the following keys are accepted.
+
+[Tab]                - accept text and edit the cell to the right
+[Shift + Tab]        - accept text and edit the cell to the left
+[Ctrl + Tab]         - accept text and edit the cell below
+[Ctrl + Shift + Tab] - accept text and edit the cell above
+
+Note that [Tab] and [Shift + Tab] also work when editing a cell in the
+PropertyPanel.
+
 
 3. Mouse input
 
