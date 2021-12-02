@@ -520,79 +520,85 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			// TODO: no Modifiers
-
-			if (!_editor.Visible)
+			if (ModifierKeys == Keys.None)
 			{
-				// TODO: only LMB
-
-				Cell sel = _grid.getSelectedCell();
-				if (sel != null)
-					_r = sel.y;
-				else
-					_r = _grid.getSelectedRow();
-
-				if (_r != -1)
+				if (!_editor.Visible)
 				{
-					_grid._editor.Visible = false;
-
-					if (_tabOverride == -1)
+					if (e.Button == MouseButtons.Left)
 					{
-						_c = (e.Y + _scroll.Value) / _heightr;
+						Cell sel = _grid.getSelectedCell();
+						if (sel != null)
+							_r = sel.y;
+						else
+							_r = _grid.getSelectedRow();
+
+						if (_r != -1)
+						{
+							_grid._editor.Visible = false;
+
+							if (_tabOverride == -1)
+							{
+								_c = (e.Y + _scroll.Value) / _heightr;
+							}
+							else
+								_c = _tabOverride;
+
+							if (sel != null)
+							{
+								sel.selected = false;
+
+								(_grid._anchorcell = _grid[_r,_c]).selected = true;
+
+//								_grid._f.EnableCelleditOperations(); // should be no need to re-deter cell-operations here.
+							}
+
+							if (_c >= _grid.FrozenCount)
+								_grid.EnsureDisplayed();
+							else
+								_grid.EnsureDisplayedRow(_r);
+
+							EnsureDisplayed(_c);
+
+							if (!_grid.Readonly && e.X > _widthVars)
+							{
+								_editRect.X = _widthVars;
+								_editRect.Y = _c * _heightr + 1;
+
+								_editor.Left = _editRect.X + 5; // cf YataGrid.EditCell() ->
+								_editor.Top  = _editRect.Y + 1 - _scroll.Value;
+								_editor.Text = _grid[_r,_c].text;
+
+								_editor.SelectionStart = 0;
+								_editor.SelectionLength = _editor.Text.Length;
+
+								_editor.Visible = true;
+								_editor.Focus();
+							}
+							else
+								_grid.Select();
+
+							_grid.Invalidator(YataGrid.INVALID_GRID
+											| YataGrid.INVALID_FROZ
+											| YataGrid.INVALID_PROP);
+						}
+						else
+							_grid.Select();
 					}
-					else
-						_c = _tabOverride;
-
-					if (sel != null)
-					{
-						sel.selected = false;
-
-						(_grid._anchorcell = _grid[_r,_c]).selected = true;
-
-//						_grid._f.EnableCelleditOperations(); // should be no need to re-deter cell-operations here.
-					}
-
-					if (_c >= _grid.FrozenCount)
-						_grid.EnsureDisplayed();
-					else
-						_grid.EnsureDisplayedRow(_r);
-
-					EnsureDisplayed(_c);
-
-					if (!_grid.Readonly && e.X > _widthVars)
-					{
-						_editRect.X = _widthVars;
-						_editRect.Y = _c * _heightr + 1;
-
-						_editor.Left = _editRect.X + 5; // cf YataGrid.EditCell() ->
-						_editor.Top  = _editRect.Y + 1 - _scroll.Value;
-						_editor.Text = _grid[_r,_c].text;
-
-						_editor.SelectionStart = 0;
-						_editor.SelectionLength = _editor.Text.Length;
-
-						_editor.Visible = true;
-						_editor.Focus();
-					}
-					else
-						_grid.Select();
-
-					_grid.Invalidator(YataGrid.INVALID_GRID
-									| YataGrid.INVALID_FROZ
-									| YataGrid.INVALID_PROP);
 				}
-				else
-					_grid.Select();
-			}
-			else // is edit
-			{
-				// TODO: only LMB/RMB
+				else // _editor.Visible
+				{
+					switch (e.Button)
+					{
+						case MouseButtons.Left: // accept edit (else cancel edit)
+							ApplyCellEdit();
+							goto case MouseButtons.Right;
 
-				if (e.Button == MouseButtons.Left) // accept edit (else cancel edit)
-					ApplyCellEdit();
-
-				hideEditor();
-				_grid.Select();
+						case MouseButtons.Right:
+							hideEditor();
+							_grid.Select();
+							break;
+					}
+				}
 			}
 		}
 
