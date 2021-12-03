@@ -3409,7 +3409,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Hides the editor and focuses the table.
+		/// Hides <c><see cref="_editor"/></c> and focuses this <c>YataGrid</c>.
 		/// </summary>
 		/// <param name="invalid"></param>
 		void hideditor(int invalid)
@@ -3420,7 +3420,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Moves cell selection and calls
+		/// <c><see cref="Celledit()">Celledit()</see></c> for the next cell in
+		/// a Tabfastedit sequence.
 		/// </summary>
 		/// <param name="dir_hori"></param>
 		/// <param name="dir_vert"></param>
