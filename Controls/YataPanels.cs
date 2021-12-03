@@ -61,6 +61,9 @@ namespace yata
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> for
+		/// <c><see cref="YataGrid.LabelColheads()">YataGrid.LabelColheads()</see></c>.</remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (!YataGrid._init)
@@ -219,6 +222,9 @@ namespace yata
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelRows</c>.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> for
+		/// <c><see cref="YataGrid.LabelRowheads()">YataGrid.LabelRowheads()</see></c>.</remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (!YataGrid._init)
@@ -274,6 +280,9 @@ namespace yata
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelFrozen</c>.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> for
+		/// <c><see cref="YataGrid.PaintFrozenPanel()">YataGrid.PaintFrozenPanel()</see></c>.</remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (!YataGrid._init)

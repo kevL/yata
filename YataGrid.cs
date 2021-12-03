@@ -64,7 +64,7 @@ namespace yata
 		const int SORT_ASC =  1;
 
 		/// <summary>
-		/// Is used only for painting in all the various <c>Paint</c> events.
+		/// Is used only for painting in the various <c>Paint</c> events.
 		/// </summary>
 		internal static Graphics graphics;
 

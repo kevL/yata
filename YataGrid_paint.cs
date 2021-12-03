@@ -9,15 +9,15 @@ using yata.Properties;
 
 namespace yata
 {
-	/// <summary>
-	/// Handles painting various controls on this <c>YataGrid</c>.
-	/// </summary>
+	// Handles painting various controls on this <c>YataGrid</c>.
 	sealed partial class YataGrid
 	{
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler for the table itself.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="graphics">YataGrid.graphics</see></c>.</remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if (!_init)
@@ -126,11 +126,13 @@ namespace yata
 		/// <summary>
 		/// Labels the colheads.
 		/// </summary>
-		/// <remarks>Called by <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
+		/// <remarks>Requires
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
+		/// <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
 		internal void LabelColheads()
 		{
 			var rect = new Rectangle(WidthRowhead - OffsetHori + _padHori, 0,
-									 0,                                    HeightColhead);
+									 0, HeightColhead);
 			int clip;
 			Color color;
 			Col col;
@@ -190,11 +192,14 @@ namespace yata
 		/// <summary>
 		/// Labels the rowheads.
 		/// </summary>
-		/// <remarks>Called by <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
+		/// <remarks>Requires
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
+		/// <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
 		internal void LabelRowheads()
 		{
-			var rect = new Rectangle(_padHoriRowhead - 1, 0, WidthRowhead - 1, HeightRow);	// NOTE: (x)-1 is a padding tweak.
-																							//       (w)-1 accounts for the double vertical line
+			var rect = new Rectangle(_padHoriRowhead - 1, 0,		// NOTE: (x)-1 is a padding tweak.
+									 WidthRowhead - 1, HeightRow);	//       (w)-1 accounts for the double vertical line
+
 			int selr = getSelectedRow();
 			Brush brush;
 
@@ -244,6 +249,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_labelid"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="graphics">YataGrid.graphics</see></c>.</remarks>
 		void labelid_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -269,7 +276,9 @@ namespace yata
 				else
 					_labelid.BackColor = Colors.LabelSorted;
 
-				rect = new Rectangle(WidthRowhead + _padHori, Top, Cols[0].width(), HeightColhead);
+				rect = new Rectangle(WidthRowhead + _padHori, Top,
+									 Cols[0].width(), HeightColhead);
+
 				TextRenderer.DrawText(graphics,
 									  gs.Id,
 									  _f.FontAccent,
@@ -290,8 +299,8 @@ namespace yata
 						sorticon = Resources.des_16px;
 
 					graphics.DrawImage(sorticon,
-									   rect.X               - _offsetHoriSort,
-									   rect.Y + rect.Height - _offsetVertSort);
+									   rect.X - _offsetHoriSort,
+									   rect.Y - _offsetVertSort + rect.Height);
 				}
 			}
 		}
@@ -301,6 +310,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_labelfirst"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="graphics">YataGrid.graphics</see></c>.</remarks>
 		void labelfirst_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -317,7 +328,8 @@ namespace yata
 				}
 
 				Color color;
-				rect = new Rectangle(_padHori, Top, Cols[1].width(), HeightColhead);
+				rect = new Rectangle(_padHori, Top,
+									 Cols[1].width(), HeightColhead);
 
 				if (_sortcol == 1)
 				{
@@ -357,6 +369,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_labelsecond"/></c></param>
 		/// <param name="e"></param>
+		/// <remarks>Assigns <c>e.Graphics</c> to
+		/// <c><see cref="graphics">YataGrid.graphics</see></c>.</remarks>
 		void labelsecond_Paint(object sender, PaintEventArgs e)
 		{
 			if (!_init)
@@ -373,7 +387,8 @@ namespace yata
 				}
 
 				Color color;
-				rect = new Rectangle(_padHori, Top, Cols[2].width(), HeightColhead);
+				rect = new Rectangle(_padHori, Top,
+									 Cols[2].width(), HeightColhead);
 
 				if (_sortcol == 2)
 				{
@@ -412,7 +427,9 @@ namespace yata
 		/// <summary>
 		/// Paints the frozen-panel.
 		/// </summary>
-		/// <remarks>Called by <c><see cref="YataPanelFrozen"/>.OnPaint()</c>.</remarks>
+		/// <remarks>Requires
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
+		/// <c><see cref="YataPanelFrozen"/>.OnPaint()</c>.</remarks>
 		internal void PaintFrozenPanel()
 		{
 			int x = 0;
@@ -455,7 +472,6 @@ namespace yata
 										  rect,
 										  Colors.Text,
 										  YataGraphics.flags);
-
 					rect.X += rect.Width;
 				}
 

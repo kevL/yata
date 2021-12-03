@@ -3,6 +3,7 @@
 
 namespace yata
 {
+	// Various routines for cell/row/col selection and subselection.
 	sealed partial class YataGrid
 	{
 		#region row selection
