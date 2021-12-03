@@ -609,8 +609,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			YataGrid.graphics = e.Graphics;
-			YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			Graphics graphics = e.Graphics;
+			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
 			int offset = _scroll.Value;
 
@@ -621,7 +621,7 @@ namespace yata
 			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(Brushes.PropanelFrozen, rect);
+				graphics.FillRectangle(Brushes.PropanelFrozen, rect);
 			}
 
 			// fill any selected cell's var/val-rect ->
@@ -629,7 +629,7 @@ namespace yata
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);
-				YataGrid.graphics.FillRectangle(Brushes.Selected, rect);
+				graphics.FillRectangle(Brushes.Selected, rect);
 			}
 
 			// fill the editor's val-rect if visible ->
@@ -639,34 +639,34 @@ namespace yata
 				rect = _editRect;
 				rect.Y -= offset;
 
-				YataGrid.graphics.FillRectangle(Brushes.Editor, rect);
+				graphics.FillRectangle(Brushes.Editor, rect);
 			}
 
 			// draw vertical lines ->
-			YataGrid.graphics.DrawLine(Pens.Black,									// vertical left line
-									   1, 0,
-									   1, HeightProps - offset);
-			YataGrid.graphics.DrawLine(Pencils.DarkLine,							// vertical center line
-									   _widthVars, 1,
-									   _widthVars, HeightProps - offset - 1);
-			YataGrid.graphics.DrawLine(Pencils.DarkLine,							// vertical right line
-									   _widthVars + _widthVals, 1,
-									   _widthVars + _widthVals, HeightProps - offset - 1);
-			YataGrid.graphics.DrawLine(Pens.Black,									// horizontal top line
-									   1,     1,
-									   Width, 1);
-			YataGrid.graphics.DrawLine(Pens.Black,									// horizontal bot line
-									   1,     _heightr * _grid.ColCount - offset,
-									   Width, _heightr * _grid.ColCount - offset);
+			graphics.DrawLine(Pens.Black,										// vertical left line
+							  1, 0,
+							  1, HeightProps - offset);
+			graphics.DrawLine(Pencils.DarkLine,									// vertical center line
+							  _widthVars, 1,
+							  _widthVars, HeightProps - offset - 1);
+			graphics.DrawLine(Pencils.DarkLine,									// vertical right line
+							  _widthVars + _widthVals, 1,
+							  _widthVars + _widthVals, HeightProps - offset - 1);
+			graphics.DrawLine(Pens.Black,										// horizontal top line
+							  1,     1,
+							  Width, 1);
+			graphics.DrawLine(Pens.Black,										// horizontal bot line
+							  1,     _heightr * _grid.ColCount - offset,
+							  Width, _heightr * _grid.ColCount - offset);
 
 			// draw horizontal lines ->
 			int y;
 			for (c = 1; c != _grid.ColCount; ++c)
 			{
 				y = _heightr * c - offset + 1;
-				YataGrid.graphics.DrawLine(Pencils.DarkLine,
-										   0,     y,
-										   Width, y);
+				graphics.DrawLine(Pencils.DarkLine,
+								  0,     y,
+								  Width, y);
 			}
 
 			// draw var-texts ->
@@ -675,7 +675,7 @@ namespace yata
 			for (c = 0; c != _grid.ColCount; ++c)
 			{
 				rect.Y = _heightr * c - offset;
-				TextRenderer.DrawText(YataGrid.graphics,
+				TextRenderer.DrawText(graphics,
 									  _grid.Cols[c].text,
 									  Font,
 									  rect,
@@ -698,7 +698,7 @@ namespace yata
 				for (c = 0; c != _grid.ColCount; ++c)
 				{
 					rect.Y = _heightr * c - offset;
-					TextRenderer.DrawText(YataGrid.graphics,
+					TextRenderer.DrawText(graphics,
 										  _grid[r,c].text,
 										  Font,
 										  rect,
