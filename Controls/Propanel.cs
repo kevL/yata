@@ -34,6 +34,8 @@ namespace yata
 		/// vertical text padding
 		/// </summary>
 		const int _padVert = 2;
+
+		const int TABFASTEDIT_Bypass = -1;
 		#endregion Fields (static)
 
 
@@ -77,9 +79,11 @@ namespace yata
 		int _c;
 
 		/// <summary>
-		/// Overrides <c><see cref="_c"/></c> for Tab fastedit.
+		/// Overrides <c><see cref="_c"/></c> for Tab fastedit while allowing
+		/// <c>[Shift]</c> in
+		/// <c><see cref="OnMouseClick()">OnMouseClick()</see></c>.
 		/// </summary>
-		int _tabOverride = -1;
+		int _tabOverride = TABFASTEDIT_Bypass;
 		#endregion Fields
 
 
@@ -405,6 +409,8 @@ namespace yata
 		/// pressed.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
+			//logfile.Log("keydown_Editor() keyData= " + e.KeyData);
+
 			if (e.Alt) hideEditor();
 		}
 
@@ -445,6 +451,8 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
+			//logfile.Log("ProcessDialogKey() keyData= " + keyData);
+
 			if (_editor.Visible)
 			{
 				switch (keyData)
@@ -459,43 +467,39 @@ namespace yata
 						return true;
 
 					case Keys.Tab:
-						if (_editor.Visible)
-						{
-							ApplyCellEdit();
-							hideEditor();
+						ApplyCellEdit();
+						hideEditor();
 
-							if (_c != _grid.ColCount - 1)
-							{
-								_tabOverride = _c + 1;
-								OnMouseClick(new MouseEventArgs(MouseButtons.Left,
-																1,
-																_widthVars + 1, 0, // fake it ...
-																0));
-								_tabOverride = -1;
-							}
-							else
-								_grid.Select();
+						if (_c != _grid.ColCount - 1)
+						{
+							_tabOverride = _c + 1;
+							OnMouseClick(new MouseEventArgs(MouseButtons.Left,
+															1,
+															_widthVars + 1, 0, // fake it ...
+															0));
+							_tabOverride = TABFASTEDIT_Bypass;
 						}
+						else
+							_grid.Select();
+
 						break;
 
 					case Keys.Tab | Keys.Shift:
-						if (_editor.Visible)
-						{
-							ApplyCellEdit();
-							hideEditor();
+						ApplyCellEdit();
+						hideEditor();
 
-							if (_c != 0)
-							{
-								_tabOverride = _c - 1;
-								OnMouseClick(new MouseEventArgs(MouseButtons.Left,
-																1,
-																_widthVars + 1, 0, // fake it ...
-																0));
-								_tabOverride = -1;
-							}
-							else
-								_grid.Select();
+						if (_c != 0)
+						{
+							_tabOverride = _c - 1;
+							OnMouseClick(new MouseEventArgs(MouseButtons.Left,
+															1,
+															_widthVars + 1, 0, // fake it ...
+															0));
+							_tabOverride = TABFASTEDIT_Bypass;
 						}
+						else
+							_grid.Select();
+
 						break;
 				}
 			}
@@ -520,11 +524,13 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			if (ModifierKeys == Keys.None)
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
 			{
 				if (!_editor.Visible)
 				{
-					if (e.Button == MouseButtons.Left)
+					if (e.Button == MouseButtons.Left
+						&& ((ModifierKeys & Keys.Shift) == Keys.None
+							|| _tabOverride != TABFASTEDIT_Bypass))
 					{
 						Cell sel = _grid.getSelectedCell();
 						if (sel != null)
@@ -536,7 +542,7 @@ namespace yata
 						{
 							_grid._editor.Visible = false;
 
-							if (_tabOverride == -1)
+							if (_tabOverride == TABFASTEDIT_Bypass)
 							{
 								_c = (e.Y + _scroll.Value) / _heightr;
 							}
@@ -585,7 +591,7 @@ namespace yata
 							_grid.Select();
 					}
 				}
-				else // _editor.Visible
+				else if ((ModifierKeys & Keys.Shift) == 0) // _editor.Visible
 				{
 					switch (e.Button)
 					{
