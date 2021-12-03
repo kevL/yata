@@ -342,7 +342,7 @@ namespace yata
 		/// <summary>
 		/// Hides the <c><see cref="_editor"/></c>.
 		/// </summary>
-		void hideEditor()
+		void hideditor()
 		{
 			_editor.Visible = false;
 			_grid.Invalidator(YataGrid.INVALID_PROP);
@@ -394,7 +394,7 @@ namespace yata
 		/// <param name="e"></param>
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
-			hideEditor();
+			hideditor();
 		}
 		#endregion Handlers (scroll)
 
@@ -411,7 +411,7 @@ namespace yata
 		{
 			//logfile.Log("keydown_Editor() keyData= " + e.KeyData);
 
-			if (e.Alt) hideEditor();
+			if (e.Alt) hideditor();
 		}
 
 		/// <summary>
@@ -437,7 +437,7 @@ namespace yata
 		/// <param name="e"></param>
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
-			hideEditor();
+			hideditor();
 		}
 		#endregion Handlers (editor)
 
@@ -462,13 +462,13 @@ namespace yata
 						goto case Keys.Escape;
 
 					case Keys.Escape:
-						hideEditor();
+						hideditor();
 						_grid.Select();
 						return true;
 
 					case Keys.Tab:
 						ApplyCellEdit();
-						hideEditor();
+						hideditor();
 
 						if (_c != _grid.ColCount - 1)
 						{
@@ -486,7 +486,7 @@ namespace yata
 
 					case Keys.Tab | Keys.Shift:
 						ApplyCellEdit();
-						hideEditor();
+						hideditor();
 
 						if (_c != 0)
 						{
@@ -600,7 +600,7 @@ namespace yata
 							goto case MouseButtons.Right;
 
 						case MouseButtons.Right:
-							hideEditor();
+							hideditor();
 							_grid.Select();
 							break;
 					}

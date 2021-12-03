@@ -3340,7 +3340,7 @@ namespace yata
 					return true;
 
 				case Keys.Escape:
-					hideEditor(INVALID_GRID);
+					hideditor(INVALID_GRID);
 					return true;
 
 
@@ -3405,14 +3405,14 @@ namespace yata
 			else if (_editcell.loadchanged)
 				ClearLoadchanged(_editcell);
 
-			hideEditor(invalid);
+			hideditor(invalid);
 		}
 
 		/// <summary>
 		/// Hides the editor and focuses the table.
 		/// </summary>
 		/// <param name="invalid"></param>
-		void hideEditor(int invalid)
+		void hideditor(int invalid)
 		{
 			_editor.Visible = false;
 			Invalidator(invalid);
