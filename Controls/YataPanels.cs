@@ -43,12 +43,21 @@ namespace yata
 
 
 		#region Handlers (override)
+		static int _widthFrozenCached;
+
 		/// <summary>
 		/// Overrides the <c>Resize</c> handler on this <c>YataPanelCols</c>.
 		/// </summary>
 		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
 		{
+			if (!YataGrid._init)
+			{
+				_widthFrozenCached = YataGrid.WidthRowhead;
+				for (int f = 0; f != _grid.FrozenCount; ++f)
+					_widthFrozenCached += _grid.Cols[f].width();
+			}
+
 			if (Settings._gradient)
 			{
 				if (Gradients.ColheadPanel != null)
@@ -74,7 +83,7 @@ namespace yata
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				if (Settings._gradient)
+				if (Gradients.ColheadPanel != null) // Settings._gradient
 				{
 					var rect = new Rectangle(0,0, Width, Height);
 					YataGrid.graphics.FillRectangle(Gradients.ColheadPanel, rect);
@@ -101,17 +110,13 @@ namespace yata
 		{
 			if (!Grab)
 			{
-				int labels = YataGrid.WidthRowhead; // TODO: This value should be cached instead.
-				for (int f = 0; f != _grid.FrozenCount; ++f)
-					labels += _grid.Cols[f].width();
-
-				if (e.X > labels)
+				if (e.X > _widthFrozenCached)
 				{
 					int x = YataGrid.WidthRowhead - _grid.OffsetHori;
 					for (int c = 0; c != _grid.ColCount; ++c)
 					{
 						x += _grid.Cols[c].width();
-						if (e.X > x - 5 && e.X < x) // && c >= _grid.FrozenCount
+						if (e.X > x - 5 && e.X < x)
 						{
 							Cursor = Cursors.VSplit;
 							_grabCol = c;
