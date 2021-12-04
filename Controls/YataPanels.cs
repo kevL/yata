@@ -49,12 +49,15 @@ namespace yata
 		/// <param name="eventargs"></param>
 		protected override void OnResize(EventArgs eventargs)
 		{
-			if (Gradients.ColheadPanel != null)
-				Gradients.ColheadPanel.Dispose();
+			if (Settings._gradient)
+			{
+				if (Gradients.ColheadPanel != null)
+					Gradients.ColheadPanel.Dispose();
 
-			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
-															 new Point(0, Height),
-															 Color.Lavender, Color.MediumOrchid);
+				Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
+																 new Point(0, Height),
+																 Color.Lavender, Color.MediumOrchid);
+			}
 		}
 
 		/// <summary>

@@ -5031,9 +5031,25 @@ namespace yata
 
 
 		static int _heightColheadCached;
+
+		/// <summary>
+		/// Creates <c>LinearGradientBrushes</c> for
+		/// <list type="bullet">
+		/// <item><c><see cref="labelid_Paint()">labelid_Paint()</see></c></item>
+		/// <item><c><see cref="labelfirst_Paint()">labelfirst_Paint()</see></c></item>
+		/// <item><c><see cref="labelsecond_Paint()">labelsecond_Paint()</see></c></item>
+		/// </list>
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="_labelid"/></c></item>
+		/// <item><c><see cref="_labelfirst"/></c></item>
+		/// <item><c><see cref="_labelsecond"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
 		void label_Resize(object sender, EventArgs e)
 		{
-			if (_heightColheadCached != HeightColhead)
+			if (Settings._gradient && _heightColheadCached != HeightColhead)
 			{
 				_heightColheadCached = HeightColhead;
 
