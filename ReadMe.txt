@@ -91,8 +91,8 @@ Cells
 - Cut    : Ctrl+x (cuts selected cell(s) if they are in a contiguous block)
 - Copy   : Ctrl+c (copies selected cell(s) if they are in a contiguous block)
 - Paste  : Ctrl+v (pastes copied cell(s) if only 1 cell is selected; that cell
-                   will be at the top left if pasting a block of cells; pasted
-                   cells that don't fit in the table get discarded)
+           will be at the top left if pasting a block of cells; pasted cells
+           that don't fit in the table get discarded)
 - Delete : Delete (deletes selected cell(s))
 
 - Lowercase : converts selected cell(s) to lowercase
@@ -101,7 +101,7 @@ Cells
 - Apply text ... : opens a dialog that replaces selected cell(s)
 
 - Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
-                             Load)
+                     Load)
 
 
 Rows
@@ -114,7 +114,7 @@ Rows
 - Delete : Shift+Delete (deletes selected row and any selected subrow(s))
 
 - Create ... : F2 (opens a dialog that inserts 1+ rows with options to fill the
-                   fields. (a) selected row (b) first copied row (c) ****)
+               fields. (a) selected row (b) first copied row (c) ****)
 
 
 Col
@@ -147,7 +147,7 @@ Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) to clipboard : F9  (exports the internal copy-list to the
+- Export copied row(s) to clipboard : F9 (exports the internal copy-list to the
                                       clipboard)
 - Import clipboard to copied row(s) : F10 (imports any clipboard text to the
                                       internal copy-list WARNING: No validity
@@ -155,8 +155,9 @@ Clipboard
                                       importing assumes that the text on your
                                       clipboard contains valid 2da-row data)
 
-- Open clip editor : F11 (accesses the Windows Clipboard for viewing/editing -
-                          only clips in text format are available)
+- Open clipboard editor : F11 (accesses the Windows Clipboard for
+                          viewing/editing - only clips in text format are
+                          available)
 
 
 2da Ops
@@ -176,10 +177,9 @@ Clipboard
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
 
-- PropertyPanel          : F7 (toggles the PropertyPanel on/off)
-- PropertyPanel location : F8 (key Shift to reverse direction. Cycles the
-                           panel's location through the four corners of the
-                           table)
+- Propanel          : F7 (toggles the PropertyPanel on/off)
+- Propanel location : F8 (key Shift to reverse direction. Cycles the panel's
+                      location through the four corners of the table)
 
 - External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
                          files open. See Appendix M: WinMerge)
