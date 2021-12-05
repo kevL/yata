@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2021 Dec 3
+2021 Dec 5
 kevL's
 ver 4.6.3.0
 
@@ -523,8 +523,8 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  Handbook recompiler tool)
              (2) warn about suspicious (non-ASCII) characters in colhead labels.
                  When labeling a colhead Strict "true" allows only alpha-numeric
-                 characters and the underscore character, while Strict "false"
-                 allows any printable ASCII character except the double-quote.
+                 characters and the underscore character, otherwise any
+                 printable ASCII character except the double-quote are allowed.
                  Note that Yata supports 2da-files with Unicode in their colhead
                  labels - but if you want to edit such labels use a decent
                  texteditor (or try a different 2da-editor)
@@ -574,7 +574,7 @@ Appendix A: note on Load
 Yata is pretty strict when loading a 2da file. If it detects anything awkward it
 lets the user know and will try to automatically fix cell-fields. Such cells
 should then appear highlighted with pink - these are called "loadchanged" cells,
-since they were changed when the 2da was loaded. An option under the Edit menu
+since they were changed when the 2da was loaded. An option under the Cells menu
 can cycle through these cells if there are any, for your review and or manual
 corrections.
 
@@ -589,15 +589,14 @@ text-editor (or a different 2da-editor).
 Appendix B: copy/paste range
 
 To copy a range of rows there first has to be a selected row (as indicated with
-a green field at the far left of a row) and then the Shift key must be used to
+a green field at the far left of a row) and then the Shift key can be used to
 select a range of rows. (Using the Control key to select multiple rows does not
 work for this.)
 
 A range of copied rows can be pasted/inserted at a currently selected row (as
 indicated with a green field at the far left of a row) or to the end of the
-table if there is not a currently selected row. Pasting a range does not
-overwrite any currently selected row(s) - it rather inserts the copy-range,
-starting at the selected row.
+table if no row is currently selected. Pasting a range does not overwrite any
+row(s) - it rather inserts the copy-range, starting at the selected row.
 
 
 Appendix C: edit operations on rows
