@@ -147,11 +147,13 @@ Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) : F9  (exports the internal copy-list to the clipboard)
-- Import copied row(s) : F10 (imports any clipboard text to the internal
-                              copy-list WARNING: No validity test is done on the
-                              clipboard text; importing assumes that the text on
-                              your clipboard contains valid 2da-row data)
+- Export copied row(s) to clipboard : F9  (exports the internal copy-list to the
+                                      clipboard)
+- Import clipboard to copied row(s) : F10 (imports any clipboard text to the
+                                      internal copy-list WARNING: No validity
+                                      test is done on the clipboard text;
+                                      importing assumes that the text on your
+                                      clipboard contains valid 2da-row data)
 
 - Open clip editor : F11 (accesses the Windows Clipboard for viewing/editing -
                           only clips in text format are available)
