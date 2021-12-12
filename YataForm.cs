@@ -2183,7 +2183,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Searches the current table for the string in the search-box.
+		/// Searches the current table for the text in the search-box.
 		/// </summary>
 		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
 		/// call.</remarks>
