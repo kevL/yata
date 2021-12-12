@@ -4422,7 +4422,7 @@ namespace yata
 			}
 			else
 			{
-				_scrollHori.Value = 0;
+//				_scrollHori.Value = 0;
 				invalid = EnsureDisplayedRow(cell.y);
 			}
 
