@@ -671,7 +671,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Processes so-called commandkey combinations.
+		/// Processes so-called command-keys.
 		/// </summary>
 		/// <param name="msg"></param>
 		/// <param name="keyData"></param>
