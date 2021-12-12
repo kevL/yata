@@ -42,8 +42,8 @@ namespace yata
 		#region Fields
 		readonly YataGrid _grid;
 
-		internal readonly ScrollBar _scroll = new VScrollBar();
-		internal readonly TextBox   _editor = new TextBox();
+		internal readonly ScrollBar   _scroll = new VScrollBar();
+		internal readonly YataEditbox _editor = new YataEditbox();
 
 		/// <summary>
 		/// The height of the entire panel (incl/ non-displayed top and bot).
@@ -177,11 +177,6 @@ namespace yata
 
 			_grid.Controls.Add(this);
 
-			_editor.Visible     = false;
-			_editor.BackColor   = Colors.Editor;
-			_editor.BorderStyle = BorderStyle.None;
-			_editor.WordWrap    = false;
-			_editor.Margin      = new Padding(0);
 			_editor.LostFocus  += lostfocus_Editor;
 			_editor.KeyDown    += keydown_Editor;
 			_editor.Leave      += leave_Editor;
@@ -449,6 +444,18 @@ namespace yata
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
+		/// <summary>
+		/// Processes a so-called dialog-key.
+		/// <list type="bullet">
+		/// <item><c>[Enter]</c> - accepts celledit</item>
+		/// <item><c>[Escape]</c> - cancels celledit</item>
+		/// <item><c>[Tab]</c>/<c>[Down]</c> - fastedit down</item>
+		/// <item><c>[Tab+Shift]/<c>[Up]</c></c> - fastedit up</item>
+		/// </list></summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
+		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			//logfile.Log("ProcessDialogKey() keyData= " + keyData);
@@ -467,6 +474,7 @@ namespace yata
 						return true;
 
 					case Keys.Tab:
+					case Keys.Down:
 						ApplyCellEdit();
 						hideditor();
 
@@ -485,6 +493,7 @@ namespace yata
 						break;
 
 					case Keys.Tab | Keys.Shift:
+					case Keys.Up:
 						ApplyCellEdit();
 						hideditor();
 

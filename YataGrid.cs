@@ -355,12 +355,6 @@ namespace yata
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
 
-			_editor.Visible     = false;
-			_editor.BackColor   = Colors.Editor;
-			_editor.BorderStyle = BorderStyle.None;
-			_editor.WordWrap    = false;
-			_editor.Margin      = new Padding(0);
-//			_editor.Height      = cf. the Propanel editor
 			_editor.KeyDown    += keydown_Editor;
 			_editor.LostFocus  += lostfocus_Editor;
 
@@ -3320,11 +3314,13 @@ namespace yata
 		/// <item><c>[Escape]</c> - cancels celledit</item>
 		/// <item><c>[Tab]</c> - fastedit right</item>
 		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
-		/// <item><c>[Tab+Ctrl]</c> - fastedit down</item>
-		/// <item><c>[Tab+Ctrl+Shift]</c> - fastedit up</item>
+		/// <item><c>[Tab+Ctrl]</c>/<c>[Down]</c> - fastedit down</item>
+		/// <item><c>[Tab+Ctrl+Shift]</c>/<c>[Up]</c> - fastedit up</item>
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
+		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
+		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			//logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
