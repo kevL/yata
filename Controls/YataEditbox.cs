@@ -50,7 +50,7 @@ namespace yata
 					break;
 			}
 
-			logfile.Log(". " + ret);
+			//logfile.Log(". " + ret);
 			return ret;
 		}
 
