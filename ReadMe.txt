@@ -351,7 +351,7 @@ Shift+Tab            - accept text and edit the cell to the left
 Ctrl+Tab or Down     - accept text and edit the cell below
 Ctrl+Shift+Tab or Up - accept text and edit the cell above
 
-Note that [Tab] and [Shift+Tab] also work when editing a cell in the
+Note that [Tab]/[Down] and [Shift+Tab]/[UP] also work when editing a cell in the
 PropertyPanel.
 
 
