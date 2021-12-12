@@ -167,7 +167,7 @@ namespace yata
 		/// The text-edit box. Note there is only one (1) <c>TextBox</c> that
 		/// floats to wherever it's required.
 		/// </summary>
-		internal readonly TextBox _editor = new TextBox(); // TODO: static
+		internal readonly YataEditbox _editor = new YataEditbox(); // TODO: static
 
 		/// <summary>
 		/// The <c><see cref="Cell"/></c> that's currently under the
@@ -2269,7 +2269,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			//logfile.Log();
 			//logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
 
 			switch (e.KeyCode)
@@ -3315,9 +3314,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles ending editing a cell by pressing
-		/// <c>[Enter]</c> or <c>[Escape]</c>/<c>[Tab]</c>.
-		/// </summary>
+		/// Processes a so-called dialog-key.
+		/// <list type="bullet">
+		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
+		/// <item><c>[Escape]</c> - cancels celledit</item>
+		/// <item><c>[Tab]</c> - fastedit right</item>
+		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
+		/// <item><c>[Tab+Ctrl]</c> - fastedit down</item>
+		/// <item><c>[Tab+Ctrl+Shift]</c> - fastedit up</item>
+		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		protected override bool ProcessDialogKey(Keys keyData)
@@ -3366,6 +3371,7 @@ namespace yata
 					return true;
 
 				case Keys.Tab | Keys.Control:
+				case Keys.Down:
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
@@ -3376,6 +3382,7 @@ namespace yata
 					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
 
 				case Keys.Tab | Keys.Control | Keys.Shift:
+				case Keys.Up:
 					if (_editor.Visible)
 					{
 						ApplyCellEdit();
