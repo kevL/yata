@@ -4387,7 +4387,7 @@ namespace yata
 					if (rect.X < left
 						|| (rect.Width > right - left
 							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
-					{																	//    than the table's visible width.
+					{																	// than the table's visible width.
 						int val = _scrollHori.Value - left + rect.X;
 						_scrollHori.Value = Math.Max(val, 0);
 						invalid = INVALID_GRID;
@@ -4420,9 +4420,9 @@ namespace yata
 					}
 				}
 			}
-			else
+			else // cell is in the FrozenPanel ->
 			{
-//				_scrollHori.Value = 0;
+//				_scrollHori.Value = 0; // do not scroll hori; cell is already visible.
 				invalid = EnsureDisplayedRow(cell.y);
 			}
 
