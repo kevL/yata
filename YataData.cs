@@ -92,15 +92,6 @@ namespace yata
 
 		#region Properties
 		/// <summary>
-		/// Gets/sets the <c><see cref="Cell"/></c> at pos <c>[</c><paramref name="c"/><c>]</c>.
-		/// </summary>
-		internal Cell this[int c]
-		{
-			get { return _cells[c]; }
-			set { _cells[c] = value; }
-		}
-
-		/// <summary>
 		/// The count of cols in this <c>Row</c>.
 		/// </summary>
 		internal int Length
@@ -128,6 +119,19 @@ namespace yata
 			}
 		}
 		#endregion Properties
+
+
+		#region Indexers
+		/// <summary>
+		/// Gets/sets the <c><see cref="Cell"/></c> at pos
+		/// <c>[</c><paramref name="c"/><c>]</c>.
+		/// </summary>
+		internal Cell this[int c]
+		{
+			get { return _cells[c]; }
+			set { _cells[c] = value; }
+		}
+		#endregion Indexers
 
 
 		#region cTors

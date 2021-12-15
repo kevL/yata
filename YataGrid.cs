@@ -224,19 +224,26 @@ namespace yata
 			}
 		}
 
-		internal string[] Fields // 'Fields' does NOT contain #0 col IDs (so that typically needs +/-1)
+		/// <summary>
+		/// The colhead labels.
+		/// </summary>
+		/// <remarks>Does NOT contain #0 id-col (so it typically needs +/-1).</remarks>
+		internal string[] Fields
 		{ get; private set; }
-
-		internal Cell this[int r, int c]
-		{
-			get { return Rows[r][c]; }
-			set { Rows[r][c] = value; }
-		}
 
 		internal InfoType Info
 		{ get; set; }
 
 		int _frozenCount = FreezeId; // initialized w/ id-col only.
+		/// <summary>
+		/// The count of cols that currently appear on the
+		/// <c><see cref="FrozenPanel"/></c>.
+		/// <list type="bullet">
+		/// <item><c>1</c> - id col only</item>
+		/// <item><c>2</c> - +1st colfield</item>
+		/// <item><c>3</c> - +2nd colfield</item>
+		/// </list>
+		/// </summary>
 		internal int FrozenCount
 		{
 			get { return _frozenCount; }
@@ -319,6 +326,19 @@ namespace yata
 		internal DateTime Lastwrite
 		{ get; set; }
 		#endregion Properties
+
+
+		#region Indexers
+		/// <summary>
+		/// Gets/sets the <c><see cref="Cell"/></c> at loc
+		/// <c>[</c><paramref name="r"/>, <paramref name="c"/><c>]</c>.
+		/// </summary>
+		internal Cell this[int r, int c]
+		{
+			get { return Rows[r][c]; }
+			set { Rows[r][c] = value; }
+		}
+		#endregion Indexers
 
 
 		#region cTor
@@ -3786,7 +3806,7 @@ namespace yata
 													_cell.selected = true;
 												}
 												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass Propanel.EnsureDisplayed() if
-																										//    selectedcell is not the only selected cell
+																										// selectedcell is not the only selected cell
 												_anchorcell = _cell;
 											}
 											else
