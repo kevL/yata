@@ -50,6 +50,7 @@ namespace yata
 
 		static Graphics graphics;
 
+		const int FROZEN_COL_Id     = 0;
 		const int FROZEN_COL_First  = 1;
 		const int FROZEN_COL_Second = 2;
 		#endregion Fields (static)
@@ -3743,7 +3744,7 @@ namespace yata
 			else if (_diff2 == Table) _diff2 = null;
 
 			Table.Colwidth(0, 0, Table.RowCount - 1);
-			Table.metricFrozenControls(0);
+			Table.metricFrozenControls(FROZEN_COL_Id);
 
 			Table.InitScroll();
 
