@@ -527,8 +527,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Overrides the <c>MouseClick</c> event. Selects the row clicked,
-		/// starts or applies/cancels edit.
+		/// Overrides the <c>MouseClick</c> event. Selects the row in this
+		/// <c>Propanel</c> that's clicked, starts or applies/cancels edit.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
