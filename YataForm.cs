@@ -49,6 +49,9 @@ namespace yata
 		internal static string PfeLoad; // cl arg
 
 		static Graphics graphics;
+
+		const int FROZEN_COL_First  = 1;
+		const int FROZEN_COL_Second = 2;
 		#endregion Fields (static)
 
 
@@ -3910,11 +3913,11 @@ namespace yata
 
 			if (it_freeze1.Checked = !it_freeze1.Checked)
 			{
-				Col col = Table.Cols[1];
+				Col col = Table.Cols[FROZEN_COL_First];
 				if (col.UserSized)
 				{
 					col.UserSized = false;
-					Table.Colwidth(1);
+					Table.Colwidth(FROZEN_COL_First);
 				}
 				Table.FrozenCount = YataGrid.FreezeFirst;
 			}
@@ -3939,18 +3942,18 @@ namespace yata
 
 			if (it_freeze2.Checked = !it_freeze2.Checked)
 			{
-				Col col = Table.Cols[1];
+				Col col = Table.Cols[FROZEN_COL_First];
 				if (col.UserSized)
 				{
 					col.UserSized = false;
-					Table.Colwidth(1);
+					Table.Colwidth(FROZEN_COL_First);
 				}
 
-				col = Table.Cols[2];
+				col = Table.Cols[FROZEN_COL_Second];
 				if (col.UserSized)
 				{
 					col.UserSized = false;
-					Table.Colwidth(2);
+					Table.Colwidth(FROZEN_COL_Second);
 				}
 
 				Table.FrozenCount = YataGrid.FreezeSecond;
