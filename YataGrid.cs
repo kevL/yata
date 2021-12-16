@@ -3817,10 +3817,8 @@ namespace yata
 									}
 									else if (sft) // do block selection ->
 									{
-										if (this != _f._diff1 && this != _f._diff2	// disallow multi-cell select if sync'd
-											&& _cell != getSelectedCell()			// else do nothing if clicked cell is the only selected cell
-											&& (_anchorcell != null || (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
-											&& areSelectedCellsContiguous())		// else do nothing if no cells are selected or selected cells are not in a contiguous block
+										if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
+											&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
 										{
 											ClearSelects(true);
 

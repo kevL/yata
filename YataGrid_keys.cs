@@ -105,9 +105,10 @@ namespace yata
 		/// <remarks>Don't allow multi-cell select if sync'd.</remarks>
 		bool allowContiguous()
 		{
-			return this != _f._diff1 && this != _f._diff2
+			return this != _f._diff1 && this != _f._diff2 // disallow multi-cell select if sync'd
 				&& (    _anchorcell != null
-					|| (_anchorcell = getFirstSelectedCell(FrozenCount)) != null);
+					|| (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
+				&& _anchorcell.x >= FrozenCount;
 		}
 
 		/// <summary>
