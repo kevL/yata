@@ -264,7 +264,8 @@ namespace yata
 				int selr = getSelectedRow();
 				for (int r = 0; r != RowCount; ++r)
 				{
-					if (   (r > selr && r > selr + RangeSelect)
+					if (selr == -1 // <- this is covered by the next condition but do it for faster execution
+						|| (r > selr && r > selr + RangeSelect)
 						|| (r < selr && r < selr + RangeSelect))
 					{
 						for (int c = 0; c != _frozenCount; ++c)
