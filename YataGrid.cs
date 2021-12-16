@@ -251,58 +251,37 @@ namespace yata
 			{
 				_frozenCount = value;
 
-				Col col;
-
-				int w = 0;
 				for (int c = 0; c != _frozenCount; ++c)
-				{
-					(col = Cols[c]).selected = false; // clear any selected frozen cols
-					w += col.width();
-				}
-				FrozenPanel.Width = w;
+					Cols[c].selected = false; // clear any selected frozen cols
 
-				_labelfirst .Visible = (_frozenCount > FreezeId);
-				_labelsecond.Visible = (_frozenCount > FreezeFirst);
+				// TODO: does that need invalidation^ - not really it gets covered by a frozen-label.
 
 				int invalid = INVALID_FROZ;
 
-				Cell sel = getSelectedCell();
-				if (sel != null) // if only one cell is selected shift selection out of frozen cols ->
+				// clear any selected cells in a selected col unless they
+				// are on a row that is selected or subselected ->
+				Cell sel;
+				int selr = getSelectedRow();
+				for (int r = 0; r != RowCount; ++r)
 				{
-					if (sel.x < _frozenCount)
+					if (   (r > selr && r > selr + RangeSelect)
+						|| (r < selr && r < selr + RangeSelect))
 					{
-						sel.selected =
-						_editor.Visible = false;
-
-						if (_frozenCount < ColCount)
+						for (int c = 0; c != _frozenCount; ++c)
 						{
-							(_anchorcell = this[sel.y, _frozenCount]).selected = true;
-
-							EnsureDisplayed(_anchorcell);
-							invalid |= INVALID_GRID;
-						}
-					}
-				}
-				else // clear any selected cells that have become frozen unless the row is selected or subselected ->
-				{
-					int selr = getSelectedRow();
-
-					for (int r = 0; r != RowCount; ++r)
-					{
-						if (   (r > selr && r > selr + RangeSelect)
-							|| (r < selr && r < selr + RangeSelect))
-						{
-							for (int c = 0; c != _frozenCount; ++c)
+							if ((sel = this[r,c]).selected)
 							{
-								if ((sel = this[r,c]).selected)
-								{
-									sel.selected = false;
-									invalid |= INVALID_GRID;
-								}
+								sel.selected = false;
+								invalid |= INVALID_GRID;
 							}
 						}
 					}
 				}
+
+				widthFrozenPanel();
+
+				_labelfirst .Visible = (_frozenCount > FreezeId);
+				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
 				if ((invalid & INVALID_GRID) != 0)
 					_f.EnableCelleditOperations();
@@ -2270,8 +2249,20 @@ namespace yata
 				metricFrozenLabels(this); // re-width the frozen-labels on the colhead
 
 				if (c < FrozenCount)
-					FrozenCount = FrozenCount; // re-width the frozen-panel
+					widthFrozenPanel(); // re-width the frozen-panel
 			}
+		}
+
+		/// <summary>
+		/// Sets the width of the <c><see cref="FrozenPanel"/></c>.
+		/// </summary>
+		void widthFrozenPanel()
+		{
+			int width = 0;
+			for (int c = 0; c != FrozenCount; ++c)
+				width += Cols[c].width();
+
+			FrozenPanel.Width = width;
 		}
 		#endregion Init
 
@@ -3541,7 +3532,9 @@ namespace yata
 
 
 		/// <summary>
-		/// Resets the width of col based on the cells in rows r to r + range.
+		/// Resets the width of a specified col based on the cells in rows
+		/// <paramref name="r"/> to <paramref name="r"/> +
+		/// <paramref name="range"/>.
 		/// </summary>
 		/// <param name="c">col</param>
 		/// <param name="r">first row to consider as changed (default -1 if
