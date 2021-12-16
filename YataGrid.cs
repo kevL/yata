@@ -239,9 +239,9 @@ namespace yata
 		/// The count of cols that currently appear on the
 		/// <c><see cref="FrozenPanel"/></c>.
 		/// <list type="bullet">
-		/// <item><c>1</c> - id col only</item>
-		/// <item><c>2</c> - +1st colfield</item>
-		/// <item><c>3</c> - +2nd colfield</item>
+		/// <item><c><see cref="FreezeId"/></c> - id col only</item>
+		/// <item><c><see cref="FreezeFirst"/></c> - +1st colfield</item>
+		/// <item><c><see cref="FreezeSecond"/></c> - +2nd colfield</item>
 		/// </list>
 		/// </summary>
 		internal int FrozenCount
@@ -287,7 +287,7 @@ namespace yata
 				if ((invalid & INVALID_GRID) != 0)
 					_f.EnableCelleditOperations();
 
-				if (Propanel != null && Propanel.Visible) // update bg-color of PP fields
+				if (Propanel != null && Propanel.Visible) // update bg-color of Propanel fields
 					invalid |= INVALID_PROP;
 
 				Invalidator(invalid);
