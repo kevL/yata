@@ -3792,27 +3792,31 @@ namespace yata
 									{
 										if (!sft)
 										{
-											if (_cell.selected = !_cell.selected)
+											Cell sel = getSelectedCell();
+											if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
 											{
-												if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
+												if (_cell.selected = !_cell.selected)
 												{
-													ClearSelects(true);
-													_cell.selected = true;
+													if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
+													{
+														ClearSelects(true);
+														_cell.selected = true;
+													}
+													EnsureDisplayed(_cell, sel == null);	// <- bypass Propanel.EnsureDisplayed() if
+																							// selectedcell is not the only selected cell
+													_anchorcell = _cell;
 												}
-												EnsureDisplayed(_cell, (getSelectedCell() == null));	// <- bypass Propanel.EnsureDisplayed() if
-																										// selectedcell is not the only selected cell
-												_anchorcell = _cell;
+												else
+													_f.ClearSyncSelects();
+
+												enablecelledit = true;
+
+												int invalid = INVALID_GRID;
+												if (Propanel != null && Propanel.Visible)
+													invalid |= INVALID_PROP;
+	
+												Invalidator(invalid);
 											}
-											else
-												_f.ClearSyncSelects();
-
-											enablecelledit = true;
-
-											int invalid = INVALID_GRID;
-											if (Propanel != null && Propanel.Visible)
-												invalid |= INVALID_PROP;
-
-											Invalidator(invalid);
 										}
 									}
 									else if (sft) // do block selection ->
