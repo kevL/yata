@@ -358,7 +358,7 @@ namespace yata
 					case DockState.BL: return DockState.BR;
 				}
 			}
-			else if ((ModifierKeys & Keys.Shift) == 0)
+			else if ((ModifierKeys & Keys.Shift) == Keys.None)
 			{
 				switch (Dockstate) // clockwise
 				{
@@ -533,7 +533,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
 				if (!_editor.Visible)
 				{
@@ -600,7 +600,7 @@ namespace yata
 							_grid.Select();
 					}
 				}
-				else if ((ModifierKeys & Keys.Shift) == 0) // _editor.Visible
+				else if ((ModifierKeys & Keys.Shift) == Keys.None) // _editor.Visible
 				{
 					switch (e.Button)
 					{
@@ -699,26 +699,24 @@ namespace yata
 			}
 
 			// draw val-texts ->
-			int r;
-			if (sel != null)
-				r = sel.y;
-			else
-				r = _grid.getSelectedRow();
-
-			if (r != -1)
+			if (_grid.RangeSelect == 0)
 			{
-				rect.X    += _widthVars;
-				rect.Width = _widthVals;
-
-				for (c = 0; c != _grid.ColCount; ++c)
+				int r = _grid.getSelectedRowOrCells(true);
+				if (r != -1)
 				{
-					rect.Y = _heightr * c - offset;
-					TextRenderer.DrawText(graphics,
-										  _grid[r,c].text,
-										  Font,
-										  rect,
-										  Colors.Text,
-										  YataGraphics.flags);
+					rect.X    += _widthVars;
+					rect.Width = _widthVals;
+
+					for (c = 0; c != _grid.ColCount; ++c)
+					{
+						rect.Y = _heightr * c - offset;
+						TextRenderer.DrawText(graphics,
+											  _grid[r,c].text,
+											  Font,
+											  rect,
+											  Colors.Text,
+											  YataGraphics.flags);
+					}
 				}
 			}
 		}

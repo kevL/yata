@@ -761,7 +761,7 @@ namespace yata
 		/// firing twice).</remarks>
 		internal void Scroll(MouseEventArgs e)
 		{
-			if ((ModifierKeys & Keys.Alt) == 0)
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				if (Propanel != null && Propanel._scroll.Visible
 					&& e.X > Propanel.Left && e.X < Propanel.Left + Propanel.Width)
@@ -770,10 +770,10 @@ namespace yata
 				}
 				else if (!_editor.Visible)
 				{
-					if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) == 0))
+					if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) == Keys.None))
 					{
 						int h;
-						if ((ModifierKeys & Keys.Shift) != 0) // shift grid vertically 1 visible-height per delta
+						if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid vertically 1 visible-height per delta
 						{
 							h = Height - HeightColhead - (_visHori ? _scrollHori.Height : 0);
 						}
@@ -798,7 +798,7 @@ namespace yata
 					else if (_visHori)
 					{
 						int w;
-						if ((ModifierKeys & Keys.Shift) != 0) // shift grid horizontally 1 visible-width per delta
+						if ((ModifierKeys & Keys.Shift) == Keys.Shift) // shift grid horizontally 1 visible-width per delta
 						{
 							w = Width - getLeft() - (_visVert ? _scrollVert.Width : 0);
 						}
@@ -3749,7 +3749,7 @@ namespace yata
 		/// or left panels.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			if ((ModifierKeys & Keys.Alt) == 0)
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				_double = false;
 
@@ -3782,8 +3782,8 @@ namespace yata
 				{
 					bool enablecelledit = false;
 
-					bool ctr = (ModifierKeys & Keys.Control) != 0,
-						 sft = (ModifierKeys & Keys.Shift)   != 0;
+					bool ctr = (ModifierKeys & Keys.Control) == Keys.Control,
+						 sft = (ModifierKeys & Keys.Shift)   == Keys.Shift;
 
 					switch (e.Button)
 					{
@@ -3800,8 +3800,8 @@ namespace yata
 
 											ApplyCellEdit();
 										}
-										else					// NOTE: There's a clickable fringe around the editor so
-											_editor.Focus();	//       just refocus the editor if the fringe is clicked.
+										else					// there's a clickable fringe around the editor so
+											_editor.Focus();	// just refocus the editor if the fringe is clicked
 									}
 									else
 										Select();
@@ -4605,7 +4605,7 @@ namespace yata
 		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_RowheadPanel(object sender, MouseEventArgs e)
 		{
-			if ((ModifierKeys & Keys.Alt) == 0)
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				Select();
 
@@ -4632,7 +4632,7 @@ namespace yata
 							// extraneous cells (instead of deselecting the clicked row)
 							bool celldeselected = false;
 
-							if ((ModifierKeys & Keys.Control) == 0) // clear all other row's cells ->
+							if ((ModifierKeys & Keys.Control) == Keys.None) // clear all other row's cells ->
 							{
 								Cell cell;
 								for (int r = 0; r != RowCount; ++r)
@@ -4664,7 +4664,7 @@ namespace yata
 
 							int selr = getSelectedRow();
 
-							if ((ModifierKeys & Keys.Shift) == 0) // select only the clicked row ->
+							if ((ModifierKeys & Keys.Shift) == Keys.None) // select only the clicked row ->
 							{
 								if (selr != -1 && selr != click_r) // clear any other selected row ->
 									Rows[selr].selected = false;
@@ -4814,12 +4814,17 @@ namespace yata
 		/// or a row-id that has <c><see cref="Cell">Cells</see></c> selected
 		/// iff only that <c>Row</c> has <c>Cells</c> selected.
 		/// </summary>
+		/// <param name="only"><c>true</c> if a <c>Row</c> is selected and you
+		/// want to get that row-id only if it's the only <c>Row</c> with
+		/// selected <c>Cells</c> - otherwise a selected <c>Row's</c> id shall
+		/// be returned even though there can be <c>Cells</c> that are selected
+		/// on another <c>Row</c></param>
 		/// <returns>the currently selected row-id or the row-id that has
 		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is applicable</returns>
-		internal int getSelectedRowOrCells()
+		internal int getSelectedRowOrCells(bool only = false)
 		{
 			int selr = getSelectedRow();
-			if (selr == -1)
+			if (selr == -1 || only)
 			{
 				Cell sel = getFirstSelectedCell();
 				if (sel != null)
@@ -4845,7 +4850,7 @@ namespace yata
 		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
-			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == 0)
+			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				Select();
 
@@ -4871,7 +4876,7 @@ namespace yata
 							// extraneous cells (instead of deselecting the clicked col)
 							bool celldeselected = false;
 
-							if ((ModifierKeys & Keys.Control) == 0) // clear all other col's cells ->
+							if ((ModifierKeys & Keys.Control) == Keys.None) // clear all other col's cells ->
 							{
 								for (int r = 0; r != RowCount; ++r)
 								for (int c = 0; c != ColCount; ++c)
@@ -4906,7 +4911,7 @@ namespace yata
 
 							int selc = getSelectedCol();
 
-							if ((ModifierKeys & Keys.Shift) == 0)
+							if ((ModifierKeys & Keys.Shift) == Keys.None)
 							{
 								if (selc != -1 && selc != click_c) // clear any other selected col ->
 									Cols[selc].selected = false;

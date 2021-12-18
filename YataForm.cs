@@ -2193,7 +2193,7 @@ namespace yata
 		/// call.</remarks>
 		void Search()
 		{
-			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == 0)
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
 				if (Table._editor.Visible)
 				{
@@ -2219,7 +2219,7 @@ namespace yata
 
 					int r,c;
 
-					if ((ModifierKeys & Keys.Shift) == 0) // forward search ->
+					if ((ModifierKeys & Keys.Shift) == Keys.None) // forward search ->
 					{
 						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
@@ -2418,7 +2418,7 @@ namespace yata
 		/// </list></remarks>
 		void editclick_GotoLoadchanged(object sender, EventArgs e)
 		{
-			if ((ModifierKeys & Keys.Alt) == 0 && Table.anyLoadchanged())
+			if ((ModifierKeys & Keys.Alt) == Keys.None && Table.anyLoadchanged())
 			{
 				if (Table._editor.Visible)
 				{
@@ -2437,7 +2437,7 @@ namespace yata
 
 				bool start = true;
 
-				if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
+				if ((ModifierKeys & Keys.Shift) == Keys.None) // forward goto ->
 				{
 					if (sel != null) { c = sel.x; selr = sel.y; }
 					else
@@ -5772,7 +5772,7 @@ namespace yata
 		/// is depressed.</remarks>
 		internal void GotoDiffCell()
 		{
-			if ((ModifierKeys & Keys.Alt) == 0)
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				if (WindowState == FormWindowState.Minimized)
 					WindowState  = FormWindowState.Normal;
@@ -5782,7 +5782,7 @@ namespace yata
 					TopMost = false;
 				}
 
-				bool bypassFocus = (ModifierKeys & Keys.Control) != 0;
+				bool bypassFocus = (ModifierKeys & Keys.Control) == Keys.Control;
 				if (bypassFocus) _fdiffer.Activate();
 
 
@@ -5816,7 +5816,7 @@ namespace yata
 
 					bool start = true;
 
-					if ((ModifierKeys & Keys.Shift) == 0) // forward goto ->
+					if ((ModifierKeys & Keys.Shift) == Keys.None) // forward goto ->
 					{
 						if (sel != null) { c = sel.x; rStart = sel.y; }
 						else
