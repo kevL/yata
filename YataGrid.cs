@@ -251,6 +251,12 @@ namespace yata
 			{
 				_frozenCount = value;
 
+				_labelfirst .Visible = (_frozenCount > FreezeId);
+				_labelsecond.Visible = (_frozenCount > FreezeFirst);
+
+				widthFrozenPanel();
+
+
 				for (int c = 0; c != _frozenCount; ++c)
 					Cols[c].selected = false; // clear any selected frozen cols
 
@@ -260,29 +266,45 @@ namespace yata
 
 				// clear any selected cells in a selected col unless they
 				// are on a row that is selected or subselected ->
-				Cell sel;
-				int selr = getSelectedRow();
-				for (int r = 0; r != RowCount; ++r)
+
+				Cell sel = getSelectedCell();
+//				if (sel != null) // if only one cell is selected shift selection out of frozen cols ->
+//				{
+//					if (sel.x < _frozenCount)
+//					{
+//						sel.selected =
+//						_editor.Visible = false;
+//
+//						if (_frozenCount < ColCount)
+//						{
+//							(_anchorcell = this[sel.y, _frozenCount]).selected = true;
+//
+//							EnsureDisplayed(_anchorcell);
+//							invalid |= INVALID_GRID;
+//						}
+//					}
+//				}
+//				else // clear any selected cells that have become frozen unless the row is selected or subselected ->
+				if (sel == null) // allow a single selected cell to stay selected
 				{
-					if (selr == -1 // <- this is covered by the next condition but do it for faster execution
-						|| (r > selr && r > selr + RangeSelect)
-						|| (r < selr && r < selr + RangeSelect))
+					int selr = getSelectedRow();
+					for (int r = 0; r != RowCount; ++r)
 					{
-						for (int c = 0; c != _frozenCount; ++c)
+						if (selr == -1 // <- this is covered by the next condition but do it for faster execution
+							|| (r > selr && r > selr + RangeSelect)
+							|| (r < selr && r < selr + RangeSelect))
 						{
-							if ((sel = this[r,c]).selected)
+							for (int c = 0; c != _frozenCount; ++c)
 							{
-								sel.selected = false;
-								invalid |= INVALID_GRID;
+								if ((sel = this[r,c]).selected)
+								{
+									sel.selected = false;
+									invalid |= INVALID_GRID;
+								}
 							}
 						}
 					}
 				}
-
-				widthFrozenPanel();
-
-				_labelfirst .Visible = (_frozenCount > FreezeId);
-				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
 				if ((invalid & INVALID_GRID) != 0)
 					_f.EnableCelleditOperations();
