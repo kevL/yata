@@ -558,15 +558,13 @@ namespace yata
 								for (int c = 0; c != _grid.ColCount; ++c)
 									_grid[_r,c].selected = false;
 
-								(_grid._anchorcell = _grid[_r,_c]).selected = true;
-
-								// TODO: does sync-table need to be cleared etc.
-
-								_grid._f.EnableCelleditOperations();
+								_grid.SelectCell(_grid[_r,_c]);
 							}
+							else
+								_grid.EnsureDisplayedRow(_r);
 
-							_grid.EnsureDisplayed();
 							EnsureDisplayed(_c);
+
 
 							if (!_grid.Readonly && e.X > _widthVars)
 							{
