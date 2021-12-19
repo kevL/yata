@@ -3141,7 +3141,7 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item><c><see cref="YataForm"/>.Search()</c></item>
-		/// <item><c>YataForm.editclick_GotoLoadchanged()</c></item>
+		/// <item><c>YataForm.editcellsclick_GotoLoadchanged()</c></item>
 		/// <item><c>YataForm.gotodiff()</c></item>
 		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
 		/// </list></remarks>
