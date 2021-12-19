@@ -538,16 +538,11 @@ namespace yata
 				if (!_editor.Visible)
 				{
 					if (e.Button == MouseButtons.Left
+						&& _grid.RangeSelect == 0
 						&& ((ModifierKeys & Keys.Shift) == Keys.None
 							|| _tabOverride != TABFASTEDIT_Bypass))
 					{
-						Cell sel = _grid.getSelectedCell();
-						if (sel != null)
-							_r = sel.y;
-						else
-							_r = _grid.getSelectedRow();
-
-						if (_r != -1)
+						if ((_r = _grid.getSelectedRowOrCells(true)) != -1)
 						{
 							_grid._editor.Visible = false;
 
@@ -558,20 +553,19 @@ namespace yata
 							else
 								_c = _tabOverride;
 
-							if (sel != null)
+							if (_grid.getSelectedRow() == -1)
 							{
-								sel.selected = false;
+								for (int c = 0; c != _grid.ColCount; ++c)
+									_grid[_r,c].selected = false;
 
 								(_grid._anchorcell = _grid[_r,_c]).selected = true;
 
-//								_grid._f.EnableCelleditOperations(); // should be no need to re-deter cell-operations here.
+								// TODO: does sync-table need to be cleared etc.
+
+								_grid._f.EnableCelleditOperations();
 							}
 
-							if (_c >= _grid.FrozenCount)
-								_grid.EnsureDisplayed();
-							else
-								_grid.EnsureDisplayedRow(_r);
-
+							_grid.EnsureDisplayed();
 							EnsureDisplayed(_c);
 
 							if (!_grid.Readonly && e.X > _widthVars)
