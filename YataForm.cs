@@ -5968,7 +5968,7 @@ namespace yata
 			if (table != null)
 			{
 				if (sel.y < table.RowCount && sel.x < table.ColCount)
-					table[sel.y, sel.x].selected = true;
+					(table._anchorcell = table[sel.y, sel.x]).selected = true;
 
 				return true;
 			}

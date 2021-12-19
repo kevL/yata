@@ -3138,14 +3138,18 @@ namespace yata
 		/// <param name="cell">a <c>Cell</c> to select</param>
 		/// <param name="sync"><c>true</c> to sync the select between diffed
 		/// tables; <c>false</c> if sync will be performed by the caller</param>
-		/// <remarks>Called by <c><see cref="YataForm"/>.Search()</c> and
-		/// <c>YataForm.editclick_GotoLoadchanged()</c> and
-		/// <c>YataForm.gotodiff()</c>.</remarks>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item><c><see cref="YataForm"/>.Search()</c></item>
+		/// <item><c>YataForm.editclick_GotoLoadchanged()</c></item>
+		/// <item><c>YataForm.gotodiff()</c></item>
+		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
+		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
 		{
 			if (sync) _f.SyncSelectCell(cell);
 
-			cell.selected = true;
+			(_anchorcell = cell).selected = true;
 			Invalidator(INVALID_GRID
 					  | INVALID_FROZ
 					  | INVALID_ROWS
