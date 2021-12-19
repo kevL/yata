@@ -2599,30 +2599,49 @@ namespace yata
 
 			int invalid = -1;
 
-			for (int r = 0; r != _copytext.GetLength(0) && r + sel.y != Table.RowCount; ++r)
-			for (int c = 0; c != _copytext.GetLength(1) && c + sel.x != Table.ColCount; ++c)
+			if (sel.x >= Table.FrozenCount)
 			{
-				cell = Table[r + sel.y,
-							 c + sel.x];
-
-				cell.selected = true;
-
-				if (cell.x == 0 && Settings._autorder)
-					text = cell.y.ToString(CultureInfo.InvariantCulture);
-				else
-					text = _copytext[r,c];
-
-				if (text != cell.text)
+				for (int r = 0; r != _copytext.GetLength(0) && r + sel.y != Table.RowCount; ++r)
+				for (int c = 0; c != _copytext.GetLength(1) && c + sel.x != Table.ColCount; ++c)
 				{
-					Table.ChangeCellText(cell, text);	// does not do a text-check
+					(cell = Table[r + sel.y,
+								  c + sel.x]).selected = true;
+
+					if (cell.x == 0 && Settings._autorder)
+						text = cell.y.ToString(CultureInfo.InvariantCulture);
+					else
+						text = _copytext[r,c];
+
+					if (text != cell.text)
+					{
+						Table.ChangeCellText(cell, text);	// does not do a text-check
+						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+					}
+					else if (cell.loadchanged)
+					{
+						cell.loadchanged = false;
+
+						if (invalid == -1)
+							invalid = YataGrid.INVALID_GRID;
+					}
+				}
+			}
+			else
+			{
+				if (sel.x == 0 && Settings._autorder)
+					text = sel.y.ToString(CultureInfo.InvariantCulture);
+				else
+					text = _copytext[0,0];
+
+				if (text != sel.text)
+				{
+					Table.ChangeCellText(sel, text);	// does not do a text-check
 					invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 				}
-				else if (cell.loadchanged)
+				else if (sel.loadchanged)
 				{
-					cell.loadchanged = false;
-
-					if (invalid == -1)
-						invalid = YataGrid.INVALID_GRID;
+					sel.loadchanged = false;
+					invalid = YataGrid.INVALID_GRID;
 				}
 			}
 
