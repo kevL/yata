@@ -218,18 +218,18 @@ namespace yata
 						}
 						else if (line.StartsWith("strict=", StringComparison.Ordinal))
 						{
-							_strict = (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
-								   && line == "true");
+							_strict = !String.IsNullOrEmpty(line = line.Substring(7).Trim())
+								   && (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("gradient=", StringComparison.Ordinal))
 						{
-							_gradient = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && line == "true");
+							_gradient = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("context=", StringComparison.Ordinal))
 						{
-							_context = (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
-									&& line == "static");
+							_context = !String.IsNullOrEmpty(line = line.Substring(8).Trim())
+									&& line.ToLower() == "static";
 						}
 						else if (line.StartsWith("recent=", StringComparison.Ordinal))
 						{
@@ -263,26 +263,29 @@ namespace yata
 						}
 						else if (line.StartsWith("maximized=", StringComparison.Ordinal))
 						{
-							_maximized = (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
-									  && line == "true");
+							_maximized = !String.IsNullOrEmpty(line = line.Substring(10).Trim())
+									  && (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("instantgoto=", StringComparison.Ordinal))
 						{
-							_instantgoto = (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
-										&& line == "true");
+							_instantgoto = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
+										&& (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("casesort=", StringComparison.Ordinal))
 						{
-							_casesort = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && line == "true");
+							_casesort = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("alignoutput=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim()))
 							{
-								switch (line)
+								switch (line.ToLower())
 								{
+									case "1":
 									case "true": _alignoutput = AoTrue; break;
+
+									case "2":
 									case "tabs": _alignoutput = AoTabs; break;
 								}
 							}
@@ -298,13 +301,13 @@ namespace yata
 						}
 						else if (line.StartsWith("autorder=", StringComparison.Ordinal))
 						{
-							_autorder = (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && line == "true");
+							_autorder = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+									 && (line == "1" || line.ToLower() == "true");
 						}
 						else if (line.StartsWith("allowdupls=", StringComparison.Ordinal))
 						{
-							_allowdupls = (!String.IsNullOrEmpty(line = line.Substring(11).Trim())
-									   && line == "true");
+							_allowdupls = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
+									   && (line == "1" || line.ToLower() == "true");
 						}
 					}
 				}
