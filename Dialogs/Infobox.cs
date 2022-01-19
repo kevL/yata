@@ -261,12 +261,26 @@ namespace yata
 			{
 				e.SuppressKeyPress = true;
 				ClipboardService.SetText(rt_Copyable.Text);
-
-				if (YataForm.that._fclip != null)
-					YataForm.that._fclip.click_Get(null, EventArgs.Empty);
 			}
 			else
 				base.OnKeyDown(e);
+		}
+
+		/// <summary>
+		/// Updates the <c><see cref="ClipboardEditor"/></c> when
+		/// <c>[Ctrl+c]</c> is released.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnKeyUp(KeyEventArgs e)
+		{
+			if (e.KeyData == (Keys.Control | Keys.C)
+				&& YataForm.that._fclip != null)
+			{
+//				e.SuppressKeyPress = true;
+				YataForm.that._fclip.click_Get(null, EventArgs.Empty);
+			}
+//			else
+//				base.OnKeyUp(e);
 		}
 
 
