@@ -261,6 +261,9 @@ namespace yata
 			{
 				e.SuppressKeyPress = true;
 				ClipboardService.SetText(rt_Copyable.Text);
+
+				if (YataForm.that._fclip != null)
+					YataForm.that._fclip.click_Get(null, EventArgs.Empty);
 			}
 			else
 				base.OnKeyDown(e);
