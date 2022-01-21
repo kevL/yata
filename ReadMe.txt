@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 jan 19
+2022 jan 20
 kevL's
 ver 4.6.6.0
 
@@ -147,17 +147,17 @@ Search options dropdown (substring or wholeword)
 
 
 Clipboard
-- Export copied row(s) to clipboard : F9 (exports the internal copy-list to the
-                                      clipboard)
+- Export copied row(s) to clipboard : F9 (exports the internal row-copy buffer
+                                      to the clipboard)
 - Import clipboard to copied row(s) : F10 (imports any clipboard text to the
-                                      internal copy-list WARNING: No validity
-                                      test is done on the clipboard text;
-                                      importing assumes that the text on your
-                                      clipboard contains valid 2da-row data)
+                                      internal row-copy buffer WARNING: No
+                                      validity test is done on the clipboard
+                                      text; importing assumes that the text on
+                                      your clipboard contains valid 2da-row
+                                      data)
 
-- Open clipboard editor : F11 (accesses the Windows Clipboard for
-                          viewing/editing - only clips in text format are
-                          available)
+- Open clipboard editor : Ctrl+p (accesses the Windows Clipboard for viewing or
+                          editing - only clips in text format are available)
 
 
 2da Ops
