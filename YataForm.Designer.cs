@@ -1044,7 +1044,7 @@ namespace yata
 			// it_OpenClipEditor
 			// 
 			this.it_OpenClipEditor.Name = "it_OpenClipEditor";
-			this.it_OpenClipEditor.ShortcutKeys = System.Windows.Forms.Keys.F11;
+			this.it_OpenClipEditor.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.it_OpenClipEditor.Size = new System.Drawing.Size(293, 22);
 			this.it_OpenClipEditor.Text = "&Open clipboard editor";
 			this.it_OpenClipEditor.Click += new System.EventHandler(this.clipclick_ViewClipboard);

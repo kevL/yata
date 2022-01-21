@@ -80,13 +80,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Closes this <c>ClipboardEditor</c> on <c>[F11]</c>.
+		/// Closes this <c>ClipboardEditor</c> on <c>[Ctrl+p]</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (e.KeyData == Keys.F11)
+			if (e.KeyData == (Keys.Control | Keys.P))
 			{
 				e.SuppressKeyPress = true;
 				Close();
