@@ -2773,11 +2773,11 @@ namespace yata
 		/// <summary>
 		/// Opens a text-input dialog for pasting text to all selected cells.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Apply"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item><c><see cref="it_Apply"/></c> - Menu|Cells|Apply text ...</item>
+		/// <item>Cells|Apply text ...</item>
 		/// </list></remarks>
 		void editcellsclick_Apply(object sender, EventArgs e)
 		{
@@ -2975,6 +2975,9 @@ namespace yata
 			it_Lower       .Enabled = // TODO: if any selected cell is not lowercase or loadchanged
 			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
 			it_Apply       .Enabled = !Table.Readonly && anyselected;
+
+			// NOTE: 'it_GotoLoadchanged.Enabled' shall be detered independently
+			// by EnableGotoLoadchanged()
 		}
 		#endregion Methods (editcells)
 
@@ -3287,7 +3290,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c>it_MenuCol</c></param>
 		/// <param name="e"></param>
-		void editcol_dropdownopening(object sender, EventArgs e)
+		void col_dropdownopening(object sender, EventArgs e)
 		{
 			dropdownopening(sender, e);
 

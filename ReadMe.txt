@@ -98,7 +98,7 @@ Cells
 - Lowercase : converts selected cell(s) to lowercase
 - Uppercase : converts selected cell(s) to uppercase
 
-- Apply text ... : opens a dialog that replaces selected cell(s)
+- Apply text ... : F11 (opens a dialog that replaces selected cell(s))
 
 - Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
                      Load)

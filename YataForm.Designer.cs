@@ -803,6 +803,7 @@ namespace yata
 			// 
 			this.it_Apply.Enabled = false;
 			this.it_Apply.Name = "it_Apply";
+			this.it_Apply.ShortcutKeys = System.Windows.Forms.Keys.F11;
 			this.it_Apply.Size = new System.Drawing.Size(222, 22);
 			this.it_Apply.Text = "&Apply text ...";
 			this.it_Apply.Click += new System.EventHandler(this.editcellsclick_Apply);
@@ -918,7 +919,7 @@ namespace yata
 			this.it_MenuCol.Name = "it_MenuCol";
 			this.it_MenuCol.Size = new System.Drawing.Size(38, 20);
 			this.it_MenuCol.Text = "C&ol";
-			this.it_MenuCol.DropDownOpening += new System.EventHandler(this.editcol_dropdownopening);
+			this.it_MenuCol.DropDownOpening += new System.EventHandler(this.col_dropdownopening);
 			// 
 			// it_DeselectCol
 			// 
