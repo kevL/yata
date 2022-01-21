@@ -66,6 +66,7 @@ namespace yata
 			this.la_Head.Location = new System.Drawing.Point(0, 22);
 			this.la_Head.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Head.Name = "la_Head";
+			this.la_Head.Padding = new System.Windows.Forms.Padding(3, 0, 2, 0);
 			this.la_Head.Size = new System.Drawing.Size(292, 35);
 			this.la_Head.TabIndex = 1;
 			this.la_Head.Text = "la_Head";
@@ -81,6 +82,7 @@ namespace yata
 			this.Controls.Add(this.bu_Cancel);
 			this.Controls.Add(this.tb_Input);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "InputCelltextDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

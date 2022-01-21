@@ -12,7 +12,7 @@ namespace yata
 		: YataDialog
 	{
 		#region Fields (static)
-		const string HEAD = "Apply sets the copy cell text and applies it to selected cells.";
+		const string HEAD = "Apply sets the copy-cell buffer and applies it to all selected cells.";
 
 		const int w_Min = 300;
 		#endregion Fields (static)
@@ -46,6 +46,23 @@ namespace yata
 			tb_Input.Select();
 		}
 		#endregion cTor
+
+
+		#region Handlers (override)
+		/// <summary>
+		/// Closes this <c>InputCelltextDialog</c> on <c>[F11]</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyData == Keys.F11)
+			{
+				e.SuppressKeyPress = true;
+				Close();
+			}
+		}
+		#endregion Handlers (override)
 
 
 		#region Handlers
