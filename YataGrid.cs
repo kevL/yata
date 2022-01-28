@@ -2303,6 +2303,8 @@ namespace yata
 			{
 				case Keys.Up:
 				case Keys.Down:
+				case Keys.PageUp:
+				case Keys.PageDown:
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
@@ -3372,7 +3374,7 @@ namespace yata
 					}
 					else if (!Readonly
 						&& (_editcell = getSelectedCell()) != null
-						&& _editcell.x >= FrozenCount)
+						&&  _editcell.x >= FrozenCount)
 					{
 						Celledit();
 					}
@@ -3425,6 +3427,36 @@ namespace yata
 							startTabedit(0,-1);
 					}
 					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
+
+				case Keys.PageDown:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						if (_editcell.y != RowCount - 1)
+						{
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							if (_editcell.y + shift > RowCount - 1) shift = RowCount - 1 - _editcell.y;
+
+							startTabedit(0, shift);
+						}
+					}
+					return true;
+
+				case Keys.PageUp:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit();
+
+						if (_editcell.y != 0)
+						{
+							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							if (_editcell.y - shift < 0) shift = _editcell.y;
+
+							startTabedit(0, -shift);
+						}
+					}
+					return true;
 			}
 			return base.ProcessDialogKey(keyData);
 		}
