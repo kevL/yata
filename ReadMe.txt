@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 jan 26
+2022 jan 28
 kevL's
-ver 4.6.6.0
+ver 4.6.7.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -350,6 +350,8 @@ Tab                  - accept text and edit the cell to the right
 Shift+Tab            - accept text and edit the cell to the left
 Ctrl+Tab or Down     - accept text and edit the cell below
 Ctrl+Shift+Tab or Up - accept text and edit the cell above
+PageDown             - accept text and edit the cell a page below
+PageUp               - accept text and edit the cell a page above
 
 Note that [Tab]/[Down] and [Shift+Tab]/[Up] also work when editing a cell in the
 PropertyPanel.
