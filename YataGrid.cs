@@ -3438,7 +3438,7 @@ namespace yata
 							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
 							if (_editcell.y + shift > RowCount - 1) shift = RowCount - 1 - _editcell.y;
 
-							startTabedit(0, shift);
+							startTabedit(0, +shift);
 						}
 					}
 					return true;
