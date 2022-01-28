@@ -136,15 +136,16 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			_grid._editor.Visible = false;
-			int invalid = YataGrid.INVALID_GRID;
-
-			if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
+			if (_grid._editor.Visible)
+			{
+				_grid._editor.Visible = false;
+				_grid.Invalidator(YataGrid.INVALID_GRID);
+			}
+			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
 				_grid.Propanel._editor.Visible = false;
-				invalid |= YataGrid.INVALID_PROP;
+				_grid.Invalidator(YataGrid.INVALID_PROP);
 			}
-			_grid.Invalidator(invalid);
 
 			Grab = (Cursor == Cursors.VSplit);
 		}
