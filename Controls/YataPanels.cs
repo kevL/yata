@@ -15,7 +15,9 @@ namespace yata
 		#region Fields
 		readonly YataGrid _grid;
 
-		internal bool Grab;
+		internal bool Grab
+		{ get; private set; }
+
 		int _grabCol;
 		int _grabStart;
 		#endregion Fields
@@ -110,7 +112,7 @@ namespace yata
 		{
 			if (!Grab)
 			{
-				if (e.X > _widthFrozenCached)
+				if (ModifierKeys == Keys.None && e.X > _widthFrozenCached)
 				{
 					int x = YataGrid.WidthRowhead - _grid.OffsetHori;
 					for (int c = 0; c != _grid.ColCount; ++c)
@@ -147,7 +149,8 @@ namespace yata
 				_grid.Invalidator(YataGrid.INVALID_PROP);
 			}
 
-			Grab = (Cursor == Cursors.VSplit);
+			Grab = ModifierKeys == Keys.None
+				&& Cursor == Cursors.VSplit;
 		}
 
 		/// <summary>
@@ -161,33 +164,36 @@ namespace yata
 				Grab = false;
 				Cursor = Cursors.Default;
 
-				Col col;
-
-				switch (e.Button)
+				if (ModifierKeys == Keys.None)
 				{
-					case MouseButtons.Left:
-						if (e.X != _grabStart)
-						{
-							col = _grid.Cols[_grabCol];
-							col.UserSized = true;
+					Col col;
 
-							int w = col.width() + e.X - _grabStart;
-							if (w < YataGrid._wId) w = YataGrid._wId;
+					switch (e.Button)
+					{
+						case MouseButtons.Left:
+							if (e.X != _grabStart)
+							{
+								col = _grid.Cols[_grabCol];
+								col.UserSized = true;
 
-							col.width(w, true);
-							_grid.InitScroll();
-							_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
-						}
-						break;
+								int w = col.width() + e.X - _grabStart;
+								if (w < YataGrid._wId) w = YataGrid._wId;
 
-					case MouseButtons.Right:
-						if ((col = _grid.Cols[_grabCol]).UserSized)
-						{
-							col.UserSized = false;
-							_grid.Colwidth(_grabCol);
-							_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
-						}
-						break;
+								col.width(w, true);
+								_grid.InitScroll();
+								_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
+							}
+							break;
+
+						case MouseButtons.Right:
+							if ((col = _grid.Cols[_grabCol]).UserSized)
+							{
+								col.UserSized = false;
+								_grid.Colwidth(_grabCol);
+								_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
+							}
+							break;
+					}
 				}
 			}
 			_grid.Select();
