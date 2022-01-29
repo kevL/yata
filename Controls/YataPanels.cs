@@ -112,22 +112,19 @@ namespace yata
 		{
 			if (!Grab)
 			{
-				if (ModifierKeys == Keys.None && e.X > _widthFrozenCached)
+				if (ModifierKeys == Keys.None)
 				{
-					int x = YataGrid.WidthRowhead - _grid.OffsetHori;
-					for (int c = 0; c != _grid.ColCount; ++c)
+					int c = GetColUnderWidther(e.X);
+					if (c != -1)
 					{
-						x += _grid.Cols[c].width();
-						if (e.X > x - 5 && e.X < x)
-						{
-							Cursor = Cursors.VSplit;
-							_grabCol = c;
-							_grabStart = e.X;
+						Cursor = Cursors.VSplit;
+						_grabStart = e.X;
+						_grabCol = c;
 
-							return;
-						}
+						return;
 					}
 				}
+
 				Cursor = Cursors.Default;
 			}
 		}
@@ -199,7 +196,32 @@ namespace yata
 			_grid.Select();
 		}
 		#endregion Handlers (override)
+
+
+		#region Methods
+		/// <summary>
+		/// Gets the col-id iff the cursor is on the col-label widther.
+		/// </summary>
+		/// <param name="cur">x-pos of cursor on this <c>YataPanelCols</c></param>
+		/// <returns>col-id under the cursor or <c>-1</c></returns>
+		internal int GetColUnderWidther(int cur)
+		{
+			if (cur > _widthFrozenCached)
+			{
+				int x = YataGrid.WidthRowhead - _grid.OffsetHori;
+				for (int c = 0; c != _grid.ColCount; ++c)
+				{
+					x += _grid.Cols[c].width();
+
+					if (cur > x - 5 && cur < x)
+						return c;
+				}
+			}
+			return -1;
+		}
+		#endregion Methods
 	}
+
 
 
 	/// <summary>
@@ -257,6 +279,7 @@ namespace yata
 		}
 		#endregion Handlers (override)
 	}
+
 
 
 	/// <summary>
