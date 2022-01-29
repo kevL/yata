@@ -5054,7 +5054,8 @@ namespace yata
 					case MouseButtons.Right:
 						if (ModifierKeys == Keys.Shift) // sort by col ->
 						{
-							if ((click_c = getClickedCol(e.X)) != -1)
+							if ((click_c = getClickedCol(e.X)) != -1
+								&& _panelCols.GetColUnderWidther(e.X) == -1)
 							{
 								ColSort(click_c);
 								EnsureDisplayedCol(click_c);
