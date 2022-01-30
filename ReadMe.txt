@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 jan 28
+2022 jan 30
 kevL's
 ver 4.6.7.0
 
@@ -93,7 +93,7 @@ Cells
 - Paste  : Ctrl+v (pastes copied cell(s) if only 1 cell is selected; that cell
            will be at the top left if pasting a block of cells; pasted cells
            that don't fit in the table get discarded)
-- Delete : Delete (deletes selected cell(s))
+- Delete : Delete (clears selected cell(s))
 
 - Lowercase : converts selected cell(s) to lowercase
 - Uppercase : converts selected cell(s) to uppercase
@@ -374,7 +374,7 @@ LMB+Ctrl+Shift - you get the idea ...
 
 - click on the colheads -
 LMB       - click-drag col-boundary to re-width a col (The text of a colhead
-            will appear dark green if its col has been user-sized.)
+            will appear grayed if its col has been user-sized.)
 RMB       - click a col-boundary to auto-width a col (Note that frozen cols
             can't be re-sized.)
 RMB+Shift - sorts the table by the col either ascending or descending (Note that
@@ -397,8 +397,9 @@ doubleLMB - selects a cell and starts the cell-editor (If a different cell is
             already in edit, changes to that cell are accepted.)
 LMB+Ctrl  - adds or subtracts a cell from the currently selected cells
 LMB+Shift - selects a block of contiguous cells if there is only one currently
-            selected cell (A contiguous block is required for multicell cut and
-            copy operations.)
+            selected cell, or resizes a currently selected contiguous block of
+            cells (A contiguous block is required for multicell cut and copy
+            operations.)
 RMB       - selects a cell and opens the cell context (Note that if editing a
             cell then a right-click on a different part of the table either
             inside or outside the grid cancels the edit.)
@@ -518,21 +519,21 @@ recent=      (integer) a count of recently opened file-paths to store. If left
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
-             (1) warn about the existance of tab-characters if Alignoutput is
+             (1) warn about the existance of tab-characters if "alignoutput=" is
                  not set to "tabs". Note that tabs are generally safe for NwN2
                  but perhaps not for NwN ... there is at least one app for NwN2
                  that fails if tabs delimit the colhead labels (the Players
                  Handbook recompiler tool)
              (2) warn about suspicious (non-ASCII) characters in colhead labels.
-                 When labeling a colhead Strict "true" allows only alpha-numeric
+                 When labeling a colhead "strict=true" allows only alpha-numeric
                  characters and the underscore character, otherwise any
-                 printable ASCII character except the double-quote are allowed.
+                 printable ASCII character except the double-quote is allowed.
                  Note that Yata supports 2da-files with Unicode in their colhead
                  labels - but if you want to edit such labels use a decent
                  texteditor (or try a different 2da-editor)
              (3) warn about a garbage Default value on the 2nd line of a
                  2da-file. This will be autocorrected if the file is saved
-                 regardless of the Strict setting
+                 regardless of the "strict=" setting
              (4) warn about a tab-character in the version header instead of a
                  space-character. This will be autocorrected if the file is
                  saved regardless of the Strict setting
@@ -543,7 +544,7 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  whitespace from the ends of row-lines); setting the Changed
                  flag like this is a way to tell purists that a file is not
                  quite at peak efficiency
-             (6) and Strict also suppresses the tooltip that appears when a col
+             (6) and "true" also suppresses the tooltip that appears when a col
                  is sorted by anything other than ID-ascending ("warn : Table is
                  not sorted by ascending ID") - ie, persons who use Strict don't
                  get a tooltip although the head of the id-col still turns to a
