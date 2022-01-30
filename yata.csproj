@@ -61,6 +61,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\MenustripOneclick.cs" />
     <Compile Include="Controls\Propanel.cs" />
     <Compile Include="Controls\PropanelButton.cs" />
     <Compile Include="Controls\YataEditbox.cs" />

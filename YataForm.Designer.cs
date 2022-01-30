@@ -17,7 +17,7 @@ namespace yata
 		/// </summary>
 		IContainer components;
 
-		MenuStrip menubar;
+		MenustripOneclick menubar;
 
 		ToolStripMenuItem it_MenuFile;
 		ToolStripMenuItem it_Create;
@@ -235,7 +235,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.menubar = new System.Windows.Forms.MenuStrip();
+			this.menubar = new yata.MenustripOneclick();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_38 = new System.Windows.Forms.ToolStripSeparator();
