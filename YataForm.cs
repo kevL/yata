@@ -263,7 +263,7 @@ namespace yata
 
 			InitializeComponent();
 
-			Tabs.ContextMenuStrip = ContextTab;
+			Tabs.MouseClick += click_Tabs;
 
 //			DrawRegulator.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -5379,6 +5379,26 @@ namespace yata
 
 
 		#region Handlers (tab)
+		/// <summary>
+		/// Handles the <c>MouseClick</c> event on the <c>TabControl</c>
+		/// <c><see cref="Tabs"/></c>. Shows <c><see cref="ContextTab"/> when
+		/// a tab is rightclicked.</c>
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// <remarks>Do not use the <c>TabControl's</c> <c>ContextMenuStrip</c>
+		/// since a rightclick on any tabpage's <c><see cref="YataGrid"/></c>
+		/// would cause
+		/// <c><see cref="ContextTab_opening()">ContextTab_opening()</see></c>
+		/// to fire. Although the context does not show rightclicks are used for
+		/// other things by <c>YataGrid</c>.</remarks>
+		void click_Tabs(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+				ContextTab.Show(Tabs, e.Location);
+		}
+
+
 		/// <summary>
 		/// Sets the selected tab when a right-click on a tab is about to open
 		/// the context.
