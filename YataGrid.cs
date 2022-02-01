@@ -446,7 +446,7 @@ namespace yata
 		/// <summary>
 		/// Scrolls the table vertically.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_scrollVert"></see></c></param>
 		/// <param name="e"></param>
 		void OnScrollValueChanged_vert(object sender, EventArgs e)
 		{
@@ -455,10 +455,7 @@ namespace yata
 			if (_table == null) _table = this;
 
 			if (_table == YataForm.Table)
-			{
-				_table._editor.Visible = false;
 				_table.Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
-			}
 
 			_table.OffsetVert = _table._scrollVert.Value;
 
@@ -483,7 +480,7 @@ namespace yata
 		/// <summary>
 		/// Scrolls the table horizontally.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_scrollHori"></see></c></param>
 		/// <param name="e"></param>
 		void OnScrollValueChanged_hori(object sender, EventArgs e)
 		{
@@ -492,10 +489,7 @@ namespace yata
 			if (_table == null) _table = this;
 
 			if (_table == YataForm.Table)
-			{
-				_table._editor.Visible = false;
 				_table.Invalidator(INVALID_GRID | INVALID_COLS);
-			}
 
 			_table.OffsetHori = _table._scrollHori.Value;
 
@@ -592,8 +586,8 @@ namespace yata
 		/// </summary>
 		void SyncDiffedGrids()
 		{
-			VScrollBar vert = null;
-			HScrollBar hori = null;
+			VScrollBar vert;
+			HScrollBar hori;
 
 			YataGrid table;
 			if (_f._diff1 == _table)
@@ -602,7 +596,7 @@ namespace yata
 				vert = table._scrollVert;
 				hori = table._scrollHori;
 			}
-			else //if (_f._diff2 == _table)
+			else // _f._diff2 == _table
 			{
 				table = _f._diff1;
 				vert = table._scrollVert;
@@ -683,17 +677,17 @@ namespace yata
 				}
 
 
-				// Do not use .LargeChange in what follows. Use HeightRow instead.
+				// Do not use LargeChange in what follows. Use HeightRow instead.
 				// If a table does not have a scrollbar and user resizes it such
-				// that it needs one .LargeChange is 1 and things go bork.
-				// .LargeChange shall be set to HeightRow period.
+				// that it needs one LargeChange is 1 and things go bork.
+				// LargeChange shall be set to HeightRow period.
 				//
-				// but think .LargeChange ...
+				// but think LargeChange ...
 				//
 				// - not that that helps since gettin' .net scrollbars to behave
 				// properly for anything nontrivial is so fuckin' frustratin'.
 				//
-				// Don't even try setting .LargeChange to HeightRow in this
+				// Don't even try setting LargeChange to HeightRow in this
 				// funct since it won't stick if the scrollbar is not visible.
 
 				if (_visVert)
