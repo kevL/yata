@@ -722,7 +722,6 @@ namespace yata
 			this.it_MenuCells.Name = "it_MenuCells";
 			this.it_MenuCells.Size = new System.Drawing.Size(47, 20);
 			this.it_MenuCells.Text = "&Cells";
-			this.it_MenuCells.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_DeselectCell
 			// 
@@ -837,7 +836,6 @@ namespace yata
 			this.it_MenuRows.Name = "it_MenuRows";
 			this.it_MenuRows.Size = new System.Drawing.Size(49, 20);
 			this.it_MenuRows.Text = "&Rows";
-			this.it_MenuRows.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_DeselectRows
 			// 
@@ -1018,7 +1016,6 @@ namespace yata
 			this.it_MenuClipboard.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuClipboard.Size = new System.Drawing.Size(70, 20);
 			this.it_MenuClipboard.Text = "Clip&board";
-			this.it_MenuClipboard.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_ClipExport
 			// 
@@ -1199,7 +1196,6 @@ namespace yata
 			this.it_MenuTalkTable.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuTalkTable.Size = new System.Drawing.Size(70, 20);
 			this.it_MenuTalkTable.Text = "&TalkTable";
-			this.it_MenuTalkTable.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_PathTalkD
 			// 
@@ -1246,7 +1242,6 @@ namespace yata
 			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);
 			this.it_MenuPaths.Text = "&Paths";
 			this.it_MenuPaths.Visible = false;
-			this.it_MenuPaths.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_PathAll
 			// 
@@ -1432,7 +1427,6 @@ namespace yata
 			this.it_MenuHelp.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuHelp.Size = new System.Drawing.Size(40, 20);
 			this.it_MenuHelp.Text = "&Help";
-			this.it_MenuHelp.DropDownOpening += new System.EventHandler(this.dropdownopening);
 			// 
 			// it_ReadMe
 			// 

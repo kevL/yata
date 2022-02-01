@@ -1409,30 +1409,6 @@ namespace yata
 		#endregion Methods (tabs)
 
 
-		#region Handlers
-		/// <summary>
-		/// Hides the <c><see cref="YataGrid._editor">YataGrid._editor</see></c>.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		/// <remarks>This is a generic handler that should be invoked when
-		/// opening a menu on the menubar.
-		/// 
-		/// 
-		/// The <c><see cref="YataGrid.Propanel">YataGrid.Propanel</see></c>
-		/// does not need to be hidden here since it gets hidden when the
-		/// <c>Propanel</c> loses focus.</remarks>
-		void dropdownopening(object sender, EventArgs e)
-		{
-			if (Table != null && Table._editor.Visible)
-			{
-				Table._editor.Visible = false;
-				Table.Invalidator(YataGrid.INVALID_GRID);
-			}
-		}
-		#endregion Handlers
-
-
 		#region Handlers (file)
 		/// <summary>
 		/// Handles opening the File menu along with the preset-dirs and
@@ -1442,8 +1418,6 @@ namespace yata
 		/// <param name="e"></param>
 		void file_dropdownopening(object sender, EventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			it_Reload.Enabled = Table != null && File.Exists(Table.Fullpath);
 
 
@@ -2039,8 +2013,6 @@ namespace yata
 		/// <param name="e"></param>
 		void edit_dropdownopening(object sender, EventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			it_DeselectAll.Enabled = Table != null && Table.anySelected();
 		}
 
@@ -3292,8 +3264,6 @@ namespace yata
 		/// <param name="e"></param>
 		void col_dropdownopening(object sender, EventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			if (Table != null)
 			{
 				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
@@ -3679,8 +3649,6 @@ namespace yata
 		/// <param name="e"></param>
 		void ops_dropdownopening(object sender, EventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			it_ClearUr.Enabled =  Table != null
 							  && (Table._ur.CanUndo || Table._ur.CanRedo);
 		}
@@ -4169,8 +4137,6 @@ namespace yata
 		/// <param name="e"></param>
 		void font_dropdownopening(object sender, EventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			it_FontDefault.Enabled = !it_Font.Checked
 								  && !Font.Equals(FontDefault);
 		}
@@ -5380,11 +5346,10 @@ namespace yata
 
 		#region Handlers (tab)
 		/// <summary>
-		/// Handles the <c>MouseClick</c> event on the <c>TabControl</c>
-		/// <c><see cref="Tabs"/></c>. Shows <c><see cref="ContextTab"/> when
-		/// a tab is rightclicked.</c>
+		/// Handles the <c>MouseClick</c> event on the <c>TabControl</c>. Shows
+		/// <c><see cref="ContextTab"/></c> when a tab is rightclicked.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="Tabs"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Do not use the <c>TabControl's</c> <c>ContextMenuStrip</c>
 		/// since a rightclick on any tabpage's <c><see cref="YataGrid"/></c>
@@ -5409,8 +5374,6 @@ namespace yata
 		/// <c><see cref="Tabs"/>.ContextMenuStrip</c>.</remarks>
 		void ContextTab_opening(object sender, CancelEventArgs e)
 		{
-			dropdownopening(sender, e);
-
 			bool found = false;
 
 			Point loc = Tabs.PointToClient(Cursor.Position); // activate the Tab ->
