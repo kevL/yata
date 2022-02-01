@@ -165,7 +165,7 @@ namespace yata
 		ToolStripSeparator separator_38;
 		ToolStripSeparator separator_39;
 
-		internal ContextMenuStrip ContextRow;
+		internal ContextMenuStrip _contextRo;
 		ToolStripMenuItem rowit_Header;
 		ToolStripMenuItem rowit_Cut;
 		ToolStripMenuItem rowit_Copy;
@@ -177,7 +177,7 @@ namespace yata
 		ToolStripMenuItem rowit_CreateBelow;
 		ToolStripMenuItem rowit_Delete;
 
-		internal ContextMenuStrip ContextCell;
+		internal ContextMenuStrip _contextCe;
 		ToolStripMenuItem cellit_Edit;
 		ToolStripMenuItem cellit_Cut;
 		ToolStripMenuItem cellit_Copy;
@@ -193,7 +193,7 @@ namespace yata
 		ToolStripMenuItem cellit_Strref_custom;
 		ToolStripMenuItem cellit_Strref_invalid;
 
-		internal ContextMenuStrip ContextTab;
+		internal ContextMenuStrip _contextTa;
 		ToolStripMenuItem tabit_Close;
 		ToolStripMenuItem tabit_CloseAll;
 		ToolStripMenuItem tabit_CloseAllOthers;
@@ -357,7 +357,7 @@ namespace yata
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_36 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Settings = new System.Windows.Forms.ToolStripMenuItem();
-			this.ContextRow = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this._contextRo = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.rowit_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.rowit_Cut = new System.Windows.Forms.ToolStripMenuItem();
@@ -376,7 +376,7 @@ namespace yata
 			this.statbar_lblCords = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statbar_lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
-			this.ContextCell = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this._contextCe = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.cellit_Edit = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_27 = new System.Windows.Forms.ToolStripSeparator();
 			this.cellit_Cut = new System.Windows.Forms.ToolStripMenuItem();
@@ -395,7 +395,7 @@ namespace yata
 			this.cellit_Strref_custom = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Strref_invalid = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Input = new System.Windows.Forms.ToolStripMenuItem();
-			this.ContextTab = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this._contextTa = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tabit_Close = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_CloseAllOthers = new System.Windows.Forms.ToolStripMenuItem();
@@ -409,10 +409,10 @@ namespace yata
 			this.tabit_DiffReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_DiffSync = new System.Windows.Forms.ToolStripMenuItem();
 			this._bar.SuspendLayout();
-			this.ContextRow.SuspendLayout();
+			this._contextRo.SuspendLayout();
 			this.statusbar.SuspendLayout();
-			this.ContextCell.SuspendLayout();
-			this.ContextTab.SuspendLayout();
+			this._contextCe.SuspendLayout();
+			this._contextTa.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _bar
@@ -1455,10 +1455,10 @@ namespace yata
 			this.it_Settings.Text = "&Options file";
 			this.it_Settings.Click += new System.EventHandler(this.helpclick_Settings);
 			// 
-			// ContextRow
+			// _contextRo
 			// 
-			this.ContextRow.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ContextRow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this._contextRo.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this._contextRo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.rowit_Header,
 			this.separator_7,
 			this.rowit_Cut,
@@ -1473,9 +1473,9 @@ namespace yata
 			this.rowit_CreateBelow,
 			this.separator_10,
 			this.rowit_Delete});
-			this.ContextRow.Name = "ContextRow";
-			this.ContextRow.ShowImageMargin = false;
-			this.ContextRow.Size = new System.Drawing.Size(177, 248);
+			this._contextRo.Name = "_contextRo";
+			this._contextRo.ShowImageMargin = false;
+			this._contextRo.Size = new System.Drawing.Size(177, 248);
 			// 
 			// rowit_Header
 			// 
@@ -1607,10 +1607,10 @@ namespace yata
 			this.panel_ColorFill.Size = new System.Drawing.Size(867, 453);
 			this.panel_ColorFill.TabIndex = 2;
 			// 
-			// ContextCell
+			// _contextCe
 			// 
-			this.ContextCell.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ContextCell.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this._contextCe.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this._contextCe.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.cellit_Edit,
 			this.separator_27,
 			this.cellit_Cut,
@@ -1626,9 +1626,9 @@ namespace yata
 			this.separator_28,
 			this.cellit_Strref,
 			this.cellit_Input});
-			this.ContextCell.Name = "ContextCell";
-			this.ContextCell.ShowImageMargin = false;
-			this.ContextCell.Size = new System.Drawing.Size(165, 270);
+			this._contextCe.Name = "_contextCe";
+			this._contextCe.ShowImageMargin = false;
+			this._contextCe.Size = new System.Drawing.Size(165, 270);
 			// 
 			// cellit_Edit
 			// 
@@ -1752,10 +1752,10 @@ namespace yata
 			this.cellit_Input.Text = "InfoInput";
 			this.cellit_Input.Click += new System.EventHandler(this.cellclick_InfoInput);
 			// 
-			// ContextTab
+			// _contextTa
 			// 
-			this.ContextTab.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ContextTab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this._contextTa.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this._contextTa.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.tabit_Close,
 			this.tabit_CloseAll,
 			this.tabit_CloseAllOthers,
@@ -1768,10 +1768,10 @@ namespace yata
 			this.tabit_Diff2,
 			this.tabit_DiffReset,
 			this.tabit_DiffSync});
-			this.ContextTab.Name = "ContextTab";
-			this.ContextTab.ShowImageMargin = false;
-			this.ContextTab.Size = new System.Drawing.Size(139, 220);
-			this.ContextTab.Opening += new System.ComponentModel.CancelEventHandler(this.opening_TabContext);
+			this._contextTa.Name = "_contextTa";
+			this._contextTa.ShowImageMargin = false;
+			this._contextTa.Size = new System.Drawing.Size(139, 242);
+			this._contextTa.Opening += new System.ComponentModel.CancelEventHandler(this.opening_TabContext);
 			// 
 			// tabit_Close
 			// 
@@ -1875,11 +1875,11 @@ namespace yata
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.yata_DragEnter);
 			this._bar.ResumeLayout(false);
 			this._bar.PerformLayout();
-			this.ContextRow.ResumeLayout(false);
+			this._contextRo.ResumeLayout(false);
 			this.statusbar.ResumeLayout(false);
 			this.statusbar.PerformLayout();
-			this.ContextCell.ResumeLayout(false);
-			this.ContextTab.ResumeLayout(false);
+			this._contextCe.ResumeLayout(false);
+			this._contextTa.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

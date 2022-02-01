@@ -303,7 +303,7 @@ namespace yata
 			{
 				// Relative Font-sizes (as defined in the Designers):
 				//
-				// _bar, statusbar, ContextTab, ContextRow, ContextCell = all unity.
+				// _bar, statusbar, _contextTa, _contextRo, _contextCe = all unity.
 				// rowit_Header     = +0.75
 				// statbar_lblCords = -0.75
 				// statbar_lblInfo  = +1.50
@@ -336,14 +336,14 @@ namespace yata
 											 Settings._font2.SizeInPoints + 0.75f,
 											 getStyleAccented(Settings._font2.FontFamily));
 
-				ContextTab.Font.Dispose();
-				ContextTab.Font = Settings._font2;
+				_contextTa.Font.Dispose();
+				_contextTa.Font = Settings._font2;
 
-				ContextRow.Font.Dispose();
-				ContextRow.Font = Settings._font2;
+				_contextRo.Font.Dispose();
+				_contextRo.Font = Settings._font2;
 
-				ContextCell.Font.Dispose();
-				ContextCell.Font = Settings._font2;
+				_contextCe.Font.Dispose();
+				_contextCe.Font = Settings._font2;
 			}
 
 			int
@@ -4433,7 +4433,7 @@ namespace yata
 		/// Shows the RMB-context on the rowhead for single-row edit operations.
 		/// </summary>
 		/// <param name="r"></param>
-		/// <remarks><c><see cref="ContextRow"/></c> is not assigned to a
+		/// <remarks><c><see cref="_contextRo"/></c> is not assigned to a
 		/// <c><see cref="YataGrid"/>._panelRows'</c> <c>ContextMenuStrip</c>
 		/// or <c>ContextMenu</c>.</remarks>
 		internal void ShowRowContext(int r)
@@ -4461,7 +4461,7 @@ namespace yata
 			else											// cursor location
 				loc = Table.PointToClient(Cursor.Position);
 
-			ContextRow.Show(Table, loc);
+			_contextRo.Show(Table, loc);
 		}
 		#endregion Methods (row)
 
@@ -4474,7 +4474,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Header(object sender, EventArgs e)
 		{
-			ContextRow.Hide();
+			_contextRo.Hide();
 		}
 
 		/// <summary>
@@ -4751,7 +4751,7 @@ namespace yata
 		/// <summary>
 		/// Shows the RMB-context on a cell for single-cell edit operations.
 		/// </summary>
-		/// <remarks><c><see cref="ContextCell"/></c> is not assigned to a
+		/// <remarks><c><see cref="_contextCe"/></c> is not assigned to a
 		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>ContextMenuStrip</c>
 		/// or <c>ContextMenu</c>.</remarks>
 		internal void ShowCellContext()
@@ -4796,7 +4796,7 @@ namespace yata
 					break;
 			}
 
-			ContextCell.Show(Table, Table.PointToClient(Cursor.Position));
+			_contextCe.Show(Table, Table.PointToClient(Cursor.Position));
 		}
 
 		/// <summary>
@@ -5347,7 +5347,7 @@ namespace yata
 		#region Handlers (tab)
 		/// <summary>
 		/// Handles the <c>MouseClick</c> event on the <c>TabControl</c>. Shows
-		/// <c><see cref="ContextTab"/></c> when a tab is rightclicked.
+		/// <c><see cref="_contextTa"/></c> when a tab is rightclicked.
 		/// </summary>
 		/// <param name="sender"><c><see cref="Tabs"/></c></param>
 		/// <param name="e"></param>
@@ -5360,7 +5360,7 @@ namespace yata
 		void click_Tabs(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
-				ContextTab.Show(Tabs, e.Location);
+				_contextTa.Show(Tabs, e.Location);
 		}
 
 
@@ -5368,9 +5368,9 @@ namespace yata
 		/// Sets the selected tab when a right-click on a tab is about to open
 		/// the context.
 		/// </summary>
-		/// <param name="sender"><c><see cref="ContextTab"/></c></param>
+		/// <param name="sender"><c><see cref="_contextTa"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks><c>ContextTab</c> is assigned to
+		/// <remarks><c>_contextTa</c> is assigned to
 		/// <c><see cref="Tabs"/>.ContextMenuStrip</c>.</remarks>
 		void opening_TabContext(object sender, CancelEventArgs e)
 		{

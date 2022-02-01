@@ -438,9 +438,9 @@ namespace yata
 		/// </summary>
 		void hideContexts()
 		{
-			if      (_f.ContextRow .Visible) _f.ContextRow .Visible = false;
-			else if (_f.ContextCell.Visible) _f.ContextCell.Visible = false;
-			else if (_f.ContextTab .Visible) _f.ContextTab .Visible = false;
+			if      (_f._contextRo.Visible) _f._contextRo.Visible = false;
+			else if (_f._contextCe.Visible) _f._contextCe.Visible = false;
+			else if (_f._contextTa.Visible) _f._contextTa.Visible = false;
 		}
 
 		/// <summary>
