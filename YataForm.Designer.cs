@@ -1771,7 +1771,7 @@ namespace yata
 			this.ContextTab.Name = "ContextTab";
 			this.ContextTab.ShowImageMargin = false;
 			this.ContextTab.Size = new System.Drawing.Size(139, 220);
-			this.ContextTab.Opening += new System.ComponentModel.CancelEventHandler(this.ContextTab_opening);
+			this.ContextTab.Opening += new System.ComponentModel.CancelEventHandler(this.opening_TabContext);
 			// 
 			// tabit_Close
 			// 

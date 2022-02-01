@@ -5354,7 +5354,7 @@ namespace yata
 		/// <remarks>Do not use the <c>TabControl's</c> <c>ContextMenuStrip</c>
 		/// since a rightclick on any tabpage's <c><see cref="YataGrid"/></c>
 		/// would cause
-		/// <c><see cref="ContextTab_opening()">ContextTab_opening()</see></c>
+		/// <c><see cref="opening_TabContext()">opening_TabContext()</see></c>
 		/// to fire. Although the context does not show rightclicks are used for
 		/// other things by <c>YataGrid</c>.</remarks>
 		void click_Tabs(object sender, MouseEventArgs e)
@@ -5372,7 +5372,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks><c>ContextTab</c> is assigned to
 		/// <c><see cref="Tabs"/>.ContextMenuStrip</c>.</remarks>
-		void ContextTab_opening(object sender, CancelEventArgs e)
+		void opening_TabContext(object sender, CancelEventArgs e)
 		{
 			bool found = false;
 
