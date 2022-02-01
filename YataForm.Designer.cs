@@ -17,7 +17,7 @@ namespace yata
 		/// </summary>
 		IContainer components;
 
-		MenustripOneclick menubar;
+		MenustripOneclick _bar;
 
 		ToolStripMenuItem it_MenuFile;
 		ToolStripMenuItem it_Create;
@@ -235,7 +235,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.menubar = new yata.MenustripOneclick();
+			this._bar = new yata.MenustripOneclick();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_38 = new System.Windows.Forms.ToolStripSeparator();
@@ -408,17 +408,17 @@ namespace yata
 			this.tabit_Diff2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_DiffReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_DiffSync = new System.Windows.Forms.ToolStripMenuItem();
-			this.menubar.SuspendLayout();
+			this._bar.SuspendLayout();
 			this.ContextRow.SuspendLayout();
 			this.statusbar.SuspendLayout();
 			this.ContextCell.SuspendLayout();
 			this.ContextTab.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// menubar
+			// _bar
 			// 
-			this.menubar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.menubar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this._bar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this._bar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_MenuFile,
 			this.it_MenuEdit,
 			this.it_MenuCells,
@@ -433,11 +433,11 @@ namespace yata
 			this.it_MenuPaths,
 			this.it_MenuFont,
 			this.it_MenuHelp});
-			this.menubar.Location = new System.Drawing.Point(0, 0);
-			this.menubar.Name = "menubar";
-			this.menubar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menubar.Size = new System.Drawing.Size(867, 24);
-			this.menubar.TabIndex = 0;
+			this._bar.Location = new System.Drawing.Point(0, 0);
+			this._bar.Name = "_bar";
+			this._bar.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+			this._bar.Size = new System.Drawing.Size(867, 24);
+			this._bar.TabIndex = 0;
 			// 
 			// it_MenuFile
 			// 
@@ -1863,18 +1863,18 @@ namespace yata
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(867, 499);
 			this.Controls.Add(this.panel_ColorFill);
-			this.Controls.Add(this.menubar);
+			this.Controls.Add(this._bar);
 			this.Controls.Add(this.statusbar);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
-			this.MainMenuStrip = this.menubar;
+			this.MainMenuStrip = this._bar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "YataForm";
 			this.Text = " Yata";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.yata_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.yata_DragEnter);
-			this.menubar.ResumeLayout(false);
-			this.menubar.PerformLayout();
+			this._bar.ResumeLayout(false);
+			this._bar.PerformLayout();
 			this.ContextRow.ResumeLayout(false);
 			this.statusbar.ResumeLayout(false);
 			this.statusbar.PerformLayout();

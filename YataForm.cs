@@ -303,13 +303,13 @@ namespace yata
 			{
 				// Relative Font-sizes (as defined in the Designers):
 				//
-				// menubar, statusbar, ContextTab, ContextRow, ContextCell = all unity.
+				// _bar, statusbar, ContextTab, ContextRow, ContextCell = all unity.
 				// rowit_Header     = +0.75
 				// statbar_lblCords = -0.75
 				// statbar_lblInfo  = +1.50
 
-				menubar.Font.Dispose();
-				menubar.Font = Settings._font2;
+				_bar.Font.Dispose();
+				_bar.Font = Settings._font2;
 
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;

@@ -97,7 +97,7 @@ namespace yata
 				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y))) _x = _f.Left - Width;
 				else                                                                _x =  loc.X  - Width;
 
-				// NOTE: '_f.Top' does not include Yata's menubar, but does include its titlebar.
+				// NOTE: '_f.Top' does not include Yata's '_bar' but does include its titlebar.
 				_y = loc.Y;
 			}
 			Left = _x;
