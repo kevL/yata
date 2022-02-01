@@ -377,8 +377,8 @@ namespace yata
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
 
-			_editor.KeyDown    += keydown_Editor;
-			_editor.LostFocus  += lostfocus_Editor;
+			_editor.KeyDown += keydown_Editor;
+			_editor.Leave   += leave_Editor;
 
 			Controls.Add(_editor);
 
@@ -3306,44 +3306,50 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>Works around dweeby .NET behavior if Alt is pressed while
+		/// <remarks>Works around dweeby .NET behavior if [Alt] is pressed while
 		/// editing.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
 			//logfile.Log("YataGrid.keydown_Editor() e.KeyData= " + e.KeyData);
 
-			if (e.Alt) _editor.Visible = false;
+			if (e.Alt)
+			{
+				leave_Editor(null, EventArgs.Empty);
+				Select();
+			}
 		}
 
+
 		/// <summary>
-		/// Handles the <c>LostFocus</c> event for the
-		/// <c><see cref="_editor"/></c>.
+		/// Set this <c>true</c> if you want to explicitly accept or reject the
+		/// text in the <c><see cref="_editor"/></c>.
+		/// </summary>
+		bool _bypassleaveditor;
+
+		/// <summary>
+		/// Handles the <c>Leave</c> event for the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>This funct is a partial catchall for other places where the
-		/// <c>_editor</c> needs to hide.</remarks>
-		void lostfocus_Editor(object sender, EventArgs e)
+		/// <remarks>When the editor is told to hide the <c>Leave</c> event
+		/// fires *before* the editor actually hides.</remarks>
+		void leave_Editor(object sender, EventArgs e)
 		{
-			_editor.Visible = false;
-			Invalidator(INVALID_GRID);
-		}
+			//logfile.Log("leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
-
-		/// <summary>
-		/// Handles the <c>Leave</c> event for the grid - hides the
-		/// <c><see cref="_editor"/></c> if it is visible.
-		/// </summary>
-		/// <param name="e"></param>
-		/// <remarks>Obsolete: but it doesn't fire if the tabpage changes w/
-		/// <c>[Ctrl+PageUp/PageDown]</c>. Lovely /explode - can be fixed in
-		/// <c><see cref="YataForm"/>.tab_SelectedIndexChanged()</c>.</remarks>
-		protected override void OnLeave(EventArgs e)
-		{
-			if (_editor.Visible)
+			if (_bypassleaveditor)
+			{
+				_bypassleaveditor = false;
+			}
+			else if (Settings._acceptedit)
+			{
+				ApplyCellEdit();// do NOT focus the table here. Do it in the calling funct if req'd.
+			}
+			else
 			{
 				_editor.Visible = false;
 				Invalidator(INVALID_GRID);
+				// do NOT focus the table.
 			}
 		}
 
@@ -3370,7 +3376,7 @@ namespace yata
 				case Keys.Enter:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 					}
 					else if (!Readonly
 						&& (_editcell = getSelectedCell()) != null
@@ -3381,7 +3387,8 @@ namespace yata
 					return true;
 
 				case Keys.Escape:
-					hideditor(INVALID_GRID);
+					_bypassleaveditor = true;
+					hideditor(INVALID_GRID, true);
 					return true;
 
 
@@ -3389,7 +3396,7 @@ namespace yata
 				case Keys.Tab:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.x != ColCount - 1)
 							startTabedit(+1,0);
@@ -3399,7 +3406,7 @@ namespace yata
 				case Keys.Tab | Keys.Shift:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.x != FrozenCount)
 							startTabedit(-1,0);
@@ -3410,7 +3417,7 @@ namespace yata
 				case Keys.Down:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.y != RowCount - 1)
 							startTabedit(0,+1);
@@ -3421,7 +3428,7 @@ namespace yata
 				case Keys.Up:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.y != 0)
 							startTabedit(0,-1);
@@ -3431,7 +3438,7 @@ namespace yata
 				case Keys.PageDown:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.y != RowCount - 1)
 						{
@@ -3446,7 +3453,7 @@ namespace yata
 				case Keys.PageUp:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit();
+						ApplyCellEdit(true);
 
 						if (_editcell.y != 0)
 						{
@@ -3464,8 +3471,10 @@ namespace yata
 		/// <summary>
 		/// Applies a cell-edit via the <c><see cref="_editor"/></c>.
 		/// </summary>
-		void ApplyCellEdit()
+		/// <param name="select"></param>
+		void ApplyCellEdit(bool @select = false)
 		{
+			//logfile.Log("ApplyCellEdit() select= " + @select);
 			int invalid = INVALID_GRID;
 
 			if (_editor.Text != _editcell.text)
@@ -3478,18 +3487,21 @@ namespace yata
 			else if (_editcell.loadchanged)
 				ClearLoadchanged(_editcell);
 
-			hideditor(invalid);
+			hideditor(invalid, @select);
 		}
 
 		/// <summary>
 		/// Hides <c><see cref="_editor"/></c> and focuses this <c>YataGrid</c>.
 		/// </summary>
 		/// <param name="invalid"></param>
-		void hideditor(int invalid)
+		/// <param name="select"></param>
+		void hideditor(int invalid, bool @select = false)
 		{
+			//logfile.Log("hideditor() _editor.Visible= " + _editor.Visible);
 			_editor.Visible = false;
 			Invalidator(invalid);
-			Select();
+
+			if (@select) Select();
 		}
 
 		/// <summary>
@@ -3761,6 +3773,59 @@ namespace yata
 
 
 		/// <summary>
+		/// Overrides the <c>MouseDown</c> eventhandler. Ensures that the editor
+		/// closes properly.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Since .net fires <c>RMB</c> <c>MouseClick</c> after other
+		/// stuff (but note that <c>LMB</c> <c>MouseClick</c> happens before
+		/// other stuff) use <c>MouseDown</c> instead for <c>RMB</c> operations
+		/// that need to happen before other stuff.</remarks>
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			//logfile.Log("OnMouseDown() " + e.Button + " _editor.Visible= " + _editor.Visible);
+
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+					if ((ModifierKeys & Keys.Alt) == Keys.None
+						&& e.X >= WidthTable || e.Y >= HeightTable // click to the right or below the table-area
+						&& _editor.Visible)
+					{
+						ApplyCellEdit(true);
+					}
+					break;
+
+				case MouseButtons.Right:
+					if (ModifierKeys == Keys.None)
+					{
+						if (e.X >= WidthTable || e.Y >= HeightTable) // click to the right or below the table-area
+						{
+							if (_editor.Visible)
+							{
+								_bypassleaveditor = true;
+								hideditor(INVALID_GRID, true);
+							}
+							// TODO: else clear all selects here ->
+//							{
+//								foreach (var col in Cols)
+//								col.selected = false;
+//
+//								foreach (var row in Rows)
+//									row.selected = false;
+//
+//								ClearCellSelects();
+//								Invalidator();
+//							}
+						}
+						else
+							Select(); // the editor's Leave handler will close it properly.
+					}
+					break;
+			}
+		}
+
+		/// <summary>
 		/// <c>true</c> allows
 		/// <c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>.
 		/// </summary>
@@ -3777,46 +3842,24 @@ namespace yata
 		Cell _cell;
 
 		/// <summary>
-		/// LMB selects a cell or enables/disables the editbox. RMB opens a
-		/// cell's context-menu.
+		/// Overrides the <c>MouseClick</c> eventhandler and deals with clicks
+		/// inside the table-area only. LMB selects a cell or enables/disables
+		/// the editbox. RMB opens a cell's context-menu.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks><c>YataGrid.MouseClick</c> does not fire on any of the top
 		/// or left panels.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+			//logfile.Log("OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible);
+
+			_double = false;
+
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
-				_double = false;
-
-				if (e.X > WidthTable || e.Y > HeightTable) // click to the right or below the table-area
+				if (e.X < WidthTable && e.Y < HeightTable) // click inside the table-area
 				{
-					Select();
-
-					if (ModifierKeys == Keys.None)
-					{
-						if (_editor.Visible) // NOTE: The editbox will never be visible here on RMB. for whatever reason ...
-						{
-//							if (e.Button == MouseButtons.Left) // apply edit only on LMB.
-							ApplyCellEdit();
-						}
-
-//						else if (e.Button == MouseButtons.Right)	// clear all selects - why does a right-click refuse to acknowledge that the editor is Vis
-//						{											// Ie. if this codeblock is activated it will cancel the edit *and* clear all selects;
-//							foreach (var col in Cols)				// the intent however is to catch the editor (above) OR clear all selects here.
-//								col.selected = false;
-//
-//							foreach (var row in Rows)
-//								row.selected = false;
-//
-//							ClearCellSelects();
-//							Invalidator();
-//						}
-					}
-				}
-				else
-				{
-					bool enablecelledit = false;
+					bool detercellops = false;
 
 					bool ctr = (ModifierKeys & Keys.Control) == Keys.Control,
 						 sft = (ModifierKeys & Keys.Shift)   == Keys.Shift;
@@ -3833,8 +3876,7 @@ namespace yata
 										if (_cell != _editcell)
 										{
 											_double = true;
-
-											ApplyCellEdit();
+											ApplyCellEdit(true);
 										}
 										else					// there's a clickable fringe around the editor so
 											_editor.Focus();	// just refocus the editor if the fringe is clicked
@@ -3867,7 +3909,7 @@ namespace yata
 												else
 													_f.ClearSyncSelects();
 
-												enablecelledit = true;
+												detercellops = true;
 
 												int invalid = INVALID_GRID;
 												if (Propanel != null && Propanel.Visible)
@@ -3895,7 +3937,7 @@ namespace yata
 
 											EnsureDisplayed(_cell, true);
 
-											enablecelledit = true;
+											detercellops = true;
 
 											int invalid = INVALID_GRID;
 											if (Propanel != null && Propanel.Visible)
@@ -3914,7 +3956,7 @@ namespace yata
 										_cell.selected = true;
 										_f.SyncSelectCell(_cell);
 
-										enablecelledit = true;
+										detercellops = true;
 
 										Invalidator(INVALID_GRID
 												  | INVALID_FROZ
@@ -3944,7 +3986,7 @@ namespace yata
 									_cell.selected = true;
 									_f.SyncSelectCell(_cell);
 
-									enablecelledit = true;
+									detercellops = true;
 
 									Invalidator(INVALID_GRID
 											  | INVALID_FROZ
@@ -3959,7 +4001,7 @@ namespace yata
 							break;
 					}
 
-					if (enablecelledit)
+					if (detercellops)
 						_f.EnableCelleditOperations();
 				}
 			}
