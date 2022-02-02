@@ -2142,6 +2142,9 @@ namespace yata
 		/// </list></remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
+			if (Table._editor.Visible)
+				Table.Select(); // fire the editor's Leave event.
+
 			_isSearch = true;
 			Search(sender == it_Searchnext);
 			_isSearch = false;
@@ -2171,13 +2174,6 @@ namespace yata
 		{
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
-				if (Table._editor.Visible)
-				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
-
-
 				string search = tb_Search.Text;
 				if (search.Length != 0)
 				{
