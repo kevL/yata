@@ -2508,14 +2508,14 @@ namespace yata
 									int r = selr;
 									if (r != 0)
 									{
-										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										int shift = GetShiftVert();
 										if ((r -= shift) < 0) r = 0;
 									}
 									selr = row_SelectRow(selr, r);
 								}
 								else
 								{
-									int range = -(Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									int range = -GetShiftVert();
 										range += RangeSelect;
 
 									if (selr + range < 0) RangeSelect = 0 - selr;
@@ -2563,7 +2563,7 @@ namespace yata
 									int sel_r = getAnchorRangedRowid();
 									if (sel_r != 0)
 									{
-										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										int shift = GetShiftVert();
 										sel_r = Math.Max(0, sel_r - shift);
 
 										int strt_r = Math.Min(sel_r, _anchorcell.y);
@@ -2598,7 +2598,7 @@ namespace yata
 								{
 									sel.selected = false;
 
-									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									int shift = GetShiftVert();
 									if ((selr = sel.y - shift) < 0) selr = 0;
 
 									(sel = this[selr, sel.x]).selected = true;
@@ -2626,14 +2626,14 @@ namespace yata
 									int r = selr;
 									if (r != RowCount - 1)
 									{
-										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										int shift = GetShiftVert();
 										if ((r += shift) > RowCount - 1) r = RowCount - 1;
 									}
 									selr = row_SelectRow(selr, r);
 								}
 								else
 								{
-									int range = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									int range = GetShiftVert();
 										range += RangeSelect;
 
 									if (selr + range >= RowCount) RangeSelect = RowCount - selr - 1;
@@ -2681,7 +2681,7 @@ namespace yata
 									int sel_r = getAnchorRangedRowid();
 									if (sel_r != RowCount - 1)
 									{
-										int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+										int shift = GetShiftVert();
 										sel_r = Math.Min(RowCount - 1, sel_r + shift);
 
 										int strt_r = Math.Min(sel_r, _anchorcell.y);
@@ -2716,7 +2716,7 @@ namespace yata
 								{
 									sel.selected = false;
 
-									int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+									int shift = GetShiftVert();
 									if ((selr = sel.y + shift) > RowCount - 1) selr = RowCount - 1;
 
 									(sel = this[selr, sel.x]).selected = true;
@@ -3108,6 +3108,16 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Gets the count of <c><see cref="Row">Rows</see></c> that are
+		/// currently visible in the table.
+		/// </summary>
+		/// <returns></returns>
+		int GetShiftVert()
+		{
+			return (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+		}
+
 
 		/// <summary>
 		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
@@ -3436,7 +3446,7 @@ namespace yata
 
 						if (_editcell.y != RowCount - 1)
 						{
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int shift = GetShiftVert();
 							if (_editcell.y + shift > RowCount - 1) shift = RowCount - 1 - _editcell.y;
 
 							startTabedit(0, +shift);
@@ -3451,7 +3461,7 @@ namespace yata
 
 						if (_editcell.y != 0)
 						{
-							int shift = (Height - HeightColhead - (_visHori ? _scrollHori.Height : 0)) / HeightRow;
+							int shift = GetShiftVert();
 							if (_editcell.y - shift < 0) shift = _editcell.y;
 
 							startTabedit(0, -shift);
@@ -4641,9 +4651,9 @@ namespace yata
 		/// on the goto-box.
 		/// </summary>
 		/// <param name="text">a <c>string</c> to parse for a row-id</param>
-		/// <param name="selectTable"><c>true</c> to <c>Select()</c> this
+		/// <param name="select"><c>true</c> to <c>Select()</c> this
 		/// <c>YataGrid</c></param>
-		internal void doGoto(string text, bool selectTable)
+		internal void doGoto(string text, bool @select)
 		{
 			int selr;
 			if (Int32.TryParse(text, out selr)
@@ -4661,7 +4671,7 @@ namespace yata
 
 				Invalidator(invalid);
 
-				if (selectTable) // on [Enter] ie. not instantgoto
+				if (@select) // on [Enter] ie. not instantgoto
 					Select();
 			}
 		}
