@@ -39,6 +39,7 @@ namespace yata
 		ToolStripMenuItem it_DeselectAll;
 		ToolStripMenuItem it_Search;
 		ToolStripMenuItem it_Searchnext;
+		ToolStripMenuItem it_Searchprev;
 		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
 		ToolStripMenuItem it_Defaultval;
@@ -262,6 +263,7 @@ namespace yata
 			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchnext = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Searchprev = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_37 = new System.Windows.Forms.ToolStripSeparator();
@@ -603,6 +605,7 @@ namespace yata
 			this.separator_18,
 			this.it_Search,
 			this.it_Searchnext,
+			this.it_Searchprev,
 			this.separator_3,
 			this.it_Goto,
 			this.separator_37,
@@ -619,7 +622,7 @@ namespace yata
 			this.it_Undo.Enabled = false;
 			this.it_Undo.Name = "it_Undo";
 			this.it_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.it_Undo.Size = new System.Drawing.Size(166, 22);
+			this.it_Undo.Size = new System.Drawing.Size(205, 22);
 			this.it_Undo.Text = "&Undo";
 			this.it_Undo.Click += new System.EventHandler(this.editclick_Undo);
 			// 
@@ -628,34 +631,34 @@ namespace yata
 			this.it_Redo.Enabled = false;
 			this.it_Redo.Name = "it_Redo";
 			this.it_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.it_Redo.Size = new System.Drawing.Size(166, 22);
+			this.it_Redo.Size = new System.Drawing.Size(205, 22);
 			this.it_Redo.Text = "&Redo";
 			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
 			// 
 			// separator_35
 			// 
 			this.separator_35.Name = "separator_35";
-			this.separator_35.Size = new System.Drawing.Size(163, 6);
+			this.separator_35.Size = new System.Drawing.Size(202, 6);
 			// 
 			// it_DeselectAll
 			// 
 			this.it_DeselectAll.Enabled = false;
 			this.it_DeselectAll.Name = "it_DeselectAll";
 			this.it_DeselectAll.ShortcutKeyDisplayString = "Esc";
-			this.it_DeselectAll.Size = new System.Drawing.Size(166, 22);
+			this.it_DeselectAll.Size = new System.Drawing.Size(205, 22);
 			this.it_DeselectAll.Text = "De&select all";
 			this.it_DeselectAll.Click += new System.EventHandler(this.editclick_Deselect);
 			// 
 			// separator_18
 			// 
 			this.separator_18.Name = "separator_18";
-			this.separator_18.Size = new System.Drawing.Size(163, 6);
+			this.separator_18.Size = new System.Drawing.Size(202, 6);
 			// 
 			// it_Search
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(166, 22);
+			this.it_Search.Size = new System.Drawing.Size(205, 22);
 			this.it_Search.Text = "&Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -664,33 +667,42 @@ namespace yata
 			this.it_Searchnext.Enabled = false;
 			this.it_Searchnext.Name = "it_Searchnext";
 			this.it_Searchnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Searchnext.Size = new System.Drawing.Size(166, 22);
+			this.it_Searchnext.Size = new System.Drawing.Size(205, 22);
 			this.it_Searchnext.Text = "Fin&d next";
 			this.it_Searchnext.Click += new System.EventHandler(this.editclick_SearchNext);
+			// 
+			// it_Searchprev
+			// 
+			this.it_Searchprev.Enabled = false;
+			this.it_Searchprev.Name = "it_Searchprev";
+			this.it_Searchprev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
+			this.it_Searchprev.Size = new System.Drawing.Size(205, 22);
+			this.it_Searchprev.Text = "Find previ&ous";
+			this.it_Searchprev.Click += new System.EventHandler(this.editclick_SearchNext);
 			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
-			this.separator_3.Size = new System.Drawing.Size(163, 6);
+			this.separator_3.Size = new System.Drawing.Size(202, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(166, 22);
+			this.it_Goto.Size = new System.Drawing.Size(205, 22);
 			this.it_Goto.Text = "&Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
 			// separator_37
 			// 
 			this.separator_37.Name = "separator_37";
-			this.separator_37.Size = new System.Drawing.Size(163, 6);
+			this.separator_37.Size = new System.Drawing.Size(202, 6);
 			// 
 			// it_Defaultval
 			// 
 			this.it_Defaultval.Enabled = false;
 			this.it_Defaultval.Name = "it_Defaultval";
-			this.it_Defaultval.Size = new System.Drawing.Size(166, 22);
+			this.it_Defaultval.Size = new System.Drawing.Size(205, 22);
 			this.it_Defaultval.Text = "Default &value ...";
 			this.it_Defaultval.Click += new System.EventHandler(this.editclick_Defaultval);
 			// 
@@ -698,7 +710,7 @@ namespace yata
 			// 
 			this.it_Defaultclear.Enabled = false;
 			this.it_Defaultclear.Name = "it_Defaultclear";
-			this.it_Defaultclear.Size = new System.Drawing.Size(166, 22);
+			this.it_Defaultclear.Size = new System.Drawing.Size(205, 22);
 			this.it_Defaultclear.Text = "&Clear Default";
 			this.it_Defaultclear.Click += new System.EventHandler(this.editclick_Defaultclear);
 			// 
@@ -1770,7 +1782,7 @@ namespace yata
 			this.tabit_DiffSync});
 			this._contextTa.Name = "_contextTa";
 			this._contextTa.ShowImageMargin = false;
-			this._contextTa.Size = new System.Drawing.Size(139, 242);
+			this._contextTa.Size = new System.Drawing.Size(139, 220);
 			this._contextTa.Opening += new System.ComponentModel.CancelEventHandler(this.opening_TabContext);
 			// 
 			// tabit_Close
