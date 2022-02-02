@@ -2075,7 +2075,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles the <c>TextChanged</c> event on the search box.
+		/// Handles the <c>TextChanged</c> event on the search-box.
 		/// Enables/disables find next/find previous.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
@@ -2088,7 +2088,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the search box.
+		/// Handles selectall hocus-pocus when user clicks the search-box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Search"/></c></param>
 		/// <param name="e"></param>
@@ -2103,7 +2103,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the search box.
+		/// Handles selectall hocus-pocus when user clicks the search-box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
@@ -2113,7 +2113,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the search box.
+		/// Handles selectall hocus-pocus when user clicks the search-box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
