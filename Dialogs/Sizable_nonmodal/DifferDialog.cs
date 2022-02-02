@@ -123,8 +123,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Passes <c>[Enter]</c> etc. to
-		/// <c><see cref="click_btnGoto()">click_btnGoto()</see></c>
+		/// Passes <c>[Enter]</c> etc to
+		/// <c><see cref="click_btnGoto()">click_btnGoto()</see></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
