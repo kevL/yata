@@ -459,8 +459,8 @@ namespace yata
 
 			_table.OffsetVert = _table._scrollVert.Value;
 
-			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
-				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
+			if (!_f._isSearch										// <- if not Search
+				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
@@ -493,8 +493,8 @@ namespace yata
 
 			_table.OffsetHori = _table._scrollHori.Value;
 
-			if (!_f._isEnterkeyedSearch								// <- if not Search by [Enter]
-				&& (!Settings._instantgoto || !_f.tb_Goto.Focused))	// <- if not "instantgoto=true" when gotobox has focus
+			if (!_f._isSearch										// <- if not Search
+				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}

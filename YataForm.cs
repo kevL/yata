@@ -112,7 +112,7 @@ namespace yata
 		Font FontDefault;
 		internal Font FontAccent;
 
-		internal bool _isEnterkeyedSearch;
+		internal bool _isSearch;
 		bool _firstclick; // preps the Search or Goto textboxes to select all text
 
 		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
@@ -700,10 +700,6 @@ namespace yata
 						}
 						break;
 
-					case Keys.Shift | Keys.F3:					// reverse search
-						editclick_SearchNext(null, EventArgs.Empty);
-						return true;
-
 					case Keys.Shift | Keys.Control | Keys.N:	// reverse gotoloadchanged
 						editcellsclick_GotoLoadchanged(null, EventArgs.Empty);
 						return true;
@@ -735,9 +731,13 @@ namespace yata
 				{
 					case Keys.Enter: // do this here to get rid of the beep.
 						if (tb_Search.Focused || cb_SearchOption.Focused)
+						{
 							_dontbeep = DONTBEEP_SEARCH;
+						}
 						else if (tb_Goto.Focused)
+						{
 							_dontbeep = DONTBEEP_GOTO;
+						}
 						else
 							_dontbeep = DONTBEEP_DEFAULT;
 
@@ -1142,7 +1142,8 @@ namespace yata
 
 				it_Undo           .Enabled = Table._ur.CanUndo;
 				it_Redo           .Enabled = Table._ur.CanRedo;
-				it_Searchnext     .Enabled = tb_Search.Text.Length != 0;
+				it_Searchnext     .Enabled =
+				it_Searchprev     .Enabled = tb_Search.Text.Length != 0;
 				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
 				it_Defaultval     .Enabled = true;
 				it_Defaultclear   .Enabled = Table._defaultval.Length != 0;
@@ -1203,6 +1204,7 @@ namespace yata
 				it_Undo           .Enabled =
 				it_Redo           .Enabled =
 				it_Searchnext     .Enabled =
+				it_Searchprev     .Enabled =
 				it_GotoLoadchanged.Enabled =
 				it_Defaultval     .Enabled =
 				it_Defaultclear   .Enabled =
@@ -2070,18 +2072,20 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles textchanged for the searchbox. Enables/disables searchnext.
+		/// Handles the <c>TextChanged</c> event on the search box.
+		/// Enables/disables find next/find previous.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Search(object sender, EventArgs e)
 		{
-			it_Searchnext.Enabled = Table != null
+			it_Searchnext.Enabled =
+			it_Searchprev.Enabled = Table != null
 								 && tb_Search.Text.Length != 0;
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the searchbox.
+		/// Handles selectall hocus-pocus when user clicks the search box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Search"/></c></param>
 		/// <param name="e"></param>
@@ -2096,7 +2100,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the searchbox.
+		/// Handles selectall hocus-pocus when user clicks the search box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
@@ -2106,7 +2110,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the searchbox.
+		/// Handles selectall hocus-pocus when user clicks the search box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
@@ -2120,50 +2124,47 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Performs <c>[F3]</c> search with focus on the
-		/// <c><see cref="Table"/></c>.
+		/// Performs search without changing focus.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Searchnext"/></c> <c>[F3]</c></item>
-		/// <item><c>null</c> (reverse search w/ <c>[Shift]</c>)</item>
+		/// <item><c><see cref="it_Searchprev"/></c> <c>[Shift+F3]</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		/// <remarks><c>[F3]</c> shall focus the table, <c>[Enter]</c> shall
-		/// keep focus on the tb/cbx.
-		/// 
-		/// 
-		/// Called by
+		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>Edit|Find next <c>[F3]</c></item>
-		/// <item><c>[Shift+F3]</c>
-		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c></item>
+		/// <item>Edit|Find previous <c>[Shift+F3]</c></item>
 		/// </list></remarks>
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
-			Table.Select();
-			Search();
+			_isSearch = true;
+			Search(sender == it_Searchnext);
+			_isSearch = false;
 		}
 
 		/// <summary>
-		/// Performs a search when <c>[Enter]</c> is pressed and focus is on
-		/// either the search-box or the search-option dropdown.
+		/// Performs a search when <c>[Enter]</c> or [Shift+Enter] is pressed
+		/// and focus is on either the search-box or the search-option dropdown.
 		/// </summary>
-		/// <remarks><c>[Enter]</c> shall keep focus on the tb/cbx, <c>[F3]</c>
-		/// shall focus the table.</remarks>
+		/// <remarks>[Enter] and [Shift+Enter] change focus to the table.</remarks>
 		void EnterkeyedSearch()
 		{
-			_isEnterkeyedSearch = true;
-			Search();
-			_isEnterkeyedSearch = false;
+			Table.Select();
+
+			_isSearch = true;
+			Search((ModifierKeys & Keys.Shift) == Keys.None);
+			_isSearch = false;
 		}
 
 		/// <summary>
 		/// Searches the current table for the text in the search-box.
 		/// </summary>
+		/// <param name="forward"></param>
 		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
 		/// call.</remarks>
-		void Search()
+		void Search(bool forward)
 		{
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
@@ -2191,7 +2192,7 @@ namespace yata
 
 					int r,c;
 
-					if ((ModifierKeys & Keys.Shift) == Keys.None) // forward search ->
+					if (forward) // forward search ->
 					{
 						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
@@ -2314,7 +2315,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles textchanged in the goto box.
+		/// Handles the <c>TextChanged</c> event on the goto box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
@@ -2335,7 +2336,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to focus the goto box.
+		/// Handles the <c>Click</c> event to focus the goto box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Goto"/></c></param>
 		/// <param name="e"></param>
@@ -2350,7 +2351,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the enter event of the goto box.
+		/// Handles the <c>Enter</c> event on the goto box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
@@ -2360,7 +2361,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles click on the goto box.
+		/// Handles the <c>Click</c> event on the goto box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
@@ -2374,7 +2375,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to edit the 2da-file's defaultval.
+		/// Handles the <c>Click</c> event to edit the 2da-file's defaultval.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Defaultval"/></c></param>
 		/// <param name="e"></param>
@@ -2399,7 +2400,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to clear the 2da-file's defaultval.
+		/// Handles the <c>Click</c> event to clear the 2da-file's defaultval.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Defaultclear"/></c></param>
 		/// <param name="e"></param>
