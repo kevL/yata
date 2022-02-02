@@ -263,6 +263,9 @@ namespace yata
 
 			InitializeComponent();
 
+			tb_Search.BackColor =
+			tb_Goto  .BackColor = Color.GhostWhite;
+
 			Tabs.MouseClick += click_Tabs;
 
 //			DrawRegulator.SetDoubleBuffered(this);
