@@ -703,11 +703,7 @@ namespace yata
 						}
 						break;
 
-					case Keys.Shift | Keys.Control | Keys.N:	// reverse gotoloadchanged
-						editcellsclick_GotoLoadchanged(null, EventArgs.Empty);
-						return true;
-
-					case Keys.Shift | Keys.F8:					// reverse cycle propanel location
+					case Keys.Shift | Keys.F8: // reverse cycle propanel location
 						opsclick_PropanelLocation(null, EventArgs.Empty);
 						return true;
 				}
@@ -2809,14 +2805,13 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_GotoLoadchanged"/></c> <c>[Ctrl+n]</c></item>
-		/// <item><c>null</c> (reverse goto w/ <c>[Shift]</c>)</item>
+		/// <item><c><see cref="it_GotoLoadchanged_pre"/></c> <c>[Shift+Ctrl+n]</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>Edit|Goto loadchanged <c>[Ctrl+n]</c></item>
-		/// <item><c>[Shift+Ctrl+n]</c>
-		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c></item>
+		/// <item>Edit|Goto loadchanged pre <c>[Shift+Ctrl+n]</c>
 		/// </list></remarks>
 		void editcellsclick_GotoLoadchanged(object sender, EventArgs e)
 		{
@@ -2843,7 +2838,7 @@ namespace yata
 
 				bool start = true;
 
-				if ((ModifierKeys & Keys.Shift) == Keys.None) // forward goto ->
+				if (sender == it_GotoLoadchanged) // forward gotolc ->
 				{
 					if (sel != null) { c = sel.x; selr = sel.y; }
 					else
@@ -2891,7 +2886,7 @@ namespace yata
 						}
 					}
 				}
-				else // backward goto ->
+				else // backward gotolc ->
 				{
 					if (sel != null) { c = sel.x; selr = sel.y; }
 					else
@@ -2964,7 +2959,7 @@ namespace yata
 			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
 			it_Apply       .Enabled = !Table.Readonly && anyselected;
 
-			// NOTE: 'it_GotoLoadchanged.Enabled' shall be detered independently
+			// NOTE: 'it_GotoLoadchanged*.Enabled' shall be detered independently
 			// by EnableGotoLoadchanged()
 		}
 		#endregion Methods (editcells)

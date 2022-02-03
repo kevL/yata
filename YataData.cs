@@ -250,7 +250,7 @@ namespace yata
 				{
 					YataForm.that.EnableGotoLoadchanged(_loadchanged || YataForm.Table.anyLoadchanged());
 				}
-				// else selecting the tab at initial load/reload deters 'it_GotoLoadchanged.Enabled'.
+				// else selecting the tab at initial load/reload deters 'it_GotoLoadchanged*.Enabled'.
 			}
 		}
 
