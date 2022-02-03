@@ -31,7 +31,7 @@ namespace yata
 		/// <returns></returns>
 		/// <remarks><c>[Up]</c>, <c>[Down]</c>, <c>[PageUp]</c>, and
 		/// <c>[PageDown]</c> shall be used for Tabfastedit by
-		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and
+		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and/or
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>.</remarks>
 		protected override bool IsInputKey(Keys keyData)
 		{
@@ -52,41 +52,8 @@ namespace yata
 					break;
 			}
 
-			//logfile.Log(". " + ret);
 			return ret;
 		}
-
-//		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-//		{
-//			logfile.Log("YataEditbox.ProcessCmdKey() keyData= " + keyData);
-//			bool ret = base.ProcessCmdKey(ref msg, keyData);
-//			logfile.Log(". " + ret);
-//			return ret;
-//		}
-//
-//		protected override bool IsInputChar(char charCode)
-//		{
-//			logfile.Log("YataEditbox.IsInputChar() charCode= " + charCode);
-//			bool ret = base.IsInputChar(charCode);
-//			logfile.Log(". " + ret);
-//			return ret;
-//		}
-//
-//		protected override bool ProcessDialogChar(char charCode)
-//		{
-//			logfile.Log("YataEditbox.ProcessDialogChar() charCode= " + charCode);
-//			bool ret = base.ProcessDialogChar(charCode);
-//			logfile.Log(". " + ret);
-//			return ret;
-//		}
-//
-//		protected override bool ProcessDialogKey(Keys keyData)
-//		{
-//			logfile.Log("YataEditbox.ProcessDialogKey() keyData= " + keyData);
-//			bool ret = base.ProcessDialogKey(keyData);
-//			logfile.Log(". " + ret);
-//			return ret;
-//		}
 		#endregion Methods (override)
 	}
 }
