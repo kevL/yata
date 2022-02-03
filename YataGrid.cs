@@ -3337,7 +3337,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>When the editor is told to hide the <c>Leave</c> event
 		/// fires *before* the editor actually hides.</remarks>
-		void leave_Editor(object sender, EventArgs e)
+		internal void leave_Editor(object sender, EventArgs e)
 		{
 			//logfile.Log("leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 

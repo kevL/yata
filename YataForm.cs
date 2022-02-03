@@ -2143,7 +2143,15 @@ namespace yata
 		void editclick_SearchNext(object sender, EventArgs e)
 		{
 			if (Table._editor.Visible)
-				Table.Select(); // fire the editor's Leave event.
+			{
+				// forcefire the Leave handler instead of relying on the editor
+				// losing focus on Table.Select() because if user presses [F3]
+				// or [Shift+F3] to search .net figures that the tab should be
+				// focused instead of 'Table' ...
+
+				Table.leave_Editor(null, EventArgs.Empty);
+				Table.Select();
+			}
 
 			_isSearch = true;
 			Search(sender == it_Searchnext);
@@ -2812,10 +2820,14 @@ namespace yata
 			{
 				if (Table._editor.Visible)
 				{
-					Table._editor.Visible = false;
-					Table.Invalidator(YataGrid.INVALID_GRID);
-				}
+					// forcefire the Leave handler instead of relying on the
+					// editor losing focus on Table.Select() because if user
+					// presses [Ctrl+n] or [Shift+Ctrl+n] to gotoloadchanged
+					// .net figures that the tab should be focused instead of
+					// 'Table' ...
 
+					Table.leave_Editor(null, EventArgs.Empty);
+				}
 				Table.Select();
 
 				Cell sel = Table.getSelectedCell();
