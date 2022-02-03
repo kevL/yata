@@ -450,7 +450,7 @@ namespace yata
 		/// <item><c>[Enter]</c> - accepts celledit</item>
 		/// <item><c>[Escape]</c> - cancels celledit</item>
 		/// <item><c>[Tab]</c>/<c>[Down]</c> - fastedit down</item>
-		/// <item><c>[Tab+Shift]/<c>[Up]</c></c> - fastedit up</item>
+		/// <item><c>[Shift+Tab]/<c>[Up]</c></c> - fastedit up</item>
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
