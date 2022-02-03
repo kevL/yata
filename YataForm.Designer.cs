@@ -677,7 +677,7 @@ namespace yata
 			this.it_Searchprev.Name = "it_Searchprev";
 			this.it_Searchprev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
 			this.it_Searchprev.Size = new System.Drawing.Size(205, 22);
-			this.it_Searchprev.Text = "Find previ&ous";
+			this.it_Searchprev.Text = "Find &prev";
 			this.it_Searchprev.Click += new System.EventHandler(this.editclick_SearchGo);
 			// 
 			// separator_3
