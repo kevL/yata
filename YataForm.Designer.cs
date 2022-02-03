@@ -42,6 +42,7 @@ namespace yata
 		ToolStripMenuItem it_Searchprev;
 		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
+		ToolStripMenuItem it_GotoLoadchanged_pre;
 		ToolStripMenuItem it_Defaultval;
 		ToolStripMenuItem it_Defaultclear;
 
@@ -283,6 +284,7 @@ namespace yata
 			this.it_Apply = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_39 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_GotoLoadchanged_pre = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeselectRows = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_33 = new System.Windows.Forms.ToolStripSeparator();
@@ -622,7 +624,7 @@ namespace yata
 			this.it_Undo.Enabled = false;
 			this.it_Undo.Name = "it_Undo";
 			this.it_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.it_Undo.Size = new System.Drawing.Size(205, 22);
+			this.it_Undo.Size = new System.Drawing.Size(182, 22);
 			this.it_Undo.Text = "&Undo";
 			this.it_Undo.Click += new System.EventHandler(this.editclick_Undo);
 			// 
@@ -631,34 +633,34 @@ namespace yata
 			this.it_Redo.Enabled = false;
 			this.it_Redo.Name = "it_Redo";
 			this.it_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.it_Redo.Size = new System.Drawing.Size(205, 22);
+			this.it_Redo.Size = new System.Drawing.Size(182, 22);
 			this.it_Redo.Text = "&Redo";
 			this.it_Redo.Click += new System.EventHandler(this.editclick_Redo);
 			// 
 			// separator_35
 			// 
 			this.separator_35.Name = "separator_35";
-			this.separator_35.Size = new System.Drawing.Size(202, 6);
+			this.separator_35.Size = new System.Drawing.Size(179, 6);
 			// 
 			// it_DeselectAll
 			// 
 			this.it_DeselectAll.Enabled = false;
 			this.it_DeselectAll.Name = "it_DeselectAll";
 			this.it_DeselectAll.ShortcutKeyDisplayString = "Esc";
-			this.it_DeselectAll.Size = new System.Drawing.Size(205, 22);
+			this.it_DeselectAll.Size = new System.Drawing.Size(182, 22);
 			this.it_DeselectAll.Text = "De&select all";
 			this.it_DeselectAll.Click += new System.EventHandler(this.editclick_Deselect);
 			// 
 			// separator_18
 			// 
 			this.separator_18.Name = "separator_18";
-			this.separator_18.Size = new System.Drawing.Size(202, 6);
+			this.separator_18.Size = new System.Drawing.Size(179, 6);
 			// 
 			// it_Search
 			// 
 			this.it_Search.Name = "it_Search";
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.it_Search.Size = new System.Drawing.Size(205, 22);
+			this.it_Search.Size = new System.Drawing.Size(182, 22);
 			this.it_Search.Text = "&Find";
 			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
 			// 
@@ -667,7 +669,7 @@ namespace yata
 			this.it_Searchnext.Enabled = false;
 			this.it_Searchnext.Name = "it_Searchnext";
 			this.it_Searchnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.it_Searchnext.Size = new System.Drawing.Size(205, 22);
+			this.it_Searchnext.Size = new System.Drawing.Size(182, 22);
 			this.it_Searchnext.Text = "Fin&d next";
 			this.it_Searchnext.Click += new System.EventHandler(this.editclick_SearchGo);
 			// 
@@ -676,33 +678,33 @@ namespace yata
 			this.it_Searchprev.Enabled = false;
 			this.it_Searchprev.Name = "it_Searchprev";
 			this.it_Searchprev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-			this.it_Searchprev.Size = new System.Drawing.Size(205, 22);
+			this.it_Searchprev.Size = new System.Drawing.Size(182, 22);
 			this.it_Searchprev.Text = "Find &prev";
 			this.it_Searchprev.Click += new System.EventHandler(this.editclick_SearchGo);
 			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
-			this.separator_3.Size = new System.Drawing.Size(202, 6);
+			this.separator_3.Size = new System.Drawing.Size(179, 6);
 			// 
 			// it_Goto
 			// 
 			this.it_Goto.Name = "it_Goto";
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(205, 22);
+			this.it_Goto.Size = new System.Drawing.Size(182, 22);
 			this.it_Goto.Text = "&Goto";
 			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
 			// separator_37
 			// 
 			this.separator_37.Name = "separator_37";
-			this.separator_37.Size = new System.Drawing.Size(202, 6);
+			this.separator_37.Size = new System.Drawing.Size(179, 6);
 			// 
 			// it_Defaultval
 			// 
 			this.it_Defaultval.Enabled = false;
 			this.it_Defaultval.Name = "it_Defaultval";
-			this.it_Defaultval.Size = new System.Drawing.Size(205, 22);
+			this.it_Defaultval.Size = new System.Drawing.Size(182, 22);
 			this.it_Defaultval.Text = "Default &value ...";
 			this.it_Defaultval.Click += new System.EventHandler(this.editclick_Defaultval);
 			// 
@@ -710,7 +712,7 @@ namespace yata
 			// 
 			this.it_Defaultclear.Enabled = false;
 			this.it_Defaultclear.Name = "it_Defaultclear";
-			this.it_Defaultclear.Size = new System.Drawing.Size(205, 22);
+			this.it_Defaultclear.Size = new System.Drawing.Size(182, 22);
 			this.it_Defaultclear.Text = "&Clear Default";
 			this.it_Defaultclear.Click += new System.EventHandler(this.editclick_Defaultclear);
 			// 
@@ -730,7 +732,8 @@ namespace yata
 			this.separator_4,
 			this.it_Apply,
 			this.separator_39,
-			this.it_GotoLoadchanged});
+			this.it_GotoLoadchanged,
+			this.it_GotoLoadchanged_pre});
 			this.it_MenuCells.Name = "it_MenuCells";
 			this.it_MenuCells.Size = new System.Drawing.Size(47, 20);
 			this.it_MenuCells.Text = "&Cells";
@@ -739,21 +742,21 @@ namespace yata
 			// 
 			this.it_DeselectCell.Enabled = false;
 			this.it_DeselectCell.Name = "it_DeselectCell";
-			this.it_DeselectCell.Size = new System.Drawing.Size(222, 22);
+			this.it_DeselectCell.Size = new System.Drawing.Size(280, 22);
 			this.it_DeselectCell.Text = "De&select";
 			this.it_DeselectCell.Click += new System.EventHandler(this.editcellsclick_Deselect);
 			// 
 			// separator_30
 			// 
 			this.separator_30.Name = "separator_30";
-			this.separator_30.Size = new System.Drawing.Size(219, 6);
+			this.separator_30.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_CutCell
 			// 
 			this.it_CutCell.Enabled = false;
 			this.it_CutCell.Name = "it_CutCell";
 			this.it_CutCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.it_CutCell.Size = new System.Drawing.Size(222, 22);
+			this.it_CutCell.Size = new System.Drawing.Size(280, 22);
 			this.it_CutCell.Text = "Cu&t";
 			this.it_CutCell.Click += new System.EventHandler(this.editcellsclick_CutCell);
 			// 
@@ -762,7 +765,7 @@ namespace yata
 			this.it_CopyCell.Enabled = false;
 			this.it_CopyCell.Name = "it_CopyCell";
 			this.it_CopyCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.it_CopyCell.Size = new System.Drawing.Size(222, 22);
+			this.it_CopyCell.Size = new System.Drawing.Size(280, 22);
 			this.it_CopyCell.Text = "&Copy";
 			this.it_CopyCell.Click += new System.EventHandler(this.editcellsclick_CopyCell);
 			// 
@@ -771,7 +774,7 @@ namespace yata
 			this.it_PasteCell.Enabled = false;
 			this.it_PasteCell.Name = "it_PasteCell";
 			this.it_PasteCell.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.it_PasteCell.Size = new System.Drawing.Size(222, 22);
+			this.it_PasteCell.Size = new System.Drawing.Size(280, 22);
 			this.it_PasteCell.Text = "&Paste";
 			this.it_PasteCell.Click += new System.EventHandler(this.editcellsclick_PasteCell);
 			// 
@@ -780,20 +783,20 @@ namespace yata
 			this.it_DeleteCell.Enabled = false;
 			this.it_DeleteCell.Name = "it_DeleteCell";
 			this.it_DeleteCell.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.it_DeleteCell.Size = new System.Drawing.Size(222, 22);
+			this.it_DeleteCell.Size = new System.Drawing.Size(280, 22);
 			this.it_DeleteCell.Text = "Clea&r";
 			this.it_DeleteCell.Click += new System.EventHandler(this.editcellsclick_Delete);
 			// 
 			// separator_20
 			// 
 			this.separator_20.Name = "separator_20";
-			this.separator_20.Size = new System.Drawing.Size(219, 6);
+			this.separator_20.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_Lower
 			// 
 			this.it_Lower.Enabled = false;
 			this.it_Lower.Name = "it_Lower";
-			this.it_Lower.Size = new System.Drawing.Size(222, 22);
+			this.it_Lower.Size = new System.Drawing.Size(280, 22);
 			this.it_Lower.Text = "&Lowercase";
 			this.it_Lower.Click += new System.EventHandler(this.editcellsclick_Lower);
 			// 
@@ -801,37 +804,47 @@ namespace yata
 			// 
 			this.it_Upper.Enabled = false;
 			this.it_Upper.Name = "it_Upper";
-			this.it_Upper.Size = new System.Drawing.Size(222, 22);
+			this.it_Upper.Size = new System.Drawing.Size(280, 22);
 			this.it_Upper.Text = "&Uppercase";
 			this.it_Upper.Click += new System.EventHandler(this.editcellsclick_Upper);
 			// 
 			// separator_4
 			// 
 			this.separator_4.Name = "separator_4";
-			this.separator_4.Size = new System.Drawing.Size(219, 6);
+			this.separator_4.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_Apply
 			// 
 			this.it_Apply.Enabled = false;
 			this.it_Apply.Name = "it_Apply";
 			this.it_Apply.ShortcutKeys = System.Windows.Forms.Keys.F11;
-			this.it_Apply.Size = new System.Drawing.Size(222, 22);
+			this.it_Apply.Size = new System.Drawing.Size(280, 22);
 			this.it_Apply.Text = "&Apply text ...";
 			this.it_Apply.Click += new System.EventHandler(this.editcellsclick_Apply);
 			// 
 			// separator_39
 			// 
 			this.separator_39.Name = "separator_39";
-			this.separator_39.Size = new System.Drawing.Size(219, 6);
+			this.separator_39.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_GotoLoadchanged
 			// 
 			this.it_GotoLoadchanged.Enabled = false;
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
 			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.it_GotoLoadchanged.Size = new System.Drawing.Size(222, 22);
+			this.it_GotoLoadchanged.Size = new System.Drawing.Size(280, 22);
 			this.it_GotoLoadchanged.Text = "Goto loadcha&nged";
 			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editcellsclick_GotoLoadchanged);
+			// 
+			// it_GotoLoadchanged_pre
+			// 
+			this.it_GotoLoadchanged_pre.Enabled = false;
+			this.it_GotoLoadchanged_pre.Name = "it_GotoLoadchanged_pre";
+			this.it_GotoLoadchanged_pre.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			| System.Windows.Forms.Keys.N)));
+			this.it_GotoLoadchanged_pre.Size = new System.Drawing.Size(280, 22);
+			this.it_GotoLoadchanged_pre.Text = "Goto loadchanged &pre";
+			this.it_GotoLoadchanged_pre.Click += new System.EventHandler(this.editcellsclick_GotoLoadchanged);
 			// 
 			// it_MenuRows
 			// 

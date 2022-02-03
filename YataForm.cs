@@ -1125,31 +1125,32 @@ namespace yata
 
 				Cell sel = Table.getSelectedCell();
 
-				bu_Propanel       .Visible = true;
-				it_MenuPaths      .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
+				bu_Propanel           .Visible = true;
+				it_MenuPaths          .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
 
 
-				it_freeze1        .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
-				it_freeze2        .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
+				it_freeze1            .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
+				it_freeze2            .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
 
-				it_Readonly       .Checked = Table.Readonly;
+				it_Readonly           .Checked = Table.Readonly;
 
 
-				it_Reload         .Enabled = File.Exists(Table.Fullpath);
-				it_Save           .Enabled = !Table.Readonly;
-				it_SaveAll        .Enabled = AllowSaveAll();
-				it_SaveAs         .Enabled =
-				it_Readonly       .Enabled =
-				it_Close          .Enabled =
-				it_CloseAll       .Enabled = true;
+				it_Reload             .Enabled = File.Exists(Table.Fullpath);
+				it_Save               .Enabled = !Table.Readonly;
+				it_SaveAll            .Enabled = AllowSaveAll();
+				it_SaveAs             .Enabled =
+				it_Readonly           .Enabled =
+				it_Close              .Enabled =
+				it_CloseAll           .Enabled = true;
 
-				it_Undo           .Enabled = Table._ur.CanUndo;
-				it_Redo           .Enabled = Table._ur.CanRedo;
-				it_Searchnext     .Enabled =
-				it_Searchprev     .Enabled = tb_Search.Text.Length != 0;
-				it_GotoLoadchanged.Enabled = Table.anyLoadchanged();
-				it_Defaultval     .Enabled = true;
-				it_Defaultclear   .Enabled = Table._defaultval.Length != 0;
+				it_Undo               .Enabled = Table._ur.CanUndo;
+				it_Redo               .Enabled = Table._ur.CanRedo;
+				it_Searchnext         .Enabled =
+				it_Searchprev         .Enabled = tb_Search.Text.Length != 0;
+				it_GotoLoadchanged    .Enabled =
+				it_GotoLoadchanged_pre.Enabled = Table.anyLoadchanged();
+				it_Defaultval         .Enabled = true;
+				it_Defaultclear       .Enabled = Table._defaultval.Length != 0;
 
 				EnableCelleditOperations();
 				EnableRoweditOperations();
@@ -1184,59 +1185,60 @@ namespace yata
 
 				// Visible ->
 
-				bu_Propanel       .Visible =
-				it_MenuPaths      .Visible =
+				bu_Propanel           .Visible =
+				it_MenuPaths          .Visible =
 
 				// Checked ->
 
-				it_freeze1        .Checked =
-				it_freeze2        .Checked =
-				it_Propanel       .Checked =
-				it_Readonly       .Checked =
+				it_freeze1            .Checked =
+				it_freeze2            .Checked =
+				it_Propanel           .Checked =
+				it_Readonly           .Checked =
 
 				// Enabled ->
 
-				it_Reload         .Enabled =
-				it_Save           .Enabled =
-				it_SaveAll        .Enabled =
-				it_SaveAs         .Enabled =
-				it_Readonly       .Enabled =
-				it_Close          .Enabled =
-				it_CloseAll       .Enabled =
+				it_Reload             .Enabled =
+				it_Save               .Enabled =
+				it_SaveAll            .Enabled =
+				it_SaveAs             .Enabled =
+				it_Readonly           .Enabled =
+				it_Close              .Enabled =
+				it_CloseAll           .Enabled =
 
-				it_Undo           .Enabled =
-				it_Redo           .Enabled =
-				it_Searchnext     .Enabled =
-				it_Searchprev     .Enabled =
-				it_GotoLoadchanged.Enabled =
-				it_Defaultval     .Enabled =
-				it_Defaultclear   .Enabled =
+				it_Undo               .Enabled =
+				it_Redo               .Enabled =
+				it_Searchnext         .Enabled =
+				it_Searchprev         .Enabled =
+				it_GotoLoadchanged    .Enabled =
+				it_GotoLoadchanged_pre.Enabled =
+				it_Defaultval         .Enabled =
+				it_Defaultclear       .Enabled =
 
-				it_DeselectCell   .Enabled =
-				it_CutCell        .Enabled =
-				it_CopyCell       .Enabled =
-				it_PasteCell      .Enabled =
-				it_DeleteCell     .Enabled =
-				it_Lower          .Enabled =
-				it_Upper          .Enabled =
-				it_Apply          .Enabled =
+				it_DeselectCell       .Enabled =
+				it_CutCell            .Enabled =
+				it_CopyCell           .Enabled =
+				it_PasteCell          .Enabled =
+				it_DeleteCell         .Enabled =
+				it_Lower              .Enabled =
+				it_Upper              .Enabled =
+				it_Apply              .Enabled =
 
-				it_DeselectRows   .Enabled =
-				it_CutRange       .Enabled =
-				it_CopyRange      .Enabled =
-				it_PasteRange     .Enabled =
-				it_DeleteRange    .Enabled =
-				it_CreateRows     .Enabled =
+				it_DeselectRows       .Enabled =
+				it_CutRange           .Enabled =
+				it_CopyRange          .Enabled =
+				it_PasteRange         .Enabled =
+				it_DeleteRange        .Enabled =
+				it_CreateRows         .Enabled =
 
-				it_OrderRows      .Enabled =
-				it_CheckRows      .Enabled =
-				it_ColorRows      .Enabled =
-				it_AutoCols       .Enabled =
-				it_freeze1        .Enabled =
-				it_freeze2        .Enabled =
-				it_Propanel       .Enabled =
-				it_PropanelLoc    .Enabled =
-				it_ExternDiff     .Enabled = false;
+				it_OrderRows          .Enabled =
+				it_CheckRows          .Enabled =
+				it_ColorRows          .Enabled =
+				it_AutoCols           .Enabled =
+				it_freeze1            .Enabled =
+				it_freeze2            .Enabled =
+				it_Propanel           .Enabled =
+				it_PropanelLoc        .Enabled =
+				it_ExternDiff         .Enabled = false;
 
 				_fdiffer = null;
 			}
@@ -2445,12 +2447,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Enables/disables <c><see cref="it_GotoLoadchanged"/></c>.
+		/// Enables/disables <c><see cref="it_GotoLoadchanged"/></c> and
+		/// <c><see cref="it_GotoLoadchanged_pre"/></c>.
 		/// </summary>
 		/// <param name="enabled"></param>
 		internal void EnableGotoLoadchanged(bool enabled)
 		{
-			it_GotoLoadchanged.Enabled = enabled;
+			it_GotoLoadchanged    .Enabled =
+			it_GotoLoadchanged_pre.Enabled = enabled;
 		}
 		#endregion Methods (edit)
 
