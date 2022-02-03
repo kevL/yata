@@ -802,7 +802,7 @@ namespace yata
 			switch (_dontbeep)
 			{
 				case DONTBEEP_SEARCH:
-					EnterkeyedSearch();
+					Search_keyEnter();
 					break;
 
 				case DONTBEEP_GOTO:
@@ -2140,7 +2140,7 @@ namespace yata
 		/// <item>Edit|Find next <c>[F3]</c></item>
 		/// <item>Edit|Find previous <c>[Shift+F3]</c></item>
 		/// </list></remarks>
-		void editclick_SearchNext(object sender, EventArgs e)
+		void editclick_SearchGo(object sender, EventArgs e)
 		{
 			if (Table._editor.Visible)
 			{
@@ -2163,7 +2163,7 @@ namespace yata
 		/// and focus is on either the search-box or the search-option dropdown.
 		/// </summary>
 		/// <remarks>[Enter] and [Shift+Enter] change focus to the table.</remarks>
-		void EnterkeyedSearch()
+		void Search_keyEnter()
 		{
 			Table.Select();
 
