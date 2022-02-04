@@ -2291,7 +2291,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			//logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
+			logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
+			logfile.Log(". YataGrid.OnPreviewKeyDown e.IsInputKey= " + e.IsInputKey);
 
 			switch (e.KeyCode)
 			{
@@ -2302,9 +2303,18 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
+					logfile.Log(". . YataGrid.OnPreviewKeyDown set e.IsInputKey TRUE");
 					e.IsInputKey = true; // as opposed to 'IsDialogKey' ... I'd guess, it's really not transparent.
 					break;
 			}
+		}
+		protected override bool IsInputKey(Keys keyData) // this can be used instead of OnPreviewKeyDown()
+		{
+			logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
+			
+			bool ret = base.IsInputKey(keyData);
+			logfile.Log(". YataGrid.IsInputKey ret= " + ret);
+			return ret;
 		}
 
 		/// <summary>
@@ -2314,7 +2324,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			//logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
+			logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			if ((e.Modifiers & Keys.Alt) == 0)
 			{
@@ -3373,7 +3383,7 @@ namespace yata
 		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			//logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
+			logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
 
 			switch (keyData)
 			{
@@ -3388,11 +3398,13 @@ namespace yata
 					{
 						Celledit();
 					}
+					logfile.Log(". ret TRUE");
 					return true;
 
 				case Keys.Escape:
 					_bypassleaveditor = true;
 					hideditor(INVALID_GRID, true);
+					logfile.Log(". ret TRUE");
 					return true;
 
 
@@ -3405,6 +3417,7 @@ namespace yata
 						if (_editcell.x != ColCount - 1)
 							startTabedit(+1,0);
 					}
+					logfile.Log(". ret TRUE");
 					return true;
 
 				case Keys.Tab | Keys.Shift:
@@ -3415,6 +3428,7 @@ namespace yata
 						if (_editcell.x != FrozenCount)
 							startTabedit(-1,0);
 					}
+					logfile.Log(". ret TRUE");
 					return true;
 
 				case Keys.Tab | Keys.Control:
@@ -3426,6 +3440,7 @@ namespace yata
 						if (_editcell.y != RowCount - 1)
 							startTabedit(0,+1);
 					}
+					logfile.Log(". ret TRUE");
 					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
 
 				case Keys.Tab | Keys.Control | Keys.Shift:
@@ -3437,6 +3452,7 @@ namespace yata
 						if (_editcell.y != 0)
 							startTabedit(0,-1);
 					}
+					logfile.Log(". ret TRUE");
 					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
 
 				case Keys.PageDown:
@@ -3452,6 +3468,7 @@ namespace yata
 							startTabedit(0, +shift);
 						}
 					}
+					logfile.Log(". ret TRUE");
 					return true;
 
 				case Keys.PageUp:
@@ -3467,9 +3484,13 @@ namespace yata
 							startTabedit(0, -shift);
 						}
 					}
+					logfile.Log(". ret TRUE");
 					return true;
 			}
-			return base.ProcessDialogKey(keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			logfile.Log(". YataGrid.ProcessDialogKey ret= " + ret);
+			return ret;
 		}
 
 		/// <summary>

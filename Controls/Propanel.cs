@@ -458,7 +458,7 @@ namespace yata
 		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			//logfile.Log("ProcessDialogKey() keyData= " + keyData);
+			logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
 
 			if (_editor.Visible)
 			{
@@ -471,6 +471,7 @@ namespace yata
 					case Keys.Escape:
 						hideditor();
 						_grid.Select();
+						logfile.Log(". Propanel.ProcessDialogKey force TRUE");
 						return true;
 
 					case Keys.Tab:
@@ -512,7 +513,10 @@ namespace yata
 						break;
 				}
 			}
-			return base.ProcessDialogKey(keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
+			return ret;
 		}
 
 

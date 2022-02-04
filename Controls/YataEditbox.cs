@@ -35,23 +35,29 @@ namespace yata
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>.</remarks>
 		protected override bool IsInputKey(Keys keyData)
 		{
-			//logfile.Log("YataEditbox.IsInputKey() keyData= " + keyData);
+			logfile.Log("YataEditbox.IsInputKey() keyData= " + keyData);
 
-			bool ret;
 			switch (keyData)
 			{
 				case Keys.Up:
 				case Keys.Down:
 				case Keys.PageUp:
 				case Keys.PageDown:
-					ret = false;
-					break;
-
-				default:
-					ret = base.IsInputKey(keyData);
-					break;
+					logfile.Log(". YataEditbox.IsInputKey force FALSE");
+					return false;
 			}
 
+			bool ret = base.IsInputKey(keyData);
+			logfile.Log(". YataEditbox.IsInputKey ret= " + ret);
+			return ret;
+		}
+
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			logfile.Log("YataEditbox.ProcessDialogKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			logfile.Log(". YataEditbox.ProcessDialogKey ret= " + ret);
 			return ret;
 		}
 		#endregion Methods (override)

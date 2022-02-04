@@ -79,6 +79,8 @@ namespace yata
 		/// by <c>YataGrid.ProcessDialogKey()</c>.</remarks>
 		protected override void OnKeyDown(KeyEventArgs ke)
 		{
+			logfile.Log("YataTabs.OnKeyDown() ke.KeyData= " + ke.KeyData);
+
 			switch (ke.KeyData)
 			{
 				case Keys.Control | Keys.Shift | Keys.PageUp:

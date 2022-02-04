@@ -685,7 +685,7 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			//logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
+			logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 
 			if (Table != null)
 			{
@@ -699,16 +699,30 @@ namespace yata
 						if (Table._editor.Visible
 							|| (Table.Propanel != null && Table.Propanel._editor.Visible))
 						{
+							logfile.Log(". YataForm.ProcessCmdKey force FALSE");
 							return false;
 						}
 						break;
 
 					case Keys.Shift | Keys.F8: // reverse cycle propanel location
 						opsclick_PropanelLocation(null, EventArgs.Empty);
+						logfile.Log(". YataForm.ProcessCmdKey force TRUE");
 						return true;
 				}
 			}
-			return base.ProcessCmdKey(ref msg, keyData);
+
+			bool ret = base.ProcessCmdKey(ref msg, keyData);
+			logfile.Log(". YataForm.ProcessCmdKey ret= " + ret);
+			return ret;
+		}
+
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			logfile.Log("YataForm.ProcessDialogKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			logfile.Log(". YataForm.ProcessDialogKey ret= " + ret);
+			return ret;
 		}
 
 		/// <summary>
@@ -722,7 +736,7 @@ namespace yata
 		/// Fires repeatedly if a key is held depressed.</remarks>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			//logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
+			logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			if (Table != null)
 			{
