@@ -696,6 +696,7 @@ namespace yata
 					case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
 					case Keys.Delete:
 //					case Keys.Delete | Keys.Shift: // appears to not be hooked by textboxes.
+					case Keys.Control | Keys.A: // bypass [Ctrl+a] if the editor is visible. This bypasses File|SaveAll and lets the editbox take the keystroke.
 						if (Table._editor.Visible
 							|| (Table.Propanel != null && Table.Propanel._editor.Visible))
 						{
