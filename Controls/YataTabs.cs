@@ -129,10 +129,16 @@ namespace yata
 			switch (ke.KeyData)
 			{
 				case Keys.Control | Keys.Shift | Keys.PageUp:
+					logfile.Log(". Keys.Control | Keys.Shift | Keys.PageUp");
+					return;
+
 				case Keys.Control | Keys.Shift | Keys.PageDown:
+					logfile.Log(". Keys.Control | Keys.Shift | Keys.PageDown");
+					return;
+
 //				case Keys.Control | Keys.Tab:
 //				case Keys.Control | Keys.Tab | Keys.Shift:
-					return;
+//					return;
 			}
 			base.OnKeyDown(ke);
 		}

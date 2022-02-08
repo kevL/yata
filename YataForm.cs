@@ -757,6 +757,7 @@ namespace yata
 				switch (e.KeyData)
 				{
 					case Keys.Enter: // do this here to get rid of the beep.
+						logfile.Log(". Keys.Enter");
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
 							_dontbeep = DONTBEEP_SEARCH;
@@ -776,6 +777,7 @@ namespace yata
 						break;
 
 					case Keys.Shift | Keys.Enter:
+						logfile.Log(". Keys.Shift | Keys.Enter");
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
 							e.SuppressKeyPress = true;
@@ -785,6 +787,7 @@ namespace yata
 						break;
 
 					case Keys.Escape:
+						logfile.Log(". Keys.Escape");
 						if (Tabs.Focused || bu_Propanel.Focused) // btn -> jic.
 						{
 							e.SuppressKeyPress = true;
@@ -793,6 +796,7 @@ namespace yata
 						break;
 
 					case Keys.Space:
+						logfile.Log(". Keys.Space");
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{
@@ -802,6 +806,7 @@ namespace yata
 						break;
 
 					case Keys.Control | Keys.Space:
+						logfile.Log(". Keys.Control | Keys.Space");
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{

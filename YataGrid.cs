@@ -2492,6 +2492,7 @@ namespace yata
 				switch (e.KeyCode)
 				{
 					case Keys.Home:
+						logfile.Log(". Keys.Home");
 						if (selr != -1)
 						{
 							if (!sft)
@@ -2574,6 +2575,7 @@ namespace yata
 						break;
 
 					case Keys.End:
+						logfile.Log(". Keys.End");
 						if (selr != -1)
 						{
 							if (!sft)
@@ -2656,6 +2658,7 @@ namespace yata
 						break;
 
 					case Keys.PageUp:
+						logfile.Log(". Keys.PageUp");
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -2774,6 +2777,7 @@ namespace yata
 						break;
 
 					case Keys.PageDown:
+						logfile.Log(". Keys.PageDown");
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -2892,6 +2896,7 @@ namespace yata
 						break;
 
 					case Keys.Up: // NOTE: needs to bypass KeyPreview
+						logfile.Log(". Keys.Up");
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -2978,6 +2983,7 @@ namespace yata
 						break;
 
 					case Keys.Down: // NOTE: needs to bypass KeyPreview
+						logfile.Log(". Keys.Down");
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -3144,6 +3150,7 @@ namespace yata
 						break;
 
 					case Keys.Right: // NOTE: needs to bypass KeyPreview
+						logfile.Log(". Keys.Right");
 						if (!ctr)
 						{
 							if (sft)
@@ -3224,6 +3231,7 @@ namespace yata
 						break;
 
 					case Keys.Escape: // NOTE: needs to bypass KeyPreview
+						logfile.Log(". Keys.Escape");
 						if (!ctr && !sft)
 						{
 							ClearSelects(true);
