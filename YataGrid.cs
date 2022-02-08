@@ -2310,6 +2310,15 @@ namespace yata
 			base.OnPreviewKeyDown(e);
 		}
 
+		/// <summary>
+		/// 
+		/// <list type="bullet">
+		/// <item><c>[Escape]</c> - cancels celledit</item>
+		/// </list>
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
@@ -2347,7 +2356,6 @@ namespace yata
 		/// Processes a so-called dialog-key.
 		/// <list type="bullet">
 		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
-		/// <item><c>[Escape]</c> - cancels celledit</item>
 		/// <item><c>[Tab]</c> - fastedit right</item>
 		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
 		/// <item><c>[Tab+Ctrl]</c>/<c>[Down]</c> - fastedit down</item>
