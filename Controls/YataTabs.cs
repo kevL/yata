@@ -69,6 +69,50 @@ namespace yata
 
 
 		#region Handlers (override)
+		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+		{
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataTabs.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+
+			base.OnPreviewKeyDown(e);
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataTabs.ProcessCmdKey() keyData= " + keyData);
+
+			bool ret = base.ProcessCmdKey(ref msg, keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataTabs.ProcessCmdKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataTabs.IsInputKey() keyData= " + keyData);
+
+			bool ret = base.IsInputKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataTabs.IsInputKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataTabs.ProcessDialogKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataTabs.ProcessDialogKey ret= " + ret);
+
+			return ret;
+		}
+
 		/// <summary>
 		/// Bypasses <c>[Ctrl+Shift+PageUp/Down]</c> that would change the
 		/// active tab so that <c><see cref="YataGrid"/>.OnKeyDown()</c> can
@@ -79,7 +123,8 @@ namespace yata
 		/// by <c>YataGrid.ProcessDialogKey()</c>.</remarks>
 		protected override void OnKeyDown(KeyEventArgs ke)
 		{
-			logfile.Log("YataTabs.OnKeyDown() ke.KeyData= " + ke.KeyData);
+			if ((ke.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataTabs.OnKeyDown() ke.KeyData= " + ke.KeyData);
 
 			switch (ke.KeyData)
 			{

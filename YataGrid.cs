@@ -2291,8 +2291,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData);
-			logfile.Log(". YataGrid.OnPreviewKeyDown e.IsInputKey= " + e.IsInputKey);
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			switch (e.KeyCode)
 			{
@@ -2303,17 +2303,163 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
-					logfile.Log(". . YataGrid.OnPreviewKeyDown set e.IsInputKey TRUE");
+					logfile.Log(". . YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
 					e.IsInputKey = true; // as opposed to 'IsDialogKey' ... I'd guess, it's really not transparent.
 					break;
 			}
+			base.OnPreviewKeyDown(e);
 		}
-		protected override bool IsInputKey(Keys keyData) // this can be used instead of OnPreviewKeyDown()
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
-			
-			bool ret = base.IsInputKey(keyData);
-			logfile.Log(". YataGrid.IsInputKey ret= " + ret);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataGrid.ProcessCmdKey() keyData= " + keyData);
+
+			bool ret = base.ProcessCmdKey(ref msg, keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataGrid.ProcessCmdKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataGrid.IsInputKey ret= " + ret);
+
+			return ret;
+		}
+
+		/// <summary>
+		/// Processes a so-called dialog-key.
+		/// <list type="bullet">
+		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
+		/// <item><c>[Escape]</c> - cancels celledit</item>
+		/// <item><c>[Tab]</c> - fastedit right</item>
+		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
+		/// <item><c>[Tab+Ctrl]</c>/<c>[Down]</c> - fastedit down</item>
+		/// <item><c>[Tab+Ctrl+Shift]</c>/<c>[Up]</c> - fastedit up</item>
+		/// </list></summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
+		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
+
+			switch (keyData)
+			{
+				case Keys.Enter:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+					}
+					else if (!Readonly
+						&& (_editcell = getSelectedCell()) != null
+						&&  _editcell.x >= FrozenCount)
+					{
+						Celledit();
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+
+				case Keys.Escape:
+					_bypassleaveditor = true;
+					hideditor(INVALID_GRID, true);
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+
+
+				// Tab fastedit ->
+				case Keys.Tab:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.x != ColCount - 1)
+							startTabedit(+1,0);
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+
+				case Keys.Tab | Keys.Shift:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.x != FrozenCount)
+							startTabedit(-1,0);
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+
+				case Keys.Tab | Keys.Control:
+				case Keys.Down:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.y != RowCount - 1)
+							startTabedit(0,+1);
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
+
+				case Keys.Tab | Keys.Control | Keys.Shift:
+				case Keys.Up:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.y != 0)
+							startTabedit(0,-1);
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
+
+				case Keys.PageUp:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.y != 0)
+						{
+							int shift = GetShiftVert();
+							if (_editcell.y - shift < 0) shift = _editcell.y;
+
+							startTabedit(0, -shift);
+						}
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+
+				case Keys.PageDown:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+
+						if (_editcell.y != RowCount - 1)
+						{
+							int shift = GetShiftVert();
+							if (_editcell.y + shift > RowCount - 1) shift = RowCount - 1 - _editcell.y;
+
+							startTabedit(0, +shift);
+						}
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
+					return true;
+			}
+
+			bool ret = base.ProcessDialogKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataGrid.ProcessDialogKey ret= " + ret);
+
 			return ret;
 		}
 
@@ -2324,7 +2470,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			if ((e.Modifiers & Keys.Alt) == 0)
 			{
@@ -3365,132 +3512,6 @@ namespace yata
 				Invalidator(INVALID_GRID);
 				// do NOT focus the table.
 			}
-		}
-
-		/// <summary>
-		/// Processes a so-called dialog-key.
-		/// <list type="bullet">
-		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
-		/// <item><c>[Escape]</c> - cancels celledit</item>
-		/// <item><c>[Tab]</c> - fastedit right</item>
-		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
-		/// <item><c>[Tab+Ctrl]</c>/<c>[Down]</c> - fastedit down</item>
-		/// <item><c>[Tab+Ctrl+Shift]</c>/<c>[Up]</c> - fastedit up</item>
-		/// </list></summary>
-		/// <param name="keyData"></param>
-		/// <returns></returns>
-		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
-		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
-		protected override bool ProcessDialogKey(Keys keyData)
-		{
-			logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
-
-			switch (keyData)
-			{
-				case Keys.Enter:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-					}
-					else if (!Readonly
-						&& (_editcell = getSelectedCell()) != null
-						&&  _editcell.x >= FrozenCount)
-					{
-						Celledit();
-					}
-					logfile.Log(". ret TRUE");
-					return true;
-
-				case Keys.Escape:
-					_bypassleaveditor = true;
-					hideditor(INVALID_GRID, true);
-					logfile.Log(". ret TRUE");
-					return true;
-
-
-				// Tab fastedit ->
-				case Keys.Tab:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.x != ColCount - 1)
-							startTabedit(+1,0);
-					}
-					logfile.Log(". ret TRUE");
-					return true;
-
-				case Keys.Tab | Keys.Shift:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.x != FrozenCount)
-							startTabedit(-1,0);
-					}
-					logfile.Log(". ret TRUE");
-					return true;
-
-				case Keys.Tab | Keys.Control:
-				case Keys.Down:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.y != RowCount - 1)
-							startTabedit(0,+1);
-					}
-					logfile.Log(". ret TRUE");
-					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
-
-				case Keys.Tab | Keys.Control | Keys.Shift:
-				case Keys.Up:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.y != 0)
-							startTabedit(0,-1);
-					}
-					logfile.Log(". ret TRUE");
-					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
-
-				case Keys.PageDown:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.y != RowCount - 1)
-						{
-							int shift = GetShiftVert();
-							if (_editcell.y + shift > RowCount - 1) shift = RowCount - 1 - _editcell.y;
-
-							startTabedit(0, +shift);
-						}
-					}
-					logfile.Log(". ret TRUE");
-					return true;
-
-				case Keys.PageUp:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-
-						if (_editcell.y != 0)
-						{
-							int shift = GetShiftVert();
-							if (_editcell.y - shift < 0) shift = _editcell.y;
-
-							startTabedit(0, -shift);
-						}
-					}
-					logfile.Log(". ret TRUE");
-					return true;
-			}
-
-			bool ret = base.ProcessDialogKey(keyData);
-			logfile.Log(". YataGrid.ProcessDialogKey ret= " + ret);
-			return ret;
 		}
 
 		/// <summary>

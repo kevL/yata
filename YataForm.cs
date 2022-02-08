@@ -677,6 +677,14 @@ namespace yata
 		}
 
 
+		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+		{
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataForm.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+
+			base.OnPreviewKeyDown(e);
+		}
+
 		/// <summary>
 		/// Processes so-called command-keys.
 		/// </summary>
@@ -685,26 +693,13 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 
 			if (Table != null)
 			{
 				switch (keyData)
 				{
-					case Keys.Control | Keys.X: // bypass [Ctrl+x] [Ctrl+c] [Ctrl+v] [Del] if the editor is visible.
-					case Keys.Control | Keys.C: // this bypasses the Edit menuitems and lets the editbox
-					case Keys.Control | Keys.V: // take the message if/when the editbox is visible.
-					case Keys.Delete:
-//					case Keys.Delete | Keys.Shift: // appears to not be hooked by textboxes.
-					case Keys.Control | Keys.A: // bypass [Ctrl+a] if the editor is visible. This bypasses File|SaveAll and lets the editbox take the keystroke.
-						if (Table._editor.Visible
-							|| (Table.Propanel != null && Table.Propanel._editor.Visible))
-						{
-							logfile.Log(". YataForm.ProcessCmdKey force FALSE");
-							return false;
-						}
-						break;
-
 					case Keys.Shift | Keys.F8: // reverse cycle propanel location
 						opsclick_PropanelLocation(null, EventArgs.Empty);
 						logfile.Log(". YataForm.ProcessCmdKey force TRUE");
@@ -713,16 +708,33 @@ namespace yata
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			logfile.Log(". YataForm.ProcessCmdKey ret= " + ret);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataForm.ProcessCmdKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataForm.IsInputKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataForm.IsInputKey ret= " + ret);
+
 			return ret;
 		}
 
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			logfile.Log("YataForm.ProcessDialogKey() keyData= " + keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataForm.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			logfile.Log(". YataForm.ProcessDialogKey ret= " + ret);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". YataForm.ProcessDialogKey ret= " + ret);
+
 			return ret;
 		}
 
@@ -737,7 +749,8 @@ namespace yata
 		/// Fires repeatedly if a key is held depressed.</remarks>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			if (Table != null)
 			{
@@ -3998,6 +4011,8 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_Propanel(object sender, EventArgs e)
 		{
+			// TODO: hide Table._editor
+
 			if (Table.Propanel == null
 				|| (Table.Propanel.Visible = !Table.Propanel.Visible))
 			{
@@ -4040,6 +4055,8 @@ namespace yata
 		/// <seealso cref="mouseup_buPropanel()"><c>mouseup_buPropanel()</c></seealso>
 		void opsclick_PropanelLocation(object sender, EventArgs e)
 		{
+			// TODO: hide Table._editor
+
 			if (Table.Propanel != null && Table.Propanel.Visible)
 				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
 		}

@@ -1,4 +1,8 @@
-﻿namespace yata
+﻿using System;
+using System.Windows.Forms;
+
+
+namespace yata
 {
 	/// <summary>
 	/// Global (const) strings.
@@ -67,6 +71,8 @@
 	static class Constants
 	{
 		internal const float epsilon = 0.00001F;
+
+		internal const Keys ControlShift = (Keys.Control | Keys.ControlKey | Keys.Shift | Keys.ShiftKey);
 	}
 	#endregion Constants
 

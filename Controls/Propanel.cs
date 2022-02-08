@@ -438,6 +438,38 @@ namespace yata
 
 
 		#region Handlers (override)
+		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+		{
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("Propanel.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+
+			base.OnPreviewKeyDown(e);
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("Propanel.ProcessCmdKey() keyData= " + keyData);
+
+			bool ret = base.ProcessCmdKey(ref msg, keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". Propanel.ProcessCmdKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("Propanel.IsInputKey() keyData= " + keyData);
+
+			bool ret = base.IsInputKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". Propanel.IsInputKey ret= " + ret);
+
+			return ret;
+		}
+
 		/// <summary>
 		/// Handles ending editing a cell by pressing <c>[Enter]</c> or
 		/// <c>[Escape]</c>/<c>[Tab]</c> - this fires during edit or so.
@@ -458,7 +490,8 @@ namespace yata
 		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
 
 			if (_editor.Visible)
 			{
