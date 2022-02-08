@@ -2502,6 +2502,19 @@ namespace yata
 
 				switch (e.KeyCode)
 				{
+					case Keys.Escape: // NOTE: needs to bypass KeyPreview
+						logfile.Log(". Keys.Escape");
+						if (!ctr && !sft)
+						{
+							ClearSelects(true);
+							_f.ClearSyncSelects();
+
+							selr = -1;
+							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+						}
+						break;
+
+
 					case Keys.Home:
 						logfile.Log(". Keys.Home");
 						if (selr != -1)
@@ -3238,18 +3251,6 @@ namespace yata
 								else
 									_scrollHori.Value += HeightRow;
 							}
-						}
-						break;
-
-					case Keys.Escape: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Escape");
-						if (!ctr && !sft)
-						{
-							ClearSelects(true);
-							_f.ClearSyncSelects();
-
-							selr = -1;
-							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 						}
 						break;
 				}
