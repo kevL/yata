@@ -2315,6 +2315,15 @@ namespace yata
 			if ((keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.ProcessCmdKey() keyData= " + keyData);
 
+			switch (keyData)
+			{
+				case Keys.Escape:
+					_bypassleaveditor = true;
+					hideditor(INVALID_GRID, true);
+					logfile.Log(". YataGrid.ProcessCmdKey force TRUE");
+					return true;
+			}
+
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 			if ((keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataGrid.ProcessCmdKey ret= " + ret);
@@ -2366,12 +2375,6 @@ namespace yata
 					{
 						Celledit();
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
-					return true;
-
-				case Keys.Escape:
-					_bypassleaveditor = true;
-					hideditor(INVALID_GRID, true);
 					logfile.Log(". YataGrid.ProcessDialogKey force TRUE");
 					return true;
 
