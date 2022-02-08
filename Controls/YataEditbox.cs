@@ -28,7 +28,7 @@ namespace yata
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
-			switch (e.KeyData)
+/*			switch (e.KeyData)
 			{
 				// Set 'e.IsInputKey' TRUE to bypass Menu shortcuts
 				// (keystrokes that are used by menuitems) as well as
@@ -66,7 +66,7 @@ namespace yata
 				// an input-key in the return from IsInputKey().
 				//
 				// IsInputKey TRUE makes the KeyDown event(s) fire, bypassing ProcessDialogKey().
-				// IsInputKey FALSE executes ProcessDialogKey(), bypassing the KeyDown events.
+				// IsInputKey FALSE executes ProcessDialogKey(), bypassing the KeyDown events <- not necessarily!
 				//
 				// The order of keyed events is as follows:
 				// - OnPreviewKeyDown
@@ -81,7 +81,16 @@ namespace yata
 				// The following keystrokes are used by .net's default TextBox
 				// behavior. Keystrokes that are also used outside of the
 				// TextBox - eg. in a Menu or in ProcessCmdKey() etc. - need to
-				// have 'e.IsInputKey' set TRUE here ->
+				// have 'e.IsInputKey' set TRUE here so that *nothing fires* in
+				// Yata other than stuff for this TextBox exclusively ->
+				//
+				// but note allow [Escape] and [Enter] to bubble up ... through
+				// the Process*Key() functs.
+				//
+				// Note that [Escape] is not actually the ShortcutKeys for Edit|Deselect all
+				// ... [Escape] is processed by YataGrid.ProcessCmdKey() iff the editor has focus
+				// - note that [Escape] gets treated differently by different Yata-objects.
+				// [Enter] is not on the Menu and very likely never will be.
 
 
 				case Keys.Control | Keys.X: // Cells|Cut
@@ -98,8 +107,61 @@ namespace yata
 					logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
 					e.IsInputKey = true;
 					break;
+			} */
+
+
+			ToolStripMenuItem it;
+
+			MenustripOneclick bar = YataForm.that._bar;
+			for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
+			{
+				if ((it = bar.Items[i] as ToolStripMenuItem) != null
+					&& it.Visible && it.Enabled)
+				{
+					if ((e.KeyData & ~Constants.ControlShift) != 0)
+						logfile.Log(it.Text);
+
+					if (hasShortcut(it, e.KeyData))
+					{
+						if ((e.KeyData & ~Constants.ControlShift) != 0)
+							logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+
+						e.IsInputKey = true;
+						break;
+					}
+				}
 			}
+
 			base.OnPreviewKeyDown(e);
+		}
+
+		/// <summary>
+		/// Checks menus and any submenus that they may have for a specified
+		/// shortcut recursively.
+		/// </summary>
+		/// <param name="it"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
+		{
+			ToolStripMenuItem subit;
+
+			for (int i = 0; i != it.DropDownItems.Count; ++i)
+			{
+				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
+//					&& subit.Enabled) // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
+				{
+					if ((keyData & ~Constants.ControlShift) != 0)
+						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
+
+					if (subit.ShortcutKeys == keyData
+						|| (subit.HasDropDownItems && hasShortcut(subit, keyData)))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		/// <summary>

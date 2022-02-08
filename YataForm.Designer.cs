@@ -17,7 +17,7 @@ namespace yata
 		/// </summary>
 		IContainer components;
 
-		MenustripOneclick _bar;
+		internal MenustripOneclick _bar;
 
 		ToolStripMenuItem it_MenuFile;
 		ToolStripMenuItem it_Create;
