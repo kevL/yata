@@ -3854,7 +3854,7 @@ namespace yata
 			{
 				case MouseButtons.Left:
 					if ((ModifierKeys & Keys.Alt) == Keys.None
-						&& e.X >= WidthTable || e.Y >= HeightTable // click to the right or below the table-area
+						&& (e.X >= WidthTable || e.Y >= HeightTable) // click to the right or below the table-area
 						&& _editor.Visible)
 					{
 						ApplyCellEdit(true);
