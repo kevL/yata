@@ -2327,6 +2327,20 @@ namespace yata
 
 			switch (keyData)
 			{
+				case Keys.Enter:
+					if (_editor.Visible)
+					{
+						ApplyCellEdit(true);
+					}
+					else if (!Readonly
+						&& (_editcell = getSelectedCell()) != null
+						&&  _editcell.x >= FrozenCount)
+					{
+						Celledit();
+					}
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is start or accept edit)");
+					return true;
+
 				case Keys.Escape:
 					_bypassleaveditor = true;
 					hideditor(INVALID_GRID, true);
@@ -2399,21 +2413,6 @@ namespace yata
 
 			switch (keyData)
 			{
-				case Keys.Enter:
-					if (_editor.Visible)
-					{
-						ApplyCellEdit(true);
-					}
-					else if (!Readonly
-						&& (_editcell = getSelectedCell()) != null
-						&&  _editcell.x >= FrozenCount)
-					{
-						Celledit();
-					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is start or accept edit)");
-					return true;
-
-
 				// Tab fastedit ->
 				case Keys.Tab: // right
 					if (_editor.Visible)
