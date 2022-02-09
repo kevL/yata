@@ -123,8 +123,7 @@ namespace yata
 
 					if (hasShortcut(it, e.KeyData))
 					{
-						if ((e.KeyData & ~Constants.ControlShift) != 0)
-							logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+						logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
 
 						e.IsInputKey = true;
 						break;
