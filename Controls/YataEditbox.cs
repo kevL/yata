@@ -209,11 +209,20 @@ namespace yata
 				// ie, handle the keystroke in Process*Key() funct(s).
 
 
-				case Keys.Up:
+//				case Keys.Up:
+//				case Keys.Down:
+//				case Keys.PageUp:
+//				case Keys.PageDown:
+
+				case Keys.Tab:								// right
+				case Keys.Shift | Keys.Tab:					// left
+				case Keys.Control | Keys.Tab:				// down
 				case Keys.Down:
-				case Keys.PageUp:
-				case Keys.PageDown:
-					logfile.Log(". YataEditbox.IsInputKey force FALSE");
+				case Keys.Shift | Keys.Control | Keys.Tab:	// up
+				case Keys.Up:
+				case Keys.PageDown:							// pagedown
+				case Keys.PageUp:							// pageup
+					logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit key");
 					return false;
 			}
 
