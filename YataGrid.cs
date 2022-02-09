@@ -2312,8 +2312,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Can be used to process any keystroke - as long as OnPreviewKeyDown()
+		/// has not flagged <c>e.IsInputKey</c> <c>true</c> - when this
+		/// <c>YataGrid</c> or <c><see cref="YataEditbox"/></c> has focus.
 		/// <list type="bullet">
+		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
 		/// <item><c>[Escape]</c> - cancels celledit</item>
 		/// </list>
 		/// </summary>
@@ -2393,19 +2396,25 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Processes a so-called dialog-key.
+		/// Processes a so-called dialog-key. Use this for TabFastedit
+		/// keystrokes only - process keystrokes for other operations in
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c>.
 		/// <list type="bullet">
-		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
 		/// <item><c>[Tab]</c> - fastedit right</item>
-		/// <item><c>[Tab+Shift]</c> - fastedit left</item>
-		/// <item><c>[Tab+Ctrl]</c>/<c>[Down]</c> - fastedit down</item>
-		/// <item><c>[Tab+Ctrl+Shift]</c>/<c>[Up]</c> - fastedit up</item>
+		/// <item><c>[Shift+Tab]</c> - fastedit left</item>
+		/// <item><c>[Ctrl+Tab]</c> or <c>[Down]</c> - fastedit down</item>
+		/// <item><c>[Shift+Ctrl+Tab]</c> or <c>[Up]</c> - fastedit up</item>
+		/// <item><c>[PageDown]</c> - fastedit pagedown</item>
+		/// <item><c>[PageUp]</c> - fastedit pageup</item>
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		/// <remarks>Some of these keystrokes need to be bypassed in
 		/// <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
 		/// <seealso cref="IsTabfasteditKey()"><c>IsTabfasteditKey()</c></seealso>
+		/// <remarks>These very likely could and should be put in
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> but I'm
+		/// going to keep them here just to differentiate the TabFastedit keys.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
