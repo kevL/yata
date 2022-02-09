@@ -198,7 +198,7 @@ namespace yata
 			if ((keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.IsInputKey() keyData= " + keyData);
 
-			switch (keyData)
+			if (YataGrid.IsTabfasteditKey(keyData))
 			{
 				// return FALSE to disable use of these keystrokes in the
 				// textbox, thereby allowing them for use by
@@ -208,22 +208,8 @@ namespace yata
 				// Note that a return of FALSE bypasses the KeyDown/Up events;
 				// ie, handle the keystroke in Process*Key() funct(s).
 
-
-//				case Keys.Up:
-//				case Keys.Down:
-//				case Keys.PageUp:
-//				case Keys.PageDown:
-
-				case Keys.Tab:								// right
-				case Keys.Shift | Keys.Tab:					// left
-				case Keys.Control | Keys.Tab:				// down
-				case Keys.Down:
-				case Keys.Shift | Keys.Control | Keys.Tab:	// up
-				case Keys.Up:
-				case Keys.PageDown:							// pagedown
-				case Keys.PageUp:							// pageup
-					logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit key");
-					return false;
+				logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit)");
+				return false;
 			}
 
 			bool ret = base.IsInputKey(keyData);

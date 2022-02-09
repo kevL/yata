@@ -2355,6 +2355,30 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Checks if a keystroke is used by a TabFastedit routine.
+		/// </summary>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		/// <remarks>Keep these in sync with
+		/// <c><see cref="ProcessDialogKey()">ProcessDialogKey()</see></c></remarks>
+		internal static bool IsTabfasteditKey(Keys keyData)
+		{
+			switch (keyData)
+			{
+				case Keys.Tab:								// right
+				case Keys.Shift | Keys.Tab:					// left
+				case Keys.Control | Keys.Tab:				// down
+				case Keys.Down:
+				case Keys.Shift | Keys.Control | Keys.Tab:	// up
+				case Keys.Up:
+				case Keys.PageDown:							// pagedown
+				case Keys.PageUp:							// pageup
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// Processes a so-called dialog-key.
 		/// <list type="bullet">
 		/// <item><c>[Enter]</c> - starts or accepts celledit</item>
