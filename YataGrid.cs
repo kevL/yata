@@ -2389,8 +2389,9 @@ namespace yata
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
-		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
-		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
+		/// <remarks>Some of these keystrokes need to be bypassed in
+		/// <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
+		/// <seealso cref="IsTabfasteditKey()"><c>IsTabfasteditKey()</c></seealso>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
@@ -2409,7 +2410,7 @@ namespace yata
 					{
 						Celledit();
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is start or stop edit");
+					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is start or accept edit)");
 					return true;
 
 
