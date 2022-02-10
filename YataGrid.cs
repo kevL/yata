@@ -2292,7 +2292,7 @@ namespace yata
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
-				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyCode= " + e.KeyCode + " e.IsInputKey= " + e.IsInputKey);
 
 			switch (e.KeyCode) // <- note KeyCode not KeyData
 			{
@@ -2303,7 +2303,7 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
-					logfile.Log(". . YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
+					logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
 
 					e.IsInputKey = true;
 					break;
