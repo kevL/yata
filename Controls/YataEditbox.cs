@@ -113,8 +113,8 @@ namespace yata
 			switch (e.KeyData)
 			{
 				case Keys.Escape:
-					logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
-
+//					logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+//
 //					e.IsInputKey = true;
 					break;
 
