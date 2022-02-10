@@ -2286,7 +2286,7 @@ namespace yata
 
 		/// <summary>
 		/// Disables textbox navigation etc. keys to allow table scrolling on
-		/// certain key-events (iff the editbox is not focused).
+		/// certain key-events (happens iff the editbox is not focused).
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -2294,7 +2294,7 @@ namespace yata
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
-			switch (e.KeyCode)
+			switch (e.KeyCode) // <- note KeyCode not KeyData
 			{
 				case Keys.Up:
 				case Keys.Down:
@@ -2305,7 +2305,7 @@ namespace yata
 				case Keys.Escape:
 					logfile.Log(". . YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
 
-					e.IsInputKey = true; // as opposed to 'IsDialogKey' ... I'd guess, it's really not transparent.
+					e.IsInputKey = true;
 					break;
 			}
 			base.OnPreviewKeyDown(e);
