@@ -788,7 +788,7 @@ namespace yata
 
 					case Keys.Escape:
 						logfile.Log(". Keys.Escape");
-						if (Tabs.Focused || bu_Propanel.Focused) // btn -> jic.
+						if (Tabs.Focused)// || bu_Propanel.Focused) // btn -> jic.
 						{
 							e.SuppressKeyPress = true;
 							Table.Select();

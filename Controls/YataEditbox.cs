@@ -110,27 +110,39 @@ namespace yata
 			} */
 
 
-			ToolStripMenuItem it;
-
-			MenustripOneclick bar = YataForm.that._bar;
-			for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
+			switch (e.KeyData)
 			{
-				if ((it = bar.Items[i] as ToolStripMenuItem) != null
-					&& it.Visible && it.Enabled)
+				case Keys.Escape:
+					logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+
+//					e.IsInputKey = true;
+					break;
+
+				default:
 				{
-					if ((e.KeyData & ~Constants.ControlShift) != 0)
-						logfile.Log(it.Text);
+					ToolStripMenuItem it;
 
-					if (hasShortcut(it, e.KeyData))
+					MenustripOneclick bar = YataForm.that._bar;
+					for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
 					{
-						logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+						if ((it = bar.Items[i] as ToolStripMenuItem) != null
+							&& it.Visible && it.Enabled)
+						{
+							if ((e.KeyData & ~Constants.ControlShift) != 0)
+								logfile.Log(it.Text);
 
-						e.IsInputKey = true;
-						break;
+							if (hasShortcut(it, e.KeyData))
+							{
+								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+
+								e.IsInputKey = true;
+								break;
+							}
+						}
 					}
+					break;
 				}
 			}
-
 			base.OnPreviewKeyDown(e);
 		}
 

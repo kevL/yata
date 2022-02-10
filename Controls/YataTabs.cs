@@ -81,6 +81,14 @@ namespace yata
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
+//			switch (e.KeyData)
+//			{
+//				case Keys.Escape:
+//					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
+//
+//					e.IsInputKey = true;
+//					break;
+//			}
 			base.OnPreviewKeyDown(e);
 		}
 
