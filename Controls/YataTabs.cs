@@ -36,6 +36,9 @@ namespace yata
 
 
 		#region cTor
+		/// <summary>
+		/// cTor.
+		/// </summary>
 		internal YataTabs()
 		{
 			DrawRegulator.SetDoubleBuffered(this);
@@ -56,6 +59,10 @@ namespace yata
 
 
 		#region Methods
+		/// <summary>
+		/// Gets the <c>TabPage</c> that the cursor is currently over.
+		/// </summary>
+		/// <returns></returns>
 		TabPage get()
 		{
 			for (int i = 0; i != TabPages.Count; ++i)
@@ -128,22 +135,25 @@ namespace yata
 
 			switch (ke.KeyData)
 			{
-				case Keys.Control | Keys.Shift | Keys.PageUp:
-					logfile.Log(". Keys.Control | Keys.Shift | Keys.PageUp");
+				case Keys.Shift | Keys.Control | Keys.PageUp:
+					logfile.Log(". Keys.Shift | Keys.Control | Keys.PageUp");
 					return;
 
-				case Keys.Control | Keys.Shift | Keys.PageDown:
-					logfile.Log(". Keys.Control | Keys.Shift | Keys.PageDown");
+				case Keys.Shift | Keys.Control | Keys.PageDown:
+					logfile.Log(". Keys.Shift | Keys.Control | Keys.PageDown");
 					return;
 
 //				case Keys.Control | Keys.Tab:
-//				case Keys.Control | Keys.Tab | Keys.Shift:
+//				case Keys.Shift | Keys.Control | Keys.Tab:
 //					return;
 			}
 			base.OnKeyDown(ke);
 		}
 
-
+		/// <summary>
+		/// Overrides the <c>MouseDown</c> eventhandler.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left
@@ -154,14 +164,22 @@ namespace yata
 			base.OnMouseDown(e);
 		}
 
+		/// <summary>
+		/// Overrides the <c>DragEnter</c> eventhandler.
+		/// </summary>
+		/// <param name="drgevent"></param>
 		protected override void OnDragEnter(DragEventArgs drgevent)
 		{
 			drgevent.Effect = DragDropEffects.Move;
 			base.OnDragEnter(drgevent);
 		}
 
-		// NOTE: Either OnDragDrop fires on a successful target or OnDragLeave
-		// fires if drop is on an invalid object.
+		/// <summary>
+		/// Overrides the <c>DragDrop</c> eventhandler.
+		/// </summary>
+		/// <param name="drgevent"></param>
+		/// <remarks>Either <c>DragDrop</c> fires on a successful target or
+		/// <c>DragLeave</c> fires if drop is on an invalid object.</remarks>
 		protected override void OnDragDrop(DragEventArgs drgevent)
 		{
 			if (_tabDrag != null)
