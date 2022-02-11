@@ -404,7 +404,7 @@ namespace yata
 		/// pressed.</remarks>
 		void keydown_Editor(object sender, KeyEventArgs e)
 		{
-			//logfile.Log("keydown_Editor() keyData= " + e.KeyData);
+			logfile.Log("Propanel.keydown_Editor() e.KeyData= " + e.KeyData);
 
 			if (e.Alt) hideditor();
 		}
@@ -418,6 +418,8 @@ namespace yata
 		/// or <c>[Ctrl+PageDown]</c> is pressed.</remarks>
 		void leave_Editor(object sender, EventArgs e)
 		{
+			logfile.Log("Propanel.leave_Editor()");
+
 			if (_editor.Visible
 				&& (ModifierKeys & Keys.Control) == Keys.Control)
 			{
@@ -432,6 +434,8 @@ namespace yata
 		/// <param name="e"></param>
 		void lostfocus_Editor(object sender, EventArgs e)
 		{
+			logfile.Log("Propanel.lostfocus_Editor()");
+
 			hideditor();
 		}
 		#endregion Handlers (editor)
