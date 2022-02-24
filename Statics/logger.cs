@@ -1,6 +1,7 @@
 using System;
 #if DEBUG
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Forms;
 #endif
 
@@ -14,7 +15,7 @@ namespace yata
 #endif
 
 		/// <summary>
-		/// Creates a logfile (overwrites the previous logfile if it exists).
+		/// Creates <c><see cref="Logfile"/></c> (overwrites the previous logfile if it exists).
 		/// </summary>
 		public static void CreateLog()
 		{
@@ -30,7 +31,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Writes a line to the logfile.
+		/// Appends a line to <c><see cref="Logfile"/></c>.
 		/// </summary>
 		/// <param name="line">the line to write</param>
 		public static void Log(string line = "")
@@ -45,6 +46,16 @@ namespace yata
 			{
 				sw.WriteLine(line);
 			}
+#endif
+		}
+
+		/// <summary>
+		/// Writes a stacktrace to <c><see cref="Logfile"/></c>.
+		/// </summary>
+		public static void Logtrace()
+		{
+#if DEBUG
+			Log(new StackTrace().ToString());
 #endif
 		}
 	}
