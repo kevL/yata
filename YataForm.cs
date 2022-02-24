@@ -112,13 +112,57 @@ namespace yata
 		Font FontDefault;
 		internal Font FontAccent;
 
-		internal bool _isSearch;
-		bool _firstclick; // preps the Search or Goto textboxes to select all text
+		/// <summary>
+		/// <c>true</c> to prevent <c><see cref="Table"/></c> from being
+		/// selected when the table scrolls.
+		/// </summary>
+		internal bool IsSearch;
+
 
 		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
 		const int DONTBEEP_DEFAULT = 0;
 		const int DONTBEEP_GOTO    = 1;
 		const int DONTBEEP_SEARCH  = 2;
+
+
+		/// <summary>
+		/// preps the Search textbox to select all text
+		/// </summary>
+		bool _selectall_search;
+
+		/// <summary>
+		/// I don't know exactly what this is doing or why it works but it does.
+		/// It appears to prevent a click on an already selected
+		/// <c>ToolStripTextBox</c> from reselecting all text ...
+		/// </summary>
+		bool _isEditclick_search;
+
+		/// <summary>
+		/// I don't know exactly what this is doing or why it works but it does.
+		/// It appears to prevent a click on an already selected
+		/// <c>ToolStripTextBox</c> from reselecting all text ...
+		/// </summary>
+		internal bool IsTabbed_search;
+
+		/// <summary>
+		/// preps the Goto textbox to select all text
+		/// </summary>
+		bool _selectall_goto;
+
+		/// <summary>
+		/// I don't know exactly what this is doing or why it works but it does.
+		/// It appears to prevent a click on an already selected
+		/// <c>ToolStripTextBox</c> from reselecting all text ...
+		/// </summary>
+		bool _isEditclick_goto;
+
+		/// <summary>
+		/// I don't know exactly what this is doing or why it works but it does.
+		/// It appears to prevent a click on an already selected
+		/// <c>ToolStripTextBox</c> from reselecting all text ...
+		/// </summary>
+		internal bool IsTabbed_goto;
+
 
 		internal DifferDialog _fdiffer;
 		internal YataGrid _diff1, _diff2;
@@ -132,10 +176,10 @@ namespace yata
 
 		/// <summary>
 		/// A pointer to a <c><see cref="YataGrid"/></c> that shall be used
-		/// during the save-routine. Is
-		/// required because it can't be assumed that the current
-		/// <c><see cref="Table"/></c> is the table being saved; that is, the
-		/// SaveAll operation needs to cycle through all tables.
+		/// during the save-routine. Is required because it can't be assumed
+		/// that the current <c><see cref="Table"/></c> is the table being
+		/// saved; that is, the SaveAll operation needs to cycle through all
+		/// tables.
 		/// </summary>
 		/// <seealso cref="fileclick_SaveAll()"><c>fileclick_SaveAll()</c></seealso>
 		YataGrid _table;
@@ -262,6 +306,8 @@ namespace yata
 			Controls.Add(bu_Propanel);
 
 			InitializeComponent();
+
+			_bar.setYata(this);
 
 			tb_Search.BackColor =
 			tb_Goto  .BackColor = Color.GhostWhite;
@@ -403,6 +449,12 @@ namespace yata
 
 			if (Settings._maximized)
 				WindowState = FormWindowState.Maximized;
+
+//			_bar.TabStop = true; // can be set in the designer <-
+			// if focus is not forced here focus will be given to the File it.
+
+//			_bar.Select(); // focuses the File it's container, the Menubar itself.
+//			Tabs.Select(); // this happens by default if _bar's TabStop property is left False.
 		}
 
 
@@ -495,20 +547,45 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// Overrides Yata's <c>Activated</c> handler.
+		/// Overrides Yata's <c>Activated</c> eventhandler. Checks if the
+		/// currently active table has been changed on the hardrive.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnActivated(EventArgs e)
 		{
+			logfile.Log("YataForm.OnActivated()");
+
 			if (Table != null)
 			{
-				//logfile.Log("YataForm.OnActivated()");
-
 				// NOTE: This could cause VerifyCurrentFileState() to run twice
 				// if user activates Yata by clicking on a tab that changes the
 				// currently selected tab - see: tab_SelectedIndexChanged()
 				VerifyCurrentFileState();
 			}
+		}
+
+		/// <summary>
+		/// Overrides Yata's <c>Deactivate</c> eventhandler. Ensures that focus
+		/// gets removed from the Menubar.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnDeactivate(EventArgs e)
+		{
+			logfile.Log("YataForm.OnDeactivate()");
+
+			if (Table != null)
+			{
+				if (Table._editor.Visible)
+					Table._editor.Visible = false;
+				else if (Table.Propanel != null && Table.Propanel._editor.Visible)
+					Table.Propanel._editor.Visible = false;
+
+				Table.Select();
+			}
+			else
+				Tabs.Select();
+
+			base.OnDeactivate(e);
 		}
 
 		/// <summary>
@@ -670,6 +747,16 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
+			//logfile.Log("YataForm.OnResize()");
+
+			if (Table != null)
+			{
+				if (Table._editor.Visible)
+					Table._editor.Visible = false;
+				else if (Table.Propanel != null && Table.Propanel._editor.Visible)
+					Table.Propanel._editor.Visible = false;
+			}
+
 			if (WindowState == FormWindowState.Minimized)
 				IsMin = true;
 
@@ -696,13 +783,43 @@ namespace yata
 			if ((keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 
+			switch (keyData)
+			{
+				case Keys.Menu | Keys.Alt:
+					// NOTE: The Menubar container is by default TabStop=FALSE and ... (not) forced TRUE in YataForm.cTor <-
+					// so it can never take focus - but its subcontrols are fucked re. "focus".
+					// ... because they aren't actually 'Controls'.
+
+					if (Table != null)
+					{
+						logfile.Log(". select Table");
+
+						// set _editor.Visible FALSE else its leave event fires twice
+						// when it loses focus ->
+
+						if (Table._editor.Visible)
+							Table._editor.Visible = false;
+						else if (Table.Propanel != null && Table.Propanel._editor.Visible)
+							Table.Propanel._editor.Visible = false;
+
+						Table.Select();
+					}
+					else
+					{
+						logfile.Log(". select Tabs");
+						Tabs.Select();
+					}
+					return false; // do not return True. [Alt] needs to 'activate' the Menubar.
+			}
+
 			if (Table != null)
 			{
 				switch (keyData)
 				{
 					case Keys.Shift | Keys.F8: // reverse cycle propanel location
 						opsclick_PropanelLocation(null, EventArgs.Empty);
-						logfile.Log(". YataForm.ProcessCmdKey force TRUE");
+
+						logfile.Log(". YataForm.ProcessCmdKey force TRUE (reverse cycle propanel location)");
 						return true;
 				}
 			}
@@ -760,14 +877,19 @@ namespace yata
 						logfile.Log(". Keys.Enter");
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
+							logfile.Log(". . Search forward");
 							_dontbeep = DONTBEEP_SEARCH;
 						}
 						else if (tb_Goto.Focused)
 						{
+							logfile.Log(". . Goto");
 							_dontbeep = DONTBEEP_GOTO;
 						}
 						else
+						{
+							logfile.Log(". . Search or Goto not focused");
 							_dontbeep = DONTBEEP_DEFAULT;
+						}
 
 						if (_dontbeep != DONTBEEP_DEFAULT)
 						{
@@ -780,19 +902,29 @@ namespace yata
 						logfile.Log(". Keys.Shift | Keys.Enter");
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
+							logfile.Log(". . Search backward");
+
 							e.SuppressKeyPress = true;
 							_dontbeep = DONTBEEP_SEARCH;
 							BeginInvoke(DontBeepEvent);
 						}
+						else
+							logfile.Log(". . Search not focused");
+
 						break;
 
 					case Keys.Escape:
 						logfile.Log(". Keys.Escape");
-						if (Tabs.Focused)// || bu_Propanel.Focused) // btn -> jic.
-						{
+						if (Tabs.Focused || bu_Propanel.Focused)	// btn -> jic. The Propanel button can become focused by
+						{											// keyboard (I saw it happen once) but can't figure out how.
+							logfile.Log(". . deselect Tabs -> select Grid");
+
 							e.SuppressKeyPress = true;
 							Table.Select();
 						}
+						else
+							logfile.Log(". . Tabs not focused");
+
 						break;
 
 					case Keys.Space:
@@ -800,9 +932,14 @@ namespace yata
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{
+							logfile.Log(". . select first cell");
+
 							e.SuppressKeyPress = true;
 							Table.SelectFirstCell();
 						}
+						else
+							logfile.Log(". . an Editor is visible -> do not select first cell");
+
 						break;
 
 					case Keys.Control | Keys.Space:
@@ -810,13 +947,61 @@ namespace yata
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{
+							logfile.Log(". . select first row");
+
 							e.SuppressKeyPress = true;
 							Table.SelectFirstRow();
 						}
+						else
+							logfile.Log(". . an Editor is visible -> do not select first row");
+
+						break;
+				}
+
+
+				// clear the col-width adjustor on '_panelCols' ->
+				switch (e.KeyCode)
+				{
+					case Keys.Menu:			// Keys.Alt
+					case Keys.ControlKey:	// Keys.Control
+					case Keys.ShiftKey:		// Keys.Shift
+						Cursor = Cursors.Default;
+						Table._panelCols.IsCursorSplit = false;
+						Table._panelCols.IsGrab = false;
 						break;
 				}
 			}
 			base.OnKeyDown(e);
+		}
+
+		/// <summary>
+		/// Overrides the <c>KeyUp</c> eventhandler. Enables the col-width
+		/// adjustor if appropriate.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnKeyUp(KeyEventArgs e)
+		{
+			if (Table != null)
+			{
+				// enable the col-width adjustor on '_panelCols' ->
+				switch (e.KeyCode)
+				{
+					case Keys.Menu:			// Keys.Alt
+					case Keys.ControlKey:	// Keys.Control
+					case Keys.ShiftKey:		// Keys.Shift
+						if (ModifierKeys == Keys.None)
+						{
+							Point pos = Table._panelCols.PointToClient(Cursor.Position);
+							if (Table._panelCols.GetSplitterCol(pos.X) != -1)
+							{
+								Cursor = Cursors.VSplit;
+								Table._panelCols.IsCursorSplit = true;
+							}
+						}
+						break;
+				}
+			}
+			base.OnKeyUp(e);
 		}
 
 		/// <summary>
@@ -2106,16 +2291,54 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles the <c>TextChanged</c> event on the search-box.
-		/// Enables/disables find next/find previous.
+		/// This is used by
+		/// <c><see cref="YataStrip"></see>.WndProc()</c> to workaround .net
+		/// fuckuppery that causes the <c>TextBoxes</c> on the Menubar to refire
+		/// their <c>Enter</c> events even when they are already Entered and
+		/// Focused, which screws up the select-all-text routine.
+		/// </summary>
+		/// <returns><c>true</c> if either <c><see cref="tb_Goto"/></c> or
+		/// <c><see cref="tb_Search"/> has focus.</c></returns>
+		internal bool isTextboxFocused()
+		{
+			return tb_Goto.Focused || tb_Search.Focused;
+		}
+
+
+		/// <summary>
+		/// Handles select-all hocus-pocus when focus enters the Search
+		/// <c>ToolStripTextBox</c> on the <c><see cref="YataStrip"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
-		void textchanged_Search(object sender, EventArgs e)
+		void enter_Searchbox(object sender, EventArgs e)
 		{
-			it_Searchnext.Enabled =
-			it_Searchprev.Enabled = Table != null
-								 && tb_Search.Text.Length != 0;
+			//logfile.Log("YataForm.enter_Searchbox()");
+//			(sender as ToolStripTextBox).SelectAll(); haha good luck. Text cannot be selected in the Enter event.
+
+			_selectall_search   = !_isEditclick_search && !IsTabbed_search;
+			_isEditclick_search =
+			IsTabbed_search     = false;
+		}
+
+		/// <summary>
+		/// Handles selectall hocus-pocus when a <c>MouseDown</c> event occurs
+		/// for a <c>ToolStripTextBox</c> on the Menubar.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="tb_Goto"/></c></item>
+		/// <item><c><see cref="tb_Search"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void mousedown_Searchbox(object sender, MouseEventArgs e)
+		{
+			//logfile.Log("YataForm.mousedown_Searchbox() _selectall= " + _selectall_search);
+			if (_selectall_search)
+			{
+				_selectall_search = false;
+				(sender as ToolStripTextBox).SelectAll();
+			}
 		}
 
 		/// <summary>
@@ -2127,34 +2350,24 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>Edit|Find <c>[Ctrl+f]</c></item>
 		/// </list></remarks>
-		void editclick_Search(object sender, EventArgs e)
+		void editclick_FocusSearch(object sender, EventArgs e)
 		{
+			_isEditclick_search = true;
 			tb_Search.Focus();
 			tb_Search.SelectAll();
 		}
 
 		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the search-box.
+		/// Handles the <c>TextChanged</c> event on the search-box.
+		/// Enables/disables find next/find previous.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
 		/// <param name="e"></param>
-		void enter_Search(object sender, EventArgs e)
+		void textchanged_Searchbox(object sender, EventArgs e)
 		{
-			_firstclick = true;
-		}
-
-		/// <summary>
-		/// Handles selectall hocus-pocus when user clicks the search-box.
-		/// </summary>
-		/// <param name="sender"><c><see cref="tb_Search"/></c></param>
-		/// <param name="e"></param>
-		void click_Search(object sender, EventArgs e)
-		{
-			if (_firstclick)
-			{
-				_firstclick = false;
-				tb_Search.SelectAll();
-			}
+			it_Searchnext.Enabled =
+			it_Searchprev.Enabled = Table != null
+								 && tb_Search.Text.Length != 0;
 		}
 
 		/// <summary>
@@ -2171,22 +2384,16 @@ namespace yata
 		/// <item>Edit|Find next <c>[F3]</c></item>
 		/// <item>Edit|Find previous <c>[Shift+F3]</c></item>
 		/// </list></remarks>
-		void editclick_SearchGo(object sender, EventArgs e)
+		void editclick_StartSearch(object sender, EventArgs e)
 		{
-			if (Table._editor.Visible)
-			{
-				// forcefire the Leave handler instead of relying on the editor
-				// losing focus on Table.Select() because if user presses [F3]
-				// or [Shift+F3] to search .net figures that the tab should be
-				// focused instead of 'Table' ...
+			// the editor will never be visible here because the only way to
+			// get here is by click on the Menubar - will close the editor
+			// because the editor loses focus - or by [F3] - which will be
+			// bypassed if the editor is open - see YataEditbox.OnPreviewKeyDown().
 
-				Table.leave_Editor(null, EventArgs.Empty);
-				Table.Select();
-			}
-
-			_isSearch = true;
-			Search(sender == it_Searchnext);
-			_isSearch = false;
+			IsSearch = true;
+			Search(sender == it_Searchnext); // [F3] shall not force the Table focused.
+			IsSearch = false;
 		}
 
 		/// <summary>
@@ -2196,20 +2403,21 @@ namespace yata
 		/// <remarks>[Enter] and [Shift+Enter] change focus to the table.</remarks>
 		void Search_keyEnter()
 		{
-			Table.Select();
+			IsSearch = true;
+			if (Search((ModifierKeys & Keys.Shift) == Keys.None))
+				Table.Select();
 
-			_isSearch = true;
-			Search((ModifierKeys & Keys.Shift) == Keys.None);
-			_isSearch = false;
+			IsSearch = false;
 		}
 
 		/// <summary>
 		/// Searches the current table for the text in the search-box.
 		/// </summary>
 		/// <param name="forward"></param>
+		/// <returns><c>true</c> if a match is found</returns>
 		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
 		/// call.</remarks>
-		void Search(bool forward)
+		bool Search(bool forward)
 		{
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
@@ -2264,7 +2472,7 @@ namespace yata
 										|| (substring && text.Contains(search))))
 								{
 									Table.SelectCell(Table[r,c]);
-									return;
+									return true;
 								}
 							}
 						}
@@ -2278,7 +2486,7 @@ namespace yata
 									|| (substring && text.Contains(search))))
 							{
 								Table.SelectCell(Table[r,c]);
-								return;
+								return true;
 							}
 						}
 					}
@@ -2316,7 +2524,7 @@ namespace yata
 										|| (substring && text.Contains(search))))
 								{
 									Table.SelectCell(Table[r,c]);
-									return;
+									return true;
 								}
 							}
 						}
@@ -2330,7 +2538,7 @@ namespace yata
 									|| (substring && text.Contains(search))))
 							{
 								Table.SelectCell(Table[r,c]);
-								return;
+								return true;
 							}
 						}
 					}
@@ -2349,15 +2557,68 @@ namespace yata
 
 				Table.Invalidator(invalid);
 			}
+			return false;
 		}
 
+
+		/// <summary>
+		/// Handles select-all hocus-pocus when focus enters the Goto
+		/// <c>ToolStripTextBox</c> on the <c><see cref="YataStrip"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
+		/// <param name="e"></param>
+		void enter_Gotobox(object sender, EventArgs e)
+		{
+			//logfile.Log("YataForm.enter_Gotobox()");
+//			(sender as ToolStripTextBox).SelectAll(); haha good luck. Text cannot be selected in the Enter event.
+
+			_selectall_goto   = !_isEditclick_goto && !IsTabbed_goto;
+			_isEditclick_goto =
+			IsTabbed_goto     = false;
+		}
+
+		/// <summary>
+		/// Handles selectall hocus-pocus when a <c>MouseDown</c> event occurs
+		/// for a <c>ToolStripTextBox</c> on the Menubar.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="tb_Goto"/></c></item>
+		/// <item><c><see cref="tb_Search"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void mousedown_Gotobox(object sender, MouseEventArgs e)
+		{
+			//logfile.Log("YataForm.mousedown_Gotobox() _selectall= " + _selectall_search);
+			if (_selectall_goto)
+			{
+				_selectall_goto = false;
+				(sender as ToolStripTextBox).SelectAll();
+			}
+		}
+
+		/// <summary>
+		/// Handles the <c>Click</c> event to focus the goto box.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Goto"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Goto <c>[Ctrl+g]</c></item>
+		/// </list></remarks>
+		void editclick_FocusGoto(object sender, EventArgs e)
+		{
+			_isEditclick_goto = true;
+			tb_Goto.Focus();
+			tb_Goto.SelectAll();
+		}
 
 		/// <summary>
 		/// Handles the <c>TextChanged</c> event on the goto box.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
 		/// <param name="e"></param>
-		void textchanged_Goto(object sender, EventArgs e)
+		void textchanged_Gotobox(object sender, EventArgs e)
 		{
 			// TODO: allow a blank string
 
@@ -2373,44 +2634,6 @@ namespace yata
 			}
 		}
 
-		/// <summary>
-		/// Handles the <c>Click</c> event to focus the goto box.
-		/// </summary>
-		/// <param name="sender"><c><see cref="it_Goto"/></c></param>
-		/// <param name="e"></param>
-		/// <remarks>Called by
-		/// <list type="bullet">
-		/// <item>Edit|Goto <c>[Ctrl+g]</c></item>
-		/// </list></remarks>
-		void editclick_Goto(object sender, EventArgs e)
-		{
-			tb_Goto.Focus();
-			tb_Goto.SelectAll();
-		}
-
-		/// <summary>
-		/// Handles the <c>Enter</c> event on the goto box.
-		/// </summary>
-		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
-		/// <param name="e"></param>
-		void enter_Goto(object sender, EventArgs e)
-		{
-			_firstclick = true;
-		}
-
-		/// <summary>
-		/// Handles the <c>Click</c> event on the goto box.
-		/// </summary>
-		/// <param name="sender"><c><see cref="tb_Goto"/></c></param>
-		/// <param name="e"></param>
-		void click_Goto(object sender, EventArgs e)
-		{
-			if (_firstclick)
-			{
-				_firstclick = false;
-				tb_Goto.SelectAll();
-			}
-		}
 
 		/// <summary>
 		/// Handles the <c>Click</c> event to edit the 2da-file's defaultval.
@@ -2844,22 +3067,12 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>Edit|Goto loadchanged <c>[Ctrl+n]</c></item>
-		/// <item>Edit|Goto loadchanged pre <c>[Shift+Ctrl+n]</c>
+		/// <item>Edit|Goto loadchanged pre <c>[Shift+Ctrl+n]</c></item>
 		/// </list></remarks>
 		void editcellsclick_GotoLoadchanged(object sender, EventArgs e)
 		{
 			if ((ModifierKeys & Keys.Alt) == Keys.None && Table.anyLoadchanged())
 			{
-				if (Table._editor.Visible)
-				{
-					// forcefire the Leave handler instead of relying on the
-					// editor losing focus on Table.Select() because if user
-					// presses [Ctrl+n] or [Shift+Ctrl+n] to gotoloadchanged
-					// .net figures that the tab should be focused instead of
-					// 'Table' ...
-
-					Table.leave_Editor(null, EventArgs.Empty);
-				}
 				Table.Select();
 
 				Cell sel = Table.getSelectedCell();

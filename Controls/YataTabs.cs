@@ -76,19 +76,30 @@ namespace yata
 
 
 		#region Handlers (override)
+		/// <summary>
+		/// Overrides the <c>PreviewKeyDown</c> eventhandler.
+		/// <list type="bullet">
+		/// <item><c>[Escape]</c> - bypasses key-processing and bubbling</item>
+		/// </list>
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
-//			switch (e.KeyData)
-//			{
-//				case Keys.Escape:
-//					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
-//
-//					e.IsInputKey = true;
-//					break;
-//			}
+			switch (e.KeyData)
+			{
+				case Keys.Escape:
+					// this just optimizes away key-processing and key-bubbling
+					// etc. - not req'd but here it is.
+					//
+					// [Escape] shall be handled in YataForm.OnKeyDown()
+
+					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
+					e.IsInputKey = true;
+					break;
+			}
 			base.OnPreviewKeyDown(e);
 		}
 
@@ -144,11 +155,8 @@ namespace yata
 			switch (ke.KeyData)
 			{
 				case Keys.Shift | Keys.Control | Keys.PageUp:
-					logfile.Log(". Keys.Shift | Keys.Control | Keys.PageUp");
-					return;
-
 				case Keys.Shift | Keys.Control | Keys.PageDown:
-					logfile.Log(". Keys.Shift | Keys.Control | Keys.PageDown");
+					logfile.Log(". YataTabs.OnKeyDown bypass base.OnKeyDown()");
 					return;
 
 //				case Keys.Control | Keys.Tab:
@@ -200,18 +208,12 @@ namespace yata
 
 					if (src < dst) // NOTE: The start and stop IDs won't be the same.
 					{
-						do
-						{
-							TabPages[src] = TabPages[++src];
-						}
+						do TabPages[src] = TabPages[++src];
 						while (src != dst);
 					}
-					else //if (dst < src)
+					else // src > dst
 					{
-						do
-						{
-							TabPages[src] = TabPages[--src];
-						}
+						do TabPages[src] = TabPages[--src];
 						while (src != dst);
 					}
 

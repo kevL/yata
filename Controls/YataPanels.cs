@@ -15,12 +15,42 @@ namespace yata
 		#region Fields
 		readonly YataGrid _grid;
 
-		internal bool Grab
-		{ get; private set; }
-
+		/// <summary>
+		/// The col-id of a current col-width grab.
+		/// </summary>
 		int _grabCol;
-		int _grabStart;
+
+		/// <summary>
+		/// The x-position of the cursor at the start of a col-width grab.
+		/// </summary>
+		int _grabPos;
 		#endregion Fields
+
+
+		#region Properties
+		/// <summary>
+		/// Tracks the state of the cursor wrt the col-width adjustor.
+		/// <list type="bullet">
+		/// <item><c>true</c> - <c>Cursors.VSplit</c></item>
+		/// <item><c>false</c> - <c>!Cursors.VSplit</c></item>
+		/// </list>
+		/// </summary>
+		/// <remarks><c>Cursors.Default</c> is the only other <c>Cursor</c> that
+		/// is used by Yata at present.
+		/// 
+		/// 
+		/// .net does not track the state of the cursor consistently with its
+		/// visual state. So do not rely on checking the state of <c>Cursor</c>.
+		/// The cursor's real state can flash briefly on a click.</remarks>
+		internal bool IsCursorSplit
+		{ private get; set; }
+
+		/// <summary>
+		/// <c>true</c> if user has the LMB depressed on the col-width adjustor.
+		/// </summary>
+		internal bool IsGrab
+		{ get; set; }
+		#endregion Properties
 
 
 		#region cTor
@@ -39,7 +69,7 @@ namespace yata
 
 			Height = YataGrid.HeightColhead;
 
-			MouseClick += _grid.click_ColheadPanel;
+			MouseDown += _grid.click_ColheadPanel;
 		}
 		#endregion cTor
 
@@ -70,6 +100,7 @@ namespace yata
 																 Color.Lavender, Color.MediumOrchid);
 			}
 		}
+
 
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler on this <c>YataPanelCols</c>.
@@ -110,15 +141,16 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			if (!Grab)
+			if (!IsGrab)
 			{
 				if (ModifierKeys == Keys.None)
 				{
-					int c = GetColUnderWidther(e.X);
+					int c = GetSplitterCol(e.X);
 					if (c != -1)
 					{
 						Cursor = Cursors.VSplit;
-						_grabStart = e.X;
+						IsCursorSplit = true;
+						_grabPos = e.X;
 						_grabCol = c;
 
 						return;
@@ -126,28 +158,56 @@ namespace yata
 				}
 
 				Cursor = Cursors.Default;
+				IsCursorSplit = false;
 			}
 		}
 
 		/// <summary>
 		/// Overrides the <c>MouseDown</c> handler on this <c>YataPanelCols</c>.
+		/// Accepts or cancels the editor based on
+		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
+			logfile.Log("YataPanelCols.OnMouseDown()");
+
+			// Don't bother checking MouseButton or ModifierKeys.
+
 			if (_grid._editor.Visible)
 			{
+				logfile.Log(". _grid._editor.Visible");
 				_grid._editor.Visible = false;
-				_grid.Invalidator(YataGrid.INVALID_GRID);
 			}
 			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
+				logfile.Log(". _grid.Propanel._editor.Visible");
 				_grid.Propanel._editor.Visible = false;
-				_grid.Invalidator(YataGrid.INVALID_PROP);
+			}
+			_grid.Select();
+
+
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+					IsGrab = ModifierKeys == Keys.None && IsCursorSplit;
+					break;
+
+				case MouseButtons.Right:
+					if (ModifierKeys == Keys.None && IsCursorSplit)
+					{
+						Col col = _grid.Cols[_grabCol];
+						if (col.UserSized)
+						{
+							col.UserSized = false;
+							_grid.Colwidth(_grabCol);
+							_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
+						}
+					}
+					break;
 			}
 
-			Grab = ModifierKeys == Keys.None
-				&& Cursor == Cursors.VSplit;
+			base.OnMouseDown(e); // fire 'YataGrid.click_ColheadPanel()'
 		}
 
 		/// <summary>
@@ -156,41 +216,25 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			if (Grab)
+			if (IsGrab)
 			{
-				Grab = false;
+				IsGrab = false;
 				Cursor = Cursors.Default;
+				IsCursorSplit = false;
 
-				if (ModifierKeys == Keys.None)
+				if (ModifierKeys == Keys.None
+					&& e.Button == MouseButtons.Left
+					&& e.X != _grabPos)
 				{
-					Col col;
+					Col col = _grid.Cols[_grabCol];
+					col.UserSized = true;
 
-					switch (e.Button)
-					{
-						case MouseButtons.Left:
-							if (e.X != _grabStart)
-							{
-								col = _grid.Cols[_grabCol];
-								col.UserSized = true;
+					int w = col.width() + e.X - _grabPos;
+					if (w < YataGrid._wId) w = YataGrid._wId;
 
-								int w = col.width() + e.X - _grabStart;
-								if (w < YataGrid._wId) w = YataGrid._wId;
-
-								col.width(w, true);
-								_grid.InitScroll();
-								_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
-							}
-							break;
-
-						case MouseButtons.Right:
-							if ((col = _grid.Cols[_grabCol]).UserSized)
-							{
-								col.UserSized = false;
-								_grid.Colwidth(_grabCol);
-								_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
-							}
-							break;
-					}
+					col.width(w, true);
+					_grid.InitScroll();
+					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
 				}
 			}
 			_grid.Select();
@@ -200,20 +244,21 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Gets the col-id iff the cursor is on the col-label widther.
+		/// Gets the col-id iff the cursor is on the col-width adjustor.
 		/// </summary>
 		/// <param name="cur">x-pos of cursor on this <c>YataPanelCols</c></param>
 		/// <returns>col-id under the cursor or <c>-1</c></returns>
-		internal int GetColUnderWidther(int cur)
+		internal int GetSplitterCol(int cur)
 		{
 			if (cur > _widthFrozenCached)
 			{
 				int x = YataGrid.WidthRowhead - _grid.OffsetHori;
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
-					x += _grid.Cols[c].width();
+					if ((x += _grid.Cols[c].width()) - 5 > cur)
+						break;
 
-					if (cur > x - 5 && cur < x)
+					if (cur < x)
 						return c;
 				}
 			}
@@ -249,7 +294,7 @@ namespace yata
 			Dock      = DockStyle.Left;
 			BackColor = Colors.RowheadPanel;
 
-			MouseClick += _grid.click_RowheadPanel;
+			MouseDown += _grid.click_RowheadPanel;
 		}
 		#endregion cTor
 
@@ -276,6 +321,32 @@ namespace yata
 										   Width - 1, Height);
 				_grid.LabelRowheads();
 			}
+		}
+
+
+		/// <summary>
+		/// Overrides the <c>MouseDown</c> handler on this <c>YataPanelRows</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			logfile.Log("YataPanelRows.OnMouseDown()");
+
+			// Don't bother checking MouseButton or ModifierKeys.
+
+			if (_grid._editor.Visible)
+			{
+				logfile.Log(". _grid._editor.Visible");
+				_grid._editor.Visible = false;
+			}
+			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
+			{
+				logfile.Log(". _grid.Propanel._editor.Visible");
+				_grid.Propanel._editor.Visible = false;
+			}
+			_grid.Select();
+
+			base.OnMouseDown(e); // fire 'YataGrid.click_RowheadPanel()'
 		}
 		#endregion Handlers (override)
 	}
@@ -331,19 +402,73 @@ namespace yata
 			}
 		}
 
+
 		/// <summary>
-		/// Overrides the <c>MouseClick</c> handler on this
-		/// <c>YataPanelFrozen</c>.
+		/// Overrides the <c>MouseDown</c> handler on this
+		/// <c>YataPanelFrozen</c>. Accepts or cancels an active edit.
+		/// <list type="bullet">
+		/// <item><c>LMB</c> - accept edit</item>
+		/// <item><c>RMB</c> - cancel edit</item>
+		/// <item><c>MMB</c> - accept or cancel based on
+		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c></item>
+		/// </list>
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnMouseClick(MouseEventArgs e)
+		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			if (_grid._editor.Visible)
+			logfile.Log("YataPanelFrozen.OnMouseDown()");
+
+			if (ModifierKeys == Keys.None)
 			{
-				_grid._editor.Visible = false;
-				_grid.Invalidator(YataGrid.INVALID_GRID);
+				if (_grid._editor.Visible)
+				{
+					logfile.Log(". _grid._editor.Visible");
+
+					switch (e.Button)
+					{
+						case MouseButtons.Left: // accept edit
+							_grid._bypassleaveditor = true;
+							_grid.ApplyCellEdit(true);
+							break;
+
+						case MouseButtons.Right: // cancel edit
+							_grid._bypassleaveditor = true;
+							_grid.hideditor(YataGrid.INVALID_GRID, true);
+							break;
+
+						case MouseButtons.Middle:
+							_grid._editor.Visible = false; // do this or else the leave event fires twice.
+							_grid.Select();
+							break;
+					}
+				}
+				else
+				{
+					Propanel propanel = _grid.Propanel;
+					if (propanel != null && propanel._editor.Visible)
+					{
+						logfile.Log(". _grid.Propanel._editor.Visible");
+
+						switch (e.Button)
+						{
+							case MouseButtons.Left: // accept edit
+								propanel._bypassleaveditor = true;
+								propanel.ApplyCellEdit(true);
+								break;
+
+							case MouseButtons.Right: // cancel edit
+								propanel._bypassleaveditor = true;
+								propanel.hideditor(true);
+								break;
+
+							case MouseButtons.Middle:
+								propanel._editor.Visible = false; // do this or else the leave event fires twice.
+								_grid.Select();
+								break;
+						}
+					}
+				}
 			}
-			_grid.Select();
 		}
 		#endregion Handlers (override)
 	}

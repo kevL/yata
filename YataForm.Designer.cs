@@ -17,7 +17,7 @@ namespace yata
 		/// </summary>
 		IContainer components;
 
-		internal MenustripOneclick _bar;
+		internal YataStrip _bar;
 
 		ToolStripMenuItem it_MenuFile;
 		ToolStripMenuItem it_Create;
@@ -64,7 +64,7 @@ namespace yata
 		ToolStripMenuItem it_DeleteRange;
 		ToolStripMenuItem it_CreateRows;
 
-		ToolStripMenuItem it_MenuCol;
+		internal ToolStripMenuItem it_MenuCol;
 		ToolStripMenuItem it_DeselectCol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
@@ -74,10 +74,10 @@ namespace yata
 
 		internal ToolStripTextBox tb_Goto;
 
-		ToolStripTextBox tb_Search;
-		ToolStripComboBox cb_SearchOption;
+		internal ToolStripTextBox tb_Search;
+		internal YataTsCombo cb_SearchOption;
 
-		ToolStripMenuItem it_MenuClipboard;
+		internal ToolStripMenuItem it_MenuClipboard;
 		ToolStripMenuItem it_ClipExport;
 		ToolStripMenuItem it_ClipImport;
 		ToolStripMenuItem it_OpenClipEditor;
@@ -237,7 +237,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this._bar = new yata.MenustripOneclick();
+			this._bar = new yata.YataStrip();
 			this.it_MenuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_38 = new System.Windows.Forms.ToolStripSeparator();
@@ -305,7 +305,7 @@ namespace yata
 			this.it_PasteCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
-			this.cb_SearchOption = new System.Windows.Forms.ToolStripComboBox();
+			this.cb_SearchOption = new yata.YataTsCombo();
 			this.it_MenuClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ClipExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ClipImport = new System.Windows.Forms.ToolStripMenuItem();
@@ -665,7 +665,7 @@ namespace yata
 			this.it_Search.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.it_Search.Size = new System.Drawing.Size(280, 22);
 			this.it_Search.Text = "&Find";
-			this.it_Search.Click += new System.EventHandler(this.editclick_Search);
+			this.it_Search.Click += new System.EventHandler(this.editclick_FocusSearch);
 			// 
 			// it_Searchnext
 			// 
@@ -674,7 +674,7 @@ namespace yata
 			this.it_Searchnext.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.it_Searchnext.Size = new System.Drawing.Size(280, 22);
 			this.it_Searchnext.Text = "Fin&d next";
-			this.it_Searchnext.Click += new System.EventHandler(this.editclick_SearchGo);
+			this.it_Searchnext.Click += new System.EventHandler(this.editclick_StartSearch);
 			// 
 			// it_Searchprev
 			// 
@@ -683,7 +683,7 @@ namespace yata
 			this.it_Searchprev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
 			this.it_Searchprev.Size = new System.Drawing.Size(280, 22);
 			this.it_Searchprev.Text = "Find &prev";
-			this.it_Searchprev.Click += new System.EventHandler(this.editclick_SearchGo);
+			this.it_Searchprev.Click += new System.EventHandler(this.editclick_StartSearch);
 			// 
 			// separator_3
 			// 
@@ -696,7 +696,7 @@ namespace yata
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
 			this.it_Goto.Size = new System.Drawing.Size(280, 22);
 			this.it_Goto.Text = "&Goto";
-			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
+			this.it_Goto.Click += new System.EventHandler(this.editclick_FocusGoto);
 			// 
 			// separator_39
 			// 
@@ -1004,9 +1004,9 @@ namespace yata
 			this.tb_Goto.Name = "tb_Goto";
 			this.tb_Goto.Size = new System.Drawing.Size(36, 18);
 			this.tb_Goto.Text = "goto";
-			this.tb_Goto.Enter += new System.EventHandler(this.enter_Goto);
-			this.tb_Goto.Click += new System.EventHandler(this.click_Goto);
-			this.tb_Goto.TextChanged += new System.EventHandler(this.textchanged_Goto);
+			this.tb_Goto.Enter += new System.EventHandler(this.enter_Gotobox);
+			this.tb_Goto.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_Gotobox);
+			this.tb_Goto.TextChanged += new System.EventHandler(this.textchanged_Gotobox);
 			// 
 			// tb_Search
 			// 
@@ -1015,9 +1015,9 @@ namespace yata
 			this.tb_Search.Name = "tb_Search";
 			this.tb_Search.Size = new System.Drawing.Size(125, 18);
 			this.tb_Search.Text = "search";
-			this.tb_Search.Enter += new System.EventHandler(this.enter_Search);
-			this.tb_Search.Click += new System.EventHandler(this.click_Search);
-			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Search);
+			this.tb_Search.Enter += new System.EventHandler(this.enter_Searchbox);
+			this.tb_Search.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_Searchbox);
+			this.tb_Search.TextChanged += new System.EventHandler(this.textchanged_Searchbox);
 			// 
 			// cb_SearchOption
 			// 

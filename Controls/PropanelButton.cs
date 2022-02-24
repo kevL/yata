@@ -56,11 +56,9 @@ namespace yata
 			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);
 
 
-			Name     = "bu_Propanel";
-			TabIndex = 4;
-			TabStop  = false;
-
+			Name    = "bu_Propanel";
 			Visible = false;
+			TabStop = false;
 
 			Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			UseVisualStyleBackColor = true;
@@ -101,6 +99,59 @@ namespace yata
 			}
 			else
 				base.OnPaint(pevent);
+		}
+
+
+		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+		{
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("PropanelButton.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+
+			base.OnPreviewKeyDown(e);
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("PropanelButton.ProcessCmdKey() keyData= " + keyData);
+
+			bool ret = base.ProcessCmdKey(ref msg, keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". PropanelButton.ProcessCmdKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("PropanelButton.IsInputKey() keyData= " + keyData);
+
+			bool ret = base.IsInputKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". PropanelButton.IsInputKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override bool ProcessDialogKey(Keys keyData)
+		{
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log("PropanelButton.ProcessDialogKey() keyData= " + keyData);
+
+			bool ret = base.ProcessDialogKey(keyData);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". PropanelButton.ProcessDialogKey ret= " + ret);
+
+			return ret;
+		}
+
+		protected override void OnKeyDown(KeyEventArgs kevent)
+		{
+			if ((kevent.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("PropanelButton.OnKeyDown() kevent.KeyData= " + kevent.KeyData);
+
+			base.OnKeyDown(kevent);
 		}
 		#endregion Handlers (override)
 	}

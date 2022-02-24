@@ -13,11 +13,12 @@ namespace yata
 		/// </summary>
 		internal YataEditbox()
 		{
-			Visible     = false;
-			BackColor   = Colors.Editor;
-			BorderStyle = BorderStyle.None;
-			WordWrap    = false;
-			Margin      = new Padding(0);
+			Visible       = false;
+			BackColor     = Colors.Editor;
+			BorderStyle   = BorderStyle.None;
+			WordWrap      = false;
+			Margin        = new Padding(0);
+			HideSelection = false;
 		}
 		#endregion cTor
 
@@ -26,7 +27,10 @@ namespace yata
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			if ((e.KeyData & ~Constants.ControlShift) != 0)
+			{
 				logfile.Log("YataEditbox.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+				logfile.Log(". Parent= " + Parent);
+			}
 
 /*			switch (e.KeyData)
 			{
@@ -112,28 +116,27 @@ namespace yata
 
 			switch (e.KeyData)
 			{
-				case Keys.Escape:
-//					logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
-//
-//					e.IsInputKey = true;
+				// no need to check these keys for Menu shortcuts ->
+				case Keys.Enter:	// handled in YataGrid.ProcessCmdKey()
+				case Keys.Escape:	// handled in YataGrid.ProcessCmdKey()
 					break;
 
 				default:
 				{
 					ToolStripMenuItem it;
 
-					MenustripOneclick bar = YataForm.that._bar;
+					YataStrip bar = YataForm.that._bar;
 					for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
 					{
 						if ((it = bar.Items[i] as ToolStripMenuItem) != null
 							&& it.Visible && it.Enabled)
 						{
-							if ((e.KeyData & ~Constants.ControlShift) != 0)
-								logfile.Log(it.Text);
+//							if ((e.KeyData & ~Constants.ControlShift) != 0)
+//								logfile.Log(it.Text);
 
 							if (hasShortcut(it, e.KeyData))
 							{
-								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE");
+								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (has shortcut)");
 
 								e.IsInputKey = true;
 								break;
@@ -162,8 +165,8 @@ namespace yata
 				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
 //					&& subit.Enabled) // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
 				{
-					if ((keyData & ~Constants.ControlShift) != 0)
-						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
+//					if ((keyData & ~Constants.ControlShift) != 0)
+//						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
 
 					if (subit.ShortcutKeys == keyData
 						|| (subit.HasDropDownItems && hasShortcut(subit, keyData)))
@@ -194,13 +197,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Disallows <c>[Up]</c>, <c>[Down]</c>, <c>[PageUp]</c>, and
-		/// <c>[PageDown]</c> for textbox navigation on this <c>YataEditbox</c>.
+		/// Disallows any/all TabFastedit keystrokes - typically <c>[Up]</c>,
+		/// <c>[Down]</c>, <c>[PageUp]</c>, and <c>[PageDown]</c> - for textbox
+		/// navigation on this <c>YataEditbox</c>.
 		/// </summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		/// <remarks><c>[Up]</c>, <c>[Down]</c>, <c>[PageUp]</c>, and
-		/// <c>[PageDown]</c> shall be used for Tabfastedit by
+		/// <c>[PageDown]</c> shall be used for TabFastedit by
 		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and/or
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>.</remarks>
 		/// <remarks>TAB, RETURN, ESC, and the UP ARROW, DOWN ARROW, LEFT ARROW,

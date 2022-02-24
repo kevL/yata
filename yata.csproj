@@ -61,13 +61,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\MenustripOneclick.cs" />
+    <Compile Include="Controls\YataStrip.cs" />
     <Compile Include="Controls\Propanel.cs" />
     <Compile Include="Controls\PropanelButton.cs" />
     <Compile Include="Controls\YataEditbox.cs" />
     <Compile Include="Controls\YataDialog.cs" />
     <Compile Include="Controls\YataPanels.cs" />
     <Compile Include="Controls\YataTabs.cs" />
+    <Compile Include="Controls\YataTsCombo.cs" />
     <Compile Include="Dialogs\FixedSingle\About.cs" />
     <Compile Include="Dialogs\FixedSingle\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>

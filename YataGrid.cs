@@ -154,7 +154,7 @@ namespace yata
 		int HeightTable;
 		int WidthTable;
 
-		YataPanelCols _panelCols;
+		internal YataPanelCols _panelCols;
 		YataPanelRows _panelRows;
 
 		internal YataPanelFrozen FrozenPanel;
@@ -167,7 +167,13 @@ namespace yata
 		/// The text-edit box. Note there is only one (1) <c>TextBox</c> that
 		/// floats to wherever it's required.
 		/// </summary>
-		internal readonly YataEditbox _editor = new YataEditbox(); // TODO: static
+		internal readonly YataEditbox _editor = new YataEditbox();
+
+		/// <summary>
+		/// Set this <c>true</c> if you want to explicitly accept or reject the
+		/// text in the <c><see cref="_editor"/></c>.
+		/// </summary>
+		internal bool _bypassleaveditor;
 
 		/// <summary>
 		/// The <c><see cref="Cell"/></c> that's currently under the
@@ -377,8 +383,7 @@ namespace yata
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
 
-			_editor.KeyDown += keydown_Editor;
-			_editor.Leave   += leave_Editor;
+			_editor.Leave += leave_Editor;
 
 			Controls.Add(_editor);
 
@@ -402,7 +407,8 @@ namespace yata
 		/// Invalidates various controls of this grid for UI-update based on
 		/// the <c><see cref="INVALID_NONE">INVALID</see></c> flags.
 		/// </summary>
-		/// <param name="invalid"></param>
+		/// <param name="invalid">a bitwise <c>int</c> of the
+		/// <c><see cref="INVALID_NONE">INVALID</see></c> flags</param>
 		/// <remarks>Check that <c><see cref="Propanel"/></c> is valid before a
 		/// call w/ <c><see cref="INVALID_PROP"/></c>.</remarks>
 		internal void Invalidator(int invalid)
@@ -459,7 +465,7 @@ namespace yata
 
 			_table.OffsetVert = _table._scrollVert.Value;
 
-			if (!_f._isSearch										// <- if not Search
+			if (!_f.IsSearch										// <- if not Search
 				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
@@ -493,7 +499,7 @@ namespace yata
 
 			_table.OffsetHori = _table._scrollHori.Value;
 
-			if (!_f._isSearch										// <- if not Search
+			if (!_f.IsSearch										// <- if not Search
 				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
@@ -755,12 +761,15 @@ namespace yata
 		/// firing twice).</remarks>
 		internal void Scroll(MouseEventArgs e)
 		{
+			//logfile.Log("YataGrid.Scroll()");
+
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				if (Propanel != null && Propanel._scroll.Visible
 					&& e.X > Propanel.Left && e.X < Propanel.Left + Propanel.Width)
 				{
-					Propanel.Scroll(e);
+					if ((ModifierKeys & (Keys.Shift | Keys.Control)) == Keys.None)
+						Propanel.Scroll(e);
 				}
 				else if (!_editor.Visible)
 				{
@@ -2331,25 +2340,39 @@ namespace yata
 			switch (keyData)
 			{
 				case Keys.Enter:
+					// NOTE: [Enter] on the propanel is processed by Propanel.ProcessCmdKey()
 					if (_editor.Visible)
 					{
+						_bypassleaveditor = true;
 						ApplyCellEdit(true);
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
+
+						return true;
 					}
-					else if (!Readonly
+
+					if (!Readonly
 						&& (_editcell = getSelectedCell()) != null
 						&&  _editcell.x >= FrozenCount)
 					{
 						Celledit();
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (start grid-edit)");
+
+						return true;
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is start or accept edit)");
-					return true;
+					break;
 
 				case Keys.Escape:
-					_bypassleaveditor = true;
-					hideditor(INVALID_GRID, true);
+					// NOTE: [Escape] on the propanel is processed by Propanel.ProcessCmdKey()
+					if (_editor.Visible)
+					{
+						_bypassleaveditor = true;
+						hideditor(INVALID_GRID, true);
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel grid-edit)");
 
-					logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel edit)");
-					return true;
+//						Select(); // should put this in jic.
+						return true;
+					}
+					break;
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
@@ -2409,12 +2432,14 @@ namespace yata
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
-		/// <remarks>Some of these keystrokes need to be bypassed in
-		/// <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
+		/// <remarks>Certain keystrokes need a return of <c>false</c> in
+		/// <c><see cref="YataEditbox"/>.IsInputKey()</c>. Cf
+		/// <c><see cref="Propanel"></see>.ProcessDialogKey()</c>.</remarks>
 		/// <seealso cref="IsTabfasteditKey()"><c>IsTabfasteditKey()</c></seealso>
 		/// <remarks>These very likely could and should be put in
 		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> but I'm
 		/// going to keep them here just to differentiate the TabFastedit keys.</remarks>
+		/// <seealso cref="Propanel"><c>Propanel.ProcessDialogKey()</c></seealso>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
@@ -2422,7 +2447,7 @@ namespace yata
 
 			switch (keyData)
 			{
-				// Tab fastedit ->
+				// TabFastedit ->
 				case Keys.Tab: // right
 					if (_editor.Visible)
 					{
@@ -2430,9 +2455,11 @@ namespace yata
 
 						if (_editcell.x != ColCount - 1)
 							startTabedit(+1,0);
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true;
+					break;
 
 				case Keys.Shift | Keys.Tab: // left
 					if (_editor.Visible)
@@ -2441,9 +2468,11 @@ namespace yata
 
 						if (_editcell.x != FrozenCount)
 							startTabedit(-1,0);
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true;
+					break;
 
 				case Keys.Control | Keys.Tab: // down
 				case Keys.Down:
@@ -2453,9 +2482,11 @@ namespace yata
 
 						if (_editcell.y != RowCount - 1)
 							startTabedit(0,+1);
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true; // stop the tabcontrol from responding to [Ctrl+Tab]
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true; // stop the tabcontrol from responding to [Ctrl+Tab]
+					break;
 
 				case Keys.Shift | Keys.Control | Keys.Tab: // up
 				case Keys.Up:
@@ -2465,9 +2496,11 @@ namespace yata
 
 						if (_editcell.y != 0)
 							startTabedit(0,-1);
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true; // stop the tabcontrol from responding to [Shift+Ctrl+Tab]
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true; // stop the tabcontrol from responding to [Ctrl+Shift+Tab]
+					break;
 
 				case Keys.PageDown: // pagedown
 					if (_editor.Visible)
@@ -2481,9 +2514,11 @@ namespace yata
 
 							startTabedit(0, +shift);
 						}
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true;
+					break;
 
 				case Keys.PageUp: // pageup
 					if (_editor.Visible)
@@ -2497,9 +2532,11 @@ namespace yata
 
 							startTabedit(0, -shift);
 						}
+
+						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 					}
-					logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
-					return true;
+					break;
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
@@ -3293,6 +3330,8 @@ namespace yata
 
 				if (invalid != INVALID_NONE)	// -> is a Row operation or [Esc]
 				{
+					e.SuppressKeyPress = true;
+
 					if (selr != -1) EnsureDisplayedRow(selr);
 
 					if (Propanel != null && Propanel.Visible)
@@ -3302,6 +3341,8 @@ namespace yata
 				}
 				else if (display)				// -> is a Cell operation
 				{
+					e.SuppressKeyPress = true;
+
 					_anchorcell = sel;
 
 					_f.SyncSelectCell(sel);
@@ -3313,6 +3354,8 @@ namespace yata
 				}
 				else if (anchor)				// -> is a block-select operation
 				{
+					e.SuppressKeyPress = true;
+
 					_f.EnableCelleditOperations();
 
 					Invalidator(INVALID_GRID
@@ -3519,64 +3562,45 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles <c>KeyDown</c> events for the <c><see cref="_editor"/></c>.
-		/// </summary>
-		/// <param name="sender"><c><see cref="_editor"/></c></param>
-		/// <param name="e"></param>
-		/// <remarks>Works around dweeby .NET behavior if [Alt] is pressed while
-		/// editing.</remarks>
-		void keydown_Editor(object sender, KeyEventArgs e)
-		{
-			//logfile.Log("YataGrid.keydown_Editor() e.KeyData= " + e.KeyData);
-
-			if (e.Alt)
-			{
-				leave_Editor(null, EventArgs.Empty);
-				Select();
-			}
-		}
-
-
-		/// <summary>
-		/// Set this <c>true</c> if you want to explicitly accept or reject the
-		/// text in the <c><see cref="_editor"/></c>.
-		/// </summary>
-		bool _bypassleaveditor;
-
-		/// <summary>
 		/// Handles the <c>Leave</c> event for the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>When the editor is told to hide the <c>Leave</c> event
-		/// fires *before* the editor actually hides.</remarks>
-		internal void leave_Editor(object sender, EventArgs e)
+		/// <remarks>It's better to set (<c>_editor.Visible=false</c>) before
+		/// the <c>Leave</c> event fires - note that the <c>Leave</c> event will
+		/// still consider the editor <c>Visible</c> - otherwise .net fires the
+		/// <c>Leave</c> event twice.</remarks>
+		/// <seealso cref="Propanel"><c>Propanel.leave_Editor()</c></seealso>
+		void leave_Editor(object sender, EventArgs e)
 		{
-			//logfile.Log("leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
+			logfile.Log("YataGrid.leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
-			if (_bypassleaveditor)
+			if (!_bypassleaveditor)
 			{
-				_bypassleaveditor = false;
-			}
-			else if (Settings._acceptedit)
-			{
-				ApplyCellEdit();// do NOT focus the table here. Do it in the calling funct if req'd.
+				if (Settings._acceptedit)
+				{
+					logfile.Log(". Settings._acceptedit");
+					ApplyCellEdit(); // do NOT focus the table here. Do it in the calling funct if req'd.
+				}
+				else
+				{
+					logfile.Log(". Settings._acceptedit FALSE");
+					hideditor(INVALID_GRID); // do NOT focus the table.
+				}
 			}
 			else
-			{
-				_editor.Visible = false;
-				Invalidator(INVALID_GRID);
-				// do NOT focus the table.
-			}
+				_bypassleaveditor = false;
 		}
 
 		/// <summary>
 		/// Applies a cell-edit via the <c><see cref="_editor"/></c>.
 		/// </summary>
-		/// <param name="select"></param>
-		void ApplyCellEdit(bool @select = false)
+		/// <param name="select"><c>true</c> to focus this <c>YataGrid</c></param>
+		/// <seealso cref="Propanel.ApplyCellEdit()"><c>Propanel.ApplyCellEdit()</c></seealso>
+		internal void ApplyCellEdit(bool @select = false)
 		{
-			//logfile.Log("ApplyCellEdit() select= " + @select);
+			logfile.Log("YataGrid.ApplyCellEdit() select= " + @select);
+
 			int invalid = INVALID_GRID;
 
 			if (_editor.Text != _editcell.text)
@@ -3595,11 +3619,14 @@ namespace yata
 		/// <summary>
 		/// Hides <c><see cref="_editor"/></c> and focuses this <c>YataGrid</c>.
 		/// </summary>
-		/// <param name="invalid"></param>
-		/// <param name="select"></param>
-		void hideditor(int invalid, bool @select = false)
+		/// <param name="invalid">a bitwise <c>int</c> of the
+		/// <c><see cref="INVALID_NONE">INVALID</see></c> flags</param>
+		/// <param name="select"><c>true</c> to focus this <c>YataGrid</c></param>
+		/// <seealso cref="Propanel.hideditor()"><c>Propanel.hideditor()</c></seealso>
+		internal void hideditor(int invalid, bool @select = false)
 		{
-			//logfile.Log("hideditor() _editor.Visible= " + _editor.Visible);
+			logfile.Log("YataGrid.hideditor() _editor.Visible= " + _editor.Visible);
+
 			_editor.Visible = false;
 			Invalidator(invalid);
 
@@ -3609,7 +3636,7 @@ namespace yata
 		/// <summary>
 		/// Moves cell selection and calls
 		/// <c><see cref="Celledit()">Celledit()</see></c> for the next cell in
-		/// a Tabfastedit sequence.
+		/// a TabFastedit sequence.
 		/// </summary>
 		/// <param name="dir_hori"></param>
 		/// <param name="dir_vert"></param>
@@ -4776,7 +4803,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles a <c>MouseClick</c> event on the rowhead. Selects or
+		/// Handles a <c>MouseDown</c> event on the rowhead. Selects or
 		/// deselects <c><see cref="Row">Row(s)</see></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelRows"/></c></param>
@@ -4787,8 +4814,6 @@ namespace yata
 		{
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
-				Select();
-
 				int click_r = (e.Y + OffsetVert) / HeightRow;
 				if (click_r < RowCount)
 				{
@@ -5021,7 +5046,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles a <c>MouseClick</c> event on the colhead. Selects or
+		/// Handles a <c>MouseDown</c> event on the colhead. Selects or
 		/// deselects <c><see cref="Col">Col(s)</see></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelCols"/></c></param>
@@ -5030,7 +5055,7 @@ namespace yata
 		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
 		internal void click_ColheadPanel(object sender, MouseEventArgs e)
 		{
-			if (!_panelCols.Grab && (ModifierKeys & Keys.Alt) == Keys.None)
+			if (!_panelCols.IsGrab && (ModifierKeys & Keys.Alt) == Keys.None)
 			{
 				Select();
 
@@ -5198,9 +5223,9 @@ namespace yata
 					case MouseButtons.Right:
 						if (ModifierKeys == Keys.Shift) // sort by col ->
 						{
-							if ((click_c = getClickedCol(e.X)) != -1
-								&& _panelCols.GetColUnderWidther(e.X) == -1)
-							{
+							if ((click_c = getClickedCol(e.X)) != -1)
+//								&& _panelCols.GetSplitterCol(e.X) == -1	// this is no longer needed since [Shift] is disallowed for
+							{											// resetting the col-width in YataPanelCols.OnMouseDown()
 								ColSort(click_c);
 								EnsureDisplayedCol(click_c);
 								Invalidator(INVALID_GRID
@@ -5528,7 +5553,10 @@ namespace yata
 
 
 		#region Sort
-		static ToolTip TooltipSort = new ToolTip(); // hint when table isn't sorted by ID-asc.
+		/// <summary>
+		/// Hint when table isn't sorted by ID-asc.
+		/// </summary>
+		static ToolTip TooltipSort = new ToolTip();
 
 		/// <summary>
 		/// Sorts rows by a col either ascending or descending.

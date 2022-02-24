@@ -79,11 +79,17 @@ namespace yata
 		int _c;
 
 		/// <summary>
-		/// Overrides <c><see cref="_c"/></c> for Tab fastedit while allowing
+		/// Overrides <c><see cref="_c"/></c> for TabFastedit while allowing
 		/// <c>[Shift]</c> in
 		/// <c><see cref="OnMouseClick()">OnMouseClick()</see></c>.
 		/// </summary>
 		int _tabOverride = TABFASTEDIT_Bypass;
+
+		/// <summary>
+		/// Set this <c>true</c> if you want to explicitly accept or reject the
+		/// text in the <c><see cref="_editor"/></c>.
+		/// </summary>
+		internal bool _bypassleaveditor;
 		#endregion Fields
 
 
@@ -138,6 +144,7 @@ namespace yata
 				BackColor = Color.LightBlue;
 
 			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+			TabStop = false; // <- the Propanel is not currently coded to cope w/ keyboard-input.
 
 			if (Settings._font3 != null)
 			{
@@ -177,9 +184,7 @@ namespace yata
 
 			_grid.Controls.Add(this);
 
-			_editor.LostFocus  += lostfocus_Editor;
-			_editor.KeyDown    += keydown_Editor;
-			_editor.Leave      += leave_Editor;
+			_editor.Leave += leave_Editor;
 
 			Controls.Add(_editor);
 		}
@@ -320,30 +325,6 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Applies a text-edit via <c><see cref="_editor"/></c>.
-		/// </summary>
-		void ApplyCellEdit()
-		{
-			Cell cell = _grid[_r,_c];
-			if (_editor.Text != cell.text)
-			{
-				_grid.ChangeCellText(cell, _editor); // does a text-check
-				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-			}
-			else if (cell.loadchanged)
-				_grid.ClearLoadchanged(cell);
-		}
-
-		/// <summary>
-		/// Hides the <c><see cref="_editor"/></c>.
-		/// </summary>
-		void hideditor()
-		{
-			_editor.Visible = false;
-			_grid.Invalidator(YataGrid.INVALID_PROP);
-		}
-
-		/// <summary>
 		/// Gets the next <c><see cref="DockState"/></c> in the cycle.
 		/// </summary>
 		/// <returns></returns>
@@ -389,54 +370,82 @@ namespace yata
 		/// <param name="e"></param>
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
-			hideditor();
+			//logfile.Log("Propanel.OnScrollValueChanged()");
+
+			if (_editor.Visible)
+				leave_Editor(null, EventArgs.Empty);
+
+			Invalidate(); // not sure why this is suddenly needed now ...
 		}
 		#endregion Handlers (scroll)
 
 
 		#region Handlers (editor)
 		/// <summary>
-		/// Handles the cell-editor's <c>KeyDown</c> event.
+		/// Handles the <c>Leave</c> event for the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_editor"/></c></param>
 		/// <param name="e"></param>
-		/// <remarks>Works around dweeby .NET behavior if <c>[Alt]</c> is
-		/// pressed.</remarks>
-		void keydown_Editor(object sender, KeyEventArgs e)
-		{
-			logfile.Log("Propanel.keydown_Editor() e.KeyData= " + e.KeyData);
-
-			if (e.Alt) hideditor();
-		}
-
-		/// <summary>
-		/// Handles the cell-editor's <c>Leave</c> event.
-		/// </summary>
-		/// <param name="sender"><c><see cref="_editor"/></c></param>
-		/// <param name="e"></param>
-		/// <remarks>Works around dweeby .NET behavior if <c>[Ctrl+PageUp]</c>
-		/// or <c>[Ctrl+PageDown]</c> is pressed.</remarks>
+		/// <remarks>It's better to set (<c>_editor.Visible=false</c>) before
+		/// the <c>Leave</c> event fires - note that the <c>Leave</c> event will
+		/// still consider the editor <c>Visible</c> - otherwise .net fires the
+		/// <c>Leave</c> event twice.</remarks>
+		/// <seealso cref="YataGrid"><c>YataGrid.leave_Editor()</c></seealso>
 		void leave_Editor(object sender, EventArgs e)
 		{
-			logfile.Log("Propanel.leave_Editor()");
+			logfile.Log("Propanel.leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
-			if (_editor.Visible
-				&& (ModifierKeys & Keys.Control) == Keys.Control)
+			if (!_bypassleaveditor)
 			{
-				_editor.Focus(); // ie. don't leave editor.
+				if (Settings._acceptedit)
+				{
+					logfile.Log(". Settings._acceptedit");
+					ApplyCellEdit(); // do NOT focus the table here. Do it in the calling funct if req'd.
+				}
+				else
+				{
+					logfile.Log(". Settings._acceptedit FALSE");
+					hideditor(); // do NOT focus the table.
+				}
 			}
+			else
+				_bypassleaveditor = false;
 		}
 
 		/// <summary>
-		/// Handles the cell-editor's <c>LostFocus</c> event.
+		/// Applies a text-edit via <c><see cref="_editor"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="_editor"/></c></param>
-		/// <param name="e"></param>
-		void lostfocus_Editor(object sender, EventArgs e)
+		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c></param>
+		/// <seealso cref="YataGrid.ApplyCellEdit()"><c>YataGrid.ApplyCellEdit()</c></seealso>
+		internal void ApplyCellEdit(bool @select = false)
 		{
-			logfile.Log("Propanel.lostfocus_Editor()");
+			logfile.Log("Propanel.ApplyCellEdit()");
 
-			hideditor();
+			Cell cell = _grid[_r,_c];
+			if (_editor.Text != cell.text)
+			{
+				_grid.ChangeCellText(cell, _editor); // does a text-check
+				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			}
+			else if (cell.loadchanged)
+				_grid.ClearLoadchanged(cell);
+
+			hideditor(@select);
+		}
+
+		/// <summary>
+		/// Hides the <c><see cref="_editor"/></c>.
+		/// </summary>
+		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c></param>
+		/// <seealso cref="YataGrid.hideditor()"><c>YataGrid.hideditor()</c></seealso>
+		internal void hideditor(bool @select = false)
+		{
+			logfile.Log("Propanel.hideditor() _editor.Visible= " + _editor.Visible);
+
+			_editor.Visible = false;
+			_grid.Invalidator(YataGrid.INVALID_PROP);
+
+			if (@select) _grid.Select();
 		}
 		#endregion Handlers (editor)
 
@@ -450,10 +459,43 @@ namespace yata
 			base.OnPreviewKeyDown(e);
 		}
 
+		/// <summary>
+		/// Processes key-input for this <c>Propanel</c>.
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessCmdKey() keyData= " + keyData);
+
+			switch (keyData)
+			{
+				case Keys.Enter:
+					// NOTE: [Enter] on the grid is processed by YataGrid.ProcessCmdKey()
+					if (_editor.Visible)
+					{
+						_bypassleaveditor = true;
+						ApplyCellEdit(true);
+
+						logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
+						return true;
+					}
+					break;
+
+				case Keys.Escape:
+					// NOTE: [Escape] on the grid is processed by YataGrid.ProcessCmdKey()
+					if (_editor.Visible)
+					{
+						_bypassleaveditor = true;
+						hideditor(true);
+
+						logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
+						return true;
+					}
+					break;
+			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 			if ((keyData & ~Constants.ControlShift) != 0)
@@ -475,23 +517,22 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles ending editing a cell by pressing <c>[Enter]</c> or
-		/// <c>[Escape]</c>/<c>[Tab]</c> - this fires during edit or so.
-		/// </summary>
-		/// <param name="keyData"></param>
-		/// <returns></returns>
-		/// <summary>
-		/// Processes a so-called dialog-key.
+		/// Processes a so-called dialog-key. Use this for TabFastedit
+		/// keystrokes only - process keystrokes for other operations in
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c>.
 		/// <list type="bullet">
-		/// <item><c>[Enter]</c> - accepts celledit</item>
-		/// <item><c>[Escape]</c> - cancels celledit</item>
-		/// <item><c>[Tab]</c>/<c>[Down]</c> - fastedit down</item>
-		/// <item><c>[Shift+Tab]/<c>[Up]</c></c> - fastedit up</item>
+		/// <item><c>[Tab]</c> or <c>[Down]</c> - fastedit down</item>
+		/// <item><c>[Shift+Tab]</c> or <c>[Up]</c> - fastedit up</item>
 		/// </list></summary>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
-		/// <remarks><c>[Down]</c> and <c>[Up]</c> require bypassing those keys
-		/// in <c><see cref="YataEditbox"/>.IsInputKey()</c>.</remarks>
+		/// <remarks>Certain keystrokes need a return of <c>false</c> in
+		/// <c><see cref="YataEditbox"/>.IsInputKey()</c>. Cf
+		/// <c><see cref="YataGrid"></see>.ProcessDialogKey()</c>.</remarks>
+		/// <seealso cref="YataGrid.IsTabfasteditKey()"><c>YataGrid.IsTabfasteditKey()</c></seealso>
+		/// <remarks>These very likely could and should be put in
+		/// <c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> but I'm
+		/// going to keep them here just to differentiate the TabFastedit keys.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if ((keyData & ~Constants.ControlShift) != 0)
@@ -501,20 +542,11 @@ namespace yata
 			{
 				switch (keyData)
 				{
-					case Keys.Enter:
-						ApplyCellEdit();
-						goto case Keys.Escape;
-
-					case Keys.Escape:
-						hideditor();
-						_grid.Select();
-						logfile.Log(". Propanel.ProcessDialogKey force TRUE");
-						return true;
-
+					// TabFastedit ->
 					case Keys.Tab:
 					case Keys.Down:
+						_bypassleaveditor = true;
 						ApplyCellEdit();
-						hideditor();
 
 						if (_c != _grid.ColCount - 1)
 						{
@@ -528,12 +560,13 @@ namespace yata
 						else
 							_grid.Select();
 
-						break;
+						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 
-					case Keys.Tab | Keys.Shift:
+					case Keys.Shift | Keys.Tab:
 					case Keys.Up:
+						_bypassleaveditor = true;
 						ApplyCellEdit();
-						hideditor();
 
 						if (_c != 0)
 						{
@@ -547,13 +580,34 @@ namespace yata
 						else
 							_grid.Select();
 
-						break;
+						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+						return true;
 				}
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-			logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
+			if ((keyData & ~Constants.ControlShift) != 0)
+				logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
+
 			return ret;
+		}
+
+
+		/// <summary>
+		/// This should never fire I believe since (<c>TabStop=false</c>) and so
+		/// this <c>Propanel</c> can never have focus.
+		/// 
+		/// 
+		/// Yeah right ... their wonkey .net bubbling pattern can do anything it
+		/// likes.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if ((e.KeyData & ~Constants.ControlShift) != 0)
+				logfile.Log("Propanel.OnKeyDown() ke.KeyData= " + e.KeyData);
+
+			base.OnKeyDown(e);
 		}
 
 
@@ -637,13 +691,14 @@ namespace yata
 				{
 					switch (e.Button)
 					{
-						case MouseButtons.Left: // accept edit (else cancel edit)
-							ApplyCellEdit();
-							goto case MouseButtons.Right;
+						case MouseButtons.Left: // accept edit
+							_bypassleaveditor = true;
+							ApplyCellEdit(true);
+							break;
 
-						case MouseButtons.Right:
-							hideditor();
-							_grid.Select();
+						case MouseButtons.Right: // cancel edit
+							_bypassleaveditor = true;
+							hideditor(true);
 							break;
 					}
 				}
