@@ -24,14 +24,23 @@ namespace yata
 
 
 		#region Methods (override)
+		/// <summary>
+		/// Overrides the <c>PreviewKeyDown</c> eventhandler. Sets
+		/// <c>e.IsInputKey</c> <c>true</c> for any shortcut that's found in
+		/// Yata's menus in order to bypass those operations and allow this
+		/// <c>YataEditbox</c> to do its text-related stuff. Eg, <c>[Ctrl+a]</c>
+		/// for select-all (instead of File|SaveAll).
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 			{
 				logfile.Log("YataEditbox.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 				logfile.Log(". Parent= " + Parent);
 			}
-
+#endif
 /*			switch (e.KeyData)
 			{
 				// Set 'e.IsInputKey' TRUE to bypass Menu shortcuts
@@ -136,8 +145,9 @@ namespace yata
 
 							if (hasShortcut(it, e.KeyData))
 							{
-								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (has shortcut)");
-
+#if DEBUG
+								if (Constants.KeyLog) logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (has shortcut)");
+#endif
 								e.IsInputKey = true;
 								break;
 							}
@@ -165,7 +175,7 @@ namespace yata
 				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
 //					&& subit.Enabled) // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
 				{
-//					if ((keyData & ~Constants.ControlShift) != 0)
+//					if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 //						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
 
 					if (subit.ShortcutKeys == keyData
@@ -178,23 +188,19 @@ namespace yata
 			return false;
 		}
 
-		/// <summary>
-		/// Processes so-called command-keys.
-		/// </summary>
-		/// <param name="msg"></param>
-		/// <param name="keyData"></param>
-		/// <returns></returns>
+#if DEBUG
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataEditbox.ProcessCmdKey ret= " + ret);
 
 			return ret;
 		}
+#endif
 
 		/// <summary>
 		/// Disallows any/all TabFastedit keystrokes - typically <c>[Up]</c>,
@@ -211,9 +217,10 @@ namespace yata
 		/// and RIGHT ARROW. kL_note: Also PageUp/Down what else you gnits.</remarks>
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.IsInputKey() keyData= " + keyData);
-
+#endif
 			if (YataGrid.IsTabfasteditKey(keyData))
 			{
 				// return FALSE to disable use of these keystrokes in the
@@ -223,25 +230,28 @@ namespace yata
 				//
 				// Note that a return of FALSE bypasses the KeyDown/Up events;
 				// ie, handle the keystroke in Process*Key() funct(s).
-
-				logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit)");
+#if DEBUG
+				if (Constants.KeyLog) logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit)");
+#endif
 				return false;
 			}
 
 			bool ret = base.IsInputKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataEditbox.IsInputKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
+#if DEBUG
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataEditbox.ProcessDialogKey ret= " + ret);
 
 			return ret;
@@ -249,11 +259,12 @@ namespace yata
 
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataEditbox.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);
 		}
+#endif
 		#endregion Methods (override)
 	}
 }

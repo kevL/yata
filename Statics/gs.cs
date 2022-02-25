@@ -72,21 +72,28 @@ namespace yata
 	{
 		internal const float epsilon = 0.00001F;
 
-//#if DEBUG
+#if DEBUG
 		/// <summary>
-		/// 
+		/// <c>true</c> to log keyboard processing and handling in the
+		/// <c><see cref="logfile"></see>.Logfile</c>.
 		/// </summary>
 		internal const bool KeyLog = true;
 
 		/// <summary>
-		/// Used to bypass [Control] and [Shift] key-presses in the
+		/// <c>true</c> to log <c>MouseDown</c> and <c>MouseUp</c> handling in
+		/// the <c><see cref="logfile"></see>.Logfile</c>.
+		/// </summary>
+		internal const bool ClickLog = true;
+
+		/// <summary>
+		/// Used to bypass [Control] and [Shift] keys in the
 		/// <c><see cref="logfile"></see>.Logfile</c>.
 		/// </summary>
 		internal const Keys ControlShift = Keys.Control
 										 | Keys.ControlKey
 										 | Keys.Shift
 										 | Keys.ShiftKey;
-//#endif
+#endif
 	}
 	#endregion Constants
 

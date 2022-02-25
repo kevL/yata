@@ -2300,9 +2300,10 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyCode= " + e.KeyCode + " e.IsInputKey= " + e.IsInputKey);
-
+#endif
 			switch (e.KeyCode) // <- note KeyCode not KeyData
 			{
 				case Keys.Up:
@@ -2312,8 +2313,9 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
-					logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
-
+#if DEBUG
+					if (Constants.KeyLog) logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
+#endif
 					e.IsInputKey = true;
 					break;
 			}
@@ -2334,9 +2336,10 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.ProcessCmdKey() keyData= " + keyData);
-
+#endif
 			switch (keyData)
 			{
 				case Keys.Enter:
@@ -2345,8 +2348,9 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						ApplyCellEdit(true);
-						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
-
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
+#endif
 						return true;
 					}
 
@@ -2355,8 +2359,9 @@ namespace yata
 						&&  _editcell.x >= FrozenCount)
 					{
 						Celledit();
-						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (start grid-edit)");
-
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (start grid-edit)");
+#endif
 						return true;
 					}
 					break;
@@ -2367,32 +2372,35 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						hideditor(INVALID_GRID, true);
-						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel grid-edit)");
-
-//						Select(); // should put this in jic.
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel grid-edit)");
+#endif
 						return true;
 					}
 					break;
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataGrid.ProcessCmdKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
+#if DEBUG
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataGrid.IsInputKey ret= " + ret);
 
 			return ret;
 		}
+#endif
 
 		/// <summary>
 		/// Checks if a keystroke is used by a TabFastedit routine.
@@ -2442,9 +2450,10 @@ namespace yata
 		/// <seealso cref="Propanel"><c>Propanel.ProcessDialogKey()</c></seealso>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
-
+#endif
 			switch (keyData)
 			{
 				// TabFastedit ->
@@ -2455,8 +2464,9 @@ namespace yata
 
 						if (_editcell.x != ColCount - 1)
 							startTabedit(+1,0);
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 					}
 					break;
@@ -2468,8 +2478,9 @@ namespace yata
 
 						if (_editcell.x != FrozenCount)
 							startTabedit(-1,0);
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 					}
 					break;
@@ -2482,8 +2493,9 @@ namespace yata
 
 						if (_editcell.y != RowCount - 1)
 							startTabedit(0,+1);
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true; // stop the tabcontrol from responding to [Ctrl+Tab]
 					}
 					break;
@@ -2496,8 +2508,9 @@ namespace yata
 
 						if (_editcell.y != 0)
 							startTabedit(0,-1);
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true; // stop the tabcontrol from responding to [Shift+Ctrl+Tab]
 					}
 					break;
@@ -2514,8 +2527,9 @@ namespace yata
 
 							startTabedit(0, +shift);
 						}
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 					}
 					break;
@@ -2532,17 +2546,19 @@ namespace yata
 
 							startTabedit(0, -shift);
 						}
-
-						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 					}
 					break;
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataGrid.ProcessDialogKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
@@ -2553,9 +2569,10 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
-
+#endif
 			if ((e.Modifiers & Keys.Alt) == 0)
 			{
 				bool ctr = (e.Modifiers & Keys.Control) != 0,
@@ -2575,7 +2592,9 @@ namespace yata
 				switch (e.KeyCode)
 				{
 					case Keys.Escape: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Escape (clear all selects)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Escape (clear all selects)");
+#endif
 						if (!ctr && !sft)
 						{
 							ClearSelects(true);
@@ -2588,7 +2607,9 @@ namespace yata
 
 
 					case Keys.Home:
-						logfile.Log(". Keys.Home (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Home (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!sft)
@@ -2671,7 +2692,9 @@ namespace yata
 						break;
 
 					case Keys.End:
-						logfile.Log(". Keys.End (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.End (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!sft)
@@ -2754,7 +2777,9 @@ namespace yata
 						break;
 
 					case Keys.PageUp:
-						logfile.Log(". Keys.PageUp (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.PageUp (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -2873,7 +2898,9 @@ namespace yata
 						break;
 
 					case Keys.PageDown:
-						logfile.Log(". Keys.PageDown (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.PageDown (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -2992,7 +3019,9 @@ namespace yata
 						break;
 
 					case Keys.Up: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Up (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Up (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -3079,7 +3108,9 @@ namespace yata
 						break;
 
 					case Keys.Down: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Down (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Down (navigate grid)");
+#endif
 						if (selr != -1)
 						{
 							if (!ctr)
@@ -3166,7 +3197,9 @@ namespace yata
 						break;
 
 					case Keys.Left: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Left (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Left (navigate grid)");
+#endif
 						if (!ctr)
 						{
 							if (sft)
@@ -3247,7 +3280,9 @@ namespace yata
 						break;
 
 					case Keys.Right: // NOTE: needs to bypass KeyPreview
-						logfile.Log(". Keys.Right (navigate grid)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Keys.Right (navigate grid)");
+#endif
 						if (!ctr)
 						{
 							if (sft)

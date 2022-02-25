@@ -451,25 +451,32 @@ namespace yata
 
 
 		#region Handlers (override)
+#if DEBUG
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
 		}
+#endif
 
 		/// <summary>
 		/// Processes key-input for this <c>Propanel</c>.
+		/// <list type="bullet">
+		/// <item><c>[Enter]</c> - accept edit</item>
+		/// <item><c>[Escape]</c> - cancel edit</item>
+		/// </list>
 		/// </summary>
 		/// <param name="msg"></param>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessCmdKey() keyData= " + keyData);
-
+#endif
 			switch (keyData)
 			{
 				case Keys.Enter:
@@ -478,8 +485,9 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						ApplyCellEdit(true);
-
-						logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
+#endif
 						return true;
 					}
 					break;
@@ -490,31 +498,35 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						hideditor(true);
-
-						logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
+#endif
 						return true;
 					}
 					break;
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessCmdKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
+#if DEBUG
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". Propanel.IsInputKey ret= " + ret);
 
 			return ret;
 		}
+#endif
 
 		/// <summary>
 		/// Processes a so-called dialog-key. Use this for TabFastedit
@@ -535,9 +547,10 @@ namespace yata
 		/// going to keep them here just to differentiate the TabFastedit keys.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
-
+#endif
 			if (_editor.Visible)
 			{
 				switch (keyData)
@@ -559,8 +572,9 @@ namespace yata
 						}
 						else
 							_grid.Select();
-
-						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 
 					case Keys.Shift | Keys.Tab:
@@ -579,20 +593,22 @@ namespace yata
 						}
 						else
 							_grid.Select();
-
-						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#if DEBUG
+						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#endif
 						return true;
 				}
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
-
+#if DEBUG
 		/// <summary>
 		/// This should never fire I believe since (<c>TabStop=false</c>) and so
 		/// this <c>Propanel</c> can never have focus.
@@ -604,12 +620,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("Propanel.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);
 		}
-
+#endif
 
 		/// <summary>
 		/// Clears cords on the statusbar when the mouse enters the control.

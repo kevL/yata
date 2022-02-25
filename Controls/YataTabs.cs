@@ -85,9 +85,10 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if ((e.KeyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
-
+#endif
 			switch (e.KeyData)
 			{
 				case Keys.Escape:
@@ -95,21 +96,23 @@ namespace yata
 					// etc. - not req'd but here it is.
 					//
 					// [Escape] shall be handled in YataForm.OnKeyDown()
-
-					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
+#if DEBUG
+					if (Constants.KeyLog) logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
+#endif
 					e.IsInputKey = true;
 					break;
 			}
 			base.OnPreviewKeyDown(e);
 		}
 
+#if DEBUG
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataTabs.ProcessCmdKey ret= " + ret);
 
 			return ret;
@@ -117,11 +120,11 @@ namespace yata
 
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataTabs.IsInputKey ret= " + ret);
 
 			return ret;
@@ -129,15 +132,16 @@ namespace yata
 
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if ((keyData & ~Constants.ControlShift) != 0)
+			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 				logfile.Log(". YataTabs.ProcessDialogKey ret= " + ret);
 
 			return ret;
 		}
+#endif
 
 		/// <summary>
 		/// Bypasses <c>[Ctrl+Shift+PageUp/Down]</c> that would change the
@@ -149,14 +153,17 @@ namespace yata
 		/// by <c>YataGrid.ProcessDialogKey()</c>.</remarks>
 		protected override void OnKeyDown(KeyEventArgs ke)
 		{
-			if ((ke.KeyData & ~Constants.ControlShift) != 0)
+#if DEBUG
+			if (Constants.KeyLog && (ke.KeyData & ~Constants.ControlShift) != 0)
 				logfile.Log("YataTabs.OnKeyDown() ke.KeyData= " + ke.KeyData);
-
+#endif
 			switch (ke.KeyData)
 			{
 				case Keys.Shift | Keys.Control | Keys.PageUp:
 				case Keys.Shift | Keys.Control | Keys.PageDown:
-					logfile.Log(". YataTabs.OnKeyDown bypass base.OnKeyDown()");
+#if DEBUG
+					if (Constants.KeyLog) logfile.Log(". YataTabs.OnKeyDown bypass base.OnKeyDown()");
+#endif
 					return;
 
 //				case Keys.Control | Keys.Tab:
