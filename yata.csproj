@@ -138,7 +138,7 @@
     <Compile Include="Statics\FileOutput.cs" />
     <Compile Include="Statics\gs.cs" />
     <Compile Include="Statics\Info.cs" />
-    <Compile Include="Statics\logger.cs" />
+    <Compile Include="Statics\logfile.cs" />
     <Compile Include="Statics\Settings.cs" />
     <Compile Include="Statics\Sorter.cs" />
     <Compile Include="Statics\TalkReader.cs" />

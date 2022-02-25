@@ -72,7 +72,21 @@ namespace yata
 	{
 		internal const float epsilon = 0.00001F;
 
-		internal const Keys ControlShift = (Keys.Control | Keys.ControlKey | Keys.Shift | Keys.ShiftKey);
+//#if DEBUG
+		/// <summary>
+		/// 
+		/// </summary>
+		internal const bool KeyLog = true;
+
+		/// <summary>
+		/// Used to bypass [Control] and [Shift] key-presses in the
+		/// <c><see cref="logfile"></see>.Logfile</c>.
+		/// </summary>
+		internal const Keys ControlShift = Keys.Control
+										 | Keys.ControlKey
+										 | Keys.Shift
+										 | Keys.ShiftKey;
+//#endif
 	}
 	#endregion Constants
 
