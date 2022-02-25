@@ -468,6 +468,11 @@ namespace yata
 			if (!_f.IsSearch										// <- if not Search
 				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
+				if (_editor.Visible)
+					_editor.Visible = false;
+				else if (Propanel != null && Propanel._editor.Visible)
+					Propanel._editor.Visible = false;
+
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
@@ -502,6 +507,11 @@ namespace yata
 			if (!_f.IsSearch										// <- if not Search
 				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
+				if (_editor.Visible)
+					_editor.Visible = false;
+				else if (Propanel != null && Propanel._editor.Visible)
+					Propanel._editor.Visible = false;
+
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
 			}
 
