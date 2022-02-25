@@ -327,8 +327,9 @@ namespace yata
 		/// <summary>
 		/// Gets the next <c><see cref="DockState"/></c> in the cycle.
 		/// </summary>
+		/// <param name="reverse"><c>true</c> to cycle counter-clockwise</param>
 		/// <returns></returns>
-		internal DockState getNextDockstate()
+		internal DockState getNextDockstate(bool reverse)
 		{
 			if (_scroll.Visible)
 			{
@@ -339,22 +340,22 @@ namespace yata
 					case DockState.BL: return DockState.BR;
 				}
 			}
-			else if ((ModifierKeys & Keys.Shift) == Keys.None)
-			{
-				switch (Dockstate) // clockwise
-				{
-					case DockState.TR: return DockState.BR;
-					case DockState.BR: return DockState.BL;
-					case DockState.BL: return DockState.TL;
-				}
-			}
-			else // [Shift] reverse cycle direction
+			else if (reverse)
 			{
 				switch (Dockstate) // counterclockwise
 				{
 					case DockState.TR: return DockState.TL;
 					case DockState.TL: return DockState.BL;
 					case DockState.BL: return DockState.BR;
+				}
+			}
+			else
+			{
+				switch (Dockstate) // clockwise
+				{
+					case DockState.TR: return DockState.BR;
+					case DockState.BR: return DockState.BL;
+					case DockState.BL: return DockState.TL;
 				}
 			}
 			return DockState.TR;
@@ -364,17 +365,18 @@ namespace yata
 
 		#region Handlers (scroll)
 		/// <summary>
-		/// Hides the editor when this <c>Propanel</c> is scrolled.
+		/// Hides the <c><see cref="_editor"/></c> when this <c>Propanel</c> is
+		/// scrolled.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_scroll"/></c></param>
 		/// <param name="e"></param>
 		void OnScrollValueChanged(object sender, EventArgs e)
 		{
-			//logfile.Log("Propanel.OnScrollValueChanged()");
-
 			if (_editor.Visible)
-				leave_Editor(null, EventArgs.Empty);
-
+			{
+				_editor.Visible = false;
+				_grid.Select();
+			}
 			Invalidate(); // not sure why this is suddenly needed now ...
 		}
 		#endregion Handlers (scroll)

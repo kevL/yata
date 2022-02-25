@@ -91,6 +91,7 @@ namespace yata
 		ToolStripMenuItem it_freeze2;
 		ToolStripMenuItem it_Propanel;
 		ToolStripMenuItem it_PropanelLoc;
+		ToolStripMenuItem it_PropanelLoc_pre;
 		ToolStripMenuItem it_ExternDiff;
 		ToolStripMenuItem it_ClearUr;
 
@@ -323,6 +324,7 @@ namespace yata
 			this.separator_17 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Propanel = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PropanelLoc = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PropanelLoc_pre = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_25 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_ExternDiff = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_21 = new System.Windows.Forms.ToolStripSeparator();
@@ -1087,6 +1089,7 @@ namespace yata
 			this.separator_17,
 			this.it_Propanel,
 			this.it_PropanelLoc,
+			this.it_PropanelLoc_pre,
 			this.separator_25,
 			this.it_ExternDiff,
 			this.separator_21,
@@ -1102,7 +1105,7 @@ namespace yata
 			this.it_OrderRows.Enabled = false;
 			this.it_OrderRows.Name = "it_OrderRows";
 			this.it_OrderRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-			this.it_OrderRows.Size = new System.Drawing.Size(236, 22);
+			this.it_OrderRows.Size = new System.Drawing.Size(250, 22);
 			this.it_OrderRows.Text = "Or&der row ids";
 			this.it_OrderRows.Click += new System.EventHandler(this.opsclick_Order);
 			// 
@@ -1111,21 +1114,21 @@ namespace yata
 			this.it_CheckRows.Enabled = false;
 			this.it_CheckRows.Name = "it_CheckRows";
 			this.it_CheckRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-			this.it_CheckRows.Size = new System.Drawing.Size(236, 22);
+			this.it_CheckRows.Size = new System.Drawing.Size(250, 22);
 			this.it_CheckRows.Text = "&Test row order";
 			this.it_CheckRows.Click += new System.EventHandler(this.opsclick_TestOrder);
 			// 
 			// separator_11
 			// 
 			this.separator_11.Name = "separator_11";
-			this.separator_11.Size = new System.Drawing.Size(233, 6);
+			this.separator_11.Size = new System.Drawing.Size(247, 6);
 			// 
 			// it_ColorRows
 			// 
 			this.it_ColorRows.Enabled = false;
 			this.it_ColorRows.Name = "it_ColorRows";
 			this.it_ColorRows.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-			this.it_ColorRows.Size = new System.Drawing.Size(236, 22);
+			this.it_ColorRows.Size = new System.Drawing.Size(250, 22);
 			this.it_ColorRows.Text = "Reco&lor rows";
 			this.it_ColorRows.Click += new System.EventHandler(this.opsclick_Recolor);
 			// 
@@ -1134,21 +1137,21 @@ namespace yata
 			this.it_AutoCols.Enabled = false;
 			this.it_AutoCols.Name = "it_AutoCols";
 			this.it_AutoCols.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-			this.it_AutoCols.Size = new System.Drawing.Size(236, 22);
+			this.it_AutoCols.Size = new System.Drawing.Size(250, 22);
 			this.it_AutoCols.Text = "Autos&ize cols";
 			this.it_AutoCols.Click += new System.EventHandler(this.opsclick_AutosizeCols);
 			// 
 			// separator_12
 			// 
 			this.separator_12.Name = "separator_12";
-			this.separator_12.Size = new System.Drawing.Size(233, 6);
+			this.separator_12.Size = new System.Drawing.Size(247, 6);
 			// 
 			// it_freeze1
 			// 
 			this.it_freeze1.Enabled = false;
 			this.it_freeze1.Name = "it_freeze1";
 			this.it_freeze1.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.it_freeze1.Size = new System.Drawing.Size(236, 22);
+			this.it_freeze1.Size = new System.Drawing.Size(250, 22);
 			this.it_freeze1.Text = "Freeze &1st col";
 			this.it_freeze1.Click += new System.EventHandler(this.opsclick_Freeze1stCol);
 			// 
@@ -1157,21 +1160,21 @@ namespace yata
 			this.it_freeze2.Enabled = false;
 			this.it_freeze2.Name = "it_freeze2";
 			this.it_freeze2.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.it_freeze2.Size = new System.Drawing.Size(236, 22);
+			this.it_freeze2.Size = new System.Drawing.Size(250, 22);
 			this.it_freeze2.Text = "Freeze &2nd col";
 			this.it_freeze2.Click += new System.EventHandler(this.opsclick_Freeze2ndCol);
 			// 
 			// separator_17
 			// 
 			this.separator_17.Name = "separator_17";
-			this.separator_17.Size = new System.Drawing.Size(233, 6);
+			this.separator_17.Size = new System.Drawing.Size(247, 6);
 			// 
 			// it_Propanel
 			// 
 			this.it_Propanel.Enabled = false;
 			this.it_Propanel.Name = "it_Propanel";
 			this.it_Propanel.ShortcutKeys = System.Windows.Forms.Keys.F7;
-			this.it_Propanel.Size = new System.Drawing.Size(236, 22);
+			this.it_Propanel.Size = new System.Drawing.Size(250, 22);
 			this.it_Propanel.Text = "&Propanel";
 			this.it_Propanel.Click += new System.EventHandler(this.opsclick_Propanel);
 			// 
@@ -1180,34 +1183,43 @@ namespace yata
 			this.it_PropanelLoc.Enabled = false;
 			this.it_PropanelLoc.Name = "it_PropanelLoc";
 			this.it_PropanelLoc.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.it_PropanelLoc.Size = new System.Drawing.Size(236, 22);
+			this.it_PropanelLoc.Size = new System.Drawing.Size(250, 22);
 			this.it_PropanelLoc.Text = "Propanel l&ocation";
 			this.it_PropanelLoc.Click += new System.EventHandler(this.opsclick_PropanelLocation);
+			// 
+			// it_PropanelLoc_pre
+			// 
+			this.it_PropanelLoc_pre.Enabled = false;
+			this.it_PropanelLoc_pre.Name = "it_PropanelLoc_pre";
+			this.it_PropanelLoc_pre.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F8)));
+			this.it_PropanelLoc_pre.Size = new System.Drawing.Size(250, 22);
+			this.it_PropanelLoc_pre.Text = "Propanel l&ocation pre";
+			this.it_PropanelLoc_pre.Click += new System.EventHandler(this.opsclick_PropanelLocation);
 			// 
 			// separator_25
 			// 
 			this.separator_25.Name = "separator_25";
-			this.separator_25.Size = new System.Drawing.Size(233, 6);
+			this.separator_25.Size = new System.Drawing.Size(247, 6);
 			// 
 			// it_ExternDiff
 			// 
 			this.it_ExternDiff.Enabled = false;
 			this.it_ExternDiff.Name = "it_ExternDiff";
 			this.it_ExternDiff.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-			this.it_ExternDiff.Size = new System.Drawing.Size(236, 22);
+			this.it_ExternDiff.Size = new System.Drawing.Size(250, 22);
 			this.it_ExternDiff.Text = "External diff/&merger";
 			this.it_ExternDiff.Click += new System.EventHandler(this.opsclick_ExternalDiff);
 			// 
 			// separator_21
 			// 
 			this.separator_21.Name = "separator_21";
-			this.separator_21.Size = new System.Drawing.Size(233, 6);
+			this.separator_21.Size = new System.Drawing.Size(247, 6);
 			// 
 			// it_ClearUr
 			// 
 			this.it_ClearUr.Enabled = false;
 			this.it_ClearUr.Name = "it_ClearUr";
-			this.it_ClearUr.Size = new System.Drawing.Size(236, 22);
+			this.it_ClearUr.Size = new System.Drawing.Size(250, 22);
 			this.it_ClearUr.Text = "&Clear undo/redo";
 			this.it_ClearUr.Click += new System.EventHandler(this.opsclick_ClearUr);
 			// 

@@ -817,19 +817,6 @@ namespace yata
 					return false; // do not return True. [Alt] needs to 'activate' the Menubar.
 			}
 
-			if (Table != null)
-			{
-				switch (keyData)
-				{
-					case Keys.Shift | Keys.F8: // reverse cycle propanel location
-						opsclick_PropanelLocation(null, EventArgs.Empty);
-#if DEBUG
-						if (Constants.KeyLog) logfile.Log(". YataForm.ProcessCmdKey force TRUE (reverse cycle propanel location)");
-#endif
-						return true;
-				}
-			}
-
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 #if DEBUG
 			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
@@ -1486,6 +1473,7 @@ namespace yata
 				it_freeze2            .Enabled =
 				it_Propanel           .Enabled =
 				it_PropanelLoc        .Enabled =
+				it_PropanelLoc_pre    .Enabled =
 				it_ExternDiff         .Enabled = false;
 
 				_fdiffer = null;
@@ -3735,7 +3723,8 @@ namespace yata
 			if (Table.Propanel != null && Table.Propanel.Visible)
 			{
 				Table.Propanel.Hide();
-				it_PropanelLoc.Enabled = false;
+				it_PropanelLoc    .Enabled =
+				it_PropanelLoc_pre.Enabled = false;
 			}
 
 			Table._ur.Clear();
@@ -4278,15 +4267,17 @@ namespace yata
 
 				Table.Propanel.Dockstate = Table.Propanel.Dockstate;
 
-				it_Propanel   .Checked =
-				it_PropanelLoc.Enabled = true;
+				it_Propanel       .Checked =
+				it_PropanelLoc    .Enabled =
+				it_PropanelLoc_pre.Enabled = true;
 			}
 			else
 			{
 				Table.Propanel.Hide();
 
-				it_Propanel   .Checked =
-				it_PropanelLoc.Enabled = false;
+				it_Propanel       .Checked =
+				it_PropanelLoc    .Enabled =
+				it_PropanelLoc_pre.Enabled = false;
 			}
 		}
 
@@ -4296,13 +4287,13 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_PropanelLoc"/></c></item>
-		/// <item><c>null</c></item>
+		/// <item><c><see cref="it_PropanelLoc_pre"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item>2daOps|Propanel location <c>[F8]</c></item>
-		/// <item><c><see cref="ProcessCmdKey()">ProcessCmdKey()</see></c> <c>[Shift+F8]</c></item>
+		/// <item>2daOps|Propanel location<c>[F8]</c></item>
+		/// <item>2daOps|Propanel location pre<c>[Shift+F8]</c></item>
 		/// </list></remarks>
 		/// <seealso cref="mouseup_buPropanel()"><c>mouseup_buPropanel()</c></seealso>
 		void opsclick_PropanelLocation(object sender, EventArgs e)
@@ -4310,7 +4301,7 @@ namespace yata
 			// TODO: hide Table._editor
 
 			if (Table.Propanel != null && Table.Propanel.Visible)
-				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
+				Table.Propanel.Dockstate = Table.Propanel.getNextDockstate(sender == it_PropanelLoc_pre);
 		}
 
 
@@ -4386,20 +4377,21 @@ namespace yata
 		/// </summary>
 		void Enable2daOperations()
 		{
-			it_OrderRows  .Enabled = !Table.Readonly;
-			it_CheckRows  .Enabled =
+			it_OrderRows      .Enabled = !Table.Readonly;
+			it_CheckRows      .Enabled =
 
-			it_ColorRows  .Enabled =
-			it_AutoCols   .Enabled = true;
+			it_ColorRows      .Enabled =
+			it_AutoCols       .Enabled = true;
 
-			it_freeze1    .Enabled = Table.ColCount > 1;
-			it_freeze2    .Enabled = Table.ColCount > 2;
+			it_freeze1        .Enabled = Table.ColCount > 1;
+			it_freeze2        .Enabled = Table.ColCount > 2;
 
-			it_Propanel   .Enabled = true;
-			it_PropanelLoc.Enabled =
-			it_Propanel   .Checked = Table.Propanel != null && Table.Propanel.Visible;
+			it_Propanel       .Enabled = true;
+			it_PropanelLoc    .Enabled =
+			it_PropanelLoc_pre.Enabled =
+			it_Propanel       .Checked = Table.Propanel != null && Table.Propanel.Visible;
 
-			it_ExternDiff .Enabled = File.Exists(Settings._diff);
+			it_ExternDiff     .Enabled = File.Exists(Settings._diff);
 		}
 
 		/// <summary>
@@ -4411,8 +4403,8 @@ namespace yata
 			long bytes;
 			using (Process proc = Process.GetCurrentProcess())
 			{
-				// The proc.PrivateMemorySize64 will returns the private memory usage in byte.
-				// Would like to Convert it to Megabyte? divide it by 2^20
+				// The proc.PrivateMemorySize64 will return the private memory usage in bytes.
+				// - to convert to Megabytes divide it by 2^20
 				bytes = proc.PrivateMemorySize64; // / (1024*1024);
 
 //				using (var ib = new Infobox(" bytes used", String.Format("{0:n0}", bytes)))
@@ -6443,7 +6435,7 @@ namespace yata
 					if (Table.Propanel != null && Table.Propanel.Visible)
 					{
 						bu_Propanel.SetDepressed(false);
-						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate();
+						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate((ModifierKeys & Keys.Shift) == Keys.Shift);
 					}
 					break;
 			}
