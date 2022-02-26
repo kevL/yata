@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 jan 30
+2022 feb 25
 kevL's
 ver 4.6.7.0
 
@@ -457,6 +457,15 @@ h=           (integer) the desired starting height of the app on your monitor
 maximized=   "true" (without quotes) to start Yata in a maximized window. A true
              setting takes precedence over the x/y/w/h settings although the
              latter are recalled if the window is restored
+acceptedit=  when editing a cell Yata's default behavior is to reject an edit
+             when the editbox loses focus unless the edit is explicitly accepted
+             by pressing [Enter] or leftclick on or around the grid or by any of
+             the TabFastedit keys. "true" (without quotes) inverts this behavior
+             so that any edit to the celltext will be accepted when the editbox
+             loses focus unless an edit is explicitly rejected by pressing [Esc]
+             or by a rightclick outside the grid or on the FrozenPanel. Note
+             that closing a table (or quitting Yata) with an editbox visible
+             always discards the edit (without warning about changed text)
 alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
              "tabs" (without quotes) to align cols with tabs. Note that using
              tab-characters in 2da files is not officially supported and could
