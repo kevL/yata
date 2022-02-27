@@ -383,7 +383,7 @@ namespace yata
 			Controls.Add(_scrollHori);
 			Controls.Add(_scrollVert);
 
-			_editor.Leave += leave_Editor;
+			_editor.Leave += editor_leave;
 
 			Controls.Add(_editor);
 
@@ -2357,7 +2357,7 @@ namespace yata
 					if (_editor.Visible)
 					{
 						_bypassleaveditor = true;
-						ApplyCellEdit(true);
+						applyCelledit(true);
 #if DEBUG
 						if (Constants.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
 #endif
@@ -2470,7 +2470,8 @@ namespace yata
 				case Keys.Tab: // right
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.x != ColCount - 1)
 							startTabedit(+1,0);
@@ -2484,7 +2485,8 @@ namespace yata
 				case Keys.Shift | Keys.Tab: // left
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.x != FrozenCount)
 							startTabedit(-1,0);
@@ -2499,7 +2501,8 @@ namespace yata
 				case Keys.Down:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.y != RowCount - 1)
 							startTabedit(0,+1);
@@ -2514,7 +2517,8 @@ namespace yata
 				case Keys.Up:
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.y != 0)
 							startTabedit(0,-1);
@@ -2528,7 +2532,8 @@ namespace yata
 				case Keys.PageDown: // pagedown
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.y != RowCount - 1)
 						{
@@ -2547,7 +2552,8 @@ namespace yata
 				case Keys.PageUp: // pageup
 					if (_editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 
 						if (_editcell.y != 0)
 						{
@@ -3615,17 +3621,17 @@ namespace yata
 		/// the <c>Leave</c> event fires - note that the <c>Leave</c> event will
 		/// still consider the editor <c>Visible</c> - otherwise .net fires the
 		/// <c>Leave</c> event twice.</remarks>
-		/// <seealso cref="Propanel"><c>Propanel.leave_Editor()</c></seealso>
-		void leave_Editor(object sender, EventArgs e)
+		/// <seealso cref="Propanel"><c>Propanel.editor_leave()</c></seealso>
+		void editor_leave(object sender, EventArgs e)
 		{
-			logfile.Log("YataGrid.leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
+			logfile.Log("YataGrid.editor_leave() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
 			if (!_bypassleaveditor)
 			{
 				if (Settings._acceptedit)
 				{
 					logfile.Log(". Settings._acceptedit");
-					ApplyCellEdit(); // do NOT focus the table here. Do it in the calling funct if req'd.
+					applyCelledit(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
@@ -3641,10 +3647,10 @@ namespace yata
 		/// Applies a cell-edit via the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="select"><c>true</c> to focus this <c>YataGrid</c></param>
-		/// <seealso cref="Propanel.ApplyCellEdit()"><c>Propanel.ApplyCellEdit()</c></seealso>
-		internal void ApplyCellEdit(bool @select = false)
+		/// <seealso cref="Propanel.applyCelledit()"><c>Propanel.applyCelledit()</c></seealso>
+		internal void applyCelledit(bool @select = false)
 		{
-			logfile.Log("YataGrid.ApplyCellEdit() select= " + @select);
+			logfile.Log("YataGrid.applyCelledit() select= " + @select);
 
 			int invalid = INVALID_GRID;
 
@@ -3966,7 +3972,8 @@ namespace yata
 						&& (e.X >= WidthTable || e.Y >= HeightTable) // click to the right or below the table-area
 						&& _editor.Visible)
 					{
-						ApplyCellEdit(true);
+						_bypassleaveditor = true;
+						applyCelledit(true);
 					}
 					break;
 
@@ -4050,7 +4057,8 @@ namespace yata
 										if (_cell != _editcell)
 										{
 											_double = true;
-											ApplyCellEdit(true);
+											_bypassleaveditor = true;
+											applyCelledit(true);
 										}
 										else					// there's a clickable fringe around the editor so
 											_editor.Focus();	// just refocus the editor if the fringe is clicked

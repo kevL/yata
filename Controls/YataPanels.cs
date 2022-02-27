@@ -467,7 +467,7 @@ namespace yata
 					{
 						case MouseButtons.Left: // accept edit
 							_grid._bypassleaveditor = true;
-							_grid.ApplyCellEdit(true);
+							_grid.applyCelledit(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
@@ -493,7 +493,7 @@ namespace yata
 						{
 							case MouseButtons.Left: // accept edit
 								propanel._bypassleaveditor = true;
-								propanel.ApplyCellEdit(true);
+								propanel.applyCelledit(true);
 								break;
 
 							case MouseButtons.Right: // cancel edit

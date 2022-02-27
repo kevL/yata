@@ -176,7 +176,7 @@ namespace yata
 
 			_scroll.Dock = DockStyle.Right;
 			_scroll.LargeChange = _heightr;
-			_scroll.ValueChanged += OnScrollValueChanged;
+			_scroll.ValueChanged += scroll_valuechanged;
 
 			widthValcol();
 
@@ -184,7 +184,7 @@ namespace yata
 
 			_grid.Controls.Add(this);
 
-			_editor.Leave += leave_Editor;
+			_editor.Leave += editor_leave;
 
 			Controls.Add(_editor);
 		}
@@ -370,7 +370,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_scroll"/></c></param>
 		/// <param name="e"></param>
-		void OnScrollValueChanged(object sender, EventArgs e)
+		void scroll_valuechanged(object sender, EventArgs e)
 		{
 			if (_editor.Visible)
 			{
@@ -392,17 +392,17 @@ namespace yata
 		/// the <c>Leave</c> event fires - note that the <c>Leave</c> event will
 		/// still consider the editor <c>Visible</c> - otherwise .net fires the
 		/// <c>Leave</c> event twice.</remarks>
-		/// <seealso cref="YataGrid"><c>YataGrid.leave_Editor()</c></seealso>
-		void leave_Editor(object sender, EventArgs e)
+		/// <seealso cref="YataGrid"><c>YataGrid.editor_leave()</c></seealso>
+		void editor_leave(object sender, EventArgs e)
 		{
-			logfile.Log("Propanel.leave_Editor() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
+			logfile.Log("Propanel.editor_leave() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
 			if (!_bypassleaveditor)
 			{
 				if (Settings._acceptedit)
 				{
 					logfile.Log(". Settings._acceptedit");
-					ApplyCellEdit(); // do NOT focus the table here. Do it in the calling funct if req'd.
+					applyCelledit(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
@@ -418,10 +418,10 @@ namespace yata
 		/// Applies a text-edit via <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c></param>
-		/// <seealso cref="YataGrid.ApplyCellEdit()"><c>YataGrid.ApplyCellEdit()</c></seealso>
-		internal void ApplyCellEdit(bool @select = false)
+		/// <seealso cref="YataGrid.applyCelledit()"><c>YataGrid.applyCelledit()</c></seealso>
+		internal void applyCelledit(bool @select = false)
 		{
-			logfile.Log("Propanel.ApplyCellEdit()");
+			logfile.Log("Propanel.applyCelledit()");
 
 			Cell cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
@@ -486,7 +486,7 @@ namespace yata
 					if (_editor.Visible)
 					{
 						_bypassleaveditor = true;
-						ApplyCellEdit(true);
+						applyCelledit(true);
 #if DEBUG
 						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
 #endif
@@ -561,7 +561,7 @@ namespace yata
 					case Keys.Tab:
 					case Keys.Down:
 						_bypassleaveditor = true;
-						ApplyCellEdit();
+						applyCelledit();
 
 						if (_c != _grid.ColCount - 1)
 						{
@@ -582,7 +582,7 @@ namespace yata
 					case Keys.Shift | Keys.Tab:
 					case Keys.Up:
 						_bypassleaveditor = true;
-						ApplyCellEdit();
+						applyCelledit();
 
 						if (_c != 0)
 						{
@@ -711,7 +711,7 @@ namespace yata
 					{
 						case MouseButtons.Left: // accept edit
 							_bypassleaveditor = true;
-							ApplyCellEdit(true);
+							applyCelledit(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
