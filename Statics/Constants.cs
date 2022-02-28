@@ -86,12 +86,12 @@ namespace yata
 		internal const bool ClickLog = true;
 
 		/// <summary>
-		/// Used to bypass [Control] [Shift] and [Alt] keys in the
-		/// <c><see cref="logfile"></see>.Logfile</c>.
+		/// Used to bypass [Control] and [Shift] keys - and [Alt] if desired -
+		/// in the <c><see cref="logfile"></see>.Logfile</c>.
 		/// </summary>
 		internal const Keys ControlShift = Keys.Control | Keys.ControlKey	// I don't know why .net does it this way.
-										 | Keys.Shift   | Keys.ShiftKey		// But when only 1 key is pressed (Ctrl,Shift,Alt)
-										 | Keys.Alt     | Keys.Menu;		// its second flag also registers respectively.
+										 | Keys.Shift   | Keys.ShiftKey;	// But when only 1 key is pressed (Ctrl,Shift,Alt)
+//										 | Keys.Alt     | Keys.Menu			// its second flag also registers respectively.
 #endif
 	}
 	#endregion Constants

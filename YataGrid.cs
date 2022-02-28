@@ -2418,7 +2418,7 @@ namespace yata
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		/// <remarks>Keep these in sync with
-		/// <c><see cref="ProcessDialogKey()">ProcessDialogKey()</see></c></remarks>
+		/// <c><see cref="ProcessDialogKey()">ProcessDialogKey()</see></c>.</remarks>
 		internal static bool IsTabfasteditKey(Keys keyData)
 		{
 			switch (keyData)
@@ -2589,10 +2589,10 @@ namespace yata
 			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 #endif
-			if ((e.Modifiers & Keys.Alt) == 0)
+			if ((e.Modifiers & Keys.Alt) == Keys.None)
 			{
-				bool ctr = (e.Modifiers & Keys.Control) != 0,
-					 sft = (e.Modifiers & Keys.Shift)   != 0;
+				bool ctr = (e.Modifiers & Keys.Control) == Keys.Control,
+					 sft = (e.Modifiers & Keys.Shift)   == Keys.Shift;
 
 				int invalid  = INVALID_NONE;
 				bool display = false;

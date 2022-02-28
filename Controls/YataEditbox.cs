@@ -160,8 +160,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Checks menus and any submenus that they may have for a specified
-		/// shortcut recursively.
+		/// Checks menus and any submenus they may have for a specified shortcut
+		/// recursively.
 		/// </summary>
 		/// <param name="it"></param>
 		/// <param name="keyData"></param>
@@ -173,7 +173,7 @@ namespace yata
 			for (int i = 0; i != it.DropDownItems.Count; ++i)
 			{
 				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
-//					&& subit.Enabled) // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
+//					&& subit.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
 				{
 //					if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
 //						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
