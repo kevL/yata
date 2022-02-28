@@ -86,13 +86,12 @@ namespace yata
 		internal const bool ClickLog = true;
 
 		/// <summary>
-		/// Used to bypass [Control] and [Shift] keys in the
+		/// Used to bypass [Control] [Shift] and [Alt] keys in the
 		/// <c><see cref="logfile"></see>.Logfile</c>.
 		/// </summary>
-		internal const Keys ControlShift = Keys.Control
-										 | Keys.ControlKey
-										 | Keys.Shift
-										 | Keys.ShiftKey;
+		internal const Keys ControlShift = Keys.Control | Keys.ControlKey	// I don't know why .net does it this way.
+										 | Keys.Shift   | Keys.ShiftKey		// But when only 1 key is pressed (Ctrl,Shift,Alt)
+										 | Keys.Alt     | Keys.Menu;		// its second flag also registers respectively.
 #endif
 	}
 	#endregion Constants
@@ -101,18 +100,18 @@ namespace yata
 	#region Util
 	static class Util
 	{
-		internal static bool isAsciiAlphanumericOrUnderscore(char character)
+		internal static bool isAsciiAlphanumericOrUnderscore(char @char)
 		{
-			int c = character;
+			int c = @char;
 			return  c == 95					// _
 				|| (c >= 48 && c <=  57)	// 0..9
 				|| (c >= 65 && c <=  90)	// A..Z
 				|| (c >= 97 && c <= 122);	// a..z
 		}
 
-		internal static bool isPrintableAsciiNotDoublequote(char character)
+		internal static bool isPrintableAsciiNotDoublequote(char @char)
 		{
-			int c = character;
+			int c = @char;
 			return c != 34 && c >= 32 && c <= 126;
 		}
 	}
