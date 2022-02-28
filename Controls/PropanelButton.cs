@@ -105,7 +105,7 @@ namespace yata
 #if DEBUG
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("PropanelButton.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -113,11 +113,11 @@ namespace yata
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("PropanelButton.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". PropanelButton.ProcessCmdKey ret= " + ret);
 
 			return ret;
@@ -125,11 +125,11 @@ namespace yata
 
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("PropanelButton.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". PropanelButton.IsInputKey ret= " + ret);
 
 			return ret;
@@ -137,11 +137,11 @@ namespace yata
 
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("PropanelButton.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". PropanelButton.ProcessDialogKey ret= " + ret);
 
 			return ret;
@@ -149,7 +149,7 @@ namespace yata
 
 		protected override void OnKeyDown(KeyEventArgs kevent)
 		{
-			if (Constants.KeyLog && (kevent.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (kevent.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("PropanelButton.OnKeyDown() kevent.KeyData= " + kevent.KeyData);
 			base.OnKeyDown(kevent);
 		}

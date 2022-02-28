@@ -631,14 +631,14 @@ namespace yata
 				bool haspars = false;
 
 				float f = Info.targetWidths[i];
-				if (Math.Abs(0.0F - f) > Constants.epsilon)
+				if (Math.Abs(0.0F - f) > gc.epsilon)
 				{
 					haspars = true;
 					text += " (" + f;
 				}
 
 				f = Info.targetLengths[i];
-				if (Math.Abs(0.0F - f) > Constants.epsilon)
+				if (Math.Abs(0.0F - f) > gc.epsilon)
 				{
 					if (!haspars)
 					{

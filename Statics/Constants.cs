@@ -66,9 +66,9 @@ namespace yata
 
 	#region Constants
 	/// <summary>
-	/// Global constants.
+	/// Global (const) !strings.
 	/// </summary>
-	static class Constants
+	static class gc
 	{
 		internal const float epsilon = 0.00001F;
 

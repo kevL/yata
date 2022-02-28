@@ -183,21 +183,21 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (Constants.ClickLog) logfile.Log("YataPanelCols.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseDown()");
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
 			if (_grid._editor.Visible)
 			{
 #if DEBUG
-				if (Constants.ClickLog) logfile.Log(". _grid._editor.Visible");
+				if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
 #endif
 				_grid._editor.Visible = false;
 			}
 			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
 #if DEBUG
-				if (Constants.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+				if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 				_grid.Propanel._editor.Visible = false;
 			}
@@ -209,7 +209,7 @@ namespace yata
 				case MouseButtons.Left:
 					IsGrab = ModifierKeys == Keys.None && IsCursorSplit;
 #if DEBUG
-					if (Constants.ClickLog) logfile.Log(". IsGrab= " + IsGrab + " _grabCol= " + _grabCol);
+					if (gc.ClickLog) logfile.Log(". IsGrab= " + IsGrab + " _grabCol= " + _grabCol);
 #endif
 					break;
 
@@ -220,7 +220,7 @@ namespace yata
 						if (col.UserSized)
 						{
 #if DEBUG
-							if (Constants.ClickLog) logfile.Log(". reset col-width _grabCol= " + _grabCol);
+							if (gc.ClickLog) logfile.Log(". reset col-width _grabCol= " + _grabCol);
 #endif
 							col.UserSized = false;
 							_grid.Colwidth(_grabCol);
@@ -240,12 +240,12 @@ namespace yata
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 #if DEBUG
-			if (Constants.ClickLog) logfile.Log("YataPanelCols.OnMouseUp()");
+			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseUp()");
 #endif
 			if (IsGrab)
 			{
 #if DEBUG
-				if (Constants.ClickLog) logfile.Log(". clear IsGrab");
+				if (gc.ClickLog) logfile.Log(". clear IsGrab");
 #endif
 				IsGrab = false;
 				Cursor = Cursors.Default;
@@ -256,7 +256,7 @@ namespace yata
 					&& e.X != _grabPos)
 				{
 #if DEBUG
-					if (Constants.ClickLog) logfile.Log(". . do col-width adjust");
+					if (gc.ClickLog) logfile.Log(". . do col-width adjust");
 #endif
 					Col col = _grid.Cols[_grabCol];
 					col.UserSized = true;
@@ -363,21 +363,21 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (Constants.ClickLog) logfile.Log("YataPanelRows.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelRows.OnMouseDown()");
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
 			if (_grid._editor.Visible)
 			{
 #if DEBUG
-				if (Constants.ClickLog) logfile.Log(". _grid._editor.Visible");
+				if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
 #endif
 				_grid._editor.Visible = false;
 			}
 			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
 #if DEBUG
-				if (Constants.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+				if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 				_grid.Propanel._editor.Visible = false;
 			}
@@ -454,14 +454,14 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (Constants.ClickLog) logfile.Log("YataPanelFrozen.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelFrozen.OnMouseDown()");
 #endif
 			if (ModifierKeys == Keys.None)
 			{
 				if (_grid._editor.Visible)
 				{
 #if DEBUG
-					if (Constants.ClickLog) logfile.Log(". _grid._editor.Visible");
+					if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
 #endif
 					switch (e.Button)
 					{
@@ -487,7 +487,7 @@ namespace yata
 					if (propanel != null && propanel._editor.Visible)
 					{
 #if DEBUG
-						if (Constants.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+						if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 						switch (e.Button)
 						{

@@ -70,7 +70,7 @@ namespace yata
 		{
 			// does not fire if a textbox or combobox is currently selected.
 
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -78,11 +78,11 @@ namespace yata
 
 		protected override bool ProcessCmdKey(ref Message m, Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref m, keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.ProcessCmdKey ret= " + ret);
 
 			return ret;
@@ -90,11 +90,11 @@ namespace yata
 
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.IsInputKey ret= " + ret);
 
 			return ret;
@@ -129,7 +129,7 @@ namespace yata
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessDialogKey() keyData= " + keyData);
 #endif
 //			for (int i = 0; i != Items.Count; ++i)
@@ -227,7 +227,7 @@ namespace yata
 
 			bool ret = base.ProcessDialogKey(keyData);
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.ProcessDialogKey ret= " + ret);
 #endif
 			return ret;
@@ -236,7 +236,7 @@ namespace yata
 #if DEBUG
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);

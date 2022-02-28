@@ -456,7 +456,7 @@ namespace yata
 #if DEBUG
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -476,7 +476,7 @@ namespace yata
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessCmdKey() keyData= " + keyData);
 #endif
 			switch (keyData)
@@ -488,7 +488,7 @@ namespace yata
 						_bypassleaveditor = true;
 						applyCelledit(true);
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
+						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
 #endif
 						return true;
 					}
@@ -501,7 +501,7 @@ namespace yata
 						_bypassleaveditor = true;
 						hideditor(true);
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
+						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
 #endif
 						return true;
 					}
@@ -510,7 +510,7 @@ namespace yata
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
@@ -519,11 +519,11 @@ namespace yata
 #if DEBUG
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.IsInputKey ret= " + ret);
 
 			return ret;
@@ -550,7 +550,7 @@ namespace yata
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
 #endif
 			if (_editor.Visible)
@@ -575,7 +575,7 @@ namespace yata
 						else
 							_grid.Select();
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+						if (gc.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
 #endif
 						return true;
 
@@ -596,7 +596,7 @@ namespace yata
 						else
 							_grid.Select();
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+						if (gc.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
 #endif
 						return true;
 				}
@@ -604,7 +604,7 @@ namespace yata
 
 			bool ret = base.ProcessDialogKey(keyData);
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
 #endif
 			return ret;
@@ -622,7 +622,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);

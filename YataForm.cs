@@ -766,7 +766,7 @@ namespace yata
 #if DEBUG
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataForm.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -782,7 +782,7 @@ namespace yata
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
 #endif
 			switch (keyData)
@@ -795,7 +795,7 @@ namespace yata
 					if (Table != null)
 					{
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". select Table");
+						if (gc.KeyLog) logfile.Log(". select Table");
 #endif
 						// set _editor.Visible FALSE else its leave event fires twice
 						// when it loses focus ->
@@ -810,7 +810,7 @@ namespace yata
 					else
 					{
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". select Tabs");
+						if (gc.KeyLog) logfile.Log(". select Tabs");
 #endif
 						Tabs.Select();
 					}
@@ -819,7 +819,7 @@ namespace yata
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataForm.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
@@ -828,11 +828,11 @@ namespace yata
 #if DEBUG
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataForm.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataForm.IsInputKey ret= " + ret);
 
 			return ret;
@@ -840,11 +840,11 @@ namespace yata
 
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataForm.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataForm.ProcessDialogKey ret= " + ret);
 
 			return ret;
@@ -863,7 +863,7 @@ namespace yata
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
 #endif
 			if (Table != null)
@@ -872,26 +872,26 @@ namespace yata
 				{
 					case Keys.Enter: // do this here to get rid of the beep.
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Keys.Enter");
+						if (gc.KeyLog) logfile.Log(". Keys.Enter");
 #endif
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . Search forward");
+							if (gc.KeyLog) logfile.Log(". . Search forward");
 #endif
 							_dontbeep = DONTBEEP_SEARCH;
 						}
 						else if (tb_Goto.Focused)
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . Goto");
+							if (gc.KeyLog) logfile.Log(". . Goto");
 #endif
 							_dontbeep = DONTBEEP_GOTO;
 						}
 						else
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . Search or Goto not focused");
+							if (gc.KeyLog) logfile.Log(". . Search or Goto not focused");
 #endif
 							_dontbeep = DONTBEEP_DEFAULT;
 						}
@@ -905,12 +905,12 @@ namespace yata
 
 					case Keys.Shift | Keys.Enter:
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Keys.Shift | Keys.Enter");
+						if (gc.KeyLog) logfile.Log(". Keys.Shift | Keys.Enter");
 #endif
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . Search backward");
+							if (gc.KeyLog) logfile.Log(". . Search backward");
 #endif
 							e.SuppressKeyPress = true;
 							_dontbeep = DONTBEEP_SEARCH;
@@ -918,63 +918,63 @@ namespace yata
 						}
 #if DEBUG
 						else
-							if (Constants.KeyLog) logfile.Log(". . Search not focused");
+							if (gc.KeyLog) logfile.Log(". . Search not focused");
 #endif
 						break;
 
 					case Keys.Escape:
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Keys.Escape");
+						if (gc.KeyLog) logfile.Log(". Keys.Escape");
 #endif
 						if (Tabs.Focused || bu_Propanel.Focused)	// btn -> jic. The Propanel button can become focused by
 						{											// keyboard (I saw it happen once) but can't figure out how.
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . deselect Tabs -> select Grid");
+							if (gc.KeyLog) logfile.Log(". . deselect Tabs -> select Grid");
 #endif
 							e.SuppressKeyPress = true;
 							Table.Select();
 						}
 #if DEBUG
 						else
-							if (Constants.KeyLog) logfile.Log(". . Tabs not focused");
+							if (gc.KeyLog) logfile.Log(". . Tabs not focused");
 #endif
 						break;
 
 					case Keys.Space:
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Keys.Space");
+						if (gc.KeyLog) logfile.Log(". Keys.Space");
 #endif
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . select first cell");
+							if (gc.KeyLog) logfile.Log(". . select first cell");
 #endif
 							e.SuppressKeyPress = true;
 							Table.SelectFirstCell();
 						}
 #if DEBUG
 						else
-							if (Constants.KeyLog) logfile.Log(". . an Editor is visible -> do not select first cell");
+							if (gc.KeyLog) logfile.Log(". . an Editor is visible -> do not select first cell");
 #endif
 						break;
 
 					case Keys.Control | Keys.Space:
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". Keys.Control | Keys.Space");
+						if (gc.KeyLog) logfile.Log(". Keys.Control | Keys.Space");
 #endif
 						if (!Table._editor.Visible
 							&& (Table.Propanel == null || !Table.Propanel._editor.Visible))
 						{
 #if DEBUG
-							if (Constants.KeyLog) logfile.Log(". . select first row");
+							if (gc.KeyLog) logfile.Log(". . select first row");
 #endif
 							e.SuppressKeyPress = true;
 							Table.SelectFirstRow();
 						}
 #if DEBUG
 						else
-							if (Constants.KeyLog) logfile.Log(". . an Editor is visible -> do not select first row");
+							if (gc.KeyLog) logfile.Log(". . an Editor is visible -> do not select first row");
 #endif
 						break;
 				}

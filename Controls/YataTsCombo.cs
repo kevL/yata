@@ -30,13 +30,13 @@ namespace yata
 		protected override bool ProcessCmdKey(ref Message m, Keys keyData)
 		{
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataTsCombo.ProcessCmdKey() keyData= " + keyData);
 #endif
 			if (Selected) // workaround since this fires when another it is currently selected.
 			{
 #if DEBUG
-				if (Constants.KeyLog) logfile.Log(". is Selected");
+				if (gc.KeyLog) logfile.Log(". is Selected");
 #endif
 				switch (keyData)
 				{
@@ -45,7 +45,7 @@ namespace yata
 						YataForm.that.tb_Search.Focus();
 						YataForm.that.tb_Search.SelectAll();
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (focus tb_Search)");
+						if (gc.KeyLog) logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (focus tb_Search)");
 #endif
 						return true;
 
@@ -57,7 +57,7 @@ namespace yata
 						(Parent as MenuStrip).Select(); // bingo! Despite '(Parent as MenuStrip).CanSelect' == FALSE.
 						YataForm.that.it_MenuClipboard.Select();
 #if DEBUG
-						if (Constants.KeyLog) logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (select it_MenuClipboard)");
+						if (gc.KeyLog) logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (select it_MenuClipboard)");
 #endif
 						return true;
 				}
@@ -65,7 +65,7 @@ namespace yata
 
 			bool ret = base.ProcessCmdKey(ref m, keyData);
 #if DEBUG
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataTsCombo.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
@@ -74,11 +74,11 @@ namespace yata
 #if DEBUG
 		protected override bool IsInputKey(Keys keyData) // does not fire.
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataTsCombo.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataTsCombo.IsInputKey ret= " + ret);
 
 			return ret;
@@ -86,11 +86,11 @@ namespace yata
 
 		protected override bool ProcessDialogKey(Keys keyData) // does not fire.
 		{
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataTsCombo.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataTsCombo.ProcessDialogKey ret= " + ret);
 
 			return ret;
@@ -98,7 +98,7 @@ namespace yata
 
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (Constants.KeyLog && (e.KeyData & ~Constants.ControlShift) != 0)
+			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataTsCombo.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);
