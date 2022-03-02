@@ -5040,7 +5040,7 @@ namespace yata
 		/// </summary>
 		/// <remarks><c><see cref="_contextCe"/></c> is not assigned to a
 		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>ContextMenuStrip</c>
-		/// or <c>ContextMenu</c>.</remarks>
+		/// or <c>ContextMenu</c> since that leads to .net bullshit.</remarks>
 		internal void ShowCellContext()
 		{
 			_sel = Table.getSelectedCell(); // '_sel' shall be valid due to rightclick
