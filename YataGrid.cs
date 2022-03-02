@@ -4145,57 +4145,84 @@ namespace yata
 #if DEBUG
 			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible + " _bypassclickhandler= " + _bypassclickhandler);
 #endif
-			if (_bypassclickhandler)
+			if (!_bypassclickhandler)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
-#endif
-				_bypassclickhandler = false;
-				return;
-			}
+				_double = false;	// DoubleClick needs to be allowed to fire even if OnMouseClick() gets bypassed.
+									// so keep that reset inside (!_bypassclickhandler)
 
-			_double = false;
-
-
-			if ((ModifierKeys & Keys.Alt) == Keys.None	// <- do this in OnMouseDown() also
-				&& _cell != null)						// e.X < WidthTable && e.Y < HeightTable // click inside the table-area
-			{
-				bool detercellops = false;
-
-				switch (e.Button)
+				if ((ModifierKeys & Keys.Alt) == Keys.None	// <- do this in OnMouseDown() also
+					&& _cell != null)						// e.X < WidthTable && e.Y < HeightTable // click inside the table-area
 				{
-					case MouseButtons.Left:
-						if ((ModifierKeys & Keys.Control) == Keys.Control) // select/deselect single cell ->
-						{
-							if ((ModifierKeys & Keys.Shift) == Keys.None)
+					bool detercellops = false;
+
+					switch (e.Button)
+					{
+						case MouseButtons.Left:
+							if ((ModifierKeys & Keys.Control) == Keys.Control) // select/deselect single cell ->
+							{
+								if ((ModifierKeys & Keys.Shift) == Keys.None)
+								{
+#if DEBUG
+									if (gc.ClickLog) logfile.Log(". Ctrl");
+#endif
+									Cell sel = getSelectedCell();
+									if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
+									{
+										if (_cell.selected = !_cell.selected)
+										{
+#if DEBUG
+											if (gc.ClickLog) logfile.Log(". . select cell");
+#endif
+											if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
+											{
+												ClearSelects(true);
+												_cell.selected = true;
+											}
+											EnsureDisplayed(_cell, sel == null);	// <- bypass Propanel.EnsureDisplayed() if
+																					// selectedcell is not the only selected cell
+											_anchorcell = _cell;
+										}
+										else
+										{
+#if DEBUG
+											if (gc.ClickLog) logfile.Log(". . deselect cell");
+#endif
+											_f.ClearSyncSelects();
+										}
+
+										detercellops = true;
+
+										int invalid = INVALID_GRID;
+										if (Propanel != null && Propanel.Visible)
+											invalid |= INVALID_PROP;
+	
+										Invalidator(invalid);
+									}
+								}
+							}
+							else if ((ModifierKeys & Keys.Shift) == Keys.Shift) // do block selection ->
 							{
 #if DEBUG
-								if (gc.ClickLog) logfile.Log(". Ctrl");
+								if (gc.ClickLog) logfile.Log(". Shift");
 #endif
-								Cell sel = getSelectedCell();
-								if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
+								if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
+									&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
 								{
-									if (_cell.selected = !_cell.selected)
-									{
 #if DEBUG
-										if (gc.ClickLog) logfile.Log(". . select cell");
+									if (gc.ClickLog) logfile.Log(". . do block selection");
 #endif
-										if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
-										{
-											ClearSelects(true);
-											_cell.selected = true;
-										}
-										EnsureDisplayed(_cell, sel == null);	// <- bypass Propanel.EnsureDisplayed() if
-																				// selectedcell is not the only selected cell
-										_anchorcell = _cell;
-									}
-									else
-									{
-#if DEBUG
-										if (gc.ClickLog) logfile.Log(". . deselect cell");
-#endif
-										_f.ClearSyncSelects();
-									}
+									ClearSelects(true);
+
+									int strt_r = Math.Min(_anchorcell.y, _cell.y);
+									int stop_r = Math.Max(_anchorcell.y, _cell.y);
+									int strt_c = Math.Min(_anchorcell.x, _cell.x);
+									int stop_c = Math.Max(_anchorcell.x, _cell.x);
+
+									for (int r = strt_r; r <= stop_r; ++r)
+									for (int c = strt_c; c <= stop_c; ++c)
+										this[r,c].selected = true;
+
+									EnsureDisplayed(_cell, true);
 
 									detercellops = true;
 
@@ -4206,93 +4233,67 @@ namespace yata
 									Invalidator(invalid);
 								}
 							}
-						}
-						else if ((ModifierKeys & Keys.Shift) == Keys.Shift) // do block selection ->
-						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". Shift");
-#endif
-							if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
-								&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
+							else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
 							{
 #if DEBUG
-								if (gc.ClickLog) logfile.Log(". . do block selection");
+								if (gc.ClickLog) logfile.Log(". select cell");
 #endif
+								_double = true;
+
 								ClearSelects(true);
 
-								int strt_r = Math.Min(_anchorcell.y, _cell.y);
-								int stop_r = Math.Max(_anchorcell.y, _cell.y);
-								int strt_c = Math.Min(_anchorcell.x, _cell.x);
-								int stop_c = Math.Max(_anchorcell.x, _cell.x);
-
-								for (int r = strt_r; r <= stop_r; ++r)
-								for (int c = strt_c; c <= stop_c; ++c)
-									this[r,c].selected = true;
-
-								EnsureDisplayed(_cell, true);
+								(_anchorcell = _cell).selected = true;
+								_f.SyncSelectCell(_cell);
 
 								detercellops = true;
 
-								int invalid = INVALID_GRID;
-								if (Propanel != null && Propanel.Visible)
-									invalid |= INVALID_PROP;
-
-								Invalidator(invalid);
+								Invalidator(INVALID_GRID
+										  | INVALID_FROZ
+										  | INVALID_ROWS
+										  | EnsureDisplayed(_cell));
 							}
-						}
-						else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
-						{
+							else if (!Readonly) // cell is already selected
+							{
 #if DEBUG
-							if (gc.ClickLog) logfile.Log(". select cell");
+								if (gc.ClickLog) logfile.Log(". edit cell");
 #endif
-							_double = true;
+								startCelledit(_cell);
+							}
+							break;
 
-							ClearSelects(true);
-
-							(_anchorcell = _cell).selected = true;
-							_f.SyncSelectCell(_cell);
-
-							detercellops = true;
-
-							Invalidator(INVALID_GRID
-									  | INVALID_FROZ
-									  | INVALID_ROWS
-									  | EnsureDisplayed(_cell));
-						}
-						else if (!Readonly) // cell is already selected
-						{
+						case MouseButtons.Right:
+							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+							{
 #if DEBUG
-							if (gc.ClickLog) logfile.Log(". edit cell");
+								if (gc.ClickLog) logfile.Log(". select cell and show context");
 #endif
-							startCelledit(_cell);
-						}
-						break;
+								ClearSelects(true);
 
-					case MouseButtons.Right:
-						if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
-						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". select cell and show context");
-#endif
-							ClearSelects(true);
+								(_anchorcell = _cell).selected = true;
+								_f.SyncSelectCell(_cell);
 
-							(_anchorcell = _cell).selected = true;
-							_f.SyncSelectCell(_cell);
+								detercellops = true;
 
-							detercellops = true;
+								Invalidator(INVALID_GRID
+										  | INVALID_FROZ
+										  | INVALID_ROWS
+										  | EnsureDisplayed(_cell));
 
-							Invalidator(INVALID_GRID
-									  | INVALID_FROZ
-									  | INVALID_ROWS
-									  | EnsureDisplayed(_cell));
+								_f.ShowCellContext();
+							}
+							break;
+					}
 
-							_f.ShowCellContext();
-						}
-						break;
+					if (detercellops)
+						_f.EnableCelleditOperations();
 				}
-
-				if (detercellops)
-					_f.EnableCelleditOperations();
+			}
+			else
+			{
+#if DEBUG
+				if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
+#endif
+				_bypassclickhandler = false;
 			}
 		}
 
