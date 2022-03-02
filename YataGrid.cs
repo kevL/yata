@@ -3953,58 +3953,18 @@ namespace yata
 
 
 		/// <summary>
-		/// Overrides the <c>MouseDown</c> eventhandler. Ensures that the editor
-		/// closes properly.
+		/// The clicked cell.
 		/// </summary>
-		/// <param name="e"></param>
-		/// <remarks>Since .net fires <c>RMB</c> <c>MouseClick</c> after other
-		/// stuff (but note that <c>LMB</c> <c>MouseClick</c> happens before
-		/// other stuff) use <c>MouseDown</c> instead for <c>RMB</c> operations
-		/// that need to happen before other stuff.</remarks>
-		protected override void OnMouseDown(MouseEventArgs e)
-		{
-			//logfile.Log("OnMouseDown() " + e.Button + " _editor.Visible= " + _editor.Visible);
-
-			switch (e.Button)
-			{
-				case MouseButtons.Left:
-					if ((ModifierKeys & Keys.Alt) == Keys.None
-						&& (e.X >= WidthTable || e.Y >= HeightTable) // click to the right or below the table-area
-						&& _editor.Visible)
-					{
-						_bypassleaveditor = true;
-						applyCelledit(true);
-					}
-					break;
-
-				case MouseButtons.Right:
-					if (ModifierKeys == Keys.None)
-					{
-						if (e.X >= WidthTable || e.Y >= HeightTable) // click to the right or below the table-area
-						{
-							if (_editor.Visible)
-							{
-								_bypassleaveditor = true;
-								hideditor(INVALID_GRID, true);
-							}
-							// TODO: else clear all selects here ->
-//							{
-//								foreach (var col in Cols)
-//								col.selected = false;
-//
-//								foreach (var row in Rows)
-//									row.selected = false;
-//
-//								ClearCellSelects();
-//								Invalidator();
-//							}
-						}
-						else
-							Select(); // the editor's Leave handler will close it properly.
-					}
-					break;
-			}
-		}
+		/// <remarks>Set by
+		/// <c><see cref="OnMouseDown()">OnMouseDown()</see></c>.
+		/// 
+		/// 
+		/// Used by
+		/// <list type="bullet">
+		/// <item><c><see cref="OnMouseClick()">OnMouseClick()</see></c></item>
+		/// <item><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c></item>
+		/// </list></remarks>
+		Cell _cell;
 
 		/// <summary>
 		/// <c>true</c> allows
@@ -4013,179 +3973,326 @@ namespace yata
 		bool _double;
 
 		/// <summary>
-		/// The clicked cell.
+		/// <c>true</c> to bypass
+		/// <c><see cref="OnMouseClick()">OnMouseClick()</see></c>.
 		/// </summary>
-		/// <remarks>Used by
-		/// <list type="bullet">
-		/// <item><c><see cref="OnMouseClick()">OnMouseClick()</see></c></item>
-		/// <item><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c></item>
-		/// </list></remarks>
-		Cell _cell;
+		/// <remarks><c><see cref="OnMouseDoubleClick()">OnMouseDoubleClick()</see></c>
+		/// can still fire if <c><see cref="_double"/></c> is set <c>true</c> in
+		/// <c><see cref="OnMouseDown()">OnMouseDown()</see></c>.</remarks>
+		bool _bypassclickhandler;
+
+		/// <summary>
+		/// Overrides the <c>MouseDown</c> eventhandler. Ensures that the editor
+		/// closes properly.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Since .net fires <c>RMB</c> <c>MouseClick</c> after other
+		/// stuff (but note that <c>LMB</c> <c>MouseClick</c> happens before
+		/// other stuff) use <c>MouseDown</c> instead for <c>RMB</c> operations
+		/// that need to happen before other stuff.
+		/// 
+		/// 
+		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
+		/// to work as a single routine.</remarks>
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+#if DEBUG
+			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseDown() " + e.Button + " _editor.Visible= " + _editor.Visible);
+#endif
+			if ((ModifierKeys & Keys.Alt) == Keys.None) // do this in OnMouseClick() also
+			{
+				if (Propanel != null && Propanel._editor.Visible)
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". Propanel._editor.Visible");
+#endif
+					Propanel._editor.Visible = false;
+				}
+
+
+				_bypassclickhandler = false;
+
+				// e.X >= WidthTable || e.Y >= HeightTable
+				if ((_cell = getClickedCell(e.X, e.Y)) != null) // click to the right or below the table-area
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". clicked cell VALID");
+#endif
+					if (_editor.Visible)
+					{
+						if (_cell != _editcell)
+						{
+							switch (e.Button)
+							{
+								case MouseButtons.Left:
+									// allow [Ctrl] and [Shift] keys
+#if DEBUG
+									if (gc.ClickLog) logfile.Log(". . accept edit");
+#endif
+									_bypassleaveditor = true;
+									applyCelledit(true);
+
+									_double = true;
+									_bypassclickhandler = true;
+									break;
+
+								case MouseButtons.Right:
+									// disallow [Ctrl] or [Shift] w/ RMB in OnMouseClick() also
+
+									if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+									{
+#if DEBUG
+										if (gc.ClickLog) logfile.Log(". . default edit result");
+#endif
+										_editor.Visible = false;
+										Select();
+									}
+									else
+										goto default;
+
+									break;
+
+								default:
+#if DEBUG
+									if (gc.ClickLog) logfile.Log(". . focus editor");
+#endif
+									_editor.Focus();
+									_bypassclickhandler = true;
+									break;
+							}
+						}
+						else // _cell == _editcell
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . (_cell == _editcell) focus editor");
+#endif
+							_editor.Focus();
+							_bypassclickhandler = true;
+						}
+					}
+				}
+				else if (_editor.Visible) // _cell == null
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". (_editor.Visible && _cell == null)");
+#endif
+					if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+					{
+						switch (e.Button)
+						{
+							case MouseButtons.Left:
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . accept edit");
+#endif
+								_bypassleaveditor = true;
+								applyCelledit(true);
+								break;
+
+							case MouseButtons.Right:
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . cancel edit");
+#endif
+								_bypassleaveditor = true;
+								hideditor(INVALID_GRID, true);
+								break;
+
+							default:
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . focus editor");
+#endif
+								_editor.Focus();
+								_bypassclickhandler = true;
+								break;
+						}
+					}
+					else // Ctrl or Shift ->
+					{
+#if DEBUG
+						if (gc.ClickLog) logfile.Log(". . (Ctrl or Shift) focus editor");
+#endif
+						_editor.Focus();
+						_bypassclickhandler = true;
+					}
+				}
+//				else if (e.Button == MouseButtons.Right) // TODO: clear all selects here ->
+//				{
+//					foreach (var col in Cols)
+//					col.selected = false;
+//
+//					foreach (var row in Rows)
+//						row.selected = false;
+//
+//					ClearCellSelects();
+//					Invalidator();
+//				}
+			}
+		}
 
 		/// <summary>
 		/// Overrides the <c>MouseClick</c> eventhandler and deals with clicks
-		/// inside the table-area only. LMB selects a cell or enables/disables
-		/// the editbox. RMB opens a cell's context-menu.
+		/// inside the table-area only. LMB selects cell(s) and RMB opens a
+		/// cell's context-menu.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks><c>YataGrid.MouseClick</c> does not fire on any of the top
-		/// or left panels.</remarks>
+		/// or left panels.
+		/// 
+		/// 
+		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
+		/// to work as a single routine.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-			//logfile.Log("OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible);
+#if DEBUG
+			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible + " _bypassclickhandler= " + _bypassclickhandler);
+#endif
+			if (_bypassclickhandler)
+			{
+#if DEBUG
+				if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
+#endif
+				_bypassclickhandler = false;
+				return;
+			}
 
 			_double = false;
 
-			if ((ModifierKeys & Keys.Alt) == Keys.None)
+
+			if ((ModifierKeys & Keys.Alt) == Keys.None	// <- do this in OnMouseDown() also
+				&& _cell != null)						// e.X < WidthTable && e.Y < HeightTable // click inside the table-area
 			{
-				if (e.X < WidthTable && e.Y < HeightTable) // click inside the table-area
+				bool detercellops = false;
+
+				switch (e.Button)
 				{
-					bool detercellops = false;
-
-					bool ctr = (ModifierKeys & Keys.Control) == Keys.Control,
-						 sft = (ModifierKeys & Keys.Shift)   == Keys.Shift;
-
-					switch (e.Button)
-					{
-						case MouseButtons.Left:
-							if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
+					case MouseButtons.Left:
+						if ((ModifierKeys & Keys.Control) == Keys.Control) // select/deselect single cell ->
+						{
+							if ((ModifierKeys & Keys.Shift) == Keys.None)
 							{
-								if (_editor.Visible)
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". Ctrl");
+#endif
+								Cell sel = getSelectedCell();
+								if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
 								{
-									if (!ctr && !sft)
+									if (_cell.selected = !_cell.selected)
 									{
-										if (_cell != _editcell)
-										{
-											_double = true;
-											_bypassleaveditor = true;
-											applyCelledit(true);
-										}
-										else					// there's a clickable fringe around the editor so
-											_editor.Focus();	// just refocus the editor if the fringe is clicked
-									}
-									else
-										Select();
-								}
-								else
-								{
-									Select();
-
-									if (ctr) // select/deselect single cell ->
-									{
-										if (!sft)
-										{
-											Cell sel = getSelectedCell();
-											if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
-											{
-												if (_cell.selected = !_cell.selected)
-												{
-													if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
-													{
-														ClearSelects(true);
-														_cell.selected = true;
-													}
-													EnsureDisplayed(_cell, sel == null);	// <- bypass Propanel.EnsureDisplayed() if
-																							// selectedcell is not the only selected cell
-													_anchorcell = _cell;
-												}
-												else
-													_f.ClearSyncSelects();
-
-												detercellops = true;
-
-												int invalid = INVALID_GRID;
-												if (Propanel != null && Propanel.Visible)
-													invalid |= INVALID_PROP;
-	
-												Invalidator(invalid);
-											}
-										}
-									}
-									else if (sft) // do block selection ->
-									{
-										if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
-											&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
+#if DEBUG
+										if (gc.ClickLog) logfile.Log(". . select cell");
+#endif
+										if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
 										{
 											ClearSelects(true);
-
-											int strt_r = Math.Min(_anchorcell.y, _cell.y);
-											int stop_r = Math.Max(_anchorcell.y, _cell.y);
-											int strt_c = Math.Min(_anchorcell.x, _cell.x);
-											int stop_c = Math.Max(_anchorcell.x, _cell.x);
-
-											for (int r = strt_r; r <= stop_r; ++r)
-											for (int c = strt_c; c <= stop_c; ++c)
-												this[r,c].selected = true;
-
-											EnsureDisplayed(_cell, true);
-
-											detercellops = true;
-
-											int invalid = INVALID_GRID;
-											if (Propanel != null && Propanel.Visible)
-												invalid |= INVALID_PROP;
-
-											Invalidator(invalid);
+											_cell.selected = true;
 										}
-									}
-									else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
-									{
+										EnsureDisplayed(_cell, sel == null);	// <- bypass Propanel.EnsureDisplayed() if
+																				// selectedcell is not the only selected cell
 										_anchorcell = _cell;
-
-										_double = true;
-
-										ClearSelects(true);
-										_cell.selected = true;
-										_f.SyncSelectCell(_cell);
-
-										detercellops = true;
-
-										Invalidator(INVALID_GRID
-												  | INVALID_FROZ
-												  | INVALID_ROWS
-												  | EnsureDisplayed(_cell));
 									}
-									else if (!Readonly) // cell is already selected
+									else
 									{
-										_editcell = _cell;
-										Celledit();
+#if DEBUG
+										if (gc.ClickLog) logfile.Log(". . deselect cell");
+#endif
+										_f.ClearSyncSelects();
 									}
-								}
-							}
-							else
-								Select();
-
-							break;
-
-						case MouseButtons.Right:
-							if (!ctr && !sft)
-							{
-								if ((_cell = getClickedCell(e.X, e.Y)) != null) // safety.
-								{
-									_anchorcell = _cell;
-
-									ClearSelects(true);
-									_cell.selected = true;
-									_f.SyncSelectCell(_cell);
 
 									detercellops = true;
 
-									Invalidator(INVALID_GRID
-											  | INVALID_FROZ
-											  | INVALID_ROWS
-											  | EnsureDisplayed(_cell));
+									int invalid = INVALID_GRID;
+									if (Propanel != null && Propanel.Visible)
+										invalid |= INVALID_PROP;
 
-									_f.ShowCellContext();
+									Invalidator(invalid);
 								}
-								else
-									Select();
 							}
-							break;
-					}
+						}
+						else if ((ModifierKeys & Keys.Shift) == Keys.Shift) // do block selection ->
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". Shift");
+#endif
+							if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
+								&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
+							{
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . do block selection");
+#endif
+								ClearSelects(true);
 
-					if (detercellops)
-						_f.EnableCelleditOperations();
+								int strt_r = Math.Min(_anchorcell.y, _cell.y);
+								int stop_r = Math.Max(_anchorcell.y, _cell.y);
+								int strt_c = Math.Min(_anchorcell.x, _cell.x);
+								int stop_c = Math.Max(_anchorcell.x, _cell.x);
+
+								for (int r = strt_r; r <= stop_r; ++r)
+								for (int c = strt_c; c <= stop_c; ++c)
+									this[r,c].selected = true;
+
+								EnsureDisplayed(_cell, true);
+
+								detercellops = true;
+
+								int invalid = INVALID_GRID;
+								if (Propanel != null && Propanel.Visible)
+									invalid |= INVALID_PROP;
+
+								Invalidator(invalid);
+							}
+						}
+						else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". select cell");
+#endif
+							_double = true;
+
+							ClearSelects(true);
+
+							(_anchorcell = _cell).selected = true;
+							_f.SyncSelectCell(_cell);
+
+							detercellops = true;
+
+							Invalidator(INVALID_GRID
+									  | INVALID_FROZ
+									  | INVALID_ROWS
+									  | EnsureDisplayed(_cell));
+						}
+						else if (!Readonly) // cell is already selected
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". edit cell");
+#endif
+							startCelledit(_cell);
+						}
+						break;
+
+					case MouseButtons.Right:
+						if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". select cell and show context");
+#endif
+							ClearSelects(true);
+
+							(_anchorcell = _cell).selected = true;
+							_f.SyncSelectCell(_cell);
+
+							detercellops = true;
+
+							Invalidator(INVALID_GRID
+									  | INVALID_FROZ
+									  | INVALID_ROWS
+									  | EnsureDisplayed(_cell));
+
+							_f.ShowCellContext();
+						}
+						break;
 				}
+
+				if (detercellops)
+					_f.EnableCelleditOperations();
 			}
 		}
 
@@ -4195,17 +4302,56 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks>If a cell is currently being edited any changes to that
 		/// cell will be accepted and the cell that is double-clicked if any
-		/// shall (sic) enter its edit-state.</remarks>
+		/// shall (sic) enter its edit-state.
+		/// 
+		/// 
+		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
+		/// to work as a single routine.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
+#if DEBUG
+			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseDoubleClick() " + e.Button + " _editor.Visible= " + _editor.Visible);
+#endif
 			if (_double)
 			{
 				if (!_cell.selected)
-					OnMouseClick(e);
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". select cell");
+#endif
+					ClearSelects(true);
 
-				OnMouseClick(e);
+					(_anchorcell = _cell).selected = true;
+					_f.SyncSelectCell(_cell);
+
+					Invalidator(INVALID_GRID // not so sure all that is needed ->
+							  | INVALID_FROZ
+							  | INVALID_ROWS
+							  | EnsureDisplayed(_cell));
+
+					_f.EnableCelleditOperations();
+				}
+
+				if (!Readonly)
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". edit cell");
+#endif
+					startCelledit(_cell);
+				}
 			}
+#if DEBUG
+			else if (gc.ClickLog) logfile.Log(". MouseDoubleClick bypassed");
+#endif
 		}
+
+//#if DEBUG
+//		protected override void OnMouseUp(MouseEventArgs e)
+//		{
+//			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseUp() " + e.Button + " _editor.Visible= " + _editor.Visible);
+//			base.OnMouseUp(e);
+//		}
+//#endif
 
 		/// <summary>
 		/// Gets the <c><see cref="Cell"/></c> clicked at x/y.
@@ -4215,21 +4361,27 @@ namespace yata
 		/// <returns></returns>
 		Cell getClickedCell(int x, int y)
 		{
-			y += OffsetVert;
-			if (y > HeightColhead && y < HeightTable)
+			if (   (y += OffsetVert) > HeightColhead && y < HeightTable
+				&& (x += OffsetHori) < WidthTable)
 			{
-				x += OffsetHori;
-				if (x < WidthTable)
+				int left = getLeft();
+				if (x > left)
 				{
-					int left = getLeft();
-					if (x > left)
-					{
-						var cords = getCords(x,y, left);
-						return this[cords.Y, cords.X];
-					}
+					Point cords = getCords(x,y, left);
+					return this[cords.Y, cords.X];
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Starts a cell-edit from YataForm via the cellmenu.
+		/// </summary>
+		/// <param name="cell"></param>
+		internal void startCelledit(Cell cell)
+		{
+			_editcell = cell;
+			Celledit();
 		}
 
 		/// <summary>
@@ -4254,16 +4406,6 @@ namespace yata
 			_editor.Focus();
 
 			Invalidator(INVALID_GRID);
-		}
-
-		/// <summary>
-		/// Starts a cell-edit from YataForm via the cellmenu.
-		/// </summary>
-		/// <param name="cell"></param>
-		internal void startCelledit(Cell cell)
-		{
-			_editcell = cell;
-			Celledit();
 		}
 
 		/// <summary>
