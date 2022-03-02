@@ -265,6 +265,22 @@ namespace yata
 			base.OnKeyDown(e);
 		}
 #endif
+
+		/// <summary>
+		/// Overrides the <c>MouseClick</c> eventhandler. Selects all text if
+		/// user double-clicks a cell on <c><see cref="YataGrid"/></c> that is
+		/// already selected.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks><c><see cref="YataGrid._doubletclick"/></c> is set by
+		/// <c><see cref="YataGrid"/>.OnMouseClick()</c> and cleared by
+		/// <c><see cref="YataGrid"/>._t1_Tick()</c>.</remarks>
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			if (YataGrid._doubletclick)
+				SelectAll();
+		}
+
 		#endregion Methods (override)
 	}
 }

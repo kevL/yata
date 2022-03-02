@@ -126,6 +126,23 @@ namespace yata
 		/// cleared when no longer needed.
 		/// </summary>
 		static readonly List<string[]> _rows = new List<string[]>();
+
+
+		/// <summary>
+		/// Handles a situation where user attempts a double-click on a cell
+		/// that is already selected.
+		/// </summary>
+		/// <remarks><c><see cref="_doubletclick"/></c> is set <c>true</c> for a
+		/// duration of <c>SystemInformation.DoubleClickTime</c> and if
+		/// <c><see cref="YataEditbox"/></c> receives a <c>MouseClick</c> event
+		/// within that duration it selects all text instead of deselecting the
+		/// text and positioning the caret.</remarks>
+		static Timer _t1;
+
+		/// <summary>
+		/// See <c><see cref="_t1"/></c>.
+		/// </summary>
+		internal static bool _doubletclick;
 		#endregion Fields (static)
 
 
@@ -390,8 +407,22 @@ namespace yata
 			AllowDrop = true;
 
 			_ur = new UndoRedo(this);
+
+			if (_t1 == null)
+			{
+				_t1 = new Timer();
+				_t1.Interval = SystemInformation.DoubleClickTime;
+				_t1.Tick += _t1_Tick;
+			}
 		}
 		#endregion cTor
+
+
+		void _t1_Tick(object sender, EventArgs e)
+		{
+			_t1.Stop();
+			_doubletclick = false;
+		}
 
 
 		#region Invalidate
@@ -4258,8 +4289,9 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". edit cell");
 #endif
 								startCelledit(_cell);
-								// TODO: Start a timer and select all text if YataEditbox
-								// gets clicked within a double-click interval.
+
+								_doubletclick = true;
+								_t1.Start();
 							}
 							break;
 
