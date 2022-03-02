@@ -280,7 +280,6 @@ namespace yata
 			if (YataGrid._doubletclick)
 				SelectAll();
 		}
-
 		#endregion Methods (override)
 	}
 }
