@@ -646,6 +646,9 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
+#if DEBUG
+			if (gc.ClickLog) logfile.Log("Propanel.OnMouseClick() " + e.Button + " _tabOverride= " + _tabOverride);
+#endif
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
 				if (!_editor.Visible)
@@ -681,6 +684,9 @@ namespace yata
 
 							if (!_grid.Readonly && e.X > _widthVars)
 							{
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . start edit");
+#endif
 								_editRect.X = _widthVars;
 								_editRect.Y = _c * _heightr + 1;
 
@@ -695,14 +701,24 @@ namespace yata
 								_editor.Focus();
 							}
 							else
+							{
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . select grid");
+#endif
 								_grid.Select();
+							}
 
 							_grid.Invalidator(YataGrid.INVALID_GRID
 											| YataGrid.INVALID_FROZ
 											| YataGrid.INVALID_PROP);
 						}
 						else
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". select grid");
+#endif
 							_grid.Select();
+						}
 					}
 				}
 				else if ((ModifierKeys & Keys.Shift) == Keys.None) // _editor.Visible
@@ -710,11 +726,17 @@ namespace yata
 					switch (e.Button)
 					{
 						case MouseButtons.Left: // accept edit
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". accept edit");
+#endif
 							_bypassleaveditor = true;
 							applyCelledit(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". cancel edit");
+#endif
 							_bypassleaveditor = true;
 							hideditor(true);
 							break;
