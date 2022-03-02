@@ -183,7 +183,7 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseDown() e.Button= " + e.Button);
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
@@ -240,7 +240,7 @@ namespace yata
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 #if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseUp()");
+			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseUp() e.Button= " + e.Button);
 #endif
 			if (IsGrab)
 			{
@@ -363,7 +363,7 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelRows.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelRows.OnMouseDown() e.Button= " + e.Button);
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
@@ -454,7 +454,7 @@ namespace yata
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelFrozen.OnMouseDown()");
+			if (gc.ClickLog) logfile.Log("YataPanelFrozen.OnMouseDown() e.Button= " + e.Button);
 #endif
 			if (ModifierKeys == Keys.None)
 			{
@@ -466,16 +466,25 @@ namespace yata
 					switch (e.Button)
 					{
 						case MouseButtons.Left: // accept edit
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . accept edit");
+#endif
 							_grid._bypassleaveditor = true;
 							_grid.applyCelledit(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . cancel edit");
+#endif
 							_grid._bypassleaveditor = true;
 							_grid.hideditor(YataGrid.INVALID_GRID, true);
 							break;
 
 						case MouseButtons.Middle:
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . default edit result");
+#endif
 							_grid._editor.Visible = false; // do this or else the leave event fires twice.
 							_grid.Select();
 							break;
@@ -492,16 +501,25 @@ namespace yata
 						switch (e.Button)
 						{
 							case MouseButtons.Left: // accept edit
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . accept edit");
+#endif
 								propanel._bypassleaveditor = true;
 								propanel.applyCelledit(true);
 								break;
 
 							case MouseButtons.Right: // cancel edit
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . cancel edit");
+#endif
 								propanel._bypassleaveditor = true;
 								propanel.hideditor(true);
 								break;
 
 							case MouseButtons.Middle:
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . default edit result");
+#endif
 								propanel._editor.Visible = false; // do this or else the leave event fires twice.
 								_grid.Select();
 								break;
