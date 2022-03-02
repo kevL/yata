@@ -277,6 +277,9 @@ namespace yata
 		/// <c><see cref="YataGrid"/>._t1_Tick()</c>.</remarks>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
+#if DEBUG
+			if (gc.ClickLog) logfile.Log("YataEditbox.OnMouseDown() " + e.Button);
+#endif
 			if (YataGrid._doubletclick)
 				SelectAll();
 		}
