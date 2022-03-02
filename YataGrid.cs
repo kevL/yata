@@ -4258,6 +4258,8 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". edit cell");
 #endif
 								startCelledit(_cell);
+								// TODO: Start a timer and select all text if YataEditbox
+								// gets clicked within a double-click interval.
 							}
 							break;
 
