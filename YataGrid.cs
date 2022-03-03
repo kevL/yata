@@ -5042,8 +5042,9 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles a <c>MouseDown</c> event on the rowhead. Selects or
-		/// deselects <c><see cref="Row">Row(s)</see></c>.
+		/// Handles a <c>MouseDown</c> event on
+		/// <c><see cref="YataPanelRows"/></c>. Selects or deselects
+		/// <c><see cref="Row">Row(s)</see></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelRows"/></c></param>
 		/// <param name="e"></param>
@@ -5276,7 +5277,7 @@ namespace yata
 					selr = sel.y;
 
 					for (int r = sel.y + 1; r != RowCount; ++r)
-					for (int c = 0; c != ColCount; ++c)
+					for (int c = 0;         c != ColCount; ++c)
 						if (this[r,c].selected)
 							return -1;
 				}
@@ -5284,9 +5285,11 @@ namespace yata
 			return selr;
 		}
 
+
 		/// <summary>
-		/// Handles a <c>MouseDown</c> event on the colhead. Selects or
-		/// deselects <c><see cref="Col">Col(s)</see></c>.
+		/// Handles a <c>MouseDown</c> event on
+		/// <c><see cref="YataPanelCols"/></c>. Selects or deselects
+		/// <c><see cref="Col">Col(s)</see></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_panelCols"/></c></param>
 		/// <param name="e"></param>
@@ -5616,7 +5619,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Inserts a row into the table.
+		/// Inserts a <c><see cref="Row"/></c> into the table.
 		/// </summary>
 		/// <param name="rowid">row-id to insert at</param>
 		/// <param name="fields">an array of fields</param>
@@ -5673,7 +5676,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a row from the table.
+		/// Deletes a <c><see cref="Row"/></c> from the table.
 		/// </summary>
 		/// <param name="idr">row-id to delete</param>
 		/// <param name="calibrate"><c>true</c> to re-layout the grid or
@@ -5732,7 +5735,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a single or multiple rows.
+		/// Deletes a single or multiple <c><see cref="Row">Rows</see></c>.
 		/// </summary>
 		/// <remarks>Called by
 		/// <c><see cref="YataForm"/>.editrowsclick_DeleteRange()</c>.</remarks>
