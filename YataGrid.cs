@@ -4031,6 +4031,8 @@ namespace yata
 #endif
 			if ((ModifierKeys & Keys.Alt) == Keys.None) // do this in OnMouseClick() also
 			{
+				bool @select = true; // set to false if an edit starts
+
 				if (Propanel != null && Propanel._editor.Visible)
 				{
 #if DEBUG
@@ -4042,7 +4044,7 @@ namespace yata
 
 				_bypassclickhandler = false;
 
-				// e.X >= WidthTable || e.Y >= HeightTable
+				// (e.X >= WidthTable || e.Y >= HeightTable)
 				if ((_cell = getCell(e.X, e.Y)) != null) // click to the right or below the table-area
 				{
 #if DEBUG
@@ -4060,10 +4062,10 @@ namespace yata
 									if (gc.ClickLog) logfile.Log(". . accept edit");
 #endif
 									_bypassleaveditor = true;
-									applyCelledit(true);
+									applyCelledit();
+									_bypassclickhandler = true;
 
 									_double = true;
-									_bypassclickhandler = true;
 									break;
 
 								case MouseButtons.Right:
@@ -4075,7 +4077,6 @@ namespace yata
 										if (gc.ClickLog) logfile.Log(". . default edit result");
 #endif
 										_editor.Visible = false;
-										Select();
 									}
 									else
 										goto default;
@@ -4086,8 +4087,7 @@ namespace yata
 #if DEBUG
 									if (gc.ClickLog) logfile.Log(". . focus editor");
 #endif
-									_editor.Focus();
-									_bypassclickhandler = true;
+									editorRefocus(ref @select);
 									break;
 							}
 						}
@@ -4096,8 +4096,7 @@ namespace yata
 #if DEBUG
 							if (gc.ClickLog) logfile.Log(". . (_cell == _editcell) focus editor");
 #endif
-							_editor.Focus();
-							_bypassclickhandler = true;
+							editorRefocus(ref @select);
 						}
 					}
 				}
@@ -4115,7 +4114,7 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". . accept edit");
 #endif
 								_bypassleaveditor = true;
-								applyCelledit(true);
+								applyCelledit();
 								break;
 
 							case MouseButtons.Right:
@@ -4123,15 +4122,14 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". . cancel edit");
 #endif
 								_bypassleaveditor = true;
-								hideditor(INVALID_GRID, true);
+								hideditor(INVALID_GRID);
 								break;
 
 							default:
 #if DEBUG
 								if (gc.ClickLog) logfile.Log(". . focus editor");
 #endif
-								_editor.Focus();
-								_bypassclickhandler = true;
+								editorRefocus(ref @select);
 								break;
 						}
 					}
@@ -4140,8 +4138,7 @@ namespace yata
 #if DEBUG
 						if (gc.ClickLog) logfile.Log(". . (Ctrl or Shift) focus editor");
 #endif
-						_editor.Focus();
-						_bypassclickhandler = true;
+						editorRefocus(ref @select);
 					}
 				}
 //				else if (e.Button == MouseButtons.Right) // TODO: clear all selects here ->
@@ -4155,7 +4152,22 @@ namespace yata
 //					ClearCellSelects();
 //					Invalidator();
 //				}
+
+				if (@select) Select();
 			}
+		}
+
+		/// <summary>
+		/// Focuses <c><see cref="_editor"/></c>.
+		/// </summary>
+		/// <param name="select"></param>
+		/// <remarks>helper for
+		/// <c><see cref="OnMouseDown()">OnMouseDown()</see></c></remarks>
+		void editorRefocus(ref bool @select)
+		{
+			_editor.Focus();
+			@select = false;
+			_bypassclickhandler = true;
 		}
 
 		/// <summary>
