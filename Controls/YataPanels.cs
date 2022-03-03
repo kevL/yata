@@ -79,8 +79,6 @@ namespace yata
 			BackColor = Colors.ColheadPanel;
 
 			Height = YataGrid.HeightColhead;
-
-			MouseDown += _grid.click_ColheadPanel;
 		}
 		#endregion cTor
 
@@ -230,7 +228,7 @@ namespace yata
 					break;
 			}
 
-			base.OnMouseDown(e); // fire 'YataGrid.click_ColheadPanel()'
+			_grid.click_ColheadPanel(this, e);
 		}
 
 		/// <summary>
@@ -325,8 +323,6 @@ namespace yata
 
 			Dock      = DockStyle.Left;
 			BackColor = Colors.RowheadPanel;
-
-			MouseDown += _grid.click_RowheadPanel;
 		}
 		#endregion cTor
 
@@ -383,7 +379,7 @@ namespace yata
 			}
 			_grid.Select();
 
-			base.OnMouseDown(e); // fire 'YataGrid.click_RowheadPanel()'
+			_grid.click_RowheadPanel(this, e);
 		}
 		#endregion Handlers (override)
 	}
