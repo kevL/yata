@@ -3930,8 +3930,7 @@ namespace yata
 				char c;
 				for (int i = 0; i != sb.Length; ++i)
 				{
-					c = sb[i];
-					if (c == '"')
+					if ((c = sb[i]) == '"')
 					{
 						quotes = false;
 						break;
@@ -3951,8 +3950,8 @@ namespace yata
 					if (load)
 						return true;
 
-					return Settings._strict;	// NOTE: Bother the user if he/she
-				}								// wants auto-quotes only if Strict.
+					return Settings._strict; // bother user if he/she wants auto-quotes only if Strict.
+				}
 			}
 
 			sb = sb.Replace("\"", null);
@@ -4044,7 +4043,7 @@ namespace yata
 				_bypassclickhandler = false;
 
 				// e.X >= WidthTable || e.Y >= HeightTable
-				if ((_cell = getClickedCell(e.X, e.Y)) != null) // click to the right or below the table-area
+				if ((_cell = getCell(e.X, e.Y)) != null) // click to the right or below the table-area
 				{
 #if DEBUG
 					if (gc.ClickLog) logfile.Log(". clicked cell VALID");
@@ -4182,7 +4181,8 @@ namespace yata
 									// so keep that reset inside (!_bypassclickhandler)
 
 				if ((ModifierKeys & Keys.Alt) == Keys.None	// <- do this in OnMouseDown() also
-					&& _cell != null)						// e.X < WidthTable && e.Y < HeightTable // click inside the table-area
+					&& _cell != null						// <- (e.X < WidthTable && e.Y < HeightTable) click inside the table-area
+					&& _cell == getCell(e.X, e.Y))			// <- cancel operation if cursor is no longer on '_cell'
 				{
 					bool detercellops = false;
 
@@ -4389,12 +4389,12 @@ namespace yata
 //#endif
 
 		/// <summary>
-		/// Gets the <c><see cref="Cell"/></c> clicked at x/y.
+		/// Gets the <c><see cref="Cell"/></c> at x/y.
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		Cell getClickedCell(int x, int y)
+		Cell getCell(int x, int y)
 		{
 			if (   (y += OffsetVert) > HeightColhead && y < HeightTable
 				&& (x += OffsetHori) < WidthTable)
