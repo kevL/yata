@@ -4322,13 +4322,10 @@ namespace yata
 						_f.EnableCelleditOperations();
 				}
 			}
-			else
-			{
 #if DEBUG
-				if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
+			else if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
 #endif
-				_bypassclickhandler = false;
-			}
+			_bypassclickhandler = false;
 		}
 
 		/// <summary>
