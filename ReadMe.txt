@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 feb 25
+2022 Mar 3
 kevL's
 ver 4.6.7.0
 
@@ -401,8 +401,13 @@ LMB+Shift - selects a block of contiguous cells if there is only one currently
             cells (A contiguous block is required for multicell cut and copy
             operations.)
 RMB       - selects a cell and opens the cell context (Note that if editing a
-            cell then a right-click on a different part of the table either
-            inside or outside the grid cancels the edit.)
+            cell then a right-click also cancels or accepts the edit depending
+            on the Setting "acceptedit=".)
+
+- click outside the grid -
+LMB - accepts an edit if editing a cell
+RMB - cancels an edit if editing a cell, otherwise deselects all cells, rows,
+      and cols
 
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a
