@@ -10,7 +10,7 @@ namespace yata
 	/// The button in the upper-right corner of Yata that opens/cycles the
 	/// active table's <c><see cref="Propanel"/></c>.
 	/// </summary>
-	sealed class PropanelButton
+	sealed class PropanelBu
 		: Button
 	{
 		#region Fields (static)
@@ -32,7 +32,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal PropanelButton()
+		internal PropanelBu()
 		{
 			DrawRegulator.SetDoubleBuffered(this);
 
@@ -62,8 +62,7 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Sets this <c>PropanelButton's</c> <c><see cref="_depressed"/></c>
-		/// bool.
+		/// Sets this <c>PropanelBu's</c> <c><see cref="_depressed"/></c> bool.
 		/// </summary>
 		/// <param name="true">I am depressed.</param>
 		internal void depressed(bool @true)
@@ -82,7 +81,7 @@ namespace yata
 		protected override void OnPaint(PaintEventArgs pevent)
 		{
 			// and you know it don't come easy - Ringo
-//			graphics.FillRectangle(Brushes.PropanelButton, _rectBg);
+//			graphics.FillRectangle(Brushes.PropanelBu, _rectBg);
 
 			if (_depressed)
 			{
@@ -112,7 +111,7 @@ namespace yata
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
-				logfile.Log("PropanelButton.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+				logfile.Log("PropanelBu.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
 		}
@@ -120,11 +119,11 @@ namespace yata
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log("PropanelButton.ProcessCmdKey() keyData= " + keyData);
+				logfile.Log("PropanelBu.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". PropanelButton.ProcessCmdKey ret= " + ret);
+				logfile.Log(". PropanelBu.ProcessCmdKey ret= " + ret);
 
 			return ret;
 		}
@@ -132,11 +131,11 @@ namespace yata
 		protected override bool IsInputKey(Keys keyData)
 		{
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log("PropanelButton.IsInputKey() keyData= " + keyData);
+				logfile.Log("PropanelBu.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". PropanelButton.IsInputKey ret= " + ret);
+				logfile.Log(". PropanelBu.IsInputKey ret= " + ret);
 
 			return ret;
 		}
@@ -144,11 +143,11 @@ namespace yata
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log("PropanelButton.ProcessDialogKey() keyData= " + keyData);
+				logfile.Log("PropanelBu.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
 			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". PropanelButton.ProcessDialogKey ret= " + ret);
+				logfile.Log(". PropanelBu.ProcessDialogKey ret= " + ret);
 
 			return ret;
 		}
@@ -156,7 +155,7 @@ namespace yata
 		protected override void OnKeyDown(KeyEventArgs kevent)
 		{
 			if (gc.KeyLog && (kevent.KeyData & ~gc.ControlShift) != 0)
-				logfile.Log("PropanelButton.OnKeyDown() kevent.KeyData= " + kevent.KeyData);
+				logfile.Log("PropanelBu.OnKeyDown() kevent.KeyData= " + kevent.KeyData);
 			base.OnKeyDown(kevent);
 		}
 #endif

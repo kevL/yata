@@ -8,8 +8,8 @@ namespace yata
 	sealed partial class YataForm
 	{
 		// okay. Fed up.
-		// YataTabs 'tabControl' and PropanelButton 'bu_Propanel' have been
-		// moved to YataForm.
+		// YataTabs 'tabControl' and PropanelBu 'bu_Propanel' have been moved to
+		// YataForm.
 
 
 		/// <summary>

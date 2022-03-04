@@ -63,7 +63,7 @@
   <ItemGroup>
     <Compile Include="Controls\YataStrip.cs" />
     <Compile Include="Controls\Propanel.cs" />
-    <Compile Include="Controls\PropanelButton.cs" />
+    <Compile Include="Controls\PropanelBu.cs" />
     <Compile Include="Controls\YataEditbox.cs" />
     <Compile Include="Controls\YataDialog.cs" />
     <Compile Include="Controls\YataPanels.cs" />
