@@ -3223,8 +3223,8 @@ namespace yata
 			it_PasteCell   .Enabled = !Table.Readonly && Table.getSelectedCell() != null;
 
 			it_DeleteCell  .Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
-			it_Lower       .Enabled = // TODO: if any selected cell is not lowercase or loadchanged
-			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase or loadchanged
+			it_Lower       .Enabled = // TODO: if any selected cell is not lowercase  or loadchanged
+			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase  or loadchanged
 			it_Apply       .Enabled = !Table.Readonly && anyselected;
 
 			// NOTE: 'it_GotoLoadchanged*.Enabled' shall be detered independently
