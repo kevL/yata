@@ -23,17 +23,9 @@ namespace yata
 		#region Fields
 //		readonly Rectangle _rectBg;
 		readonly Rectangle _rectGr;
-		#endregion Fields
 
-
-		#region Properties
 		bool _depressed;
-		internal void SetDepressed(bool depressed)
-		{
-			_depressed = depressed;
-			Invalidate();
-		}
-		#endregion Properties
+		#endregion Fields
 
 
 		#region cTor
@@ -66,6 +58,20 @@ namespace yata
 			Margin = new Padding(0);
 		}
 		#endregion cTor
+
+
+		#region Methods
+		/// <summary>
+		/// Sets this <c>PropanelButton's</c> <c><see cref="_depressed"/></c>
+		/// bool.
+		/// </summary>
+		/// <param name="true">I am depressed.</param>
+		internal void depressed(bool @true)
+		{
+			_depressed = @true;
+			Invalidate();
+		}
+		#endregion Methods
 
 
 		#region Handlers (override)

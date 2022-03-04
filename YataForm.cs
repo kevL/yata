@@ -6389,7 +6389,7 @@ namespace yata
 				|| (e.Button == MouseButtons.Right
 					&& Table.Propanel != null && Table.Propanel.Visible))
 			{
-				bu_Propanel.SetDepressed(true);
+				bu_Propanel.depressed(true);
 			}
 		}
 
@@ -6410,14 +6410,14 @@ namespace yata
 			switch (e.Button)
 			{
 				case MouseButtons.Left:
-					bu_Propanel.SetDepressed(false);
+					bu_Propanel.depressed(false);
 					opsclick_Propanel(sender, e);
 					break;
 
 				case MouseButtons.Right:
 					if (Table.Propanel != null && Table.Propanel.Visible)
 					{
-						bu_Propanel.SetDepressed(false);
+						bu_Propanel.depressed(false);
 						Table.Propanel.Dockstate = Table.Propanel.getNextDockstate((ModifierKeys & Keys.Shift) == Keys.Shift);
 					}
 					break;
