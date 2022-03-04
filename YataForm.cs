@@ -6241,14 +6241,13 @@ namespace yata
 			YataGrid table;
 			if      (Table == _diff1) table = _diff2;
 			else if (Table == _diff2) table = _diff1;
-			else                      table = null;
+			else
+				return null;
 
 			if (table != null)
-			{
 				table.ClearSelects(true, true);
-				return table;
-			}
-			return null;
+
+			return table;
 		}
 		#endregion Methods (tab)
 
