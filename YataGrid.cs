@@ -2649,6 +2649,8 @@ namespace yata
 
 							selr = -1;
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+
+							_f.EnableCelleditOperations();
 						}
 						break;
 
@@ -4141,6 +4143,12 @@ namespace yata
 						editorRefocus(ref @select);
 					}
 				}
+				else if (e.Button == MouseButtons.Right)
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". (!_editor.Visible && _cell == null)");
+#endif
+				}
 //				else if (e.Button == MouseButtons.Right) // TODO: clear all selects here ->
 //				{
 //					foreach (var col in Cols)
@@ -4451,6 +4459,7 @@ namespace yata
 
 			Invalidator(INVALID_GRID);
 		}
+
 
 		/// <summary>
 		/// Clears all <c><see cref="Cell">Cells</see></c> that are currently
