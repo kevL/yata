@@ -6250,26 +6250,6 @@ namespace yata
 			}
 			return null;
 		}
-
-		/// <summary>
-		/// Selects a specified <c><see cref="Cell">Cell's</see></c>
-		/// corresponding <c>Cell</c> in a sync-table.
-		/// </summary>
-		/// <param name="sel">a <c>Cell</c> in the current table</param>
-		/// <returns><c>true</c> if a sync-table is valid</returns>
-		/// <remarks>Ensure <paramref name="sel"/> is valid before call.</remarks>
-		internal bool SyncSelectCell(Cell sel)
-		{
-			YataGrid table = ClearSyncSelects();
-			if (table != null)
-			{
-				if (sel.y < table.RowCount && sel.x < table.ColCount)
-					(table._anchorcell = table[sel.y, sel.x]).selected = true;
-
-				return true;
-			}
-			return false;
-		}
 		#endregion Methods (tab)
 
 

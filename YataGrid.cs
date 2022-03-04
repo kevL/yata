@@ -3427,7 +3427,7 @@ namespace yata
 
 					_anchorcell = sel;
 
-					_f.SyncSelectCell(sel);
+					SelectSyncCell(sel);
 					_f.EnableCelleditOperations();
 
 					Invalidator(INVALID_GRID
@@ -3491,7 +3491,7 @@ namespace yata
 		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
 		{
-			if (sync) _f.SyncSelectCell(cell);
+			if (sync) SelectSyncCell(cell);
 
 			(_anchorcell = cell).selected = true;
 			Invalidator(INVALID_GRID
@@ -3500,6 +3500,26 @@ namespace yata
 					  | EnsureDisplayed(cell));
 
 			_f.EnableCelleditOperations();
+		}
+
+		/// <summary>
+		/// Selects a specified <c><see cref="Cell">Cell's</see></c>
+		/// corresponding <c>Cell</c> in a sync-table.
+		/// </summary>
+		/// <param name="sel">a <c>Cell</c> in the current table</param>
+		/// <returns><c>true</c> if a sync-table is valid</returns>
+		/// <remarks>Ensure <paramref name="sel"/> is valid before call.</remarks>
+		bool SelectSyncCell(Cell sel)
+		{
+			YataGrid table = _f.ClearSyncSelects();
+			if (table != null)
+			{
+				if (sel.y < table.RowCount && sel.x < table.ColCount)
+					(table._anchorcell = table[sel.y, sel.x]).selected = true;
+
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -3549,7 +3569,7 @@ namespace yata
 				{
 					sel = this[r,c];
 					sel.selected = true;
-					_f.SyncSelectCell(sel);
+					SelectSyncCell(sel);
 
 					_anchorcell = sel;
 				}
@@ -3732,7 +3752,7 @@ namespace yata
 
 			Celledit();
 
-			_f.SyncSelectCell(_anchorcell = _editcell);
+			SelectSyncCell(_anchorcell = _editcell);
 		}
 
 		/// <summary>
@@ -4218,7 +4238,7 @@ namespace yata
 #if DEBUG
 											if (gc.ClickLog) logfile.Log(". . select cell");
 #endif
-											if (_f.SyncSelectCell(_cell)) // disallow multi-cell select if sync'd
+											if (SelectSyncCell(_cell)) // disallow multi-cell select if sync'd
 											{
 												ClearSelects(true);
 												_cell.selected = true;
@@ -4288,7 +4308,7 @@ namespace yata
 								ClearSelects(true);
 
 								(_anchorcell = _cell).selected = true;
-								_f.SyncSelectCell(_cell);
+								SelectSyncCell(_cell);
 
 								detercellops = true;
 
@@ -4318,7 +4338,7 @@ namespace yata
 								ClearSelects(true);
 
 								(_anchorcell = _cell).selected = true;
-								_f.SyncSelectCell(_cell);
+								SelectSyncCell(_cell);
 
 								detercellops = true;
 
@@ -4368,7 +4388,7 @@ namespace yata
 					ClearSelects(true);
 
 					(_anchorcell = _cell).selected = true;
-					_f.SyncSelectCell(_cell);
+					SelectSyncCell(_cell);
 
 					Invalidator(INVALID_GRID // not so sure all that is needed ->
 							  | INVALID_FROZ
