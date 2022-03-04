@@ -390,19 +390,19 @@ RMB - opens the context for single-row editing (This handles single-row editing
       only - for multi-row editing see the Rows menu.)
 
 - click on a table-cell -
-LMB       - selects a cell or if already selected then starts the cell-editor,
-            or if editing a cell then a left-click on a different part of the
-            table either inside or outside the grid accepts the edit
-doubleLMB - selects a cell and starts the cell-editor (If a different cell is
-            already in edit, changes to that cell are accepted.)
-LMB+Ctrl  - adds or subtracts a cell from the currently selected cells
-LMB+Shift - selects a block of contiguous cells if there is only one currently
-            selected cell, or resizes a currently selected contiguous block of
-            cells (A contiguous block is required for multicell cut and copy
-            operations.)
-RMB       - selects a cell and opens the cell context (Note that if editing a
-            cell then a right-click also cancels or accepts the edit depending
-            on the Setting "acceptedit=".)
+LMB        - selects a cell or if already selected then starts the cell-editor,
+             or if editing a cell then a left-click on a different part of the
+             table either inside or outside the grid accepts the edit
+LMB double - selects a cell and starts the cell-editor (If a different cell is
+             already in edit, changes to that cell are accepted.)
+LMB+Ctrl   - adds or subtracts a cell from the currently selected cells
+LMB+Shift  - selects a block of contiguous cells if there is only one currently
+             selected cell, or resizes a currently selected contiguous block of
+             cells (A contiguous block is required for multicell cut and copy
+             operations.)
+RMB        - selects a cell and opens the cell context (Note that if editing a
+             cell then a right-click also cancels or accepts the edit depending
+             on the Setting "acceptedit=".)
 
 - click outside the grid -
 LMB - accepts an edit if editing a cell
