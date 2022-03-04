@@ -2298,9 +2298,13 @@ namespace yata
 		/// <c><see cref="Row">Rows</see></c>/
 		/// <c><see cref="Col">Cols</see></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_DeselectAll"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_DeselectAll"/></c></item>
+		/// <item><c><see cref="YataGrid"/></c> - <c>RMB</c> outside the grid</item>
+		/// </list></param>
 		/// <param name="e"></param>
-		void editclick_Deselect(object sender, EventArgs e)
+		internal void editclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearSelects();
 			ClearSyncSelects();

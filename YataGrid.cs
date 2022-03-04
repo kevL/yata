@@ -4103,7 +4103,7 @@ namespace yata
 				else if (_editor.Visible) // _cell == null
 				{
 #if DEBUG
-					if (gc.ClickLog) logfile.Log(". (_editor.Visible && _cell == null)");
+					if (gc.ClickLog) logfile.Log(". (_cell == null && _editor.Visible)");
 #endif
 					if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 					{
@@ -4144,20 +4144,16 @@ namespace yata
 				else if (e.Button == MouseButtons.Right)
 				{
 #if DEBUG
-					if (gc.ClickLog) logfile.Log(". (!_editor.Visible && _cell == null)");
+					if (gc.ClickLog) logfile.Log(". (_cell == null && !_editor.Visible)");
 #endif
+					if (anySelected())
+					{
+#if DEBUG
+						if (gc.ClickLog) logfile.Log(". . deselect all");
+#endif
+						_f.editclick_Deselect(this, EventArgs.Empty);
+					}
 				}
-//				else if (e.Button == MouseButtons.Right) // TODO: clear all selects here ->
-//				{
-//					foreach (var col in Cols)
-//					col.selected = false;
-//
-//					foreach (var row in Rows)
-//						row.selected = false;
-//
-//					ClearCellSelects();
-//					Invalidator();
-//				}
 
 				if (@select) Select();
 			}
