@@ -2644,13 +2644,11 @@ namespace yata
 #endif
 						if (!ctr && !sft)
 						{
-							ClearSelects(true);
+							ClearSelects();
 							_f.ClearSyncSelects();
 
 							selr = -1;
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
-
-							_f.EnableCelleditOperations();
 						}
 						break;
 
