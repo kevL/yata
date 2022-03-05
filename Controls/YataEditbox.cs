@@ -100,9 +100,11 @@ namespace yata
 				// but note allow [Escape] and [Enter] to bubble up ... through
 				// the Process*Key() functs.
 				//
-				// Note that [Escape] is not actually the ShortcutKeys for Edit|Deselect all
-				// ... [Escape] is processed by YataGrid.ProcessCmdKey() iff the editor has focus
-				// - note that [Escape] gets treated differently by different Yata-objects.
+				// Note that [Escape] is not actually the ShortcutKeys for
+				// Edit|Deselect all ... [Escape] is processed by
+				// YataGrid.ProcessCmdKey() iff the editor has focus - note that
+				// [Escape] gets treated differently by different Yata-objects.
+				//
 				// [Enter] is not on the Menu and very likely never will be.
 
 
