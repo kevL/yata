@@ -900,7 +900,7 @@ namespace yata
 		/// <summary>
 		/// Tries to load a 2da-file.
 		/// </summary>
-		/// <returns>a <c>LOADRESULT_*</c> val
+		/// <returns>
 		/// <list type="bullet">
 		/// <item><c><see cref="LOADRESULT_FALSE"/></c></item>
 		/// <item><c><see cref="LOADRESULT_TRUE"/></c></item>
@@ -3698,6 +3698,8 @@ namespace yata
 		/// Applies a cell-edit via the <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="select"><c>true</c> to focus this <c>YataGrid</c></param>
+		/// <remarks>Shows an <c><see cref="Infobox"/></c> if the text gets
+		/// sanitized.</remarks>
 		/// <seealso cref="Propanel.applyCelledit()"><c>Propanel.applyCelledit()</c></seealso>
 		internal void applyCelledit(bool @select = false)
 		{
@@ -3705,9 +3707,11 @@ namespace yata
 
 			int invalid = INVALID_GRID;
 
+			bool sanitized = false;
+
 			if (_editor.Text != _editcell.text)
 			{
-				ChangeCellText(_editcell, _editor); // does a text-check
+				sanitized = ChangeCellText(_editcell, _editor); // does a text-check
 
 				if (Propanel != null && Propanel.Visible)
 					invalid |= INVALID_PROP;
@@ -3716,6 +3720,17 @@ namespace yata
 				ClearLoadchanged(_editcell);
 
 			hideditor(invalid, @select);
+
+			if (sanitized)
+			{
+				using (var ib = new Infobox(Infobox.Title_warni,
+											"The text that was submitted has been altered.",
+											null,
+											InfoboxType.Warn))
+				{
+					ib.ShowDialog(_f);
+				}
+			}
 		}
 
 		/// <summary>
@@ -3761,8 +3776,9 @@ namespace yata
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="tb">the editor's <c>TextBox</c> whose text to check for
 		/// validity</param>
+		/// <returns><c>true</c> if the text gets sanitized</returns>
 		/// <remarks>Performs a text-check.</remarks>
-		internal void ChangeCellText(Cell cell, Control tb)
+		internal bool ChangeCellText(Cell cell, Control tb)
 		{
 			Restorable rest = UndoRedo.createCell(cell);
 			if (!Changed)
@@ -3775,16 +3791,8 @@ namespace yata
 			cell.loadchanged =
 			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
-			if (VerifyText_edit(tb))
-			{
-				using (var ib = new Infobox(Infobox.Title_warni,
-											"The text that was submitted has been altered.",
-											null,
-											InfoboxType.Warn))
-				{
-					ib.ShowDialog(_f);
-				}
-			}
+			bool sanitized = VerifyText_edit(tb);
+
 			cell.text = tb.Text;
 
 			Colwidth(cell.x, cell.y);
@@ -3793,6 +3801,8 @@ namespace yata
 
 			rest.postext = cell.text;
 			_ur.Push(rest);
+
+			return sanitized;
 		}
 
 		/// <summary>
@@ -3916,7 +3926,7 @@ namespace yata
 			if (text.Length == 0)
 			{
 				tb.Text = gs.Stars;
-				return false; // NOTE: Don't bother the user if he/she simply wants to blank a field.
+				return false; // don't bother the user if he/she simply wants to blank a field.
 			}
 
 			bool changed = VerifyText(ref text);
@@ -3942,25 +3952,25 @@ namespace yata
 		{
 			var sb = new StringBuilder(text);
 
+			bool quote = false;
+
 			if (sb.Length != 0
 				&& sb[0] != '"' && sb[sb.Length - 1] != '"')
 			{
-				bool quotes = false;
-
 				char c;
 				for (int i = 0; i != sb.Length; ++i)
 				{
 					if ((c = sb[i]) == '"')
 					{
-						quotes = false;
+						quote = false;
 						break;
 					}
 
 					if (Char.IsWhiteSpace(c))
-						quotes = true;
+						quote = true;
 				}
 
-				if (quotes)
+				if (quote)
 				{
 					sb.Insert(0, '"');
 					sb.Append('"');
@@ -3974,6 +3984,10 @@ namespace yata
 				}
 			}
 
+
+			quote = sb.Length != 0
+				 && sb[0] == '"' && sb[sb.Length - 1] == '"';
+
 			sb = sb.Replace("\"", null);
 
 			if (sb.Length == 0)
@@ -3982,21 +3996,30 @@ namespace yata
 				return true;
 			}
 
-			for (int i = 0; i != sb.Length; ++i)
+			if (!quote)
 			{
-				if (Char.IsWhiteSpace(sb[i]))
+				for (int i = 0; i != sb.Length; ++i)
 				{
-					sb.Insert(0, '"');
-					sb.Append('"');
+					if (Char.IsWhiteSpace(sb[i]))
+					{
+						sb.Insert(0, '"');
+						sb.Append('"');
 
-					text = sb.ToString();
-					return true;
+						text = sb.ToString();
+						return true;
+					}
 				}
 			}
+			else
+			{
+				sb.Insert(0, '"');
+				sb.Append('"');
+			}
 
-			string verified = sb.ToString();
-			bool changed = verified != text;
-			text = verified;
+			string veri = sb.ToString();
+			bool changed = veri != text;
+
+			text = veri;
 
 			return changed;
 		}

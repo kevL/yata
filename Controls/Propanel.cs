@@ -423,16 +423,29 @@ namespace yata
 		{
 			logfile.Log("Propanel.applyCelledit()");
 
+			bool sanitized = false;
+
 			Cell cell = _grid[_r,_c];
 			if (_editor.Text != cell.text)
 			{
-				_grid.ChangeCellText(cell, _editor); // does a text-check
+				sanitized = _grid.ChangeCellText(cell, _editor); // does a text-check
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
 			else if (cell.loadchanged)
 				_grid.ClearLoadchanged(cell);
 
 			hideditor(@select);
+
+			if (sanitized)
+			{
+				using (var ib = new Infobox(Infobox.Title_warni,
+											"The text that was submitted has been altered.",
+											null,
+											InfoboxType.Warn))
+				{
+					ib.ShowDialog(_grid._f);
+				}
+			}
 		}
 
 		/// <summary>
