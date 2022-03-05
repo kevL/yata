@@ -1765,28 +1765,46 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Open"/></c></item>
-		/// <item><c><see cref="it_OpenFolder"/></c></item>
+		/// <item><c><see cref="it_OpenFolder"/></c> subits</item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item>File|Open <c>[Ctrl+o]</c></item>
-		/// <item>File|Open@Folder
-		/// <c><see cref="fileclick_OpenFolder()">fileclick_OpenFolder()</see></c></item>
+		/// <item>File|Open@Folder ...
+		/// <c><see cref="fileclick_OpenFolder()">fileclick_OpenFolder()</see></c>
+		/// subits</item>
 		/// </list></remarks>
 		void fileclick_Open(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
-//				ofd.InitialDirectory = _preset;					// <- does not always work.
-				ofd.FileName = Path.Combine(_preset, "*.*");	// -> but that forces it to.
+				if (sender == it_Open)
+				{
+					string dir = Directory.GetCurrentDirectory();
+					if (dir != Application.StartupPath)
+					{
+//						ofd.InitialDirectory = Directory.GetCurrentDirectory();
+						ofd.FileName = Path.Combine(dir, "*.2da");
+					}
+					// else use the directory of the filetype stored in the Registry
+					// ... if it exists.
+				}
+				else // invoked by fileclick_OpenFolder()
+				{
+					ofd.RestoreDirectory = true;
+
+//					ofd.InitialDirectory = _preset;					// <- does not always work.
+					ofd.FileName = Path.Combine(_preset, "*.2da");	// -> but that forces it to.
+				}
 
 				ofd.Title  = "Select a 2da file";
 				ofd.Filter = Get2daFilter();
 
 				ofd.ShowReadOnly =
 				ofd.Multiselect  = true;
+
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
