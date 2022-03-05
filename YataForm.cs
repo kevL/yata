@@ -1779,7 +1779,8 @@ namespace yata
 		{
 			using (var ofd = new OpenFileDialog())
 			{
-				ofd.InitialDirectory = _preset;
+//				ofd.InitialDirectory = _preset;					// <- does not always work.
+				ofd.FileName = Path.Combine(_preset, "*.*");	// -> but that forces it to.
 
 				ofd.Title  = "Select a 2da file";
 				ofd.Filter = Get2daFilter();
@@ -2073,7 +2074,9 @@ namespace yata
 				sfd.FileName = Path.GetFileName(Table.Fullpath);
 
 				if (Directory.Exists(_lastSaveasDirectory))
+				{
 					sfd.InitialDirectory = _lastSaveasDirectory;
+				}
 				else if (Table.Fullpath.Length != 0)
 				{
 					string dir = Path.GetDirectoryName(Table.Fullpath);
