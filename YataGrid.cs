@@ -4074,16 +4074,7 @@ namespace yata
 #endif
 			if ((ModifierKeys & Keys.Alt) == Keys.None) // do this in OnMouseClick() also
 			{
-				bool @select = true; // set to false if an edit starts
-
-				if (Propanel != null && Propanel._editor.Visible)
-				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". Propanel._editor.Visible");
-#endif
-					Propanel._editor.Visible = false;
-				}
-
+				bool @select = true; // set to false if an editor gets focus
 
 				_bypassclickhandler = false;
 
@@ -4100,15 +4091,21 @@ namespace yata
 							switch (e.Button)
 							{
 								case MouseButtons.Left:
-									// allow [Ctrl] and [Shift] keys
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". . accept edit");
-#endif
-									_bypassleaveditor = true;
-									applyCelledit();
-									_bypassclickhandler = true;
+									// disallow [Ctrl] or [Shift] since OnMouseClick() will be bypassed
 
-									_double = true;
+									if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+									{
+#if DEBUG
+										if (gc.ClickLog) logfile.Log(". . grid accept edit");
+#endif
+										_bypassleaveditor = true;
+										applyCelledit();
+
+										_bypassclickhandler = true;
+
+										_double = true;
+									}
+									else goto default;
 									break;
 
 								case MouseButtons.Right:
@@ -4117,29 +4114,70 @@ namespace yata
 									if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 									{
 #if DEBUG
-										if (gc.ClickLog) logfile.Log(". . default edit result");
+										if (gc.ClickLog) logfile.Log(". . grid default edit result");
 #endif
 										_editor.Visible = false;
 									}
-									else
-										goto default;
-
+									else goto default;
 									break;
 
 								default:
 #if DEBUG
-									if (gc.ClickLog) logfile.Log(". . focus editor");
+									if (gc.ClickLog) logfile.Log(". . grid focus editor");
 #endif
-									editorRefocus(ref @select);
+									refocuseditor(_editor, ref @select);
 									break;
 							}
 						}
 						else // _cell == _editcell
 						{
 #if DEBUG
-							if (gc.ClickLog) logfile.Log(". . (_cell == _editcell) focus editor");
+							if (gc.ClickLog) logfile.Log(". . grid (_cell == _editcell) focus editor");
 #endif
-							editorRefocus(ref @select);
+							refocuseditor(_editor, ref @select);
+						}
+					}
+					else if (Propanel != null && Propanel._editor.Visible)
+					{
+						switch (e.Button)
+						{
+							case MouseButtons.Left:
+								// disallow [Ctrl] or [Shift] since OnMouseClick() will be bypassed
+
+								if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+								{
+#if DEBUG
+									if (gc.ClickLog) logfile.Log(". . propanel accept edit");
+#endif
+									Propanel._bypassleaveditor = true;
+									Propanel.applyCelledit();
+
+									_bypassclickhandler = true;
+
+									_double = true;
+								}
+								else goto default;
+								break;
+
+							case MouseButtons.Right:
+								// disallow [Ctrl] or [Shift] w/ RMB in OnMouseClick() also
+
+								if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+								{
+#if DEBUG
+									if (gc.ClickLog) logfile.Log(". . propanel default edit result");
+#endif
+									Propanel._editor.Visible = false;
+								}
+								else goto default;
+								break;
+
+							default:
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . propanel focus editor");
+#endif
+								refocuseditor(Propanel._editor, ref @select);
+								break;
 						}
 					}
 				}
@@ -4148,53 +4186,103 @@ namespace yata
 #if DEBUG
 					if (gc.ClickLog) logfile.Log(". (_cell == null && _editor.Visible)");
 #endif
-					if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+					switch (e.Button)
 					{
-						switch (e.Button)
-						{
-							case MouseButtons.Left:
+						case MouseButtons.Left:
+							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+							{
 #if DEBUG
-								if (gc.ClickLog) logfile.Log(". . accept edit");
+								if (gc.ClickLog) logfile.Log(". . grid accept edit");
 #endif
 								_bypassleaveditor = true;
 								applyCelledit();
-								break;
 
-							case MouseButtons.Right:
+								_bypassclickhandler = true;
+							}
+							else goto default;
+							break;
+
+						case MouseButtons.Right:
+							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+							{
 #if DEBUG
-								if (gc.ClickLog) logfile.Log(". . cancel edit");
+								if (gc.ClickLog) logfile.Log(". . grid cancel edit");
 #endif
 								_bypassleaveditor = true;
 								hideditor(INVALID_GRID);
-								break;
 
-							default:
+								_bypassclickhandler = true;
+							}
+							else goto default;
+							break;
+
+						default:
 #if DEBUG
-								if (gc.ClickLog) logfile.Log(". . focus editor");
+							if (gc.ClickLog) logfile.Log(". . grid focus editor");
 #endif
-								editorRefocus(ref @select);
-								break;
-						}
-					}
-					else // Ctrl or Shift ->
-					{
-#if DEBUG
-						if (gc.ClickLog) logfile.Log(". . (Ctrl or Shift) focus editor");
-#endif
-						editorRefocus(ref @select);
+							refocuseditor(_editor, ref @select);
+							break;
 					}
 				}
-				else if (e.Button == MouseButtons.Right)
+				else if (Propanel != null && Propanel._editor.Visible)
 				{
 #if DEBUG
-					if (gc.ClickLog) logfile.Log(". (_cell == null && !_editor.Visible)");
+					if (gc.ClickLog) logfile.Log(". (_cell == null && Propanel._editor.Visible)");
 #endif
-					if (anySelected())
+					switch (e.Button)
 					{
+						case MouseButtons.Left:
+							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+							{
 #if DEBUG
-						if (gc.ClickLog) logfile.Log(". . deselect all");
+								if (gc.ClickLog) logfile.Log(". . propanel accept edit");
 #endif
-						_f.editclick_Deselect(this, EventArgs.Empty);
+								Propanel._bypassleaveditor = true;
+								Propanel.applyCelledit();
+
+								_bypassclickhandler = true;
+							}
+							else goto default;
+							break;
+
+						case MouseButtons.Right:
+							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
+							{
+#if DEBUG
+								if (gc.ClickLog) logfile.Log(". . propanel cancel edit");
+#endif
+								Propanel._bypassleaveditor = true;
+								Propanel.hideditor();
+
+								_bypassclickhandler = true;
+							}
+							else goto default;
+							break;
+
+						default:
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . propanel focus editor");
+#endif
+							refocuseditor(Propanel._editor, ref @select);
+							break;
+					}
+				}
+				else
+				{
+#if DEBUG
+					if (gc.ClickLog) logfile.Log(". (_cell == null");
+#endif
+					_bypassclickhandler = true;
+
+					if (e.Button == MouseButtons.Right)
+					{
+						if (anySelected())
+						{
+#if DEBUG
+							if (gc.ClickLog) logfile.Log(". . deselect all");
+#endif
+							_f.editclick_Deselect(this, EventArgs.Empty);
+						}
 					}
 				}
 
@@ -4203,14 +4291,16 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Focuses <c><see cref="_editor"/></c>.
+		/// Focuses either <c><see cref="_editor"/></c> or
+		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>.
 		/// </summary>
-		/// <param name="select"></param>
+		/// <param name="tb">a <c><see cref="YataEditbox"/></c> to focus</param>
+		/// <param name="select">ref to set <c>false</c></param>
 		/// <remarks>helper for
 		/// <c><see cref="OnMouseDown()">OnMouseDown()</see></c></remarks>
-		void editorRefocus(ref bool @select)
+		void refocuseditor(Control tb, ref bool @select)
 		{
-			_editor.Focus();
+			tb.Focus();
 			@select = false;
 			_bypassclickhandler = true;
 		}
