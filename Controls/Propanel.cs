@@ -451,7 +451,8 @@ namespace yata
 		/// <summary>
 		/// Hides the <c><see cref="_editor"/></c>.
 		/// </summary>
-		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c></param>
+		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c> - if
+		/// <c>false</c> the calling funct shall focus a <c>Control</c> itself</param>
 		/// <seealso cref="YataGrid.hideditor()"><c>YataGrid.hideditor()</c></seealso>
 		internal void hideditor(bool @select = false)
 		{
