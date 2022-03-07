@@ -575,11 +575,7 @@ namespace yata
 
 			if (Table != null)
 			{
-				if (Table._editor.Visible)
-					Table._editor.Visible = false;
-				else if (Table.Propanel != null && Table.Propanel._editor.Visible)
-					Table.Propanel._editor.Visible = false;
-
+				Table.editresultdefault();
 				Table.Select();
 			}
 			else
@@ -738,23 +734,20 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets 'IsMin' true so that when the form is minimized then restored/
-		/// maximized the ensure-displayed call(s) are bypassed by the tables'
-		/// OnResize() event(s). Because if the user wants to simply minimize
-		/// the window temporarily to check something out in another app you
-		/// don't want the view to be changed.
+		/// Sets <c><see cref="IsMin"/></c> true so that when the form is
+		/// minimized then restored/maximized the ensure-displayed call(s) are
+		/// bypassed by <c><see cref="YataGrid"/>.OnResize()</c> event(s).
+		/// Because if the user wants to simply minimize the window temporarily
+		/// to check something out in another app you don't want the view to be
+		/// changed.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
-			//logfile.Log("YataForm.OnResize()");
-
 			if (Table != null)
 			{
-				if (Table._editor.Visible)
-					Table._editor.Visible = false;
-				else if (Table.Propanel != null && Table.Propanel._editor.Visible)
-					Table.Propanel._editor.Visible = false;
+				Table.editresultdefault();
+				Table.Select();
 			}
 
 			if (WindowState == FormWindowState.Minimized)
@@ -797,14 +790,10 @@ namespace yata
 #if DEBUG
 						if (gc.KeyLog) logfile.Log(". select Table");
 #endif
-						// set _editor.Visible FALSE else its leave event fires twice
-						// when it loses focus ->
+						// set '_editor.Visible' FALSE else its leave event
+						// fires twice when it loses focus ->
 
-						if (Table._editor.Visible)
-							Table._editor.Visible = false;
-						else if (Table.Propanel != null && Table.Propanel._editor.Visible)
-							Table.Propanel._editor.Visible = false;
-
+						Table.editresultdefault();
 						Table.Select();
 					}
 					else
@@ -871,17 +860,22 @@ namespace yata
 				switch (e.KeyData)
 				{
 					case Keys.Enter: // do this here to get rid of the beep.
+					case Keys.Shift | Keys.Enter:
 #if DEBUG
 						if (gc.KeyLog) logfile.Log(". Keys.Enter");
 #endif
 						if (tb_Search.Focused || cb_SearchOption.Focused)
 						{
 #if DEBUG
-							if (gc.KeyLog) logfile.Log(". . Search forward");
+							if (gc.KeyLog)
+							{
+								if (e.KeyData == Keys.Enter) logfile.Log(". . Search forward");
+								else                         logfile.Log(". . Search reverse");
+							}
 #endif
 							_dontbeep = DONTBEEP_SEARCH;
 						}
-						else if (tb_Goto.Focused)
+						else if (tb_Goto.Focused && e.KeyData == Keys.Enter)
 						{
 #if DEBUG
 							if (gc.KeyLog) logfile.Log(". . Goto");
@@ -903,32 +897,13 @@ namespace yata
 						}
 						break;
 
-					case Keys.Shift | Keys.Enter:
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Shift | Keys.Enter");
-#endif
-						if (tb_Search.Focused || cb_SearchOption.Focused)
-						{
-#if DEBUG
-							if (gc.KeyLog) logfile.Log(". . Search backward");
-#endif
-							e.SuppressKeyPress = true;
-							_dontbeep = DONTBEEP_SEARCH;
-							BeginInvoke(DontBeepEvent);
-						}
-#if DEBUG
-						else
-							if (gc.KeyLog) logfile.Log(". . Search not focused");
-#endif
-						break;
-
 					case Keys.Escape:
 #if DEBUG
 						if (gc.KeyLog) logfile.Log(". Keys.Escape");
 #endif
 						if (Tabs.Focused || bu_Propanel.Focused)	// btn -> jic. The Propanel button can become focused by
 						{											// keyboard (I saw it happen once) but can't figure out how.
-#if DEBUG
+#if DEBUG															// NOTE: It wasn't actually focused, it was a graphical glitch.
 							if (gc.KeyLog) logfile.Log(". . deselect Tabs -> select Grid");
 #endif
 							e.SuppressKeyPress = true;
@@ -1156,24 +1131,6 @@ namespace yata
 			if (obscure) panel_ColorFill.BringToFront();
 			else         panel_ColorFill.SendToBack();
 		}
-
-/*		/// <summary>
-		/// Hides a visible editor when the tabpage changes.
-		/// </summary>
-		/// <remarks>This is a redundant check jic user changes the tabpage w/
-		/// <c>[Ctrl+PageUp]/[Ctrl+PageDown]</c>. Typically each
-		/// <c><see cref="YataGrid">YataGrid's</see></c> <c>Leave</c> handler
-		/// takes care of it.</remarks>
-		void HideEditor()
-		{
-			YataGrid table;
-			for (int i = 0; i != Tabs.TabCount; ++i)
-			if ((table = Tabs.TabPages[i].Tag as YataGrid)._editor.Visible)
-			{
-				table._editor.Visible = false;
-				break;
-			}
-		} */
 		#endregion Methods
 
 
@@ -5927,7 +5884,7 @@ namespace yata
 				if (_diff1.Fields[f] != _diff2.Fields[f])
 				{
 					isDiff = true;
-					if (!String.IsNullOrEmpty(copyable))
+					if (copyable.Length != 0)
 						copyable += Environment.NewLine;
 
 					copyable += "Head #" + f + ": (a) " + _diff1.Fields[f] + "  (b) " + _diff2.Fields[f];
@@ -5942,7 +5899,7 @@ namespace yata
 			if (cols1 != cols2)
 			{
 				isDiff = true;
-				if (!String.IsNullOrEmpty(copyable))
+				if (copyable.Length != 0)
 				{
 					copyable += Environment.NewLine + Environment.NewLine;
 					prelinedone = true;
@@ -5955,7 +5912,7 @@ namespace yata
 			if (rows1 != rows2)
 			{
 				isDiff = true;
-				if (!String.IsNullOrEmpty(copyable))
+				if (copyable.Length != 0)
 				{
 					copyable += Environment.NewLine;
 					if (!prelinedone)
@@ -5987,7 +5944,7 @@ namespace yata
 			if (celldiffs != 0)
 			{
 				@goto = true;
-				if (!String.IsNullOrEmpty(copyable))
+				if (copyable.Length != 0)
 				{
 					copyable += Environment.NewLine + Environment.NewLine;
 					prelinedone = true;
@@ -6038,7 +5995,7 @@ namespace yata
 			if (celldiffs != 0)
 			{
 				@goto = true;
-				if (!String.IsNullOrEmpty(copyable))
+				if (copyable.Length != 0)
 				{
 					copyable += Environment.NewLine;
 					if (!prelinedone)
@@ -6050,7 +6007,7 @@ namespace yata
 
 			string label;
 			Color color;
-			if (String.IsNullOrEmpty(copyable))
+			if (copyable.Length == 0)
 			{
 				label = "Tables are identical.";
 				color = Colors.Text;
@@ -6107,12 +6064,6 @@ namespace yata
 					&& (_diff1 != null  || _diff2 != null)
 					&& (_diff1 == Table || _diff2 == Table))
 				{
-					if (Table._editor.Visible)
-					{
-						Table._editor.Visible = false;
-						Table.Invalidator(YataGrid.INVALID_GRID);
-					}
-
 					if (!bypassFocus) Table.Select();
 
 
