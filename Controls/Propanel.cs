@@ -402,12 +402,12 @@ namespace yata
 				if (Settings._acceptedit)
 				{
 					logfile.Log(". Settings._acceptedit");
-					applyCelledit(); // do NOT focus the table here. Do it in the calling funct if req'd.
+					editresultaccept(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
 					logfile.Log(". Settings._acceptedit FALSE");
-					hideditor(); // do NOT focus the table.
+					editresultcancel(); // do NOT focus the table.
 				}
 			}
 			else
@@ -418,10 +418,10 @@ namespace yata
 		/// Applies a text-edit via <c><see cref="_editor"/></c>.
 		/// </summary>
 		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c></param>
-		/// <seealso cref="YataGrid.applyCelledit()"><c>YataGrid.applyCelledit()</c></seealso>
-		internal void applyCelledit(bool @select = false)
+		/// <seealso cref="YataGrid.editresultaccept()"><c>YataGrid.editresultaccept()</c></seealso>
+		internal void editresultaccept(bool @select = false)
 		{
-			logfile.Log("Propanel.applyCelledit()");
+			logfile.Log("Propanel.editresultaccept()");
 
 			bool sanitized = false;
 
@@ -434,7 +434,7 @@ namespace yata
 			else if (cell.loadchanged)
 				_grid.ClearLoadchanged(cell);
 
-			hideditor(@select);
+			editresultcancel(@select);
 
 			if (sanitized)
 			{
@@ -453,10 +453,10 @@ namespace yata
 		/// </summary>
 		/// <param name="select"><c>true</c> to focus the <c>YataGrid</c> - if
 		/// <c>false</c> the calling funct shall focus a <c>Control</c> itself</param>
-		/// <seealso cref="YataGrid.hideditor()"><c>YataGrid.hideditor()</c></seealso>
-		internal void hideditor(bool @select = false)
+		/// <seealso cref="YataGrid.editresultcancel()"><c>YataGrid.editresultcancel()</c></seealso>
+		internal void editresultcancel(bool @select = false)
 		{
-			logfile.Log("Propanel.hideditor() _editor.Visible= " + _editor.Visible);
+			logfile.Log("Propanel.editresultcancel() _editor.Visible= " + _editor.Visible);
 
 			_editor.Visible = false;
 			_grid.Invalidator(YataGrid.INVALID_PROP);
@@ -500,7 +500,7 @@ namespace yata
 					if (_editor.Visible)
 					{
 						_bypassleaveditor = true;
-						applyCelledit(true);
+						editresultaccept(true);
 #if DEBUG
 						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
 #endif
@@ -513,7 +513,7 @@ namespace yata
 					if (_editor.Visible)
 					{
 						_bypassleaveditor = true;
-						hideditor(true);
+						editresultcancel(true);
 #if DEBUG
 						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
 #endif
@@ -575,7 +575,7 @@ namespace yata
 					case Keys.Tab:
 					case Keys.Down:
 						_bypassleaveditor = true;
-						applyCelledit();
+						editresultaccept();
 
 						if (_c != _grid.ColCount - 1)
 						{
@@ -596,7 +596,7 @@ namespace yata
 					case Keys.Shift | Keys.Tab:
 					case Keys.Up:
 						_bypassleaveditor = true;
-						applyCelledit();
+						editresultaccept();
 
 						if (_c != 0)
 						{
@@ -744,7 +744,7 @@ namespace yata
 							if (gc.ClickLog) logfile.Log(". accept edit");
 #endif
 							_bypassleaveditor = true;
-							applyCelledit(true);
+							editresultaccept(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
@@ -752,7 +752,7 @@ namespace yata
 							if (gc.ClickLog) logfile.Log(". cancel edit");
 #endif
 							_bypassleaveditor = true;
-							hideditor(true);
+							editresultcancel(true);
 							break;
 					}
 				}

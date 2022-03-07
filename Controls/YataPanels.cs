@@ -466,7 +466,7 @@ namespace yata
 							if (gc.ClickLog) logfile.Log(". . accept edit");
 #endif
 							_grid._bypassleaveditor = true;
-							_grid.applyCelledit();
+							_grid.editresultaccept();
 							break;
 
 						case MouseButtons.Right: // cancel edit
@@ -474,7 +474,7 @@ namespace yata
 							if (gc.ClickLog) logfile.Log(". . cancel edit");
 #endif
 							_grid._bypassleaveditor = true;
-							_grid.hideditor(YataGrid.INVALID_GRID);
+							_grid.editresultcancel(YataGrid.INVALID_GRID);
 							break;
 
 						case MouseButtons.Middle:
@@ -500,7 +500,7 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". . accept edit");
 #endif
 								propanel._bypassleaveditor = true;
-								propanel.applyCelledit();
+								propanel.editresultaccept();
 								break;
 
 							case MouseButtons.Right: // cancel edit
@@ -508,7 +508,7 @@ namespace yata
 								if (gc.ClickLog) logfile.Log(". . cancel edit");
 #endif
 								propanel._bypassleaveditor = true;
-								propanel.hideditor();
+								propanel.editresultcancel();
 								break;
 
 							case MouseButtons.Middle:
