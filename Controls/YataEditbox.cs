@@ -148,7 +148,7 @@ namespace yata
 							if (hasShortcut(it, e.KeyData))
 							{
 #if DEBUG
-								if (gc.KeyLog) logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (has shortcut)");
+								if (gc.KeyLog) logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (shortcut)");
 #endif
 								e.IsInputKey = true;
 								break;
@@ -233,7 +233,7 @@ namespace yata
 				// Note that a return of FALSE bypasses the KeyDown/Up events;
 				// ie, handle the keystroke in Process*Key() funct(s).
 #if DEBUG
-				if (gc.KeyLog) logfile.Log(". YataEditbox.IsInputKey force FALSE (is TabFastedit)");
+				if (gc.KeyLog) logfile.Log(". YataEditbox.IsInputKey force FALSE (TabFastedit)");
 #endif
 				return false;
 			}
