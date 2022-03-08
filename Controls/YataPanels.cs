@@ -477,7 +477,7 @@ namespace yata
 							_grid.editresultcancel(YataGrid.INVALID_GRID);
 							break;
 
-						case MouseButtons.Middle:
+						default:
 #if DEBUG
 							if (gc.ClickLog) logfile.Log(". . default edit result");
 #endif
@@ -511,7 +511,7 @@ namespace yata
 								propanel.editresultcancel();
 								break;
 
-							case MouseButtons.Middle:
+							default:
 #if DEBUG
 								if (gc.ClickLog) logfile.Log(". . default edit result");
 #endif
