@@ -34,8 +34,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-#if DEBUG
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 			{
 				logfile.Log("YataEditbox.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 				logfile.Log(". Parent= " + Parent);
@@ -142,13 +142,13 @@ namespace yata
 						if ((it = bar.Items[i] as ToolStripMenuItem) != null
 							&& it.Visible && it.Enabled)
 						{
-//							if ((e.KeyData & ~Constants.ControlShift) != 0)
+//							if ((e.KeyData & ~gc.ControlShift) != 0)
 //								logfile.Log(it.Text);
 
 							if (hasShortcut(it, e.KeyData))
 							{
-#if DEBUG
-								if (gc.KeyLog) logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (shortcut)");
+#if Keys
+								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (shortcut)");
 #endif
 								e.IsInputKey = true;
 								break;
@@ -177,7 +177,7 @@ namespace yata
 				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
 //					&& subit.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
 				{
-//					if (Constants.KeyLog && (keyData & ~Constants.ControlShift) != 0)
+//					if ((keyData & ~gc.ControlShift) != 0)
 //						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
 
 					if (subit.ShortcutKeys == keyData
@@ -190,14 +190,14 @@ namespace yata
 			return false;
 		}
 
-#if DEBUG
+#if Keys
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataEditbox.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataEditbox.ProcessCmdKey ret= " + ret);
 
 			return ret;
@@ -219,8 +219,8 @@ namespace yata
 		/// and RIGHT ARROW. kL_note: Also PageUp/Down what else you gnits.</remarks>
 		protected override bool IsInputKey(Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataEditbox.IsInputKey() keyData= " + keyData);
 #endif
 			if (YataGrid.IsTabfasteditKey(keyData))
@@ -232,28 +232,28 @@ namespace yata
 				//
 				// Note that a return of FALSE bypasses the KeyDown/Up events;
 				// ie, handle the keystroke in Process*Key() funct(s).
-#if DEBUG
-				if (gc.KeyLog) logfile.Log(". YataEditbox.IsInputKey force FALSE (TabFastedit)");
+#if Keys
+				logfile.Log(". YataEditbox.IsInputKey force FALSE (TabFastedit)");
 #endif
 				return false;
 			}
 
 			bool ret = base.IsInputKey(keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataEditbox.IsInputKey ret= " + ret);
 #endif
 			return ret;
 		}
 
-#if DEBUG
+#if Keys
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataEditbox.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataEditbox.ProcessDialogKey ret= " + ret);
 
 			return ret;
@@ -261,7 +261,7 @@ namespace yata
 
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataEditbox.OnKeyDown() e.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);
@@ -279,8 +279,8 @@ namespace yata
 		/// <c><see cref="YataGrid"/>._t1_Tick()</c>.</remarks>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataEditbox.OnMouseDown() " + e.Button);
+#if Clicks
+			logfile.Log("YataEditbox.OnMouseDown() " + e.Button);
 #endif
 			if (YataGrid._doubletclick)
 				SelectAll();

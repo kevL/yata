@@ -180,22 +180,22 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseDown() e.Button= " + e.Button);
+#if Clicks
+			logfile.Log("YataPanelCols.OnMouseDown() e.Button= " + e.Button);
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
 			if (_grid._editor.Visible)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
+#if Clicks
+				logfile.Log(". _grid._editor.Visible");
 #endif
 				_grid._editor.Visible = false;
 			}
 			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+#if Clicks
+				logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 				_grid.Propanel._editor.Visible = false;
 			}
@@ -206,8 +206,8 @@ namespace yata
 			{
 				case MouseButtons.Left:
 					IsGrab = ModifierKeys == Keys.None && IsCursorSplit;
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". IsGrab= " + IsGrab + " _grabCol= " + _grabCol);
+#if Clicks
+					logfile.Log(". IsGrab= " + IsGrab + " _grabCol= " + _grabCol);
 #endif
 					break;
 
@@ -217,8 +217,8 @@ namespace yata
 						Col col = _grid.Cols[_grabCol];
 						if (col.UserSized)
 						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". reset col-width _grabCol= " + _grabCol);
+#if Clicks
+							logfile.Log(". reset col-width _grabCol= " + _grabCol);
 #endif
 							col.UserSized = false;
 							_grid.Colwidth(_grabCol);
@@ -237,13 +237,13 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelCols.OnMouseUp() e.Button= " + e.Button);
+#if Clicks
+			logfile.Log("YataPanelCols.OnMouseUp() e.Button= " + e.Button);
 #endif
 			if (IsGrab)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". clear IsGrab");
+#if Clicks
+				logfile.Log(". clear IsGrab");
 #endif
 				IsGrab = false;
 				Cursor = Cursors.Default;
@@ -253,8 +253,8 @@ namespace yata
 					&& e.Button == MouseButtons.Left
 					&& e.X != _grabPos)
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". . do col-width adjust");
+#if Clicks
+					logfile.Log(". . do col-width adjust");
 #endif
 					Col col = _grid.Cols[_grabCol];
 					col.UserSized = true;
@@ -358,22 +358,22 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelRows.OnMouseDown() e.Button= " + e.Button);
+#if Clicks
+			logfile.Log("YataPanelRows.OnMouseDown() e.Button= " + e.Button);
 #endif
 			// Don't bother checking MouseButton or ModifierKeys.
 
 			if (_grid._editor.Visible)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
+#if Clicks
+				logfile.Log(". _grid._editor.Visible");
 #endif
 				_grid._editor.Visible = false;
 			}
 			else if (_grid.Propanel != null && _grid.Propanel._editor.Visible)
 			{
-#if DEBUG
-				if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+#if Clicks
+				logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 				_grid.Propanel._editor.Visible = false;
 			}
@@ -449,37 +449,37 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataPanelFrozen.OnMouseDown() e.Button= " + e.Button);
+#if Clicks
+			logfile.Log("YataPanelFrozen.OnMouseDown() e.Button= " + e.Button);
 #endif
 			if (ModifierKeys == Keys.None)
 			{
 				if (_grid._editor.Visible)
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". _grid._editor.Visible");
+#if Clicks
+					logfile.Log(". _grid._editor.Visible");
 #endif
 					switch (e.Button)
 					{
 						case MouseButtons.Left: // accept edit
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . accept edit");
+#if Clicks
+							logfile.Log(". . accept edit");
 #endif
 							_grid._bypassleaveditor = true;
 							_grid.editresultaccept();
 							break;
 
 						case MouseButtons.Right: // cancel edit
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . cancel edit");
+#if Clicks
+							logfile.Log(". . cancel edit");
 #endif
 							_grid._bypassleaveditor = true;
 							_grid.editresultcancel(YataGrid.INVALID_GRID);
 							break;
 
 						default:
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . default edit result");
+#if Clicks
+							logfile.Log(". . default edit result");
 #endif
 							_grid._editor.Visible = false; // do this or else the leave event fires twice.
 							break;
@@ -490,30 +490,30 @@ namespace yata
 					Propanel propanel = _grid.Propanel;
 					if (propanel != null && propanel._editor.Visible)
 					{
-#if DEBUG
-						if (gc.ClickLog) logfile.Log(". _grid.Propanel._editor.Visible");
+#if Clicks
+						logfile.Log(". _grid.Propanel._editor.Visible");
 #endif
 						switch (e.Button)
 						{
 							case MouseButtons.Left: // accept edit
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . accept edit");
+#if Clicks
+								logfile.Log(". . accept edit");
 #endif
 								propanel._bypassleaveditor = true;
 								propanel.editresultaccept();
 								break;
 
 							case MouseButtons.Right: // cancel edit
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . cancel edit");
+#if Clicks
+								logfile.Log(". . cancel edit");
 #endif
 								propanel._bypassleaveditor = true;
 								propanel.editresultcancel();
 								break;
 
 							default:
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . default edit result");
+#if Clicks
+								logfile.Log(". . default edit result");
 #endif
 								propanel._editor.Visible = false; // do this or else the leave event fires twice.
 								break;

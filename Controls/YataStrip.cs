@@ -65,12 +65,12 @@ namespace yata
 			base.WndProc(ref m);
 		}
 
-#if DEBUG
+#if Keys
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			// does not fire if a textbox or combobox is currently selected.
 
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -78,11 +78,11 @@ namespace yata
 
 		protected override bool ProcessCmdKey(ref Message m, Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessCmdKey() keyData= " + keyData);
 
 			bool ret = base.ProcessCmdKey(ref m, keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.ProcessCmdKey ret= " + ret);
 
 			return ret;
@@ -90,11 +90,11 @@ namespace yata
 
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.IsInputKey ret= " + ret);
 
 			return ret;
@@ -128,8 +128,8 @@ namespace yata
 		/// behavior of <c>ToolStripComboBox</c>.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessDialogKey() keyData= " + keyData);
 #endif
 //			for (int i = 0; i != Items.Count; ++i)
@@ -151,14 +151,14 @@ namespace yata
 
 					if (YataForm.Table != null)
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". YataStrip.ProcessDialogKey (select Table)");
 #endif
 						YataForm.Table.Select();
 					}
 					else
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". YataStrip.ProcessDialogKey (select Tabs)");
 #endif
 						_f.Tabs.Select();
@@ -168,7 +168,7 @@ namespace yata
 				case Keys.Tab:
 					if (_f.tb_Goto.Selected)
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". tb_Goto");
 #endif
 						_f.IsTabbed_search = true;
@@ -182,7 +182,7 @@ namespace yata
 				case Keys.Right:
 					if (_f.it_MenuCol.Selected)
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". it_MenuCol");
 #endif
 						// NOTE: 'it_MenuCol' can get stuck highlighted on [Tab]
@@ -205,7 +205,7 @@ namespace yata
 				case Keys.Shift | Keys.Tab: // reverse dir
 					if (_f.cb_SearchOption.Selected)
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". cb_SearchOption");
 #endif
 						_f.IsTabbed_search = true;
@@ -213,7 +213,7 @@ namespace yata
 					}
 					else if (_f.tb_Search.Selected)
 					{
-#if DEBUG
+#if Keys
 						logfile.Log(". tb_Search");
 #endif
 						_f.IsTabbed_goto = true;
@@ -226,17 +226,17 @@ namespace yata
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.ProcessDialogKey ret= " + ret);
 #endif
 			return ret;
 		}
 
-#if DEBUG
+#if Keys
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);

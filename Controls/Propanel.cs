@@ -467,10 +467,10 @@ namespace yata
 
 
 		#region Handlers (override)
-#if DEBUG
+#if Keys
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
@@ -489,8 +489,8 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessCmdKey() keyData= " + keyData);
 #endif
 			switch (keyData)
@@ -501,8 +501,8 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						editresultaccept(true);
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
+#if Keys
+						logfile.Log(". Propanel.ProcessCmdKey force TRUE (accept propanel-edit)");
 #endif
 						return true;
 					}
@@ -514,8 +514,8 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						editresultcancel(true);
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
+#if Keys
+						logfile.Log(". Propanel.ProcessCmdKey force TRUE (cancel propanel-edit)");
 #endif
 						return true;
 					}
@@ -523,21 +523,21 @@ namespace yata
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
 		}
 
-#if DEBUG
+#if Keys
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.IsInputKey(keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.IsInputKey ret= " + ret);
 
 			return ret;
@@ -563,8 +563,8 @@ namespace yata
 		/// going to keep them here just to differentiate the TabFastedit keys.</remarks>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.ProcessDialogKey() keyData= " + keyData);
 #endif
 			if (_editor.Visible)
@@ -588,8 +588,8 @@ namespace yata
 						}
 						else
 							_grid.Select();
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#if Keys
+						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
 #endif
 						return true;
 
@@ -609,22 +609,22 @@ namespace yata
 						}
 						else
 							_grid.Select();
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
+#if Keys
+						logfile.Log(". Propanel.ProcessDialogKey force TRUE (is TabFastedit)");
 #endif
 						return true;
 				}
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". Propanel.ProcessDialogKey ret= " + ret);
 #endif
 			return ret;
 		}
 
-#if DEBUG
+#if Keys
 		/// <summary>
 		/// This should never fire I believe since (<c>TabStop=false</c>) and so
 		/// this <c>Propanel</c> can never have focus.
@@ -636,7 +636,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("Propanel.OnKeyDown() ke.KeyData= " + e.KeyData);
 
 			base.OnKeyDown(e);
@@ -660,8 +660,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("Propanel.OnMouseClick() " + e.Button + " _tabOverride= " + _tabOverride);
+#if Clicks
+			logfile.Log("Propanel.OnMouseClick() " + e.Button + " _tabOverride= " + _tabOverride);
 #endif
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
@@ -698,8 +698,8 @@ namespace yata
 
 							if (!_grid.Readonly && e.X > _widthVars)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . start edit");
+#if Clicks
+								logfile.Log(". . start edit");
 #endif
 								_editRect.X = _widthVars;
 								_editRect.Y = _c * _heightr + 1;
@@ -716,8 +716,8 @@ namespace yata
 							}
 							else
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . select grid");
+#if Clicks
+								logfile.Log(". . select grid");
 #endif
 								_grid.Select();
 							}
@@ -728,8 +728,8 @@ namespace yata
 						}
 						else
 						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". select grid");
+#if Clicks
+							logfile.Log(". select grid");
 #endif
 							_grid.Select();
 						}
@@ -740,22 +740,25 @@ namespace yata
 					switch (e.Button)
 					{
 						case MouseButtons.Left: // accept edit
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". accept edit");
+#if Clicks
+							logfile.Log(". accept edit");
 #endif
 							_bypassleaveditor = true;
 							editresultaccept(true);
 							break;
 
 						case MouseButtons.Right: // cancel edit
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". cancel edit");
+#if Clicks
+							logfile.Log(". cancel edit");
 #endif
 							_bypassleaveditor = true;
 							editresultcancel(true);
 							break;
 
 						default:
+#if Clicks
+							logfile.Log(". edit result default");
+#endif
 							_editor.Visible = false;
 							_grid.Select();
 							break;

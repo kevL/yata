@@ -72,26 +72,14 @@ namespace yata
 	{
 		internal const float epsilon = 0.00001F;
 
-#if DEBUG
-		/// <summary>
-		/// <c>true</c> to log keyboard processing and handling in the
-		/// <c><see cref="logfile"></see>.Logfile</c>.
-		/// </summary>
-		internal const bool KeyLog = true;
-
-		/// <summary>
-		/// <c>true</c> to log <c>MouseDown</c> and <c>MouseUp</c> handling in
-		/// the <c><see cref="logfile"></see>.Logfile</c>.
-		/// </summary>
-		internal const bool ClickLog = true;
-
+#if Keys
 		/// <summary>
 		/// Used to bypass [Control] and [Shift] keys - and [Alt] if desired -
 		/// in the <c><see cref="logfile"></see>.Logfile</c>.
 		/// </summary>
 		internal const Keys ControlShift = Keys.Control | Keys.ControlKey	// I don't know why .net does it this way.
-										 | Keys.Shift   | Keys.ShiftKey;	// But when only 1 key is pressed (Ctrl,Shift,Alt)
-//										 | Keys.Alt     | Keys.Menu			// its second flag also registers respectively.
+										 | Keys.Shift   | Keys.ShiftKey		// But when only 1 key is pressed (Ctrl,Shift,Alt)
+										 | Keys.Alt     | Keys.Menu;		// its second flag also registers respectively.
 #endif
 	}
 	#endregion Constants

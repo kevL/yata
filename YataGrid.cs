@@ -2329,8 +2329,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
-#if DEBUG
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyCode= " + e.KeyCode + " e.IsInputKey= " + e.IsInputKey);
 #endif
 			switch (e.KeyCode) // <- note KeyCode not KeyData
@@ -2342,8 +2342,8 @@ namespace yata
 				case Keys.Left:
 				case Keys.Right:
 				case Keys.Escape:
-#if DEBUG
-					if (gc.KeyLog) logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
+#if Keys
+					logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
 #endif
 					e.IsInputKey = true;
 					break;
@@ -2366,8 +2366,8 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.ProcessCmdKey() keyData= " + keyData);
 #endif
 			switch (keyData)
@@ -2378,8 +2378,8 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						editresultaccept(true);
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
+#if Keys
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (accept grid-edit)");
 #endif
 						return true;
 					}
@@ -2389,8 +2389,8 @@ namespace yata
 						&&  _editcell.x >= FrozenCount)
 					{
 						Celledit();
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (start grid-edit)");
+#if Keys
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (start grid-edit)");
 #endif
 						return true;
 					}
@@ -2402,8 +2402,8 @@ namespace yata
 					{
 						_bypassleaveditor = true;
 						editresultcancel(INVALID_GRID, true);
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel grid-edit)");
+#if Keys
+						logfile.Log(". YataGrid.ProcessCmdKey force TRUE (cancel grid-edit)");
 #endif
 						return true;
 					}
@@ -2411,21 +2411,21 @@ namespace yata
 			}
 
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataGrid.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
 		}
 
-#if DEBUG
+#if Keys
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataGrid.IsInputKey ret= " + ret);
 
 			return ret;
@@ -2480,8 +2480,8 @@ namespace yata
 		/// <seealso cref="Propanel"><c>Propanel.ProcessDialogKey()</c></seealso>
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.ProcessDialogKey() keyData= " + keyData);
 #endif
 			// TabFastedit ->
@@ -2501,7 +2501,7 @@ namespace yata
 						editresultaccept(true);
 
 						process(keyData);
-#if DEBUG
+#if Keys
 						logfile.Log(". YataGrid.ProcessDialogKey force TRUE (TabFastedit)");
 #endif
 						return true;
@@ -2509,8 +2509,8 @@ namespace yata
 			}
 
 			bool ret = base.ProcessDialogKey(keyData);
-#if DEBUG
-			if (gc.KeyLog && (keyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataGrid.ProcessDialogKey ret= " + ret);
 #endif
 			return ret;
@@ -2576,8 +2576,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
-#if DEBUG
-			if (gc.KeyLog && (e.KeyData & ~gc.ControlShift) != 0)
+#if Keys
+			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.OnKeyDown() e.KeyData= " + e.KeyData);
 #endif
 			if ((e.Modifiers & Keys.Alt) == Keys.None)
@@ -2599,8 +2599,8 @@ namespace yata
 				switch (e.KeyCode)
 				{
 					case Keys.Escape: // NOTE: needs to bypass KeyPreview
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Escape (clear all selects)");
+#if Keys
+						logfile.Log(". Keys.Escape (clear all selects)");
 #endif
 						if (!ctr && !sft)
 						{
@@ -2614,8 +2614,8 @@ namespace yata
 
 
 					case Keys.Home:
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Home (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.Home (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -2699,8 +2699,8 @@ namespace yata
 						break;
 
 					case Keys.End:
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.End (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.End (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -2784,8 +2784,8 @@ namespace yata
 						break;
 
 					case Keys.PageUp:
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.PageUp (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.PageUp (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -2905,8 +2905,8 @@ namespace yata
 						break;
 
 					case Keys.PageDown:
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.PageDown (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.PageDown (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -3026,8 +3026,8 @@ namespace yata
 						break;
 
 					case Keys.Up: // NOTE: needs to bypass KeyPreview
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Up (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.Up (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -3115,8 +3115,8 @@ namespace yata
 						break;
 
 					case Keys.Down: // NOTE: needs to bypass KeyPreview
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Down (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.Down (navigate grid)");
 #endif
 						if (selr != -1)
 						{
@@ -3204,8 +3204,8 @@ namespace yata
 						break;
 
 					case Keys.Left: // NOTE: needs to bypass KeyPreview
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Left (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.Left (navigate grid)");
 #endif
 						if (!ctr)
 						{
@@ -3287,8 +3287,8 @@ namespace yata
 						break;
 
 					case Keys.Right: // NOTE: needs to bypass KeyPreview
-#if DEBUG
-						if (gc.KeyLog) logfile.Log(". Keys.Right (navigate grid)");
+#if Keys
+						logfile.Log(". Keys.Right (navigate grid)");
 #endif
 						if (!ctr)
 						{
@@ -4046,8 +4046,8 @@ namespace yata
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseDown() " + e.Button + " _editor.Visible= " + _editor.Visible);
+#if Clicks
+			logfile.Log("YataGrid.OnMouseDown() " + e.Button + " _editor.Visible= " + _editor.Visible);
 #endif
 			if ((ModifierKeys & Keys.Alt) == Keys.None) // do this in OnMouseClick() also
 			{
@@ -4058,8 +4058,8 @@ namespace yata
 				// (e.X >= WidthTable || e.Y >= HeightTable)
 				if ((_cell = getCell(e.X, e.Y)) != null) // click to the right or below the table-area
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". clicked cell VALID");
+#if Clicks
+					logfile.Log(". clicked cell VALID");
 #endif
 					if (_editor.Visible)
 					{
@@ -4072,8 +4072,8 @@ namespace yata
 
 									if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 									{
-#if DEBUG
-										if (gc.ClickLog) logfile.Log(". . grid accept edit");
+#if Clicks
+										logfile.Log(". . grid accept edit");
 #endif
 										_bypassleaveditor = true;
 										editresultaccept();
@@ -4090,8 +4090,8 @@ namespace yata
 
 									if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 									{
-#if DEBUG
-										if (gc.ClickLog) logfile.Log(". . grid default edit result");
+#if Clicks
+										logfile.Log(". . grid default edit result");
 #endif
 										_editor.Visible = false;
 									}
@@ -4099,8 +4099,8 @@ namespace yata
 									break;
 
 								default:
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". . grid focus editor");
+#if Clicks
+									logfile.Log(". . grid focus editor");
 #endif
 									refocuseditor(_editor, ref @select);
 									break;
@@ -4108,8 +4108,8 @@ namespace yata
 						}
 						else // _cell == _editcell
 						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . grid (_cell == _editcell) focus editor");
+#if Clicks
+							logfile.Log(". . grid (_cell == _editcell) focus editor");
 #endif
 							refocuseditor(_editor, ref @select);
 						}
@@ -4123,8 +4123,8 @@ namespace yata
 
 								if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 								{
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". . propanel accept edit");
+#if Clicks
+									logfile.Log(". . propanel accept edit");
 #endif
 									Propanel._bypassleaveditor = true;
 									Propanel.editresultaccept();
@@ -4141,8 +4141,8 @@ namespace yata
 
 								if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 								{
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". . propanel default edit result");
+#if Clicks
+									logfile.Log(". . propanel default edit result");
 #endif
 									Propanel._editor.Visible = false;
 								}
@@ -4150,8 +4150,8 @@ namespace yata
 								break;
 
 							default:
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . propanel focus editor");
+#if Clicks
+								logfile.Log(". . propanel focus editor");
 #endif
 								refocuseditor(Propanel._editor, ref @select);
 								break;
@@ -4160,16 +4160,16 @@ namespace yata
 				}
 				else if (_editor.Visible) // _cell == null
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". (_cell == null && _editor.Visible)");
+#if Clicks
+					logfile.Log(". (_cell == null && _editor.Visible)");
 #endif
 					switch (e.Button)
 					{
 						case MouseButtons.Left:
 							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . grid accept edit");
+#if Clicks
+								logfile.Log(". . grid accept edit");
 #endif
 								_bypassleaveditor = true;
 								editresultaccept();
@@ -4182,8 +4182,8 @@ namespace yata
 						case MouseButtons.Right:
 							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . grid cancel edit");
+#if Clicks
+								logfile.Log(". . grid cancel edit");
 #endif
 								_bypassleaveditor = true;
 								editresultcancel(INVALID_GRID);
@@ -4194,8 +4194,8 @@ namespace yata
 							break;
 
 						default:
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . grid focus editor");
+#if Clicks
+							logfile.Log(". . grid focus editor");
 #endif
 							refocuseditor(_editor, ref @select);
 							break;
@@ -4203,16 +4203,16 @@ namespace yata
 				}
 				else if (Propanel != null && Propanel._editor.Visible)
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". (_cell == null && Propanel._editor.Visible)");
+#if Clicks
+					logfile.Log(". (_cell == null && Propanel._editor.Visible)");
 #endif
 					switch (e.Button)
 					{
 						case MouseButtons.Left:
 							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . propanel accept edit");
+#if Clicks
+								logfile.Log(". . propanel accept edit");
 #endif
 								Propanel._bypassleaveditor = true;
 								Propanel.editresultaccept();
@@ -4225,8 +4225,8 @@ namespace yata
 						case MouseButtons.Right:
 							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". . propanel cancel edit");
+#if Clicks
+								logfile.Log(". . propanel cancel edit");
 #endif
 								Propanel._bypassleaveditor = true;
 								Propanel.editresultcancel();
@@ -4237,8 +4237,8 @@ namespace yata
 							break;
 
 						default:
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . propanel focus editor");
+#if Clicks
+							logfile.Log(". . propanel focus editor");
 #endif
 							refocuseditor(Propanel._editor, ref @select);
 							break;
@@ -4246,8 +4246,8 @@ namespace yata
 				}
 				else
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". (_cell == null");
+#if Clicks
+					logfile.Log(". (_cell == null");
 #endif
 					_bypassclickhandler = true;
 
@@ -4255,8 +4255,8 @@ namespace yata
 					{
 						if (anySelected())
 						{
-#if DEBUG
-							if (gc.ClickLog) logfile.Log(". . deselect all");
+#if Clicks
+							logfile.Log(". . deselect all");
 #endif
 							_f.editclick_Deselect(this, EventArgs.Empty);
 						}
@@ -4296,8 +4296,8 @@ namespace yata
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible + " _bypassclickhandler= " + _bypassclickhandler);
+#if Clicks
+			logfile.Log("YataGrid.OnMouseClick() " + e.Button + " _editor.Visible= " + _editor.Visible + " _bypassclickhandler= " + _bypassclickhandler);
 #endif
 			if (!_bypassclickhandler)
 			{
@@ -4317,16 +4317,16 @@ namespace yata
 							{
 								if ((ModifierKeys & Keys.Shift) == Keys.None)
 								{
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". Ctrl");
+#if Clicks
+									logfile.Log(". Ctrl");
 #endif
 									Cell sel = getSelectedCell();
 									if (sel == null || sel.x >= FrozenCount) // disallow multi-cell select if a frozen cell is currently selected
 									{
 										if (_cell.selected = !_cell.selected)
 										{
-#if DEBUG
-											if (gc.ClickLog) logfile.Log(". . select cell");
+#if Clicks
+											logfile.Log(". . select cell");
 #endif
 											if (SelectSyncCell(_cell)) // disallow multi-cell select if sync'd
 											{
@@ -4339,8 +4339,8 @@ namespace yata
 										}
 										else
 										{
-#if DEBUG
-											if (gc.ClickLog) logfile.Log(". . deselect cell");
+#if Clicks
+											logfile.Log(". . deselect cell");
 #endif
 											_f.ClearSyncSelects();
 										}
@@ -4357,14 +4357,14 @@ namespace yata
 							}
 							else if ((ModifierKeys & Keys.Shift) == Keys.Shift) // do block selection ->
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". Shift");
+#if Clicks
+								logfile.Log(". Shift");
 #endif
 								if (_cell != getSelectedCell()								// else do nothing if clicked cell is the only selected cell
 									&& allowContiguous() && areSelectedCellsContiguous())	// else do nothing if no cells are selected or selected cells are not in a contiguous block
 								{
-#if DEBUG
-									if (gc.ClickLog) logfile.Log(". . do block selection");
+#if Clicks
+									logfile.Log(". . do block selection");
 #endif
 									ClearSelects(true);
 
@@ -4390,8 +4390,8 @@ namespace yata
 							}
 							else if (!_cell.selected || getSelectedCell() == null) // select cell if it's not selected or if it's not the only selected cell ->
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". select cell");
+#if Clicks
+								logfile.Log(". select cell");
 #endif
 								_double = true;
 
@@ -4409,8 +4409,8 @@ namespace yata
 							}
 							else if (!Readonly) // cell is already selected
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". edit cell");
+#if Clicks
+								logfile.Log(". edit cell");
 #endif
 								startCelledit(_cell);
 
@@ -4422,8 +4422,8 @@ namespace yata
 						case MouseButtons.Right:
 							if ((ModifierKeys & (Keys.Control | Keys.Shift)) == Keys.None)
 							{
-#if DEBUG
-								if (gc.ClickLog) logfile.Log(". select cell and show context");
+#if Clicks
+								logfile.Log(". select cell and show context");
 #endif
 								ClearSelects(true);
 
@@ -4446,8 +4446,8 @@ namespace yata
 						_f.EnableCelleditOperations();
 				}
 			}
-#if DEBUG
-			else if (gc.ClickLog) logfile.Log(". MouseClick bypassed");
+#if Clicks
+			else logfile.Log(". MouseClick bypassed");
 #endif
 			_bypassclickhandler = false;
 		}
@@ -4465,15 +4465,15 @@ namespace yata
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
 		{
-#if DEBUG
-			if (gc.ClickLog) logfile.Log("YataGrid.OnMouseDoubleClick() " + e.Button + " _editor.Visible= " + _editor.Visible);
+#if Clicks
+			logfile.Log("YataGrid.OnMouseDoubleClick() " + e.Button + " _editor.Visible= " + _editor.Visible);
 #endif
 			if (_double)
 			{
 				if (!_cell.selected)
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". select cell");
+#if Clicks
+					logfile.Log(". select cell");
 #endif
 					ClearSelects(true);
 
@@ -4490,14 +4490,14 @@ namespace yata
 
 				if (!Readonly)
 				{
-#if DEBUG
-					if (gc.ClickLog) logfile.Log(". edit cell");
+#if Clicks
+					logfile.Log(". edit cell");
 #endif
 					startCelledit(_cell);
 				}
 			}
-#if DEBUG
-			else if (gc.ClickLog) logfile.Log(". MouseDoubleClick bypassed");
+#if Clicks
+			else logfile.Log(". MouseDoubleClick bypassed");
 #endif
 		}
 
