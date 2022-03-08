@@ -674,7 +674,7 @@ namespace yata
 					{
 						if ((_r = _grid.getSelectedRowOrCells(true)) != -1)
 						{
-							_grid._editor.Visible = false;
+							_grid._editor.Visible = false; // edit result default on YataGrid's editor (if visible).
 
 							if (_tabOverride == TABFASTEDIT_Bypass)
 							{
@@ -753,6 +753,11 @@ namespace yata
 #endif
 							_bypassleaveditor = true;
 							editresultcancel(true);
+							break;
+
+						default:
+							_editor.Visible = false;
+							_grid.Select();
 							break;
 					}
 				}
