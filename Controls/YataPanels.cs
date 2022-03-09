@@ -138,6 +138,7 @@ namespace yata
 				YataGrid.graphics.DrawLine(Pencils.DarkLine,
 										   Width, 0,
 										   Width, Height);
+
 				_grid.LabelColheads();
 			}
 		}
@@ -341,12 +342,14 @@ namespace yata
 			{
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
 				YataGrid.graphics.DrawLine(Pencils.DarkLine,
 										   Width, 0,
 										   Width, Height);
 				YataGrid.graphics.DrawLine(Pencils.DarkLine,
 										   Width - 1, 0,
 										   Width - 1, Height);
+
 				_grid.LabelRowheads();
 			}
 		}
@@ -431,6 +434,7 @@ namespace yata
 			{
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
 				_grid.PaintFrozenPanel();
 			}
 		}
