@@ -553,8 +553,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnActivated(EventArgs e)
 		{
-			logfile.Log("YataForm.OnActivated()");
-
 			if (Table != null)
 			{
 				// NOTE: This could cause VerifyCurrentFileState() to run twice
@@ -571,8 +569,6 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnDeactivate(EventArgs e)
 		{
-			logfile.Log("YataForm.OnDeactivate()");
-
 			if (Table != null)
 			{
 				Table.editresultdefault();
