@@ -3635,18 +3635,18 @@ namespace yata
 		/// <seealso cref="Propanel"><c>Propanel.editor_leave()</c></seealso>
 		void editor_leave(object sender, EventArgs e)
 		{
-			logfile.Log("YataGrid.editor_leave() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
+			//logfile.Log("YataGrid.editor_leave() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
 
 			if (!_bypassleaveditor)
 			{
 				if (Settings._acceptedit)
 				{
-					logfile.Log(". Settings._acceptedit");
+					//logfile.Log(". Settings._acceptedit");
 					editresultaccept(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
-					logfile.Log(". Settings._acceptedit FALSE");
+					//logfile.Log(". Settings._acceptedit FALSE");
 					editresultcancel(INVALID_GRID); // do NOT focus the table.
 				}
 			}
@@ -3663,7 +3663,7 @@ namespace yata
 		/// <seealso cref="Propanel.editresultaccept()"><c>Propanel.editresultaccept()</c></seealso>
 		internal void editresultaccept(bool @select = false)
 		{
-			logfile.Log("YataGrid.editresultaccept() select= " + @select);
+			//logfile.Log("YataGrid.editresultaccept() select= " + @select);
 
 			int invalid = INVALID_GRID;
 
@@ -3703,7 +3703,7 @@ namespace yata
 		/// <seealso cref="Propanel.editresultcancel()"><c>Propanel.editresultcancel()</c></seealso>
 		internal void editresultcancel(int invalid, bool @select = false)
 		{
-			logfile.Log("YataGrid.editresultcancel() _editor.Visible= " + _editor.Visible);
+			//logfile.Log("YataGrid.editresultcancel() _editor.Visible= " + _editor.Visible);
 
 			_editor.Visible = false;
 			Invalidator(invalid);
@@ -3721,6 +3721,8 @@ namespace yata
 		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c>.</remarks>
 		internal void editresultdefault()
 		{
+			//logfile.Log("YataGrid.editresultdefault());
+
 			if (_editor.Visible)
 				_editor.Visible = false;
 			else if (Propanel != null && Propanel._editor.Visible)
