@@ -3411,9 +3411,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Starts a cell-edit from YataForm via the cellmenu.
+		/// Starts cell-edit on
+		/// <list type="bullet">
+		/// <item><c>MouseClick</c></item>
+		/// <item><c>MouseDoubleClick</c></item>
+		/// <item><c><see cref="YataForm"/>.cellit_Edit</c></item>
+		/// </list>
 		/// </summary>
-		/// <param name="cell"></param>
+		/// <param name="cell">a <c><see cref="Cell"/> to edit</c></param>
 		internal void startCelledit(Cell cell)
 		{
 			_editcell = cell;
@@ -3421,8 +3426,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Starts cell-edit on either <c>LMB</c> or <c>[Enter]</c>.
+		/// Starts cell-edit on
+		/// <list type="bullet">
+		/// <item><c>[Enter]</c></item>
+		/// <item>Tabfastedit</item>
+		/// <item><c><see cref="startCelledit()">startCelledit()</see></c></item>
+		/// </list>
 		/// </summary>
+		/// <remarks>Ensure that <c><see cref="_editcell"/></c> is valid before
+		/// call.</remarks>
 		void Celledit()
 		{
 			EnsureDisplayed(_editcell);
