@@ -92,7 +92,7 @@ namespace yata
 
 		#region Properties
 		/// <summary>
-		/// The count of cols in this <c>Row</c>.
+		/// The count of fields in this <c>Row</c>.
 		/// </summary>
 		internal int Length
 		{ get; set; }

@@ -3580,15 +3580,13 @@ namespace yata
 		/// for use by
 		/// <c><see cref="YataForm._copytext">YataForm._copytext[,]</see></c>.
 		/// </summary>
-		/// <returns><c>true</c> if any/all selected cells are in a continguous
-		/// rectangular block</returns>
+		/// <returns><c>true</c> if there is at least one selected cell and that
+		/// all selected cells are in a continguous rectangular block</returns>
 		/// <remarks>This turned out to be more complicated than first expected.
 		/// There's probably an easier way using <c>Lists</c> of x/y positions
 		/// ...</remarks>
 		internal bool areSelectedCellsContiguous()
 		{
-			//logfile.Log("YataGrid.areSelectedCellsContiguous()");
-
 			int
 				r0 = -1,			// tracks current row
 				c0 = -1, c1 = -1,	// start and stop of selected cells on 1st row w/ selected cells
