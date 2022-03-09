@@ -327,10 +327,6 @@ namespace yata
 
 
 		#region ICloneable requirements
-		/// <summary>
-		/// Clones this <c>Cell</c>.
-		/// </summary>
-		/// <returns>a cloned <c>Cell</c> as an <c>object</c></returns>
 		public object Clone()
 		{
 			var cell = new Cell(y,x, String.Copy(text));
