@@ -95,11 +95,13 @@ namespace yata
 					// this just optimizes away key-processing and key-bubbling
 					// etc. - not req'd but here it is.
 					//
+					// cf. YataGrid.OnPreviewKeyDown()
+					//
 					// [Escape] shall be handled in YataForm.OnKeyDown()
 #if Keys
 					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
 #endif
-					e.IsInputKey = true;
+					e.IsInputKey = true; // bypass processing and go straight to KeyDown events.
 					break;
 			}
 			base.OnPreviewKeyDown(e);

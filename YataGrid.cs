@@ -2333,6 +2333,11 @@ namespace yata
 			if ((e.KeyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.OnPreviewKeyDown() e.KeyCode= " + e.KeyCode + " e.IsInputKey= " + e.IsInputKey);
 #endif
+			// perhaps this just optimizes away key-processing and key-bubbling
+			// etc. - not req'd but here it is.
+			//
+			// cf. YataTabs.OnPreviewKeyDown()
+
 			switch (e.KeyCode) // <- note KeyCode not KeyData
 			{
 				case Keys.Up:
@@ -2345,7 +2350,7 @@ namespace yata
 #if Keys
 					logfile.Log(". YataGrid.OnPreviewKeyDown force e.IsInputKey TRUE");
 #endif
-					e.IsInputKey = true;
+					e.IsInputKey = true; // bypass processing and go straight to KeyDown events.
 					break;
 			}
 			base.OnPreviewKeyDown(e);
