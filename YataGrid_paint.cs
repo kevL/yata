@@ -18,7 +18,7 @@ namespace yata
 		#endregion Fields (static)
 
 
-		#region handlers (override)
+		#region Handlers (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler for the table itself.
 		/// </summary>
@@ -129,10 +129,10 @@ namespace yata
 				}
 			}
 		}
-		#endregion handlers (override)
+		#endregion Handlers (override)
 
 
-		#region handlers
+		#region Handlers
 		/// <summary>
 		/// Paints the frozen-id <c>Label</c>.
 		/// </summary>
@@ -312,10 +312,10 @@ namespace yata
 								  _labelsecond.Width, _labelsecond.Bottom);
 			}
 		}
-		#endregion handlers
+		#endregion Handlers
 
 
-		#region helpers
+		#region Helpers
 		/// <summary>
 		/// Labels the colheads.
 		/// </summary>
@@ -494,6 +494,6 @@ namespace yata
 								  rect.X + rect.Width, rect.Y + HeightRow);
 			}
 		}
-		#endregion helpers
+		#endregion Helpers
 	}
 }

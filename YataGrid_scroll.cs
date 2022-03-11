@@ -250,7 +250,7 @@ namespace yata
 		#endregion Methods
 
 
-		#region handlers
+		#region Handlers
 		/// <summary>
 		/// Scrolls the table vertically.
 		/// </summary>
@@ -330,7 +330,7 @@ namespace yata
 			else if (_f._contextCe.Visible) _f._contextCe.Visible = false;
 			else if (_f._contextTa.Visible) _f._contextTa.Visible = false;
 		}
-		#endregion handlers
+		#endregion Handlers
 
 
 		/// <summary>
