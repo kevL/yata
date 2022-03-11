@@ -148,6 +148,45 @@
     <Compile Include="YataForm.Designer.cs">
       <DependentUpon>YataForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="YataForm_contextce.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_contextro.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_contexttab.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_keys.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menucells.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menuclip.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menucol.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menuedit.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menufile.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menufont.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menuhelp.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menuops.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataForm_menurows.cs">
+      <DependentUpon>YataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="YataGrid.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
