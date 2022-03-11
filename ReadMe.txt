@@ -69,9 +69,13 @@ Edit
 - Deselect : deselects selected cells, rows, and cols
 
 - Find      : Ctrl+f (focuses the Search box)
-- Find next : F3 (key Shift to find previous)
+- Find next : F3
+- Find pre  : Shift+F3
 
 - Goto : Ctrl+g (focuses the Goto box)
+
+- Goto loadchanged     : Ctrl+n (see Appendix A: note on Load)
+- Goto loadchanged pre : Ctrl+Shift+n
 
 - Default value ... : opens a dialog to edit the 2da-file's Default value (apps
                       that try to access an invalid row or col should return
@@ -99,9 +103,6 @@ Cells
 - Uppercase : converts selected cell(s) to uppercase
 
 - Apply text ... : F11 (opens a dialog that replaces selected cell(s))
-
-- Goto loadchanged : Ctrl+n (key Shift to goto previous. See Appendix A: note on
-                     Load)
 
 
 Rows
@@ -141,7 +142,7 @@ Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto=")
 
 
 Search box (type a string to search for and press [Enter] or [F3]. Note that
-            [Enter] keeps the searchbox focused while [F3] switches focus to the
+            [F3] keeps the searchbox focused while [Enter] switches focus to the
             table. [Shift] reverses the search direction
 Search options dropdown (substring or wholeword)
 
@@ -177,9 +178,10 @@ Clipboard
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
 
-- Propanel          : F7 (toggles the PropertyPanel on/off)
-- Propanel location : F8 (key Shift to reverse direction. Cycles the panel's
-                      location through the four corners of the table)
+- Propanel              : F7 (toggles the PropertyPanel on/off)
+- Propanel location     : F8 (cycles the panel's location through the four
+                          corners of the table)
+- Propanel location pre : Shift+F8 (reverse direction)
 
 - External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
                          files open. See Appendix M: WinMerge)
@@ -323,12 +325,12 @@ Ctrl+Space - focuses the table and selects the first row if no rows or cells are
              that the row that gets selected is visible.
 
 Escape - deselects any selected cells/rows/cols if not currently editing a cell
-       - if editing a cell it escapes the edit without changing the field
+       - if editing a cell it cancels the edit without changing the field
        - if the tabcontrol is focused it switches focus to the table
 
 Enter - starts editing a cell if the table has focus and only one cell is
         currently selected
-      - commits an edit if the editor box has focus
+      - accepts an edit if the editor box has focus
       - performs search if the Search box or Search Options dropdown has focus
       - performs goto if the Goto box has focus
 
@@ -339,8 +341,8 @@ Shift+Delete - when a row is selected (as indicated with a green field at the
                range of rows to delete. If all rows of a table are deleted a
                single default row will be created.
 
-Note that Cut, Copy, Paste operations have their keys listed under the Cells and
-Rows descriptions above. The Col operations do not have shortcuts.
+Note that Cut, Copy, Paste operations have their keystrokes listed under the
+Cells and Rows descriptions above. The Col operations do not have shortcuts.
 
 - Tab fastedit -
 
@@ -367,47 +369,56 @@ Shift+wheel - scrolls the table by its visible height/width if applicable; the
               Ctrl-key is also respected
 
 - click on the colheads or rowheads -
-LMB            - selects or deselects the col/row and clears other cells
+LMB            - selects or deselects the col/row and clears other cells. If an
+                 editbox is visible it will be canceled or accepted depending on
+                 the Setting "acceptedit="
 LMB+Ctrl       - selects or deselects the col/row
 LMB+Shift      - selects a range of cols/rows if a col/row is already selected
 LMB+Ctrl+Shift - you get the idea ...
+RMB            - if an editbox is visible it will be canceled or accepted
+                 depending on the Setting "acceptedit="
 
 - click on the colheads -
-LMB       - click-drag col-boundary to re-width a col (The text of a colhead
-            will appear grayed if its col has been user-sized.)
-RMB       - click a col-boundary to auto-width a col (Note that frozen cols
-            can't be re-sized.)
-RMB+Shift - sorts the table by the col either ascending or descending (Note that
-            the ID-header changes to a red color as a warning to indicate that
-            the table is not ordered correctly. Before sorting by cols, it is
+LMB       - click-drag col-boundary to re-width a col. The text of a colhead
+            will appear grayed if its col has been user-sized
+RMB       - click a col-boundary to auto-width a col. Frozen cols can't be
+            re-sized
+RMB+Shift - sorts the table by the col either ascending or descending. The
+            ID-header changes to a red color as a warning to indicate that the
+            table is not ordered correctly. Before sorting by cols, it is
             strongly suggested to check the row-IDs under 2da Ops->Test row
             order, since re-sorting by row-IDs is the best way to get your table
             back into its correct order. Tables are saved in the order that they
-            are sorted.)
+            are sorted
 
 - click on the rowheads -
-RMB - opens the context for single-row editing (This handles single-row editing
-      only - for multi-row editing see the Rows menu.)
+RMB - opens the context for single-row editing. This handles single-row editing
+      only. For multi-row editing see the Rows menu
 
 - click on a table-cell -
 LMB        - selects a cell or if already selected then starts the cell-editor,
-             or if editing a cell then a left-click on a different part of the
-             table either inside or outside the grid accepts the edit
-LMB double - selects a cell and starts the cell-editor (If a different cell is
-             already in edit, changes to that cell are accepted.)
+             or if editing a cell then a left-click on another cell accepts the
+             edit
+LMB double - selects a cell and starts the cell-editor. If a different cell is
+             being edited changes to that cell are accepted
 LMB+Ctrl   - adds or subtracts a cell from the currently selected cells
 LMB+Shift  - selects a block of contiguous cells if there is only one currently
              selected cell, or resizes a currently selected contiguous block of
-             cells (A contiguous block is required for multicell cut and copy
-             operations.)
-RMB        - selects a cell and opens the cell context (Note that if editing a
-             cell then a right-click also cancels or accepts the edit depending
-             on the Setting "acceptedit=".)
+             cells. A contiguous block is required for multicell cut and copy
+             operations
+RMB        - selects a cell and opens the cell context If a different cell is
+             being editing then a right-click cancels or accepts the edit
+             depending on the Setting "acceptedit="
 
 - click outside the grid -
 LMB - accepts an edit if editing a cell
 RMB - cancels an edit if editing a cell, otherwise deselects all cells, rows,
       and cols
+
+- click on the frozen panel -
+LMB - accepts an edit
+RMB - cancels an edit
+MMB - accepts or cancels an edit depending on the Setting "acceptedit="
 
 Note that frozen-col cells cannot be directly selected or edited. Additionally,
 note that pressing Shift when clicking on a colhead or rowhead never selects a
