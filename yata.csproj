@@ -179,7 +179,7 @@
     <Compile Include="YataGrid_scroll.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataPaths.cs">
+    <Compile Include="YataForm_pathinfo.cs">
       <DependentUpon>YataForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
