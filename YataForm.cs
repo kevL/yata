@@ -57,11 +57,6 @@ namespace yata
 		readonly PropanelBu bu_Propanel = new PropanelBu();
 
 		/// <summary>
-		/// The <c><see cref="SettingsEditor"/></c> dialog/editor.
-		/// </summary>
-		SettingsEditor _fsettings;
-
-		/// <summary>
 		/// The <c><see cref="ClipboardEditor"/></c> dialog/editor.
 		/// </summary>
 		internal ClipboardEditor _fclip;

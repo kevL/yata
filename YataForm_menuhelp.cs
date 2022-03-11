@@ -8,6 +8,14 @@ namespace yata
 {
 	sealed partial class YataForm
 	{
+		#region Fields
+		/// <summary>
+		/// The <c><see cref="SettingsEditor"/></c> dialog/editor.
+		/// </summary>
+		SettingsEditor _fsettings;
+		#endregion Fields
+
+
 		#region Handlers (help)
 		/// <summary>
 		/// Handles it-click to open ReadMe.txt.
