@@ -12,6 +12,13 @@ namespace yata
 	// Handles painting various controls on this <c>YataGrid</c>.
 	sealed partial class YataGrid
 	{
+		#region Fields (static)
+		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
+		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
+		#endregion Fields (static)
+
+
+		#region handlers (override)
 		/// <summary>
 		/// Overrides the <c>Paint</c> handler for the table itself.
 		/// </summary>
@@ -122,128 +129,10 @@ namespace yata
 				}
 			}
 		}
+		#endregion handlers (override)
 
-		/// <summary>
-		/// Labels the colheads.
-		/// </summary>
-		/// <remarks>Requires
-		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
-		/// <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
-		internal void LabelColheads()
-		{
-			var rect = new Rectangle(WidthRowhead - OffsetHori + _padHori, 0,
-									 0, HeightColhead);
-			int clip;
-			Color color;
-			Col col;
 
-			for (int c = 0; c != ColCount; ++c)
-			{
-				if (rect.X + (rect.Width = (col = Cols[c]).width()) > Left)
-				{
-					if (c == _sortcol)
-					{
-						Bitmap sort;
-						if (_sortdir == SORT_ASC)
-						{
-							if (col.selected) color = Colors.TextColSelected;
-							else              color = Colors.TextColSorted_asc;
-
-							sort  = Resources.asc_16px;
-						}
-						else
-						{
-							if (col.selected) color = Colors.TextColSelected;
-							else              color = Colors.TextColSorted_des;
-
-							sort  = Resources.des_16px;
-						}
-
-						graphics.DrawImage(sort,
-										   rect.X + rect.Width  - _offsetHoriSort,
-										   rect.Y + rect.Height - _offsetVertSort);
-
-						clip = _offsetHoriSort - 1;
-					}
-					else
-					{
-						clip = 7;
-
-						if      (col.selected)  color = Colors.TextColSelected;
-						else if (col.UserSized) color = Colors.TextColSized;
-						else                    color = Colors.Text;
-					}
-
-					rect.Width -= clip;
-					TextRenderer.DrawText(graphics,
-										  col.text,
-										  _f.FontAccent,
-										  rect,
-										  color,
-										  YataGraphics.flags);
-					rect.Width += clip;
-				}
-
-				if ((rect.X += rect.Width) > Right)
-					break;
-			}
-		}
-
-		/// <summary>
-		/// Labels the rowheads.
-		/// </summary>
-		/// <remarks>Requires
-		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
-		/// <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
-		internal void LabelRowheads()
-		{
-			var rect = new Rectangle(_padHoriRowhead - 1, 0,		// NOTE: (x)-1 is a padding tweak.
-									 WidthRowhead - 1, HeightRow);	//       (w)-1 accounts for the double vertical line
-
-			int selr = getSelectedRow();
-			Brush brush;
-
-			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
-			{
-				if ((rect.Y = HeightRow * r - OffsetVert) > Height)
-					break;
-
-				if (selr != -1)
-				{
-					if (r == selr)
-						brush = Brushes.Selected;
-					else if ((r < selr && r >= selr + RangeSelect)
-						||   (r > selr && r <= selr + RangeSelect))
-					{
-						brush = Brushes.SubSelected;
-					}
-					else
-						brush = null;
-
-					if (brush != null)
-					{
-						rect.X -= _padHoriRowhead;
-						graphics.FillRectangle(brush, rect);
-						rect.X += _padHoriRowhead;
-
-						graphics.DrawLine(Pencils.DarkLine,
-										  0,            rect.Y,
-										  WidthRowhead, rect.Y);
-						graphics.DrawLine(Pencils.DarkLine,
-										  0,            rect.Y + HeightRow,
-										  WidthRowhead, rect.Y + HeightRow);
-					}
-				}
-
-				TextRenderer.DrawText(graphics,
-									  r.ToString(CultureInfo.InvariantCulture),
-									  _f.FontAccent,
-									  rect,
-									  Colors.Text,
-									  YataGraphics.flags);
-			}
-		}
-
+		#region handlers
 		/// <summary>
 		/// Paints the frozen-id <c>Label</c>.
 		/// </summary>
@@ -423,6 +312,131 @@ namespace yata
 								  _labelsecond.Width, _labelsecond.Bottom);
 			}
 		}
+		#endregion handlers
+
+
+		#region helpers
+		/// <summary>
+		/// Labels the colheads.
+		/// </summary>
+		/// <remarks>Requires
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
+		/// <c><see cref="YataPanelCols"/>.OnPaint()</c>.</remarks>
+		internal void LabelColheads()
+		{
+			var rect = new Rectangle(WidthRowhead - OffsetHori + _padHori, 0,
+									 0, HeightColhead);
+			int clip;
+			Color color;
+			Col col;
+
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (rect.X + (rect.Width = (col = Cols[c]).width()) > Left)
+				{
+					if (c == _sortcol)
+					{
+						Bitmap sort;
+						if (_sortdir == SORT_ASC)
+						{
+							if (col.selected) color = Colors.TextColSelected;
+							else              color = Colors.TextColSorted_asc;
+
+							sort  = Resources.asc_16px;
+						}
+						else
+						{
+							if (col.selected) color = Colors.TextColSelected;
+							else              color = Colors.TextColSorted_des;
+
+							sort  = Resources.des_16px;
+						}
+
+						graphics.DrawImage(sort,
+										   rect.X + rect.Width  - _offsetHoriSort,
+										   rect.Y + rect.Height - _offsetVertSort);
+
+						clip = _offsetHoriSort - 1;
+					}
+					else
+					{
+						clip = 7;
+
+						if      (col.selected)  color = Colors.TextColSelected;
+						else if (col.UserSized) color = Colors.TextColSized;
+						else                    color = Colors.Text;
+					}
+
+					rect.Width -= clip;
+					TextRenderer.DrawText(graphics,
+										  col.text,
+										  _f.FontAccent,
+										  rect,
+										  color,
+										  YataGraphics.flags);
+					rect.Width += clip;
+				}
+
+				if ((rect.X += rect.Width) > Right)
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Labels the rowheads.
+		/// </summary>
+		/// <remarks>Requires
+		/// <c><see cref="YataGrid.graphics">YataGrid.graphics</see></c> set by
+		/// <c><see cref="YataPanelRows"/>.OnPaint()</c>.</remarks>
+		internal void LabelRowheads()
+		{
+			var rect = new Rectangle(_padHoriRowhead - 1, 0,		// NOTE: (x)-1 is a padding tweak.
+									 WidthRowhead - 1, HeightRow);	//       (w)-1 accounts for the double vertical line
+
+			int selr = getSelectedRow();
+			Brush brush;
+
+			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
+			{
+				if ((rect.Y = HeightRow * r - OffsetVert) > Height)
+					break;
+
+				if (selr != -1)
+				{
+					if (r == selr)
+						brush = Brushes.Selected;
+					else if ((r < selr && r >= selr + RangeSelect)
+						||   (r > selr && r <= selr + RangeSelect))
+					{
+						brush = Brushes.SubSelected;
+					}
+					else
+						brush = null;
+
+					if (brush != null)
+					{
+						rect.X -= _padHoriRowhead;
+						graphics.FillRectangle(brush, rect);
+						rect.X += _padHoriRowhead;
+
+						graphics.DrawLine(Pencils.DarkLine,
+										  0,            rect.Y,
+										  WidthRowhead, rect.Y);
+						graphics.DrawLine(Pencils.DarkLine,
+										  0,            rect.Y + HeightRow,
+										  WidthRowhead, rect.Y + HeightRow);
+					}
+				}
+
+				TextRenderer.DrawText(graphics,
+									  r.ToString(CultureInfo.InvariantCulture),
+									  _f.FontAccent,
+									  rect,
+									  Colors.Text,
+									  YataGraphics.flags);
+			}
+		}
+
 
 		/// <summary>
 		/// Paints the frozen-panel.
@@ -480,5 +494,6 @@ namespace yata
 								  rect.X + rect.Width, rect.Y + HeightRow);
 			}
 		}
+		#endregion helpers
 	}
 }

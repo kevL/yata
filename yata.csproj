@@ -155,10 +155,28 @@
     <Compile Include="YataData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YataGrid_editcol.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataGrid_editrow.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="YataGrid_keys.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="YataGrid_loadtable.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataGrid_metric.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataGrid_mouse.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="YataGrid_paint.cs">
+      <DependentUpon>YataGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YataGrid_scroll.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="YataPaths.cs">

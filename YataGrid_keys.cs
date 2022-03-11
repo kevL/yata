@@ -1120,6 +1120,24 @@ namespace yata
 
 
 		/// <summary>
+		/// Clears all <c><see cref="Cell">Cells</see></c> that are currently
+		/// selected.
+		/// </summary>
+		/// <param name="bypassCol"><c>true</c> to not clear selected col-cells</param>
+		/// <remarks>The caller shall call
+		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
+		/// after it deters required cell-selects.</remarks>
+		internal void ClearCellSelects(bool bypassCol = false)
+		{
+//			_anchorcell = null; // ~safety. Would need to go through all select patterns.
+
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			if (!bypassCol || !Cols[c].selected)
+				row[c].selected = false;
+		}
+
+		/// <summary>
 		/// Gets the count of <c><see cref="Row">Rows</see></c> that are
 		/// currently visible in the table.
 		/// </summary>
@@ -1235,6 +1253,96 @@ namespace yata
 					|| (_anchorcell = getFirstSelectedCell(FrozenCount)) != null)
 				&& _anchorcell.x >= FrozenCount;
 		}
+
+		/// <summary>
+		/// Checks if there is at least one selected cell and that all selected
+		/// cells are in a contiguous block. Stores the count of rows/cols in
+		/// <c><see cref="YataForm._copyvert">YataForm._copyvert</see></c> and
+		/// <c><see cref="YataForm._copyhori">YataForm._copyhori</see></c> ready
+		/// for use by
+		/// <c><see cref="YataForm._copytext">YataForm._copytext[,]</see></c>.
+		/// </summary>
+		/// <returns><c>true</c> if there is at least one selected cell and that
+		/// all selected cells are in a continguous rectangular block</returns>
+		/// <remarks>This turned out to be more complicated than first expected.
+		/// There's probably an easier way using <c>Lists</c> of x/y positions
+		/// ...</remarks>
+		internal bool areSelectedCellsContiguous()
+		{
+			int
+				r0 = -1,			// tracks current row
+				c0 = -1, c1 = -1,	// start and stop of selected cells on 1st row w/ selected cells
+				c2,      c3 = -1,	// start and stop of selected cells on subsequent rows
+				cols = -1,			// turns to 0 when 1st selected cell is found; actual val is set after 1st found row
+				rows =  0;			// count of rows w/ selected cells
+
+			for (int r = 0; r != RowCount; ++r)
+			{
+				c2 = -1;
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if (this[r,c].selected)
+					{
+						if (cols == -1) cols = 0;
+
+						if (cols == 0)					// on 1st row w/ selected cell
+						{
+							if (c0 == -1)
+							{
+								c0 = c;					// 1st selected cell
+								++rows;
+							}
+							else if (c != c1 + 1)		// 2nd+ cell - fail if not consecutive
+								return false;
+
+							c1 = c;						// set 'c1' stop to current cell
+						}
+						else							// on 2nd+ row w/ selected cell
+						{
+							if (c2 == -1)				// 1st selected cell
+							{
+								if ((c2 = c) != c0)		// fail if 1st col doesn't match 1st col
+									return false;
+							}
+							else if (c != c3 + 1)		// 2nd+ cell - fail if not consecutive
+								return false;
+
+							if (c >= c2) c3 = c;		// set 'c3' stop to current cell
+						}
+
+						if (r0 == -1) r0 = r;			// on 1st row w/ selected cell
+						else							// on 2nd+ row w/ selected cell
+						{
+							if (r != r0 && r != r0 + 1)	// fail if row not consecutive
+								return false;
+
+							r0 = r;						// advance 'r0' to current row
+						}
+					}
+				}
+
+				if (cols != -1)							// ie. bypass if a selected cell not found yet
+				{
+					if (cols == 0) cols = c1 - c0 + 1;	// 1st row w/ selected cell - set count of cols
+					else if (c2 != -1					// 2nd+ row w/ selected cell - bypass if selected cell not found on row
+						&& (c3 - c2 + 1 != cols			// fail if count of cols don't match or
+							|| c3 != c1))				// fail if last col doesn't match
+					{
+						return false;
+					}
+
+					if (c2 != -1) ++rows;
+				}
+			}
+
+			_f._copyvert = rows;
+			_f._copyhori = cols;
+
+			//logfile.Log(". " + (r0 != -1) + " " + rows + "/" + cols);
+
+			return r0 != -1;
+		}
+
 
 		/// <summary>
 		/// Assigns the start and stop row-ids that shall be used as a range of
