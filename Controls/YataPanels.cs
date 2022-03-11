@@ -229,7 +229,7 @@ namespace yata
 					break;
 			}
 
-			_grid.click_ColheadPanel(this, e);
+			_grid.click_ColheadPanel(e);
 		}
 
 		/// <summary>
@@ -382,7 +382,7 @@ namespace yata
 			}
 			_grid.Select();
 
-			_grid.click_RowheadPanel(this, e);
+			_grid.click_RowheadPanel(e);
 		}
 		#endregion Handlers (override)
 	}

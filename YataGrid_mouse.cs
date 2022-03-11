@@ -676,11 +676,10 @@ namespace yata
 		/// <c><see cref="YataPanelRows"/></c>. Selects or deselects
 		/// <c><see cref="Row">Row(s)</see></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="_panelRows"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
 		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
-		internal void click_RowheadPanel(object sender, MouseEventArgs e)
+		internal void click_RowheadPanel(MouseEventArgs e)
 		{
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
@@ -876,11 +875,10 @@ namespace yata
 		/// <c><see cref="YataPanelCols"/></c>. Selects or deselects
 		/// <c><see cref="Col">Col(s)</see></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="_panelCols"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>.net fucks with <c>RMB</c> and <c>[Alt]</c> differently
 		/// than <c>LMB</c> and <c>[Ctrl]</c>/<c>[Shift]</c>.</remarks>
-		internal void click_ColheadPanel(object sender, MouseEventArgs e)
+		internal void click_ColheadPanel(MouseEventArgs e)
 		{
 			if (!_panelCols.IsGrab && (ModifierKeys & Keys.Alt) == Keys.None)
 			{
