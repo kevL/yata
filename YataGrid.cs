@@ -467,6 +467,7 @@ namespace yata
 		#endregion eventhandler Resize
 
 
+		#region Select
 		/// <summary>
 		/// Clears all <c><see cref="Cell">Cells</see></c>/
 		/// <c><see cref="Row">Rows</see></c>/
@@ -513,7 +514,6 @@ namespace yata
 		}
 
 
-		#region Select
 		/// <summary>
 		/// Selects a specified <c><see cref="Cell"/></c> and invalidates stuff.
 		/// </summary>

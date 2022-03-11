@@ -1107,7 +1107,6 @@ namespace yata
 					_labelid.MouseClick += labelid_MouseClick;
 					_labelid.MouseClick += (sender, e) => Select();
 				}
-
 				_panelCols.Controls.Add(_labelid);
 
 				if (ColCount > 1)
@@ -1124,7 +1123,6 @@ namespace yata
 						_labelfirst.MouseClick += labelfirst_MouseClick;
 						_labelfirst.MouseClick += (sender, e) => Select();
 					}
-
 					_panelCols.Controls.Add(_labelfirst);
 
 					if (ColCount > 2)
@@ -1141,7 +1139,6 @@ namespace yata
 							_labelsecond.MouseClick += labelsecond_MouseClick;
 							_labelsecond.MouseClick += (sender, e) => Select();
 						}
-
 						_panelCols.Controls.Add(_labelsecond);
 					}
 				}

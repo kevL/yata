@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace yata
 {
-	// Routines for detering control sizes and distances on and around the grid.
+	// Routines for detering control-sizes and distances in and around the grid.
 	sealed partial class YataGrid
 	{
 		#region Fields (static)
