@@ -24,7 +24,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f"></param>
 		/// <remarks>These values are the same for all loaded tables.</remarks>
-		internal static void SetStaticMetrics(YataForm f)
+		internal static void SetStaticMetrics(Yata f)
 		{
 			HeightColhead = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.FontAccent) + _padVert * 2;
 			HeightRow     = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, f.Font)       + _padVert * 2;
@@ -39,7 +39,7 @@ namespace yata
 		/// tabs/tables.
 		/// </summary>
 		/// <param name="f"></param>
-		internal static void metricStaticHeads(YataForm f)
+		internal static void metricStaticHeads(Yata f)
 		{
 			YataGrid table;
 
@@ -135,8 +135,8 @@ namespace yata
 
 		/// <summary>
 		/// Lays out this <c>YataGrid</c> per
-		/// <c><see cref="YataForm.doFont()">YataForm.doFont()</see></c> or
-		/// <c><see cref="YataForm"/>.AutosizeCols()</c> or when row(s) are
+		/// <c><see cref="Yata.doFont()">Yata.doFont()</see></c> or
+		/// <c><see cref="Yata"/>.AutosizeCols()</c> or when row(s) are
 		/// inserted, deleted, or cleared.
 		/// </summary>
 		/// <param name="r">first row to consider as changed (<c>-1</c> if

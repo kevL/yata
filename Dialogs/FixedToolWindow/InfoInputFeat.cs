@@ -21,7 +21,7 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
+		Yata _f;
 		Cell _cell;
 
 		bool _init;
@@ -36,7 +36,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f"></param>
 		/// <param name="cell"></param>
-		internal InfoInputFeat(YataForm f, Cell cell)
+		internal InfoInputFeat(Yata f, Cell cell)
 		{
 			_f    = f;
 			_cell = cell;
@@ -209,11 +209,11 @@ namespace yata
 				btn_Clear.Enabled = false;
 
 				if (val == gs.Stars)
-					_f.int0 = YataForm.II_ASSIGN_STARS;
+					_f.int0 = Yata.II_ASSIGN_STARS;
 				else
-					_f.int0 = YataForm.II_INIT_INVALID;
+					_f.int0 = Yata.II_INIT_INVALID;
 
-				_f.int1 = YataForm.II_ASSIGN_STARS;
+				_f.int1 = Yata.II_ASSIGN_STARS;
 
 				cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 			}
@@ -332,7 +332,7 @@ namespace yata
 					btn_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
-					_f.int1 = YataForm.II_ASSIGN_STARS;
+					_f.int1 = Yata.II_ASSIGN_STARS;
 				}
 				else
 				{

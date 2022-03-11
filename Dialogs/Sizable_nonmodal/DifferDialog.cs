@@ -24,7 +24,7 @@ namespace yata
 		/// <param name="label">info to be displayed with a proportional font</param>
 		/// <param name="copyable">info to be displayed with a fixed font in a
 		/// RichTextBox so it can be copied</param>
-		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
+		/// <param name="f">parent <c><see cref="Yata"/></c></param>
 		/// <param name="color"></param>
 		/// <param name="goto"></param>
 		/// <param name="reset"></param>
@@ -32,7 +32,7 @@ namespace yata
 				string title,
 				string label,
 				string copyable,
-				YataForm f,
+				Yata f,
 				Color color,
 				bool @goto,
 				bool reset)
@@ -112,12 +112,12 @@ namespace yata
 
 		/// <summary>
 		/// Overrides this dialog's <c>FormClosing</c> handler. Sets the static
-		/// location and nulls the differ in <c><see cref="YataForm"/></c>.
+		/// location and nulls the differ in <c><see cref="Yata"/></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as YataForm)._fdiffer = null;
+			(_f as Yata)._fdiffer = null;
 			base.OnFormClosing(e);
 		}
 
@@ -147,13 +147,13 @@ namespace yata
 		#region Handlers
 		/// <summary>
 		/// Handles a click on the Reset button. Clears and desyncs the diff'd
-		/// tables. Closes this dialog via <c><see cref="YataForm"/></c>.
+		/// tables. Closes this dialog via <c><see cref="Yata"/></c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void click_btnReset(object sender, EventArgs e)
 		{
-			(_f as YataForm).tabclick_DiffReset(sender, e);
+			(_f as Yata).tabclick_DiffReset(sender, e);
 		}
 
 		/// <summary>
@@ -166,7 +166,7 @@ namespace yata
 		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			(_f as YataForm).GotoDiffCell();
+			(_f as Yata).GotoDiffCell();
 		}
 		#endregion Handlers
 

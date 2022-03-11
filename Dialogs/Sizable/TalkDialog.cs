@@ -44,7 +44,7 @@ namespace yata
 		/// <remarks>Check that the <c><see cref="Cell.text">Cell.text</see></c>
 		/// of <paramref name="cell"/> parses to a valid value before invoking
 		/// this <c>TalkDialog</c>.</remarks>
-		internal TalkDialog(Cell cell, YataForm f)
+		internal TalkDialog(Cell cell, Yata f)
 		{
 			_f = f;
 
@@ -86,7 +86,7 @@ namespace yata
 				cb_Custo.Text = TalkReader.AltLabel;
 
 
-			if ((btn_Accept.Enabled = !YataForm.Table.Readonly))
+			if ((btn_Accept.Enabled = !Yata.Table.Readonly))
 				btn_Accept.Select();
 			else
 				btn_Cancel.Select();
@@ -176,7 +176,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles a click on the Select button. Passes the current strref to
-		/// <c>YataForm</c> and closes this dialog.
+		/// <c>Yata</c> and closes this dialog.
 		/// </summary>
 		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
 		/// <param name="e"></param>
@@ -203,7 +203,7 @@ namespace yata
 				if (_eId != TalkReader.invalid && cb_Custo.Checked)
 					_eId |= TalkReader.bitCusto;
 
-				(_f as YataForm)._strref = _eId.ToString(CultureInfo.InvariantCulture);
+				(_f as Yata)._strref = _eId.ToString(CultureInfo.InvariantCulture);
 				Close();
 			}
 		}
@@ -220,10 +220,10 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = YataForm.GetTlkFilter();
+					ofd.Filter = Yata.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, (_f as YataForm).it_PathTalkD);
+						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkD);
 				}
 
 				lo = TalkReader.loDialo;
@@ -234,10 +234,10 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = YataForm.GetTlkFilter();
+					ofd.Filter = Yata.GetTlkFilter();
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, (_f as YataForm).it_PathTalkC, true);
+						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkC, true);
 				}
 
 				lo = TalkReader.loCusto;

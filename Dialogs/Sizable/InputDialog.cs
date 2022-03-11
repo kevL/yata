@@ -54,10 +54,10 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f">parent <c><see cref="YataForm"/></c></param>
+		/// <param name="f">parent <c><see cref="Yata"/></c></param>
 		/// <param name="selc">the currently selected col-id; default -2 enables
 		/// defaultval input</param>
-		internal InputDialog(YataForm f, int selc = DEFVAL)
+		internal InputDialog(Yata f, int selc = DEFVAL)
 		{
 			_f = f;
 			_selc = selc;
@@ -203,7 +203,7 @@ namespace yata
 		{
 			if (_selc != DEFVAL) // colhead
 			{
-				string[] fields = YataForm.Table.Fields;
+				string[] fields = Yata.Table.Fields;
 				for (int i = 0; i != fields.Length; ++i)
 				{
 					if ((_selc == -1 || _selc != i + 1)

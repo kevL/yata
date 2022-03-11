@@ -13,10 +13,10 @@ namespace yata
 		/// <summary>
 		/// The editor for Settings.Cfg.
 		/// </summary>
-		/// <param name="f">pointer to <c><see cref="YataForm"/></c></param>
+		/// <param name="f">pointer to <c><see cref="Yata"/></c></param>
 		/// <param name="lines">array of <c>strings</c> in user's current
 		/// settings file</param>
-		internal SettingsEditor(YataForm f, string[] lines)
+		internal SettingsEditor(Yata f, string[] lines)
 		{
 			_f = f;
 
@@ -47,7 +47,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as YataForm).CloseSettingsEditor();
+			(_f as Yata).CloseSettingsEditor();
 			base.OnFormClosing(e);
 		}
 

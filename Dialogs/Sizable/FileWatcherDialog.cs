@@ -58,9 +58,9 @@ namespace yata
 		/// <c><see cref="bu_Action"/></c> operation.
 		/// <list type="bullet">
 		/// <item><c><see cref="FwdType.FileDeleted">Fwd.FileDeleted</see></c> -
-		/// <c><see cref="YataForm.fileclick_Save()">YataForm.fileclick_Save()</see></c></item>
+		/// <c><see cref="Yata.fileclick_Save()">Yata.fileclick_Save()</see></c></item>
 		/// <item><c><see cref="FwdType.FileChanged">Fwd.FileChanged</see></c> -
-		/// <c><see cref="YataForm.fileclick_Reload()">YataForm.fileclick_Reload()</see></c></item>
+		/// <c><see cref="Yata.fileclick_Reload()">Yata.fileclick_Reload()</see></c></item>
 		/// </list>
 		/// </summary>
 		internal FwdType _fwdType;

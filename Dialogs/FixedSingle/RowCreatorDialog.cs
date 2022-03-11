@@ -40,12 +40,12 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f">the <c><see cref="YataForm"/></c></param>
+		/// <param name="f">the <c><see cref="Yata"/></c></param>
 		/// <param name="r">the currently selected row-id</param>
 		/// <param name="copyfillenabled"><c>true</c> if at least one
 		/// <c><see cref="Row"/></c> has been copied into
-		/// <c><see cref="YataForm"/>._copyr</c></param>
-		internal RowCreatorDialog(YataForm f, int r, bool copyfillenabled)
+		/// <c><see cref="Yata"/>._copyr</c></param>
+		internal RowCreatorDialog(Yata f, int r, bool copyfillenabled)
 		{
 			_f = f;
 
@@ -120,7 +120,7 @@ namespace yata
 					break;
 			}
 
-			tb_StartAdd   .Text = YataForm.Table.Rows.Count.ToString(CultureInfo.InvariantCulture);
+			tb_StartAdd   .Text = Yata.Table.Rows.Count.ToString(CultureInfo.InvariantCulture);
 			tb_StartInsert.Text = (r + 1).ToString(CultureInfo.InvariantCulture);
 
 			int result = Int32.Parse(_count, CultureInfo.InvariantCulture);	// shall be valid and greater than 0.
@@ -259,7 +259,7 @@ namespace yata
 					{
 						int result;
 						if (Int32.TryParse(tb.Text, out result)
-							&& result > -1 && result <= YataForm.Table.RowCount)
+							&& result > -1 && result <= Yata.Table.RowCount)
 						{
 							tb_StopFinish.Text = (result + result2 - 1).ToString(CultureInfo.InvariantCulture);
 						}
@@ -311,9 +311,9 @@ namespace yata
 					int result2;
 					if (tb == tb_StartInsert)
 					{
-						if (result > YataForm.Table.Rows.Count)
+						if (result > Yata.Table.Rows.Count)
 						{
-							tb_StartInsert.Text = YataForm.Table.Rows.Count.ToString(CultureInfo.InvariantCulture); // -> recurse
+							tb_StartInsert.Text = Yata.Table.Rows.Count.ToString(CultureInfo.InvariantCulture); // -> recurse
 							tb_StartInsert.SelectionStart = tb_StartInsert.Text.Length;
 						}
 						else
@@ -411,7 +411,7 @@ namespace yata
 		{
 			_cancel = true;
 
-			var f = _f as YataForm;
+			var f = _f as Yata;
 
 			int result;
 			if (rb_StartAdd.Checked)
@@ -439,7 +439,7 @@ namespace yata
 			{
 				if (Int32.TryParse(tb_StartInsert.Text, out result)
 					&& (f._startCr = result) > -1
-					&&  f._startCr <= YataForm.Table.RowCount)
+					&&  f._startCr <= Yata.Table.RowCount)
 				{
 					if (rb_StopFinish.Checked)
 					{
@@ -470,9 +470,9 @@ namespace yata
 					ib.ShowDialog(this);
 				}
 			}
-			else if (rb_FillCopied  .Checked) f._fillCr = YataForm.CrFillType.Copied;
-			else if (rb_FillSelected.Checked) f._fillCr = YataForm.CrFillType.Selected;
-			else                              f._fillCr = YataForm.CrFillType.Stars; // rb_FillStars.Checked
+			else if (rb_FillCopied  .Checked) f._fillCr = Yata.CrFillType.Copied;
+			else if (rb_FillSelected.Checked) f._fillCr = Yata.CrFillType.Selected;
+			else                              f._fillCr = Yata.CrFillType.Stars; // rb_FillStars.Checked
 		}
 
 

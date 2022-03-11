@@ -11,38 +11,37 @@ namespace yata
 	/// allow the user to select multiple choices or checkboxes that act like
 	/// radiobuttons if only a unique choice is allowed; alternately the dialog
 	/// can load as a combobox with a list of unique choices. The return to
-	/// YataForm can be a <c>string</c>, an <c>int</c>, or a hexadecimal
-	/// <c>int</c>.
+	/// Yata can be a <c>string</c>, an <c>int</c>, or a hexadecimal <c>int</c>.
 	/// 
 	/// 
-	/// Two <c><see cref="YataForm"/></c> variables shall be initialized: either
-	/// <c><see cref="YataForm.int0"/></c> and
-	/// <c><see cref="YataForm.int1"/></c> or <c><see cref="YataForm.str0"/></c>
-	/// and <c><see cref="YataForm.str1"/></c> according to whether the return
-	/// will be an <c>int</c> or a <c>string</c>. <c>int0</c> or <c>str0</c> is
-	/// the initial value that was passed into this dialog; <c>int1</c> or
-	/// <c>str1</c> will be the return value to <c>YataForm</c> itself. Two
-	/// conditions must be met before <c>YataForm</c> does anything with a
-	/// return: (1) the user must click the Accept button (2) the return value
-	/// must be different than the value that was passed into this dialog.
+	/// Two <c><see cref="Yata"/></c> variables shall be initialized: either
+	/// <c><see cref="Yata.int0"/></c> and <c><see cref="Yata.int1"/></c> or
+	/// <c><see cref="Yata.str0"/></c> and <c><see cref="Yata.str1"/></c>
+	/// according to whether the return will be an <c>int</c> or a
+	/// <c>string</c>. <c>int0</c> or <c>str0</c> is the initial value that was
+	/// passed into this dialog; <c>int1</c> or <c>str1</c> will be the return
+	/// value to <c>Yata</c> itself. Two conditions must be met before
+	/// <c>Yata</c> does anything with a return: (1) the user must click the
+	/// Accept button (2) the return value must be different than the value that
+	/// was passed into this dialog.
 	/// 
 	/// 
-	/// If a value is passed in from <c>YataForm</c> that this dialog does not
+	/// If a value is passed in from <c>Yata</c> that this dialog does not
 	/// recognize as valid (ie. the value is not listed as any of the choices
 	/// that user can select) then default values shall be assigned to the
 	/// <c>0</c> and <c>1</c> variables. <c>str0</c> and <c>str1</c> are
 	/// initialized with the passed in value unless the passed in value is
 	/// considered invalid, for which <c>str1</c> will be initialzed to
 	/// <c>****</c>; if not the user needs to choose a different string-value to
-	/// return or else <c>YataForm</c> won't bother with it.
+	/// return or else <c>Yata</c> won't bother with it.
 	/// 
 	/// 
 	/// Integer returns, however, are trickier. Very tricky ...
 	/// 
 	/// 
 	/// The value displayed at the top of a checkbox-configuration shall be the
-	/// value that will be returned to <c>YataForm</c> iff user clicks the
-	/// Accept button. A combobox-configuration displays the value that will be
+	/// value that will be returned to <c>Yata</c> iff user clicks the Accept
+	/// button. A combobox-configuration displays the value that will be
 	/// returned (iff user clicks the Accept button) in the combobox itself.
 	/// </summary>
 	sealed partial class InfoInputSpells
@@ -63,7 +62,7 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
+		Yata _f;
 		Cell _cell;
 
 		bool _init;
@@ -78,7 +77,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f"></param>
 		/// <param name="cell"></param>
-		internal InfoInputSpells(YataForm f, Cell cell)
+		internal InfoInputSpells(Yata f, Cell cell)
 		{
 			_f    = f;
 			_cell = cell;
@@ -166,37 +165,37 @@ namespace yata
 										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 										  out result))
 					{
-						cb_00.Checked = ((result & YataForm.META_EMPOWER)            != 0); // standard ->
-						cb_01.Checked = ((result & YataForm.META_EXTEND)             != 0);
-						cb_02.Checked = ((result & YataForm.META_MAXIMIZE)           != 0);
-						cb_03.Checked = ((result & YataForm.META_QUICKEN)            != 0);
-						cb_04.Checked = ((result & YataForm.META_SILENT)             != 0);
-						cb_05.Checked = ((result & YataForm.META_STILL)              != 0);
-						cb_06.Checked = ((result & YataForm.META_PERSISTENT)         != 0);
-						cb_07.Checked = ((result & YataForm.META_PERMANENT)          != 0);
+						cb_00.Checked = ((result & Yata.META_EMPOWER)            != 0); // standard ->
+						cb_01.Checked = ((result & Yata.META_EXTEND)             != 0);
+						cb_02.Checked = ((result & Yata.META_MAXIMIZE)           != 0);
+						cb_03.Checked = ((result & Yata.META_QUICKEN)            != 0);
+						cb_04.Checked = ((result & Yata.META_SILENT)             != 0);
+						cb_05.Checked = ((result & Yata.META_STILL)              != 0);
+						cb_06.Checked = ((result & Yata.META_PERSISTENT)         != 0);
+						cb_07.Checked = ((result & Yata.META_PERMANENT)          != 0);
 
-						cb_08.Checked = ((result & YataForm.META_I_BESHADOWED_BLAST) != 0); // Eldritch Essences ->
-						cb_09.Checked = ((result & YataForm.META_I_BEWITCHING_BLAST) != 0);
-						cb_10.Checked = ((result & YataForm.META_I_BINDING_BLAST)    != 0);
-						cb_11.Checked = ((result & YataForm.META_I_BRIMSTONE_BLAST)  != 0);
-						cb_12.Checked = ((result & YataForm.META_I_DRAINING_BLAST)   != 0);
-						cb_13.Checked = ((result & YataForm.META_I_FRIGHTFUL_BLAST)  != 0);
-						cb_14.Checked = ((result & YataForm.META_I_HELLRIME_BLAST)   != 0);
-						cb_15.Checked = ((result & YataForm.META_I_HINDERING_BLAST)  != 0);
-						cb_16.Checked = ((result & YataForm.META_I_NOXIOUS_BLAST)    != 0);
-						cb_17.Checked = ((result & YataForm.META_I_UTTERDARK_BLAST)  != 0);
-						cb_18.Checked = ((result & YataForm.META_I_VITRIOLIC_BLAST)  != 0);
+						cb_08.Checked = ((result & Yata.META_I_BESHADOWED_BLAST) != 0); // Eldritch Essences ->
+						cb_09.Checked = ((result & Yata.META_I_BEWITCHING_BLAST) != 0);
+						cb_10.Checked = ((result & Yata.META_I_BINDING_BLAST)    != 0);
+						cb_11.Checked = ((result & Yata.META_I_BRIMSTONE_BLAST)  != 0);
+						cb_12.Checked = ((result & Yata.META_I_DRAINING_BLAST)   != 0);
+						cb_13.Checked = ((result & Yata.META_I_FRIGHTFUL_BLAST)  != 0);
+						cb_14.Checked = ((result & Yata.META_I_HELLRIME_BLAST)   != 0);
+						cb_15.Checked = ((result & Yata.META_I_HINDERING_BLAST)  != 0);
+						cb_16.Checked = ((result & Yata.META_I_NOXIOUS_BLAST)    != 0);
+						cb_17.Checked = ((result & Yata.META_I_UTTERDARK_BLAST)  != 0);
+						cb_18.Checked = ((result & Yata.META_I_VITRIOLIC_BLAST)  != 0);
 
-						cb_19.Checked = ((result & YataForm.META_I_ELDRITCH_CHAIN)   != 0); // Blast Shapes ->
-						cb_20.Checked = ((result & YataForm.META_I_ELDRITCH_CONE)    != 0);
-						cb_21.Checked = ((result & YataForm.META_I_ELDRITCH_DOOM)    != 0);
-						cb_22.Checked = ((result & YataForm.META_I_ELDRITCH_SPEAR)   != 0);
-						cb_23.Checked = ((result & YataForm.META_I_HIDEOUS_BLOW)     != 0);
+						cb_19.Checked = ((result & Yata.META_I_ELDRITCH_CHAIN)   != 0); // Blast Shapes ->
+						cb_20.Checked = ((result & Yata.META_I_ELDRITCH_CONE)    != 0);
+						cb_21.Checked = ((result & Yata.META_I_ELDRITCH_DOOM)    != 0);
+						cb_22.Checked = ((result & Yata.META_I_ELDRITCH_SPEAR)   != 0);
+						cb_23.Checked = ((result & Yata.META_I_HIDEOUS_BLOW)     != 0);
 
 						metamagicGroups(result);
 
 						// TODO: There is an issue. If an unconventional value is passed
-						// in from YataForm it could have bits for both standard metamagic
+						// in from Yata it could have bits for both standard metamagic
 						// and invocation metamagic which should be disallowed here.
 						// The initialization routine will then check disabled checkboxes,
 						// which should never happen ...
@@ -206,11 +205,11 @@ namespace yata
 						// to keep: standard or invocation ... and I don't want to
 						// set that up.
 
-						if ((result & ~(YataForm.META_STANDARD | YataForm.META_I_ALL)) != 0) // invalid - bits outside allowed range
+						if ((result & ~(Yata.META_STANDARD | Yata.META_I_ALL)) != 0) // invalid - bits outside allowed range
 						{
 							_f.int0 = result;
 							// crop 'result' so 'int1' differs from 'int0' ->
-							printHexString(_f.int1 = (result &= (YataForm.META_STANDARD | YataForm.META_I_ALL)));
+							printHexString(_f.int1 = (result &= (Yata.META_STANDARD | Yata.META_I_ALL)));
 						}
 						else
 							printHexString(_f.int0 = _f.int1 = result);
@@ -219,7 +218,7 @@ namespace yata
 					}
 					else // is not a valid hex-value ->
 					{
-						_f.int0 = YataForm.II_INIT_INVALID;
+						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
 						btn_Clear.Enabled = false;
 					}
@@ -239,18 +238,18 @@ namespace yata
 										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
 										  out result))
 					{
-						cb_00.Checked = ((result & YataForm.TARGET_SELF)       != 0);
-						cb_01.Checked = ((result & YataForm.TARGET_CREATURE)   != 0);
-						cb_02.Checked = ((result & YataForm.TARGET_GROUND)     != 0);
-						cb_03.Checked = ((result & YataForm.TARGET_ITEMS)      != 0);
-						cb_04.Checked = ((result & YataForm.TARGET_DOORS)      != 0);
-						cb_05.Checked = ((result & YataForm.TARGET_PLACEABLES) != 0);
-						cb_06.Checked = ((result & YataForm.TARGET_TRIGGERS)   != 0);
+						cb_00.Checked = ((result & Yata.TARGET_SELF)       != 0);
+						cb_01.Checked = ((result & Yata.TARGET_CREATURE)   != 0);
+						cb_02.Checked = ((result & Yata.TARGET_GROUND)     != 0);
+						cb_03.Checked = ((result & Yata.TARGET_ITEMS)      != 0);
+						cb_04.Checked = ((result & Yata.TARGET_DOORS)      != 0);
+						cb_05.Checked = ((result & Yata.TARGET_PLACEABLES) != 0);
+						cb_06.Checked = ((result & Yata.TARGET_TRIGGERS)   != 0);
 
-						if ((result & ~YataForm.TARGET_TOTAL) != 0)
+						if ((result & ~Yata.TARGET_TOTAL) != 0)
 						{
 							_f.int0 = result;
-							printHexString(_f.int1 = (result &= YataForm.TARGET_TOTAL));
+							printHexString(_f.int1 = (result &= Yata.TARGET_TOTAL));
 						}
 						else
 							printHexString(_f.int0 = _f.int1 = result);
@@ -259,7 +258,7 @@ namespace yata
 					}
 					else // is not a valid hex-value ->
 					{
-						_f.int0 = YataForm.II_INIT_INVALID;
+						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
 						btn_Clear.Enabled = false;
 					}
@@ -339,7 +338,7 @@ namespace yata
 
 					if (val == gs.Stars)
 					{
-						_f.int0 = _f.int1 = YataForm.II_ASSIGN_STARS;
+						_f.int0 = _f.int1 = Yata.II_ASSIGN_STARS;
 						btn_Clear.Enabled = false;
 						break;
 					}
@@ -352,23 +351,23 @@ namespace yata
 					{
 						switch (result)
 						{
-							case YataForm.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
-							case YataForm.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
-							case YataForm.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
-							case YataForm.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
-							case YataForm.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
-							case YataForm.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
-							case YataForm.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
-							case YataForm.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
-							case YataForm.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
-							case YataForm.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
-							case YataForm.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
+							case Yata.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
+							case Yata.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
+							case Yata.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
+							case Yata.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
+							case Yata.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
+							case Yata.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
+							case Yata.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
+							case Yata.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
+							case Yata.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
+							case Yata.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
+							case Yata.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
 
-							case YataForm.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Blast Shapes ->
-							case YataForm.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
-							case YataForm.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
-							case YataForm.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
-							case YataForm.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
+							case Yata.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Blast Shapes ->
+							case Yata.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
+							case Yata.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
+							case Yata.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
+							case Yata.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
 						}
 
 						if (cbx_Val.SelectedIndex != cbx_Val.Items.Count - 1)
@@ -378,8 +377,8 @@ namespace yata
 						}
 					}
 
-					_f.int0 = YataForm.II_INIT_INVALID;
-					_f.int1 = YataForm.II_ASSIGN_STARS;
+					_f.int0 = Yata.II_INIT_INVALID;
+					_f.int1 = Yata.II_ASSIGN_STARS;
 					break;
 
 				case TargetingUI: // int-val,dropdown,unique
@@ -584,23 +583,23 @@ namespace yata
 
 			dropdown();
 
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast)); // Eldritch Essences ->
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast)); // Eldritch Essences ->
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast));
 
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain)); // Blast Shapes ->
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
-			cbx_Val.Items.Add(new tui(toHexString(YataForm.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain)); // Blast Shapes ->
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
+			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
 
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -674,10 +673,10 @@ namespace yata
 			{
 				btn_Clear.Enabled = false;
 
-				if (val == gs.Stars) _f.int0 = YataForm.II_ASSIGN_STARS;
-				else                 _f.int0 = YataForm.II_INIT_INVALID;
+				if (val == gs.Stars) _f.int0 = Yata.II_ASSIGN_STARS;
+				else                 _f.int0 = Yata.II_INIT_INVALID;
 
-				_f.int1 = YataForm.II_ASSIGN_STARS;
+				_f.int1 = Yata.II_ASSIGN_STARS;
 
 				cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 			}
@@ -869,125 +868,125 @@ namespace yata
 		{
 			if (_cb == cb_00) // standard ->
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_EMPOWER;
-				else             _f.int1 &= ~YataForm.META_EMPOWER;
+				if (_cb.Checked) _f.int1 |=  Yata.META_EMPOWER;
+				else             _f.int1 &= ~Yata.META_EMPOWER;
 			}
 			else if (_cb == cb_01)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_EXTEND;
-				else             _f.int1 &= ~YataForm.META_EXTEND;
+				if (_cb.Checked) _f.int1 |=  Yata.META_EXTEND;
+				else             _f.int1 &= ~Yata.META_EXTEND;
 			}
 			else if (_cb == cb_02)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_MAXIMIZE;
-				else             _f.int1 &= ~YataForm.META_MAXIMIZE;
+				if (_cb.Checked) _f.int1 |=  Yata.META_MAXIMIZE;
+				else             _f.int1 &= ~Yata.META_MAXIMIZE;
 			}
 			else if (_cb == cb_03)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_QUICKEN;
-				else             _f.int1 &= ~YataForm.META_QUICKEN;
+				if (_cb.Checked) _f.int1 |=  Yata.META_QUICKEN;
+				else             _f.int1 &= ~Yata.META_QUICKEN;
 			}
 			else if (_cb == cb_04)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_SILENT;
-				else             _f.int1 &= ~YataForm.META_SILENT;
+				if (_cb.Checked) _f.int1 |=  Yata.META_SILENT;
+				else             _f.int1 &= ~Yata.META_SILENT;
 			}
 			else if (_cb == cb_05)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_STILL;
-				else             _f.int1 &= ~YataForm.META_STILL;
+				if (_cb.Checked) _f.int1 |=  Yata.META_STILL;
+				else             _f.int1 &= ~Yata.META_STILL;
 			}
 			else if (_cb == cb_06)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_PERSISTENT;
-				else             _f.int1 &= ~YataForm.META_PERSISTENT;
+				if (_cb.Checked) _f.int1 |=  Yata.META_PERSISTENT;
+				else             _f.int1 &= ~Yata.META_PERSISTENT;
 			}
 			else if (_cb == cb_07)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_PERMANENT;
-				else             _f.int1 &= ~YataForm.META_PERMANENT;
+				if (_cb.Checked) _f.int1 |=  Yata.META_PERMANENT;
+				else             _f.int1 &= ~Yata.META_PERMANENT;
 			}
 
 			else if (_cb == cb_08) // Eldritch Essences ->
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BESHADOWED_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_BESHADOWED_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_BESHADOWED_BLAST;
+				else             _f.int1 &= ~Yata.META_I_BESHADOWED_BLAST;
 			}
 			else if (_cb == cb_09)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BEWITCHING_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_BEWITCHING_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_BEWITCHING_BLAST;
+				else             _f.int1 &= ~Yata.META_I_BEWITCHING_BLAST;
 			}
 			else if (_cb == cb_10)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BINDING_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_BINDING_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_BINDING_BLAST;
+				else             _f.int1 &= ~Yata.META_I_BINDING_BLAST;
 			}
 			else if (_cb == cb_11)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_BRIMSTONE_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_BRIMSTONE_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_BRIMSTONE_BLAST;
+				else             _f.int1 &= ~Yata.META_I_BRIMSTONE_BLAST;
 			}
 			else if (_cb == cb_12)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_DRAINING_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_DRAINING_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_DRAINING_BLAST;
+				else             _f.int1 &= ~Yata.META_I_DRAINING_BLAST;
 			}
 			else if (_cb == cb_13)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_FRIGHTFUL_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_FRIGHTFUL_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_FRIGHTFUL_BLAST;
+				else             _f.int1 &= ~Yata.META_I_FRIGHTFUL_BLAST;
 			}
 			else if (_cb == cb_14)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HELLRIME_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_HELLRIME_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_HELLRIME_BLAST;
+				else             _f.int1 &= ~Yata.META_I_HELLRIME_BLAST;
 			}
 			else if (_cb == cb_15)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HINDERING_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_HINDERING_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_HINDERING_BLAST;
+				else             _f.int1 &= ~Yata.META_I_HINDERING_BLAST;
 			}
 			else if (_cb == cb_16)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_NOXIOUS_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_NOXIOUS_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_NOXIOUS_BLAST;
+				else             _f.int1 &= ~Yata.META_I_NOXIOUS_BLAST;
 			}
 			else if (_cb == cb_17)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_UTTERDARK_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_UTTERDARK_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_UTTERDARK_BLAST;
+				else             _f.int1 &= ~Yata.META_I_UTTERDARK_BLAST;
 			}
 			else if (_cb == cb_18)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_VITRIOLIC_BLAST;
-				else             _f.int1 &= ~YataForm.META_I_VITRIOLIC_BLAST;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_VITRIOLIC_BLAST;
+				else             _f.int1 &= ~Yata.META_I_VITRIOLIC_BLAST;
 			}
 
 			else if (_cb == cb_19) // Blast Shapes ->
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_CHAIN;
-				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_CHAIN;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_ELDRITCH_CHAIN;
+				else             _f.int1 &= ~Yata.META_I_ELDRITCH_CHAIN;
 			}
 			else if (_cb == cb_20)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_CONE;
-				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_CONE;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_ELDRITCH_CONE;
+				else             _f.int1 &= ~Yata.META_I_ELDRITCH_CONE;
 			}
 			else if (_cb == cb_21)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_DOOM;
-				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_DOOM;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_ELDRITCH_DOOM;
+				else             _f.int1 &= ~Yata.META_I_ELDRITCH_DOOM;
 			}
 			else if (_cb == cb_22)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_ELDRITCH_SPEAR;
-				else             _f.int1 &= ~YataForm.META_I_ELDRITCH_SPEAR;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_ELDRITCH_SPEAR;
+				else             _f.int1 &= ~Yata.META_I_ELDRITCH_SPEAR;
 			}
 			else if (_cb == cb_23)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.META_I_HIDEOUS_BLOW;
-				else             _f.int1 &= ~YataForm.META_I_HIDEOUS_BLOW;
+				if (_cb.Checked) _f.int1 |=  Yata.META_I_HIDEOUS_BLOW;
+				else             _f.int1 &= ~Yata.META_I_HIDEOUS_BLOW;
 			}
 
 			_init = true;
@@ -1005,38 +1004,38 @@ namespace yata
 		{
 			if (_cb == cb_00)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_SELF;
-				else             _f.int1 &= ~YataForm.TARGET_SELF;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_SELF;
+				else             _f.int1 &= ~Yata.TARGET_SELF;
 			}
 			else if (_cb == cb_01)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_CREATURE;
-				else             _f.int1 &= ~YataForm.TARGET_CREATURE;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_CREATURE;
+				else             _f.int1 &= ~Yata.TARGET_CREATURE;
 			}
 			else if (_cb == cb_02)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_GROUND;
-				else             _f.int1 &= ~YataForm.TARGET_GROUND;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_GROUND;
+				else             _f.int1 &= ~Yata.TARGET_GROUND;
 			}
 			else if (_cb == cb_03)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_ITEMS;
-				else             _f.int1 &= ~YataForm.TARGET_ITEMS;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_ITEMS;
+				else             _f.int1 &= ~Yata.TARGET_ITEMS;
 			}
 			else if (_cb == cb_04)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_DOORS;
-				else             _f.int1 &= ~YataForm.TARGET_DOORS;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_DOORS;
+				else             _f.int1 &= ~Yata.TARGET_DOORS;
 			}
 			else if (_cb == cb_05)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_PLACEABLES;
-				else             _f.int1 &= ~YataForm.TARGET_PLACEABLES;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_PLACEABLES;
+				else             _f.int1 &= ~Yata.TARGET_PLACEABLES;
 			}
 			else if (_cb == cb_06)
 			{
-				if (_cb.Checked) _f.int1 |=  YataForm.TARGET_TRIGGERS;
-				else             _f.int1 &= ~YataForm.TARGET_TRIGGERS;
+				if (_cb.Checked) _f.int1 |=  Yata.TARGET_TRIGGERS;
+				else             _f.int1 &= ~Yata.TARGET_TRIGGERS;
 			}
 
 			printHexString(_f.int1);
@@ -1105,7 +1104,7 @@ namespace yata
 					btn_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
-					_f.int1 = YataForm.II_ASSIGN_STARS;
+					_f.int1 = Yata.II_ASSIGN_STARS;
 				}
 				else
 				{
@@ -1140,23 +1139,23 @@ namespace yata
 						case AsMetaMagic:
 							switch (cbx_Val.SelectedIndex)
 							{
-								case  0: _f.int1 = YataForm.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
-								case  1: _f.int1 = YataForm.META_I_BEWITCHING_BLAST; break;
-								case  2: _f.int1 = YataForm.META_I_BINDING_BLAST;    break;
-								case  3: _f.int1 = YataForm.META_I_BRIMSTONE_BLAST;  break;
-								case  4: _f.int1 = YataForm.META_I_DRAINING_BLAST;   break;
-								case  5: _f.int1 = YataForm.META_I_FRIGHTFUL_BLAST;  break;
-								case  6: _f.int1 = YataForm.META_I_HELLRIME_BLAST;   break;
-								case  7: _f.int1 = YataForm.META_I_HINDERING_BLAST;  break;
-								case  8: _f.int1 = YataForm.META_I_NOXIOUS_BLAST;    break;
-								case  9: _f.int1 = YataForm.META_I_UTTERDARK_BLAST;  break;
-								case 10: _f.int1 = YataForm.META_I_VITRIOLIC_BLAST;  break;
+								case  0: _f.int1 = Yata.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
+								case  1: _f.int1 = Yata.META_I_BEWITCHING_BLAST; break;
+								case  2: _f.int1 = Yata.META_I_BINDING_BLAST;    break;
+								case  3: _f.int1 = Yata.META_I_BRIMSTONE_BLAST;  break;
+								case  4: _f.int1 = Yata.META_I_DRAINING_BLAST;   break;
+								case  5: _f.int1 = Yata.META_I_FRIGHTFUL_BLAST;  break;
+								case  6: _f.int1 = Yata.META_I_HELLRIME_BLAST;   break;
+								case  7: _f.int1 = Yata.META_I_HINDERING_BLAST;  break;
+								case  8: _f.int1 = Yata.META_I_NOXIOUS_BLAST;    break;
+								case  9: _f.int1 = Yata.META_I_UTTERDARK_BLAST;  break;
+								case 10: _f.int1 = Yata.META_I_VITRIOLIC_BLAST;  break;
 
-								case 11: _f.int1 = YataForm.META_I_ELDRITCH_CHAIN;   break; // Blast Shapes ->
-								case 12: _f.int1 = YataForm.META_I_ELDRITCH_CONE;    break;
-								case 13: _f.int1 = YataForm.META_I_ELDRITCH_DOOM;    break;
-								case 14: _f.int1 = YataForm.META_I_ELDRITCH_SPEAR;   break;
-								case 15: _f.int1 = YataForm.META_I_HIDEOUS_BLOW;     break;
+								case 11: _f.int1 = Yata.META_I_ELDRITCH_CHAIN;   break; // Blast Shapes ->
+								case 12: _f.int1 = Yata.META_I_ELDRITCH_CONE;    break;
+								case 13: _f.int1 = Yata.META_I_ELDRITCH_DOOM;    break;
+								case 14: _f.int1 = Yata.META_I_ELDRITCH_SPEAR;   break;
+								case 15: _f.int1 = Yata.META_I_HIDEOUS_BLOW;     break;
 							}
 							break;
 
@@ -1189,10 +1188,10 @@ namespace yata
 						cb_12.Checked = cb_13.Checked = cb_14.Checked = cb_15.Checked =
 						cb_16.Checked = cb_17.Checked = cb_18.Checked = cb.Checked)
 					{
-						_f.int1 |=  YataForm.META_I_ESSENCES;
+						_f.int1 |=  Yata.META_I_ESSENCES;
 					}
 					else
-						_f.int1 &= ~YataForm.META_I_ESSENCES;
+						_f.int1 &= ~Yata.META_I_ESSENCES;
 				}
 
 				if (cb == cb_MetaAllShapesEssences || cb == cb_MetaAllShapes)
@@ -1200,10 +1199,10 @@ namespace yata
 					if (cb_19.Checked = cb_20.Checked = cb_21.Checked =
 						cb_22.Checked = cb_23.Checked = cb.Checked)
 					{
-						_f.int1 |=  YataForm.META_I_SHAPES;
+						_f.int1 |=  Yata.META_I_SHAPES;
 					}
 					else
-						_f.int1 &= ~YataForm.META_I_SHAPES;
+						_f.int1 &= ~Yata.META_I_SHAPES;
 				}
 
 				metamagicGroups(_f.int1);
@@ -1235,9 +1234,9 @@ namespace yata
 			gb_MetaGroups.Enabled = (result == 0x00 || result > 0xFF);
 
 
-			cb_MetaAllShapesEssences.Checked = ((result & YataForm.META_I_ALL)      == YataForm.META_I_ALL);
-			cb_MetaAllEssences      .Checked = ((result & YataForm.META_I_ESSENCES) == YataForm.META_I_ESSENCES);
-			cb_MetaAllShapes        .Checked = ((result & YataForm.META_I_SHAPES)   == YataForm.META_I_SHAPES);
+			cb_MetaAllShapesEssences.Checked = ((result & Yata.META_I_ALL)      == Yata.META_I_ALL);
+			cb_MetaAllEssences      .Checked = ((result & Yata.META_I_ESSENCES) == Yata.META_I_ESSENCES);
+			cb_MetaAllShapes        .Checked = ((result & Yata.META_I_SHAPES)   == Yata.META_I_SHAPES);
 		}
 
 

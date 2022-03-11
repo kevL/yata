@@ -17,7 +17,7 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		internal CodePageDialog(YataForm f, Encoding enc)
+		internal CodePageDialog(Yata f, Encoding enc)
 		{
 			_f = f;
 

@@ -1125,7 +1125,7 @@ namespace yata
 		/// </summary>
 		/// <param name="bypassCol"><c>true</c> to not clear selected col-cells</param>
 		/// <remarks>The caller shall call
-		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
+		/// <c><see cref="Yata.EnableCelleditOperations()">Yata.EnableCelleditOperations()</see></c>
 		/// after it deters required cell-selects.</remarks>
 		internal void ClearCellSelects(bool bypassCol = false)
 		{
@@ -1257,10 +1257,9 @@ namespace yata
 		/// <summary>
 		/// Checks if there is at least one selected cell and that all selected
 		/// cells are in a contiguous block. Stores the count of rows/cols in
-		/// <c><see cref="YataForm._copyvert">YataForm._copyvert</see></c> and
-		/// <c><see cref="YataForm._copyhori">YataForm._copyhori</see></c> ready
-		/// for use by
-		/// <c><see cref="YataForm._copytext">YataForm._copytext[,]</see></c>.
+		/// <c><see cref="Yata._copyvert">Yata._copyvert</see></c> and
+		/// <c><see cref="Yata._copyhori">Yata._copyhori</see></c> ready for use
+		/// by <c><see cref="Yata._copytext">Yata._copytext[,]</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if there is at least one selected cell and that
 		/// all selected cells are in a continguous rectangular block</returns>

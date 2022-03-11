@@ -123,16 +123,16 @@ namespace yata
 				if (args.Length != 0)
 				{
 					//logfile.Log(". pass arg to new instance");
-					YataForm.PfeLoad = args[0];
+					Yata.PfeLoad = args[0];
 				}
 				//else logfile.Log(". no args - start new instance");
 
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);	// ie, use GDI aka TextRenderer class. (perhaps, read:
 																		// perhaps depends on the Control that's being drawn)
-				Application.Run(new YataForm());
+				Application.Run(new Yata());
 
-				YataForm.PfeLoad = null;
+				Yata.PfeLoad = null;
 			}
 		}
 		#endregion Methods

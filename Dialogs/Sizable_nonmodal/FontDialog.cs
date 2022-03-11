@@ -88,8 +88,8 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f"><c><see cref="YataForm"/></c></param>
-		internal FontDialog(YataForm f)
+		/// <param name="f"><c><see cref="Yata"/></c></param>
+		internal FontDialog(Yata f)
 		{
 			_f = f;
 
@@ -213,7 +213,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as YataForm).CloseFontDialog();
+			(_f as Yata).CloseFontDialog();
 
 			_scDistance = sc_Hori.SplitterDistance;
 
@@ -302,7 +302,7 @@ namespace yata
 		void click_Apply(object sender, EventArgs e)
 		{
 			bu_Apply.Enabled = false;
-			(_f as YataForm).doFont(lbl_Lazydog.Font.Clone() as Font);
+			(_f as Yata).doFont(lbl_Lazydog.Font.Clone() as Font);
 
 			BringToFront(); // see OnLoad() doc
 		}

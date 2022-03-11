@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// Loads, formats, and handles 2da-data as a table or grid on YataForm's
+	/// Loads, formats, and handles 2da-data as a table or grid on Yata's
 	/// tab-pages.
 	/// </summary>
 	sealed partial class YataGrid
@@ -88,7 +88,7 @@ namespace yata
 
 
 		#region Fields
-		internal readonly YataForm _f;
+		internal readonly Yata _f;
 		YataGrid _table; // for cycling through all tables
 
 		internal int ColCount;
@@ -304,7 +304,7 @@ namespace yata
 		/// <param name="f">parent</param>
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read">readonly</param>
-		internal YataGrid(YataForm f, string pfe, bool read)
+		internal YataGrid(Yata f, string pfe, bool read)
 		{
 //			DrawRegulator.SetDoubleBuffered(this);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer
@@ -417,7 +417,7 @@ namespace yata
 					// pressing [Enter]. Note also that Windows w7 does not
 					// exhibit consistent behavior here when opening multiple
 					// files; all the selected files might not get sent to
-					// Program.Main()->YataForm.CreatePage().
+					// Program.Main()->Yata.CreatePage().
 
 					if (_table != null)
 					{
@@ -474,12 +474,12 @@ namespace yata
 		/// <c><see cref="Col">Cols</see></c> that are currently selected.
 		/// </summary>
 		/// <param name="bypassEnableCelledit"><c>true</c> to bypass
-		/// <c><see cref="YataForm.EnableCelleditOperations()">YataForm.EnableCelleditOperations()</see></c>
+		/// <c><see cref="Yata.EnableCelleditOperations()">Yata.EnableCelleditOperations()</see></c>
 		/// - this typically means that the caller shall select a <c>Cell</c>
 		/// and call <c>EnableCelleditOperations()</c> itself or that selects
 		/// are being cleared from a synced <c><see cref="YataGrid"/></c></param>
 		/// <param name="bypassEnableRowedit"><c>true</c> to bypass
-		/// <c><see cref="YataForm.EnableRoweditOperations()">YataForm.EnableRoweditOperations()</see></c>
+		/// <c><see cref="Yata.EnableRoweditOperations()">Yata.EnableRoweditOperations()</see></c>
 		/// - this typically means that the caller shall select a <c>Row</c>
 		/// since that calls <c>EnableRoweditOperations()</c> or that selects
 		/// are being cleared from a synced <c><see cref="YataGrid"/></c></param>
@@ -522,9 +522,9 @@ namespace yata
 		/// tables; <c>false</c> if sync will be performed by the caller</param>
 		/// <remarks>Called by
 		/// <list type="bullet">
-		/// <item><c><see cref="YataForm"/>.Search()</c></item>
-		/// <item><c>YataForm.editcellsclick_GotoLoadchanged()</c></item>
-		/// <item><c>YataForm.gotodiff()</c></item>
+		/// <item><c><see cref="Yata"/>.Search()</c></item>
+		/// <item><c>Yata.editcellsclick_GotoLoadchanged()</c></item>
+		/// <item><c>Yata.gotodiff()</c></item>
 		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
 		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
@@ -574,7 +574,7 @@ namespace yata
 		/// No change if only one <c>Cell</c> is currently selected.
 		/// </summary>
 		/// <remarks>Called at the form-level by
-		/// <c><see cref="YataForm"/>.OnKeyDown()</c> <c>[Space]</c>.</remarks>
+		/// <c><see cref="Yata"/>.OnKeyDown()</c> <c>[Space]</c>.</remarks>
 		internal void SelectFirstCell()
 		{
 			Select();
@@ -672,7 +672,7 @@ namespace yata
 		/// </list>
 		/// </summary>
 		/// <remarks>Called at the form-level by
-		/// <c><see cref="YataForm"/>.OnKeyDown()</c> <c>[Ctrl+Space]</c>.</remarks>
+		/// <c><see cref="Yata"/>.OnKeyDown()</c> <c>[Ctrl+Space]</c>.</remarks>
 		internal void SelectFirstRow()
 		{
 			Select();
@@ -708,7 +708,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c>MouseClick</c></item>
 		/// <item><c>MouseDoubleClick</c></item>
-		/// <item><c><see cref="YataForm"/>.cellit_Edit</c></item>
+		/// <item><c><see cref="Yata"/>.cellit_Edit</c></item>
 		/// </list>
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/> to edit</c></param>

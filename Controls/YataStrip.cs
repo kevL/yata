@@ -6,7 +6,7 @@ namespace yata
 {
 	/// <summary>
 	/// A custom <c>MenuStrip</c> that accepts clicks on
-	/// <c>ToolStripDropDown</c> buttons when <c><see cref="YataForm"/></c> gets
+	/// <c>ToolStripDropDown</c> buttons when <c><see cref="Yata"/></c> gets
 	/// <c>Activated</c>.
 	/// </summary>
 	/// <remarks><c><see cref="ProcessDialogKey()">ProcessDialogKey()</see></c>
@@ -21,22 +21,22 @@ namespace yata
 
 
 		#region Fields
-		YataForm _f;
+		Yata _f;
 		#endregion Fields
 
 
 		#region Methods
 		/// <summary>
-		/// Assigns <c><see cref="YataForm"/></c> to <c><see cref="_f"/></c>.
+		/// Assigns <c><see cref="Yata"/></c> to <c><see cref="_f"/></c>.
 		/// </summary>
 		/// <param name="f"></param>
 		/// <remarks>I'm doing it this way so that this <c>YataStrip</c> can be
-		/// instantiated and built in <c>YataForm's</c> designer, rather than
+		/// instantiated and built in <c>Yata's</c> designer, rather than
 		/// passing <paramref name="f"/> into the cTor.
 		/// 
 		/// 
 		/// Cheers. Welcome to winforms workaround #2368.</remarks>
-		internal void setYata(YataForm f)
+		internal void setYata(Yata f)
 		{
 			_f = f;
 		}
@@ -105,18 +105,18 @@ namespace yata
 		/// Processes navigation-keys on this <c>YataStrip</c>.
 		/// <list type="bullet">
 		/// <item><c>[Escape]</c> - sets focus to
-		/// <c><see cref="YataForm.Table">YataForm.Table</see></c> or
+		/// <c><see cref="Yata.Table">Yata.Table</see></c> or
 		/// <c><see cref="YataTabs"/></c></item>
 		/// <item><c>[Tab]</c> - navigates right if
-		/// <c><see cref="YataForm.it_MenuCol">YataForm.it_MenuCol</see></c> or
-		/// <c><see cref="YataForm.tb_Goto">YataForm.tb_Goto</see></c> is
-		/// currently selected</item>
+		/// <c><see cref="Yata.it_MenuCol">Yata.it_MenuCol</see></c> or
+		/// <c><see cref="Yata.tb_Goto">Yata.tb_Goto</see></c> is currently
+		/// selected</item>
 		/// <item><c>[Right]</c> - navigates right if
-		/// <c><see cref="YataForm.it_MenuCol">YataForm.it_MenuCol</see></c> is
+		/// <c><see cref="Yata.it_MenuCol">Yata.it_MenuCol</see></c> is
 		/// currently selected</item>
 		/// <item><c>[Shift+Tab]</c> - navigates left if
-		/// <c><see cref="YataForm.cb_SearchOption">YataForm.cb_SearchOption</see></c>
-		/// or <c><see cref="YataForm.tb_Search">YataForm.tb_Search</see></c> is
+		/// <c><see cref="Yata.cb_SearchOption">Yata.cb_SearchOption</see></c>
+		/// or <c><see cref="Yata.tb_Search">Yata.tb_Search</see></c> is
 		/// currently selected</item>
 		/// </list>
 		/// </summary>
@@ -149,12 +149,12 @@ namespace yata
 					// base.ProcessDialogKey() needs to run in order to clear
 					// highlights and release focus from the MenuStrip.
 
-					if (YataForm.Table != null)
+					if (Yata.Table != null)
 					{
 #if Keys
 						logfile.Log(". YataStrip.ProcessDialogKey (select Table)");
 #endif
-						YataForm.Table.Select();
+						Yata.Table.Select();
 					}
 					else
 					{

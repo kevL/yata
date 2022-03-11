@@ -579,7 +579,7 @@ namespace yata
 
 			_grid.Invalidator(invalid);
 
-			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
+			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -610,7 +610,7 @@ namespace yata
 
 			_grid.Invalidator(invalid);
 
-			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
+			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -636,7 +636,7 @@ namespace yata
 			_grid.Invalidator(YataGrid.INVALID_GRID
 							| YataGrid.INVALID_ROWS);
 
-			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
+			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -683,7 +683,7 @@ namespace yata
 			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
 
-			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
+			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
@@ -718,7 +718,7 @@ namespace yata
 			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
 
-			if (Settings._autorder && YataForm.order() != 0) _grid._f.layout();
+			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 		#endregion Methods (actions)
 

@@ -27,8 +27,8 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <param name="f"><c><see cref="YataForm"/></c></param>
-		internal InputCelltextDialog(YataForm f)
+		/// <param name="f"><c><see cref="Yata"/></c></param>
+		internal InputCelltextDialog(Yata f)
 		{
 			_f = f;
 
@@ -37,7 +37,7 @@ namespace yata
 
 			la_Head.Text = HEAD;
 
-			tb_Input.Text = (_f as YataForm)._copytext[0,0];
+			tb_Input.Text = (_f as Yata)._copytext[0,0];
 
 			MinimumSize = new Size(w_Min,          Height);
 			MaximumSize = new Size(Int32.MaxValue, Height);
@@ -81,7 +81,7 @@ namespace yata
 			}
 			else
 			{
-				var f = _f as YataForm;
+				var f = _f as Yata;
 
 				f._copytext = new string[,] {{ tb_Input.Text }};
 

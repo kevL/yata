@@ -144,48 +144,48 @@
     <Compile Include="Statics\TalkReader.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
     <Compile Include="UndoRedo.cs" />
-    <Compile Include="YataForm.cs" />
-    <Compile Include="YataForm.Designer.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata.cs" />
+    <Compile Include="Yata.Designer.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_contextce.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_contextce.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_contextro.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_contextro.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_contexttab.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_contexttab.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_keys.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_keys.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menucells.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menucells.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menuclip.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menuclip.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menucol.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menucol.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menuedit.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menuedit.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menufile.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menufile.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menufont.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menufont.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menuhelp.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menuhelp.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menuops.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menuops.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_menurows.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_menurows.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
     <Compile Include="YataGrid.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -218,8 +218,8 @@
     <Compile Include="YataGrid_scroll.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="YataForm_pathinfo.cs">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <Compile Include="Yata_pathinfo.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -272,8 +272,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="YataForm.resx">
-      <DependentUpon>YataForm.cs</DependentUpon>
+    <EmbeddedResource Include="Yata.resx">
+      <DependentUpon>Yata.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

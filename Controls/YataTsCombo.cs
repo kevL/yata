@@ -13,8 +13,8 @@ namespace yata
 		/// <summary>
 		/// Overrides <c>ToolStripItem.ProcessCmdKey()</c> to bypass .net's
 		/// default navigation for
-		/// <c><see cref="YataForm.cb_SearchOption">YataForm.cb_SearchOption</see></c>
-		/// on <c><see cref="YataForm._bar">YataForm._bar</see></c>.
+		/// <c><see cref="Yata.cb_SearchOption">Yata.cb_SearchOption</see></c>
+		/// on <c><see cref="Yata._bar">Yata._bar</see></c>.
 		/// <list type="bullet">
 		/// <item><c>[Left]</c> - navigates to the left control on the Menubar</item>
 		/// <item><c>[Right]</c> - navigates to the right control on the Menubar</item>
@@ -24,8 +24,8 @@ namespace yata
 		/// <param name="keyData"></param>
 		/// <returns></returns>
 		/// <remarks>This fires not only if
-		/// <c><see cref="YataForm.cb_SearchOption">YataForm.cb_SearchOption</see></c>
-		/// has focus but also if <c><see cref="YataForm"/>.it_MenuFile</c> has
+		/// <c><see cref="Yata.cb_SearchOption">Yata.cb_SearchOption</see></c>
+		/// has focus but also if <c><see cref="Yata"/>.it_MenuFile</c> has
 		/// focus etc.</remarks>
 		protected override bool ProcessCmdKey(ref Message m, Keys keyData)
 		{
@@ -41,9 +41,9 @@ namespace yata
 				switch (keyData)
 				{
 					case Keys.Left:
-						YataForm.that.IsTabbed_search = true;
-						YataForm.that.tb_Search.Focus();
-						YataForm.that.tb_Search.SelectAll();
+						Yata.that.IsTabbed_search = true;
+						Yata.that.tb_Search.Focus();
+						Yata.that.tb_Search.SelectAll();
 #if Keys
 						logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (focus tb_Search)");
 #endif
@@ -55,7 +55,7 @@ namespace yata
 						// 'cb_SearchOption' is still taking key-input.
 
 						(Parent as MenuStrip).Select(); // bingo! Despite '(Parent as MenuStrip).CanSelect' == FALSE.
-						YataForm.that.it_MenuClipboard.Select();
+						Yata.that.it_MenuClipboard.Select();
 #if Keys
 						logfile.Log(". YataTsCombo.ProcessCmdKey force TRUE (select it_MenuClipboard)");
 #endif

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class YataForm
+	sealed partial class Yata
 	{
 		#region Fields (static)
 		int _dontbeep; // directs keydown [Enter] to the appropriate funct: Goto or Search
@@ -19,7 +19,7 @@ namespace yata
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 			if ((e.KeyData & ~gc.ControlShift) != 0)
-				logfile.Log("YataForm.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
+				logfile.Log("Yata.OnPreviewKeyDown() e.KeyData= " + e.KeyData + " e.IsInputKey= " + e.IsInputKey);
 
 			base.OnPreviewKeyDown(e);
 		}
@@ -35,12 +35,12 @@ namespace yata
 		{
 #if Keys
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log("YataForm.ProcessCmdKey() keyData= " + keyData);
+				logfile.Log("Yata.ProcessCmdKey() keyData= " + keyData);
 #endif
 			switch (keyData)
 			{
 				case Keys.Menu | Keys.Alt:
-					// NOTE: The Menubar container is by default TabStop=FALSE and ... (not) forced TRUE in YataForm.cTor <-
+					// NOTE: The Menubar container is by default TabStop=FALSE and ... (not) forced TRUE in Yata.cTor <-
 					// so it can never take focus - but its subcontrols are fucked re. "focus".
 					// ... because they aren't actually 'Controls'.
 
@@ -68,7 +68,7 @@ namespace yata
 			bool ret = base.ProcessCmdKey(ref msg, keyData);
 #if Keys
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". YataForm.ProcessCmdKey ret= " + ret);
+				logfile.Log(". Yata.ProcessCmdKey ret= " + ret);
 #endif
 			return ret;
 		}
@@ -77,11 +77,11 @@ namespace yata
 		protected override bool IsInputKey(Keys keyData)
 		{
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log("YataForm.IsInputKey() keyData= " + keyData);
+				logfile.Log("Yata.IsInputKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". YataForm.IsInputKey ret= " + ret);
+				logfile.Log(". Yata.IsInputKey ret= " + ret);
 
 			return ret;
 		}
@@ -89,11 +89,11 @@ namespace yata
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log("YataForm.ProcessDialogKey() keyData= " + keyData);
+				logfile.Log("Yata.ProcessDialogKey() keyData= " + keyData);
 
 			bool ret = base.ProcessDialogKey(keyData);
 			if ((keyData & ~gc.ControlShift) != 0)
-				logfile.Log(". YataForm.ProcessDialogKey ret= " + ret);
+				logfile.Log(". Yata.ProcessDialogKey ret= " + ret);
 
 			return ret;
 		}
@@ -112,7 +112,7 @@ namespace yata
 		{
 #if Keys
 			if ((e.KeyData & ~gc.ControlShift) != 0)
-				logfile.Log("YataForm.OnKeyDown() e.KeyData= " + e.KeyData);
+				logfile.Log("Yata.OnKeyDown() e.KeyData= " + e.KeyData);
 #endif
 			if (Table != null)
 			{

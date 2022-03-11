@@ -97,7 +97,7 @@ namespace yata
 					//
 					// cf. YataGrid.OnPreviewKeyDown()
 					//
-					// [Escape] shall be handled in YataForm.OnKeyDown()
+					// [Escape] shall be handled in Yata.OnKeyDown()
 #if Keys
 					logfile.Log(". YataTabs.OnPreviewKeyDown force e.IsInputKey TRUE");
 #endif

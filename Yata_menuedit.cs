@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class YataForm
+	sealed partial class Yata
 	{
 		#region Fields
 		/// <summary>
@@ -147,7 +147,7 @@ namespace yata
 		/// <param name="e"></param>
 		void enter_Searchbox(object sender, EventArgs e)
 		{
-			//logfile.Log("YataForm.enter_Searchbox()");
+			//logfile.Log("Yata.enter_Searchbox()");
 //			(sender as ToolStripTextBox).SelectAll(); haha good luck. Text cannot be selected in the Enter event.
 
 			_selectall_search   = !_isEditclick_search && !IsTabbed_search;
@@ -167,7 +167,7 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Searchbox(object sender, MouseEventArgs e)
 		{
-			//logfile.Log("YataForm.mousedown_Searchbox() _selectall= " + _selectall_search);
+			//logfile.Log("Yata.mousedown_Searchbox() _selectall= " + _selectall_search);
 			if (_selectall_search)
 			{
 				_selectall_search = false;
@@ -403,7 +403,7 @@ namespace yata
 		/// <param name="e"></param>
 		void enter_Gotobox(object sender, EventArgs e)
 		{
-			//logfile.Log("YataForm.enter_Gotobox()");
+			//logfile.Log("Yata.enter_Gotobox()");
 //			(sender as ToolStripTextBox).SelectAll(); haha good luck. Text cannot be selected in the Enter event.
 
 			_selectall_goto   = !_isEditclick_goto && !IsTabbed_goto;
@@ -423,7 +423,7 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Gotobox(object sender, MouseEventArgs e)
 		{
-			//logfile.Log("YataForm.mousedown_Gotobox() _selectall= " + _selectall_search);
+			//logfile.Log("Yata.mousedown_Gotobox() _selectall= " + _selectall_search);
 			if (_selectall_goto)
 			{
 				_selectall_goto = false;

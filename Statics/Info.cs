@@ -120,7 +120,7 @@ namespace yata
 		/// routines. It has 2 fields that are float-values (instead of only 1
 		/// optional int-value). So GropeSpellTarget() will be used instead of
 		/// the regular GropeLabels() and it needs to be called by the general
-		/// YataForm.GropeLabels() function as well as the path-item.
+		/// Yata.GropeLabels() function as well as the path-item.
 		/// </summary>
 		internal static List<string> targetLabels  = new List<string>();
 		internal static List<float>  targetWidths  = new List<float>();
@@ -310,7 +310,7 @@ namespace yata
 												pfe2da,
 												InfoboxType.Error))
 					{
-						ib.ShowDialog(YataForm.that);
+						ib.ShowDialog(Yata.that);
 					}
 					return true;
 				}

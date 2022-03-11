@@ -17,7 +17,7 @@ namespace yata
 		/// About dialog.
 		/// </summary>
 		/// <param name="f">parent</param>
-		internal About(YataForm f)
+		internal About(Yata f)
 		{
 			_f = f;
 

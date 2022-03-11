@@ -633,7 +633,7 @@ namespace yata
 		/// Clears statusbar coordinates and path-info when the mouse-cursor
 		/// leaves the grid.
 		/// </summary>
-		/// <remarks>Called by <c><see cref="YataForm"></see>.t1_Tick()</c>. The
+		/// <remarks>Called by <c><see cref="Yata"></see>.t1_Tick()</c>. The
 		/// <c>MouseLeave</c> event is unreliable.</remarks>
 		internal void MouseLeaveTicker()
 		{

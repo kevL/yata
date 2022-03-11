@@ -14,7 +14,7 @@ namespace yata
 		/// <summary>
 		/// An <c>IDeviceContext</c> used for measuring texts.
 		/// </summary>
-		/// <remarks>Is defined in the <c><see cref="YataForm()"/></c>
+		/// <remarks>Is defined in the <c><see cref="Yata()"/></c>
 		/// <c>cTor</c>.</remarks>
 		internal static Graphics graphics;
 

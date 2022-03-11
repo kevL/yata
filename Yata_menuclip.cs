@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class YataForm
+	sealed partial class Yata
 	{
 		#region Handlers (clipboard)
 		/// <summary>

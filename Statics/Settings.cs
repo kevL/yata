@@ -332,7 +332,7 @@ namespace yata
 			var fontdialog = font.Clone() as Font;
 
 			string label = fontdialog.Name;
-			FontStyle style = YataForm.getStyleStandard(fontdialog.FontFamily);
+			FontStyle style = Yata.getStyleStandard(fontdialog.FontFamily);
 
 			// the font as it appears in a dialog is smaller than the same font
 			// with the SAME pointsize as it appears on the table ...

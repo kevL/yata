@@ -74,7 +74,7 @@ namespace yata
 										InfoboxType.Warn,
 										InfoboxButtons.AbortLoadNext))
 			{
-				return ib.ShowDialog(YataForm.that);
+				return ib.ShowDialog(Yata.that);
 			}
 		}
 

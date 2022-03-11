@@ -26,7 +26,7 @@ namespace yata
 		/// 
 		/// 
 		/// The problem appears to be that
-		/// <c><see cref="YataForm"/>.SetTabSize()</c> causes not one but two
+		/// <c><see cref="Yata"/>.SetTabSize()</c> causes not one but two
 		/// <c>Resize</c> events; the first event calculates that the
 		/// client-width is 1px greater than it actually is. So I'm going to let
 		/// the snuggle-to-max routine (horizontal) do its work and bypass the
@@ -262,7 +262,7 @@ namespace yata
 
 			if (_table == null) _table = this;
 
-			if (_table == YataForm.Table)
+			if (_table == Yata.Table)
 				_table.Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
 
 			_table.OffsetVert = _table._scrollVert.Value;
@@ -278,7 +278,7 @@ namespace yata
 			var args = new MouseEventArgs(MouseButtons.Left, 1, loc.X, loc.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
-			if (_table == YataForm.Table
+			if (_table == Yata.Table
 				&&  _f._diff1 != null   && _f._diff2 != null
 				&& (_f._diff1 == _table || _f._diff2 == _table))
 			{
@@ -297,7 +297,7 @@ namespace yata
 
 			if (_table == null) _table = this;
 
-			if (_table == YataForm.Table)
+			if (_table == Yata.Table)
 				_table.Invalidator(INVALID_GRID | INVALID_COLS);
 
 			_table.OffsetHori = _table._scrollHori.Value;
@@ -313,7 +313,7 @@ namespace yata
 			var args = new MouseEventArgs(MouseButtons.Left, 1, loc.X, loc.Y, 0); // clicks,x,y,delta
 			OnMouseMove(args); // update coords on the Statusbar
 
-			if (_table == YataForm.Table
+			if (_table == Yata.Table
 				&&  _f._diff1 != null   && _f._diff2 != null
 				&& (_f._diff1 == _table || _f._diff2 == _table))
 			{
@@ -337,8 +337,8 @@ namespace yata
 		/// Synchs diffed tables both vertically and horizontally.
 		/// </summary>
 		/// <remarks>Ensure that
-		/// <c><see cref="YataForm._diff1">YataForm._diff1</see></c> and
-		/// <c><see cref="YataForm._diff2">YataForm._diff2</see></c> and
+		/// <c><see cref="Yata._diff1">Yata._diff1</see></c> and
+		/// <c><see cref="Yata._diff2">Yata._diff2</see></c> and
 		/// <c><see cref="_table"/></c> are valid before call.</remarks>
 		void SyncDiffedGrids()
 		{

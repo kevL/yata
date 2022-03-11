@@ -14,7 +14,7 @@ namespace yata
 	/// </summary>
 	/// <remarks>Public access is required for the pointers in
 	/// <c><see cref="YataDialog"/></c>.</remarks>
-	public sealed partial class YataForm
+	public sealed partial class Yata
 		: Form
 	{
 		#region Enumerators
@@ -36,7 +36,7 @@ namespace yata
 
 
 		#region Fields (static)
-		internal static YataForm that;
+		internal static Yata that;
 
 		const string TITLE    = " Yata";
 		const string ASTERICS = " *";
@@ -220,7 +220,7 @@ namespace yata
 		/// <summary>
 		/// cTor. This is Yata.
 		/// </summary>
-		internal YataForm()
+		internal Yata()
 		{
 			that = this;
 
@@ -527,7 +527,7 @@ namespace yata
 		/// </list></remarks>
 		void VerifyCurrentFileState()
 		{
-			//logfile.Log("YataForm.VerifyCurrentFileState()");
+			//logfile.Log("Yata.VerifyCurrentFileState()");
 
 			if (!_bypassVerifyFile)
 			{
@@ -963,7 +963,7 @@ namespace yata
 		/// </list></remarks>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//logfile.Log("YataForm.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
+			//logfile.Log("Yata.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
 
 			if (Tabs.SelectedIndex != -1)
 			{

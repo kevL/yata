@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class YataForm
+	sealed partial class Yata
 	{
 		// okay. Fed up.
 		// YataTabs 'tabControl' and PropanelBu 'bu_Propanel' have been moved to
-		// YataForm.
+		// Yata.
 
 
 		/// <summary>
@@ -1894,7 +1894,7 @@ namespace yata
 			this.tabit_DiffSync.Text = "Sync tables";
 			this.tabit_DiffSync.Click += new System.EventHandler(this.tabclick_DiffSync);
 			// 
-			// YataForm
+			// Yata
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1906,7 +1906,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MainMenuStrip = this._bar;
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.Name = "YataForm";
+			this.Name = "Yata";
 			this.Text = " Yata";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.yata_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.yata_DragEnter);

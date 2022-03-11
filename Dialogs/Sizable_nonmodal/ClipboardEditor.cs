@@ -39,7 +39,7 @@ namespace yata
 		/// <summary>
 		/// cTor. Instantiates Yata's clipboard dialog.
 		/// </summary>
-		internal ClipboardEditor(YataForm f)
+		internal ClipboardEditor(Yata f)
 		{
 			_f = f;
 
@@ -75,7 +75,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as YataForm).CloseClipEditor();
+			(_f as Yata).CloseClipEditor();
 			base.OnFormClosing(e);
 		}
 
@@ -114,14 +114,14 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="bu_Get"/></c></item>
-		/// <item><c><see cref="YataForm"/>.it_ClipExport</c></item>
+		/// <item><c><see cref="Yata"/>.it_ClipExport</c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Invoked by
 		/// <list type="bullet">
 		/// <item>Get button</item>
-		/// <item><c><see cref="YataForm"/>.clipclick_ExportCopy()</c></item>
+		/// <item><c><see cref="Yata"/>.clipclick_ExportCopy()</c></item>
 		/// <item><c><see cref="Infobox"/>.OnKeyDown()</c></item>
 		/// </list></remarks>
 		internal void click_Get(object sender, EventArgs e)
@@ -218,7 +218,7 @@ namespace yata
 		{
 			if (rb_RowsBuffer.Checked)
 			{
-				List<string[]> copyr = (_f as YataForm)._copyr;
+				List<string[]> copyr = (_f as Yata)._copyr;
 
 				var sb = new StringBuilder();
 
@@ -244,7 +244,7 @@ namespace yata
 		{
 			if (rb_ColBuffer.Checked)
 			{
-				List<string> copyc = (_f as YataForm)._copyc;
+				List<string> copyc = (_f as Yata)._copyc;
 
 				var sb = new StringBuilder();
 
@@ -265,7 +265,7 @@ namespace yata
 		{
 			if (rb_CellsBuffer.Checked)
 			{
-				string[,] copyt = (_f as YataForm)._copytext;
+				string[,] copyt = (_f as Yata)._copytext;
 
 				var sb = new StringBuilder();
 

@@ -214,8 +214,8 @@ namespace yata
 				}
 			}
 
-			if (   YataForm.that == null
-				|| YataForm.that.WindowState == FormWindowState.Minimized)
+			if (   Yata.that == null
+				|| Yata.that.WindowState == FormWindowState.Minimized)
 			{
 				CenterToScreen();
 			}
@@ -274,10 +274,10 @@ namespace yata
 		protected override void OnKeyUp(KeyEventArgs e)
 		{
 			if (e.KeyData == (Keys.Control | Keys.C)
-				&& YataForm.that._fclip != null)
+				&& Yata.that._fclip != null)
 			{
 //				e.SuppressKeyPress = true;
-				YataForm.that._fclip.click_Get(null, EventArgs.Empty);
+				Yata.that._fclip.click_Get(null, EventArgs.Empty);
 			}
 //			else
 //				base.OnKeyUp(e);

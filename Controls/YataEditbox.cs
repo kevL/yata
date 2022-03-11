@@ -66,7 +66,7 @@ namespace yata
 				// containing controls, if the key-events of those controls are
 				// set to fire ... note that during the bubbling, OnKeyDown()
 				// for this Editbox fires *last* - *after* YataTabs.OnKeyDown()
-				// and YataForm.OnKeyDown() in that order, only then does
+				// and Yata.OnKeyDown() in that order, only then does
 				// YataEditbox.OnKeyDown() execute.
 				//
 				//
@@ -136,7 +136,7 @@ namespace yata
 				{
 					ToolStripMenuItem it;
 
-					YataStrip bar = YataForm.that._bar;
+					YataStrip bar = Yata.that._bar;
 					for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
 					{
 						if ((it = bar.Items[i] as ToolStripMenuItem) != null

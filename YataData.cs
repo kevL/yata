@@ -103,7 +103,7 @@ namespace yata
 		/// Flags this <c>Row</c> as selected. The setter clears
 		/// <c><see cref="YataGrid.RangeSelect">YataGrid.RangeSelect</see></c>
 		/// and calls
-		/// <c><see cref="YataForm.EnableRoweditOperations()">YataForm.EnableRoweditOperations()</see></c>
+		/// <c><see cref="Yata.EnableRoweditOperations()">Yata.EnableRoweditOperations()</see></c>
 		/// iff <c><see cref="_bypassEnableRowedit"/></c> is <c>false</c>.
 		/// </summary>
 		/// <remarks>Only 1 <c>Row</c> shall ever be <c>selected</c>.</remarks>
@@ -229,14 +229,14 @@ namespace yata
 				_selected = value;
 				SetState();
 
-//				YataForm.that.EnableCelleditOperations();
+//				Yata.that.EnableCelleditOperations();
 			}
 		}
 
 		bool _loadchanged;
 		/// <summary>
 		/// Flags this <c>Cell</c> as loadchanged. The setter can call
-		/// <c><see cref="YataForm.EnableGotoLoadchanged()">YataForm.EnableGotoLoadchanged()</see></c>.
+		/// <c><see cref="Yata.EnableGotoLoadchanged()">Yata.EnableGotoLoadchanged()</see></c>.
 		/// </summary>
 		internal bool loadchanged
 		{
@@ -248,7 +248,7 @@ namespace yata
 
 				if (!YataGrid._init)
 				{
-					YataForm.that.EnableGotoLoadchanged(_loadchanged || YataForm.Table.anyLoadchanged());
+					Yata.that.EnableGotoLoadchanged(_loadchanged || Yata.Table.anyLoadchanged());
 				}
 				// else selecting the tab at initial load/reload deters 'it_GotoLoadchanged*.Enabled'.
 			}
