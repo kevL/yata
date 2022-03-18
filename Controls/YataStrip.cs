@@ -114,11 +114,20 @@ namespace yata
 		/// the texbox would incorrectly keep selecting all text.</remarks>
 		protected override void WndProc(ref Message m)
 		{
+			// https://stackoverflow.com/questions/19209047/menustrip-cant-get-focus-on-load#answer-19210787
+			// This is a flaw in the MenuStrip and ToolStrip classes, they don't
+			// properly handle the WM_MOUSEACTIVATE notification. These classes
+			// have plenty of quirks, they support window-less controls and
+			// getting them to emulate the exact same behavior as a normal
+			// Windows window is never not a problem. These quirks didn't get
+			// addressed, the Winforms team got broken up shortly after the
+			// .NET 2.0 release to dedicate resources to WPF.
+
 			if (m.Msg == WM_MOUSEACTIVATE	// && CanFocus && !Focused
 				&&  _f != null				// <- will be null if in DesignMode.
-				&& !_f.isTextboxFocused())	// <- workaround to accommodate SelectAll in the textboxes
-			{
-				Focus();
+				&& !_f.isTextboxFocused())	// <- Workaround to pacify SelectAll in the goto/search textboxes:
+			{								//    if this condition is not present here, a click can no longer
+				Focus();					//    be used to set the caret position; all text gets reselected.
 			}
 			base.WndProc(ref m);
 		}
@@ -138,8 +147,8 @@ namespace yata
 		/// <summary>
 		/// Processes a keystroke. I'm not sure what this is even doing anymore;
 		/// but somehow it prevents shortcuts on the Menu from firing and allows
-		/// a default keystroke like [Ctrl+a]SelectAllText to work in the
-		/// Gotobox and the Searchbox.
+		/// a default keystroke like [Ctrl+a] SelectAllText to work in the
+		/// goto/search textboxes.
 		/// </summary>
 		/// <param name="m"></param>
 		/// <param name="keyData"></param>
@@ -151,7 +160,7 @@ namespace yata
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessCmdKey() keyData= " + keyData);
 #endif
-			if (_f.tb_Goto.Selected || _f.tb_Search.Selected) //|| _f.cb_SearchOption.Selected
+			if (_f.isTextboxFocused())
 			{
 				switch (keyData)
 				{

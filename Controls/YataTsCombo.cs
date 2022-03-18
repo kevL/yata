@@ -33,8 +33,8 @@ namespace yata
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataTsCombo.ProcessCmdKey() keyData= " + keyData);
 #endif
-			if (Selected) // workaround since this fires when another it is currently selected.
-			{
+			if (Selected)	// Workaround since ProcessCmdKey() fires for this ToolStripComboBox even
+			{				// when another it is currently selected. That's not normal Control behavior.
 #if Keys
 				logfile.Log(". is Selected");
 #endif
