@@ -53,10 +53,10 @@ namespace yata
 		{
 			ToolStripMenuItem it;
 
-			YataStrip bar = Yata.that._bar;
-			for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
+			ToolStripItemCollection its = Yata.that._bar.Items;
+			for (int i = 0; i != its.Count; ++i) // rifle through the top-level Menu its ->
 			{
-				if ((it = bar.Items[i] as ToolStripMenuItem) != null
+				if ((it = its[i] as ToolStripMenuItem) != null
 					&& it.Visible && it.Enabled)
 				{
 //					if ((e.KeyData & ~gc.ControlShift) != 0)
@@ -78,18 +78,19 @@ namespace yata
 		/// <returns></returns>
 		private static bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
 		{
-			ToolStripMenuItem subit;
+			ToolStripMenuItem it0;
 
-			for (int i = 0; i != it.DropDownItems.Count; ++i)
+			ToolStripItemCollection its = it.DropDownItems;
+			for (int i = 0; i != its.Count; ++i)
 			{
-				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
-//					&& subit.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in any textboxes at all.
+				if ((it0 = its[i] as ToolStripMenuItem) != null)
+//					&& it0.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in any textboxes at all.
 				{
 //					if ((keyData & ~gc.ControlShift) != 0)
-//						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
+//						logfile.Log(". " + it0.Text + " hasSub= " + it0.HasDropDownItems + " shortcut= " + it0.ShortcutKeys);
 
-					if (subit.ShortcutKeys == keyData
-						|| (subit.HasDropDownItems && hasShortcut(subit, keyData)))
+					if (it0.ShortcutKeys == keyData
+						|| (it0.HasDropDownItems && hasShortcut(it0, keyData)))
 					{
 						return true;
 					}
