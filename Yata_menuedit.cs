@@ -167,7 +167,7 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Searchbox(object sender, MouseEventArgs e)
 		{
-			//logfile.Log("Yata.mousedown_Searchbox() _selectall= " + _selectall_search);
+			//logfile.Log("Yata.mousedown_Searchbox() _selectall_search= " + _selectall_search);
 			if (_selectall_search)
 			{
 				_selectall_search = false;
@@ -423,7 +423,7 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Gotobox(object sender, MouseEventArgs e)
 		{
-			//logfile.Log("Yata.mousedown_Gotobox() _selectall= " + _selectall_search);
+			//logfile.Log("Yata.mousedown_Gotobox() _selectall_goto= " + _selectall_goto);
 			if (_selectall_goto)
 			{
 				_selectall_goto = false;
