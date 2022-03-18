@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	public sealed class YataTsCombo
+	sealed class YataTsCombo
 		: ToolStripComboBox
 	{
 		#region Methods (override)
