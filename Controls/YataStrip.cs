@@ -43,6 +43,63 @@ namespace yata
 		#endregion Methods
 
 
+		#region Methods (static)
+		/// <summary>
+		/// Checks if a specified keystroke is a shortcut on Yata's Menubar.
+		/// </summary>
+		/// <param name="keyData"></param>
+		/// <returns><c>true</c> if <paramref name="keyData"/> is a shortcut</returns>
+		internal static bool isShortcut(Keys keyData)
+		{
+			ToolStripMenuItem it;
+
+			YataStrip bar = Yata.that._bar;
+			for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
+			{
+				if ((it = bar.Items[i] as ToolStripMenuItem) != null
+					&& it.Visible && it.Enabled)
+				{
+//					if ((e.KeyData & ~gc.ControlShift) != 0)
+//						logfile.Log(it.Text);
+
+					if (YataStrip.hasShortcut(it, keyData))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Checks menus and any submenus they may have for a specified shortcut
+		/// recursively.
+		/// </summary>
+		/// <param name="it"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		private static bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
+		{
+			ToolStripMenuItem subit;
+
+			for (int i = 0; i != it.DropDownItems.Count; ++i)
+			{
+				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
+//					&& subit.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in any textboxes at all.
+				{
+//					if ((keyData & ~gc.ControlShift) != 0)
+//						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
+
+					if (subit.ShortcutKeys == keyData
+						|| (subit.HasDropDownItems && hasShortcut(subit, keyData)))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		#endregion Methods (static)
+
+
 		#region Methods (override)
 		/// <summary>
 		/// Focuses this <c>MenuStrip</c> when a mouseclick on this
@@ -75,19 +132,55 @@ namespace yata
 
 			base.OnPreviewKeyDown(e);
 		}
+#endif
 
+		/// <summary>
+		/// Processes a keystroke. I'm not sure what this is even doing anymore;
+		/// but somehow it prevents shortcuts on the Menu from firing and allows
+		/// a default keystroke like [Ctrl+a]SelectAllText to work in the
+		/// Gotobox and the Searchbox.
+		/// </summary>
+		/// <param name="m"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		/// <seealso cref="YataEditbox"><c>YataEditbox.OnPreviewKeyDown()</c></seealso>
 		protected override bool ProcessCmdKey(ref Message m, Keys keyData)
 		{
+#if Keys
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataStrip.ProcessCmdKey() keyData= " + keyData);
+#endif
+			if (_f.tb_Goto.Selected || _f.tb_Search.Selected) //|| _f.cb_SearchOption.Selected
+			{
+				switch (keyData)
+				{
+					// no need to check these keys for Menu shortcuts ->
+					case Keys.Enter:	// handled in YataGrid.ProcessCmdKey()
+					case Keys.Escape:	// handled in YataGrid.ProcessCmdKey()
+						break;
+
+					default:
+						if (isShortcut(keyData))
+						{
+#if Keys
+							logfile.Log(". YataStrip.ProcessCmdKey force FALSE (shortcut)");
+#endif
+							return false; // do not fuckin' ask why. Thanks.
+							// Let's just say that I should have stuck with .net's old MainMenu object.
+						}
+						break;
+				}
+			}
 
 			bool ret = base.ProcessCmdKey(ref m, keyData);
+#if Keys
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataStrip.ProcessCmdKey ret= " + ret);
-
+#endif
 			return ret;
 		}
 
+#if Keys
 		protected override bool IsInputKey(Keys keyData)
 		{
 			if ((keyData & ~gc.ControlShift) != 0)

@@ -32,6 +32,7 @@ namespace yata
 		/// for select-all (instead of File|SaveAll).
 		/// </summary>
 		/// <param name="e"></param>
+		/// <seealso cref="YataStrip"><c>YataStrip.ProcessCmdKey()</c></seealso>
 		protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
 		{
 #if Keys
@@ -133,61 +134,16 @@ namespace yata
 					break;
 
 				default:
-				{
-					ToolStripMenuItem it;
-
-					YataStrip bar = Yata.that._bar;
-					for (int i = 0; i != bar.Items.Count; ++i) // rifle through the top-level Menu its ->
+					if (YataStrip.isShortcut(e.KeyData))
 					{
-						if ((it = bar.Items[i] as ToolStripMenuItem) != null
-							&& it.Visible && it.Enabled)
-						{
-//							if ((e.KeyData & ~gc.ControlShift) != 0)
-//								logfile.Log(it.Text);
-
-							if (hasShortcut(it, e.KeyData))
-							{
 #if Keys
-								logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (shortcut)");
+						logfile.Log(". YataEditbox.OnPreviewKeyDown force e.IsInputKey TRUE (shortcut)");
 #endif
-								e.IsInputKey = true;
-								break;
-							}
-						}
+						e.IsInputKey = true;
 					}
 					break;
-				}
 			}
 			base.OnPreviewKeyDown(e);
-		}
-
-		/// <summary>
-		/// Checks menus and any submenus they may have for a specified shortcut
-		/// recursively.
-		/// </summary>
-		/// <param name="it"></param>
-		/// <param name="keyData"></param>
-		/// <returns></returns>
-		bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
-		{
-			ToolStripMenuItem subit;
-
-			for (int i = 0; i != it.DropDownItems.Count; ++i)
-			{
-				if ((subit = it.DropDownItems[i] as ToolStripMenuItem) != null)
-//					&& subit.Enabled // check *all* its. Ie, don't allow their shortcuts to be used in the editor at all.
-				{
-//					if ((keyData & ~gc.ControlShift) != 0)
-//						logfile.Log(". " + subit.Text + " hasSub= " + subit.HasDropDownItems + " shortcut= " + subit.ShortcutKeys);
-
-					if (subit.ShortcutKeys == keyData
-						|| (subit.HasDropDownItems && hasShortcut(subit, keyData)))
-					{
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 
 #if Keys
