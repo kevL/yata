@@ -1048,7 +1048,30 @@ namespace yata
 					}
 				}
 			}
-			else // if quoted leave it quoted ->
+			else if (Settings._clearquotes) // quoted but user doesn't want quotes (unless there's whitespace) ->
+			{
+				bool cleared = true;
+
+				for (int i = 0; i != sb.Length; ++i)
+				{
+					if (Char.IsWhiteSpace(sb[i]))
+					{
+						sb.Insert(0, '"');
+						sb.Append('"');
+
+						cleared = false;
+						break;
+					}
+				}
+
+				if (cleared) // existing quotes were successfully cleared ->
+				{
+					text = sb.ToString();
+
+					return Settings._strict; // <- bother user if he/she wants to clear quotes only if Strict.
+				}
+			}
+			else // reapply quotes ->
 			{
 				sb.Insert(0, '"');
 				sb.Append('"');
