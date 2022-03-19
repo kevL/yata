@@ -43,6 +43,7 @@ namespace yata
 		internal static bool _autorder;
 		internal static bool _allowdupls;
 		internal static bool _acceptedit;
+		internal static bool _clearquotes;
 
 		internal static int _recent;
 		internal static int _alignoutput;
@@ -315,6 +316,11 @@ namespace yata
 							_acceptedit = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
 									   && (line == "1" || line.ToLower() == "true");
 						}
+						else if (line.StartsWith("clearquotes=", StringComparison.Ordinal))
+						{
+							_clearquotes = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
+										&& (line == "1" || line.ToLower() == "true");
+						}
 					}
 				}
 			}
@@ -400,7 +406,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 26;
+		internal const int ids = 27;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -427,6 +433,7 @@ namespace yata
 			options[++i] = "allowdupls=";
 			options[++i] = "autorder=";
 			options[++i] = "casesort=";
+			options[++i] = "clearquotes=";
 			options[++i] = "codepage=";
 			options[++i] = "context=";
 			options[++i] = "dialog=";
