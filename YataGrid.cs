@@ -993,7 +993,7 @@ namespace yata
 			bool quote = false;
 
 			if (sb.Length != 0
-				&& sb[0] != '"' && sb[sb.Length - 1] != '"')
+				&& sb[0] != '"' && sb[sb.Length - 1] != '"') // totally unquoted ->
 			{
 				char c;
 				for (int i = 0; i != sb.Length; ++i)
@@ -1008,7 +1008,7 @@ namespace yata
 						quote = true;
 				}
 
-				if (quote)
+				if (quote) // add quotes and return unless there's a misplaced quotation mark (as detered above) ->
 				{
 					sb.Insert(0, '"');
 					sb.Append('"');
@@ -1018,23 +1018,23 @@ namespace yata
 					if (load)
 						return true;
 
-					return Settings._strict; // bother user if he/she wants auto-quotes only if Strict.
+					return Settings._strict; // <- bother user if he/she wants auto-quotes only if Strict.
 				}
 			}
 
 
 			quote = sb.Length != 0
-				 && sb[0] == '"' && sb[sb.Length - 1] == '"';
+				 && sb[0] == '"' && sb[sb.Length - 1] == '"'; // -> has outer quotes
 
-			sb = sb.Replace("\"", null);
+			sb = sb.Replace("\"", null); // remove all quotation marks
 
 			if (sb.Length == 0)
 			{
 				text = gs.Stars;
-				return true;
+				return true; // -> inform user
 			}
 
-			if (!quote)
+			if (!quote) // not quoted, check for whitespace ->
 			{
 				for (int i = 0; i != sb.Length; ++i)
 				{
@@ -1044,18 +1044,18 @@ namespace yata
 						sb.Append('"');
 
 						text = sb.ToString();
-						return true;
+						return true; // -> inform user
 					}
 				}
 			}
-			else
+			else // if quoted leave it quoted ->
 			{
 				sb.Insert(0, '"');
 				sb.Append('"');
 			}
 
 			string veri = sb.ToString();
-			bool changed = veri != text;
+			bool changed = veri != text; // <- if changed inform user.
 
 			text = veri;
 
