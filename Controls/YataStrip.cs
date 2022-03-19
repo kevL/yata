@@ -130,6 +130,10 @@ namespace yata
 				Focus();					//    be used to set the caret position; all text gets reselected.
 			}
 			base.WndProc(ref m);
+
+			// TODO: All texts gets selected only if click is to the right of
+			// the text; ie. only text that's on the left of the click gets
+			// selected ... wtf.
 		}
 
 #if Keys
