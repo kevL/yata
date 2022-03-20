@@ -785,8 +785,6 @@ namespace yata
 		/// <seealso cref="Propanel"><c>Propanel.editor_leave()</c></seealso>
 		void editor_leave(object sender, EventArgs e)
 		{
-			//logfile.Log("YataGrid.editor_leave() _editor.Visible= " + _editor.Visible + " _bypassleaveditor= " + _bypassleaveditor);
-
 			if (!_bypassleaveditor)
 			{
 				if (Settings._acceptedit)
@@ -813,8 +811,6 @@ namespace yata
 		/// <seealso cref="Propanel.editresultaccept()"><c>Propanel.editresultaccept()</c></seealso>
 		internal void editresultaccept(bool @select = false)
 		{
-			//logfile.Log("YataGrid.editresultaccept() select= " + @select);
-
 			int invalid = INVALID_GRID;
 
 			bool sanitized = false;
@@ -853,8 +849,6 @@ namespace yata
 		/// <seealso cref="Propanel.editresultcancel()"><c>Propanel.editresultcancel()</c></seealso>
 		internal void editresultcancel(int invalid, bool @select = false)
 		{
-			//logfile.Log("YataGrid.editresultcancel() _editor.Visible= " + _editor.Visible);
-
 			_editor.Visible = false;
 			Invalidator(invalid);
 
@@ -871,8 +865,6 @@ namespace yata
 		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c>.</remarks>
 		internal void editresultdefault()
 		{
-			//logfile.Log("YataGrid.editresultdefault());
-
 			if (_editor.Visible)
 				_editor.Visible = false;
 			else if (Propanel != null && Propanel._editor.Visible)
@@ -887,13 +879,17 @@ namespace yata
 		/// <param name="tb">the editor's <c>TextBox</c> whose text to check for
 		/// validity</param>
 		/// <returns><c>true</c> if the text gets sanitized</returns>
-		/// <remarks>Performs a text-check.</remarks>
+		/// <remarks>Performs text verification. This function does not flag a
+		/// table <c><see cref="Changed"/></c> nor does it push an Undo
+		/// <c><see cref="Restorable"/></c> etc. if the submitted text is
+		/// identical to existing text. It does however clear
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> and
+		/// <c><see cref="Cell.diff">Cell.diff</see></c> flags.</remarks>
 		internal bool ChangeCellText(Cell cell, Control tb)
 		{
 			Restorable rest = UndoRedo.createCell(cell);
 			if (!Changed)
 			{
-				Changed = true;
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 
@@ -903,14 +899,19 @@ namespace yata
 
 			bool sanitized = VerifyText_edit(tb);
 
-			cell.text = tb.Text;
+			if (cell.text != tb.Text)
+			{
+				cell.text = tb.Text;
 
-			Colwidth(cell.x, cell.y);
-			metricFrozenControls(cell.x);
+				Colwidth(cell.x, cell.y);
+				metricFrozenControls(cell.x);
+
+				if (!Changed) Changed = true;
 
 
-			rest.postext = cell.text;
-			_ur.Push(rest);
+				rest.postext = cell.text;
+				_ur.Push(rest);
+			}
 
 			return sanitized;
 		}
@@ -920,7 +921,9 @@ namespace yata
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>
-		/// <remarks>Does *not* perform a text-check.</remarks>
+		/// <remarks>Does *not* perform text verification. A check should be
+		/// done for if the texts differ before calling this function since the
+		/// table shall be flagged <c><see cref="Changed"/></c>.</remarks>
 		internal void ChangeCellText(Cell cell, string text)
 		{
 			// TODO: Optimize this for multiple calls/cells.
@@ -1010,8 +1013,7 @@ namespace yata
 
 				if (quote) // add quotes and return unless there's a misplaced quotation mark (as detered above) ->
 				{
-					sb.Insert(0, '"');
-					sb.Append('"');
+					applyQuotes(sb);
 
 					text = sb.ToString();
 
@@ -1022,6 +1024,8 @@ namespace yata
 				}
 			}
 
+
+			string verified; bool changed;
 
 			quote = sb.Length != 0
 				 && sb[0] == '"' && sb[sb.Length - 1] == '"'; // -> has outer quotes
@@ -1040,8 +1044,7 @@ namespace yata
 				{
 					if (Char.IsWhiteSpace(sb[i]))
 					{
-						sb.Insert(0, '"');
-						sb.Append('"');
+						applyQuotes(sb);
 
 						text = sb.ToString();
 						return true; // -> inform user
@@ -1056,8 +1059,7 @@ namespace yata
 				{
 					if (Char.IsWhiteSpace(sb[i]))
 					{
-						sb.Insert(0, '"');
-						sb.Append('"');
+						applyQuotes(sb);
 
 						cleared = false;
 						break;
@@ -1066,23 +1068,34 @@ namespace yata
 
 				if (cleared) // existing quotes were successfully cleared ->
 				{
-					text = sb.ToString();
+					verified = sb.ToString();
+					changed = Settings._strict && verified != text; // <- bother user if he/she wants to clear quotes only if Strict.
 
-					return Settings._strict; // <- bother user if he/she wants to clear quotes only if Strict.
+					text = verified;
+					return changed;
 				}
 			}
 			else // reapply quotes ->
 			{
-				sb.Insert(0, '"');
-				sb.Append('"');
+				applyQuotes(sb);
 			}
 
-			string veri = sb.ToString();
-			bool changed = veri != text; // <- if changed inform user.
+			verified = sb.ToString();
+			changed = verified != text; // <- if changed inform user.
 
-			text = veri;
-
+			text = verified;
 			return changed;
+		}
+
+		/// <summary>
+		/// Applies double-quotes to start and end of specified
+		/// <c>StringBuilder</c> data.
+		/// </summary>
+		/// <param name="sb"><c>StringBuilder</c> data</param>
+		static void applyQuotes(StringBuilder sb)
+		{
+			sb.Insert(0, '"');
+			sb.Append('"');
 		}
 		#endregion editresult
 
