@@ -22,6 +22,15 @@ namespace yata
 
 
 		#region Fields (static)
+		/// <summary>
+		/// The <c><see cref="Current"/></c> view.
+		/// <list type="bullet">
+		/// <item><c><see cref="Current.Clipboard"/></c></item>
+		/// <item><c><see cref="Current.RowsBuffer"/></c></item>
+		/// <item><c><see cref="Current.ColBuffer"/></c></item>
+		/// <item><c><see cref="Current.CellsBuffer"/></c></item>
+		/// </list>
+		/// </summary>
 		static Current _current = Current.Clipboard;
 		#endregion Fields (static)
 
@@ -45,12 +54,6 @@ namespace yata
 
 			InitializeComponent();
 			Initialize(YataDialog.METRIC_FUL);
-
-			if (Settings._fonti != null)
-			{
-				la_Edit.Font =
-				la_View.Font = Settings._fonti;
-			}
 
 			switch (_current)
 			{

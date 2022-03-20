@@ -7,9 +7,7 @@ namespace yata
 	sealed partial class ClipboardEditor
 	{
 		Panel pa_top;
-		Label la_Edit;
 		RadioButton rb_Clipboard;
-		Label la_View;
 		RadioButton rb_RowsBuffer;
 		RadioButton rb_ColBuffer;
 		RadioButton rb_CellsBuffer;
@@ -31,9 +29,7 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.pa_top = new System.Windows.Forms.Panel();
-			this.la_Edit = new System.Windows.Forms.Label();
 			this.rb_Clipboard = new System.Windows.Forms.RadioButton();
-			this.la_View = new System.Windows.Forms.Label();
 			this.rb_RowsBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_ColBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_CellsBuffer = new System.Windows.Forms.RadioButton();
@@ -48,9 +44,7 @@ namespace yata
 			// 
 			// pa_top
 			// 
-			this.pa_top.Controls.Add(this.la_Edit);
 			this.pa_top.Controls.Add(this.rb_Clipboard);
-			this.pa_top.Controls.Add(this.la_View);
 			this.pa_top.Controls.Add(this.rb_RowsBuffer);
 			this.pa_top.Controls.Add(this.rb_ColBuffer);
 			this.pa_top.Controls.Add(this.rb_CellsBuffer);
@@ -58,71 +52,59 @@ namespace yata
 			this.pa_top.Location = new System.Drawing.Point(0, 0);
 			this.pa_top.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_top.Name = "pa_top";
-			this.pa_top.Size = new System.Drawing.Size(642, 22);
+			this.pa_top.Size = new System.Drawing.Size(642, 21);
 			this.pa_top.TabIndex = 0;
 			this.pa_top.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_Top);
 			// 
-			// la_Edit
-			// 
-			this.la_Edit.Location = new System.Drawing.Point(0, 1);
-			this.la_Edit.Margin = new System.Windows.Forms.Padding(0);
-			this.la_Edit.Name = "la_Edit";
-			this.la_Edit.Size = new System.Drawing.Size(45, 21);
-			this.la_Edit.TabIndex = 0;
-			this.la_Edit.Text = "editor";
-			this.la_Edit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// rb_Clipboard
 			// 
-			this.rb_Clipboard.Location = new System.Drawing.Point(48, 1);
+			this.rb_Clipboard.Location = new System.Drawing.Point(0, 1);
 			this.rb_Clipboard.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Clipboard.Name = "rb_Clipboard";
-			this.rb_Clipboard.Size = new System.Drawing.Size(95, 21);
-			this.rb_Clipboard.TabIndex = 1;
-			this.rb_Clipboard.Text = "Clipboard";
+			this.rb_Clipboard.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this.rb_Clipboard.Size = new System.Drawing.Size(130, 19);
+			this.rb_Clipboard.TabIndex = 0;
+			this.rb_Clipboard.Text = "Clipboard editor";
+			this.rb_Clipboard.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_Clipboard.UseVisualStyleBackColor = true;
 			this.rb_Clipboard.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
-			// la_View
-			// 
-			this.la_View.Location = new System.Drawing.Point(148, 1);
-			this.la_View.Margin = new System.Windows.Forms.Padding(0);
-			this.la_View.Name = "la_View";
-			this.la_View.Size = new System.Drawing.Size(55, 21);
-			this.la_View.TabIndex = 2;
-			this.la_View.Text = "viewers";
-			this.la_View.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// rb_RowsBuffer
 			// 
-			this.rb_RowsBuffer.Location = new System.Drawing.Point(207, 1);
+			this.rb_RowsBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.rb_RowsBuffer.Location = new System.Drawing.Point(250, 1);
 			this.rb_RowsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_RowsBuffer.Name = "rb_RowsBuffer";
-			this.rb_RowsBuffer.Size = new System.Drawing.Size(95, 21);
-			this.rb_RowsBuffer.TabIndex = 3;
-			this.rb_RowsBuffer.Text = "Rows buffer";
+			this.rb_RowsBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_RowsBuffer.TabIndex = 1;
+			this.rb_RowsBuffer.Text = "view Rows buffer";
+			this.rb_RowsBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_RowsBuffer.UseVisualStyleBackColor = true;
 			this.rb_RowsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// rb_ColBuffer
 			// 
-			this.rb_ColBuffer.Location = new System.Drawing.Point(305, 1);
+			this.rb_ColBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.rb_ColBuffer.Location = new System.Drawing.Point(510, 1);
 			this.rb_ColBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_ColBuffer.Name = "rb_ColBuffer";
-			this.rb_ColBuffer.Size = new System.Drawing.Size(95, 21);
-			this.rb_ColBuffer.TabIndex = 4;
-			this.rb_ColBuffer.Text = "Col buffer";
+			this.rb_ColBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_ColBuffer.TabIndex = 3;
+			this.rb_ColBuffer.Text = "view Col buffer";
+			this.rb_ColBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_ColBuffer.UseVisualStyleBackColor = true;
 			this.rb_ColBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
 			// rb_CellsBuffer
 			// 
-			this.rb_CellsBuffer.Location = new System.Drawing.Point(403, 1);
+			this.rb_CellsBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.rb_CellsBuffer.Location = new System.Drawing.Point(380, 1);
 			this.rb_CellsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_CellsBuffer.Name = "rb_CellsBuffer";
-			this.rb_CellsBuffer.Size = new System.Drawing.Size(95, 21);
-			this.rb_CellsBuffer.TabIndex = 5;
-			this.rb_CellsBuffer.Text = "Cells buffer";
+			this.rb_CellsBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_CellsBuffer.TabIndex = 2;
+			this.rb_CellsBuffer.Text = "view Cells buffer";
+			this.rb_CellsBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_CellsBuffer.UseVisualStyleBackColor = true;
 			this.rb_CellsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
@@ -131,10 +113,10 @@ namespace yata
 			this.rtb_Clip.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtb_Clip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rtb_Clip.HideSelection = false;
-			this.rtb_Clip.Location = new System.Drawing.Point(0, 22);
+			this.rtb_Clip.Location = new System.Drawing.Point(0, 21);
 			this.rtb_Clip.Margin = new System.Windows.Forms.Padding(0);
 			this.rtb_Clip.Name = "rtb_Clip";
-			this.rtb_Clip.Size = new System.Drawing.Size(642, 247);
+			this.rtb_Clip.Size = new System.Drawing.Size(642, 243);
 			this.rtb_Clip.TabIndex = 1;
 			this.rtb_Clip.Text = "";
 			this.rtb_Clip.WordWrap = false;
@@ -145,7 +127,7 @@ namespace yata
 			this.pa_bot.Controls.Add(this.bu_Begone);
 			this.pa_bot.Controls.Add(this.bu_Set);
 			this.pa_bot.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.pa_bot.Location = new System.Drawing.Point(0, 269);
+			this.pa_bot.Location = new System.Drawing.Point(0, 264);
 			this.pa_bot.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_bot.Name = "pa_bot";
 			this.pa_bot.Size = new System.Drawing.Size(642, 30);
@@ -192,7 +174,7 @@ namespace yata
 			// ClipboardEditor
 			// 
 			this.CancelButton = this.bu_Begone;
-			this.ClientSize = new System.Drawing.Size(642, 299);
+			this.ClientSize = new System.Drawing.Size(642, 294);
 			this.Controls.Add(this.rtb_Clip);
 			this.Controls.Add(this.pa_top);
 			this.Controls.Add(this.pa_bot);
