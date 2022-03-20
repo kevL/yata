@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 Mar 11
+2022 Mar 19
 kevL's
-ver 5.0.0.0
+ver 5.0.1.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -505,6 +505,8 @@ autorder=    "true" (without quotes) to automatically reorder row-ids after row
              PropertyPanel ignores this rule in case you want to force a row to
              have a specific id for whatever reason
 casesort=    "true" (without quotes) for case-sensitive sorting
+clearquotes= "true" (without quotes) to clear quotes around celltext that does
+             not contain whitespace
 codepage=    (integer) see Appendix N: Codepages
 context=     a right-click on a rowhead displays the contextmenu at the mouse-
              cursor's location by default. It can be displayed in a static
@@ -566,9 +568,10 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  as a notice that saving the table would result in output that
                  is different than the input file. But this is not rigorous.
                  Note that any silent changes shall be innocuous (eg. trimming
-                 whitespace from the ends of row-lines); setting the Changed
-                 flag like this is a way to tell purists that a file is not
-                 quite at peak efficiency
+                 whitespace from the ends of row-lines, or clearing quotes from
+                 celltexts that do not contain whitespace iff
+                 "clearquotes=true"); setting the Changed flag like this is a
+                 way to tell purists that a file is not quite at peak efficiency
              (6) and "true" also suppresses the tooltip that appears when a col
                  is sorted by anything other than ID-ascending ("warn : Table is
                  not sorted by ascending ID") - ie, persons who use Strict don't
@@ -578,6 +581,11 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  quoted Yata will add the quotes and issue a notice that the
                  text has been changed if "true"; otherwise Yata will add
                  double-quotes without bothering the user.
+             (8) when applying celltext that does not have whitespace but is
+                 double-quoted Yata will clear the quotes if "clearquotes=true"
+                 and issue a notice that the text has been changed if "true";
+                 otherwise Yata will clear the quotes without bothering the
+                 user.
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
