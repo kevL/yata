@@ -76,7 +76,7 @@ namespace yata
 		/// <param name="it"></param>
 		/// <param name="keyData"></param>
 		/// <returns></returns>
-		private static bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
+		static bool hasShortcut(ToolStripDropDownItem it, Keys keyData)
 		{
 			ToolStripMenuItem it0;
 
