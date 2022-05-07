@@ -70,8 +70,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Checks menus and any submenus they may have for a specified shortcut
-		/// recursively.
+		/// Checks menus and any submenus that they may have for a specified
+		/// shortcut recursively.
 		/// </summary>
 		/// <param name="it"></param>
 		/// <param name="keyData"></param>
@@ -131,9 +131,9 @@ namespace yata
 			}
 			base.WndProc(ref m);
 
-			// TODO: All texts gets selected only if click is to the right of
-			// the text; ie. only text that's on the left of the click gets
-			// selected ... wtf.
+			// TODO: All text gets selected only if click is to the right of the
+			// text; ie. only text that's on the left of the click gets selected
+			// ... wtf.
 		}
 
 #if Keys
@@ -172,6 +172,14 @@ namespace yata
 					case Keys.Enter:	// handled in YataGrid.ProcessCmdKey()
 					case Keys.Escape:	// handled in YataGrid.ProcessCmdKey()
 						break;
+
+					// allow [F3] and [Shift+F3] to work if 'tb_Search' has focus ->
+					case Keys.F3:
+					case Keys.F3 | Keys.Shift:
+						if (Yata.that.tb_Search.Focused)
+							break;
+
+						goto default;
 
 					default:
 						if (isShortcut(keyData))
