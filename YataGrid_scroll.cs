@@ -383,7 +383,8 @@ namespace yata
 				else
 					vert.Value = table.MaxVert;
 
-				Select();
+				if (!_f.Tabs.Focused)
+					Select();
 			}
 
 			if (table.MaxHori != 0)
@@ -393,7 +394,8 @@ namespace yata
 				else
 					hori.Value = table.MaxHori;
 
-				Select();
+				if (!_f.Tabs.Focused)
+					Select();
 			}
 		}
 	}
