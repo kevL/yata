@@ -62,6 +62,7 @@ namespace yata
 		{
 			if (!BypassInitScroll)
 			{
+				//logfile.Log("(" + System.IO.Path.GetFileNameWithoutExtension(Fullpath) + ") YataGrid.InitScroll()");
 				HeightTable = HeightColhead + HeightRow * RowCount;
 
 				WidthTable = WidthRowhead;
@@ -194,6 +195,7 @@ namespace yata
 				}
 				else if (!_editor.Visible)
 				{
+					//logfile.Log("(" + System.IO.Path.GetFileNameWithoutExtension(Fullpath) + ") YataGrid.Scroll()");
 					if (_visVert && (!_visHori || (ModifierKeys & Keys.Control) == Keys.None))
 					{
 						int h;
@@ -260,7 +262,14 @@ namespace yata
 		{
 			hideContexts();
 
-			if (_table == null) _table = this;
+			//string t = System.IO.Path.GetFileNameWithoutExtension(Fullpath);
+			//logfile.Log("(" + t + ") YataGrid.OnScrollValueChanged_vert() Yata.Table= " + System.IO.Path.GetFileNameWithoutExtension(Yata.Table.Fullpath));
+			if (_table == null)
+			{
+				_table = this;
+				//logfile.Log(". (_table == null) _table= " + System.IO.Path.GetFileNameWithoutExtension(_table.Fullpath));
+			}
+			//else logfile.Log(". _table= " + System.IO.Path.GetFileNameWithoutExtension(_table.Fullpath));
 
 			if (_table == Yata.Table)
 				_table.Invalidator(INVALID_GRID | INVALID_FROZ | INVALID_ROWS);
@@ -299,6 +308,8 @@ namespace yata
 
 			if (_table == Yata.Table)
 				_table.Invalidator(INVALID_GRID | INVALID_COLS);
+
+			//logfile.Log("YataGrid.OnScrollValueChanged_hori() _table= " + System.IO.Path.GetFileNameWithoutExtension(_table.Fullpath));
 
 			_table.OffsetHori = _table._scrollHori.Value;
 
@@ -342,19 +353,25 @@ namespace yata
 		/// <c><see cref="_table"/></c> are valid before call.</remarks>
 		void SyncDiffedGrids()
 		{
+			//string t = System.IO.Path.GetFileNameWithoutExtension(Fullpath);
+			//logfile.Log("(" + t + ") YataGrid.SyncDiffedGrids() _table= " + System.IO.Path.GetFileNameWithoutExtension(_table.Fullpath));
+
+			YataGrid table;
+
 			VScrollBar vert;
 			HScrollBar hori;
 
-			YataGrid table;
 			if (_f._diff1 == _table)
 			{
 				table = _f._diff2;
+
 				vert = table._scrollVert;
 				hori = table._scrollHori;
 			}
 			else // _f._diff2 == _table
 			{
 				table = _f._diff1;
+
 				vert = table._scrollVert;
 				hori = table._scrollHori;
 			}

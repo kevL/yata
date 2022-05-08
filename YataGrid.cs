@@ -89,7 +89,11 @@ namespace yata
 
 		#region Fields
 		internal readonly Yata _f;
-		YataGrid _table; // for cycling through all tables
+
+		/// <summary>
+		/// For cycling through all tables or for scrolling a sync-table.
+		/// </summary>
+		YataGrid _table;
 
 		internal int ColCount;
 		internal int RowCount;
@@ -404,11 +408,13 @@ namespace yata
 		{
 			if (!_init)
 			{
-				bool doneSync = false;
+				//string t = System.IO.Path.GetFileNameWithoutExtension(Fullpath);
 
 				for (int tab = 0; tab != _f.Tabs.TabCount; ++tab)
 				{
 					_table = _f.Tabs.TabPages[tab].Tag as YataGrid;
+
+					//logfile.Log("(" + t + ") YataGrid.OnResize() tab= " + tab + " (set) _table= " + System.IO.Path.GetFileNameWithoutExtension(_table.Fullpath));
 
 					// BLARG. The table can be invalid when a yata-process is
 					// already running and user opens more, multiple files from
@@ -433,11 +439,10 @@ namespace yata
 
 						if (!_f.IsMin) _table.EnsureDisplayed();
 
-						if (!doneSync
+						if (_table == this
 							&&  _f._diff1 != null   && _f._diff2 != null
 							&& (_f._diff1 == _table || _f._diff2 == _table))
 						{
-							doneSync = true;
 							SyncDiffedGrids();
 						}
 					}
@@ -452,6 +457,7 @@ namespace yata
 //						}
 //					}
 				}
+				//logfile.Log("(" + t + ") YataGrid.OnResize() (set) _table NULL");
 				_table = null;
 
 //				if (_piColhead != null) _piColhead.Dispose();
