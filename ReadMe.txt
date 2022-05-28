@@ -563,7 +563,7 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  regardless of the "strict=" setting
              (4) warn about a tab-character in the version header instead of a
                  space-character. This will be autocorrected if the file is
-                 saved regardless of the Strict setting
+                 saved regardless of the "strict=" setting
              (5) "true" will also cause Yata to try to flag the table as Changed
                  as a notice that saving the table would result in output that
                  is different than the input file. But this is not rigorous.
@@ -574,9 +574,9 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  way to tell purists that a file is not quite at peak efficiency
              (6) and "true" also suppresses the tooltip that appears when a col
                  is sorted by anything other than ID-ascending ("warn : Table is
-                 not sorted by ascending ID") - ie, persons who use Strict don't
-                 get a tooltip although the head of the id-col still turns to a
-                 red color regardless of this setting
+                 not sorted by ascending ID") - ie, persons who use
+                 "strict=true" don't get a tooltip although the head of the
+                 id-col still turns to a red color regardless of this setting
              (7) when applying celltext that has whitespace but is not double-
                  quoted Yata will add the quotes and issue a notice that the
                  text has been changed if "true"; otherwise Yata will add
@@ -804,8 +804,8 @@ Windows Registry.
 
 Appendix J: the Property Panel
 
-Yata can display the content of a selected row, or of the row of a single
-selected cell, vertically in a panel that appears at the right. Click the small
+Yata can display the content of a selected row, or of a row with selected
+cell(s), vertically in a panel that appears at the right. Click the small
 unlabeled button that's just beneath the Close button on the title bar to open
 and close the Property Panel.
 
