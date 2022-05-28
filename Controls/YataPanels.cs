@@ -241,15 +241,15 @@ namespace yata
 #if Clicks
 			logfile.Log("YataPanelCols.OnMouseUp() e.Button= " + e.Button);
 #endif
+			Cursor = Cursors.Default;
+			IsCursorSplit = false;
+
 			if (IsGrab)
 			{
 #if Clicks
 				logfile.Log(". clear IsGrab");
 #endif
 				IsGrab = false;
-				Cursor = Cursors.Default;
-				IsCursorSplit = false;
-
 				if (ModifierKeys == Keys.None
 					&& e.Button == MouseButtons.Left
 					&& e.X != _grabPos)
