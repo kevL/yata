@@ -376,6 +376,9 @@ namespace yata
 				hori = table._scrollHori;
 			}
 
+			bool @select = !_f.Tabs.Focused									// <- if tabs not focused
+						&& (!_f.tb_Goto.Focused || !Settings._instantgoto);	// <- if not "instantgoto" when gotobox has focus
+
 			if (table.MaxVert != 0)
 			{
 				if (_scrollVert.Value < table.MaxVert)
@@ -383,8 +386,7 @@ namespace yata
 				else
 					vert.Value = table.MaxVert;
 
-				if (!_f.Tabs.Focused)
-					Select();
+				if (@select) Select();
 			}
 
 			if (table.MaxHori != 0)
@@ -394,8 +396,7 @@ namespace yata
 				else
 					hori.Value = table.MaxHori;
 
-				if (!_f.Tabs.Focused)
-					Select();
+				if (@select) Select();
 			}
 		}
 	}
