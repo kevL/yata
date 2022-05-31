@@ -6,8 +6,8 @@ using System.Globalization;
 using System.Windows.Forms;
 
 // DEBUG ->
-using System.IO;
-using Microsoft.Win32;
+//using System.IO;
+//using Microsoft.Win32;
 
 
 namespace yata
@@ -597,7 +597,7 @@ namespace yata
 			foreach (FileInfo file in files)
 			{
 				logfile.Log(file.Name);
-				ttfFiles.Add(file.Name.ToLower(CultureInfo.InvariantCulture));
+				ttfFiles.Add(file.Name.ToLowerInvariant());
 			}
 			logfile.Log();
 			logfile.Log("COUNT (ttf)= " + files.Length);
@@ -649,11 +649,11 @@ namespace yata
 				string val = fonts.GetValue(@var) as String;
 				logfile.Log(@var + " : " + val);
 
-				switch (val.Substring(val.Length - 3).ToLower(CultureInfo.InvariantCulture))
+				switch (val.Substring(val.Length - 3).ToLowerInvariant())
 				{
 					case "ttf":
 						++countTtf;
-						ttfInstalled.Add(val.ToLower(CultureInfo.InvariantCulture));
+						ttfInstalled.Add(val.ToLowerInvariant());
 						break;
 
 					case "ttc": ++countTtc; break;
