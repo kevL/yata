@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 May 30
+2022 May 31
 kevL's
 ver 5.1.0.0
 
@@ -687,14 +687,17 @@ the filesize.
 
 Appendix E: how to use Info paths
 
+IMPORTANT - Info (on the statusbar) and InfoInput dialogs are hardcoded to work
+with 2das that ship with NwN2 only. NwN and NwN:EE users can (and will) get
+incorrect results. Info and InfoInput are not waranteed (sic) for NwN or NwN:EE.
+
 Yata is capable of displaying readable info about fields in Crafting.2da,
 Spells.2da, Feat.2da, and Classes.2da. Paths to various other 2da-files need to
 be set first, then info ought be displayed on the statusbar when the
 mouse-cursor is moved over the cells of certain cols like "CATEGORY" (displays
-the title of the trigger-spell) or "EFFECTS" (displays the recipe's itemproperty
-in a readable way), etc. Note that pathing to 2da-files can also be termed,
-groping ... that is, when a 2da-file is pathed it will be groped for relevant
-info.
+the label of a trigger-spell) or "EFFECTS" (displays a recipe's itemproperty in
+a readable way), etc. Note that pathing to 2da-files can also be termed, groping
+... that is, when a 2da-file is pathed it will be groped for relevant info.
 
 There are two ways to get such info: (a) Using the Paths menu when Crafting.2da,
 Spells.2da, Feat.2da, or Classes.2da is loaded, (b) Using "pathall=" entries in
