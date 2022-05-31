@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 May 29
+2022 May 30
 kevL's
-ver 5.0.3.0
+ver 5.1.0.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -529,8 +529,8 @@ instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
              pressed to select a row after digits are typed
 pathall=     a path without quotes to a valid directory to grope for 2da info
-             for Crafting.2da, Spells.2da, or Feat.2da (see Appendix E: how to
-             use Info paths)
+             for Crafting.2da, Spells.2da, Feat.2da, or Classes.2da (see
+             Appendix E: how to use Info paths)
 pathall=     another path for Crafting, Spells, and Feat info
 pathall=     etc. (the first pathall has lowest priority and any info found will
              be replaced by any info found in subsequent pathall directories;
@@ -591,9 +591,9 @@ The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
 
 The pathall directories are for gathering Info that will appear on the statusbar
-if Crafting.2da, Spells.2da, or Feat.2da are loaded as the cursor is moved over
-their cells. (Yata was designed with Crafting in mind and can show stuff like
-Encoded IPs as readable strings on the statusbar, eg.)
+if Crafting.2da, Spells.2da, Feat.2da, or Classes.2da are loaded as the cursor
+is moved over their cells. (Yata was designed with Crafting in mind and can show
+stuff like Encoded IPs as readable strings on the statusbar, eg.)
 
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
@@ -688,21 +688,24 @@ the filesize.
 Appendix E: how to use Info paths
 
 Yata is capable of displaying readable info about fields in Crafting.2da,
-Spells.2da, and Feat.2da. Paths to various other 2da-files need to be set first,
-then info ought be displayed on the statusbar when the mouse-cursor is moved
-over the cells of certain cols like "CATEGORY" (displays the title of the
-trigger-spell) or "EFFECTS" (displays the recipe's itemproperty in a readable
-way), etc. Note that pathing to 2da-files can also be termed, groping ... that
-is, when a 2da-file is pathed it will be groped for relevant info.
+Spells.2da, Feat.2da, and Classes.2da. Paths to various other 2da-files need to
+be set first, then info ought be displayed on the statusbar when the
+mouse-cursor is moved over the cells of certain cols like "CATEGORY" (displays
+the title of the trigger-spell) or "EFFECTS" (displays the recipe's itemproperty
+in a readable way), etc. Note that pathing to 2da-files can also be termed,
+groping ... that is, when a 2da-file is pathed it will be groped for relevant
+info.
 
 There are two ways to get such info: (a) Using the Paths menu when Crafting.2da,
-Spells.2da, or Feat.2da is loaded, (b) Using "pathall=" entries in Settings.Cfg.
+Spells.2da, Feat.2da, or Classes.2da is loaded, (b) Using "pathall=" entries in
+Settings.Cfg.
 
 (a) Using the Paths menu
 
-Paths appears on the menubar only when Crafting.2da, Spells.2da, or Feat.2da are
-loaded - the filename without extension needs to be "crafting", "spells", or
-"feat" (case-insensitive). The items under Paths are divided into five sections:
+Paths appears on the menubar only when Crafting.2da, Spells.2da, Feat.2da, or
+Classes.2da are loaded - the filename without extension needs to be "crafting",
+"spells", "feat", or "classes" (case-insensitive). The items under Paths are
+divided into six sections:
 
 Path all ...             : this item opens a folder browser dialog to search for
                            any/all applicable 2da-file(s). It can be used more
@@ -741,6 +744,13 @@ path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
                            note that Info for Feat.2da can also make use of data
                            that's groped from Feat.2da, Skills.2da, Spells.2da
                            and Categories.2da above.
+--
+path Packages.2da        : this item opens a file browser dialog. Use it to path
+                           to a specific 2da-file. A check will appear next to
+                           the entry on the menu; selecting the item a second
+                           time would clear the info. This is used by
+                           Classes.2da - note that Info for Classes.2da can also
+                           make use of data that's groped from Feat.2da above.
 
 (b) Using "pathall=" entries in Settings.Cfg
 

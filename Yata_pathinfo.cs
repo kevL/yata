@@ -48,13 +48,13 @@ namespace yata
 //				case -1: // rowhead
 //				case  0: // id
 
-				case 1: // "CATEGORY"
+				case 1: // "CATEGORY" - Spells.2da or no 2da
 					if (it_PathSpells2da.Checked
-					 	&& !String.IsNullOrEmpty(val = Table[id,col].text))
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+						if (val == gs.Stars) // this is actually AcidFog ...
 						{
 							info += gs.non;
 						}
@@ -86,7 +86,7 @@ namespace yata
 
 //				case 2: // "REAGENTS"
 
-				case 3: // "TAGS"
+				case 3: // "TAGS" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -135,7 +135,7 @@ namespace yata
 					}
 					break;
 
-				case 4: // "EFFECTS"
+				case 4: // "EFFECTS" - ItemPropDef.2da
 					if (it_PathItemPropDef2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -190,7 +190,7 @@ namespace yata
 
 //				case 5: // "OUTPUT"
 
-				case 6: // "SKILL"
+				case 6: // "SKILL" - Feat.2da and/or Skills.2da
 					if ((it_PathFeat2da.Checked || it_PathSkills2da.Checked)
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -260,6 +260,9 @@ namespace yata
 					ofd.Title  = "Select BaseItems.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "baseitems.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -291,6 +294,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Feat.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "feat.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -324,6 +330,9 @@ namespace yata
 					ofd.Title  = "Select ItemPropDef.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "itempropdef.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -356,6 +365,9 @@ namespace yata
 					ofd.Title  = "Select Skills.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "skills.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -387,6 +399,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Spells.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "spells.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -423,6 +438,9 @@ namespace yata
 					ofd.Title  = "Select Classes.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "classes.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -454,6 +472,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Disease.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "disease.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -487,6 +508,9 @@ namespace yata
 					ofd.Title  = "Select Iprp_AmmoCost.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "iprp_ammocost.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -518,6 +542,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Iprp_Feats.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "iprp_feats.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -552,6 +579,9 @@ namespace yata
 					ofd.Title  = "Select Iprp_OnHitSpell.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "iprp_onhitspell.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -585,6 +615,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Iprp_Spells.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "iprp_spells.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -621,6 +654,9 @@ namespace yata
 					ofd.Title  = "Select RacialTypes.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "racialtypes.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -655,13 +691,13 @@ namespace yata
 
 			switch (col)
 			{
-				case 4: // "School" (also SpellSchools.2da)
+				case 4: // "School" (SpellSchools.2da) - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
-						switch (val.ToUpper(CultureInfo.InvariantCulture))
+						switch (val.ToUpperInvariant())
 						{
 							case "A": info += "Abjuration";    break;
 							case "C": info += "Conjuration";   break;
@@ -677,14 +713,14 @@ namespace yata
 					}
 					break;
 
-				case 5: // "Range" (Ranges.2da)
+				case 5: // "Range" (Ranges.2da) - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
 						info = Table.Cols[col].text + ": ";
 
 						int r;
-						switch (val.ToUpper(CultureInfo.InvariantCulture))
+						switch (val.ToUpperInvariant())
 						{
 							case "P": info += "Personal"; r =  0; break; // NOTE: 'rangeLabels' could be used but
 							case "T": info += "Touch";    r =  1; break; // they're abnormal: "SpellRngPers" eg.
@@ -703,7 +739,7 @@ namespace yata
 					}
 					break;
 
-				case 7: // "MetaMagic"
+				case 7: // "MetaMagic" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -891,7 +927,7 @@ namespace yata
 					}
 					break;
 
-				case 8: // "TargetType"
+				case 8: // "TargetType" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -961,7 +997,7 @@ namespace yata
 					}
 					break;
 
-				case 47: // "SubRadSpell1" (Spells.2da)
+				case 47: // "SubRadSpell1" - Spells.2da
 				case 48: // "SubRadSpell2"
 				case 49: // "SubRadSpell3"
 				case 50: // "SubRadSpell4"
@@ -991,7 +1027,7 @@ namespace yata
 					}
 					break;
 
-				case 52: // "Category" (Categories.2da)
+				case 52: // "Category" - Categories.2da
 					if (it_PathCategories2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1016,7 +1052,7 @@ namespace yata
 					}
 					break;
 
-				case 54: // "UserType"
+				case 54: // "UserType" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -1039,7 +1075,7 @@ namespace yata
 					}
 					break;
 
-				case 58: // "SpontCastClassReq" (Classes.2da)
+				case 58: // "SpontCastClassReq" - Classes.2da
 					if (it_PathClasses2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1066,7 +1102,7 @@ namespace yata
 					}
 					break;
 
-				case 61: // "FeatID"
+				case 61: // "FeatID" - Feat.2da
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1110,7 +1146,7 @@ namespace yata
 					}
 					break;
 
-				case 65: // "AsMetaMagic"
+				case 65: // "AsMetaMagic" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -1149,7 +1185,7 @@ namespace yata
 					}
 					break;
 
-				case 66: // "TargetingUI"
+				case 66: // "TargetingUI" - SpellTarget.2da
 					if (it_PathSpellTarget2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1252,9 +1288,9 @@ namespace yata
 		internal const int TARGET_PLACEABLES = 0x20; // 32
 		internal const int TARGET_TRIGGERS   = 0x40; // 64
 
-		internal const int TARGET_TOTAL      = TARGET_SELF | TARGET_CREATURE | TARGET_GROUND
-											 | TARGET_ITEMS | TARGET_DOORS | TARGET_PLACEABLES
-											 | TARGET_TRIGGERS;
+		internal const int TARGET_TOTAL = TARGET_SELF | TARGET_CREATURE | TARGET_GROUND
+										| TARGET_ITEMS | TARGET_DOORS | TARGET_PLACEABLES
+										| TARGET_TRIGGERS;
 
 
 		/// <summary>
@@ -1273,6 +1309,9 @@ namespace yata
 				{
 					ofd.Title  = "Select Categories.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "categories.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1308,6 +1347,9 @@ namespace yata
 					ofd.Title  = "Select Ranges.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "ranges.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -1342,6 +1384,9 @@ namespace yata
 				{
 					ofd.Title  = "Select SpellTarget.2da";
 					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "spelltarget.2da";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
@@ -1381,7 +1426,7 @@ namespace yata
 
 			switch (col)
 			{
-				case 20: // "PREREQFEAT1" - Feat.2da ->
+				case 20: // "PREREQFEAT1" - Feat.2da
 				case 21: // "PREREQFEAT2"
 				case 28: // "SUCCESSOR"
 				case 34: // "OrReqFeat0"
@@ -1489,7 +1534,7 @@ namespace yata
 					}
 					break;
 
-				case 40: // "REQSKILL" - Skills.2da ->
+				case 40: // "REQSKILL" - Skills.2da
 				case 43: // "REQSKILL2"
 					if (it_PathSkills2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
@@ -1515,7 +1560,7 @@ namespace yata
 					}
 					break;
 
-				case 47: // "TOOLSCATEGORIES"
+				case 47: // "TOOLSCATEGORIES" - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "All Feats"
 					{
@@ -1540,7 +1585,7 @@ namespace yata
 					}
 					break;
 
-				case 57: // "ToggleMode"
+				case 57: // "ToggleMode" - CombatModes.2da
 					if (it_PathCombatModes2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -1586,6 +1631,9 @@ namespace yata
 					ofd.Title  = "Select MasterFeats.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "masterfeats.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -1619,6 +1667,9 @@ namespace yata
 					ofd.Title  = "Select CombatModes.2da";
 					ofd.Filter = Get2daFilter();
 
+					ofd.FileName = "combatmodes.2da";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 					{
 						Info.GropeLabels(ofd.FileName,
@@ -1635,6 +1686,293 @@ namespace yata
 			}
 		}
 		#endregion Feat info
+
+
+		#region Class info
+		/// <summary>
+		/// Gets a readable string when mouseovering cols in Classes.2da.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="col"></param>
+		/// <returns>info text for the statusbar</returns>
+		string getClassInfo(int id, int col)
+		{
+			string info = gs.non;
+
+			string val;
+			int result;
+
+			switch (col)
+			{
+				case 40: // "PrimaryAbil" - no 2da
+				case 41: // "SpellAbil"
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						switch (val.ToUpperInvariant())
+						{
+							case "STR": info += "Strength";     break;
+							case "CON": info += "Constitution"; break;
+							case "DEX": info += "Dexterity";    break;
+							case "INT": info += "Intelligence"; break;
+							case "WIS": info += "Wisdom";       break;
+							case "CHA": info += "Charisma";     break;
+
+							default: info += gs.bork;           break;
+						}
+					}
+					break;
+
+				case 42: // "AlignRestrict" - no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+											  out result))
+						{
+							switch (result)
+							{
+								case ALIGNRESTRICT_NONE:
+									info += "none";
+									break;
+
+								default:
+								{
+									// check the InvertRestrict col ->
+									// NOTE: The NwN engine(s) could allow values other than "1".
+									if (col + 2 < Table.ColCount && Table[id, col + 2].text == "1")
+									{
+										info += "REQUIRED ";
+									}
+									else
+										info += "PROHIBITED ";
+
+									bool space = false;
+									if ((result & ALIGNRESTRICT_NEUTRAL) != 0)
+									{
+										// check the AlignRstrctType col ->
+										string art = String.Empty;
+
+										if (col + 1 < Table.ColCount)
+										{
+											int artresult;
+
+											string text = Table[id, col + 1].text;
+											if (text.Length > 2 && text.Substring(0,2) == "0x"
+												&& Int32.TryParse(text.Substring(2),
+																  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+																  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+																  out artresult))
+											{
+												if ((artresult & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
+													art = " ethics";
+
+												if ((artresult & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
+												{
+													if (art != String.Empty) art += "/morals";
+													else                     art  = " morals";
+												}
+											}
+										}
+
+										info += "(1)neutral" + art;
+										space = true;
+									}
+									if ((result & ALIGNRESTRICT_LAWFUL) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(2)lawful";
+										space = true;
+									}
+									if ((result & ALIGNRESTRICT_CHAOTIC) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(4)chaotic";
+										space = true;
+									}
+									if ((result & ALIGNRESTRICT_GOOD) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(8)good";
+										space = true;
+									}
+									if ((result & ALIGNRESTRICT_EVIL) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(16)evil";
+										space = true;
+									}
+									break;
+								}
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case 43: // "AlignRstrctType" - no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+											  out result))
+						{
+							switch (result)
+							{
+								case ALIGNRESTRICTTYPE_NONE:
+									info += "none";
+									break;
+
+								default:
+								{
+									bool space = false;
+									if ((result & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
+									{
+										info += "(1)law/chaos";
+										space = true;
+									}
+									if ((result & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(2)good/evil";
+										space = true;
+									}
+									break;
+								}
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case 74: // "Package" - Packages.2da
+					if (it_PathPackages2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.packageLabels.Count)
+							{
+								info += Info.packageLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case 75: // "FEATPracticedSpellcaster" - Feat.2da
+				case 76: // "FEATExtraSlot"
+				case 77: // "FEATArmoredCaster"
+					if (it_PathFeat2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.featLabels.Count)
+							{
+								info += Info.featLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+			}
+
+			return info;
+		}
+
+		// AlignRestrict
+		internal const int ALIGNRESTRICT_NONE    = 0x00; //  0
+		internal const int ALIGNRESTRICT_NEUTRAL = 0x01; //  1
+		internal const int ALIGNRESTRICT_LAWFUL  = 0x02; //  2
+		internal const int ALIGNRESTRICT_CHAOTIC = 0x04; //  4
+		internal const int ALIGNRESTRICT_GOOD    = 0x08; //  8
+		internal const int ALIGNRESTRICT_EVIL    = 0x10; // 16
+
+		internal const int ALIGNRESTRICT_TOTAL = ALIGNRESTRICT_NEUTRAL
+											   | ALIGNRESTRICT_LAWFUL
+											   | ALIGNRESTRICT_CHAOTIC
+											   | ALIGNRESTRICT_GOOD
+											   | ALIGNRESTRICT_EVIL;
+
+		// AlignRstrctType
+		internal const int ALIGNRESTRICTTYPE_NONE     = 0x0;
+		internal const int ALIGNRESTRICTTYPE_LAWCHAOS = 0x1;
+		internal const int ALIGNRESTRICTTYPE_GOODEVIL = 0x2;
+
+		internal const int ALIGNRESTRICTTYPE_TOTAL = ALIGNRESTRICTTYPE_LAWCHAOS
+												   | ALIGNRESTRICTTYPE_GOODEVIL;
+
+		/// <summary>
+		/// Handles clicking the PathPackages menuitem.
+		/// Intended to add labels from Packages.2da to the
+		/// <c><see cref="Info.packageLabels">Info.packageLabels</see></c>
+		/// list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathPackages2da"/></c></param>
+		/// <param name="e"></param>
+		void itclick_PathPackages2da(object sender, EventArgs e)
+		{
+			if (!it_PathPackages2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select Packages.2da";
+					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "packages.2da";
+					ofd.AutoUpgradeEnabled = false;
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.packageLabels,
+										 it_PathPackages2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathPackages2da.Checked = false;
+				Info.packageLabels.Clear();
+			}
+		}
+		#endregion Class info
 
 
 		#region Paths
@@ -1758,6 +2096,13 @@ namespace yata
 			Info.GropeLabels(Path.Combine(directory, "combatmodes.2da"),
 							 Info.combatmodeLabels,
 							 it_PathCombatModes2da,
+							 1);
+
+
+			// Classes info ->
+			Info.GropeLabels(Path.Combine(directory, "packages.2da"),
+							 Info.packageLabels,
+							 it_PathPackages2da,
 							 1);
 		}
 		#endregion Paths

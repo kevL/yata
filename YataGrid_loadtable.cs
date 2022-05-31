@@ -819,6 +819,10 @@ namespace yata
 					case "FEAT":
 						Info = InfoType.INFO_FEAT;
 						break;
+
+					case "CLASSES":
+						Info = InfoType.INFO_CLASS;
+						break;
 				}
 
 				if (Info != InfoType.INFO_NONE)

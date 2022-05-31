@@ -1349,6 +1349,9 @@ namespace yata
 								case YataGrid.InfoType.INFO_FEAT:
 									statbar_lblInfo.Text = getFeatInfo(r,c);
 									break;
+								case YataGrid.InfoType.INFO_CLASS:
+									statbar_lblInfo.Text = getClassInfo(r,c);
+									break;
 
 								default:
 									statbar_lblInfo.Text = String.Empty;

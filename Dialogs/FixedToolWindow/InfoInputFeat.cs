@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
 
 
@@ -99,7 +98,7 @@ namespace yata
 					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 					break;
 
-				case ToggleMode:
+				case ToggleMode: // int-val,dropdown,unique
 					list_CombatModes();
 
 					initintvals(val);
@@ -150,7 +149,7 @@ namespace yata
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower(CultureInfo.InvariantCulture)));
+				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -173,7 +172,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "" (.2da) to the
+		/// Adds allowable entries for "ToggleMode" (CombatModes.2da) to the
 		/// combobox along with a final stars item.
 		/// </summary>
 		void list_CombatModes()
@@ -194,6 +193,7 @@ namespace yata
 		/// Selects an entry in the combobox and preps the int-vals in Yata to
 		/// deal with user-input.
 		/// - duplicates InfoInputSpells.initintvals()
+		/// - duplicates InfoInputClass.initintvals()
 		/// </summary>
 		/// <param name="val"></param>
 		void initintvals(string val)
@@ -360,9 +360,9 @@ namespace yata
 		{
 			switch (_cell.x)
 			{
-				case Category:   // int,dropdown,unique
-				case MasterFeat: // int,dropdown,unique
-				case ToggleMode: // int,dropdown,unique
+				case Category: // int,dropdown,unique
+				case MasterFeat:
+				case ToggleMode:
 					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
 					break;
 

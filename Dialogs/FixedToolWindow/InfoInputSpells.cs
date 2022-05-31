@@ -551,7 +551,7 @@ namespace yata
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLower(CultureInfo.InvariantCulture)));
+				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -659,6 +659,7 @@ namespace yata
 		/// Selects an entry in the combobox and preps the int-vals in Yata to
 		/// deal with user-input.
 		/// - duplicates InfoInputFeat.initintvals()
+		/// - duplicates InfoInputClass.initintvals()
 		/// </summary>
 		/// <param name="val"></param>
 		void initintvals(string val)
@@ -778,7 +779,7 @@ namespace yata
 					cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
 				}
 			}
-			else //if (_cb == cb_07)
+			else // _cb == cb_07
 			{
 				if (_cb.Checked)
 				{
@@ -846,7 +847,7 @@ namespace yata
 					cb_03.Checked = cb_05.Checked = false;
 				}
 			}
-			else //if (_cb == cb_05)
+			else // _cb == cb_05
 			{
 				if (_cb.Checked)
 				{
@@ -983,7 +984,7 @@ namespace yata
 				if (_cb.Checked) _f.int1 |=  Yata.META_I_ELDRITCH_SPEAR;
 				else             _f.int1 &= ~Yata.META_I_ELDRITCH_SPEAR;
 			}
-			else if (_cb == cb_23)
+			else // _cb == cb_23
 			{
 				if (_cb.Checked) _f.int1 |=  Yata.META_I_HIDEOUS_BLOW;
 				else             _f.int1 &= ~Yata.META_I_HIDEOUS_BLOW;
@@ -1032,7 +1033,7 @@ namespace yata
 				if (_cb.Checked) _f.int1 |=  Yata.TARGET_PLACEABLES;
 				else             _f.int1 &= ~Yata.TARGET_PLACEABLES;
 			}
-			else if (_cb == cb_06)
+			else // _cb == cb_06
 			{
 				if (_cb.Checked) _f.int1 |=  Yata.TARGET_TRIGGERS;
 				else             _f.int1 &= ~Yata.TARGET_TRIGGERS;
@@ -1075,7 +1076,7 @@ namespace yata
 					cb_00.Checked = cb_01.Checked = cb_03.Checked = false;
 				}
 			}
-			else //if (_cb == cb_03)
+			else // _cb == cb_03
 			{
 				if (_cb.Checked)
 				{
@@ -1328,11 +1329,11 @@ namespace yata
 		/// <param name="result"></param>
 		void printHexString(int result)
 		{
-			string q;
-			if (result > 0xFF) q = "X6";
-			else               q = "X2";
+			string f;
+			if (result > 0xFF) f = "X6";
+			else               f = "X2";
 
-			lbl_Val.Text = "0x" + result.ToString(q, CultureInfo.InvariantCulture);
+			lbl_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
 		}
 		#endregion Methods
 

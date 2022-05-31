@@ -148,6 +148,17 @@ namespace yata
 		#endregion Feat caches
 
 
+		#region Class caches
+		// NOTE: Also uses Feat.2da for feat-labels.
+
+		/// <summary>
+		/// A list that holds labels for packages in Packages.2da.
+		/// - optional
+		/// </summary>
+		internal static List<string> packageLabels = new List<string>();
+		#endregion Class caches
+
+
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
 		/// TODO: Check that the given 2da really has the required cols.

@@ -54,6 +54,12 @@ namespace yata
 					cellit_Input.Visible = true;
 					cellit_Input.Enabled = !Table.Readonly && isFeatInfoInputCol();
 					break;
+
+				case YataGrid.InfoType.INFO_CLASS:
+					cellit_Input.Text    = "InfoInput (classes.2da)";
+					cellit_Input.Visible = true;
+					cellit_Input.Enabled = !Table.Readonly && isClassesInfoInputCol();
+					break;
 			}
 
 			_contextCe.Show(Table, Table.PointToClient(Cursor.Position));
@@ -176,6 +182,30 @@ namespace yata
 
 				case InfoInputFeat.ToggleMode:
 					if (Info.combatmodeLabels.Count != 0)
+						return true;
+					break;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
+		/// </summary>
+		/// <returns><c>true</c> if the InfoInput operation will show for
+		/// Classes.2da.</returns>
+		bool isClassesInfoInputCol()
+		{
+			switch (_sel.x)
+			{
+				case InfoInputClasses.PrimaryAbil: // these don't rely on 2da-gropes ->
+				case InfoInputClasses.SpellAbil:
+				case InfoInputClasses.AlignRestrict:
+				case InfoInputClasses.AlignRstrctType:
+					return true;
+
+				case InfoInputClasses.Package:
+					if (Info.packageLabels.Count != 0)
 						return true;
 					break;
 			}
@@ -427,11 +457,11 @@ namespace yata
 									}
 									else
 									{
-										string q;
-										if (int1 > 0xFF) q = "X6"; // is MetaMagic (invocation)
-										else             q = "X2"; // is MetaMagic (standard) or TargetType
+										string f;
+										if (int1 > 0xFF) f = "X6"; // is MetaMagic (invocation)
+										else             f = "X2"; // is MetaMagic (standard) or TargetType
 
-										Table.ChangeCellText(_sel, "0x" + int1.ToString(q, CultureInfo.InvariantCulture)); // does not do a text-check
+										Table.ChangeCellText(_sel, "0x" + int1.ToString(f, CultureInfo.InvariantCulture)); // does not do a text-check
 									}
 								}
 							}
@@ -466,6 +496,50 @@ namespace yata
 							break;
 					}
 					break;
+
+				case YataGrid.InfoType.INFO_CLASS:
+					switch (_sel.x)
+					{
+						case InfoInputClasses.PrimaryAbil: // STRING Input ->
+						case InfoInputClasses.SpellAbil:
+							using (var iic = new InfoInputClasses(this, _sel))
+							{
+								if (iic.ShowDialog(this) == DialogResult.OK
+									&& str1 != str0)
+								{
+									Table.ChangeCellText(_sel, str1); // does not do a text-check
+								}
+							}
+							break;
+
+						case InfoInputClasses.AlignRestrict: // HEX Input ->
+						case InfoInputClasses.AlignRstrctType:
+							using (var iis = new InfoInputClasses(this, _sel))
+							{
+								if (iis.ShowDialog(this) == DialogResult.OK
+									&& int1 != int0)
+								{
+									if (int1 == II_ASSIGN_STARS)
+									{
+										Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
+									}
+									else
+									{
+										string f;
+										if (_sel.x == InfoInputClasses.AlignRestrict) f = "X2";
+										else                                          f = "X1"; // _sel.x == InfoInputClasses.AlignRstrctType
+
+										Table.ChangeCellText(_sel, "0x" + int1.ToString(f, CultureInfo.InvariantCulture)); // does not do a text-check
+									}
+								}
+							}
+							break;
+
+						case InfoInputClasses.Package:
+							doIntInputClass();
+							break;
+					}
+					break;
 			}
 		}
 
@@ -487,6 +561,16 @@ namespace yata
 		{
 			using (var iif = new InfoInputFeat(this, _sel))
 				doIntInput(iif);
+		}
+
+		/// <summary>
+		/// - helper for
+		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
+		/// </summary>
+		void doIntInputClass()
+		{
+			using (var iic = new InfoInputClasses(this, _sel))
+				doIntInput(iic);
 		}
 
 		/// <summary>
