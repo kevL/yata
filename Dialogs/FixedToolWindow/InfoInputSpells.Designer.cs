@@ -457,10 +457,11 @@ namespace yata
 			// 
 			// btn_Clear
 			// 
+			this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_Clear.Location = new System.Drawing.Point(5, 190);
 			this.btn_Clear.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Clear.Name = "btn_Clear";
-			this.btn_Clear.Size = new System.Drawing.Size(65, 20);
+			this.btn_Clear.Size = new System.Drawing.Size(65, 22);
 			this.btn_Clear.TabIndex = 26;
 			this.btn_Clear.Text = "clear";
 			this.btn_Clear.UseVisualStyleBackColor = true;

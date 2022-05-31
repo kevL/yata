@@ -114,7 +114,7 @@ namespace yata
 			// 
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btn_Accept.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.btn_Accept.Location = new System.Drawing.Point(0, 194);
+			this.btn_Accept.Location = new System.Drawing.Point(0, 174);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(369, 27);
@@ -149,10 +149,11 @@ namespace yata
 			// 
 			// btn_Clear
 			// 
-			this.btn_Clear.Location = new System.Drawing.Point(5, 170);
+			this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btn_Clear.Location = new System.Drawing.Point(5, 150);
 			this.btn_Clear.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_Clear.Name = "btn_Clear";
-			this.btn_Clear.Size = new System.Drawing.Size(65, 20);
+			this.btn_Clear.Size = new System.Drawing.Size(65, 22);
 			this.btn_Clear.TabIndex = 8;
 			this.btn_Clear.Text = "clear";
 			this.btn_Clear.UseVisualStyleBackColor = true;
@@ -161,7 +162,7 @@ namespace yata
 			// InfoInputClasses
 			// 
 			this.AcceptButton = this.btn_Accept;
-			this.ClientSize = new System.Drawing.Size(369, 221);
+			this.ClientSize = new System.Drawing.Size(369, 201);
 			this.Controls.Add(this.btn_Clear);
 			this.Controls.Add(this.cb_05);
 			this.Controls.Add(this.cb_04);

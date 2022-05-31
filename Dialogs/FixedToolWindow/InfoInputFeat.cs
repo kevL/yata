@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -129,12 +130,15 @@ namespace yata
 
 
 		/// <summary>
-		/// Hides the label and shows the combobox for lists instead.
+		/// Hides the label and shows the combobox for dropdown-lists instead.
 		/// </summary>
 		void dropdown()
 		{
 			lbl_Val.Visible = false;
 			cbx_Val.Visible = true;
+
+			ClientSize = new Size(ClientSize.Width,
+								  ClientSize.Height - 140);
 		}
 
 		/// <summary>
