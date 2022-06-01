@@ -114,7 +114,7 @@ namespace yata
 			ClientSize = new Size(w + pad_HORI,
 								  h + pad_VERT);
 
-			pokeUi(_dict.Count != 0);
+			enable();
 
 
 			int widthborder = (Width  - ClientSize.Width) / 2;
@@ -245,7 +245,7 @@ namespace yata
 			}
 
 
-			pokeUi(_dict.Count != 0);
+			enable();
 
 			if (_dict.ContainsKey(_eId))
 				rtb_Copyable.Text = _dict[_eId];
@@ -338,7 +338,7 @@ namespace yata
 				}
 
 
-				pokeUi(_dict.Count != 0);
+				enable();
 
 				if (_dict.ContainsKey(_eId))
 					rtb_Copyable.Text = _dict[_eId];
@@ -405,16 +405,16 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets UI elements depending on whether there are any entries in the
-		/// current TalkTable's dictionary.
+		/// Enables <c><see cref="btn_Forward"/></c> and
+		/// <c><see cref="btn_Backward"/></c> based on whether there are any
+		/// entries in the current TalkTable's <c>Dictionary</c>. Also sets the
+		/// background color.
 		/// </summary>
-		/// <param name="enabled"><c>true</c> if the current dictionary has
-		/// entries</param>
-		void pokeUi(bool enabled)
+		void enable()
 		{
 			Color color;
 			if (btn_Backward.Enabled =
-				btn_Forward .Enabled = enabled)
+				btn_Forward .Enabled = _dict.Count != 0)
 			{
 				color = Colors.TalkfileLoaded;
 			}
