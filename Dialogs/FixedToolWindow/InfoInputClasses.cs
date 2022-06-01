@@ -461,8 +461,8 @@ namespace yata
 					printHexString(_f.int1 = 0);
 					break;
 
-				case Package: // int,dropdown,unique
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
+				case Package: // dropdown -> fire changed_Combobox()
+					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 					break;
 			}
 		}
