@@ -25,6 +25,13 @@ namespace yata
 		Yata _f;
 		Cell _cell;
 
+		/// <summary>
+		/// <c>true</c> bypasses the <c>CheckedChanged</c> handler for
+		/// <c>CheckBoxes</c> and the <c>SelectedIndexChanged</c> handler for
+		/// the <c>ComboBox</c>.
+		/// </summary>
+		/// <remarks>Initialization will configure this dialog without invoking
+		/// the handlers.</remarks>
 		bool _init;
 
 		CheckBox _cb;
@@ -201,8 +208,11 @@ namespace yata
 		/// <summary>
 		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
 		/// Yata to deal with user-input.
-		/// - duplicates InfoInputSpells.initintvals()
-		/// - duplicates InfoInputClass.initintvals()
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputSpells"/>.initintvals()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputClasses"/>.initintvals()</c>
 		/// </summary>
 		/// <param name="val"></param>
 		void initintvals(string val)
@@ -254,73 +264,21 @@ namespace yata
 		/// </summary>
 		void change_ToolsCategories()
 		{
-			string val = gs.Stars;
+			clearchecks();
 
-			_init = true;
-			if (_cb == cb_00)
+			string val;
+			if (_cb.Checked)
 			{
-				if (_cb.Checked)
-				{
-					val = "0";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = false;
-				}
+				if      (_cb == cb_00) val = "0";
+				else if (_cb == cb_01) val = "1";
+				else if (_cb == cb_02) val = "2";
+				else if (_cb == cb_03) val = "3";
+				else if (_cb == cb_04) val = "4";
+				else if (_cb == cb_05) val = "5";
+				else                   val = "6"; // _cb == cb_06
 			}
-			else if (_cb == cb_01)
-			{
-				if (_cb.Checked)
-				{
-					val = "1";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = false;
-				}
-			}
-			else if (_cb == cb_02)
-			{
-				if (_cb.Checked)
-				{
-					val = "2";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = false;
-				}
-			}
-			else if (_cb == cb_03)
-			{
-				if (_cb.Checked)
-				{
-					val = "3";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = false;
-				}
-			}
-			else if (_cb == cb_04)
-			{
-				if (_cb.Checked)
-				{
-					val = "4";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_05.Checked = cb_06.Checked = false;
-				}
-			}
-			else if (_cb == cb_05)
-			{
-				if (_cb.Checked)
-				{
-					val = "5";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_06.Checked = false;
-				}
-			}
-			else //if (_cb == cb_06)
-			{
-				if (_cb.Checked)
-				{
-					val = "6";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-				}
-			}
-			_init = false;
+			else
+				val = gs.Stars;
 
 			lbl_Val.Text = _f.str1 = val;
 			btn_Clear.Enabled = (val != gs.Stars);
@@ -379,14 +337,41 @@ namespace yata
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
-					_init = false;
+					_cb = null;
+					clearchecks();
 					break;
 			}
 		}
 		#endregion Handlers
+
+
+		#region Methods
+		/// <summary>
+		/// Clears all <c>CheckBoxes</c> except the current <c>CheckBox</c>
+		/// <c><see cref="_cb"/></c> (if valid).
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputSpells"/>.clearchecks()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputClasses"/>.clearchecks()</c>
+		/// </summary>
+		/// <remarks>Set <c>(_cb = null)</c> to clear all <c>Checkboxes</c>.</remarks>
+		void clearchecks()
+		{
+			_init = true;
+
+			CheckBox cb;
+			foreach (var control in Controls)
+			{
+				if ((cb = control as CheckBox) != null
+					&& cb.Checked && (_cb == null || cb != _cb))
+				{
+					cb.Checked = false;
+				}
+			}
+			_init = false;
+		}
+		#endregion Methods
 
 
 		#region Handlers (override)

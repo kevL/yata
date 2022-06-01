@@ -27,6 +27,13 @@ namespace yata
 		Yata _f;
 		Cell _cell;
 
+		/// <summary>
+		/// <c>true</c> bypasses the <c>CheckedChanged</c> handler for
+		/// <c>CheckBoxes</c> and the <c>SelectedIndexChanged</c> handler for
+		/// the <c>ComboBox</c>.
+		/// </summary>
+		/// <remarks>Initialization will configure this dialog without invoking
+		/// the handlers.</remarks>
 		bool _init;
 
 		CheckBox _cb;
@@ -260,8 +267,11 @@ namespace yata
 		/// <summary>
 		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
 		/// Yata to deal with user-input.
-		/// - duplicates InfoInputSpells.initintvals()
-		/// - duplicates InfoInputFeat.initintvals()
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputSpells"/>.initintvals()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputFeat"/>.initintvals()</c>
 		/// </summary>
 		/// <param name="val"></param>
 		void initintvals(string val)
@@ -314,52 +324,20 @@ namespace yata
 		/// </summary>
 		void change_Ability()
 		{
-			string val = gs.Stars;
+			clearchecks();
 
-			_init = true;
-			if (_cb == cb_00)
+			string val;
+			if (_cb.Checked)
 			{
-				if (_cb.Checked)
-				{
-					val = "STR"; clearchecks();
-				}
+				if      (_cb == cb_00) val = "STR";
+				else if (_cb == cb_01) val = "CON";
+				else if (_cb == cb_02) val = "DEX";
+				else if (_cb == cb_03) val = "INT";
+				else if (_cb == cb_04) val = "WIS";
+				else                   val = "CHA"; // _cb == cb_05
 			}
-			else if (_cb == cb_01)
-			{
-				if (_cb.Checked)
-				{
-					val = "CON"; clearchecks();
-				}
-			}
-			else if (_cb == cb_02)
-			{
-				if (_cb.Checked)
-				{
-					val = "DEX"; clearchecks();
-				}
-			}
-			else if (_cb == cb_03)
-			{
-				if (_cb.Checked)
-				{
-					val = "INT"; clearchecks();
-				}
-			}
-			else if (_cb == cb_04)
-			{
-				if (_cb.Checked)
-				{
-					val = "WIS"; clearchecks();
-				}
-			}
-			else // _cb == cb_05
-			{
-				if (_cb.Checked)
-				{
-					val = "CHA"; clearchecks();
-				}
-			}
-			_init = false;
+			else
+				val = gs.Stars;
 
 			lbl_Val.Text = _f.str1 = val;
 			btn_Clear.Enabled = (val != gs.Stars);
@@ -469,18 +447,16 @@ namespace yata
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
 
-					_init = true;
-					_cb = null; clearchecks();
-					_init = false;
+					_cb = null;
+					clearchecks();
 					break;
 
 				case AlignRestrict: // hex,cb,multiple
 				case AlignRstrctType:
 					btn_Clear.Enabled = false;
 
-					_init = true;
-					_cb = null; clearchecks();
-					_init = false;
+					_cb = null;
+					clearchecks();
 
 					printHexString(_f.int1 = 0);
 					break;
@@ -497,19 +473,27 @@ namespace yata
 		/// <summary>
 		/// Clears all <c>CheckBoxes</c> except the current <c>CheckBox</c>
 		/// <c><see cref="_cb"/></c> (if valid).
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputSpells"/>.clearchecks()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputFeat"/>.clearchecks()</c>
 		/// </summary>
 		/// <remarks>Set <c>(_cb = null)</c> to clear all <c>Checkboxes</c>.</remarks>
 		void clearchecks()
 		{
+			_init = true;
+
 			CheckBox cb;
 			foreach (var control in Controls)
 			{
 				if ((cb = control as CheckBox) != null
-					&& (_cb == null || cb != _cb))
+					&& cb.Checked && (_cb == null || cb != _cb))
 				{
 					cb.Checked = false;
 				}
 			}
+			_init = false;
 		}
 
 		/// <summary>

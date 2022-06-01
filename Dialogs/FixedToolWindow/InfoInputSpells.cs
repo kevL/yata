@@ -70,6 +70,13 @@ namespace yata
 		Yata _f;
 		Cell _cell;
 
+		/// <summary>
+		/// <c>true</c> bypasses the <c>CheckedChanged</c> handler for
+		/// <c>CheckBoxes</c> and the <c>SelectedIndexChanged</c> handler for
+		/// the <c>ComboBox</c>.
+		/// </summary>
+		/// <remarks>Initialization will configure this dialog without invoking
+		/// the handlers.</remarks>
 		bool _init;
 
 		CheckBox _cb;
@@ -114,7 +121,7 @@ namespace yata
 			int result;
 			switch (_cell.x)
 			{
-				case School: // string-val,checkbox,unique // TODO: change 'School' to string-val,dropdown,unique
+				case School: // string-val,checkbox,unique
 					_f.str0 = _f.str1 = val;
 					prep_Schools();
 
@@ -136,7 +143,7 @@ namespace yata
 					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
 					break;
 
-				case Range: // string-val,checkbox,unique // TODO: change 'Range' to string-val,dropdown,unique
+				case Range: // string-val,checkbox,unique
 					_f.str0 = _f.str1 = val;
 					prep_Ranges();
 
@@ -197,7 +204,7 @@ namespace yata
 						cb_22.Checked = ((result & Yata.META_I_ELDRITCH_SPEAR)   != 0);
 						cb_23.Checked = ((result & Yata.META_I_HIDEOUS_BLOW)     != 0);
 
-						metamagicGroups(result);
+						ResolveMetagroups(result);
 
 						// TODO: There is an issue. If an unconventional value is passed
 						// in from Yata it could have bits for both standard metamagic
@@ -684,8 +691,11 @@ namespace yata
 		/// <summary>
 		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
 		/// Yata to deal with user-input.
-		/// - duplicates InfoInputFeat.initintvals()
-		/// - duplicates InfoInputClass.initintvals()
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputFeat"/>.initintvals()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputClasses"/>.initintvals()</c>
 		/// </summary>
 		/// <param name="val"></param>
 		void initintvals(string val)
@@ -739,82 +749,22 @@ namespace yata
 		/// </summary>
 		void change_School()
 		{
-			string val = gs.Stars;
+			clearchecks();
 
-			_init = true;
-			if (_cb == cb_00)
+			string val;
+			if (_cb.Checked)
 			{
-				if (_cb.Checked)
-				{
-					val = "A";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
+				if      (_cb == cb_00) val = "A";
+				else if (_cb == cb_01) val = "C";
+				else if (_cb == cb_02) val = "D";
+				else if (_cb == cb_03) val = "E";
+				else if (_cb == cb_04) val = "I";
+				else if (_cb == cb_05) val = "N";
+				else if (_cb == cb_06) val = "T";
+				else                   val = "V"; // _cb == cb_07
 			}
-			else if (_cb == cb_01)
-			{
-				if (_cb.Checked)
-				{
-					val = "C";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-			}
-			else if (_cb == cb_02)
-			{
-				if (_cb.Checked)
-				{
-					val = "D";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-			}
-			else if (_cb == cb_03)
-			{
-				if (_cb.Checked)
-				{
-					val = "E";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_04.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-			}
-			else if (_cb == cb_04)
-			{
-				if (_cb.Checked)
-				{
-					val = "I";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-			}
-			else if (_cb == cb_05)
-			{
-				if (_cb.Checked)
-				{
-					val = "N";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_06.Checked = cb_07.Checked = false;
-				}
-			}
-			else if (_cb == cb_06)
-			{
-				if (_cb.Checked)
-				{
-					val = "T";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_07.Checked = false;
-				}
-			}
-			else // _cb == cb_07
-			{
-				if (_cb.Checked)
-				{
-					val = "V";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
-				}
-			}
-			_init = false;
+			else
+				val = gs.Stars;
 
 			lbl_Val.Text = _f.str1 = val;
 			btn_Clear.Enabled = (val != gs.Stars);
@@ -825,64 +775,20 @@ namespace yata
 		/// </summary>
 		void change_Range()
 		{
-			string val = gs.Stars;
+			clearchecks();
 
-			_init = true;
-			if (_cb == cb_00)
+			string val;
+			if (_cb.Checked)
 			{
-				if (_cb.Checked)
-				{
-					val = "P";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-				}
+				if      (_cb == cb_00) val = "P";
+				else if (_cb == cb_01) val = "T";
+				else if (_cb == cb_02) val = "S";
+				else if (_cb == cb_03) val = "M";
+				else if (_cb == cb_04) val = "L";
+				else                   val = "I"; // _cb == cb_05
 			}
-			else if (_cb == cb_01)
-			{
-				if (_cb.Checked)
-				{
-					val = "T";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-				}
-			}
-			else if (_cb == cb_02)
-			{
-				if (_cb.Checked)
-				{
-					val = "S";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-				}
-			}
-			else if (_cb == cb_03)
-			{
-				if (_cb.Checked)
-				{
-					val = "M";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-				}
-			}
-			else if (_cb == cb_04)
-			{
-				if (_cb.Checked)
-				{
-					val = "L";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_03.Checked = cb_05.Checked = false;
-				}
-			}
-			else // _cb == cb_05
-			{
-				if (_cb.Checked)
-				{
-					val = "I";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked =
-					cb_03.Checked = cb_04.Checked = false;
-				}
-			}
-			_init = false;
+			else
+				val = gs.Stars;
 
 			lbl_Val.Text = _f.str1 = val;
 			btn_Clear.Enabled = (val != gs.Stars);
@@ -1017,7 +923,7 @@ namespace yata
 			}
 
 			_init = true;
-			metamagicGroups(_f.int1);
+			ResolveMetagroups(_f.int1);
 			_init = false;
 
 			printHexString(_f.int1);
@@ -1075,42 +981,18 @@ namespace yata
 		/// </summary>
 		void change_UserType()
 		{
-			string val = gs.Stars;
+			clearchecks();
 
-			_init = true;
-			if (_cb == cb_00)
+			string val;
+			if (_cb.Checked)
 			{
-				if (_cb.Checked)
-				{
-					val = "1";
-					cb_01.Checked = cb_02.Checked = cb_03.Checked = false;
-				}
+				if      (_cb == cb_00) val = "1";
+				else if (_cb == cb_01) val = "2";
+				else if (_cb == cb_02) val = "3";
+				else                   val = "4"; // _cb == cb_03
 			}
-			else if (_cb == cb_01)
-			{
-				if (_cb.Checked)
-				{
-					val = "2";
-					cb_00.Checked = cb_02.Checked = cb_03.Checked = false;
-				}
-			}
-			else if (_cb == cb_02)
-			{
-				if (_cb.Checked)
-				{
-					val = "3";
-					cb_00.Checked = cb_01.Checked = cb_03.Checked = false;
-				}
-			}
-			else // _cb == cb_03
-			{
-				if (_cb.Checked)
-				{
-					val = "4";
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = false;
-				}
-			}
-			_init = false;
+			else
+				val = gs.Stars;
 
 			lbl_Val.Text = _f.str1 = val;
 			btn_Clear.Enabled = (val != gs.Stars);
@@ -1198,7 +1080,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles changing an invocation metamagic group checkbox.
+		/// Handles changing an invocation MetaMagic group <c>CheckBox</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1206,10 +1088,11 @@ namespace yata
 		{
 			if (!_init)
 			{
+				_init = true;
+
 				var cb = sender as CheckBox;
 
-				_init = true;
-				if (cb == cb_MetaAllShapesEssences || cb == cb_MetaAllEssences)
+				if (cb == cb_MetaEssenceShape || cb == cb_MetaEssence)
 				{
 					if (cb_08.Checked = cb_09.Checked = cb_10.Checked = cb_11.Checked =
 						cb_12.Checked = cb_13.Checked = cb_14.Checked = cb_15.Checked =
@@ -1221,7 +1104,7 @@ namespace yata
 						_f.int1 &= ~Yata.META_I_ESSENCES;
 				}
 
-				if (cb == cb_MetaAllShapesEssences || cb == cb_MetaAllShapes)
+				if (cb == cb_MetaEssenceShape || cb == cb_MetaShape)
 				{
 					if (cb_19.Checked = cb_20.Checked = cb_21.Checked =
 						cb_22.Checked = cb_23.Checked = cb.Checked)
@@ -1232,7 +1115,7 @@ namespace yata
 						_f.int1 &= ~Yata.META_I_SHAPES;
 				}
 
-				metamagicGroups(_f.int1);
+				ResolveMetagroups(_f.int1);
 				_init = false;
 
 				printHexString(_f.int1);
@@ -1242,13 +1125,14 @@ namespace yata
 
 
 		/// <summary>
-		/// Determines which group of metamagic checkboxes should be enabled
-		/// (standard or invocation) and checks the invocation groups if
-		/// applicable.
+		/// Determines which set of MetaMagic <c>CheckBoxes</c> should be
+		/// enabled (standard or invocation) and checks invocation-group
+		/// <c>Checkboxes</c> if applicable.
 		/// </summary>
 		/// <param name="result"></param>
-		void metamagicGroups(int result)
+		void ResolveMetagroups(int result)
 		{
+			// standard ->
 			cb_00.Enabled = cb_01.Enabled = cb_02.Enabled = cb_03.Enabled =
 			cb_04.Enabled = cb_05.Enabled = cb_06.Enabled = cb_07.Enabled = (result <= 0xFF);
 
@@ -1261,9 +1145,9 @@ namespace yata
 			gb_MetaGroups.Enabled = (result == 0x00 || result > 0xFF);
 
 
-			cb_MetaAllShapesEssences.Checked = ((result & Yata.META_I_ALL)      == Yata.META_I_ALL);
-			cb_MetaAllEssences      .Checked = ((result & Yata.META_I_ESSENCES) == Yata.META_I_ESSENCES);
-			cb_MetaAllShapes        .Checked = ((result & Yata.META_I_SHAPES)   == Yata.META_I_SHAPES);
+			cb_MetaEssenceShape.Checked = ((result & Yata.META_I_ALL)      == Yata.META_I_ALL);
+			cb_MetaEssence     .Checked = ((result & Yata.META_I_ESSENCES) == Yata.META_I_ESSENCES);
+			cb_MetaShape       .Checked = ((result & Yata.META_I_SHAPES)   == Yata.META_I_SHAPES);
 		}
 
 
@@ -1281,10 +1165,8 @@ namespace yata
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = cb_07.Checked = false;
-					_init = false;
+					_cb = null;
+					clearchecks();
 					break;
 
 				case Range:
@@ -1292,24 +1174,18 @@ namespace yata
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = false;
-					_init = false;
+					_cb = null;
+					clearchecks();
 					break;
 
 				case MetaMagic:
 					btn_Clear.Enabled = false;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = cb_07.Checked =
-					cb_08.Checked = cb_09.Checked = cb_10.Checked = cb_11.Checked =
-					cb_12.Checked = cb_13.Checked = cb_14.Checked = cb_15.Checked =
-					cb_16.Checked = cb_17.Checked = cb_18.Checked = cb_19.Checked =
-					cb_20.Checked = cb_21.Checked = cb_22.Checked = cb_23.Checked = false;
+					_cb = null;
+					clearchecks();
 
-					metamagicGroups(_f.int1 = 0);
+					_init = true;
+					ResolveMetagroups(_f.int1 = 0);
 					_init = false;
 
 					printHexString(_f.int1);
@@ -1318,10 +1194,8 @@ namespace yata
 				case TargetType:
 					btn_Clear.Enabled = false;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked =
-					cb_04.Checked = cb_05.Checked = cb_06.Checked = false;
-					_init = false;
+					_cb = null;
+					clearchecks();
 
 					printHexString(_f.int1 = 0);
 					break;
@@ -1339,9 +1213,8 @@ namespace yata
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
 
-					_init = true;
-					cb_00.Checked = cb_01.Checked = cb_02.Checked = cb_03.Checked = false;
-					_init = false;
+					_cb = null;
+					clearchecks();
 					break;
 			}
 		}
@@ -1349,6 +1222,32 @@ namespace yata
 
 
 		#region Methods
+		/// <summary>
+		/// Clears all <c>CheckBoxes</c> except the current <c>CheckBox</c>
+		/// <c><see cref="_cb"/></c> (if valid).
+		/// 
+		/// 
+		/// - duplicates <c><see cref="InfoInputFeat"/>.clearchecks()</c>
+		/// 
+		/// - duplicates <c><see cref="InfoInputClasses"/>.clearchecks()</c>
+		/// </summary>
+		/// <remarks>Set <c>(_cb = null)</c> to clear all <c>Checkboxes</c>.</remarks>
+		void clearchecks()
+		{
+			_init = true;
+
+			CheckBox cb;
+			foreach (var control in Controls)
+			{
+				if ((cb = control as CheckBox) != null
+					&& cb.Checked && (_cb == null || cb != _cb))
+				{
+					cb.Checked = false;
+				}
+			}
+			_init = false;
+		}
+
 		/// <summary>
 		/// Prints a hex-value at the top of the dialog.
 		/// </summary>
