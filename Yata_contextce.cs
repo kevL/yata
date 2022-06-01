@@ -178,6 +178,7 @@ namespace yata
 					break;
 
 				case InfoInputFeat.ToolsCategories: // this doesn't rely on 2da-gropes ->
+				case InfoInputFeat.FeatCategory:
 					return true;
 
 				case InfoInputFeat.ToggleMode:
@@ -484,7 +485,8 @@ namespace yata
 							doIntInputFeat();
 							break;
 
-						case InfoInputFeat.ToolsCategories:
+						case InfoInputFeat.ToolsCategories: // STRING Input ->
+						case InfoInputFeat.FeatCategory:
 							using (var iif = new InfoInputFeat(this, _sel))
 							{
 								if (iif.ShowDialog(this) == DialogResult.OK
@@ -535,7 +537,7 @@ namespace yata
 							}
 							break;
 
-						case InfoInputClasses.Package:
+						case InfoInputClasses.Package: // INT Input ->
 							doIntInputClass();
 							break;
 					}

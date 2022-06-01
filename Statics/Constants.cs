@@ -59,6 +59,21 @@ namespace yata
 		internal const string EldritchSpear   = "Eldritch Spear";
 		internal const string HideousBlow     = "Hideous Blow";
 
+		internal const string FeatCatBackground    = "BACKGROUND_FT_CAT";
+		internal const string FeatCatClassability  = "CLASSABILITY_FT_CAT";
+		internal const string FeatCatDivine        = "DIVINE_FT_CAT";
+		internal const string FeatCatEpic          = "EPIC_FT_CAT";
+		internal const string FeatCatGeneral       = "GENERAL_FT_CAT";
+		internal const string FeatCatHeritage      = "HERITAGE_FT_CAT";
+		internal const string FeatCatHistory       = "HISTORY_FT_CAT";
+		internal const string FeatCatItemCreation  = "ITEMCREATION_FT_CAT";
+		internal const string FeatCatMetamagic     = "METAMAGIC_FT_CAT";
+		internal const string FeatCatProficiency   = "PROFICIENCY_FT_CAT";
+		internal const string FeatCatRacialability = "RACIALABILITY_FT_CAT";
+		internal const string FeatCatSkillSave     = "SKILLNSAVE_FT_CAT";
+		internal const string FeatCatSpellcasting  = "SPELLCASTING_FT_CAT";
+		internal const string FeatCatTeamwork      = "TEAMWORK_FT_CAT";
+
 
 		internal static string[] CRandorLF = { "\r\n", "\r", "\n" };
 	}
