@@ -214,7 +214,7 @@ namespace yata
 					case Keys.Menu:			// Keys.Alt
 					case Keys.ControlKey:	// Keys.Control
 					case Keys.ShiftKey:		// Keys.Shift
-						Cursor = Cursors.Default;
+						Table._panelCols.Cursor = Cursors.Default;
 						Table._panelCols.IsCursorSplit = false;
 						Table._panelCols.IsGrab = false;
 						break;
@@ -241,9 +241,11 @@ namespace yata
 						if (ModifierKeys == Keys.None)
 						{
 							Point pos = Table._panelCols.PointToClient(Cursor.Position);
-							if (Table._panelCols.GetSplitterCol(pos.X) != -1)
+							if (Table._panelCols.GetSplitterCol(pos.X) != -1
+								&& pos.Y >= Table._panelCols.Location.Y
+								&& pos.Y <  Table._panelCols.Location.Y + Table._panelCols.Height)
 							{
-								Cursor = Cursors.VSplit;
+								Table._panelCols.Cursor = Cursors.VSplit;
 								Table._panelCols.IsCursorSplit = true;
 							}
 						}
