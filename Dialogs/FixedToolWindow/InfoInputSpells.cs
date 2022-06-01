@@ -306,7 +306,8 @@ namespace yata
 						case gs.Constitution:   cbx_Val.SelectedIndex = 16; break; // non-standard
 						case gs.Water:          cbx_Val.SelectedIndex = 17; break; // non-standard
 
-						case gs.Stars:          cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; break;
+						case gs.Stars: cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+							break;
 
 						default: _f.str1 = gs.Stars; goto case gs.Stars;
 					}
@@ -1160,16 +1161,9 @@ namespace yata
 		{
 			switch (_cell.x)
 			{
-				case School:
-					btn_Clear.Enabled = false;
-
-					lbl_Val.Text = _f.str1 = gs.Stars;
-
-					_cb = null;
-					clearchecks();
-					break;
-
+				case School: // str,cb,unique
 				case Range:
+				case UserType:
 					btn_Clear.Enabled = false;
 
 					lbl_Val.Text = _f.str1 = gs.Stars;
@@ -1178,7 +1172,7 @@ namespace yata
 					clearchecks();
 					break;
 
-				case MetaMagic:
+				case MetaMagic: // hex,cb,multiple
 					btn_Clear.Enabled = false;
 
 					_cb = null;
@@ -1191,7 +1185,7 @@ namespace yata
 					printHexString(_f.int1);
 					break;
 
-				case TargetType:
+				case TargetType: // hex,cb,multiple
 					btn_Clear.Enabled = false;
 
 					_cb = null;
@@ -1200,21 +1194,12 @@ namespace yata
 					printHexString(_f.int1 = 0);
 					break;
 
-				case ImmunityType:
+				case ImmunityType: // dropdown -> fire changed_Combobox()
 				case Category:
 				case SpontCastClass:
 				case AsMetaMagic:
 				case TargetingUI:
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
-					break;
-
-				case UserType:
-					btn_Clear.Enabled = false;
-
-					lbl_Val.Text = _f.str1 = gs.Stars;
-
-					_cb = null;
-					clearchecks();
+					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
 					break;
 			}
 		}
