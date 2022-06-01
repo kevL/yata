@@ -1,9 +1,13 @@
 ﻿using System;
+
+#if Keys
 using System.Windows.Forms;
+#endif
 
 
 namespace yata
 {
+	#region Constants
 	/// <summary>
 	/// Global (const) strings.
 	/// </summary>
@@ -79,7 +83,6 @@ namespace yata
 	}
 
 
-	#region Constants
 	/// <summary>
 	/// Global (const) !strings.
 	/// </summary>
