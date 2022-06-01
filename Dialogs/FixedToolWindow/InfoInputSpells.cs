@@ -11,8 +11,9 @@ namespace yata
 	/// a series of checkboxes that might be either actual checkboxes that
 	/// allow the user to select multiple choices or checkboxes that act like
 	/// radiobuttons if only a unique choice is allowed; alternately the dialog
-	/// can load as a combobox with a list of unique choices. The return to
-	/// Yata can be a <c>string</c>, an <c>int</c>, or a hexadecimal <c>int</c>.
+	/// can load as a <c>ComboBox</c> with a list of unique choices. The return
+	/// to Yata can be a <c>string</c>, an <c>int</c>, or a hexadecimal
+	/// <c>int</c>.
 	/// 
 	/// 
 	/// Two <c><see cref="Yata"/></c> variables shall be initialized: either
@@ -42,9 +43,12 @@ namespace yata
 	/// 
 	/// The value displayed at the top of a checkbox-configuration shall be the
 	/// value that will be returned to <c>Yata</c> iff user clicks the Accept
-	/// button. A combobox-configuration displays the value that will be
-	/// returned (iff user clicks the Accept button) in the combobox itself.
+	/// button. A <c>ComboBox</c> configuration displays the value that will be
+	/// returned (iff user clicks the Accept button) in the <c>ComboBox</c>
+	/// itself.
 	/// </summary>
+	/// <seealso cref="InfoInputFeat"><c>InfoInputFeat</c></seealso>
+	/// <seealso cref="InfoInputClasses"><c>InfoInputClasses</c></seealso>
 	sealed partial class InfoInputSpells
 		: Form
 	{
@@ -112,7 +116,7 @@ namespace yata
 			{
 				case School: // string-val,checkbox,unique // TODO: change 'School' to string-val,dropdown,unique
 					_f.str0 = _f.str1 = val;
-					vis_Schools();
+					prep_Schools();
 
 					switch (val)
 					{
@@ -134,7 +138,7 @@ namespace yata
 
 				case Range: // string-val,checkbox,unique // TODO: change 'Range' to string-val,dropdown,unique
 					_f.str0 = _f.str1 = val;
-					vis_Ranges();
+					prep_Ranges();
 
 					switch (val)
 					{
@@ -158,7 +162,7 @@ namespace yata
 					// when the value passed into this dialog is considered
 					// invalid.
 
-					vis_MetaMagics();
+					prep_MetaMagics();
 
 					if (val.Length > 2 && val.Substring(0,2) == "0x"
 						&& Int32.TryParse(val.Substring(2),
@@ -231,7 +235,7 @@ namespace yata
 					// when the value passed into this dialog is considered
 					// invalid.
 
-					vis_TargetTypes();
+					prep_TargetTypes();
 
 					if (val.Length > 2 && val.Substring(0,2) == "0x"
 						&& Int32.TryParse(val.Substring(2),
@@ -247,7 +251,7 @@ namespace yata
 						cb_05.Checked = ((result & Yata.TARGET_PLACEABLES) != 0);
 						cb_06.Checked = ((result & Yata.TARGET_TRIGGERS)   != 0);
 
-						if ((result & ~Yata.TARGET_TOTAL) != 0)
+						if ((result & ~Yata.TARGET_TOTAL) != 0) // invalid - bits outside allowed range
 						{
 							_f.int0 = result;
 							printHexString(_f.int1 = (result &= Yata.TARGET_TOTAL));
@@ -310,7 +314,7 @@ namespace yata
 
 				case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
 					_f.str0 = _f.str1 = val;
-					vis_UserTypes();
+					prep_UserTypes();
 
 					switch (val)
 					{
@@ -392,7 +396,10 @@ namespace yata
 		}
 
 
-		void vis_Schools()
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="School"/></c> input.
+		/// </summary>
+		void prep_Schools()
 		{
 			Text = " School";
 
@@ -409,7 +416,10 @@ namespace yata
 			cb_04.Visible = cb_05.Visible = cb_06.Visible = cb_07.Visible = true;
 		}
 
-		void vis_Ranges()
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="Range"/></c> input.
+		/// </summary>
+		void prep_Ranges()
 		{
 			Text = " Range";
 
@@ -424,7 +434,10 @@ namespace yata
 			cb_04.Visible = cb_05.Visible = true;
 		}
 
-		void vis_MetaMagics()
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="MetaMagic"/></c> input.
+		/// </summary>
+		void prep_MetaMagics()
 		{
 			Text = " MetaMagic";
 
@@ -470,7 +483,10 @@ namespace yata
 			gb_MetaGroups.Visible = true;
 		}
 
-		void vis_TargetTypes()
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="TargetType"/></c> input.
+		/// </summary>
+		void prep_TargetTypes()
 		{
 			Text = " TargetType";
 
@@ -486,7 +502,10 @@ namespace yata
 			cb_04.Visible = cb_05.Visible = cb_06.Visible = true;
 		}
 
-		void vis_UserTypes()
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="UserType"/></c> input.
+		/// </summary>
+		void prep_UserTypes()
 		{
 			Text = " UserType";
 
@@ -500,7 +519,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Hides the label and shows the combobox for dropdown-lists instead.
+		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
+		/// instead.
 		/// </summary>
 		void dropdown()
 		{
@@ -512,8 +532,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "ImmunityType" to the combobox along with
-		/// a final stars item.
+		/// Adds allowable entries for <c><see cref="ImmunityType"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_ImmunityTypes()
 		{
@@ -544,8 +564,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "Category" (Categories.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="Category"/></c>
+		/// (Categories.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
 		/// </summary>
 		void list_Categories()
 		{
@@ -561,8 +582,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "SpontCastClassReq" (Classes.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="SpontCastClass"/></c>
+		/// (Classes.2da) to the <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_SpontCastClasses()
 		{
@@ -578,8 +599,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "AsMetaMagic" to the combobox along with
-		/// a final stars item.
+		/// Adds allowable entries for <c><see cref="AsMetaMagic"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_AsMetaMagics()
 		{
@@ -609,7 +630,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for list_AsMetaMagics()
+		/// - helper for <c><see cref="list_AsMetaMagics()">list_AsMetaMagics()</see></c>
 		/// </summary>
 		/// <param name="bits"></param>
 		/// <returns></returns>
@@ -617,8 +638,9 @@ namespace yata
 
 
 		/// <summary>
-		/// Adds allowable entries for "TargetingUI" (SpellTarget.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="TargetingUI"/></c>
+		/// (SpellTarget.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
 		/// </summary>
 		void list_Targeters()
 		{
@@ -660,8 +682,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Selects an entry in the combobox and preps the int-vals in Yata to
-		/// deal with user-input.
+		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
+		/// Yata to deal with user-input.
 		/// - duplicates InfoInputFeat.initintvals()
 		/// - duplicates InfoInputClass.initintvals()
 		/// </summary>
@@ -691,7 +713,7 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
-		/// Handles user changing a checkbox.
+		/// Handles user changing a <c>CheckBox</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -713,7 +735,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_School()
 		{
@@ -799,7 +821,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_Range()
 		{
@@ -867,7 +889,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_MetaMagic()
 		{
@@ -1003,7 +1025,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_TargetType()
 		{
@@ -1049,7 +1071,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_UserType()
 		{
@@ -1096,7 +1118,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles user changing a combobox selection.
+		/// Handles user changing the <c>ComboBox</c> selection.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -1246,7 +1268,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles clicking the Clear button.
+		/// Handles clicking the Clear <c>Button</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

@@ -6,6 +6,11 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
+	/// <seealso cref="InfoInputFeat"><c>InfoInputFeat</c></seealso>
 	sealed partial class InfoInputClasses
 		: Form
 	{
@@ -69,7 +74,7 @@ namespace yata
 				case PrimaryAbil: // string-val,checkbox,unique
 				case SpellAbil:
 					_f.str0 = _f.str1 = val;
-					vis_Abilities();
+					prep_Abilities();
 
 					switch (val.ToUpperInvariant())
 					{
@@ -93,7 +98,7 @@ namespace yata
 					// when the value passed into this dialog is considered
 					// invalid.
 
-					vis_AlignmentRestrictions();
+					prep_AlignmentRestrictions();
 
 					if (val.Length > 2 && val.Substring(0,2) == "0x"
 						&& Int32.TryParse(val.Substring(2),
@@ -107,7 +112,7 @@ namespace yata
 						cb_03.Checked = ((result & Yata.ALIGNRESTRICT_GOOD)    != 0);
 						cb_04.Checked = ((result & Yata.ALIGNRESTRICT_EVIL)    != 0);
 
-						if ((result & ~Yata.ALIGNRESTRICT_TOTAL) != 0)
+						if ((result & ~Yata.ALIGNRESTRICT_TOTAL) != 0) // invalid - bits outside allowed range
 						{
 							_f.int0 = result;
 							printHexString(_f.int1 = (result &= Yata.ALIGNRESTRICT_TOTAL));
@@ -131,7 +136,7 @@ namespace yata
 					// when the value passed into this dialog is considered
 					// invalid.
 
-					vis_AlignmentRestrictionType();
+					prep_AlignmentRestrictionType();
 
 					if (val.Length > 2 && val.Substring(0,2) == "0x"
 						&& Int32.TryParse(val.Substring(2),
@@ -142,7 +147,7 @@ namespace yata
 						cb_00.Checked = ((result & Yata.ALIGNRESTRICTTYPE_LAWCHAOS) != 0);
 						cb_01.Checked = ((result & Yata.ALIGNRESTRICTTYPE_GOODEVIL) != 0);
 
-						if ((result & ~Yata.ALIGNRESTRICTTYPE_TOTAL) != 0)
+						if ((result & ~Yata.ALIGNRESTRICTTYPE_TOTAL) != 0) // invalid - bits outside allowed range
 						{
 							_f.int0 = result;
 							printHexString(_f.int1 = (result &= Yata.ALIGNRESTRICTTYPE_TOTAL));
@@ -174,7 +179,7 @@ namespace yata
 		/// Prepares this dialog for <c><see cref="PrimaryAbil"/></c> or
 		/// <c><see cref="SpellAbil"/></c> input.
 		/// </summary>
-		void vis_Abilities()
+		void prep_Abilities()
 		{
 			if (_cell.x == PrimaryAbil) Text = " PrimaryAbil";
 			else                        Text = " SpellAbil"; // _cell.x == SpellAbil
@@ -193,7 +198,7 @@ namespace yata
 		/// <summary>
 		/// Prepares this dialog for <c><see cref="AlignRestrict"/></c> input.
 		/// </summary>
-		void vis_AlignmentRestrictions()
+		void prep_AlignmentRestrictions()
 		{
 			Text = " AlignRestrict";
 
@@ -210,19 +215,20 @@ namespace yata
 		/// <summary>
 		/// Prepares this dialog for <c><see cref="AlignRstrctType"/></c> input.
 		/// </summary>
-		void vis_AlignmentRestrictionType()
+		void prep_AlignmentRestrictionType()
 		{
 			Text = " AlignRstrctType";
 
-			cb_00.Text = "(1)neutral ethics (law/chaos)";
-			cb_01.Text = "(2)neutral morals (good/evil)";
+			cb_00.Text = "(1)neutral as LawChaos";
+			cb_01.Text = "(2)neutral as GoodEvil)";
 
 			cb_00.Visible = cb_01.Visible = true;
 		}
 
 
 		/// <summary>
-		/// Hides the label and shows the combobox for dropdown-lists instead.
+		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
+		/// instead.
 		/// </summary>
 		void dropdown()
 		{
@@ -235,7 +241,7 @@ namespace yata
 
 		/// <summary>
 		/// Adds allowable entries for "Packages" (Packages.2da) to the
-		/// combobox along with a final stars item.
+		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_Packages()
 		{
@@ -252,8 +258,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Selects an entry in the combobox and preps the int-vals in Yata to
-		/// deal with user-input.
+		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
+		/// Yata to deal with user-input.
 		/// - duplicates InfoInputSpells.initintvals()
 		/// - duplicates InfoInputFeat.initintvals()
 		/// </summary>
@@ -304,8 +310,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_Ability()
 		{
@@ -361,7 +366,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_AlignRestrict()
 		{
@@ -397,7 +402,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// helper for changed_Checkbox()
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_AlignRstrctType()
 		{
@@ -419,7 +424,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles user changing a combobox selection.
+		/// Handles user changing the <c>ComboBox</c> selection.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -450,7 +455,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles clicking the Clear button.
+		/// Handles clicking the Clear <c>Button</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

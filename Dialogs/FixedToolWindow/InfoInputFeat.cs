@@ -9,6 +9,7 @@ namespace yata
 	/// 
 	/// </summary>
 	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
+	/// <seealso cref="InfoInputClasses"><c>InfoInputClasses</c></seealso>
 	sealed partial class InfoInputFeat
 		: Form
 	{
@@ -80,7 +81,7 @@ namespace yata
 
 				case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
 					_f.str0 = _f.str1 = val;
-					vis_ToolsCategories();
+					prep_ToolsCategories();
 
 					switch (val)
 					{
@@ -110,11 +111,11 @@ namespace yata
 
 
 		/// <summary>
-		/// Visibles ToolsCategories.
+		/// Prepares this dialog for <c><see cref="ToolsCategories"/></c> input.
 		/// </summary>
-		void vis_ToolsCategories()
+		void prep_ToolsCategories()
 		{
-			Text = " ToolsCategories";
+			Text = " TOOLSCATEGORIES";
 
 			cb_00.Text = "0 - All Feats";
 			cb_01.Text = "1 - Combat Feats";
@@ -130,7 +131,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Hides the label and shows the combobox for dropdown-lists instead.
+		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
+		/// instead.
 		/// </summary>
 		void dropdown()
 		{
@@ -142,12 +144,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "CATEGORY" (Categories.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="Category"/></c>
+		/// (Categories.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
 		/// </summary>
 		void list_Categories()
 		{
-			Text = " Category";
+			Text = " CATEGORY";
 
 			dropdown();
 
@@ -159,12 +162,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "MASTERFEAT" (MasterFeats.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="MasterFeat"/></c>
+		/// (MasterFeats.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
 		/// </summary>
 		void list_Masterfeats()
 		{
-			Text = " MasterFeat";
+			Text = " MASTERFEAT";
 
 			dropdown();
 
@@ -176,8 +180,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "ToggleMode" (CombatModes.2da) to the
-		/// combobox along with a final stars item.
+		/// Adds allowable entries for <c><see cref="ToggleMode"/></c>
+		/// (CombatModes.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
 		/// </summary>
 		void list_CombatModes()
 		{
@@ -194,8 +199,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Selects an entry in the combobox and preps the int-vals in Yata to
-		/// deal with user-input.
+		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
+		/// Yata to deal with user-input.
 		/// - duplicates InfoInputSpells.initintvals()
 		/// - duplicates InfoInputClass.initintvals()
 		/// </summary>
@@ -227,7 +232,7 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
-		/// Handles user changing a checkbox.
+		/// Handles user changing a <c>CheckBox</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -245,8 +250,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_ToolsCategories()
 		{
@@ -323,7 +327,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles user changing a combobox selection.
+		/// Handles user changing the <c>ComboBox</c> selection.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -356,7 +360,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles clicking the Clear button.
+		/// Handles clicking the Clear <c>Button</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
