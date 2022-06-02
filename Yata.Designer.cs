@@ -102,23 +102,23 @@ namespace yata
 		ToolStripMenuItem it_MenuPaths;
 		ToolStripMenuItem it_PathAll;
 		ToolStripMenuItem it_PathBaseItems2da;
-		ToolStripMenuItem it_PathFeat2da;
-		ToolStripMenuItem it_PathItemPropDef2da;
-		ToolStripMenuItem it_PathSkills2da;
-		ToolStripMenuItem it_PathSpells2da;
+		ToolStripMenuItem it_PathCategories2da;
 		ToolStripMenuItem it_PathClasses2da;
+		ToolStripMenuItem it_PathCombatModes2da;
 		ToolStripMenuItem it_PathDisease2da;
+		ToolStripMenuItem it_PathFeat2da;
 		ToolStripMenuItem it_PathIprpAmmoCost2da;
 		ToolStripMenuItem it_PathIprpFeats2da;
 		ToolStripMenuItem it_PathIprpOnHitSpell2da;
 		ToolStripMenuItem it_PathIprpSpells2da;
-		ToolStripMenuItem it_PathRaces2da;
-		ToolStripMenuItem it_PathCategories2da;
-		ToolStripMenuItem it_PathRanges2da;
-		ToolStripMenuItem it_PathSpellTarget2da;
+		ToolStripMenuItem it_PathItemPropDef2da;
 		ToolStripMenuItem it_PathMasterFeats2da;
-		ToolStripMenuItem it_PathCombatModes2da;
 		ToolStripMenuItem it_PathPackages2da;
+		ToolStripMenuItem it_PathRaces2da;
+		ToolStripMenuItem it_PathRanges2da;
+		ToolStripMenuItem it_PathSkills2da;
+		ToolStripMenuItem it_PathSpells2da;
+		ToolStripMenuItem it_PathSpellTarget2da;
 
 		ToolStripMenuItem it_MenuFont;
 		ToolStripMenuItem it_Font;
@@ -133,8 +133,6 @@ namespace yata
 		ToolStripSeparator separator_2;
 		ToolStripSeparator separator_3;
 		ToolStripSeparator separator_4;
-		ToolStripSeparator separator_5;
-		ToolStripSeparator separator_6;
 		ToolStripSeparator separator_7;
 		ToolStripSeparator separator_8;
 		ToolStripSeparator separator_9;
@@ -143,7 +141,6 @@ namespace yata
 		ToolStripSeparator separator_12;
 		ToolStripSeparator separator_13;
 		ToolStripSeparator separator_14;
-		ToolStripSeparator separator_15;
 		ToolStripSeparator separator_16;
 		ToolStripSeparator separator_17;
 		ToolStripSeparator separator_18;
@@ -159,7 +156,6 @@ namespace yata
 		ToolStripSeparator separator_28;
 		ToolStripSeparator separator_29;
 		ToolStripSeparator separator_30;
-		ToolStripSeparator separator_31;
 		ToolStripSeparator separator_32;
 		ToolStripSeparator separator_33;
 		ToolStripSeparator separator_34;
@@ -168,7 +164,6 @@ namespace yata
 		ToolStripSeparator separator_37;
 		ToolStripSeparator separator_38;
 		ToolStripSeparator separator_39;
-		ToolStripSeparator separator_40;
 
 		internal ContextMenuStrip _contextRo;
 		ToolStripMenuItem rowit_Header;
@@ -336,29 +331,24 @@ namespace yata
 			this.it_PathTalkC = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_PathBaseItems2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathFeat2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathItemPropDef2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathSkills2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathSpells2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathClasses2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathCombatModes2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathDisease2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathFeat2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpAmmoCost2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpFeats2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_15 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_31 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_PathItemPropDef2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathMasterFeats2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PathCombatModes2da = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_40 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_PathPackages2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathRanges2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathSkills2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathSpells2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
@@ -1257,29 +1247,25 @@ namespace yata
 			this.it_MenuPaths.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuPaths.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_PathAll,
-			this.separator_5,
 			this.it_PathBaseItems2da,
-			this.it_PathFeat2da,
-			this.it_PathItemPropDef2da,
-			this.it_PathSkills2da,
-			this.it_PathSpells2da,
-			this.separator_6,
+			this.it_PathCategories2da,
 			this.it_PathClasses2da,
+			this.it_PathCombatModes2da,
 			this.it_PathDisease2da,
+			this.it_PathFeat2da,
 			this.it_PathIprpAmmoCost2da,
 			this.it_PathIprpFeats2da,
 			this.it_PathIprpOnHitSpell2da,
 			this.it_PathIprpSpells2da,
-			this.it_PathRaces2da,
-			this.separator_15,
-			this.it_PathCategories2da,
-			this.it_PathRanges2da,
-			this.it_PathSpellTarget2da,
-			this.separator_31,
+			this.it_PathItemPropDef2da,
 			this.it_PathMasterFeats2da,
-			this.it_PathCombatModes2da,
-			this.separator_40,
-			this.it_PathPackages2da});
+			this.it_PathPackages2da,
+			this.it_PathRaces2da,
+			this.it_PathRanges2da,
+			this.it_PathSkills2da,
+			this.it_PathSpells2da,
+			this.it_PathSpellTarget2da});
+			
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);
@@ -1293,137 +1279,26 @@ namespace yata
 			this.it_PathAll.Text = "Path &all ...";
 			this.it_PathAll.Click += new System.EventHandler(this.itclick_PathAll);
 			// 
-			// separator_5
-			// 
-			this.separator_5.Name = "separator_5";
-			this.separator_5.Size = new System.Drawing.Size(219, 6);
-			// 
 			// it_PathBaseItems2da
 			// 
 			this.it_PathBaseItems2da.Name = "it_PathBaseItems2da";
 			this.it_PathBaseItems2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathBaseItems2da.Text = "path &BaseItems.2da";
+			this.it_PathBaseItems2da.Text = "path BaseItems.2da";
 			this.it_PathBaseItems2da.Click += new System.EventHandler(this.itclick_PathBaseItems2da);
-			// 
-			// it_PathFeat2da
-			// 
-			this.it_PathFeat2da.Name = "it_PathFeat2da";
-			this.it_PathFeat2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathFeat2da.Text = "path &Feat.2da";
-			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
-			// 
-			// it_PathItemPropDef2da
-			// 
-			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
-			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathItemPropDef2da.Text = "path &ItemPropDef.2da";
-			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
-			// 
-			// it_PathSkills2da
-			// 
-			this.it_PathSkills2da.Name = "it_PathSkills2da";
-			this.it_PathSkills2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathSkills2da.Text = "path S&kills.2da";
-			this.it_PathSkills2da.Click += new System.EventHandler(this.itclick_PathSkills2da);
-			// 
-			// it_PathSpells2da
-			// 
-			this.it_PathSpells2da.Name = "it_PathSpells2da";
-			this.it_PathSpells2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathSpells2da.Text = "path &Spells.2da";
-			this.it_PathSpells2da.Click += new System.EventHandler(this.itclick_PathSpells2da);
-			// 
-			// separator_6
-			// 
-			this.separator_6.Name = "separator_6";
-			this.separator_6.Size = new System.Drawing.Size(219, 6);
-			// 
-			// it_PathClasses2da
-			// 
-			this.it_PathClasses2da.Name = "it_PathClasses2da";
-			this.it_PathClasses2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathClasses2da.Text = "path &Classes.2da";
-			this.it_PathClasses2da.Click += new System.EventHandler(this.itclick_PathClasses2da);
-			// 
-			// it_PathDisease2da
-			// 
-			this.it_PathDisease2da.Name = "it_PathDisease2da";
-			this.it_PathDisease2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathDisease2da.Text = "path &Disease.2da";
-			this.it_PathDisease2da.Click += new System.EventHandler(this.itclick_PathDisease2da);
-			// 
-			// it_PathIprpAmmoCost2da
-			// 
-			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
-			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathIprpAmmoCost2da.Text = "path Iprp_A&mmoCost.2da";
-			this.it_PathIprpAmmoCost2da.Click += new System.EventHandler(this.itclick_PathIprpAmmoCost2da);
-			// 
-			// it_PathIprpFeats2da
-			// 
-			this.it_PathIprpFeats2da.Name = "it_PathIprpFeats2da";
-			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathIprpFeats2da.Text = "path Iprp_F&eats.2da";
-			this.it_PathIprpFeats2da.Click += new System.EventHandler(this.itclick_PathIprpFeats2da);
-			// 
-			// it_PathIprpOnHitSpell2da
-			// 
-			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
-			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_On&HitSpell.2da";
-			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpell2da);
-			// 
-			// it_PathIprpSpells2da
-			// 
-			this.it_PathIprpSpells2da.Name = "it_PathIprpSpells2da";
-			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathIprpSpells2da.Text = "path Iprp_Spe&lls.2da";
-			this.it_PathIprpSpells2da.Click += new System.EventHandler(this.itclick_PathIprpSpells2da);
-			// 
-			// it_PathRaces2da
-			// 
-			this.it_PathRaces2da.Name = "it_PathRaces2da";
-			this.it_PathRaces2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathRaces2da.Text = "path &RacialTypes.2da";
-			this.it_PathRaces2da.Click += new System.EventHandler(this.itclick_PathRaces2da);
-			// 
-			// separator_15
-			// 
-			this.separator_15.Name = "separator_15";
-			this.separator_15.Size = new System.Drawing.Size(219, 6);
 			// 
 			// it_PathCategories2da
 			// 
 			this.it_PathCategories2da.Name = "it_PathCategories2da";
 			this.it_PathCategories2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathCategories2da.Text = "path Categ&ories.2da";
+			this.it_PathCategories2da.Text = "path Categories.2da";
 			this.it_PathCategories2da.Click += new System.EventHandler(this.itclick_PathCategories2da);
 			// 
-			// it_PathRanges2da
+			// it_PathClasses2da
 			// 
-			this.it_PathRanges2da.Name = "it_PathRanges2da";
-			this.it_PathRanges2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathRanges2da.Text = "path Ra&nges.2da";
-			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
-			// 
-			// it_PathSpellTarget2da
-			// 
-			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
-			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathSpellTarget2da.Text = "path Spell&Target.2da";
-			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
-			// 
-			// separator_31
-			// 
-			this.separator_31.Name = "separator_31";
-			this.separator_31.Size = new System.Drawing.Size(219, 6);
-			// 
-			// it_PathMasterFeats2da
-			// 
-			this.it_PathMasterFeats2da.Name = "it_PathMasterFeats2da";
-			this.it_PathMasterFeats2da.Size = new System.Drawing.Size(222, 22);
-			this.it_PathMasterFeats2da.Text = "path MasterFeats.2da";
-			this.it_PathMasterFeats2da.Click += new System.EventHandler(this.itclick_PathMasterFeats2da);
+			this.it_PathClasses2da.Name = "it_PathClasses2da";
+			this.it_PathClasses2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathClasses2da.Text = "path Classes.2da";
+			this.it_PathClasses2da.Click += new System.EventHandler(this.itclick_PathClasses2da);
 			// 
 			// it_PathCombatModes2da
 			// 
@@ -1432,10 +1307,61 @@ namespace yata
 			this.it_PathCombatModes2da.Text = "path CombatModes.2da";
 			this.it_PathCombatModes2da.Click += new System.EventHandler(this.itclick_PathCombatModes2da);
 			// 
-			// separator_40
+			// it_PathDisease2da
 			// 
-			this.separator_40.Name = "separator_31";
-			this.separator_40.Size = new System.Drawing.Size(219, 6);
+			this.it_PathDisease2da.Name = "it_PathDisease2da";
+			this.it_PathDisease2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathDisease2da.Text = "path Disease.2da";
+			this.it_PathDisease2da.Click += new System.EventHandler(this.itclick_PathDisease2da);
+			// 
+			// it_PathFeat2da
+			// 
+			this.it_PathFeat2da.Name = "it_PathFeat2da";
+			this.it_PathFeat2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathFeat2da.Text = "path Feat.2da";
+			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
+			// 
+			// it_PathIprpAmmoCost2da
+			// 
+			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
+			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpAmmoCost2da.Text = "path Iprp_AmmoCost.2da";
+			this.it_PathIprpAmmoCost2da.Click += new System.EventHandler(this.itclick_PathIprpAmmoCost2da);
+			// 
+			// it_PathIprpFeats2da
+			// 
+			this.it_PathIprpFeats2da.Name = "it_PathIprpFeats2da";
+			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpFeats2da.Text = "path Iprp_Feats.2da";
+			this.it_PathIprpFeats2da.Click += new System.EventHandler(this.itclick_PathIprpFeats2da);
+			// 
+			// it_PathIprpOnHitSpell2da
+			// 
+			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
+			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_OnHitSpell.2da";
+			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpell2da);
+			// 
+			// it_PathIprpSpells2da
+			// 
+			this.it_PathIprpSpells2da.Name = "it_PathIprpSpells2da";
+			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpSpells2da.Text = "path Iprp_Spells.2da";
+			this.it_PathIprpSpells2da.Click += new System.EventHandler(this.itclick_PathIprpSpells2da);
+			// 
+			// it_PathItemPropDef2da
+			// 
+			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
+			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathItemPropDef2da.Text = "path ItemPropDef.2da";
+			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
+			// 
+			// it_PathMasterFeats2da
+			// 
+			this.it_PathMasterFeats2da.Name = "it_PathMasterFeats2da";
+			this.it_PathMasterFeats2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathMasterFeats2da.Text = "path MasterFeats.2da";
+			this.it_PathMasterFeats2da.Click += new System.EventHandler(this.itclick_PathMasterFeats2da);
 			// 
 			// it_PathPackages2da
 			// 
@@ -1443,6 +1369,41 @@ namespace yata
 			this.it_PathPackages2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathPackages2da.Text = "path Packages.2da";
 			this.it_PathPackages2da.Click += new System.EventHandler(this.itclick_PathPackages2da);
+			// 
+			// it_PathRaces2da
+			// 
+			this.it_PathRaces2da.Name = "it_PathRaces2da";
+			this.it_PathRaces2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathRaces2da.Text = "path RacialTypes.2da";
+			this.it_PathRaces2da.Click += new System.EventHandler(this.itclick_PathRaces2da);
+			// 
+			// it_PathRanges2da
+			// 
+			this.it_PathRanges2da.Name = "it_PathRanges2da";
+			this.it_PathRanges2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathRanges2da.Text = "path Ranges.2da";
+			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
+			// 
+			// it_PathSkills2da
+			// 
+			this.it_PathSkills2da.Name = "it_PathSkills2da";
+			this.it_PathSkills2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSkills2da.Text = "path Skills.2da";
+			this.it_PathSkills2da.Click += new System.EventHandler(this.itclick_PathSkills2da);
+			// 
+			// it_PathSpells2da
+			// 
+			this.it_PathSpells2da.Name = "it_PathSpells2da";
+			this.it_PathSpells2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpells2da.Text = "path Spells.2da";
+			this.it_PathSpells2da.Click += new System.EventHandler(this.itclick_PathSpells2da);
+			// 
+			// it_PathSpellTarget2da
+			// 
+			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
+			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
+			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
 			// 
 			// it_MenuFont
 			// 

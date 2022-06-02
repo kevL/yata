@@ -977,11 +977,9 @@ namespace yata
 //				HideEditor();
 				// NOTE: Appears to no longer be needed.
 
-				Cell sel = Table.getSelectedCell();
+				visPath_its();
 
 				bu_Propanel           .Visible = true;
-				it_MenuPaths          .Visible = Table.Info != YataGrid.InfoType.INFO_NONE;
-
 
 				it_freeze1            .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
 				it_freeze2            .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
@@ -1014,6 +1012,8 @@ namespace yata
 				if (Table.Propanel != null && Table.Propanel.Visible)
 				{
 					Table.Propanel.telemetric();
+
+					Cell sel = Table.getSelectedCell();
 					if (sel != null)
 						Table.Propanel.EnsureDisplayed(sel.x);
 				}
@@ -1100,6 +1100,147 @@ namespace yata
 
 			SetTitlebarText();
 		}
+
+
+		ToolStripSeparator _tsep = new ToolStripSeparator(); // TODO: dispose <-
+		ToolStripSeparator _tsepcraft;
+
+		/// <summary>
+		/// Deters what its on the Paths menu should show and hide.
+		/// </summary>
+		void visPath_its()
+		{
+			switch (Table.Info)
+			{
+				case YataGrid.InfoType.INFO_NONE:
+					if (_tsepcraft != null) _tsepcraft.Dispose();
+
+					it_MenuPaths.Visible = false;
+					break;
+
+				case YataGrid.InfoType.INFO_CRAFT:
+					if (_tsepcraft == null) _tsepcraft = new ToolStripSeparator(); // TODO: dispose <-
+
+					it_MenuPaths.DropDownItems.Clear();
+
+					it_MenuPaths.DropDownItems.Add(it_PathAll);
+					it_MenuPaths.DropDownItems.Add(_tsep);
+					it_MenuPaths.DropDownItems.Add(it_PathBaseItems2da);
+					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
+					it_MenuPaths.DropDownItems.Add(it_PathItemPropDef2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSkills2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSpells2da);
+					it_MenuPaths.DropDownItems.Add(_tsepcraft);
+					it_MenuPaths.DropDownItems.Add(it_PathClasses2da);
+					it_MenuPaths.DropDownItems.Add(it_PathDisease2da);
+					it_MenuPaths.DropDownItems.Add(it_PathIprpAmmoCost2da);
+					it_MenuPaths.DropDownItems.Add(it_PathIprpFeats2da);
+					it_MenuPaths.DropDownItems.Add(it_PathIprpOnHitSpell2da);
+					it_MenuPaths.DropDownItems.Add(it_PathIprpSpells2da);
+					it_MenuPaths.DropDownItems.Add(it_PathRaces2da);
+
+					it_MenuPaths.Visible = true;
+
+//					it_PathCategories2da .Visible =
+//					it_PathCombatModes2da.Visible =
+//					it_PathMasterFeats2da.Visible =
+//					it_PathPackages2da   .Visible =
+//					it_PathRanges2da     .Visible =
+//					it_PathSpellTarget2da.Visible = false;
+					break;
+
+				case YataGrid.InfoType.INFO_SPELL:
+					if (_tsepcraft != null) _tsepcraft.Dispose();
+
+					it_MenuPaths.DropDownItems.Clear();
+
+					it_MenuPaths.DropDownItems.Add(it_PathAll);
+					it_MenuPaths.DropDownItems.Add(_tsep);
+					it_MenuPaths.DropDownItems.Add(it_PathCategories2da);
+					it_MenuPaths.DropDownItems.Add(it_PathClasses2da);
+					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
+					it_MenuPaths.DropDownItems.Add(it_PathRanges2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSpells2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSpellTarget2da);
+
+					it_MenuPaths.Visible = true;
+
+//					it_PathBaseItems2da     .Visible =
+//					it_PathCombatModes2da   .Visible =
+//					it_PathDisease2da       .Visible =
+//					it_PathIprpAmmoCost2da  .Visible =
+//					it_PathIprpFeats2da     .Visible =
+//					it_PathIprpOnHitSpell2da.Visible =
+//					it_PathIprpSpells2da    .Visible =
+//					it_PathItemPropDef2da   .Visible =
+//					it_PathMasterFeats2da   .Visible =
+//					it_PathPackages2da      .Visible =
+//					it_PathRaces2da         .Visible =
+//					it_PathSkills2da        .Visible = false;
+					break;
+
+				case YataGrid.InfoType.INFO_FEAT:
+					if (_tsepcraft != null) _tsepcraft.Dispose();
+
+					it_MenuPaths.DropDownItems.Clear();
+
+					it_MenuPaths.DropDownItems.Add(it_PathAll);
+					it_MenuPaths.DropDownItems.Add(_tsep);
+					it_MenuPaths.DropDownItems.Add(it_PathCategories2da);
+					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
+					it_MenuPaths.DropDownItems.Add(it_PathMasterFeats2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSkills2da);
+					it_MenuPaths.DropDownItems.Add(it_PathSpells2da);
+					it_MenuPaths.DropDownItems.Add(it_PathCombatModes2da);
+
+					it_MenuPaths.Visible = true;
+
+//					it_PathBaseItems2da     .Visible =
+//					it_PathClasses2da       .Visible =
+//					it_PathDisease2da       .Visible =
+//					it_PathIprpAmmoCost2da  .Visible =
+//					it_PathIprpFeats2da     .Visible =
+//					it_PathIprpOnHitSpell2da.Visible =
+//					it_PathIprpSpells2da    .Visible =
+//					it_PathItemPropDef2da   .Visible =
+//					it_PathPackages2da      .Visible =
+//					it_PathRaces2da         .Visible =
+//					it_PathRanges2da        .Visible =
+//					it_PathSpellTarget2da   .Visible = false;
+					break;
+
+				case YataGrid.InfoType.INFO_CLASS:
+					if (_tsepcraft != null) _tsepcraft.Dispose();
+
+					it_MenuPaths.DropDownItems.Clear();
+
+					it_MenuPaths.DropDownItems.Add(it_PathAll);
+					it_MenuPaths.DropDownItems.Add(_tsep);
+					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
+					it_MenuPaths.DropDownItems.Add(it_PathPackages2da);
+
+					it_MenuPaths.Visible = true;
+
+//					it_PathBaseItems2da     .Visible =
+//					it_PathCategories2da    .Visible =
+//					it_PathClasses2da       .Visible =
+//					it_PathCombatModes2da   .Visible =
+//					it_PathDisease2da       .Visible =
+//					it_PathIprpAmmoCost2da  .Visible =
+//					it_PathIprpFeats2da     .Visible =
+//					it_PathIprpOnHitSpell2da.Visible =
+//					it_PathIprpSpells2da    .Visible =
+//					it_PathItemPropDef2da   .Visible =
+//					it_PathMasterFeats2da   .Visible =
+//					it_PathRaces2da         .Visible =
+//					it_PathRanges2da        .Visible =
+//					it_PathSkills2da        .Visible =
+//					it_PathSpells2da        .Visible =
+//					it_PathSpellTarget2da   .Visible = false;
+					break;
+			}
+		}
+
 
 		/// <summary>
 		/// Draws the tab-text in Bold iff selected.
