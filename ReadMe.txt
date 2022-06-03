@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 May 31
+2022 June 2
 kevL's
 ver 5.1.0.0
 
@@ -688,8 +688,9 @@ the filesize.
 Appendix E: how to use Info paths
 
 IMPORTANT - Info (on the statusbar) and InfoInput dialogs are hardcoded to work
-with 2das that ship with NwN2 only. NwN and NwN:EE users can (and will) get
-incorrect results. Info and InfoInput are not waranteed (sic) for NwN or NwN:EE.
+with 2das that ship with or are compliant with those that ship with NwN2 only.
+NwN and NwN:EE users can get incorrect results. Info and InfoInput are not
+waranteed (sic) for NwN or NwN:EE.
 
 Yata is capable of displaying readable info about fields in Crafting.2da,
 Spells.2da, Feat.2da, and Classes.2da. Paths to various other 2da-files need to
@@ -707,53 +708,58 @@ Settings.Cfg.
 
 Paths appears on the menubar only when Crafting.2da, Spells.2da, Feat.2da, or
 Classes.2da are loaded - the filename without extension needs to be "crafting",
-"spells", "feat", or "classes" (case-insensitive). The items under Paths are
-divided into six sections:
+"spells", "feat", or "classes" (case-insensitive).
 
-Path all ...             : this item opens a folder browser dialog to search for
-                           any/all applicable 2da-file(s). It can be used more
-                           than once and if so, each time another folder is
-                           selected any applicable 2da-file(s) will be
-                           additionally groped for info. In case of two files
-                           with the same filename in two different directories
-                           info from the latest groping will be used.
---
-path BaseItems.2da       : these items open a file browser dialog. Use them to
-path Feat.2da              path to a specific 2da-file. A check will appear next
-path ItemPropDef.2da       to the entry on the menu; selecting the item a second
-path Skills.2da            time would clear the info. These are used by
-path Spells.2da            Crafting.2da
---
-path Classes.2da         : these items open a file browser dialog. Use them to
-path Disease.2da           path to a specific 2da-file. A check will appear next
-path Iprp_AmmoCost.2da     to the entry on the menu; selecting the item a second
-path Iprp_Feats.2da        time would clear the info. These are used to
-path Iprp_OnHitSpell.2da   interpret EncodedIPs in Crafting.2da
-path Iprp_Spells.2da
+Path all ... : this item opens a folder browser dialog to search for any/all
+               applicable 2da-file(s). It can be used more than once and if so,
+               each time another folder is selected any applicable 2da-file(s)
+               will be additionally groped for info. In case of two files with
+               the same filename in two different directories info from the
+               latest groping will be used.
+
+Other items that appear under Paths depend on the 2da that is currently active.
+The items open a file browser dialog. Use them to path to a specific 2da-file. A
+check will appear next to the entry on the menu if the file was successfully
+groped; clicking a checked item clears its info.
+
+Crafting.2da
+
+path BaseItems.2da       : these files contain basic Info for Crafting.2da
+path Feat.2da
+path ItemPropDef.2da
+path Skills.2da
+path Spells.2da
+
+path Classes.2da         : these files contain Info that is used to decode
+path Disease.2da           EncodedIPs for Crafting.2da. Note that
+path Iprp_AmmoCost.2da     ItemPropDef.2da above interprets the base
+path Iprp_Feats.2da        itemproperty; these files contain further details of
+path Iprp_OnHitSpell.2da   the itemproperty. Raw values are displayed if these
+path Iprp_Spells.2da       files have not been groped.
 path RacialTypes.2da
---
-path Categories.2da      : these items open a file browser dialog. Use them to
-path Ranges.2da            path to a specific 2da-file. A check will appear next
-path SpellTarget.2da       to the entry on the menu; selecting the item a second
-                           time would clear the info. These are used by
-                           Spells.2da - note that Info for Spells.2da can also
-                           make use of data that's groped from Feat.2da,
-                           Spells.2da, and Classes.2da above.
---
-path MasterFeats.2da     : this item opens a file browser dialog. Use it to path
-                           to a specific 2da-file. A check will appear next to
-                           the entry on the menu; selecting the item a second
-                           time would clear the info. This is used by Feat.2da -
-                           note that Info for Feat.2da can also make use of data
-                           that's groped from Feat.2da, Skills.2da, Spells.2da
-                           and Categories.2da above.
---
-path Packages.2da        : this item opens a file browser dialog. Use it to path
-                           to a specific 2da-file. A check will appear next to
-                           the entry on the menu; selecting the item a second
-                           time would clear the info. This is used by
-                           Classes.2da - note that Info for Classes.2da can also
-                           make use of data that's groped from Feat.2da above.
+
+Spells.2da
+
+path Categories.2da      : these files contain Info for Spells.2da
+path Classes.2da
+path Feat.2da
+path Ranges.2da
+path Spells.2da
+path SpellTarget.2da
+
+Feat.2da
+
+path Categories.2da      : these files contain Info for Feat.2da
+path CombatModes.2da
+path Feat.2da
+path MasterFeats.2da
+path Skills.2da
+path Spells.2da
+
+Classes.2da
+
+path Feat.2da            : these files contain Info for Classes.2da
+path Packages.2da
 
 (b) Using "pathall=" entries in Settings.Cfg
 
@@ -762,11 +768,23 @@ quotes), and each will operate just like "Path all ..." does under the menubar.
 
 Please note that the path-feature in Yata does not look inside zipped archives.
 This is to say that the 2da-files that are part of the stock installation are
-invalid targets; the files first need to be copied out of the /Data folder to a
+invalid targets; the files need to be copied out of the /Data folder to a
 different directory (ie, as unarchived/uncompressed files).
 
 If you have custom versions of those files they should be groped after the stock
 files.
+
+Note that Info can appear on the statusbar for various cols even if 2das have
+not been groped; this is because standard info has been hardcoded in Yata.
+Similarly, the InfoInput dialog (rightclick on a cell in any of Crafting.2da,
+Spells.2da, Feat.2da, or Classes.2da) might also be accessible without any
+secondary 2das having been groped.
+
+Also note that the info from groped 2das is consistent across all loaded and
+relevant 2das. Eg, if path Spells.2da is checked when Crafting.2da is loaded
+then that info is used - its menuitem is checked - for Feat.2da also. Yata
+retains the info from each groped 2da until it exits or the user dechecks a
+path.
 
 
 Appendix F: creating a 2da-file
@@ -774,9 +792,10 @@ Appendix F: creating a 2da-file
 Yata can create a new 2da-file from scratch w/ File|Create .... If you want to
 create a new 2da-file yourself, at a minimum you should use a text-editor to
 specify the 2da version header, followed by a blank line, followed by a line
-with a col label - look at the top of any valid 2da, in a text-editor, to see
-what those first three lines should look like. Yata ought then be able to open
-the 2da and assign a first blank row with default cell-values.
+with a space and a colhead label - look at the top of any valid 2da, in a
+text-editor, to see what those first three lines should look like. Yata ought
+then be able to open the 2da and assign a first blank row with default
+cell-values.
 
 
 Appendix G: Drag & Drop to open 2da-file(s)
