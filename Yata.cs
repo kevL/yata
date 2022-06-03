@@ -1119,7 +1119,8 @@ namespace yata
 					break;
 
 				case YataGrid.InfoType.INFO_CRAFT:
-					if (_tsepcraft == null) _tsepcraft = new ToolStripSeparator(); // TODO: dispose <-
+					if (_tsepcraft == null || _tsepcraft.IsDisposed)
+						_tsepcraft = new ToolStripSeparator(); // TODO: dispose <-
 
 					it_MenuPaths.DropDownItems.Clear();
 
@@ -1187,11 +1188,11 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathAll);
 					it_MenuPaths.DropDownItems.Add(_tsep);
 					it_MenuPaths.DropDownItems.Add(it_PathCategories2da);
+					it_MenuPaths.DropDownItems.Add(it_PathCombatModes2da);
 					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
 					it_MenuPaths.DropDownItems.Add(it_PathMasterFeats2da);
 					it_MenuPaths.DropDownItems.Add(it_PathSkills2da);
 					it_MenuPaths.DropDownItems.Add(it_PathSpells2da);
-					it_MenuPaths.DropDownItems.Add(it_PathCombatModes2da);
 
 					it_MenuPaths.Visible = true;
 
