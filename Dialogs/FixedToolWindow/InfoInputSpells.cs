@@ -50,7 +50,7 @@ namespace yata
 	/// <seealso cref="InfoInputFeat"><c>InfoInputFeat</c></seealso>
 	/// <seealso cref="InfoInputClasses"><c>InfoInputClasses</c></seealso>
 	sealed partial class InfoInputSpells
-		: Form
+		: InfoInput
 	{
 		#region Fields (static)
 		internal const int School         =  4; // col in Spells.2da ->
@@ -66,23 +66,6 @@ namespace yata
 		#endregion Fields (static)
 
 
-		#region Fields
-		Yata _f;
-		Cell _cell;
-
-		/// <summary>
-		/// <c>true</c> bypasses the <c>CheckedChanged</c> handler for
-		/// <c>CheckBoxes</c> and the <c>SelectedIndexChanged</c> handler for
-		/// the <c>ComboBox</c>.
-		/// </summary>
-		/// <remarks>Initialization will configure this dialog without invoking
-		/// the handlers.</remarks>
-		bool _init;
-
-		CheckBox _cb;
-		#endregion Fields
-
-
 		#region cTor
 		/// <summary>
 		/// A dialog for the user to input <c>Spells.2da</c> info.
@@ -91,8 +74,8 @@ namespace yata
 		/// <param name="cell"></param>
 		internal InfoInputSpells(Yata f, Cell cell)
 		{
-			_f    = f;
-			_cell = cell;
+			_f    = f;		// don't try to pass these to a base.InfoInput cTor
+			_cell = cell;	// because the designer will scream blue murder.
 
 			InitializeComponent();
 
@@ -317,7 +300,7 @@ namespace yata
 				case Category: // int-val,dropdown,unique
 					list_Categories();
 
-					initintvals(val);
+					initintvals(val, cbx_Val, btn_Clear);
 					break;
 
 				case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
@@ -341,7 +324,7 @@ namespace yata
 				case SpontCastClass: // int-val,dropdown,unique
 					list_SpontCastClasses();
 
-					initintvals(val);
+					initintvals(val, cbx_Val, btn_Clear);
 					break;
 
 				case AsMetaMagic: // int-val(hex),dropdown,unique
@@ -397,7 +380,7 @@ namespace yata
 				case TargetingUI: // int-val,dropdown,unique
 					list_Targeters();
 
-					initintvals(val);
+					initintvals(val, cbx_Val, btn_Clear);
 					break;
 			}
 			_init = false;
@@ -686,38 +669,6 @@ namespace yata
 				cbx_Val.Items.Add(new tui(text));
 			}
 			cbx_Val.Items.Add(new tui(gs.Stars));
-		}
-
-
-		/// <summary>
-		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
-		/// Yata to deal with user-input.
-		/// 
-		/// 
-		/// - duplicates <c><see cref="InfoInputFeat"/>.initintvals()</c>
-		/// 
-		/// - duplicates <c><see cref="InfoInputClasses"/>.initintvals()</c>
-		/// </summary>
-		/// <param name="val"></param>
-		void initintvals(string val)
-		{
-			int result;
-			if (Int32.TryParse(val, out result)
-				&& result > -1 && result < cbx_Val.Items.Count - 1)
-			{
-				cbx_Val.SelectedIndex = _f.int0 = _f.int1 = result;
-			}
-			else
-			{
-				btn_Clear.Enabled = false;
-
-				if (val == gs.Stars) _f.int0 = Yata.II_ASSIGN_STARS;
-				else                 _f.int0 = Yata.II_INIT_INVALID;
-
-				_f.int1 = Yata.II_ASSIGN_STARS;
-
-				cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
-			}
 		}
 		#endregion init
 
@@ -1208,32 +1159,6 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Clears all <c>CheckBoxes</c> except the current <c>CheckBox</c>
-		/// <c><see cref="_cb"/></c> (if valid).
-		/// 
-		/// 
-		/// - duplicates <c><see cref="InfoInputFeat"/>.clearchecks()</c>
-		/// 
-		/// - duplicates <c><see cref="InfoInputClasses"/>.clearchecks()</c>
-		/// </summary>
-		/// <remarks>Set <c>(_cb = null)</c> to clear all <c>Checkboxes</c>.</remarks>
-		void clearchecks()
-		{
-			_init = true;
-
-			CheckBox cb;
-			foreach (var control in Controls)
-			{
-				if ((cb = control as CheckBox) != null
-					&& cb.Checked && (_cb == null || cb != _cb))
-				{
-					cb.Checked = false;
-				}
-			}
-			_init = false;
-		}
-
-		/// <summary>
 		/// Prints a hex-value at the top of the dialog.
 		/// </summary>
 		/// <param name="result"></param>
@@ -1246,21 +1171,6 @@ namespace yata
 			lbl_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
 		}
 		#endregion Methods
-
-
-		#region Handlers (override)
-		/// <summary>
-		/// Closes the dialog on [Esc].
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			if (e.KeyData == Keys.Escape)
-				Close();
-			else
-				base.OnKeyDown(e);
-		}
-		#endregion Handlers (override)
 	}
 }
 /*
