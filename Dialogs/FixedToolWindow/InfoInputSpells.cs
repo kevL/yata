@@ -74,7 +74,7 @@ namespace yata
 		/// <param name="cell"></param>
 		internal InfoInputSpells(Yata f, Cell cell)
 		{
-			_f    = f;		// don't try to pass these to a base.InfoInput cTor
+			_f    = f;		// don't try to pass these to a (base)InfoInput cTor
 			_cell = cell;	// because the designer will scream blue murder.
 
 			InitializeComponent();
