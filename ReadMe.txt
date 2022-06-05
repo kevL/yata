@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 June 2
+2022 June 5
 kevL's
 ver 5.1.0.0
 
@@ -720,7 +720,7 @@ Path all ... : this item opens a folder browser dialog to search for any/all
 Other items that appear under Paths depend on the 2da that is currently active.
 The items open a file browser dialog. Use them to path to a specific 2da-file. A
 check will appear next to the entry on the menu if the file was successfully
-groped; clicking a checked item clears its info.
+groped; clicking on a checked item clears its info.
 
 Crafting.2da
 
