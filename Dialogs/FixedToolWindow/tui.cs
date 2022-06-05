@@ -4,7 +4,7 @@
 namespace yata
 {
 	/// <summary>
-	/// A class-object for populating the <c>cbx_Val</c> dropdown-list in
+	/// A class-object for populating the <c>co_Val</c> dropdown-list in
 	/// <list type="bullet">
 	/// <item><c><see cref="InfoInputSpells"/></c></item>
 	/// <item><c><see cref="InfoInputFeat"/></c></item>
@@ -12,7 +12,7 @@ namespace yata
 	/// </list>
 	/// </summary>
 	/// <remarks><c>tui</c> stands for ... "A class-object for populating the
-	/// <c>cbx_Val</c> dropdown-list".</remarks>
+	/// <c>co_Val</c> dropdown-list".</remarks>
 	sealed class tui
 	{
 		/// <summary>
@@ -22,7 +22,7 @@ namespace yata
 		{ get; set; }
 
 		/// <summary>
-		/// Constructs an item for populating a <c>cbx_Val</c> dropdown-list.
+		/// Constructs an item for populating a <c>co_Val</c> dropdown-list.
 		/// </summary>
 		/// <param name="label"></param>
 		internal tui(string label)

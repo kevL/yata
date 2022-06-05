@@ -143,7 +143,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="tabit_DiffReset"/></c></item>
-		/// <item><c><see cref="DifferDialog"/>.btn_Reset</c></item>
+		/// <item><c><see cref="DifferDialog"/>.bu_Reset</c></item>
 		/// <item><c><see cref="tabit_Diff1"/></c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>

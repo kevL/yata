@@ -128,12 +128,12 @@ namespace yata
 			if (rb_StartAdd.Checked)										// readonly - shall be valid.
 			{
 				tb = tb_StartAdd;
-				btn_Accept.Text = ADD;
+				bu_Accept.Text = ADD;
 			}
 			else // rb_StartInsert.Checked									// shall be valid.
 			{
 				tb = tb_StartInsert;
-				btn_Accept.Text = INSERT;
+				bu_Accept.Text = INSERT;
 			}
 
 			tb_StopFinish.Text = (Int32.Parse(tb.Text, CultureInfo.InvariantCulture) + result - 1).ToString(CultureInfo.InvariantCulture);
@@ -159,7 +159,7 @@ namespace yata
 				tb_StopCount .BackColor = Colors.TextboxSelected;
 			}
 
-			btn_Accept.Select();
+			bu_Accept.Select();
 		}
 		#endregion cTor
 
@@ -238,7 +238,7 @@ namespace yata
 
 					if (tb_StartAdd.Enabled = rb.Checked)
 					{
-						btn_Accept.Text = ADD;
+						bu_Accept.Text = ADD;
 
 						tb = tb_StartAdd;
 
@@ -247,7 +247,7 @@ namespace yata
 					}
 					else
 					{
-						btn_Accept.Text = INSERT;
+						bu_Accept.Text = INSERT;
 
 						(tb = tb_StartInsert).BackColor = Colors.TextboxSelected;
 						 tb                  .Enabled   = true;
@@ -405,7 +405,7 @@ namespace yata
 		/// <summary>
 		/// Fires when user clicks Ok. Let the chips fly.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_Ok(object sender, EventArgs e)
 		{

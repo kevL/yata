@@ -79,7 +79,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; break;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case AlignRestrict: // int-val(hex),checkbox,multiple
@@ -110,13 +110,13 @@ namespace yata
 						else
 							printHexString(_f.int0 = _f.int1 = result);
 
-						btn_Clear.Enabled = (result != 0);
+						bu_Clear.Enabled = (result != 0);
 					}
 					else // is not a valid hex-value ->
 					{
 						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
-						btn_Clear.Enabled = false;
+						bu_Clear.Enabled = false;
 					}
 					break;
 
@@ -145,20 +145,20 @@ namespace yata
 						else
 							printHexString(_f.int0 = _f.int1 = result);
 
-						btn_Clear.Enabled = (result != 0);
+						bu_Clear.Enabled = (result != 0);
 					}
 					else // is not a valid hex-value ->
 					{
 						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
-						btn_Clear.Enabled = false;
+						bu_Clear.Enabled = false;
 					}
 					break;
 
 				case Package: // int-val,dropdown,unique
 					list_Packages();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
 			_init = false;
@@ -222,8 +222,8 @@ namespace yata
 		/// </summary>
 		void dropdown()
 		{
-			lbl_Val.Visible = false;
-			cbx_Val.Visible = true;
+			la_Val.Visible = false;
+			co_Val.Visible = true;
 
 			ClientSize = new Size(ClientSize.Width,
 								  ClientSize.Height - 120);
@@ -241,9 +241,9 @@ namespace yata
 
 			for (int i = 0; i != Info.packageLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.packageLabels[i]));
+				co_Val.Items.Add(new tui(i + " - " + Info.packageLabels[i]));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 		#endregion init
 
@@ -290,8 +290,8 @@ namespace yata
 			else
 				val = gs.Stars;
 
-			lbl_Val.Text = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -327,7 +327,7 @@ namespace yata
 
 			printHexString(_f.int1);
 
-			btn_Clear.Enabled = (_f.int1 != 0);
+			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
 		/// <summary>
@@ -348,7 +348,7 @@ namespace yata
 
 			printHexString(_f.int1);
 
-			btn_Clear.Enabled = (_f.int1 != 0);
+			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
 
@@ -361,21 +361,21 @@ namespace yata
 		{
 			if (!_init)
 			{
-				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
+				if (co_Val.SelectedIndex == co_Val.Items.Count - 1)
 				{
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
 					_f.int1 = Yata.II_ASSIGN_STARS;
 				}
 				else
 				{
-					btn_Clear.Enabled = true;
+					bu_Clear.Enabled = true;
 
 					switch (_cell.x)
 					{
 						case Package:
-							_f.int1 = cbx_Val.SelectedIndex;
+							_f.int1 = co_Val.SelectedIndex;
 							break;
 					}
 				}
@@ -394,9 +394,9 @@ namespace yata
 			{
 				case PrimaryAbil: // str,cb,unique
 				case SpellAbil:
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
-					lbl_Val.Text = _f.str1 = gs.Stars;
+					la_Val.Text = _f.str1 = gs.Stars;
 
 					_cb = null;
 					clearchecks();
@@ -404,7 +404,7 @@ namespace yata
 
 				case AlignRestrict: // hex,cb,multiple
 				case AlignRstrctType:
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_cb = null;
 					clearchecks();
@@ -413,7 +413,7 @@ namespace yata
 					break;
 
 				case Package: // dropdown -> fire changed_Combobox()
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 					break;
 			}
 		}
@@ -431,7 +431,7 @@ namespace yata
 			if (_cell.x == AlignRestrict) f = "X2";
 			else                          f = "X1"; // _cell.x == AlignRstrctType
 
-			lbl_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
+			la_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
 		}
 		#endregion Methods
 	}

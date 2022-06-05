@@ -44,12 +44,12 @@ namespace yata
 
 			Text = title;
 
-			btn_Goto .Visible = @goto;
-			btn_Reset.Visible = reset;
+			bu_Goto .Visible = @goto;
+			bu_Reset.Visible = reset;
 
-			lbl_Info.ForeColor = color;
-			lbl_Info.Height = YataGraphics.MeasureHeight(label, Font) + 15; // +15 = label's pad top+bot +5
-			lbl_Info.Text = label;
+			la_Info.ForeColor = color;
+			la_Info.Height = YataGraphics.MeasureHeight(label, Font) + 15; // +15 = label's pad top+bot +5
+			la_Info.Text = label;
 
 			int w;
 			if (!String.IsNullOrEmpty(copyable))
@@ -57,20 +57,20 @@ namespace yata
 				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
 
 				w = GetWidth(copyable) + 30;					// +30 = parent panel's pad left+right +5
-				pnl_Copyable.Height = GetHeight(copyable) + 20;	// +20 = parent panel's pad top+bot +5
+				pa_Copyable.Height = GetHeight(copyable) + 20;	// +20 = parent panel's pad top+bot +5
 
-				rtb_Copyable.Text = copyable;
+				rt_Copyable.Text = copyable;
 			}
 			else
 			{
-				pnl_Copyable.Visible = false;
-				pnl_Copyable.Height = w = 0;
+				pa_Copyable.Visible = false;
+				pa_Copyable.Height = w = 0;
 			}
 
 			if (w < WIDTH_Min) w = WIDTH_Min;
 
 			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
-								  lbl_Info.Height + pnl_Copyable.Height + btn_Okay.Height);
+								  la_Info.Height + pa_Copyable.Height + bu_Okay.Height);
 
 			MinimumSize = new Size(Width, Height);
 
@@ -103,11 +103,11 @@ namespace yata
 			Left = _x;
 			Top  = _y;
 
-			rtb_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
+			rt_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
 
-			if      (btn_Goto .Visible) btn_Goto .Select();
-			else if (btn_Reset.Visible) btn_Reset.Select();
-			else                        btn_Okay .Select();
+			if      (bu_Goto .Visible) bu_Goto .Select();
+			else if (bu_Reset.Visible) bu_Reset.Select();
+			else                       bu_Okay .Select();
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@ namespace yata
 		/// Handles a click on the Goto button. Goes to the next diff'd cell or
 		/// the previous diff'd cell if <c>[Shift]</c> is depressed.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Goto"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Goto"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
 		/// is depressed.</remarks>
@@ -184,7 +184,7 @@ namespace yata
 			int width = 0, test;
 			foreach (var line in lines)
 			{
-				if ((test = YataGraphics.MeasureWidth(line, rtb_Copyable.Font)) > width)
+				if ((test = YataGraphics.MeasureWidth(line, rt_Copyable.Font)) > width)
 					width = test;
 			}
 			return width;
@@ -199,7 +199,7 @@ namespace yata
 		{
 			string[] lines = text.Split(gs.CRandorLF, StringSplitOptions.None);
 
-			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
+			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rt_Copyable.Font)
 				 * lines.Length;
 		}
 
@@ -210,7 +210,7 @@ namespace yata
 		/// <param name="enabled">true to enable</param>
 		internal void EnableGotoButton(bool enabled)
 		{
-			btn_Goto.Enabled = enabled;
+			bu_Goto.Enabled = enabled;
 		}
 		#endregion Methods
 	}

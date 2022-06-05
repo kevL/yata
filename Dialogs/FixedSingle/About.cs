@@ -53,7 +53,7 @@ namespace yata
 
 			la_Text.Text = ver;
 
-			btn_Close.Select();
+			bu_Close.Select();
 		}
 		#endregion cTor
 

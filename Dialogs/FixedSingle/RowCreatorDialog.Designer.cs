@@ -6,8 +6,8 @@ namespace yata
 {
 	sealed partial class RowCreatorDialog
 	{
-		Button btn_Cancel;
-		Button btn_Accept;
+		Button bu_Cancel;
+		Button bu_Accept;
 		RadioButton rb_StartAdd;
 		RadioButton rb_StartInsert;
 		GroupBox gb_Start;
@@ -38,8 +38,8 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.btn_Cancel = new System.Windows.Forms.Button();
-			this.btn_Accept = new System.Windows.Forms.Button();
+			this.bu_Cancel = new System.Windows.Forms.Button();
+			this.bu_Accept = new System.Windows.Forms.Button();
 			this.rb_StartAdd = new System.Windows.Forms.RadioButton();
 			this.rb_StartInsert = new System.Windows.Forms.RadioButton();
 			this.gb_Start = new System.Windows.Forms.GroupBox();
@@ -66,29 +66,29 @@ namespace yata
 			this.gb_Fillstyle.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// btn_Cancel
+			// bu_Cancel
 			// 
-			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(125, 201);
-			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Cancel.Name = "btn_Cancel";
-			this.btn_Cancel.Size = new System.Drawing.Size(110, 32);
-			this.btn_Cancel.TabIndex = 4;
-			this.btn_Cancel.Text = "Cancel";
-			this.btn_Cancel.UseVisualStyleBackColor = true;
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Location = new System.Drawing.Point(125, 201);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Cancel.Name = "bu_Cancel";
+			this.bu_Cancel.Size = new System.Drawing.Size(110, 32);
+			this.bu_Cancel.TabIndex = 4;
+			this.bu_Cancel.Text = "Cancel";
+			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
-			// btn_Accept
+			// bu_Accept
 			// 
-			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Accept.Location = new System.Drawing.Point(10, 201);
-			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Accept.Name = "btn_Accept";
-			this.btn_Accept.Size = new System.Drawing.Size(110, 32);
-			this.btn_Accept.TabIndex = 3;
-			this.btn_Accept.UseVisualStyleBackColor = true;
-			this.btn_Accept.Click += new System.EventHandler(this.click_Ok);
+			this.bu_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.bu_Accept.Location = new System.Drawing.Point(10, 201);
+			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Accept.Name = "bu_Accept";
+			this.bu_Accept.Size = new System.Drawing.Size(110, 32);
+			this.bu_Accept.TabIndex = 3;
+			this.bu_Accept.UseVisualStyleBackColor = true;
+			this.bu_Accept.Click += new System.EventHandler(this.click_Ok);
 			// 
 			// rb_StartAdd
 			// 
@@ -336,14 +336,14 @@ namespace yata
 			// 
 			// RowCreatorDialog
 			// 
-			this.AcceptButton = this.btn_Accept;
-			this.CancelButton = this.btn_Cancel;
+			this.AcceptButton = this.bu_Accept;
+			this.CancelButton = this.bu_Cancel;
 			this.ClientSize = new System.Drawing.Size(244, 236);
 			this.Controls.Add(this.gb_Fillstyle);
 			this.Controls.Add(this.gb_Stop);
 			this.Controls.Add(this.gb_Start);
-			this.Controls.Add(this.btn_Accept);
-			this.Controls.Add(this.btn_Cancel);
+			this.Controls.Add(this.bu_Accept);
+			this.Controls.Add(this.bu_Cancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;

@@ -123,7 +123,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; break;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case Range: // string-val,checkbox,unique
@@ -143,7 +143,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; break;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case MetaMagic: // int-val(hex),checkbox,multiple
@@ -209,13 +209,13 @@ namespace yata
 						else
 							printHexString(_f.int0 = _f.int1 = result);
 
-						btn_Clear.Enabled = (result != 0);
+						bu_Clear.Enabled = (result != 0);
 					}
 					else // is not a valid hex-value ->
 					{
 						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
-						btn_Clear.Enabled = false;
+						bu_Clear.Enabled = false;
 					}
 					break;
 
@@ -249,13 +249,13 @@ namespace yata
 						else
 							printHexString(_f.int0 = _f.int1 = result);
 
-						btn_Clear.Enabled = (result != 0);
+						bu_Clear.Enabled = (result != 0);
 					}
 					else // is not a valid hex-value ->
 					{
 						_f.int0 = Yata.II_INIT_INVALID;
 						printHexString(_f.int1 = 0);
-						btn_Clear.Enabled = false;
+						bu_Clear.Enabled = false;
 					}
 					break;
 
@@ -270,37 +270,37 @@ namespace yata
 
 					switch (val)
 					{
-						case gs.Acid:           cbx_Val.SelectedIndex =  0; break; // sub
-						case gs.Cold:           cbx_Val.SelectedIndex =  1; break; // sub
-						case gs.Death:          cbx_Val.SelectedIndex =  2; break;
-						case gs.Disease:        cbx_Val.SelectedIndex =  3; break;
-						case gs.Divine:         cbx_Val.SelectedIndex =  4; break; // sub
-						case gs.Electricity:    cbx_Val.SelectedIndex =  5; break; // sub
-						case gs.Evil:           cbx_Val.SelectedIndex =  6; break; // non-standard
-						case gs.Fear:           cbx_Val.SelectedIndex =  7; break;
-						case gs.Fire:           cbx_Val.SelectedIndex =  8; break; // sub
-						case gs.Magical:        cbx_Val.SelectedIndex =  9; break; // sub
-						case gs.Mind_Affecting: cbx_Val.SelectedIndex = 10; break;
-						case gs.Negative:       cbx_Val.SelectedIndex = 11; break; // sub
-						case gs.Paralysis:      cbx_Val.SelectedIndex = 12; break;
-						case gs.Poison:         cbx_Val.SelectedIndex = 13; break;
-						case gs.Positive:       cbx_Val.SelectedIndex = 14; break; // sub
-						case gs.Sonic:          cbx_Val.SelectedIndex = 15; break; // sub
-						case gs.Constitution:   cbx_Val.SelectedIndex = 16; break; // non-standard
-						case gs.Water:          cbx_Val.SelectedIndex = 17; break; // non-standard
+						case gs.Acid:           co_Val.SelectedIndex =  0; break; // sub
+						case gs.Cold:           co_Val.SelectedIndex =  1; break; // sub
+						case gs.Death:          co_Val.SelectedIndex =  2; break;
+						case gs.Disease:        co_Val.SelectedIndex =  3; break;
+						case gs.Divine:         co_Val.SelectedIndex =  4; break; // sub
+						case gs.Electricity:    co_Val.SelectedIndex =  5; break; // sub
+						case gs.Evil:           co_Val.SelectedIndex =  6; break; // non-standard
+						case gs.Fear:           co_Val.SelectedIndex =  7; break;
+						case gs.Fire:           co_Val.SelectedIndex =  8; break; // sub
+						case gs.Magical:        co_Val.SelectedIndex =  9; break; // sub
+						case gs.Mind_Affecting: co_Val.SelectedIndex = 10; break;
+						case gs.Negative:       co_Val.SelectedIndex = 11; break; // sub
+						case gs.Paralysis:      co_Val.SelectedIndex = 12; break;
+						case gs.Poison:         co_Val.SelectedIndex = 13; break;
+						case gs.Positive:       co_Val.SelectedIndex = 14; break; // sub
+						case gs.Sonic:          co_Val.SelectedIndex = 15; break; // sub
+						case gs.Constitution:   co_Val.SelectedIndex = 16; break; // non-standard
+						case gs.Water:          co_Val.SelectedIndex = 17; break; // non-standard
 
-						case gs.Stars: cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
 							break;
 
 						default: _f.str1 = gs.Stars; goto case gs.Stars;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case Category: // int-val,dropdown,unique
 					list_Categories();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case UserType: // string-val,checkbox,unique // TODO: change 'UserType' selection to int-val,dropdown,unique
@@ -318,24 +318,24 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; break;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case SpontCastClass: // int-val,dropdown,unique
 					list_SpontCastClasses();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case AsMetaMagic: // int-val(hex),dropdown,unique
 					list_AsMetaMagics();
 
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 
 					if (val == gs.Stars)
 					{
 						_f.int0 = _f.int1 = Yata.II_ASSIGN_STARS;
-						btn_Clear.Enabled = false;
+						bu_Clear.Enabled = false;
 						break;
 					}
 
@@ -347,26 +347,26 @@ namespace yata
 					{
 						switch (result)
 						{
-							case Yata.META_I_BESHADOWED_BLAST: cbx_Val.SelectedIndex =  0; break; // Eldritch Essences ->
-							case Yata.META_I_BEWITCHING_BLAST: cbx_Val.SelectedIndex =  1; break;
-							case Yata.META_I_BINDING_BLAST:    cbx_Val.SelectedIndex =  2; break;
-							case Yata.META_I_BRIMSTONE_BLAST:  cbx_Val.SelectedIndex =  3; break;
-							case Yata.META_I_DRAINING_BLAST:   cbx_Val.SelectedIndex =  4; break;
-							case Yata.META_I_FRIGHTFUL_BLAST:  cbx_Val.SelectedIndex =  5; break;
-							case Yata.META_I_HELLRIME_BLAST:   cbx_Val.SelectedIndex =  6; break;
-							case Yata.META_I_HINDERING_BLAST:  cbx_Val.SelectedIndex =  7; break;
-							case Yata.META_I_NOXIOUS_BLAST:    cbx_Val.SelectedIndex =  8; break;
-							case Yata.META_I_UTTERDARK_BLAST:  cbx_Val.SelectedIndex =  9; break;
-							case Yata.META_I_VITRIOLIC_BLAST:  cbx_Val.SelectedIndex = 10; break;
+							case Yata.META_I_BESHADOWED_BLAST: co_Val.SelectedIndex =  0; break; // Eldritch Essences ->
+							case Yata.META_I_BEWITCHING_BLAST: co_Val.SelectedIndex =  1; break;
+							case Yata.META_I_BINDING_BLAST:    co_Val.SelectedIndex =  2; break;
+							case Yata.META_I_BRIMSTONE_BLAST:  co_Val.SelectedIndex =  3; break;
+							case Yata.META_I_DRAINING_BLAST:   co_Val.SelectedIndex =  4; break;
+							case Yata.META_I_FRIGHTFUL_BLAST:  co_Val.SelectedIndex =  5; break;
+							case Yata.META_I_HELLRIME_BLAST:   co_Val.SelectedIndex =  6; break;
+							case Yata.META_I_HINDERING_BLAST:  co_Val.SelectedIndex =  7; break;
+							case Yata.META_I_NOXIOUS_BLAST:    co_Val.SelectedIndex =  8; break;
+							case Yata.META_I_UTTERDARK_BLAST:  co_Val.SelectedIndex =  9; break;
+							case Yata.META_I_VITRIOLIC_BLAST:  co_Val.SelectedIndex = 10; break;
 
-							case Yata.META_I_ELDRITCH_CHAIN:   cbx_Val.SelectedIndex = 11; break; // Blast Shapes ->
-							case Yata.META_I_ELDRITCH_CONE:    cbx_Val.SelectedIndex = 12; break;
-							case Yata.META_I_ELDRITCH_DOOM:    cbx_Val.SelectedIndex = 13; break;
-							case Yata.META_I_ELDRITCH_SPEAR:   cbx_Val.SelectedIndex = 14; break;
-							case Yata.META_I_HIDEOUS_BLOW:     cbx_Val.SelectedIndex = 15; break;
+							case Yata.META_I_ELDRITCH_CHAIN:   co_Val.SelectedIndex = 11; break; // Blast Shapes ->
+							case Yata.META_I_ELDRITCH_CONE:    co_Val.SelectedIndex = 12; break;
+							case Yata.META_I_ELDRITCH_DOOM:    co_Val.SelectedIndex = 13; break;
+							case Yata.META_I_ELDRITCH_SPEAR:   co_Val.SelectedIndex = 14; break;
+							case Yata.META_I_HIDEOUS_BLOW:     co_Val.SelectedIndex = 15; break;
 						}
 
-						if (cbx_Val.SelectedIndex != cbx_Val.Items.Count - 1)
+						if (co_Val.SelectedIndex != co_Val.Items.Count - 1)
 						{
 							_f.int0 = _f.int1 = result;
 							break;
@@ -380,7 +380,7 @@ namespace yata
 				case TargetingUI: // int-val,dropdown,unique
 					list_Targeters();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
 			_init = false;
@@ -515,8 +515,8 @@ namespace yata
 		/// </summary>
 		void dropdown()
 		{
-			lbl_Val.Visible = false;
-			cbx_Val.Visible = true;
+			la_Val.Visible = false;
+			co_Val.Visible = true;
 
 			ClientSize = new Size(ClientSize.Width,
 								  ClientSize.Height - 160);
@@ -532,26 +532,26 @@ namespace yata
 
 			dropdown();
 
-			cbx_Val.Items.Add(new tui(gs.Acid));
-			cbx_Val.Items.Add(new tui(gs.Cold));
-			cbx_Val.Items.Add(new tui(gs.Death));
-			cbx_Val.Items.Add(new tui(gs.Disease));
-			cbx_Val.Items.Add(new tui(gs.Divine));
-			cbx_Val.Items.Add(new tui(gs.Electricity));
-			cbx_Val.Items.Add(new tui(gs.Evil));
-			cbx_Val.Items.Add(new tui(gs.Fear));
-			cbx_Val.Items.Add(new tui(gs.Fire));
-			cbx_Val.Items.Add(new tui(gs.Magical));
-			cbx_Val.Items.Add(new tui(gs.Mind_Affecting));
-			cbx_Val.Items.Add(new tui(gs.Negative));
-			cbx_Val.Items.Add(new tui(gs.Paralysis));
-			cbx_Val.Items.Add(new tui(gs.Poison));
-			cbx_Val.Items.Add(new tui(gs.Positive));
-			cbx_Val.Items.Add(new tui(gs.Sonic));
-			cbx_Val.Items.Add(new tui(gs.Constitution));
-			cbx_Val.Items.Add(new tui(gs.Water));
+			co_Val.Items.Add(new tui(gs.Acid));
+			co_Val.Items.Add(new tui(gs.Cold));
+			co_Val.Items.Add(new tui(gs.Death));
+			co_Val.Items.Add(new tui(gs.Disease));
+			co_Val.Items.Add(new tui(gs.Divine));
+			co_Val.Items.Add(new tui(gs.Electricity));
+			co_Val.Items.Add(new tui(gs.Evil));
+			co_Val.Items.Add(new tui(gs.Fear));
+			co_Val.Items.Add(new tui(gs.Fire));
+			co_Val.Items.Add(new tui(gs.Magical));
+			co_Val.Items.Add(new tui(gs.Mind_Affecting));
+			co_Val.Items.Add(new tui(gs.Negative));
+			co_Val.Items.Add(new tui(gs.Paralysis));
+			co_Val.Items.Add(new tui(gs.Poison));
+			co_Val.Items.Add(new tui(gs.Positive));
+			co_Val.Items.Add(new tui(gs.Sonic));
+			co_Val.Items.Add(new tui(gs.Constitution));
+			co_Val.Items.Add(new tui(gs.Water));
 
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -567,9 +567,9 @@ namespace yata
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
+				co_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -584,9 +584,9 @@ namespace yata
 
 			for (int i = 0; i != Info.classLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.classLabels[i]));
+				co_Val.Items.Add(new tui(i + " - " + Info.classLabels[i]));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -599,25 +599,25 @@ namespace yata
 
 			dropdown();
 
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast)); // Eldritch Essences ->
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast)); // Eldritch Essences ->
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast));
 
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain)); // Blast Shapes ->
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
-			cbx_Val.Items.Add(new tui(toHexString(Yata.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain)); // Blast Shapes ->
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
+			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
 
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -666,9 +666,9 @@ namespace yata
 
 				if (haspars) text += ")";
 
-				cbx_Val.Items.Add(new tui(text));
+				co_Val.Items.Add(new tui(text));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 		#endregion init
 
@@ -718,8 +718,8 @@ namespace yata
 			else
 				val = gs.Stars;
 
-			lbl_Val.Text = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -742,8 +742,8 @@ namespace yata
 			else
 				val = gs.Stars;
 
-			lbl_Val.Text = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -879,7 +879,7 @@ namespace yata
 			_init = false;
 
 			printHexString(_f.int1);
-			btn_Clear.Enabled = (_f.int1 != 0);
+			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
 		/// <summary>
@@ -925,7 +925,7 @@ namespace yata
 
 			printHexString(_f.int1);
 
-			btn_Clear.Enabled = (_f.int1 != 0);
+			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
 		/// <summary>
@@ -946,8 +946,8 @@ namespace yata
 			else
 				val = gs.Stars;
 
-			lbl_Val.Text = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 
@@ -960,21 +960,21 @@ namespace yata
 		{
 			if (!_init)
 			{
-				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
+				if (co_Val.SelectedIndex == co_Val.Items.Count - 1)
 				{
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
 					_f.int1 = Yata.II_ASSIGN_STARS;
 				}
 				else
 				{
-					btn_Clear.Enabled = true;
+					bu_Clear.Enabled = true;
 
 					switch (_cell.x)
 					{
 						case ImmunityType:
-							switch (cbx_Val.SelectedIndex)
+							switch (co_Val.SelectedIndex)
 							{
 								case  0: _f.str1 = gs.Acid;           break;
 								case  1: _f.str1 = gs.Cold;           break;
@@ -998,7 +998,7 @@ namespace yata
 							break;
 
 						case AsMetaMagic:
-							switch (cbx_Val.SelectedIndex)
+							switch (co_Val.SelectedIndex)
 							{
 								case  0: _f.int1 = Yata.META_I_BESHADOWED_BLAST; break; // Eldritch Essences ->
 								case  1: _f.int1 = Yata.META_I_BEWITCHING_BLAST; break;
@@ -1023,7 +1023,7 @@ namespace yata
 						case Category:
 						case SpontCastClass:
 						case TargetingUI:
-							_f.int1 = cbx_Val.SelectedIndex;
+							_f.int1 = co_Val.SelectedIndex;
 							break;
 					}
 				}
@@ -1071,7 +1071,7 @@ namespace yata
 				_init = false;
 
 				printHexString(_f.int1);
-				btn_Clear.Enabled = (_f.int1 != 0);
+				bu_Clear.Enabled = (_f.int1 != 0);
 			}
 		}
 
@@ -1115,16 +1115,16 @@ namespace yata
 				case School: // str,cb,unique
 				case Range:
 				case UserType:
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
-					lbl_Val.Text = _f.str1 = gs.Stars;
+					la_Val.Text = _f.str1 = gs.Stars;
 
 					_cb = null;
 					clearchecks();
 					break;
 
 				case MetaMagic: // hex,cb,multiple
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_cb = null;
 					clearchecks();
@@ -1137,7 +1137,7 @@ namespace yata
 					break;
 
 				case TargetType: // hex,cb,multiple
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_cb = null;
 					clearchecks();
@@ -1150,7 +1150,7 @@ namespace yata
 				case SpontCastClass:
 				case AsMetaMagic:
 				case TargetingUI:
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 					break;
 			}
 		}
@@ -1168,7 +1168,7 @@ namespace yata
 			if (result > 0xFF) f = "X6";
 			else               f = "X2";
 
-			lbl_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
+			la_Val.Text = "0x" + result.ToString(f, CultureInfo.InvariantCulture);
 		}
 		#endregion Methods
 	}

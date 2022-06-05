@@ -6,8 +6,8 @@ namespace yata
 {
 	sealed partial class InfoInputFeat
 	{
-		Label lbl_Val;
-		ComboBox cbx_Val;
+		Label la_Val;
+		ComboBox co_Val;
 
 		CheckBox cb_00;
 		CheckBox cb_01;
@@ -18,8 +18,8 @@ namespace yata
 		CheckBox cb_06;
 
 
-		Button btn_Clear;
-		Button btn_Accept;
+		Button bu_Clear;
+		Button bu_Accept;
 
 		/// <summary>
 		/// Required method for Designer support - do not modify the contents of
@@ -34,10 +34,10 @@ namespace yata
 			this.cb_04 = new System.Windows.Forms.CheckBox();
 			this.cb_05 = new System.Windows.Forms.CheckBox();
 			this.cb_06 = new System.Windows.Forms.CheckBox();
-			this.btn_Accept = new System.Windows.Forms.Button();
-			this.lbl_Val = new System.Windows.Forms.Label();
-			this.cbx_Val = new System.Windows.Forms.ComboBox();
-			this.btn_Clear = new System.Windows.Forms.Button();
+			this.bu_Accept = new System.Windows.Forms.Button();
+			this.la_Val = new System.Windows.Forms.Label();
+			this.co_Val = new System.Windows.Forms.ComboBox();
+			this.bu_Clear = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// cb_00
@@ -124,60 +124,60 @@ namespace yata
 			this.cb_06.Visible = false;
 			this.cb_06.CheckedChanged += new System.EventHandler(this.changed_Checkbox);
 			// 
-			// btn_Accept
+			// bu_Accept
 			// 
-			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Accept.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.btn_Accept.Location = new System.Drawing.Point(0, 194);
-			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Accept.Name = "btn_Accept";
-			this.btn_Accept.Size = new System.Drawing.Size(369, 27);
-			this.btn_Accept.TabIndex = 10;
-			this.btn_Accept.Text = "accept";
-			this.btn_Accept.UseVisualStyleBackColor = true;
+			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.bu_Accept.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.bu_Accept.Location = new System.Drawing.Point(0, 194);
+			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Accept.Name = "bu_Accept";
+			this.bu_Accept.Size = new System.Drawing.Size(369, 27);
+			this.bu_Accept.TabIndex = 10;
+			this.bu_Accept.Text = "accept";
+			this.bu_Accept.UseVisualStyleBackColor = true;
 			// 
-			// lbl_Val
+			// la_Val
 			// 
-			this.lbl_Val.Dock = System.Windows.Forms.DockStyle.Top;
-			this.lbl_Val.Location = new System.Drawing.Point(0, 0);
-			this.lbl_Val.Margin = new System.Windows.Forms.Padding(0);
-			this.lbl_Val.Name = "lbl_Val";
-			this.lbl_Val.Size = new System.Drawing.Size(369, 20);
-			this.lbl_Val.TabIndex = 0;
-			this.lbl_Val.Text = "lbl_Val";
-			this.lbl_Val.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.la_Val.Dock = System.Windows.Forms.DockStyle.Top;
+			this.la_Val.Location = new System.Drawing.Point(0, 0);
+			this.la_Val.Margin = new System.Windows.Forms.Padding(0);
+			this.la_Val.Name = "la_Val";
+			this.la_Val.Size = new System.Drawing.Size(369, 20);
+			this.la_Val.TabIndex = 0;
+			this.la_Val.Text = "la_Val";
+			this.la_Val.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
-			// cbx_Val
+			// co_Val
 			// 
-			this.cbx_Val.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cbx_Val.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbx_Val.FormattingEnabled = true;
-			this.cbx_Val.Location = new System.Drawing.Point(0, 20);
-			this.cbx_Val.Margin = new System.Windows.Forms.Padding(0);
-			this.cbx_Val.MaxDropDownItems = 30;
-			this.cbx_Val.Name = "cbx_Val";
-			this.cbx_Val.Size = new System.Drawing.Size(369, 21);
-			this.cbx_Val.TabIndex = 1;
-			this.cbx_Val.Visible = false;
-			this.cbx_Val.SelectedIndexChanged += new System.EventHandler(this.changed_Combobox);
+			this.co_Val.Dock = System.Windows.Forms.DockStyle.Top;
+			this.co_Val.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.co_Val.FormattingEnabled = true;
+			this.co_Val.Location = new System.Drawing.Point(0, 20);
+			this.co_Val.Margin = new System.Windows.Forms.Padding(0);
+			this.co_Val.MaxDropDownItems = 30;
+			this.co_Val.Name = "co_Val";
+			this.co_Val.Size = new System.Drawing.Size(369, 21);
+			this.co_Val.TabIndex = 1;
+			this.co_Val.Visible = false;
+			this.co_Val.SelectedIndexChanged += new System.EventHandler(this.changed_Combobox);
 			// 
-			// btn_Clear
+			// bu_Clear
 			// 
-			this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.btn_Clear.Location = new System.Drawing.Point(5, 170);
-			this.btn_Clear.Margin = new System.Windows.Forms.Padding(0);
-			this.btn_Clear.Name = "btn_Clear";
-			this.btn_Clear.Size = new System.Drawing.Size(65, 22);
-			this.btn_Clear.TabIndex = 9;
-			this.btn_Clear.Text = "clear";
-			this.btn_Clear.UseVisualStyleBackColor = true;
-			this.btn_Clear.Click += new System.EventHandler(this.click_Clear);
+			this.bu_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Clear.Location = new System.Drawing.Point(5, 170);
+			this.bu_Clear.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Clear.Name = "bu_Clear";
+			this.bu_Clear.Size = new System.Drawing.Size(65, 22);
+			this.bu_Clear.TabIndex = 9;
+			this.bu_Clear.Text = "clear";
+			this.bu_Clear.UseVisualStyleBackColor = true;
+			this.bu_Clear.Click += new System.EventHandler(this.click_Clear);
 			// 
 			// InfoInputFeat
 			// 
-			this.AcceptButton = this.btn_Accept;
+			this.AcceptButton = this.bu_Accept;
 			this.ClientSize = new System.Drawing.Size(369, 221);
-			this.Controls.Add(this.btn_Clear);
+			this.Controls.Add(this.bu_Clear);
 			this.Controls.Add(this.cb_06);
 			this.Controls.Add(this.cb_05);
 			this.Controls.Add(this.cb_04);
@@ -185,9 +185,9 @@ namespace yata
 			this.Controls.Add(this.cb_02);
 			this.Controls.Add(this.cb_01);
 			this.Controls.Add(this.cb_00);
-			this.Controls.Add(this.cbx_Val);
-			this.Controls.Add(this.lbl_Val);
-			this.Controls.Add(this.btn_Accept);
+			this.Controls.Add(this.co_Val);
+			this.Controls.Add(this.la_Val);
+			this.Controls.Add(this.bu_Accept);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;

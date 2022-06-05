@@ -79,17 +79,17 @@ namespace yata
 				_eId_init &= TalkReader.strref;
 
 
-			tb_Strref.Text = _eId_init.ToString(CultureInfo.InvariantCulture); // <- sets '_eId' and 'rtb_Copyable.Text'
+			tb_Strref.Text = _eId_init.ToString(CultureInfo.InvariantCulture); // <- sets '_eId' and 'rt_Copyable.Text'
 
 
 			if (TalkReader.AltLabel != null)
 				cb_Custo.Text = TalkReader.AltLabel;
 
 
-			if ((btn_Accept.Enabled = !Yata.Table.Readonly))
-				btn_Accept.Select();
+			if ((bu_Accept.Enabled = !Yata.Table.Readonly))
+				bu_Accept.Select();
 			else
-				btn_Cancel.Select();
+				bu_Cancel.Select();
 		}
 		#endregion cTor
 
@@ -101,13 +101,13 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnLoad(EventArgs e)
 		{
-			int w = GetWidth(rtb_Copyable.Text) + 30;					// +30 = parent panel's pad left+right +5
-			pnl_Copyable.Height = GetHeight(rtb_Copyable.Text) + 20;	// +20 = parent panel's pad top+bot +5
+			int w = GetWidth(rt_Copyable.Text) + 30;				// +30 = parent panel's pad left+right +5
+			pa_Copyable.Height = GetHeight(rt_Copyable.Text) + 20;	// +20 = parent panel's pad top+bot +5
 
 			if      (w < WIDTH_Min) w = WIDTH_Min;
 			else if (w > WIDTH_Max) w = WIDTH_Max;
 
-			int h = pnl_Head.Height + pnl_Copyable.Height + btn_Cancel.Height;
+			int h = pa_Head.Height + pa_Copyable.Height + bu_Cancel.Height;
 			if      (h < HIGHT_Min) h = HIGHT_Min;
 			else if (h > HIGHT_Max) h = HIGHT_Max;
 
@@ -132,11 +132,11 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
-			pnl_Copyable.Height = ClientSize.Height
-								- pnl_Head  .Height
-								- btn_Cancel.Height - pad_VERT;
+			pa_Copyable.Height = ClientSize.Height
+							   - pa_Head   .Height
+							   - bu_Cancel .Height - pad_VERT;
 			base.OnResize(e);
-			pnl_Copyable.Invalidate();
+			pa_Copyable.Invalidate();
 		}
 		#endregion Handlers (override)
 
@@ -169,16 +169,16 @@ namespace yata
 			}
 
 			if (_dict.ContainsKey(_eId))
-				rtb_Copyable.Text = _dict[_eId];
+				rt_Copyable.Text = _dict[_eId];
 			else
-				rtb_Copyable.Text = String.Empty;
+				rt_Copyable.Text = String.Empty;
 		}
 
 		/// <summary>
 		/// Handles a click on the Select button. Passes the current strref to
 		/// <c>Yata</c> and closes this dialog.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Accept"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_btnSelect(object sender, EventArgs e)
 		{
@@ -211,7 +211,7 @@ namespace yata
 		/// <summary>
 		/// Handles a click on the Load ... button.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Load"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Load"/></c></param>
 		/// <param name="e"></param>
 		void click_btnLoad(object sender, EventArgs e)
 		{
@@ -248,9 +248,9 @@ namespace yata
 			enable();
 
 			if (_dict.ContainsKey(_eId))
-				rtb_Copyable.Text = _dict[_eId];
+				rt_Copyable.Text = _dict[_eId];
 			else
-				rtb_Copyable.Text = String.Empty;
+				rt_Copyable.Text = String.Empty;
 
 			if (TalkReader.AltLabel != null)
 				cb_Custo.Text = TalkReader.AltLabel;
@@ -263,7 +263,7 @@ namespace yata
 		/// Handles a click on the Prevert button. Reverts the strref to its
 		/// initial val.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Prevert"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Prevert"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPrevert(object sender, EventArgs e)
 		{
@@ -274,7 +274,7 @@ namespace yata
 		/// Handles a click on the Pre button. Steps backward to the antecedent
 		/// dialog-entry.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Backward"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Backward"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPre(object sender, EventArgs e)
 		{
@@ -296,7 +296,7 @@ namespace yata
 		/// Handles a click on the Pos button. Steps forward to the posterior
 		/// dialog-entry.
 		/// </summary>
-		/// <param name="sender"><c><see cref="btn_Forward"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Forward"/></c></param>
 		/// <param name="e"></param>
 		void click_btnPos(object sender, EventArgs e)
 		{
@@ -341,9 +341,9 @@ namespace yata
 				enable();
 
 				if (_dict.ContainsKey(_eId))
-					rtb_Copyable.Text = _dict[_eId];
+					rt_Copyable.Text = _dict[_eId];
 				else
-					rtb_Copyable.Text = String.Empty;
+					rt_Copyable.Text = String.Empty;
 			}
 		}
 
@@ -351,12 +351,12 @@ namespace yata
 		/// <summary>
 		/// Draws a 1px border around the copyable-panel.
 		/// </summary>
-		/// <param name="sender"><c><see cref="pnl_Copyable"/></c></param>
+		/// <param name="sender"><c><see cref="pa_Copyable"/></c></param>
 		/// <param name="e"></param>
 		void paint_CopyPanel(object sender, PaintEventArgs e)
 		{
-			int w = pnl_Copyable.Width  - 1;
-			int h = pnl_Copyable.Height - 1;
+			int w = pa_Copyable.Width  - 1;
+			int h = pa_Copyable.Height - 1;
 
 			var tl = new Point(0, 0);
 			var tr = new Point(w, 0);
@@ -385,7 +385,7 @@ namespace yata
 			int width = 0, test;
 			foreach (var line in lines)
 			{
-				if ((test = YataGraphics.MeasureWidth(line, rtb_Copyable.Font)) > width)
+				if ((test = YataGraphics.MeasureWidth(line, rt_Copyable.Font)) > width)
 					width = test;
 			}
 			return width;
@@ -400,29 +400,29 @@ namespace yata
 		{
 			string[] lines = text.Split(gs.CRandorLF, StringSplitOptions.None);
 
-			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rtb_Copyable.Font)
+			return YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, rt_Copyable.Font)
 				 * lines.Length;
 		}
 
 		/// <summary>
-		/// Enables <c><see cref="btn_Forward"/></c> and
-		/// <c><see cref="btn_Backward"/></c> based on whether there are any
+		/// Enables <c><see cref="bu_Forward"/></c> and
+		/// <c><see cref="bu_Backward"/></c> based on whether there are any
 		/// entries in the current TalkTable's <c>Dictionary</c>. Also sets the
 		/// background color.
 		/// </summary>
 		void enable()
 		{
 			Color color;
-			if (btn_Backward.Enabled =
-				btn_Forward .Enabled = _dict.Count != 0)
+			if (bu_Backward.Enabled =
+				bu_Forward .Enabled = _dict.Count != 0)
 			{
 				color = Colors.TalkfileLoaded;
 			}
 			else
 				color = Colors.TalkfileLoaded_f;
 
-			pnl_Copyable.BackColor =
-			rtb_Copyable.BackColor = color;
+			pa_Copyable.BackColor =
+			rt_Copyable.BackColor = color;
 		}
 		#endregion Methods
 	}

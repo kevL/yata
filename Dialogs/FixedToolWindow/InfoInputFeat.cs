@@ -61,13 +61,13 @@ namespace yata
 				case Category: // int-val,dropdown,unique
 					list_Categories();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case MasterFeat: // int-val,dropdown,unique
 					list_Masterfeats();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
@@ -88,7 +88,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; break;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case FeatCategory: // string-val,dropdown,unique
@@ -97,33 +97,33 @@ namespace yata
 
 					switch (val)
 					{
-						case gs.FeatCatBackground:    cbx_Val.SelectedIndex =  0; break;
-						case gs.FeatCatClassability:  cbx_Val.SelectedIndex =  1; break;
-						case gs.FeatCatDivine:        cbx_Val.SelectedIndex =  2; break;
-						case gs.FeatCatEpic:          cbx_Val.SelectedIndex =  3; break;
-						case gs.FeatCatGeneral:       cbx_Val.SelectedIndex =  4; break;
-						case gs.FeatCatHeritage:      cbx_Val.SelectedIndex =  5; break;
-						case gs.FeatCatHistory:       cbx_Val.SelectedIndex =  6; break;
-						case gs.FeatCatItemCreation:  cbx_Val.SelectedIndex =  7; break;
-						case gs.FeatCatMetamagic:     cbx_Val.SelectedIndex =  8; break;
-						case gs.FeatCatProficiency:   cbx_Val.SelectedIndex =  9; break;
-						case gs.FeatCatRacialability: cbx_Val.SelectedIndex = 10; break;
-						case gs.FeatCatSkillSave:     cbx_Val.SelectedIndex = 11; break;
-						case gs.FeatCatSpellcasting:  cbx_Val.SelectedIndex = 12; break;
-						case gs.FeatCatTeamwork:      cbx_Val.SelectedIndex = 13; break;
+						case gs.FeatCatBackground:    co_Val.SelectedIndex =  0; break;
+						case gs.FeatCatClassability:  co_Val.SelectedIndex =  1; break;
+						case gs.FeatCatDivine:        co_Val.SelectedIndex =  2; break;
+						case gs.FeatCatEpic:          co_Val.SelectedIndex =  3; break;
+						case gs.FeatCatGeneral:       co_Val.SelectedIndex =  4; break;
+						case gs.FeatCatHeritage:      co_Val.SelectedIndex =  5; break;
+						case gs.FeatCatHistory:       co_Val.SelectedIndex =  6; break;
+						case gs.FeatCatItemCreation:  co_Val.SelectedIndex =  7; break;
+						case gs.FeatCatMetamagic:     co_Val.SelectedIndex =  8; break;
+						case gs.FeatCatProficiency:   co_Val.SelectedIndex =  9; break;
+						case gs.FeatCatRacialability: co_Val.SelectedIndex = 10; break;
+						case gs.FeatCatSkillSave:     co_Val.SelectedIndex = 11; break;
+						case gs.FeatCatSpellcasting:  co_Val.SelectedIndex = 12; break;
+						case gs.FeatCatTeamwork:      co_Val.SelectedIndex = 13; break;
 
-						case gs.Stars: cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1;
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
 							break;
 
 						default: _f.str1 = gs.Stars; goto case gs.Stars;
 					}
-					btn_Clear.Enabled = ((lbl_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
 				case ToggleMode: // int-val,dropdown,unique
 					list_CombatModes();
 
-					initintvals(val, cbx_Val, btn_Clear);
+					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
 			_init = false;
@@ -156,8 +156,8 @@ namespace yata
 		/// </summary>
 		void dropdown()
 		{
-			lbl_Val.Visible = false;
-			cbx_Val.Visible = true;
+			la_Val.Visible = false;
+			co_Val.Visible = true;
 
 			ClientSize = new Size(ClientSize.Width,
 								  ClientSize.Height - 140);
@@ -176,9 +176,9 @@ namespace yata
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
+				co_Val.Items.Add(new tui(i + " - " + Info.categoryLabels[i].ToLowerInvariant()));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -194,9 +194,9 @@ namespace yata
 
 			for (int i = 0; i != Info.masterfeatLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i]));
+				co_Val.Items.Add(new tui(i + " - " + Info.masterfeatLabels[i]));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -209,22 +209,22 @@ namespace yata
 
 			dropdown();
 
-			cbx_Val.Items.Add(new tui(gs.FeatCatBackground));
-			cbx_Val.Items.Add(new tui(gs.FeatCatClassability));
-			cbx_Val.Items.Add(new tui(gs.FeatCatDivine));
-			cbx_Val.Items.Add(new tui(gs.FeatCatEpic));
-			cbx_Val.Items.Add(new tui(gs.FeatCatGeneral));
-			cbx_Val.Items.Add(new tui(gs.FeatCatHeritage));
-			cbx_Val.Items.Add(new tui(gs.FeatCatHistory));
-			cbx_Val.Items.Add(new tui(gs.FeatCatItemCreation));
-			cbx_Val.Items.Add(new tui(gs.FeatCatMetamagic));
-			cbx_Val.Items.Add(new tui(gs.FeatCatProficiency));
-			cbx_Val.Items.Add(new tui(gs.FeatCatRacialability));
-			cbx_Val.Items.Add(new tui(gs.FeatCatSkillSave));
-			cbx_Val.Items.Add(new tui(gs.FeatCatSpellcasting));
-			cbx_Val.Items.Add(new tui(gs.FeatCatTeamwork));
+			co_Val.Items.Add(new tui(gs.FeatCatBackground));
+			co_Val.Items.Add(new tui(gs.FeatCatClassability));
+			co_Val.Items.Add(new tui(gs.FeatCatDivine));
+			co_Val.Items.Add(new tui(gs.FeatCatEpic));
+			co_Val.Items.Add(new tui(gs.FeatCatGeneral));
+			co_Val.Items.Add(new tui(gs.FeatCatHeritage));
+			co_Val.Items.Add(new tui(gs.FeatCatHistory));
+			co_Val.Items.Add(new tui(gs.FeatCatItemCreation));
+			co_Val.Items.Add(new tui(gs.FeatCatMetamagic));
+			co_Val.Items.Add(new tui(gs.FeatCatProficiency));
+			co_Val.Items.Add(new tui(gs.FeatCatRacialability));
+			co_Val.Items.Add(new tui(gs.FeatCatSkillSave));
+			co_Val.Items.Add(new tui(gs.FeatCatSpellcasting));
+			co_Val.Items.Add(new tui(gs.FeatCatTeamwork));
 
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 
 		/// <summary>
@@ -240,9 +240,9 @@ namespace yata
 
 			for (int i = 0; i != Info.combatmodeLabels.Count; ++i)
 			{
-				cbx_Val.Items.Add(new tui(i + " - " + Info.combatmodeLabels[i]));
+				co_Val.Items.Add(new tui(i + " - " + Info.combatmodeLabels[i]));
 			}
-			cbx_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 		#endregion init
 
@@ -287,8 +287,8 @@ namespace yata
 			else
 				val = gs.Stars;
 
-			lbl_Val.Text = _f.str1 = val;
-			btn_Clear.Enabled = (val != gs.Stars);
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -300,27 +300,27 @@ namespace yata
 		{
 			if (!_init)
 			{
-				if (cbx_Val.SelectedIndex == cbx_Val.Items.Count - 1)
+				if (co_Val.SelectedIndex == co_Val.Items.Count - 1)
 				{
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
 					_f.int1 = Yata.II_ASSIGN_STARS;
 				}
 				else
 				{
-					btn_Clear.Enabled = true;
+					bu_Clear.Enabled = true;
 
 					switch (_cell.x)
 					{
 						case Category:
 						case MasterFeat:
 						case ToggleMode:
-							_f.int1 = cbx_Val.SelectedIndex;
+							_f.int1 = co_Val.SelectedIndex;
 							break;
 
 						case FeatCategory:
-							switch (cbx_Val.SelectedIndex)
+							switch (co_Val.SelectedIndex)
 							{
 								case  0: _f.str1 = gs.FeatCatBackground;    break;
 								case  1: _f.str1 = gs.FeatCatClassability;  break;
@@ -357,13 +357,13 @@ namespace yata
 				case MasterFeat:
 				case FeatCategory:
 				case ToggleMode:
-					cbx_Val.SelectedIndex = cbx_Val.Items.Count - 1; // fire changed_Combobox()
+					co_Val.SelectedIndex = co_Val.Items.Count - 1; // fire changed_Combobox()
 					break;
 
 				case ToolsCategories: // str,cb,unique
-					btn_Clear.Enabled = false;
+					bu_Clear.Enabled = false;
 
-					lbl_Val.Text = _f.str1 = gs.Stars;
+					la_Val.Text = _f.str1 = gs.Stars;
 
 					_cb = null;
 					clearchecks();
