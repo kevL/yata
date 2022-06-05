@@ -222,6 +222,9 @@ namespace yata
 					ofd.Title  = " Select Dialog.Tlk";
 					ofd.Filter = Yata.GetTlkFilter();
 
+					ofd.FileName = "dialog.tlk";
+					ofd.AutoUpgradeEnabled = false;
+
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkD);
 				}
@@ -235,6 +238,9 @@ namespace yata
 				{
 					ofd.Title  = " Select a TalkTable";
 					ofd.Filter = Yata.GetTlkFilter();
+
+					ofd.FileName = "*.tlk";
+					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
 						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkC, true);

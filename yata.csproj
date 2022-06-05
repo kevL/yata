@@ -189,6 +189,9 @@
     <Compile Include="Yata_menuops.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
+    <Compile Include="Yata_menupaths.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
+    </Compile>
     <Compile Include="Yata_menurows.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
@@ -223,7 +226,7 @@
     <Compile Include="YataGrid_scroll.cs">
       <DependentUpon>YataGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="Yata_pathinfo.cs">
+    <Compile Include="Yata_info.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
   </ItemGroup>
