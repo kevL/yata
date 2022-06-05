@@ -22,6 +22,14 @@ namespace yata
 		internal const int LOADRESULT_CHANGED = 2;
 
 		static int CodePage = -1;
+
+		/// <summary>
+		/// This <c>static bool</c> is set <c>true</c> when loading
+		/// Crafting.2da, Spells.2da, Feat.2da, or Classes.2da causes the
+		/// <c><see cref="Settings._pathall">Settings._pathall</see></c>
+		/// directories to be groped.
+		/// </summary>
+		static bool Groped;
 		#endregion Fields (static)
 
 
@@ -825,8 +833,9 @@ namespace yata
 						break;
 				}
 
-				if (Info != InfoType.INFO_NONE)
+				if (!Groped && Info != InfoType.INFO_NONE)
 				{
+					Groped = true;
 					foreach (var dir in Settings._pathall)
 						_f.GropeLabels(dir);
 				}
