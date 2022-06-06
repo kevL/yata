@@ -49,88 +49,88 @@ namespace yata
 		/// <summary>
 		/// Rifles through various .2das for info.
 		/// </summary>
-		/// <param name="directory"></param>
-		internal void GropeLabels(string directory)
+		/// <param name="dir"></param>
+		internal void GropeLabels(string dir)
 		{
 			// Crafting info ->
-			Info.GropeLabels(Path.Combine(directory, "baseitems.2da"),
+			Info.GropeLabels(Path.Combine(dir, "baseitems.2da"),
 							 Info.tagLabels,
 							 it_PathBaseItems2da,
 							 2);
 
-			Info.GropeLabels(Path.Combine(directory, "feat.2da"),
+			Info.GropeLabels(Path.Combine(dir, "feat.2da"),
 							 Info.featLabels,
 							 it_PathFeat2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "itempropdef.2da"),
+			Info.GropeLabels(Path.Combine(dir, "itempropdef.2da"),
 							 Info.ipLabels,
 							 it_PathItemPropDef2da,
 							 2);
 
-			Info.GropeLabels(Path.Combine(directory, "skills.2da"),
+			Info.GropeLabels(Path.Combine(dir, "skills.2da"),
 							 Info.skillLabels,
 							 it_PathSkills2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "spells.2da"),
+			Info.GropeLabels(Path.Combine(dir, "spells.2da"),
 							 Info.spellLabels,
 							 it_PathSpells2da,
 							 1);
 
 
-			Info.GropeLabels(Path.Combine(directory, "classes.2da"),
+			Info.GropeLabels(Path.Combine(dir, "classes.2da"),
 							 Info.classLabels,
 							 it_PathClasses2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "disease.2da"),
+			Info.GropeLabels(Path.Combine(dir, "disease.2da"),
 							 Info.diseaseLabels,
 							 it_PathDisease2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "iprp_ammocost.2da"),
+			Info.GropeLabels(Path.Combine(dir, "iprp_ammocost.2da"),
 							 Info.ipammoLabels,
 							 it_PathIprpAmmoCost2da,
 							 2);
 
-			Info.GropeLabels(Path.Combine(directory, "iprp_feats.2da"),
+			Info.GropeLabels(Path.Combine(dir, "iprp_feats.2da"),
 							 Info.ipfeatLabels,
 							 it_PathIprpFeats2da,
 							 2);
 
-			Info.GropeLabels(Path.Combine(directory, "iprp_onhitspell.2da"),
+			Info.GropeLabels(Path.Combine(dir, "iprp_onhitspell.2da"),
 							 Info.iphitspellLabels,
 							 it_PathIprpOnHitSpell2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "iprp_spells.2da"),
+			Info.GropeLabels(Path.Combine(dir, "iprp_spells.2da"),
 							 Info.ipspellLabels,
 							 it_PathIprpSpells2da,
 							 1, // label
 							 3, // level
 							 Info.ipspellLevels);
 
-			Info.GropeLabels(Path.Combine(directory, "racialtypes.2da"),
+			Info.GropeLabels(Path.Combine(dir, "racialtypes.2da"),
 							 Info.raceLabels,
 							 it_PathRaces2da,
 							 1);
 
 
 			// Spells info ->
-			Info.GropeLabels(Path.Combine(directory, "categories.2da"),
+			Info.GropeLabels(Path.Combine(dir, "categories.2da"),
 							 Info.categoryLabels,
 							 it_PathCategories2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "ranges.2da"),
+			Info.GropeLabels(Path.Combine(dir, "ranges.2da"),
 							 Info.rangeLabels,
 							 it_PathRanges2da,
 							 1, // label
 							 2, // range
 							 Info.rangeRanges);
 
-			Info.GropeSpellTarget(Path.Combine(directory, "spelltarget.2da"),
+			Info.GropeSpellTarget(Path.Combine(dir, "spelltarget.2da"),
 								  Info.targetLabels,
 								  it_PathSpellTarget2da,
 								  1,
@@ -141,19 +141,19 @@ namespace yata
 
 
 			// Feat info ->
-			Info.GropeLabels(Path.Combine(directory, "combatmodes.2da"),
+			Info.GropeLabels(Path.Combine(dir, "combatmodes.2da"),
 							 Info.combatmodeLabels,
 							 it_PathCombatModes2da,
 							 1);
 
-			Info.GropeLabels(Path.Combine(directory, "masterfeats.2da"),
+			Info.GropeLabels(Path.Combine(dir, "masterfeats.2da"),
 							 Info.masterfeatLabels,
 							 it_PathMasterFeats2da,
 							 1);
 
 
 			// Classes info ->
-			Info.GropeLabels(Path.Combine(directory, "packages.2da"),
+			Info.GropeLabels(Path.Combine(dir, "packages.2da"),
 							 Info.packageLabels,
 							 it_PathPackages2da,
 							 1);
