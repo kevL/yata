@@ -127,24 +127,24 @@ namespace yata
 
 
 		/// <summary>
-		/// String-input for InfoInputSpells or InfoInputFeat (re PathInfo).
-		/// <c>str0</c> is the current value; <c>str1</c> will be the
-		/// user-chosen value that's assigned on Accept.
+		/// String-input for InfoInputSpells or InfoInputFeat or
+		/// InfoInputClasses (re PathInfo). <c>str0</c> is the current value;
+		/// <c>str1</c> will be the user-chosen value that's assigned on Accept.
 		/// </summary>
 		internal string str0, str1;
 
 		/// <summary>
-		/// Int-input for InfoInputSpells or InfoInputFeat (re PathInfo).
-		/// <c>int0</c> is the current value; <c>int1</c> will be the
-		/// user-chosen value that's assigned on Accept.
+		/// Int-input for InfoInputSpells or InfoInputFeat or InfoInputClasses
+		/// (re PathInfo). <c>int0</c> is the current value; <c>int1</c> will be
+		/// the user-chosen value that's assigned on Accept.
 		/// </summary>
 		internal int int0, int1;
 
 		// NOTE: These are to initialize 'int0' and 'int1' and need to be
 		// different to recognize that an invalid current value should be
 		// changed to stars (iff the user accepts the dialog).
-		internal const int II_INIT_INVALID = -2; // for 'int0'
-		internal const int II_ASSIGN_STARS = -1; // for 'int1'
+		internal const int II_INIT_INVALID = -2; // for 'int0' only
+		internal const int II_ASSIGN_STARS = -1; // for 'int1' or 'int0'
 
 
 		/// <summary>

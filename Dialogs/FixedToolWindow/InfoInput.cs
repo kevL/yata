@@ -17,8 +17,8 @@ namespace yata
 		/// <c>CheckBoxes</c> and the <c>SelectedIndexChanged</c> handler for
 		/// the <c>ComboBox</c>.
 		/// </summary>
-		/// <remarks>Initialization will configure this dialog without invoking
-		/// the handlers.</remarks>
+		/// <remarks>Initialization will configure this dialog but bypasses the
+		/// handlers.</remarks>
 		protected bool _init;
 
 		protected CheckBox _cb;
@@ -28,11 +28,16 @@ namespace yata
 		#region Methods
 		/// <summary>
 		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
-		/// Yata to deal with user-input.
+		/// <c><see cref="Yata"/></c> to deal with user-input.
+		/// <list type="bullet">
+		/// <item><c><see cref="Yata.int0"></see></c></item>
+		/// <item><c><see cref="Yata.int1"></see></c></item>
+		/// </list>
 		/// </summary>
-		/// <param name="val"></param>
-		/// <param name="co_Val"></param>
-		/// <param name="bu_Clear"></param>
+		/// <param name="val">the curent int-val as a <c>string</c></param>
+		/// <param name="co_Val">the <c>ComboBox</c> to deal with</param>
+		/// <param name="bu_Clear">the Clear <c>Button</c> to disable if things
+		/// go south</param>
 		/// <remarks>Don't try to declare <paramref name="co_Val"/> and/or
 		/// <paramref name="bu_Clear"/> in this base class because the
 		/// designers can't figure that out.</remarks>
@@ -60,9 +65,11 @@ namespace yata
 
 		/// <summary>
 		/// Clears all <c>CheckBoxes</c> except the current <c>CheckBox</c>
-		/// <c><see cref="_cb"/></c> (if valid).
+		/// <c><see cref="_cb"/></c>. Set <c>(_cb = null)</c> to clear all
+		/// <c>Checkboxes</c>.
 		/// </summary>
-		/// <remarks>Set <c>(_cb = null)</c> to clear all <c>Checkboxes</c>.</remarks>
+		/// <remarks>Disregards invocation MetaMagic group <c>CheckBoxes</c> in
+		/// <c><see cref="InfoInputSpells"/></c>.</remarks>
 		protected void clearchecks()
 		{
 			_init = true;
