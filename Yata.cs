@@ -54,7 +54,7 @@ namespace yata
 
 
 		#region Fields
-		readonly PropanelBu bu_Propanel = new PropanelBu();
+		readonly PropanelButton bu_Propanel = new PropanelButton();
 
 		/// <summary>
 		/// The <c><see cref="ClipboardEditor"/></c> dialog/editor.
@@ -1540,7 +1540,8 @@ namespace yata
 
 		#region Handlers (propanel)
 		/// <summary>
-		/// Handler for <c>MouseDown</c> on the <c><see cref="PropanelBu"/></c>.
+		/// Handler for <c>MouseDown</c> on the
+		/// <c><see cref="PropanelButton"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Propanel"/></c></param>
 		/// <param name="e"></param>
@@ -1557,7 +1558,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handler for <c>MouseUp</c> on the <c><see cref="PropanelBu"/></c>.
+		/// Handler for <c>MouseUp</c> on the
+		/// <c><see cref="PropanelButton"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Propanel"/></c></param>
 		/// <param name="e"></param>

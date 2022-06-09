@@ -106,7 +106,7 @@ namespace yata
 		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
 
 		// propanel
-//		internal static readonly Brush PropanelBu     = new SolidBrush(SystemColors.Control);
+//		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
 		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
 	}
 
@@ -143,7 +143,7 @@ namespace yata
 		internal static LinearGradientBrush ColheadPanel, FrozenLabel, Disordered;
 
 		internal static readonly LinearGradientBrush ppBrush = new LinearGradientBrush(new Point(0, 0),
-																					   new Point(0, PropanelBu.HEIGHT),
+																					   new Point(0, PropanelButton.HEIGHT),
 																					   Color.White, Color.CornflowerBlue);
 	}
 }
