@@ -12,7 +12,7 @@ namespace yata
 	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
 	/// <seealso cref="InfoInputFeat"><c>InfoInputFeat</c></seealso>
 	sealed partial class InfoInputClasses
-		: InfoInput
+		: InfoInputDialog
 	{
 		#region Fields (static)
 		internal const int PrimaryAbil     = 40; // col in Classes.2da ->
@@ -31,7 +31,7 @@ namespace yata
 		/// <param name="cell"></param>
 		internal InfoInputClasses(Yata f, Cell cell)
 		{
-			_f    = f;		// don't try to pass these to a (base)InfoInput cTor
+			_f    = f;		// don't try to pass these to a InfoInputDialog.cTor
 			_cell = cell;	// because the designer will scream blue murder.
 
 			InitializeComponent();

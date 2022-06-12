@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	class InfoInput
+	class InfoInputDialog
 		: Form
 	{
 		#region Fields

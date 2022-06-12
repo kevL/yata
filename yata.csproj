@@ -90,7 +90,7 @@
       <DependentUpon>InfoInputSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\FixedToolWindow\tui.cs" />
-    <Compile Include="Dialogs\FixedToolWindow\InfoInput.cs" />
+    <Compile Include="Dialogs\FixedToolWindow\InfoInputDialog.cs" />
     <Compile Include="Dialogs\Infobox.cs" />
     <Compile Include="Dialogs\Infobox.Designer.cs">
       <DependentUpon>Infobox.cs</DependentUpon>

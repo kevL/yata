@@ -40,7 +40,7 @@ namespace yata
 					cellit_Input.Enabled = false;
 					break;
 
-				// TODO: If table is Readonly allow viewing the InfoInput dialog
+				// TODO: If table is Readonly allow viewing the InfoInputDialog
 				// but disable its controls ->
 
 				case YataGrid.InfoType.INFO_SPELL:
@@ -419,7 +419,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles singlecell-click InfoInput dialog.
+		/// Handles a singlecell-click <c><see cref="InfoInputDialog"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Input"/></c></param>
 		/// <param name="e"></param>
@@ -576,7 +576,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Shows an InfoInput dialog and handles its return.
+		/// Shows an <c><see cref="InfoInputDialog"/></c> and handles its
+		/// return.
 		/// </summary>
 		/// <param name="dialog"></param>
 		/// <remarks>- helper for
