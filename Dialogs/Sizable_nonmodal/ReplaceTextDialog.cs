@@ -87,6 +87,14 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
+
+			// set these before loading the YataDialog metrics ->
+			// else the MinSize gets stuck wide if user closes this dialog wider
+			// than the designer says it should be
+
+			MaximumSize = new Size(Int32.MaxValue, Height);
+			MinimumSize = new Size(         Width, Height);
+
 			Initialize(YataDialog.METRIC_FUL);
 
 			switch (_searchtyp)
@@ -115,9 +123,6 @@ namespace yata
 			tb_Pretext.Text = _pre;
 			tb_Postext.Text = _pos;
 
-
-			MaximumSize = new Size(Int32.MaxValue, Height);
-			MinimumSize = new Size(         Width, Height);
 
 			Show(_f); // Yata is owner.
 		}

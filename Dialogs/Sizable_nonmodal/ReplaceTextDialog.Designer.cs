@@ -337,8 +337,6 @@ namespace yata
 			// 
 			// cb_Replall
 			// 
-			this.cb_Replall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
 			this.cb_Replall.Location = new System.Drawing.Point(10, 17);
 			this.cb_Replall.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Replall.Name = "cb_Replall";
@@ -350,6 +348,8 @@ namespace yata
 			// 
 			// bu_ClearReplaced
 			// 
+			this.bu_ClearReplaced.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_ClearReplaced.Enabled = false;
 			this.bu_ClearReplaced.Location = new System.Drawing.Point(122, 11);
 			this.bu_ClearReplaced.Margin = new System.Windows.Forms.Padding(0);
@@ -374,6 +374,8 @@ namespace yata
 			// 
 			// bu_GotoReplaced
 			// 
+			this.bu_GotoReplaced.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_GotoReplaced.Enabled = false;
 			this.bu_GotoReplaced.Location = new System.Drawing.Point(122, 38);
 			this.bu_GotoReplaced.Margin = new System.Windows.Forms.Padding(0);
