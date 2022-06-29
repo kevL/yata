@@ -117,7 +117,6 @@ namespace yata
 		/// <remarks><c>_f</c> shall be set to a valid <c>Control</c>.</remarks>
 		protected Control _f
 		{ get; set; }
-
 		#endregion Properties
 
 
@@ -155,12 +154,12 @@ namespace yata
 						WindowState = FormWindowState.Maximized;
 				}
 
-				RichTextBox rtb;
+				RichTextBox rt;
 				foreach (var tbb in _tbbs)
 				{
-					if ((rtb = tbb as RichTextBox) != null)	// is RichTextBox ->
+					if ((rt = tbb as RichTextBox) != null)	// is RichTextBox ->
 					{
-						rtb.AutoWordSelection = false; // <- needs to be here not in the designer or cTor to work right.
+						rt.AutoWordSelection = false; // <- needs to be here not in the designer or cTor to work right.
 					}
 					else									// is TextBox ->
 					{
@@ -228,8 +227,8 @@ namespace yata
 		/// <item><c><see cref="METRIC_LOC"/></c> - store location</item>
 		/// <item><c><see cref="METRIC_FUL"/></c> - store location and size</item>
 		/// </list></param>
-		/// <param name="bypassColor"><c>true</c> to set the <c>TextBoxBase's</c>
-		/// <c>BackColor</c> to the Yata-default.</param>
+		/// <param name="bypassColor"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
 		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
 		/// <c>Font</c></param>
 		protected void Initialize(int metric, bool bypassColor = false, bool bypassFont = false)
