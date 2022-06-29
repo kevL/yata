@@ -177,7 +177,27 @@ namespace yata
 					case Keys.F3:
 					case Keys.F3 | Keys.Shift:
 						if (Yata.that.tb_Search.Focused)
-							break;
+						{
+							// latest in .NET newsflash: if the textbox has text
+							// then base.ProcessCmdKey() returns true; but if
+							// there is no text in the textbox then base.ProcessCmdKey()
+							// returns false. wtf
+							//
+							// I want it to act as if it has text so that an Infobox
+							// can be displayed. Force it true ->
+							//
+							// Unfortunately that alone makes no difference to what I want ...
+							// so call the search routine here and return true
+							// (false appears to invoke the routine twice).
+
+							Yata.that.IsSearch = true;
+							Yata.that.Search(keyData == Keys.F3);
+							Yata.that.IsSearch = false;
+#if Keys
+							logfile.Log(". YataStrip.ProcessCmdKey force TRUE (Search)");
+#endif
+							return true;
+						}
 
 						goto default;
 
