@@ -37,10 +37,12 @@ namespace yata
 
 
 		#region Fields (static)
-		static SearchTyp _searchtyp = SearchTyp.Subfield;
+		// default these to the RadioButton Checked setting in the designer ->
+		static SearchTyp _searchtyp = SearchTyp.Fulfield;
 		static SearchDir _searchdir = SearchDir.D;
 		static StartType _starttype = StartType.Sel;
 
+		// default these to the CheckBox Checked setting in the designer ->
 		static bool _casesen;
 		static bool _replall;
 		static bool _autstep;
@@ -592,7 +594,7 @@ namespace yata
 			if ((sender as RadioButton).Checked)
 			{
 				if (sender == rb_Subfield) _searchtyp = SearchTyp.Subfield;
-				else                    _searchtyp = SearchTyp.Fulfield; // rb_Field
+				else                       _searchtyp = SearchTyp.Fulfield; // rb_Field
 			}
 		}
 
@@ -637,9 +639,9 @@ namespace yata
 				{
 					_starttype = StartType.Sel;
 				}
-				else
+				else // rb_Bot
 				{
-					_starttype = StartType.Bot; // rb_Bot
+					_starttype = StartType.Bot;
 					rb_U.Checked = true;
 				}
 			}
