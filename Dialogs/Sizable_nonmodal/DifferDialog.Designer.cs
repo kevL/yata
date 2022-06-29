@@ -118,6 +118,7 @@ namespace yata
 			this.Controls.Add(this.bu_Goto);
 			this.Controls.Add(this.pa_Copyable);
 			this.Controls.Add(this.la_Info);
+			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "DifferDialog";
