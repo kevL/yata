@@ -221,17 +221,17 @@ namespace yata
 						else if (line.StartsWith("strict=", StringComparison.Ordinal))
 						{
 							_strict = !String.IsNullOrEmpty(line = line.Substring(7).Trim())
-								   && (line == "1" || line.ToLower() == "true");
+								   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("gradient=", StringComparison.Ordinal))
 						{
 							_gradient = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && (line == "1" || line.ToLower() == "true");
+									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("context=", StringComparison.Ordinal))
 						{
 							_context = !String.IsNullOrEmpty(line = line.Substring(8).Trim())
-									&& line.ToLower() == "static";
+									&& line.ToLowerInvariant() == "static";
 						}
 						else if (line.StartsWith("recent=", StringComparison.Ordinal))
 						{
@@ -266,23 +266,23 @@ namespace yata
 						else if (line.StartsWith("maximized=", StringComparison.Ordinal))
 						{
 							_maximized = !String.IsNullOrEmpty(line = line.Substring(10).Trim())
-									  && (line == "1" || line.ToLower() == "true");
+									  && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("instantgoto=", StringComparison.Ordinal))
 						{
 							_instantgoto = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
-										&& (line == "1" || line.ToLower() == "true");
+										&& (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("casesort=", StringComparison.Ordinal))
 						{
 							_casesort = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && (line == "1" || line.ToLower() == "true");
+									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("alignoutput=", StringComparison.Ordinal))
 						{
 							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim()))
 							{
-								switch (line.ToLower())
+								switch (line.ToLowerInvariant())
 								{
 									case "1":
 									case "true": _alignoutput = AoTrue; break;
@@ -304,22 +304,22 @@ namespace yata
 						else if (line.StartsWith("autorder=", StringComparison.Ordinal))
 						{
 							_autorder = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
-									 && (line == "1" || line.ToLower() == "true");
+									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("allowdupls=", StringComparison.Ordinal))
 						{
 							_allowdupls = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
-									   && (line == "1" || line.ToLower() == "true");
+									   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("acceptedit=", StringComparison.Ordinal))
 						{
 							_acceptedit = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
-									   && (line == "1" || line.ToLower() == "true");
+									   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("clearquotes=", StringComparison.Ordinal))
 						{
 							_clearquotes = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
-										&& (line == "1" || line.ToLower() == "true");
+										&& (line == "1" || line.ToLowerInvariant() == "true");
 						}
 					}
 				}
@@ -357,8 +357,8 @@ namespace yata
 		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
 		/// </summary>
 		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
-		/// <param name="bypassColor"><c>true</c> to set the <c>TextBoxBase's</c>
-		/// <c>BackColor</c> to the Yata-default.</param>
+		/// <param name="bypassColor"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
 		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
 		/// <c>Font</c></param>
 		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
