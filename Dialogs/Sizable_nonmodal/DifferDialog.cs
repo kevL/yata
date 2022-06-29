@@ -112,7 +112,8 @@ namespace yata
 
 		/// <summary>
 		/// Overrides this dialog's <c>FormClosing</c> handler. Sets the static
-		/// location and nulls the differ in <c><see cref="Yata"/></c>.
+		/// location and nulls
+		/// <c><see cref="Yata._fdiffer">Yata._fdiffer</see></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
