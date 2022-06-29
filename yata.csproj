@@ -108,6 +108,10 @@
     <Compile Include="Dialogs\Sizable_nonmodal\FontDialog.Designer.cs">
       <DependentUpon>FontDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.Designer.cs">
+      <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.Designer.cs">
       <DependentUpon>SettingsEditor.cs</DependentUpon>
@@ -257,6 +261,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\FontDialog.resx">
       <DependentUpon>FontDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.resx">
+      <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\SettingsEditor.resx">
       <DependentUpon>SettingsEditor.cs</DependentUpon>
