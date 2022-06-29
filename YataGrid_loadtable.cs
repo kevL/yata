@@ -949,6 +949,8 @@ namespace yata
 
 			if (isLoadchanged) // inform user regardless of Strict setting ->
 			{
+				_f.EnableGotoLoadchanged(anyLoadchanged());
+
 				using (var ib = new Infobox(Infobox.Title_infor, "Cell-texts changed."))
 					ib.ShowDialog(_f);
 			}
