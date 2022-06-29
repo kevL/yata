@@ -169,7 +169,6 @@ namespace yata
 			if (selr < RowCount)
 				EnsureDisplayedRow(selr);
 
-
 			if (!Changed)
 			{
 				Changed = true;
