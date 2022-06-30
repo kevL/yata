@@ -750,10 +750,12 @@ namespace yata
 		/// Wrapper for <c><see cref="EnableSearch()"/></c> and
 		/// <c><see cref="EnableReplace()"/></c>.
 		/// </summary>
-		internal void EnableOps()
+		/// <param name="enabled"><c>true</c> to enable the Replaced buttons</param>
+		internal void EnableOps(bool enabled)
 		{
 			EnableSearch();
 			EnableReplace();
+			EnableReplacedOps(enabled);
 		}
 
 		/// <summary>
