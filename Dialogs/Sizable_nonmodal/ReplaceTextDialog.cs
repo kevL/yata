@@ -63,19 +63,19 @@ namespace yata
 		string _search;
 
 		/// <summary>
+		/// <c>true</c> to search for a subfield instead of a fulfield.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Search()">Search()</see></c>.</remarks>
+		bool _substr;
+
+		/// <summary>
 		/// A <c>string</c> of text to match against
 		/// <c><see cref="_search"/></c>.
 		/// </summary>
 		/// <remarks>The value is set in
 		/// <c><see cref="SearchResult()">SearchResult()</see></c>.</remarks>
 		string _text;
-
-		/// <summary>
-		/// <c>true</c> to search for a subfield instead of a fulfield.
-		/// </summary>
-		/// <remarks>The value is set in
-		/// <c><see cref="Search()">Search()</see></c>.</remarks>
-		bool _substr;
 		#endregion Fields
 
 
@@ -373,13 +373,12 @@ namespace yata
 					if (_casesen)
 					{
 						_text = sel.text.Replace(_pre, tb_Postext.Text);
-
 						sanitized = table.ChangeCellText_repl(sel, _text);
 					}
 					else
 					{
 						_text = sel.text;
-						if (ReplaceCaseInsensitive(ref _text, _pre, tb_Postext.Text))
+						if (ReplaceCaseInsensitive(ref _text, _pre, tb_Postext.Text)) // TODO: that should always be true here
 						{
 							sanitized = table.ChangeCellText_repl(sel, _text);
 						}
@@ -785,7 +784,7 @@ namespace yata
 		bool SearchResult(int r, int c)
 		{
 			if (_casesen) _text = Yata.Table[r,c].text;
-			else           _text = Yata.Table[r,c].text.ToUpperInvariant();
+			else          _text = Yata.Table[r,c].text.ToUpperInvariant();
 
 			return _text == _search || (_substr && _text.Contains(_search));
 		}
