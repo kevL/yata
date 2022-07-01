@@ -211,6 +211,7 @@ namespace yata
 				Table.Rows[r]._brush = (r % 2 == 0) ? Brushes.Alice
 													: Brushes.Bob;
 			}
+			Table.ClearReplaced();
 			Table.ClearLoadchanged();
 
 			Table.Invalidator(YataGrid.INVALID_GRID);

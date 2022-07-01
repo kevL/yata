@@ -61,9 +61,13 @@ namespace yata
 						Table.ChangeCellText(cell, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
-					else if (cell.loadchanged)
+					else
 					{
-						cell.loadchanged = false;
+						if (cell.replaced)
+							cell.replaced = false;
+
+						if (cell.loadchanged)
+							cell.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -149,9 +153,13 @@ namespace yata
 						Table.ChangeCellText(cell, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
-					else if (cell.loadchanged)
+					else
 					{
-						cell.loadchanged = false;
+						if (cell.replaced)
+							cell.replaced = false;
+
+						if (cell.loadchanged)
+							cell.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -170,9 +178,14 @@ namespace yata
 					Table.ChangeCellText(sel, text);	// does not do a text-check
 					invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 				}
-				else if (sel.loadchanged)
+				else
 				{
-					sel.loadchanged = false;
+					if (sel.replaced)
+						sel.replaced = false;
+
+					if (sel.loadchanged)
+						sel.loadchanged = false;
+
 					invalid = YataGrid.INVALID_GRID;
 				}
 			}
@@ -212,9 +225,13 @@ namespace yata
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
-					else if (sel.loadchanged)
+					else
 					{
-						sel.loadchanged = false;
+						if (sel.replaced)
+							sel.replaced = false;
+
+						if (sel.loadchanged)
+							sel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -250,9 +267,13 @@ namespace yata
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
-					else if (sel.loadchanged)
+					else
 					{
-						sel.loadchanged = false;
+						if (sel.replaced)
+							sel.replaced = false;
+
+						if (sel.loadchanged)
+							sel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -288,9 +309,13 @@ namespace yata
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
-					else if (sel.loadchanged)
+					else
 					{
-						sel.loadchanged = false;
+						if (sel.replaced)
+							sel.replaced = false;
+
+						if (sel.loadchanged)
+							sel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -335,10 +360,14 @@ namespace yata
 								Table.ChangeCellText(sel, text);	// does not do a text-check
 								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 							}
-							else if (sel.loadchanged)
+							else
 							{
-								sel.loadchanged = false;
-		
+								if (sel.replaced)
+									sel.replaced = false;
+
+								if (sel.loadchanged)
+									sel.loadchanged = false;
+
 								if (invalid == -1)
 									invalid = YataGrid.INVALID_GRID;
 							}
@@ -347,134 +376,6 @@ namespace yata
 
 					if (invalid == YataGrid.INVALID_GRID)
 						Table.Invalidator(invalid);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Selects the next LoadChanged cell.
-		/// </summary>
-		/// <param name="sender">
-		/// <list type="bullet">
-		/// <item><c><see cref="it_GotoLoadchanged"/></c> <c>[Ctrl+n]</c></item>
-		/// <item><c><see cref="it_GotoLoadchanged_pre"/></c> <c>[Shift+Ctrl+n]</c></item>
-		/// </list></param>
-		/// <param name="e"></param>
-		/// <remarks>Called by
-		/// <list type="bullet">
-		/// <item>Edit|Goto loadchanged <c>[Ctrl+n]</c></item>
-		/// <item>Edit|Goto loadchanged pre <c>[Shift+Ctrl+n]</c></item>
-		/// </list></remarks>
-		void editcellsclick_GotoLoadchanged(object sender, EventArgs e)
-		{
-			if ((ModifierKeys & Keys.Alt) == Keys.None && Table.anyLoadchanged())
-			{
-				Table.Select();
-
-				Cell sel = Table.getSelectedCell();
-				int selr = Table.getSelectedRow();
-
-				Table.ClearSelects();
-
-				int r,c;
-
-				bool start = true;
-
-				if (sender == it_GotoLoadchanged) // forward gotolc ->
-				{
-					if (sel != null) { c = sel.x; selr = sel.y; }
-					else
-					{
-						c = -1;
-						if (selr == -1) selr = 0;
-					}
-
-					for (r = selr; r != Table.RowCount; ++r)
-					{
-						if (start)
-						{
-							start = false;
-							if (++c == Table.ColCount)		// if starting on the last cell of a row
-							{
-								c = 0;
-
-								if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-									++r;
-								else						// or to the top of the table if on the last row
-									r = 0;
-							}
-						}
-						else
-							c = 0;
-
-						for (; c != Table.ColCount; ++c)
-						{
-							if ((sel = Table[r,c]).loadchanged)
-							{
-								Table.SelectCell(sel);
-								return;
-							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = 0; r != selr + 1;       ++r) // quick and dirty wrap ->
-					for (c = 0; c != Table.ColCount; ++c)
-					{
-						if ((sel = Table[r,c]).loadchanged)
-						{
-							Table.SelectCell(sel);
-							return;
-						}
-					}
-				}
-				else // backward gotolc ->
-				{
-					if (sel != null) { c = sel.x; selr = sel.y; }
-					else
-					{
-						c = Table.ColCount;
-						if (selr == -1) selr = Table.RowCount - 1;
-					}
-
-					for (r = selr; r != -1; --r)
-					{
-						if (start)
-						{
-							start = false;
-							if (--c == -1)	// if starting on the first cell of a row
-							{
-								c = Table.ColCount - 1;
-
-								if (r > 0)	// jump to the last cell of the previous row
-									--r;
-								else		// or to the bottom of the table if on the first row
-									r = Table.RowCount - 1;
-							}
-						}
-						else
-							c = Table.ColCount - 1;
-
-						for (; c != -1; --c)
-						{
-							if ((sel = Table[r,c]).loadchanged)
-							{
-								Table.SelectCell(sel);
-								return;
-							}
-						}
-					}
-
-					// TODO: tighten exact start/end-cells
-					for (r = Table.RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
-					for (c = Table.ColCount - 1; c != -1;       --c)
-					{
-						if ((sel = Table[r,c]).loadchanged)
-						{
-							Table.SelectCell(sel);
-							return;
-						}
-					}
 				}
 			}
 		}

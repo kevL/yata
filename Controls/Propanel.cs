@@ -431,8 +431,14 @@ namespace yata
 				sanitized = _grid.ChangeCellText(cell, _editor); // does a text-check
 				_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 			}
-			else if (cell.loadchanged)
-				_grid.ClearLoadchanged(cell);
+			else
+			{
+				if (cell.replaced)
+					_grid.ClearReplaced(cell);
+
+				if (cell.loadchanged)
+					_grid.ClearLoadchanged(cell);
+			}
 
 			editresultcancel(@select);
 

@@ -732,7 +732,7 @@ namespace yata
 							}
 
 
-							Row._bypassEnableRowedit = true; // call _f.EnableRoweditOperations() later ...
+							Row.BypassEnableRowedit = true; // call _f.EnableRoweditOperations() later ...
 
 							bool display = false; // deter col for ensure displayed col
 
@@ -795,14 +795,8 @@ namespace yata
 									display = true;
 
 									int start, stop;
-									if (RangeSelect > 0)
-									{
-										start = selr; stop = click_r;
-									}
-									else
-									{
-										start = click_r; stop = selr;
-									}
+									if (RangeSelect > 0) { start = selr; stop = click_r; }
+									else                 { start = click_r; stop = selr; }
 
 									for (int r = start; r <= stop; ++r) // select subselected rows' cells ->
 									for (int c = 0; c != ColCount; ++c)
@@ -821,7 +815,7 @@ namespace yata
 								}
 							}
 
-							Row._bypassEnableRowedit = false;
+							Row.BypassEnableRowedit = false;
 
 							if (display) EnsureDisplayedRow(click_r);
 

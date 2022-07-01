@@ -69,12 +69,12 @@ namespace yata
 	{
 		#region Fields (static)
 		/// <summary>
-		/// Set <c>_bypassEnableRowedit</c> <c>true</c> when clearing
+		/// Set <c>BypassEnableRowedit</c> <c>true</c> when clearing
 		/// <c><see cref="selected"/></c> for a synced
 		/// <c><see cref="YataGrid"/></c> so that the Rowedit its don't go
 		/// borky.
 		/// </summary>
-		internal static bool _bypassEnableRowedit;
+		internal static bool BypassEnableRowedit;
 		#endregion Fields (static)
 
 
@@ -104,7 +104,7 @@ namespace yata
 		/// <c><see cref="YataGrid.RangeSelect">YataGrid.RangeSelect</see></c>
 		/// and calls
 		/// <c><see cref="Yata.EnableRoweditOperations()">Yata.EnableRoweditOperations()</see></c>
-		/// iff <c><see cref="_bypassEnableRowedit"/></c> is <c>false</c>.
+		/// iff <c><see cref="BypassEnableRowedit"/></c> is <c>false</c>.
 		/// </summary>
 		/// <remarks>Only 1 <c>Row</c> shall ever be <c>selected</c>.</remarks>
 		internal bool selected
@@ -115,7 +115,7 @@ namespace yata
 				_selected = value;
 				_grid.RangeSelect = 0;
 
-				if (!_bypassEnableRowedit) _grid._f.EnableRoweditOperations();
+				if (!BypassEnableRowedit) _grid._f.EnableRoweditOperations();
 			}
 		}
 		#endregion Properties
@@ -194,7 +194,8 @@ namespace yata
 			Default,
 			Selected,
 			LoadChanged,
-			Diff
+			Diff,
+			Replaced
 		}
 		#endregion Enums
 
@@ -221,6 +222,9 @@ namespace yata
 
 		#region Properties
 		bool _selected;
+		/// <summary>
+		/// Flags this <c>Cell</c> as selected.
+		/// </summary>
 		internal bool selected
 		{
 			get { return _selected; }
@@ -255,10 +259,34 @@ namespace yata
 		}
 
 		bool _diff;
+		/// <summary>
+		/// Flags this <c>Cell</c> as diffed.
+		/// </summary>
 		internal bool diff
 		{
 			get { return _diff; }
 			set { _diff = value; SetState(); }
+		}
+
+		bool _replaced;
+		/// <summary>
+		/// Flags this <c>Cell</c> as replaced by
+		/// <c><see cref="ReplaceTextDialog"/></c>.
+		/// </summary>
+		internal bool replaced
+		{
+			get { return _replaced; }
+			set
+			{
+				_replaced = value;
+				SetState();
+
+				if (!_replaced && !YataGrid._init)	// (replaced=true) happens only in ReplaceTextDialog where
+				{									// EnableGotoReplaced() is taken care of if so
+													// TODO: it also happens in Undo/Redo ...
+					Yata.that.EnableGotoReplaced(Yata.Table.anyReplaced());
+				}
+			}
 		}
 		#endregion Properties
 
@@ -287,8 +315,9 @@ namespace yata
 		void SetState()
 		{
 			if      (selected)    state = CellState.Selected;		// highest priority
-			else if (diff)        state = CellState.Diff;			// 2nd priority
-			else if (loadchanged) state = CellState.LoadChanged;	// 3rd priority
+			else if (replaced)    state = CellState.Replaced;		// 2nd priority
+			else if (diff)        state = CellState.Diff;			// 3rd priority
+			else if (loadchanged) state = CellState.LoadChanged;	// 4th priority
 			else                  state = CellState.Default;		// default.
 		}
 
@@ -320,6 +349,9 @@ namespace yata
 
 				case CellState.LoadChanged:
 					return Brushes.LoadChanged;
+
+				case CellState.Replaced:
+					return Brushes.Replaced;
 			}
 			return null; // shall never happen.
 		}

@@ -66,7 +66,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to cut a row.
+		/// Handles context-click to cut a row. Copies a
+		/// <c><see cref="Row">Row's</see></c> fields then deletes the
+		/// <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Cut"/></c></param>
 		/// <param name="e"></param>
@@ -77,8 +79,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to copy a row and enables
-		/// <c><see cref="it_PasteRange"/></c> and
+		/// Handles context-click to copy a <c><see cref="Row">Row's</see></c>
+		/// fields and enables <c><see cref="it_PasteRange"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
@@ -105,7 +107,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to paste above the current row.
+		/// Handles context-click to paste copied fields above the current
+		/// <c><see cref="Row"/></c>. Creates a new <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_PasteAbove"/></c></param>
 		/// <param name="e"></param>
@@ -126,7 +129,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to paste into the current row.
+		/// Handles context-click to paste copied fields into the currently
+		/// selected <c><see cref="Row"/></c>. Uses the old <c>Row</c> instead
+		/// of creating a new <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Paste"/></c></param>
 		/// <param name="e"></param>
@@ -136,16 +141,22 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
-			YataGrid._init = true; // bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
-
+			YataGrid._init = true;	// bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
+									// bypass EnableGotoReplaced()    in Cell.setter_replaced
 			Row row = Table.Rows[_r];
 
 			int c = 0;
 			if (Settings._autorder)
 			{
 				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
-				row[c].diff =
-				row[c].loadchanged = false;
+
+				if (row[c].diff)
+					row[c].diff = false;
+
+				if (row[c].loadchanged)
+					row[c].loadchanged = false;
+
+				// note that ReplaceTextDialog shall not replace the id-col's text
 
 				++c;
 			}
@@ -157,12 +168,20 @@ namespace yata
 				else
 					row[c].text = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
 
-				row[c].diff =
-				row[c].loadchanged = false;
+				if (row[c].diff)
+					row[c].diff = false;
+
+				if (row[c].loadchanged)
+					row[c].loadchanged = false;
+
+				if (row[c].replaced)
+					row[c].replaced = false;
 			}
 			row._brush = Brushes.Created;
 
 			YataGrid._init = false;
+
+			EnableGotoReplaced(Table.anyReplaced());
 			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 			Table.Calibrate(_r);
@@ -182,7 +201,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to paste below the current row.
+		/// Handles context-click to paste copied fields below the current
+		/// <c><see cref="Row"/></c>. Creates a new <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_PasteBelow"/></c></param>
 		/// <param name="e"></param>
@@ -203,7 +223,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to create a row above the current row.
+		/// Handles context-click to create a <c><see cref="Row"/></c> above the
+		/// currently selected <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_CreateAbove"/></c></param>
 		/// <param name="e"></param>
@@ -228,7 +249,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to clear the current row.
+		/// Handles context-click to clear the fields of the currently selected
+		/// <c><see cref="Row"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Clear"/></c></param>
 		/// <param name="e"></param>
@@ -238,16 +260,22 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r]);
 
 
-			YataGrid._init = true; // bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
-
+			YataGrid._init = true;	// bypass EnableGotoLoadchanged() in Cell.setter_loadchanged
+									// bypass EnableGotoReplaced()    in Cell.setter_replaced
 			Row row = Table.Rows[_r];
 
 			int c = 0;
 			if (Settings._autorder)
 			{
 				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
-				row[c].diff =
-				row[c].loadchanged = false;
+
+				if (row[c].diff)
+					row[c].diff = false;
+
+				if (row[c].loadchanged)
+					row[c].loadchanged = false;
+
+				// note that ReplaceTextDialog shall not replace the id-col's text
 
 				++c;
 			}
@@ -255,12 +283,21 @@ namespace yata
 			for (; c != Table.ColCount; ++c)
 			{
 				row[c].text = gs.Stars;
-				row[c].diff =
-				row[c].loadchanged = false;
+
+				if (row[c].diff)
+					row[c].diff = false;
+
+				if (row[c].loadchanged)
+					row[c].loadchanged = false;
+
+				if (row[c].replaced)
+					row[c].replaced = false;
 			}
 			row._brush = Brushes.Created;
 
 			YataGrid._init = false;
+
+			EnableGotoReplaced(Table.anyReplaced());
 			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 			Table.Calibrate(_r);
@@ -280,7 +317,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to create a row below the current row.
+		/// Handles context-click to create a <c><see cref="Row"/></c> below the
+		/// currently selected <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_CreateBelow"/></c></param>
 		/// <param name="e"></param>
@@ -305,7 +343,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles context-click to delete the current row.
+		/// Handles context-click to delete the currently selected
+		/// <c><see cref="Row"/></c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -321,6 +360,8 @@ namespace yata
 			Table.Delete(_r);
 
 			EnableRoweditOperations();
+			EnableGotoReplaced(Table.anyReplaced());
+			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 
 			if (!Table.Changed)

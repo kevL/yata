@@ -505,9 +505,9 @@ namespace yata
 			{
 				if (row.selected)
 				{
-					Row._bypassEnableRowedit = bypassEnableRowedit;
+					Row.BypassEnableRowedit = bypassEnableRowedit;
 					row.selected = false;
-					Row._bypassEnableRowedit = false;
+					Row.BypassEnableRowedit = false;
 				}
 
 				for (int c = 0; c != ColCount; ++c)
@@ -530,8 +530,10 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item><c><see cref="Yata"/>.Search()</c></item>
-		/// <item><c>Yata.editcellsclick_GotoLoadchanged()</c></item>
-		/// <item><c>Yata.gotodiff()</c></item>
+		/// <item><c><see cref="ReplaceTextDialog"/>.Search()</c></item>
+		/// <item><c><see cref="YataGrid.GotoReplaced()">YataGrid.GotoReplaced()</see></c></item>
+		/// <item><c><see cref="YataGrid.GotoLoadchanged()">YataGrid.GotoLoadchanged()</see></c></item>
+		/// <item><c>Yata.SelectDiffedCell()</c></item>
 		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
 		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
@@ -548,8 +550,9 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Selects a specified <c><see cref="Cell">Cell's</see></c>
-		/// corresponding <c>Cell</c> in a sync-table.
+		/// Clears all selects in a sync-table and then selects a specified
+		/// <c><see cref="Cell">Cell's</see></c> corresponding <c>Cell</c> in
+		/// the sync-table.
 		/// </summary>
 		/// <param name="sel">a <c>Cell</c> in the current table</param>
 		/// <returns><c>true</c> if a sync-table is valid</returns>
@@ -659,9 +662,9 @@ namespace yata
 			{
 				row = table.Rows[r];
 
-				Row._bypassEnableRowedit = true;
+				Row.BypassEnableRowedit = true;
 				row.selected = true;
-				Row._bypassEnableRowedit = false;
+				Row.BypassEnableRowedit = false;
 
 				for (int c = 0; c != table.ColCount; ++c)
 					row[c].selected = true;
@@ -829,8 +832,14 @@ namespace yata
 				if (Propanel != null && Propanel.Visible)
 					invalid |= INVALID_PROP;
 			}
-			else if (_editcell.loadchanged)
-				ClearLoadchanged(_editcell);
+			else
+			{
+				if (_editcell.replaced)
+					ClearReplaced(_editcell);
+
+				if (_editcell.loadchanged)
+					ClearLoadchanged(_editcell);
+			}
 
 			editresultcancel(invalid, @select);
 
@@ -901,8 +910,14 @@ namespace yata
 			}
 
 
-			cell.loadchanged =
-			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
+			if (cell.replaced)
+				cell.replaced = false;
+
+			if (cell.loadchanged)
+				cell.loadchanged = false;
+
+			if (cell.diff)
+				cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			bool sanitized = VerifyText_edit(tb);
 
@@ -918,6 +933,59 @@ namespace yata
 
 				rest.postext = cell.text;
 				_ur.Push(rest);
+			}
+
+			return sanitized;
+		}
+
+		/// <summary>
+		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo
+		/// for <c><see cref="ReplaceTextDialog"/></c>.
+		/// </summary>
+		/// <param name="cell">a <c><see cref="Cell"/></c></param>
+		/// <param name="text">the text to change to</param>
+		/// <returns><c>true</c> if the text gets sanitized</returns>
+		internal bool ChangeCellText_repl(Cell cell, string text)
+		{
+			Restorable rest = UndoRedo.createCell(cell);
+			if (!Changed)
+			{
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+
+
+//			if (cell.replaced)
+//				cell.replaced = false; // don't clear replaced; this funct *sets* replaced
+
+			if (cell.loadchanged)
+				cell.loadchanged = false;
+
+			if (cell.diff)
+				cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
+
+			bool sanitized = VerifyText_repl(ref text);
+
+			if (cell.text != text)
+			{
+				cell.text = text;
+
+				Colwidth(cell.x, cell.y);
+				metricFrozenControls(cell.x);
+
+				if (!Changed) Changed = true;
+
+
+				rest.postext = cell.text;
+				_ur.Push(rest);
+			}
+
+			if (sanitized)
+			{
+				ReplaceTextDialog.Cords cords;
+				cords.r = cell.y;
+				cords.c = cell.x;
+
+				ReplaceTextDialog.Warns.Add(cords);
 			}
 
 			return sanitized;
@@ -943,8 +1011,14 @@ namespace yata
 			}
 
 
-			cell.loadchanged =
-			cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
+			if (cell.replaced)
+				cell.replaced = false;
+
+			if (cell.loadchanged)
+				cell.loadchanged = false;
+
+			if (cell.diff)
+				cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			cell.text = text;
 
@@ -964,10 +1038,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Checks the cell-field text during user-edits.
+		/// Verifies a cell-field text during user-edits.
 		/// </summary>
 		/// <param name="tb">a <c>TextBox</c> in which user is editing the text</param>
-		/// <returns><c>true</c> to notify user if text changes</returns>
+		/// <returns><c>true</c> to notify user if text gets changed</returns>
 		internal static bool VerifyText_edit(Control tb)
 		{
 			string text = tb.Text; // allow whitespace - do not Trim()
@@ -977,23 +1051,41 @@ namespace yata
 				return false; // don't bother the user if he/she simply wants to blank a field.
 			}
 
-			bool changed = VerifyText(ref text);
+			bool sanitized = VerifyText(ref text);
 
 			tb.Text = text;
-			return changed;
+			return sanitized;
 		}
 
 		/// <summary>
-		/// Checks a cell-field text. Called during file load by
+		/// Verifies a cell-field text for
+		/// <c><see cref="ReplaceTextDialog"/></c>.
+		/// </summary>
+		/// <param name="text">the text to verify</param>
+		/// <returns><c>true</c> if text gets sanitized</returns>
+		static bool VerifyText_repl(ref string text)
+		{
+			if (text.Length == 0) // allow whitespace - do not Trim()
+			{
+				text = gs.Stars;
+				return false; // don't bother the user if he/she simply wants to blank a field.
+			}
+			return VerifyText(ref text);
+		}
+
+		/// <summary>
+		/// Verifies a cell-field text. Called during file load by
 		/// <c><see cref="CreateRows()">CreateRows()</see></c> or after
 		/// user-edits by
-		/// <c><see cref="VerifyText_edit()">VerifyText_edit()</see></c>.
+		/// <c><see cref="VerifyText_edit()">VerifyText_edit()</see></c> or
+		/// during replace/replaceall by
+		/// <c><see cref="VerifyText_repl()">VerifyText_repl()</see></c>.
 		/// </summary>
 		/// <param name="text">ref to a text-string</param>
 		/// <param name="load"><c>true</c> to return <c>true</c> even if a
 		/// text-change is insignificant</param>
-		/// <returns><c>true</c> if (a) text is changed and user should be
-		/// notified or (b) text is changed and its <c><see cref="Cell"/></c>
+		/// <returns><c>true</c> if (a) text gets sanitized and user should be
+		/// notified or (b) text gets sanitized and its <c><see cref="Cell"/></c>
 		/// should be flagged as <c><see cref="Cell.loadchanged"/></c> when a
 		/// 2da-file loads</returns>
 		static bool VerifyText(ref string text, bool load = false)
@@ -1032,7 +1124,7 @@ namespace yata
 			}
 
 
-			string verified; bool changed;
+			string verified; bool sanitized;
 
 			quote = sb.Length != 0
 				 && sb[0] == '"' && sb[sb.Length - 1] == '"'; // -> has outer quotes
@@ -1076,10 +1168,10 @@ namespace yata
 				if (cleared) // existing quotes were successfully cleared ->
 				{
 					verified = sb.ToString();
-					changed = Settings._strict && verified != text; // <- bother user if he/she wants to clear quotes only if Strict.
+					sanitized = Settings._strict && verified != text; // <- bother user if he/she wants to clear quotes only if Strict.
 
 					text = verified;
-					return changed;
+					return sanitized;
 				}
 			}
 			else // reapply quotes ->
@@ -1087,11 +1179,10 @@ namespace yata
 				applyQuotes(sb);
 			}
 
-			verified = sb.ToString();
-			changed = verified != text; // <- if changed inform user.
+			sanitized = ((verified = sb.ToString()) != text); // <- if changed inform user.
 
 			text = verified;
-			return changed;
+			return sanitized;
 		}
 
 		/// <summary>
@@ -1251,9 +1342,196 @@ namespace yata
 		#endregion Select getters
 
 
+		#region replaced
+		/// <summary>
+		/// Checks if any <c><see cref="Cell"/></c> is currently
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c>.
+		/// </summary>
+		/// <returns><c>true</c> if a <c>Cell</c> is replaced</returns>
+		internal bool anyReplaced()
+		{
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			if (row[c].replaced)
+				return true;
+
+			return false;
+		}
+
+		/// <summary>
+		/// Clears all <c><see cref="Cell">Cells'</see></c>
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flags without
+		/// resetting the GotoReplaced it repeatedly.
+		/// </summary>
+		/// <param name="activetable"><c>true</c> if the <c>YataGrid</c> to clear is
+		/// currently active - see
+		/// <c><see cref="Yata.CloseReplacer()">Yata.CloseReplacer()</see></c></param>
+		internal void ClearReplaced(bool activetable = true)
+		{
+			_init = true; // bypass EnableGotoReplaced() in Cell.setter_replaced
+
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			if (row[c].replaced)
+				row[c].replaced = false;
+
+			_init = false;
+
+			_f.EnableGotoReplaced(false);
+			if (_f._replacer != null)
+				_f._replacer.EnableReplacedOps(false);
+
+			if (activetable)
+				Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+		}
+
+		/// <summary>
+		/// Clears <c><see cref="Cell.replaced">Cell.replaced</see></c> from a
+		/// specified <c><see cref="Cell"/></c> and invalidates the grid.
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <remarks>Check <c>Cell.replaced</c> before call.</remarks>
+		internal void ClearReplaced(Cell cell)
+		{
+			cell.replaced = false;
+			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+		}
+
+		/// <summary>
+		/// Selects the next/previous <c><see cref="Cell"/></c> this has its
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flag set.
+		/// </summary>
+		/// <param name="forward"><c>true</c> to perform forward search</param>
+		internal void GotoReplaced(bool forward)
+		{
+//			if (anyReplaced()) // safety-ish. That probably shouldn't be needed.
+//			{
+			Select();
+
+			Cell sel = getSelectedCell();
+			int selr = getSelectedRow();
+
+			ClearSelects();
+			// SelectCell() calls Yata.ClearSyncSelects()
+
+			int r,c;
+
+			bool start = true;
+
+			if (forward) // forward search ->
+			{
+				if (sel != null) { c = sel.x; selr = sel.y; }
+				else
+				{
+					c = -1;
+					if (selr == -1) selr = 0;
+				}
+
+				for (r = selr; r != RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						if (++c == ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < RowCount - 1)	// jump to the first cell of the next row
+								++r;
+							else					// or to the top of the table if on the last row
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != ColCount; ++c)
+					{
+						if ((sel = this[r,c]).replaced)
+						{
+							SelectCell(sel);
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != selr + 1; ++r) // quick and dirty wrap ->
+				for (c = 0; c != ColCount; ++c)
+				{
+					if ((sel = this[r,c]).replaced)
+					{
+						SelectCell(sel);
+						return;
+					}
+				}
+			}
+			else // backward search ->
+			{
+				if (sel != null) { c = sel.x; selr = sel.y; }
+				else
+				{
+					c = ColCount;
+					if (selr == -1) selr = RowCount - 1;
+				}
+
+				for (r = selr; r != -1; --r)
+				{
+					if (start)
+					{
+						start = false;
+						if (--c == -1)	// if starting on the first cell of a row
+						{
+							c = ColCount - 1;
+
+							if (r > 0)	// jump to the last cell of the previous row
+								--r;
+							else		// or to the bottom of the table if on the first row
+								r = RowCount - 1;
+						}
+					}
+					else
+						c = ColCount - 1;
+
+					for (; c != -1; --c)
+					{
+						if ((sel = this[r,c]).replaced)
+						{
+							SelectCell(sel);
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+				for (c = ColCount - 1; c != -1;       --c)
+				{
+					if ((sel = this[r,c]).replaced)
+					{
+						SelectCell(sel);
+						return;
+					}
+				}
+			}
+
+//			int invalid = YataGrid.INVALID_GRID
+//						| YataGrid.INVALID_FROZ
+//						| YataGrid.INVALID_ROWS
+//						| YataGrid.INVALID_COLS;
+//			if (Propanel != null && Propanel.Visible)
+//				invalid |= YataGrid.INVALID_PROP;
+
+//			Invalidator(invalid);
+		}
+//		}
+		#endregion replaced
+
+
 		#region loadchanged
 		/// <summary>
-		/// Checks if any <c><see cref="Cell"/></c> is currently loadchanged.
+		/// Checks if any <c><see cref="Cell"/></c> is currently
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if a <c>Cell</c> is loadchanged</returns>
 		internal bool anyLoadchanged()
@@ -1265,7 +1543,6 @@ namespace yata
 
 			return false;
 		}
-
 
 		/// <summary>
 		/// Clears all cells'
@@ -1282,7 +1559,10 @@ namespace yata
 				row[c].loadchanged = false;
 
 			_init = false;
+
 			_f.EnableGotoLoadchanged(false);
+
+			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 		}
 
 		/// <summary>
@@ -1294,7 +1574,136 @@ namespace yata
 		internal void ClearLoadchanged(Cell cell)
 		{
 			cell.loadchanged = false;
-			Invalidator(YataGrid.INVALID_GRID);
+			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+		}
+
+		/// <summary>
+		/// Selects the next/previous <c><see cref="Cell"/></c> this has its
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> flag set.
+		/// </summary>
+		/// <param name="forward"><c>true</c> to perform forward search</param>
+		internal void GotoLoadchanged(bool forward)
+		{
+//			if (anyLoadchanged()) // safety-ish. That probably shouldn't be needed.
+//			{
+			Select();
+
+			Cell sel = getSelectedCell();
+			int selr = getSelectedRow();
+
+			ClearSelects();
+			// SelectCell() calls Yata.ClearSyncSelects()
+
+			int r,c;
+
+			bool start = true;
+
+			if (forward) // forward search ->
+			{
+				if (sel != null) { c = sel.x; selr = sel.y; }
+				else
+				{
+					c = -1;
+					if (selr == -1) selr = 0;
+				}
+
+				for (r = selr; r != RowCount; ++r)
+				{
+					if (start)
+					{
+						start = false;
+						if (++c == ColCount)		// if starting on the last cell of a row
+						{
+							c = 0;
+
+							if (r < RowCount - 1)	// jump to the first cell of the next row
+								++r;
+							else					// or to the top of the table if on the last row
+								r = 0;
+						}
+					}
+					else
+						c = 0;
+
+					for (; c != ColCount; ++c)
+					{
+						if ((sel = this[r,c]).loadchanged)
+						{
+							SelectCell(sel);
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = 0; r != selr + 1; ++r) // quick and dirty wrap ->
+				for (c = 0; c != ColCount; ++c)
+				{
+					if ((sel = this[r,c]).loadchanged)
+					{
+						SelectCell(sel);
+						return;
+					}
+				}
+			}
+			else // backward search ->
+			{
+				if (sel != null) { c = sel.x; selr = sel.y; }
+				else
+				{
+					c = ColCount;
+					if (selr == -1) selr = RowCount - 1;
+				}
+
+				for (r = selr; r != -1; --r)
+				{
+					if (start)
+					{
+						start = false;
+						if (--c == -1)	// if starting on the first cell of a row
+						{
+							c = ColCount - 1;
+
+							if (r > 0)	// jump to the last cell of the previous row
+								--r;
+							else		// or to the bottom of the table if on the first row
+								r = RowCount - 1;
+						}
+					}
+					else
+						c = ColCount - 1;
+
+					for (; c != -1; --c)
+					{
+						if ((sel = this[r,c]).loadchanged)
+						{
+							SelectCell(sel);
+							return;
+						}
+					}
+				}
+
+				// TODO: tighten exact start/end-cells
+				for (r = RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+				for (c = ColCount - 1; c != -1;       --c)
+				{
+					if ((sel = this[r,c]).loadchanged)
+					{
+						SelectCell(sel);
+						return;
+					}
+				}
+			}
+
+//			int invalid = YataGrid.INVALID_GRID
+//						| YataGrid.INVALID_FROZ
+//						| YataGrid.INVALID_ROWS
+//						| YataGrid.INVALID_COLS;
+//			if (Propanel != null && Propanel.Visible)
+//				invalid |= YataGrid.INVALID_PROP;
+
+//			Invalidator(invalid);
+//			}
 		}
 		#endregion loadchanged
 

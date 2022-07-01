@@ -108,6 +108,8 @@ namespace yata
 		internal DifferDialog _fdiffer;
 		internal YataGrid _diff1, _diff2;
 
+		internal ReplaceTextDialog _replacer;
+
 		/// <summary>
 		/// Caches a fullpath when doing SaveAs.
 		/// So that the Table's new path-variables don't get assigned unless the
@@ -349,8 +351,8 @@ namespace yata
 
 			cb_SearchOption.Items.AddRange(new object[]
 			{
-				"find substring",
-				"find wholeword"
+				"subfield",
+				"wholefield"
 			});
 			cb_SearchOption.SelectedIndex = 0;
 
@@ -965,6 +967,8 @@ namespace yata
 		{
 			//logfile.Log("Yata.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
 
+			bool replaced;
+
 			if (Tabs.SelectedIndex != -1)
 			{
 				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
@@ -999,8 +1003,12 @@ namespace yata
 				it_Redo               .Enabled = Table._ur.CanRedo;
 				it_Searchnext         .Enabled =
 				it_Searchprev         .Enabled = tb_Search.Text.Length != 0;
+				it_GotoReplaced       .Enabled =
+				it_GotoReplaced_pre   .Enabled =
+				it_ClearReplaced      .Enabled = (replaced = Table.anyReplaced());
 				it_GotoLoadchanged    .Enabled =
-				it_GotoLoadchanged_pre.Enabled = Table.anyLoadchanged();
+				it_GotoLoadchanged_pre.Enabled =
+				it_ClearLoadchanged   .Enabled = Table.anyLoadchanged();
 				it_Defaultval         .Enabled = true;
 				it_Defaultclear       .Enabled = Table._defaultval.Length != 0;
 
@@ -1063,8 +1071,12 @@ namespace yata
 				it_Redo               .Enabled =
 				it_Searchnext         .Enabled =
 				it_Searchprev         .Enabled =
+				it_GotoReplaced       .Enabled =
+				it_GotoReplaced_pre   .Enabled =
+				it_ClearReplaced      .Enabled =
 				it_GotoLoadchanged    .Enabled =
 				it_GotoLoadchanged_pre.Enabled =
+				it_ClearLoadchanged   .Enabled =
 				it_Defaultval         .Enabled =
 				it_Defaultclear       .Enabled =
 
@@ -1096,9 +1108,14 @@ namespace yata
 				it_ExternDiff         .Enabled = false;
 
 				_fdiffer = null;
+
+				replaced = false;
 			}
 
 			SetTitlebarText();
+
+			if (_replacer != null)
+				_replacer.EnableOps(replaced);
 		}
 
 

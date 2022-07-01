@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
 
 
@@ -51,6 +50,28 @@ namespace yata
 		/// <c>ToolStripTextBox</c> from reselecting all text ...
 		/// </summary>
 		internal bool IsTabbed_goto;
+
+		/// <summary>
+		/// A <c>string</c> to search for.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Search()">Search()</see></c>.</remarks>
+		string _search;
+
+		/// <summary>
+		/// A <c>string</c> of text to match against
+		/// <c><see cref="_search"/></c>.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="SearchResult()">SearchResult()</see></c>.</remarks>
+		string _text;
+
+		/// <summary>
+		/// <c>true</c> to search for a subfield instead of a wholefield.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Search()">Search()</see></c>.</remarks>
+		bool _substr;
 		#endregion Fields
 
 
@@ -231,10 +252,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Performs a search when <c>[Enter]</c> or [Shift+Enter] is pressed
-		/// and focus is on either the search-box or the search-option dropdown.
+		/// Performs a search when <c>[Enter]</c> or <c>[Shift+Enter]</c> is
+		/// pressed and focus is on either the search-box or the search-option
+		/// dropdown.
 		/// </summary>
-		/// <remarks>[Enter] and [Shift+Enter] change focus to the table.</remarks>
+		/// <remarks><c>[Enter]</c> and <c>[Shift+Enter]</c> change focus to the
+		/// table iff a match is found.</remarks>
 		void Search_keyEnter()
 		{
 			IsSearch = true;
@@ -251,28 +274,29 @@ namespace yata
 		/// <returns><c>true</c> if a match is found</returns>
 		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
 		/// call.</remarks>
-		bool Search(bool forward)
+		/// <seealso cref="ReplaceTextDialog"><c>ReplaceTextDialog.Search()</c></seealso>
+		internal bool Search(bool forward)
 		{
 			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
 			{
-				string search = tb_Search.Text;
-				if (search.Length != 0)
+				if ((_search = tb_Search.Text).Length != 0)
 				{
-					search = search.ToUpper(CultureInfo.CurrentCulture);
+					_search = _search.ToUpperInvariant();
 
 					Cell sel = Table.getSelectedCell();
 					int selr = Table.getSelectedRow();
 
 					Table.ClearSelects();
+					ClearSyncSelects();
 
-					bool substring = (cb_SearchOption.SelectedIndex == 0); // else is wholestring search.
+
+					_substr = (cb_SearchOption.SelectedIndex == 0); // else is Wholefield search.
+
 					bool start = true;
-
-					string text;
 
 					int r,c;
 
-					if (forward) // forward search ->
+					if (forward) // forward ->
 					{
 						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
@@ -301,9 +325,7 @@ namespace yata
 
 							for (; c != Table.ColCount; ++c)
 							{
-								if (c != 0 // don't search the id-col
-									&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
-										|| (substring && text.Contains(search))))
+								if (c != 0 && SearchResult(r,c)) // don't search the id-col
 								{
 									Table.SelectCell(Table[r,c]);
 									return true;
@@ -315,16 +337,14 @@ namespace yata
 						for (r = 0; r != selr + 1;       ++r) // quick and dirty wrap ->
 						for (c = 0; c != Table.ColCount; ++c)
 						{
-							if (c != 0 // don't search the id-col
-								&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
-									|| (substring && text.Contains(search))))
+							if (c != 0 && SearchResult(r,c)) // don't search the id-col
 							{
 								Table.SelectCell(Table[r,c]);
 								return true;
 							}
 						}
 					}
-					else // backward search ->
+					else // backward ->
 					{
 						if (sel != null) { c = sel.x; selr = sel.y; }
 						else
@@ -353,9 +373,7 @@ namespace yata
 
 							for (; c != -1; --c)
 							{
-								if (c != 0 // don't search the id-col
-									&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
-										|| (substring && text.Contains(search))))
+								if (c != 0 && SearchResult(r,c)) // don't search the id-col
 								{
 									Table.SelectCell(Table[r,c]);
 									return true;
@@ -367,31 +385,45 @@ namespace yata
 						for (r = Table.RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
 						for (c = Table.ColCount - 1; c != -1;       --c)
 						{
-							if (c != 0 // don't search the id-col
-								&& ((text = Table[r,c].text.ToUpper(CultureInfo.CurrentCulture)) == search
-									|| (substring && text.Contains(search))))
+							if (c != 0 && SearchResult(r,c)) // don't search the id-col
 							{
 								Table.SelectCell(Table[r,c]);
 								return true;
 							}
 						}
 					}
+
+					int invalid = YataGrid.INVALID_GRID
+								| YataGrid.INVALID_FROZ
+								| YataGrid.INVALID_ROWS
+								| YataGrid.INVALID_COLS;
+					if (Table.Propanel != null && Table.Propanel.Visible)
+						invalid |= YataGrid.INVALID_PROP;
+
+					Table.Invalidator(invalid);
+					Table.Update();
 				}
-				else // not found ->
+
+				using (var ib = new Infobox(Infobox.Title_infor, "Search not found."))
 				{
-					Table.ClearSelects(); // TODO: That should return a bool if any clears happened.
-					ClearSyncSelects();
+					ib.ShowDialog(this);
 				}
-
-				int invalid = YataGrid.INVALID_GRID
-							| YataGrid.INVALID_FROZ
-							| YataGrid.INVALID_ROWS;
-				if (Table.Propanel != null && Table.Propanel.Visible)
-					invalid |= YataGrid.INVALID_PROP;
-
-				Table.Invalidator(invalid);
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Helper for <c><see cref="Search()">Search()</see></c>
+		/// </summary>
+		/// <param name="r">row</param>
+		/// <param name="c">col</param>
+		/// <returns><c>true</c> if <c><see cref="_text"/></c> matches
+		/// <c><see cref="_search"/></c> - dependent on
+		/// <c><see cref="_substr"/></c></returns>
+		bool SearchResult(int r, int c)
+		{
+			return (_text = Table[r,c].text.ToUpperInvariant()) == _search
+				|| (_substr && _text.Contains(_search));
 		}
 
 
@@ -440,7 +472,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>Edit|Goto <c>[Ctrl+g]</c></item>
 		/// </list></remarks>
-		void editclick_FocusGoto(object sender, EventArgs e)
+		void editclick_Goto(object sender, EventArgs e)
 		{
 			_isEditclick_goto = true;
 			tb_Goto.Focus();
@@ -466,6 +498,90 @@ namespace yata
 			{
 				Table.doGoto(tb_Goto.Text, false); // NOTE: Text is checked for validity in doGoto().
 			}
+		}
+
+
+		/// <summary>
+		/// Opens a dialog to search and replace text in the current
+		/// <c><see cref="Table"/></c>.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_Replace"/></c></param>
+		/// <param name="e"></param>
+		void editclick_ReplaceText(object sender, EventArgs e)
+		{
+			if (_replacer == null)
+			{
+				_replacer = new ReplaceTextDialog(this);
+				it_Replace.Checked = true;
+			}
+			else
+				_replacer.Close();
+		}
+
+		/// <summary>
+		/// Selects the next/previous <c><see cref="Cell"/></c> that has its
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flag set.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_GotoReplaced"/></c></item>
+		/// <item><c><see cref="it_GotoReplaced_pre"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Goto replaced</item>
+		/// <item>Edit|Goto replaced pre</item>
+		/// </list></remarks>
+		void editclick_GotoReplaced(object sender, EventArgs e)
+		{
+			Table.GotoReplaced(sender == it_GotoReplaced);
+		}
+
+		/// <summary>
+		/// Clears all <c><see cref="Cell">Cells</see></c> of their
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flags.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_ClearReplaced"/></c></param>
+		/// <param name="e"></param>
+		void editclick_ClearReplaced(object sender, EventArgs e)
+		{
+			Table.ClearReplaced();
+		}
+
+
+		/// <summary>
+		/// Selects the next/previous <c><see cref="Cell"/></c> that has its
+		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> flag set.
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_GotoLoadchanged"/></c> <c>[Ctrl+n]</c></item>
+		/// <item><c><see cref="it_GotoLoadchanged_pre"/></c> <c>[Shift+Ctrl+n]</c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>Edit|Goto loadchanged <c>[Ctrl+n]</c></item>
+		/// <item>Edit|Goto loadchanged pre <c>[Shift+Ctrl+n]</c></item>
+		/// </list></remarks>
+		void editclick_GotoLoadchanged(object sender, EventArgs e)
+		{
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
+			{
+				Table.GotoLoadchanged(sender == it_GotoLoadchanged);
+			}
+		}
+
+		/// <summary>
+		/// Clears all <c><see cref="Cell">Cells</see></c> of their
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flags.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_ClearReplaced"/></c></param>
+		/// <param name="e"></param>
+		void editclick_ClearLoadchanged(object sender, EventArgs e)
+		{
+			Table.ClearLoadchanged();
 		}
 
 
@@ -533,14 +649,54 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Enables/disables <c><see cref="it_GotoLoadchanged"/></c> and
-		/// <c><see cref="it_GotoLoadchanged_pre"/></c>.
+		/// Enables/disables
+		/// <list type="bullet">
+		/// <item><c><see cref="it_GotoReplaced"/></c></item>
+		/// <item><c><see cref="it_GotoReplaced_pre"/></c></item>
+		/// <item><c><see cref="it_ClearReplaced"/></c></item>
+		/// </list>
+		/// </summary>
+		/// <param name="enabled"></param>
+		internal void EnableGotoReplaced(bool enabled)
+		{
+			it_GotoReplaced    .Enabled =
+			it_GotoReplaced_pre.Enabled =
+			it_ClearReplaced   .Enabled = enabled;
+		}
+
+		/// <summary>
+		/// Enables/disables
+		/// <list type="bullet">
+		/// <item><c><see cref="it_GotoLoadchanged"/></c></item>
+		/// <item><c><see cref="it_GotoLoadchanged_pre"/></c></item>
+		/// <item><c><see cref="it_ClearLoadchanged"/></c></item>
+		/// </list>
 		/// </summary>
 		/// <param name="enabled"></param>
 		internal void EnableGotoLoadchanged(bool enabled)
 		{
 			it_GotoLoadchanged    .Enabled =
-			it_GotoLoadchanged_pre.Enabled = enabled;
+			it_GotoLoadchanged_pre.Enabled =
+			it_ClearLoadchanged   .Enabled = enabled;
+		}
+
+		/// <summary>
+		/// Closes a <c><see cref="ReplaceTextDialog"/></c> from its
+		/// <c>FormClosing</c> event. Also clears all
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flags from all
+		/// <c><see cref="YataGrid">YataGrids</see></c>.
+		/// </summary>
+		internal void CloseReplacer()
+		{
+			_replacer = null;
+			it_Replace.Checked = false;
+
+			YataGrid table;
+			for (int tab = 0; tab != Tabs.TabCount; ++tab)
+			{
+				table = Tabs.TabPages[tab].Tag as YataGrid;
+				table.ClearReplaced(table == Table);
+			}
 		}
 		#endregion Methods (edit)
 	}

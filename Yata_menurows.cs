@@ -41,9 +41,9 @@ namespace yata
 				{
 					if (row.selected)
 					{
-						Row._bypassEnableRowedit = true;
+						Row.BypassEnableRowedit = true;
 						row.selected = false;
-						Row._bypassEnableRowedit = false;
+						Row.BypassEnableRowedit = false;
 					}
 	
 					for (int c = 0; c != table.ColCount; ++c)
@@ -63,7 +63,8 @@ namespace yata
 
 
 		/// <summary>
-		/// Cuts a range of rows.
+		/// Copies the fields of a range of <c><see cref="Row">Rows</see></c>
+		/// and deletes the <c>Rows</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CutRange"/></c></param>
 		/// <param name="e"></param>
@@ -78,8 +79,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Copies a range of rows and enables
-		/// <c><see cref="it_PasteRange"/></c> and
+		/// Copies the fields of a range of <c><see cref="Row">Rows</see></c>
+		/// and enables <c><see cref="it_PasteRange"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
@@ -101,16 +102,8 @@ namespace yata
 			int selr = Table.getSelectedRow();
 
 			int strt, stop;
-			if (Table.RangeSelect > 0)
-			{
-				strt = selr;
-				stop = selr + Table.RangeSelect;
-			}
-			else
-			{
-				strt = selr + Table.RangeSelect;
-				stop = selr;
-			}
+			if (Table.RangeSelect > 0) { strt = selr; stop = selr + Table.RangeSelect; }
+			else                       { strt = selr + Table.RangeSelect; stop = selr; }
 
 			string[] celltexts;
 			do
@@ -131,7 +124,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Pastes a range of rows.
+		/// Creates a range of <c><see cref="Row">Rows</see></c> and pastes
+		/// copied fields into them.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PasteRange"/></c></param>
 		/// <param name="e"></param>
@@ -181,7 +175,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a range of rows.
+		/// Deletes a range of <c><see cref="Row">Rows</see></c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -200,6 +194,8 @@ namespace yata
 			Table.DeleteRows();
 
 			EnableRoweditOperations();
+			EnableGotoReplaced(Table.anyReplaced());
+			EnableGotoLoadchanged(Table.anyLoadchanged());
 
 			if (Settings._autorder && order() != 0) layout();
 		}
@@ -294,7 +290,7 @@ namespace yata
 		/// </summary>
 		internal void EnableRoweditOperations()
 		{
-			bool isrowselected = Table.getSelectedRow() != -1;
+			bool isrowselected = (Table.getSelectedRow() != -1);
 
 			it_DeselectRows.Enabled = isrowselected;
 
@@ -306,7 +302,5 @@ namespace yata
 			it_CreateRows  .Enabled = !Table.Readonly;
 		}
 		#endregion Methods (editrows)
-
-
 	}
 }

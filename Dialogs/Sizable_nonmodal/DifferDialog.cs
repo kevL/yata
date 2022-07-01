@@ -167,7 +167,7 @@ namespace yata
 		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			(_f as Yata).GotoDiffCell();
+			(_f as Yata).GotoDiffed();
 		}
 		#endregion Handlers
 

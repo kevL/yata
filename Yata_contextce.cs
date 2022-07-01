@@ -18,14 +18,16 @@ namespace yata
 		{
 			_sel = Table.getSelectedCell(); // '_sel' shall be valid due to rightclick
 
+			bool flagged = (_sel.loadchanged || _sel.replaced);
+
 			cellit_Edit   .Enabled = !Table.Readonly;
 
 			cellit_Cut    .Enabled = !Table.Readonly;
 			cellit_Paste  .Enabled = !Table.Readonly;
-			cellit_Clear  .Enabled = !Table.Readonly && (_sel.text != gs.Stars || _sel.loadchanged);
+			cellit_Clear  .Enabled = !Table.Readonly && (flagged || _sel.text != gs.Stars);
 
-			cellit_Lower  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToLower(CultureInfo.CurrentCulture) || _sel.loadchanged);
-			cellit_Upper  .Enabled = !Table.Readonly && (_sel.text != _sel.text.ToUpper(CultureInfo.CurrentCulture) || _sel.loadchanged);
+			cellit_Lower  .Enabled = !Table.Readonly && (flagged || _sel.text != _sel.text.ToLower(CultureInfo.CurrentCulture));
+			cellit_Upper  .Enabled = !Table.Readonly && (flagged || _sel.text != _sel.text.ToUpper(CultureInfo.CurrentCulture));
 
 			cellit_MergeCe.Enabled =
 			cellit_MergeRo.Enabled = isMergeEnabled();
@@ -285,8 +287,14 @@ namespace yata
 			{
 				if (_sel.text != _copytext[0,0])
 					Table.ChangeCellText(_sel, _copytext[0,0]);
-				else if (_sel.loadchanged)
-					Table.ClearLoadchanged(_sel);
+				else
+				{
+					if (_sel.replaced)
+						Table.ClearReplaced(_sel);
+
+					if (_sel.loadchanged)
+						Table.ClearLoadchanged(_sel);
+				}
 			}
 			else
 				editcellsclick_PasteCell(sender, e);
@@ -305,8 +313,14 @@ namespace yata
 		{
 			if (_sel.text != gs.Stars)
 				Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check, does Invalidate
-			else if (_sel.loadchanged)
-				Table.ClearLoadchanged(_sel);
+			else
+			{
+				if (_sel.replaced)
+					Table.ClearReplaced(_sel);
+
+				if (_sel.loadchanged)
+					Table.ClearLoadchanged(_sel);
+			}
 		}
 
 		/// <summary>
@@ -319,8 +333,14 @@ namespace yata
 			string text = _sel.text.ToLower(CultureInfo.CurrentCulture);
 			if (_sel.text != text)
 				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
-			else if (_sel.loadchanged)
-				Table.ClearLoadchanged(_sel);
+			else
+			{
+				if (_sel.replaced)
+					Table.ClearReplaced(_sel);
+
+				if (_sel.loadchanged)
+					Table.ClearLoadchanged(_sel);
+			}
 		}
 
 		/// <summary>
@@ -333,8 +353,14 @@ namespace yata
 			string text = _sel.text.ToUpper(CultureInfo.CurrentCulture);
 			if (_sel.text != text)
 				Table.ChangeCellText(_sel, text); // does not do a text-check, does Invalidate
-			else if (_sel.loadchanged)
-				Table.ClearLoadchanged(_sel);
+			else
+			{
+				if (_sel.replaced)
+					Table.ClearReplaced(_sel);
+
+				if (_sel.loadchanged)
+					Table.ClearLoadchanged(_sel);
+			}
 		}
 
 		/// <summary>

@@ -301,6 +301,10 @@ namespace yata
 
 			EnableCelleditOperations();
 			EnableRoweditOperations();
+			// col-edit operations are detered by its dropdown event
+
+			if (_replacer != null)
+				_replacer.EnableReplace();
 
 			it_OrderRows.Enabled = !Table.Readonly;
 
@@ -381,7 +385,8 @@ namespace yata
 						_table.Changed = false;
 						_table._ur.ResetSaved();
 
-						_table.ClearLoadchanged(); // this toggles YataGrid._init - don't do that when creating a 2da
+						_table.ClearReplaced(); // these toggle YataGrid._init so don't do that when creating a 2da ->
+						_table.ClearLoadchanged();
 
 						if (_table == Table)
 							_table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);

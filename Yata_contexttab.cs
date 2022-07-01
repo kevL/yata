@@ -440,7 +440,7 @@ namespace yata
 		/// 
 		/// Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
 		/// is depressed.</remarks>
-		internal void GotoDiffCell()
+		internal void GotoDiffed()
 		{
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
@@ -511,7 +511,7 @@ namespace yata
 							{
 								if ((sel = Table[r,c]).diff)
 								{
-									gotodiff(sel, table);
+									SelectDiffedCell(sel, table);
 									return;
 								}
 							}
@@ -523,7 +523,7 @@ namespace yata
 						{
 							if ((sel = Table[r,c]).diff)
 							{
-								gotodiff(sel, table);
+								SelectDiffedCell(sel, table);
 								return;
 							}
 						}
@@ -559,7 +559,7 @@ namespace yata
 							{
 								if ((sel = Table[r,c]).diff)
 								{
-									gotodiff(sel, table);
+									SelectDiffedCell(sel, table);
 									return;
 								}
 							}
@@ -571,7 +571,7 @@ namespace yata
 						{
 							if ((sel = Table[r,c]).diff)
 							{
-								gotodiff(sel, table);
+								SelectDiffedCell(sel, table);
 								return;
 							}
 						}
@@ -582,11 +582,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Helper for <c><see cref="GotoDiffCell()">GotoDiffCell()</see></c>.
+		/// Helper for <c><see cref="GotoDiffed()">GotoDiffed()</see></c>.
 		/// </summary>
-		/// <param name="sel">a <c><see cref="Cell"/></c> in the current table</param>
-		/// <param name="table">the other <c><see cref="YataGrid"/></c></param>
-		static void gotodiff(Cell sel, YataGrid table)
+		/// <param name="sel">a <c><see cref="Cell"/></c> in the active
+		/// <c><see cref="YataGrid"/></c></param>
+		/// <param name="table">a sync'd <c>YataGrid</c> - can be <c>null</c></param>
+		static void SelectDiffedCell(Cell sel, YataGrid table)
 		{
 			Table.SelectCell(sel, false);
 

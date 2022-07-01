@@ -40,9 +40,14 @@ namespace yata
 		ToolStripMenuItem it_Search;
 		ToolStripMenuItem it_Searchnext;
 		ToolStripMenuItem it_Searchprev;
+		ToolStripMenuItem it_Replace;
+		ToolStripMenuItem it_GotoReplaced;
+		ToolStripMenuItem it_GotoReplaced_pre;
+		ToolStripMenuItem it_ClearReplaced;
 		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
 		ToolStripMenuItem it_GotoLoadchanged_pre;
+		ToolStripMenuItem it_ClearLoadchanged;
 		ToolStripMenuItem it_Defaultval;
 		ToolStripMenuItem it_Defaultclear;
 
@@ -133,6 +138,7 @@ namespace yata
 		ToolStripSeparator separator_2;
 		ToolStripSeparator separator_3;
 		ToolStripSeparator separator_4;
+		ToolStripSeparator separator_5;
 		ToolStripSeparator separator_7;
 		ToolStripSeparator separator_8;
 		ToolStripSeparator separator_9;
@@ -263,11 +269,17 @@ namespace yata
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchprev = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_5 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Replace = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_GotoReplaced = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_GotoReplaced_pre = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClearReplaced = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_39 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged_pre = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_ClearLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_37 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Defaultval = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Defaultclear = new System.Windows.Forms.ToolStripMenuItem();
@@ -604,11 +616,17 @@ namespace yata
 			this.it_Search,
 			this.it_Searchnext,
 			this.it_Searchprev,
+			this.separator_5,
+			this.it_Replace,
+			this.it_GotoReplaced,
+			this.it_GotoReplaced_pre,
+			this.it_ClearReplaced,
 			this.separator_3,
 			this.it_Goto,
 			this.separator_39,
 			this.it_GotoLoadchanged,
 			this.it_GotoLoadchanged_pre,
+			this.it_ClearLoadchanged,
 			this.separator_37,
 			this.it_Defaultval,
 			this.it_Defaultclear});
@@ -681,6 +699,42 @@ namespace yata
 			this.it_Searchprev.Text = "Find &pre";
 			this.it_Searchprev.Click += new System.EventHandler(this.editclick_StartSearch);
 			// 
+			// separator_5
+			// 
+			this.separator_5.Name = "separator_5";
+			this.separator_5.Size = new System.Drawing.Size(277, 6);
+			// 
+			// it_Replace
+			// 
+			this.it_Replace.Name = "it_Replace";
+			this.it_Replace.Size = new System.Drawing.Size(280, 22);
+			this.it_Replace.Text = "Replace text ...";
+			this.it_Replace.Click += new System.EventHandler(this.editclick_ReplaceText);
+			// 
+			// it_GotoReplaced
+			// 
+			this.it_GotoReplaced.Enabled = false;
+			this.it_GotoReplaced.Name = "it_GotoReplaced";
+			this.it_GotoReplaced.Size = new System.Drawing.Size(280, 22);
+			this.it_GotoReplaced.Text = "Goto replaced next";
+			this.it_GotoReplaced.Click += new System.EventHandler(this.editclick_GotoReplaced);
+			// 
+			// it_GotoReplaced_pre
+			// 
+			this.it_GotoReplaced_pre.Enabled = false;
+			this.it_GotoReplaced_pre.Name = "it_GotoReplaced_pre";
+			this.it_GotoReplaced_pre.Size = new System.Drawing.Size(280, 22);
+			this.it_GotoReplaced_pre.Text = "Goto replaced pre";
+			this.it_GotoReplaced_pre.Click += new System.EventHandler(this.editclick_GotoReplaced);
+			// 
+			// it_ClearReplaced
+			// 
+			this.it_ClearReplaced.Enabled = false;
+			this.it_ClearReplaced.Name = "it_ClearReplaced";
+			this.it_ClearReplaced.Size = new System.Drawing.Size(280, 22);
+			this.it_ClearReplaced.Text = "Clear replaced";
+			this.it_ClearReplaced.Click += new System.EventHandler(this.editclick_ClearReplaced);
+			// 
 			// separator_3
 			// 
 			this.separator_3.Name = "separator_3";
@@ -692,7 +746,7 @@ namespace yata
 			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
 			this.it_Goto.Size = new System.Drawing.Size(280, 22);
 			this.it_Goto.Text = "&Goto";
-			this.it_Goto.Click += new System.EventHandler(this.editclick_FocusGoto);
+			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
 			// 
 			// separator_39
 			// 
@@ -705,8 +759,8 @@ namespace yata
 			this.it_GotoLoadchanged.Name = "it_GotoLoadchanged";
 			this.it_GotoLoadchanged.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.it_GotoLoadchanged.Size = new System.Drawing.Size(280, 22);
-			this.it_GotoLoadchanged.Text = "Goto loadcha&nged";
-			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editcellsclick_GotoLoadchanged);
+			this.it_GotoLoadchanged.Text = "Goto loadcha&nged next";
+			this.it_GotoLoadchanged.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
 			// 
 			// it_GotoLoadchanged_pre
 			// 
@@ -716,7 +770,15 @@ namespace yata
 			| System.Windows.Forms.Keys.N)));
 			this.it_GotoLoadchanged_pre.Size = new System.Drawing.Size(280, 22);
 			this.it_GotoLoadchanged_pre.Text = "Goto lo&adchanged pre";
-			this.it_GotoLoadchanged_pre.Click += new System.EventHandler(this.editcellsclick_GotoLoadchanged);
+			this.it_GotoLoadchanged_pre.Click += new System.EventHandler(this.editclick_GotoLoadchanged);
+			// 
+			// it_ClearLoadchanged
+			// 
+			this.it_ClearLoadchanged.Enabled = false;
+			this.it_ClearLoadchanged.Name = "it_ClearLoadchanged";
+			this.it_ClearLoadchanged.Size = new System.Drawing.Size(280, 22);
+			this.it_ClearLoadchanged.Text = "Clear loadchanged";
+			this.it_ClearLoadchanged.Click += new System.EventHandler(this.editclick_ClearLoadchanged);
 			// 
 			// separator_37
 			// 
@@ -1022,7 +1084,7 @@ namespace yata
 			this.cb_SearchOption.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cb_SearchOption.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.cb_SearchOption.Name = "cb_SearchOption";
-			this.cb_SearchOption.Size = new System.Drawing.Size(100, 18);
+			this.cb_SearchOption.Size = new System.Drawing.Size(77, 18);
 			// 
 			// it_MenuClipboard
 			// 
@@ -1265,7 +1327,6 @@ namespace yata
 			this.it_PathSkills2da,
 			this.it_PathSpells2da,
 			this.it_PathSpellTarget2da});
-			
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);

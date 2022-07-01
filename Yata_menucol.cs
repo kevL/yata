@@ -188,6 +188,7 @@ namespace yata
 			Table.FrozenCount = YataGrid.FreezeId;
 
 			Table.ClearSelects();
+			Table.ClearReplaced();
 			Table.ClearLoadchanged();
 
 			tabclick_DiffReset(null, EventArgs.Empty);
