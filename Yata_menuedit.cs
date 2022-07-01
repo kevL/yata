@@ -496,7 +496,7 @@ namespace yata
 			}
 			else if (Table != null && Settings._instantgoto)
 			{
-				Table.doGoto(tb_Goto.Text, false); // NOTE: Text is checked for validity in doGoto().
+				Table.Goto(tb_Goto.Text, false); // NOTE: Text is checked for validity in Goto().
 			}
 		}
 

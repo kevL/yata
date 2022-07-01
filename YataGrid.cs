@@ -1900,7 +1900,7 @@ namespace yata
 		/// <param name="text">a <c>string</c> to parse for a row-id</param>
 		/// <param name="select"><c>true</c> to <c>Select()</c> this
 		/// <c>YataGrid</c></param>
-		internal void doGoto(string text, bool @select)
+		internal void Goto(string text, bool @select)
 		{
 			int selr;
 			if (Int32.TryParse(text, out selr)
@@ -1911,7 +1911,9 @@ namespace yata
 				SelectRow(selr);
 				EnsureDisplayedRow(selr);
 
-				int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+				int invalid = INVALID_GRID
+							| INVALID_FROZ
+							| INVALID_ROWS;
 				if (Propanel != null && Propanel.Visible)
 					invalid |= INVALID_PROP;
 

@@ -271,7 +271,7 @@ namespace yata
 					break;
 
 				case DONTBEEP_GOTO:
-					Table.doGoto(tb_Goto.Text, true);
+					Table.Goto(tb_Goto.Text, true);
 					break;
 			}
 		}
