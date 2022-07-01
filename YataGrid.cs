@@ -474,7 +474,7 @@ namespace yata
 		#endregion eventhandler Resize
 
 
-		#region Select
+		#region Select (setters)
 		/// <summary>
 		/// Clears all <c><see cref="Cell">Cells</see></c>/
 		/// <c><see cref="Row">Rows</see></c>/
@@ -709,7 +709,151 @@ namespace yata
 
 			Invalidator(invalid);
 		}
-		#endregion Select
+		#endregion Select (setters)
+
+
+		#region Select (getters)
+		/// <summary>
+		/// Checks if only one <c><see cref="Cell"/></c> is currently selected
+		/// and returns it if so.
+		/// </summary>
+		/// <returns>the only <c>Cell</c> selected, else <c>null</c> if none or
+		/// more than one is selected</returns>
+		internal Cell getSelectedCell()
+		{
+			Cell cell0 = null;
+
+			Cell cell;
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if ((cell = row[c]).selected)
+				{
+					if (cell0 != null)
+						return null;
+
+					cell0 = cell;
+				}
+			}
+			return cell0;
+		}
+
+		/// <summary>
+		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
+		/// <c>null</c>.
+		/// </summary>
+		/// <param name="strt_c">start col-id usually either 0 (includes frozen
+		/// cols) or <c><see cref="FrozenCount"/></c></param>
+		/// <returns>the first <c>Cell</c> found else <c>null</c></returns>
+		internal Cell getFirstSelectedCell(int strt_c = 0)
+		{
+			Cell sel;
+
+			foreach (var row in Rows)
+			for (int c = strt_c; c != ColCount; ++c)
+				if ((sel = row[c]).selected)
+					return sel;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>.
+		/// </summary>
+		/// <returns>the currently selected row-id; <c>-1</c> if no <c>Row</c>
+		/// is currently selected</returns>
+		internal int getSelectedRow()
+		{
+			for (int r = 0; r != RowCount; ++r)
+			if (Rows[r].selected)
+				return r;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>
+		/// or a row-id that has <c><see cref="Cell">Cells</see></c> selected
+		/// iff only that <c>Row</c> has <c>Cells</c> selected.
+		/// </summary>
+		/// <param name="only"><c>true</c> if a <c>Row</c> is selected and you
+		/// want to get that row-id only if it's the only <c>Row</c> with
+		/// selected <c>Cells</c> - otherwise a selected <c>Row's</c> id shall
+		/// be returned even though there can be <c>Cells</c> that are selected
+		/// on another <c>Row</c></param>
+		/// <returns>the currently selected row-id or the row-id that has
+		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is applicable</returns>
+		internal int getSelectedRowOrCells(bool only = false)
+		{
+			int selr = getSelectedRow();
+			if (selr == -1 || only)
+			{
+				Cell sel = getFirstSelectedCell();
+				if (sel != null)
+				{
+					selr = sel.y;
+
+					for (int r = sel.y + 1; r != RowCount; ++r)
+					for (int c = 0;         c != ColCount; ++c)
+						if (this[r,c].selected)
+							return -1;
+				}
+			}
+			return selr;
+		}
+
+		/// <summary>
+		/// Gets the col-id of the currently selected <c><see cref="Col"/></c>.
+		/// </summary>
+		/// <returns>the currently selected col-id; <c>-1</c> if no col is
+		/// currently selected</returns>
+		internal int getSelectedCol()
+		{
+			for (int c = 0; c != ColCount; ++c)
+			if (Cols[c].selected)
+				return c;
+
+			return -1;
+		}
+
+
+		/// <summary>
+		/// Checks if any <c><see cref="Cell"/></c> is currently selected.
+		/// </summary>
+		/// <returns><c>true</c> if a <c>Cell</c> is selected</returns>
+		internal bool anyCellSelected()
+		{
+			foreach (var row in Rows)
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (row[c].selected)
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Checks if any <c><see cref="Cell"/></c>/ <c><see cref="Row"/></c>/
+		/// <c><see cref="Col"/></c> is currently selected.
+		/// </summary>
+		/// <returns><c>true</c> if a <c>Cell</c>/ <c>Row</c>/ <c>Col</c> is
+		/// selected</returns>
+		internal bool anySelected()
+		{
+			foreach (var row in Rows)
+			{
+				if (row.selected)
+					return true;
+
+				for (int c = 0; c != ColCount; ++c)
+				{
+					if (Cols[c].selected || row[c].selected)
+						return true;
+				}
+			}
+			return false;
+		}
+		#endregion Select (getters)
 
 
 		#region editresult
@@ -1196,150 +1340,6 @@ namespace yata
 			sb.Append('"');
 		}
 		#endregion editresult
-
-
-		#region Select getters
-		/// <summary>
-		/// Checks if only one <c><see cref="Cell"/></c> is currently selected
-		/// and returns it if so.
-		/// </summary>
-		/// <returns>the only <c>Cell</c> selected, else <c>null</c> if none or
-		/// more than one is selected</returns>
-		internal Cell getSelectedCell()
-		{
-			Cell cell0 = null;
-
-			Cell cell;
-			foreach (var row in Rows)
-			for (int c = 0; c != ColCount; ++c)
-			{
-				if ((cell = row[c]).selected)
-				{
-					if (cell0 != null)
-						return null;
-
-					cell0 = cell;
-				}
-			}
-			return cell0;
-		}
-
-		/// <summary>
-		/// Gets the first selected <c><see cref="Cell"/></c> in the table else
-		/// <c>null</c>.
-		/// </summary>
-		/// <param name="strt_c">start col-id usually either 0 (includes frozen
-		/// cols) or <c><see cref="FrozenCount"/></c></param>
-		/// <returns>the first <c>Cell</c> found else <c>null</c></returns>
-		internal Cell getFirstSelectedCell(int strt_c = 0)
-		{
-			Cell sel;
-
-			foreach (var row in Rows)
-			for (int c = strt_c; c != ColCount; ++c)
-				if ((sel = row[c]).selected)
-					return sel;
-
-			return null;
-		}
-
-		/// <summary>
-		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>.
-		/// </summary>
-		/// <returns>the currently selected row-id; <c>-1</c> if no <c>Row</c>
-		/// is currently selected</returns>
-		internal int getSelectedRow()
-		{
-			for (int r = 0; r != RowCount; ++r)
-			if (Rows[r].selected)
-				return r;
-
-			return -1;
-		}
-
-		/// <summary>
-		/// Gets the row-id of the currently selected <c><see cref="Row"/></c>
-		/// or a row-id that has <c><see cref="Cell">Cells</see></c> selected
-		/// iff only that <c>Row</c> has <c>Cells</c> selected.
-		/// </summary>
-		/// <param name="only"><c>true</c> if a <c>Row</c> is selected and you
-		/// want to get that row-id only if it's the only <c>Row</c> with
-		/// selected <c>Cells</c> - otherwise a selected <c>Row's</c> id shall
-		/// be returned even though there can be <c>Cells</c> that are selected
-		/// on another <c>Row</c></param>
-		/// <returns>the currently selected row-id or the row-id that has
-		/// selected <c>Cells</c>; <c>-1</c> if no <c>Row</c> is applicable</returns>
-		internal int getSelectedRowOrCells(bool only = false)
-		{
-			int selr = getSelectedRow();
-			if (selr == -1 || only)
-			{
-				Cell sel = getFirstSelectedCell();
-				if (sel != null)
-				{
-					selr = sel.y;
-
-					for (int r = sel.y + 1; r != RowCount; ++r)
-					for (int c = 0;         c != ColCount; ++c)
-						if (this[r,c].selected)
-							return -1;
-				}
-			}
-			return selr;
-		}
-
-		/// <summary>
-		/// Gets the col-id of the currently selected <c><see cref="Col"/></c>.
-		/// </summary>
-		/// <returns>the currently selected col-id; <c>-1</c> if no col is
-		/// currently selected</returns>
-		internal int getSelectedCol()
-		{
-			for (int c = 0; c != ColCount; ++c)
-			if (Cols[c].selected)
-				return c;
-
-			return -1;
-		}
-
-
-		/// <summary>
-		/// Checks if any <c><see cref="Cell"/></c> is currently selected.
-		/// </summary>
-		/// <returns><c>true</c> if a <c>Cell</c> is selected</returns>
-		internal bool anyCellSelected()
-		{
-			foreach (var row in Rows)
-			for (int c = 0; c != ColCount; ++c)
-			{
-				if (row[c].selected)
-					return true;
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// Checks if any <c><see cref="Cell"/></c>/ <c><see cref="Row"/></c>/
-		/// <c><see cref="Col"/></c> is currently selected.
-		/// </summary>
-		/// <returns><c>true</c> if a <c>Cell</c>/ <c>Row</c>/ <c>Col</c> is
-		/// selected</returns>
-		internal bool anySelected()
-		{
-			foreach (var row in Rows)
-			{
-				if (row.selected)
-					return true;
-
-				for (int c = 0; c != ColCount; ++c)
-				{
-					if (Cols[c].selected || row[c].selected)
-						return true;
-				}
-			}
-			return false;
-		}
-		#endregion Select getters
 
 
 		#region replaced
