@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -38,7 +39,7 @@ namespace yata
 			DateTime dt = Assembly.GetExecutingAssembly().GetLinkerTime(true);
 
 			ver += Environment.NewLine + Environment.NewLine
-				 + String.Format(System.Globalization.CultureInfo.CurrentCulture,
+				 + String.Format(CultureInfo.CurrentCulture,
 								 "{0:yyyy MMM d}  {0:HH}:{0:mm}:{0:ss} UTC", // {0:zzz}
 								 dt);
 
