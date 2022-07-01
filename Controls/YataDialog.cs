@@ -39,18 +39,18 @@ namespace yata
 		/// Do not respect Telemetry. Location and Size is detered by the
 		/// derived class.
 		/// </summary>
-		internal const int METRIC_NON = 0;
+		protected const int METRIC_NON = 0;
 
 		/// <summary>
 		/// Respect only location Telemetry. Size is detered by the derived
 		/// class.
 		/// </summary>
-		internal const int METRIC_LOC = 1;
+		protected const int METRIC_LOC = 1;
 
 		/// <summary>
 		/// Respect both location and size Telemetry.
 		/// </summary>
-		internal const int METRIC_FUL = 2;
+		protected const int METRIC_FUL = 2;
 		#endregion Fields
 
 
