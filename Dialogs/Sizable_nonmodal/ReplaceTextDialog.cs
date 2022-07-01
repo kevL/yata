@@ -679,6 +679,10 @@ namespace yata
 											+ " doing Replace All. If things screw up they can"
 											+ " screw up badly ... especially in large tables."))
 				{
+					// make Yata the owner of the warning Infobox when ReplaceAll
+					// is checked; else the dialog shows at the upper left corner
+					// of the screen when the dialog is closed and reopened (and
+					// ReplaceAll is checked)
 					ib.ShowDialog(_f);
 				}
 			}
