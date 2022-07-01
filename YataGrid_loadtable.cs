@@ -854,7 +854,7 @@ namespace yata
 			CreateRows();
 
 			FrozenPanel = new YataPanelFrozen(this, Cols[0].width());
-			initFrozenLabels();
+			InitializeFrozenLabels();
 
 			metricStaticHeads(_f);
 
@@ -1106,7 +1106,7 @@ namespace yata
 		/// <summary>
 		/// Initializes the frozen-labels on the colhead panel.
 		/// </summary>
-		void initFrozenLabels()
+		void InitializeFrozenLabels()
 		{
 			_labelid    .Visible =
 			_labelfirst .Visible =
