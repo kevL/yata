@@ -94,7 +94,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_FUL, true, true);
+			Initialize(METRIC_FUL, true, true);
 
 			tb_FontSize  .BackColor = Color.White;
 			tb_FontString.BackColor = Colors.TextboxBackground;

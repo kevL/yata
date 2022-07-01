@@ -97,7 +97,7 @@ namespace yata
 			MaximumSize = new Size(Int32.MaxValue, Height);
 			MinimumSize = new Size(         Width, Height);
 
-			Initialize(YataDialog.METRIC_FUL);
+			Initialize(METRIC_FUL);
 
 			switch (_searchtyp)
 			{

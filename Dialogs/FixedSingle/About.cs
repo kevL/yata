@@ -22,7 +22,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_LOC);
+			Initialize(METRIC_LOC);
 
 			AssemblyName an = Assembly.GetExecutingAssembly().GetName();
 			string ver = "Ver "

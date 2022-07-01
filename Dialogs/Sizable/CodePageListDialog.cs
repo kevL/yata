@@ -25,7 +25,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_FUL);
+			Initialize(METRIC_FUL);
 
 			var sb = new StringBuilder();
 

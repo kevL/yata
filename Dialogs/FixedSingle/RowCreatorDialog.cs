@@ -50,7 +50,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_LOC, true);
+			Initialize(METRIC_LOC, true);
 
 			if (r != -1)
 			{

@@ -22,7 +22,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_FUL);
+			Initialize(METRIC_FUL);
 
 			string head = "The 2da file appears to have ANSI encoding."
 						+ " Please enter the codepage of its text.";

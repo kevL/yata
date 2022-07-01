@@ -97,7 +97,7 @@ namespace yata
 			_f = (_grid = grid)._f; // 'YataDialog._f' is used only to set UI parameters.
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_NON);
+			Initialize(METRIC_NON);
 
 			string text = String.Empty;
 			switch (_fwdType = fwdType)

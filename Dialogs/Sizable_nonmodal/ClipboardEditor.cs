@@ -53,7 +53,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_FUL);
+			Initialize(METRIC_FUL);
 
 			switch (_current)
 			{

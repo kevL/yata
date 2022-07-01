@@ -63,7 +63,7 @@ namespace yata
 			_selc = selc;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_FUL);
+			Initialize(METRIC_FUL);
 
 			if (_selc != DEFVAL)
 			{

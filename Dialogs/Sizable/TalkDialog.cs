@@ -49,7 +49,7 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(YataDialog.METRIC_LOC);
+			Initialize(METRIC_LOC);
 
 			string strref = cell.text;
 			if (strref == gs.Stars) strref = "0";
