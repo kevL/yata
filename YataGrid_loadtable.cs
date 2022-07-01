@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -30,6 +32,8 @@ namespace yata
 		/// directories to be groped.
 		/// </summary>
 		static bool Groped;
+
+		static int _heightColheadCached;
 		#endregion Fields (static)
 
 
@@ -1159,6 +1163,43 @@ namespace yata
 				}
 			}
 			_initFrozenLabels = false;
+		}
+
+		/// <summary>
+		/// Creates <c>LinearGradientBrushes</c> for
+		/// <list type="bullet">
+		/// <item><c><see cref="labelid_Paint()">labelid_Paint()</see></c></item>
+		/// <item><c><see cref="labelfirst_Paint()">labelfirst_Paint()</see></c></item>
+		/// <item><c><see cref="labelsecond_Paint()">labelsecond_Paint()</see></c></item>
+		/// </list>
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="_labelid"/></c></item>
+		/// <item><c><see cref="_labelfirst"/></c></item>
+		/// <item><c><see cref="_labelsecond"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void label_Resize(object sender, EventArgs e)
+		{
+			if (Settings._gradient && _heightColheadCached != HeightColhead)
+			{
+				_heightColheadCached = HeightColhead;
+
+				if (Gradients.FrozenLabel != null)
+					Gradients.FrozenLabel.Dispose();
+
+				Gradients.FrozenLabel = new LinearGradientBrush(new Point(0, 0),
+																new Point(0, HeightColhead),
+																Color.Cornsilk, Color.BurlyWood);
+
+				if (Gradients.Disordered != null)
+					Gradients.Disordered.Dispose();
+
+				Gradients.Disordered = new LinearGradientBrush(new Point(0, 0),
+															   new Point(0, HeightColhead),
+															   Color.LightCoral, Color.Lavender);
+			}
 		}
 		#endregion Methods (load)
 
