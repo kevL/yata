@@ -679,7 +679,7 @@ namespace yata
 											+ " doing Replace All. If things screw up they can"
 											+ " screw up badly ... especially in large tables."))
 				{
-					ib.ShowDialog(this);
+					ib.ShowDialog(_f);
 				}
 			}
 		}
