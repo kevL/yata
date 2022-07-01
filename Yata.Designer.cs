@@ -37,6 +37,7 @@ namespace yata
 		ToolStripMenuItem it_Undo;
 		ToolStripMenuItem it_Redo;
 		ToolStripMenuItem it_DeselectAll;
+		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_Search;
 		ToolStripMenuItem it_Searchnext;
 		ToolStripMenuItem it_Searchprev;
@@ -44,7 +45,6 @@ namespace yata
 		ToolStripMenuItem it_GotoReplaced;
 		ToolStripMenuItem it_GotoReplaced_pre;
 		ToolStripMenuItem it_ClearReplaced;
-		ToolStripMenuItem it_Goto;
 		ToolStripMenuItem it_GotoLoadchanged;
 		ToolStripMenuItem it_GotoLoadchanged_pre;
 		ToolStripMenuItem it_ClearLoadchanged;
@@ -266,6 +266,8 @@ namespace yata
 			this.separator_35 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_DeselectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_18 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_39 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Search = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchnext = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Searchprev = new System.Windows.Forms.ToolStripMenuItem();
@@ -275,8 +277,6 @@ namespace yata
 			this.it_GotoReplaced_pre = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ClearReplaced = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_Goto = new System.Windows.Forms.ToolStripMenuItem();
-			this.separator_39 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_GotoLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_GotoLoadchanged_pre = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_ClearLoadchanged = new System.Windows.Forms.ToolStripMenuItem();
@@ -613,6 +613,8 @@ namespace yata
 			this.separator_35,
 			this.it_DeselectAll,
 			this.separator_18,
+			this.it_Goto,
+			this.separator_39,
 			this.it_Search,
 			this.it_Searchnext,
 			this.it_Searchprev,
@@ -622,8 +624,6 @@ namespace yata
 			this.it_GotoReplaced_pre,
 			this.it_ClearReplaced,
 			this.separator_3,
-			this.it_Goto,
-			this.separator_39,
 			this.it_GotoLoadchanged,
 			this.it_GotoLoadchanged_pre,
 			this.it_ClearLoadchanged,
@@ -672,6 +672,19 @@ namespace yata
 			// 
 			this.separator_18.Name = "separator_18";
 			this.separator_18.Size = new System.Drawing.Size(277, 6);
+			// 
+			// it_Goto
+			// 
+			this.it_Goto.Name = "it_Goto";
+			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.it_Goto.Size = new System.Drawing.Size(280, 22);
+			this.it_Goto.Text = "&Goto";
+			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
+			// 
+			// separator_39
+			// 
+			this.separator_39.Name = "separator_39";
+			this.separator_39.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_Search
 			// 
@@ -739,19 +752,6 @@ namespace yata
 			// 
 			this.separator_3.Name = "separator_3";
 			this.separator_3.Size = new System.Drawing.Size(277, 6);
-			// 
-			// it_Goto
-			// 
-			this.it_Goto.Name = "it_Goto";
-			this.it_Goto.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.it_Goto.Size = new System.Drawing.Size(280, 22);
-			this.it_Goto.Text = "&Goto";
-			this.it_Goto.Click += new System.EventHandler(this.editclick_Goto);
-			// 
-			// separator_39
-			// 
-			this.separator_39.Name = "separator_39";
-			this.separator_39.Size = new System.Drawing.Size(277, 6);
 			// 
 			// it_GotoLoadchanged
 			// 
