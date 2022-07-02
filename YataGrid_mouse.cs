@@ -882,7 +882,7 @@ namespace yata
 				switch (e.Button)
 				{
 					case MouseButtons.Left:
-						if ((click_c = getClickedCol(e.X)) != -1)
+						if ((click_c = GetClickedCol(e.X)) != -1)
 						{
 							// get the sync-table if one exists
 							YataGrid table;
@@ -1042,7 +1042,7 @@ namespace yata
 					case MouseButtons.Right:
 						if (ModifierKeys == Keys.Shift) // sort by col ->
 						{
-							if ((click_c = getClickedCol(e.X)) != -1)
+							if ((click_c = GetClickedCol(e.X)) != -1)
 //								&& _panelCols.GetSplitterCol(e.X) == -1	// this is no longer needed since [Shift] is disallowed for
 							{											// resetting the col-width in YataPanelCols.OnMouseDown()
 								ColSort(click_c);
@@ -1071,7 +1071,7 @@ namespace yata
 		/// </summary>
 		/// <param name="x"></param>
 		/// <returns>col-id or <c>-1</c> if out of bounds</returns>
-		int getClickedCol(int x)
+		int GetClickedCol(int x)
 		{
 			x += OffsetHori;
 
