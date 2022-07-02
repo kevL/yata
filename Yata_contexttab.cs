@@ -219,13 +219,8 @@ namespace yata
 			_diff1.InitScroll();
 			_diff2.InitScroll();
 
-			YataGrid table;
-			if      (_diff1 == Table) table = _diff1;
-			else if (_diff2 == Table) table = _diff2;
-			else                      table = null;
-
-			if (table != null)
-				table.Invalidator(YataGrid.INVALID_GRID);
+//			if (_diff1 == Table || _diff2 == Table) // will always be true
+			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 		}
 		#endregion Handlers (tab)
 
