@@ -439,14 +439,6 @@ namespace yata
 		{
 			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
-				if (WindowState == FormWindowState.Minimized)
-					WindowState  = FormWindowState.Normal;
-				else
-				{
-					TopMost = true;
-					TopMost = false;
-				}
-
 				bool bypassFocus = (ModifierKeys & Keys.Control) == Keys.Control;
 				if (bypassFocus) _fdiffer.Activate();
 
