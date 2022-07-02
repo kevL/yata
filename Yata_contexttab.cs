@@ -564,8 +564,8 @@ namespace yata
 						}
 					}
 				}
+				_fdiffer.EnableGotoButton(false);
 			}
-			_fdiffer.EnableGotoButton(false);
 		}
 
 		/// <summary>
