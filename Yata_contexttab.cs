@@ -191,9 +191,9 @@ namespace yata
 		/// </list></remarks>
 		void tabclick_DiffSync(object sender, EventArgs e)
 		{
-			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			int w1, w2;
 
+			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			for (int c = 0; c != cols; ++c)
 			{
 				w1 = _diff1.Cols[c].width();
