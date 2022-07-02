@@ -532,7 +532,7 @@ namespace yata
 		/// <item><c><see cref="ReplaceTextDialog"/>.Search()</c></item>
 		/// <item><c><see cref="YataGrid.GotoReplaced()">YataGrid.GotoReplaced()</see></c></item>
 		/// <item><c><see cref="YataGrid.GotoLoadchanged()">YataGrid.GotoLoadchanged()</see></c></item>
-		/// <item><c>Yata.SelectDiffedCell()</c></item>
+		/// <item><c>Yata.SelectDiffCell()</c></item>
 		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
 		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
