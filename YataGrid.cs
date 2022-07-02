@@ -1346,7 +1346,7 @@ namespace yata
 		/// Checks if any <c><see cref="Cell"/></c> is currently
 		/// <c><see cref="Cell.replaced">Cell.replaced</see></c>.
 		/// </summary>
-		/// <returns><c>true</c> if a <c>Cell</c> is replaced</returns>
+		/// <returns><c>true</c> if a <c>Cell</c> is <c>replaced</c></returns>
 		internal bool anyReplaced()
 		{
 			foreach (var row in Rows)
@@ -1532,7 +1532,7 @@ namespace yata
 		/// Checks if any <c><see cref="Cell"/></c> is currently
 		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c>.
 		/// </summary>
-		/// <returns><c>true</c> if a <c>Cell</c> is loadchanged</returns>
+		/// <returns><c>true</c> if a <c>Cell</c> is <c>loadchanged</c></returns>
 		internal bool anyLoadchanged()
 		{
 			foreach (var row in Rows)
