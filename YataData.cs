@@ -42,7 +42,7 @@ namespace yata
 		/// decrease if it's less wide than the current width (but not if it's
 		/// less wide than the colhead's width). Hence the
 		/// <paramref name="allowDecrease"/> parameter.</remarks>
-		internal void width(int w, bool allowDecrease = false)
+		internal void SetWidth(int w, bool allowDecrease = false)
 		{
 			if (allowDecrease || w > Width)
 				Width = w;

@@ -206,7 +206,7 @@ namespace yata
 
 				if ((colwidth += _padHori * 2) > totalwidth)
 				{
-					col.width(colwidth);
+					col.SetWidth(colwidth);
 				}
 				else if (colwidth < totalwidth) // recalc width on the entire col
 				{
@@ -220,7 +220,7 @@ namespace yata
 						if (widthtext > colwidth)
 							colwidth = widthtext;
 					}
-					col.width(colwidth, true);
+					col.SetWidth(colwidth, true);
 				}
 
 				if (range == 0 && totalwidth != colwidth)	// if range >0 let Calibrate() handle multiple

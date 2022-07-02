@@ -32,7 +32,7 @@ namespace yata
 					var col = new Col();
 					col.text = InputDialog._colabel;
 					col._widthtext = YataGraphics.MeasureWidth(col.text, _f.FontAccent);
-					col.width(col._widthtext + _padHori * 2 + _padHoriSort);
+					col.SetWidth(col._widthtext + _padHori * 2 + _padHoriSort);
 					col.selected = true;
 
 					Cols.Insert(i + 1, col);
@@ -71,7 +71,7 @@ namespace yata
 			Fields = fields;
 
 			int w = _wStars + _padHori * 2;
-			if (w > Cols[++selc].Width) Cols[selc].width(w);
+			if (w > Cols[++selc].Width) Cols[selc].SetWidth(w);
 
 			InitScroll();
 			EnsureDisplayedCol(selc);

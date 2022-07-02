@@ -199,8 +199,8 @@ namespace yata
 				w1 = _diff1.Cols[c].Width;
 				w2 = _diff2.Cols[c].Width;
 
-				if      (w1 > w2) _diff2.Cols[c].width(w1, true);
-				else if (w2 > w1) _diff1.Cols[c].width(w2, true);
+				if      (w1 > w2) _diff2.Cols[c].SetWidth(w1, true);
+				else if (w2 > w1) _diff1.Cols[c].SetWidth(w2, true);
 			}
 
 			cols = Math.Min(YataGrid.FreezeSecond, _diff1.ColCount);

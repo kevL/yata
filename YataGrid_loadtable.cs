@@ -901,7 +901,7 @@ namespace yata
 				widthtext = YataGraphics.MeasureWidth(head, _f.FontAccent);
 				Cols[c]._widthtext = widthtext;
 
-				Cols[c].width(widthtext + _padHori * 2 + _padHoriSort, rewidthOnly);
+				Cols[c].SetWidth(widthtext + _padHori * 2 + _padHoriSort, rewidthOnly);
 			}
 		}
 
@@ -978,7 +978,7 @@ namespace yata
 
 					if ((wT += _padHori * 2) > w) w = wT;
 				}
-				Cols[c].width(w);
+				Cols[c].SetWidth(w);
 			}
 
 

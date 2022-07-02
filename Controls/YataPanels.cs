@@ -263,7 +263,7 @@ namespace yata
 					int w = col.Width + e.X - _grabPos;
 					if (w < YataGrid._wId) w = YataGrid._wId;
 
-					col.width(w, true);
+					col.SetWidth(w, true);
 					_grid.InitScroll();
 					_grid.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_COLS);
 				}
