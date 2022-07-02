@@ -50,28 +50,6 @@ namespace yata
 		/// <c>ToolStripTextBox</c> from reselecting all text ...
 		/// </summary>
 		internal bool IsTabbed_goto;
-
-		/// <summary>
-		/// A <c>string</c> to search for.
-		/// </summary>
-		/// <remarks>The value is set in
-		/// <c><see cref="Search()">Search()</see></c>.</remarks>
-		string _search;
-
-		/// <summary>
-		/// A <c>string</c> of text to match against
-		/// <c><see cref="_search"/></c>.
-		/// </summary>
-		/// <remarks>The value is set in
-		/// <c><see cref="SearchResult()">SearchResult()</see></c>.</remarks>
-		string _text;
-
-		/// <summary>
-		/// <c>true</c> to search for a subfield instead of a wholefield.
-		/// </summary>
-		/// <remarks>The value is set in
-		/// <c><see cref="Search()">Search()</see></c>.</remarks>
-		bool _substr;
 		#endregion Fields
 
 
@@ -247,7 +225,9 @@ namespace yata
 			// bypassed if the editor is open - see YataEditbox.OnPreviewKeyDown().
 
 			IsSearch = true;
-			Search(sender == it_Searchnext); // [F3] shall not force the Table focused.
+			Table.Search(tb_Search.Text, // [F3] shall not force the Table focused.
+						 cb_SearchOption.SelectedIndex == 0,
+						 sender == it_Searchnext);
 			IsSearch = false;
 		}
 
@@ -261,169 +241,13 @@ namespace yata
 		void Search_keyEnter()
 		{
 			IsSearch = true;
-			if (Search((ModifierKeys & Keys.Shift) == Keys.None))
-				Table.Select();
-
-			IsSearch = false;
-		}
-
-		/// <summary>
-		/// Searches the current table for the text in the search-box.
-		/// </summary>
-		/// <param name="forward"></param>
-		/// <returns><c>true</c> if a match is found</returns>
-		/// <remarks>Ensure that <c><see cref="Table"/></c> is valid before
-		/// call.</remarks>
-		/// <seealso cref="ReplaceTextDialog"><c>ReplaceTextDialog.Search()</c></seealso>
-		internal bool Search(bool forward)
-		{
-			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
+			if (Table.Search(tb_Search.Text,
+							 cb_SearchOption.SelectedIndex == 0,
+							 (ModifierKeys & Keys.Shift) == Keys.None))
 			{
-				if ((_search = tb_Search.Text).Length != 0)
-				{
-					_search = _search.ToUpperInvariant();
-
-					Cell sel = Table.getSelectedCell();
-					int selr = Table.getSelectedRow();
-
-					Table.ClearSelects();
-					ClearSyncSelects();
-
-
-					_substr = (cb_SearchOption.SelectedIndex == 0); // else is Wholefield search.
-
-					bool start = true;
-
-					int r,c;
-
-					if (forward) // forward ->
-					{
-						if (sel != null) { c = sel.x; selr = sel.y; }
-						else
-						{
-							c = -1;
-							if (selr == -1) selr = 0;
-						}
-
-						for (r = selr; r != Table.RowCount; ++r)
-						{
-							if (start)
-							{
-								start = false;
-								if (++c == Table.ColCount)		// if starting on the last cell of a row
-								{
-									c = 0;
-
-									if (r < Table.RowCount - 1)	// jump to the first cell of the next row
-										++r;
-									else						// or to the top of the table if on the last row
-										r = 0;
-								}
-							}
-							else
-								c = 0;
-
-							for (; c != Table.ColCount; ++c)
-							{
-								if (c != 0 && SearchResult(r,c)) // don't search the id-col
-								{
-									Table.SelectCell(Table[r,c]);
-									return true;
-								}
-							}
-						}
-
-						// TODO: tighten exact start/end-cells
-						for (r = 0; r != selr + 1;       ++r) // quick and dirty wrap ->
-						for (c = 0; c != Table.ColCount; ++c)
-						{
-							if (c != 0 && SearchResult(r,c)) // don't search the id-col
-							{
-								Table.SelectCell(Table[r,c]);
-								return true;
-							}
-						}
-					}
-					else // backward ->
-					{
-						if (sel != null) { c = sel.x; selr = sel.y; }
-						else
-						{
-							c = Table.ColCount;
-							if (selr == -1) selr = Table.RowCount - 1;
-						}
-
-						for (r = selr; r != -1; --r)
-						{
-							if (start)
-							{
-								start = false;
-								if (--c == -1)	// if starting on the first cell of a row
-								{
-									c = Table.ColCount - 1;
-
-									if (r > 0)	// jump to the last cell of the previous row
-										--r;
-									else		// or to the bottom of the table if on the first row
-										r = Table.RowCount - 1;
-								}
-							}
-							else
-								c = Table.ColCount - 1;
-
-							for (; c != -1; --c)
-							{
-								if (c != 0 && SearchResult(r,c)) // don't search the id-col
-								{
-									Table.SelectCell(Table[r,c]);
-									return true;
-								}
-							}
-						}
-
-						// TODO: tighten exact start/end-cells
-						for (r = Table.RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
-						for (c = Table.ColCount - 1; c != -1;       --c)
-						{
-							if (c != 0 && SearchResult(r,c)) // don't search the id-col
-							{
-								Table.SelectCell(Table[r,c]);
-								return true;
-							}
-						}
-					}
-
-					int invalid = YataGrid.INVALID_GRID
-								| YataGrid.INVALID_FROZ
-								| YataGrid.INVALID_ROWS
-								| YataGrid.INVALID_COLS;
-					if (Table.Propanel != null && Table.Propanel.Visible)
-						invalid |= YataGrid.INVALID_PROP;
-
-					Table.Invalidator(invalid);
-					Table.Update();
-				}
-
-				using (var ib = new Infobox(Infobox.Title_infor, "Search not found."))
-				{
-					ib.ShowDialog(this);
-				}
+				Table.Select();
 			}
-			return false;
-		}
-
-		/// <summary>
-		/// Helper for <c><see cref="Search()">Search()</see></c>
-		/// </summary>
-		/// <param name="r">row</param>
-		/// <param name="c">col</param>
-		/// <returns><c>true</c> if <c><see cref="_text"/></c> matches
-		/// <c><see cref="_search"/></c> - dependent on
-		/// <c><see cref="_substr"/></c></returns>
-		bool SearchResult(int r, int c)
-		{
-			return (_text = Table[r,c].text.ToUpperInvariant()) == _search
-				|| (_substr && _text.Contains(_search));
+			IsSearch = false;
 		}
 
 

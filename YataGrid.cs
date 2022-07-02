@@ -1892,6 +1892,7 @@ namespace yata
 		#endregion ensure displayed
 
 
+		#region Goto
 		/// <summary>
 		/// Performs a goto when the <c>[Enter]</c> key is pressed and focus is
 		/// on the goto-box.
@@ -1922,5 +1923,193 @@ namespace yata
 					Select();
 			}
 		}
+		#endregion Goto
+
+
+		#region Search
+		/// <summary>
+		/// A <c>string</c> to search for.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Search()">Search()</see></c>.</remarks>
+		string _search;
+
+		/// <summary>
+		/// <c>true</c> to search for a subfield instead of a wholefield.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="Search()">Search()</see></c>.</remarks>
+		bool _substr;
+
+		/// <summary>
+		/// A <c>string</c> of text to match against
+		/// <c><see cref="_search"/></c>.
+		/// </summary>
+		/// <remarks>The value is set in
+		/// <c><see cref="SearchResult()">SearchResult()</see></c>.</remarks>
+		string _text;
+
+
+		/// <summary>
+		/// Searches this <c>YataGrid</c> for the text in the search-box.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="substr"></param>
+		/// <param name="forward"></param>
+		/// <returns><c>true</c> if a match is found</returns>
+		/// <remarks>Ensure that <c><see cref="Yata.Table">Yata.Table</see></c>
+		/// is valid before call.</remarks>
+		/// <seealso cref="ReplaceTextDialog"><c>ReplaceTextDialog.Search()</c></seealso>
+		internal bool Search(string text, bool substr, bool forward)
+		{
+			if ((ModifierKeys & (Keys.Control | Keys.Alt)) == Keys.None)
+			{
+				if ((_search = text).Length != 0)
+				{
+					_search = _search.ToUpperInvariant();
+
+					Cell sel = getSelectedCell();
+					int selr = getSelectedRow();
+
+					ClearSelects();
+					_f.ClearSyncSelects();
+
+
+					_substr = substr; // else is Wholefield search.
+
+					bool start = true;
+
+					int r,c;
+
+					if (forward) // forward ->
+					{
+						if (sel != null) { c = sel.x; selr = sel.y; }
+						else
+						{
+							c = -1;
+							if (selr == -1) selr = 0;
+						}
+
+						for (r = selr; r != RowCount; ++r)
+						{
+							if (start)
+							{
+								start = false;
+								if (++c == ColCount)		// if starting on the last cell of a row
+								{
+									c = 0;
+
+									if (r < RowCount - 1)	// jump to the first cell of the next row
+										++r;
+									else					// or to the top of the table if on the last row
+										r = 0;
+								}
+							}
+							else
+								c = 0;
+
+							for (; c != ColCount; ++c)
+							{
+								if (c != 0 && SearchResult(r,c)) // don't search the id-col
+								{
+									SelectCell(this[r,c]);
+									return true;
+								}
+							}
+						}
+
+						// TODO: tighten exact start/end-cells
+						for (r = 0; r != selr + 1; ++r) // quick and dirty wrap ->
+						for (c = 0; c != ColCount; ++c)
+						{
+							if (c != 0 && SearchResult(r,c)) // don't search the id-col
+							{
+								SelectCell(this[r,c]);
+								return true;
+							}
+						}
+					}
+					else // backward ->
+					{
+						if (sel != null) { c = sel.x; selr = sel.y; }
+						else
+						{
+							c = ColCount;
+							if (selr == -1) selr = RowCount - 1;
+						}
+
+						for (r = selr; r != -1; --r)
+						{
+							if (start)
+							{
+								start = false;
+								if (--c == -1)	// if starting on the first cell of a row
+								{
+									c = ColCount - 1;
+
+									if (r > 0)	// jump to the last cell of the previous row
+										--r;
+									else		// or to the bottom of the table if on the first row
+										r = RowCount - 1;
+								}
+							}
+							else
+								c = ColCount - 1;
+
+							for (; c != -1; --c)
+							{
+								if (c != 0 && SearchResult(r,c)) // don't search the id-col
+								{
+									SelectCell(this[r,c]);
+									return true;
+								}
+							}
+						}
+
+						// TODO: tighten exact start/end-cells
+						for (r = RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+						for (c = ColCount - 1; c != -1;       --c)
+						{
+							if (c != 0 && SearchResult(r,c)) // don't search the id-col
+							{
+								SelectCell(this[r,c]);
+								return true;
+							}
+						}
+					}
+
+					int invalid = YataGrid.INVALID_GRID
+								| YataGrid.INVALID_FROZ
+								| YataGrid.INVALID_ROWS
+								| YataGrid.INVALID_COLS;
+					if (Propanel != null && Propanel.Visible)
+						invalid |= YataGrid.INVALID_PROP;
+
+					Invalidator(invalid);
+					Update();
+				}
+
+				using (var ib = new Infobox(Infobox.Title_infor, "Search not found."))
+				{
+					ib.ShowDialog(this);
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Helper for <c><see cref="Search()">Search()</see></c>
+		/// </summary>
+		/// <param name="r">row</param>
+		/// <param name="c">col</param>
+		/// <returns><c>true</c> if <c><see cref="_text"/></c> matches
+		/// <c><see cref="_search"/></c> - dependent on
+		/// <c><see cref="_substr"/></c></returns>
+		bool SearchResult(int r, int c)
+		{
+			return (_text = this[r,c].text.ToUpperInvariant()) == _search
+				|| (_substr && _text.Contains(_search));
+		}
+		#endregion Search
 	}
 }

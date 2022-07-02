@@ -176,7 +176,7 @@ namespace yata
 					// allow [F3] and [Shift+F3] to work if 'tb_Search' has focus ->
 					case Keys.F3:
 					case Keys.F3 | Keys.Shift:
-						if (Yata.that.tb_Search.Focused)
+						if (Yata.Table != null && Yata.that.tb_Search.Focused)
 						{
 							// latest in .NET newsflash: if the textbox has text
 							// then base.ProcessCmdKey() returns true; but if
@@ -191,7 +191,9 @@ namespace yata
 							// (false appears to invoke the routine twice).
 
 							Yata.that.IsSearch = true;
-							Yata.that.Search(keyData == Keys.F3);
+							Yata.Table.Search(Yata.that.tb_Search.Text,
+											  Yata.that.cb_SearchOption.SelectedIndex == 0,
+											  keyData == Keys.F3);
 							Yata.that.IsSearch = false;
 #if Keys
 							logfile.Log(". YataStrip.ProcessCmdKey force TRUE (Search)");
