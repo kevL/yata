@@ -102,9 +102,12 @@ namespace yata
 		/// </summary>
 		/// <param name="r1">the value of the reference to a 'Row'</param>
 		/// <param name="r2">the value of the reference to a 'Row'</param>
-		/// <returns>-1 first is first, second is second
-		///           0 identical
-		///           1 first is second, second is first</returns>
+		/// <returns>
+		/// <list type="bullet">
+		/// <item>-1 : first is first, second is second</item>
+		/// <item>0 : identical</item>
+		/// <item>1 : first is second, second is first</item>
+		/// </list></returns>
 		static int Sort(Row r1, Row r2)
 		{
 			_a = r1[_sortcol].text;
