@@ -71,7 +71,7 @@ namespace yata
 			Fields = fields;
 
 			int w = _wStars + _padHori * 2;
-			if (w > Cols[++selc].width()) Cols[selc].width(w);
+			if (w > Cols[++selc].Width) Cols[selc].width(w);
 
 			InitScroll();
 			EnsureDisplayedCol(selc);

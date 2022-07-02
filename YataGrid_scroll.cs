@@ -67,7 +67,7 @@ namespace yata
 
 				WidthTable = WidthRowhead;
 				for (int c = 0; c != ColCount; ++c)
-					WidthTable += Cols[c].width();
+					WidthTable += Cols[c].Width;
 
 				// NOTE: Height/Width *includes* the height/width of the relevant
 				// scrollbar(s) and panel(s).

@@ -913,13 +913,13 @@ namespace yata
 
 			rect.X = WidthRowhead - OffsetHori;
 			for (int c = 0; c != cell.x; ++c)
-				rect.X += Cols[c].width();
+				rect.X += Cols[c].Width;
 
 			rect.Y = HeightColhead - OffsetVert;
 			for (int r = 0; r != cell.y; ++r)
 				rect.Y += HeightRow;
 
-			rect.Width = Cols[cell.x].width();
+			rect.Width = Cols[cell.x].Width;
 			rect.Height = HeightRow;
 
 			return rect;
@@ -1851,9 +1851,9 @@ namespace yata
 		{
 			int posL = WidthRowhead - OffsetHori;
 			for (int c = 0; c != colid; ++c)
-				posL += Cols[c].width();
+				posL += Cols[c].Width;
 
-			int posR = posL + Cols[colid].width();
+			int posR = posL + Cols[colid].Width;
 
 			int left = getLeft();
 			if (posL != left)
@@ -1885,7 +1885,7 @@ namespace yata
 		{
 			int left = WidthRowhead;
 			for (int c = 0; c != FrozenCount; ++c)
-				left += Cols[c].width();
+				left += Cols[c].Width;
 
 			return left;
 		}

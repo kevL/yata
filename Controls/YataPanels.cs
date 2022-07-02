@@ -97,7 +97,7 @@ namespace yata
 			{
 				_widthFrozenCached = YataGrid.WidthRowhead;
 				for (int f = 0; f != _grid.FrozenCount; ++f)
-					_widthFrozenCached += _grid.Cols[f].width();
+					_widthFrozenCached += _grid.Cols[f].Width;
 			}
 
 			if (Settings._gradient)
@@ -260,7 +260,7 @@ namespace yata
 					Col col = _grid.Cols[_grabCol];
 					col.UserSized = true;
 
-					int w = col.width() + e.X - _grabPos;
+					int w = col.Width + e.X - _grabPos;
 					if (w < YataGrid._wId) w = YataGrid._wId;
 
 					col.width(w, true);
@@ -286,7 +286,7 @@ namespace yata
 				int x = YataGrid.WidthRowhead - _grid.OffsetHori;
 				for (int c = 0; c != _grid.ColCount; ++c)
 				{
-					if ((x += _grid.Cols[c].width()) - 5 > cur)
+					if ((x += _grid.Cols[c].Width) - 5 > cur)
 						break;
 
 					if (cur < x)

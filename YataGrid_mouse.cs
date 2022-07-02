@@ -339,7 +339,7 @@ namespace yata
 			var cords = new Point();
 
 			cords.X = FrozenCount;
-			while ((l += Cols[cords.X].width()) < x)
+			while ((l += Cols[cords.X].Width) < x)
 				++cords.X;
 
 			int top = HeightColhead;
@@ -1082,7 +1082,7 @@ namespace yata
 				if (++c == ColCount)
 					return -1;
 			}
-			while ((left += Cols[c].width()) < x);
+			while ((left += Cols[c].Width) < x);
 
 			return c;
 		}

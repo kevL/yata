@@ -196,8 +196,8 @@ namespace yata
 			int cols = Math.Min(_diff1.ColCount, _diff2.ColCount);
 			for (int c = 0; c != cols; ++c)
 			{
-				w1 = _diff1.Cols[c].width();
-				w2 = _diff2.Cols[c].width();
+				w1 = _diff1.Cols[c].Width;
+				w2 = _diff2.Cols[c].Width;
 
 				if      (w1 > w2) _diff2.Cols[c].width(w1, true);
 				else if (w2 > w1) _diff1.Cols[c].width(w2, true);

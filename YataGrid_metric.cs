@@ -66,7 +66,7 @@ namespace yata
 
 				table.WidthTable = WidthRowhead;
 				foreach (var col in table.Cols)
-					table.WidthTable += col.width();
+					table.WidthTable += col.Width;
 
 				table._panelRows.Width  = WidthRowhead;
 				table._panelCols.Height = HeightColhead;
@@ -83,20 +83,20 @@ namespace yata
 		{
 			if (table.ColCount != 0)
 			{
-				int w0 = table.Cols[0].width();
+				int w0 = table.Cols[0].Width;
 				table._labelid.Location = new Point(0,0);
 				table._labelid.Size = new Size(WidthRowhead + w0, HeightColhead - 1);	// -1 so these don't cover the long
 																						// horizontal line under the colhead.
 				if (table.ColCount > 1)
 				{
-					int w1 = table.Cols[1].width();
+					int w1 = table.Cols[1].Width;
 					table._labelfirst.Location = new Point(WidthRowhead + w0, 0);
 					table._labelfirst.Size = new Size(w1, HeightColhead - 1);
 
 					if (table.ColCount > 2)
 					{
 						table._labelsecond.Location = new Point(WidthRowhead + w0 + w1, 0);
-						table._labelsecond.Size = new Size(table.Cols[2].width(), HeightColhead - 1);
+						table._labelsecond.Size = new Size(table.Cols[2].Width, HeightColhead - 1);
 					}
 				}
 			}
@@ -127,7 +127,7 @@ namespace yata
 		{
 			int width = 0;
 			for (int c = 0; c != FrozenCount; ++c)
-				width += Cols[c].width();
+				width += Cols[c].Width;
 
 			FrozenPanel.Width = width;
 		}
@@ -202,7 +202,7 @@ namespace yata
 
 			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
 			{					// be forced (eg. on reload) unflag UserSized on all cols first.
-				int totalwidth = col.width();
+				int totalwidth = col.Width;
 
 				if ((colwidth += _padHori * 2) > totalwidth)
 				{

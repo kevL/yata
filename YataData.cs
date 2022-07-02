@@ -18,8 +18,8 @@ namespace yata
 		/// <remarks>Only 1 <c>Col</c> shall ever be <c>selected</c>.</remarks>
 		internal bool selected;
 
-		int _width;
 		internal int _widthtext;
+		internal int Width;
 		#endregion Fields
 
 
@@ -31,7 +31,7 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Sets <c><see cref="_width"/></c>.
+		/// Sets <c><see cref="Width"/></c>.
 		/// </summary>
 		/// <param name="w">the width in pixels</param>
 		/// <param name="allowDecrease"><c>true</c> to allow decreasing the width</param>
@@ -44,17 +44,8 @@ namespace yata
 		/// <paramref name="allowDecrease"/> parameter.</remarks>
 		internal void width(int w, bool allowDecrease = false)
 		{
-			if (allowDecrease || w > _width)
-				_width = w;
-		}
-
-		/// <summary>
-		/// Gets <c><see cref="_width"/></c>.
-		/// </summary>
-		/// <returns></returns>
-		internal int width()
-		{
-			return _width;
+			if (allowDecrease || w > Width)
+				Width = w;
 		}
 		#endregion Methods
 	}

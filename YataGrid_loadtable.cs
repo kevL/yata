@@ -853,7 +853,7 @@ namespace yata
 			CreateCols();
 			CreateRows();
 
-			FrozenPanel = new YataPanelFrozen(this, Cols[0].width());
+			FrozenPanel = new YataPanelFrozen(this, Cols[0].Width);
 			InitializeFrozenLabels();
 
 			metricStaticHeads(_f);

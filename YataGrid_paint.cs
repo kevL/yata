@@ -65,7 +65,7 @@ namespace yata
 					row = Rows[r];
 					for (c = 0; c != ColCount; ++c)
 					{
-						if (rect.X + (rect.Width = Cols[c].width()) > WidthRowhead)
+						if (rect.X + (rect.Width = Cols[c].Width) > WidthRowhead)
 						{
 							if ((cell = row[c]).state != Cell.CellState.Default)
 							{
@@ -119,7 +119,7 @@ namespace yata
 				int x = WidthRowhead - OffsetHori;
 				for (c = 0; c != ColCount; ++c)
 				{
-					if ((x += Cols[c].width()) > Right)
+					if ((x += Cols[c].Width) > Right)
 						break;
 
 					if (x > WidthRowhead)
@@ -166,7 +166,7 @@ namespace yata
 					_labelid.BackColor = Colors.LabelSorted;
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top,
-									 Cols[0].width(), HeightColhead);
+									 Cols[0].Width, HeightColhead);
 
 				TextRenderer.DrawText(graphics,
 									  gs.Id,
@@ -218,7 +218,7 @@ namespace yata
 
 				Color color;
 				rect = new Rectangle(_padHori, Top,
-									 Cols[1].width(), HeightColhead);
+									 Cols[1].Width, HeightColhead);
 
 				if (_sortcol == 1)
 				{
@@ -277,7 +277,7 @@ namespace yata
 
 				Color color;
 				rect = new Rectangle(_padHori, Top,
-									 Cols[2].width(), HeightColhead);
+									 Cols[2].Width, HeightColhead);
 
 				if (_sortcol == 2)
 				{
@@ -332,7 +332,7 @@ namespace yata
 
 			for (int c = 0; c != ColCount; ++c)
 			{
-				if (rect.X + (rect.Width = (col = Cols[c]).width()) > Left)
+				if (rect.X + (rect.Width = (col = Cols[c]).Width) > Left)
 				{
 					if (c == _sortcol)
 					{
@@ -450,7 +450,7 @@ namespace yata
 			int c = 0;
 			for (; c != FrozenCount; ++c)
 			{
-				x += Cols[c].width();
+				x += Cols[c].Width;
 				graphics.DrawLine(Pencils.DarkLine,
 								  x, 0,
 								  x, Height);
@@ -469,7 +469,7 @@ namespace yata
 				row = Rows[r];
 				for (c = 0; c != FrozenCount; ++c)
 				{
-					rect.Width = Cols[c].width();
+					rect.Width = Cols[c].Width;
 
 					if ((cell = row[c]).state != Cell.CellState.Default)
 					{

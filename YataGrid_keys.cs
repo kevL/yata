@@ -934,7 +934,7 @@ namespace yata
 //										pt.X += OffsetHori - w;
 //
 //										int c = -1, tally = 0;
-//										while ((tally += Cols[++c].width()) < pt.X)
+//										while ((tally += Cols[++c].Width) < pt.X)
 //										{}
 //
 //										if (++c >= sel.x)
@@ -1017,7 +1017,7 @@ namespace yata
 //										pt.X += OffsetHori + w;
 //
 //										int c = -1, tally = 0;
-//										while (++c != ColCount && (tally += Cols[c].width()) < pt.X)
+//										while (++c != ColCount && (tally += Cols[c].Width) < pt.X)
 //										{}
 //
 //										if (--c <= sel.x)
