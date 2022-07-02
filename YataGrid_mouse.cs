@@ -1048,8 +1048,11 @@ namespace yata
 								ColSort(click_c);
 
 								EnsureDisplayedCol(click_c);
+								EnsureDisplayed();
+
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
+										  | INVALID_ROWS
 										  | INVALID_COLS
 										  | INVALID_LBLS);
 							}

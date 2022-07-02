@@ -1728,6 +1728,28 @@ namespace yata
 
 		#region ensure displayed
 		/// <summary>
+		/// Scrolls the table so that the currently selected
+		/// <c><see cref="Row"/></c> or first selected <c><see cref="Cell"/></c>
+		/// is (more or less) completely displayed.
+		/// </summary>
+		/// <returns>a bitwise <c>int</c> defining controls that need to be
+		/// invalidated</returns>
+		/// <remarks>A selected <c>Row</c> has priority over any selected
+		/// <c>Cells</c>.</remarks>
+		internal int EnsureDisplayed()
+		{
+			int selr = getSelectedRow();
+			if (selr != -1)
+				return EnsureDisplayedRow(selr);
+
+			Cell sel = getFirstSelectedCell();
+			if (sel != null)
+				return EnsureDisplayed(sel);
+
+			return INVALID_NONE;
+		}
+
+		/// <summary>
 		/// Scrolls the table so that a given <c><see cref="Cell"/></c> is (more
 		/// or less) completely displayed.
 		/// </summary>
@@ -1735,9 +1757,10 @@ namespace yata
 		/// <param name="bypassPropanel"><c>true</c> to bypass any
 		/// <c><see cref="Propanel"/></c> considerations</param>
 		/// <returns>a bitwise <c>int</c> defining controls that need to be
-		/// invalidated; note that the <c>Propanel's</c> invalidation bit will
-		/// be flagged as long as the panel is visible regardless of whether it
-		/// really needs to be redrawn</returns>
+		/// invalidated</returns>
+		/// <remarks>The <c>Propanel's</c> invalidation bit will be flagged as
+		/// long as the panel is visible regardless of whether it really needs
+		/// to be redrawn.</remarks>
 		internal int EnsureDisplayed(Cell cell, bool bypassPropanel = false)
 		{
 			int invalid = INVALID_NONE;
@@ -1804,26 +1827,6 @@ namespace yata
 
 			// TODO: Wait a second. Setting a scrollbar.Value auto-refreshes the grid ...
 			return invalid;
-		}
-
-		/// <summary>
-		/// Scrolls the table so that the currently selected
-		/// <c><see cref="Cell"/></c> or <c><see cref="Row"/></c> is (more or
-		/// less) completely displayed.
-		/// </summary>
-		/// <returns>a bitwise <c>int</c> defining controls that need to be
-		/// invalidated</returns>
-		internal int EnsureDisplayed()
-		{
-			Cell sel = getSelectedCell();
-			if (sel != null)
-				return EnsureDisplayed(sel);
-
-			int selr = getSelectedRow();
-			if (selr != -1)
-				return EnsureDisplayedRow(selr);
-
-			return INVALID_NONE;
 		}
 
 		/// <summary>
