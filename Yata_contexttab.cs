@@ -227,27 +227,6 @@ namespace yata
 
 		#region Methods (tab)
 		/// <summary>
-		/// Helper for
-		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
-		/// </summary>
-		/// <param name="table">a <c><see cref="YataGrid"/></c></param>
-		/// <remarks>Check that <paramref name="table"/> is not null before
-		/// call.</remarks>
-		void DiffReset(YataGrid table)
-		{
-			for (int r = 0; r != table.RowCount; ++r)
-			for (int c = 0; c != table.ColCount; ++c)
-			{
-				table[r,c].diff = false;
-			}
-
-			if (table == Table)
-				opsclick_AutosizeCols(null, EventArgs.Empty);
-			else
-				AutosizeCols(table);
-		}
-
-		/// <summary>
 		/// The yata-diff routine.
 		/// </summary>
 		/// <returns><c>true</c> if differences are found</returns>
@@ -422,6 +401,27 @@ namespace yata
 										@goto,
 										@goto || isDiff);
 			return isDiff || @goto;
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="tabclick_DiffReset()">tabclick_DiffReset()</see></c>.
+		/// </summary>
+		/// <param name="table">a <c><see cref="YataGrid"/></c></param>
+		/// <remarks>Check that <paramref name="table"/> is not null before
+		/// call.</remarks>
+		void DiffReset(YataGrid table)
+		{
+			for (int r = 0; r != table.RowCount; ++r)
+			for (int c = 0; c != table.ColCount; ++c)
+			{
+				table[r,c].diff = false;
+			}
+
+			if (table == Table)
+				opsclick_AutosizeCols(null, EventArgs.Empty);
+			else
+				AutosizeCols(table);
 		}
 		#endregion Methods (tab)
 	}
