@@ -131,7 +131,7 @@ namespace yata
 			if (_diff2   != null) DiffReset(_diff2);
 
 			_diff2 = Table;
-			if (doDiff())
+			if (Diff())
 				tabclick_DiffSync(sender, e);
 			else
 				_diff1 = _diff2 = null;
@@ -205,11 +205,11 @@ namespace yata
 
 			cols = Math.Min(YataGrid.FreezeSecond, _diff1.ColCount);
 			for (int c = 0; c != cols; ++c)
-				_diff1.metricFrozenControls(c);
+				_diff1.MetricFrozenControls(c);
 
 			cols = Math.Min(YataGrid.FreezeSecond, _diff2.ColCount);
 			for (int c = 0; c != cols; ++c)
-				_diff2.metricFrozenControls(c);
+				_diff2.MetricFrozenControls(c);
 
 			_diff1._scrollVert.Value =
 			_diff1._scrollHori.Value =
@@ -256,7 +256,7 @@ namespace yata
 		/// The yata-diff routine.
 		/// </summary>
 		/// <returns><c>true</c> if differences are found</returns>
-		bool doDiff()
+		bool Diff()
 		{
 			_diff1.ClearSelects(true, true);	// sync table
 			_diff2.ClearSelects();				// currently active table

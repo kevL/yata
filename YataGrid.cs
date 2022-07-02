@@ -105,9 +105,9 @@ namespace yata
 		internal int OffsetHori;
 
 		internal YataPanelCols _panelCols;
-		YataPanelRows _panelRows;
+				 YataPanelRows _panelRows;
 
-		internal YataPanelFrozen FrozenPanel;
+		YataPanelFrozen FrozenPanel;
 
 		Label _labelid     = new Label();
 		Label _labelfirst  = new Label();
@@ -212,7 +212,7 @@ namespace yata
 				_labelfirst .Visible = (_frozenCount > FreezeId);
 				_labelsecond.Visible = (_frozenCount > FreezeFirst);
 
-				widthFrozenPanel();
+				WidthFrozenPanel();
 
 
 				for (int c = 0; c != _frozenCount; ++c)
@@ -1069,7 +1069,7 @@ namespace yata
 				cell.text = tb.Text;
 
 				Colwidth(cell.x, cell.y);
-				metricFrozenControls(cell.x);
+				MetricFrozenControls(cell.x);
 
 				if (!Changed) Changed = true;
 
@@ -1113,7 +1113,7 @@ namespace yata
 				cell.text = text;
 
 				Colwidth(cell.x, cell.y);
-				metricFrozenControls(cell.x);
+				MetricFrozenControls(cell.x);
 
 				if (!Changed) Changed = true;
 
@@ -1166,7 +1166,7 @@ namespace yata
 			cell.text = text;
 
 			Colwidth(cell.x, cell.y);
-			metricFrozenControls(cell.x);
+			MetricFrozenControls(cell.x);
 
 			int invalid = INVALID_GRID;
 			if (Propanel != null && Propanel.Visible)

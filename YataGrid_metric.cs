@@ -109,21 +109,21 @@ namespace yata
 		/// Re-widths any frozen-labels and the frozen-panel if they need it.
 		/// </summary>
 		/// <param name="c">col-id that changed its width</param>
-		internal void metricFrozenControls(int c)
+		internal void MetricFrozenControls(int c)
 		{
 			if (c < FreezeSecond)
 			{
 				metricFrozenLabels(this); // re-width the frozen-labels on the colhead
 
 				if (c < FrozenCount)
-					widthFrozenPanel(); // re-width the frozen-panel
+					WidthFrozenPanel(); // re-width the frozen-panel
 			}
 		}
 
 		/// <summary>
 		/// Sets the width of the <c><see cref="FrozenPanel"/></c>.
 		/// </summary>
-		void widthFrozenPanel()
+		void WidthFrozenPanel()
 		{
 			int width = 0;
 			for (int c = 0; c != FrozenCount; ++c)
