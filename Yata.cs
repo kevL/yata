@@ -1354,7 +1354,7 @@ namespace yata
 			Tabs.TabPages.Remove(tab);
 			tab.Dispose();
 
-			YataGrid.metricStaticHeads(this);
+			YataGrid.MetricStaticHeads(this);
 		}
 
 		/// <summary>

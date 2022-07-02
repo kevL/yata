@@ -856,7 +856,7 @@ namespace yata
 			FrozenPanel = new YataPanelFrozen(this, Cols[0].Width);
 			InitializeFrozenLabels();
 
-			metricStaticHeads(_f);
+			MetricStaticHeads(_f);
 
 			Controls.Add(FrozenPanel);
 			Controls.Add(_panelRows);

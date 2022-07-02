@@ -39,7 +39,7 @@ namespace yata
 		/// tabs/tables.
 		/// </summary>
 		/// <param name="f"></param>
-		internal static void metricStaticHeads(Yata f)
+		internal static void MetricStaticHeads(Yata f)
 		{
 			YataGrid table;
 
@@ -71,7 +71,7 @@ namespace yata
 				table._panelRows.Width  = WidthRowhead;
 				table._panelCols.Height = HeightColhead;
 
-				metricFrozenLabels(table);
+				MetricFrozenLabels(table);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace yata
 		/// Re-widths and re-locates the frozen labels.
 		/// </summary>
 		/// <param name="table"></param>
-		internal static void metricFrozenLabels(YataGrid table)
+		internal static void MetricFrozenLabels(YataGrid table)
 		{
 			if (table.ColCount != 0)
 			{
@@ -113,7 +113,7 @@ namespace yata
 		{
 			if (c < FreezeSecond)
 			{
-				metricFrozenLabels(this); // re-width the frozen-labels on the colhead
+				MetricFrozenLabels(this); // re-width the frozen-labels on the colhead
 
 				if (c < FrozenCount)
 					WidthFrozenPanel(); // re-width the frozen-panel
@@ -152,7 +152,7 @@ namespace yata
 
 			FrozenCount = FrozenCount; // refresh the Frozen panel
 
-			metricStaticHeads(_f);
+			MetricStaticHeads(_f);
 
 
 			_scrollVert.LargeChange =
