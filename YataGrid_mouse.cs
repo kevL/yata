@@ -426,7 +426,7 @@ namespace yata
 #if Clicks
 											logfile.Log(". . deselect cell");
 #endif
-											_f.ClearSyncSelects();
+											ClearSyncSelects();
 										}
 
 										detercellops = true;
@@ -852,7 +852,7 @@ namespace yata
 				else if (ModifierKeys == Keys.None) // click below the last entry ->
 				{
 					ClearSelects();
-					_f.ClearSyncSelects();
+					ClearSyncSelects();
 
 					int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 					if (Propanel != null && Propanel.Visible)

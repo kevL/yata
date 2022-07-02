@@ -16,7 +16,7 @@ namespace yata
 		void editcellsclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearCellSelects();
-			ClearSyncSelects();
+			Table.ClearSyncSelects();
 
 			EnableCelleditOperations();
 

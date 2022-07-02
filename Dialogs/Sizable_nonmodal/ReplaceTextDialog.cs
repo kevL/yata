@@ -211,7 +211,7 @@ namespace yata
 			}
 
 			table.ClearSelects();
-			(_f as Yata).ClearSyncSelects();
+			table.ClearSyncSelects();
 
 
 			bool start = true;
@@ -444,7 +444,7 @@ namespace yata
 			else          _search = _pre.ToUpperInvariant();
 
 			table.ClearSelects();
-			(_f as Yata).ClearSyncSelects();
+			table.ClearSyncSelects();
 			table.ClearReplaced();
 
 

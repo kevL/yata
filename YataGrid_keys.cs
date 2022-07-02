@@ -317,7 +317,7 @@ namespace yata
 						if (!ctr && !sft)
 						{
 							ClearSelects();
-							_f.ClearSyncSelects();
+							ClearSyncSelects();
 
 							selr = -1;
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;

@@ -114,7 +114,7 @@ namespace yata
 		internal void editclick_Deselect(object sender, EventArgs e)
 		{
 			Table.ClearSelects();
-			ClearSyncSelects();
+			Table.ClearSyncSelects();
 
 			Table.Invalidator(YataGrid.INVALID_GRID
 							| YataGrid.INVALID_FROZ

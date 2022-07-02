@@ -558,7 +558,7 @@ namespace yata
 		/// <remarks>Ensure <paramref name="sel"/> is valid before call.</remarks>
 		bool SelectSyncCell(Cell sel)
 		{
-			YataGrid table = _f.ClearSyncSelects();
+			YataGrid table = ClearSyncSelects();
 			if (table != null)
 			{
 				if (sel.y < table.RowCount && sel.x < table.ColCount)
@@ -567,6 +567,25 @@ namespace yata
 				return true;
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Clears all selects on a sync-table if that table is valid.
+		/// </summary>
+		/// <returns>the sync'd <c><see cref="YataGrid"/></c> if a sync-table is
+		/// valid</returns>
+		internal YataGrid ClearSyncSelects()
+		{
+			YataGrid table;
+			if      (this == _f._diff1) table = _f._diff2;
+			else if (this == _f._diff2) table = _f._diff1;
+			else
+				return null;
+
+			if (table != null)
+				table.ClearSelects(true, true);
+
+			return table;
 		}
 
 		/// <summary>
@@ -623,7 +642,7 @@ namespace yata
 				else
 				{
 					sel = this[r,0]; // just a cell (for its row-id) to pass to EnsureDisplayed() below.
-					_f.ClearSyncSelects();
+					ClearSyncSelects();
 
 					_anchorcell = null;
 				}
@@ -656,7 +675,7 @@ namespace yata
 				row[c].selected = true;
 
 
-			YataGrid table = _f.ClearSyncSelects();
+			YataGrid table = ClearSyncSelects();
 			if (table != null && r < table.RowCount)
 			{
 				row = table.Rows[r];
@@ -1411,7 +1430,7 @@ namespace yata
 			int selr = getSelectedRow();
 
 			ClearSelects();
-			// SelectCell() calls Yata.ClearSyncSelects()
+			// SelectCell() calls ClearSyncSelects()
 
 			int r,c;
 
@@ -1591,7 +1610,7 @@ namespace yata
 			int selr = getSelectedRow();
 
 			ClearSelects();
-			// SelectCell() calls Yata.ClearSyncSelects()
+			// SelectCell() calls ClearSyncSelects()
 
 			int r,c;
 
@@ -1972,7 +1991,7 @@ namespace yata
 					int selr = getSelectedRow();
 
 					ClearSelects();
-					_f.ClearSyncSelects();
+					ClearSyncSelects();
 
 
 					_substr = substr; // else is Wholefield search.
@@ -2111,5 +2130,163 @@ namespace yata
 				|| (_substr && _text.Contains(_search));
 		}
 		#endregion Search
+
+
+		#region Diff
+		/// <summary>
+		/// Selects the next/previous diffed cell in this <c>YataGrid</c> and
+		/// its sync-table if valid.
+		/// </summary>
+		/// <remarks>Frozen cells will be selected but they don't respect
+		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
+		/// They get no respect ...
+		/// 
+		/// 
+		/// Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
+		/// is depressed.</remarks>
+		internal void GotoDiff()
+		{
+			if (   (_f._diff1 != null || _f._diff2 != null)
+				&& (_f._diff1 == this || _f._diff2 == this))
+			{
+				if ((ModifierKeys & Keys.Control) == Keys.None) _f.Activate();
+				Select();
+
+
+				YataGrid table; // the other table - can be null.
+
+				if (this == _f._diff1) table = _f._diff2;
+				else                   table = _f._diff1;
+
+				Cell sel = getSelectedCell();
+				int selr = getSelectedRow();
+
+				ClearSelects();
+
+				if (table != null)
+					table.ClearSelects(true, true);
+
+				int r,c;
+
+				bool start = true;
+
+				if ((ModifierKeys & Keys.Shift) == Keys.None) // forward goto ->
+				{
+					if (sel != null) { c = sel.x; selr = sel.y; }
+					else
+					{
+						c = -1;
+						if (selr == -1) selr = 0;
+					}
+
+					for (r = selr; r != RowCount; ++r)
+					{
+						if (start)
+						{
+							start = false;
+							if (++c == ColCount)		// if starting on the last cell of a row
+							{
+								c = 0;
+
+								if (r < RowCount - 1)	// jump to the first cell of the next row
+									++r;
+								else					// or to the top of the table if on the last row
+									r = 0;
+							}
+						}
+						else
+							c = 0;
+
+						for (; c != ColCount; ++c)
+						{
+							if ((sel = this[r,c]).diff)
+							{
+								SelectDiffCell(sel, table);
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = 0; r != selr + 1; ++r) // quick and dirty wrap ->
+					for (c = 0; c != ColCount;   ++c)
+					{
+						if ((sel = this[r,c]).diff)
+						{
+							SelectDiffCell(sel, table);
+							return;
+						}
+					}
+				}
+				else // backward goto ->
+				{
+					if (sel != null) { c = sel.x; selr = sel.y; }
+					else
+					{
+						c = ColCount;
+						if (selr == -1) selr = RowCount - 1;
+					}
+
+					for (r = selr; r != -1; --r)
+					{
+						if (start)
+						{
+							start = false;
+							if (--c == -1)	// if starting on the first cell of a row
+							{
+								c = ColCount - 1;
+
+								if (r > 0)	// jump to the last cell of the previous row
+									--r;
+								else		// or to the bottom of the table if on the first row
+									r = RowCount - 1;
+							}
+						}
+						else
+							c = ColCount - 1;
+
+						for (; c != -1; --c)
+						{
+							if ((sel = this[r,c]).diff)
+							{
+								SelectDiffCell(sel, table);
+								return;
+							}
+						}
+					}
+
+					// TODO: tighten exact start/end-cells
+					for (r = RowCount - 1; r != selr - 1; --r) // quick and dirty wrap ->
+					for (c = ColCount - 1; c != -1;       --c)
+					{
+						if ((sel = this[r,c]).diff)
+						{
+							SelectDiffCell(sel, table);
+							return;
+						}
+					}
+				}
+			}
+			_f._fdiffer.EnableGotoButton(false);
+		}
+
+		/// <summary>
+		/// Helper for <c><see cref="GotoDiff()">GotoDiff()</see></c>.
+		/// </summary>
+		/// <param name="sel">a <c><see cref="Cell"/></c> in the active
+		/// <c><see cref="YataGrid"/></c></param>
+		/// <param name="table">a sync'd <c>YataGrid</c> - can be <c>null</c></param>
+		void SelectDiffCell(Cell sel, YataGrid table)
+		{
+			SelectCell(sel, false);
+
+			if (table != null
+				&& sel.y < table.RowCount
+				&& sel.x < table.ColCount)
+			{
+				table[sel.y, sel.x].selected = true;
+			}
+		}
+		#endregion Diff
 	}
 }

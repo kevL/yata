@@ -167,7 +167,13 @@ namespace yata
 		/// is depressed.</remarks>
 		void click_btnGoto(object sender, EventArgs e)
 		{
-			(_f as Yata).GotoDiff();
+			if ((ModifierKeys & Keys.Alt) == Keys.None) // TODO: that check is probly unnecessary
+			{
+				if (Yata.Table != null)
+					Yata.Table.GotoDiff();
+				else
+					EnableGotoButton(false);
+			}
 		}
 		#endregion Handlers
 
