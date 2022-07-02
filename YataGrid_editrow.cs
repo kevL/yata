@@ -16,10 +16,10 @@ namespace yata
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
 		/// <param name="brush">a <c>Brush</c> to use for Undo/Redo</param>
-		internal void Insert(int      rowid,
+		internal void Insert(int rowid,
 							 string[] fields,
-							 bool     calibrate = true,
-							 Brush    brush     = null)
+							 bool calibrate = true,
+							 Brush brush = null)
 		{
 			if (calibrate)
 				DrawRegulator.SuspendDrawing(this);
@@ -65,7 +65,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Deletes a <c><see cref="Row"/></c> from the table.
+		/// Deletes a <c><see cref="Row"/></c> from this <c>YataGrid</c>.
 		/// </summary>
 		/// <param name="idr">row-id to delete</param>
 		/// <param name="calibrate"><c>true</c> to re-layout the grid or
@@ -140,16 +140,8 @@ namespace yata
 			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
 
 			int rFirst, rLast;
-			if (RangeSelect > 0)
-			{
-				rFirst = selr;
-				rLast  = selr + RangeSelect;
-			}
-			else
-			{
-				rFirst = selr + RangeSelect;
-				rLast  = selr;
-			}
+			if (RangeSelect > 0) { rFirst = selr; rLast = selr + RangeSelect; }
+			else                 { rFirst = selr + RangeSelect; rLast = selr; }
 
 			while (rLast >= rFirst) // reverse delete.
 			{
