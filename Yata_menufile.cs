@@ -165,7 +165,7 @@ namespace yata
 				ofd.Title  = "Select a 2da file";
 				ofd.Filter = Get2daFilter();
 
-				ofd.ShowReadOnly =
+				ofd.ShowReadOnly = // <- that forces (AutoUpgradeEnabled=false)
 				ofd.Multiselect  = true;
 
 
