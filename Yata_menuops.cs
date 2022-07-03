@@ -90,7 +90,8 @@ namespace yata
 		/// <summary>
 		/// Lays out table after rows are ordered.
 		/// </summary>
-		internal void layout()
+		/// <param name="bypassInvalidate"></param>
+		internal void layout(bool bypassInvalidate = false)
 		{
 			DrawRegulator.SuspendDrawing(this);
 
@@ -108,12 +109,14 @@ namespace yata
 
 			Table.InitScroll();
 
-			int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-			if (Table.Propanel != null && Table.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
+			if (!bypassInvalidate)
+			{
+				int invalid = (YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+				if (Table.Propanel != null && Table.Propanel.Visible)
+					invalid |= YataGrid.INVALID_PROP;
 
-			Table.Invalidator(invalid);
-
+				Table.Invalidator(invalid);
+			}
 
 			DrawRegulator.ResumeDrawing(this);
 		}

@@ -270,10 +270,10 @@ namespace yata
 
 				int i = 0;
 				if (!allchanged)
-					u[i++].isSaved = UndoRedo.IsSavedType.is_Redo;
+					u[i++].isSaved = IsSavedType.is_Redo;
 
 				for (; i != u.Length; ++i)
-					u[i].isSaved = UndoRedo.IsSavedType.is_None;
+					u[i].isSaved = IsSavedType.is_None;
 
 				Undoables.Clear();
 				for (i = u.Length - 1; i != -1; --i)
@@ -286,10 +286,10 @@ namespace yata
 
 				int i = 0;
 				if (!allchanged)
-					r[i++].isSaved = UndoRedo.IsSavedType.is_Undo;
+					r[i++].isSaved = IsSavedType.is_Undo;
 
 				for (; i != r.Length; ++i)
-					r[i].isSaved = UndoRedo.IsSavedType.is_None;
+					r[i].isSaved = IsSavedType.is_None;
 
 				Redoables.Clear();
 				for (i = r.Length - 1; i != -1; --i)
@@ -424,7 +424,7 @@ namespace yata
 		{
 			_it = Undoables.Pop();
 
-			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Undo);
+			_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
 
 			switch (_it.RestoreType)
 			{
@@ -470,7 +470,7 @@ namespace yata
 		{
 			_it = Redoables.Pop();
 
-			_grid.Changed = (_it.isSaved != UndoRedo.IsSavedType.is_Redo);
+			_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
 
 			switch (_it.RestoreType)
 			{
@@ -507,12 +507,29 @@ namespace yata
 
 			Undoables.Push(_it);
 		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void Invalidate()
+		{
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS
+						| YataGrid.INVALID_COLS;
+			if (_grid.Propanel != null && _grid.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			_grid.Invalidator(invalid);
+		}
 		#endregion Methods
 
 
 		#region Methods (actions)
 		/// <summary>
-		/// Changes cell-text in accord with <c><see cref="Undo()">Undo()</see></c> or
+		/// Changes cell-text in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void RestoreCell()
@@ -528,27 +545,25 @@ namespace yata
 			_grid[r,c] = cell;
 
 			_grid.Colwidth(c,r);
-			_grid.metricFrozenControls(c);
+			_grid.MetricFrozenControls(c);
 
 			_grid.ClearSelects(true);
 			cell.selected = true;
 			_grid.EnsureDisplayed(cell);
 
 			_grid._f.EnableCelleditOperations();
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
+			// TODO: technically this could involve re-ordering rowids
 
-			int invalid = YataGrid.INVALID_GRID
-						| YataGrid.INVALID_FROZ
-						| YataGrid.INVALID_ROWS;
-			if (_grid.Propanel != null && _grid.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
-
-			_grid.Invalidator(invalid);
+			Invalidate();
 		}
 
 		/// <summary>
-		/// Inserts a row in accord with <c><see cref="Undo()">Undo()</see></c>
-		/// or <c><see cref="Redo()">Redo()</see></c>.
+		/// Inserts a <c><see cref="Row"/></c> in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void InsertRow()
 		{
@@ -563,28 +578,33 @@ namespace yata
 			int r = row._id;
 			_grid.Insert(r, fields, true, row._brush);
 
+			YataGrid._init = true;
+			Cell cell;
 			for (int c = 0; c != row.Length; ++c)
-				_grid[r,c].loadchanged = row[c].loadchanged;
+			{
+				cell = _grid[r,c];
+				cell.loadchanged = row[c].loadchanged;
+				cell.replaced    = row[c].replaced;
+			}
+			YataGrid._init = false;
+
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			_grid.ClearSelects(false, true);
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
+			if (Settings._autorder && Yata.order() != 0)
+				_grid._f.layout(true);
 
-			int invalid = YataGrid.INVALID_GRID
-						| YataGrid.INVALID_FROZ
-						| YataGrid.INVALID_ROWS;
-			if (_grid.Propanel != null && _grid.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
-
-			_grid.Invalidator(invalid);
-
-			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
+			Invalidate();
 		}
 
 		/// <summary>
-		/// Deletes a row in accord with <c><see cref="Undo()">Undo()</see></c>
-		/// or <c><see cref="Redo()">Redo()</see></c>.
+		/// Deletes a <c><see cref="Row"/></c> in accord with
+		/// <c><see cref="Undo()">Undo()</see></c> or
+		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		void DeleteRow()
 		{
@@ -595,26 +615,19 @@ namespace yata
 			_grid.Delete(r);
 
 			_grid.ClearSelects();
-			if (r >= _grid.RowCount)
-				r  = _grid.RowCount - 1;
-			_grid.EnsureDisplayedRow(r);
+			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
 
-			_grid._f.EnableRoweditOperations();
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
+			if (Settings._autorder && Yata.order() != 0)
+				_grid._f.layout(true);
 
-			int invalid = YataGrid.INVALID_GRID
-						| YataGrid.INVALID_FROZ
-						| YataGrid.INVALID_ROWS;
-			if (_grid.Propanel != null && _grid.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
-
-			_grid.Invalidator(invalid);
-
-			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
+			Invalidate();
 		}
 
 		/// <summary>
-		/// Overwrites a row in accord with
+		/// Overwrites a <c><see cref="Row"/></c> in accord with
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
@@ -632,15 +645,17 @@ namespace yata
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			_grid.Invalidator(YataGrid.INVALID_GRID
-							| YataGrid.INVALID_ROWS);
+			if (Settings._autorder && Yata.order() != 0)
+				_grid._f.layout(true);
 
-			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
+			Invalidate();
 		}
 
 		/// <summary>
-		/// Inserts an array of rows in accord with
+		/// Inserts an array of <c><see cref="Row">Rows</see></c> in accord with
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
@@ -655,7 +670,8 @@ namespace yata
 			int cols = _it.array[0].Length;
 			var fields = new string[cols];
 
-			Row row;
+			YataGrid._init = true;
+			Row row; Cell cell;
 			for (int a = 0; a != _it.array.Length; ++a)
 			{
 				row = _it.array[a];
@@ -665,29 +681,34 @@ namespace yata
 				_grid.Insert(row._id, fields, false, row._brush);
 
 				for (int c = 0; c != row.Length; ++c)
-					_grid[row._id, c].loadchanged = row[c].loadchanged;
+				{
+					cell = _grid[row._id, c];
+					cell.loadchanged = row[c].loadchanged;
+					cell.replaced    = row[c].replaced;
+				}
 			}
-			_grid.Calibrate(0, _grid.RowCount - 1);
+			_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			_grid.ClearSelects(false, true);
 			int r = _it.array[0]._id;
 			_grid.Rows[r].selected = true;
 //			_grid.RangeSelect = _it.array.Length - 1;	// that's problematic ... wrt/ re-Sorted cols
 														// and since only 1 row shall ever be selected you can't just select them all either.
+			_grid.EnsureDisplayedRow(r);				// TODO: EnsureDisplayedRows()
 
-			_grid.EnsureDisplayedRow(r); // TODO: EnsureDisplayedRows()
-			// NOTE: Does not select the row's cells.
+			if (Settings._autorder && Yata.order() != 0)
+				_grid._f.layout(true);
 
 
 			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
-
-			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 
 		/// <summary>
-		/// Deletes an array of rows in accord with
+		/// Deletes an array of <c><see cref="Row">Rows</see></c> in accord with
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
@@ -703,22 +724,20 @@ namespace yata
 			{
 				_grid.Delete(_it.array[a]._id, false);
 			}
-
 			_grid.Calibrate();
 
 			_grid.ClearSelects();
-			int r = _it.array[0]._id;
-			if (r >= _grid.RowCount)
-				r  = _grid.RowCount - 1;
-			_grid.EnsureDisplayedRow(r);
+			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
 
-			_grid._f.EnableRoweditOperations();
+			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+
+			if (Settings._autorder && Yata.order() != 0)
+				_grid._f.layout(true);
 
 
 			DrawRegulator.ResumeDrawing(_grid);
 			_grid._f.Obfuscate(false);
-
-			if (Settings._autorder && Yata.order() != 0) _grid._f.layout();
 		}
 		#endregion Methods (actions)
 
