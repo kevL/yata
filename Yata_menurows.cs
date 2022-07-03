@@ -11,7 +11,7 @@ namespace yata
 		/// <summary>
 		/// Deselects all <c><see cref="Row">Rows</see></c> and subrows as well
 		/// as all <c><see cref="Cell">Cells</see></c> in
-		/// <c><see cref="YataGrid.FrozenPanel">YataGrid.FrozenPanel</see></c>.
+		/// <c><see cref="YataGrid"/>.FrozenPanel</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_DeselectRows"/></c></param>
 		/// <param name="e"></param>
