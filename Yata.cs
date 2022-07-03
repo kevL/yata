@@ -950,18 +950,19 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="Tabs"/></c></item>
 		/// <item><c>null</c></item>
-		/// </list>
-		/// </param>
+		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>This should be bypassed when a page other than tabid #0 is
 		/// active and user closes all other tabs - if tabid #0 is already
-		/// active the selected-id does not change.
+		/// active the selected-id does not change (but the event fires anyway).
 		/// 
 		/// 
 		/// Invoked by
 		/// <list type="bullet">
-		/// <item>Tab click</item>
+		/// <item>tabpage change</item>
+		/// <item>close table</item>
 		/// <item><c><see cref="CreatePage()">CreatePage()</see></c></item>
+		/// <item><c><see cref="fileclick_Create()">fileclick_Create()</see></c></item>
 		/// </list></remarks>
 		void tab_SelectedIndexChanged(object sender, EventArgs e)
 		{
