@@ -272,9 +272,11 @@ namespace yata
 				_replaced = value;
 				SetState();
 
-				if (!_replaced && !YataGrid._init)	// (replaced=true) happens only in ReplaceTextDialog where
-				{									// EnableGotoReplaced() is taken care of if so
-													// TODO: it also happens in Undo/Redo ...
+				// (_replaced=true) happens only in ReplaceTextDialog where
+				// EnableGotoReplaced() is taken care of if so ... it also
+				// happens in Undo/Redo but it's taken care of there too.
+				if (!_replaced && !YataGrid._init)
+				{
 					Yata.that.EnableGotoReplaced(Yata.Table.anyReplaced());
 				}
 			}
