@@ -555,9 +555,7 @@ namespace yata
 			{
 				TabPage lastpage = _lastpage;
 				ClosePage(Tabs.SelectedTab);
-
-				if (lastpage != null)
-					Tabs.SelectedTab = lastpage;
+				Tabs.SelectedTab = lastpage;
 			}
 		}
 
