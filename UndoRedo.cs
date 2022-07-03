@@ -31,6 +31,9 @@ namespace yata
 	}
 
 
+	/// <summary>
+	/// Mind-bending backflips done by gorillas dressed in clown outfits.
+	/// </summary>
 	sealed class UndoRedo
 	{
 		#region Enums
@@ -510,7 +513,7 @@ namespace yata
 
 
 		/// <summary>
-		/// 
+		/// Invalidates a bunch of <c>Controls</c>.
 		/// </summary>
 		void Invalidate()
 		{
