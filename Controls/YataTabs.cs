@@ -52,8 +52,8 @@ namespace yata
 			DrawMode  = TabDrawMode.OwnerDrawFixed;
 			SizeMode  = TabSizeMode.Fixed;
 
-			Padding  = new Point(0,0); // Padding uses Point and Margin uses Padding
-			Margin   = new Padding(0); // right got it.
+			Padding = new Point(0,0); // Padding uses Point and Margin uses Padding
+			Margin  = new Padding(0); // right got it.
 		}
 		#endregion cTor
 
@@ -76,6 +76,21 @@ namespace yata
 
 
 		#region Handlers (override)
+		/// <summary>
+		/// Sets the focused <c>TabPage</c> as previously focused before
+		/// changing focus to another <c>TabPage</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>This is used to refocus the previously focused
+		/// <c>TabPage</c> when a <c>TabPage</c>/ <c><see cref="YataGrid"/></c>
+		/// gets closed.</remarks>
+		protected override void OnDeselecting(TabControlCancelEventArgs e)
+		{
+			Yata.that.SetLastPage(e.TabPage);
+			base.OnDeselecting(e);
+		}
+
+
 		/// <summary>
 		/// Overrides the <c>PreviewKeyDown</c> eventhandler.
 		/// <list type="bullet">

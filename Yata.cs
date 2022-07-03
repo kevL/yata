@@ -196,6 +196,12 @@ namespace yata
 		/// <c><see cref="FileWatcherDialog"/>.OnFormClosing()</c>.
 		/// </summary>
 		internal FileWatcherDialog.FwdResult _fileresult;
+
+
+		/// <summary>
+		/// Stores the previously focused <c>TabPage</c>.
+		/// </summary>
+		TabPage _lastpage;
 		#endregion Fields
 
 
@@ -794,6 +800,15 @@ namespace yata
 		{
 			if (obscure) panel_ColorFill.BringToFront();
 			else         panel_ColorFill.SendToBack();
+		}
+
+		/// <summary>
+		/// Caches the previously focused <c>TabPage</c>.
+		/// </summary>
+		/// <param name="page"></param>
+		internal void SetLastPage(TabPage page)
+		{
+			_lastpage = page;
 		}
 		#endregion Methods
 

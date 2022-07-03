@@ -551,7 +551,14 @@ namespace yata
 				}
 			}
 
-			if (close) ClosePage(Tabs.SelectedTab);
+			if (close)
+			{
+				TabPage lastpage = _lastpage;
+				ClosePage(Tabs.SelectedTab);
+
+				if (lastpage != null)
+					Tabs.SelectedTab = lastpage;
+			}
 		}
 
 		/// <summary>
