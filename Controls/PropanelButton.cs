@@ -14,7 +14,7 @@ namespace yata
 		: Button
 	{
 		#region Fields (static)
-		internal static int HEIGHT = 20;
+		internal static int HEIGHT = 21;
 
 		static Pen pen1, pen2;
 		#endregion Fields (static)
@@ -38,7 +38,7 @@ namespace yata
 
 			// NOTE: .NET is using the default vals for button's Width/Height
 			// here. So set it explicitly.
-			Width  = 30;
+			Width  = 26;
 			Height = HEIGHT;
 
 			pen1 = Pens.Black;
@@ -56,6 +56,8 @@ namespace yata
 			UseVisualStyleBackColor = true;
 
 			Margin = new Padding(0);
+
+			Image = global::yata.Properties.Resources.ppb;
 		}
 		#endregion cTor
 

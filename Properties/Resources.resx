@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1809,6 +1809,13 @@
         /v/v/f7/7/3+/+/9/v/v/f7/7/3+/42Pj/8rIR//jY+P/+/9/v/v/f7/7/3+/+/9/v/v/f7/7/3+/+/9
         /v/v/f7/7/3+/+/9/v/v/f7/7/3+/42Pj/8rIR//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+</value>
+  </data>
+  <data name="ppb" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAkAAAAPCAYAAAA2yOUNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAA2SURBVChTY8AC/kNpvIB8RSBBQhgDYBVEB+QrgtmLD2MArILogHxFMHvxYQyAVRAdkKOIgQEA
+        5oYm2kVzA/gAAAAASUVORK5CYII=
 </value>
   </data>
 </root>
