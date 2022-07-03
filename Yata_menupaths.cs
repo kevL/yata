@@ -23,7 +23,7 @@ namespace yata
 		/// <returns></returns>
 		internal static string GetTlkFilter()
 		{
-			return "tlk files (*.tlk)|*.tlk|All files (*.*)|*.*";
+			return "Talk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 		}
 		#endregion Methods (static)
 
