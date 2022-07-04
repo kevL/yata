@@ -1164,7 +1164,7 @@ namespace yata
 
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
 
-			Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
+			if (!Changed) Changed = true; // TODO: do Changed only if rows are swapped/order is *actually* changed.
 			_ur.ResetSaved(true);
 
 			RangeSelect = 0;
