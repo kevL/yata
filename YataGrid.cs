@@ -1051,7 +1051,10 @@ namespace yata
 
 
 		/// <summary>
-		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
+		/// Changes a cell's text by either
+		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> or
+		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>,
+		/// recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="tb">the editor's <c>TextBox</c> whose text to check for
@@ -1061,8 +1064,9 @@ namespace yata
 		/// table <c><see cref="Changed"/></c> nor does it push an Undo
 		/// <c><see cref="Restorable"/></c> etc. if the submitted text is
 		/// identical to existing text. It does however clear
+		/// <c><see cref="Cell.replaced">Cell.replaced</see></c>,
 		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> and
-		/// <c><see cref="Cell.diff">Cell.diff</see></c> flags.</remarks>
+		/// <c><see cref="Cell.diff">Cell.diff</see></c> flags regardless.</remarks>
 		internal bool ChangeCellText(Cell cell, Control tb)
 		{
 			Restorable rest = UndoRedo.createCell(cell);
@@ -1101,8 +1105,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo
-		/// for <c><see cref="ReplaceTextDialog"/></c>.
+		/// Changes a cell's text by <c><see cref="ReplaceTextDialog"/></c>,
+		/// recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>
@@ -1154,7 +1158,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Changes a cell's text, recalculates col-width, and sets up Undo/Redo.
+		/// Changes a cell's text by any of the many stock methods in Yata,
+		/// recalculates col-width, and sets up Undo/Redo.
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>

@@ -353,7 +353,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Replaces the text in a currently selected cell.
+		/// Replaces the text in a currently selected <c><see cref="Cell"/></c>.
 		/// </summary>
 		/// <param name="table"></param>
 		void Replace(YataGrid table)
