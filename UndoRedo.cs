@@ -469,7 +469,7 @@ namespace yata
 		/// Redo's a cell-text change or a row-insert/delete/overwrite or a
 		/// row-array insert/delete.
 		/// </summary>
-		public void Redo()
+		internal void Redo()
 		{
 			_it = Redoables.Pop();
 
