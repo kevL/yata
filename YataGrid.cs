@@ -1121,7 +1121,7 @@ namespace yata
 
 
 //			if (cell.replaced)
-//				cell.replaced = false; // don't clear replaced; this funct *sets* replaced
+//				cell.replaced = false; // don't clear replaced; this routine *sets* replaced
 
 			if (cell.loadchanged)
 				cell.loadchanged = false;
