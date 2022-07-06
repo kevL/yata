@@ -499,6 +499,10 @@ namespace yata
 
 			if (replaced != 0)
 			{
+				if (replaced != 1)
+					table._ur.SetChained(replaced);
+
+
 				(_f as Yata).EnableGotoReplaced(true);
 				EnableReplacedOps(true);
 
