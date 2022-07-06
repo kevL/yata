@@ -17,17 +17,18 @@ namespace yata
 	{
 		internal UndoRedo.UrType RestoreType;
 
-		internal Cell cell;
-		internal string pretext;
-		internal string postext;
+		internal Cell cell;						// a Cell that was user-changed
+		internal string pretext;				// its text before it was changed
+		internal string postext;				// its text after it was changed
+		internal UndoRedo.ChainGroup chain;		// 'b' or 'c' if 2+ Cells changed in a single operation
 
-		internal Row r;
-		internal Row rPre;
-		internal Row rPos;
+		internal Row r;							// a Row that was user-changed
+		internal Row rPre;						// the row as it was before the change
+		internal Row rPos;						// the row after it was changed
 
-		internal Row[] array;
+		internal Row[] array;					// an array of Rows that were user-changed
 
-		internal UndoRedo.IsSavedType isSaved;
+		internal UndoRedo.IsSavedType isSaved;	// tracks if state is the saved state
 	}
 
 
@@ -45,15 +46,22 @@ namespace yata
 			rt_Delete,		// 2
 			rt_Overwrite,	// 3
 
-			rt_ArrayInsert,	// 4
+			rt_ArrayInsert,	// 4 row array actions ->
 			rt_ArrayDelete	// 5
 		}
 
 		internal enum IsSavedType
 		{
 			is_None,	// 0 - neither Undo-state nor Redo-state is 2da-saved.
-			is_Undo,	// 1 - the Undo-state has been saved.
-			is_Redo		// 2 - the Redo-state has been saved.
+			is_Undo,	// 1 - the Undo-state is the saved state.
+			is_Redo		// 2 - the Redo-state is the saved state.
+		}
+
+		internal enum ChainGroup
+		{
+			a,	// no chain
+			b,	// chaingroup 'b'
+			c	// chaingroup 'c'
 		}
 		#endregion Enums
 
@@ -70,21 +78,55 @@ namespace yata
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
 		Restorable _it;
+
+		/// <summary>
+		/// When user does consecutive <c><see cref="Cell"/></c> changes that
+		/// involve 2+ <c>Cells</c> the Undo/Redo routines need to distinguish
+		/// one operation from the next. A <c><see cref="ChainGroup"/></c> will
+		/// be applied to each that toggles between
+		/// <c><see cref="ChainGroup.b">ChainGroup.b</see></c> and
+		/// <c><see cref="ChainGroup.c">ChainGroup.c</see></c>. The default is
+		/// actually <c><see cref="ChainGroup.a">ChainGroup.a</see></c> that
+		/// denotes a single-cell operation that does not require
+		/// <c><see cref="Restorable">Restorables</see></c> to be chained.
+		/// </summary>
+		ChainGroup _chain = ChainGroup.b;
+
+		/// <summary>
+		/// When <c><see cref="Restorable">Restorables</see></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> are chained
+		/// the <c>_cols</c> variable caches a <c>List</c> of col-ids that need
+		/// to be layed out when the Undo/Redo routine finishes.
+		/// </summary>
+		readonly List<int> _cols = new List<int>();
+
+		/// <summary>
+		/// When <c><see cref="Restorable">Restorables</see></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> are chained
+		/// the <c>_cells</c> variable caches a <c>List</c> of
+		/// <c><see cref="Cell">Cells</see></c> that shall be selected when the
+		/// Undo/Redo routine finishes.
+		/// </summary>
+		readonly List<Cell> _cells = new List<Cell>();
 		#endregion Fields
 
 
 		#region Properties
 		/// <summary>
-		/// Checks if the Undo operation is allowed.
+		/// Checks if an Undo action is allowed.
 		/// </summary>
+		/// <returns><c>true</c> if <c><see cref="Undo()">Undo()</see></c> is
+		/// allowed</returns>
 		internal bool CanUndo
 		{
 			get { return Undoables.Count != 0; }
 		}
 
 		/// <summary>
-		/// Checks if the Redo operation is allowed.
+		/// Checks if a Redo action is allowed.
 		/// </summary>
+		/// <returns><c>true</c> if <c><see cref="Redo()">Redo()</see></c> is
+		/// allowed</returns>
 		internal bool CanRedo
 		{
 			get { return Redoables.Count != 0; }
@@ -117,9 +159,10 @@ namespace yata
 			Restorable it;
 			it.RestoreType = UrType.rt_Cell;
 
-			it.cell    = cell.Clone() as Cell;	// is used by current action
+			it.cell    = cell.Clone() as Cell;	// is used by current action ->
 			it.pretext = it.cell.text;			// used by Undo
 			it.postext = String.Empty;			// used by Redo
+			it.chain   = ChainGroup.a;			// used by both Undo and Redo
 
 			it.r    =							// not used
 			it.rPre =							// not used
@@ -150,6 +193,7 @@ namespace yata
 			it.cell    = null;			// not used
 			it.pretext =				// not used
 			it.postext = null;			// not used
+			it.chain   = ChainGroup.a;	// not used
 
 			it.r = row.Clone() as Row;	// is used by current action
 
@@ -177,8 +221,9 @@ namespace yata
 			it.cell    = null;				// not used
 			it.pretext =					// not used
 			it.postext = null;				// not used
+			it.chain   = ChainGroup.a;		// not used
 
-			it.r    = null;					// is used by current action
+			it.r    = null;					// is used by current action ->
 			it.rPre = row.Clone() as Row;	// used by Undo
 			it.rPos = null;					// used by Redo
 
@@ -207,6 +252,7 @@ namespace yata
 			it.cell    = null;			// not used
 			it.pretext =				// not used
 			it.postext = null;			// not used
+			it.chain   = ChainGroup.a;	// not used
 
 			it.r    =					// not used
 			it.rPre =					// not used
@@ -420,6 +466,44 @@ namespace yata
 
 
 		/// <summary>
+		/// Chains <c><see cref="Restorable">Restorables</see></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> when 2+
+		/// <c><see cref="Cell">Cells</see></c> get changed by a single
+		/// operation and need to be Undone or Redone by a single action.
+		/// </summary>
+		/// <param name="length">the count of <c>Restorables</c> to chain
+		/// together and rule in a single action</param>
+		internal void SetChained(int length)
+		{
+			ChainGroup chaingroup = GetChainGroup();
+
+			var u = Undoables.ToArray();
+
+			int i = 0;
+			for (; i != length; ++i)
+				u[i].chain = chaingroup;
+
+			Undoables.Clear();
+			for (i = u.Length - 1; i != -1; --i)
+				Undoables.Push(u[i]);
+		}
+
+		/// <summary>
+		/// Gets a <c><see cref="ChainGroup"/></c> for chained
+		/// <c><see cref="Restorable">Restorables</see></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c>.
+		/// </summary>
+		/// <returns>you do the Math</returns>
+		ChainGroup GetChainGroup()
+		{
+			if (_chain == ChainGroup.b)
+				return (_chain = ChainGroup.c);
+
+			return (_chain = ChainGroup.b);
+		}
+
+
+		/// <summary>
 		/// Undo's a cell-text change or a row-insert/delete/overwrite or a
 		/// row-array insert/delete.
 		/// </summary>
@@ -427,13 +511,13 @@ namespace yata
 		{
 			_it = Undoables.Pop();
 
-			_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
-
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
 					_it.cell.text = _it.pretext;
-					RestoreCell();
+					RestoreCell(_it.chain == ChainGroup.a
+							 || Undoables.Count == 0
+							 || Undoables.Peek().chain != _it.chain);
 					break;
 
 				case UrType.rt_Insert:
@@ -463,6 +547,15 @@ namespace yata
 			}
 
 			Redoables.Push(_it);
+
+			if (_it.chain != ChainGroup.a
+				&& Undoables.Count != 0
+				&& Undoables.Peek().chain == _it.chain)
+			{
+				Undo(); // recurse funct.
+			}
+			else
+				_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
 		}
 
 		/// <summary>
@@ -473,13 +566,13 @@ namespace yata
 		{
 			_it = Redoables.Pop();
 
-			_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
-
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
 					_it.cell.text = _it.postext;
-					RestoreCell();
+					RestoreCell(_it.chain == ChainGroup.a
+							 || Redoables.Count == 0
+							 || Redoables.Peek().chain != _it.chain);
 					break;
 
 				case UrType.rt_Insert:
@@ -509,6 +602,15 @@ namespace yata
 			}
 
 			Undoables.Push(_it);
+
+			if (_it.chain != ChainGroup.a
+				&& Redoables.Count != 0
+				&& Redoables.Peek().chain == _it.chain)
+			{
+				Redo(); // recurse funct.
+			}
+			else
+				_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
 		}
 
 
@@ -535,32 +637,48 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void RestoreCell()
+		/// <param name="finish"><c>true</c> to finish chained
+		/// <c><see cref="Cell"/></c> actions</param>
+		void RestoreCell(bool finish)
 		{
 			//logfile.Log("UndoRedo.RestoreCell()");
 
 			var cell = _it.cell.Clone() as Cell;
 
-			int
-				c = _it.cell.x,
-				r = _it.cell.y;
+			int c = cell.x;
+			_grid[cell.y, c] = cell;
 
-			_grid[r,c] = cell;
+			_cells.Add(cell);
 
-			_grid.Colwidth(c,r);
-			_grid.MetricFrozenControls(c);
+			if (!_cols.Contains(c))
+				 _cols.Add(c);
 
-			_grid.ClearSelects(true);
-			cell.selected = true;
-			_grid.EnsureDisplayed(cell);
+			if (finish)
+			{
+				//logfile.Log(". finish");
 
-			_grid._f.EnableCelleditOperations();
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+				_grid.ClearSelects(true);
+				foreach (var sel in _cells)
+					sel.selected = true;
+				_cells.Clear();
 
-			// TODO: technically this could involve re-ordering rowids
+				foreach (var col in _cols)
+				{
+					_grid.Colwidth(col, 0, _grid.RowCount - 1);
+					_grid.MetricFrozenControls(col);
+				}
+				_cols.Clear();
 
-			Invalidate();
+				_grid.EnsureDisplayed(cell);
+
+				_grid._f.EnableCelleditOperations();
+				_grid._f.EnableGotoReplaced(_grid.anyReplaced());
+				_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+
+				// TODO: technically this could involve re-ordering rowids
+
+				Invalidate();
+			}
 		}
 
 		/// <summary>
