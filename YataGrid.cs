@@ -190,7 +190,7 @@ namespace yata
 		{ get; private set; }
 
 		internal InfoType Info
-		{ get; set; }
+		{ get; private set; }
 
 		int _frozenCount = FreezeId; // initialized w/ id-col only.
 		/// <summary>
@@ -1113,6 +1113,8 @@ namespace yata
 		/// <returns><c>true</c> if the text gets sanitized</returns>
 		internal bool ChangeCellText_repl(Cell cell, string text)
 		{
+			// TODO: Optimize this for multiple calls/cells.
+
 			Restorable rest = UndoRedo.createCell(cell);
 			if (!Changed)
 			{
