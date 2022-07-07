@@ -272,7 +272,6 @@ namespace yata
 			_grid._f.EnableRedo(false);
 		}
 
-
 		/// <summary>
 		/// User's current state is pushed onto <c><see cref="Undoables"/></c>
 		/// on any regular state-change. The stack of
@@ -287,202 +286,6 @@ namespace yata
 
 			_grid._f.EnableUndo(true);
 			_grid._f.EnableRedo(false);
-		}
-
-
-		/// <summary>
-		/// Re-determines the
-		/// <c><see cref="Restorable.isSaved">Restorable.isSaved</see></c> var
-		/// of the <c><see cref="Undoables"/></c> and
-		/// <c><see cref="Redoables"/></c> when user saves the 2da-file.
-		/// </summary>
-		/// <param name="allchanged"><c>true</c> to set all <c>Undoables</c> and
-		/// <c>Redoables</c> to
-		/// <c><see cref="IsSavedType.is_None">IsSavedType.is_None</see></c></param>
-		/// <remarks>It would probably be easier to contain
-		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
-		/// instead of <c>Stacks</c>.</remarks>
-		internal void ResetSaved(bool allchanged = false)
-		{
-			if (Undoables.Count != 0)
-			{
-				var u = Undoables.ToArray();
-
-				int i = 0;
-				if (!allchanged)
-					u[i++].isSaved = IsSavedType.is_Redo;
-
-				for (; i != u.Length; ++i)
-					u[i].isSaved = IsSavedType.is_None;
-
-				Undoables.Clear();
-				for (i = u.Length - 1; i != -1; --i)
-					Undoables.Push(u[i]);
-			}
-
-			if (Redoables.Count != 0)
-			{
-				var r = Redoables.ToArray();
-
-				int i = 0;
-				if (!allchanged)
-					r[i++].isSaved = IsSavedType.is_Undo;
-
-				for (; i != r.Length; ++i)
-					r[i].isSaved = IsSavedType.is_None;
-
-				Redoables.Clear();
-				for (i = r.Length - 1; i != -1; --i)
-					Redoables.Push(r[i]);
-			}
-		}
-
-		/// <summary>
-		/// Re-determines the y-position (aka row) of all
-		/// <c><see cref="Restorable">Restorables</see></c> when user sorts cols.
-		/// </summary>
-		/// <remarks>The presort-vars do not need to be cleared.
-		/// 
-		/// 
-		/// It would probably be easier to contain
-		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
-		/// instead of <c>Stacks</c>.</remarks>
-		internal void ResetY()
-		{
-			if (Undoables.Count != 0)
-			{
-				Restorable[] u = Undoables.ToArray();
-
-				ResetY(ref u);
-
-				Undoables.Clear();
-				for (int i = u.Length - 1; i != -1; --i)
-					Undoables.Push(u[i]);
-			}
-
-			if (Redoables.Count != 0)
-			{
-				Restorable[] r = Redoables.ToArray();
-
-				ResetY(ref r);
-
-				Redoables.Clear();
-				for (int i = r.Length - 1; i != -1; --i)
-					Redoables.Push(r[i]);
-			}
-		}
-
-		/// <summary>
-		/// Helper for <c><see cref="ResetY()">ResetY()</see></c>.
-		/// </summary>
-		/// <param name="rests"></param>
-		void ResetY(ref Restorable[] rests)
-		{
-			int y;
-
-			Restorable rest;
-			for (int i = 0; i != rests.Length; ++i)
-			{
-				rest = rests[i];
-
-				switch (rest.RestoreType)
-				{
-					case UrType.rt_Cell: // cell
-					{
-						y = rest.cell.y;
-
-						int c = rest.cell.x;
-						for (int r = 0; r != _grid.RowCount; ++r)
-						{
-							if (_grid[r,c].y_presort == y)
-							{
-								rest.cell.y = _grid[r,c].y;
-								break;
-							}
-						}
-						break;
-					}
-
-					case UrType.rt_Insert: // r
-					case UrType.rt_Delete:
-						y = rest.r._id;
-
-						for (int r = 0; r != _grid.RowCount; ++r)
-						{
-							if (_grid.Rows[r]._id_presort == y)
-							{
-								rest.r._id = _grid.Rows[r]._id;
-								break;
-							}
-						}
-						break;
-
-					case UrType.rt_Overwrite: // r,rPre,rPos
-						y = rest.rPre._id;
-
-						for (int r = 0; r != _grid.RowCount; ++r)
-						{
-							if (_grid.Rows[r]._id_presort == y)
-							{
-//								rest.r   ._id = // no need don't bother gets reset on each Undo/Redo.
-								rest.rPre._id =
-								rest.rPos._id = _grid.Rows[r]._id;
-								break;
-							}
-						}
-						break;
-
-					case UrType.rt_ArrayInsert: // array
-					case UrType.rt_ArrayDelete:
-						for (int a = 0; a != rest.array.Length; ++a)
-						{
-							y = rest.array[a]._id;
-
-							for (int r = 0; r != _grid.RowCount; ++r)
-							{
-								if (_grid.Rows[r]._id_presort == y)
-								{
-									rest.array[a]._id = _grid.Rows[r]._id;
-									break;
-								}
-							}
-						}
-
-						// Sort by id-asc
-						Array.Sort(rest.array, (a,b) => a._id.CompareTo(b._id));
-						break;
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// Chains <c><see cref="Restorable">Restorables</see></c> of
-		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> when 2+
-		/// <c><see cref="Cell">Cells</see></c> get changed by a single
-		/// operation and need to be Undone or Redone by a single action.
-		/// </summary>
-		/// <param name="length">the count of <c>Restorables</c> to chain
-		/// together and rule in a single action</param>
-		/// <remarks>Call this only *once* after each multi-celled operation and
-		/// mind that a chain is required only if its <paramref name="length"/>
-		/// is greater than <c>1</c>.</remarks>
-		internal void SetChained(int length)
-		{
-			if (_chain == UInt32.MaxValue)
-				_chain = (uint)0;
-
-			++_chain;
-
-			var u = Undoables.ToArray();
-
-			int i = 0;
-			for (; i != length; ++i)
-				u[i].chain = _chain;
-
-			Undoables.Clear();
-			for (i = u.Length - 1; i != -1; --i)
-				Undoables.Push(u[i]);
 		}
 
 
@@ -533,12 +336,10 @@ namespace yata
 
 			Redoables.Push(_it);
 
-			if (!finish)
-			{
-				Undo(); // recurse funct.
-			}
-			else
+			if (finish)
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
+
+			else Undo(); // recurse funct.
 		}
 
 		/// <summary>
@@ -588,28 +389,10 @@ namespace yata
 
 			Undoables.Push(_it);
 
-			if (!finish)
-			{
-				Redo(); // recurse funct.
-			}
-			else
+			if (finish)
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
-		}
 
-
-		/// <summary>
-		/// Invalidates a bunch of <c>Controls</c>.
-		/// </summary>
-		void Invalidate()
-		{
-			int invalid = YataGrid.INVALID_GRID
-						| YataGrid.INVALID_FROZ
-						| YataGrid.INVALID_ROWS
-						| YataGrid.INVALID_COLS;
-			if (_grid.Propanel != null && _grid.Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
-
-			_grid.Invalidator(invalid);
+			else Redo(); // recurse funct.
 		}
 		#endregion Methods
 
@@ -759,6 +542,22 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Invalidates a bunch of <c>Controls</c>.
+		/// </summary>
+		void Invalidate()
+		{
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS
+						| YataGrid.INVALID_COLS;
+			if (_grid.Propanel != null && _grid.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			_grid.Invalidator(invalid);
+		}
+
+
+		/// <summary>
 		/// Inserts an array of <c><see cref="Row">Rows</see></c> in accord with
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
@@ -844,6 +643,205 @@ namespace yata
 			_grid._f.Obfuscate(false);
 		}
 		#endregion Methods (actions)
+
+
+		#region Methods (reset)
+		/// <summary>
+		/// Chains <c><see cref="Restorable">Restorables</see></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> when 2+
+		/// <c><see cref="Cell">Cells</see></c> get changed by a single
+		/// operation and need to be Undone or Redone by a single action.
+		/// </summary>
+		/// <param name="length">the count of <c>Restorables</c> to chain
+		/// together and rule in a single action</param>
+		/// <remarks>Call this only *once* after each multi-celled operation and
+		/// mind that a chain is required only if its <paramref name="length"/>
+		/// is greater than <c>1</c>.</remarks>
+		internal void SetChained(int length)
+		{
+			if (_chain == UInt32.MaxValue)
+				_chain = (uint)0;
+
+			++_chain;
+
+			var u = Undoables.ToArray();
+
+			int i = 0;
+			for (; i != length; ++i)
+				u[i].chain = _chain;
+
+			Undoables.Clear();
+			for (i = u.Length - 1; i != -1; --i)
+				Undoables.Push(u[i]);
+		}
+
+
+		/// <summary>
+		/// Re-determines the
+		/// <c><see cref="Restorable.isSaved">Restorable.isSaved</see></c> var
+		/// of the <c><see cref="Undoables"/></c> and
+		/// <c><see cref="Redoables"/></c> when user saves the 2da-file.
+		/// </summary>
+		/// <param name="allchanged"><c>true</c> to set all <c>Undoables</c> and
+		/// <c>Redoables</c> to
+		/// <c><see cref="IsSavedType.is_None">IsSavedType.is_None</see></c></param>
+		/// <remarks>It would probably be easier to contain
+		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
+		/// instead of <c>Stacks</c>.</remarks>
+		internal void ResetSaved(bool allchanged = false)
+		{
+			if (Undoables.Count != 0)
+			{
+				var u = Undoables.ToArray();
+
+				int i = 0;
+				if (!allchanged)
+					u[i++].isSaved = IsSavedType.is_Redo;
+
+				for (; i != u.Length; ++i)
+					u[i].isSaved = IsSavedType.is_None;
+
+				Undoables.Clear();
+				for (i = u.Length - 1; i != -1; --i)
+					Undoables.Push(u[i]);
+			}
+
+			if (Redoables.Count != 0)
+			{
+				var r = Redoables.ToArray();
+
+				int i = 0;
+				if (!allchanged)
+					r[i++].isSaved = IsSavedType.is_Undo;
+
+				for (; i != r.Length; ++i)
+					r[i].isSaved = IsSavedType.is_None;
+
+				Redoables.Clear();
+				for (i = r.Length - 1; i != -1; --i)
+					Redoables.Push(r[i]);
+			}
+		}
+
+
+		/// <summary>
+		/// Re-determines the y-position (aka row) of all
+		/// <c><see cref="Restorable">Restorables</see></c> when user sorts cols.
+		/// </summary>
+		/// <remarks>The presort-vars do not need to be cleared.
+		/// 
+		/// 
+		/// It would probably be easier to contain
+		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
+		/// instead of <c>Stacks</c>.</remarks>
+		internal void ResetY()
+		{
+			if (Undoables.Count != 0)
+			{
+				Restorable[] u = Undoables.ToArray();
+
+				ResetY(ref u);
+
+				Undoables.Clear();
+				for (int i = u.Length - 1; i != -1; --i)
+					Undoables.Push(u[i]);
+			}
+
+			if (Redoables.Count != 0)
+			{
+				Restorable[] r = Redoables.ToArray();
+
+				ResetY(ref r);
+
+				Redoables.Clear();
+				for (int i = r.Length - 1; i != -1; --i)
+					Redoables.Push(r[i]);
+			}
+		}
+
+		/// <summary>
+		/// Helper for <c><see cref="ResetY()">ResetY()</see></c>.
+		/// </summary>
+		/// <param name="rests"></param>
+		void ResetY(ref Restorable[] rests)
+		{
+			int y;
+
+			Restorable rest;
+			for (int i = 0; i != rests.Length; ++i)
+			{
+				rest = rests[i];
+
+				switch (rest.RestoreType)
+				{
+					case UrType.rt_Cell: // cell
+					{
+						y = rest.cell.y;
+
+						int c = rest.cell.x;
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid[r,c].y_presort == y)
+							{
+								rest.cell.y = _grid[r,c].y;
+								break;
+							}
+						}
+						break;
+					}
+
+					case UrType.rt_Insert: // r
+					case UrType.rt_Delete:
+						y = rest.r._id;
+
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid.Rows[r]._id_presort == y)
+							{
+								rest.r._id = _grid.Rows[r]._id;
+								break;
+							}
+						}
+						break;
+
+					case UrType.rt_Overwrite: // r,rPre,rPos
+						y = rest.rPre._id;
+
+						for (int r = 0; r != _grid.RowCount; ++r)
+						{
+							if (_grid.Rows[r]._id_presort == y)
+							{
+//								rest.r   ._id = // no need don't bother gets reset on each Undo/Redo.
+								rest.rPre._id =
+								rest.rPos._id = _grid.Rows[r]._id;
+								break;
+							}
+						}
+						break;
+
+					case UrType.rt_ArrayInsert: // array
+					case UrType.rt_ArrayDelete:
+						for (int a = 0; a != rest.array.Length; ++a)
+						{
+							y = rest.array[a]._id;
+
+							for (int r = 0; r != _grid.RowCount; ++r)
+							{
+								if (_grid.Rows[r]._id_presort == y)
+								{
+									rest.array[a]._id = _grid.Rows[r]._id;
+									break;
+								}
+							}
+						}
+
+						// Sort by id-asc
+						Array.Sort(rest.array, (a,b) => a._id.CompareTo(b._id));
+						break;
+				}
+			}
+		}
+		#endregion Methods (reset)
 
 
 /*		#region debug
