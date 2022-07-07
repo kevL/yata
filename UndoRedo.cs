@@ -20,7 +20,7 @@ namespace yata
 		internal Cell cell;						// a Cell that was user-changed
 		internal string pretext;				// its text before it was changed
 		internal string postext;				// its text after it was changed
-		internal UndoRedo.ChainGroup chain;		// 'b' or 'c' if 2+ Cells changed in a single operation
+		internal uint chain;					// a chain-id for multi-celled operations
 
 		internal Row r;							// a Row that was user-changed
 		internal Row rPre;						// the row as it was before the change
@@ -56,13 +56,6 @@ namespace yata
 			is_Undo,	// 1 - the Undo-state is the saved state.
 			is_Redo		// 2 - the Redo-state is the saved state.
 		}
-
-		internal enum ChainGroup
-		{
-			a,	// no chain
-			b,	// chaingroup 'b'
-			c	// chaingroup 'c'
-		}
 		#endregion Enums
 
 
@@ -82,15 +75,13 @@ namespace yata
 		/// <summary>
 		/// When user does consecutive <c><see cref="Cell"/></c> changes that
 		/// involve 2+ <c>Cells</c> the Undo/Redo routines need to distinguish
-		/// one operation from the next. A <c><see cref="ChainGroup"/></c> will
-		/// be applied to each that toggles between
-		/// <c><see cref="ChainGroup.b">ChainGroup.b</see></c> and
-		/// <c><see cref="ChainGroup.c">ChainGroup.c</see></c>. The default is
-		/// actually <c><see cref="ChainGroup.a">ChainGroup.a</see></c> that
-		/// denotes a single-cell operation that does not require
-		/// <c><see cref="Restorable">Restorables</see></c> to be chained.
+		/// one operation from the next. A <c>UInt32</c> will be successively
+		/// incremented and applied to each <c><see cref="Restorable"/></c> of
+		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c> to define its
+		/// chaingroup. The default of <c>0</c> shall be reserved for
+		/// <c>Restorables</c> that are *not* chained together.
 		/// </summary>
-		ChainGroup _chain = ChainGroup.b;
+		uint _chain;
 
 		/// <summary>
 		/// When <c><see cref="Restorable">Restorables</see></c> of
@@ -162,7 +153,7 @@ namespace yata
 			it.cell    = cell.Clone() as Cell;	// is used by current action ->
 			it.pretext = it.cell.text;			// used by Undo
 			it.postext = String.Empty;			// used by Redo
-			it.chain   = ChainGroup.a;			// used by both Undo and Redo
+			it.chain   = (uint)0;				// used by both Undo and Redo
 
 			it.r    =							// not used
 			it.rPre =							// not used
@@ -193,7 +184,7 @@ namespace yata
 			it.cell    = null;			// not used
 			it.pretext =				// not used
 			it.postext = null;			// not used
-			it.chain   = ChainGroup.a;	// not used
+			it.chain   = (uint)0;		// not used
 
 			it.r = row.Clone() as Row;	// is used by current action
 
@@ -221,7 +212,7 @@ namespace yata
 			it.cell    = null;				// not used
 			it.pretext =					// not used
 			it.postext = null;				// not used
-			it.chain   = ChainGroup.a;		// not used
+			it.chain   = (uint)0;			// not used
 
 			it.r    = null;					// is used by current action ->
 			it.rPre = row.Clone() as Row;	// used by Undo
@@ -252,7 +243,7 @@ namespace yata
 			it.cell    = null;			// not used
 			it.pretext =				// not used
 			it.postext = null;			// not used
-			it.chain   = ChainGroup.a;	// not used
+			it.chain   = (uint)0;		// not used
 
 			it.r    =					// not used
 			it.rPre =					// not used
@@ -473,33 +464,25 @@ namespace yata
 		/// </summary>
 		/// <param name="length">the count of <c>Restorables</c> to chain
 		/// together and rule in a single action</param>
+		/// <remarks>Call this only *once* after each multi-celled operation and
+		/// mind that a chain is required only if its <paramref name="length"/>
+		/// is greater than <c>1</c>.</remarks>
 		internal void SetChained(int length)
 		{
-			ChainGroup chaingroup = GetChainGroup();
+			if (_chain == UInt32.MaxValue)
+				_chain = (uint)0;
+
+			++_chain;
 
 			var u = Undoables.ToArray();
 
 			int i = 0;
 			for (; i != length; ++i)
-				u[i].chain = chaingroup;
+				u[i].chain = _chain;
 
 			Undoables.Clear();
 			for (i = u.Length - 1; i != -1; --i)
 				Undoables.Push(u[i]);
-		}
-
-		/// <summary>
-		/// Gets a <c><see cref="ChainGroup"/></c> for chained
-		/// <c><see cref="Restorable">Restorables</see></c> of
-		/// <c><see cref="UrType.rt_Cell">UrType.rt_Cell</see></c>.
-		/// </summary>
-		/// <returns>you do the Math</returns>
-		ChainGroup GetChainGroup()
-		{
-			if (_chain == ChainGroup.b)
-				return (_chain = ChainGroup.c);
-
-			return (_chain = ChainGroup.b);
 		}
 
 
@@ -511,13 +494,15 @@ namespace yata
 		{
 			_it = Undoables.Pop();
 
+			bool finish = _it.chain == 0
+					   || Undoables.Count == 0
+					   || Undoables.Peek().chain != _it.chain;
+
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
 					_it.cell.text = _it.pretext;
-					RestoreCell(_it.chain == ChainGroup.a
-							 || Undoables.Count == 0
-							 || Undoables.Peek().chain != _it.chain);
+					RestoreCell(finish);
 					break;
 
 				case UrType.rt_Insert:
@@ -548,9 +533,7 @@ namespace yata
 
 			Redoables.Push(_it);
 
-			if (_it.chain != ChainGroup.a
-				&& Undoables.Count != 0
-				&& Undoables.Peek().chain == _it.chain)
+			if (!finish)
 			{
 				Undo(); // recurse funct.
 			}
@@ -566,13 +549,15 @@ namespace yata
 		{
 			_it = Redoables.Pop();
 
+			bool finish = _it.chain == 0
+					   || Redoables.Count == 0
+					   || Redoables.Peek().chain != _it.chain;
+
 			switch (_it.RestoreType)
 			{
 				case UrType.rt_Cell:
 					_it.cell.text = _it.postext;
-					RestoreCell(_it.chain == ChainGroup.a
-							 || Redoables.Count == 0
-							 || Redoables.Peek().chain != _it.chain);
+					RestoreCell(finish);
 					break;
 
 				case UrType.rt_Insert:
@@ -603,9 +588,7 @@ namespace yata
 
 			Undoables.Push(_it);
 
-			if (_it.chain != ChainGroup.a
-				&& Redoables.Count != 0
-				&& Redoables.Peek().chain == _it.chain)
+			if (!finish)
 			{
 				Redo(); // recurse funct.
 			}
