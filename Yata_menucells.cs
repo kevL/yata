@@ -40,6 +40,7 @@ namespace yata
 			Cell cell; string text;
 
 			int invalid = -1;
+			int replaced = 0;
 
 			_copytext = new string[_copyvert, _copyhori];
 
@@ -58,6 +59,7 @@ namespace yata
 
 					if (cell.text != text)
 					{
+						++replaced;
 						Table.ChangeCellText(cell, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
@@ -75,11 +77,14 @@ namespace yata
 				}
 			}
 
-			if (_fclip != null)
-				_fclip.SetCellsBufferText();
+			if (replaced > 1)
+				Table._ur.SetChained(replaced);
 
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
+
+			if (_fclip != null)
+				_fclip.SetCellsBufferText();
 		}
 
 		/// <summary>
@@ -115,7 +120,9 @@ namespace yata
 		/// Pastes to an only selected cell. If more than one field is in
 		/// <c><see cref="_copytext">_copytext[,]</see></c> then the only
 		/// selected cell will be the top-left corner of the paste-block; fields
-		/// that overflow the table to right or bottom shall be ignored.
+		/// that overflow the table to right or bottom shall be ignored. If a
+		/// frozen-cell is currently selected then only that cell shall be
+		/// pasted to (with the first field in <c><see cref="_copytext"/></c>).
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -134,6 +141,7 @@ namespace yata
 			Cell cell; string text;
 
 			int invalid = -1;
+			int replaced = 0;
 
 			if (sel.x >= Table.FrozenCount)
 			{
@@ -150,6 +158,7 @@ namespace yata
 
 					if (text != cell.text)
 					{
+						++replaced;
 						Table.ChangeCellText(cell, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
@@ -190,10 +199,13 @@ namespace yata
 				}
 			}
 
+			if (replaced > 1)
+				Table._ur.SetChained(replaced);
+
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
 
-			EnableCelleditOperations();
+			EnableCelleditOperations(); // TODO: why is the Paste edit-funct the only one that deters celledit ops
 		}
 
 		/// <summary>
@@ -208,7 +220,9 @@ namespace yata
 		internal void editcellsclick_Delete(object sender, EventArgs e)
 		{
 			Cell sel; string text;
+
 			int invalid = -1;
+			int replaced = 0;
 
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
@@ -222,6 +236,7 @@ namespace yata
 
 					if (sel.text != text)
 					{
+						++replaced;
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
@@ -238,6 +253,9 @@ namespace yata
 					}
 				}
 			}
+
+			if (replaced > 1)
+				Table._ur.SetChained(replaced);
 
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
@@ -255,7 +273,9 @@ namespace yata
 		void editcellsclick_Lower(object sender, EventArgs e)
 		{
 			Cell sel; string text;
+
 			int invalid = -1;
+			int replaced = 0;
 
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
@@ -264,6 +284,7 @@ namespace yata
 				{
 					if (sel.text != (text = sel.text.ToLower(CultureInfo.CurrentCulture)))
 					{
+						++replaced;
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
@@ -280,6 +301,9 @@ namespace yata
 					}
 				}
 			}
+
+			if (replaced > 1)
+				Table._ur.SetChained(replaced);
 
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
@@ -297,7 +321,9 @@ namespace yata
 		void editcellsclick_Upper(object sender, EventArgs e)
 		{
 			Cell sel; string text;
+
 			int invalid = -1;
+			int replaced = 0;
 
 			foreach (var row in Table.Rows)
 			for (int c = 0; c != Table.ColCount; ++c)
@@ -306,6 +332,7 @@ namespace yata
 				{
 					if (sel.text != (text = sel.text.ToUpper(CultureInfo.CurrentCulture)))
 					{
+						++replaced;
 						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
@@ -322,6 +349,9 @@ namespace yata
 					}
 				}
 			}
+
+			if (replaced > 1)
+				Table._ur.SetChained(replaced);
 
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
@@ -343,7 +373,9 @@ namespace yata
 				if (tid.ShowDialog(this) == DialogResult.OK)
 				{
 					Cell sel; string text;
+
 					int invalid = -1;
+					int replaced = 0;
 
 					foreach (var row in Table.Rows)
 					for (int c = 0; c != Table.ColCount; ++c)
@@ -357,6 +389,7 @@ namespace yata
 
 							if (sel.text != text)
 							{
+								++replaced;
 								Table.ChangeCellText(sel, text);	// does not do a text-check
 								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 							}
@@ -373,6 +406,9 @@ namespace yata
 							}
 						}
 					}
+
+					if (replaced > 1)
+						Table._ur.SetChained(replaced);
 
 					if (invalid == YataGrid.INVALID_GRID)
 						Table.Invalidator(invalid);
@@ -392,15 +428,15 @@ namespace yata
 			it_DeselectCell.Enabled = anyselected;
 
 			bool contiguous = Table.areSelectedCellsContiguous();
-			it_CutCell     .Enabled = !Table.Readonly && contiguous;
-			it_CopyCell    .Enabled = contiguous;
+			it_CutCell   .Enabled = !Table.Readonly && contiguous;
+			it_CopyCell  .Enabled = contiguous;
 
-			it_PasteCell   .Enabled = !Table.Readonly && Table.getSelectedCell() != null;
+			it_PasteCell .Enabled = !Table.Readonly && Table.getSelectedCell() != null;
 
-			it_DeleteCell  .Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
-			it_Lower       .Enabled = // TODO: if any selected cell is not lowercase  or loadchanged
-			it_Upper       .Enabled = // TODO: if any selected cell is not uppercase  or loadchanged
-			it_Apply       .Enabled = !Table.Readonly && anyselected;
+			it_DeleteCell.Enabled = // TODO: if any selected cell is not 'gs.Stars' or loadchanged
+			it_Lower     .Enabled = // TODO: if any selected cell is not lowercase  or loadchanged
+			it_Upper     .Enabled = // TODO: if any selected cell is not uppercase  or loadchanged
+			it_Apply     .Enabled = !Table.Readonly && anyselected;
 
 			// NOTE: 'it_GotoLoadchanged*.Enabled' shall be detered independently
 			// by EnableGotoLoadchanged()
