@@ -61,6 +61,7 @@ namespace yata
 
 		#region Fields
 		readonly YataGrid _grid;
+		readonly Yata _f;
 
 		readonly Stack<Restorable> Undoables = new Stack<Restorable>(); // states that can be Undone to
 		readonly Stack<Restorable> Redoables = new Stack<Restorable>(); // states that can be Redone to
@@ -133,7 +134,7 @@ namespace yata
 		/// <c>UndoRedo</c> will track changes for</param>
 		internal UndoRedo(YataGrid grid)
 		{
-			_grid = grid;
+			_f = (_grid = grid)._f;
 		}
 		#endregion cTor
 
@@ -268,8 +269,8 @@ namespace yata
 			Undoables.Clear();
 			Redoables.Clear();
 
-			_grid._f.EnableUndo(false);
-			_grid._f.EnableRedo(false);
+			_f.EnableUndo(false);
+			_f.EnableRedo(false);
 		}
 
 		/// <summary>
@@ -284,8 +285,8 @@ namespace yata
 			Undoables.Push(it);
 			Redoables.Clear();
 
-			_grid._f.EnableUndo(true);
-			_grid._f.EnableRedo(false);
+			_f.EnableUndo(true);
+			_f.EnableRedo(false);
 		}
 
 
@@ -297,7 +298,7 @@ namespace yata
 		{
 			_it = Undoables.Pop();
 
-			bool finish = _it.chain == 0
+			bool finish = _it.chain == (uint)0
 					   || Undoables.Count == 0
 					   || Undoables.Peek().chain != _it.chain;
 
@@ -350,7 +351,7 @@ namespace yata
 		{
 			_it = Redoables.Pop();
 
-			bool finish = _it.chain == 0
+			bool finish = _it.chain == (uint)0
 					   || Redoables.Count == 0
 					   || Redoables.Peek().chain != _it.chain;
 
@@ -437,9 +438,9 @@ namespace yata
 
 				_grid.EnsureDisplayed(cell);
 
-				_grid._f.EnableCelleditOperations();
-				_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-				_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+				_f.EnableCelleditOperations();
+				_f.EnableGotoReplaced(_grid.anyReplaced());
+				_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 				// TODO: technically this could involve re-ordering rowids
 
@@ -475,15 +476,15 @@ namespace yata
 			}
 			YataGrid._init = false;
 
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			_f.EnableGotoReplaced(_grid.anyReplaced());
+			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			_grid.ClearSelects(false, true);
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
 			if (Settings._autorder && Yata.order() != 0)
-				_grid._f.layout(true);
+				_f.layout(true);
 
 			Invalidate();
 		}
@@ -504,11 +505,11 @@ namespace yata
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
 
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			_f.EnableGotoReplaced(_grid.anyReplaced());
+			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			if (Settings._autorder && Yata.order() != 0)
-				_grid._f.layout(true);
+				_f.layout(true);
 
 			Invalidate();
 		}
@@ -532,11 +533,11 @@ namespace yata
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			_f.EnableGotoReplaced(_grid.anyReplaced());
+			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			if (Settings._autorder && Yata.order() != 0)
-				_grid._f.layout(true);
+				_f.layout(true);
 
 			Invalidate();
 		}
@@ -566,7 +567,7 @@ namespace yata
 		{
 			//logfile.Log("UndoRedo.InsertArray()");
 
-			_grid._f.Obfuscate();
+			_f.Obfuscate();
 			DrawRegulator.SuspendDrawing(_grid);
 
 
@@ -592,8 +593,8 @@ namespace yata
 			}
 			_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			_f.EnableGotoReplaced(_grid.anyReplaced());
+			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			_grid.ClearSelects(false, true);
 			int r = _it.array[0]._id;
@@ -603,11 +604,11 @@ namespace yata
 			_grid.EnsureDisplayedRow(r);				// TODO: EnsureDisplayedRows()
 
 			if (Settings._autorder && Yata.order() != 0)
-				_grid._f.layout(true);
+				_f.layout(true);
 
 
 			DrawRegulator.ResumeDrawing(_grid);
-			_grid._f.Obfuscate(false);
+			_f.Obfuscate(false);
 		}
 
 		/// <summary>
@@ -619,7 +620,7 @@ namespace yata
 		{
 			//logfile.Log("UndoRedo.DeleteArray()");
 
-			_grid._f.Obfuscate();
+			_f.Obfuscate();
 			DrawRegulator.SuspendDrawing(_grid);
 
 
@@ -632,15 +633,15 @@ namespace yata
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
 
-			_grid._f.EnableGotoReplaced(_grid.anyReplaced());
-			_grid._f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			_f.EnableGotoReplaced(_grid.anyReplaced());
+			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
 			if (Settings._autorder && Yata.order() != 0)
-				_grid._f.layout(true);
+				_f.layout(true);
 
 
 			DrawRegulator.ResumeDrawing(_grid);
-			_grid._f.Obfuscate(false);
+			_f.Obfuscate(false);
 		}
 		#endregion Methods (actions)
 
