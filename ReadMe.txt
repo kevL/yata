@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 June 29
+2022 July 10
 kevL's
-ver 5.1.2.0
+ver 5.1.3.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -66,16 +66,24 @@ Edit
 - Undo : Ctrl+z
 - Redo : Ctrl+y
 
-- Deselect : deselects selected cells, rows, and cols
+- Deselect all : deselects selected cells, rows, and cols
+
+- Goto : Ctrl+g (focuses the Goto box)
 
 - Find      : Ctrl+f (focuses the Search box)
 - Find next : F3
 - Find pre  : Shift+F3
 
-- Goto : Ctrl+g (focuses the Goto box)
+- Replace text ...   : opens a dialog to find and replace fields or subfields
+- Goto replaced next : selects the next cell that has been changed after a
+                       replace-all operation
+- Goto replaced pre  : selects the previous cell that has been changed after a
+                       replace-all operation
+- Clear replaced     : clears all cells' replaced flags
 
 - Goto loadchanged     : Ctrl+n (see Appendix A: note on Load)
 - Goto loadchanged pre : Ctrl+Shift+n
+- Clear loadchanged    : clears all cells' loadchanged flags
 
 - Default value ... : opens a dialog to edit the 2da-file's Default value (apps
                       that try to access an invalid row or col should return
@@ -144,7 +152,7 @@ Goto box (type a row ID and press Enter. See also Settings.Cfg "instantgoto=")
 Search box (type a string to search for and press [Enter] or [F3]. Note that
             [F3] keeps the searchbox focused while [Enter] switches focus to the
             table. [Shift] reverses the search direction
-Search options dropdown (substring or wholeword)
+Search options dropdown (subfield or wholefield)
 
 
 Clipboard
@@ -178,10 +186,10 @@ Clipboard
                    the row's "label" - so by freezing it you can scroll to the
                    right and still read what it is.
 
-- Propanel              : F7 (toggles the PropertyPanel on/off)
-- Propanel location     : F8 (cycles the panel's location through the four
-                          corners of the table)
-- Propanel location pre : Shift+F8 (reverse direction)
+- Propanel               : F7 (toggles the PropertyPanel on/off)
+- Propanel location next : F8 (cycles the panel's location through the four
+                           corners of the table)
+- Propanel location pre  : Shift+F8 (reverse direction)
 
 - External diff/merger : Ctrl+m (starts an external diff program with 2 diffed
                          files open. See Appendix M: WinMerge)
