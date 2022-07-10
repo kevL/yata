@@ -1240,7 +1240,7 @@ namespace yata
 			this.it_PropanelLoc.Name = "it_PropanelLoc";
 			this.it_PropanelLoc.ShortcutKeys = System.Windows.Forms.Keys.F8;
 			this.it_PropanelLoc.Size = new System.Drawing.Size(250, 22);
-			this.it_PropanelLoc.Text = "Propanel l&ocation";
+			this.it_PropanelLoc.Text = "Propanel l&ocation next";
 			this.it_PropanelLoc.Click += new System.EventHandler(this.opsclick_PropanelLocation);
 			// 
 			// it_PropanelLoc_pre
