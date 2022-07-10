@@ -174,6 +174,8 @@ namespace yata
 							invalid = YataGrid.INVALID_GRID;
 					}
 				}
+
+				EnableCelleditOperations();
 			}
 			else
 			{
@@ -204,8 +206,6 @@ namespace yata
 
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
-
-			EnableCelleditOperations(); // TODO: why is the Paste edit-funct the only one that deters celledit ops
 		}
 
 		/// <summary>
