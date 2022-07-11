@@ -157,10 +157,10 @@
     <Compile Include="Yata.Designer.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="Yata_contextce.cs">
+    <Compile Include="Yata_contextcell.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
-    <Compile Include="Yata_contextro.cs">
+    <Compile Include="Yata_contextrow.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
     <Compile Include="Yata_contexttab.cs">
