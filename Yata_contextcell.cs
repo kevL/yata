@@ -118,7 +118,7 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputSpells.SpontCastClass:
+				case InfoInputSpells.SpontCastClassReq:
 					if (Info.classLabels.Count != 0)
 						return true;
 					break;
@@ -229,7 +229,8 @@ namespace yata
 		{
 			switch (_sel.x)
 			{
-				case InfoInputBaseItems.EquipableSlots: // this doesn't rely on a 2da-grope
+				case InfoInputBaseItems.EquipableSlots: // these don't rely on 2da-gropes ->
+				case InfoInputBaseItems.ModelType:
 					return true;
 			}
 			return false;
@@ -515,7 +516,7 @@ namespace yata
 							break;
 
 						case InfoInputSpells.Category: // INT Input ->
-						case InfoInputSpells.SpontCastClass:
+						case InfoInputSpells.SpontCastClassReq:
 						case InfoInputSpells.TargetingUI:
 							doIntInputSpells();
 							break;
@@ -611,6 +612,10 @@ namespace yata
 								}
 							}
 							break;
+
+						case InfoInputBaseItems.ModelType: // INT Input ->
+							doIntInputItem();
+							break;
 					}
 					break;
 			}
@@ -643,6 +648,16 @@ namespace yata
 		void doIntInputClass()
 		{
 			using (var iic = new InfoInputClasses(this, _sel))
+				doIntInput(iic);
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
+		/// </summary>
+		void doIntInputItem()
+		{
+			using (var iic = new InfoInputBaseItems(this, _sel))
 				doIntInput(iic);
 		}
 

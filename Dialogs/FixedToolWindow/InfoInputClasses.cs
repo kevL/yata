@@ -226,7 +226,7 @@ namespace yata
 			co_Val.Visible = true;
 
 			ClientSize = new Size(ClientSize.Width,
-								  ClientSize.Height - 120);
+								  ClientSize.Height - 20 * 6);
 		}
 
 		/// <summary>

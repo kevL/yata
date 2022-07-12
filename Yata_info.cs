@@ -3148,7 +3148,7 @@ namespace yata
 
 			switch (col)
 			{
-				case 4: // "School" (SpellSchools.2da) - no 2da
+				case InfoInputSpells.School: // (SpellSchools.2da) - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3170,7 +3170,7 @@ namespace yata
 					}
 					break;
 
-				case 5: // "Range" (Ranges.2da) - no 2da
+				case InfoInputSpells.Range: // (Ranges.2da) - no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3196,7 +3196,7 @@ namespace yata
 					}
 					break;
 
-				case 7: // "MetaMagic" - no 2da
+				case InfoInputSpells.MetaMagic: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3384,7 +3384,7 @@ namespace yata
 					}
 					break;
 
-				case 8: // "TargetType" - no 2da
+				case InfoInputSpells.TargetType: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3484,7 +3484,7 @@ namespace yata
 					}
 					break;
 
-				case 52: // "Category" - Categories.2da
+				case InfoInputSpells.Category: // Categories.2da
 					if (it_PathCategories2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3509,7 +3509,7 @@ namespace yata
 					}
 					break;
 
-				case 54: // "UserType" - no 2da
+				case InfoInputSpells.UserType: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3532,7 +3532,7 @@ namespace yata
 					}
 					break;
 
-				case 58: // "SpontCastClassReq" - Classes.2da
+				case InfoInputSpells.SpontCastClassReq: // Classes.2da
 					if (it_PathClasses2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3603,7 +3603,7 @@ namespace yata
 					}
 					break;
 
-				case 65: // "AsMetaMagic" - no 2da
+				case InfoInputSpells.AsMetaMagic: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3642,7 +3642,7 @@ namespace yata
 					}
 					break;
 
-				case 66: // "TargetingUI" - SpellTarget.2da
+				case InfoInputSpells.TargetingUI: // SpellTarget.2da
 					if (it_PathSpellTarget2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3800,7 +3800,7 @@ namespace yata
 					}
 					break;
 
-				case 25: // "CATEGORY" - Categories.2da
+				case InfoInputFeat.Category: // Categories.2da
 					if (it_PathCategories2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3850,7 +3850,7 @@ namespace yata
 					}
 					break;
 
-				case 32: // "MASTERFEAT" - MasterFeats.2da
+				case InfoInputFeat.MasterFeat: // MasterFeats.2da
 					if (it_PathMasterFeats2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3901,7 +3901,7 @@ namespace yata
 					}
 					break;
 
-				case 47: // "TOOLSCATEGORIES" - no 2da
+				case InfoInputFeat.ToolsCategories: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "All Feats"
 					{
@@ -3912,13 +3912,13 @@ namespace yata
 						{
 							switch (result)
 							{
-								case 0:  info += "All Feats";           break;
-								case 1:  info += "Combat Feats";        break;
-								case 2:  info += "Active Combat Feats"; break;
-								case 3:  info += "Defensive Feats";     break;
-								case 4:  info += "Magical Feats";       break;
-								case 5:  info += "Class/Racial Feats";  break;
-								case 6:  info += "Other Feats";         break;
+								case 0: info += "All Feats";           break;
+								case 1: info += "Combat Feats";        break;
+								case 2: info += "Active Combat Feats"; break;
+								case 3: info += "Defensive Feats";     break;
+								case 4: info += "Magical Feats";       break;
+								case 5: info += "Class/Racial Feats";  break;
+								case 6: info += "Other Feats";         break;
 							}
 						}
 						else
@@ -3926,7 +3926,7 @@ namespace yata
 					}
 					break;
 
-				case 57: // "ToggleMode" - CombatModes.2da
+				case InfoInputFeat.ToggleMode: // CombatModes.2da
 					if (it_PathCombatModes2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3973,8 +3973,8 @@ namespace yata
 
 			switch (col)
 			{
-				case 40: // "PrimaryAbil" - no 2da
-				case 41: // "SpellAbil"
+				case InfoInputClasses.PrimaryAbil: // no 2da ->
+				case InfoInputClasses.SpellAbil:
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3994,7 +3994,7 @@ namespace yata
 					}
 					break;
 
-				case 42: // "AlignRestrict" - no 2da
+				case InfoInputClasses.AlignRestrict: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -4087,7 +4087,7 @@ namespace yata
 					}
 					break;
 
-				case 43: // "AlignRstrctType" - no 2da
+				case InfoInputClasses.AlignRstrctType: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -4128,7 +4128,7 @@ namespace yata
 					}
 					break;
 
-				case 74: // "Package" - Packages.2da
+				case InfoInputClasses.Package: // Packages.2da
 					if (it_PathPackages2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -4224,7 +4224,7 @@ namespace yata
 
 			switch (col)
 			{
-				case 5: // "EquipableSlots" - no 2da
+				case InfoInputBaseItems.EquipableSlots: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -4336,6 +4336,28 @@ namespace yata
 									}
 									break;
 								}
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseItems.ModelType: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "simple"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 4)
+						{
+							switch (result)
+							{
+								case 0: info += "simple";       break;
+								case 1: info += "colored";      break;
+								case 2: info += "configurable"; break;
+								case 3: info += "armor";        break;
 							}
 						}
 						else

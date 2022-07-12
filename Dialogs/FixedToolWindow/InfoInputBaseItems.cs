@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -10,6 +11,7 @@ namespace yata
 	{
 		#region Fields (static)
 		internal const int EquipableSlots = 5; // col in BaseItems.2da ->
+		internal const int ModelType      = 7;
 		#endregion Fields (static)
 
 
@@ -98,10 +100,17 @@ namespace yata
 						bu_Clear.Enabled = false;
 					}
 					break;
+
+				case ModelType: // int-val,dropdown,unique
+					list_ModelTypes();
+
+					initintvals(val, co_Val, bu_Clear);
+					break;
 			}
 
 			_init = false;
 		}
+
 
 		/// <summary>
 		/// Prepares this dialog for <c><see cref="EquipableSlots"/></c> input.
@@ -130,6 +139,38 @@ namespace yata
 			cb_04.Visible = cb_05.Visible = cb_06.Visible = cb_07.Visible =
 			cb_08.Visible = cb_09.Visible = cb_10.Visible = cb_11.Visible =
 			cb_12.Visible = cb_13.Visible = cb_14.Visible = true;
+		}
+
+
+		/// <summary>
+		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
+		/// instead.
+		/// </summary>
+		void dropdown()
+		{
+			la_Val.Visible = false;
+			co_Val.Visible = true;
+
+			ClientSize = new Size(ClientSize.Width,
+								  ClientSize.Height - 20 * 5);
+		}
+
+		/// <summary>
+		/// Adds allowable entries for "ModelTypes" to the <c>ComboBox</c> along
+		/// with a final stars item.
+		/// </summary>
+		void list_ModelTypes()
+		{
+			Text = " ModelTypes";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - simple"));
+			co_Val.Items.Add(new tui("1 - colored"));
+			co_Val.Items.Add(new tui("2 - configurable"));
+			co_Val.Items.Add(new tui("3 - armor"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
 		}
 		#endregion init
 
@@ -248,7 +289,29 @@ namespace yata
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void changed_Combobox(object sender, EventArgs e)
-		{}
+		{
+			if (!_init)
+			{
+				if (co_Val.SelectedIndex == co_Val.Items.Count - 1)
+				{
+					bu_Clear.Enabled = false;
+
+					_f.str1 = gs.Stars;
+					_f.int1 = Yata.Info_ASSIGN_STARS;
+				}
+				else
+				{
+					bu_Clear.Enabled = true;
+
+					switch (_cell.x)
+					{
+						case ModelType:
+							_f.int1 = co_Val.SelectedIndex;
+							break;
+					}
+				}
+			}
+		}
 
 
 		/// <summary>
@@ -260,13 +323,17 @@ namespace yata
 		{
 			switch (_cell.x)
 			{
-				case EquipableSlots:
+				case EquipableSlots: // hex,cb,multiple
 					bu_Clear.Enabled = false;
 
 					_cb = null;
 					clearchecks();
 
 					printHexString(_f.int1 = 0);
+					break;
+
+				case ModelType: // dropdown -> fire changed_Combobox()
+					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 					break;
 			}
 		}

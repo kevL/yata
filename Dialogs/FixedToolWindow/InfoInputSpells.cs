@@ -53,16 +53,16 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int School         =  4; // col in Spells.2da ->
-		internal const int Range          =  5;
-		internal const int MetaMagic      =  7;
-		internal const int TargetType     =  8;
-		internal const int ImmunityType   = 45;
-		internal const int Category       = 52;
-		internal const int UserType       = 54;
-		internal const int SpontCastClass = 58;
-		internal const int AsMetaMagic    = 65;
-		internal const int TargetingUI    = 66;
+		internal const int School            =  4; // col in Spells.2da ->
+		internal const int Range             =  5;
+		internal const int MetaMagic         =  7;
+		internal const int TargetType        =  8;
+		internal const int ImmunityType      = 45;
+		internal const int Category          = 52;
+		internal const int UserType          = 54;
+		internal const int SpontCastClassReq = 58;
+		internal const int AsMetaMagic       = 65;
+		internal const int TargetingUI       = 66;
 		#endregion Fields (static)
 
 
@@ -321,7 +321,7 @@ namespace yata
 					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 
-				case SpontCastClass: // int-val,dropdown,unique
+				case SpontCastClassReq: // int-val,dropdown,unique
 					list_SpontCastClasses();
 
 					initintvals(val, co_Val, bu_Clear);
@@ -519,7 +519,7 @@ namespace yata
 			co_Val.Visible = true;
 
 			ClientSize = new Size(ClientSize.Width,
-								  ClientSize.Height - 160);
+								  ClientSize.Height - 20 * 8);
 		}
 
 		/// <summary>
@@ -573,7 +573,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for <c><see cref="SpontCastClass"/></c>
+		/// Adds allowable entries for <c><see cref="SpontCastClassReq"/></c>
 		/// (Classes.2da) to the <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_SpontCastClasses()
@@ -1021,7 +1021,7 @@ namespace yata
 							break;
 
 						case Category:
-						case SpontCastClass:
+						case SpontCastClassReq:
 						case TargetingUI:
 							_f.int1 = co_Val.SelectedIndex;
 							break;
@@ -1147,7 +1147,7 @@ namespace yata
 
 				case ImmunityType: // dropdown -> fire changed_Combobox()
 				case Category:
-				case SpontCastClass:
+				case SpontCastClassReq:
 				case AsMetaMagic:
 				case TargetingUI:
 					co_Val.SelectedIndex = co_Val.Items.Count - 1;
