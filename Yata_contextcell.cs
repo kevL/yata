@@ -62,6 +62,12 @@ namespace yata
 					cellit_Input.Visible = true;
 					cellit_Input.Enabled = !Table.Readonly && isClassesInfoInputCol();
 					break;
+
+				case YataGrid.InfoType.INFO_ITEM:
+					cellit_Input.Text    = "InfoInput (baseitems.2da)";
+					cellit_Input.Visible = true;
+					cellit_Input.Enabled = !Table.Readonly && isBaseItemsInfoInputCol();
+					break;
 			}
 
 			_contextCe.Show(Table, Table.PointToClient(Cursor.Position));
@@ -211,6 +217,20 @@ namespace yata
 					if (Info.packageLabels.Count != 0)
 						return true;
 					break;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool isBaseItemsInfoInputCol()
+		{
+			switch (_sel.x)
+			{
+				case InfoInputBaseItems.EquipableSlots: // this doesn't rely on a 2da-grope
+					return true;
 			}
 			return false;
 		}
@@ -477,18 +497,19 @@ namespace yata
 								if (iis.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
 								{
-									if (int1 == II_ASSIGN_STARS)
-									{
-										Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
-									}
-									else
+									string text;
+									if (int1 != Info_ASSIGN_STARS)
 									{
 										string f;
 										if (int1 > 0xFF) f = "X6"; // is MetaMagic (invocation)
 										else             f = "X2"; // is MetaMagic (standard) or TargetType
 
-										Table.ChangeCellText(_sel, "0x" + int1.ToString(f, CultureInfo.InvariantCulture)); // does not do a text-check
+										text = "0x" + int1.ToString(f, CultureInfo.InvariantCulture);
 									}
+									else
+										text = gs.Stars;
+
+									Table.ChangeCellText(_sel, text); // does not do a text-check
 								}
 							}
 							break;
@@ -546,18 +567,19 @@ namespace yata
 								if (iis.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
 								{
-									if (int1 == II_ASSIGN_STARS)
-									{
-										Table.ChangeCellText(_sel, gs.Stars); // does not do a text-check
-									}
-									else
+									string text;
+									if (int1 != Info_ASSIGN_STARS)
 									{
 										string f;
 										if (_sel.x == InfoInputClasses.AlignRestrict) f = "X2";
 										else                                          f = "X1"; // _sel.x == InfoInputClasses.AlignRstrctType
 
-										Table.ChangeCellText(_sel, "0x" + int1.ToString(f, CultureInfo.InvariantCulture)); // does not do a text-check
+										text = "0x" + int1.ToString(f, CultureInfo.InvariantCulture);
 									}
+									else
+										text = gs.Stars;
+
+									Table.ChangeCellText(_sel, text); // does not do a text-check
 								}
 							}
 							break;
@@ -567,11 +589,35 @@ namespace yata
 							break;
 					}
 					break;
+
+				case YataGrid.InfoType.INFO_ITEM:
+					switch (_sel.x)
+					{
+						case InfoInputBaseItems.EquipableSlots: // HEX Input ->
+							using (var iis = new InfoInputBaseItems(this, _sel))
+							{
+								if (iis.ShowDialog(this) == DialogResult.OK
+									&& int1 != int0)
+								{
+									string text;
+									if (int1 != Info_ASSIGN_STARS)
+									{
+										text = "0x" + int1.ToString("X5", CultureInfo.InvariantCulture);
+									}
+									else
+										text = gs.Stars;
+
+									Table.ChangeCellText(_sel, text); // does not do a text-check
+								}
+							}
+							break;
+					}
+					break;
 			}
 		}
 
 		/// <summary>
-		/// - helper for
+		/// Helper for
 		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
 		/// </summary>
 		void doIntInputSpells()
@@ -581,7 +627,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for
+		/// Helper for
 		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
 		/// </summary>
 		void doIntInputFeat()
@@ -591,7 +637,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for
+		/// Helper for
 		/// <c><see cref="cellclick_InfoInput()">cellclick_InfoInput()</see></c>
 		/// </summary>
 		void doIntInputClass()
@@ -615,11 +661,11 @@ namespace yata
 			if (dialog.ShowDialog(this) == DialogResult.OK
 				&& int1 != int0)
 			{
-				string val;
-				if (int1 == II_ASSIGN_STARS) val = gs.Stars;
-				else                         val = int1.ToString(CultureInfo.InvariantCulture);
+				string text;
+				if (int1 != Info_ASSIGN_STARS) text = int1.ToString(CultureInfo.InvariantCulture);
+				else                           text = gs.Stars;
 
-				Table.ChangeCellText(_sel, val); // does not do a text-check
+				Table.ChangeCellText(_sel, text); // does not do a text-check
 			}
 		}
 

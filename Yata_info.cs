@@ -4206,5 +4206,180 @@ namespace yata
 		internal const int ALIGNRESTRICTTYPE_TOTAL = ALIGNRESTRICTTYPE_LAWCHAOS
 												   | ALIGNRESTRICTTYPE_GOODEVIL;
 		#endregion Class info
+
+
+		#region Item info
+		/// <summary>
+		/// Gets a readable string when mouseovering cols in BaseItems.2da.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="col"></param>
+		/// <returns>info text for the statusbar</returns>
+		string getItemInfo(int id, int col)
+		{
+			string info = gs.non;
+
+			string val;
+			int result;
+
+			switch (col)
+			{
+				case 5: // "EquipableSlots" - no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val.Length > 2
+							&& Int32.TryParse(val.Substring(2),
+											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
+											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+											  out result))
+						{
+							switch (result)
+							{
+								case EQUIPSLOT_NONE:
+									info += "not equipable";
+									break;
+
+								default:
+								{
+									bool space = false;
+									if ((result & EQUIPSLOT_HELMET) != 0)
+									{
+										info += "(1)head";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_ARMOR) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(2)chest";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_BOOTS) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(4)feet";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_GLOVES) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(8)arms";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_MAINHAND) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(16)righthand";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_OFFHAND) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(32)lefthand";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_CLOAK) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(64)back";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_RINGS) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(384)fingers";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_AMULET) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(512)neck";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_BELT) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(1024)waist";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_ARROW) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(2048)arrow";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_BULLET) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(4096)bullet";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_BOLT) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(8192)bolt";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_CWEAPON) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(114688)Cweapon";
+										space = true;
+									}
+									if ((result & EQUIPSLOT_CARMOR) != 0)
+									{
+										if (space) info += gs.Space;
+										info += "(131072)Carmor";
+										space = true;
+									}
+									break;
+								}
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+			}
+
+			return info;
+		}
+
+		// EquipableSlots
+		internal const int EQUIPSLOT_NONE     = 0x00000000; //      0
+		internal const int EQUIPSLOT_HELMET   = 0x00000001; //      1
+		internal const int EQUIPSLOT_ARMOR    = 0x00000002; //      2
+		internal const int EQUIPSLOT_BOOTS    = 0x00000004; //      4
+		internal const int EQUIPSLOT_GLOVES   = 0x00000008; //      8
+		internal const int EQUIPSLOT_MAINHAND = 0x00000010; //     16
+		internal const int EQUIPSLOT_OFFHAND  = 0x00000020; //     32
+		internal const int EQUIPSLOT_CLOAK    = 0x00000040; //     64
+		internal const int EQUIPSLOT_RINGS    = 0x00000180; //    384 // wtf
+		internal const int EQUIPSLOT_AMULET   = 0x00000200; //    512
+		internal const int EQUIPSLOT_BELT     = 0x00000400; //   1024
+		internal const int EQUIPSLOT_ARROW    = 0x00000800; //   2048
+		internal const int EQUIPSLOT_BULLET   = 0x00001000; //   4096
+		internal const int EQUIPSLOT_BOLT     = 0x00002000; //   8192
+		internal const int EQUIPSLOT_CWEAPON  = 0x0001C000; // 114688 // wtf
+		internal const int EQUIPSLOT_CARMOR   = 0x00020000; // 131072
+
+		internal const int EQUIPSLOTS_TOTAL = EQUIPSLOT_HELMET
+											| EQUIPSLOT_ARMOR
+											| EQUIPSLOT_BOOTS
+											| EQUIPSLOT_GLOVES
+											| EQUIPSLOT_MAINHAND
+											| EQUIPSLOT_OFFHAND
+											| EQUIPSLOT_CLOAK
+											| EQUIPSLOT_RINGS
+											| EQUIPSLOT_AMULET
+											| EQUIPSLOT_BELT
+											| EQUIPSLOT_ARROW
+											| EQUIPSLOT_BULLET
+											| EQUIPSLOT_BOLT
+											| EQUIPSLOT_CWEAPON
+											| EQUIPSLOT_CARMOR;
+		#endregion Item info
 	}
 }

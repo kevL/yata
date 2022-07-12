@@ -114,7 +114,7 @@ namespace yata
 					}
 					else // is not a valid hex-value ->
 					{
-						_f.int0 = Yata.II_INIT_INVALID;
+						_f.int0 = Yata.Info_INIT_INVALID;
 						printHexString(_f.int1 = 0);
 						bu_Clear.Enabled = false;
 					}
@@ -149,7 +149,7 @@ namespace yata
 					}
 					else // is not a valid hex-value ->
 					{
-						_f.int0 = Yata.II_INIT_INVALID;
+						_f.int0 = Yata.Info_INIT_INVALID;
 						printHexString(_f.int1 = 0);
 						bu_Clear.Enabled = false;
 					}
@@ -250,7 +250,7 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
-		/// Handles user changing a checkbox.
+		/// Handles user changing a <c>CheckBox</c>.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -366,7 +366,7 @@ namespace yata
 					bu_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
-					_f.int1 = Yata.II_ASSIGN_STARS;
+					_f.int1 = Yata.Info_ASSIGN_STARS;
 				}
 				else
 				{

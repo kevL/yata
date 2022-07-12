@@ -46,7 +46,8 @@ namespace yata
 			INFO_CRAFT,	// 1
 			INFO_SPELL,	// 2
 			INFO_FEAT,	// 3
-			INFO_CLASS	// 4
+			INFO_CLASS,	// 4
+			INFO_ITEM	// 5
 		}
 		#endregion Enums
 

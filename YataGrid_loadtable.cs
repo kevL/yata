@@ -835,6 +835,10 @@ namespace yata
 					case "CLASSES":
 						Info = InfoType.INFO_CLASS;
 						break;
+
+					case "BASEITEMS":
+						Info = InfoType.INFO_ITEM;
+						break;
 				}
 
 				if (!Groped && Info != InfoType.INFO_NONE)

@@ -53,10 +53,10 @@ namespace yata
 			{
 				bu_Clear.Enabled = false;
 
-				if (val == gs.Stars) _f.int0 = Yata.II_ASSIGN_STARS;
-				else                 _f.int0 = Yata.II_INIT_INVALID;
+				if (val == gs.Stars) _f.int0 = Yata.Info_ASSIGN_STARS;
+				else                 _f.int0 = Yata.Info_INIT_INVALID;
 
-				_f.int1 = Yata.II_ASSIGN_STARS;
+				_f.int1 = Yata.Info_ASSIGN_STARS;
 
 				co_Val.SelectedIndex = co_Val.Items.Count - 1;
 			}

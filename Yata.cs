@@ -145,8 +145,8 @@ namespace yata
 		// NOTE: These are to initialize 'int0' and 'int1' and need to be
 		// different to recognize that an invalid current value should be
 		// changed to stars (iff the user accepts the dialog).
-		internal const int II_INIT_INVALID = -2; // for 'int0' only
-		internal const int II_ASSIGN_STARS = -1; // for 'int1' or 'int0'
+		internal const int Info_INIT_INVALID = -2; // for 'int0' only
+		internal const int Info_ASSIGN_STARS = -1; // for 'int1' or 'int0'
 
 
 		/// <summary>
@@ -1526,6 +1526,9 @@ namespace yata
 									break;
 								case YataGrid.InfoType.INFO_CLASS:
 									statbar_lblInfo.Text = getClassInfo(r,c);
+									break;
+								case YataGrid.InfoType.INFO_ITEM:
+									statbar_lblInfo.Text = getItemInfo(r,c);
 									break;
 
 								default:

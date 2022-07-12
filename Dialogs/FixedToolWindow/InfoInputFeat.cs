@@ -305,7 +305,7 @@ namespace yata
 					bu_Clear.Enabled = false;
 
 					_f.str1 = gs.Stars;
-					_f.int1 = Yata.II_ASSIGN_STARS;
+					_f.int1 = Yata.Info_ASSIGN_STARS;
 				}
 				else
 				{
