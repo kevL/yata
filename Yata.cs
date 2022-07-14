@@ -492,7 +492,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnActivated(EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null && !_isCreate)
 			{
 				// NOTE: This could cause VerifyCurrentFileState() to run twice
 				// if user activates Yata by clicking on a tab that changes the
