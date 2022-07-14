@@ -231,6 +231,7 @@ namespace yata
 			{
 				case InfoInputBaseItems.EquipableSlots: // these don't rely on 2da-gropes ->
 				case InfoInputBaseItems.ModelType:
+				case InfoInputBaseItems.WeaponWield:
 					return true;
 			}
 			return false;
@@ -614,6 +615,7 @@ namespace yata
 							break;
 
 						case InfoInputBaseItems.ModelType: // INT Input ->
+						case InfoInputBaseItems.WeaponWield:
 							doIntInputItem();
 							break;
 					}

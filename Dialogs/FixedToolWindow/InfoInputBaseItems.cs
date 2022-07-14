@@ -10,8 +10,9 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int EquipableSlots = 5; // col in BaseItems.2da ->
-		internal const int ModelType      = 7;
+		internal const int EquipableSlots =  5; // col in BaseItems.2da ->
+		internal const int ModelType      =  7;
+		internal const int WeaponWield    = 18;
 		#endregion Fields (static)
 
 
@@ -106,6 +107,12 @@ namespace yata
 
 					initintvals(val, co_Val, bu_Clear);
 					break;
+
+				case WeaponWield: // int-val,dropdown,unique
+					list_WeaponWields();
+
+					initintvals(val, co_Val, bu_Clear);
+					break;
 			}
 
 			_init = false;
@@ -156,19 +163,47 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "ModelTypes" to the <c>ComboBox</c> along
+		/// Adds allowable entries for "ModelType" to the <c>ComboBox</c> along
 		/// with a final stars item.
 		/// </summary>
 		void list_ModelTypes()
 		{
-			Text = " ModelTypes";
+			Text = " ModelType";
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - simple"));
-			co_Val.Items.Add(new tui("1 - colored"));
-			co_Val.Items.Add(new tui("2 - configurable"));
+			co_Val.Items.Add(new tui("0 - simple 1-part"));
+			co_Val.Items.Add(new tui("1 - colored 1-part"));
+			co_Val.Items.Add(new tui("2 - configurable 3-part"));
 			co_Val.Items.Add(new tui("3 - armor"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for "WeaponWield" to the <c>ComboBox</c> along
+		/// with a final stars item.
+		/// </summary>
+		void list_WeaponWields()
+		{
+			Text = " WeaponWield";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - standard one-handed weapon"));
+			co_Val.Items.Add(new tui("1 - not wieldable"));
+			co_Val.Items.Add(new tui("2 - not used/unknown"));
+			co_Val.Items.Add(new tui("3 - not used/unknown"));
+			co_Val.Items.Add(new tui("4 - two-handed weapon"));
+			co_Val.Items.Add(new tui("5 - bow"));
+			co_Val.Items.Add(new tui("6 - crossbow"));
+			co_Val.Items.Add(new tui("7 - shield"));
+			co_Val.Items.Add(new tui("8 - double-sided weapon"));
+			co_Val.Items.Add(new tui("9 - creature weapon"));
+			co_Val.Items.Add(new tui("10 - dart or sling"));
+			co_Val.Items.Add(new tui("11 - shuriken or throwing axe"));
+			co_Val.Items.Add(new tui("12 - spears"));
+			co_Val.Items.Add(new tui("13 - musical instruments"));
 
 			co_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -306,6 +341,7 @@ namespace yata
 					switch (_cell.x)
 					{
 						case ModelType:
+						case WeaponWield:
 							_f.int1 = co_Val.SelectedIndex;
 							break;
 					}
@@ -333,6 +369,7 @@ namespace yata
 					break;
 
 				case ModelType: // dropdown -> fire changed_Combobox()
+				case WeaponWield:
 					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 					break;
 			}

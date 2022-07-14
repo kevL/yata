@@ -4226,7 +4226,7 @@ namespace yata
 			{
 				case InfoInputBaseItems.EquipableSlots: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "not equipable"
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -4345,7 +4345,7 @@ namespace yata
 
 				case InfoInputBaseItems.ModelType: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "simple"
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "simple 1-part"
 					{
 						info = Table.Cols[col].text + ": ";
 
@@ -4354,10 +4354,42 @@ namespace yata
 						{
 							switch (result)
 							{
-								case 0: info += "simple";       break;
-								case 1: info += "colored";      break;
-								case 2: info += "configurable"; break;
-								case 3: info += "armor";        break;
+								case 0: info += "simple 1-part";       break;
+								case 1: info += "colored 1-part";      break;
+								case 2: info += "configurable 3-part"; break;
+								case 3: info += "armor";               break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseItems.WeaponWield: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "standard one-handed weapon"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 14)
+						{
+							switch (result)
+							{
+								case  0: info += "standard one-handed weapon"; break;
+								case  1: info += "not wieldable";              break;
+								case  2: info += "not used/unknown";           break;
+								case  3: info += "not used/unknown";           break;
+								case  4: info += "two-handed weapon";          break;
+								case  5: info += "bow";                        break;
+								case  6: info += "crossbow";                   break;
+								case  7: info += "shield";                     break;
+								case  8: info += "double-sided weapon";        break;
+								case  9: info += "creature weapon";            break;
+								case 10: info += "dart or sling";              break;
+								case 11: info += "shuriken or throwing axe";   break;
+								case 12: info += "spears";                     break;
+								case 13: info += "musical instruments";        break;
 							}
 						}
 						else
