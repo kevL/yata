@@ -27,9 +27,9 @@ namespace yata
 
 		/// <summary>
 		/// This <c>static bool</c> is set <c>true</c> when loading
-		/// Crafting.2da, Spells.2da, Feat.2da, or Classes.2da causes the
-		/// <c><see cref="Settings._pathall">Settings._pathall</see></c>
-		/// directories to be groped.
+		/// Crafting.2da, Spells.2da, Feat.2da, or Classes.2da to indicate that
+		/// the <c><see cref="Settings._pathall">Settings._pathall</see></c>
+		/// directories have been groped.
 		/// </summary>
 		static bool Groped;
 
@@ -68,7 +68,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// A generic warn-box if something goes wonky while loading a 2da-file.
+		/// An <c><see cref="Infobox"/></c> if something goes wonky while
+		/// loading a 2da-file.
 		/// </summary>
 		/// <param name="head">the warning</param>
 		/// <param name="copy">copyable text</param>
@@ -158,19 +159,6 @@ namespace yata
 		/// </list></returns>
 		internal int LoadTable()
 		{
-/*			const string test = "The 2da-file contains double-quotes. Although that can be"
-							  + " valid in a 2da-file Yata's 2da Info-grope is not coded to cope."
-							  + " Format the 2da-file (in a texteditor) to not use double-quotes"
-							  + " if you want to access it for 2da Info.";
-			using (var ib = new Infobox(Infobox.Title_error,
-										test,
-										"A bunch of text. A bunch of text. A bunch of text. A bunch of text."
-										+ " A bunch of text. A bunch of text. A bunch of text. A bunch of text."
-										+ " A bunch of text. A bunch of text.",
-										InfoboxType.Error))
-			{
-				ib.ShowDialog(_f);
-			} */
 			// �
 //			byte[] asciiBytes = Encoding.ASCII.GetBytes("�");
 //			logfile.Log("� = " + asciiBytes);
@@ -639,7 +627,9 @@ namespace yata
 						{
 							++id;
 
-							if (!quelch && Settings._strict && !whitespacewarned && line != tr)
+							if (!quelch && Settings._strict && !whitespacewarned
+								&& (   (Settings._alignoutput == Settings.AoElectron && line != line.TrimEnd()) // 'AoElectron' indents each row with at least one space
+									|| (Settings._alignoutput != Settings.AoElectron && line != tr)))
 							{
 								whitespacewarned = true;
 
