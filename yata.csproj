@@ -154,6 +154,7 @@
     <Compile Include="Statics\logfile.cs" />
     <Compile Include="Statics\Settings.cs" />
     <Compile Include="Statics\Sorter.cs" />
+    <Compile Include="Statics\StringDecryptor.cs" />
     <Compile Include="Statics\TalkReader.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
     <Compile Include="UndoRedo.cs" />
