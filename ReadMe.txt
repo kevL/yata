@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 July 10
+2022 July 14
 kevL's
-ver 5.1.3.0
+ver 5.1.4.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -493,7 +493,8 @@ acceptedit=  when editing a cell Yata's default behavior is to reject an edit
 alignoutput= "true" (without quotes) to align the cols of 2da files with spaces;
              "tabs" (without quotes) to align cols with tabs. Note that using
              tab-characters in 2da files is not officially supported and could
-             break in other applications
+             break in other applications. "electron" (without quotes) to style
+             output like the Electron toolset (for version control if req'd)
 allowdupls=  "true" (without quotes) to allow Yata to open multiple instances of
              the same file. By default Yata will activate the tab that already
              has the file open, but this allows you to keep another instance

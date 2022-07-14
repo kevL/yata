@@ -54,9 +54,10 @@ namespace yata
 		internal static string _dialogalt;
 
 
-		internal const int AoFalse = 0; // '_alignoutput' vals ->
-		internal const int AoTrue  = 1;
-		internal const int AoTabs  = 2;
+		internal const int AoFalse    = 0; // '_alignoutput' vals ->
+		internal const int AoTrue     = 1;
+		internal const int AoTabs     = 2;
+		internal const int AoElectron = 3;
 		#endregion Fields (static)
 
 
@@ -289,6 +290,9 @@ namespace yata
 
 									case "2":
 									case "tabs": _alignoutput = AoTabs; break;
+
+									case "3":
+									case "electron": _alignoutput = AoElectron; break;
 								}
 							}
 						}
