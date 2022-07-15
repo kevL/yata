@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 July 14
+2022 July 15
 kevL's
-ver 5.1.4.0
+ver 5.1.5.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -166,7 +166,9 @@ Clipboard
                                       data)
 
 - Open clipboard editor : Ctrl+p (accesses the Windows Clipboard for viewing or
-                          editing - only clips in text format are available)
+                          editing - only clips in text format are available. The
+                          copied rows, copied cells, and copied col buffers can
+                          also be previewed in the editor but are readonly)
 
 
 2da Ops
