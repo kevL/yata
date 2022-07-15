@@ -44,6 +44,7 @@ namespace yata
 			// rt_Copyable
 			// 
 			this.rt_Copyable.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.rt_Copyable.DetectUrls = false;
 			this.rt_Copyable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rt_Copyable.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rt_Copyable.HideSelection = false;

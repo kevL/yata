@@ -110,6 +110,7 @@ namespace yata
 			// 
 			// rtb_Clip
 			// 
+			this.rtb_Clip.DetectUrls = false;
 			this.rtb_Clip.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtb_Clip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rtb_Clip.HideSelection = false;

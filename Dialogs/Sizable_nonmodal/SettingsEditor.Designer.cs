@@ -25,6 +25,7 @@ namespace yata
 			// 
 			// rtb_Settings
 			// 
+			this.rtb_Settings.DetectUrls = false;
 			this.rtb_Settings.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtb_Settings.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rtb_Settings.HideSelection = false;

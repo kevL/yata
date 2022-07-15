@@ -41,6 +41,7 @@ namespace yata
 			pa_Copyable.Paint += OnPaintPanel;
 
 			rt_Copyable.BorderStyle = BorderStyle.None;
+			rt_Copyable.DetectUrls = false;
 			rt_Copyable.Dock = DockStyle.Fill;
 			rt_Copyable.Font = new Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			rt_Copyable.HideSelection = false;

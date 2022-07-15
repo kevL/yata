@@ -23,7 +23,7 @@ namespace yata
 		/// <param name="title">a caption on the titlebar</param>
 		/// <param name="label">info to be displayed with a proportional font</param>
 		/// <param name="copyable">info to be displayed with a fixed font in a
-		/// RichTextBox so it can be copied</param>
+		/// <c>RichTextBox</c> so it can be copied</param>
 		/// <param name="f">parent <c><see cref="Yata"/></c></param>
 		/// <param name="color"></param>
 		/// <param name="goto"></param>
