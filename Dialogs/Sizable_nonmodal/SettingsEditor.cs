@@ -29,12 +29,12 @@ namespace yata
 				for (int i = 0; i != lines.Length; ++i)
 					sb.AppendLine(lines[i].Trim());
 
-				rtb_Settings.Text = sb.ToString();
+				rt_Settings.Text = sb.ToString();
 			}
 
 			bu_Insert.Visible = CheckInsertVisible();
 
-			rtb_Settings.Select();
+			rt_Settings.Select();
 			Show(_f); // Yata is owner.
 		}
 		#endregion cTor
@@ -86,7 +86,7 @@ namespace yata
 			{
 				string pfeT = Path.Combine(Application.StartupPath, Settings.FE) + ".t";
 
-				File.WriteAllText(pfeT, rtb_Settings.Text);
+				File.WriteAllText(pfeT, rt_Settings.Text);
 
 				if (File.Exists(pfeT))
 				{
@@ -134,7 +134,7 @@ namespace yata
 		{
 			bu_Insert.Visible = false;
 
-			string text = rtb_Settings.Text;
+			string text = rt_Settings.Text;
 
 			bool found = false;
 
@@ -152,9 +152,9 @@ namespace yata
 					text += option + Environment.NewLine;
 				}
 			}
-			rtb_Settings.Text = text;
-			rtb_Settings.SelectionStart = rtb_Settings.Text.Length;
-			rtb_Settings.Focus();
+			rt_Settings.Text = text;
+			rt_Settings.SelectionStart = rt_Settings.Text.Length;
+			rt_Settings.Focus();
 		}
 		#endregion Handlers
 
@@ -169,7 +169,7 @@ namespace yata
 			if (Settings.options == null)
 				Settings.CreateOptions();
 
-			string text = rtb_Settings.Text;
+			string text = rt_Settings.Text;
 
 			for (int i = 0; i != Settings.ids; ++i)
 			{

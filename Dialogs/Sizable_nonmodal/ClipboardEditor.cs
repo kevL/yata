@@ -105,7 +105,7 @@ namespace yata
 		protected override void OnActivated(EventArgs e)
 		{
 			if (_inited && rb_Clipboard.Checked)
-				rtb_Clip.Text = ClipboardService.GetText();
+				rt_Clip.Text = ClipboardService.GetText();
 		}
 		#endregion Handlers (override)
 
@@ -130,7 +130,7 @@ namespace yata
 		internal void click_Get(object sender, EventArgs e)
 		{
 			if (rb_Clipboard.Checked)
-				rtb_Clip.Text = ClipboardService.GetText();
+				rt_Clip.Text = ClipboardService.GetText();
 		}
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace yata
 		void click_Set(object sender, EventArgs e)
 		{
 			if (rb_Clipboard.Checked)
-				ClipboardService.SetText(rtb_Clip.Text.Replace("\n", Environment.NewLine));
+				ClipboardService.SetText(rt_Clip.Text.Replace("\n", Environment.NewLine));
 		}
 
 
@@ -164,7 +164,7 @@ namespace yata
 				if (sender == rb_Clipboard)
 				{
 					_current = Current.Clipboard;
-					rtb_Clip.Text = ClipboardService.GetText();
+					rt_Clip.Text = ClipboardService.GetText();
 				}
 				else if (sender == rb_RowsBuffer)
 				{
@@ -182,7 +182,7 @@ namespace yata
 					SetCellsBufferText();
 				}
 
-				rtb_Clip.ReadOnly = sender != rb_Clipboard;
+				rt_Clip.ReadOnly = sender != rb_Clipboard;
 
 				bu_Get.Enabled =
 				bu_Set.Enabled = sender == rb_Clipboard;
@@ -236,7 +236,7 @@ namespace yata
 					if (i != copyr.Count - 1) sb.AppendLine();
 				}
 
-				rtb_Clip.Text = sb.ToString();
+				rt_Clip.Text = sb.ToString();
 			}
 		}
 
@@ -257,7 +257,7 @@ namespace yata
 					if (i != copyc.Count - 1) sb.AppendLine();
 				}
 
-				rtb_Clip.Text = sb.ToString();
+				rt_Clip.Text = sb.ToString();
 			}
 		}
 
@@ -283,7 +283,7 @@ namespace yata
 					if (i != copyt.GetLength(0) - 1) sb.AppendLine();
 				}
 
-				rtb_Clip.Text = sb.ToString();
+				rt_Clip.Text = sb.ToString();
 			}
 		}
 		#endregion Methods

@@ -7,7 +7,7 @@ namespace yata
 	sealed partial class SettingsEditor
 	{
 		#region Designer
-		RichTextBox rtb_Settings;
+		RichTextBox rt_Settings;
 		Panel pa_Buttons;
 		Button bu_Cancel;
 		Button bu_Okay;
@@ -15,7 +15,7 @@ namespace yata
 
 		private void InitializeComponent()
 		{
-			this.rtb_Settings = new System.Windows.Forms.RichTextBox();
+			this.rt_Settings = new System.Windows.Forms.RichTextBox();
 			this.pa_Buttons = new System.Windows.Forms.Panel();
 			this.bu_Insert = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
@@ -23,19 +23,19 @@ namespace yata
 			this.pa_Buttons.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// rtb_Settings
+			// rt_Settings
 			// 
-			this.rtb_Settings.DetectUrls = false;
-			this.rtb_Settings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rtb_Settings.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.rtb_Settings.HideSelection = false;
-			this.rtb_Settings.Location = new System.Drawing.Point(0, 0);
-			this.rtb_Settings.Margin = new System.Windows.Forms.Padding(0);
-			this.rtb_Settings.Name = "rtb_Settings";
-			this.rtb_Settings.Size = new System.Drawing.Size(592, 423);
-			this.rtb_Settings.TabIndex = 0;
-			this.rtb_Settings.Text = "";
-			this.rtb_Settings.WordWrap = false;
+			this.rt_Settings.DetectUrls = false;
+			this.rt_Settings.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rt_Settings.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rt_Settings.HideSelection = false;
+			this.rt_Settings.Location = new System.Drawing.Point(0, 0);
+			this.rt_Settings.Margin = new System.Windows.Forms.Padding(0);
+			this.rt_Settings.Name = "rt_Settings";
+			this.rt_Settings.Size = new System.Drawing.Size(592, 423);
+			this.rt_Settings.TabIndex = 0;
+			this.rt_Settings.Text = "";
+			this.rt_Settings.WordWrap = false;
 			// 
 			// pa_Buttons
 			// 
@@ -92,7 +92,7 @@ namespace yata
 			// 
 			this.CancelButton = this.bu_Cancel;
 			this.ClientSize = new System.Drawing.Size(592, 458);
-			this.Controls.Add(this.rtb_Settings);
+			this.Controls.Add(this.rt_Settings);
 			this.Controls.Add(this.pa_Buttons);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;

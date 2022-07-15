@@ -12,7 +12,7 @@ namespace yata
 		RadioButton rb_ColBuffer;
 		RadioButton rb_CellsBuffer;
 
-		RichTextBox rtb_Clip;
+		RichTextBox rt_Clip;
 
 		Panel pa_bot;
 		Button bu_Get;
@@ -33,7 +33,7 @@ namespace yata
 			this.rb_RowsBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_ColBuffer = new System.Windows.Forms.RadioButton();
 			this.rb_CellsBuffer = new System.Windows.Forms.RadioButton();
-			this.rtb_Clip = new System.Windows.Forms.RichTextBox();
+			this.rt_Clip = new System.Windows.Forms.RichTextBox();
 			this.pa_bot = new System.Windows.Forms.Panel();
 			this.bu_Get = new System.Windows.Forms.Button();
 			this.bu_Begone = new System.Windows.Forms.Button();
@@ -108,19 +108,19 @@ namespace yata
 			this.rb_CellsBuffer.UseVisualStyleBackColor = true;
 			this.rb_CellsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
 			// 
-			// rtb_Clip
+			// rt_Clip
 			// 
-			this.rtb_Clip.DetectUrls = false;
-			this.rtb_Clip.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rtb_Clip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.rtb_Clip.HideSelection = false;
-			this.rtb_Clip.Location = new System.Drawing.Point(0, 21);
-			this.rtb_Clip.Margin = new System.Windows.Forms.Padding(0);
-			this.rtb_Clip.Name = "rtb_Clip";
-			this.rtb_Clip.Size = new System.Drawing.Size(642, 243);
-			this.rtb_Clip.TabIndex = 1;
-			this.rtb_Clip.Text = "";
-			this.rtb_Clip.WordWrap = false;
+			this.rt_Clip.DetectUrls = false;
+			this.rt_Clip.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rt_Clip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rt_Clip.HideSelection = false;
+			this.rt_Clip.Location = new System.Drawing.Point(0, 21);
+			this.rt_Clip.Margin = new System.Windows.Forms.Padding(0);
+			this.rt_Clip.Name = "rt_Clip";
+			this.rt_Clip.Size = new System.Drawing.Size(642, 243);
+			this.rt_Clip.TabIndex = 1;
+			this.rt_Clip.Text = "";
+			this.rt_Clip.WordWrap = false;
 			// 
 			// pa_bot
 			// 
@@ -176,7 +176,7 @@ namespace yata
 			// 
 			this.CancelButton = this.bu_Begone;
 			this.ClientSize = new System.Drawing.Size(642, 294);
-			this.Controls.Add(this.rtb_Clip);
+			this.Controls.Add(this.rt_Clip);
 			this.Controls.Add(this.pa_top);
 			this.Controls.Add(this.pa_bot);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
