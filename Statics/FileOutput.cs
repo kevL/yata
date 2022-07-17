@@ -39,13 +39,10 @@ namespace yata
 			{
 				sw.WriteLine(gs.TwodaVer);
 
-				string @default;
 				if (table._defaultval.Length != 0)
-					@default = gs.Default + table._defaultval;
+					sw.WriteLine(gs.Default + table._defaultval);
 				else
-					@default = String.Empty;
-
-				sw.WriteLine(@default);
+					sw.WriteLine();
 
 
 				if (table.RowCount != 0) // else isCreate
@@ -55,13 +52,13 @@ namespace yata
 					switch (Settings._alignoutput)
 					{
 						case Settings.AoFalse:
-							fields = table.Fields.Length - 1;					// col-fields ->
+							fields = table.Fields.Length - 1;		// colabels ->
 							for (f = 0; f != fields; ++f)
 								sw.Write(gs.Space + table.Fields[f]);
 
 							sw.WriteLine(gs.Space + table.Fields[f]);
 
-							for (r = 0; r != table.RowCount; ++r)				// row-cells ->
+							for (r = 0; r != table.RowCount; ++r)	// celltexts ->
 							{
 								for (c = 0; c != table.ColCount - 1; ++c)
 									sw.Write(table[r,c].text + gs.Space);
@@ -99,14 +96,14 @@ namespace yata
 
 							if (Settings._alignoutput == Settings.AoTrue)
 							{
-								sw.Write(new string(gs.Spacechar, widths[0]));	// col-fields ->
+								sw.Write(new string(gs.Spacechar, widths[0]));	// colabels ->
 								fields = table.Fields.Length - 1;
 								for (f = 0; f != fields; ++f)
 									sw.Write(gs.Space + table.Fields[f].PadRight(widths[f + 1]));
 
 								sw.WriteLine(gs.Space + table.Fields[f]);
 
-								for (r = 0; r != table.RowCount; ++r)			// row-cells ->
+								for (r = 0; r != table.RowCount; ++r)			// celltexts ->
 								{
 									for (c = 0; c != table.ColCount - 1; ++c)
 										sw.Write(table[r,c].text.PadRight(widths[c] + 1));
@@ -141,7 +138,7 @@ namespace yata
 								string val;
 
 								fields = table.Fields.Length - 1;
-								for (f = 0; f != fields; ++f)					// col-fields ->
+								for (f = 0; f != fields; ++f)			// colabels ->
 								{
 									val = table.Fields[f];
 									sw.Write(val);
@@ -156,7 +153,7 @@ namespace yata
 								sw.WriteLine(table.Fields[f]);
 
 
-								for (r = 0; r != table.RowCount; ++r)			// row-cells ->
+								for (r = 0; r != table.RowCount; ++r)	// celltexts ->
 								{
 									for (c = 0; c != table.ColCount - 1; ++c)
 									{
@@ -188,8 +185,8 @@ namespace yata
 					switch (Settings._alignoutput)
 					{
 						case Settings.AoFalse:
-							sw.WriteLine(" "  + gs.DefaultColLabel);	// col-fields
-							sw.WriteLine("0 " + gs.Stars);				// row-cells
+							sw.WriteLine(" "  + gs.DefaultColLabel);	// colabels
+							sw.WriteLine("0 " + gs.Stars);				// celltexts
 							break;
 
 						case Settings.AoTrue:
