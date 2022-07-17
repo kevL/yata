@@ -47,7 +47,7 @@ namespace yata
 
 				if (table.RowCount != 0) // else isCreate
 				{
-					int f,r,c, fields;
+					int f,r,c, fields; int[] widths;
 
 					switch (Settings._alignoutput)
 					{
@@ -68,107 +68,83 @@ namespace yata
 							break;
 
 						case Settings.AoTrue:
+							widths = GetWidths(table);
+
+							sw.Write(new string(gs.Spacechar, widths[0]));	// colabels ->
+							fields = table.Fields.Length - 1;
+							for (f = 0; f != fields; ++f)
+								sw.Write(gs.Space + table.Fields[f].PadRight(widths[f + 1]));
+
+							sw.WriteLine(gs.Space + table.Fields[f]);
+
+							for (r = 0; r != table.RowCount; ++r)			// celltexts ->
+							{
+								for (c = 0; c != table.ColCount - 1; ++c)
+									sw.Write(table[r,c].text.PadRight(widths[c] + 1));
+
+								sw.WriteLine(table[r,c].text);
+							}
+							break;
+
 						case Settings.AoTabs:
 						{
-							// find longest string-width in each col (incl/ colheads)
-							var widths = new int[table.ColCount];
+							widths = GetWidths(table);
 
-							// check cols ->
-							int width, widthtest;
-							for (c = 0; c != table.ColCount; ++c)
-							{
-								width = 0;
-								for (r = 0; r != table.RowCount; ++r)
-								{
-									if ((widthtest = table[r,c].text.Length) > width)
-										width = widthtest;
-								}
-								widths[c] = width;
-							}
+							const int TabWidth = 4;
 
-							// check colheads -> NOTE: There is one more col than colheads.
-							for (f = 0; f != table.Fields.Length; ++f)
+							var tabstops = new int[table.ColCount];
+							tabstops[0] = 0;
+							for (int i = 1; i != widths.Length; ++i)
 							{
-								if (widths[f + 1] < table.Fields[f].Length)
-									widths[f + 1] = table.Fields[f].Length;
+								// to deter the position of the current tabstop [i]
+								// add the start-pos of the preceeding tabstop +
+								// the width of the longest preceeding field +
+								// any remaining spaces that are required to bring
+								// the total to a value that is divisible by TabWidth:
+								// the result is the position of the current tabstop [i]
+
+								tabstops[i] = tabstops[i - 1] + widths[i - 1] + TabWidth - widths[i - 1] % TabWidth;
 							}
 
 
-							if (Settings._alignoutput == Settings.AoTrue)
+							int spaces = widths[0] + TabWidth - widths[0] % TabWidth; // insert whitespace at the start of the colheads ->
+							do
+							{ sw.Write("\t"); }
+							while ((spaces -= TabWidth) > 0);
+
+							string val; int width, tabs;
+
+							fields = table.Fields.Length - 1;
+							for (f = 0; f != fields; ++f)			// colabels ->
 							{
-								sw.Write(new string(gs.Spacechar, widths[0]));	// colabels ->
-								fields = table.Fields.Length - 1;
-								for (f = 0; f != fields; ++f)
-									sw.Write(gs.Space + table.Fields[f].PadRight(widths[f + 1]));
+								val = table.Fields[f];
+								sw.Write(val);
 
-								sw.WriteLine(gs.Space + table.Fields[f]);
+								width = tabstops[f + 2] - tabstops[f + 1] - val.Length;
+								tabs = width / TabWidth;
+								if (val.Length % TabWidth != 0) ++tabs;
 
-								for (r = 0; r != table.RowCount; ++r)			// celltexts ->
-								{
-									for (c = 0; c != table.ColCount - 1; ++c)
-										sw.Write(table[r,c].text.PadRight(widths[c] + 1));
-
-									sw.WriteLine(table[r,c].text);
-								}
+								while (tabs-- != 0)
+									sw.Write("\t");
 							}
-							else // Settings.AoTabs
+							sw.WriteLine(table.Fields[f]);
+
+
+							for (r = 0; r != table.RowCount; ++r)	// celltexts ->
 							{
-								const int TabWidth = 4;
-
-								var tabstops = new int[table.ColCount];
-								tabstops[0] = 0;
-								for (int i = 1; i != widths.Length; ++i)
+								for (c = 0; c != table.ColCount - 1; ++c)
 								{
-									// to deter the position of the current tabstop [i]
-									// add the start-pos of the preceeding tabstop +
-									// the width of the longest preceeding field +
-									// any remaining spaces that are required to bring
-									// the total to a value that is divisible by TabWidth:
-									// the result is the position of the current tabstop [i]
-
-									tabstops[i] = tabstops[i - 1] + widths[i - 1] + TabWidth - widths[i - 1] % TabWidth;
-								}
-
-
-								int spaces = widths[0] + TabWidth - widths[0] % TabWidth; // insert whitespace at the start of the colheads ->
-								do
-								{ sw.Write("\t"); }
-								while ((spaces -= TabWidth) > 0);
-
-								string val;
-
-								fields = table.Fields.Length - 1;
-								for (f = 0; f != fields; ++f)			// colabels ->
-								{
-									val = table.Fields[f];
+									val = table[r,c].text;
 									sw.Write(val);
 
-									width = tabstops[f + 2] - tabstops[f + 1] - val.Length;
-									int tabs = width / TabWidth;
+									width = tabstops[c + 1] - tabstops[c] - val.Length;
+									tabs = width / TabWidth;
 									if (val.Length % TabWidth != 0) ++tabs;
 
 									while (tabs-- != 0)
 										sw.Write("\t");
 								}
-								sw.WriteLine(table.Fields[f]);
-
-
-								for (r = 0; r != table.RowCount; ++r)	// celltexts ->
-								{
-									for (c = 0; c != table.ColCount - 1; ++c)
-									{
-										val = table[r,c].text;
-										sw.Write(val);
-
-										width = tabstops[c + 1] - tabstops[c] - val.Length;
-										int tabs = width / TabWidth;
-										if (val.Length % TabWidth != 0) ++tabs;
-
-										while (tabs-- != 0)
-											sw.Write("\t");
-									}
-									sw.WriteLine(table[r,c].text);
-								}
+								sw.WriteLine(table[r,c].text);
 							}
 							break;
 						}
@@ -213,6 +189,40 @@ namespace yata
 
 
 		/// <summary>
+		/// Gets an array with the longest width of text in each
+		/// <c><see cref="Col"/></c>.
+		/// </summary>
+		/// <param name="table"></param>
+		/// <returns></returns>
+		static int[] GetWidths(YataGrid table)
+		{
+			// find longest string-width in each col (incl/ colheads)
+			var widths = new int[table.ColCount];
+
+			// check cols ->
+			int width;
+			for (int c = 0; c != table.ColCount; ++c)
+			{
+				widths[c] = 0;
+				for (int r = 0; r != table.RowCount; ++r)
+				{
+					if ((width = table[r,c].text.Length) > widths[c])
+						widths[c] = width;
+				}
+			}
+
+			// check colheads -> NOTE: There is one more col than colheads.
+			for (int f = 0; f != table.Fields.Length; ++f)
+			{
+				if ((width = table.Fields[f].Length) > widths[f + 1])
+					widths[f + 1] = width;
+			}
+
+			return widths;
+		}
+
+
+		/// <summary>
 		/// Writes a specified <c><see cref="YataGrid"/></c> to file using the
 		/// Electron toolset routine.
 		/// </summary>
@@ -226,17 +236,17 @@ namespace yata
 			int rCount = table.RowCount;
 			do { ++width_idcol; } while ((rCount /= 10) != 0);
 
-			int[] widths = GetWidths(table);
+			int[] widths = GetWidthsElectron(table);
 
 			sw.Write(new string(' ', width_idcol + 1)); // indent col-fields (add another space, just because)
 
-			for (int f = 0; f != table.Fields.Length; ++f)		// col-fields ->
+			for (int f = 0; f != table.Fields.Length; ++f)		// colabels ->
 				sw.Write(table.Fields[f].PadLeft(widths[f]));
 
 			sw.WriteLine();
 
 			Row row;
-			for (int r = 0; r != table.RowCount; r++)			// row-cells ->
+			for (int r = 0; r != table.RowCount; r++)			// celltexts ->
 			{
 				sw.Write(r.ToString().PadLeft(width_idcol)); // DOES NOT WRITE THE VALUE IN THE ID-CELL
 
@@ -249,25 +259,26 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the total length required for each <c><see cref="Col"/></c>.
+		/// Gets an array with the width required (text + pad) for each
+		/// <c><see cref="Col"/></c>.
 		/// </summary>
 		/// <param name="table"></param>
 		/// <returns></returns>
-		static int[] GetWidths(YataGrid table)
+		static int[] GetWidthsElectron(YataGrid table)
 		{
-			var widths = new int[table.ColCount - 1];
+			var widths = new int[table.Fields.Length];
 
-			int width, widthtest;
+			int width;
 			for (int f = 0; f != table.Fields.Length; ++f)
 			{
-				width = table.Fields[f].Length + 5; // why +5 ... just because
+				widths[f] = table.Fields[f].Length + 5; // why +5 ... just because
 
 				for (int r = 0; r != table.RowCount; ++r)
 				{
-					if ((widthtest = table[r, f + 1].text.Length + 1) > width) // don't do the length-comparison with +5 accounted for, just because)
-						width = widthtest + 5;
+					// don't do the length-comparison with +5 accounted for, just because
+					if ((width = table[r, f + 1].text.Length + 1) > widths[f])
+						widths[f] = width + 5;
 				}
-				widths[f] = width;
 			}
 			return widths;
 		}
