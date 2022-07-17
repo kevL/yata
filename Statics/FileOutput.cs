@@ -23,46 +23,45 @@ namespace yata
 		/// </summary>
 		/// <param name="table">a <c><see cref="YataGrid"/> to write the data
 		/// for</c></param>
+		/// <remarks>These routines require that <paramref name="table"/> has at
+		/// least one entry in
+		/// <c><see cref="YataGrid.Fields">YataGrid.Fields</see></c> and in
+		/// <c><see cref="YataGrid.Cols">YataGrid.Cols</see></c>. Yata is coded
+		/// to always maintain at least one <c>Field</c> - aka. colhead - one
+		/// <c><see cref="YataGrid.Rows">YataGrid.Row</see></c>, and two
+		/// <c>Cols</c> - ie. there shall always be a valid 2da-table ready to
+		/// write.</remarks>
 		internal static void Write(YataGrid table)
 		{
 			if (table.RowCount != 0) // else isCreate
 			{
+				string @default;
+				if (table._defaultval.Length != 0)
+					@default = gs.Default + table._defaultval;	// default value ->
+				else
+					@default = String.Empty;
+
 				switch (Settings._alignoutput)
 				{
 					case Settings.AoFalse:
 						using (var sw = new StreamWriter(table.Fullpath))
 						{
-							sw.WriteLine(gs.TwodaVer);							// header ->
+							sw.WriteLine(gs.TwodaVer);							// header
+							sw.WriteLine(@default);								// default value
 
-							if (table._defaultval.Length != 0)
-								sw.WriteLine(gs.Default + table._defaultval);	// default value ->
-							else
-								sw.WriteLine();
+							int f = 0, fields = table.Fields.Length - 1;		// col-fields ->
+							for (; f != fields; ++f)
+								sw.Write(gs.Space + table.Fields[f]);
 
-							string line = String.Empty;
-							for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
-							{
-								line += gs.Space + table.Fields[i];
-							}
-							sw.WriteLine(line);
+							sw.WriteLine(gs.Space + table.Fields[f]);
 
-
-							string val;
+							int c;
 							for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
 							{
-								line = String.Empty;
+								for (c = 0; c != table.ColCount - 1; ++c)
+									sw.Write(table[r,c].text + gs.Space);
 
-								for (int c = 0; c != table.ColCount; ++c)
-								{
-									if (c != 0)
-										line += gs.Space;
-
-									if (!String.IsNullOrEmpty(val = table[r,c].text)) // safety.
-										line += val;
-									else
-										line += gs.Stars;
-								}
-								sw.WriteLine(line);
+								sw.WriteLine(table[r,c].text);
 							}
 						}
 						break;
@@ -87,10 +86,10 @@ namespace yata
 						}
 
 						// check colheads -> NOTE: There is one more col than colheads.
-						for (int i = 0; i != table.Fields.Length; ++i)
+						for (int f = 0; f != table.Fields.Length; ++f)
 						{
-							if (widths[i + 1] < table.Fields[i].Length)
-								widths[i + 1] = table.Fields[i].Length;
+							if (widths[f + 1] < table.Fields[f].Length)
+								widths[f + 1] = table.Fields[f].Length;
 						}
 
 
@@ -98,50 +97,23 @@ namespace yata
 						{
 							using (var sw = new StreamWriter(table.Fullpath))
 							{
-								sw.WriteLine(gs.TwodaVer);							// header ->
+								sw.WriteLine(gs.TwodaVer);						// header
+								sw.WriteLine(@default);							// default value
 
-								if (table._defaultval.Length != 0)
-									sw.WriteLine(gs.Default + table._defaultval);	// default value ->
-								else
-									sw.WriteLine();
+								sw.Write(new string(gs.Spacechar, widths[0]));	// col-fields ->
+								int f, fields = table.Fields.Length - 1;
+								for (f = 0; f != fields; ++f)
+									sw.Write(gs.Space + table.Fields[f].PadRight(widths[f + 1]));
 
-								string line = String.Empty;
-								for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
+								sw.WriteLine(gs.Space + table.Fields[f]);
+
+								int c;
+								for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
 								{
-									if (i == 0)
-									for (int j = 0; j != widths[0]; ++j)
-										line += gs.Space;
+									for (c = 0; c != table.ColCount - 1; ++c)
+										sw.Write(table[r,c].text.PadRight(widths[c] + 1));
 
-									if (i != table.Fields.Length - 1)
-										line += gs.Space + table.Fields[i].PadRight(widths[i + 1]);
-									else
-										line += gs.Space + table.Fields[i];
-								}
-								sw.WriteLine(line);
-
-
-								string val;
-								for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
-								{
-									line = String.Empty;
-
-									for (int c = 0; c != table.ColCount; ++c)
-									{
-										val = table[r,c].text;
-
-										if (c != table.ColCount - 1)
-										{
-											if (!String.IsNullOrEmpty(val)) // safety.
-												line += val.PadRight(widths[c] + 1);
-											else
-												line += gs.Stars.PadRight(widths[c] + 1);
-										}
-										else if (!String.IsNullOrEmpty(val)) // safety.
-											line += val;
-										else
-											line += gs.Stars;
-									}
-									sw.WriteLine(line);
+									sw.WriteLine(table[r,c].text);
 								}
 							}
 						}
@@ -151,12 +123,8 @@ namespace yata
 
 							using (var sw = new StreamWriter(table.Fullpath))
 							{
-								sw.WriteLine(gs.TwodaVer);							// header ->
-
-								if (table._defaultval.Length != 0)
-									sw.WriteLine(gs.Default + table._defaultval);	// default value ->
-								else
-									sw.WriteLine();
+								sw.WriteLine(gs.TwodaVer);						// header
+								sw.WriteLine(@default);							// default value
 
 								var tabstops = new int[table.ColCount];
 								tabstops[0] = 0;
@@ -173,61 +141,45 @@ namespace yata
 								}
 
 
-								string line = String.Empty;
-								for (int i = 0; i != table.Fields.Length; ++i)		// col-fields ->
-								{
-									if (i == 0) // insert whitespace at the start of the colheads ->
-									{
-										int spaces = widths[0] + TabWidth - widths[0] % TabWidth;
-										do
-										{ line += "\t"; }
-										while ((spaces -= TabWidth) > 0);
-									}
-
-									if (i != table.Fields.Length - 1)	// 2+ fields in row ->
-									{
-										line += table.Fields[i];
-
-										width = tabstops[i + 2] - tabstops[i + 1] - table.Fields[i].Length;
-										int tabs = width / TabWidth;
-										if (table.Fields[i].Length % TabWidth != 0) ++tabs;
-
-										while (tabs-- != 0)
-											line += "\t";
-									}
-									else								// last field in row ->
-										line += table.Fields[i];
-								}
-								sw.WriteLine(line);
-
+								int spaces = widths[0] + TabWidth - widths[0] % TabWidth; // insert whitespace at the start of the colheads ->
+								do
+								{ sw.Write("\t"); }
+								while ((spaces -= TabWidth) > 0);
 
 								string val;
-								for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
-								{
-									line = String.Empty;
 
-									for (int c = 0; c != table.ColCount; ++c)
+								int f, fields = table.Fields.Length - 1;
+								for (f = 0; f != fields; ++f)					// col-fields ->
+								{
+									val = table.Fields[f];
+									sw.Write(val);
+
+									width = tabstops[f + 2] - tabstops[f + 1] - val.Length;
+									int tabs = width / TabWidth;
+									if (val.Length % TabWidth != 0) ++tabs;
+
+									while (tabs-- != 0)
+										sw.Write("\t");
+								}
+								sw.WriteLine(table.Fields[f]);
+
+
+								int c;
+								for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
+								{
+									for (c = 0; c != table.ColCount - 1; ++c)
 									{
 										val = table[r,c].text;
+										sw.Write(val);
 
-										if (String.IsNullOrEmpty(val)) // safety.
-											val = gs.Stars;
+										width = tabstops[c + 1] - tabstops[c] - val.Length;
+										int tabs = width / TabWidth;
+										if (val.Length % TabWidth != 0) ++tabs;
 
-										if (c != table.ColCount - 1)	// 2+ cells in row ->
-										{
-											line += val;
-
-											width = tabstops[c + 1] - tabstops[c] - val.Length;
-											int tabs = width / TabWidth;
-											if (val.Length % TabWidth != 0) ++tabs;
-
-											while (tabs-- != 0)
-												line += "\t";
-										}
-										else							// last cell in row ->
-											line += val;
+										while (tabs-- != 0)
+											sw.Write("\t");
 									}
-									sw.WriteLine(line);
+									sw.WriteLine(table[r,c].text);
 								}
 							}
 						}

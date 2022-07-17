@@ -22,6 +22,7 @@ namespace yata
 		internal const string Id              = "id";
 
 		internal const string Space           = " ";
+		internal const char   Spacechar       = ' ';
 
 		internal const string non             = "n/a";
 		internal const string bork            = "bork";
