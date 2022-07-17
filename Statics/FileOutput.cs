@@ -30,85 +30,83 @@ namespace yata
 		/// to always maintain at least one <c>Field</c> - aka. colhead - one
 		/// <c><see cref="YataGrid.Rows">YataGrid.Row</see></c>, and two
 		/// <c>Cols</c> - ie. there shall always be a valid 2da-table ready to
-		/// write.</remarks>
+		/// write ... except if the table is created by
+		/// <c><see cref="Yata"/>.fileclick_Create()</c>. The latter is handled
+		/// by the condition <c>(table.RowCount == 0)</c>.</remarks>
 		internal static void Write(YataGrid table)
 		{
-			if (table.RowCount != 0) // else isCreate
+			using (var sw = new StreamWriter(table.Fullpath))
 			{
+				sw.WriteLine(gs.TwodaVer);
+
 				string @default;
 				if (table._defaultval.Length != 0)
-					@default = gs.Default + table._defaultval;	// default value ->
+					@default = gs.Default + table._defaultval;
 				else
 					@default = String.Empty;
 
-				switch (Settings._alignoutput)
-				{
-					case Settings.AoFalse:
-						using (var sw = new StreamWriter(table.Fullpath))
-						{
-							sw.WriteLine(gs.TwodaVer);							// header
-							sw.WriteLine(@default);								// default value
+				sw.WriteLine(@default);
 
-							int f = 0, fields = table.Fields.Length - 1;		// col-fields ->
-							for (; f != fields; ++f)
+
+				if (table.RowCount != 0) // else isCreate
+				{
+					int f,r,c, fields;
+
+					switch (Settings._alignoutput)
+					{
+						case Settings.AoFalse:
+							fields = table.Fields.Length - 1;					// col-fields ->
+							for (f = 0; f != fields; ++f)
 								sw.Write(gs.Space + table.Fields[f]);
 
 							sw.WriteLine(gs.Space + table.Fields[f]);
 
-							int c;
-							for (int r = 0; r != table.RowCount; ++r)			// row-cells ->
+							for (r = 0; r != table.RowCount; ++r)				// row-cells ->
 							{
 								for (c = 0; c != table.ColCount - 1; ++c)
 									sw.Write(table[r,c].text + gs.Space);
 
 								sw.WriteLine(table[r,c].text);
 							}
-						}
-						break;
+							break;
 
-					case Settings.AoTrue:
-					case Settings.AoTabs:
-					{
-						// find longest string-width in each col (incl/ colheads)
-						var widths = new int[table.ColCount];
-
-						// check cols ->
-						int width, widthtest;
-						for (int c = 0; c != table.ColCount; ++c)
+						case Settings.AoTrue:
+						case Settings.AoTabs:
 						{
-							width = 0;
-							for (int r = 0; r != table.RowCount; ++r)
+							// find longest string-width in each col (incl/ colheads)
+							var widths = new int[table.ColCount];
+
+							// check cols ->
+							int width, widthtest;
+							for (c = 0; c != table.ColCount; ++c)
 							{
-								if ((widthtest = table[r,c].text.Length) > width)
-									width = widthtest;
+								width = 0;
+								for (r = 0; r != table.RowCount; ++r)
+								{
+									if ((widthtest = table[r,c].text.Length) > width)
+										width = widthtest;
+								}
+								widths[c] = width;
 							}
-							widths[c] = width;
-						}
 
-						// check colheads -> NOTE: There is one more col than colheads.
-						for (int f = 0; f != table.Fields.Length; ++f)
-						{
-							if (widths[f + 1] < table.Fields[f].Length)
-								widths[f + 1] = table.Fields[f].Length;
-						}
-
-
-						if (Settings._alignoutput == Settings.AoTrue)
-						{
-							using (var sw = new StreamWriter(table.Fullpath))
+							// check colheads -> NOTE: There is one more col than colheads.
+							for (f = 0; f != table.Fields.Length; ++f)
 							{
-								sw.WriteLine(gs.TwodaVer);						// header
-								sw.WriteLine(@default);							// default value
+								if (widths[f + 1] < table.Fields[f].Length)
+									widths[f + 1] = table.Fields[f].Length;
+							}
 
+
+							if (Settings._alignoutput == Settings.AoTrue)
+							{
 								sw.Write(new string(gs.Spacechar, widths[0]));	// col-fields ->
-								int f, fields = table.Fields.Length - 1;
+								fields = table.Fields.Length - 1;
 								for (f = 0; f != fields; ++f)
 									sw.Write(gs.Space + table.Fields[f].PadRight(widths[f + 1]));
 
 								sw.WriteLine(gs.Space + table.Fields[f]);
 
-								int c;
-								for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
+								for (r = 0; r != table.RowCount; ++r)			// row-cells ->
 								{
 									for (c = 0; c != table.ColCount - 1; ++c)
 										sw.Write(table[r,c].text.PadRight(widths[c] + 1));
@@ -116,15 +114,9 @@ namespace yata
 									sw.WriteLine(table[r,c].text);
 								}
 							}
-						}
-						else // Settings.AoTabs
-						{
-							const int TabWidth = 4;
-
-							using (var sw = new StreamWriter(table.Fullpath))
+							else // Settings.AoTabs
 							{
-								sw.WriteLine(gs.TwodaVer);						// header
-								sw.WriteLine(@default);							// default value
+								const int TabWidth = 4;
 
 								var tabstops = new int[table.ColCount];
 								tabstops[0] = 0;
@@ -148,7 +140,7 @@ namespace yata
 
 								string val;
 
-								int f, fields = table.Fields.Length - 1;
+								fields = table.Fields.Length - 1;
 								for (f = 0; f != fields; ++f)					// col-fields ->
 								{
 									val = table.Fields[f];
@@ -164,8 +156,7 @@ namespace yata
 								sw.WriteLine(table.Fields[f]);
 
 
-								int c;
-								for (int r = 0; r != table.RowCount; ++r)		// row-cells ->
+								for (r = 0; r != table.RowCount; ++r)			// row-cells ->
 								{
 									for (c = 0; c != table.ColCount - 1; ++c)
 									{
@@ -182,26 +173,18 @@ namespace yata
 									sw.WriteLine(table[r,c].text);
 								}
 							}
+							break;
 						}
-						break;
-					}
 
-					case Settings.AoElectron:
-						using (var sw = new StreamWriter(table.Fullpath))
+						case Settings.AoElectron:
 							WriteElectron(table, sw);
+							break;
 
-						break;
-
-//					default: break; // error
+//						default: break; // error
+					}
 				}
-			}
-			else // is freshly Created
-			{
-				using (var sw = new StreamWriter(table.Fullpath))
+				else // is freshly Created
 				{
-					sw.WriteLine(gs.TwodaVer);							// header
-					sw.WriteLine();										// default value
-
 					switch (Settings._alignoutput)
 					{
 						case Settings.AoFalse:
@@ -242,14 +225,6 @@ namespace yata
 		/// <c>OEIShared.IO.TwoDA.TwoDAFile.Save(string)</c>.</remarks>
 		static void WriteElectron(YataGrid table, TextWriter sw)
 		{
-			sw.WriteLine(gs.TwodaVer);							// header ->
-
-			if (table._defaultval.Length != 0)
-				sw.WriteLine(gs.Default + table._defaultval);	// default value ->
-			else
-				sw.WriteLine();
-
-
 			int width_idcol = 1; // at least 1-space indent (no reason, just because)
 			int rCount = table.RowCount;
 			do { ++width_idcol; } while ((rCount /= 10) != 0);
