@@ -47,7 +47,7 @@ namespace yata
 
 				if (table.RowCount != 0) // else isCreate
 				{
-					int f,r,c, fields; int[] widths;
+					int f,r,c, fields, width; int[] widths;
 
 					switch (Settings._alignoutput)
 					{
@@ -94,7 +94,7 @@ namespace yata
 
 							var tabstops = new int[table.ColCount];
 							tabstops[0] = 0;
-							for (int i = 1; i != widths.Length; ++i)
+							for (c = 1; c != widths.Length; ++c)
 							{
 								// to deter the position of the current tabstop [i]
 								// add the start-pos of the preceeding tabstop +
@@ -103,16 +103,14 @@ namespace yata
 								// the total to a value that is divisible by TabWidth:
 								// the result is the position of the current tabstop [i]
 
-								tabstops[i] = tabstops[i - 1] + widths[i - 1] + TabWidth - widths[i - 1] % TabWidth;
+								tabstops[c] = tabstops[c - 1] + widths[c - 1] + TabWidth - widths[c - 1] % TabWidth;
 							}
 
 
-							int spaces = widths[0] + TabWidth - widths[0] % TabWidth; // insert whitespace at the start of the colheads ->
-							do
-							{ sw.Write("\t"); }
-							while ((spaces -= TabWidth) > 0);
+							string val; int tabs;
 
-							string val; int width, tabs;
+							width = widths[0] + TabWidth - widths[0] % TabWidth; // insert whitespace at the start of the colheads ->
+							do { sw.Write(gs.Tab); } while ((width -= TabWidth) > 0);
 
 							fields = table.Fields.Length - 1;
 							for (f = 0; f != fields; ++f)			// colabels ->
@@ -124,8 +122,7 @@ namespace yata
 								tabs = width / TabWidth;
 								if (val.Length % TabWidth != 0) ++tabs;
 
-								while (tabs-- != 0)
-									sw.Write("\t");
+								while (tabs-- != 0) sw.Write(gs.Tab);
 							}
 							sw.WriteLine(table.Fields[f]);
 
@@ -141,8 +138,7 @@ namespace yata
 									tabs = width / TabWidth;
 									if (val.Length % TabWidth != 0) ++tabs;
 
-									while (tabs-- != 0)
-										sw.Write("\t");
+									while (tabs-- != 0) sw.Write(gs.Tab);
 								}
 								sw.WriteLine(table[r,c].text);
 							}
@@ -150,8 +146,36 @@ namespace yata
 						}
 
 						case Settings.AoElectron:
-							WriteElectron(table, sw);
+						{
+							// writes to file using the Electron toolset routine -
+							// this routine is based on OEIShared.IO.TwoDA.TwoDAFile.Save(string)
+
+							width = 1; // at least 1-space indent (no reason, just because)
+							r = table.RowCount;
+							do { ++width; } while ((r /= 10) != 0);
+
+							widths = GetWidthsElectron(table);
+				
+							sw.Write(new string(gs.Spacechar, width + 1)); // indent col-fields (add another space, just because)
+
+							for (f = 0; f != table.Fields.Length; ++f)		// colabels ->
+								sw.Write(table.Fields[f].PadLeft(widths[f]));
+
+							sw.WriteLine();
+
+							Row row;
+							for (r = 0; r != table.RowCount; r++)			// celltexts ->
+							{
+								sw.Write(r.ToString().PadLeft(width)); // DOES NOT WRITE THE VALUE IN THE ID-CELL
+
+								row = table.Rows[r];
+								for (f = 0; f != table.Fields.Length; ++f)
+									sw.Write(row[f + 1].text.PadLeft(widths[f]));
+
+								sw.WriteLine();
+							}
 							break;
+						}
 
 //						default: break; // error
 					}
@@ -221,46 +245,9 @@ namespace yata
 			return widths;
 		}
 
-
-		/// <summary>
-		/// Writes a specified <c><see cref="YataGrid"/></c> to file using the
-		/// Electron toolset routine.
-		/// </summary>
-		/// <param name="table"></param>
-		/// <param name="sw"></param>
-		/// <remarks>The routine is based on
-		/// <c>OEIShared.IO.TwoDA.TwoDAFile.Save(string)</c>.</remarks>
-		static void WriteElectron(YataGrid table, TextWriter sw)
-		{
-			int width_idcol = 1; // at least 1-space indent (no reason, just because)
-			int rCount = table.RowCount;
-			do { ++width_idcol; } while ((rCount /= 10) != 0);
-
-			int[] widths = GetWidthsElectron(table);
-
-			sw.Write(new string(' ', width_idcol + 1)); // indent col-fields (add another space, just because)
-
-			for (int f = 0; f != table.Fields.Length; ++f)		// colabels ->
-				sw.Write(table.Fields[f].PadLeft(widths[f]));
-
-			sw.WriteLine();
-
-			Row row;
-			for (int r = 0; r != table.RowCount; r++)			// celltexts ->
-			{
-				sw.Write(r.ToString().PadLeft(width_idcol)); // DOES NOT WRITE THE VALUE IN THE ID-CELL
-
-				row = table.Rows[r];
-				for (int f = 0; f != table.Fields.Length; ++f)
-					sw.Write(row[f + 1].text.PadLeft(widths[f], ' '));
-
-				sw.WriteLine();
-			}
-		}
-
 		/// <summary>
 		/// Gets an array with the width required (text + pad) for each
-		/// <c><see cref="Col"/></c>.
+		/// <c><see cref="YataGrid.Fields">YataGrid.Field</see></c>.
 		/// </summary>
 		/// <param name="table"></param>
 		/// <returns></returns>
