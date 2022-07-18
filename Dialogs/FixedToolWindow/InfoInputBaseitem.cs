@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class InfoInputBaseItems
+	sealed partial class InfoInputBaseitems
 		: InfoInputDialog
 	{
 		#region Fields (static)
@@ -22,7 +22,7 @@ namespace yata
 		/// </summary>
 		/// <param name="f"></param>
 		/// <param name="cell"></param>
-		internal InfoInputBaseItems(Yata f, Cell cell)
+		internal InfoInputBaseitems(Yata f, Cell cell)
 		{
 			_f    = f;		// don't try to pass these to a InfoInputDialog.cTor
 			_cell = cell;	// because the designer will scream blue murder.

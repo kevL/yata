@@ -77,9 +77,9 @@
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\FixedToolWindow\InfoInputBaseItems.cs" />
-    <Compile Include="Dialogs\FixedToolWindow\InfoInputBaseItems.Designer.cs">
-      <DependentUpon>InfoInputBaseItems.cs</DependentUpon>
+    <Compile Include="Dialogs\FixedToolWindow\InfoInputBaseitem.cs" />
+    <Compile Include="Dialogs\FixedToolWindow\InfoInputBaseitem.Designer.cs">
+      <DependentUpon>InfoInputBaseitem.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\FixedToolWindow\InfoInputClasses.cs" />
     <Compile Include="Dialogs\FixedToolWindow\InfoInputClasses.Designer.cs">
@@ -246,8 +246,8 @@
     <EmbeddedResource Include="Dialogs\FixedSingle\RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputBaseItems.resx">
-      <DependentUpon>InfoInputBaseItems.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputBaseitem.resx">
+      <DependentUpon>InfoInputBaseitem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedToolWindow\InfoInputClasses.resx">
       <DependentUpon>InfoInputClasses.cs</DependentUpon>

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class InfoInputBaseItems
+	sealed partial class InfoInputBaseitems
 	{
 		Label la_Val;
 		ComboBox co_Val;
@@ -285,7 +285,7 @@ namespace yata
 			this.bu_Clear.UseVisualStyleBackColor = true;
 			this.bu_Clear.Click += new System.EventHandler(this.click_Clear);
 			// 
-			// InfoInputBaseItems
+			// InfoInputBaseitems
 			// 
 			this.AcceptButton = this.bu_Accept;
 			this.ClientSize = new System.Drawing.Size(444, 181);
@@ -313,7 +313,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "InfoInputBaseItems";
+			this.Name = "InfoInputBaseitems";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.ResumeLayout(false);
 
