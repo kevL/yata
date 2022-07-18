@@ -14,6 +14,7 @@ namespace yata
 	static class gs
 	{
 		internal const string TwodaVer        = "2DA V2.0";
+		internal const string TwodaVer_tab    = "2DA\tV2.0";
 		internal const string Default         = "DEFAULT: ";
 		internal const string DefaultColLabel = "Label";
 
@@ -24,6 +25,12 @@ namespace yata
 		internal const string Space           = " ";
 		internal const char   Spacechar       = ' ';
 		internal const string Tab             = "\t";
+
+		internal const string Crafting        = "CRAFTING";
+		internal const string Spells          = "SPELLS";
+		internal const string Feat            = "FEAT";
+		internal const string Classes         = "CLASSES";
+		internal const string Baseitems       = "BASEITEMS";
 
 		internal const string non             = "n/a";
 		internal const string bork            = "bork";

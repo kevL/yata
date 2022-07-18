@@ -235,7 +235,7 @@ namespace yata
 			if (lines.Length > LINE_VERSION) line = lines[LINE_VERSION].Trim();
 			else                             line = String.Empty;
 
-			if (line != gs.TwodaVer && line != "2DA\tV2.0") // tab is not fatal - autocorrect it later
+			if (line != gs.TwodaVer && line != gs.TwodaVer_tab) // tab is not fatal - autocorrect it later
 			{
 				head = "The 2da-file contains an incorrect version header on its 1st line.";
 				copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -810,23 +810,23 @@ namespace yata
 			{
 				switch (Path.GetFileNameWithoutExtension(Fullpath).ToUpperInvariant())
 				{
-					case "CRAFTING":
+					case gs.Crafting:
 						Info = InfoType.INFO_CRAFT;
 						break;
 
-					case "SPELLS":
+					case gs.Spells:
 						Info = InfoType.INFO_SPELL;
 						break;
 
-					case "FEAT":
+					case gs.Feat:
 						Info = InfoType.INFO_FEAT;
 						break;
 
-					case "CLASSES":
+					case gs.Classes:
 						Info = InfoType.INFO_CLASS;
 						break;
 
-					case "BASEITEMS":
+					case gs.Baseitems:
 						Info = InfoType.INFO_ITEM;
 						break;
 				}
