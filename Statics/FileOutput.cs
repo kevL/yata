@@ -103,7 +103,8 @@ namespace yata
 								// the total to a value that is divisible by TabWidth:
 								// the result is the position of the current tabstop [i]
 
-								tabstops[c] = tabstops[c - 1] + widths[c - 1] + TabWidth - widths[c - 1] % TabWidth;
+								width = widths[c - 1];
+								tabstops[c] = tabstops[c - 1] + width + TabWidth - width % TabWidth;
 							}
 
 
