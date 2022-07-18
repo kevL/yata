@@ -282,7 +282,7 @@ namespace yata
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
-					if (i != LINE_DEFAULT && lines[i].Contains("\t"))
+					if (i != LINE_DEFAULT && lines[i].Contains(gs.Tab))
 					{
 						head = "Tab characters are detected in the 2da-file. They will be replaced with space characters (or deleted where redundant) if the file is saved.";
 
@@ -348,7 +348,7 @@ namespace yata
 								}
 							}
 
-							if (!quelch && tr.Contains("\t"))
+							if (!quelch && tr.Contains(gs.Tab))
 							{
 								head = "The 1st line (version header) contains a tab-character. It will be corrected if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
