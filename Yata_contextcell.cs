@@ -66,7 +66,7 @@ namespace yata
 				case YataGrid.InfoType.INFO_ITEM:
 					cellit_Input.Text    = "InfoInput (baseitems.2da)";
 					cellit_Input.Visible = true;
-					cellit_Input.Enabled = !Table.Readonly && isBaseItemsInfoInputCol();
+					cellit_Input.Enabled = !Table.Readonly && isBaseitemsInfoInputCol();
 					break;
 			}
 
@@ -225,13 +225,13 @@ namespace yata
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		bool isBaseItemsInfoInputCol()
+		bool isBaseitemsInfoInputCol()
 		{
 			switch (_sel.x)
 			{
-				case InfoInputBaseItems.EquipableSlots: // these don't rely on 2da-gropes ->
-				case InfoInputBaseItems.ModelType:
-				case InfoInputBaseItems.WeaponWield:
+				case InfoInputBaseitems.EquipableSlots: // these don't rely on 2da-gropes ->
+				case InfoInputBaseitems.ModelType:
+				case InfoInputBaseitems.WeaponWield:
 					return true;
 			}
 			return false;
@@ -595,8 +595,8 @@ namespace yata
 				case YataGrid.InfoType.INFO_ITEM:
 					switch (_sel.x)
 					{
-						case InfoInputBaseItems.EquipableSlots: // HEX Input ->
-							using (var iis = new InfoInputBaseItems(this, _sel))
+						case InfoInputBaseitems.EquipableSlots: // HEX Input ->
+							using (var iis = new InfoInputBaseitems(this, _sel))
 							{
 								if (iis.ShowDialog(this) == DialogResult.OK
 									&& int1 != int0)
@@ -614,8 +614,8 @@ namespace yata
 							}
 							break;
 
-						case InfoInputBaseItems.ModelType: // INT Input ->
-						case InfoInputBaseItems.WeaponWield:
+						case InfoInputBaseitems.ModelType: // INT Input ->
+						case InfoInputBaseitems.WeaponWield:
 							doIntInputItem();
 							break;
 					}
@@ -659,7 +659,7 @@ namespace yata
 		/// </summary>
 		void doIntInputItem()
 		{
-			using (var iic = new InfoInputBaseItems(this, _sel))
+			using (var iic = new InfoInputBaseitems(this, _sel))
 				doIntInput(iic);
 		}
 

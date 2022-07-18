@@ -162,7 +162,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathBaseItems menuitem.
-		/// Intended to add labels from BaseItems.2da to the
+		/// Intended to add labels from <c>BaseItems.2da</c> to the
 		/// <c><see cref="Info.tagLabels">Info.tagLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathBaseItems2da"/></c></param>
@@ -197,7 +197,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathFeat menuitem.
-		/// Intended to add labels from Feat.2da to the
+		/// Intended to add labels from <c>Feat.2da</c> to the
 		/// <c><see cref="Info.featLabels">Info.featLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathFeat2da"/></c></param>
@@ -232,7 +232,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathItemPropDef menuitem.
-		/// Intended to add labels from ItemPropDef.2da to the
+		/// Intended to add labels from <c>ItemPropDef.2da</c> to the
 		/// <c><see cref="Info.ipLabels">Info.ipLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathItemPropDef2da"/></c></param>
@@ -267,7 +267,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathSkills menuitem.
-		/// Intended to add labels from Skills.2da to the
+		/// Intended to add labels from <c>Skills.2da</c> to the
 		/// <c><see cref="Info.skillLabels">Info.skillLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathSkills2da"/></c></param>
@@ -302,7 +302,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathSpells menuitem.
-		/// Intended to add labels from Spells.2da to the
+		/// Intended to add labels from <c>Spells.2da</c> to the
 		/// <c><see cref="Info.spellLabels">Info.spellLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathSpells2da"/></c></param>
@@ -340,7 +340,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathClasses menuitem.
-		/// Intended to add labels from Classes.2da to the
+		/// Intended to add labels from <c>Classes.2da</c> to the
 		/// <c><see cref="Info.classLabels">Info.classLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathClasses2da"/></c></param>
@@ -375,7 +375,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathDisease menuitem.
-		/// Intended to add labels from Disease.2da to the
+		/// Intended to add labels from <c>Disease.2da</c> to the
 		/// <c><see cref="Info.diseaseLabels">Info.diseaseLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathDisease2da"/></c></param>
@@ -410,7 +410,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpAmmoCost menuitem.
-		/// Intended to add labels from Iprp_AmmoCost.2da to the
+		/// Intended to add labels from <c>Iprp_AmmoCost.2da</c> to the
 		/// <c><see cref="Info.ipammoLabels">Info.ipammoLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathIprpAmmoCost2da"/></c></param>
@@ -445,7 +445,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpFeats menuitem.
-		/// Intended to add labels from Iprp_Feats.2da to the
+		/// Intended to add labels from <c>Iprp_Feats.2da</c> to the
 		/// <c><see cref="Info.ipfeatLabels">Info.ipfeatLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathIprpFeats2da"/></c></param>
@@ -480,7 +480,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpOnHitSpell menuitem.
-		/// Intended to add labels from Iprp_OnHitSpell.2da to the
+		/// Intended to add labels from <c>Iprp_OnHitSpell.2da</c> to the
 		/// <c><see cref="Info.iphitspellLabels">Info.iphitspellLabels</see></c>
 		/// list.
 		/// </summary>
@@ -516,7 +516,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathIprpSpells menuitem.
-		/// Intended to add labels and levels from Iprp_Spells.2da to the
+		/// Intended to add labels and levels from <c>Iprp_Spells.2da</c> to the
 		/// <c><see cref="Info.ipspellLabels">Info.ipspellLabels</see></c> and
 		/// <c><see cref="Info.ipspellLevels">Info.ipspellLevels</see></c>
 		/// lists.
@@ -556,7 +556,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathRaces menuitem.
-		/// Intended to add labels from RacialTypes.2da to the
+		/// Intended to add labels from <c>RacialTypes.2da</c> to the
 		/// <c><see cref="Info.raceLabels">Info.raceLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathRaces2da"/></c></param>
@@ -592,7 +592,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathCategories menuitem.
-		/// Intended to add labels from Categories.2da to the
+		/// Intended to add labels from <c>Categories.2da</c> to the
 		/// <c><see cref="Info.categoryLabels">Info.categoryLabels</see></c>
 		/// list.
 		/// </summary>
@@ -628,7 +628,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathRanges menuitem.
-		/// Intended to add labels from Ranges.2da to the
+		/// Intended to add labels from <c>Ranges.2da</c> to the
 		/// <c><see cref="Info.rangeLabels">Info.rangeLabels</see></c> list and
 		/// ranges to the
 		/// <c><see cref="Info.rangeRanges">Info.rangeRanges</see></c> list.
@@ -668,7 +668,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathSpellTarget menuitem.
-		/// Intended to add labels from SpellTarget.2da to the
+		/// Intended to add labels from <c>SpellTarget.2da</c> to the
 		/// <c><see cref="Info.targetLabels">Info.targetLabels</see></c> list.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_PathSpellTarget2da"/></c></param>
@@ -708,7 +708,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathCombatModes menuitem.
-		/// Intended to add labels from CombatModes.2da to the
+		/// Intended to add labels from <c>CombatModes.2da</c> to the
 		/// <c><see cref="Info.combatmodeLabels">Info.combatmodeLabels</see></c>
 		/// list.
 		/// </summary>
@@ -744,7 +744,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathMasterFeats menuitem.
-		/// Intended to add labels from MasterFeats.2da to the
+		/// Intended to add labels from <c>MasterFeats.2da</c> to the
 		/// <c><see cref="Info.masterfeatLabels">Info.masterfeatLabels</see></c>
 		/// list.
 		/// </summary>
@@ -781,7 +781,7 @@ namespace yata
 
 		/// <summary>
 		/// Handles clicking the PathPackages menuitem.
-		/// Intended to add labels from Packages.2da to the
+		/// Intended to add labels from <c>Packages.2da</c> to the
 		/// <c><see cref="Info.packageLabels">Info.packageLabels</see></c>
 		/// list.
 		/// </summary>

@@ -10,80 +10,76 @@ namespace yata
 	{
 		#region Crafting caches
 		/// <summary>
-		/// A list that holds labels for spells in Spells.2da.
-		/// - optional
+		/// A list that holds labels for spells in <c>Spells.2da</c> - optional.
 		/// </summary>
 		internal static List<string> spellLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for feats in Feat.2da.
-		/// - optional
+		/// A list that holds labels for feats in <c>Feat.2da</c> - optional.
 		/// </summary>
 		internal static List<string> featLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for itemproperties in ItemPropDef.2da.
-		/// - optional
+		/// A list that holds labels for itemproperties in
+		/// <c>ItemPropDef.2da</c> - optional.
 		/// </summary>
 		internal static List<string> ipLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for baseitem-types in BaseItems.2da.
-		/// - optional
+		/// A list that holds labels for baseitem-types in <c>BaseItems.2da</c>
+		/// - optional.
 		/// </summary>
 		internal static List<string> tagLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for skills in Skills.2da.
-		/// - optional
+		/// A list that holds labels for skills in <c>Skills.2da</c> - optional.
 		/// </summary>
 		internal static List<string> skillLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for races in Races.2da.
-		/// - optional
+		/// A list that holds labels for races in <c>Races.2da</c> - optional.
 		/// </summary>
 		internal static List<string> raceLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for classes in Classes.2da.
-		/// - optional
+		/// A list that holds labels for classes in <c>Classes.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> classLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for ip-spells in Iprp_Spells.2da.
-		/// - optional
+		/// A list that holds labels for ip-spells in <c>Iprp_Spells.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> ipspellLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds casterlevel for ip-spells in Iprp_Spells.2da.
-		/// - optional
+		/// A list that holds casterlevel for ip-spells in
+		/// <c>Iprp_Spells.2da</c> - optional.
 		/// </summary>
 		internal static List<int> ipspellLevels = new List<int>();
 
 		/// <summary>
-		/// A list that holds labels for diseases in Disease.2da.
-		/// - optional
+		/// A list that holds labels for diseases in <c>Disease.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> diseaseLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for onhitspell in Iprp_OnHitSpell.2da.
-		/// - optional
+		/// A list that holds labels for onhitspell in
+		/// <c>Iprp_OnHitSpell.2da</c> - optional.
 		/// </summary>
 		internal static List<string> iphitspellLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for feats in Iprp_Feats.2da.
-		/// - optional
+		/// A list that holds labels for feats in <c>Iprp_Feats.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> ipfeatLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for ammo in Iprp_AmmoCost.2da.
-		/// - optional
+		/// A list that holds labels for ammo in <c>Iprp_AmmoCost.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> ipammoLabels = new List<string>();
 		#endregion Crafting caches
@@ -95,32 +91,36 @@ namespace yata
 		// NOTE: Also uses Feat.2da for feat-id feat-labels.
 
 		/// <summary>
-		/// A list that holds labels for categories in Categories.2da.
-		/// - optional
+		/// A list that holds labels for categories in <c>Categories.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> categoryLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for spell-ranges in Ranges.2da.
-		/// - optional
+		/// A list that holds labels for spell-ranges in <c>Ranges.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> rangeLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds ranges for spell-ranges in Ranges.2da.
-		/// - optional
+		/// A list that holds ranges for spell-ranges in <c>Ranges.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<int> rangeRanges = new List<int>();
 
 		/// <summary>
-		/// A list that holds labels for spell-targets in SpellTarget.2da.
-		/// - optional
-		/// @note Groping SpellTarget.2da does NOT use the regular grope-
-		/// routines. It has 2 fields that are float-values (instead of only 1
-		/// optional int-value). So GropeSpellTarget() will be used instead of
-		/// the regular GropeLabels() and it needs to be called by the general
-		/// Yata.GropeLabels() function as well as the path-item.
+		/// A list that holds labels for spell-targets in <c>SpellTarget.2da</c>
+		/// - optional.
 		/// </summary>
+		/// <remarks>Groping <c>SpellTarget.2da</c> does NOT use the regular
+		/// grope-routines. It has 2 fields that are float-values (instead of
+		/// only 1 optional int-value). So
+		/// <c><see cref="GropeSpellTarget()">GropeSpellTarget()</see></c>
+		/// will be used instead of the regular
+		/// <c><see cref="GropeLabels()">GropeLabels()</see></c> and it needs to
+		/// be called by the general
+		/// <c><see cref="Yata.GropeLabels()">Yata.GropeLabels()</see></c>
+		/// function as well as the path-item.</remarks>
 		internal static List<string> targetLabels  = new List<string>();
 		internal static List<float>  targetWidths  = new List<float>();
 		internal static List<float>  targetLengths = new List<float>();
@@ -134,14 +134,14 @@ namespace yata
 		// NOTE: Also uses Skills.2da for skill-labels.
 
 		/// <summary>
-		/// A list that holds labels for combatmodes in CombatModes.2da.
-		/// - optional
+		/// A list that holds labels for combatmodes in <c>CombatModes.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> combatmodeLabels = new List<string>();
 
 		/// <summary>
-		/// A list that holds labels for master-feats in MasterFeats.2da.
-		/// - optional
+		/// A list that holds labels for master-feats in <c>MasterFeats.2da</c>
+		/// - optional.
 		/// </summary>
 		internal static List<string> masterfeatLabels = new List<string>();
 		#endregion Feat caches
@@ -151,8 +151,8 @@ namespace yata
 		// NOTE: Also uses Feat.2da for feat-labels.
 
 		/// <summary>
-		/// A list that holds labels for packages in Packages.2da.
-		/// - optional
+		/// A list that holds labels for packages in <c>Packages.2da</c> -
+		/// optional.
 		/// </summary>
 		internal static List<string> packageLabels = new List<string>();
 		#endregion Class caches

@@ -4210,7 +4210,8 @@ namespace yata
 
 		#region Item info
 		/// <summary>
-		/// Gets a readable string when mouseovering cols in BaseItems.2da.
+		/// Gets a readable string when mouseovering cols in
+		/// <c>BaseItems.2da</c>.
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="col"></param>
@@ -4224,7 +4225,7 @@ namespace yata
 
 			switch (col)
 			{
-				case InfoInputBaseItems.EquipableSlots: // no 2da
+				case InfoInputBaseitems.EquipableSlots: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "not equipable"
 					{
@@ -4343,7 +4344,7 @@ namespace yata
 					}
 					break;
 
-				case InfoInputBaseItems.ModelType: // no 2da
+				case InfoInputBaseitems.ModelType: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "simple 1-part"
 					{
@@ -4365,7 +4366,7 @@ namespace yata
 					}
 					break;
 
-				case InfoInputBaseItems.WeaponWield: // no 2da
+				case InfoInputBaseitems.WeaponWield: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "standard one-handed weapon"
 					{
