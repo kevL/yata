@@ -299,7 +299,6 @@ namespace yata
 
 				case Category: // int-val,dropdown,unique
 					list_Categories();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
@@ -323,7 +322,6 @@ namespace yata
 
 				case SpontCastClassReq: // int-val,dropdown,unique
 					list_SpontCastClasses();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
@@ -379,7 +377,6 @@ namespace yata
 
 				case TargetingUI: // int-val,dropdown,unique
 					list_Targeters();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
@@ -392,7 +389,7 @@ namespace yata
 		/// </summary>
 		void prep_Schools()
 		{
-			Text = " School";
+			Text = "  School";
 
 			cb_00.Text = "Abjuration";
 			cb_01.Text = "Conjuration";
@@ -412,7 +409,7 @@ namespace yata
 		/// </summary>
 		void prep_Ranges()
 		{
-			Text = " Range";
+			Text = "  Range";
 
 			cb_00.Text = "Personal" + (( 0 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 0] + "m") : String.Empty);
 			cb_01.Text = "Touch"    + (( 1 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 1] + "m") : String.Empty);
@@ -430,7 +427,7 @@ namespace yata
 		/// </summary>
 		void prep_MetaMagics()
 		{
-			Text = " MetaMagic";
+			Text = "  MetaMagic";
 
 			// standard ->
 			cb_00.Text = "(1)Empower";
@@ -479,7 +476,7 @@ namespace yata
 		/// </summary>
 		void prep_TargetTypes()
 		{
-			Text = " TargetType";
+			Text = "  TargetType";
 
 			cb_00.Text = "(1)Self";
 			cb_01.Text = "(2)Creatures";
@@ -498,7 +495,7 @@ namespace yata
 		/// </summary>
 		void prep_UserTypes()
 		{
-			Text = " UserType";
+			Text = "  UserType";
 
 			cb_00.Text = "1 - Spell";
 			cb_01.Text = "2 - Special Ability";
@@ -528,7 +525,7 @@ namespace yata
 		/// </summary>
 		void list_ImmunityTypes()
 		{
-			Text = " ImmunityType";
+			Text = "  ImmunityType";
 
 			dropdown();
 
@@ -561,7 +558,7 @@ namespace yata
 		/// </summary>
 		void list_Categories()
 		{
-			Text = " Category";
+			Text = "  Category";
 
 			dropdown();
 
@@ -578,7 +575,7 @@ namespace yata
 		/// </summary>
 		void list_SpontCastClasses()
 		{
-			Text = " SpontCastClassReq";
+			Text = "  SpontCastClassReq";
 
 			dropdown();
 
@@ -595,7 +592,7 @@ namespace yata
 		/// </summary>
 		void list_AsMetaMagics()
 		{
-			Text = " AsMetaMagic";
+			Text = "  AsMetaMagic";
 
 			dropdown();
 
@@ -635,7 +632,7 @@ namespace yata
 		/// </summary>
 		void list_Targeters()
 		{
-			Text = " TargetingUI";
+			Text = "  TargetingUI";
 
 			dropdown();
 
@@ -697,7 +694,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_School()
 		{
@@ -723,7 +721,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_Range()
 		{
@@ -747,7 +746,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_MetaMagic()
 		{
@@ -883,7 +883,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_TargetType()
 		{
@@ -929,7 +930,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
 		/// </summary>
 		void change_UserType()
 		{

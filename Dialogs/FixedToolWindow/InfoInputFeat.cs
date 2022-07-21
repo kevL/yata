@@ -60,13 +60,11 @@ namespace yata
 			{
 				case Category: // int-val,dropdown,unique
 					list_Categories();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case MasterFeat: // int-val,dropdown,unique
 					list_Masterfeats();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
@@ -122,7 +120,6 @@ namespace yata
 
 				case ToggleMode: // int-val,dropdown,unique
 					list_CombatModes();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
@@ -135,7 +132,7 @@ namespace yata
 		/// </summary>
 		void prep_ToolsCategories()
 		{
-			Text = " TOOLSCATEGORIES";
+			Text = "  TOOLSCATEGORIES";
 
 			cb_00.Text = "0 - All Feats";
 			cb_01.Text = "1 - Combat Feats";
@@ -170,7 +167,7 @@ namespace yata
 		/// </summary>
 		void list_Categories()
 		{
-			Text = " CATEGORY";
+			Text = "  CATEGORY";
 
 			dropdown();
 
@@ -188,7 +185,7 @@ namespace yata
 		/// </summary>
 		void list_Masterfeats()
 		{
-			Text = " MASTERFEAT";
+			Text = "  MASTERFEAT";
 
 			dropdown();
 
@@ -205,7 +202,7 @@ namespace yata
 		/// </summary>
 		void list_FeatCategories()
 		{
-			Text = " FeatCategory";
+			Text = "  FeatCategory";
 
 			dropdown();
 
@@ -234,7 +231,7 @@ namespace yata
 		/// </summary>
 		void list_CombatModes()
 		{
-			Text = " ToggleMode";
+			Text = "  ToggleMode";
 
 			dropdown();
 

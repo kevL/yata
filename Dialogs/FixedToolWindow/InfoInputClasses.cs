@@ -157,7 +157,6 @@ namespace yata
 
 				case Package: // int-val,dropdown,unique
 					list_Packages();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
@@ -171,8 +170,8 @@ namespace yata
 		/// </summary>
 		void prep_Abilities()
 		{
-			if (_cell.x == PrimaryAbil) Text = " PrimaryAbil";
-			else                        Text = " SpellAbil"; // _cell.x == SpellAbil
+			if (_cell.x == PrimaryAbil) Text = "  PrimaryAbil";
+			else                        Text = "  SpellAbil"; // _cell.x == SpellAbil
 
 			cb_00.Text = "STR";
 			cb_01.Text = "CON";
@@ -190,7 +189,7 @@ namespace yata
 		/// </summary>
 		void prep_AlignmentRestrictions()
 		{
-			Text = " AlignRestrict";
+			Text = "  AlignRestrict";
 
 			cb_00.Text = "(1)neutral";
 			cb_01.Text = "(2)lawful";
@@ -207,7 +206,7 @@ namespace yata
 		/// </summary>
 		void prep_AlignmentRestrictionType()
 		{
-			Text = " AlignRstrctType";
+			Text = "  AlignRstrctType";
 
 			cb_00.Text = "(1)neutral as LawChaos";
 			cb_01.Text = "(2)neutral as GoodEvil)";
@@ -235,7 +234,7 @@ namespace yata
 		/// </summary>
 		void list_Packages()
 		{
-			Text = " Package";
+			Text = "  Package";
 
 			dropdown();
 
@@ -271,7 +270,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_Ability()
 		{
@@ -295,7 +295,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_AlignRestrict()
 		{
@@ -331,7 +332,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_AlignRstrctType()
 		{
