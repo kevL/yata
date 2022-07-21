@@ -1174,13 +1174,6 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathRaces2da);
 
 					it_MenuPaths.Visible = true;
-
-//					it_PathCategories2da .Visible =
-//					it_PathCombatModes2da.Visible =
-//					it_PathMasterFeats2da.Visible =
-//					it_PathPackages2da   .Visible =
-//					it_PathRanges2da     .Visible =
-//					it_PathSpellTarget2da.Visible = false;
 					break;
 
 				case YataGrid.InfoType.INFO_SPELL:
@@ -1198,19 +1191,6 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathSpellTarget2da);
 
 					it_MenuPaths.Visible = true;
-
-//					it_PathBaseItems2da     .Visible =
-//					it_PathCombatModes2da   .Visible =
-//					it_PathDisease2da       .Visible =
-//					it_PathIprpAmmoCost2da  .Visible =
-//					it_PathIprpFeats2da     .Visible =
-//					it_PathIprpOnHitSpell2da.Visible =
-//					it_PathIprpSpells2da    .Visible =
-//					it_PathItemPropDef2da   .Visible =
-//					it_PathMasterFeats2da   .Visible =
-//					it_PathPackages2da      .Visible =
-//					it_PathRaces2da         .Visible =
-//					it_PathSkills2da        .Visible = false;
 					break;
 
 				case YataGrid.InfoType.INFO_FEAT:
@@ -1228,19 +1208,6 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathSpells2da);
 
 					it_MenuPaths.Visible = true;
-
-//					it_PathBaseItems2da     .Visible =
-//					it_PathClasses2da       .Visible =
-//					it_PathDisease2da       .Visible =
-//					it_PathIprpAmmoCost2da  .Visible =
-//					it_PathIprpFeats2da     .Visible =
-//					it_PathIprpOnHitSpell2da.Visible =
-//					it_PathIprpSpells2da    .Visible =
-//					it_PathItemPropDef2da   .Visible =
-//					it_PathPackages2da      .Visible =
-//					it_PathRaces2da         .Visible =
-//					it_PathRanges2da        .Visible =
-//					it_PathSpellTarget2da   .Visible = false;
 					break;
 
 				case YataGrid.InfoType.INFO_CLASS:
@@ -1254,23 +1221,22 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathPackages2da);
 
 					it_MenuPaths.Visible = true;
+					break;
 
-//					it_PathBaseItems2da     .Visible =
-//					it_PathCategories2da    .Visible =
-//					it_PathClasses2da       .Visible =
-//					it_PathCombatModes2da   .Visible =
-//					it_PathDisease2da       .Visible =
-//					it_PathIprpAmmoCost2da  .Visible =
-//					it_PathIprpFeats2da     .Visible =
-//					it_PathIprpOnHitSpell2da.Visible =
-//					it_PathIprpSpells2da    .Visible =
-//					it_PathItemPropDef2da   .Visible =
-//					it_PathMasterFeats2da   .Visible =
-//					it_PathRaces2da         .Visible =
-//					it_PathRanges2da        .Visible =
-//					it_PathSkills2da        .Visible =
-//					it_PathSpells2da        .Visible =
-//					it_PathSpellTarget2da   .Visible = false;
+				case YataGrid.InfoType.INFO_ITEM:
+					if (_tsepcraft != null) _tsepcraft.Dispose();
+
+					it_MenuPaths.DropDownItems.Clear();
+
+					it_MenuPaths.DropDownItems.Add(it_PathAll);
+					it_MenuPaths.DropDownItems.Add(_tsep);
+					it_MenuPaths.DropDownItems.Add(it_PathBaseItems2da);
+					it_MenuPaths.DropDownItems.Add(it_PathInventorySnds2da);
+					it_MenuPaths.DropDownItems.Add(it_PathItemProps2da);
+					it_MenuPaths.DropDownItems.Add(it_PathWeaponSounds2da);
+					it_MenuPaths.DropDownItems.Add(it_PathAmmunitionTypes2da);
+
+					it_MenuPaths.Visible = true;
 					break;
 			}
 		}

@@ -10,9 +10,51 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int EquipableSlots =  5; // col in BaseItems.2da ->
-		internal const int ModelType      =  7;
-		internal const int WeaponWield    = 18;
+		internal const int EquipableSlots     =  5; // col in BaseItems.2da ->
+		internal const int ModelType          =  7;
+//		internal const int NWN2_DefaultIcon   = 15; // req. images i guess
+		internal const int WeaponWield        = 18;
+		internal const int WeaponType         = 19;
+		internal const int WeaponSize         = 20;
+		internal const int RangedWeapon       = 21; // baseitems.2da
+//		internal const int Category           = 29; // TODO <-
+		internal const int InvSoundType       = 34; // inventorysnds.2da
+		internal const int PropColumn         = 37; // itemprops.2da
+		internal const int StorePanel         = 38;
+
+		internal const int ReqFeat0           = 39; // feat.2da ->
+		internal const int ReqFeat1           = 40;
+		internal const int ReqFeat2           = 41;
+		internal const int ReqFeat3           = 42;
+		internal const int ReqFeat4           = 43;
+		internal const int ReqFeat5           = 44;
+
+		internal const int AC_Enchant         = 45;
+
+		internal const int BaseAC             = 46; // info: "shields only"
+		internal const int ArmorCheckPen      = 47; // info: "shields only"
+
+//		internal const int BaseItemStatRef    = 48; // is this applicable to shields/armor
+
+		internal const int WeaponMatType      = 52; // weaponsounds.2da
+		internal const int AmmunitionType     = 53; // index+1 into ammunitiontypes.2da
+		internal const int QBBehaviour        = 54;
+
+		internal const int ArcaneSpellFailure = 55; // info: "shields only"
+
+		internal const int FEATImprCrit       = 61; // feat.2da ->
+		internal const int FEATWpnFocus       = 62;
+		internal const int FEATWpnSpec        = 63;
+		internal const int FEATEpicDevCrit    = 64;
+		internal const int FEATEpicWpnFocus   = 65;
+		internal const int FEATEpicWpnSpec    = 66;
+		internal const int FEATOverWhCrit     = 67;
+		internal const int FEATWpnOfChoice    = 68;
+		internal const int FEATGrtrWpnFocus   = 69;
+		internal const int FEATGrtrWpnSpec    = 70;
+		internal const int FEATPowerCrit      = 71;
+
+//		internal const int GMaterialType      = 72; // Material Type.2da - doesn't exist. not used.
 		#endregion Fields (static)
 
 
@@ -104,13 +146,61 @@ namespace yata
 
 				case ModelType: // int-val,dropdown,unique
 					list_ModelTypes();
-
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case WeaponWield: // int-val,dropdown,unique
 					list_WeaponWields();
+					initintvals(val, co_Val, bu_Clear);
+					break;
 
+				case WeaponType: // int-val,dropdown,unique
+					list_WeaponTypes();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case WeaponSize: // int-val,dropdown,unique
+					list_WeaponSizes();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case RangedWeapon: // int-val,dropdown,unique
+					list_RangedWeapons();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case InvSoundType: // int-val,dropdown,unique
+					list_InventorySounds();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case PropColumn: // int-val,dropdown,unique
+					list_PropertyCols();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case StorePanel:
+					list_StorePanels();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case AC_Enchant:
+					list_AcEnchants();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case WeaponMatType:
+					list_WeaponMatTypes();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case AmmunitionType:
+					list_AmmunitionTypes();
+					initintvals_1(val, co_Val, bu_Clear); // off by 1
+					break;
+
+				case QBBehaviour:
+					list_QBBehaviours();
 					initintvals(val, co_Val, bu_Clear);
 					break;
 			}
@@ -124,7 +214,7 @@ namespace yata
 		/// </summary>
 		void prep_EquipableSlots()
 		{
-			Text = " EquipableSlots";
+			Text = "  EquipableSlots";
 
 			cb_00.Text = "(1)head";
 			cb_01.Text = "(2)chest";
@@ -163,12 +253,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "ModelType" to the <c>ComboBox</c> along
-		/// with a final stars item.
+		/// Adds allowable entries for <c><see cref="ModelType"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_ModelTypes()
 		{
-			Text = " ModelType";
+			Text = "  ModelType";
 
 			dropdown();
 
@@ -181,12 +271,12 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "WeaponWield" to the <c>ComboBox</c> along
-		/// with a final stars item.
+		/// Adds allowable entries for <c><see cref="WeaponWield"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_WeaponWields()
 		{
-			Text = " WeaponWield";
+			Text = "  WeaponWield";
 
 			dropdown();
 
@@ -204,6 +294,190 @@ namespace yata
 			co_Val.Items.Add(new tui("11 - shuriken or throwing axe"));
 			co_Val.Items.Add(new tui("12 - spears"));
 			co_Val.Items.Add(new tui("13 - musical instruments"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="WeaponType"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_WeaponTypes()
+		{
+			Text = "  WeaponType";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - none"));
+			co_Val.Items.Add(new tui("1 - piercing"));
+			co_Val.Items.Add(new tui("2 - bludgeoning"));
+			co_Val.Items.Add(new tui("3 - slashing"));
+			co_Val.Items.Add(new tui("4 - piercing/slashing"));
+			co_Val.Items.Add(new tui("5 - bludgeoning/piercing"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="WeaponSize"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_WeaponSizes()
+		{
+			Text = "  WeaponSize";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - none"));
+			co_Val.Items.Add(new tui("1 - tiny"));
+			co_Val.Items.Add(new tui("2 - small"));
+			co_Val.Items.Add(new tui("3 - medium"));
+			co_Val.Items.Add(new tui("4 - large"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="RangedWeapon"/></c>
+		/// (BaseItems.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
+		/// </summary>
+		void list_RangedWeapons()
+		{
+			Text = "  RangedWeapon";
+
+			dropdown();
+
+			for (int i = 0; i != Info.tagLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.tagLabels[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="InvSoundType"/></c>
+		/// (InventorySnds.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
+		/// </summary>
+		void list_InventorySounds()
+		{
+			Text = "  InvSoundType";
+
+			dropdown();
+
+			for (int i = 0; i != Info.soundLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.soundLabels[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="PropColumn"/></c>
+		/// (ItemProps.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
+		/// </summary>
+		void list_PropertyCols()
+		{
+			Text = "  PropColumn";
+
+			dropdown();
+
+			for (int i = 0; i != Info.propFields.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.propFields[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="StorePanel"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_StorePanels()
+		{
+			Text = "  StorePanel";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - armor and clothing"));
+			co_Val.Items.Add(new tui("1 - weapons"));
+			co_Val.Items.Add(new tui("2 - potions and scrolls"));
+			co_Val.Items.Add(new tui("3 - wands and magic items"));
+			co_Val.Items.Add(new tui("4 - miscellaneous"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="AC_Enchant"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_AcEnchants()
+		{
+			Text = "  AC_Enchant";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - dodge"));
+			co_Val.Items.Add(new tui("1 - natural"));
+			co_Val.Items.Add(new tui("2 - armor"));
+			co_Val.Items.Add(new tui("3 - shield"));
+			co_Val.Items.Add(new tui("4 - deflection"));
+
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="WeaponMatType"/></c>
+		/// (WeaponSounds.2da) to the <c>ComboBox</c> along with a final stars
+		/// item.
+		/// </summary>
+		void list_WeaponMatTypes()
+		{
+			Text = "  WeaponMatType";
+
+			dropdown();
+
+			for (int i = 0; i != Info.weapsoundLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.weapsoundLabels[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="AmmunitionType"/></c>
+		/// (AmmunitionTypes.2da) to the <c>ComboBox</c> along with a final
+		/// stars item.
+		/// </summary>
+		void list_AmmunitionTypes()
+		{
+			Text = "  AmmunitionType";
+
+			dropdown();
+
+			for (int i = 0; i != Info.ammoLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui((i + 1) + " - " + Info.ammoLabels[i])); // lovely. off by 1
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="QBBehaviour"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_QBBehaviours()
+		{
+			Text = "  QBBehaviour";
+
+			dropdown();
+
+			co_Val.Items.Add(new tui("0 - none"));
+			co_Val.Items.Add(new tui("1 - rods instruments wands and misc items"));
+			co_Val.Items.Add(new tui("2 - potions and scrolls"));
 
 			co_Val.Items.Add(new tui(gs.Stars));
 		}
@@ -232,7 +506,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_EquipableSlots()
 		{
@@ -342,7 +617,20 @@ namespace yata
 					{
 						case ModelType:
 						case WeaponWield:
+						case WeaponType:
+						case WeaponSize:
+						case RangedWeapon:
+						case InvSoundType:
+						case PropColumn:
+						case StorePanel:
+						case AC_Enchant:
+						case WeaponMatType:
+						case QBBehaviour:
 							_f.int1 = co_Val.SelectedIndex;
+							break;
+
+						case AmmunitionType:
+							_f.int1 = co_Val.SelectedIndex + 1; // off by 1
 							break;
 					}
 				}
@@ -370,6 +658,16 @@ namespace yata
 
 				case ModelType: // dropdown -> fire changed_Combobox()
 				case WeaponWield:
+				case WeaponType:
+				case WeaponSize:
+				case RangedWeapon:
+				case InvSoundType:
+				case PropColumn:
+				case StorePanel:
+				case AC_Enchant:
+				case WeaponMatType:
+				case AmmunitionType:
+				case QBBehaviour:
 					co_Val.SelectedIndex = co_Val.Items.Count - 1;
 					break;
 			}

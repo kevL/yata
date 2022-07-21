@@ -157,6 +157,28 @@ namespace yata
 							 Info.packageLabels,
 							 it_PathPackages2da,
 							 1);
+
+
+			// BaseItems info ->
+			Info.GropeLabels(Path.Combine(dir, "inventorysnds.2da"),
+							 Info.soundLabels,
+							 it_PathInventorySnds2da,
+							 1);
+
+			Info.GropeFields(Path.Combine(dir, "itemprops.2da"), // see also ItemTypes.2da
+							 Info.propFields,
+							 it_PathItemProps2da,
+							 21);
+
+			Info.GropeLabels(Path.Combine(dir, "weaponsounds.2da"),
+							 Info.weapsoundLabels,
+							 it_PathWeaponSounds2da,
+							 1);
+
+			Info.GropeLabels(Path.Combine(dir, "ammunitiontypes.2da"),
+							 Info.ammoLabels,
+							 it_PathAmmunitionTypes2da,
+							 1);
 		}
 
 
@@ -231,6 +253,41 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Handles clicking the PathInventorySounds menuitem.
+		/// Intended to add labels from <c>InventorySnds.2da</c> to the
+		/// <c><see cref="Info.soundLabels">Info.soundLabels</see></c> list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathInventorySnds2da"/></c></param>
+		/// <param name="e"></param>
+		void itclick_PathInventorySnds2da(object sender, EventArgs e)
+		{
+			if (!it_PathInventorySnds2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select InventorySnds.2da";
+					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "inventorysnds.2da";
+					ofd.AutoUpgradeEnabled = false;
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.soundLabels,
+										 it_PathInventorySnds2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathInventorySnds2da.Checked = false;
+				Info.soundLabels.Clear();
+			}
+		}
+
+		/// <summary>
 		/// Handles clicking the PathItemPropDef menuitem.
 		/// Intended to add labels from <c>ItemPropDef.2da</c> to the
 		/// <c><see cref="Info.ipLabels">Info.ipLabels</see></c> list.
@@ -262,6 +319,42 @@ namespace yata
 			{
 				it_PathItemPropDef2da.Checked = false;
 				Info.ipLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathItemProps menuitem.
+		/// Intended to add colabels from <c>ItemProps.2da</c> to the
+		/// <c><see cref="Info.propFields">Info.propFields</see></c> list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathItemProps2da"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>See also <c>ItemTypes.2da</c>.</remarks>
+		void itclick_PathItemProps2da(object sender, EventArgs e)
+		{
+			if (!it_PathItemProps2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select ItemProps.2da";
+					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "itemprops.2da";
+					ofd.AutoUpgradeEnabled = false;
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeFields(ofd.FileName,
+										 Info.propFields,
+										 it_PathItemProps2da,
+										 21);
+					}
+				}
+			}
+			else
+			{
+				it_PathItemProps2da.Checked = false;
+				Info.propFields.Clear();
 			}
 		}
 
@@ -812,6 +905,78 @@ namespace yata
 			{
 				it_PathPackages2da.Checked = false;
 				Info.packageLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathWeaponSounds menuitem.
+		/// Intended to add labels from <c>WeaponSounds.2da</c> to the
+		/// <c><see cref="Info.weapsoundLabels">Info.weapsoundLabels</see></c>
+		/// list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathWeaponSounds2da"/></c></param>
+		/// <param name="e"></param>
+		void itclick_PathWeaponSounds2da(object sender, EventArgs e)
+		{
+			if (!it_PathWeaponSounds2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select WeaponSounds.2da";
+					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "weaponsounds.2da";
+					ofd.AutoUpgradeEnabled = false;
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.weapsoundLabels,
+										 it_PathWeaponSounds2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathWeaponSounds2da.Checked = false;
+				Info.weapsoundLabels.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Handles clicking the PathAmmunitionTypes menuitem.
+		/// Intended to add labels from <c>AmmunitionTypes.2da</c> to the
+		/// <c><see cref="Info.ammoLabels">Info.ammoLabels</see></c>
+		/// list.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PathAmmunitionTypes2da"/></c></param>
+		/// <param name="e"></param>
+		void itclick_PathAmmunitionTypes2da(object sender, EventArgs e)
+		{
+			if (!it_PathAmmunitionTypes2da.Checked)
+			{
+				using (var ofd = new OpenFileDialog())
+				{
+					ofd.Title  = "Select AmmunitionTypes.2da";
+					ofd.Filter = Get2daFilter();
+
+					ofd.FileName = "ammunitiontypes.2da";
+					ofd.AutoUpgradeEnabled = false;
+
+					if (ofd.ShowDialog() == DialogResult.OK)
+					{
+						Info.GropeLabels(ofd.FileName,
+										 Info.ammoLabels,
+										 it_PathAmmunitionTypes2da,
+										 1);
+					}
+				}
+			}
+			else
+			{
+				it_PathAmmunitionTypes2da.Checked = false;
+				Info.ammoLabels.Clear();
 			}
 		}
 		#endregion Handlers (Paths)

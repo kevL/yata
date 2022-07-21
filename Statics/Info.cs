@@ -158,6 +158,38 @@ namespace yata
 		#endregion Class caches
 
 
+		#region BaseItem caches
+		// NOTE: Also uses BaseItems.2da for baseitem-labels.
+		// NOTE: Also uses Feat.2da for feat-labels.
+
+		/// <summary>
+		/// A list that holds labels for inventory-sounds in
+		/// <c>InventorySnds.2da</c> - optional.
+		/// </summary>
+		internal static List<string> soundLabels = new List<string>();
+
+		/// <summary>
+		/// A list that holds colabels for itemproperties in
+		/// <c>ItemPropDef.2da</c> - optional.
+		/// A list that holds labels for allowed itemproperties on baseitemtypes
+		/// in <c>ItemProps.2da</c> - optional.
+		/// </summary>
+		internal static List<string> propFields = new List<string>();
+
+		/// <summary>
+		/// A list that holds labels for weapon-sounds in
+		/// <c>WeaponSounds.2da</c> - optional.
+		/// </summary>
+		internal static List<string> weapsoundLabels = new List<string>();
+
+		/// <summary>
+		/// A list that holds labels for ammunition-types in
+		/// <c>AmmunitionTypes.2da</c> - optional.
+		/// </summary>
+		internal static List<string> ammoLabels = new List<string>();
+		#endregion BaseItem caches
+
+
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
 		/// TODO: Check that the given 2da really has the required cols.
@@ -186,8 +218,7 @@ namespace yata
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
-					string line;
-					string[] fields;
+					string line; string[] fields;
 
 					for (int i = 0; i != lines.Length; ++i)
 					{
@@ -252,8 +283,7 @@ namespace yata
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
-					string line;
-					string[] fields;
+					string line; string[] fields;
 
 					for (int i = 0; i != lines.Length; ++i)
 					{
@@ -290,6 +320,56 @@ namespace yata
 								}
 							}
 						}
+					}
+				}
+
+				it.Checked = (labels.Count != 0);
+			}
+		}
+
+		/// <summary>
+		/// Gets the colabel-strings from a given 2da.
+		/// </summary>
+		/// <param name="pfe2da">path_file_extension to the 2da</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
+		/// <param name="stop"></param>
+		/// <param name="strt"></param>
+		internal static void GropeFields(string pfe2da,
+										 ICollection<string> labels,
+										 ToolStripMenuItem it,
+										 int stop,
+										 int strt = 0)
+		{
+			if (File.Exists(pfe2da))
+			{
+				labels.Clear();
+
+				using (var sr = new StreamReader(pfe2da))
+				{
+					// WARNING: This function does *not* handle quotation marks around 2da fields.
+					// And it does not even check for them since it only gets the colheads.
+
+					string line; string[] fields;
+
+					for (int i = 0; i != 3; ++i)
+					{
+						if ((line = sr.ReadLine()) != null)
+						{
+							if (i == 2)
+							{
+								if ((line = line.Trim()).Length != 0)
+								{
+									fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+									for (int f = strt; f != fields.Length && f <= stop; ++f)
+									{
+										labels.Add(fields[f]);
+									}
+								}
+							}
+						}
+						else break;
 					}
 				}
 

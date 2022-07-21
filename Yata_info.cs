@@ -63,7 +63,7 @@ namespace yata
 
 //				case 2: // "REAGENTS"
 
-				case 3: // "TAGS" - no 2da
+				case 3: // "TAGS" - BaseItems.2da or no 2da for TCC-types
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -4391,6 +4391,292 @@ namespace yata
 								case 11: info += "shuriken or throwing axe";   break;
 								case 12: info += "spears";                     break;
 								case 13: info += "musical instruments";        break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.WeaponType: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 6)
+						{
+							switch (result)
+							{
+								case  0: info += "none";                 break;
+								case  1: info += "piercing";             break;
+								case  2: info += "bludgeoning";          break;
+								case  3: info += "slashing";             break;
+								case  4: info += "piercing/slashing";    break;
+								case  5: info += "bludgeoning/piercing"; break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.WeaponSize: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 5)
+						{
+							switch (result)
+							{
+								case  0: info += "none";   break;
+								case  1: info += "tiny";   break;
+								case  2: info += "small";  break;
+								case  3: info += "medium"; break;
+								case  4: info += "large";  break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.RangedWeapon: // BaseItems.2da
+					if (it_PathBaseItems2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.tagLabels.Count)
+							{
+								info += Info.tagLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.InvSoundType: // InventorySnds.2da
+					if (it_PathInventorySnds2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.soundLabels.Count)
+							{
+								info += Info.soundLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.PropColumn: // ItemProps.2da
+					if (it_PathItemProps2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.propFields.Count)
+							{
+								info += Info.propFields[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.StorePanel: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "armor and clothing"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 5)
+						{
+							switch (result)
+							{
+								case  0: info += "armor and clothing";    break;
+								case  1: info += "weapons";               break;
+								case  2: info += "potions and scrolls";   break;
+								case  3: info += "wands and magic items"; break;
+								case  4: info += "miscellaneous";         break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.ReqFeat0: // Feat.2da ->
+				case InfoInputBaseitems.ReqFeat1:
+				case InfoInputBaseitems.ReqFeat2:
+				case InfoInputBaseitems.ReqFeat3:
+				case InfoInputBaseitems.ReqFeat4:
+				case InfoInputBaseitems.ReqFeat5:
+				case InfoInputBaseitems.FEATImprCrit:
+				case InfoInputBaseitems.FEATWpnFocus:
+				case InfoInputBaseitems.FEATWpnSpec:
+				case InfoInputBaseitems.FEATEpicDevCrit:
+				case InfoInputBaseitems.FEATEpicWpnFocus:
+				case InfoInputBaseitems.FEATEpicWpnSpec:
+				case InfoInputBaseitems.FEATOverWhCrit:
+				case InfoInputBaseitems.FEATWpnOfChoice:
+				case InfoInputBaseitems.FEATGrtrWpnFocus:
+				case InfoInputBaseitems.FEATGrtrWpnSpec:
+				case InfoInputBaseitems.FEATPowerCrit:
+					if (it_PathFeat2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.featLabels.Count)
+							{
+								info += Info.featLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.AC_Enchant: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "dodge"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 5)
+						{
+							switch (result)
+							{
+								case  0: info += "dodge";      break;
+								case  1: info += "natural";    break;
+								case  2: info += "armor";      break;
+								case  3: info += "shield";     break;
+								case  4: info += "deflection"; break;
+							}
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.BaseAC:
+				case InfoInputBaseitems.ArmorCheckPen:
+				case InfoInputBaseitems.ArcaneSpellFailure:
+					info = Table.Cols[col].text + ": for shields only";
+					break;
+
+				case InfoInputBaseitems.WeaponMatType: // WeaponSounds.2da
+					if (it_PathWeaponSounds2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.weapsoundLabels.Count)
+							{
+								info += Info.weapsoundLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.AmmunitionType: // AmmunitionTypes.2da
+					if (it_PathAmmunitionTypes2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars)
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result) // off by 1 ->
+							&& result > 0)
+						{
+							if (result - 1 < Info.ammoLabels.Count)
+							{
+								info += Info.ammoLabels[result - 1];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputBaseitems.QBBehaviour: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 3)
+						{
+							switch (result)
+							{
+								case  0: info += "none";                                  break;
+								case  1: info += "rods instruments wands and misc items"; break;
+								case  2: info += "potions and scrolls";                   break;
 							}
 						}
 						else

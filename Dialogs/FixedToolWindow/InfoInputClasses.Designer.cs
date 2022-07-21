@@ -179,7 +179,7 @@ namespace yata
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "InfoInputClasses";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.ResumeLayout(false);
 
 		}

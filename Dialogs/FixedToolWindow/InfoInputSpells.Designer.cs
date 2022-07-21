@@ -506,7 +506,7 @@ namespace yata
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "InfoInputSpells";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.gb_MetaGroups.ResumeLayout(false);
 			this.ResumeLayout(false);
 

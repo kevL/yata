@@ -106,17 +106,20 @@ namespace yata
 
 		ToolStripMenuItem it_MenuPaths;
 		ToolStripMenuItem it_PathAll;
+		ToolStripMenuItem it_PathAmmunitionTypes2da;
 		ToolStripMenuItem it_PathBaseItems2da;
 		ToolStripMenuItem it_PathCategories2da;
 		ToolStripMenuItem it_PathClasses2da;
 		ToolStripMenuItem it_PathCombatModes2da;
 		ToolStripMenuItem it_PathDisease2da;
 		ToolStripMenuItem it_PathFeat2da;
+		ToolStripMenuItem it_PathInventorySnds2da;
 		ToolStripMenuItem it_PathIprpAmmoCost2da;
 		ToolStripMenuItem it_PathIprpFeats2da;
 		ToolStripMenuItem it_PathIprpOnHitSpell2da;
 		ToolStripMenuItem it_PathIprpSpells2da;
 		ToolStripMenuItem it_PathItemPropDef2da;
+		ToolStripMenuItem it_PathItemProps2da;
 		ToolStripMenuItem it_PathMasterFeats2da;
 		ToolStripMenuItem it_PathPackages2da;
 		ToolStripMenuItem it_PathRaces2da;
@@ -124,6 +127,7 @@ namespace yata
 		ToolStripMenuItem it_PathSkills2da;
 		ToolStripMenuItem it_PathSpells2da;
 		ToolStripMenuItem it_PathSpellTarget2da;
+		ToolStripMenuItem it_PathWeaponSounds2da;
 
 		ToolStripMenuItem it_MenuFont;
 		ToolStripMenuItem it_Font;
@@ -343,17 +347,20 @@ namespace yata
 			this.it_PathTalkC = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuPaths = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathAmmunitionTypes2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathBaseItems2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathCategories2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathClasses2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathCombatModes2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathDisease2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathFeat2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathInventorySnds2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpAmmoCost2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpFeats2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpOnHitSpell2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathIprpSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathItemPropDef2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathItemProps2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathMasterFeats2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathPackages2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathRaces2da = new System.Windows.Forms.ToolStripMenuItem();
@@ -361,6 +368,7 @@ namespace yata
 			this.it_PathSkills2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathSpells2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PathSpellTarget2da = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PathWeaponSounds2da = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_MenuFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Font = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_FontDefault = new System.Windows.Forms.ToolStripMenuItem();
@@ -1309,24 +1317,28 @@ namespace yata
 			this.it_MenuPaths.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.it_MenuPaths.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.it_PathAll,
+			this.it_PathAmmunitionTypes2da,
 			this.it_PathBaseItems2da,
 			this.it_PathCategories2da,
 			this.it_PathClasses2da,
 			this.it_PathCombatModes2da,
 			this.it_PathDisease2da,
 			this.it_PathFeat2da,
+			this.it_PathInventorySnds2da,
 			this.it_PathIprpAmmoCost2da,
 			this.it_PathIprpFeats2da,
 			this.it_PathIprpOnHitSpell2da,
 			this.it_PathIprpSpells2da,
 			this.it_PathItemPropDef2da,
+			this.it_PathItemProps2da,
 			this.it_PathMasterFeats2da,
 			this.it_PathPackages2da,
 			this.it_PathRaces2da,
 			this.it_PathRanges2da,
 			this.it_PathSkills2da,
 			this.it_PathSpells2da,
-			this.it_PathSpellTarget2da});
+			this.it_PathSpellTarget2da,
+			this.it_PathWeaponSounds2da});
 			this.it_MenuPaths.Name = "it_MenuPaths";
 			this.it_MenuPaths.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuPaths.Size = new System.Drawing.Size(46, 20);
@@ -1339,6 +1351,13 @@ namespace yata
 			this.it_PathAll.Size = new System.Drawing.Size(222, 22);
 			this.it_PathAll.Text = "Path &all ...";
 			this.it_PathAll.Click += new System.EventHandler(this.itclick_PathAll);
+			// 
+			// it_PathAmmunitionTypes2da
+			// 
+			this.it_PathAmmunitionTypes2da.Name = "it_PathAmmunitionTypes2da";
+			this.it_PathAmmunitionTypes2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathAmmunitionTypes2da.Text = "path AmmunitionTypes.2da";
+			this.it_PathAmmunitionTypes2da.Click += new System.EventHandler(this.itclick_PathAmmunitionTypes2da);
 			// 
 			// it_PathBaseItems2da
 			// 
@@ -1382,6 +1401,13 @@ namespace yata
 			this.it_PathFeat2da.Text = "path Feat.2da";
 			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
 			// 
+			// it_PathInventorySnds2da
+			// 
+			this.it_PathInventorySnds2da.Name = "it_PathInventorySnds2da";
+			this.it_PathInventorySnds2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathInventorySnds2da.Text = "path InventorySnds.2da";
+			this.it_PathInventorySnds2da.Click += new System.EventHandler(this.itclick_PathInventorySnds2da);
+			// 
 			// it_PathIprpAmmoCost2da
 			// 
 			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
@@ -1416,6 +1442,13 @@ namespace yata
 			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathItemPropDef2da.Text = "path ItemPropDef.2da";
 			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
+			// 
+			// it_PathItemProps2da
+			// 
+			this.it_PathItemProps2da.Name = "it_PathItemProps2da";
+			this.it_PathItemProps2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathItemProps2da.Text = "path ItemProps.2da";
+			this.it_PathItemProps2da.Click += new System.EventHandler(this.itclick_PathItemProps2da);
 			// 
 			// it_PathMasterFeats2da
 			// 
@@ -1465,6 +1498,13 @@ namespace yata
 			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
 			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
 			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
+			// 
+			// it_PathWeaponSounds2da
+			// 
+			this.it_PathWeaponSounds2da.Name = "it_PathWeaponSounds2da";
+			this.it_PathWeaponSounds2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathWeaponSounds2da.Text = "path WeaponSounds.2da";
+			this.it_PathWeaponSounds2da.Click += new System.EventHandler(this.itclick_PathWeaponSounds2da);
 			// 
 			// it_MenuFont
 			// 

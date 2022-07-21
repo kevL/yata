@@ -99,7 +99,7 @@ namespace yata
 		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
-		/// Spells.2da.</returns>
+		/// <c>Spells.2da</c>.</returns>
 		bool isSpellsInfoInputCol()
 		{
 			switch (_sel.x)
@@ -136,7 +136,7 @@ namespace yata
 		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
-		/// Feat.2da.</returns>
+		/// <c>Feat.2da</c>.</returns>
 		bool isFeatInfoInputCol()
 		{
 			switch (_sel.x)
@@ -202,7 +202,7 @@ namespace yata
 		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
-		/// Classes.2da.</returns>
+		/// <c>Classes.2da</c>.</returns>
 		bool isClassesInfoInputCol()
 		{
 			switch (_sel.x)
@@ -222,9 +222,11 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Helper for
+		/// <c><see cref="ShowCellContext()">ShowCellContext()</see></c>.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><c>true</c> if the InfoInput operation will show for
+		/// <c>BaseItems.2da</c>.</returns>
 		bool isBaseitemsInfoInputCol()
 		{
 			switch (_sel.x)
@@ -232,7 +234,37 @@ namespace yata
 				case InfoInputBaseitems.EquipableSlots: // these don't rely on 2da-gropes ->
 				case InfoInputBaseitems.ModelType:
 				case InfoInputBaseitems.WeaponWield:
+				case InfoInputBaseitems.WeaponType:
+				case InfoInputBaseitems.WeaponSize:
+				case InfoInputBaseitems.StorePanel:
+				case InfoInputBaseitems.AC_Enchant:
+				case InfoInputBaseitems.QBBehaviour:
 					return true;
+
+				case InfoInputBaseitems.RangedWeapon:
+					if (Info.tagLabels.Count != 0)
+						return true;
+					break;
+
+				case InfoInputBaseitems.InvSoundType:
+					if (Info.soundLabels.Count != 0)
+						return true;
+					break;
+
+				case InfoInputBaseitems.PropColumn:
+					if (Info.propFields.Count != 0)
+						return true;
+					break;
+
+				case InfoInputBaseitems.WeaponMatType:
+					if (Info.weapsoundLabels.Count != 0)
+						return true;
+					break;
+
+				case InfoInputBaseitems.AmmunitionType:
+					if (Info.ammoLabels.Count != 0)
+						return true;
+					break;
 			}
 			return false;
 		}
@@ -616,6 +648,16 @@ namespace yata
 
 						case InfoInputBaseitems.ModelType: // INT Input ->
 						case InfoInputBaseitems.WeaponWield:
+						case InfoInputBaseitems.WeaponType:
+						case InfoInputBaseitems.WeaponSize:
+						case InfoInputBaseitems.RangedWeapon:
+						case InfoInputBaseitems.InvSoundType:
+						case InfoInputBaseitems.PropColumn:
+						case InfoInputBaseitems.StorePanel:
+						case InfoInputBaseitems.AC_Enchant:
+						case InfoInputBaseitems.WeaponMatType:
+						case InfoInputBaseitems.AmmunitionType:
+						case InfoInputBaseitems.QBBehaviour:
 							doIntInputItem();
 							break;
 					}

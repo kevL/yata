@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -7,6 +8,12 @@ namespace yata
 	class InfoInputDialog
 		: Form
 	{
+		#region Fields (static)
+		static int _x = Int32.MinValue;
+		static int _y = Int32.MinValue;
+		#endregion Fields (static)
+
+
 		#region Fields
 		protected Yata _f;
 
@@ -34,7 +41,7 @@ namespace yata
 		/// <item><c><see cref="Yata.int1"></see></c></item>
 		/// </list>
 		/// </summary>
-		/// <param name="val">the curent int-val as a <c>string</c></param>
+		/// <param name="val">the current int-val as a <c>string</c></param>
 		/// <param name="co_Val">the <c>ComboBox</c> to deal with</param>
 		/// <param name="bu_Clear">the Clear <c>Button</c> to disable if things
 		/// go south</param>
@@ -48,6 +55,42 @@ namespace yata
 				&& result > -1 && result < co_Val.Items.Count - 1)
 			{
 				co_Val.SelectedIndex = _f.int0 = _f.int1 = result;
+			}
+			else
+			{
+				bu_Clear.Enabled = false;
+
+				if (val == gs.Stars) _f.int0 = Yata.Info_ASSIGN_STARS;
+				else                 _f.int0 = Yata.Info_INIT_INVALID;
+
+				_f.int1 = Yata.Info_ASSIGN_STARS;
+
+				co_Val.SelectedIndex = co_Val.Items.Count - 1;
+			}
+		}
+
+		/// <summary>
+		/// Selects an entry in the <c>ComboBox</c> and preps the int-vals in
+		/// <c><see cref="Yata"/></c> to deal with user-input when the value in
+		/// the 2da field is 1 greater than the values in the
+		/// <c><see cref="Info"/></c> list.
+		/// <list type="bullet">
+		/// <item><c><see cref="Yata.int0"></see></c></item>
+		/// <item><c><see cref="Yata.int1"></see></c></item>
+		/// </list>
+		/// </summary>
+		/// <param name="val">the current int-val as a <c>string</c></param>
+		/// <param name="co_Val">the <c>ComboBox</c> to deal with</param>
+		/// <param name="bu_Clear">the Clear <c>Button</c> to disable if things
+		/// go south</param>
+		protected void initintvals_1(string val, ComboBox co_Val, Button bu_Clear)
+		{
+			int result;
+			if (Int32.TryParse(val, out result)
+				&& result > 0 && result < co_Val.Items.Count)
+			{
+				co_Val.SelectedIndex = result - 1;
+				_f.int0 = _f.int1 = result;
 			}
 			else
 			{
@@ -90,7 +133,38 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// Closes the dialog on [Esc].
+		/// Overrides the <c>Load</c> handler. Sets <c>Location</c> wrt the
+		/// desktop.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnLoad(EventArgs e)
+		{
+			if (_x != Int32.MinValue) // TODO: check if isOnScreen
+			{
+				DesktopLocation = new Point(_x, _y);
+			}
+			else
+				Location = new Point(_f.Location.X + 20,
+									 _f.Location.Y + 20);
+
+			base.OnLoad(e);
+		}
+
+		/// <summary>
+		/// Overrides the <c>Closing</c> handler. Stores <c>Location</c> wrt
+		/// the desktop.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+		{
+			_x = Math.Max(0, DesktopLocation.X);
+			_y = Math.Max(0, DesktopLocation.Y);
+
+			base.OnClosing(e);
+		}
+
+		/// <summary>
+		/// Closes this dialog on <c>[Esc]</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnKeyDown(KeyEventArgs e)
