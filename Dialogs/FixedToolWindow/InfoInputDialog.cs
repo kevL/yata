@@ -144,8 +144,7 @@ namespace yata
 				DesktopLocation = new Point(_x, _y);
 			}
 			else
-				Location = new Point(_f.Location.X + 20,
-									 _f.Location.Y + 20);
+				CenterToParent();
 
 			base.OnLoad(e);
 		}
