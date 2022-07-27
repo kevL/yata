@@ -23,6 +23,7 @@
     <ApplicationIcon>icon\yata_icon.ico</ApplicationIcon>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <SourceAnalysisOverrideSettingsFile>C:\Users\User\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -144,6 +145,17 @@
     <Compile Include="Dialogs\Sizable\InputCelltextDialog.Designer.cs">
       <DependentUpon>InputCelltextDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SharpZipLib_yata\ByteOrderUtil_yata.cs" />
+    <Compile Include="SharpZipLib_yata\InflatorHuffmanTree_yata.cs" />
+    <Compile Include="SharpZipLib_yata\InflatorInputBuffer_yata.cs" />
+    <Compile Include="SharpZipLib_yata\InflatorInputStream_yata.cs" />
+    <Compile Include="SharpZipLib_yata\Inflator_yata.cs" />
+    <Compile Include="SharpZipLib_yata\InflatorDynamicHeader_yata.cs" />
+    <Compile Include="SharpZipLib_yata\OutputWindow_yata.cs" />
+    <Compile Include="SharpZipLib_yata\StreamManipulator_yata.cs" />
+    <Compile Include="SharpZipLib_yata\ZipConstants_yata.cs" />
+    <Compile Include="SharpZipLib_yata\ZipEntry_yata.cs" />
+    <Compile Include="SharpZipLib_yata\ZipFile_yata.cs" />
     <Compile Include="Statics\ClipboardService.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
@@ -309,7 +321,11 @@
     <Folder Include="Dialogs\FixedSingle" />
     <Folder Include="Dialogs\Sizable" />
     <Folder Include="Dialogs\Sizable_nonmodal" />
+    <Folder Include="SharpZipLib_yata" />
     <Folder Include="Statics" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
