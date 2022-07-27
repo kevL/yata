@@ -252,6 +252,62 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Gets the label-strings from a given 2da.
+		/// TODO: Check that the given 2da really has the required cols.
+		/// </summary>
+		/// <param name="lines">an array of lines of a 2da-file</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
+		/// <param name="col">col in the 2da of the label</param>
+		/// <param name="col1">col in the 2da of an int</param>
+		/// <param name="ints">a collection MUST be passed in if
+		/// <paramref name="col1"/> is not <c>-1</c></param>
+		internal static void GropeLabels(string[] lines,
+										 ICollection<string> labels,
+										 ToolStripMenuItem it,
+										 int col,
+										 int col1 = -1,
+										 ICollection<int> ints = null)
+		{
+				labels.Clear();
+				if (ints != null) ints.Clear();
+
+				// WARNING: This function does *not* handle quotation marks around 2da fields.
+				// And it does not even check for them since ... the stock 2das don't have
+				// any - hopefully.
+
+				string line; string[] fields;
+
+				for (int i = 0; i != lines.Length; ++i)
+				{
+					if (!String.IsNullOrEmpty(line = lines[i].Trim()))
+					{
+						fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+						if (fields.Length > col && fields.Length > col1)
+						{
+							int id;
+							if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+							{
+								labels.Add(fields[col]); // and hope for the best.
+
+								if (col1 != -1)
+								{
+									int result;
+									if (!Int32.TryParse(fields[col1], out result))
+										result = -1; // always add an int to keep sync w/ the labels
+
+									ints.Add(result);
+								}
+							}
+						}
+					}
+				}
+
+				it.Checked = (labels.Count != 0);
+		}
+
+		/// <summary>
 		/// Gets the label-strings plus width/height values from SpellTarget.2da.
 		/// TODO: Check that the given 2da really has the required cols.
 		/// </summary>
