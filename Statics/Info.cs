@@ -8,6 +8,7 @@ namespace yata
 {
 	static class Info
 	{
+		#region Fields (static)
 		#region Crafting caches
 		/// <summary>
 		/// A list that holds labels for spells in <c>Spells.2da</c> - optional.
@@ -188,8 +189,10 @@ namespace yata
 		/// </summary>
 		internal static List<string> ammoLabels = new List<string>();
 		#endregion BaseItem caches
+		#endregion Fields (static)
 
 
+		#region Methods (static)
 		/// <summary>
 		/// Gets the label-strings from a given 2da.
 		/// TODO: Check that the given 2da really has the required cols.
@@ -218,35 +221,8 @@ namespace yata
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
-					string line; string[] fields;
-
-					for (int i = 0; i != lines.Length; ++i)
-					{
-						if (!String.IsNullOrEmpty(line = lines[i].Trim()))
-						{
-							fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-							if (fields.Length > col && fields.Length > col1)
-							{
-								int id;
-								if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
-								{
-									labels.Add(fields[col]); // and hope for the best.
-
-									if (col1 != -1)
-									{
-										int result;
-										if (!Int32.TryParse(fields[col1], out result))
-											result = -1; // always add an int to keep sync w/ the labels
-
-										ints.Add(result);
-									}
-								}
-							}
-						}
-					}
+					GropeLabels(lines, labels, it, col, col1, ints);
 				}
-
 				it.Checked = (labels.Count != 0);
 			}
 		}
@@ -280,7 +256,7 @@ namespace yata
 
 			for (int i = 0; i != lines.Length; ++i)
 			{
-				if (!String.IsNullOrEmpty(line = lines[i].Trim()))
+				if ((line = lines[i].Trim()).Length != 0)
 				{
 					fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
@@ -306,6 +282,7 @@ namespace yata
 
 			it.Checked = (labels.Count != 0);
 		}
+
 
 		/// <summary>
 		/// Gets the label-strings plus width/height values from SpellTarget.2da.
@@ -339,44 +316,7 @@ namespace yata
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
-					string line; string[] fields;
-
-					for (int i = 0; i != lines.Length; ++i)
-					{
-						if (!String.IsNullOrEmpty(line = lines[i].Trim()))
-						{
-							fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-							if (fields.Length > col && fields.Length > col1 && fields.Length > col2)
-							{
-								int id;
-								if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
-								{
-									labels.Add(fields[col]); // and hope for the best.
-
-									float result;
-
-									if (col1 != -1)
-									{
-										if (!Single.TryParse(fields[col1], out result))
-										{
-											result = 0.0F; // always add a float to keep sync w/ the labels
-										}
-										floats1.Add(result);
-									}
-
-									if (col2 != -1)
-									{
-										if (!Single.TryParse(fields[col2], out result))
-										{
-											result = 0.0F; // always add a float to keep sync w/ the labels
-										}
-										floats2.Add(result);
-									}
-								}
-							}
-						}
-					}
+					GropeSpellTarget(lines, labels, it, col, col1, col2, floats1, floats2);
 				}
 
 				it.Checked = (labels.Count != 0);
@@ -416,7 +356,7 @@ namespace yata
 
 			for (int i = 0; i != lines.Length; ++i)
 			{
-				if (!String.IsNullOrEmpty(line = lines[i].Trim()))
+				if ((line = lines[i].Trim()).Length != 0)
 				{
 					fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
@@ -454,6 +394,7 @@ namespace yata
 			it.Checked = (labels.Count != 0);
 		}
 
+
 		/// <summary>
 		/// Gets the colabel-strings from a given 2da.
 		/// </summary>
@@ -483,16 +424,13 @@ namespace yata
 					{
 						if ((line = sr.ReadLine()) != null)
 						{
-							if (i == 2)
+							if (i == 2 && (line = line.Trim()).Length != 0)
 							{
-								if ((line = line.Trim()).Length != 0)
-								{
-									fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+								fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-									for (int f = strt; f != fields.Length && f <= stop; ++f)
-									{
-										labels.Add(fields[f]);
-									}
+								for (int f = strt; f != fields.Length && f <= stop; ++f)
+								{
+									labels.Add(fields[f]);
 								}
 							}
 						}
@@ -533,6 +471,7 @@ namespace yata
 			it.Checked = (labels.Count != 0);
 		}
 
+
 		/// <summary>
 		/// Checks for a quotation character and if found shows an error to the
 		/// user.
@@ -563,5 +502,6 @@ namespace yata
 			}
 			return false;
 		}
+		#endregion Methods (static)
 	}
 }
