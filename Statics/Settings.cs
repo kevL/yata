@@ -28,6 +28,7 @@ namespace yata
 
 		internal static readonly List<string> _dirpreset = new List<string>();
 		internal static readonly List<string> _pathall   = new List<string>();
+		internal static string _pathzipdata;
 
 		internal static int _x = -1;
 		internal static int _y = -1;
@@ -185,6 +186,14 @@ namespace yata
 								&& Directory.Exists(line))
 							{
 								_pathall.Add(line);
+							}
+						}
+						else if (line.StartsWith("pathzipdata=", StringComparison.Ordinal))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
+								&& Directory.Exists(line))
+							{
+								_pathzipdata = line;
 							}
 						}
 						else if (line.StartsWith("x=", StringComparison.Ordinal))
@@ -410,7 +419,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 27;
+		internal const int ids = 28;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -447,6 +456,7 @@ namespace yata
 			options[++i] = "gradient=";
 			options[++i] = "instantgoto=";
 			options[++i] = "pathall=";
+			options[++i] = "pathzipdata=";
 			options[++i] = "recent=";
 			options[++i] = "strict=";
 		}
