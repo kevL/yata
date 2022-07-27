@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 
@@ -47,7 +49,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Rifles through various .2das for info.
+		/// Rifles through various .2das for <c><see cref="Info"/></c>.
 		/// </summary>
 		/// <param name="dir"></param>
 		internal void GropeLabels(string dir)
@@ -181,6 +183,261 @@ namespace yata
 							 1);
 		}
 
+		/// <summary>
+		/// Rifles through the zipped 2da-files in the NwN2 stock directory
+		/// \Data for <c><see cref="Info"/></c>.
+		/// </summary>
+		internal void GropeZipData()
+		{
+			string dir = Settings._pathzipdata;
+
+			var zips = new List<string>();
+			zips.Add(dir + @"\2DA.zip");
+			zips.Add(dir + @"\2DA_X1.zip");
+			zips.Add(dir + @"\2DA_X2.zip");
+
+			foreach (var zip in zips)
+			{
+				//logfile.Log(zip);
+
+				if (File.Exists(zip))
+				{
+					using (var fs = new FileStream(zip, FileMode.Open, FileAccess.Read))
+					using (var zf = new ZipFile(fs))
+					{
+						ZipEntry ze;
+
+						// Crafting info ->
+						if ((ze = zf.GetEntry("baseitems.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.tagLabels,
+											 it_PathBaseItems2da,
+											 2);
+						}
+
+						if ((ze = zf.GetEntry("feat.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.featLabels,
+											 it_PathFeat2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("itempropdef.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.ipLabels,
+											 it_PathItemPropDef2da,
+											 2);
+						}
+
+						if ((ze = zf.GetEntry("skills.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.skillLabels,
+											 it_PathSkills2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("spells.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.spellLabels,
+											 it_PathSpells2da,
+											 1);
+						}
+
+
+						if ((ze = zf.GetEntry("classes.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.classLabels,
+											 it_PathClasses2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("disease.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.diseaseLabels,
+											 it_PathDisease2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("iprp_ammocost.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.ipammoLabels,
+											 it_PathIprpAmmoCost2da,
+											 2);
+						}
+
+						if ((ze = zf.GetEntry("iprp_feats.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.ipfeatLabels,
+											 it_PathIprpFeats2da,
+											 2);
+						}
+
+						if ((ze = zf.GetEntry("iprp_onhitspell.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.iphitspellLabels,
+											 it_PathIprpOnHitSpell2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("iprp_spells.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.ipspellLabels,
+											 it_PathIprpSpells2da,
+											 1, // label
+											 3, // level
+											 Info.ipspellLevels);
+						}
+
+						if ((ze = zf.GetEntry("racialtypes.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.raceLabels,
+											 it_PathRaces2da,
+											 1);
+						}
+
+
+						// Spells info ->
+						if ((ze = zf.GetEntry("categories.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.categoryLabels,
+											 it_PathCategories2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("ranges.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.rangeLabels,
+											 it_PathRanges2da,
+											 1, // label
+											 2, // range
+											 Info.rangeRanges);
+						}
+
+						if ((ze = zf.GetEntry("spelltarget.2da")) != null)
+						{
+							Info.GropeSpellTarget(GropeLabels(zf, ze),
+												  Info.targetLabels,
+												  it_PathSpellTarget2da,
+												  1,
+												  3,
+												  4,
+												  Info.targetWidths,
+												  Info.targetLengths);
+						}
+
+						// Feat info ->
+						if ((ze = zf.GetEntry("combatmodes.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.combatmodeLabels,
+											 it_PathCombatModes2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("masterfeats.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.masterfeatLabels,
+											 it_PathMasterFeats2da,
+											 1);
+						}
+
+						// Classes info ->
+						if ((ze = zf.GetEntry("packages.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.packageLabels,
+											 it_PathPackages2da,
+											 1);
+						}
+
+						// BaseItems info ->
+						if ((ze = zf.GetEntry("inventorysnds.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.soundLabels,
+											 it_PathInventorySnds2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("itemprops.2da")) != null) // see also ItemTypes.2da
+						{
+							Info.GropeFields(GropeLabels(zf, ze),
+											 Info.propFields,
+											 it_PathItemProps2da,
+											 21);
+						}
+
+						if ((ze = zf.GetEntry("weaponsounds.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.weapsoundLabels,
+											 it_PathWeaponSounds2da,
+											 1);
+						}
+
+						if ((ze = zf.GetEntry("ammunitiontypes.2da")) != null)
+						{
+							Info.GropeLabels(GropeLabels(zf, ze),
+											 Info.ammoLabels,
+											 it_PathAmmunitionTypes2da,
+											 1);
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="zf"></param>
+		/// <param name="ze"></param>
+		string[] GropeLabels(ZipFile zf, ZipEntry ze)
+		{
+			string[] lines = null;
+
+			using (Stream s0 = zf.GetInputStream(ze))
+			using (var s1 = new MemoryStream())
+			{
+				CopyStream(s0,s1);
+
+				string text = Encoding.UTF8.GetString(s1.ToArray());
+				//logfile.Log(text);
+
+				lines = text.Split(gs.CRandorLF, StringSplitOptions.RemoveEmptyEntries);
+			}
+			return lines;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="output"></param>
+		static void CopyStream(Stream input, Stream output)
+		{
+			var buffer = new byte[4096]; //32768 or 81920
+			int read;
+			while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+			{
+				output.Write(buffer, 0, read);
+			}
+		}
 
 		/// <summary>
 		/// Handles clicking the PathBaseItems menuitem.

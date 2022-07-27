@@ -269,42 +269,42 @@ namespace yata
 										 int col1 = -1,
 										 ICollection<int> ints = null)
 		{
-				labels.Clear();
-				if (ints != null) ints.Clear();
+			labels.Clear();
+			if (ints != null) ints.Clear();
 
-				// WARNING: This function does *not* handle quotation marks around 2da fields.
-				// And it does not even check for them since ... the stock 2das don't have
-				// any - hopefully.
+			// WARNING: This function does *not* handle quotation marks around 2da fields.
+			// And it does not even check for them since ... the stock 2das don't have
+			// any - hopefully.
 
-				string line; string[] fields;
+			string line; string[] fields;
 
-				for (int i = 0; i != lines.Length; ++i)
+			for (int i = 0; i != lines.Length; ++i)
+			{
+				if (!String.IsNullOrEmpty(line = lines[i].Trim()))
 				{
-					if (!String.IsNullOrEmpty(line = lines[i].Trim()))
+					fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+					if (fields.Length > col && fields.Length > col1)
 					{
-						fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-						if (fields.Length > col && fields.Length > col1)
+						int id;
+						if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
 						{
-							int id;
-							if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+							labels.Add(fields[col]); // and hope for the best.
+
+							if (col1 != -1)
 							{
-								labels.Add(fields[col]); // and hope for the best.
+								int result;
+								if (!Int32.TryParse(fields[col1], out result))
+									result = -1; // always add an int to keep sync w/ the labels
 
-								if (col1 != -1)
-								{
-									int result;
-									if (!Int32.TryParse(fields[col1], out result))
-										result = -1; // always add an int to keep sync w/ the labels
-
-									ints.Add(result);
-								}
+								ints.Add(result);
 							}
 						}
 					}
 				}
+			}
 
-				it.Checked = (labels.Count != 0);
+			it.Checked = (labels.Count != 0);
 		}
 
 		/// <summary>
@@ -384,6 +384,77 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Gets the label-strings plus width/height values from SpellTarget.2da.
+		/// TODO: Check that the given 2da really has the required cols.
+		/// </summary>
+		/// <param name="lines">an array of lines of a 2da-file</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
+		/// <param name="col">col in the 2da of the label</param>
+		/// <param name="col1">col in the 2da of a float (default -1)</param>
+		/// <param name="col2">col in the 2da of a float (default -1)</param>
+		/// <param name="floats1">a collection MUST be passed in if col1 is not -1</param>
+		/// <param name="floats2">a collection MUST be passed in if col2 is not -1</param>
+		internal static void GropeSpellTarget(string[] lines,
+											  ICollection<string> labels,
+											  ToolStripMenuItem it,
+											  int col,
+											  int col1 = -1,
+											  int col2 = -1,
+											  ICollection<float> floats1 = null,
+											  ICollection<float> floats2 = null)
+		{
+			labels.Clear();
+			if (floats1 != null) floats1.Clear();
+			if (floats2 != null) floats2.Clear();
+
+			// WARNING: This function does *not* handle quotation marks around 2da fields.
+			// And it does not even check for them since ... the stock 2das don't have
+			// any - hopefully.
+
+			string line; string[] fields;
+
+			for (int i = 0; i != lines.Length; ++i)
+			{
+				if (!String.IsNullOrEmpty(line = lines[i].Trim()))
+				{
+					fields = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+					if (fields.Length > col && fields.Length > col1 && fields.Length > col2)
+					{
+						int id;
+						if (Int32.TryParse(fields[0], out id)) // is a valid 2da row
+						{
+							labels.Add(fields[col]); // and hope for the best.
+
+							float result;
+
+							if (col1 != -1)
+							{
+								if (!Single.TryParse(fields[col1], out result))
+								{
+									result = 0.0F; // always add a float to keep sync w/ the labels
+								}
+								floats1.Add(result);
+							}
+
+							if (col2 != -1)
+							{
+								if (!Single.TryParse(fields[col2], out result))
+								{
+									result = 0.0F; // always add a float to keep sync w/ the labels
+								}
+								floats2.Add(result);
+							}
+						}
+					}
+				}
+			}
+
+			it.Checked = (labels.Count != 0);
+		}
+
+		/// <summary>
 		/// Gets the colabel-strings from a given 2da.
 		/// </summary>
 		/// <param name="pfe2da">path_file_extension to the 2da</param>
@@ -431,6 +502,35 @@ namespace yata
 
 				it.Checked = (labels.Count != 0);
 			}
+		}
+
+		/// <summary>
+		/// Gets the colabel-strings from a given 2da.
+		/// </summary>
+		/// <param name="lines">an array of lines of a 2da-file</param>
+		/// <param name="labels">the cache in which to store the labels</param>
+		/// <param name="it">the path-item on which to toggle Checked</param>
+		/// <param name="stop"></param>
+		/// <param name="strt"></param>
+		internal static void GropeFields(IList<string> lines,
+										 ICollection<string> labels,
+										 ToolStripMenuItem it,
+										 int stop,
+										 int strt = 0)
+		{
+			labels.Clear();
+
+			// WARNING: This function does *not* handle quotation marks around 2da fields.
+			// And it does not even check for them since it only gets the colheads.
+
+			string[] fields = lines[2].Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+			for (int f = strt; f != fields.Length && f <= stop; ++f)
+			{
+				labels.Add(fields[f]);
+			}
+
+			it.Checked = (labels.Count != 0);
 		}
 
 		/// <summary>

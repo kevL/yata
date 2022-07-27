@@ -834,6 +834,10 @@ namespace yata
 				if (!Groped && Info != InfoType.INFO_NONE)
 				{
 					Groped = true;
+
+					if (Directory.Exists(Settings._pathzipdata))
+						_f.GropeZipData();
+
 					foreach (var dir in Settings._pathall)
 						_f.GropeLabels(dir);
 				}
