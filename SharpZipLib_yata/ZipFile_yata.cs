@@ -44,8 +44,8 @@ namespace yata
 		/// </summary>
 		public void Dispose()
 		{
-			logfile.Log("ZipFile.Dispose()");
-			logfile.Log("----");
+//			logfile.Log("ZipFile.Dispose()");
+//			logfile.Log("----");
 
 			if (!_disposed)
 			{
@@ -69,7 +69,7 @@ namespace yata
 		#region Methods
 		void ReadEntries()
 		{
-			logfile.Log("ZipFile.ReadEntries()");
+//			logfile.Log("ZipFile.ReadEntries()");
 
 			// force Encoding ->
 			Encoding enc = Encoding.GetEncoding(1252); // Western European (Windows)
