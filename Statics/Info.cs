@@ -190,6 +190,9 @@ namespace yata
 		/// </summary>
 		internal static List<string> ammoLabels = new List<string>();
 		#endregion BaseItem caches
+
+
+		static bool _helper;
 		#endregion Fields (static)
 
 
@@ -222,7 +225,9 @@ namespace yata
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
+					_helper = true;
 					GropeLabels(lines, labels, it, col, col1, ints);
+					_helper = false;
 				}
 				it.Checked = (labels.Count != 0);
 			}
@@ -246,8 +251,11 @@ namespace yata
 										 int col1 = -1,
 										 ICollection<int> ints = null)
 		{
-			labels.Clear();
-			if (ints != null) ints.Clear();
+			if (!_helper)
+			{
+				labels.Clear();
+				if (ints != null) ints.Clear();
+			}
 
 			// WARNING: This function does *not* handle quotation marks around 2da fields.
 			// And it does not even check for them since ... the stock 2das don't have
@@ -281,7 +289,7 @@ namespace yata
 				}
 			}
 
-			it.Checked = (labels.Count != 0);
+			if (!_helper) it.Checked = (labels.Count != 0);
 		}
 
 
@@ -301,25 +309,26 @@ namespace yata
 											  ICollection<string> labels,
 											  ToolStripMenuItem it,
 											  int col,
-											  int col1 = -1,
-											  int col2 = -1,
-											  ICollection<float> floats1 = null,
-											  ICollection<float> floats2 = null)
+											  int col1,
+											  int col2,
+											  ICollection<float> floats1,
+											  ICollection<float> floats2)
 		{
 			if (File.Exists(pfe2da))
 			{
 				labels.Clear();
-				if (floats1 != null) floats1.Clear();
-				if (floats2 != null) floats2.Clear();
+				floats1.Clear();
+				floats2.Clear();
 
 				string[] lines = File.ReadAllLines(pfe2da);
 
 				// WARNING: This function does *not* handle quotation marks around 2da fields.
 				if (!hasQuote(lines, pfe2da))
 				{
+					_helper = true;
 					GropeSpellTarget(lines, labels, it, col, col1, col2, floats1, floats2);
+					_helper = false;
 				}
-
 				it.Checked = (labels.Count != 0);
 			}
 		}
@@ -340,14 +349,17 @@ namespace yata
 											  ICollection<string> labels,
 											  ToolStripMenuItem it,
 											  int col,
-											  int col1 = -1,
-											  int col2 = -1,
-											  ICollection<float> floats1 = null,
-											  ICollection<float> floats2 = null)
+											  int col1,
+											  int col2,
+											  ICollection<float> floats1,
+											  ICollection<float> floats2)
 		{
-			labels.Clear();
-			if (floats1 != null) floats1.Clear();
-			if (floats2 != null) floats2.Clear();
+			if (!_helper)
+			{
+				labels.Clear();
+				floats1.Clear();
+				floats2.Clear();
+			}
 
 			// WARNING: This function does *not* handle quotation marks around 2da fields.
 			// And it does not even check for them since ... the stock 2das don't have
@@ -370,29 +382,23 @@ namespace yata
 
 							float result;
 
-							if (col1 != -1)
+							if (!Single.TryParse(fields[col1], out result))
 							{
-								if (!Single.TryParse(fields[col1], out result))
-								{
-									result = 0.0F; // always add a float to keep sync w/ the labels
-								}
-								floats1.Add(result);
+								result = 0.0F; // always add a float to keep sync w/ the labels
 							}
+							floats1.Add(result);
 
-							if (col2 != -1)
+							if (!Single.TryParse(fields[col2], out result))
 							{
-								if (!Single.TryParse(fields[col2], out result))
-								{
-									result = 0.0F; // always add a float to keep sync w/ the labels
-								}
-								floats2.Add(result);
+								result = 0.0F; // always add a float to keep sync w/ the labels
 							}
+							floats2.Add(result);
 						}
 					}
 				}
 			}
 
-			it.Checked = (labels.Count != 0);
+			if (!_helper) it.Checked = (labels.Count != 0);
 		}
 
 
@@ -529,7 +535,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Copies a <c>Stream</c> from <paramref name="input"/> to
+		/// <paramref name="output"/>.
 		/// </summary>
 		/// <param name="input"></param>
 		/// <param name="output"></param>
@@ -537,7 +544,7 @@ namespace yata
 		{
 			var buffer = new byte[4096]; //32768 or 81920
 			int read;
-			while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+			while ((read = input.Read(buffer, 0, buffer.Length)) != 0)
 			{
 				output.Write(buffer, 0, read);
 			}
