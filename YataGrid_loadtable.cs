@@ -835,11 +835,15 @@ namespace yata
 				{
 					Groped = true;
 
+//					_f.CreateInfoStructs();
+
 					if (Directory.Exists(Settings._pathzipdata))
 						_f.GropeZipData();
 
 					foreach (var dir in Settings._pathall)
 						_f.GropeLabels(dir);
+
+//					_f.ClearInfoStructs();
 				}
 			}
 

@@ -1,11 +1,63 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Windows.Forms;
 
 
 namespace yata
 {
 	sealed partial class Yata
 	{
+/*		enum InfoStructType
+		{
+			standard,
+			spelltarget,
+			fields
+		}
+
+		List<InfoStruct> _infoStructs = new List<InfoStruct>();
+
+		struct InfoStruct
+		{
+			internal InfoStructType type;
+			internal string file2da;
+			internal List<string> labels;
+			internal ToolStripMenuItem it;
+			internal int col;
+			internal int col1;
+			internal int col2;
+			internal List<int> ints;
+			internal List<float> floats1;
+			internal List<float> floats2;
+			internal int strt;
+			internal int stop;
+		}
+
+		internal void CreateInfoStructs()
+		{
+			var @is = new InfoStruct();
+			@is.type = InfoStructType.standard;
+			@is.file2da = "baseitems.2da";
+			@is.labels = Info.tagLabels;
+			@is.it = it_PathBaseItems2da;
+			@is.col = 1;
+			@is.col1 = -1;
+			@is.col2 = -1;
+			@is.ints = null;
+			@is.floats1 = null;
+			@is.floats2 = null;
+			@is.strt = 0;
+			@is.stop = 0;
+			_infoStructs.Add(@is);
+
+		}
+
+		internal void ClearInfoStructs()
+		{
+			_infoStructs.Clear();
+		} */
+
+
 		#region Crafting info
 		/// <summary>
 		/// Gets a readable string when mouseovering cols in Crafting.2da.
