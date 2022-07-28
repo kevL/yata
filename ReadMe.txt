@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 July 15
+2022 July 27
 kevL's
-ver 5.1.5.0
+ver 5.2.0.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -540,12 +540,16 @@ instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
              pressed to select a row after digits are typed
 pathall=     a path without quotes to a valid directory to grope for 2da info
-             for Crafting.2da, Spells.2da, Feat.2da, or Classes.2da (see
-             Appendix E: how to use Info paths)
+             for Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or
+             BaseItems.2da (see Appendix E: how to use Info paths)
 pathall=     another path for Crafting, Spells, and Feat info
 pathall=     etc. (the first pathall has lowest priority and any info found will
              be replaced by any info found in subsequent pathall directories;
              there can be as many or as few pathall directories as you like)
+pathzipdata= a path without quotes to the stock NwN2 Data installation directory
+             to grope for 2da info for Crafting.2da, Spells.2da, Feat.2da,
+             Classes.2da, or BaseItems.2da (see Appendix E: how to use Info
+             paths)
 recent=      (integer) a count of recently opened file-paths to store. If left
              blank or a value less than 1 is specified, recently opened files
              will not be tracked, while 16 is the hardcoded upper limit. SETTING
@@ -602,9 +606,10 @@ The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
 
 The pathall directories are for gathering Info that will appear on the statusbar
-if Crafting.2da, Spells.2da, Feat.2da, or Classes.2da are loaded as the cursor
-is moved over their cells. (Yata was designed with Crafting in mind and can show
-stuff like Encoded IPs as readable strings on the statusbar, eg.)
+if Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da are loaded
+as the cursor is moved over their cells. (Yata was designed with Crafting in
+mind and can show stuff like Encoded IPs as readable strings on the statusbar,
+eg.)
 
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
@@ -704,29 +709,36 @@ NwN and NwN:EE users can get incorrect results. Info and InfoInput are not
 waranteed (sic) for NwN or NwN:EE.
 
 Yata is capable of displaying readable info about fields in Crafting.2da,
-Spells.2da, Feat.2da, and Classes.2da. Paths to various other 2da-files need to
-be set first, then info ought be displayed on the statusbar when the
-mouse-cursor is moved over the cells of certain cols like "CATEGORY" (displays
-the label of a trigger-spell) or "EFFECTS" (displays a recipe's itemproperty in
-a readable way), etc. Note that pathing to 2da-files can also be termed, groping
-... that is, when a 2da-file is pathed it will be groped for relevant info.
+Spells.2da, Feat.2da, Classes.2da and BaseItems.2da. Paths to various other
+2da-files need to be set first, then info ought be displayed on the statusbar
+when the mouse-cursor is moved over the cells of certain cols like "CATEGORY"
+(displays the label of a trigger-spell) or "EFFECTS" (displays a recipe's
+itemproperty in a readable way), etc. Note that pathing to 2da-files can also be
+termed, groping ... that is, when a 2da-file is pathed it will be groped for
+relevant info.
 
-There are two ways to get such info: (a) Using the Paths menu when Crafting.2da,
-Spells.2da, Feat.2da, or Classes.2da is loaded, (b) Using "pathall=" entries in
-Settings.Cfg.
+There are three ways to get such info: (a) Using the Paths menu when
+Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da is loaded, (b)
+Using "pathall=" entries in Settings.Cfg,* (c) Using the "pathzipdata=" entry in
+Settings.Cfg.*
+
+* 2da-info will not be groped until one of Crafting.2da, Spells.2da, Feat.2da,
+Classes.2da, or BaseItems.2da is opened in Yata. After that the info will be
+retained unless reset by using the Paths menu.
 
 (a) Using the Paths menu
 
-Paths appears on the menubar only when Crafting.2da, Spells.2da, Feat.2da, or
-Classes.2da are loaded - the filename without extension needs to be "crafting",
-"spells", "feat", or "classes" (case-insensitive).
+Paths appears on the menubar only when Crafting.2da, Spells.2da, Feat.2da,
+Classes.2da, or BaseItems.2da are loaded - the filename without extension needs
+to be "crafting", "spells", "feat", "classes", or "baseitems"
+(case-insensitive).
 
 Path all ... : this item opens a folder browser dialog to search for any/all
                applicable 2da-file(s). It can be used more than once and if so,
                each time another folder is selected any applicable 2da-file(s)
-               will be additionally groped for info. In case of two files with
-               the same filename in two different directories info from the
-               latest groping will be used.
+               will be additionally groped for info. In the case of two files
+               with the same filename pathed in two different directories info
+               from the latest groping will be used.
 
 Other items that appear under Paths depend on the 2da that is currently active.
 The items open a file browser dialog. Use them to path to a specific 2da-file. A
@@ -772,30 +784,65 @@ Classes.2da
 path Feat.2da            : these files contain Info for Classes.2da
 path Packages.2da
 
+BaseItems.2da
+
+path BaseItems.2da       : these files contain Info for BaseItems.2da
+path InventorySnds.2da
+path ItemProps.2da
+path WeaponSounds.2da
+path AmmunitionTypes.2da
+
 (b) Using "pathall=" entries in Settings.Cfg
 
 You can specify one (or more) "pathall=" directories in Settings.Cfg (without
 quotes), and each will operate just like "Path all ..." does under the menubar.
 
-Please note that the path-feature in Yata does not look inside zipped archives.
-This is to say that the 2da-files that are part of the stock installation are
-invalid targets; the files need to be copied out of the /Data folder to a
-different directory (ie, as unarchived/uncompressed files).
+eg.
+pathall=C:\Users\User\Documents\Neverwinter Nights 2\override\2da
+pathall=C:\Users\User\Documents\Neverwinter Nights 2\override\2da\classes
 
-If you have custom versions of those files they should be groped after the stock
+(subdirectories are *not* recursed)
+
+Please note that this path-feature in Yata does not look inside zipped archives.
+This is to say that the 2da-files that are part of the stock installation are
+invalid targets; the files would need to be copied out of the /Data folder to a
+different directory (ie, as individual unarchived/uncompressed 2da-files).
+
+If you have custom versions of 2da-files they should be groped *after* the stock
 files.
 
 Note that Info can appear on the statusbar for various cols even if 2das have
 not been groped; this is because standard info has been hardcoded in Yata.
 Similarly, the InfoInput dialog (rightclick on a cell in any of Crafting.2da,
-Spells.2da, Feat.2da, or Classes.2da) might also be accessible without any
-secondary 2das having been groped.
+Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da) might also be accessible
+without any informational 2das having been groped.
 
 Also note that the info from groped 2das is consistent across all loaded and
 relevant 2das. Eg, if path Spells.2da is checked when Crafting.2da is loaded
 then that info is used - its menuitem is checked - for Feat.2da also. Yata
 retains the info from each groped 2da until it exits or the user dechecks a
 path.
+
+(c) Using the "pathzipdata=" entry in Settings.Cfg
+
+As of Yata 5.2.0.0 the stock 2das that ship with NwN2 can also be groped. You
+can specify a "pathzipdata=" directory in Settings.Cfg (without quotes).
+
+eg.
+pathzipdata=c:\Neverwinter Nights 2\Data
+
+Routines from a 3rd party codec library, SharpZipLib, have been hardcoded in
+Yata to extract info from the NwN2 data zips: 2DA.zip, 2DA_X1.zip, 2DA_X2.zip
+(the OC, MotB, SoZ respectively). If "pathzipdata=" points to a valid directory
+Yata will try to grope any relevant 2da-files; data that's found in later
+expansions takes priority over the earlier ones.
+
+Note that info groped from a "pathzipdata=" directory always has lower priority
+than info found in "pathall=" directories.
+
+Also note that Yata uses only very sparse code from SharpZipLib - the intent is
+to read only the Zipfiles that ship with NwN2. So it probably wouldn't be wise
+to package your own Zipfiles and expect Yata to read them ...
 
 
 Appendix F: creating a 2da-file
