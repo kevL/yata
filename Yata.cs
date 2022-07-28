@@ -1231,6 +1231,7 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathAll);
 					it_MenuPaths.DropDownItems.Add(_tsep);
 					it_MenuPaths.DropDownItems.Add(it_PathBaseItems2da);
+					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
 					it_MenuPaths.DropDownItems.Add(it_PathInventorySnds2da);
 					it_MenuPaths.DropDownItems.Add(it_PathItemProps2da);
 					it_MenuPaths.DropDownItems.Add(it_PathWeaponSounds2da);

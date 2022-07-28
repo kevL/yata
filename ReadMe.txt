@@ -787,6 +787,7 @@ path Packages.2da
 BaseItems.2da
 
 path BaseItems.2da       : these files contain Info for BaseItems.2da
+path Feat.2da
 path InventorySnds.2da
 path ItemProps.2da
 path WeaponSounds.2da
