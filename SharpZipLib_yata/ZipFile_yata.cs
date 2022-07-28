@@ -23,7 +23,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// 
+		/// And NwN2 Data compatible Zipfile.
 		/// </summary>
 		/// <param name="file"></param>
 		internal ZipFile(FileStream file)
