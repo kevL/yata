@@ -45,13 +45,13 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// Initializes an entry with the given name and made by information.
+		/// Creates a <c>ZipEntry</c> with a specified label and
+		/// <c><see cref="Method"/></c>.
 		/// </summary>
 		/// <param name="label">label for this entry</param>
-		/// <param name="method"><c><see cref="Method"/></c> for this entry</param>
+		/// <param name="method">the compression <c>Method</c> for this entry</param>
 		/// <remarks>This constructor is used by <c><see cref="ZipFile"/></c>
-		/// when reading from the central header. It is not generally useful,
-		/// use the constructor specifying the name only.</remarks>
+		/// when reading from the central header.</remarks>
 		internal ZipEntry(string label, Method method)
 		{
 //			logfile.Log("ZipEntry.cTor");
