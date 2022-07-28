@@ -130,14 +130,14 @@ namespace yata
 				ReadFully(_file, buffer, 0, lenLabel);
 				string label = enc.GetString(buffer, 0, lenLabel);
 
-				var entry = new ZipEntry(label, (CompressionMethod)method)
+				var entry = new ZipEntry(label, (Method)method)
 				{
 //					Crc                    = crc   & 0xffffffffL,
 //					Size                   = size  & 0xffffffffL,
 					CompressedSize         = csize & 0xffffffffL,
 //					Flags                  = bitFlags,
 //					DosTime                = dostime,
-					ZipFileIndex           = (long)i,
+//					Id                     = (long)i,
 					Offset                 = offset,
 //					ExternalFileAttributes = (int)externalAttributes
 				};
@@ -218,11 +218,11 @@ namespace yata
 			long start = GetEntryDataOffset(entry);
 			Stream data = new PartialInputStream(this, start, entry.CompressedSize);
 
-			if (entry.CompressionMethod == CompressionMethod.Deflated)
+			if (entry.Method == Method.Deflated)
 			{
 				data = new InflatorInputStream(data, new Inflator(), 4096);
 			}
-			// else CompressionMethod.Stored // the directory-label of the compressed files is stored uncompressed
+			// else Method.Stored // the directory-label of the compressed files is stored uncompressed
 
 			return data;
 		}
@@ -239,17 +239,17 @@ namespace yata
 			{
 				_file.Seek(OffsetOfFirstEntry + entry.Offset, SeekOrigin.Begin);
 
-				int   signature         =               (int)_file.ReadLEUint();
-				short extractVersion    =            (short)(_file.ReadLEUshort() & 0x00ff);
-				var   localFlags        =   (GeneralBitFlags)_file.ReadLEUshort();
-				var   compressionMethod = (CompressionMethod)_file.ReadLEUshort();
-				short fileTime          =             (short)_file.ReadLEUshort();
-				short fileDate          =             (short)_file.ReadLEUshort();
-				uint  crcValue          =                    _file.ReadLEUint();
-				long  compressedSize    =              (long)_file.ReadLEUint();
-				long  size              =              (long)_file.ReadLEUint();
-				int   storedNameLength  =               (int)_file.ReadLEUshort();
-				int   extraDataLength   =               (int)_file.ReadLEUshort();
+				int   signature         =      (int)_file.ReadLEUint();
+				short extractVersion    =   (short)(_file.ReadLEUshort() & 0x00ff);
+				var   localFlags        = (Bitflags)_file.ReadLEUshort();
+				var   compressionMethod =   (Method)_file.ReadLEUshort();
+				short fileTime          =    (short)_file.ReadLEUshort();
+				short fileDate          =    (short)_file.ReadLEUshort();
+				uint  crcValue          =           _file.ReadLEUint();
+				long  compressedSize    =     (long)_file.ReadLEUint();
+				long  size              =     (long)_file.ReadLEUint();
+				int   storedNameLength  =      (int)_file.ReadLEUshort();
+				int   extraDataLength   =      (int)_file.ReadLEUshort();
 
 				return OffsetOfFirstEntry
 					 + entry.Offset

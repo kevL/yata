@@ -22,20 +22,10 @@ namespace yata
 		internal string Label
 		{ get; private set; }
 
-		long _zipFileIndex = -1;
-		/// <summary>
-		/// Gets/sets index of this entry in its <c><see cref="ZipFile"/></c>.
-		/// </summary>
-		public long ZipFileIndex
-		{
-			get { return _zipFileIndex; }
-			set { _zipFileIndex = value; }
-		}
-
 		/// <summary>
 		/// Gets/sets offset for use in central header.
 		/// </summary>
-		public long Offset
+		internal long Offset
 		{ get; set; }
 
 		/// <summary>
@@ -45,15 +35,11 @@ namespace yata
 		internal long CompressedSize
 		{ get; set; }
 
-		CompressionMethod _method = CompressionMethod.Deflated;
 		/// <summary>
 		/// Gets/sets the compression method for this <c>ZipEntry</c>.
 		/// </summary>
-		public CompressionMethod CompressionMethod
-		{
-			get { return _method; }
-			set { _method = value; }
-		}
+		internal Method Method
+		{ get; private set; }
 		#endregion Properties
 
 
@@ -62,19 +48,18 @@ namespace yata
 		/// Initializes an entry with the given name and made by information.
 		/// </summary>
 		/// <param name="label">label for this entry</param>
-		/// <param name="method"><c><see cref="CompressionMethod"/></c> for this
-		/// entry</param>
+		/// <param name="method"><c><see cref="Method"/></c> for this entry</param>
 		/// <remarks>This constructor is used by <c><see cref="ZipFile"/></c>
 		/// when reading from the central header. It is not generally useful,
 		/// use the constructor specifying the name only.</remarks>
-		internal ZipEntry(string label, CompressionMethod method)
+		internal ZipEntry(string label, Method method)
 		{
 //			logfile.Log("ZipEntry.cTor");
 //			logfile.Log(". label= " + label);
 //			logfile.Log(". method= " + method);
 
 			Label = label;
-			_method = method;
+			Method = method;
 		}
 		#endregion cTor
 
