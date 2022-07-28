@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 
@@ -501,6 +502,45 @@ namespace yata
 				}
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Gets the text of a zipped 2da-file as an array of <c>strings</c>
+		/// given a
+		/// <c><see cref="ZipFile"/></c> and a <c><see cref="ZipEntry"/></c>.
+		/// </summary>
+		/// <param name="zf"><c>ZipFile</c></param>
+		/// <param name="ze"><c>ZipEntry</c></param>
+		internal static string[] GetZipped2daLines(ZipFile zf, ZipEntry ze)
+		{
+			string[] lines = null;
+
+			using (Stream s0 = zf.GetInputStream(ze))
+			using (var s1 = new MemoryStream())
+			{
+				CopyStream(s0,s1);
+
+				string text = Encoding.UTF8.GetString(s1.ToArray());
+				//logfile.Log(text);
+
+				lines = text.Split(gs.CRandorLF, StringSplitOptions.RemoveEmptyEntries);
+			}
+			return lines;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="output"></param>
+		static void CopyStream(Stream input, Stream output)
+		{
+			var buffer = new byte[4096]; //32768 or 81920
+			int read;
+			while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+			{
+				output.Write(buffer, 0, read);
+			}
 		}
 		#endregion Methods (static)
 	}
