@@ -9,7 +9,7 @@ namespace yata
 	/// <summary>
 	/// Yata's <c>Propanel</c>.
 	/// </summary>
-	/// <remarks>Each tabbed table gets its own.</remarks>
+	/// <remarks>Each tabbed <c><see cref="YataGrid"/></c> gets its own.</remarks>
 	sealed class Propanel
 		: Control
 	{
@@ -131,7 +131,8 @@ namespace yata
 		/// <summary>
 		/// cTor.
 		/// </summary>
-		/// <remarks>Each tabbed table gets its own Propanel.</remarks>
+		/// <remarks>Each tabbed <c><see cref="YataGrid"/></c> gets its own
+		/// <c>Propanel</c>.</remarks>
 		internal Propanel(YataGrid grid)
 		{
 			DrawRegulator.SetDoubleBuffered(this);
@@ -333,7 +334,7 @@ namespace yata
 		{
 			if (_scroll.Visible)
 			{
-				switch (Dockstate) // left/right
+				switch (Dockstate) // left/right only
 				{
 					case DockState.TR: return DockState.TL;
 					case DockState.BR: return DockState.BL;
@@ -342,7 +343,7 @@ namespace yata
 			}
 			else if (reverse)
 			{
-				switch (Dockstate) // counterclockwise
+				switch (Dockstate) // counterclockwise (corners)
 				{
 					case DockState.TR: return DockState.TL;
 					case DockState.TL: return DockState.BL;
@@ -351,7 +352,7 @@ namespace yata
 			}
 			else
 			{
-				switch (Dockstate) // clockwise
+				switch (Dockstate) // clockwise (corners)
 				{
 					case DockState.TR: return DockState.BR;
 					case DockState.BR: return DockState.BL;
@@ -660,8 +661,13 @@ namespace yata
 
 
 		/// <summary>
-		/// Overrides the <c>MouseClick</c> event. Selects the row in this
-		/// <c>Propanel</c> that's clicked, starts or applies/cancels edit.
+		/// Overrides the <c>MouseClick</c> event. Selects the corresponding
+		/// <c><see cref="Cell"/></c> on the <c><see cref="_grid"/></c> that
+		/// gets clicked in this <c>Propanel</c>, or if a
+		/// <c><see cref="Row"/></c> is currently selected on the <c>_grid</c>
+		/// then it will be ensured-displayed; starts or applies/cancels an edit
+		/// if applicable. <c>OnMouseClick</c> also handles TabFastedit with
+		/// faked mouseclicks.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseClick(MouseEventArgs e)
@@ -737,6 +743,7 @@ namespace yata
 #if Clicks
 							logfile.Log(". select grid");
 #endif
+							_grid.EnsureDisplayedCol((e.Y + _scroll.Value) / _heightr);
 							_grid.Select();
 						}
 					}
