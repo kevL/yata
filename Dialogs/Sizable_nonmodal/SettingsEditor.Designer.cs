@@ -53,13 +53,13 @@ namespace yata
 			// 
 			this.bu_Insert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.bu_Insert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Insert.ForeColor = System.Drawing.Color.RoyalBlue;
+			this.bu_Insert.ForeColor = System.Drawing.Color.Crimson;
 			this.bu_Insert.Location = new System.Drawing.Point(10, 8);
 			this.bu_Insert.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Insert.Name = "bu_Insert";
 			this.bu_Insert.Size = new System.Drawing.Size(75, 23);
 			this.bu_Insert.TabIndex = 0;
-			this.bu_Insert.Text = "UPDATE";
+			this.bu_Insert.Text = "Update";
 			this.bu_Insert.UseVisualStyleBackColor = true;
 			this.bu_Insert.Click += new System.EventHandler(this.click_Insert);
 			// 
