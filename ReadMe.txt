@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 July 27
+2022 July 29
 kevL's
 ver 5.2.0.0
 
@@ -63,7 +63,7 @@ File
 
 
 Edit
-- Undo : Ctrl+z
+- Undo : Ctrl+z (see Appendix K: Undo/Redo)
 - Redo : Ctrl+y
 
 - Deselect all : deselects selected cells, rows, and cols
