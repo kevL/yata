@@ -690,7 +690,7 @@ namespace yata
 
 							if (_tabOverride == TABFASTEDIT_Bypass)
 							{
-								_c = (e.Y + _scroll.Value) / _heightr;
+								_c = col(e.Y);
 							}
 							else
 								_c = _tabOverride;
@@ -703,7 +703,10 @@ namespace yata
 								_grid.SelectCell(_grid[_r,_c]);
 							}
 							else
+							{
 								_grid.EnsureDisplayedRow(_r);
+								_grid.EnsureDisplayedCol(_c);
+							}
 
 							EnsureDisplayed(_c);
 
@@ -743,7 +746,7 @@ namespace yata
 #if Clicks
 							logfile.Log(". select grid");
 #endif
-							_grid.EnsureDisplayedCol((e.Y + _scroll.Value) / _heightr);
+							_grid.EnsureDisplayedCol(col(e.Y));
 							_grid.Select();
 						}
 					}
@@ -778,6 +781,19 @@ namespace yata
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the colid that corresponds to pixel <paramref name="y"/> down
+		/// the y-axis.
+		/// </summary>
+		/// <param name="y"><c>MouseEventArgs.Y</c></param>
+		/// <returns>the colid</returns>
+		/// <remarks>Helper for
+		/// <c><see cref="OnMouseClick()">OnMouseClick()</see></c>.</remarks>
+		int col(int y)
+		{
+			return (y + _scroll.Value) / _heightr;
 		}
 
 
