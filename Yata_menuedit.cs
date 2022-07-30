@@ -515,12 +515,12 @@ namespace yata
 			_replacer = null;
 			it_Replace.Checked = false;
 
-			YataGrid table;
-			for (int tab = 0; tab != Tabs.TabCount; ++tab)
-			{
-				table = Tabs.TabPages[tab].Tag as YataGrid;
-				table.ClearReplaced(table == Table);
-			}
+//			YataGrid table;
+//			for (int tab = 0; tab != Tabs.TabCount; ++tab)
+//			{
+//				table = Tabs.TabPages[tab].Tag as YataGrid;
+//				table.ClearReplaced(table == Table);
+//			}
 		}
 		#endregion Methods (edit)
 	}
