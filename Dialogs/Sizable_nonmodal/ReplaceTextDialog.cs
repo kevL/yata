@@ -190,8 +190,8 @@ namespace yata
 
 			YataGrid table = Yata.Table;
 
-			Cell sel;
 			int selr;
+			Cell sel;
 			switch (_starttype)
 			{
 				case StartType.Top:
@@ -506,6 +506,8 @@ namespace yata
 				(_f as Yata).EnableGotoReplaced(true);
 				EnableReplacedOps(true);
 
+				string plural = (replaced != 1) ? "s" : String.Empty;
+
 				if (sanitized)
 				{
 					string copy;
@@ -528,7 +530,7 @@ namespace yata
 
 
 					using (var ib = new Infobox(Infobox.Title_warni,
-												replaced + " fields replaced.",
+												replaced + " field" + plural + " replaced.",
 												copy,
 												InfoboxType.Warn))
 					{
@@ -537,7 +539,7 @@ namespace yata
 				}
 				else
 				{
-					using (var ib = new Infobox(Infobox.Title_infor, replaced + " fields replaced."))
+					using (var ib = new Infobox(Infobox.Title_infor, replaced + " field" + plural + " replaced."))
 					{
 						ib.ShowDialog(this);
 					}
@@ -597,7 +599,7 @@ namespace yata
 			if ((sender as RadioButton).Checked)
 			{
 				if (sender == rb_Subfield) _searchtyp = SearchTyp.Subfield;
-				else                       _searchtyp = SearchTyp.Fulfield; // rb_Field
+				else                       _searchtyp = SearchTyp.Fulfield; // rb_Fulfield
 			}
 		}
 
@@ -658,8 +660,6 @@ namespace yata
 		void checkedchanged_CaseSens(object sender, EventArgs e)
 		{
 			_casesen = cb_Casesen.Checked;
-
-//			EnableReplace();
 		}
 
 		/// <summary>
