@@ -53,10 +53,29 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int School            =  4; // col in Spells.2da ->
+		// cols in Spells.2da ->
+		internal const int IconResRef        =  3; // ofd only (OpenFileDialog)
+		internal const int School            =  4;
 		internal const int Range             =  5;
 		internal const int MetaMagic         =  7;
 		internal const int TargetType        =  8;
+		internal const int ImpactScript      =  9; // ofd only
+		internal const int ConjVisual0       = 20; // ofd only
+		internal const int LowConjVisual0    = 21; // ofd only
+		internal const int ConjVisual1       = 22; // ofd only
+		internal const int ConjVisual2       = 23; // ofd only
+		internal const int ConjSoundVFX      = 24; // ofd only
+		internal const int ConjSoundMale     = 25; // ofd only
+		internal const int ConjSoundFemale   = 26; // ofd only
+		internal const int CastVisual0       = 30; // ofd only
+		internal const int LowCastVisual0    = 31; // ofd only
+		internal const int CastVisual1       = 32; // ofd only
+		internal const int CastVisual2       = 33; // ofd only
+		internal const int CastSound         = 34; // ofd only
+		internal const int ProjSEF           = 37; // ofd only
+		internal const int LowProjSEF        = 38; // ofd only
+		internal const int ImpactSEF         = 43; // ofd only
+		internal const int LowImpactSEF      = 44; // ofd only
 		internal const int ImmunityType      = 45;
 		internal const int Category          = 52;
 		internal const int UserType          = 54;

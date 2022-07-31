@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 
@@ -127,6 +128,36 @@ namespace yata
 					if (Info.targetLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoInputSpells.ImpactScript:
+					cellit_Input.Text = "Select script ...";
+					return true;
+
+				case InfoInputSpells.IconResRef:
+					cellit_Input.Text = "Select icon ...";
+					return true;
+
+				case InfoInputSpells.ConjVisual0:
+				case InfoInputSpells.LowConjVisual0:
+				case InfoInputSpells.ConjVisual1:
+				case InfoInputSpells.ConjVisual2:
+				case InfoInputSpells.CastVisual0:
+				case InfoInputSpells.LowCastVisual0:
+				case InfoInputSpells.CastVisual1:
+				case InfoInputSpells.CastVisual2:
+				case InfoInputSpells.ProjSEF:
+				case InfoInputSpells.LowProjSEF:
+				case InfoInputSpells.ImpactSEF:
+				case InfoInputSpells.LowImpactSEF:
+					cellit_Input.Text = "Select specialeffect ...";
+					return true;
+
+				case InfoInputSpells.ConjSoundVFX:
+				case InfoInputSpells.ConjSoundMale:
+				case InfoInputSpells.ConjSoundFemale:
+				case InfoInputSpells.CastSound:
+					cellit_Input.Text = "Select sound ...";
+					return true;
 			}
 			return false;
 		}
@@ -553,6 +584,37 @@ namespace yata
 						case InfoInputSpells.TargetingUI:
 							doIntInputSpells();
 							break;
+
+						// File input ->
+						case InfoInputSpells.IconResRef:
+							SelectFile(" Select an image", Yata.GetIconFilter(), ".tga");
+							break;
+
+						case InfoInputSpells.ImpactScript:
+							SelectFile(" Select a script", Yata.GetScriptFilter(), ".nss");
+							break;
+
+						case InfoInputSpells.ConjVisual0:
+						case InfoInputSpells.LowConjVisual0:
+						case InfoInputSpells.ConjVisual1:
+						case InfoInputSpells.ConjVisual2:
+						case InfoInputSpells.CastVisual0:
+						case InfoInputSpells.LowCastVisual0:
+						case InfoInputSpells.CastVisual1:
+						case InfoInputSpells.CastVisual2:
+						case InfoInputSpells.ProjSEF:
+						case InfoInputSpells.LowProjSEF:
+						case InfoInputSpells.ImpactSEF:
+						case InfoInputSpells.LowImpactSEF:
+							SelectFile(" Select a specialeffect", Yata.GetSpecialeffectFilter(), ".sef");
+							break;
+
+						case InfoInputSpells.ConjSoundVFX:
+						case InfoInputSpells.ConjSoundMale:
+						case InfoInputSpells.ConjSoundFemale:
+						case InfoInputSpells.CastSound:
+							SelectFile(" Select a sound", Yata.GetSoundFilter(), ".wav");
+							break;
 					}
 					break;
 
@@ -662,6 +724,45 @@ namespace yata
 							break;
 					}
 					break;
+			}
+		}
+
+		/// <summary>
+		/// Invokes an <c>OpenFileDialog</c> to select and insert a file-label
+		/// as the text in <c><see cref="_sel"/></c>.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="filter"></param>
+		/// <param name="default"></param>
+		void SelectFile(string title, string filter, string @default)
+		{
+			using (var ofd = new OpenFileDialog())
+			{
+				ofd.Title  = title;
+				ofd.Filter = filter;
+
+				ofd.AutoUpgradeEnabled = false;
+
+				if (_sel.text == gs.Stars)
+				{
+					ofd.FileName = "*" + @default;
+				}
+				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
+				{
+					ofd.FileName = _sel.text + @default;
+				}
+				else
+					ofd.FileName = _sel.text;
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+				{
+					string label = Path.GetFileNameWithoutExtension(ofd.FileName);
+					if (label != _sel.text)
+					{
+						YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary
+						Table.ChangeCellText(_sel, label); // does not do a text-check
+					}
+				}
 			}
 		}
 

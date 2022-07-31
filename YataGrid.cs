@@ -1231,7 +1231,7 @@ namespace yata
 		/// Verifies a cell-field text for
 		/// <c><see cref="ReplaceTextDialog"/></c>.
 		/// </summary>
-		/// <param name="text">the text to verify</param>
+		/// <param name="text"><c>ref</c>to a <c>string</c> to verify</param>
 		/// <returns><c>true</c> if text gets sanitized</returns>
 		static bool VerifyText_repl(ref string text)
 		{
@@ -1251,13 +1251,12 @@ namespace yata
 		/// during replace/replaceall by
 		/// <c><see cref="VerifyText_repl()">VerifyText_repl()</see></c>.
 		/// </summary>
-		/// <param name="text">ref to a text-string</param>
+		/// <param name="text"><c>ref</c> to a <c>string</c> to verify</param>
 		/// <param name="load"><c>true</c> to return <c>true</c> even if a
 		/// text-change is insignificant</param>
-		/// <returns><c>true</c> if (a) text gets sanitized and user should be
-		/// notified or (b) text gets sanitized and its <c><see cref="Cell"/></c>
-		/// should be flagged as <c><see cref="Cell.loadchanged"/></c> when a
-		/// 2da-file loads</returns>
+		/// <returns><c>true</c> if text gets sanitized and (a) user should be
+		/// notified or (b) its <c><see cref="Cell"/></c> should be flagged as
+		/// <c><see cref="Cell.loadchanged"/></c> when a 2da-file loads</returns>
 		static bool VerifyText(ref string text, bool load = false)
 		{
 			var sb = new StringBuilder(text);
@@ -1365,6 +1364,26 @@ namespace yata
 			sb.Insert(0, '"');
 			sb.Append('"');
 		}
+
+		/// <summary>
+		/// Verifies a file-label as given by <c>OpenFileDialog</c>.
+		/// </summary>
+		/// <param name="label"><c>ref</c> to a <c>string</c> to verify</param>
+		/// <remarks>Keep file-labels as they are; do not trim leading or
+		/// trailing whitespace. Windows OS won't allow any double-quotes -
+		/// simply add outer quotes if any whitespace is detected.</remarks>
+		internal static void VerifyFile(ref string label)
+		{
+			foreach (var c in label)
+			{
+				if (Char.IsWhiteSpace(c))
+				{
+					label = "\"" + label;
+					label = label + "\"";
+					break;
+				}
+			}
+		}
 		#endregion editresult
 
 
@@ -1389,10 +1408,10 @@ namespace yata
 		/// <c><see cref="Cell.replaced">Cell.replaced</see></c> flags without
 		/// resetting the GotoReplaced it repeatedly.
 		/// </summary>
-		/// <param name="activetable"><c>true</c> if the <c>YataGrid</c> to clear is
-		/// currently active - see
-		/// <c><see cref="Yata.CloseReplacer()">Yata.CloseReplacer()</see></c></param>
-		internal void ClearReplaced(bool activetable = true)
+//		/// <param name="activetable"><c>true</c> if the <c>YataGrid</c> to
+//		/// clear is currently active - see
+//		/// <c><see cref="Yata.CloseReplacer()">Yata.CloseReplacer()</see></c></param>
+		internal void ClearReplaced() //bool activetable = true
 		{
 			_init = true; // bypass EnableGotoReplaced() in Cell.setter_replaced
 
@@ -1407,8 +1426,8 @@ namespace yata
 			if (_f._replacer != null)
 				_f._replacer.EnableReplacedOps(false);
 
-			if (activetable)
-				Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+//			if (activetable)
+			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 		}
 
 		/// <summary>

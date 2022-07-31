@@ -26,6 +26,43 @@ namespace yata
 		{
 			return "Talk files (*.tlk)|*.tlk|All files (*.*)|*.*";
 		}
+
+		/// <summary>
+		/// Gets the script-filter for <c>.Nss</c> files.
+		/// </summary>
+		/// <returns></returns>
+		internal static string GetScriptFilter()
+		{
+			return "NwScript files (*.nss)|*.nss|All files (*.*)|*.*";
+		}
+
+		/// <summary>
+		/// Gets the icon-filter for <c>.Tga</c> files.
+		/// </summary>
+		/// <returns></returns>
+		internal static string GetIconFilter()
+		{
+			return "Targa files (*.tga)|*.tga|All files (*.*)|*.*";
+		}
+
+		/// <summary>
+		/// Gets the specialeffect-filter for <c>.Sef</c> files.
+		/// </summary>
+		/// <returns></returns>
+		internal static string GetSpecialeffectFilter()
+		{
+			return "SpecialEffect files (*.sef)|*.sef|All files (*.*)|*.*";
+		}
+
+		/// <summary>
+		/// Gets the sound-filter for <c>.Wav</c> files.
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>These are typically .MP3 files with .WAV extension.</remarks>
+		internal static string GetSoundFilter()
+		{
+			return "Sound files (*.wav)|*.wav|All files (*.*)|*.*";
+		}
 		#endregion Methods (static)
 
 
