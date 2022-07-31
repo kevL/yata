@@ -90,12 +90,12 @@ namespace yata
 			{
 				int fborder = (_f.Width - _f.ClientSize.Width) / 2;
 				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width + fborder,
-													_f.Top  + 20));
+													_f.Top  + 46));
 
 				Screen screen = Screen.FromControl(_f);
 				if      (screen.Bounds.Contains(new Point( loc.X  + Width, loc.Y))) _x =  loc.X;
 				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y))) _x = _f.Left - Width;
-				else                                                                _x =  loc.X  - Width;
+				else                                                                _x =  loc.X  - Width - 23;
 
 				// NOTE: '_f.Top' does not include Yata's '_bar' but does include its titlebar.
 				_y = loc.Y;
