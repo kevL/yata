@@ -10,8 +10,11 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int EquipableSlots     =  5; // col in BaseItems.2da ->
+		// cols in BaseItems.2da ->
+		internal const int EquipableSlots     =  5;
 		internal const int ModelType          =  7;
+		internal const int ItemClass          =  9; // ofd only (OpenFileDialog)
+		internal const int DefaultModel       = 14; // ofd only
 //		internal const int NWN2_DefaultIcon   = 15; // req. images i guess
 		internal const int WeaponWield        = 18;
 		internal const int WeaponType         = 19;

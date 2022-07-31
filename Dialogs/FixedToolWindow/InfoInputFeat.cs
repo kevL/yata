@@ -14,7 +14,9 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int Category        = 25; // col in Feat.2da ->
+		// cols in Feat.2da ->
+		internal const int Icon_           =  4; // ofd only (OpenFileDialog)
+		internal const int Category        = 25;
 		internal const int MasterFeat      = 32;
 		internal const int ToolsCategories = 47;
 		internal const int FeatCategory    = 54;

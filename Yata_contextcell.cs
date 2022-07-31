@@ -216,7 +216,7 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputFeat.ToolsCategories: // this doesn't rely on 2da-gropes ->
+				case InfoInputFeat.ToolsCategories: // these don't rely on 2da-gropes ->
 				case InfoInputFeat.FeatCategory:
 					return true;
 
@@ -224,6 +224,10 @@ namespace yata
 					if (Info.combatmodeLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoInputFeat.Icon_:
+					cellit_Input.Text = "Select icon ...";
+					return true;
 			}
 			return false;
 		}
@@ -248,6 +252,32 @@ namespace yata
 					if (Info.packageLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoInputClasses.Icon_:
+				case InfoInputClasses.BorderedIcon:
+					cellit_Input.Text = "Select icon ...";
+					return true;
+
+				case InfoInputClasses.AttackBonusTable:
+				case InfoInputClasses.FeatsTable:
+				case InfoInputClasses.SavingThrowTable:
+				case InfoInputClasses.SkillsTable:
+				case InfoInputClasses.BonusFeatsTable:
+				case InfoInputClasses.SpellGainTable:
+				case InfoInputClasses.SpellKnownTable:
+				case InfoInputClasses.PreReqTable:
+				case InfoInputClasses.BonusSpellcasterLevelTable:
+				case InfoInputClasses.BonusCasterFeatByClassMap:
+					cellit_Input.Text = "Select 2da ...";
+					return true;
+
+				case InfoInputClasses.CharGen_Chest:
+				case InfoInputClasses.CharGen_Feet:
+				case InfoInputClasses.CharGen_Hands:
+				case InfoInputClasses.CharGen_Cloak:
+				case InfoInputClasses.CharGen_Head:
+					cellit_Input.Text = "Select resref ...";
+					return true;
 			}
 			return false;
 		}
@@ -296,6 +326,11 @@ namespace yata
 					if (Info.ammoLabels.Count != 0)
 						return true;
 					break;
+
+				case InfoInputBaseitems.ItemClass:
+				case InfoInputBaseitems.DefaultModel:
+					cellit_Input.Text = "Select model ...";
+					return true;
 			}
 			return false;
 		}
@@ -587,11 +622,11 @@ namespace yata
 
 						// File input ->
 						case InfoInputSpells.IconResRef:
-							SelectFile(" Select an image", Yata.GetFileFilter("tga"), ".tga");
+							SelectFile(" Select icon", Yata.GetFileFilter("tga"), ".tga");
 							break;
 
 						case InfoInputSpells.ImpactScript:
-							SelectFile(" Select a script", Yata.GetFileFilter("nss"), ".nss");
+							SelectFile(" Select script", Yata.GetFileFilter("nss"), ".nss");
 							break;
 
 						case InfoInputSpells.ConjVisual0:
@@ -606,14 +641,14 @@ namespace yata
 						case InfoInputSpells.LowProjSEF:
 						case InfoInputSpells.ImpactSEF:
 						case InfoInputSpells.LowImpactSEF:
-							SelectFile(" Select a specialeffect", Yata.GetFileFilter("sef"), ".sef");
+							SelectFile(" Select specialeffect", Yata.GetFileFilter("sef"), ".sef");
 							break;
 
 						case InfoInputSpells.ConjSoundVFX:
 						case InfoInputSpells.ConjSoundMale:
 						case InfoInputSpells.ConjSoundFemale:
 						case InfoInputSpells.CastSound:
-							SelectFile(" Select a sound", Yata.GetFileFilter("wav"), ".wav");
+							SelectFile(" Select sound", Yata.GetFileFilter("wav"), ".wav");
 							break;
 					}
 					break;
@@ -637,6 +672,11 @@ namespace yata
 									Table.ChangeCellText(_sel, str1); // does not do a text-check
 								}
 							}
+							break;
+
+						// File input ->
+						case InfoInputFeat.Icon_:
+							SelectFile(" Select icon", Yata.GetFileFilter("tga"), ".tga");
 							break;
 					}
 					break;
@@ -683,6 +723,33 @@ namespace yata
 						case InfoInputClasses.Package: // INT Input ->
 							doIntInputClass();
 							break;
+
+						// File input ->
+						case InfoInputClasses.Icon_:
+						case InfoInputClasses.BorderedIcon:
+							SelectFile(" Select icon", Yata.GetFileFilter("tga"), ".tga");
+							break;
+
+						case InfoInputClasses.AttackBonusTable:
+						case InfoInputClasses.FeatsTable:
+						case InfoInputClasses.SavingThrowTable:
+						case InfoInputClasses.SkillsTable:
+						case InfoInputClasses.BonusFeatsTable:
+						case InfoInputClasses.SpellGainTable:
+						case InfoInputClasses.SpellKnownTable:
+						case InfoInputClasses.PreReqTable:
+						case InfoInputClasses.BonusSpellcasterLevelTable:
+						case InfoInputClasses.BonusCasterFeatByClassMap:
+							SelectFile(" Select 2da", Yata.GetFileFilter("2da"), ".2da");
+							break;
+
+						case InfoInputClasses.CharGen_Chest:
+						case InfoInputClasses.CharGen_Feet:
+						case InfoInputClasses.CharGen_Hands:
+						case InfoInputClasses.CharGen_Cloak:
+						case InfoInputClasses.CharGen_Head:
+							SelectFile(" Select resref", Yata.GetFileFilter("uti"), ".uti");
+							break;
 					}
 					break;
 
@@ -722,6 +789,12 @@ namespace yata
 						case InfoInputBaseitems.QBBehaviour:
 							doIntInputItem();
 							break;
+
+						// File input ->
+						case InfoInputBaseitems.ItemClass:
+						case InfoInputBaseitems.DefaultModel:
+							SelectFile(" Select model", Yata.GetFileFilter("mdb"), ".mdb", true);
+							break;
 					}
 					break;
 			}
@@ -734,7 +807,9 @@ namespace yata
 		/// <param name="title"></param>
 		/// <param name="filter"></param>
 		/// <param name="default"></param>
-		void SelectFile(string title, string filter, string @default)
+		/// <param name="base"><c>true</c> to deal with arbitrary trailing
+		/// digits</param>
+		void SelectFile(string title, string filter, string @default, bool @base = false)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
@@ -750,6 +825,8 @@ namespace yata
 				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
 				{
 					ofd.FileName = _sel.text + @default;
+//					if (@base) ofd.FileName = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
+//					else       ofd.FileName = _sel.text + @default;
 				}
 				else
 					ofd.FileName = _sel.text;
@@ -757,6 +834,15 @@ namespace yata
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
 					string label = Path.GetFileNameWithoutExtension(ofd.FileName);
+
+					if (@base)
+					for (int i = 0; i != label.Length; ++i)
+					if (Char.IsDigit(label[i]))
+					{
+						label = label.Substring(0, i);
+						break;
+					}
+
 					if (label != _sel.text)
 					{
 						YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary

@@ -15,11 +15,29 @@ namespace yata
 		: InfoInputDialog
 	{
 		#region Fields (static)
-		internal const int PrimaryAbil     = 40; // col in Classes.2da ->
-		internal const int SpellAbil       = 41;
-		internal const int AlignRestrict   = 42;
-		internal const int AlignRstrctType = 43;
-		internal const int Package         = 74;
+		// cols in Classes.2da ->
+		internal const int Icon_                      =  6; // ofd only (OpenFileDialog)
+		internal const int BorderedIcon               =  7; // ofd only
+		internal const int AttackBonusTable           =  9; // ofd only
+		internal const int FeatsTable                 = 10; // ofd only
+		internal const int SavingThrowTable           = 11; // ofd only
+		internal const int SkillsTable                = 12; // ofd only
+		internal const int BonusFeatsTable            = 13; // ofd only
+		internal const int SpellGainTable             = 15; // ofd only
+		internal const int SpellKnownTable            = 16; // ofd only
+		internal const int PrimaryAbil                = 40;
+		internal const int SpellAbil                  = 41;
+		internal const int AlignRestrict              = 42;
+		internal const int AlignRstrctType            = 43;
+		internal const int PreReqTable                = 66; // ofd only
+		internal const int BonusSpellcasterLevelTable = 69; // ofd only
+		internal const int BonusCasterFeatByClassMap  = 70; // ofd only
+		internal const int Package                    = 74;
+		internal const int CharGen_Chest              = 81; // ofd only
+		internal const int CharGen_Feet               = 82; // ofd only
+		internal const int CharGen_Hands              = 83; // ofd only
+		internal const int CharGen_Cloak              = 84; // ofd only
+		internal const int CharGen_Head               = 85; // ofd only
 		#endregion Fields (static)
 
 
