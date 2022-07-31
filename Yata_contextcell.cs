@@ -587,11 +587,11 @@ namespace yata
 
 						// File input ->
 						case InfoInputSpells.IconResRef:
-							SelectFile(" Select an image", Yata.GetIconFilter(), ".tga");
+							SelectFile(" Select an image", Yata.GetFileFilter("tga"), ".tga");
 							break;
 
 						case InfoInputSpells.ImpactScript:
-							SelectFile(" Select a script", Yata.GetScriptFilter(), ".nss");
+							SelectFile(" Select a script", Yata.GetFileFilter("nss"), ".nss");
 							break;
 
 						case InfoInputSpells.ConjVisual0:
@@ -606,14 +606,14 @@ namespace yata
 						case InfoInputSpells.LowProjSEF:
 						case InfoInputSpells.ImpactSEF:
 						case InfoInputSpells.LowImpactSEF:
-							SelectFile(" Select a specialeffect", Yata.GetSpecialeffectFilter(), ".sef");
+							SelectFile(" Select a specialeffect", Yata.GetFileFilter("sef"), ".sef");
 							break;
 
 						case InfoInputSpells.ConjSoundVFX:
 						case InfoInputSpells.ConjSoundMale:
 						case InfoInputSpells.ConjSoundFemale:
 						case InfoInputSpells.CastSound:
-							SelectFile(" Select a sound", Yata.GetSoundFilter(), ".wav");
+							SelectFile(" Select a sound", Yata.GetFileFilter("wav"), ".wav");
 							break;
 					}
 					break;

@@ -220,7 +220,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = Yata.GetTlkFilter();
+					ofd.Filter = Yata.GetFileFilter("tlk");
 
 					ofd.FileName = "dialog.tlk";
 					ofd.AutoUpgradeEnabled = false;
@@ -237,7 +237,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = Yata.GetTlkFilter();
+					ofd.Filter = Yata.GetFileFilter("tlk");
 
 					ofd.FileName = "*.tlk";
 					ofd.AutoUpgradeEnabled = false;

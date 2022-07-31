@@ -10,58 +10,13 @@ namespace yata
 	{
 		#region Methods (static)
 		/// <summary>
-		/// Gets the dialog-filter for <c>.2da</c> files.
+		/// Gets the <c>OpenFileDialog.Filter</c> for a specified filetype.
 		/// </summary>
+		/// <param name="ext">the extension of filetype without dot</param>
 		/// <returns></returns>
-		static string Get2daFilter()
+		internal static string GetFileFilter(string ext)
 		{
-			return "2da files (*.2da)|*.2da|All files (*.*)|*.*";
-		}
-
-		/// <summary>
-		/// Gets the dialog-filter for <c>.Tlk</c> files.
-		/// </summary>
-		/// <returns></returns>
-		internal static string GetTlkFilter()
-		{
-			return "Talk files (*.tlk)|*.tlk|All files (*.*)|*.*";
-		}
-
-		/// <summary>
-		/// Gets the script-filter for <c>.Nss</c> files.
-		/// </summary>
-		/// <returns></returns>
-		internal static string GetScriptFilter()
-		{
-			return "NwScript files (*.nss)|*.nss|All files (*.*)|*.*";
-		}
-
-		/// <summary>
-		/// Gets the icon-filter for <c>.Tga</c> files.
-		/// </summary>
-		/// <returns></returns>
-		internal static string GetIconFilter()
-		{
-			return "Targa files (*.tga)|*.tga|All files (*.*)|*.*";
-		}
-
-		/// <summary>
-		/// Gets the specialeffect-filter for <c>.Sef</c> files.
-		/// </summary>
-		/// <returns></returns>
-		internal static string GetSpecialeffectFilter()
-		{
-			return "SpecialEffect files (*.sef)|*.sef|All files (*.*)|*.*";
-		}
-
-		/// <summary>
-		/// Gets the sound-filter for <c>.Wav</c> files.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>These are typically .MP3 files with .WAV extension.</remarks>
-		internal static string GetSoundFilter()
-		{
-			return "Sound files (*.wav)|*.wav|All files (*.*)|*.*";
+			return "2da files (*." + ext + ")|*." + ext + "|All files (*.*)|*.*";
 		}
 		#endregion Methods (static)
 
@@ -452,7 +407,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select BaseItems.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "baseitems.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -487,7 +442,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Feat.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "feat.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -522,7 +477,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select InventorySnds.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "inventorysnds.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -557,7 +512,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select ItemPropDef.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "itempropdef.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -593,7 +548,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select ItemProps.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "itemprops.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -628,7 +583,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Skills.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "skills.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -663,7 +618,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Spells.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "spells.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -701,7 +656,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Classes.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "classes.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -736,7 +691,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Disease.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "disease.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -771,7 +726,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_AmmoCost.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "iprp_ammocost.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -806,7 +761,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_Feats.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "iprp_feats.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -842,7 +797,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_OnHitSpell.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "iprp_onhitspell.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -879,7 +834,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Iprp_Spells.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "iprp_spells.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -917,7 +872,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select RacialTypes.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "racialtypes.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -954,7 +909,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Categories.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "categories.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -991,7 +946,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Ranges.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "ranges.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1029,7 +984,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select SpellTarget.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "spelltarget.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1070,7 +1025,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select CombatModes.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "combatmodes.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1106,7 +1061,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select MasterFeats.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "masterfeats.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1143,7 +1098,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select Packages.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "packages.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1179,7 +1134,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select WeaponSounds.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "weaponsounds.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1215,7 +1170,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = "Select AmmunitionTypes.2da";
-					ofd.Filter = Get2daFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "ammunitiontypes.2da";
 					ofd.AutoUpgradeEnabled = false;
@@ -1251,7 +1206,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = GetTlkFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "dialog.tlk";
 					ofd.AutoUpgradeEnabled = false;
@@ -1279,7 +1234,7 @@ namespace yata
 				using (var ofd = new OpenFileDialog())
 				{
 					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = GetTlkFilter();
+					ofd.Filter = GetFileFilter("2da");
 
 					ofd.FileName = "*.tlk";
 					ofd.AutoUpgradeEnabled = false;

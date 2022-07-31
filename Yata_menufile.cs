@@ -163,7 +163,7 @@ namespace yata
 				}
 
 				ofd.Title  = "Select a 2da file";
-				ofd.Filter = Get2daFilter();
+				ofd.Filter = GetFileFilter("2da");
 
 				ofd.ShowReadOnly = // <- that forces (AutoUpgradeEnabled=false)
 				ofd.Multiselect  = true;
@@ -456,7 +456,7 @@ namespace yata
 			using (var sfd = new SaveFileDialog())
 			{
 				sfd.Title    = "Save as ...";
-				sfd.Filter   = Get2daFilter();
+				sfd.Filter   = GetFileFilter("2da");
 				sfd.FileName = Path.GetFileName(Table.Fullpath);
 
 				if (Directory.Exists(_lastSaveasDirectory))
