@@ -90,7 +90,6 @@ namespace yata
 //				Text = TitlePrefi + TitleDeflt;
 
 			tb_Filter.Text = _filter;
-			ActiveControl = tb_Filter;
 
 			_t1.Tick += t1_tick;
 			_t1.Interval = 100;
