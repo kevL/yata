@@ -198,6 +198,7 @@ namespace yata
 		ToolStripMenuItem cellit_MergeCe;
 		ToolStripMenuItem cellit_MergeRo;
 		ToolStripMenuItem cellit_Input;
+		ToolStripMenuItem cellit_Input_zip;
 		ToolStripMenuItem cellit_Strref;
 		ToolStripMenuItem cellit_Strref_talktable;
 		ToolStripMenuItem cellit_Strref_custom;
@@ -415,6 +416,7 @@ namespace yata
 			this.cellit_Strref_custom = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Strref_invalid = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Input = new System.Windows.Forms.ToolStripMenuItem();
+			this.cellit_Input_zip = new System.Windows.Forms.ToolStripMenuItem();
 			this._contextTa = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tabit_Close = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabit_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -1742,7 +1744,8 @@ namespace yata
 			this.cellit_MergeRo,
 			this.separator_28,
 			this.cellit_Strref,
-			this.cellit_Input});
+			this.cellit_Input,
+			this.cellit_Input_zip});
 			this._contextCe.Name = "_contextCe";
 			this._contextCe.ShowImageMargin = false;
 			this._contextCe.Size = new System.Drawing.Size(165, 270);
@@ -1868,6 +1871,13 @@ namespace yata
 			this.cellit_Input.Size = new System.Drawing.Size(164, 22);
 			this.cellit_Input.Text = "InfoInput";
 			this.cellit_Input.Click += new System.EventHandler(this.cellclick_InfoInput);
+			// 
+			// cellit_Input_zip
+			// 
+			this.cellit_Input_zip.Name = "cellit_Input_zip";
+			this.cellit_Input_zip.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Input_zip.Text = "Select Data/zip file ...";
+			this.cellit_Input_zip.Click += new System.EventHandler(this.cellclick_InfoInput_zip);
 			// 
 			// _contextTa
 			// 

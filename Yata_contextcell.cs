@@ -35,6 +35,9 @@ namespace yata
 
 			cellit_Strref .Enabled = isStrrefEnabled();
 
+
+			cellit_Input_zip.Visible = false;
+
 			switch (Table.Info)
 			{
 				case YataGrid.InfoType.INFO_NONE:
@@ -131,6 +134,7 @@ namespace yata
 
 				case InfoInputSpells.ImpactScript:
 					cellit_Input.Text = "Select script ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 
 				case InfoInputSpells.IconResRef:
@@ -836,17 +840,89 @@ namespace yata
 					string label = Path.GetFileNameWithoutExtension(ofd.FileName);
 
 					if (@base)
-					for (int i = 0; i != label.Length; ++i)
-					if (Char.IsDigit(label[i]))
 					{
-						label = label.Substring(0, i);
-						break;
+						for (int i = 0; i != label.Length; ++i)
+						{
+							if (Char.IsDigit(label[i]))
+							{
+								label = label.Substring(0, i);
+								break;
+							}
+						}
 					}
 
 					if (label != _sel.text)
 					{
 						YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary
 						Table.ChangeCellText(_sel, label); // does not do a text-check
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"><c><see cref="cellit_Input_zip"/></c></param>
+		/// <param name="e"></param>
+		void cellclick_InfoInput_zip(object sender, EventArgs e)
+		{
+			switch (Table.Info)
+			{
+				case YataGrid.InfoType.INFO_SPELL:
+					switch (_sel.x)
+					{
+						case InfoInputSpells.ImpactScript:
+							SelectZippedFileLabel();
+							break;
+					}
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Invokes an <c>OpenFileDialog</c> for the user to insert a zipped
+		/// file-label into the <c><see cref="Cell.text">Cell.text</see></c> of
+		/// <c><see cref="_sel">_sel</see></c>.
+		/// </summary>
+		/// <remarks>This is waranteed only for the Zipfiles in the NwN2 /Data
+		/// folder.</remarks>
+		void SelectZippedFileLabel(bool @base = false)
+		{
+			using (var ofd = new OpenFileDialog())
+			{
+				ofd.Title  = " Open Data/zip";
+				ofd.Filter = Yata.GetFileFilter("zip");
+
+				ofd.FileName = "*.zip";
+				ofd.AutoUpgradeEnabled = false;
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+				{
+					using (var dzld = new DataZipListDialog(this, ofd.FileName))
+					{
+						if (dzld.ShowDialog() == DialogResult.OK)
+						{
+							string label = dzld.GetSelectedFile();
+
+							if (@base)
+							{
+								for (int i = 0; i != label.Length; ++i)
+								{
+									if (Char.IsDigit(label[i]))
+									{
+										label = label.Substring(0, i);
+										break;
+									}
+								}
+							}
+
+							if (label != _sel.text)
+							{
+								YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary
+								Table.ChangeCellText(_sel, label); // does not do a text-check
+							}
+						}
 					}
 				}
 			}
