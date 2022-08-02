@@ -67,6 +67,9 @@ namespace yata
 
 
 		#region Methods
+		/// <summary>
+		/// 
+		/// </summary>
 		void ReadEntries()
 		{
 //			logfile.Log("ZipFile.ReadEntries()");
@@ -172,6 +175,16 @@ namespace yata
 			return -1;
 		}
 
+
+		/// <summary>
+		/// Gets the array of <c><see cref="ZipEntry">ZipEntries</see></c> in
+		/// this <c>ZipFile</c>.
+		/// </summary>
+		/// <returns></returns>
+		internal ZipEntry[] GetEntries()
+		{
+			return _entries;
+		}
 
 		/// <summary>
 		/// Searches for a <c><see cref="ZipEntry"/></c> in this archive with
