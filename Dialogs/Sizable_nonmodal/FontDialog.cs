@@ -74,7 +74,7 @@ namespace yata
 		/// </summary>
 		int _tid;
 
-		Timer _t1 = new Timer();
+		readonly Timer _t1 = new Timer();
 
 		/// <summary>
 		/// <c>true</c> if the currently chosen font's Regular <c>FontStyle</c>
