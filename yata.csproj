@@ -101,6 +101,10 @@
       <DependentUpon>Infobox.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Infobox_enum.cs" />
+    <Compile Include="Dialogs\Sizable\DataZipListDialog.cs" />
+    <Compile Include="Dialogs\Sizable\DataZipListDialog.Designer.cs">
+      <DependentUpon>DataZipListDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
@@ -272,6 +276,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Infobox.resx">
       <DependentUpon>Infobox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Sizable\DataZipListDialog.resx">
+      <DependentUpon>DataZipListDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
