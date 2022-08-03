@@ -38,10 +38,11 @@ namespace yata
 			// 
 			this.tb_Filter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tb_Filter.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tb_Filter.Location = new System.Drawing.Point(46, 0);
 			this.tb_Filter.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Filter.Name = "tb_Filter";
-			this.tb_Filter.Size = new System.Drawing.Size(246, 20);
+			this.tb_Filter.Size = new System.Drawing.Size(246, 22);
 			this.tb_Filter.TabIndex = 1;
 			this.tb_Filter.WordWrap = false;
 			this.tb_Filter.TextChanged += new System.EventHandler(this.textchanged_filter);
@@ -52,8 +53,10 @@ namespace yata
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.lb_List.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.lb_List.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lb_List.FormattingEnabled = true;
 			this.lb_List.IntegralHeight = false;
+			this.lb_List.ItemHeight = 14;
 			this.lb_List.Location = new System.Drawing.Point(0, 20);
 			this.lb_List.Margin = new System.Windows.Forms.Padding(0);
 			this.lb_List.Name = "lb_List";
@@ -72,7 +75,7 @@ namespace yata
 			this.bu_Load.TabIndex = 3;
 			this.bu_Load.Text = "load ...";
 			this.bu_Load.UseVisualStyleBackColor = true;
-			this.bu_Load.Click += new System.EventHandler(this.click_Open);
+			this.bu_Load.Click += new System.EventHandler(this.click_Load);
 			// 
 			// bu_Accept
 			// 

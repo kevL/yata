@@ -12,7 +12,7 @@ namespace yata
 	{
 		#region Fields (static)
 		const string TitlePrefi = " yata - ";
-		const string TitleDeflt = "Data/zip list";
+//		const string TitleDeflt = "Data/zip list";
 
 		static string _filter = String.Empty;
 
@@ -24,12 +24,18 @@ namespace yata
 
 
 		#region Fields
+		/// <summary>
+		/// File+extension of the currently opened Zipfile.
+		/// </summary>
 		string _zipfe;
 
+		/// <summary>
+		/// The cache of all file-labels in the currently opened Zipfile.
+		/// </summary>
 		readonly List<string> _filelist = new List<string>();
 
 		/// <summary>
-		/// Tracks the top-id in the font-list.
+		/// Tracks the top-id in the file-list.
 		/// </summary>
 		int _tid = -1;
 
@@ -62,6 +68,7 @@ namespace yata
 			// cf. Settings.SetFonts() ->
 			if (Settings._fontf != null)
 			{
+				lb_List.Font.Dispose();
 				lb_List.Font = Settings._fontf;
 			}
 			lb_List.BackColor = Colors.TextboxBackground;
@@ -196,7 +203,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Load"/></c></param>
 		/// <param name="e"></param>
-		void click_Open(object sender, EventArgs e)
+		void click_Load(object sender, EventArgs e)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
@@ -205,6 +212,7 @@ namespace yata
 
 				ofd.FileName = _zipfe;
 				ofd.AutoUpgradeEnabled = false;
+
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
