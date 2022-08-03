@@ -64,8 +64,7 @@ namespace yata
 		/// <remarks>Do not use <c>KeyDown</c> because the event will repeat
 		/// even if told to suppress itself here and
 		/// <c><see cref="CodePageDialog"/></c> would then close also.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Requires <c>KeyPreview</c> <c>true</c>.</remarks>
 		protected override void OnKeyUp(KeyEventArgs e)
 		{
