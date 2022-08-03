@@ -822,18 +822,26 @@ namespace yata
 
 				ofd.AutoUpgradeEnabled = false;
 
+				string dir = Directory.GetCurrentDirectory();
+				if (dir == Application.StartupPath) // cf. Yata.fileclick_Open() ->
+				{
+					// use the directory of the filetype stored in the Registry
+					// ... if it exists.
+					dir = String.Empty;
+				}
+
 				if (_sel.text == gs.Stars)
 				{
-					ofd.FileName = "*" + @default;
+					ofd.FileName = Path.Combine(dir, "*" + @default);
 				}
 				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
 				{
-					ofd.FileName = _sel.text + @default;
 //					if (@base) ofd.FileName = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
 //					else       ofd.FileName = _sel.text + @default;
+					ofd.FileName = Path.Combine(dir, _sel.text + @default);
 				}
 				else
-					ofd.FileName = _sel.text;
+					ofd.FileName = Path.Combine(dir, _sel.text);
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
@@ -861,7 +869,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles a singlecell-click for the user to select a file-label
+		/// that's in a NwN2 Data/zip file.
 		/// </summary>
 		/// <param name="sender"><c><see cref="cellit_Input_zip"/></c></param>
 		/// <param name="e"></param>
@@ -873,7 +882,7 @@ namespace yata
 					switch (_sel.x)
 					{
 						case InfoInputSpells.ImpactScript:
-							SelectZippedFileLabel();
+							SelectFile();
 							break;
 					}
 					break;
@@ -887,15 +896,26 @@ namespace yata
 		/// </summary>
 		/// <remarks>This is waranteed only for the Zipfiles in the NwN2 /Data
 		/// folder.</remarks>
-		void SelectZippedFileLabel(bool @base = false)
+		void SelectFile(bool @base = false)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
+				if (Directory.Exists(Settings._pathzipdata))
+				{
+					ofd.RestoreDirectory = true;
+
+//					ofd.InitialDirectory = Settings._pathzipdata;					// <- does not always work.
+					ofd.FileName = Path.Combine(Settings._pathzipdata, "*.zip");	// -> but that forces it to.
+				}
+				else
+					ofd.FileName = "*.zip";
+
+
 				ofd.Title  = " Open Data/zip";
 				ofd.Filter = Yata.GetFileFilter("zip");
 
-				ofd.FileName = "*.zip";
 				ofd.AutoUpgradeEnabled = false;
+
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
