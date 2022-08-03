@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
+using System.Windows.Forms;
 
 
 namespace yata
@@ -24,12 +25,12 @@ namespace yata
 			InitializeComponent();
 			Initialize(METRIC_FUL);
 
-			string head = "The 2da file appears to have ANSI encoding."
+			string head = "The 2da file appears to have Extended ASCII encoding."
 						+ " Please enter the codepage of its text.";
 			if (enc == null)
 			{
 				head += Environment.NewLine + Environment.NewLine
-					  + "The #codepage in Settings.Cfg is invalid.";
+					  + "The codepage specified in Settings.Cfg is invalid.";
 
 				enc = Encoding.GetEncoding(0);
 			}
@@ -47,6 +48,23 @@ namespace yata
 		// replaced by � ensure that your 2da files are encoded in UTF-8 or
 		// ASCII before opening them in Yata."
 		#endregion cTor
+
+
+		#region Handlers (override)
+		/// <summary>
+		/// Closes the <c><see cref="CodePageList"/></c>
+		/// <c><see cref="_cpList"/></c> when this <c>CodePageDialog</c> closes.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>reasons ...</remarks>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			if (_cpList != null)
+				_cpList.Close();
+
+			base.OnFormClosing(e);
+		}
+		#endregion Handlers (override)
 
 
 		#region Handlers
@@ -92,7 +110,7 @@ namespace yata
 				else
 				{
 					la_CodepageInfo.ForeColor = Colors.TextReadonly;
-					la_CodepageInfo.Text = "Codepage invalid.";
+					la_CodepageInfo.Text = "invalid Codepage";
 				}
 			}
 			bu_Accept.Enabled = (enc != null);
@@ -139,6 +157,8 @@ namespace yata
 		{
 			if (_cpList == null)
 				_cpList = new CodePageList(this);
+			else if (_cpList.WindowState == FormWindowState.Minimized)
+				_cpList.WindowState = FormWindowState.Normal;
 			else
 				_cpList.Close();
 		}
