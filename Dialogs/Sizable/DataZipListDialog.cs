@@ -90,11 +90,7 @@ namespace yata
 			}
 
 			_zipfe = Path.GetFileName(pfe);
-
-//			if (_filelist.Count != 0) // TODO: is not robust - Zip could have no entries eg, Music_X1.zip
 			Text = TitlePrefi + _zipfe;
-//			else
-//				Text = TitlePrefi + TitleDeflt;
 
 			tb_Filter.Text = _filter;
 
@@ -117,8 +113,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Overrides the <c>Resize</c> handler. Restores
-		/// <c><see cref="_tid"/></c>.
+		/// Overrides the <c>Resize</c> handler. Restores <c>List.TopIndex</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
@@ -239,11 +234,7 @@ namespace yata
 					}
 
 					_zipfe = Path.GetFileName(ofd.FileName);
-
-//					if (_filelist.Count != 0) // TODO: is not robust - Zip could have no entries eg, Music_X1.zip
 					Text = TitlePrefi + _zipfe;
-//					else
-//						Text = TitlePrefi + TitleDeflt;
 
 					_tid = -1;
 					bu_Accept.Enabled = false;
