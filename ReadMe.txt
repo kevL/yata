@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 July 29
+2022 August 3
 kevL's
 ver 5.2.0.0
 
@@ -549,7 +549,9 @@ pathall=     etc. (the first pathall has lowest priority and any info found will
 pathzipdata= a path without quotes to the stock NwN2 Data installation directory
              to grope for 2da info for Crafting.2da, Spells.2da, Feat.2da,
              Classes.2da, or BaseItems.2da (see Appendix E: how to use Info
-             paths)
+             paths) Note that this path will also be used as the default
+             Select Data/zip file directory when a cell's InfoInput context
+             allows input from the NwN2 Data/zip resources
 recent=      (integer) a count of recently opened file-paths to store. If left
              blank or a value less than 1 is specified, recently opened files
              will not be tracked, while 16 is the hardcoded upper limit. SETTING
@@ -557,7 +559,7 @@ recent=      (integer) a count of recently opened file-paths to store. If left
              Recent.Cfg TO ITS APPLICATION DIRECTORY. Recent.Cfg stores
              filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
              variety of reasons that I really don't want to be arshed with -
-             hence the option so you can decide if it works on your OS.
+             hence the option so you can decide if it works on your OS
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
