@@ -598,8 +598,7 @@ namespace yata
 		/// <item>the first selected <c>Cell</c> if multiple cells are currently
 		/// selected</item>
 		/// </list>
-		/// 
-		/// 
+		/// <br/><br/>
 		/// No change if only one <c>Cell</c> is currently selected.
 		/// </summary>
 		/// <remarks>Called at the form-level by
@@ -2170,8 +2169,7 @@ namespace yata
 		/// <remarks>Frozen cells will be selected but they don't respect
 		/// <c><see cref="YataGrid.EnsureDisplayed()">YataGrid.EnsureDisplayed()</see></c>.
 		/// They get no respect ...
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Do not focus <c><see cref="YataGrid"/></c> if <c>[Ctrl]</c>
 		/// is depressed.</remarks>
 		internal void GotoDiff()

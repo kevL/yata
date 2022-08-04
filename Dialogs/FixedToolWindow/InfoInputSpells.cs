@@ -14,8 +14,7 @@ namespace yata
 	/// can load as a <c>ComboBox</c> with a list of unique choices. The return
 	/// to Yata can be a <c>string</c>, an <c>int</c>, or a hexadecimal
 	/// <c>int</c>.
-	/// 
-	/// 
+	/// <br/><br/>
 	/// Two <c><see cref="Yata"/></c> variables shall be initialized: either
 	/// <c><see cref="Yata.int0"/></c> and <c><see cref="Yata.int1"/></c> or
 	/// <c><see cref="Yata.str0"/></c> and <c><see cref="Yata.str1"/></c>
@@ -26,8 +25,7 @@ namespace yata
 	/// <c>Yata</c> does anything with a return: (1) the user must click the
 	/// Accept button (2) the return value must be different than the value that
 	/// was passed into this dialog.
-	/// 
-	/// 
+	/// <br/><br/>
 	/// If a value is passed in from <c>Yata</c> that this dialog does not
 	/// recognize as valid (ie. the value is not listed as any of the choices
 	/// that user can select) then default values shall be assigned to the
@@ -36,11 +34,9 @@ namespace yata
 	/// considered invalid, for which <c>str1</c> will be initialzed to
 	/// <c>****</c>; if not the user needs to choose a different string-value to
 	/// return or else <c>Yata</c> won't bother with it.
-	/// 
-	/// 
-	/// Integer returns, however, are trickier. Very tricky ...
-	/// 
-	/// 
+	/// <br/><br/>
+	/// Integer returns however are trickier. Very tricky ...
+	/// <br/><br/>
 	/// The value displayed at the top of a checkbox-configuration shall be the
 	/// value that will be returned to <c>Yata</c> iff user clicks the Accept
 	/// button. A <c>ComboBox</c> configuration displays the value that will be
