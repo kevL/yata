@@ -1623,7 +1623,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Selects the next/previous <c><see cref="Cell"/></c> this has its
+		/// Selects the next/previous <c><see cref="Cell"/></c> that has its
 		/// <c><see cref="Cell.loadchanged">Cell.loadchanged</see></c> flag set.
 		/// </summary>
 		/// <param name="forward"><c>true</c> to perform forward search</param>
