@@ -31,7 +31,7 @@ namespace yata
 			this.la_Filter.Name = "la_Filter";
 			this.la_Filter.Size = new System.Drawing.Size(46, 20);
 			this.la_Filter.TabIndex = 0;
-			this.la_Filter.Text = "filter";
+			this.la_Filter.Text = "filtr";
 			this.la_Filter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// tb_Filter
@@ -42,7 +42,7 @@ namespace yata
 			this.tb_Filter.Location = new System.Drawing.Point(46, 0);
 			this.tb_Filter.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Filter.Name = "tb_Filter";
-			this.tb_Filter.Size = new System.Drawing.Size(246, 22);
+			this.tb_Filter.Size = new System.Drawing.Size(216, 22);
 			this.tb_Filter.TabIndex = 1;
 			this.tb_Filter.WordWrap = false;
 			this.tb_Filter.TextChanged += new System.EventHandler(this.textchanged_filter);
@@ -60,7 +60,7 @@ namespace yata
 			this.lb_List.Location = new System.Drawing.Point(0, 20);
 			this.lb_List.Margin = new System.Windows.Forms.Padding(0);
 			this.lb_List.Name = "lb_List";
-			this.lb_List.Size = new System.Drawing.Size(292, 226);
+			this.lb_List.Size = new System.Drawing.Size(262, 361);
 			this.lb_List.TabIndex = 2;
 			this.lb_List.SelectedIndexChanged += new System.EventHandler(this.selectedindexchanged_list);
 			this.lb_List.DoubleClick += new System.EventHandler(this.doubleclick_list);
@@ -68,7 +68,7 @@ namespace yata
 			// bu_Load
 			// 
 			this.bu_Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bu_Load.Location = new System.Drawing.Point(3, 249);
+			this.bu_Load.Location = new System.Drawing.Point(3, 384);
 			this.bu_Load.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Load.Name = "bu_Load";
 			this.bu_Load.Size = new System.Drawing.Size(75, 23);
@@ -82,7 +82,7 @@ namespace yata
 			this.bu_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.bu_Accept.Enabled = false;
-			this.bu_Accept.Location = new System.Drawing.Point(134, 249);
+			this.bu_Accept.Location = new System.Drawing.Point(104, 384);
 			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Accept.Name = "bu_Accept";
 			this.bu_Accept.Size = new System.Drawing.Size(75, 23);
@@ -94,7 +94,7 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(214, 249);
+			this.bu_Cancel.Location = new System.Drawing.Point(184, 384);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(75, 23);
@@ -106,7 +106,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Accept;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(292, 274);
+			this.ClientSize = new System.Drawing.Size(262, 409);
 			this.Controls.Add(this.la_Filter);
 			this.Controls.Add(this.tb_Filter);
 			this.Controls.Add(this.lb_List);
