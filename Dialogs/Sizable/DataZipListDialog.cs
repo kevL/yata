@@ -12,7 +12,6 @@ namespace yata
 	{
 		#region Fields (static)
 		const string TitlePrefi = " yata - ";
-//		const string TitleDeflt = "Data/zip list";
 
 		static string _filter = String.Empty;
 
