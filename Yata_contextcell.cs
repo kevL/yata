@@ -278,7 +278,9 @@ namespace yata
 				case InfoInputClasses.PreReqTable:
 				case InfoInputClasses.BonusSpellcasterLevelTable:
 				case InfoInputClasses.BonusCasterFeatByClassMap:
-					cellit_Input.Text = "Select 2da ...";
+					cellit_Input    .Text = "Select 2da ...";
+					cellit_Input_zip.Text = "Select Data/zip 2da ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 
 				case InfoInputClasses.CharGen_Chest:
@@ -286,7 +288,9 @@ namespace yata
 				case InfoInputClasses.CharGen_Hands:
 				case InfoInputClasses.CharGen_Cloak:
 				case InfoInputClasses.CharGen_Head:
-					cellit_Input.Text = "Select resref ...";
+					cellit_Input    .Text = "Select resref ...";
+					cellit_Input_zip.Text = "Select Data/zip resref ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 			}
 			return false;
@@ -914,6 +918,32 @@ namespace yata
 						case InfoInputSpells.CastSound:
 						case InfoInputSpells.ProjSound:
 							SelectFile(" Select Data/zip sound archive");
+							break;
+					}
+					break;
+
+				case YataGrid.InfoType.INFO_CLASS:
+					switch (_sel.x)
+					{
+						case InfoInputClasses.AttackBonusTable:
+						case InfoInputClasses.FeatsTable:
+						case InfoInputClasses.SavingThrowTable:
+						case InfoInputClasses.SkillsTable:
+						case InfoInputClasses.BonusFeatsTable:
+						case InfoInputClasses.SpellGainTable:
+						case InfoInputClasses.SpellKnownTable:
+						case InfoInputClasses.PreReqTable:
+						case InfoInputClasses.BonusSpellcasterLevelTable:
+						case InfoInputClasses.BonusCasterFeatByClassMap:
+							SelectFile(" Select Data/zip 2da archive");
+							break;
+
+						case InfoInputClasses.CharGen_Chest:
+						case InfoInputClasses.CharGen_Feet:
+						case InfoInputClasses.CharGen_Hands:
+						case InfoInputClasses.CharGen_Cloak:
+						case InfoInputClasses.CharGen_Head:
+							SelectFile(" Select Data/zip resref archive");
 							break;
 					}
 					break;
