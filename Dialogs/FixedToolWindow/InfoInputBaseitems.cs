@@ -6,6 +6,11 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// An <c><see cref="InfoInputDialog"/></c> to input specific data for
+	/// <c>BaseItems.2da</c>.
+	/// </summary>
+	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
 	sealed partial class InfoInputBaseitems
 		: InfoInputDialog
 	{

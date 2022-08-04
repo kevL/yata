@@ -235,7 +235,7 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputFeat.Icon_:
+				case InfoInputFeat.icon:
 					cellit_Input.Text = "Select icon ...";
 					return true;
 			}
@@ -263,7 +263,7 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputClasses.Icon_:
+				case InfoInputClasses.icon:
 				case InfoInputClasses.BorderedIcon:
 					cellit_Input.Text = "Select icon ...";
 					return true;
@@ -686,7 +686,7 @@ namespace yata
 							break;
 
 						// File input ->
-						case InfoInputFeat.Icon_:
+						case InfoInputFeat.icon:
 							SelectFile(" Select icon", Yata.GetFileFilter("tga"), ".tga");
 							break;
 					}
@@ -736,7 +736,7 @@ namespace yata
 							break;
 
 						// File input ->
-						case InfoInputClasses.Icon_:
+						case InfoInputClasses.icon:
 						case InfoInputClasses.BorderedIcon:
 							SelectFile(" Select icon", Yata.GetFileFilter("tga"), ".tga");
 							break;

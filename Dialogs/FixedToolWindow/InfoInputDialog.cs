@@ -5,6 +5,9 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// An inherited class for <c>InfoInput*</c> dialogs.
+	/// </summary>
 	class InfoInputDialog
 		: Form
 	{

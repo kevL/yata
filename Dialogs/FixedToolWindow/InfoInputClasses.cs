@@ -7,16 +7,16 @@ using System.Windows.Forms;
 namespace yata
 {
 	/// <summary>
-	/// 
+	/// An <c><see cref="InfoInputDialog"/></c> to input specific data for
+	/// <c>Classes.2da</c>.
 	/// </summary>
 	/// <seealso cref="InfoInputSpells"><c>InfoInputSpells</c></seealso>
-	/// <seealso cref="InfoInputFeat"><c>InfoInputFeat</c></seealso>
 	sealed partial class InfoInputClasses
 		: InfoInputDialog
 	{
 		#region Fields (static)
 		// cols in Classes.2da ->
-		internal const int Icon_                      =  6; // ofd only (OpenFileDialog)
+		internal const int icon                       =  6; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
 		internal const int BorderedIcon               =  7; // ofd only
 		internal const int AttackBonusTable           =  9; // ofd only
 		internal const int FeatsTable                 = 10; // ofd only
