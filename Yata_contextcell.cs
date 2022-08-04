@@ -132,13 +132,14 @@ namespace yata
 						return true;
 					break;
 
-				case InfoInputSpells.ImpactScript:
-					cellit_Input.Text = "Select script ...";
-					cellit_Input_zip.Visible = true;
-					return true;
-
 				case InfoInputSpells.IconResRef:
 					cellit_Input.Text = "Select icon ...";
+					return true;
+
+				case InfoInputSpells.ImpactScript:
+					cellit_Input    .Text = "Select script ...";
+					cellit_Input_zip.Text = "Select Data/zip script ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 
 				case InfoInputSpells.ConjVisual0:
@@ -153,14 +154,19 @@ namespace yata
 				case InfoInputSpells.LowProjSEF:
 				case InfoInputSpells.ImpactSEF:
 				case InfoInputSpells.LowImpactSEF:
-					cellit_Input.Text = "Select specialeffect ...";
+					cellit_Input    .Text = "Select specialeffect ...";
+					cellit_Input_zip.Text = "Select Data/zip specialeffect ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 
 				case InfoInputSpells.ConjSoundVFX:
 				case InfoInputSpells.ConjSoundMale:
 				case InfoInputSpells.ConjSoundFemale:
 				case InfoInputSpells.CastSound:
-					cellit_Input.Text = "Select sound ...";
+				case InfoInputSpells.ProjSound:
+					cellit_Input    .Text = "Select sound ...";
+					cellit_Input_zip.Text = "Select Data/zip sound ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 			}
 			return false;
@@ -652,6 +658,7 @@ namespace yata
 						case InfoInputSpells.ConjSoundMale:
 						case InfoInputSpells.ConjSoundFemale:
 						case InfoInputSpells.CastSound:
+						case InfoInputSpells.ProjSound:
 							SelectFile(" Select sound", Yata.GetFileFilter("wav"), ".wav");
 							break;
 					}
@@ -836,9 +843,10 @@ namespace yata
 				}
 				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
 				{
+					ofd.FileName = Path.Combine(dir, _sel.text + @default);
+
 //					if (@base) ofd.FileName = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
 //					else       ofd.FileName = _sel.text + @default;
-					ofd.FileName = Path.Combine(dir, _sel.text + @default);
 				}
 				else
 					ofd.FileName = Path.Combine(dir, _sel.text);
@@ -882,7 +890,30 @@ namespace yata
 					switch (_sel.x)
 					{
 						case InfoInputSpells.ImpactScript:
-							SelectFile();
+							SelectFile(" Select Data/zip script archive");
+							break;
+
+						case InfoInputSpells.ConjVisual0:
+						case InfoInputSpells.LowConjVisual0:
+						case InfoInputSpells.ConjVisual1:
+						case InfoInputSpells.ConjVisual2:
+						case InfoInputSpells.CastVisual0:
+						case InfoInputSpells.LowCastVisual0:
+						case InfoInputSpells.CastVisual1:
+						case InfoInputSpells.CastVisual2:
+						case InfoInputSpells.ProjSEF:
+						case InfoInputSpells.LowProjSEF:
+						case InfoInputSpells.ImpactSEF:
+						case InfoInputSpells.LowImpactSEF:
+							SelectFile(" Select Data/zip specialeffect archive");
+							break;
+
+						case InfoInputSpells.ConjSoundVFX:
+						case InfoInputSpells.ConjSoundMale:
+						case InfoInputSpells.ConjSoundFemale:
+						case InfoInputSpells.CastSound:
+						case InfoInputSpells.ProjSound:
+							SelectFile(" Select Data/zip sound archive");
 							break;
 					}
 					break;
@@ -896,7 +927,7 @@ namespace yata
 		/// </summary>
 		/// <remarks>This is waranteed only for the Zipfiles in the NwN2 /Data
 		/// folder.</remarks>
-		void SelectFile(bool @base = false)
+		void SelectFile(string title, bool @base = false)
 		{
 			using (var ofd = new OpenFileDialog())
 			{
@@ -911,7 +942,7 @@ namespace yata
 					ofd.FileName = "*.zip";
 
 
-				ofd.Title  = " Open Data/zip";
+				ofd.Title  = title;
 				ofd.Filter = Yata.GetFileFilter("zip");
 
 				ofd.AutoUpgradeEnabled = false;

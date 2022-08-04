@@ -74,6 +74,7 @@ namespace yata
 		internal const int CastSound         = 34; // ofd only
 		internal const int ProjSEF           = 37; // ofd only
 		internal const int LowProjSEF        = 38; // ofd only
+		internal const int ProjSound         = 41; // ofd only
 		internal const int ImpactSEF         = 43; // ofd only
 		internal const int LowImpactSEF      = 44; // ofd only
 		internal const int ImmunityType      = 45;
