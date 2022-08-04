@@ -7,6 +7,10 @@ using System.Windows.Forms;
 
 namespace yata
 {
+	/// <summary>
+	/// A <c><see cref="YataDialog"/></c> that lists file-labels in the stock
+	/// NwN2 /Data Zipfiles and allows the user to select one.
+	/// </summary>
 	sealed partial class DataZipListDialog
 		: YataDialog
 	{
