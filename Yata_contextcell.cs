@@ -52,25 +52,25 @@ namespace yata
 				case YataGrid.InfoType.INFO_SPELL:
 					cellit_Input.Text    = "InfoInput (spells.2da)";
 					cellit_Input.Visible = true;
-					cellit_Input.Enabled = !Table.Readonly && isInfoInputCol_Spells();
+					cellit_Input.Enabled = !Table.Readonly && isInfoInputcol_Spells();
 					break;
 
 				case YataGrid.InfoType.INFO_FEAT:
 					cellit_Input.Text    = "InfoInput (feat.2da)";
 					cellit_Input.Visible = true;
-					cellit_Input.Enabled = !Table.Readonly && isInfoInputCol_Feat();
+					cellit_Input.Enabled = !Table.Readonly && isInfoInputcol_Feat();
 					break;
 
 				case YataGrid.InfoType.INFO_CLASS:
 					cellit_Input.Text    = "InfoInput (classes.2da)";
 					cellit_Input.Visible = true;
-					cellit_Input.Enabled = !Table.Readonly && isInfoInputCol_Classes();
+					cellit_Input.Enabled = !Table.Readonly && isInfoInputcol_Classes();
 					break;
 
 				case YataGrid.InfoType.INFO_ITEM:
 					cellit_Input.Text    = "InfoInput (baseitems.2da)";
 					cellit_Input.Visible = true;
-					cellit_Input.Enabled = !Table.Readonly && isInfoInputCol_Baseitems();
+					cellit_Input.Enabled = !Table.Readonly && isInfoInputcol_Baseitems();
 					break;
 			}
 
@@ -104,7 +104,7 @@ namespace yata
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// <c>Spells.2da</c>.</returns>
-		bool isInfoInputCol_Spells()
+		bool isInfoInputcol_Spells()
 		{
 			switch (_sel.x)
 			{
@@ -178,7 +178,7 @@ namespace yata
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// <c>Feat.2da</c>.</returns>
-		bool isInfoInputCol_Feat()
+		bool isInfoInputcol_Feat()
 		{
 			switch (_sel.x)
 			{
@@ -248,7 +248,7 @@ namespace yata
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// <c>Classes.2da</c>.</returns>
-		bool isInfoInputCol_Classes()
+		bool isInfoInputcol_Classes()
 		{
 			switch (_sel.x)
 			{
@@ -298,7 +298,7 @@ namespace yata
 		/// </summary>
 		/// <returns><c>true</c> if the InfoInput operation will show for
 		/// <c>BaseItems.2da</c>.</returns>
-		bool isInfoInputCol_Baseitems()
+		bool isInfoInputcol_Baseitems()
 		{
 			switch (_sel.x)
 			{
