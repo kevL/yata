@@ -208,8 +208,9 @@ namespace yata
 				ofd.Title  = " Open Data/zip";
 				ofd.Filter = Yata.GetFileFilter("zip");
 
-				ofd.FileName = _zipfe;
 				ofd.AutoUpgradeEnabled = false;
+
+				ofd.FileName = _zipfe; // no need for GetCurrentDirectory() since CurrentDirectory has been set
 
 
 				if (ofd.ShowDialog() == DialogResult.OK)

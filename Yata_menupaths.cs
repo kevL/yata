@@ -18,6 +18,29 @@ namespace yata
 		{
 			return "2da files (*." + ext + ")|*." + ext + "|All files (*.*)|*.*";
 		}
+
+		/// <summary>
+		/// Gets initial directory for <c>OpenFileDialog</c>.
+		/// </summary>
+		/// <returns>few really know ...</returns>
+		/// <remarks>When the app starts the CurrentDirectory is set to
+		/// <c>Application.StartupPath</c> by .NET. But invoking an
+		/// <c>OpenFileDialog</c> with that as its <c>InitialDirectory</c> is
+		/// bogus - so if the directory is left blank the dialog finds one of
+		/// the ComDlg32 MRUs in the registry and uses that instead.
+		/// <br/><br/>
+		/// Note that <c>OpenFileDialog.InitialDirectory</c> does not always
+		/// work - so combine the desired path with the desired filename and
+		/// assign it to <c>OpenFileDialog.FileName</c> before calling
+		/// <c>ShowDialog()</c>.</remarks>
+		internal static string GetCurrentDirectory()
+		{
+			string dir = Directory.GetCurrentDirectory();
+			if (dir != Application.StartupPath)
+				return dir;
+
+			return String.Empty;
+		}
 		#endregion Methods (static)
 
 

@@ -90,9 +90,6 @@ namespace yata
 		internal List<string> _copyc = new List<string>();
 
 
-		string _preset = String.Empty;
-		string _lastSaveasDirectory;
-
 		internal int _startCr, _lengthCr;
 		internal CrFillType _fillCr;
 
@@ -230,6 +227,8 @@ namespace yata
 		/// </summary>
 		internal Yata()
 		{
+//			Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+
 			that = this;
 
 			// init 'Tabs' ->

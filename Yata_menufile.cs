@@ -8,6 +8,9 @@ namespace yata
 	sealed partial class Yata
 	{
 		#region Fields
+		string _preset;
+		string _lastSaveasDirectory;
+
 		/// <summary>
 		/// A flag that prevents a Readonly warning/error from showing twice.
 		/// </summary>
@@ -29,8 +32,6 @@ namespace yata
 
 			if (Settings._dirpreset.Count != 0) // directory presets ->
 			{
-				_preset = String.Empty;
-
 				ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
 				for (int i = presets.Count - 1; i != -1; --i)
 					presets[i].Dispose();
@@ -129,7 +130,6 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Open"/></c></item>
 		/// <item><c><see cref="it_OpenFolder"/></c> subits</item>
-		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		/// <remarks>Called by
@@ -143,29 +143,18 @@ namespace yata
 		{
 			using (var ofd = new OpenFileDialog())
 			{
-				if (sender == it_Open)
-				{
-					string dir = Directory.GetCurrentDirectory();
-					if (dir != Application.StartupPath)
-					{
-//						ofd.InitialDirectory = Directory.GetCurrentDirectory();
-						ofd.FileName = Path.Combine(dir, "*.2da");
-					}
-					// else use the directory of the filetype stored in the Registry
-					// ... if it exists.
-				}
-				else // invoked by fileclick_OpenFolder()
+				if (sender != it_Open) // invoked by fileclick_OpenFolder() ->
 				{
 					ofd.RestoreDirectory = true;
-
-//					ofd.InitialDirectory = _preset;					// <- does not always work.
-					ofd.FileName = Path.Combine(_preset, "*.2da");	// -> but that forces it to.
+					ofd.FileName = Path.Combine(_preset, "*.2da");
 				}
+				else
+					ofd.FileName = Path.Combine(GetCurrentDirectory(), "*.2da");
 
 				ofd.Title  = "Select a 2da file";
 				ofd.Filter = GetFileFilter("2da");
 
-				ofd.ShowReadOnly = // <- that forces (AutoUpgradeEnabled=false)
+				ofd.ShowReadOnly = // <- forces (AutoUpgradeEnabled=false)
 				ofd.Multiselect  = true;
 
 

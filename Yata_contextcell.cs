@@ -837,27 +837,21 @@ namespace yata
 
 				ofd.AutoUpgradeEnabled = false;
 
-				string dir = Directory.GetCurrentDirectory();
-				if (dir == Application.StartupPath) // cf. Yata.fileclick_Open() ->
-				{
-					// use the directory of the filetype stored in the Registry
-					// ... if it exists.
-					dir = String.Empty;
-				}
-
+				string fe;
 				if (_sel.text == gs.Stars)
 				{
-					ofd.FileName = Path.Combine(dir, "*" + @default);
+					fe = "*" + @default;
 				}
 				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
 				{
-					ofd.FileName = Path.Combine(dir, _sel.text + @default);
-
-//					if (@base) ofd.FileName = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
-//					else       ofd.FileName = _sel.text + @default;
+//					fe = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
+					fe = _sel.text + @default;
 				}
 				else
-					ofd.FileName = Path.Combine(dir, _sel.text);
+					fe = _sel.text;
+
+				ofd.FileName = Path.Combine(GetCurrentDirectory(), fe);
+
 
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
@@ -976,21 +970,21 @@ namespace yata
 		{
 			using (var ofd = new OpenFileDialog())
 			{
-				if (Directory.Exists(Settings._pathzipdata))
-				{
-					ofd.RestoreDirectory = true;
-
-//					ofd.InitialDirectory = Settings._pathzipdata;					// <- does not always work.
-					ofd.FileName = Path.Combine(Settings._pathzipdata, "*.zip");	// -> but that forces it to.
-				}
-				else
-					ofd.FileName = "*.zip";
-
-
 				ofd.Title  = title;
 				ofd.Filter = Yata.GetFileFilter("zip");
 
 				ofd.AutoUpgradeEnabled = false;
+
+				string dir;
+				if (Directory.Exists(Settings._pathzipdata))
+				{
+					dir = Settings._pathzipdata;
+					ofd.RestoreDirectory = true;
+				}
+				else
+					dir = GetCurrentDirectory();
+
+				ofd.FileName = Path.Combine(dir, "*.zip");
 
 
 				if (ofd.ShowDialog() == DialogResult.OK)
