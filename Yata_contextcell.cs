@@ -275,6 +275,7 @@ namespace yata
 				case InfoInputClasses.BonusFeatsTable:
 				case InfoInputClasses.SpellGainTable:
 				case InfoInputClasses.SpellKnownTable:
+				case InfoInputClasses.SpontaneousConversionTable:
 				case InfoInputClasses.PreReqTable:
 				case InfoInputClasses.BonusSpellcasterLevelTable:
 				case InfoInputClasses.BonusCasterFeatByClassMap:
@@ -343,7 +344,9 @@ namespace yata
 
 				case InfoInputBaseitems.ItemClass:
 				case InfoInputBaseitems.DefaultModel:
-					cellit_Input.Text = "Select model ...";
+					cellit_Input    .Text = "Select model ...";
+					cellit_Input_zip.Text = "Select Data/zip model ...";
+					cellit_Input_zip.Visible = true;
 					return true;
 			}
 			return false;
@@ -752,6 +755,7 @@ namespace yata
 						case InfoInputClasses.BonusFeatsTable:
 						case InfoInputClasses.SpellGainTable:
 						case InfoInputClasses.SpellKnownTable:
+						case InfoInputClasses.SpontaneousConversionTable:
 						case InfoInputClasses.PreReqTable:
 						case InfoInputClasses.BonusSpellcasterLevelTable:
 						case InfoInputClasses.BonusCasterFeatByClassMap:
@@ -932,6 +936,7 @@ namespace yata
 						case InfoInputClasses.BonusFeatsTable:
 						case InfoInputClasses.SpellGainTable:
 						case InfoInputClasses.SpellKnownTable:
+						case InfoInputClasses.SpontaneousConversionTable:
 						case InfoInputClasses.PreReqTable:
 						case InfoInputClasses.BonusSpellcasterLevelTable:
 						case InfoInputClasses.BonusCasterFeatByClassMap:
@@ -944,6 +949,16 @@ namespace yata
 						case InfoInputClasses.CharGen_Cloak:
 						case InfoInputClasses.CharGen_Head:
 							SelectFile(" Select Data/zip resref archive");
+							break;
+					}
+					break;
+
+				case YataGrid.InfoType.INFO_ITEM:
+					switch (_sel.x)
+					{
+						case InfoInputBaseitems.ItemClass:
+						case InfoInputBaseitems.DefaultModel:
+							SelectFile(" Select Data/zip model archive", true);
 							break;
 					}
 					break;

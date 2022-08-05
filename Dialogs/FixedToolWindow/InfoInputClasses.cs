@@ -25,6 +25,7 @@ namespace yata
 		internal const int BonusFeatsTable            = 13; // ofd only
 		internal const int SpellGainTable             = 15; // ofd only
 		internal const int SpellKnownTable            = 16; // ofd only
+		internal const int SpontaneousConversionTable = 24; // ofd only
 		internal const int PrimaryAbil                = 40;
 		internal const int SpellAbil                  = 41;
 		internal const int AlignRestrict              = 42;
@@ -226,8 +227,8 @@ namespace yata
 		{
 			Text = "  AlignRstrctType";
 
-			cb_00.Text = "(1)neutral as LawChaos";
-			cb_01.Text = "(2)neutral as GoodEvil)";
+			cb_00.Text = "(1)neutral - LawChaos axis";
+			cb_01.Text = "(2)neutral - GoodEvil axis";
 
 			cb_00.Visible = cb_01.Visible = true;
 		}
