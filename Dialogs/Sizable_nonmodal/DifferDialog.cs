@@ -88,17 +88,26 @@ namespace yata
 		{
 			if (_x == -1)
 			{
-				int fborder = (_f.Width - _f.ClientSize.Width) / 2;
-				Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width + fborder,
-													_f.Top  + 46));
-
 				Screen screen = Screen.FromControl(_f);
-				if      (screen.Bounds.Contains(new Point( loc.X  + Width, loc.Y))) _x =  loc.X;
-				else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y))) _x = _f.Left - Width;
-				else                                                                _x =  loc.X  - Width - 23;
 
-				// NOTE: '_f.Top' does not include Yata's '_bar' but does include its titlebar.
-				_y = loc.Y;
+				if ((_f as Yata).WindowState == FormWindowState.Maximized)
+				{
+					_x = screen.Bounds.Width - Width - 20;
+					_y = 45;
+				}
+				else
+				{
+					int fborder = (_f.Width - _f.ClientSize.Width) / 2;
+					Point loc = PointToScreen(new Point(_f.Left + _f.ClientSize.Width + fborder,
+														_f.Top  + 45));
+					// NOTE: '_f.Top' does not include Yata's '_bar' but does include its titlebar.
+
+					if      (screen.Bounds.Contains(new Point( loc.X  + Width, loc.Y))) _x =  loc.X;
+					else if (screen.Bounds.Contains(new Point(_f.Left - Width, loc.Y))) _x = _f.Left - Width;
+					else                                                                _x =  loc.X  - Width - 20;
+
+					_y = loc.Y;
+				}
 			}
 			Left = _x;
 			Top  = _y;
