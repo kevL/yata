@@ -205,15 +205,15 @@ namespace yata
 		{
 			string dir = Settings._pathzipdata;
 
-			var zips = new List<string>();
-			zips.Add(dir + @"\2DA.zip");
-			zips.Add(dir + @"\2DA_X1.zip");
-			zips.Add(dir + @"\2DA_X2.zip");
+			var zips = new List<string>
+			{
+				dir + @"\2DA.zip",
+				dir + @"\2DA_X1.zip",
+				dir + @"\2DA_X2.zip"
+			};
 
 			foreach (var zip in zips)
 			{
-				//logfile.Log(zip);
-
 				if (File.Exists(zip))
 				{
 					using (var fs = new FileStream(zip, FileMode.Open, FileAccess.Read))
@@ -1263,7 +1263,7 @@ namespace yata
 					ofd.AutoUpgradeEnabled = false;
 
 					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, it_PathTalkC, true);
+						TalkReader.Load(ofd.FileName, it_PathTalkC);
 				}
 			}
 			else

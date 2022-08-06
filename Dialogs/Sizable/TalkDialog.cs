@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 
@@ -114,7 +115,7 @@ namespace yata
 			ClientSize = new Size(w + pad_HORI,
 								  h + pad_VERT);
 
-			enable();
+			EnableButtons();
 
 
 			int widthborder = (Width  - ClientSize.Width) / 2;
@@ -143,13 +144,13 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
-		/// Handles the textchanged event of the strref-box.
+		/// Handles <c>TextChanged</c> for the Strref <c>TextBox</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tb_Strref"/></c></param>
 		/// <param name="e"></param>
 		void textchanged_Strref(object sender, EventArgs e)
 		{
-			if (String.IsNullOrEmpty(tb_Strref.Text))
+			if (tb_Strref.Text.Length == 0)
 			{
 				_eId = _eId_init; // revert to default.
 			}
@@ -168,10 +169,7 @@ namespace yata
 				_eId = result; // This is the setter for the '_eId' val.
 			}
 
-			if (_dict.ContainsKey(_eId))
-				rt_Copyable.Text = _dict[_eId];
-			else
-				rt_Copyable.Text = String.Empty;
+			SetCopyableText();
 		}
 
 		/// <summary>
@@ -194,7 +192,7 @@ namespace yata
 											InfoboxType.Warn,
 											InfoboxButtons.CancelYes))
 				{
-					proceed = ib.ShowDialog(this) == DialogResult.OK;
+					proceed = (ib.ShowDialog(this) == DialogResult.OK);
 				}
 			}
 
@@ -215,53 +213,51 @@ namespace yata
 		/// <param name="e"></param>
 		void click_btnLoad(object sender, EventArgs e)
 		{
-			if (!cb_Custo.Checked)
+			using (var ofd = new OpenFileDialog())
 			{
-				using (var ofd = new OpenFileDialog())
+				ofd.Filter = Yata.GetFileFilter("tlk");
+				ofd.AutoUpgradeEnabled = false;
+
+				string label;
+				if (cb_Custo.Checked)
 				{
-					ofd.Title  = " Select Dialog.Tlk";
-					ofd.Filter = Yata.GetFileFilter("tlk");
-
-					ofd.FileName = "dialog.tlk";
-					ofd.AutoUpgradeEnabled = false;
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkD);
+					ofd.Title = " Select a TalkTable";
+					label     = "*";
 				}
+				else
+				{
+					ofd.Title = " Select Dialog.Tlk";
+					label     = "dialog";
+				}
+				ofd.FileName = Path.Combine(Yata.GetCurrentDirectory(), label + ".tlk");
 
-				lo = TalkReader.loDialo;
-				hi = TalkReader.hiDialo;
+
+				if (ofd.ShowDialog() == DialogResult.OK)
+				{
+					ToolStripMenuItem it;
+					if (cb_Custo.Checked) it = (_f as Yata).it_PathTalkC;
+					else                  it = (_f as Yata).it_PathTalkD;
+
+					TalkReader.Load(ofd.FileName, it);
+				}
 			}
-			else
+
+			if (cb_Custo.Checked)
 			{
-				using (var ofd = new OpenFileDialog())
-				{
-					ofd.Title  = " Select a TalkTable";
-					ofd.Filter = Yata.GetFileFilter("tlk");
-
-					ofd.FileName = "*.tlk";
-					ofd.AutoUpgradeEnabled = false;
-
-					if (ofd.ShowDialog() == DialogResult.OK)
-						TalkReader.Load(ofd.FileName, (_f as Yata).it_PathTalkC, true);
-				}
-
 				lo = TalkReader.loCusto;
 				hi = TalkReader.hiCusto;
 			}
-
-
-			enable();
-
-			if (_dict.ContainsKey(_eId))
-				rt_Copyable.Text = _dict[_eId];
 			else
-				rt_Copyable.Text = String.Empty;
+			{
+				lo = TalkReader.loDialo;
+				hi = TalkReader.hiDialo;
+			}
 
-			if (TalkReader.AltLabel != null)
-				cb_Custo.Text = TalkReader.AltLabel;
-			else
-				cb_Custo.Text = "Custom";
+			if (TalkReader.AltLabel != null) cb_Custo.Text = TalkReader.AltLabel;
+			else                             cb_Custo.Text = "Custom";
+
+			SetCopyableText();
+			EnableButtons();
 		}
 
 
@@ -286,8 +282,7 @@ namespace yata
 		{
 			do
 			{
-				if (_eId <= lo)
-					_eId = hi + 1;
+				if (_eId <= lo) _eId = hi + 1;
 
 				if (_dict.ContainsKey(--_eId))
 				{
@@ -333,23 +328,18 @@ namespace yata
 				if (!cb_Custo.Checked)
 				{
 					_dict = TalkReader.DictDialo;
-					lo = TalkReader.loDialo;
-					hi = TalkReader.hiDialo;
+					lo    = TalkReader.loDialo;
+					hi    = TalkReader.hiDialo;
 				}
 				else
 				{
 					_dict = TalkReader.DictCusto;
-					lo = TalkReader.loCusto;
-					hi = TalkReader.hiCusto;
+					lo    = TalkReader.loCusto;
+					hi    = TalkReader.hiCusto;
 				}
 
-
-				enable();
-
-				if (_dict.ContainsKey(_eId))
-					rt_Copyable.Text = _dict[_eId];
-				else
-					rt_Copyable.Text = String.Empty;
+				SetCopyableText();
+				EnableButtons();
 			}
 		}
 
@@ -411,12 +401,23 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Sets the <c>Text</c> of <c><see cref="rt_Copyable"/></c>.
+		/// </summary>
+		void SetCopyableText()
+		{
+			if (_dict.ContainsKey(_eId))
+				rt_Copyable.Text = _dict[_eId];
+			else
+				rt_Copyable.Text = String.Empty;
+		}
+
+		/// <summary>
 		/// Enables <c><see cref="bu_Forward"/></c> and
 		/// <c><see cref="bu_Backward"/></c> based on whether there are any
 		/// entries in the current TalkTable's <c>Dictionary</c>. Also sets the
 		/// background color.
 		/// </summary>
-		void enable()
+		void EnableButtons()
 		{
 			Color color;
 			if (bu_Backward.Enabled =

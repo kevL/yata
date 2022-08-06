@@ -54,18 +54,19 @@ namespace yata
 		/// </summary>
 		/// <param name="pfeTlk">fullpath of a talktable</param>
 		/// <param name="it">a menuitem to check/uncheck</param>
-		/// <param name="alt">true if loading a custom table</param>
 		/// <remarks>See description of .tlk Format at the bot of this file.</remarks>
-		internal static void Load(string pfeTlk, ToolStripMenuItem it, bool alt = false)
+		internal static void Load(string pfeTlk, ToolStripMenuItem it)
 		{
 			SortedDictionary<int, string> dict;
 
-			if (!alt) dict = DictDialo;
-			else
+			bool alt = (it == Yata.that.it_PathTalkC);
+			if (alt)
 			{
 				dict = DictCusto;
 				AltLabel = null;
 			}
+			else
+				dict = DictDialo;
 
 			dict.Clear();
 
@@ -178,8 +179,8 @@ namespace yata
 							if (key < lo) lo = key;
 						}
 
-						if (!alt) { loDialo = lo; hiDialo = hi; }
-						else      { loCusto = lo; hiCusto = hi; }
+						if (alt) { loCusto = lo; hiCusto = hi; }
+						else     { loDialo = lo; hiDialo = hi; }
 
 						it.Checked = true;
 						return;

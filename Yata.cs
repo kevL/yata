@@ -383,7 +383,7 @@ namespace yata
 
 			TalkReader.LoadTalkingHeads(Strrefheads);
 			TalkReader.Load(Settings._dialog,    it_PathTalkD);
-			TalkReader.Load(Settings._dialogalt, it_PathTalkC, true);
+			TalkReader.Load(Settings._dialogalt, it_PathTalkC);
 
 			if (Settings._maximized)
 				WindowState = FormWindowState.Maximized;
