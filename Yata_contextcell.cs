@@ -844,7 +844,8 @@ namespace yata
 				}
 				else if (!_sel.text.EndsWith(@default, StringComparison.InvariantCultureIgnoreCase))
 				{
-//					fe = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
+//					if (@base) fe = _sel.text + "*" + @default; // no good. An asterisk here masks out all .MDB files in the dialog.
+//					else
 					fe = _sel.text + @default;
 				}
 				else
@@ -979,8 +980,8 @@ namespace yata
 				if (Directory.Exists(Settings._pathzipdata))
 				{
 					dir = Settings._pathzipdata;
-					ofd.RestoreDirectory = true;
-				}
+					ofd.RestoreDirectory = true;	// while this restores the app's CurrentDirectory it does
+				}									// not restore the directory in the registry ComDlg32 MRU - oh well
 				else
 					dir = GetCurrentDirectory();
 
