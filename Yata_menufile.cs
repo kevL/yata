@@ -151,7 +151,7 @@ namespace yata
 				else
 					ofd.FileName = Path.Combine(GetCurrentDirectory(), "*.2da");
 
-				ofd.Title  = "Select a 2da file";
+				ofd.Title  = " Select a 2da file";
 				ofd.Filter = GetFileFilter("2da");
 
 				ofd.ShowReadOnly = // <- forces (AutoUpgradeEnabled=false)
