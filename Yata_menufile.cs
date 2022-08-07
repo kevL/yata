@@ -444,8 +444,11 @@ namespace yata
 		{
 			using (var sfd = new SaveFileDialog())
 			{
-				sfd.Title    = "Save as ...";
-				sfd.Filter   = GetFileFilter("2da");
+				sfd.Title  = " Save as ...";
+				sfd.Filter = GetFileFilter("2da");
+
+				sfd.AutoUpgradeEnabled = false;
+
 				sfd.FileName = Path.GetFileName(Table.Fullpath);
 
 				if (Directory.Exists(_lastSaveasDirectory))
