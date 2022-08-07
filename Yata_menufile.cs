@@ -449,18 +449,17 @@ namespace yata
 
 				sfd.AutoUpgradeEnabled = false;
 
-				sfd.FileName = Path.GetFileName(Table.Fullpath);
-
+				string dir;
 				if (Directory.Exists(_lastSaveasDirectory))
 				{
-					sfd.InitialDirectory = _lastSaveasDirectory;
+					dir = _lastSaveasDirectory;
 				}
-				else if (Table.Fullpath.Length != 0)
+				else if (Table.Fullpath.Length == 0
+					|| !Directory.Exists(dir = Path.GetDirectoryName(Table.Fullpath)))
 				{
-					string dir = Path.GetDirectoryName(Table.Fullpath);
-					if (Directory.Exists(dir))
-						sfd.InitialDirectory = dir;
+					dir = GetCurrentDirectory();
 				}
+				sfd.FileName = Path.Combine(dir, Path.GetFileName(Table.Fullpath));
 
 
 				if (sfd.ShowDialog() == DialogResult.OK)
