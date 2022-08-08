@@ -307,7 +307,7 @@ namespace yata
 		/// <summary>
 		/// Ensures that a selected field is displayed within this
 		/// <c>Propanel's</c> visible height.
-		/// <param name="c">the col in the table, the row in the panel</param>
+		/// <param name="c">the col-id in the table, the row in the panel</param>
 		/// </summary>
 		internal void EnsureDisplayed(int c)
 		{
@@ -679,76 +679,84 @@ namespace yata
 			{
 				if (!_editor.Visible)
 				{
-					if (e.Button == MouseButtons.Left
-						&& _grid.RangeSelect == 0
-						&& ((ModifierKeys & Keys.Shift) == Keys.None
-							|| _tabOverride != TABFASTEDIT_Bypass))
+					switch (e.Button)
 					{
-						if ((_r = _grid.getSelectedRowOrCells(true)) != -1)
-						{
-							_grid._editor.Visible = false; // edit result default on YataGrid's editor (if visible).
-
-							if (_tabOverride == TABFASTEDIT_Bypass)
+						case MouseButtons.Left:
+							if (_grid.RangeSelect == 0
+								&& ((ModifierKeys & Keys.Shift) == Keys.None
+									|| _tabOverride != TABFASTEDIT_Bypass))
 							{
-								_c = col(e.Y);
-							}
-							else
-								_c = _tabOverride;
+								if ((_r = _grid.getSelectedRowOrCells(true)) != -1)
+								{
+									_grid._editor.Visible = false; // edit result default on YataGrid's editor (if visible).
 
-							if (_grid.getSelectedRow() == -1)
-							{
-								for (int c = 0; c != _grid.ColCount; ++c)
-									_grid[_r,c].selected = false;
+									if (_tabOverride == TABFASTEDIT_Bypass)
+									{
+										_c = col(e.Y);
+									}
+									else
+										_c = _tabOverride;
 
-								_grid.SelectCell(_grid[_r,_c]);
-							}
-							else
-							{
-								_grid.EnsureDisplayedRow(_r);
-								_grid.EnsureDisplayedCol(_c);
-							}
+									if (_grid.getSelectedRow() == -1)
+									{
+										for (int c = 0; c != _grid.ColCount; ++c)
+											_grid[_r,c].selected = false;
 
-							EnsureDisplayed(_c);
+										_grid.SelectCell(_grid[_r,_c]);
+									}
+									else
+									{
+										_grid.EnsureDisplayedRow(_r);
+										_grid.EnsureDisplayedCol(_c);
+									}
+
+									EnsureDisplayed(_c);
 
 
-							if (!_grid.Readonly && e.X > _widthVars)
-							{
+									if (!_grid.Readonly && e.X > _widthVars)
+									{
 #if Clicks
-								logfile.Log(". . start edit");
+										logfile.Log(". . start edit");
 #endif
-								_editRect.X = _widthVars;
-								_editRect.Y = _c * _heightr + 1;
+										_editRect.X = _widthVars;
+										_editRect.Y = _c * _heightr + 1;
 
-								_editor.Left = _editRect.X + 5; // cf YataGrid.EditCell() ->
-								_editor.Top  = _editRect.Y + 1 - _scroll.Value;
-								_editor.Text = _grid[_r,_c].text;
+										_editor.Left = _editRect.X + 5; // cf YataGrid.EditCell() ->
+										_editor.Top  = _editRect.Y + 1 - _scroll.Value;
+										_editor.Text = _grid[_r,_c].text;
 
-								_editor.SelectionStart = 0;
-								_editor.SelectionLength = _editor.Text.Length;
+										_editor.SelectionStart = 0;
+										_editor.SelectionLength = _editor.Text.Length;
 
-								_editor.Visible = true;
-								_editor.Focus();
-							}
-							else
-							{
+										_editor.Visible = true;
+										_editor.Focus();
+									}
+									else
+									{
 #if Clicks
-								logfile.Log(". . select grid");
+										logfile.Log(". . select grid");
 #endif
-								_grid.Select();
-							}
+										_grid.Select();
+									}
 
-							_grid.Invalidator(YataGrid.INVALID_GRID
-											| YataGrid.INVALID_FROZ
-											| YataGrid.INVALID_PROP);
-						}
-						else
-						{
+									_grid.Invalidator(YataGrid.INVALID_GRID
+													| YataGrid.INVALID_FROZ
+													| YataGrid.INVALID_PROP);
+								}
+								else
+								{
 #if Clicks
-							logfile.Log(". select grid");
+									logfile.Log(". select grid");
 #endif
-							_grid.EnsureDisplayedCol(col(e.Y));
-							_grid.Select();
-						}
+									_grid.EnsureDisplayedCol(col(e.Y));
+									_grid.Select();
+								}
+							}
+							break;
+
+						case MouseButtons.Right:
+							_grid.Propanel.Dockstate = _grid.Propanel.getNextDockstate((ModifierKeys & Keys.Shift) == Keys.Shift);
+							break;
 					}
 				}
 				else if ((ModifierKeys & Keys.Shift) == Keys.None) // _editor.Visible
@@ -784,7 +792,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets the colid that corresponds to pixel <paramref name="y"/> down
+		/// Gets the col-id that corresponds to pixel <paramref name="y"/> down
 		/// the y-axis.
 		/// </summary>
 		/// <param name="y"><c>MouseEventArgs.Y</c></param>

@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 August 3
+2022 August 7
 kevL's
 ver 5.2.0.0
 
@@ -898,9 +898,9 @@ Windows Registry.
 Appendix J: the Property Panel
 
 Yata can display the content of a selected row, or of a row with selected
-cell(s), vertically in a panel that appears at the right. Click the small
-unlabeled button that's just beneath the Close button on the title bar to open
-and close the Property Panel.
+cell(s), vertically in a panel that initially appears at the right. Click the
+button - it has a treelike graphic - that's just beneath the Close button on
+Yata's title bar to open and close the Property Panel.
 
 Cell-values can be edited in the Property Panel by left-clicking a value field.
 To accept an edit, press Enter or left-click on the panel; to cancel an edit,
@@ -913,11 +913,11 @@ unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (but, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
 
-A right-click on the Property Panel button will cycle the panel's docked
-location through the four corners of the page in a clockwise direction, or
-counter-clockwise if [Shift] is pressed. If the height of the panel is
-greater than the height of the page, the panel simply shifts to the left or
-right side instead.
+A right-click on the Property Panel button (or the Property Panel itself) will
+cycle the panel's docked location through the four corners of the page in a
+clockwise direction, or counter-clockwise if [Shift] is depressed. If the height
+of the panel is greater than the height of the page, the panel simply shifts to
+the left or right side instead.
 
 
 Appendix K: Undo/Redo
