@@ -98,7 +98,7 @@ Edit
 
 
 Cells
-- Deselect : deselects selected cells
+- Deselect : deselects selected cells as well as any selected rows/cols
 
 - Cut    : Ctrl+x (cuts selected cell(s) if they are in a contiguous block)
 - Copy   : Ctrl+c (copies selected cell(s) if they are in a contiguous block)

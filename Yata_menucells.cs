@@ -15,8 +15,8 @@ namespace yata
 		/// <param name="e"></param>
 		void editcellsclick_Deselect(object sender, EventArgs e)
 		{
-			Table.ClearCellSelects();
-			Table.ClearSyncSelects();
+			Table.ClearSelects();
+			Table.ClearSelects_sync();
 
 			EnableCelleditOperations();
 

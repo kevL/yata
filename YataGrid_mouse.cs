@@ -412,7 +412,7 @@ namespace yata
 #if Clicks
 											logfile.Log(". . select cell");
 #endif
-											if (SelectSyncCell(_cell)) // disallow multi-cell select if sync'd
+											if (SelectCell_sync(_cell)) // disallow multi-cell select if sync'd
 											{
 												ClearSelects(true);
 												_cell.selected = true;
@@ -426,7 +426,7 @@ namespace yata
 #if Clicks
 											logfile.Log(". . deselect cell");
 #endif
-											ClearSyncSelects();
+											ClearSelects_sync();
 										}
 
 										detercellops = true;
@@ -482,7 +482,7 @@ namespace yata
 								ClearSelects(true);
 
 								(_anchorcell = _cell).selected = true;
-								SelectSyncCell(_cell);
+								SelectCell_sync(_cell);
 
 								detercellops = true;
 
@@ -512,7 +512,7 @@ namespace yata
 								ClearSelects(true);
 
 								(_anchorcell = _cell).selected = true;
-								SelectSyncCell(_cell);
+								SelectCell_sync(_cell);
 
 								detercellops = true;
 
@@ -562,7 +562,7 @@ namespace yata
 					ClearSelects(true);
 
 					(_anchorcell = _cell).selected = true;
-					SelectSyncCell(_cell);
+					SelectCell_sync(_cell);
 
 					Invalidator(INVALID_GRID // not so sure all that is needed ->
 							  | INVALID_FROZ
@@ -852,7 +852,7 @@ namespace yata
 				else if (ModifierKeys == Keys.None) // click below the last entry ->
 				{
 					ClearSelects();
-					ClearSyncSelects();
+					ClearSelects_sync();
 
 					int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
 					if (Propanel != null && Propanel.Visible)

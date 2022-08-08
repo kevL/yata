@@ -525,7 +525,7 @@ namespace yata
 		/// </summary>
 		/// <returns>the sync'd <c><see cref="YataGrid"/></c> if a sync-table is
 		/// valid</returns>
-		internal YataGrid ClearSyncSelects()
+		internal YataGrid ClearSelects_sync()
 		{
 			YataGrid table;
 			if      (this == _f._diff1) table = _f._diff2;
@@ -557,7 +557,7 @@ namespace yata
 		/// </list></remarks>
 		internal void SelectCell(Cell cell, bool sync = true)
 		{
-			if (sync) SelectSyncCell(cell);
+			if (sync) SelectCell_sync(cell);
 
 			(_anchorcell = cell).selected = true;
 			Invalidator(INVALID_GRID
@@ -576,9 +576,9 @@ namespace yata
 		/// <param name="sel">a <c>Cell</c> in the current table</param>
 		/// <returns><c>true</c> if a sync-table is valid</returns>
 		/// <remarks>Ensure <paramref name="sel"/> is valid before call.</remarks>
-		bool SelectSyncCell(Cell sel)
+		bool SelectCell_sync(Cell sel)
 		{
-			YataGrid table = ClearSyncSelects();
+			YataGrid table = ClearSelects_sync();
 			if (table != null)
 			{
 				if (sel.y < table.RowCount && sel.x < table.ColCount)
@@ -635,14 +635,14 @@ namespace yata
 				{
 					sel = this[r,c];
 					sel.selected = true;
-					SelectSyncCell(sel);
+					SelectCell_sync(sel);
 
 					_anchorcell = sel;
 				}
 				else
 				{
 					sel = this[r,0]; // just a cell (for its row-id) to pass to EnsureDisplayed() below.
-					ClearSyncSelects();
+					ClearSelects_sync();
 
 					_anchorcell = null;
 				}
@@ -674,7 +674,7 @@ namespace yata
 			for (int c = 0; c != ColCount; ++c)
 				row[c].selected = true;
 
-			YataGrid table = ClearSyncSelects();
+			YataGrid table = ClearSelects_sync();
 			if (table != null && r < table.RowCount)
 			{
 				row = table.Rows[r];
@@ -740,7 +740,7 @@ namespace yata
 			Select();
 
 			ClearSelects();
-			YataGrid table = ClearSyncSelects();
+			YataGrid table = ClearSelects_sync();
 
 			_anchorcell = this[0,c];
 
@@ -1494,7 +1494,7 @@ namespace yata
 			int selr = getSelectedRow();
 
 			ClearSelects();
-			// SelectCell() calls ClearSyncSelects()
+			// SelectCell() calls ClearSelects_sync()
 
 			int r,c;
 
@@ -1674,7 +1674,7 @@ namespace yata
 			int selr = getSelectedRow();
 
 			ClearSelects();
-			// SelectCell() calls ClearSyncSelects()
+			// SelectCell() calls ClearSelects_sync()
 
 			int r,c;
 
@@ -2061,7 +2061,7 @@ namespace yata
 					int selr = getSelectedRow();
 
 					ClearSelects();
-					ClearSyncSelects();
+					ClearSelects_sync();
 
 
 					_substr = substr; // else is Wholefield search.

@@ -277,7 +277,7 @@ namespace yata
 
 			Celledit();
 
-			SelectSyncCell(_anchorcell = _editcell);
+			SelectCell_sync(_anchorcell = _editcell);
 		}
 
 
@@ -317,7 +317,7 @@ namespace yata
 						if (!ctr && !sft)
 						{
 							ClearSelects();
-							ClearSyncSelects();
+							ClearSelects_sync();
 
 							selr = -1;
 							invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
@@ -1099,7 +1099,7 @@ namespace yata
 
 					_anchorcell = sel;
 
-					SelectSyncCell(sel);
+					SelectCell_sync(sel);
 					_f.EnableCelleditOperations();
 
 					Invalidator(INVALID_GRID
