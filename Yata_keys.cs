@@ -181,7 +181,7 @@ namespace yata
 							logfile.Log(". . select first cell");
 #endif
 							e.SuppressKeyPress = true;
-							Table.SelectFirstCell();
+							Table.SelectCell_first();
 						}
 #if Keys
 						else logfile.Log(". . an Editor is visible -> do not select first cell");
@@ -199,7 +199,7 @@ namespace yata
 							logfile.Log(". . select first row");
 #endif
 							e.SuppressKeyPress = true;
-							Table.SelectFirstRow();
+							Table.SelectRow_first();
 						}
 #if Keys
 						else logfile.Log(". . an Editor is visible -> do not select first row");

@@ -603,7 +603,7 @@ namespace yata
 		/// </summary>
 		/// <remarks>Called at the form-level by
 		/// <c><see cref="Yata"/>.OnKeyDown()</c> <c>[Space]</c>.</remarks>
-		internal void SelectFirstCell()
+		internal void SelectCell_first()
 		{
 			Select();
 
@@ -700,7 +700,7 @@ namespace yata
 		/// </summary>
 		/// <remarks>Called at the form-level by
 		/// <c><see cref="Yata"/>.OnKeyDown()</c> <c>[Ctrl+Space]</c>.</remarks>
-		internal void SelectFirstRow()
+		internal void SelectRow_first()
 		{
 			Select();
 
