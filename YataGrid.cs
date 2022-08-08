@@ -520,6 +520,25 @@ namespace yata
 				_f.EnableCelleditOperations();
 		}
 
+		/// <summary>
+		/// Clears all selects on a sync-table if that table is valid.
+		/// </summary>
+		/// <returns>the sync'd <c><see cref="YataGrid"/></c> if a sync-table is
+		/// valid</returns>
+		internal YataGrid ClearSyncSelects()
+		{
+			YataGrid table;
+			if      (this == _f._diff1) table = _f._diff2;
+			else if (this == _f._diff2) table = _f._diff1;
+			else
+				return null;
+
+			if (table != null)
+				table.ClearSelects(true, true);
+
+			return table;
+		}
+
 
 		/// <summary>
 		/// Selects a specified <c><see cref="Cell"/></c> and invalidates stuff.
@@ -568,25 +587,6 @@ namespace yata
 				return true;
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// Clears all selects on a sync-table if that table is valid.
-		/// </summary>
-		/// <returns>the sync'd <c><see cref="YataGrid"/></c> if a sync-table is
-		/// valid</returns>
-		internal YataGrid ClearSyncSelects()
-		{
-			YataGrid table;
-			if      (this == _f._diff1) table = _f._diff2;
-			else if (this == _f._diff2) table = _f._diff1;
-			else
-				return null;
-
-			if (table != null)
-				table.ClearSelects(true, true);
-
-			return table;
 		}
 
 		/// <summary>
@@ -660,7 +660,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Selects a specified row by Id and flags its cells selected.
+		/// Selects a specified <c><see cref="Row"/></c> by row-id and flags its
+		/// cells selected.
 		/// </summary>
 		/// <param name="r">row-id</param>
 		/// <remarks>Check that <paramref name="r"/> doesn't over/underflow
@@ -670,10 +671,8 @@ namespace yata
 			Row row = Rows[r];
 
 			row.selected = true;
-
 			for (int c = 0; c != ColCount; ++c)
 				row[c].selected = true;
-
 
 			YataGrid table = ClearSyncSelects();
 			if (table != null && r < table.RowCount)
@@ -726,6 +725,45 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			Invalidator(invalid);
+		}
+
+
+		/// <summary>
+		/// Selects a specified <c><see cref="Col"/></c> by col-id and flags its
+		/// cells selected.
+		/// </summary>
+		/// <param name="c">col-id</param>
+		/// <remarks>Check that <paramref name="c"/> doesn't over/underflow
+		/// <c><see cref="ColCount"/></c> before call.</remarks>
+		internal void SelectCol(int c)
+		{
+			Select();
+
+			ClearSelects();
+			YataGrid table = ClearSyncSelects();
+
+			_anchorcell = this[0,c];
+
+			Cols[c].selected = true;
+			for (int r = 0; r != RowCount; ++r)
+				this[r,c].selected = true;
+
+			if (table != null && c < table.ColCount)
+			{
+				// TODO: set table._anchorcell - it seems to get done so find out where
+
+				table.Cols[c].selected = true;
+				for (int r = 0; r != table.RowCount; ++r)
+					table[r,c].selected = true;
+			}
+
+			EnsureDisplayedCol(c);
+
+//			invalid |= INVALID_FROZ;					// <- doesn't seem to be needed.
+//			if (Propanel != null && Propanel.Visible)
+//				invalid |= INVALID_PROP;				// <- doesn't seem to be needed.
+
+			Invalidator(YataGrid.INVALID_COLS | YataGrid.INVALID_GRID);
 		}
 		#endregion Select (setters)
 
@@ -1891,35 +1929,38 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Scrolls the table so that a given <c><see cref="Col"/></c> is (more
-		/// or less) completely displayed.
+		/// Scrolls the table so that a given <c><see cref="Col"/></c> is
+		/// displayed.
 		/// </summary>
 		/// <param name="colid">the col-id to display</param>
 		internal void EnsureDisplayedCol(int colid)
 		{
-			int posL = WidthRowhead - OffsetHori;
-			for (int c = 0; c != colid; ++c)
-				posL += Cols[c].Width;
+			if (colid >= FrozenCount)					// there's never a need to scroll to a col in the FrozenPanel
+			{											// - those cols/cells are always displayed already.
+				int posL = WidthRowhead - OffsetHori;
+				for (int c = 0; c != colid; ++c)
+					posL += Cols[c].Width;
 
-			int posR = posL + Cols[colid].Width;
+				int posR = posL + Cols[colid].Width;
 
-			int left = getLeft();
-			if (posL != left)
-			{
-				int bar = (_visVert ? _scrollVert.Width : 0);
-				int right = Width - bar;
-
-				int width = posR - posL;
-
-				if (posL < left
-					|| (width > right - left
-						&& (posL > right || posL + left > (right - left) / 2)))
+				int left = getLeft();
+				if (posL != left)
 				{
-					_scrollHori.Value -= left - posL;
-				}
-				else if (posR > right && width < right - left)
-				{
-					_scrollHori.Value += posR + bar - Width;
+					int bar = (_visVert ? _scrollVert.Width : 0);
+					int right = Width - bar;
+
+					int width = posR - posL;
+
+					if (posL < left
+						|| (width > right - left
+							&& (posL > right || posL + left > (right - left) / 2)))
+					{
+						_scrollHori.Value -= left - posL;
+					}
+					else if (posR > right && width < right - left)
+					{
+						_scrollHori.Value += posR + bar - Width;
+					}
 				}
 			}
 		}

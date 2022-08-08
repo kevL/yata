@@ -27,6 +27,8 @@ namespace yata
 
 				it_CopyCells  .Enabled = isColSelected;
 				it_PasteCells .Enabled = isColSelected && !Table.Readonly && _copyc.Count != 0;
+
+				it_SelectCol  .Enabled = true;
 			}
 			else
 			{
@@ -37,8 +39,52 @@ namespace yata
 				it_RelabelHead.Enabled =
 
 				it_CopyCells  .Enabled =
-				it_PasteCells .Enabled = false;
+				it_PasteCells .Enabled =
+
+				it_SelectCol  .Enabled = false;
 			}
+		}
+
+		/// <summary>
+		/// Handles the <c>DropDownOpening</c> event for
+		/// <c><see cref="it_SelectCol"/></c>. Populates a submenu with
+		/// colhead-labels.
+		/// </summary>
+		/// <param name="sender"><c>it_SelectCol</c></param>
+		/// <param name="e"></param>
+		void colist_dropdownopening(object sender, EventArgs e)
+		{
+			ToolStripItemCollection its = it_SelectCol.DropDownItems;
+
+			for (int i = 0; i != its.Count; ++i)
+				its[i].Click -= click_itcol;
+
+			it_SelectCol.DropDownItems.Clear();
+
+			ToolStripItem it;
+			for (int i = 0; i != Table.Fields.Length; ++i)
+			{
+				it = its.Add(Table.Fields[i]);
+				it.Padding = new Padding(0);
+				it.Tag = i + 1;
+
+				if (i + 1 < Table.FrozenCount)
+					it.ForeColor = System.Drawing.Color.DarkKhaki;
+				else
+					it.Click += click_itcol;
+				
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_itcol(object sender, EventArgs e)
+		{
+			Table.SelectCol((int)(sender as ToolStripItem).Tag);
+			EnableCelleditOperations();
 		}
 
 

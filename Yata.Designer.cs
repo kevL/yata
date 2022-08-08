@@ -70,6 +70,7 @@ namespace yata
 		ToolStripMenuItem it_CreateRows;
 
 		internal ToolStripMenuItem it_MenuCol;
+		ToolStripMenuItem it_SelectCol;
 		ToolStripMenuItem it_DeselectCol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
@@ -143,6 +144,7 @@ namespace yata
 		ToolStripSeparator separator_3;
 		ToolStripSeparator separator_4;
 		ToolStripSeparator separator_5;
+		ToolStripSeparator separator_6;
 		ToolStripSeparator separator_7;
 		ToolStripSeparator separator_8;
 		ToolStripSeparator separator_9;
@@ -318,6 +320,8 @@ namespace yata
 			this.separator_32 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CopyCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteCells = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.it_SelectCol = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new yata.YataTsCombo();
@@ -1006,7 +1010,9 @@ namespace yata
 			this.it_RelabelHead,
 			this.separator_32,
 			this.it_CopyCells,
-			this.it_PasteCells});
+			this.it_PasteCells,
+			this.separator_6,
+			this.it_SelectCol});
 			this.it_MenuCol.Name = "it_MenuCol";
 			this.it_MenuCol.Size = new System.Drawing.Size(38, 20);
 			this.it_MenuCol.Text = "C&ol";
@@ -1063,6 +1069,18 @@ namespace yata
 			this.it_PasteCells.Size = new System.Drawing.Size(161, 22);
 			this.it_PasteCells.Text = "&paste cells";
 			this.it_PasteCells.Click += new System.EventHandler(this.editcolclick_PasteCol);
+			// 
+			// separator_6
+			// 
+			this.separator_6.Name = "separator_6";
+			this.separator_6.Size = new System.Drawing.Size(158, 6);
+			// 
+			// it_SelectCol
+			// 
+			this.it_SelectCol.Name = "it_SelectCol";
+			this.it_SelectCol.Size = new System.Drawing.Size(161, 22);
+			this.it_SelectCol.Text = "select";
+			this.it_SelectCol.DropDownOpening += new System.EventHandler(this.colist_dropdownopening);
 			// 
 			// tb_Goto
 			// 
@@ -1350,161 +1368,161 @@ namespace yata
 			// it_PathAll
 			// 
 			this.it_PathAll.Name = "it_PathAll";
-			this.it_PathAll.Size = new System.Drawing.Size(222, 22);
+			this.it_PathAll.Size = new System.Drawing.Size(230, 22);
 			this.it_PathAll.Text = "Path &all ...";
 			this.it_PathAll.Click += new System.EventHandler(this.itclick_PathAll);
 			// 
 			// it_PathAmmunitionTypes2da
 			// 
 			this.it_PathAmmunitionTypes2da.Name = "it_PathAmmunitionTypes2da";
-			this.it_PathAmmunitionTypes2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathAmmunitionTypes2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathAmmunitionTypes2da.Text = "path AmmunitionTypes.2da";
 			this.it_PathAmmunitionTypes2da.Click += new System.EventHandler(this.itclick_PathAmmunitionTypes2da);
 			// 
 			// it_PathBaseItems2da
 			// 
 			this.it_PathBaseItems2da.Name = "it_PathBaseItems2da";
-			this.it_PathBaseItems2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathBaseItems2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathBaseItems2da.Text = "path BaseItems.2da";
 			this.it_PathBaseItems2da.Click += new System.EventHandler(this.itclick_PathBaseItems2da);
 			// 
 			// it_PathCategories2da
 			// 
 			this.it_PathCategories2da.Name = "it_PathCategories2da";
-			this.it_PathCategories2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathCategories2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathCategories2da.Text = "path Categories.2da";
 			this.it_PathCategories2da.Click += new System.EventHandler(this.itclick_PathCategories2da);
 			// 
 			// it_PathClasses2da
 			// 
 			this.it_PathClasses2da.Name = "it_PathClasses2da";
-			this.it_PathClasses2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathClasses2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathClasses2da.Text = "path Classes.2da";
 			this.it_PathClasses2da.Click += new System.EventHandler(this.itclick_PathClasses2da);
 			// 
 			// it_PathCombatModes2da
 			// 
 			this.it_PathCombatModes2da.Name = "it_PathCombatModes2da";
-			this.it_PathCombatModes2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathCombatModes2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathCombatModes2da.Text = "path CombatModes.2da";
 			this.it_PathCombatModes2da.Click += new System.EventHandler(this.itclick_PathCombatModes2da);
 			// 
 			// it_PathDisease2da
 			// 
 			this.it_PathDisease2da.Name = "it_PathDisease2da";
-			this.it_PathDisease2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathDisease2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathDisease2da.Text = "path Disease.2da";
 			this.it_PathDisease2da.Click += new System.EventHandler(this.itclick_PathDisease2da);
 			// 
 			// it_PathFeat2da
 			// 
 			this.it_PathFeat2da.Name = "it_PathFeat2da";
-			this.it_PathFeat2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathFeat2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathFeat2da.Text = "path Feat.2da";
 			this.it_PathFeat2da.Click += new System.EventHandler(this.itclick_PathFeat2da);
 			// 
 			// it_PathInventorySnds2da
 			// 
 			this.it_PathInventorySnds2da.Name = "it_PathInventorySnds2da";
-			this.it_PathInventorySnds2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathInventorySnds2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathInventorySnds2da.Text = "path InventorySnds.2da";
 			this.it_PathInventorySnds2da.Click += new System.EventHandler(this.itclick_PathInventorySnds2da);
 			// 
 			// it_PathIprpAmmoCost2da
 			// 
 			this.it_PathIprpAmmoCost2da.Name = "it_PathIprpAmmoCost2da";
-			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpAmmoCost2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathIprpAmmoCost2da.Text = "path Iprp_AmmoCost.2da";
 			this.it_PathIprpAmmoCost2da.Click += new System.EventHandler(this.itclick_PathIprpAmmoCost2da);
 			// 
 			// it_PathIprpFeats2da
 			// 
 			this.it_PathIprpFeats2da.Name = "it_PathIprpFeats2da";
-			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpFeats2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathIprpFeats2da.Text = "path Iprp_Feats.2da";
 			this.it_PathIprpFeats2da.Click += new System.EventHandler(this.itclick_PathIprpFeats2da);
 			// 
 			// it_PathIprpOnHitSpell2da
 			// 
 			this.it_PathIprpOnHitSpell2da.Name = "it_PathIprpOnHitSpell2da";
-			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpOnHitSpell2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathIprpOnHitSpell2da.Text = "path Iprp_OnHitSpell.2da";
 			this.it_PathIprpOnHitSpell2da.Click += new System.EventHandler(this.itclick_PathIprpOnHitSpell2da);
 			// 
 			// it_PathIprpSpells2da
 			// 
 			this.it_PathIprpSpells2da.Name = "it_PathIprpSpells2da";
-			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathIprpSpells2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathIprpSpells2da.Text = "path Iprp_Spells.2da";
 			this.it_PathIprpSpells2da.Click += new System.EventHandler(this.itclick_PathIprpSpells2da);
 			// 
 			// it_PathItemPropDef2da
 			// 
 			this.it_PathItemPropDef2da.Name = "it_PathItemPropDef2da";
-			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathItemPropDef2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathItemPropDef2da.Text = "path ItemPropDef.2da";
 			this.it_PathItemPropDef2da.Click += new System.EventHandler(this.itclick_PathItemPropDef2da);
 			// 
 			// it_PathItemProps2da
 			// 
 			this.it_PathItemProps2da.Name = "it_PathItemProps2da";
-			this.it_PathItemProps2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathItemProps2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathItemProps2da.Text = "path ItemProps.2da";
 			this.it_PathItemProps2da.Click += new System.EventHandler(this.itclick_PathItemProps2da);
 			// 
 			// it_PathMasterFeats2da
 			// 
 			this.it_PathMasterFeats2da.Name = "it_PathMasterFeats2da";
-			this.it_PathMasterFeats2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathMasterFeats2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathMasterFeats2da.Text = "path MasterFeats.2da";
 			this.it_PathMasterFeats2da.Click += new System.EventHandler(this.itclick_PathMasterFeats2da);
 			// 
 			// it_PathPackages2da
 			// 
 			this.it_PathPackages2da.Name = "it_PathPackages2da";
-			this.it_PathPackages2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathPackages2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathPackages2da.Text = "path Packages.2da";
 			this.it_PathPackages2da.Click += new System.EventHandler(this.itclick_PathPackages2da);
 			// 
 			// it_PathRaces2da
 			// 
 			this.it_PathRaces2da.Name = "it_PathRaces2da";
-			this.it_PathRaces2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathRaces2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathRaces2da.Text = "path RacialTypes.2da";
 			this.it_PathRaces2da.Click += new System.EventHandler(this.itclick_PathRaces2da);
 			// 
 			// it_PathRanges2da
 			// 
 			this.it_PathRanges2da.Name = "it_PathRanges2da";
-			this.it_PathRanges2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathRanges2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathRanges2da.Text = "path Ranges.2da";
 			this.it_PathRanges2da.Click += new System.EventHandler(this.itclick_PathRanges2da);
 			// 
 			// it_PathSkills2da
 			// 
 			this.it_PathSkills2da.Name = "it_PathSkills2da";
-			this.it_PathSkills2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSkills2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathSkills2da.Text = "path Skills.2da";
 			this.it_PathSkills2da.Click += new System.EventHandler(this.itclick_PathSkills2da);
 			// 
 			// it_PathSpells2da
 			// 
 			this.it_PathSpells2da.Name = "it_PathSpells2da";
-			this.it_PathSpells2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpells2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathSpells2da.Text = "path Spells.2da";
 			this.it_PathSpells2da.Click += new System.EventHandler(this.itclick_PathSpells2da);
 			// 
 			// it_PathSpellTarget2da
 			// 
 			this.it_PathSpellTarget2da.Name = "it_PathSpellTarget2da";
-			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathSpellTarget2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathSpellTarget2da.Text = "path SpellTarget.2da";
 			this.it_PathSpellTarget2da.Click += new System.EventHandler(this.itclick_PathSpellTarget2da);
 			// 
 			// it_PathWeaponSounds2da
 			// 
 			this.it_PathWeaponSounds2da.Name = "it_PathWeaponSounds2da";
-			this.it_PathWeaponSounds2da.Size = new System.Drawing.Size(222, 22);
+			this.it_PathWeaponSounds2da.Size = new System.Drawing.Size(230, 22);
 			this.it_PathWeaponSounds2da.Text = "path WeaponSounds.2da";
 			this.it_PathWeaponSounds2da.Click += new System.EventHandler(this.itclick_PathWeaponSounds2da);
 			// 
@@ -1748,90 +1766,90 @@ namespace yata
 			this.cellit_Input_zip});
 			this._contextCe.Name = "_contextCe";
 			this._contextCe.ShowImageMargin = false;
-			this._contextCe.Size = new System.Drawing.Size(165, 270);
+			this._contextCe.Size = new System.Drawing.Size(174, 292);
 			// 
 			// cellit_Edit
 			// 
 			this.cellit_Edit.Name = "cellit_Edit";
-			this.cellit_Edit.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Edit.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Edit.Text = "edit";
 			this.cellit_Edit.Click += new System.EventHandler(this.cellclick_Edit);
 			// 
 			// separator_27
 			// 
 			this.separator_27.Name = "separator_27";
-			this.separator_27.Size = new System.Drawing.Size(161, 6);
+			this.separator_27.Size = new System.Drawing.Size(170, 6);
 			// 
 			// cellit_Cut
 			// 
 			this.cellit_Cut.Name = "cellit_Cut";
-			this.cellit_Cut.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Cut.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Cut.Text = "cut";
 			this.cellit_Cut.Click += new System.EventHandler(this.cellclick_Cut);
 			// 
 			// cellit_Copy
 			// 
 			this.cellit_Copy.Name = "cellit_Copy";
-			this.cellit_Copy.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Copy.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Copy.Text = "copy";
 			this.cellit_Copy.Click += new System.EventHandler(this.cellclick_Copy);
 			// 
 			// cellit_Paste
 			// 
 			this.cellit_Paste.Name = "cellit_Paste";
-			this.cellit_Paste.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Paste.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Paste.Text = "paste";
 			this.cellit_Paste.Click += new System.EventHandler(this.cellclick_Paste);
 			// 
 			// cellit_Clear
 			// 
 			this.cellit_Clear.Name = "cellit_Clear";
-			this.cellit_Clear.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Clear.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Clear.Text = "clear";
 			this.cellit_Clear.Click += new System.EventHandler(this.cellclick_Delete);
 			// 
 			// separator_16
 			// 
 			this.separator_16.Name = "separator_16";
-			this.separator_16.Size = new System.Drawing.Size(161, 6);
+			this.separator_16.Size = new System.Drawing.Size(170, 6);
 			// 
 			// cellit_Lower
 			// 
 			this.cellit_Lower.Name = "cellit_Lower";
-			this.cellit_Lower.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Lower.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Lower.Text = "lowercase";
 			this.cellit_Lower.Click += new System.EventHandler(this.cellclick_Lower);
 			// 
 			// cellit_Upper
 			// 
 			this.cellit_Upper.Name = "cellit_Upper";
-			this.cellit_Upper.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Upper.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Upper.Text = "uppercase";
 			this.cellit_Upper.Click += new System.EventHandler(this.cellclick_Upper);
 			// 
 			// separator_24
 			// 
 			this.separator_24.Name = "separator_24";
-			this.separator_24.Size = new System.Drawing.Size(161, 6);
+			this.separator_24.Size = new System.Drawing.Size(170, 6);
 			// 
 			// cellit_MergeCe
 			// 
 			this.cellit_MergeCe.Name = "cellit_MergeCe";
-			this.cellit_MergeCe.Size = new System.Drawing.Size(164, 22);
+			this.cellit_MergeCe.Size = new System.Drawing.Size(173, 22);
 			this.cellit_MergeCe.Text = "merge to other - Ce";
 			this.cellit_MergeCe.Click += new System.EventHandler(this.cellclick_MergeCe);
 			// 
 			// cellit_MergeRo
 			// 
 			this.cellit_MergeRo.Name = "cellit_MergeRo";
-			this.cellit_MergeRo.Size = new System.Drawing.Size(164, 22);
+			this.cellit_MergeRo.Size = new System.Drawing.Size(173, 22);
 			this.cellit_MergeRo.Text = "merge to other - Ro";
 			this.cellit_MergeRo.Click += new System.EventHandler(this.cellclick_MergeRo);
 			// 
 			// separator_28
 			// 
 			this.separator_28.Name = "separator_28";
-			this.separator_28.Size = new System.Drawing.Size(161, 6);
+			this.separator_28.Size = new System.Drawing.Size(170, 6);
 			// 
 			// cellit_Strref
 			// 
@@ -1840,7 +1858,7 @@ namespace yata
 			this.cellit_Strref_custom,
 			this.cellit_Strref_invalid});
 			this.cellit_Strref.Name = "cellit_Strref";
-			this.cellit_Strref.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Strref.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Strref.Text = "STRREF";
 			this.cellit_Strref.DropDownOpening += new System.EventHandler(this.dropdownopening_Strref);
 			// 
@@ -1868,14 +1886,14 @@ namespace yata
 			// cellit_Input
 			// 
 			this.cellit_Input.Name = "cellit_Input";
-			this.cellit_Input.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Input.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Input.Text = "InfoInput";
 			this.cellit_Input.Click += new System.EventHandler(this.cellclick_InfoInput);
 			// 
 			// cellit_Input_zip
 			// 
 			this.cellit_Input_zip.Name = "cellit_Input_zip";
-			this.cellit_Input_zip.Size = new System.Drawing.Size(164, 22);
+			this.cellit_Input_zip.Size = new System.Drawing.Size(173, 22);
 			this.cellit_Input_zip.Text = "Select Data/zip file ...";
 			this.cellit_Input_zip.Click += new System.EventHandler(this.cellclick_InfoInput_zip);
 			// 
