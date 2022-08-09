@@ -15,13 +15,7 @@ namespace yata
 		/// <param name="e"></param>
 		void editcellsclick_Deselect(object sender, EventArgs e)
 		{
-			Table.ClearSelects();
-			Table.ClearSelects_sync();
-
-			EnableCelleditOperations();
-
-			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
-			// TODO: not sure why but that deselects and invalidates a Propanel select also.
+			editclick_Deselect(sender, e);
 		}
 
 
@@ -261,6 +255,7 @@ namespace yata
 				Table.Invalidator(invalid);
 		}
 
+
 		/// <summary>
 		/// Converts all selected cells to lowercase.
 		/// </summary>
@@ -356,6 +351,7 @@ namespace yata
 			if (invalid == YataGrid.INVALID_GRID)
 				Table.Invalidator(invalid);
 		}
+
 
 		/// <summary>
 		/// Opens a text-input dialog for pasting text to all selected cells.
