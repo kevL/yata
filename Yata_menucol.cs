@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -52,6 +53,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c>it_SelectCol</c></param>
 		/// <param name="e"></param>
+		/// <remarks>The select it has a fake subit that is instantiated in the
+		/// designer-code so that the select it displays with a right-arrow.</remarks>
 		void colist_dropdownopening(object sender, EventArgs e)
 		{
 			ToolStripItemCollection its = it_SelectCol.DropDownItems;
@@ -69,7 +72,7 @@ namespace yata
 				it.Tag = i + 1;
 
 				if (i + 1 < Table.FrozenCount)
-					it.ForeColor = System.Drawing.Color.DarkKhaki;
+					it.ForeColor = Color.DarkKhaki;
 				else
 					it.Click += click_itcol;
 				

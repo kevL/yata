@@ -70,13 +70,15 @@ namespace yata
 		ToolStripMenuItem it_CreateRows;
 
 		internal ToolStripMenuItem it_MenuCol;
-		ToolStripMenuItem it_SelectCol;
 		ToolStripMenuItem it_DeselectCol;
 		ToolStripMenuItem it_CreateHead;
 		ToolStripMenuItem it_DeleteHead;
 		ToolStripMenuItem it_RelabelHead;
 		ToolStripMenuItem it_CopyCells;
 		ToolStripMenuItem it_PasteCells;
+		ToolStripMenuItem it_SelectCol;
+		ToolStripMenuItem it_SelectCol_fake;
+
 
 		internal ToolStripTextBox tb_Goto;
 
@@ -322,6 +324,7 @@ namespace yata
 			this.it_PasteCells = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_SelectCol = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_SelectCol_fake = new System.Windows.Forms.ToolStripMenuItem();
 			this.tb_Goto = new System.Windows.Forms.ToolStripTextBox();
 			this.tb_Search = new System.Windows.Forms.ToolStripTextBox();
 			this.cb_SearchOption = new yata.YataTsCombo();
@@ -838,8 +841,9 @@ namespace yata
 			// 
 			this.it_DeselectCell.Enabled = false;
 			this.it_DeselectCell.Name = "it_DeselectCell";
+			this.it_DeselectCell.ShortcutKeyDisplayString = "Esc";
 			this.it_DeselectCell.Size = new System.Drawing.Size(175, 22);
-			this.it_DeselectCell.Text = "De&select";
+			this.it_DeselectCell.Text = "De&select all";
 			this.it_DeselectCell.Click += new System.EventHandler(this.editcellsclick_Deselect);
 			// 
 			// separator_30
@@ -1077,10 +1081,18 @@ namespace yata
 			// 
 			// it_SelectCol
 			// 
+			this.it_SelectCol.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.it_SelectCol_fake});
 			this.it_SelectCol.Name = "it_SelectCol";
 			this.it_SelectCol.Size = new System.Drawing.Size(161, 22);
 			this.it_SelectCol.Text = "select";
 			this.it_SelectCol.DropDownOpening += new System.EventHandler(this.colist_dropdownopening);
+			// 
+			// it_SelectCol_fake
+			// 
+			this.it_SelectCol_fake.Name = "it_SelectCol_fake";
+			this.it_SelectCol_fake.Size = new System.Drawing.Size(152, 22);
+			this.it_SelectCol_fake.Text = "fake";
 			// 
 			// tb_Goto
 			// 
