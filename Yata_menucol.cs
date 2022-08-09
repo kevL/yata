@@ -62,7 +62,7 @@ namespace yata
 			for (int i = 0; i != its.Count; ++i)
 				its[i].Click -= click_itcol;
 
-			it_SelectCol.DropDownItems.Clear();
+			its.Clear();
 
 			ToolStripItem it;
 			for (int i = 0; i != Table.Fields.Length; ++i)
