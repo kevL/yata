@@ -53,6 +53,7 @@ namespace yata
 		internal const int IconResRef        =  3; // ofd only (OpenFileDialog)
 		internal const int School            =  4;
 		internal const int Range             =  5;
+		internal const int Vs                =  6;
 		internal const int MetaMagic         =  7;
 		internal const int TargetType        =  8;
 		internal const int ImpactScript      =  9; // ofd only
@@ -154,6 +155,24 @@ namespace yata
 						case "M": cb_03.Checked = true; break;
 						case "L": cb_04.Checked = true; break;
 						case "I": cb_05.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case Vs: // string-val,checkbox,multiple
+					_f.str0 = _f.str1 = val;
+					prep_Vs();
+
+					switch (val.ToUpperInvariant())
+					{
+						case "V":  cb_00.Checked = true; break;
+						case "S":  cb_01.Checked = true; break;
+						case "VS": cb_00.Checked =
+								   cb_01.Checked = true; break;
 
 						case gs.Stars: break;
 
@@ -439,6 +458,19 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Prepares this dialog for <c><see cref="Vs"/></c> input.
+		/// </summary>
+		void prep_Vs()
+		{
+			Text = "  VS";
+
+			cb_00.Text = "Verbal";
+			cb_01.Text = "Somatic";
+
+			cb_00.Visible = cb_01.Visible = true;
+		}
+
+		/// <summary>
 		/// Prepares this dialog for <c><see cref="MetaMagic"/></c> input.
 		/// </summary>
 		void prep_MetaMagics()
@@ -702,6 +734,7 @@ namespace yata
 				{
 					case School:     change_School();     break;
 					case Range:      change_Range();      break;
+					case Vs:         change_Vs();         break;
 					case MetaMagic:  change_MetaMagic();  break;
 					case TargetType: change_TargetType(); break;
 					case UserType:   change_UserType();   break;
@@ -755,6 +788,23 @@ namespace yata
 				else                   val = "I"; // _cb == cb_05
 			}
 			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// </summary>
+		void change_Vs()
+		{
+			string val;
+			if      (cb_00.Checked && cb_01.Checked) val = "vs";
+			else if (cb_00.Checked)                  val = "v";
+			else if (cb_01.Checked)                  val = "s";
+			else 
 				val = gs.Stars;
 
 			la_Val.Text = _f.str1 = val;
@@ -1132,6 +1182,7 @@ namespace yata
 			{
 				case School: // str,cb,unique
 				case Range:
+				case Vs:
 				case UserType:
 					bu_Clear.Enabled = false;
 

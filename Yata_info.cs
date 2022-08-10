@@ -3248,6 +3248,23 @@ namespace yata
 					}
 					break;
 
+				case InfoInputSpells.Vs:
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						switch (val.ToUpperInvariant())
+						{
+							case "V":  info += "verbal";          break;
+							case "S":  info += "somatic";         break;
+							case "VS": info += "verbal, somatic"; break;
+
+							default:   info += gs.bork;           break;
+						}
+					}
+					break;
+
 				case InfoInputSpells.MetaMagic: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)

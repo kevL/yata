@@ -110,6 +110,7 @@ namespace yata
 			{
 				case InfoInputSpells.School: // these don't rely on 2da-gropes ->
 				case InfoInputSpells.Range:
+				case InfoInputSpells.Vs:
 				case InfoInputSpells.MetaMagic:
 				case InfoInputSpells.TargetType:
 				case InfoInputSpells.ImmunityType:
@@ -594,6 +595,7 @@ namespace yata
 					{
 						case InfoInputSpells.School: // STRING Input ->
 						case InfoInputSpells.Range:
+						case InfoInputSpells.Vs:
 						case InfoInputSpells.ImmunityType:
 						case InfoInputSpells.UserType:
 							using (var iis = new InfoInputSpells(this, _sel))
