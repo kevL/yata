@@ -354,7 +354,7 @@ namespace yata
 				ClientSize = new Size(w,h);
 
 
-			cb_SearchOption.Items.AddRange(new object[]
+			cb_SearchOption.Items.AddRange(new []
 			{
 				"subfield",
 				"wholefield"
