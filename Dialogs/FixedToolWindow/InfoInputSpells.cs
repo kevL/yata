@@ -625,26 +625,28 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui(gs.Acid));
-			co_Val.Items.Add(new tui(gs.Cold));
-			co_Val.Items.Add(new tui(gs.Death));
-			co_Val.Items.Add(new tui(gs.Disease));
-			co_Val.Items.Add(new tui(gs.Divine));
-			co_Val.Items.Add(new tui(gs.Electricity));
-			co_Val.Items.Add(new tui(gs.Evil));
-			co_Val.Items.Add(new tui(gs.Fear));
-			co_Val.Items.Add(new tui(gs.Fire));
-			co_Val.Items.Add(new tui(gs.Magical));
-			co_Val.Items.Add(new tui(gs.Mind_Affecting));
-			co_Val.Items.Add(new tui(gs.Negative));
-			co_Val.Items.Add(new tui(gs.Paralysis));
-			co_Val.Items.Add(new tui(gs.Poison));
-			co_Val.Items.Add(new tui(gs.Positive));
-			co_Val.Items.Add(new tui(gs.Sonic));
-			co_Val.Items.Add(new tui(gs.Constitution));
-			co_Val.Items.Add(new tui(gs.Water));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Acid),
+				new tui(gs.Cold),
+				new tui(gs.Death),
+				new tui(gs.Disease),
+				new tui(gs.Divine),
+				new tui(gs.Electricity),
+				new tui(gs.Evil),
+				new tui(gs.Fear),
+				new tui(gs.Fire),
+				new tui(gs.Magical),
+				new tui(gs.Mind_Affecting),
+				new tui(gs.Negative),
+				new tui(gs.Paralysis),
+				new tui(gs.Poison),
+				new tui(gs.Positive),
+				new tui(gs.Sonic),
+				new tui(gs.Constitution),
+				new tui(gs.Water),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -692,29 +694,31 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast)); // Eldritch Essences ->
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast));
-
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain)); // Blast Shapes ->
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear));
-			co_Val.Items.Add(new tui(toHexString(Yata.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui(toHexString(Yata.META_I_BESHADOWED_BLAST) + " - " + gs.BeshadowedBlast), // Eldritch Essences ->
+				new tui(toHexString(Yata.META_I_BEWITCHING_BLAST) + " - " + gs.BewitchingBlast),
+				new tui(toHexString(Yata.META_I_BINDING_BLAST)    + " - " + gs.BindingBlast),
+				new tui(toHexString(Yata.META_I_BRIMSTONE_BLAST)  + " - " + gs.BrimstoneBlast),
+				new tui(toHexString(Yata.META_I_DRAINING_BLAST)   + " - " + gs.DrainingBlast),
+				new tui(toHexString(Yata.META_I_FRIGHTFUL_BLAST)  + " - " + gs.FrightfulBlast),
+				new tui(toHexString(Yata.META_I_HELLRIME_BLAST)   + " - " + gs.HellrimeBlast),
+				new tui(toHexString(Yata.META_I_HINDERING_BLAST)  + " - " + gs.HinderingBlast),
+				new tui(toHexString(Yata.META_I_NOXIOUS_BLAST)    + " - " + gs.NoxiousBlast),
+				new tui(toHexString(Yata.META_I_UTTERDARK_BLAST)  + " - " + gs.UtterdarkBlast),
+				new tui(toHexString(Yata.META_I_VITRIOLIC_BLAST)  + " - " + gs.VitriolicBlast),
+				new tui(toHexString(Yata.META_I_ELDRITCH_CHAIN)   + " - " + gs.EldritchChain), // Blast Shapes ->
+				new tui(toHexString(Yata.META_I_ELDRITCH_CONE)    + " - " + gs.EldritchCone),
+				new tui(toHexString(Yata.META_I_ELDRITCH_DOOM)    + " - " + gs.EldritchDoom),
+				new tui(toHexString(Yata.META_I_ELDRITCH_SPEAR)   + " - " + gs.EldritchSpear),
+				new tui(toHexString(Yata.META_I_HIDEOUS_BLOW)     + " - " + gs.HideousBlow),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="list_AsMetaMagics()">list_AsMetaMagics()</see></c>
+		/// Helper for
+		/// <c><see cref="list_AsMetaMagics()">list_AsMetaMagics()</see></c>.
 		/// </summary>
 		/// <param name="bits"></param>
 		/// <returns></returns>

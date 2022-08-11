@@ -270,12 +270,14 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - simple 1-part"));
-			co_Val.Items.Add(new tui("1 - colored 1-part"));
-			co_Val.Items.Add(new tui("2 - configurable 3-part"));
-			co_Val.Items.Add(new tui("3 - armor"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - simple 1-part"),
+				new tui("1 - colored 1-part"),
+				new tui("2 - configurable 3-part"),
+				new tui("3 - armor"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -288,22 +290,24 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - standard one-handed weapon"));
-			co_Val.Items.Add(new tui("1 - not wieldable"));
-			co_Val.Items.Add(new tui("2 - not used/unknown"));
-			co_Val.Items.Add(new tui("3 - not used/unknown"));
-			co_Val.Items.Add(new tui("4 - two-handed weapon"));
-			co_Val.Items.Add(new tui("5 - bow"));
-			co_Val.Items.Add(new tui("6 - crossbow"));
-			co_Val.Items.Add(new tui("7 - shield"));
-			co_Val.Items.Add(new tui("8 - double-sided weapon"));
-			co_Val.Items.Add(new tui("9 - creature weapon"));
-			co_Val.Items.Add(new tui("10 - dart or sling"));
-			co_Val.Items.Add(new tui("11 - shuriken or throwing axe"));
-			co_Val.Items.Add(new tui("12 - spears"));
-			co_Val.Items.Add(new tui("13 - musical instruments"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - standard one-handed weapon"),
+				new tui("1 - not wieldable"),
+				new tui("2 - not used/unknown"),
+				new tui("3 - not used/unknown"),
+				new tui("4 - two-handed weapon"),
+				new tui("5 - bow"),
+				new tui("6 - crossbow"),
+				new tui("7 - shield"),
+				new tui("8 - double-sided weapon"),
+				new tui("9 - creature weapon"),
+				new tui("10 - dart or sling"),
+				new tui("11 - shuriken or throwing axe"),
+				new tui("12 - spears"),
+				new tui("13 - musical instruments"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -316,14 +320,16 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - none"));
-			co_Val.Items.Add(new tui("1 - piercing"));
-			co_Val.Items.Add(new tui("2 - bludgeoning"));
-			co_Val.Items.Add(new tui("3 - slashing"));
-			co_Val.Items.Add(new tui("4 - piercing/slashing"));
-			co_Val.Items.Add(new tui("5 - bludgeoning/piercing"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - none"),
+				new tui("1 - piercing"),
+				new tui("2 - bludgeoning"),
+				new tui("3 - slashing"),
+				new tui("4 - piercing/slashing"),
+				new tui("5 - bludgeoning/piercing"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -336,13 +342,15 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - none"));
-			co_Val.Items.Add(new tui("1 - tiny"));
-			co_Val.Items.Add(new tui("2 - small"));
-			co_Val.Items.Add(new tui("3 - medium"));
-			co_Val.Items.Add(new tui("4 - large"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - none"),
+				new tui("1 - tiny"),
+				new tui("2 - small"),
+				new tui("3 - medium"),
+				new tui("4 - large"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -409,13 +417,15 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - armor and clothing"));
-			co_Val.Items.Add(new tui("1 - weapons"));
-			co_Val.Items.Add(new tui("2 - potions and scrolls"));
-			co_Val.Items.Add(new tui("3 - wands and magic items"));
-			co_Val.Items.Add(new tui("4 - miscellaneous"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - armor and clothing"),
+				new tui("1 - weapons"),
+				new tui("2 - potions and scrolls"),
+				new tui("3 - wands and magic items"),
+				new tui("4 - miscellaneous"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -428,13 +438,15 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - dodge"));
-			co_Val.Items.Add(new tui("1 - natural"));
-			co_Val.Items.Add(new tui("2 - armor"));
-			co_Val.Items.Add(new tui("3 - shield"));
-			co_Val.Items.Add(new tui("4 - deflection"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - dodge"),
+				new tui("1 - natural"),
+				new tui("2 - armor"),
+				new tui("3 - shield"),
+				new tui("4 - deflection"),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -483,11 +495,13 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui("0 - none"));
-			co_Val.Items.Add(new tui("1 - rods instruments wands and misc items"));
-			co_Val.Items.Add(new tui("2 - potions and scrolls"));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - none"),
+				new tui("1 - rods instruments wands and misc items"),
+				new tui("2 - potions and scrolls"),
+				new tui(gs.Stars)
+			});
 		}
 		#endregion init
 

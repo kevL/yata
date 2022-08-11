@@ -117,7 +117,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; goto case gs.Stars;
 					}
-					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
 					break;
 
 				case ToggleMode: // int-val,dropdown,unique
@@ -208,22 +208,24 @@ namespace yata
 
 			dropdown();
 
-			co_Val.Items.Add(new tui(gs.FeatCatBackground));
-			co_Val.Items.Add(new tui(gs.FeatCatClassability));
-			co_Val.Items.Add(new tui(gs.FeatCatDivine));
-			co_Val.Items.Add(new tui(gs.FeatCatEpic));
-			co_Val.Items.Add(new tui(gs.FeatCatGeneral));
-			co_Val.Items.Add(new tui(gs.FeatCatHeritage));
-			co_Val.Items.Add(new tui(gs.FeatCatHistory));
-			co_Val.Items.Add(new tui(gs.FeatCatItemCreation));
-			co_Val.Items.Add(new tui(gs.FeatCatMetamagic));
-			co_Val.Items.Add(new tui(gs.FeatCatProficiency));
-			co_Val.Items.Add(new tui(gs.FeatCatRacialability));
-			co_Val.Items.Add(new tui(gs.FeatCatSkillSave));
-			co_Val.Items.Add(new tui(gs.FeatCatSpellcasting));
-			co_Val.Items.Add(new tui(gs.FeatCatTeamwork));
-
-			co_Val.Items.Add(new tui(gs.Stars));
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.FeatCatBackground),
+				new tui(gs.FeatCatClassability),
+				new tui(gs.FeatCatDivine),
+				new tui(gs.FeatCatEpic),
+				new tui(gs.FeatCatGeneral),
+				new tui(gs.FeatCatHeritage),
+				new tui(gs.FeatCatHistory),
+				new tui(gs.FeatCatItemCreation),
+				new tui(gs.FeatCatMetamagic),
+				new tui(gs.FeatCatProficiency),
+				new tui(gs.FeatCatRacialability),
+				new tui(gs.FeatCatSkillSave),
+				new tui(gs.FeatCatSpellcasting),
+				new tui(gs.FeatCatTeamwork),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
