@@ -113,6 +113,7 @@ namespace yata
 				case InfoInputSpells.Vs:
 				case InfoInputSpells.MetaMagic:
 				case InfoInputSpells.TargetType:
+				case InfoInputSpells.ConjAnim:
 				case InfoInputSpells.ImmunityType:
 				case InfoInputSpells.UserType:
 				case InfoInputSpells.AsMetaMagic:
@@ -596,6 +597,7 @@ namespace yata
 						case InfoInputSpells.School: // STRING Input ->
 						case InfoInputSpells.Range:
 						case InfoInputSpells.Vs:
+						case InfoInputSpells.ConjAnim:
 						case InfoInputSpells.ImmunityType:
 						case InfoInputSpells.UserType:
 							using (var iis = new InfoInputSpells(this, _sel))

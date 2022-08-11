@@ -57,6 +57,7 @@ namespace yata
 		internal const int MetaMagic         =  7;
 		internal const int TargetType        =  8;
 		internal const int ImpactScript      =  9; // ofd only
+		internal const int ConjAnim          = 19;
 		internal const int ConjVisual0       = 20; // ofd only
 		internal const int LowConjVisual0    = 21; // ofd only
 		internal const int ConjVisual1       = 22; // ofd only
@@ -294,6 +295,29 @@ namespace yata
 					}
 					break;
 
+				case ConjAnim: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_ConjAnimTypes();
+
+					switch (val)
+					{
+						case gs.Attack:    co_Val.SelectedIndex = 0; break;
+						case gs.Bardsong:  co_Val.SelectedIndex = 1; break;
+						case gs.Defensive: co_Val.SelectedIndex = 2; break;
+						case gs.Hand:      co_Val.SelectedIndex = 3; break;
+						case gs.Head:      co_Val.SelectedIndex = 4; break;
+						case gs.Major:     co_Val.SelectedIndex = 5; break;
+						case gs.Party:     co_Val.SelectedIndex = 6; break;
+						case gs.Read:      co_Val.SelectedIndex = 7; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
 				case ImmunityType: // string-val,dropdown,unique
 					// NOTE: ImmunityTypes are not used by the NwN2 engine but their
 					// string-values can be accessed by script regardless. What follows
@@ -329,7 +353,7 @@ namespace yata
 
 						default: _f.str1 = gs.Stars; goto case gs.Stars;
 					}
-					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
 					break;
 
 				case Category: // int-val,dropdown,unique
@@ -565,6 +589,30 @@ namespace yata
 
 			ClientSize = new Size(ClientSize.Width,
 								  ClientSize.Height - 20 * 8);
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="ConjAnim"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_ConjAnimTypes()
+		{
+			Text = "  ConjAnim";
+
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Attack),
+				new tui(gs.Bardsong),
+				new tui(gs.Defensive),
+				new tui(gs.Hand),
+				new tui(gs.Head),
+				new tui(gs.Major),
+				new tui(gs.Party),
+				new tui(gs.Read),
+				new tui(gs.Stars)
+			});
 		}
 
 		/// <summary>
@@ -1041,6 +1089,20 @@ namespace yata
 
 					switch (_cell.x)
 					{
+						case ConjAnim:
+							switch (co_Val.SelectedIndex)
+							{
+								case 0: _f.str1 = gs.Attack;    break;
+								case 1: _f.str1 = gs.Bardsong;  break;
+								case 2: _f.str1 = gs.Defensive; break;
+								case 3: _f.str1 = gs.Hand;      break;
+								case 4: _f.str1 = gs.Head;      break;
+								case 5: _f.str1 = gs.Major;     break;
+								case 6: _f.str1 = gs.Party;     break;
+								case 7: _f.str1 = gs.Read;      break;
+							}
+							break;
+
 						case ImmunityType:
 							switch (co_Val.SelectedIndex)
 							{
@@ -1214,7 +1276,8 @@ namespace yata
 					printHexString(_f.int1 = 0);
 					break;
 
-				case ImmunityType: // dropdown -> fire changed_Combobox()
+				case ConjAnim: // dropdown -> fire changed_Combobox()
+				case ImmunityType:
 				case Category:
 				case SpontCastClassReq:
 				case AsMetaMagic:

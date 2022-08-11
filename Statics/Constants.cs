@@ -35,7 +35,7 @@ namespace yata
 		internal const string non             = "n/a";
 		internal const string bork            = "bork";
 
-		internal const string Acid            = "Acid";
+		internal const string Acid            = "Acid"; // immunity types ->
 		internal const string Cold            = "Cold";
 		internal const string Death           = "Death";
 		internal const string Disease         = "Disease";
@@ -53,6 +53,15 @@ namespace yata
 		internal const string Sonic           = "Sonic";
 		internal const string Constitution    = "Constitution";
 		internal const string Water           = "Water";
+
+		internal const string Attack          = "attack";		// conjanim types ->
+		internal const string Bardsong        = "bardsong";		// I merely pulled these from
+		internal const string Defensive       = "defensive";	// what's in Spells.2da
+		internal const string Hand            = "hand";
+		internal const string Head            = "head";
+		internal const string Major           = "major";
+		internal const string Party           = "party";
+		internal const string Read            = "read";
 
 		internal const string BeshadowedBlast = "Beshadowed Blast";
 		internal const string BewitchingBlast = "Bewitching Blast";
