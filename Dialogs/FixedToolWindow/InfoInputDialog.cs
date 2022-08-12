@@ -7,6 +7,12 @@ namespace yata
 {
 	/// <summary>
 	/// An inherited class for <c>InfoInput*</c> dialogs.
+	/// <list type="bullet">
+	/// <item><c><see cref="InfoInputSpells"/></c></item>
+	/// <item><c><see cref="InfoInputFeat"/></c></item>
+	/// <item><c><see cref="InfoInputClasses"/></c></item>
+	/// <item><c><see cref="InfoInputBaseitems"/></c></item>
+	/// </list>
 	/// </summary>
 	class InfoInputDialog
 		: Form
