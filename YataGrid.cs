@@ -438,7 +438,7 @@ namespace yata
 						if (_table.Propanel != null && _table.Propanel.Visible)
 							_table.Propanel.telemetric();
 
-						if (!_f.IsMin) _table.EnsureDisplayed();
+						if (!_f.IsMin && !_isColsort) _table.EnsureDisplayed();
 
 						if (_table == this
 							&&  _f._diff1 != null   && _f._diff2 != null
@@ -1798,8 +1798,9 @@ namespace yata
 		/// </summary>
 		/// <returns>a bitwise <c>int</c> defining controls that need to be
 		/// invalidated</returns>
-		/// <remarks>A selected <c>Row</c> has priority over any selected
-		/// <c>Cells</c>.</remarks>
+		/// <remarks>A selected <c><see cref="Row"/></c> has priority over any
+		/// selected <c><see cref="Cell">Cells</see></c> but a selected
+		/// <c><see cref="Col"/></c> shall be ignored.</remarks>
 		internal int EnsureDisplayed()
 		{
 			int selr = getSelectedRow();

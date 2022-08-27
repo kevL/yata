@@ -14,8 +14,7 @@ namespace yata
 		/// </summary>
 		/// <remarks>Set by
 		/// <c><see cref="OnMouseDown()">OnMouseDown()</see></c>.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Used by
 		/// <list type="bullet">
 		/// <item><c><see cref="OnMouseClick()">OnMouseClick()</see></c></item>
@@ -54,6 +53,14 @@ namespace yata
 		/// See <c><see cref="_t1"/></c>.
 		/// </summary>
 		internal static bool _doubletclick;
+
+		/// <summary>
+		/// <c><see cref="ColSort()">ColSort()</see></c> causes the tabs to
+		/// redraw which fires <c><see cref="OnResize()">OnResize()</see></c>
+		/// twice so set this <c>bool</c> <c>true</c> to bypass
+		/// <c><see cref="EnsureDisplayed()">EnsureDisplayed()</see></c>.
+		/// </summary>
+		bool _isColsort;
 		#endregion Fields
 
 
@@ -67,8 +74,7 @@ namespace yata
 		/// stuff (but note that <c>LMB</c> <c>MouseClick</c> happens before
 		/// other stuff) use <c>MouseDown</c> instead for <c>RMB</c> operations
 		/// that need to happen before other stuff.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -374,8 +380,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks><c>YataGrid.MouseClick</c> does not fire on any of the top
 		/// or left panels.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseClick(MouseEventArgs e)
@@ -543,8 +548,7 @@ namespace yata
 		/// <remarks>If a cell is currently being edited any changes to that
 		/// cell will be accepted and the cell that is double-clicked if any
 		/// shall (sic) enter its edit-state.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// <c>MouseDown</c> <c>MouseClick</c> and <c>MouseDoubleClick</c> need
 		/// to work as a single routine.</remarks>
 		protected override void OnMouseDoubleClick(MouseEventArgs e)
@@ -1048,7 +1052,10 @@ namespace yata
 								ColSort(click_c);
 
 								EnsureDisplayedCol(click_c);
-								EnsureDisplayed();
+
+								for (int r = 0; r != RowCount; ++r) // display first selected cell in col ->
+								if (this[r, click_c].selected)
+									EnsureDisplayedRow(r);
 
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
@@ -1129,16 +1136,21 @@ namespace yata
 		/// <summary>
 		/// helper for sorting by labels
 		/// </summary>
-		/// <param name="col"></param>
-		void labelSort(int col)
+		/// <param name="colid"></param>
+		void labelSort(int colid)
 		{
 			if (ModifierKeys == Keys.Shift)
 			{
 				editresultdefault();
 				Select();
 
-				ColSort(col);
-				EnsureDisplayed();
+				ColSort(colid);
+
+				// do not shift table horizontally (is a frozen col)
+
+				for (int r = 0; r != RowCount; ++r) // display first selected cell in col ->
+				if (this[r, colid].selected)
+					EnsureDisplayedRow(r);
 
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
@@ -1160,6 +1172,7 @@ namespace yata
 		/// <remarks>Performs a mergesort.</remarks>
 		void ColSort(int col)
 		{
+			_isColsort = true;
 			DrawRegulator.SuspendDrawing(_f);
 
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
@@ -1208,6 +1221,7 @@ namespace yata
 			_ur.ResetY(); // straighten out row._id and cell.y in UndoRedo's Restorables
 
 			DrawRegulator.ResumeDrawing(_f);
+			_isColsort = false;
 		}
 		#endregion Sort
 	}
