@@ -54,14 +54,48 @@ namespace yata
 		internal const string Constitution    = "Constitution";
 		internal const string Water           = "Water";
 
-		internal const string Attack          = "attack";		// conjanim types ->
-		internal const string Bardsong        = "bardsong";		// I merely pulled these from
-		internal const string Defensive       = "defensive";	// what's in Spells.2da
+		internal const string Attack          = "attack";		// ConjAnim types ->
+		internal const string Bardsong        = "bardsong";		// I merely pulled these from what's in Spells.2da
+		internal const string Defensive       = "defensive";
 		internal const string Hand            = "hand";
 		internal const string Head            = "head";
 		internal const string Major           = "major";
 		internal const string Party           = "party";
 		internal const string Read            = "read";
+
+		internal const string Area            = "area";		// CastAnim types ->
+		internal const string Creature        = "creature";	// I merely pulled these from what's in Spells.2da
+		internal const string General         = "general";	// - a few ConjAnim types are also used.
+		internal const string Out             = "out";
+		internal const string Self            = "self";
+		internal const string Touch           = "touch";
+		internal const string Up              = "up";
+
+		internal const string Accelerating      = "accelerating";	// ProjTypes ->
+		internal const string Ballistic         = "ballistic";		// I merely pulled these from what's in Spells.2da
+		internal const string Bounce            = "bounce";
+		internal const string Burst             = "burst";
+		internal const string Burstup           = "burstup";
+		internal const string Highballistic     = "highballistic";
+		internal const string Homing            = "homing";
+		internal const string Homingspiral      = "homingspiral";
+		internal const string Launchedballistic = "launchedballistic";
+		internal const string Linked            = "linked";
+		internal const string Loworbit          = "loworbit";
+		internal const string Thrownballistic   = "thrownballistic";
+
+		internal const string Halo              = "halo";	// ProjSpwnPoint types ->
+//		internal const string Head              = "head";	// I merely pulled these from what's in Spells.2da
+		internal const string Lrhand            = "lrhand";
+		internal const string Monster0          = "monster0";
+		internal const string Monster1          = "monster1";
+		internal const string Monster2          = "monster2";
+		internal const string Monster3          = "monster3";
+		internal const string Monster4          = "monster4";
+		internal const string Mouth             = "mouth";
+		internal const string Rhand             = "rhand";
+
+		internal const string Path              = "path"; // ProjOrientation types -> ditto.
 
 		internal const string BeshadowedBlast = "Beshadowed Blast";
 		internal const string BewitchingBlast = "Bewitching Blast";

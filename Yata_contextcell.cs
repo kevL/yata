@@ -114,9 +114,20 @@ namespace yata
 				case InfoInputSpells.MetaMagic:
 				case InfoInputSpells.TargetType:
 				case InfoInputSpells.ConjAnim:
+				case InfoInputSpells.CastAnim:
+				case InfoInputSpells.ProjType:
+				case InfoInputSpells.ProjSpwnPoint:
+				case InfoInputSpells.ProjOrientation:
 				case InfoInputSpells.ImmunityType:
+				case InfoInputSpells.ItemImmunity:
 				case InfoInputSpells.UserType:
+				case InfoInputSpells.UseConcentration:
+				case InfoInputSpells.SpontaneouslyCast:
+				case InfoInputSpells.HostileSetting:
+				case InfoInputSpells.HasProjectile:
 				case InfoInputSpells.AsMetaMagic:
+				case InfoInputSpells.CastableOnDead:
+				case InfoInputSpells.Removed:
 					return true;
 
 				case InfoInputSpells.Category:
@@ -168,6 +179,12 @@ namespace yata
 				case InfoInputSpells.ProjSound:
 					cellit_Input    .Text = "Select sound ...";
 					cellit_Input_zip.Text = "Select Data/zip sound ...";
+					cellit_Input_zip.Visible = true;
+					return true;
+
+				case InfoInputSpells.ProjModel:
+					cellit_Input    .Text = "Select model ...";
+					cellit_Input_zip.Text = "Select Data/zip model ...";
 					cellit_Input_zip.Visible = true;
 					return true;
 			}
@@ -598,8 +615,19 @@ namespace yata
 						case InfoInputSpells.Range:
 						case InfoInputSpells.Vs:
 						case InfoInputSpells.ConjAnim:
+						case InfoInputSpells.CastAnim:
+						case InfoInputSpells.ProjType:
+						case InfoInputSpells.ProjSpwnPoint:
+						case InfoInputSpells.ProjOrientation:
 						case InfoInputSpells.ImmunityType:
+						case InfoInputSpells.ItemImmunity:
 						case InfoInputSpells.UserType:
+						case InfoInputSpells.UseConcentration:
+						case InfoInputSpells.SpontaneouslyCast:
+						case InfoInputSpells.HostileSetting:
+						case InfoInputSpells.HasProjectile:
+						case InfoInputSpells.CastableOnDead:
+						case InfoInputSpells.Removed:
 							using (var iis = new InfoInputSpells(this, _sel))
 							{
 								if (iis.ShowDialog(this) == DialogResult.OK
@@ -671,6 +699,10 @@ namespace yata
 						case InfoInputSpells.CastSound:
 						case InfoInputSpells.ProjSound:
 							SelectFile(" Select sound", Yata.GetFileFilter("wav"), ".wav");
+							break;
+
+						case InfoInputSpells.ProjModel:
+							SelectFile(" Select model", Yata.GetFileFilter("mdb"), ".mdb", true);
 							break;
 					}
 					break;
@@ -921,6 +953,10 @@ namespace yata
 						case InfoInputSpells.CastSound:
 						case InfoInputSpells.ProjSound:
 							SelectFile(" Select Data/zip sound archive");
+							break;
+
+						case InfoInputSpells.ProjModel:
+							SelectFile(" Select Data/zip model archive", true);
 							break;
 					}
 					break;

@@ -3248,7 +3248,7 @@ namespace yata
 					}
 					break;
 
-				case InfoInputSpells.Vs:
+				case InfoInputSpells.Vs: // no 2da
 					if (!String.IsNullOrEmpty(val = Table[id,col].text)
 						&& val != gs.Stars)
 					{
@@ -3523,12 +3523,14 @@ namespace yata
 					}
 					break;
 
-				case 47: // "SubRadSpell1" - Spells.2da
-				case 48: // "SubRadSpell2"
-				case 49: // "SubRadSpell3"
-				case 50: // "SubRadSpell4"
-				case 51: // "SubRadSpell5"
-				case 53: // "Master"
+				case InfoInputSpells.SubRadSpell1: // Spells.2da ->
+				case InfoInputSpells.SubRadSpell2:
+				case InfoInputSpells.SubRadSpell3:
+				case InfoInputSpells.SubRadSpell4:
+				case InfoInputSpells.SubRadSpell5:
+				case InfoInputSpells.Master:
+				case InfoInputSpells.Counter1:
+				case InfoInputSpells.Counter2:
 					if (it_PathSpells2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3628,7 +3630,7 @@ namespace yata
 					}
 					break;
 
-				case 61: // "FeatID" - Feat.2da
+				case InfoInputSpells.FeatID: // Feat.2da
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3752,6 +3754,33 @@ namespace yata
 							}
 							else
 								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputSpells.ItemImmunity: // no 2da (bools) ->
+				case InfoInputSpells.UseConcentration:
+				case InfoInputSpells.SpontaneouslyCast:
+				case InfoInputSpells.HostileSetting:
+				case InfoInputSpells.HasProjectile:
+				case InfoInputSpells.CastableOnDead:
+				case InfoInputSpells.Removed:
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result))
+						{
+							switch (result)
+							{
+								case 0:  info += "false"; break;
+								case 1:  info += "true";  break;
+
+								default: info += gs.bork; break;
+							}
 						}
 						else
 							info += gs.bork;

@@ -65,22 +65,43 @@ namespace yata
 		internal const int ConjSoundVFX      = 24; // ofd only
 		internal const int ConjSoundMale     = 25; // ofd only
 		internal const int ConjSoundFemale   = 26; // ofd only
+		internal const int CastAnim          = 28;
 		internal const int CastVisual0       = 30; // ofd only
 		internal const int LowCastVisual0    = 31; // ofd only
 		internal const int CastVisual1       = 32; // ofd only
 		internal const int CastVisual2       = 33; // ofd only
 		internal const int CastSound         = 34; // ofd only
+		internal const int ProjModel         = 36; // ofd only
 		internal const int ProjSEF           = 37; // ofd only
 		internal const int LowProjSEF        = 38; // ofd only
+		internal const int ProjType          = 39;
+		internal const int ProjSpwnPoint     = 40;
 		internal const int ProjSound         = 41; // ofd only
+		internal const int ProjOrientation   = 42;
 		internal const int ImpactSEF         = 43; // ofd only
 		internal const int LowImpactSEF      = 44; // ofd only
 		internal const int ImmunityType      = 45;
+		internal const int ItemImmunity      = 46; // bool
+		internal const int SubRadSpell1      = 47; // info only
+		internal const int SubRadSpell2      = 48; // info only
+		internal const int SubRadSpell3      = 49; // info only
+		internal const int SubRadSpell4      = 50; // info only
+		internal const int SubRadSpell5      = 51; // info only
+		internal const int Master            = 53; // info only
 		internal const int Category          = 52;
 		internal const int UserType          = 54;
+		internal const int UseConcentration  = 56; // bool
+		internal const int SpontaneouslyCast = 57; // bool
 		internal const int SpontCastClassReq = 58;
+		internal const int HostileSetting    = 60; // bool
+		internal const int FeatID            = 61; // info only
+		internal const int Counter1          = 62;
+		internal const int Counter2          = 63;
+		internal const int HasProjectile     = 64; // bool
 		internal const int AsMetaMagic       = 65;
 		internal const int TargetingUI       = 66;
+		internal const int CastableOnDead    = 67; // bool
+		internal const int Removed           = 68; // bool
 		#endregion Fields (static)
 
 
@@ -318,6 +339,104 @@ namespace yata
 					bu_Clear.Enabled = (_f.str1 != gs.Stars);
 					break;
 
+				case CastAnim: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_CastAnimTypes();
+
+					switch (val)
+					{
+						case gs.Area:      co_Val.SelectedIndex =  0; break;
+						case gs.Attack:    co_Val.SelectedIndex =  1; break;
+						case gs.Bardsong:  co_Val.SelectedIndex =  2; break;
+						case gs.Creature:  co_Val.SelectedIndex =  3; break;
+						case gs.Defensive: co_Val.SelectedIndex =  4; break;
+						case gs.General:   co_Val.SelectedIndex =  5; break;
+//						case gs.Hand:      co_Val.SelectedIndex =   ; break;
+//						case gs.Head:      co_Val.SelectedIndex =   ; break;
+						case gs.Major:     co_Val.SelectedIndex =  6; break;
+//						case gs.Party:     co_Val.SelectedIndex =   ; break;
+						case gs.Out:       co_Val.SelectedIndex =  7; break;
+//						case gs.Read:      co_Val.SelectedIndex =   ; break;
+						case gs.Self:      co_Val.SelectedIndex =  8; break;
+						case gs.Touch:     co_Val.SelectedIndex =  9; break;
+						case gs.Up:        co_Val.SelectedIndex = 10; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
+				case ProjType: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_ProjTypes();
+
+					switch (val)
+					{
+						case gs.Accelerating:      co_Val.SelectedIndex =  0; break;
+						case gs.Ballistic:         co_Val.SelectedIndex =  1; break;
+						case gs.Bounce:            co_Val.SelectedIndex =  2; break;
+						case gs.Burst:             co_Val.SelectedIndex =  3; break;
+						case gs.Burstup:           co_Val.SelectedIndex =  4; break;
+						case gs.Highballistic:     co_Val.SelectedIndex =  5; break;
+						case gs.Homing:            co_Val.SelectedIndex =  6; break;
+						case gs.Homingspiral:      co_Val.SelectedIndex =  7; break;
+						case gs.Launchedballistic: co_Val.SelectedIndex =  8; break;
+						case gs.Linked:            co_Val.SelectedIndex =  9; break;
+						case gs.Loworbit:          co_Val.SelectedIndex = 10; break;
+						case gs.Thrownballistic:   co_Val.SelectedIndex = 11; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
+				case ProjSpwnPoint: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_ProjSpwnPointTypes();
+
+					switch (val)
+					{
+						case gs.Halo:     co_Val.SelectedIndex = 0; break;
+						case gs.Head:     co_Val.SelectedIndex = 1; break;
+						case gs.Lrhand:   co_Val.SelectedIndex = 2; break;
+						case gs.Monster0: co_Val.SelectedIndex = 3; break;
+						case gs.Monster1: co_Val.SelectedIndex = 4; break;
+						case gs.Monster2: co_Val.SelectedIndex = 5; break;
+						case gs.Monster3: co_Val.SelectedIndex = 6; break;
+						case gs.Monster4: co_Val.SelectedIndex = 7; break;
+						case gs.Mouth:    co_Val.SelectedIndex = 8; break;
+						case gs.Rhand:    co_Val.SelectedIndex = 9; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
+				case ProjOrientation: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_ProjOrientationTypes();
+
+					switch (val)
+					{
+						case gs.Path: co_Val.SelectedIndex = 0; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
 				case ImmunityType: // string-val,dropdown,unique
 					// NOTE: ImmunityTypes are not used by the NwN2 engine but their
 					// string-values can be accessed by script regardless. What follows
@@ -437,6 +556,28 @@ namespace yata
 				case TargetingUI: // int-val,dropdown,unique
 					list_Targeters();
 					initintvals(val, co_Val, bu_Clear);
+					break;
+
+				case ItemImmunity: // string-val,checkbox,unique (bools) ->
+				case UseConcentration:
+				case SpontaneouslyCast:
+				case HostileSetting:
+				case HasProjectile:
+				case CastableOnDead:
+				case Removed:
+					_f.str0 = _f.str1 = val;
+					prep_bool();
+
+					switch (val)
+					{
+						case "0": cb_00.Checked = true; break;
+						case "1": cb_01.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
 					break;
 			}
 			_init = false;
@@ -577,6 +718,19 @@ namespace yata
 			cb_00.Visible = cb_01.Visible = cb_02.Visible = cb_03.Visible = true;
 		}
 
+		/// <summary>
+		/// Prepares this dialog for <c>bool</c> input.
+		/// </summary>
+		void prep_bool()
+		{
+			Text = "  " + Yata.Table.Cols[_cell.x].text;
+
+			cb_00.Text = "0 - false";
+			cb_01.Text = "1 - true";
+
+			cb_00.Visible = cb_01.Visible = true;
+		}
+
 
 		/// <summary>
 		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
@@ -611,6 +765,104 @@ namespace yata
 				new tui(gs.Major),
 				new tui(gs.Party),
 				new tui(gs.Read),
+				new tui(gs.Stars)
+			});
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="CastAnim"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_CastAnimTypes()
+		{
+			Text = "  CastAnim";
+
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Area),
+				new tui(gs.Attack),
+				new tui(gs.Bardsong),
+				new tui(gs.Creature),
+				new tui(gs.Defensive),
+				new tui(gs.General),
+				new tui(gs.Major),
+				new tui(gs.Out),
+				new tui(gs.Self),
+				new tui(gs.Touch),
+				new tui(gs.Up),
+				new tui(gs.Stars)
+			});
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="ProjType"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_ProjTypes()
+		{
+			Text = "  ProjType";
+
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Accelerating),
+				new tui(gs.Ballistic),
+				new tui(gs.Bounce),
+				new tui(gs.Burst),
+				new tui(gs.Burstup),
+				new tui(gs.Highballistic),
+				new tui(gs.Homing),
+				new tui(gs.Homingspiral),
+				new tui(gs.Launchedballistic),
+				new tui(gs.Linked),
+				new tui(gs.Loworbit),
+				new tui(gs.Thrownballistic),
+				new tui(gs.Stars)
+			});
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="ProjSpwnPoint"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_ProjSpwnPointTypes()
+		{
+			Text = "  ProjSpwnPoint";
+
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Halo),
+				new tui(gs.Head),
+				new tui(gs.Lrhand),
+				new tui(gs.Monster0),
+				new tui(gs.Monster1),
+				new tui(gs.Monster2),
+				new tui(gs.Monster3),
+				new tui(gs.Monster4),
+				new tui(gs.Mouth),
+				new tui(gs.Rhand),
+				new tui(gs.Stars)
+			});
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="ProjOrientation"/></c> to
+		/// the <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_ProjOrientationTypes()
+		{
+			Text = "  ProjOrientation";
+
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Path),
 				new tui(gs.Stars)
 			});
 		}
@@ -790,13 +1042,21 @@ namespace yata
 					case MetaMagic:  change_MetaMagic();  break;
 					case TargetType: change_TargetType(); break;
 					case UserType:   change_UserType();   break;
+
+					case ItemImmunity:
+					case UseConcentration:
+					case SpontaneouslyCast:
+					case HostileSetting:
+					case HasProjectile:
+					case CastableOnDead:
+					case Removed:    change_bool();       break;
 				}
 			}
 		}
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_School()
 		{
@@ -823,7 +1083,7 @@ namespace yata
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_Range()
 		{
@@ -848,7 +1108,7 @@ namespace yata
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_Vs()
 		{
@@ -865,7 +1125,7 @@ namespace yata
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_MetaMagic()
 		{
@@ -1002,7 +1262,7 @@ namespace yata
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_TargetType()
 		{
@@ -1049,7 +1309,7 @@ namespace yata
 
 		/// <summary>
 		/// Helper for
-		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_UserType()
 		{
@@ -1062,6 +1322,27 @@ namespace yata
 				else if (_cb == cb_01) val = "2";
 				else if (_cb == cb_02) val = "3";
 				else                   val = "4"; // _cb == cb_03
+			}
+			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// </summary>
+		void change_bool()
+		{
+			clearchecks();
+
+			string val;
+			if (_cb.Checked)
+			{
+				if (_cb == cb_00) val = "0";
+				else              val = "1"; // _cb == cb_01
 			}
 			else
 				val = gs.Stars;
@@ -1104,6 +1385,64 @@ namespace yata
 								case 5: _f.str1 = gs.Major;     break;
 								case 6: _f.str1 = gs.Party;     break;
 								case 7: _f.str1 = gs.Read;      break;
+							}
+							break;
+
+						case CastAnim:
+							switch (co_Val.SelectedIndex)
+							{
+								case  0: _f.str1 = gs.Area;      break;
+								case  1: _f.str1 = gs.Attack;    break;
+								case  2: _f.str1 = gs.Bardsong;  break;
+								case  3: _f.str1 = gs.Creature;  break;
+								case  4: _f.str1 = gs.Defensive; break;
+								case  5: _f.str1 = gs.General;   break;
+								case  6: _f.str1 = gs.Major;     break;
+								case  7: _f.str1 = gs.Out;       break;
+								case  8: _f.str1 = gs.Self;      break;
+								case  9: _f.str1 = gs.Touch;     break;
+								case 10: _f.str1 = gs.Up;        break;
+							}
+							break;
+
+						case ProjType:
+							switch (co_Val.SelectedIndex)
+							{
+								case  0: _f.str1 = gs.Accelerating;      break;
+								case  1: _f.str1 = gs.Ballistic;         break;
+								case  2: _f.str1 = gs.Bounce;            break;
+								case  3: _f.str1 = gs.Burst;             break;
+								case  4: _f.str1 = gs.Burstup;           break;
+								case  5: _f.str1 = gs.Highballistic;     break;
+								case  6: _f.str1 = gs.Homing;            break;
+								case  7: _f.str1 = gs.Homingspiral;      break;
+								case  8: _f.str1 = gs.Launchedballistic; break;
+								case  9: _f.str1 = gs.Linked;            break;
+								case 10: _f.str1 = gs.Loworbit;          break;
+								case 11: _f.str1 = gs.Thrownballistic;   break;
+							}
+							break;
+
+						case ProjSpwnPoint:
+							switch (co_Val.SelectedIndex)
+							{
+								case 0: _f.str1 = gs.Halo;     break;
+								case 1: _f.str1 = gs.Head;     break;
+								case 2: _f.str1 = gs.Lrhand;   break;
+								case 3: _f.str1 = gs.Monster0; break;
+								case 4: _f.str1 = gs.Monster1; break;
+								case 5: _f.str1 = gs.Monster2; break;
+								case 6: _f.str1 = gs.Monster3; break;
+								case 7: _f.str1 = gs.Monster4; break;
+								case 8: _f.str1 = gs.Mouth;    break;
+								case 9: _f.str1 = gs.Rhand;    break;
+							}
+							break;
+
+						case ProjOrientation:
+							switch (co_Val.SelectedIndex)
+							{
+								case 0: _f.str1 = gs.Path; break;
 							}
 							break;
 
@@ -1250,6 +1589,13 @@ namespace yata
 				case Range:
 				case Vs:
 				case UserType:
+				case ItemImmunity:
+				case UseConcentration:
+				case SpontaneouslyCast:
+				case HostileSetting:
+				case HasProjectile:
+				case CastableOnDead:
+				case Removed:
 					bu_Clear.Enabled = false;
 
 					la_Val.Text = _f.str1 = gs.Stars;
@@ -1281,6 +1627,10 @@ namespace yata
 					break;
 
 				case ConjAnim: // dropdown -> fire changed_Combobox()
+				case CastAnim:
+				case ProjType:
+				case ProjSpwnPoint:
+				case ProjOrientation:
 				case ImmunityType:
 				case Category:
 				case SpontCastClassReq:
