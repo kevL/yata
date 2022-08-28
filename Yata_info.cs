@@ -3865,15 +3865,15 @@ namespace yata
 
 			switch (col)
 			{
-				case 20: // "PREREQFEAT1" - Feat.2da
-				case 21: // "PREREQFEAT2"
-				case 28: // "SUCCESSOR"
-				case 34: // "OrReqFeat0"
-				case 35: // "OrReqFeat1"
-				case 36: // "OrReqFeat2"
-				case 37: // "OrReqFeat3"
-				case 38: // "OrReqFeat4"
-				case 39: // "OrReqFeat5"
+				case InfoInputFeat.PREREQFEAT1: // Feat.2da ->
+				case InfoInputFeat.PREREQFEAT2:
+				case InfoInputFeat.SUCCESSOR:
+				case InfoInputFeat.OrReqFeat0:
+				case InfoInputFeat.OrReqFeat1:
+				case InfoInputFeat.OrReqFeat2:
+				case InfoInputFeat.OrReqFeat3:
+				case InfoInputFeat.OrReqFeat4:
+				case InfoInputFeat.OrReqFeat5:
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3923,7 +3923,7 @@ namespace yata
 					}
 					break;
 
-				case 27: // "SPELLID" - Spells.2da
+				case InfoInputFeat.SPELLID: // Spells.2da
 					if (it_PathSpells2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -3973,8 +3973,8 @@ namespace yata
 					}
 					break;
 
-				case 40: // "REQSKILL" - Skills.2da
-				case 43: // "REQSKILL2"
+				case InfoInputFeat.REQSKILL: // Skills.2da ->
+				case InfoInputFeat.REQSKILL2:
 					if (it_PathSkills2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{
@@ -4251,9 +4251,9 @@ namespace yata
 					}
 					break;
 
-				case 75: // "FEATPracticedSpellcaster" - Feat.2da
-				case 76: // "FEATExtraSlot"
-				case 77: // "FEATArmoredCaster"
+				case InfoInputClasses.FEATPracticedSpellcaster: // Feat.2da ->
+				case InfoInputClasses.FEATExtraSlot:
+				case InfoInputClasses.FEATArmoredCaster:
 					if (it_PathFeat2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
 					{

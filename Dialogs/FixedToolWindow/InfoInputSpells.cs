@@ -118,6 +118,13 @@ namespace yata
 
 			InitializeComponent();
 
+			Text = pad + Yata.Table.Cols[_cell.x].text;
+
+//			_title = Yata.Table.Cols[_cell.x].text;
+//			int border = (Width - ClientSize.Width) / 2;
+//			_hTitle = Height - ClientSize.Height - border;
+//			_width  = Width;
+
 			// NOTE: Don't bother inheriting from YataDialog since setting the
 			// font is the only benefit ->
 			if (Settings._font2dialog != null)
@@ -589,8 +596,6 @@ namespace yata
 		/// </summary>
 		void prep_Schools()
 		{
-			Text = "  School";
-
 			cb_00.Text = "Abjuration";
 			cb_01.Text = "Conjuration";
 			cb_02.Text = "Divination";
@@ -609,8 +614,6 @@ namespace yata
 		/// </summary>
 		void prep_Ranges()
 		{
-			Text = "  Range";
-
 			cb_00.Text = "Personal" + (( 0 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 0] + "m") : String.Empty);
 			cb_01.Text = "Touch"    + (( 1 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 1] + "m") : String.Empty);
 			cb_02.Text = "Short"    + (( 2 < Info.rangeRanges.Count) ? (gs.Space + Info.rangeRanges[ 2] + "m") : String.Empty);
@@ -627,8 +630,6 @@ namespace yata
 		/// </summary>
 		void prep_Vs()
 		{
-			Text = "  VS";
-
 			cb_00.Text = "Verbal";
 			cb_01.Text = "Somatic";
 
@@ -640,8 +641,6 @@ namespace yata
 		/// </summary>
 		void prep_MetaMagics()
 		{
-			Text = "  MetaMagic";
-
 			// standard ->
 			cb_00.Text = "(1)Empower";
 			cb_01.Text = "(2)Extend";
@@ -689,8 +688,6 @@ namespace yata
 		/// </summary>
 		void prep_TargetTypes()
 		{
-			Text = "  TargetType";
-
 			cb_00.Text = "(1)Self";
 			cb_01.Text = "(2)Creatures";
 			cb_02.Text = "(4)Ground";
@@ -708,8 +705,6 @@ namespace yata
 		/// </summary>
 		void prep_UserTypes()
 		{
-			Text = "  UserType";
-
 			cb_00.Text = "1 - Spell";
 			cb_01.Text = "2 - Special Ability";
 			cb_02.Text = "3 - Feat";
@@ -723,8 +718,6 @@ namespace yata
 		/// </summary>
 		void prep_bool()
 		{
-			Text = "  " + Yata.Table.Cols[_cell.x].text;
-
 			cb_00.Text = "0 - false";
 			cb_01.Text = "1 - true";
 
@@ -751,8 +744,6 @@ namespace yata
 		/// </summary>
 		void list_ConjAnimTypes()
 		{
-			Text = "  ConjAnim";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -775,8 +766,6 @@ namespace yata
 		/// </summary>
 		void list_CastAnimTypes()
 		{
-			Text = "  CastAnim";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -802,8 +791,6 @@ namespace yata
 		/// </summary>
 		void list_ProjTypes()
 		{
-			Text = "  ProjType";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -830,8 +817,6 @@ namespace yata
 		/// </summary>
 		void list_ProjSpwnPointTypes()
 		{
-			Text = "  ProjSpwnPoint";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -856,8 +841,6 @@ namespace yata
 		/// </summary>
 		void list_ProjOrientationTypes()
 		{
-			Text = "  ProjOrientation";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -873,8 +856,6 @@ namespace yata
 		/// </summary>
 		void list_ImmunityTypes()
 		{
-			Text = "  ImmunityType";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -908,8 +889,6 @@ namespace yata
 		/// </summary>
 		void list_Categories()
 		{
-			Text = "  Category";
-
 			dropdown();
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
@@ -925,8 +904,6 @@ namespace yata
 		/// </summary>
 		void list_SpontCastClasses()
 		{
-			Text = "  SpontCastClassReq";
-
 			dropdown();
 
 			for (int i = 0; i != Info.classLabels.Count; ++i)
@@ -942,8 +919,6 @@ namespace yata
 		/// </summary>
 		void list_AsMetaMagics()
 		{
-			Text = "  AsMetaMagic";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -984,8 +959,6 @@ namespace yata
 		/// </summary>
 		void list_Targeters()
 		{
-			Text = "  TargetingUI";
-
 			dropdown();
 
 			string text;

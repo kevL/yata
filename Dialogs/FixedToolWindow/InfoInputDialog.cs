@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+//using System.Runtime.InteropServices;
+
 
 namespace yata
 {
@@ -20,6 +22,8 @@ namespace yata
 		#region Fields (static)
 		static int _x = Int32.MinValue;
 		static int _y = Int32.MinValue;
+
+//		static Font TitleFont = new Font("Consolas", 7); // TODO: Dispose (not req'd.)
 		#endregion Fields (static)
 
 
@@ -38,7 +42,54 @@ namespace yata
 		protected bool _init;
 
 		protected CheckBox _cb;
+
+		/// <summary>
+		/// Pad left of the title text.
+		/// </summary>
+		protected string pad = "  ";
 		#endregion Fields
+
+
+/*		#region custom titletext font
+		protected string _title = "default";
+		protected int _hTitle;
+		protected int _width;
+
+		[DllImport("User32.dll")]
+		static extern IntPtr GetWindowDC(IntPtr hWnd);
+
+		[DllImport("User32.dll")]
+		static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+		const int WM_NCPAINT = 0x85;
+
+		/// <summary>
+		/// Prints title-text.
+		/// </summary>
+		/// <param name="m"></param>
+		/// <remarks>https://stackoverflow.com/questions/9566443/how-to-change-title-bar-font-in-win-apps-by-c</remarks>
+		protected override void WndProc(ref Message m)
+		{
+			base.WndProc(ref m);
+
+			if (m.Msg == WM_NCPAINT)
+			{
+				IntPtr hdc = GetWindowDC(m.HWnd);
+				Graphics graphics = Graphics.FromHdc(hdc);
+
+				if (Settings._fontf_tb != null)
+					TitleFont = Settings._fontf_tb;
+
+				Size size = YataGraphics.MeasureSize(_title, TitleFont);
+				float x = (_width  - size.Width)  / 2.0f - 1.0f;
+				float y = (_hTitle - size.Height) / 2.0f + 1.0f;
+
+				graphics.DrawString(_title, TitleFont, SystemBrushes.ActiveCaptionText, x,y);
+
+				ReleaseDC(m.HWnd, hdc);
+			}
+		}
+		#endregion custom titletext font */
 
 
 		#region Methods

@@ -79,6 +79,13 @@ namespace yata
 
 			InitializeComponent();
 
+			Text = pad + Yata.Table.Cols[_cell.x].text;
+
+//			_title = Yata.Table.Cols[_cell.x].text;
+//			int border = (Width - ClientSize.Width) / 2;
+//			_hTitle = Height - ClientSize.Height - border;
+//			_width  = Width;
+
 			// NOTE: Don't bother inheriting from YataDialog since setting the
 			// font is the only benefit ->
 			if (Settings._font2dialog != null)
@@ -222,8 +229,6 @@ namespace yata
 		/// </summary>
 		void prep_EquipableSlots()
 		{
-			Text = "  EquipableSlots";
-
 			cb_00.Text = "(1)head";
 			cb_01.Text = "(2)chest";
 			cb_02.Text = "(4)feet";
@@ -266,8 +271,6 @@ namespace yata
 		/// </summary>
 		void list_ModelTypes()
 		{
-			Text = "  ModelType";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -286,8 +289,6 @@ namespace yata
 		/// </summary>
 		void list_WeaponWields()
 		{
-			Text = "  WeaponWield";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -316,8 +317,6 @@ namespace yata
 		/// </summary>
 		void list_WeaponTypes()
 		{
-			Text = "  WeaponType";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -338,8 +337,6 @@ namespace yata
 		/// </summary>
 		void list_WeaponSizes()
 		{
-			Text = "  WeaponSize";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -360,8 +357,6 @@ namespace yata
 		/// </summary>
 		void list_RangedWeapons()
 		{
-			Text = "  RangedWeapon";
-
 			dropdown();
 
 			for (int i = 0; i != Info.tagLabels.Count; ++i)
@@ -378,8 +373,6 @@ namespace yata
 		/// </summary>
 		void list_InventorySounds()
 		{
-			Text = "  InvSoundType";
-
 			dropdown();
 
 			for (int i = 0; i != Info.soundLabels.Count; ++i)
@@ -396,8 +389,6 @@ namespace yata
 		/// </summary>
 		void list_PropertyCols()
 		{
-			Text = "  PropColumn";
-
 			dropdown();
 
 			for (int i = 0; i != Info.propFields.Count; ++i)
@@ -413,8 +404,6 @@ namespace yata
 		/// </summary>
 		void list_StorePanels()
 		{
-			Text = "  StorePanel";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -434,8 +423,6 @@ namespace yata
 		/// </summary>
 		void list_AcEnchants()
 		{
-			Text = "  AC_Enchant";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -456,8 +443,6 @@ namespace yata
 		/// </summary>
 		void list_WeaponMatTypes()
 		{
-			Text = "  WeaponMatType";
-
 			dropdown();
 
 			for (int i = 0; i != Info.weapsoundLabels.Count; ++i)
@@ -474,8 +459,6 @@ namespace yata
 		/// </summary>
 		void list_AmmunitionTypes()
 		{
-			Text = "  AmmunitionType";
-
 			dropdown();
 
 			for (int i = 0; i != Info.ammoLabels.Count; ++i)
@@ -491,8 +474,6 @@ namespace yata
 		/// </summary>
 		void list_QBBehaviours()
 		{
-			Text = "  QBBehaviour";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []

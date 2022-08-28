@@ -34,6 +34,9 @@ namespace yata
 		internal const int BonusSpellcasterLevelTable = 69; // ofd only
 		internal const int BonusCasterFeatByClassMap  = 70; // ofd only
 		internal const int Package                    = 74;
+		internal const int FEATPracticedSpellcaster   = 75;
+		internal const int FEATExtraSlot              = 76;
+		internal const int FEATArmoredCaster          = 77;
 		internal const int CharGen_Chest              = 81; // ofd only
 		internal const int CharGen_Feet               = 82; // ofd only
 		internal const int CharGen_Hands              = 83; // ofd only
@@ -54,6 +57,13 @@ namespace yata
 			_cell = cell;	// because the designer will scream blue murder.
 
 			InitializeComponent();
+
+			Text = pad + Yata.Table.Cols[_cell.x].text;
+
+//			_title = Yata.Table.Cols[_cell.x].text;
+//			int border = (Width - ClientSize.Width) / 2;
+//			_hTitle = Height - ClientSize.Height - border;
+//			_width  = Width;
 
 			// NOTE: Don't bother inheriting from YataDialog since setting the
 			// font is the only benefit ->
@@ -189,9 +199,6 @@ namespace yata
 		/// </summary>
 		void prep_Abilities()
 		{
-			if (_cell.x == PrimaryAbil) Text = "  PrimaryAbil";
-			else                        Text = "  SpellAbil"; // _cell.x == SpellAbil
-
 			cb_00.Text = "STR";
 			cb_01.Text = "CON";
 			cb_02.Text = "DEX";
@@ -208,8 +215,6 @@ namespace yata
 		/// </summary>
 		void prep_AlignmentRestrictions()
 		{
-			Text = "  AlignRestrict";
-
 			cb_00.Text = "(1)neutral";
 			cb_01.Text = "(2)lawful";
 			cb_02.Text = "(4)chaotic";
@@ -225,10 +230,8 @@ namespace yata
 		/// </summary>
 		void prep_AlignmentRestrictionType()
 		{
-			Text = "  AlignRstrctType";
-
-			cb_00.Text = "(1)neutral - LawChaos axis";
-			cb_01.Text = "(2)neutral - GoodEvil axis";
+			cb_00.Text = "(1)neutral on LawChaos axis";
+			cb_01.Text = "(2)neutral on GoodEvil axis";
 
 			cb_00.Visible = cb_01.Visible = true;
 		}
@@ -253,8 +256,6 @@ namespace yata
 		/// </summary>
 		void list_Packages()
 		{
-			Text = "  Package";
-
 			dropdown();
 
 			for (int i = 0; i != Info.packageLabels.Count; ++i)

@@ -16,8 +16,20 @@ namespace yata
 		#region Fields (static)
 		// cols in Feat.2da ->
 		internal const int icon            =  4; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
+		internal const int PREREQFEAT1     = 20;
+		internal const int PREREQFEAT2     = 21;
 		internal const int Category        = 25;
+		internal const int SPELLID         = 27;
+		internal const int SUCCESSOR       = 28;
 		internal const int MasterFeat      = 32;
+		internal const int OrReqFeat0      = 34;
+		internal const int OrReqFeat1      = 35;
+		internal const int OrReqFeat2      = 36;
+		internal const int OrReqFeat3      = 37;
+		internal const int OrReqFeat4      = 38;
+		internal const int OrReqFeat5      = 39;
+		internal const int REQSKILL        = 40;
+		internal const int REQSKILL2       = 43;
 		internal const int ToolsCategories = 47;
 		internal const int FeatCategory    = 54;
 		internal const int ToggleMode      = 57;
@@ -36,6 +48,13 @@ namespace yata
 			_cell = cell;	// because the designer will scream blue murder.
 
 			InitializeComponent();
+
+			Text = pad + Yata.Table.Cols[_cell.x].text;
+
+//			_title = Yata.Table.Cols[_cell.x].text;
+//			int border = (Width - ClientSize.Width) / 2;
+//			_hTitle = Height - ClientSize.Height - border;
+//			_width  = Width;
 
 			// NOTE: Don't bother inheriting from YataDialog since setting the
 			// font is the only benefit ->
@@ -134,8 +153,6 @@ namespace yata
 		/// </summary>
 		void prep_ToolsCategories()
 		{
-			Text = "  TOOLSCATEGORIES";
-
 			cb_00.Text = "0 - All Feats";
 			cb_01.Text = "1 - Combat Feats";
 			cb_02.Text = "2 - Active Combat Feats";
@@ -169,8 +186,6 @@ namespace yata
 		/// </summary>
 		void list_Categories()
 		{
-			Text = "  CATEGORY";
-
 			dropdown();
 
 			for (int i = 0; i != Info.categoryLabels.Count; ++i)
@@ -187,8 +202,6 @@ namespace yata
 		/// </summary>
 		void list_Masterfeats()
 		{
-			Text = "  MASTERFEAT";
-
 			dropdown();
 
 			for (int i = 0; i != Info.masterfeatLabels.Count; ++i)
@@ -204,8 +217,6 @@ namespace yata
 		/// </summary>
 		void list_FeatCategories()
 		{
-			Text = "  FeatCategory";
-
 			dropdown();
 
 			co_Val.Items.AddRange(new []
@@ -235,8 +246,6 @@ namespace yata
 		/// </summary>
 		void list_CombatModes()
 		{
-			Text = "  ToggleMode";
-
 			dropdown();
 
 			for (int i = 0; i != Info.combatmodeLabels.Count; ++i)
@@ -268,7 +277,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// - helper for <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
 		/// </summary>
 		void change_ToolsCategories()
 		{
