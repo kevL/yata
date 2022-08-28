@@ -1053,9 +1053,12 @@ namespace yata
 
 								EnsureDisplayedCol(click_c);
 
-								for (int r = 0; r != RowCount; ++r) // display first selected cell in col ->
-								if (this[r, click_c].selected)
-									EnsureDisplayedRow(r);
+								if (!Cols[click_c].selected) // display first selected cell in col ->
+								{
+									for (int r = 0; r != RowCount; ++r)
+									if (this[r, click_c].selected)
+										EnsureDisplayedRow(r);
+								}
 
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
@@ -1148,9 +1151,12 @@ namespace yata
 
 				// do not shift table horizontally (is a frozen col)
 
-				for (int r = 0; r != RowCount; ++r) // display first selected cell in col ->
-				if (this[r, colid].selected)
-					EnsureDisplayedRow(r);
+				if (!Cols[colid].selected) // display first selected cell in col ->
+				{
+					for (int r = 0; r != RowCount; ++r)
+					if (this[r, colid].selected)
+						EnsureDisplayedRow(r);
+				}
 
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ
