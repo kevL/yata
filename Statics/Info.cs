@@ -134,6 +134,7 @@ namespace yata
 		// NOTE: Also uses Spells.2da for spell-labels.
 		// NOTE: Also uses Categories.2da for category-labels.
 		// NOTE: Also uses Skills.2da for skill-labels.
+		// NOTE: Also uses Classes.2da for class-labels.
 
 		/// <summary>
 		/// A list that holds labels for combatmodes in <c>CombatModes.2da</c> -

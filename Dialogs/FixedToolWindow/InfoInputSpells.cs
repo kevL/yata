@@ -1022,7 +1022,9 @@ namespace yata
 					case HostileSetting:
 					case HasProjectile:
 					case CastableOnDead:
-					case Removed:    change_bool();       break;
+					case Removed:
+						change_bool();
+						break;
 				}
 			}
 		}
