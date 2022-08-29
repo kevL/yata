@@ -3217,7 +3217,7 @@ namespace yata
 							case "T": info += "Transmutation"; break;
 							case "V": info += "Evocation";     break;
 
-							default:  info += gs.bork;         break;
+							default: info += gs.bork; break;
 						}
 					}
 					break;
@@ -3238,7 +3238,7 @@ namespace yata
 							case "L": info += "Long";     r =  4; break;
 							case "I": info += "Infinite"; r = 14; break;
 
-							default:  info += gs.bork;    r = -1; break;
+							default: info += gs.bork; r = -1; break;
 						}
 
 						if (r != -1 && r < Info.rangeRanges.Count) //&& it_PathRanges2da.Checked <- redundant
@@ -3260,7 +3260,7 @@ namespace yata
 							case "S":  info += "somatic";         break;
 							case "VS": info += "verbal, somatic"; break;
 
-							default:   info += gs.bork;           break;
+							default: info += gs.bork; break;
 						}
 					}
 					break;
@@ -3467,9 +3467,7 @@ namespace yata
 						{
 							switch (result)
 							{
-								case TARGET_NONE:
-									info += "none";
-									break;
+								case TARGET_NONE: info += "none"; break;
 
 								default:
 								{
@@ -3586,16 +3584,15 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (Int32.TryParse(val, out result)
+							&& result > 0 && result < 5)
 						{
 							switch (result)
 							{
-								case 1:  info += "Spell";           break;
-								case 2:  info += "Special Ability"; break;
-								case 3:  info += "Feat";            break;
-								case 4:  info += "Item Power";      break;
-
-								default: info += gs.bork;           break;
+								case 1: info += "Spell";           break;
+								case 2: info += "Special Ability"; break;
+								case 3: info += "Feat";            break;
+								case 4: info += "Item Power";      break;
 							}
 						}
 						else
@@ -3705,7 +3702,7 @@ namespace yata
 								case META_I_HINDERING_BLAST:  info += gs.HinderingBlast;  break;
 								case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
 
-								default:                      info += gs.bork;            break;
+								default: info += gs.bork; break;
 							}
 						}
 						else
@@ -3772,14 +3769,13 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result))
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 2)
 						{
 							switch (result)
 							{
-								case 0:  info += "false"; break;
-								case 1:  info += "true";  break;
-
-								default: info += gs.bork; break;
+								case 0: info += "false"; break;
+								case 1: info += "true";  break;
 							}
 						}
 						else
@@ -3868,6 +3864,7 @@ namespace yata
 				case InfoInputFeat.PREREQFEAT1: // Feat.2da ->
 				case InfoInputFeat.PREREQFEAT2:
 				case InfoInputFeat.SUCCESSOR:
+				case InfoInputFeat.USESMAPFEAT:
 				case InfoInputFeat.OrReqFeat0:
 				case InfoInputFeat.OrReqFeat1:
 				case InfoInputFeat.OrReqFeat2:
@@ -3980,7 +3977,7 @@ namespace yata
 					{
 						info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "DEL_AnimalEmpathy"
 						{
 							info += gs.non;
 						}
@@ -4024,6 +4021,31 @@ namespace yata
 					}
 					break;
 
+				case InfoInputFeat.MinLevelClass: // Classes.2da
+					if (it_PathClasses2da.Checked
+						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "Barbarian"
+						{
+							info += gs.non;
+						}
+						else if (Int32.TryParse(val, out result)
+							&& result > -1)
+						{
+							if (result < Info.classLabels.Count)
+							{
+								info += Info.classLabels[result];
+							}
+							else
+								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
 				case InfoInputFeat.ToggleMode: // CombatModes.2da
 					if (it_PathCombatModes2da.Checked
 						&& !String.IsNullOrEmpty(val = Table[id,col].text))
@@ -4043,6 +4065,52 @@ namespace yata
 							}
 							else
 								info += val;
+						}
+						else
+							info += gs.bork;
+					}
+					break;
+
+				case InfoInputFeat.ImmunityType: // no 2da
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						switch (val)
+						{
+							case gs.Knockdown: info += gs.Knockdown; break;
+							case gs.NonSpirit: info += gs.NonSpirit; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
+				case InfoInputFeat.GAINMULTIPLE: // no 2da (bools) ->
+				case InfoInputFeat.EFFECTSSTACK:
+				case InfoInputFeat.ALLCLASSESCANUSE:
+				case InfoInputFeat.TARGETSELF:
+				case InfoInputFeat.HostileFeat:
+				case InfoInputFeat.PreReqEpic:
+				case InfoInputFeat.IsActive:
+				case InfoInputFeat.IsPersistent:
+				case InfoInputFeat.DMFeat:
+				case InfoInputFeat.REMOVED:
+				case InfoInputFeat.Instant:
+					if (!String.IsNullOrEmpty(val = Table[id,col].text)
+						&& val != gs.Stars)
+					{
+						info = Table.Cols[col].text + ": ";
+
+						if (Int32.TryParse(val, out result)
+							&& result > -1 && result < 2)
+						{
+							switch (result)
+							{
+								case 0: info += "false"; break;
+								case 1: info += "true";  break;
+							}
 						}
 						else
 							info += gs.bork;
@@ -4087,7 +4155,7 @@ namespace yata
 							case "WIS": info += "Wisdom";       break;
 							case "CHA": info += "Charisma";     break;
 
-							default: info += gs.bork;           break;
+							default: info += gs.bork; break;
 						}
 					}
 					break;
@@ -4106,9 +4174,7 @@ namespace yata
 						{
 							switch (result)
 							{
-								case ALIGNRESTRICT_NONE:
-									info += "none";
-									break;
+								case ALIGNRESTRICT_NONE: info += "none"; break;
 
 								default:
 								{
@@ -4199,9 +4265,7 @@ namespace yata
 						{
 							switch (result)
 							{
-								case ALIGNRESTRICTTYPE_NONE:
-									info += "none";
-									break;
+								case ALIGNRESTRICTTYPE_NONE: info += "none"; break;
 
 								default:
 								{
@@ -4507,12 +4571,12 @@ namespace yata
 						{
 							switch (result)
 							{
-								case  0: info += "none";                 break;
-								case  1: info += "piercing";             break;
-								case  2: info += "bludgeoning";          break;
-								case  3: info += "slashing";             break;
-								case  4: info += "piercing/slashing";    break;
-								case  5: info += "bludgeoning/piercing"; break;
+								case 0: info += "none";                 break;
+								case 1: info += "piercing";             break;
+								case 2: info += "bludgeoning";          break;
+								case 3: info += "slashing";             break;
+								case 4: info += "piercing/slashing";    break;
+								case 5: info += "bludgeoning/piercing"; break;
 							}
 						}
 						else
@@ -4531,11 +4595,11 @@ namespace yata
 						{
 							switch (result)
 							{
-								case  0: info += "none";   break;
-								case  1: info += "tiny";   break;
-								case  2: info += "small";  break;
-								case  3: info += "medium"; break;
-								case  4: info += "large";  break;
+								case 0: info += "none";   break;
+								case 1: info += "tiny";   break;
+								case 2: info += "small";  break;
+								case 3: info += "medium"; break;
+								case 4: info += "large";  break;
 							}
 						}
 						else
@@ -4629,11 +4693,11 @@ namespace yata
 						{
 							switch (result)
 							{
-								case  0: info += "armor and clothing";    break;
-								case  1: info += "weapons";               break;
-								case  2: info += "potions and scrolls";   break;
-								case  3: info += "wands and magic items"; break;
-								case  4: info += "miscellaneous";         break;
+								case 0: info += "armor and clothing";    break;
+								case 1: info += "weapons";               break;
+								case 2: info += "potions and scrolls";   break;
+								case 3: info += "wands and magic items"; break;
+								case 4: info += "miscellaneous";         break;
 							}
 						}
 						else
@@ -4693,11 +4757,11 @@ namespace yata
 						{
 							switch (result)
 							{
-								case  0: info += "dodge";      break;
-								case  1: info += "natural";    break;
-								case  2: info += "armor";      break;
-								case  3: info += "shield";     break;
-								case  4: info += "deflection"; break;
+								case 0: info += "dodge";      break;
+								case 1: info += "natural";    break;
+								case 2: info += "armor";      break;
+								case 3: info += "shield";     break;
+								case 4: info += "deflection"; break;
 							}
 						}
 						else
@@ -4772,9 +4836,9 @@ namespace yata
 						{
 							switch (result)
 							{
-								case  0: info += "none";                                  break;
-								case  1: info += "rods instruments wands and misc items"; break;
-								case  2: info += "potions and scrolls";                   break;
+								case 0: info += "none";                                  break;
+								case 1: info += "rods instruments wands and misc items"; break;
+								case 2: info += "potions and scrolls";                   break;
 							}
 						}
 						else

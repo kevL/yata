@@ -15,24 +15,38 @@ namespace yata
 	{
 		#region Fields (static)
 		// cols in Feat.2da ->
-		internal const int icon            =  4; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
-		internal const int PREREQFEAT1     = 20;
-		internal const int PREREQFEAT2     = 21;
-		internal const int Category        = 25;
-		internal const int SPELLID         = 27;
-		internal const int SUCCESSOR       = 28;
-		internal const int MasterFeat      = 32;
-		internal const int OrReqFeat0      = 34;
-		internal const int OrReqFeat1      = 35;
-		internal const int OrReqFeat2      = 36;
-		internal const int OrReqFeat3      = 37;
-		internal const int OrReqFeat4      = 38;
-		internal const int OrReqFeat5      = 39;
-		internal const int REQSKILL        = 40;
-		internal const int REQSKILL2       = 43;
-		internal const int ToolsCategories = 47;
-		internal const int FeatCategory    = 54;
-		internal const int ToggleMode      = 57;
+		internal const int icon             =  4; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
+		internal const int PREREQFEAT1      = 20; // info only
+		internal const int PREREQFEAT2      = 21; // info only
+		internal const int GAINMULTIPLE     = 22; // bool
+		internal const int EFFECTSSTACK     = 23; // bool
+		internal const int ALLCLASSESCANUSE = 24; // bool
+		internal const int Category         = 25;
+		internal const int SPELLID          = 27; // info only
+		internal const int SUCCESSOR        = 28; // info only
+		internal const int USESMAPFEAT      = 31; // info only
+		internal const int MasterFeat       = 32;
+		internal const int TARGETSELF       = 33; // bool
+		internal const int OrReqFeat0       = 34; // info only
+		internal const int OrReqFeat1       = 35; // info only
+		internal const int OrReqFeat2       = 36; // info only
+		internal const int OrReqFeat3       = 37; // info only
+		internal const int OrReqFeat4       = 38; // info only
+		internal const int OrReqFeat5       = 39; // info only
+		internal const int REQSKILL         = 40;
+		internal const int REQSKILL2        = 43;
+		internal const int ToolsCategories  = 47;
+		internal const int HostileFeat      = 48;
+		internal const int MinLevelClass    = 50;
+		internal const int PreReqEpic       = 53; // bool
+		internal const int FeatCategory     = 54;
+		internal const int IsActive         = 55; // bool
+		internal const int IsPersistent     = 56; // bool
+		internal const int ToggleMode       = 57;
+		internal const int DMFeat           = 59; // bool
+		internal const int REMOVED          = 60; // bool
+		internal const int ImmunityType     = 62;
+		internal const int Instant          = 63; // bool
 		#endregion Fields (static)
 
 
@@ -89,6 +103,12 @@ namespace yata
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
+				case REQSKILL: // int-val,dropdown,unique ->
+				case REQSKILL2:
+					list_Skills();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
 				case ToolsCategories: // string-val,checkbox,unique // TODO: change 'ToolsCategories' selection to int-val,dropdown,unique
 					_f.str0 = _f.str1 = val;
 					prep_ToolsCategories();
@@ -108,6 +128,11 @@ namespace yata
 						default: _f.str1 = gs.Stars; break;
 					}
 					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
+
+				case MinLevelClass: // int-val,dropdown,unique
+					list_Classes();
+					initintvals(val, co_Val, bu_Clear);
 					break;
 
 				case FeatCategory: // string-val,dropdown,unique
@@ -143,6 +168,49 @@ namespace yata
 					list_CombatModes();
 					initintvals(val, co_Val, bu_Clear);
 					break;
+
+				case ImmunityType: // string-val,dropdown,unique
+					_f.str0 = _f.str1 = val;
+					list_ImmunityTypes();
+
+					switch (val)
+					{
+						case gs.Knockdown: co_Val.SelectedIndex = 0; break;
+						case gs.NonSpirit: co_Val.SelectedIndex = 1; break;
+
+						case gs.Stars: co_Val.SelectedIndex = co_Val.Items.Count - 1;
+							break;
+
+						default: _f.str1 = gs.Stars; goto case gs.Stars;
+					}
+					bu_Clear.Enabled = (_f.str1 != gs.Stars);
+					break;
+
+				case GAINMULTIPLE: // string-val,checkbox,unique (bools) ->
+				case EFFECTSSTACK:
+				case ALLCLASSESCANUSE:
+				case TARGETSELF:
+				case HostileFeat:
+				case PreReqEpic:
+				case IsActive:
+				case IsPersistent:
+				case DMFeat:
+				case REMOVED:
+				case Instant:
+					_f.str0 = _f.str1 = val;
+					prep_bool();
+
+					switch (val)
+					{
+						case "0": cb_00.Checked = true; break;
+						case "1": cb_01.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
 			}
 			_init = false;
 		}
@@ -163,6 +231,17 @@ namespace yata
 
 			cb_00.Visible = cb_01.Visible = cb_02.Visible = cb_03.Visible =
 			cb_04.Visible = cb_05.Visible = cb_06.Visible = true;
+		}
+
+		/// <summary>
+		/// Prepares this dialog for <c>bool</c> input.
+		/// </summary>
+		void prep_bool()
+		{
+			cb_00.Text = "0 - false";
+			cb_01.Text = "1 - true";
+
+			cb_00.Visible = cb_01.Visible = true;
 		}
 
 
@@ -212,6 +291,37 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Adds allowable entries for <c><see cref="REQSKILL"/></c> or
+		/// <c><see cref="REQSKILL2"/></c> to the <c>ComboBox</c> along with a
+		/// final stars item.
+		/// </summary>
+		void list_Skills()
+		{
+			dropdown();
+
+			for (int i = 0; i != Info.skillLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.skillLabels[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="MinLevelClass"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_Classes()
+		{
+			dropdown();
+
+			for (int i = 0; i != Info.classLabels.Count; ++i)
+			{
+				co_Val.Items.Add(new tui(i + " - " + Info.classLabels[i]));
+			}
+			co_Val.Items.Add(new tui(gs.Stars));
+		}
+
+		/// <summary>
 		/// Adds allowable entries for <c><see cref="FeatCategory"/></c> to the
 		/// <c>ComboBox</c> along with a final stars item.
 		/// </summary>
@@ -254,6 +364,22 @@ namespace yata
 			}
 			co_Val.Items.Add(new tui(gs.Stars));
 		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="ImmunityType"/></c> to the
+		/// <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_ImmunityTypes()
+		{
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui(gs.Knockdown),
+				new tui(gs.NonSpirit),
+				new tui(gs.Stars)
+			});
+		}
 		#endregion init
 
 
@@ -272,6 +398,20 @@ namespace yata
 				switch (_cell.x)
 				{
 					case ToolsCategories: change_ToolsCategories(); break;
+
+					case GAINMULTIPLE:
+					case EFFECTSSTACK:
+					case ALLCLASSESCANUSE:
+					case TARGETSELF:
+					case HostileFeat:
+					case PreReqEpic:
+					case IsActive:
+					case IsPersistent:
+					case DMFeat:
+					case REMOVED:
+					case Instant:
+						change_bool();
+						break;
 				}
 			}
 		}
@@ -303,6 +443,28 @@ namespace yata
 		}
 
 		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// </summary>
+		void change_bool()
+		{
+			clearchecks();
+
+			string val;
+			if (_cb.Checked)
+			{
+				if (_cb == cb_00) val = "0";
+				else              val = "1"; // _cb == cb_01
+			}
+			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
+		}
+
+
+		/// <summary>
 		/// Handles user changing the <c>ComboBox</c> selection.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -326,6 +488,9 @@ namespace yata
 					{
 						case Category:
 						case MasterFeat:
+						case REQSKILL:
+						case REQSKILL2:
+						case MinLevelClass:
 						case ToggleMode:
 							_f.int1 = co_Val.SelectedIndex;
 							break;
@@ -349,6 +514,14 @@ namespace yata
 								case 13: _f.str1 = gs.FeatCatTeamwork;      break;
 							}
 							break;
+
+						case ImmunityType:
+							switch (co_Val.SelectedIndex)
+							{
+								case 0: _f.str1 = gs.Knockdown; break;
+								case 1: _f.str1 = gs.NonSpirit; break;
+							}
+							break;
 					}
 				}
 			}
@@ -366,12 +539,27 @@ namespace yata
 			{
 				case Category: // dropdown -> fire changed_Combobox()
 				case MasterFeat:
+				case REQSKILL:
+				case REQSKILL2:
+				case MinLevelClass:
 				case FeatCategory:
 				case ToggleMode:
+				case ImmunityType:
 					co_Val.SelectedIndex = co_Val.Items.Count - 1; // fire changed_Combobox()
 					break;
 
 				case ToolsCategories: // str,cb,unique
+				case GAINMULTIPLE:
+				case EFFECTSSTACK:
+				case ALLCLASSESCANUSE:
+				case TARGETSELF:
+				case HostileFeat:
+				case PreReqEpic:
+				case IsActive:
+				case IsPersistent:
+				case DMFeat:
+				case REMOVED:
+				case Instant:
 					bu_Clear.Enabled = false;
 
 					la_Val.Text = _f.str1 = gs.Stars;

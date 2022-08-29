@@ -1200,6 +1200,7 @@ namespace yata
 					it_MenuPaths.DropDownItems.Add(it_PathAll);
 					it_MenuPaths.DropDownItems.Add(_tsep);
 					it_MenuPaths.DropDownItems.Add(it_PathCategories2da);
+					it_MenuPaths.DropDownItems.Add(it_PathClasses2da);
 					it_MenuPaths.DropDownItems.Add(it_PathCombatModes2da);
 					it_MenuPaths.DropDownItems.Add(it_PathFeat2da);
 					it_MenuPaths.DropDownItems.Add(it_PathMasterFeats2da);

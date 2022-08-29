@@ -245,9 +245,32 @@ namespace yata
 						return true;
 					break;
 
+				case InfoInputFeat.REQSKILL:
+				case InfoInputFeat.REQSKILL2:
+					if (Info.skillLabels.Count != 0)
+						return true;
+					break;
+
 				case InfoInputFeat.ToolsCategories: // these don't rely on 2da-gropes ->
 				case InfoInputFeat.FeatCategory:
+				case InfoInputFeat.GAINMULTIPLE:
+				case InfoInputFeat.EFFECTSSTACK:
+				case InfoInputFeat.ALLCLASSESCANUSE:
+				case InfoInputFeat.TARGETSELF:
+				case InfoInputFeat.HostileFeat:
+				case InfoInputFeat.PreReqEpic:
+				case InfoInputFeat.IsActive:
+				case InfoInputFeat.IsPersistent:
+				case InfoInputFeat.DMFeat:
+				case InfoInputFeat.REMOVED:
+				case InfoInputFeat.ImmunityType:
+				case InfoInputFeat.Instant:
 					return true;
+
+				case InfoInputFeat.MinLevelClass:
+					if (Info.classLabels.Count != 0)
+						return true;
+					break;
 
 				case InfoInputFeat.ToggleMode:
 					if (Info.combatmodeLabels.Count != 0)
@@ -712,12 +735,27 @@ namespace yata
 					{
 						case InfoInputFeat.Category: // INT Input ->
 						case InfoInputFeat.MasterFeat:
+						case InfoInputFeat.REQSKILL:
+						case InfoInputFeat.REQSKILL2:
+						case InfoInputFeat.MinLevelClass:
 						case InfoInputFeat.ToggleMode:
 							doIntInputFeat();
 							break;
 
 						case InfoInputFeat.ToolsCategories: // STRING Input ->
 						case InfoInputFeat.FeatCategory:
+						case InfoInputFeat.GAINMULTIPLE:
+						case InfoInputFeat.EFFECTSSTACK:
+						case InfoInputFeat.ALLCLASSESCANUSE:
+						case InfoInputFeat.TARGETSELF:
+						case InfoInputFeat.HostileFeat:
+						case InfoInputFeat.PreReqEpic:
+						case InfoInputFeat.IsActive:
+						case InfoInputFeat.IsPersistent:
+						case InfoInputFeat.DMFeat:
+						case InfoInputFeat.REMOVED:
+						case InfoInputFeat.ImmunityType:
+						case InfoInputFeat.Instant:
 							using (var iif = new InfoInputFeat(this, _sel))
 							{
 								if (iif.ShowDialog(this) == DialogResult.OK
