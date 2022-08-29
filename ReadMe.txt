@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 August 7
+2022 August 29
 kevL's
 ver 5.2.0.0
 
@@ -775,6 +775,7 @@ path SpellTarget.2da
 Feat.2da
 
 path Categories.2da      : these files contain Info for Feat.2da
+path Classes.2da
 path CombatModes.2da
 path Feat.2da
 path MasterFeats.2da
