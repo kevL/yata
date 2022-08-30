@@ -115,6 +115,7 @@ namespace yata
 				case InfoInputSpells.TargetType:
 				case InfoInputSpells.ConjAnim:
 				case InfoInputSpells.CastAnim:
+				case InfoInputSpells.Proj:
 				case InfoInputSpells.ProjType:
 				case InfoInputSpells.ProjSpwnPoint:
 				case InfoInputSpells.ProjOrientation:
@@ -639,6 +640,7 @@ namespace yata
 						case InfoInputSpells.Vs:
 						case InfoInputSpells.ConjAnim:
 						case InfoInputSpells.CastAnim:
+						case InfoInputSpells.Proj:
 						case InfoInputSpells.ProjType:
 						case InfoInputSpells.ProjSpwnPoint:
 						case InfoInputSpells.ProjOrientation:

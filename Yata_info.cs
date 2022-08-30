@@ -3577,9 +3577,6 @@ namespace yata
 					}
 					break;
 
-//				case InfoInputSpells.Proj:
-//					break;
-
 				case InfoInputSpells.ProjType:
 					info = Table.Cols[col].text + ": ";
 
@@ -3879,7 +3876,8 @@ namespace yata
 						info += gs.bork;
 					break;
 
-				case InfoInputSpells.ItemImmunity: // no 2da (bools) ->
+				case InfoInputSpells.Proj: // no 2da (bools) ->
+				case InfoInputSpells.ItemImmunity:
 				case InfoInputSpells.UseConcentration:
 				case InfoInputSpells.SpontaneouslyCast:
 				case InfoInputSpells.HostileSetting:

@@ -71,6 +71,7 @@ namespace yata
 		internal const int CastVisual1       = 32; // ofd only
 		internal const int CastVisual2       = 33; // ofd only
 		internal const int CastSound         = 34; // ofd only
+		internal const int Proj              = 35; // bool
 		internal const int ProjModel         = 36; // ofd only
 		internal const int ProjSEF           = 37; // ofd only
 		internal const int LowProjSEF        = 38; // ofd only
@@ -565,7 +566,8 @@ namespace yata
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
-				case ItemImmunity: // string-val,checkbox,unique (bools) ->
+				case Proj: // string-val,checkbox,unique (bools) ->
+				case ItemImmunity:
 				case UseConcentration:
 				case SpontaneouslyCast:
 				case HostileSetting:
@@ -1016,6 +1018,7 @@ namespace yata
 					case TargetType: change_TargetType(); break;
 					case UserType:   change_UserType();   break;
 
+					case Proj:
 					case ItemImmunity:
 					case UseConcentration:
 					case SpontaneouslyCast:
@@ -1564,6 +1567,7 @@ namespace yata
 				case Range:
 				case Vs:
 				case UserType:
+				case Proj:
 				case ItemImmunity:
 				case UseConcentration:
 				case SpontaneouslyCast:
