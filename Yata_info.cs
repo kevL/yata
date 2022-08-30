@@ -3524,6 +3524,17 @@ namespace yata
 						info += gs.bork;
 					break;
 
+				case InfoInputSpells.ImmunityType:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+						info += val; // "ImmunityType" is technically unsupported so just print 'val'.
+					break;
+
 				case InfoInputSpells.SubRadSpell1: // Spells.2da ->
 				case InfoInputSpells.SubRadSpell2:
 				case InfoInputSpells.SubRadSpell3:
@@ -3751,17 +3762,16 @@ namespace yata
 					{
 						info += gs.non;
 					}
-					else if (Int32.TryParse(val, out result)
-						&& result > -1 && result < 2)
+					else
 					{
-						switch (result)
+						switch (val)
 						{
-							case 0: info += "false"; break;
-							case 1: info += "true";  break;
+							case "0": info += "false"; break;
+							case "1": info += "true";  break;
+
+							default: info += gs.bork; break;
 						}
 					}
-					else
-						info += gs.bork;
 					break;
 			}
 
@@ -4060,17 +4070,16 @@ namespace yata
 					{
 						info += gs.non;
 					}
-					else if (Int32.TryParse(val, out result)
-						&& result > -1 && result < 2)
+					else
 					{
-						switch (result)
+						switch (val)
 						{
-							case 0: info += "false"; break;
-							case 1: info += "true";  break;
+							case "0": info += "false"; break;
+							case "1": info += "true";  break;
+
+							default: info += gs.bork; break;
 						}
 					}
-					else
-						info += gs.bork;
 					break;
 			}
 
