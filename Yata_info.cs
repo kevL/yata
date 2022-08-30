@@ -74,41 +74,36 @@ namespace yata
 
 			switch (col)
 			{
-//				case -1: // rowhead
-//				case  0: // id
+//				case 0: // id
 
 				case 1: // "CATEGORY" - Spells.2da or no 2da
-					if (it_PathSpells2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // this is actually AcidFog ...
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Acid Fog"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result))
+					{
+						if (result > -1)
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result))
-						{
-							if (result > -1)
+							if (result < Info.spellLabels.Count) // it_PathSpells2da.Checked
 							{
-								if (result < Info.spellLabels.Count)
-								{
-									info += Info.spellLabels[result];
-								}
-								else
-									info += val;
+								info += Info.spellLabels[result];
 							}
 							else
-								info += gs.bork;
+								info += val;
 						}
 						else
+							info += gs.bork;
+					}
+					else
+					{
+						switch (val)
 						{
-							switch (val)
-							{
-								case "ALC": info += "Alchemy";      break;
-								case "DIS": info += "Distillation"; break;
-								default:    info += "Mundane";      break; // 'val' should be the tag of a Mold here
-							}
+							case "ALC": info += "Alchemy";      break;
+							case "DIS": info += "Distillation"; break;
+							default:    info += "Mundane";      break; // 'val' should be the tag of a Mold here
 						}
 					}
 					break;
@@ -116,103 +111,100 @@ namespace yata
 //				case 2: // "REAGENTS"
 
 				case 3: // "TAGS" - BaseItems.2da or no 2da for TCC-types
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						if (val.StartsWith("B", StringComparison.Ordinal)) // is in BaseItems.2da
-						{
-							info = Table.Cols[col].text + ": [BaseItem] ";
+						info += gs.non;
+					}
+					else if (val.StartsWith("B", StringComparison.Ordinal)) // is in BaseItems.2da
+					{
+						info += "[BaseItem] ";
 
-							string[] array = val.Substring(1).Split(','); // lose the "B"
-							for (int i = 0; i != array.Length; ++i)
+						string[] array = val.Substring(1).Split(','); // lose the "B"
+						for (int i = 0; i != array.Length; ++i)
+						{
+							if (Int32.TryParse(array[i], out result)
+								&& result > -1)
 							{
-								if (Int32.TryParse(array[i], out result)
-									&& result > -1)
+								if (result < Info.tagLabels.Count) // it_PathBaseItems2da.Checked
 								{
-									if (result < Info.tagLabels.Count)
-									{
-										info += Info.tagLabels[result];
-									}
-									else
-										info += array[i];
+									info += Info.tagLabels[result];
 								}
 								else
-									info += gs.bork;
-
-								if (i != array.Length - 1)
-									info += ", ";
+									info += array[i];
 							}
+							else
+								info += gs.bork;
+
+							if (i != array.Length - 1)
+								info += ", ";
 						}
-						else // is a TCC item-type
+					}
+					else // is a TCC item-type
+					{
+						info += "[TCC] ";
+
+						string[] array = val.Split(',');
+						for (int i = 0; i != array.Length; ++i)
 						{
-							info = Table.Cols[col].text + ": [TCC] ";
-
-							string[] array = val.Split(',');
-							for (int i = 0; i != array.Length; ++i)
+							if (Int32.TryParse(array[i], out result)) // 'result' can be less than 0 here
 							{
-								if (Int32.TryParse(array[i], out result))
-								{
-									info += GetTccType(result);
-								}
-								else
-									info += gs.bork;
-
-								if (i != array.Length - 1)
-									info += ", ";
+								info += GetTccType(result);
 							}
+							else
+								info += gs.bork;
+
+							if (i != array.Length - 1)
+								info += ", ";
 						}
 					}
 					break;
 
 				case 4: // "EFFECTS" - ItemPropDef.2da
-					if (it_PathItemPropDef2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						info = Table.Cols[col].text + ": ";
+						info += gs.non;
+					}
+					else
+					{
+						string ipEncoded; int pos;
 
-						if (val == gs.Stars)
+						string[] ips = val.Split(';');
+						for (int i = 0; i != ips.Length; ++i)
 						{
-							info += gs.non;
-						}
-						else
-						{
-							string ipEncoded; int pos;
-
-							string[] ips = val.Split(';');
-							for (int i = 0; i != ips.Length; ++i)
+							ipEncoded = ips[i];
+							if ((pos = ipEncoded.IndexOf(',')) != -1)
 							{
-								ipEncoded = ips[i];
-								if ((pos = ipEncoded.IndexOf(',')) != -1)
+								if (pos != 0 && Int32.TryParse(ipEncoded.Substring(0, pos), out result) // 'result' is the nwn2 ip-constant
+									&& result > -1)
 								{
-									// NOTE: 'result' is the nwn2 ip-constant
-									if (pos != 0 && Int32.TryParse(ipEncoded.Substring(0, pos), out result)
-										&& result > -1)
+									if (result < Info.ipLabels.Count) // it_PathItemPropDef2da.Checked
 									{
-										if (result < Info.ipLabels.Count)
-										{
-											info += Info.ipLabels[result] + gs.Space;
+										info += Info.ipLabels[result] + gs.Space;
 
-											if (ipEncoded.Length > pos + 1)
-											{
-												info += GetDecodedDescription(ipEncoded, result, pos);
-											}
-											else
-												info += gs.bork;
+										if (ipEncoded.Length > pos + 1)
+										{
+											info += GetDecodedDescription(ipEncoded, result, pos);
 										}
 										else
-											info += result.ToString(CultureInfo.InvariantCulture);
+											info += gs.bork;
 									}
 									else
-										info += gs.bork;
+										info += result.ToString(CultureInfo.InvariantCulture);
 								}
-								else // is a PropertySet preparation val.
-								{
-									info += "PropertySet val=" + ipEncoded; // TODO: description for par.
-								}
-
-								if (i != ips.Length - 1)
-									info += ", ";
+								else
+									info += gs.bork;
 							}
+							else // is a PropertySet preparation val.
+							{
+								info += "PropertySet val=" + ipEncoded; // TODO: description for par.
+							}
+
+							if (i != ips.Length - 1)
+								info += ", ";
 						}
 					}
 					break;
@@ -220,47 +212,47 @@ namespace yata
 //				case 5: // "OUTPUT"
 
 				case 6: // "SKILL" - Feat.2da and/or Skills.2da
-					if ((it_PathFeat2da.Checked || it_PathSkills2da.Checked)
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "DEL_AnimalEmpathy"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result) // TODO: SKILL can be -2 (CATEGORY 376) or 0 (spell,ALC,DIS)
+						&& result > -1)
+					{
+						string cat = Table[id,1].text;
+						if (cat == gs.Stars)
 						{
 							info += gs.non;
 						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
+						else
 						{
-							string cat = Table[id,1].text;
-							if (!String.IsNullOrEmpty(cat) && cat != gs.Stars)
+							int result2;
+							if (Int32.TryParse(cat, out result2))									// is triggered by spell id -> SKILL-col is a feat
 							{
-								int result2;
-								if (Int32.TryParse(cat, out result2)) // is triggered by spell id -> SKILL-col is a feat
+								if (result2 > -1)
 								{
-									if (result < Info.featLabels.Count)
+									if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
 									{
 										info += Info.featLabels[result];
 									}
 									else
 										info += val;
 								}
-								else // is triggered NOT by spell but by mold-tag or is Alchemy or Distillation -> SKILL-col is a skill
-								{
-									if (result < Info.skillLabels.Count)
-									{
-										info += Info.skillLabels[result];
-									}
-									else
-										info += val;
-								}
+								else
+									info += "[CATEGORY] SpellId is invalid";
+							}
+							else if (result < Info.skillLabels.Count) // it_PathSkills2da.Checked	// is triggered NOT by spell but by mold-tag or is
+							{																		// Alchemy or Distillation -> SKILL-col is a skill
+								info += Info.skillLabels[result];
 							}
 							else
-								info += gs.non;
+								info += val;
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 //				case  7: // "LEVEL"
@@ -3164,11 +3156,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets a par-value as an int out of a comma-delimited string of pars.
+		/// Gets a par-value as an <c>int</c> out of a comma-delimited
+		/// <c>string</c> of pars.
 		/// </summary>
-		/// <param name="pars">comma-delimited string of pars</param>
+		/// <param name="pars">comma-delimited <c>string</c> of pars</param>
 		/// <param name="pos">position of the par-value to retrieve</param>
-		/// <returns>the par-value as an int; -1 if it didn't parse</returns>
+		/// <returns>the par-value as an <c>int</c> or <c>-1</c> if it didn't
+		/// parse</returns>
 		static int GetPar(string pars, int pos)
 		{
 			string[] ips = pars.Split(',');
@@ -3200,12 +3194,15 @@ namespace yata
 
 			switch (col)
 			{
-				case InfoInputSpells.School: // (SpellSchools.2da) - no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+				case InfoInputSpells.School: // no 2da (SpellSchools.2da)
+					info = Table.Cols[col].text + ": ";
 
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
 						switch (val.ToUpperInvariant())
 						{
 							case "A": info += "Abjuration";    break;
@@ -3222,12 +3219,15 @@ namespace yata
 					}
 					break;
 
-				case InfoInputSpells.Range: // (Ranges.2da) - no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+				case InfoInputSpells.Range: // no 2da (Ranges.2da)
+					info = Table.Cols[col].text + ": ";
 
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
 						int r;
 						switch (val.ToUpperInvariant())
 						{
@@ -3241,7 +3241,7 @@ namespace yata
 							default: info += gs.bork; r = -1; break;
 						}
 
-						if (r != -1 && r < Info.rangeRanges.Count) //&& it_PathRanges2da.Checked <- redundant
+						if (r != -1 && r < Info.rangeRanges.Count) // it_PathRanges2da.Checked
 						{
 							info += gs.Space + Info.rangeRanges[r] + "m";
 						}
@@ -3249,11 +3249,14 @@ namespace yata
 					break;
 
 				case InfoInputSpells.Vs: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
 						switch (val.ToUpperInvariant())
 						{
 							case "V":  info += "verbal";          break;
@@ -3266,259 +3269,259 @@ namespace yata
 					break;
 
 				case InfoInputSpells.MetaMagic: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+						info += gs.non;
+					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							switch (result)
+							case META_NONE:
+								info += "none";
+								break;
+							case META_ANY:
+								info += "ANY";
+								break;
+							case META_I_ALL:
+								info += "All Eldritch Essences and Blast Shapes";
+								break;
+							case META_I_SHAPES:
+								// Eldritch Spear, Hideous Blow, Eldritch Chain, Eldritch Cone, Eldritch Doom
+								info += "All Blast Shapes";
+								break;
+							case META_I_ESSENCES:
+								// Draining, Frightful, Beshadowed, Brimstone, Hellrime, Bewitching, Noxious,
+								// Vitriolic, Utterdark, Hindering, Binding
+								info += "All Eldritch Essences";
+								break;
+
+							default:
 							{
-								case META_NONE:
-									info += "none";
-									break;
-								case META_ANY:
-									info += "ANY";
-									break;
-								case META_I_ALL:
-									info += "All Eldritch Essences and Blast Shapes";
-									break;
-								case META_I_SHAPES:
-									// Eldritch Spear, Hideous Blow, Eldritch Chain, Eldritch Cone, Eldritch Doom
-									info += "All Blast Shapes";
-									break;
-								case META_I_ESSENCES:
-									// Draining, Frightful, Beshadowed, Brimstone, Hellrime, Bewitching, Noxious,
-									// Vitriolic, Utterdark, Hindering, Binding
-									info += "All Eldritch Essences";
-									break;
-
-								default:
+								bool space = false;
+								if ((result & META_EMPOWER) != 0)
 								{
-									bool space = false;
-									if ((result & META_EMPOWER) != 0)
-									{
-										info += "(1)Empower";
-										space = true;
-									}
-									if ((result & META_EXTEND) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2)Extend";
-										space = true;
-									}
-									if ((result & META_MAXIMIZE) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(4)Maximize";
-										space = true;
-									}
-									if ((result & META_QUICKEN) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(8)Quicken";
-										space = true;
-									}
-									if ((result & META_SILENT) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(16)Silent";
-										space = true;
-									}
-									if ((result & META_STILL) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(32)Still";
-										space = true;
-									}
-									if ((result & META_PERSISTENT) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(64)Persistent";
-										space = true;
-									}
-									if ((result & META_PERMANENT) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(128)Permanent";
-										space = true;
-									}
-
-									if ((result & META_I_DRAINING_BLAST) != 0) // Eldritch Essences and Blast Shapes ->
-									{
-										if (space) info += " - "; // that should never happen.
-										info += gs.DrainingBlast; //(256)
-										space = true;
-									}
-									if ((result & META_I_ELDRITCH_SPEAR) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.EldritchSpear; //(512)
-										space = true;
-									}
-									if ((result & META_I_FRIGHTFUL_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.FrightfulBlast; //(1024)
-										space = true;
-									}
-									if ((result & META_I_HIDEOUS_BLOW) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.HideousBlow; //(2048)
-										space = true;
-									}
-									if ((result & META_I_BESHADOWED_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.BeshadowedBlast; //(4096)
-										space = true;
-									}
-									if ((result & META_I_BRIMSTONE_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.BrimstoneBlast; //(8192)
-										space = true;
-									}
-									if ((result & META_I_ELDRITCH_CHAIN) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.EldritchChain; //(16384)
-										space = true;
-									}
-									if ((result & META_I_HELLRIME_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.HellrimeBlast; //(32768)
-										space = true;
-									}
-									if ((result & META_I_BEWITCHING_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.BewitchingBlast; //(65536)
-										space = true;
-									}
-									if ((result & META_I_ELDRITCH_CONE) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.EldritchCone; //(131072)
-										space = true;
-									}
-									if ((result & META_I_NOXIOUS_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.NoxiousBlast; //(262144)
-										space = true;
-									}
-									if ((result & META_I_VITRIOLIC_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.VitriolicBlast; //(524288)
-										space = true;
-									}
-									if ((result & META_I_ELDRITCH_DOOM) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.EldritchDoom; //(1048576)
-										space = true;
-									}
-									if ((result & META_I_UTTERDARK_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.UtterdarkBlast; //(2097152)
-										space = true;
-									}
-									if ((result & META_I_HINDERING_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.HinderingBlast; //(4194304)
-										space = true;
-									}
-									if ((result & META_I_BINDING_BLAST) != 0)
-									{
-										if (space) info += ", ";
-										info += gs.BindingBlast; //(8388608)
-									}
-									break;
+									info += "(1)Empower";
+									space = true;
 								}
+								if ((result & META_EXTEND) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2)Extend";
+									space = true;
+								}
+								if ((result & META_MAXIMIZE) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(4)Maximize";
+									space = true;
+								}
+								if ((result & META_QUICKEN) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(8)Quicken";
+									space = true;
+								}
+								if ((result & META_SILENT) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(16)Silent";
+									space = true;
+								}
+								if ((result & META_STILL) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(32)Still";
+									space = true;
+								}
+								if ((result & META_PERSISTENT) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(64)Persistent";
+									space = true;
+								}
+								if ((result & META_PERMANENT) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(128)Permanent";
+									space = true;
+								}
+
+								if ((result & META_I_DRAINING_BLAST) != 0) // Eldritch Essences and Blast Shapes ->
+								{
+									if (space) info += " - "; // that should never happen.
+									info += gs.DrainingBlast; //(256)
+									space = true;
+								}
+								if ((result & META_I_ELDRITCH_SPEAR) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.EldritchSpear; //(512)
+									space = true;
+								}
+								if ((result & META_I_FRIGHTFUL_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.FrightfulBlast; //(1024)
+									space = true;
+								}
+								if ((result & META_I_HIDEOUS_BLOW) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.HideousBlow; //(2048)
+									space = true;
+								}
+								if ((result & META_I_BESHADOWED_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.BeshadowedBlast; //(4096)
+									space = true;
+								}
+								if ((result & META_I_BRIMSTONE_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.BrimstoneBlast; //(8192)
+									space = true;
+								}
+								if ((result & META_I_ELDRITCH_CHAIN) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.EldritchChain; //(16384)
+									space = true;
+								}
+								if ((result & META_I_HELLRIME_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.HellrimeBlast; //(32768)
+									space = true;
+								}
+								if ((result & META_I_BEWITCHING_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.BewitchingBlast; //(65536)
+									space = true;
+								}
+								if ((result & META_I_ELDRITCH_CONE) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.EldritchCone; //(131072)
+									space = true;
+								}
+								if ((result & META_I_NOXIOUS_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.NoxiousBlast; //(262144)
+									space = true;
+								}
+								if ((result & META_I_VITRIOLIC_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.VitriolicBlast; //(524288)
+									space = true;
+								}
+								if ((result & META_I_ELDRITCH_DOOM) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.EldritchDoom; //(1048576)
+									space = true;
+								}
+								if ((result & META_I_UTTERDARK_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.UtterdarkBlast; //(2097152)
+									space = true;
+								}
+								if ((result & META_I_HINDERING_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.HinderingBlast; //(4194304)
+									space = true;
+								}
+								if ((result & META_I_BINDING_BLAST) != 0)
+								{
+									if (space) info += ", ";
+									info += gs.BindingBlast; //(8388608)
+								}
+								break;
 							}
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.TargetType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+						info += gs.non;
+					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							switch (result)
-							{
-								case TARGET_NONE: info += "none"; break;
+							case TARGET_NONE: info += "none"; break;
 
-								default:
+							default:
+							{
+								bool space = false;
+								if ((result & TARGET_SELF) != 0)
 								{
-									bool space = false;
-									if ((result & TARGET_SELF) != 0)
-									{
-										info += "(1)Self";
-										space = true;
-									}
-									if ((result & TARGET_CREATURE) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2)Creatures";
-										space = true;
-									}
-									if ((result & TARGET_GROUND) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(4)Ground";
-										space = true;
-									}
-									if ((result & TARGET_ITEMS) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(8)Items";
-										space = true;
-									}
-									if ((result & TARGET_DOORS) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(16)Doors";
-										space = true;
-									}
-									if ((result & TARGET_PLACEABLES) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(32)Placeables";
-										space = true;
-									}
-									if ((result & TARGET_TRIGGERS) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(64)Triggers";
-									}
-									break;
+									info += "(1)Self";
+									space = true;
 								}
+								if ((result & TARGET_CREATURE) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2)Creatures";
+									space = true;
+								}
+								if ((result & TARGET_GROUND) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(4)Ground";
+									space = true;
+								}
+								if ((result & TARGET_ITEMS) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(8)Items";
+									space = true;
+								}
+								if ((result & TARGET_DOORS) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(16)Doors";
+									space = true;
+								}
+								if ((result & TARGET_PLACEABLES) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(32)Placeables";
+									space = true;
+								}
+								if ((result & TARGET_TRIGGERS) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(64)Triggers";
+								}
+								break;
 							}
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.SubRadSpell1: // Spells.2da ->
@@ -3529,232 +3532,210 @@ namespace yata
 				case InfoInputSpells.Master:
 				case InfoInputSpells.Counter1:
 				case InfoInputSpells.Counter2:
-					if (it_PathSpells2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Acid Fog"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.spellLabels.Count) // it_PathSpells2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.spellLabels.Count)
-							{
-								info += Info.spellLabels[result];
-							}
-							else
-								info += val;
+							info += Info.spellLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.Category: // Categories.2da
-					if (it_PathCategories2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.categoryLabels.Count) // it_PathCategories2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.categoryLabels.Count)
-							{
-								info += Info.categoryLabels[result];
-							}
-							else
-								info += val;
+							info += Info.categoryLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.UserType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > 0 && result < 5)
-						{
-							switch (result)
-							{
-								case 1: info += "Spell";           break;
-								case 2: info += "Special Ability"; break;
-								case 3: info += "Feat";            break;
-								case 4: info += "Item Power";      break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > 0 && result < 5)
+					{
+						switch (result)
+						{
+							case 1: info += "Spell";           break;
+							case 2: info += "Special Ability"; break;
+							case 3: info += "Feat";            break;
+							case 4: info += "Item Power";      break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.SpontCastClassReq: // Classes.2da
-					if (it_PathClasses2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
-						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.classLabels.Count)
-							{
-								// NOTE: The stock Spells.2da uses "0" for n/a here.
-								// The field ought be "****" (or "-1") instead ofc.
-								info += Info.classLabels[result];
-							}
-							else
-								info += val;
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Barbarian"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.classLabels.Count) // it_PathClasses2da.Checked
+						{
+							info += Info.classLabels[result];	// The stock Spells.2da uses "0" for n/a here.
+						}										// The field ought be "****" (or "-1") instead ofc.
+						else
+							info += val;
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.FeatID: // Feat.2da
-					if (it_PathFeat2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val == gs.Stars)
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						int feat, dividend, right;
+						if (result < FEATSPELL_MASTER)
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							int feat, dividend, right;
-							if (result < FEATSPELL_MASTER)
-							{
-								feat     = result;
-								dividend = -1;
-								right    = -1;
-							}
-							else
-							{
-								feat     = (result % FEATSPELL_MASTER);
-								dividend = (result / FEATSPELL_MASTER);
-								right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
-							}
-
-							if (feat < Info.featLabels.Count)
-							{
-								info += Info.featLabels[feat];
-								if (dividend != -1)
-								{
-									info += " (d=" + dividend + ")";
-									info += " (r=" + right    + ")";
-								}
-							}
-							else
-								info += val;
+							feat     = result;
+							dividend = -1;
+							right    = -1;
 						}
 						else
-							info += gs.bork;
+						{
+							feat     = (result % FEATSPELL_MASTER);
+							dividend = (result / FEATSPELL_MASTER);
+							right    = (result & FEATSPELL_FEATS); // TODO: is that real or should it be 0x0000FFFF
+						}
+
+						if (feat < Info.featLabels.Count) // it_PathFeat2da.Checked
+						{
+							info += Info.featLabels[feat];
+							if (dividend != -1)
+							{
+								info += " (d=" + dividend + ")";
+								info += " (r=" + right    + ")";
+							}
+						}
+						else
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.AsMetaMagic: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
-						{
-							switch (result)
-							{
-								case META_I_DRAINING_BLAST:   info += gs.DrainingBlast;   break;
-								case META_I_ELDRITCH_SPEAR:   info += gs.EldritchSpear;   break;
-								case META_I_FRIGHTFUL_BLAST:  info += gs.FrightfulBlast;  break;
-								case META_I_HIDEOUS_BLOW:     info += gs.HideousBlow;     break;
-								case META_I_BESHADOWED_BLAST: info += gs.BeshadowedBlast; break;
-								case META_I_BRIMSTONE_BLAST:  info += gs.BrimstoneBlast;  break;
-								case META_I_ELDRITCH_CHAIN:   info += gs.EldritchChain;   break;
-								case META_I_HELLRIME_BLAST:   info += gs.HellrimeBlast;   break;
-								case META_I_BEWITCHING_BLAST: info += gs.BewitchingBlast; break;
-								case META_I_ELDRITCH_CONE:    info += gs.EldritchCone;    break;
-								case META_I_NOXIOUS_BLAST:    info += gs.NoxiousBlast;    break;
-								case META_I_VITRIOLIC_BLAST:  info += gs.VitriolicBlast;  break;
-								case META_I_ELDRITCH_DOOM:    info += gs.EldritchDoom;    break;
-								case META_I_UTTERDARK_BLAST:  info += gs.UtterdarkBlast;  break;
-								case META_I_HINDERING_BLAST:  info += gs.HinderingBlast;  break;
-								case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
-
-								default: info += gs.bork; break;
-							}
-						}
-						else
-							info += gs.bork;
+						info += gs.non;
 					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
+						{
+							case META_I_DRAINING_BLAST:   info += gs.DrainingBlast;   break;
+							case META_I_ELDRITCH_SPEAR:   info += gs.EldritchSpear;   break;
+							case META_I_FRIGHTFUL_BLAST:  info += gs.FrightfulBlast;  break;
+							case META_I_HIDEOUS_BLOW:     info += gs.HideousBlow;     break;
+							case META_I_BESHADOWED_BLAST: info += gs.BeshadowedBlast; break;
+							case META_I_BRIMSTONE_BLAST:  info += gs.BrimstoneBlast;  break;
+							case META_I_ELDRITCH_CHAIN:   info += gs.EldritchChain;   break;
+							case META_I_HELLRIME_BLAST:   info += gs.HellrimeBlast;   break;
+							case META_I_BEWITCHING_BLAST: info += gs.BewitchingBlast; break;
+							case META_I_ELDRITCH_CONE:    info += gs.EldritchCone;    break;
+							case META_I_NOXIOUS_BLAST:    info += gs.NoxiousBlast;    break;
+							case META_I_VITRIOLIC_BLAST:  info += gs.VitriolicBlast;  break;
+							case META_I_ELDRITCH_DOOM:    info += gs.EldritchDoom;    break;
+							case META_I_UTTERDARK_BLAST:  info += gs.UtterdarkBlast;  break;
+							case META_I_HINDERING_BLAST:  info += gs.HinderingBlast;  break;
+							case META_I_BINDING_BLAST:    info += gs.BindingBlast;    break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.TargetingUI: // SpellTarget.2da
-					if (it_PathSpellTarget2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
 					{
-						info = Table.Cols[col].text + ": ";
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.targetLabels.Count) // it_PathSpellTarget2da.Checked
+						{
+							info += Info.targetLabels[result];
 
-						if (val == gs.Stars)
-						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.targetLabels.Count)
+							bool valid = false;
+
+							float f = Info.targetWidths[result];
+							if (Math.Abs(0.0F - f) > 0.00001F)
 							{
-								info += Info.targetLabels[result];
-
-								bool b = false;
-
-								float f = Info.targetWidths[result];
-								if (Math.Abs(0.0F - f) > 0.00001F)
-								{
-									b = true;
-									info += " (" + f;
-								}
-
-								f = Info.targetLengths[result];
-								if (Math.Abs(0.0F - f) > 0.00001F)
-								{
-									if (!b)
-									{
-										b = true;
-										info += " (_";
-									}
-									info += " x " + f;
-								}
-
-								if (b) info += ")";
+								valid = true;
+								info += " (" + f;
 							}
-							else
-								info += val;
+
+							f = Info.targetLengths[result];
+							if (Math.Abs(0.0F - f) > 0.00001F)
+							{
+								if (!valid)
+								{
+									valid = true;
+									info += " (_";
+								}
+								info += " x " + f;
+							}
+
+							if (valid) info += ")";
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputSpells.ItemImmunity: // no 2da (bools) ->
@@ -3764,23 +3745,23 @@ namespace yata
 				case InfoInputSpells.HasProjectile:
 				case InfoInputSpells.CastableOnDead:
 				case InfoInputSpells.Removed:
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 2)
-						{
-							switch (result)
-							{
-								case 0: info += "false"; break;
-								case 1: info += "true";  break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "false"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 2)
+					{
+						switch (result)
+						{
+							case 0: info += "false"; break;
+							case 1: info += "true";  break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 			}
 
@@ -3871,212 +3852,187 @@ namespace yata
 				case InfoInputFeat.OrReqFeat3:
 				case InfoInputFeat.OrReqFeat4:
 				case InfoInputFeat.OrReqFeat5:
-					if (it_PathFeat2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.featLabels.Count)
-							{
-								info += Info.featLabels[result];
-							}
-							else
-								info += val;
+							info += Info.featLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.Category: // Categories.2da
-					if (it_PathCategories2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "****" /hah
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "****" /hah
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.categoryLabels.Count) // it_PathCategories2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.categoryLabels.Count)
-							{
-								info += Info.categoryLabels[result];
-							}
-							else
-								info += val;
+							info += Info.categoryLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.SPELLID: // Spells.2da
-					if (it_PathSpells2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Acid Fog"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.spellLabels.Count) // it_PathSpells2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.spellLabels.Count)
-							{
-								info += Info.spellLabels[result];
-							}
-							else
-								info += val;
+							info += Info.spellLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.MasterFeat: // MasterFeats.2da
-					if (it_PathMasterFeats2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "ImprovedCritical"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.masterfeatLabels.Count) // it_PathMasterFeats2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.masterfeatLabels.Count)
-							{
-								info += Info.masterfeatLabels[result];
-							}
-							else
-								info += val;
+							info += Info.masterfeatLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.REQSKILL: // Skills.2da ->
 				case InfoInputFeat.REQSKILL2:
-					if (it_PathSkills2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "DEL_AnimalEmpathy"
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "DEL_AnimalEmpathy"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.skillLabels.Count) // it_PathSkills2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.skillLabels.Count)
-							{
-								info += Info.skillLabels[result];
-							}
-							else
-								info += val;
+							info += Info.skillLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.ToolsCategories: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "All Feats"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 7)
-						{
-							switch (result)
-							{
-								case 0: info += "All Feats";           break;
-								case 1: info += "Combat Feats";        break;
-								case 2: info += "Active Combat Feats"; break;
-								case 3: info += "Defensive Feats";     break;
-								case 4: info += "Magical Feats";       break;
-								case 5: info += "Class/Racial Feats";  break;
-								case 6: info += "Other Feats";         break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "All Feats"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 7)
+					{
+						switch (result)
+						{
+							case 0: info += "All Feats";           break;
+							case 1: info += "Combat Feats";        break;
+							case 2: info += "Active Combat Feats"; break;
+							case 3: info += "Defensive Feats";     break;
+							case 4: info += "Magical Feats";       break;
+							case 5: info += "Class/Racial Feats";  break;
+							case 6: info += "Other Feats";         break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.MinLevelClass: // Classes.2da
-					if (it_PathClasses2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually "Barbarian"
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Barbarian"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.classLabels.Count) // it_PathClasses2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.classLabels.Count)
-							{
-								info += Info.classLabels[result];
-							}
-							else
-								info += val;
+							info += Info.classLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.ToggleMode: // CombatModes.2da
-					if (it_PathCombatModes2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.combatmodeLabels.Count) // it_PathCombatModes2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.combatmodeLabels.Count)
-							{
-								info += Info.combatmodeLabels[result];
-							}
-							else
-								info += val;
+							info += Info.combatmodeLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputFeat.ImmunityType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
 						switch (val)
 						{
 							case gs.Knockdown: info += gs.Knockdown; break;
@@ -4098,23 +4054,23 @@ namespace yata
 				case InfoInputFeat.DMFeat:
 				case InfoInputFeat.REMOVED:
 				case InfoInputFeat.Instant:
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 2)
-						{
-							switch (result)
-							{
-								case 0: info += "false"; break;
-								case 1: info += "true";  break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars)
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 2)
+					{
+						switch (result)
+						{
+							case 0: info += "false"; break;
+							case 1: info += "true";  break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 			}
 
@@ -4141,11 +4097,14 @@ namespace yata
 			{
 				case InfoInputClasses.PrimaryAbil: // no 2da ->
 				case InfoInputClasses.SpellAbil:
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
 						switch (val.ToUpperInvariant())
 						{
 							case "STR": info += "Strength";     break;
@@ -4161,185 +4120,177 @@ namespace yata
 					break;
 
 				case InfoInputClasses.AlignRestrict: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+						info += gs.non;
+					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							switch (result)
+							case ALIGNRESTRICT_NONE: info += "none"; break;
+
+							default:
 							{
-								case ALIGNRESTRICT_NONE: info += "none"; break;
-
-								default:
+								// check the InvertRestrict col ->
+								// NOTE: The NwN engine(s) could allow values other than "1".
+								if (col + 2 < Table.ColCount && Table[id, col + 2].text == "1")
 								{
-									// check the InvertRestrict col ->
-									// NOTE: The NwN engine(s) could allow values other than "1".
-									if (col + 2 < Table.ColCount && Table[id, col + 2].text == "1")
-									{
-										info += "REQUIRED ";
-									}
-									else
-										info += "PROHIBITED ";
+									info += "REQUIRED ";
+								}
+								else
+									info += "PROHIBITED ";
 
-									bool space = false;
-									if ((result & ALIGNRESTRICT_NEUTRAL) != 0)
-									{
-										// check the AlignRstrctType col ->
-										string art = String.Empty;
+								bool space = false;
+								if ((result & ALIGNRESTRICT_NEUTRAL) != 0)
+								{
+									// check the AlignRstrctType col ->
+									string art = String.Empty;
 
-										if (col + 1 < Table.ColCount)
+									if (col + 1 < Table.ColCount)
+									{
+										int artresult;
+
+										string text = Table[id, col + 1].text;
+										if (text.Length > 2 && text.Substring(0,2) == "0x"
+											&& Int32.TryParse(text.Substring(2),
+															  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+															  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+															  out artresult))
 										{
-											int artresult;
+											if ((artresult & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
+												art = " ethics";
 
-											string text = Table[id, col + 1].text;
-											if (text.Length > 2 && text.Substring(0,2) == "0x"
-												&& Int32.TryParse(text.Substring(2),
-																  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-																  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-																  out artresult))
+											if ((artresult & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
 											{
-												if ((artresult & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
-													art = " ethics";
-
-												if ((artresult & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
-												{
-													if (art != String.Empty) art += "/morals";
-													else                     art  = " morals";
-												}
+												if (art != String.Empty) art += "/morals";
+												else                     art  = " morals";
 											}
 										}
+									}
 
-										info += "(1)neutral" + art;
-										space = true;
-									}
-									if ((result & ALIGNRESTRICT_LAWFUL) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2)lawful";
-										space = true;
-									}
-									if ((result & ALIGNRESTRICT_CHAOTIC) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(4)chaotic";
-										space = true;
-									}
-									if ((result & ALIGNRESTRICT_GOOD) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(8)good";
-										space = true;
-									}
-									if ((result & ALIGNRESTRICT_EVIL) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(16)evil";
-										space = true;
-									}
-									break;
+									info += "(1)neutral" + art;
+									space = true;
 								}
+								if ((result & ALIGNRESTRICT_LAWFUL) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2)lawful";
+									space = true;
+								}
+								if ((result & ALIGNRESTRICT_CHAOTIC) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(4)chaotic";
+									space = true;
+								}
+								if ((result & ALIGNRESTRICT_GOOD) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(8)good";
+									space = true;
+								}
+								if ((result & ALIGNRESTRICT_EVIL) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(16)evil";
+									space = true;
+								}
+								break;
 							}
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputClasses.AlignRstrctType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+						info += gs.non;
+					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							switch (result)
-							{
-								case ALIGNRESTRICTTYPE_NONE: info += "none"; break;
+							case ALIGNRESTRICTTYPE_NONE: info += "none"; break;
 
-								default:
+							default:
+							{
+								bool space = false;
+								if ((result & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
 								{
-									bool space = false;
-									if ((result & ALIGNRESTRICTTYPE_LAWCHAOS) != 0)
-									{
-										info += "(1)law/chaos";
-										space = true;
-									}
-									if ((result & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2)good/evil";
-										space = true;
-									}
-									break;
+									info += "(1)law/chaos";
+									space = true;
 								}
+								if ((result & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2)good/evil";
+									space = true;
+								}
+								break;
 							}
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputClasses.Package: // Packages.2da
-					if (it_PathPackages2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.packageLabels.Count) // it_PathPackages2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.packageLabels.Count)
-							{
-								info += Info.packageLabels[result];
-							}
-							else
-								info += val;
+							info += Info.packageLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputClasses.FEATPracticedSpellcaster: // Feat.2da ->
 				case InfoInputClasses.FEATExtraSlot:
 				case InfoInputClasses.FEATArmoredCaster:
-					if (it_PathFeat2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.featLabels.Count)
-							{
-								info += Info.featLabels[result];
-							}
-							else
-								info += val;
+							info += Info.featLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 			}
 
@@ -4388,321 +4339,307 @@ namespace yata
 			switch (col)
 			{
 				case InfoInputBaseitems.EquipableSlots: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "not equipable"
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "not equipable"
 					{
-						info = Table.Cols[col].text + ": ";
-
-						if (val.Length > 2
-							&& Int32.TryParse(val.Substring(2),
-											  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notatation
-											  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
-											  out result))
+						info += gs.non;
+					}
+					else if (val.Length > 2
+						&& Int32.TryParse(val.Substring(2),
+										  NumberStyles.AllowHexSpecifier, // <- that treats the string as hexadecimal notation
+										  CultureInfo.InvariantCulture,   //    but does *not* allow the hex-specifier "0x"
+										  out result))
+					{
+						switch (result)
 						{
-							switch (result)
-							{
-								case EQUIPSLOT_NONE:
-									info += "not equipable";
-									break;
+							case EQUIPSLOT_NONE: info += "not equipable"; break;
 
-								default:
+							default:
+							{
+								bool space = false;
+								if ((result & EQUIPSLOT_HELMET) != 0)
 								{
-									bool space = false;
-									if ((result & EQUIPSLOT_HELMET) != 0)
-									{
-										info += "(1)head";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_ARMOR) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2)chest";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_BOOTS) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(4)feet";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_GLOVES) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(8)arms";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_MAINHAND) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(16)righthand";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_OFFHAND) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(32)lefthand";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_CLOAK) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(64)back";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_RINGS) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(384)fingers";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_AMULET) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(512)neck";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_BELT) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(1024)waist";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_ARROW) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(2048)arrow";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_BULLET) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(4096)bullet";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_BOLT) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(8192)bolt";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_CWEAPON) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(114688)Cweapon";
-										space = true;
-									}
-									if ((result & EQUIPSLOT_CARMOR) != 0)
-									{
-										if (space) info += gs.Space;
-										info += "(131072)Carmor";
-										space = true;
-									}
-									break;
+									info += "(1)head";
+									space = true;
 								}
+								if ((result & EQUIPSLOT_ARMOR) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2)chest";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_BOOTS) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(4)feet";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_GLOVES) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(8)arms";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_MAINHAND) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(16)righthand";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_OFFHAND) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(32)lefthand";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_CLOAK) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(64)back";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_RINGS) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(384)fingers";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_AMULET) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(512)neck";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_BELT) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(1024)waist";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_ARROW) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(2048)arrow";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_BULLET) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(4096)bullet";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_BOLT) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(8192)bolt";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_CWEAPON) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(114688)Cweapon";
+									space = true;
+								}
+								if ((result & EQUIPSLOT_CARMOR) != 0)
+								{
+									if (space) info += gs.Space;
+									info += "(131072)Carmor";
+									space = true;
+								}
+								break;
 							}
 						}
-						else
-							info += gs.bork;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.ModelType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "simple 1-part"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 4)
-						{
-							switch (result)
-							{
-								case 0: info += "simple 1-part";       break;
-								case 1: info += "colored 1-part";      break;
-								case 2: info += "configurable 3-part"; break;
-								case 3: info += "armor";               break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "simple 1-part"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 4)
+					{
+						switch (result)
+						{
+							case 0: info += "simple 1-part";       break;
+							case 1: info += "colored 1-part";      break;
+							case 2: info += "configurable 3-part"; break;
+							case 3: info += "armor";               break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.WeaponWield: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "standard one-handed weapon"
-					{
 						info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 14)
-						{
-							switch (result)
-							{
-								case  0: info += "standard one-handed weapon"; break;
-								case  1: info += "not wieldable";              break;
-								case  2: info += "not used/unknown";           break;
-								case  3: info += "not used/unknown";           break;
-								case  4: info += "two-handed weapon";          break;
-								case  5: info += "bow";                        break;
-								case  6: info += "crossbow";                   break;
-								case  7: info += "shield";                     break;
-								case  8: info += "double-sided weapon";        break;
-								case  9: info += "creature weapon";            break;
-								case 10: info += "dart or sling";              break;
-								case 11: info += "shuriken or throwing axe";   break;
-								case 12: info += "spears";                     break;
-								case 13: info += "musical instruments";        break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "standard one-handed weapon"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 14)
+					{
+						switch (result)
+						{
+							case  0: info += "standard one-handed weapon"; break;
+							case  1: info += "not wieldable";              break;
+							case  2: info += "not used/unknown";           break;
+							case  3: info += "not used/unknown";           break;
+							case  4: info += "two-handed weapon";          break;
+							case  5: info += "bow";                        break;
+							case  6: info += "crossbow";                   break;
+							case  7: info += "shield";                     break;
+							case  8: info += "double-sided weapon";        break;
+							case  9: info += "creature weapon";            break;
+							case 10: info += "dart or sling";              break;
+							case 11: info += "shuriken or throwing axe";   break;
+							case 12: info += "spears";                     break;
+							case 13: info += "musical instruments";        break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.WeaponType: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 6)
-						{
-							switch (result)
-							{
-								case 0: info += "none";                 break;
-								case 1: info += "piercing";             break;
-								case 2: info += "bludgeoning";          break;
-								case 3: info += "slashing";             break;
-								case 4: info += "piercing/slashing";    break;
-								case 5: info += "bludgeoning/piercing"; break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 6)
+					{
+						switch (result)
+						{
+							case 0: info += "none";                 break;
+							case 1: info += "piercing";             break;
+							case 2: info += "bludgeoning";          break;
+							case 3: info += "slashing";             break;
+							case 4: info += "piercing/slashing";    break;
+							case 5: info += "bludgeoning/piercing"; break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.WeaponSize: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 5)
-						{
-							switch (result)
-							{
-								case 0: info += "none";   break;
-								case 1: info += "tiny";   break;
-								case 2: info += "small";  break;
-								case 3: info += "medium"; break;
-								case 4: info += "large";  break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 5)
+					{
+						switch (result)
+						{
+							case 0: info += "none";   break;
+							case 1: info += "tiny";   break;
+							case 2: info += "small";  break;
+							case 3: info += "medium"; break;
+							case 4: info += "large";  break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.RangedWeapon: // BaseItems.2da
-					if (it_PathBaseItems2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.tagLabels.Count) // it_PathBaseItems2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.tagLabels.Count)
-							{
-								info += Info.tagLabels[result];
-							}
-							else
-								info += val;
+							info += Info.tagLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.InvSoundType: // InventorySnds.2da
-					if (it_PathInventorySnds2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.soundLabels.Count) // it_PathInventorySnds2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.soundLabels.Count)
-							{
-								info += Info.soundLabels[result];
-							}
-							else
-								info += val;
+							info += Info.soundLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.PropColumn: // ItemProps.2da
-					if (it_PathItemProps2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.propFields.Count) // it_PathItemProps2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.propFields.Count)
-							{
-								info += Info.propFields[result];
-							}
-							else
-								info += val;
+							info += Info.propFields[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.StorePanel: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "armor and clothing"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 5)
-						{
-							switch (result)
-							{
-								case 0: info += "armor and clothing";    break;
-								case 1: info += "weapons";               break;
-								case 2: info += "potions and scrolls";   break;
-								case 3: info += "wands and magic items"; break;
-								case 4: info += "miscellaneous";         break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "armor and clothing"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 5)
+					{
+						switch (result)
+						{
+							case 0: info += "armor and clothing";    break;
+							case 1: info += "weapons";               break;
+							case 2: info += "potions and scrolls";   break;
+							case 3: info += "wands and magic items"; break;
+							case 4: info += "miscellaneous";         break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.ReqFeat0: // Feat.2da ->
@@ -4722,51 +4659,47 @@ namespace yata
 				case InfoInputBaseitems.FEATGrtrWpnFocus:
 				case InfoInputBaseitems.FEATGrtrWpnSpec:
 				case InfoInputBaseitems.FEATPowerCrit:
-					if (it_PathFeat2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.featLabels.Count)
-							{
-								info += Info.featLabels[result];
-							}
-							else
-								info += val;
+							info += Info.featLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.AC_Enchant: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "dodge"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 5)
-						{
-							switch (result)
-							{
-								case 0: info += "dodge";      break;
-								case 1: info += "natural";    break;
-								case 2: info += "armor";      break;
-								case 3: info += "shield";     break;
-								case 4: info += "deflection"; break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "dodge"
+					{
+						info += gs.non;
 					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 5)
+					{
+						switch (result)
+						{
+							case 0: info += "dodge";      break;
+							case 1: info += "natural";    break;
+							case 2: info += "armor";      break;
+							case 3: info += "shield";     break;
+							case 4: info += "deflection"; break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.BaseAC:
@@ -4776,74 +4709,66 @@ namespace yata
 					break;
 
 				case InfoInputBaseitems.WeaponMatType: // WeaponSounds.2da
-					if (it_PathWeaponSounds2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1)
+					{
+						if (result < Info.weapsoundLabels.Count) // it_PathWeaponSounds2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result)
-							&& result > -1)
-						{
-							if (result < Info.weapsoundLabels.Count)
-							{
-								info += Info.weapsoundLabels[result];
-							}
-							else
-								info += val;
+							info += Info.weapsoundLabels[result];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.AmmunitionType: // AmmunitionTypes.2da
-					if (it_PathAmmunitionTypes2da.Checked
-						&& !String.IsNullOrEmpty(val = Table[id,col].text))
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (val == gs.Stars)
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result) // off by 1 ->
+						&& result > 0)
+					{
+						if (result - 1 < Info.ammoLabels.Count) // it_PathAmmunitionTypes2da.Checked
 						{
-							info += gs.non;
-						}
-						else if (Int32.TryParse(val, out result) // off by 1 ->
-							&& result > 0)
-						{
-							if (result - 1 < Info.ammoLabels.Count)
-							{
-								info += Info.ammoLabels[result - 1];
-							}
-							else
-								info += val;
+							info += Info.ammoLabels[result - 1];
 						}
 						else
-							info += gs.bork;
+							info += val;
 					}
+					else
+						info += gs.bork;
 					break;
 
 				case InfoInputBaseitems.QBBehaviour: // no 2da
-					if (!String.IsNullOrEmpty(val = Table[id,col].text)
-						&& val != gs.Stars) // NOTE: "****" is 0 which is actually "none"
-					{
-						info = Table.Cols[col].text + ": ";
+					info = Table.Cols[col].text + ": ";
 
-						if (Int32.TryParse(val, out result)
-							&& result > -1 && result < 3)
-						{
-							switch (result)
-							{
-								case 0: info += "none";                                  break;
-								case 1: info += "rods instruments wands and misc items"; break;
-								case 2: info += "potions and scrolls";                   break;
-							}
-						}
-						else
-							info += gs.bork;
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "none"
+					{
+						info += gs.non;
 					}
+					if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 3)
+					{
+						switch (result)
+						{
+							case 0: info += "none";                                  break;
+							case 1: info += "rods instruments wands and misc items"; break;
+							case 2: info += "potions and scrolls";                   break;
+						}
+					}
+					else
+						info += gs.bork;
 					break;
 			}
 
