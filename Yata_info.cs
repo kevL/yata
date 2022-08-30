@@ -4232,6 +4232,28 @@ namespace yata
 
 			switch (col)
 			{
+				case InfoInputClasses.HitDie: // no 2da ->
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case "4" : info += "d4";  break;
+							case "6" : info += "d6";  break;
+							case "8" : info += "d8";  break;
+							case "10": info += "d10"; break;
+							case "12": info += "d12"; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
 				case InfoInputClasses.PrimaryAbil: // no 2da ->
 				case InfoInputClasses.SpellAbil:
 					info = Table.Cols[col].text + ": ";
@@ -4428,6 +4450,38 @@ namespace yata
 					}
 					else
 						info += gs.bork;
+					break;
+
+				case InfoInputClasses.PlayerClass: // no 2da (bools) ->
+				case InfoInputClasses.SpellCaster:
+				case InfoInputClasses.MetaMagicAllowed:
+				case InfoInputClasses.MemorizesSpells:
+				case InfoInputClasses.HasArcane:
+				case InfoInputClasses.HasDivine:
+				case InfoInputClasses.HasSpontaneousSpells:
+				case InfoInputClasses.AllSpellsKnown:
+				case InfoInputClasses.HasInfiniteSpells:
+				case InfoInputClasses.HasDomains:
+				case InfoInputClasses.HasSchool:
+				case InfoInputClasses.HasFamiliar:
+				case InfoInputClasses.HasAnimalCompanion:
+				case InfoInputClasses.InvertRestrict:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars)
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case "0": info += "false"; break;
+							case "1": info += "true";  break;
+
+							default: info += gs.bork; break;
+						}
+					}
 					break;
 			}
 

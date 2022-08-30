@@ -295,10 +295,25 @@ namespace yata
 		{
 			switch (_sel.x)
 			{
-				case InfoInputClasses.PrimaryAbil: // these don't rely on 2da-gropes ->
+				case InfoInputClasses.HitDie: // these don't rely on 2da-gropes ->
+				case InfoInputClasses.PrimaryAbil:
 				case InfoInputClasses.SpellAbil:
 				case InfoInputClasses.AlignRestrict:
 				case InfoInputClasses.AlignRstrctType:
+				case InfoInputClasses.PlayerClass:
+				case InfoInputClasses.SpellCaster:
+				case InfoInputClasses.MetaMagicAllowed:
+				case InfoInputClasses.MemorizesSpells:
+				case InfoInputClasses.HasArcane:
+				case InfoInputClasses.HasDivine:
+				case InfoInputClasses.HasSpontaneousSpells:
+				case InfoInputClasses.AllSpellsKnown:
+				case InfoInputClasses.HasInfiniteSpells:
+				case InfoInputClasses.HasDomains:
+				case InfoInputClasses.HasSchool:
+				case InfoInputClasses.HasFamiliar:
+				case InfoInputClasses.HasAnimalCompanion:
+				case InfoInputClasses.InvertRestrict:
 					return true;
 
 				case InfoInputClasses.Package:
@@ -778,8 +793,23 @@ namespace yata
 				case YataGrid.InfoType.INFO_CLASS:
 					switch (_sel.x)
 					{
-						case InfoInputClasses.PrimaryAbil: // STRING Input ->
+						case InfoInputClasses.HitDie: // STRING Input ->
+						case InfoInputClasses.PrimaryAbil:
 						case InfoInputClasses.SpellAbil:
+						case InfoInputClasses.PlayerClass:
+						case InfoInputClasses.SpellCaster:
+						case InfoInputClasses.MetaMagicAllowed:
+						case InfoInputClasses.MemorizesSpells:
+						case InfoInputClasses.HasArcane:
+						case InfoInputClasses.HasDivine:
+						case InfoInputClasses.HasSpontaneousSpells:
+						case InfoInputClasses.AllSpellsKnown:
+						case InfoInputClasses.HasInfiniteSpells:
+						case InfoInputClasses.HasDomains:
+						case InfoInputClasses.HasSchool:
+						case InfoInputClasses.HasFamiliar:
+						case InfoInputClasses.HasAnimalCompanion:
+						case InfoInputClasses.InvertRestrict:
 							using (var iic = new InfoInputClasses(this, _sel))
 							{
 								if (iic.ShowDialog(this) == DialogResult.OK

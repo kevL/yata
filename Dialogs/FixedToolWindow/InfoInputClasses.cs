@@ -18,6 +18,7 @@ namespace yata
 		// cols in Classes.2da ->
 		internal const int icon                       =  6; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
 		internal const int BorderedIcon               =  7; // ofd only
+		internal const int HitDie                     =  8;
 		internal const int AttackBonusTable           =  9; // ofd only
 		internal const int FeatsTable                 = 10; // ofd only
 		internal const int SavingThrowTable           = 11; // ofd only
@@ -25,11 +26,25 @@ namespace yata
 		internal const int BonusFeatsTable            = 13; // ofd only
 		internal const int SpellGainTable             = 15; // ofd only
 		internal const int SpellKnownTable            = 16; // ofd only
+		internal const int PlayerClass                = 17; // bool
+		internal const int SpellCaster                = 18; // bool
+		internal const int MetaMagicAllowed           = 19; // bool
+		internal const int MemorizesSpells            = 20; // bool
+		internal const int HasArcane                  = 21; // bool
+		internal const int HasDivine                  = 22; // bool
+		internal const int HasSpontaneousSpells       = 23; // bool
 		internal const int SpontaneousConversionTable = 24; // ofd only
+		internal const int AllSpellsKnown             = 28; // bool
+		internal const int HasInfiniteSpells          = 29; // bool
+		internal const int HasDomains                 = 30; // bool
+		internal const int HasSchool                  = 31; // bool
+		internal const int HasFamiliar                = 32; // bool
+		internal const int HasAnimalCompanion         = 33; // bool
 		internal const int PrimaryAbil                = 40;
 		internal const int SpellAbil                  = 41;
 		internal const int AlignRestrict              = 42;
 		internal const int AlignRstrctType            = 43;
+		internal const int InvertRestrict             = 44; // bool
 		internal const int PreReqTable                = 66; // ofd only
 		internal const int BonusSpellcasterLevelTable = 69; // ofd only
 		internal const int BonusCasterFeatByClassMap  = 70; // ofd only
@@ -90,6 +105,25 @@ namespace yata
 			int result;
 			switch (_cell.x)
 			{
+				case HitDie: // string-val,checkbox,unique
+					_f.str0 = _f.str1 = val;
+					prep_HitDice();
+
+					switch (val)
+					{
+						case "4" : cb_00.Checked = true; break;
+						case "6" : cb_01.Checked = true; break;
+						case "8" : cb_02.Checked = true; break;
+						case "10": cb_03.Checked = true; break;
+						case "12": cb_04.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
+
 				case PrimaryAbil: // string-val,checkbox,unique
 				case SpellAbil:
 					_f.str0 = _f.str1 = val;
@@ -188,10 +222,54 @@ namespace yata
 					list_Packages();
 					initintvals(val, co_Val, bu_Clear);
 					break;
+
+				case PlayerClass: // string-val,checkbox,unique (bools) ->
+				case SpellCaster:
+				case MetaMagicAllowed:
+				case MemorizesSpells:
+				case HasArcane:
+				case HasDivine:
+				case HasSpontaneousSpells:
+				case AllSpellsKnown:
+				case HasInfiniteSpells:
+				case HasDomains:
+				case HasSchool:
+				case HasFamiliar:
+				case HasAnimalCompanion:
+				case InvertRestrict:
+					_f.str0 = _f.str1 = val;
+					prep_bool();
+
+					switch (val)
+					{
+						case "0": cb_00.Checked = true; break;
+						case "1": cb_01.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
 			}
 			_init = false;
 		}
 
+
+		/// <summary>
+		/// Prepares this dialog for <c><see cref="HitDie"/></c> input.
+		/// </summary>
+		void prep_HitDice()
+		{
+			cb_00.Text = "d4";
+			cb_01.Text = "d6";
+			cb_02.Text = "d8";
+			cb_03.Text = "d10";
+			cb_04.Text = "d12";
+
+			cb_00.Visible = cb_01.Visible = cb_02.Visible =
+			cb_03.Visible = cb_04.Visible = true;
+		}
 
 		/// <summary>
 		/// Prepares this dialog for <c><see cref="PrimaryAbil"/></c> or
@@ -236,6 +314,17 @@ namespace yata
 			cb_00.Visible = cb_01.Visible = true;
 		}
 
+		/// <summary>
+		/// Prepares this dialog for <c>bool</c> input.
+		/// </summary>
+		void prep_bool()
+		{
+			cb_00.Text = "0 - false";
+			cb_01.Text = "1 - true";
+
+			cb_00.Visible = cb_01.Visible = true;
+		}
+
 
 		/// <summary>
 		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
@@ -251,8 +340,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Adds allowable entries for "Packages" (Packages.2da) to the
-		/// <c>ComboBox</c> along with a final stars item.
+		/// Adds allowable entries for <c><see cref="Package"/></c>
+		/// (Packages.2da) to the <c>ComboBox</c> along with a final stars item.
 		/// </summary>
 		void list_Packages()
 		{
@@ -281,12 +370,54 @@ namespace yata
 
 				switch (_cell.x)
 				{
+					case HitDie:          change_HitDie();          break;
 					case PrimaryAbil:
 					case SpellAbil:       change_Ability();         break;
 					case AlignRestrict:   change_AlignRestrict();   break;
 					case AlignRstrctType: change_AlignRstrctType(); break;
+
+					case PlayerClass:
+					case SpellCaster:
+					case MetaMagicAllowed:
+					case MemorizesSpells:
+					case HasArcane:
+					case HasDivine:
+					case HasSpontaneousSpells:
+					case AllSpellsKnown:
+					case HasInfiniteSpells:
+					case HasDomains:
+					case HasSchool:
+					case HasFamiliar:
+					case HasAnimalCompanion:
+					case InvertRestrict:
+						change_bool();
+						break;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// </summary>
+		void change_HitDie()
+		{
+			clearchecks();
+
+			string val;
+			if (_cb.Checked)
+			{
+				if      (_cb == cb_00) val = "4";
+				else if (_cb == cb_01) val = "6";
+				else if (_cb == cb_02) val = "8";
+				else if (_cb == cb_03) val = "10";
+				else                   val = "12"; // _cb == cb_04
+			}
+			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
 		}
 
 		/// <summary>
@@ -373,6 +504,27 @@ namespace yata
 			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// </summary>
+		void change_bool()
+		{
+			clearchecks();
+
+			string val;
+			if (_cb.Checked)
+			{
+				if (_cb == cb_00) val = "0";
+				else              val = "1"; // _cb == cb_01
+			}
+			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
+		}
+
 
 		/// <summary>
 		/// Handles user changing the <c>ComboBox</c> selection.
@@ -414,8 +566,23 @@ namespace yata
 		{
 			switch (_cell.x)
 			{
-				case PrimaryAbil: // str,cb,unique
+				case HitDie: // str,cb,unique ->
+				case PrimaryAbil:
 				case SpellAbil:
+				case PlayerClass:
+				case SpellCaster:
+				case MetaMagicAllowed:
+				case MemorizesSpells:
+				case HasArcane:
+				case HasDivine:
+				case HasSpontaneousSpells:
+				case AllSpellsKnown:
+				case HasInfiniteSpells:
+				case HasDomains:
+				case HasSchool:
+				case HasFamiliar:
+				case HasAnimalCompanion:
+				case InvertRestrict:
 					bu_Clear.Enabled = false;
 
 					la_Val.Text = _f.str1 = gs.Stars;
@@ -424,7 +591,7 @@ namespace yata
 					clearchecks();
 					break;
 
-				case AlignRestrict: // hex,cb,multiple
+				case AlignRestrict: // hex,cb,multiple ->
 				case AlignRstrctType:
 					bu_Clear.Enabled = false;
 
