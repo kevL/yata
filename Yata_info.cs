@@ -3524,6 +3524,136 @@ namespace yata
 						info += gs.bork;
 					break;
 
+				case InfoInputSpells.ConjAnim:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case gs.Attack:
+							case gs.Bardsong:
+							case gs.Defensive:
+							case gs.Hand:
+							case gs.Head:
+							case gs.Major:
+							case gs.Party:
+							case gs.Read: info += val; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
+				case InfoInputSpells.CastAnim:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case gs.Area:
+							case gs.Attack:
+							case gs.Bardsong:
+							case gs.Creature:
+							case gs.Defensive:
+							case gs.General:
+							case gs.Major:
+							case gs.Out:
+							case gs.Self:
+							case gs.Touch:
+							case gs.Up: info += val; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
+//				case InfoInputSpells.Proj:
+//					break;
+
+				case InfoInputSpells.ProjType:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case gs.Accelerating:
+							case gs.Ballistic:
+							case gs.Bounce:
+							case gs.Burst:
+							case gs.Burstup:
+							case gs.Highballistic:
+							case gs.Homing:
+							case gs.Homingspiral:
+							case gs.Launchedballistic:
+							case gs.Linked:
+							case gs.Loworbit:
+							case gs.Thrownballistic: info += val; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
+				case InfoInputSpells.ProjSpwnPoint:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case gs.Halo:
+							case gs.Head:
+							case gs.Lrhand:
+							case gs.Monster0:
+							case gs.Monster1:
+							case gs.Monster2:
+							case gs.Monster3:
+							case gs.Monster4:
+							case gs.Mouth:
+							case gs.Rhand: info += val; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
+				case InfoInputSpells.ProjOrientation:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually ""
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case gs.Path: info += val; break;
+
+							default: info += gs.bork; break;
+						}
+					}
+					break;
+
 				case InfoInputSpells.ImmunityType:
 					info = Table.Cols[col].text + ": ";
 
