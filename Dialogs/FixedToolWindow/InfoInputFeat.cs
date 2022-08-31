@@ -15,7 +15,7 @@ namespace yata
 	{
 		#region Fields (static)
 		// cols in Feat.2da ->
-		internal const int icon             =  4; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
+		internal const int icon             =  4; // ofd only (OpenFileDialog) - lc to not conflict w/ 'Icon'
 		internal const int PREREQFEAT1      = 20; // info only
 		internal const int PREREQFEAT2      = 21; // info only
 		internal const int GAINMULTIPLE     = 22; // bool
@@ -397,7 +397,7 @@ namespace yata
 
 				switch (_cell.x)
 				{
-					case ToolsCategories: change_ToolsCategories(); break;
+					case ToolsCategories:  change_ToolsCategories(); break;
 
 					case GAINMULTIPLE:
 					case EFFECTSSTACK:
@@ -409,9 +409,7 @@ namespace yata
 					case IsPersistent:
 					case DMFeat:
 					case REMOVED:
-					case Instant:
-						change_bool();
-						break;
+					case Instant:          change_bool(); break;
 				}
 			}
 		}

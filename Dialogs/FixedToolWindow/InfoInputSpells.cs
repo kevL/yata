@@ -1011,12 +1011,12 @@ namespace yata
 
 				switch (_cell.x)
 				{
-					case School:     change_School();     break;
-					case Range:      change_Range();      break;
-					case Vs:         change_Vs();         break;
-					case MetaMagic:  change_MetaMagic();  break;
-					case TargetType: change_TargetType(); break;
-					case UserType:   change_UserType();   break;
+					case School:            change_School();     break;
+					case Range:             change_Range();      break;
+					case Vs:                change_Vs();         break;
+					case MetaMagic:         change_MetaMagic();  break;
+					case TargetType:        change_TargetType(); break;
+					case UserType:          change_UserType();   break;
 
 					case Proj:
 					case ItemImmunity:
@@ -1025,9 +1025,7 @@ namespace yata
 					case HostileSetting:
 					case HasProjectile:
 					case CastableOnDead:
-					case Removed:
-						change_bool();
-						break;
+					case Removed:           change_bool(); break;
 				}
 			}
 		}

@@ -16,7 +16,7 @@ namespace yata
 	{
 		#region Fields (static)
 		// cols in Classes.2da ->
-		internal const int icon                       =  6; // ofd only (OpenFileDialog) lc to not conflict w/ 'Icon'
+		internal const int icon                       =  6; // ofd only (OpenFileDialog) - lc to not conflict w/ 'Icon'
 		internal const int BorderedIcon               =  7; // ofd only
 		internal const int HitDie                     =  8;
 		internal const int AttackBonusTable           =  9; // ofd only
@@ -370,11 +370,11 @@ namespace yata
 
 				switch (_cell.x)
 				{
-					case HitDie:          change_HitDie();          break;
+					case HitDie:               change_HitDie();          break;
 					case PrimaryAbil:
-					case SpellAbil:       change_Ability();         break;
-					case AlignRestrict:   change_AlignRestrict();   break;
-					case AlignRstrctType: change_AlignRstrctType(); break;
+					case SpellAbil:            change_Ability();         break;
+					case AlignRestrict:        change_AlignRestrict();   break;
+					case AlignRstrctType:      change_AlignRstrctType(); break;
 
 					case PlayerClass:
 					case SpellCaster:
@@ -389,9 +389,7 @@ namespace yata
 					case HasSchool:
 					case HasFamiliar:
 					case HasAnimalCompanion:
-					case InvertRestrict:
-						change_bool();
-						break;
+					case InvertRestrict:       change_bool(); break;
 				}
 			}
 		}
