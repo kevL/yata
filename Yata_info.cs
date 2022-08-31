@@ -4520,7 +4520,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns>info text for the statusbar</returns>
-		string getItemInfo(int id, int col)
+		string getBaseitemInfo(int id, int col)
 		{
 			string info = gs.non;
 
@@ -4662,6 +4662,28 @@ namespace yata
 							case 1: info += "colored 1-part";      break;
 							case 2: info += "configurable 3-part"; break;
 							case 3: info += "armor";               break;
+						}
+					}
+					else
+						info += gs.bork;
+					break;
+
+				case InfoInputBaseitems.Part1EnvMap: // no 2da ->
+				case InfoInputBaseitems.Part2EnvMap:
+				case InfoInputBaseitems.Part3EnvMap:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "transparency"
+					{
+						info += gs.non;
+					}
+					else if (Int32.TryParse(val, out result)
+						&& result > -1 && result < 2)
+					{
+						switch (result)
+						{
+							case 0: info += "transparency"; break;
+							case 1: info += "reflectivity"; break;
 						}
 					}
 					else
@@ -4896,7 +4918,7 @@ namespace yata
 				case InfoInputBaseitems.BaseAC:
 				case InfoInputBaseitems.ArmorCheckPen:
 				case InfoInputBaseitems.ArcaneSpellFailure:
-					info = Table.Cols[col].text + ": for shields only";
+					info = Table.Cols[col].text + ": for shields only (see ArmorRuleStats.2da for armors)";
 					break;
 
 				case InfoInputBaseitems.WeaponMatType: // WeaponSounds.2da
@@ -4948,7 +4970,7 @@ namespace yata
 					{
 						info += gs.non;
 					}
-					if (Int32.TryParse(val, out result)
+					else if (Int32.TryParse(val, out result)
 						&& result > -1 && result < 3)
 					{
 						switch (result)
@@ -4960,6 +4982,27 @@ namespace yata
 					}
 					else
 						info += gs.bork;
+					break;
+
+				case InfoInputBaseitems.CanRotateIcon: // no 2da (bools) ->
+				case InfoInputBaseitems.GenderSpecific:
+				case InfoInputBaseitems.container:
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars)
+					{
+						info += gs.non;
+					}
+					else
+					{
+						switch (val)
+						{
+							case "0": info += "false"; break;
+							case "1": info += "true";  break;
+
+							default: info += gs.bork; break;
+						}
+					}
 					break;
 			}
 

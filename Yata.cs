@@ -1495,7 +1495,7 @@ namespace yata
 									statbar_lblInfo.Text = getClassInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_ITEM:
-									statbar_lblInfo.Text = getItemInfo(r,c);
+									statbar_lblInfo.Text = getBaseitemInfo(r,c);
 									break;
 
 								default:

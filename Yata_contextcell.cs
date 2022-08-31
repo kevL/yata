@@ -367,12 +367,18 @@ namespace yata
 			{
 				case InfoInputBaseitems.EquipableSlots: // these don't rely on 2da-gropes ->
 				case InfoInputBaseitems.ModelType:
+				case InfoInputBaseitems.Part1EnvMap:
+				case InfoInputBaseitems.Part2EnvMap:
+				case InfoInputBaseitems.Part3EnvMap:
 				case InfoInputBaseitems.WeaponWield:
 				case InfoInputBaseitems.WeaponType:
 				case InfoInputBaseitems.WeaponSize:
 				case InfoInputBaseitems.StorePanel:
 				case InfoInputBaseitems.AC_Enchant:
 				case InfoInputBaseitems.QBBehaviour:
+				case InfoInputBaseitems.CanRotateIcon:
+				case InfoInputBaseitems.GenderSpecific:
+				case InfoInputBaseitems.container:
 					return true;
 
 				case InfoInputBaseitems.RangedWeapon:
@@ -901,6 +907,9 @@ namespace yata
 							break;
 
 						case InfoInputBaseitems.ModelType: // INT Input ->
+						case InfoInputBaseitems.Part1EnvMap:
+						case InfoInputBaseitems.Part2EnvMap:
+						case InfoInputBaseitems.Part3EnvMap:
 						case InfoInputBaseitems.WeaponWield:
 						case InfoInputBaseitems.WeaponType:
 						case InfoInputBaseitems.WeaponSize:
@@ -913,6 +922,19 @@ namespace yata
 						case InfoInputBaseitems.AmmunitionType:
 						case InfoInputBaseitems.QBBehaviour:
 							doIntInputItem();
+							break;
+
+						case InfoInputBaseitems.CanRotateIcon: // STRING Input ->
+						case InfoInputBaseitems.GenderSpecific:
+						case InfoInputBaseitems.container:
+							using (var iic = new InfoInputBaseitems(this, _sel))
+							{
+								if (iic.ShowDialog(this) == DialogResult.OK
+									&& str1 != str0)
+								{
+									Table.ChangeCellText(_sel, str1); // does not do a text-check
+								}
+							}
 							break;
 
 						// File input ->

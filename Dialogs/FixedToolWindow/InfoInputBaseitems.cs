@@ -17,10 +17,20 @@ namespace yata
 		#region Fields (static)
 		// cols in BaseItems.2da ->
 		internal const int EquipableSlots     =  5;
+		internal const int CanRotateIcon      =  6; // bool
 		internal const int ModelType          =  7;
+//		internal const int NWN2_Anim          =  8; // 0, 1(sling or flail), 2(whip only)
 		internal const int ItemClass          =  9; // ofd only (OpenFileDialog)
+		internal const int GenderSpecific     = 10; // bool
+
+		internal const int Part1EnvMap        = 11; // transparency/reflectiveness (alpha-channel)
+		internal const int Part2EnvMap        = 12; // transparency/reflectiveness (alpha-channel)
+		internal const int Part3EnvMap        = 13; // transparency/reflectiveness (alpha-channel)
+
 		internal const int DefaultModel       = 14; // ofd only
 //		internal const int NWN2_DefaultIcon   = 15; // req. images i guess
+//		internal const int DefaultIcon        = 16; // whot
+		internal const int container          = 17; // bool - lc to not conflict w/ 'Container'
 		internal const int WeaponWield        = 18;
 		internal const int WeaponType         = 19;
 		internal const int WeaponSize         = 20;
@@ -43,6 +53,7 @@ namespace yata
 		internal const int ArmorCheckPen      = 47; // info: "shields only"
 
 //		internal const int BaseItemStatRef    = 48; // is this applicable to shields/armor
+//		internal const int RotateOnGround     = 50; // whot
 
 		internal const int WeaponMatType      = 52; // weaponsounds.2da
 		internal const int AmmunitionType     = 53; // index+1 into ammunitiontypes.2da
@@ -164,6 +175,13 @@ namespace yata
 					initintvals(val, co_Val, bu_Clear);
 					break;
 
+				case Part1EnvMap: // int-val,dropdown,unique
+				case Part2EnvMap:
+				case Part3EnvMap:
+					list_EnvMaps();
+					initintvals(val, co_Val, bu_Clear);
+					break;
+
 				case WeaponWield: // int-val,dropdown,unique
 					list_WeaponWields();
 					initintvals(val, co_Val, bu_Clear);
@@ -218,6 +236,24 @@ namespace yata
 					list_QBBehaviours();
 					initintvals(val, co_Val, bu_Clear);
 					break;
+
+				case CanRotateIcon: // string-val,checkbox,unique (bools) ->
+				case GenderSpecific:
+				case container:
+					_f.str0 = _f.str1 = val;
+					prep_bool();
+
+					switch (val)
+					{
+						case "0": cb_00.Checked = true; break;
+						case "1": cb_01.Checked = true; break;
+
+						case gs.Stars: break;
+
+						default: _f.str1 = gs.Stars; break;
+					}
+					bu_Clear.Enabled = ((la_Val.Text = _f.str1) != gs.Stars);
+					break;
 			}
 
 			_init = false;
@@ -251,6 +287,17 @@ namespace yata
 			cb_12.Visible = cb_13.Visible = cb_14.Visible = true;
 		}
 
+		/// <summary>
+		/// Prepares this dialog for <c>bool</c> input.
+		/// </summary>
+		void prep_bool()
+		{
+			cb_00.Text = "0 - false";
+			cb_01.Text = "1 - true";
+
+			cb_00.Visible = cb_01.Visible = true;
+		}
+
 
 		/// <summary>
 		/// Hides the label and shows the <c>ComboBox</c> for dropdown-lists
@@ -279,6 +326,23 @@ namespace yata
 				new tui("1 - colored 1-part"),
 				new tui("2 - configurable 3-part"),
 				new tui("3 - armor"),
+				new tui(gs.Stars)
+			});
+		}
+
+		/// <summary>
+		/// Adds allowable entries for <c><see cref="Part1EnvMap"/></c>,
+		/// <c><see cref="Part2EnvMap"/></c>, <c><see cref="Part3EnvMap"/></c>
+		/// to the <c>ComboBox</c> along with a final stars item.
+		/// </summary>
+		void list_EnvMaps()
+		{
+			dropdown();
+
+			co_Val.Items.AddRange(new []
+			{
+				new tui("0 - transparency"),
+				new tui("1 - reflectivity"),
 				new tui(gs.Stars)
 			});
 		}
@@ -501,9 +565,11 @@ namespace yata
 
 				switch (_cell.x)
 				{
-					case EquipableSlots:
-						change_EquipableSlots();
-						break;
+					case EquipableSlots: change_EquipableSlots(); break;
+
+					case CanRotateIcon:
+					case GenderSpecific:
+					case container:      change_bool(); break;
 				}
 			}
 		}
@@ -595,6 +661,27 @@ namespace yata
 			bu_Clear.Enabled = (_f.int1 != 0);
 		}
 
+		/// <summary>
+		/// Helper for
+		/// <c><see cref="changed_Checkbox()">changed_Checkbox()</see></c>.
+		/// </summary>
+		void change_bool()
+		{
+			clearchecks();
+
+			string val;
+			if (_cb.Checked)
+			{
+				if (_cb == cb_00) val = "0";
+				else              val = "1"; // _cb == cb_01
+			}
+			else
+				val = gs.Stars;
+
+			la_Val.Text = _f.str1 = val;
+			bu_Clear.Enabled = (val != gs.Stars);
+		}
+
 
 		/// <summary>
 		/// Handles user changing the <c>ComboBox</c> selection.
@@ -619,6 +706,9 @@ namespace yata
 					switch (_cell.x)
 					{
 						case ModelType:
+						case Part1EnvMap:
+						case Part2EnvMap:
+						case Part3EnvMap:
 						case WeaponWield:
 						case WeaponType:
 						case WeaponSize:
@@ -660,6 +750,9 @@ namespace yata
 					break;
 
 				case ModelType: // dropdown -> fire changed_Combobox()
+				case Part1EnvMap:
+				case Part2EnvMap:
+				case Part3EnvMap:
 				case WeaponWield:
 				case WeaponType:
 				case WeaponSize:
@@ -672,6 +765,17 @@ namespace yata
 				case AmmunitionType:
 				case QBBehaviour:
 					co_Val.SelectedIndex = co_Val.Items.Count - 1;
+					break;
+
+				case CanRotateIcon: // str,cb,unique ->
+				case GenderSpecific:
+				case container:
+					bu_Clear.Enabled = false;
+
+					la_Val.Text = _f.str1 = gs.Stars;
+
+					_cb = null;
+					clearchecks();
 					break;
 			}
 		}
