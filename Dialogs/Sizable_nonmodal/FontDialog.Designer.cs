@@ -19,21 +19,23 @@ namespace yata
 		CheckBox cb_Strk;
 		Button bu_Apply;
 		Button bu_Cancel;
+		CheckBox cb_Reduced;
 		GroupBox gb_Text;
 		Label lbl_Lazydog;
 		TextBox tb_FontString;
 
 		/// <summary>
-		/// This method is required for Windows Forms designer support.
-		/// Do not change the method contents inside the source code editor. The
-		/// Forms designer might not be able to load this method if it was
-		/// changed manually.
+		/// This method is required for Windows Forms designer support. Do not
+		/// change the method contents inside the source code editor. The Forms
+		/// designer might not be able to load this method if it was changed
+		/// manually. and you know how that goes ...
 		/// </summary>
 		private void InitializeComponent()
 		{
 			this.sc_Hori = new System.Windows.Forms.SplitContainer();
 			this.list_Font = new System.Windows.Forms.ListBox();
 			this.pa_Right = new System.Windows.Forms.Panel();
+			this.cb_Reduced = new System.Windows.Forms.CheckBox();
 			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.bu_Apply = new System.Windows.Forms.Button();
 			this.gb_Style = new System.Windows.Forms.GroupBox();
@@ -75,8 +77,8 @@ namespace yata
 			// 
 			this.sc_Hori.Panel2.Controls.Add(this.gb_Text);
 			this.sc_Hori.Panel2MinSize = 0;
-			this.sc_Hori.Size = new System.Drawing.Size(492, 352);
-			this.sc_Hori.SplitterDistance = 298;
+			this.sc_Hori.Size = new System.Drawing.Size(487, 357);
+			this.sc_Hori.SplitterDistance = 309;
 			this.sc_Hori.SplitterWidth = 3;
 			this.sc_Hori.TabIndex = 0;
 			this.sc_Hori.Resize += new System.EventHandler(this.OnSplitContainerResize);
@@ -90,23 +92,38 @@ namespace yata
 			this.list_Font.Location = new System.Drawing.Point(0, 0);
 			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
 			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(394, 298);
+			this.list_Font.Size = new System.Drawing.Size(389, 309);
 			this.list_Font.TabIndex = 0;
 			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_drawitem);
 			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.changefont);
 			// 
 			// pa_Right
 			// 
+			this.pa_Right.Controls.Add(this.cb_Reduced);
 			this.pa_Right.Controls.Add(this.bu_Cancel);
 			this.pa_Right.Controls.Add(this.bu_Apply);
 			this.pa_Right.Controls.Add(this.gb_Style);
 			this.pa_Right.Controls.Add(this.gb_Size);
 			this.pa_Right.Dock = System.Windows.Forms.DockStyle.Right;
-			this.pa_Right.Location = new System.Drawing.Point(394, 0);
+			this.pa_Right.Location = new System.Drawing.Point(389, 0);
 			this.pa_Right.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Right.Name = "pa_Right";
-			this.pa_Right.Size = new System.Drawing.Size(98, 298);
+			this.pa_Right.Size = new System.Drawing.Size(98, 309);
 			this.pa_Right.TabIndex = 1;
+			// 
+			// cb_Reduced
+			// 
+			this.cb_Reduced.Appearance = System.Windows.Forms.Appearance.Button;
+			this.cb_Reduced.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.cb_Reduced.Location = new System.Drawing.Point(0, 287);
+			this.cb_Reduced.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_Reduced.Name = "cb_Reduced";
+			this.cb_Reduced.Size = new System.Drawing.Size(98, 22);
+			this.cb_Reduced.TabIndex = 4;
+			this.cb_Reduced.Text = "reduced";
+			this.cb_Reduced.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.cb_Reduced.UseVisualStyleBackColor = true;
+			this.cb_Reduced.CheckedChanged += new System.EventHandler(this.changefont);
 			// 
 			// bu_Cancel
 			// 
@@ -222,18 +239,19 @@ namespace yata
 			this.tb_FontSize.Location = new System.Drawing.Point(7, 13);
 			this.tb_FontSize.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_FontSize.Name = "tb_FontSize";
-			this.tb_FontSize.Size = new System.Drawing.Size(39, 22);
+			this.tb_FontSize.Size = new System.Drawing.Size(44, 22);
 			this.tb_FontSize.TabIndex = 0;
+			this.tb_FontSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.tb_FontSize.WordWrap = false;
 			this.tb_FontSize.TextChanged += new System.EventHandler(this.changefont);
 			// 
 			// lbl_FontSize
 			// 
-			this.lbl_FontSize.Location = new System.Drawing.Point(46, 14);
+			this.lbl_FontSize.Location = new System.Drawing.Point(51, 14);
 			this.lbl_FontSize.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_FontSize.Name = "lbl_FontSize";
 			this.lbl_FontSize.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-			this.lbl_FontSize.Size = new System.Drawing.Size(45, 19);
+			this.lbl_FontSize.Size = new System.Drawing.Size(40, 19);
 			this.lbl_FontSize.TabIndex = 1;
 			this.lbl_FontSize.Text = "pt";
 			this.lbl_FontSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -247,7 +265,7 @@ namespace yata
 			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Text.Name = "gb_Text";
 			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 1, 2, 2);
-			this.gb_Text.Size = new System.Drawing.Size(492, 51);
+			this.gb_Text.Size = new System.Drawing.Size(487, 45);
 			this.gb_Text.TabIndex = 0;
 			this.gb_Text.TabStop = false;
 			// 
@@ -258,7 +276,7 @@ namespace yata
 			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 14);
 			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Lazydog.Name = "lbl_Lazydog";
-			this.lbl_Lazydog.Size = new System.Drawing.Size(480, 35);
+			this.lbl_Lazydog.Size = new System.Drawing.Size(475, 29);
 			this.lbl_Lazydog.TabIndex = 0;
 			// 
 			// tb_FontString
@@ -266,11 +284,11 @@ namespace yata
 			this.tb_FontString.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tb_FontString.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.tb_FontString.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tb_FontString.Location = new System.Drawing.Point(0, 352);
+			this.tb_FontString.Location = new System.Drawing.Point(0, 357);
 			this.tb_FontString.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_FontString.Name = "tb_FontString";
 			this.tb_FontString.ReadOnly = true;
-			this.tb_FontString.Size = new System.Drawing.Size(492, 22);
+			this.tb_FontString.Size = new System.Drawing.Size(487, 22);
 			this.tb_FontString.TabIndex = 1;
 			this.tb_FontString.WordWrap = false;
 			// 
@@ -280,7 +298,7 @@ namespace yata
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(492, 374);
+			this.ClientSize = new System.Drawing.Size(487, 379);
 			this.Controls.Add(this.sc_Hori);
 			this.Controls.Add(this.tb_FontString);
 			this.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

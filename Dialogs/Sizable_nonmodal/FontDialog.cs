@@ -51,6 +51,8 @@ namespace yata
 		#region Fields
 		readonly List<FontFamily> _ffs = new List<FontFamily>();
 
+		Font _font;
+
 		/// <summary>
 		/// All fonts used to render <c><see cref="list_Font"/></c> will be
 		/// disposed.
@@ -81,6 +83,11 @@ namespace yata
 		/// is available.
 		/// </summary>
 		bool _regular;
+
+		/// <summary>
+		/// Tooltip for <c><see cref="cb_Smallfont"/></c>.
+		/// </summary>
+		ToolTip _tip = new ToolTip();
 		#endregion Fields
 
 
@@ -98,6 +105,17 @@ namespace yata
 
 			tb_FontSize  .BackColor = Color.White;
 			tb_FontString.BackColor = Colors.TextboxBackground;
+
+			_tip.AutoPopDelay = 10000;
+			_tip.InitialDelay = 500;
+			_tip.ReshowDelay = 100;
+			_tip.UseAnimation = false;
+			_tip.UseFading = false;
+//			_tip.ShowAlways = true; // show the tip even if this dialog is unfocused
+			_tip.SetToolTip(cb_Reduced, "Yata will decrease the size of several fonts - font, font2, fontf - for" + Environment.NewLine
+									  + "small controls. This button renders the currently selected font with"    + Environment.NewLine
+									  + "reduced pointsize in the LazyDog display only to see the distinction."   + Environment.NewLine
+									  + "Note that a font with a small enough pointsize will be unaffected.");
 
 
 			// Safely ensure that Yata's current font is good to go
@@ -217,8 +235,10 @@ namespace yata
 
 			_scDistance = sc_Hori.SplitterDistance;
 
+			_tip.Dispose();
 			_t1.Dispose();
 			lbl_Lazydog.Font.Dispose();
+			_font.Dispose();
 			foreach (var font in _fonts)
 				font.Dispose();
 
@@ -302,7 +322,7 @@ namespace yata
 		void click_Apply(object sender, EventArgs e)
 		{
 			bu_Apply.Enabled = false;
-			(_f as Yata).doFont(lbl_Lazydog.Font.Clone() as Font);
+			(_f as Yata).doFont(_font.Clone() as Font);
 
 			BringToFront(); // see OnLoad() doc
 		}
@@ -346,6 +366,7 @@ namespace yata
 		/// <item><c><see cref="cb_Undr"/></c> - <c>CheckedChanged</c></item>
 		/// <item><c><see cref="cb_Ital"/></c> - <c>CheckedChanged</c></item>
 		/// <item><c><see cref="cb_Bold"/></c> - <c>CheckedChanged</c></item>
+		/// <item><c><see cref="cb_Reduced"/></c> - <c>CheckedChanged</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		void changefont(object sender, EventArgs e)
@@ -442,7 +463,9 @@ namespace yata
 		{
 			if (_id != -1) // safety.
 			{
+				lbl_Lazydog.Text = String.Empty;
 				lbl_Lazydog.Font.Dispose();
+				if (_font != null) _font.Dispose();
 
 				float size;
 				if (Single.TryParse(tb_FontSize.Text, out size)
@@ -460,11 +483,18 @@ namespace yata
 						return;
 					}
 
+					_font = new Font(_ffs[_id].Name, size, style);
+					if (cb_Reduced.Checked)
+					{
+						lbl_Lazydog.Font = Settings.CreateDialogFont(_font);
+					}
+					else
+						lbl_Lazydog.Font = _font;
+
 					lbl_Lazydog.ForeColor = SystemColors.ControlText;
-					lbl_Lazydog.Font = new Font(_ffs[_id].Name, size, style);
 					lbl_Lazydog.Text = stLAZYDOG;
 
-					printstring();
+					printfontstring();
 				}
 				else
 				{
@@ -472,7 +502,7 @@ namespace yata
 					return;
 				}
 			}
-			bu_Apply.Enabled = !copulate(lbl_Lazydog.Font, _f.Font);
+			bu_Apply.Enabled = !copulate(_font, _f.Font);
 		}
 
 		/// <summary>
@@ -482,8 +512,10 @@ namespace yata
 		/// point-size error; <c>false</c> if error is a font-style error</param>
 		void LazydogError(bool fontsize = false)
 		{
-			lbl_Lazydog.ForeColor = Color.Crimson;
+			lbl_Lazydog.Font.Dispose();
 			lbl_Lazydog.Font = new Font("Verdana", 8F, FontStyle.Bold);
+
+			lbl_Lazydog.ForeColor = Color.Crimson;
 
 			if (fontsize)
 				lbl_Lazydog.Text = ERROR_FONTSIZE;
@@ -512,13 +544,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Prints the .NET font-string of the currently chosen <c>Font</c>.
+		/// Prints the .NET font-string of the currently chosen <c>Font</c>
+		/// <c><see cref="_font"/></c>.
 		/// </summary>
 		/// <remarks>For user to use in Settings.Cfg.</remarks>
-		void printstring()
+		void printfontstring()
 		{
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
-			tb_FontString.Text = tc.ConvertToString(lbl_Lazydog.Font);
+			tb_FontString.Text = tc.ConvertToString(_font);
 			tb_FontString.SelectionStart = tb_FontString.Text.Length;
 		}
 		#endregion Methods
