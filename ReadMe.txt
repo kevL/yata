@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 August 29
+2022 September 1
 kevL's
-ver 5.2.0.0
+ver 5.3.0.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -81,9 +81,9 @@ Edit
                        replace-all operation
 - Clear replaced     : clears all cells' replaced flags
 
-- Goto loadchanged     : Ctrl+n (see Appendix A: note on Load)
-- Goto loadchanged pre : Ctrl+Shift+n
-- Clear loadchanged    : clears all cells' loadchanged flags
+- Goto loadchanged next : Ctrl+n (see Appendix A: note on Load)
+- Goto loadchanged pre  : Ctrl+Shift+n
+- Clear loadchanged     : clears all cells' loadchanged flags
 
 - Default value ... : opens a dialog to edit the 2da-file's Default value (apps
                       that try to access an invalid row or col should return
@@ -214,8 +214,8 @@ TalkTable
                       Path to ... and the Settings.Cfg "dialogalt=" option)
 
 
-Paths (appears only when a 2da called "crafting", "spells", or "feat" is loaded
-       - see Appendix E: how to use Info paths)
+Paths (appears only when a 2da called "crafting", "spells", "feat", "classes",
+       or "baseitems" is loaded - see Appendix E: how to use Info paths)
 
 
 Font
@@ -301,22 +301,22 @@ Shift+Right    - scrolls table right by visible width if no cell is selected
   press [Space]. Or when a row/col is selected the first cell in the row/col
   replaces the current anchorcell -
 
-Shift+Left          - adjusts selection left
-Shift+Right         - adjusts selection right
-Shift+Up            - adjusts selection up
-Shift+Down          - adjusts selection down
+Shift+Left          - adjusts block selection left
+Shift+Right         - adjusts block selection right
+Shift+Up            - adjusts block selection up
+Shift+Down          - adjusts block selection down
 
-Shift+PageUp        - adjusts selection up by visible height
-Shift+PageDown      - adjusts selection down by visible height
+Shift+PageUp        - adjusts block selection up by visible height
+Shift+PageDown      - adjusts block selection down by visible height
 
-Shift+Ctrl+PageUp   - selects all cells above
-Shift+Ctrl+PageDown - selects all cells below
+Shift+Ctrl+PageUp   - adjusts block selection to the top of the table
+Shift+Ctrl+PageDown - adjusts block selection to the bottom of the table
 
-Shift+Home          - selects all cells left
-Shift+End           - selects all cells right
+Shift+Home          - adjusts block selection to the left edge of the table
+Shift+End           - adjusts block selection to the right edge of the table
 
-Shift+Ctrl+Home     - selects all cells to the first cell in the table
-Shift+Ctrl+End      - selects all cells to the last cell in the table
+Shift+Ctrl+Home     - adjusts block selection to the first cell in the table
+Shift+Ctrl+End      - adjusts block selection to the last cell in the table
 
 
 Space - focuses the table and selects the first cell if no cells are currently
