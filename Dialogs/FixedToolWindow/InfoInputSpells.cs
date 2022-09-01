@@ -65,6 +65,7 @@ namespace yata
 		internal const int ConjSoundVFX      = 24; // ofd only
 		internal const int ConjSoundMale     = 25; // ofd only
 		internal const int ConjSoundFemale   = 26; // ofd only
+//		internal const int ConjSoundOverride = 27; // TODO
 		internal const int CastAnim          = 28;
 		internal const int CastVisual0       = 30; // ofd only
 		internal const int LowCastVisual0    = 31; // ofd only
@@ -119,7 +120,7 @@ namespace yata
 
 			InitializeComponent();
 
-			Text = pad + Yata.Table.Cols[_cell.x].text;
+			Text = pad + Yata.Table.Cols[_cell.x].text; //+ get2da();
 
 //			_title = Yata.Table.Cols[_cell.x].text;
 //			int border = (Width - ClientSize.Width) / 2;
@@ -135,6 +136,20 @@ namespace yata
 
 			init();
 		}
+
+/*		/// <summary>
+		/// Gets file+extension of the 2da that this <c>InfoInputDialog</c>
+		/// references - else a blank string.
+		/// </summary>
+		/// <returns></returns>
+		string get2da()
+		{
+			switch (_cell.x)
+			{
+				case School: return " - spellschools.2da *"; // * indicates that the 2da's values are hardcoded in Yata.
+			}
+			return String.Empty;
+		} */
 		#endregion cTor
 
 
