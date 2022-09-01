@@ -17,7 +17,7 @@ namespace yata
 	{
 		#region Fields (static)
 		static string stLAZYDOG = "01234567890 ` ~ ! @ # $ % ^ & * ( ) _ + - = \\ | [ ] { } ; : ' \" , < . > / ?" + Environment.NewLine
-								+ "the quick brown fox jumps over the lazy dog"    + Environment.NewLine
+								+ "the quick brown fox jumps over the lazy dog" + Environment.NewLine
 								+ "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
 
 		static string ERROR_FONTSTYLE = " does not support the Regular style."
