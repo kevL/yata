@@ -165,45 +165,85 @@ namespace yata
 				case 6: // "SKILL" - Feat.2da and/or Skills.2da
 					info = Table.Cols[col].text + ": ";
 
-					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "Alertness" or "DEL_AnimalEmpathy"
-					{
+					if ((val = Table[id,col].text) == gs.Stars)	// NOTE: "****" is 0 which is actually "Alertness" or "DEL_AnimalEmpathy"
+					{											// which in the TccScripts is actually "required feat is based on item type"
 						info += gs.non;
 					}
-					else if (Int32.TryParse(val, out result) // TODO: SKILL can be -2 (CATEGORY 376) or 0 (spell,ALC,DIS)
-						&& result > -1)
+					else
 					{
-						string cat = Table[id,1].text;
+						string cat = Table[id,1].text; // triggerId: (int)spellId,ALC,DIS,(string)tag
 						if (cat == gs.Stars)
 						{
-							info += gs.non;
+							info += "[CATEGORY] is invalid";
 						}
 						else
 						{
 							int result2;
-							if (Int32.TryParse(cat, out result2))									// is triggered by spell id -> SKILL-col is a feat
+							if (Int32.TryParse(cat, out result2)) // is triggered by (int)spellId -> SKILL-col is a feat
 							{
 								if (result2 > -1)
 								{
-									if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
+									if (Int32.TryParse(val, out result)) // SKILL-col can be -2 (CATEGORY 376) or 0 (spell,ALC,DIS)
 									{
-										info += Info.featLabels[result];
+										switch (result)
+										{
+											case -2: // kL_TccScriptsets only.
+												info += "no feat required";
+												break;
+
+											case -1: // kL_TccScriptsets or TccScripts
+											case  0: // TODO: This is actually "Alertness" and should be changed to -1 but good luck with that.
+												info += "required feat is based on item type";
+												break;
+
+											default:
+												if (result > 0)
+												{
+													if (result < Info.featLabels.Count) // it_PathFeat2da.Checked
+													{
+														info += Info.featLabels[result];
+													}
+													else
+														info += val;
+												}
+												else
+													info += gs.bork;
+												break;
+										}
 									}
 									else
-										info += val;
+										info += gs.bork;
 								}
 								else
 									info += "[CATEGORY] SpellId is invalid";
 							}
-							else if (result < Info.skillLabels.Count) // it_PathSkills2da.Checked	// is triggered NOT by spell but by mold-tag or is
-							{																		// Alchemy or Distillation -> SKILL-col is a skill
-								info += Info.skillLabels[result];
+							else // is triggered by ALC,DIS,(string)tag
+							{
+								switch (cat)
+								{
+									case "ALC":
+									case "DIS":
+										info += "Craft Alchemy"; // SKILL-col is ignored.
+										break;
+
+									default: // is a mold-tag ->
+										if (Int32.TryParse(val, out result)
+											&& result > -1)
+										{
+											if (result < Info.skillLabels.Count) // it_PathSkills2da.Checked
+											{
+												info += Info.skillLabels[result];
+											}
+											else
+												info += val;
+										}
+										else
+											info += gs.bork;
+										break;
+								}
 							}
-							else
-								info += val;
 						}
 					}
-					else
-						info += gs.bork;
 					break;
 
 //				case  7: // "LEVEL"
