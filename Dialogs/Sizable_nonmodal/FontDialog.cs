@@ -85,7 +85,7 @@ namespace yata
 		bool _regular;
 
 		/// <summary>
-		/// Tooltip for <c><see cref="cb_Smallfont"/></c>.
+		/// Tooltip for <c><see cref="cb_Reduced"/></c>.
 		/// </summary>
 		ToolTip _tip = new ToolTip();
 		#endregion Fields
@@ -115,7 +115,7 @@ namespace yata
 			_tip.SetToolTip(cb_Reduced, "Yata will decrease the size of several fonts - font, font2, fontf - for" + Environment.NewLine
 									  + "small controls. This button renders the currently selected font with"    + Environment.NewLine
 									  + "reduced pointsize in the LazyDog display only to see the distinction."   + Environment.NewLine
-									  + "Note that a font with a small enough pointsize will be unaffected.");
+									  + "Note that a font with a small enough pointsize is unaffected.");
 
 
 			// Safely ensure that Yata's current font is good to go
