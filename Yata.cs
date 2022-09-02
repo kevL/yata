@@ -157,8 +157,8 @@ namespace yata
 		int _strInt;	// cache for cell-context's dropdown functs
 		Cell _sel;		// cache for cell-context's dropdown functs
 
-		int _track_x = -1; // tracks last mouseover coords ->
-		int _track_y = -1;
+		internal int _track_x = -1; // tracks last mouseover coords ->
+		internal int _track_y = -1;
 
 		/// <summary>
 		/// Hides any info that's currently displayed on the statusbar when the

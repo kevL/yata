@@ -349,6 +349,10 @@ namespace yata
 				}
 				else
 					ReplaceAll();
+
+				var f = _f as Yata;
+				Point? cords = new Point(f._track_x, f._track_y);
+				f.PrintInfo(cords, true);
 			}
 		}
 

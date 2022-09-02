@@ -1000,7 +1000,7 @@ namespace yata
 
 					if (label != _sel.text)
 					{
-						YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary
+						YataGrid.VerifyFileLabel(ref label); // check whitespace and add outer quotes if necessary
 						Table.ChangeCellText(_sel, label); // does not do a text-check
 					}
 				}
@@ -1142,7 +1142,7 @@ namespace yata
 
 							if (label != _sel.text)
 							{
-								YataGrid.VerifyFile(ref label); // check whitespace and add outer quotes if necessary
+								YataGrid.VerifyFileLabel(ref label); // check whitespace and add outer quotes if necessary
 								Table.ChangeCellText(_sel, label); // does not do a text-check
 							}
 						}

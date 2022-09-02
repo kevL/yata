@@ -1053,6 +1053,9 @@ namespace yata
 					ib.ShowDialog(_f);
 				}
 			}
+
+			Point? cords = new Point(_f._track_x, _f._track_y);
+			_f.PrintInfo(cords, true);
 		}
 
 		/// <summary>
@@ -1409,7 +1412,7 @@ namespace yata
 		/// <remarks>Keep file-labels as they are; do not trim leading or
 		/// trailing whitespace. Windows OS won't allow any double-quotes -
 		/// simply add outer quotes if any whitespace is detected.</remarks>
-		internal static void VerifyFile(ref string label)
+		internal static void VerifyFileLabel(ref string label)
 		{
 			foreach (var c in label)
 			{
