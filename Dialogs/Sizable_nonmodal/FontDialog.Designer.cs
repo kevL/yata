@@ -78,7 +78,7 @@ namespace yata
 			this.sc_Hori.Panel2.Controls.Add(this.gb_Text);
 			this.sc_Hori.Panel2MinSize = 0;
 			this.sc_Hori.Size = new System.Drawing.Size(487, 357);
-			this.sc_Hori.SplitterDistance = 309;
+			this.sc_Hori.SplitterDistance = 310;
 			this.sc_Hori.SplitterWidth = 3;
 			this.sc_Hori.TabIndex = 0;
 			this.sc_Hori.Resize += new System.EventHandler(this.OnSplitContainerResize);
@@ -92,7 +92,7 @@ namespace yata
 			this.list_Font.Location = new System.Drawing.Point(0, 0);
 			this.list_Font.Margin = new System.Windows.Forms.Padding(0);
 			this.list_Font.Name = "list_Font";
-			this.list_Font.Size = new System.Drawing.Size(389, 309);
+			this.list_Font.Size = new System.Drawing.Size(389, 310);
 			this.list_Font.TabIndex = 0;
 			this.list_Font.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fontList_drawitem);
 			this.list_Font.SelectedIndexChanged += new System.EventHandler(this.changefont);
@@ -108,14 +108,14 @@ namespace yata
 			this.pa_Right.Location = new System.Drawing.Point(389, 0);
 			this.pa_Right.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Right.Name = "pa_Right";
-			this.pa_Right.Size = new System.Drawing.Size(98, 309);
+			this.pa_Right.Size = new System.Drawing.Size(98, 310);
 			this.pa_Right.TabIndex = 1;
 			// 
 			// cb_Reduced
 			// 
 			this.cb_Reduced.Appearance = System.Windows.Forms.Appearance.Button;
 			this.cb_Reduced.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.cb_Reduced.Location = new System.Drawing.Point(0, 287);
+			this.cb_Reduced.Location = new System.Drawing.Point(0, 288);
 			this.cb_Reduced.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Reduced.Name = "cb_Reduced";
 			this.cb_Reduced.Size = new System.Drawing.Size(98, 22);
@@ -265,7 +265,7 @@ namespace yata
 			this.gb_Text.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Text.Name = "gb_Text";
 			this.gb_Text.Padding = new System.Windows.Forms.Padding(10, 1, 2, 2);
-			this.gb_Text.Size = new System.Drawing.Size(487, 45);
+			this.gb_Text.Size = new System.Drawing.Size(487, 44);
 			this.gb_Text.TabIndex = 0;
 			this.gb_Text.TabStop = false;
 			// 
@@ -276,7 +276,7 @@ namespace yata
 			this.lbl_Lazydog.Location = new System.Drawing.Point(10, 14);
 			this.lbl_Lazydog.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_Lazydog.Name = "lbl_Lazydog";
-			this.lbl_Lazydog.Size = new System.Drawing.Size(475, 29);
+			this.lbl_Lazydog.Size = new System.Drawing.Size(475, 28);
 			this.lbl_Lazydog.TabIndex = 0;
 			// 
 			// tb_FontString
