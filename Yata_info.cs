@@ -1,6 +1,7 @@
 using System;
-//using System.Collections.Generic;
 using System.Globalization;
+
+//using System.Collections.Generic;
 //using System.Windows.Forms;
 
 
@@ -2120,8 +2121,6 @@ namespace yata
 											| EQUIPSLOT_CWEAPON
 											| EQUIPSLOT_CARMOR;
 		#endregion Item info
-	}
-}
 
 
 /*		enum InfoStructType
@@ -2171,3 +2170,5 @@ namespace yata
 		{
 			_infoStructs.Clear();
 		} */
+	}
+}
