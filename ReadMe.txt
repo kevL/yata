@@ -715,9 +715,9 @@ Spells.2da, Feat.2da, Classes.2da and BaseItems.2da. Paths to various other
 2da-files need to be set first, then info ought be displayed on the statusbar
 when the mouse-cursor is moved over the cells of certain cols like "CATEGORY"
 (displays the label of a trigger-spell) or "EFFECTS" (displays a recipe's
-itemproperty in a readable way), etc. Note that pathing to 2da-files can also be
-termed, groping ... that is, when a 2da-file is pathed it will be groped for
-relevant info.
+itemproperty in a readable way) in Crafting.2da, etc. Note that pathing to
+2da-files can also be termed, groping ... that is, when a 2da-file is pathed it
+will be groped for relevant info.
 
 There are three ways to get such info: (a) Using the Paths menu when
 Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da is loaded, (b)
@@ -829,7 +829,7 @@ path.
 
 (c) Using the "pathzipdata=" entry in Settings.Cfg
 
-As of Yata 5.2.0.0 the stock 2das that ship with NwN2 can also be groped. You
+As of Yata 5.3.0.0 the stock 2das that ship with NwN2 can also be groped. You
 can specify a "pathzipdata=" directory in Settings.Cfg (without quotes).
 
 eg.
