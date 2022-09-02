@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -81,6 +82,9 @@ namespace yata
 			Table._ur.Undo();
 			it_Undo.Enabled = Table._ur.CanUndo;
 			it_Redo.Enabled = true;
+
+			Point? cords = new Point(_track_x, _track_y);
+			PrintInfo(cords, true);
 		}
 
 		/// <summary>
@@ -97,6 +101,9 @@ namespace yata
 			Table._ur.Redo();
 			it_Redo.Enabled = Table._ur.CanRedo;
 			it_Undo.Enabled = true;
+
+			Point? cords = new Point(_track_x, _track_y);
+			PrintInfo(cords, true);
 		}
 
 

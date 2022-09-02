@@ -1420,7 +1420,10 @@ namespace yata
 		/// </summary>
 		/// <param name="cords"><c>null</c> to clear statusbar-cords and
 		/// -pathinfo</param>
-		internal void PrintInfo(Point? cords = null)
+		/// <param name="force"><c>true</c> to force reprint even if
+		/// <c><see cref="_track_x"/></c> and/or <c><see cref="_track_y"/></c>
+		/// have not changed</param>
+		internal void PrintInfo(Point? cords = null, bool force = false)
 		{
 			if (cords != null && Table != null) // else CloseAll can throw on invalid object.
 			{
@@ -1430,7 +1433,7 @@ namespace yata
 
 				if (r < Table.RowCount && c < Table.ColCount) // NOTE: mouseover pos can register in the scrollbars
 				{
-					if (c != _track_x || r != _track_y)
+					if (c != _track_x || r != _track_y || force)
 					{
 						_track_x = c; _track_y = r;
 
