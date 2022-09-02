@@ -187,6 +187,9 @@
     <Compile Include="Yata_contexttab.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
+    <Compile Include="Yata_infocraft.cs">
+      <DependentUpon>Yata.cs</DependentUpon>
+    </Compile>
     <Compile Include="Yata_keys.cs">
       <DependentUpon>Yata.cs</DependentUpon>
     </Compile>
