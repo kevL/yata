@@ -217,13 +217,13 @@ namespace yata
 								else
 									info += "[CATEGORY] SpellId is invalid";
 							}
-							else // is triggered by ALC,DIS,(string)tag
+							else // is triggered by ALC,DIS,(string)tag -> SKILL-col is a skill
 							{
 								switch (cat)
 								{
 									case "ALC":
 									case "DIS":
-										info += "Craft Alchemy"; // SKILL-col is ignored.
+										info += "not used [Craft Alchemy]"; // SKILL-col is ignored.
 										break;
 
 									default: // is a mold-tag ->
@@ -246,7 +246,52 @@ namespace yata
 					}
 					break;
 
-//				case  7: // "LEVEL"
+				case 7: // "LEVEL" - level or skillrank (depends on CATEGORY)
+					info = Table.Cols[col].text + ": ";
+
+					if ((val = Table[id,col].text) == gs.Stars) // NOTE: "****" is 0 which is actually "0"
+					{
+						info += gs.non;
+					}
+					else
+					{
+						string cat = Table[id,1].text; // triggerId: (int)spellId,ALC,DIS,(string)tag
+						if (cat == gs.Stars)
+						{
+							info += "[CATEGORY] is invalid";
+						}
+						else
+						{
+							int result2;
+							if (Int32.TryParse(cat, out result2)) // is triggered by (int)spellId -> LEVEL-col is a level
+							{
+								if (result2 > -1)
+								{
+									if (Int32.TryParse(val, out result)
+										&& result > -1)
+									{
+										info += "level " + val + "+";
+									}
+									else
+										info += gs.bork;
+								}
+								else
+									info += "[CATEGORY] SpellId is invalid";
+							}
+							else // is triggered by ALC,DIS,(string)tag -> LEVEL-col is a skillrank
+							{
+								if (Int32.TryParse(val, out result)
+									&& result > -1)
+								{
+									info += "rank " + val + "+";
+								}
+								else
+									info += gs.bork;
+							}
+						}
+					}
+					break;
+
 //				case  8: // "EXCLUDE"
 //				case  9: // "XP"
 //				case 10: // "GP"
