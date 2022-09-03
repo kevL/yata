@@ -31,7 +31,7 @@ namespace yata
 		void editcellsclick_CutCell(object sender, EventArgs e)
 		{
 			Cell sel = Table.getFirstSelectedCell();
-			Cell cell; string text;
+			string text;
 
 			int invalid = -1;
 			int replaced = 0;
@@ -44,26 +44,26 @@ namespace yata
 				++i; j = -1;
 				for (int c = sel.x; c != sel.x + _copyhori; ++c)
 				{
-					_copytext[i, ++j] = (cell = Table[r,c]).text;
+					_copytext[i, ++j] = (sel = Table[r,c]).text;
 
 					if (c == 0 && Settings._autorder)
 						text = r.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
 
-					if (cell.text != text)
+					if (sel.text != text)
 					{
 						++replaced;
-						Table.ChangeCellText(cell, text);	// does not do a text-check
+						Table.ChangeCellText(sel, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
-						if (cell.replaced)
-							cell.replaced = false;
+						if (sel.replaced)
+							sel.replaced = false;
 
-						if (cell.loadchanged)
-							cell.loadchanged = false;
+						if (sel.loadchanged)
+							sel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
