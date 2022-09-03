@@ -132,7 +132,7 @@ namespace yata
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
 			Cell sel = Table.getSelectedCell();
-			Cell cell; string text;
+			string text;
 
 			int invalid = -1;
 			int replaced = 0;
@@ -142,27 +142,27 @@ namespace yata
 				for (int r = 0; r != _copytext.GetLength(0) && r + sel.y != Table.RowCount; ++r)
 				for (int c = 0; c != _copytext.GetLength(1) && c + sel.x != Table.ColCount; ++c)
 				{
-					(cell = Table[r + sel.y,
-								  c + sel.x]).selected = true;
+					(sel = Table[r + sel.y,
+								 c + sel.x]).selected = true;
 
-					if (cell.x == 0 && Settings._autorder)
-						text = cell.y.ToString(CultureInfo.InvariantCulture);
+					if (sel.x == 0 && Settings._autorder)
+						text = sel.y.ToString(CultureInfo.InvariantCulture);
 					else
 						text = _copytext[r,c];
 
-					if (text != cell.text)
+					if (text != sel.text)
 					{
 						++replaced;
-						Table.ChangeCellText(cell, text);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text); // does not do a text-check
+						invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
-						if (cell.replaced)
-							cell.replaced = false;
+						if (sel.replaced)
+							sel.replaced = false;
 
-						if (cell.loadchanged)
-							cell.loadchanged = false;
+						if (sel.loadchanged)
+							sel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
@@ -180,8 +180,8 @@ namespace yata
 
 				if (text != sel.text)
 				{
-					Table.ChangeCellText(sel, text);	// does not do a text-check
-					invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+					Table.ChangeCellText(sel, text); // does not do a text-check
+					invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 				}
 				else
 				{
@@ -231,8 +231,8 @@ namespace yata
 					if (sel.text != text)
 					{
 						++replaced;
-						Table.ChangeCellText(sel, text);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text); // does not do a text-check
+						invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
@@ -280,8 +280,8 @@ namespace yata
 					if (sel.text != (text = sel.text.ToLower(CultureInfo.CurrentCulture)))
 					{
 						++replaced;
-						Table.ChangeCellText(sel, text);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text); // does not do a text-check
+						invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
@@ -328,8 +328,8 @@ namespace yata
 					if (sel.text != (text = sel.text.ToUpper(CultureInfo.CurrentCulture)))
 					{
 						++replaced;
-						Table.ChangeCellText(sel, text);	// does not do a text-check
-						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+						Table.ChangeCellText(sel, text); // does not do a text-check
+						invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
@@ -386,8 +386,8 @@ namespace yata
 							if (sel.text != text)
 							{
 								++replaced;
-								Table.ChangeCellText(sel, text);	// does not do a text-check
-								invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
+								Table.ChangeCellText(sel, text); // does not do a text-check
+								invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 							}
 							else
 							{
