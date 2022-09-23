@@ -42,9 +42,25 @@ namespace yata
 				var rect = new Rectangle(Left,       offset_y,
 										 WidthTable, HeightRow);
 
+				Brush brush;
 				for (r = 0; r != RowCount; ++r)
 				{
-					graphics.FillRectangle(Rows[r]._brush, rect);
+					switch (Info)
+					{
+						case InfoType.INFO_SPELL:
+							brush = getDisabled(r, InfoInputSpells.Removed);
+							break;
+
+						case InfoType.INFO_FEAT:
+							brush = getDisabled(r, InfoInputFeat.REMOVED);
+							break;
+
+						default:
+							brush = Rows[r]._brush;
+							break;
+					}
+
+					graphics.FillRectangle(brush, rect);
 					rect.Y += HeightRow;
 				}
 
@@ -126,6 +142,27 @@ namespace yata
 										  x, Bottom);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets a <c>Brush</c> with which to paint the background of disabled
+		/// <c><see cref="Row">Rows</see></c> (for Spells.2da and Feat.2da
+		/// only).
+		/// </summary>
+		/// <param name="r">row-id</param>
+		/// <param name="c">col-id of the REMOVED col</param>
+		/// <returns><c><see cref="Row._brush">Row._brush</see></c> if the
+		/// <c>Row</c> is not disabled</returns>
+		/// <remarks>Helper for <c><see cref="OnPaint()">OnPaint()</see></c></remarks>
+		Brush getDisabled(int r, int c)
+		{
+			if (ColCount > c
+				&& Fields[c - 1] == "REMOVED"
+				&& this[r,c].text != "0")
+			{
+				return (r % 2 == 0) ? Brushes.Disabled_a : Brushes.Disabled_b;
+			}
+			return Rows[r]._brush;
 		}
 		#endregion Handlers (override)
 

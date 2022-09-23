@@ -106,6 +106,9 @@ namespace yata
 		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
 		internal static readonly Brush Replaced    = new SolidBrush(Color.Goldenrod);
 
+		internal static readonly Brush Disabled_a  = new SolidBrush(Color.LavenderBlush);
+		internal static readonly Brush Disabled_b  = new SolidBrush(Color.MistyRose);
+
 		// propanel
 //		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
 		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
