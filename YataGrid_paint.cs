@@ -32,11 +32,9 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-//				ControlPaint.DrawBorder3D(graphics, ClientRectangle, Border3DStyle.Etched);
-
 				int r,c;
 
-				// NOTE: Paint backgrounds full-height/width of table ->
+				// paint backgrounds full-height/width of table ->
 
 				int offset_y = HeightColhead - OffsetVert;
 
@@ -97,7 +95,7 @@ namespace yata
 //				if (_piRowhead != null) graphics_.DrawImage(_piRowhead, 0,0);
 
 
-				// NOTE: Paint horizontal lines full-width of table.
+				// paint horizontal lines full-width of table ->
 
 				// row lines - scrollable
 				int y;
@@ -113,7 +111,7 @@ namespace yata
 				}
 
 
-				// NOTE: Paint vertical lines full-height of table.
+				// paint vertical lines full-height of table ->
 
 				// col lines - scrollable
 				int x = WidthRowhead - OffsetHori;
