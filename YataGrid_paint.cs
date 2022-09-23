@@ -9,12 +9,12 @@ using yata.Properties;
 
 namespace yata
 {
-	// Handles painting various controls on this <c>YataGrid</c>.
+	// handles painting various controls
 	sealed partial class YataGrid
 	{
 		#region Fields (static)
-		const int _offsetHoriSort = 23; // horizontal offset for the sort-arrow
-		const int _offsetVertSort = 15; // vertical offset for the sort-arrow
+		const int _offsetSortHori = 23; // horizontal offset for the sort-arrow
+		const int _offsetSortVert = 15; // vertical offset for the sort-arrow
 		#endregion Fields (static)
 
 
@@ -188,8 +188,8 @@ namespace yata
 						sorticon = Resources.des_16px;
 
 					graphics.DrawImage(sorticon,
-									   rect.X - _offsetHoriSort,
-									   rect.Y - _offsetVertSort + rect.Height);
+									   rect.X - _offsetSortHori,
+									   rect.Y - _offsetSortVert + rect.Height);
 				}
 			}
 		}
@@ -234,8 +234,8 @@ namespace yata
 						sorticon = Resources.des_16px;
 					}
 					graphics.DrawImage(sorticon,
-									   rect.X + rect.Width  - _offsetHoriSort,
-									   rect.Y + rect.Height - _offsetVertSort);
+									   rect.X + rect.Width  - _offsetSortHori,
+									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
 					color = Colors.Text;
@@ -294,8 +294,8 @@ namespace yata
 					}
 
 					graphics.DrawImage(sorticon,
-									   rect.X + rect.Width  - _offsetHoriSort,
-									   rect.Y + rect.Height - _offsetVertSort);
+									   rect.X + rect.Width  - _offsetSortHori,
+									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
 					color = Colors.Text;
@@ -353,10 +353,10 @@ namespace yata
 						}
 
 						graphics.DrawImage(sort,
-										   rect.X + rect.Width  - _offsetHoriSort,
-										   rect.Y + rect.Height - _offsetVertSort);
+										   rect.X + rect.Width  - _offsetSortHori,
+										   rect.Y + rect.Height - _offsetSortVert);
 
-						clip = _offsetHoriSort - 1;
+						clip = _offsetSortHori - 1;
 					}
 					else
 					{
