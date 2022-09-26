@@ -12,23 +12,20 @@ namespace yata
 		/// </summary>
 		/// <param name="rowid">row-id to insert at</param>
 		/// <param name="fields">an array of fields</param>
-		/// <param name="calibrate"><c>true</c> to re-layout the grid or
-		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
-		/// will be done by the caller</param>
 		/// <param name="brush">a <c>Brush</c> to use for Undo/Redo</param>
+		/// <param name="bypassCalibrate"><c>false</c> to re-layout the grid or
+		/// <c>true</c> if <c><see cref="Calibrate()">Calibrate()</see></c> will
+		/// be done by the caller</param>
 		internal void Insert(int rowid,
 							 string[] fields,
-							 bool calibrate = true,
-							 Brush brush = null)
+							 Brush brush,
+							 bool bypassCalibrate = false)
 		{
-			if (calibrate)
+			if (!bypassCalibrate)
 				DrawRegulator.SuspendDrawing(this);
 
 			if (fields != null)
 			{
-				if (brush == null)
-					brush = Brushes.Created;
-
 				var row = new Row(rowid, ColCount, brush, this);
 
 				string field;
@@ -53,7 +50,7 @@ namespace yata
 				}
 			}
 
-			if (calibrate) // is only 1 row (no range) via context single-row edit
+			if (!bypassCalibrate)
 			{
 				Calibrate(rowid);
 
@@ -68,12 +65,12 @@ namespace yata
 		/// Deletes a <c><see cref="Row"/></c> from this <c>YataGrid</c>.
 		/// </summary>
 		/// <param name="idr">row-id to delete</param>
-		/// <param name="calibrate"><c>true</c> to re-layout the grid or
+		/// <param name="bypassCalibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
-		internal void Delete(int idr, bool calibrate = true)
+		internal void Delete(int idr, bool bypassCalibrate = false)
 		{
-			if (calibrate)
+			if (!bypassCalibrate)
 				DrawRegulator.SuspendDrawing(this);
 
 			Row row;
@@ -103,7 +100,7 @@ namespace yata
 
 				Rows.Add(row);
 
-				if (calibrate)
+				if (!bypassCalibrate)
 				{
 					Calibrate(0);
 					DrawRegulator.ResumeDrawing(this);
@@ -112,7 +109,7 @@ namespace yata
 				}
 			}
 
-			if (calibrate) // is only 1 row (no range) via context single-row edit
+			if (!bypassCalibrate)
 			{
 				Calibrate();
 
@@ -146,7 +143,7 @@ namespace yata
 			while (rLast >= rFirst) // reverse delete.
 			{
 				rest.array[range--] = Rows[rLast].Clone() as Row;
-				Delete(rLast, false);
+				Delete(rLast, true);
 
 				--rLast;
 			}

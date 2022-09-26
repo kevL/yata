@@ -114,7 +114,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteAbove(object sender, EventArgs e)
 		{
-			Table.Insert(_r, _copyr[0]);
+			Table.Insert(_r, _copyr[0], Brushes.Created);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -208,7 +208,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteBelow(object sender, EventArgs e)
 		{
-			Table.Insert(_r + 1, _copyr[0]);
+			Table.Insert(_r + 1, _copyr[0], Brushes.Created);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -234,7 +234,7 @@ namespace yata
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
-			Table.Insert(_r, fields);
+			Table.Insert(_r, fields, Brushes.Created);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -328,7 +328,7 @@ namespace yata
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
-			Table.Insert(_r + 1, fields);
+			Table.Insert(_r + 1, fields, Brushes.Created);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);

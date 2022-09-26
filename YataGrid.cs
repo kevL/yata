@@ -1206,10 +1206,12 @@ namespace yata
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>
+		/// <param name="bypassCalibrate"><c>true</c> to not rewidth the cell's
+		/// col</param>
 		/// <remarks>Does *not* perform text verification. A check should be
 		/// done for if the texts differ before calling this function since the
 		/// table shall be flagged <c><see cref="Changed"/></c>.</remarks>
-		internal void ChangeCellText(Cell cell, string text)
+		internal void ChangeCellText(Cell cell, string text, bool bypassCalibrate = false)
 		{
 			// TODO: Optimize this for multiple calls/cells.
 
@@ -1232,14 +1234,17 @@ namespace yata
 
 			cell.text = text;
 
-			Colwidth(cell.x, cell.y);
-			MetricFrozenControls(cell.x);
+			if (!bypassCalibrate)
+			{
+				Colwidth(cell.x, cell.y);
+				MetricFrozenControls(cell.x);
 
-			int invalid = INVALID_GRID;
-			if (Propanel != null && Propanel.Visible)
-				invalid |= INVALID_PROP;
+				int invalid = INVALID_GRID;
+				if (Propanel != null && Propanel.Visible)
+					invalid |= INVALID_PROP;
 
-			Invalidator(invalid);
+				Invalidator(invalid);
+			}
 
 
 			rest.postext = cell.text;

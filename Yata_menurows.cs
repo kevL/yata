@@ -148,10 +148,9 @@ namespace yata
 			int r = selr;
 			for (int i = 0; i != _copyr.Count; ++i, ++r)
 			{
-				Table.Insert(r, _copyr[i], false);
+				Table.Insert(r, _copyr[i], Brushes.Created, true);
 				rest.array[i] = Table.Rows[r].Clone() as Row;
 			}
-
 			Table.Calibrate(selr, _copyr.Count - 1); // paste range
 
 			Table.ClearSelects(false, true);
@@ -254,10 +253,9 @@ namespace yata
 					{
 						cells[0] = r.ToString(CultureInfo.InvariantCulture);
 
-						Table.Insert(r, cells, false);
+						Table.Insert(r, cells, Brushes.Created, true);
 						rest.array[i] = Table.Rows[r].Clone() as Row;
 					}
-
 					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
 
 					Table.ClearSelects(false, true);

@@ -429,10 +429,13 @@ namespace yata
 					sel.selected = true;
 				_cells.Clear();
 
-				foreach (var col in _cols)
+				if (!isDiffedTable())
 				{
-					_grid.Colwidth(col, 0, _grid.RowCount - 1);
-					_grid.MetricFrozenControls(col);
+					foreach (var col in _cols)
+					{
+						_grid.Colwidth(col, 0, _grid.RowCount - 1);
+						_grid.MetricFrozenControls(col);
+					}
 				}
 				_cols.Clear();
 
@@ -464,7 +467,7 @@ namespace yata
 				fields[c] = String.Copy(row[c].text);
 
 			int r = row._id;
-			_grid.Insert(r, fields, true, row._brush);
+			_grid.Insert(r, fields, row._brush, isDiffedTable());
 
 			YataGrid._init = true;
 			Cell cell;
@@ -500,7 +503,7 @@ namespace yata
 
 			int r = _it.r._id;
 
-			_grid.Delete(r);
+			_grid.Delete(r, isDiffedTable());
 
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
@@ -527,7 +530,8 @@ namespace yata
 			int r = row._id;
 
 			_grid.Rows[r] = row.Clone() as Row;
-			_grid.Calibrate(r);
+
+			if (!isDiffedTable()) _grid.Calibrate(r);
 
 			_grid.ClearSelects(false, true);
 			_grid.Rows[r].selected = true;
@@ -582,7 +586,7 @@ namespace yata
 				for (int c = 0; c != cols; ++c)
 					fields[c] = String.Copy(row[c].text);
 
-				_grid.Insert(row._id, fields, false, row._brush);
+				_grid.Insert(row._id, fields, row._brush, true);
 
 				for (int c = 0; c != row.Length; ++c)
 				{
@@ -591,7 +595,8 @@ namespace yata
 					cell.replaced    = row[c].replaced;
 				}
 			}
-			_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
+
+			if (!isDiffedTable()) _grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
@@ -626,9 +631,10 @@ namespace yata
 
 			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
 			{
-				_grid.Delete(_it.array[a]._id, false);
+				_grid.Delete(_it.array[a]._id, true);
 			}
-			_grid.Calibrate();
+
+			if (!isDiffedTable()) _grid.Calibrate();
 
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
@@ -642,6 +648,18 @@ namespace yata
 
 			DrawRegulator.ResumeDrawing(_grid);
 			_f.Obfuscate(false);
+		}
+
+
+		/// <summary>
+		/// Checks if this <c>UndoRedo</c> belongs to an actively diffed table.
+		/// </summary>
+		/// <returns></returns>
+		bool isDiffedTable()
+		{
+			Yata f = _grid._f;
+			return f._diff1 != null && f._diff2 != null
+				&& (_grid == f._diff1 || _grid == f._diff2);
 		}
 		#endregion Methods (actions)
 
@@ -665,7 +683,7 @@ namespace yata
 
 			++_chain;
 
-			var u = Undoables.ToArray();
+			Restorable[] u = Undoables.ToArray();
 
 			int i = 0;
 			for (; i != length; ++i)
@@ -693,7 +711,7 @@ namespace yata
 		{
 			if (Undoables.Count != 0)
 			{
-				var u = Undoables.ToArray();
+				Restorable[] u = Undoables.ToArray();
 
 				int i = 0;
 				if (!allchanged)
@@ -709,7 +727,7 @@ namespace yata
 
 			if (Redoables.Count != 0)
 			{
-				var r = Redoables.ToArray();
+				Restorable[] r = Redoables.ToArray();
 
 				int i = 0;
 				if (!allchanged)
@@ -730,9 +748,7 @@ namespace yata
 		/// <c><see cref="Restorable">Restorables</see></c> when user sorts cols.
 		/// </summary>
 		/// <remarks>The presort-vars do not need to be cleared.
-		/// 
-		/// 
-		/// It would probably be easier to contain
+		/// <remarks>It would probably be easier to contain
 		/// <c><see cref="Restorable">Restorables</see></c> in <c>Lists</c>
 		/// instead of <c>Stacks</c>.</remarks>
 		internal void ResetY()
