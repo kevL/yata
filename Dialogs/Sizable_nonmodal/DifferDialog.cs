@@ -51,26 +51,26 @@ namespace yata
 			la_Info.Height = YataGraphics.MeasureHeight(label, Font) + 15; // +15 = label's pad top+bot +5
 			la_Info.Text = label;
 
-			int w;
+			int w, hCopyable;
 			if (!String.IsNullOrEmpty(copyable))
 			{
 				copyable += Environment.NewLine; // add a blank line to bot of the copyable text.
 
-				w = GetWidth(copyable) + 30;					// +30 = parent panel's pad left+right +5
-				pa_Copyable.Height = GetHeight(copyable) + 20;	// +20 = parent panel's pad top+bot +5
+				w = GetWidth(copyable) + 30;							// +30 = parent panel's pad left+right +5
+				hCopyable = Math.Min(GetHeight(copyable) + 20, 600);	// +20 = parent panel's pad top+bot +5
 
 				rt_Copyable.Text = copyable;
 			}
 			else
 			{
 				pa_Copyable.Visible = false;
-				pa_Copyable.Height = w = 0;
+				hCopyable = w = 0;
 			}
 
 			if (w < WIDTH_Min) w = WIDTH_Min;
 
 			ClientSize = new Size(w + 20, // +20 = pad real and imagined.
-								  la_Info.Height + pa_Copyable.Height + bu_Okay.Height);
+								  la_Info.Height + hCopyable + pa_Buttons.Height);
 
 			MinimumSize = new Size(Width, Height);
 
