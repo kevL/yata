@@ -1127,7 +1127,7 @@ namespace yata
 		/// <remarks>The caller shall call
 		/// <c><see cref="Yata.EnableCelleditOperations()">Yata.EnableCelleditOperations()</see></c>
 		/// after it deters required cell-selects.</remarks>
-		internal void ClearCellSelects(bool bypassCol = false)
+		void ClearCellSelects(bool bypassCol = false)
 		{
 //			_anchorcell = null; // ~safety. Would need to go through all select patterns.
 
