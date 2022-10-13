@@ -1439,7 +1439,7 @@ namespace yata
 
 						statbar_lblCords.Text = " id= " + r + "  col= " + c;
 
-						if (c != 0 && Strrefheads.Contains(Table.Fields[c - 1]))
+						if (c > 0 && Strrefheads.Contains(Table.Fields[c - 1])) // NOTE: 'c' can be -1
 						{
 							string text = null;
 
