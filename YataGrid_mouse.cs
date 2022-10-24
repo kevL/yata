@@ -1052,13 +1052,7 @@ namespace yata
 								ColSort(click_c);
 
 								EnsureDisplayedCol(click_c);
-
-								if (!Cols[click_c].selected) // display first selected cell in col ->
-								{
-									for (int r = 0; r != RowCount; ++r)
-									if (this[r, click_c].selected)
-										EnsureDisplayedRow(r);
-								}
+								EnsureDisplayedPostsort(click_c);
 
 								Invalidator(INVALID_GRID
 										  | INVALID_FROZ
@@ -1150,13 +1144,7 @@ namespace yata
 				ColSort(colid);
 
 				// do not shift table horizontally (is a frozen col)
-
-				if (!Cols[colid].selected) // display first selected cell in col ->
-				{
-					for (int r = 0; r != RowCount; ++r)
-					if (this[r, colid].selected)
-						EnsureDisplayedRow(r);
-				}
+				EnsureDisplayedPostsort(colid);
 
 				Invalidator(INVALID_GRID
 						  | INVALID_FROZ

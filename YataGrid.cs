@@ -1987,6 +1987,37 @@ namespace yata
 
 			return left;
 		}
+
+		/// <summary>
+		/// Scrolls the table so that a <c><see cref="Row"/></c> is displayed
+		/// based on a given a <c><see cref="Col"/></c> after a sort.
+		/// </summary>
+		/// <param name="colid">the col-id that got sorted</param>
+		void EnsureDisplayedPostsort(int colid)
+		{
+			// display first selected cell in col if col is not selected
+			if (!Cols[colid].selected)
+			{
+				for (int r = 0; r != RowCount; ++r)
+				if (this[r,colid].selected)
+				{
+					EnsureDisplayedRow(r);
+					return;
+				}
+			}
+
+			// if col is selected or there are no selected cells in that col
+			// display first selected cell not in a selected col
+			for (int r = 0; r != RowCount; ++r)
+			for (int c = 0; c != ColCount; ++c)
+			{
+				if (!Cols[c].selected && this[r,c].selected)
+				{
+					EnsureDisplayedRow(r);
+					return;
+				}
+			}
+		}
 		#endregion ensure displayed
 
 
