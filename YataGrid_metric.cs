@@ -172,8 +172,8 @@ namespace yata
 		/// <param name="r">first row to consider as changed (default -1 if
 		/// deleting rows and/or no extant text-widths have changed; ie, no
 		/// text-widths need to be re-measured)</param>
-		/// <param name="range">range of rows to consider as changed (default 0
-		/// for a single row)</param>
+		/// <param name="range">range of rows to consider as changed (default
+		/// <c>0</c> for a single row)</param>
 		internal void Colwidth(int c, int r = -1, int range = 0)
 		{
 			Col col = Cols[c];

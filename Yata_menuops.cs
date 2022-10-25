@@ -88,7 +88,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Lays out table after rows are ordered.
+		/// Lays out table after rows are auto-ordered.
 		/// </summary>
 		/// <param name="bypassInvalidate"></param>
 		internal void layout(bool bypassInvalidate = false)
