@@ -338,8 +338,10 @@ namespace yata
 			Redoables.Push(_it);
 
 			if (finish)
+			{
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
-
+				_grid.SyncSelect();
+			}
 			else Undo(); // recurse funct.
 		}
 
@@ -391,8 +393,10 @@ namespace yata
 			Undoables.Push(_it);
 
 			if (finish)
+			{
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
-
+				_grid.SyncSelect();
+			}
 			else Redo(); // recurse funct.
 		}
 		#endregion Methods

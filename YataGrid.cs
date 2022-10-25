@@ -765,6 +765,38 @@ namespace yata
 
 			Invalidator(YataGrid.INVALID_COLS | YataGrid.INVALID_GRID);
 		}
+
+
+		/// <summary>
+		/// Selects a sync'd <c>YataGrid's</c> Cells/Rows/Cols.
+		/// </summary>
+		internal void SyncSelect()
+		{
+			YataGrid table;
+			if      (this == _f._diff1) table = _f._diff2;
+			else if (this == _f._diff2) table = _f._diff1;
+			else return;
+
+			if (table != null)
+			{
+				table.ClearSelects(true, true);
+
+				for (int r = 0; r != RowCount && r != table.RowCount; ++r)
+				{
+					if (Rows[r].selected)
+						table.Rows[r].selected = true;
+
+					for (int c = 0; c != ColCount && c != table.ColCount; ++c)
+					{
+						if (Cols[c].selected)
+							table.Cols[c].selected = true;
+
+						if (this[r,c].selected)
+							table[r,c].selected = true;
+					}
+				}
+			}
+		}
 		#endregion Select (setters)
 
 
