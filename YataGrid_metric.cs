@@ -54,11 +54,11 @@ namespace yata
 					rows = rowsTest;
 			}
 
-			string texttest = "9"; // determine how many nines need to be measured ->
+			string digits = "9"; // determine how many nines need to be measured ->
 			while ((rows /= 10) != 0)
-				texttest += "9";
+				digits += "9";
 
-			WidthRowhead = YataGraphics.MeasureWidth(texttest, f.FontAccent) + _padHoriRowhead * 2;
+			WidthRowhead = YataGraphics.MeasureWidth(digits, f.FontAccent) + _padHoriRowhead * 2;
 
 			for (tab = 0; tab != tabs; ++tab)
 			{
@@ -200,6 +200,7 @@ namespace yata
 				}
 			}
 
+//			if (!isDiffedTable())
 			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
 			{					// be forced (eg. on reload) unflag UserSized on all cols first.
 				int totalwidth = col.Width;
@@ -233,6 +234,17 @@ namespace yata
 			if (Propanel != null && Propanel.Visible)
 				Propanel.widthValcol(); // TODO: Re-calc the 'c' col only.
 		}
+
+
+/*		/// <summary>
+		/// Checks if this <c>YataGrid</c> is an actively diffed table.
+		/// </summary>
+		/// <returns><c>true</c> if this is one of two diffed tables</returns>
+		internal bool isDiffedTable()
+		{
+			return _f._diff1 != null && _f._diff2 != null
+				&& (this == _f._diff1 || this == _f._diff2);
+		} */
 		#endregion Methods
 	}
 }
