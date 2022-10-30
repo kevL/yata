@@ -22,10 +22,11 @@ namespace yata
 		/// <c><see cref="Yata"/>.AutosizeCols()</c> or when row(s) are
 		/// inserted, deleted, pasted, or cleared.
 		/// </summary>
-		/// <param name="r">first row to consider as changed (<c>-1</c> if
-		/// deleting rows)</param>
-		/// <param name="range">range of rows to consider as changed (<c>0</c>
-		/// for single row)</param>
+		/// <param name="r">first row-id to consider as changed (default
+		/// <c>-1</c> if deleting rows and/or no extant text-widths have
+		/// changed; ie. no text-widths need to be re-measured)</param>
+		/// <param name="range">range of rows to consider as changed (default
+		/// <c>0</c> for a single row)</param>
 		internal void Calibrate(int r = -1, int range = 0)
 		{
 			_init = true;
@@ -51,10 +52,10 @@ namespace yata
 		/// <paramref name="r"/> to <paramref name="r"/> +
 		/// <paramref name="range"/>.
 		/// </summary>
-		/// <param name="c">col</param>
-		/// <param name="r">first row to consider as changed (default -1 if
-		/// deleting rows and/or no extant text-widths have changed; ie, no
-		/// text-widths need to be re-measured)</param>
+		/// <param name="c">col-id</param>
+		/// <param name="r">first row-id to consider as changed (default
+		/// <c>-1</c> if deleting rows and/or no extant text-widths have
+		/// changed; ie. no text-widths need to be re-measured)</param>
 		/// <param name="range">range of rows to consider as changed (default
 		/// <c>0</c> for a single row)</param>
 		internal void Colwidth(int c, int r = -1, int range = 0)
