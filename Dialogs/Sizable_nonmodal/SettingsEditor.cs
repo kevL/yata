@@ -100,7 +100,9 @@ namespace yata
 						File.Delete(pfeT);
 
 						using (var ib = new Infobox(Infobox.Title_infor,
-													"Yata must be restarted for any changes to take effect."))
+													"Yata must be restarted for any changes to take effect.",
+													null,
+													InfoboxType.Warn))
 						{
 							ib.ShowDialog(this);
 						}
