@@ -16,6 +16,7 @@ namespace yata
 		/// <param name="e"></param>
 		void font_dropdownopening(object sender, EventArgs e)
 		{
+			it_Font       .Enabled = !isTableDiffed();
 			it_FontDefault.Enabled = !it_Font.Checked
 								  && !Font.Equals(FontDefault);
 		}
@@ -58,8 +59,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>Font|Load default font</item>
 		/// </list>
-		/// 
-		/// 
+		/// <br/><br/>
 		/// The item will be disabled if <c><see cref="FontDialog"/></c> is open
 		/// or if Yata's current <c>Font</c> is
 		/// <c><see cref="FontDefault"/></c>.</remarks>

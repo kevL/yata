@@ -131,8 +131,11 @@ namespace yata
 			if (_diff2   != null) DiffReset(_diff2);
 
 			_diff2 = Table;
-			if (Diff())
+			if (doDiff())
+			{
+				if (_ffont != null) _ffont.Close();
 				tabclick_DiffSync(sender, e);
+			}
 			else
 				_diff1 = _diff2 = null;
 		}
@@ -219,7 +222,6 @@ namespace yata
 			_diff1.InitScroll();
 			_diff2.InitScroll();
 
-//			if (_diff1 == Table || _diff2 == Table) // will always be true
 			Table.Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
 		}
 		#endregion Handlers (tab)
@@ -230,7 +232,7 @@ namespace yata
 		/// The yata-diff routine.
 		/// </summary>
 		/// <returns><c>true</c> if differences are found</returns>
-		bool Diff()
+		bool doDiff()
 		{
 			_diff1.ClearSelects(true, true);	// sync-table
 			_diff2.ClearSelects();				// active table
@@ -424,5 +426,17 @@ namespace yata
 				AutosizeCols(table);
 		}
 		#endregion Methods (tab)
+
+
+		/// <summary>
+		/// Checks if <c><see cref="Table"/></c> is an actively diffed table.
+		/// </summary>
+		/// <returns><c>true</c> if this is one of two diffed tables</returns>
+		internal bool isTableDiffed()
+		{
+			return Table != null
+				&& _diff1 != null && _diff2 != null
+				&& (Table == _diff1 || Table == _diff2);
+		}
 	}
 }
