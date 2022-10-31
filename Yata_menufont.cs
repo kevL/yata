@@ -16,7 +16,7 @@ namespace yata
 		/// <param name="e"></param>
 		void font_dropdownopening(object sender, EventArgs e)
 		{
-			it_Font       .Enabled = !isTableDiffed();
+			it_Font       .Enabled = _diff1 == null || _diff2 == null;
 			it_FontDefault.Enabled = !it_Font.Checked
 								  && !Font.Equals(FontDefault);
 		}

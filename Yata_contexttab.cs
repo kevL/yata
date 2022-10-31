@@ -428,7 +428,7 @@ namespace yata
 		#endregion Methods (tab)
 
 
-		/// <summary>
+/*		/// <summary>
 		/// Checks if <c><see cref="Table"/></c> is an actively diffed table.
 		/// </summary>
 		/// <returns><c>true</c> if this is one of two diffed tables</returns>
@@ -437,6 +437,6 @@ namespace yata
 			return Table != null
 				&& _diff1 != null && _diff2 != null
 				&& (Table == _diff1 || Table == _diff2);
-		}
+		} */
 	}
 }
