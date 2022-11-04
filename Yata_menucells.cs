@@ -38,32 +38,34 @@ namespace yata
 
 			_copytext = new string[_copyvert, _copyhori];
 
+			Cell cell;
+
 			int i = -1, j;
 			for (int r = sel.y; r != sel.y + _copyvert; ++r)
 			{
 				++i; j = -1;
 				for (int c = sel.x; c != sel.x + _copyhori; ++c)
 				{
-					_copytext[i, ++j] = (sel = Table[r,c]).text;
+					_copytext[i, ++j] = (cell = Table[r,c]).text;
 
 					if (c == 0 && Settings._autorder)
 						text = r.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
 
-					if (sel.text != text)
+					if (cell.text != text)
 					{
 						++replaced;
-						Table.ChangeCellText(sel, text);	// does not do a text-check
+						Table.ChangeCellText(cell, text);	// does not do a text-check
 						invalid = YataGrid.INVALID_NONE;	// ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
-						if (sel.replaced)
-							sel.replaced = false;
+						if (cell.replaced)
+							cell.replaced = false;
 
-						if (sel.loadchanged)
-							sel.loadchanged = false;
+						if (cell.loadchanged)
+							cell.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
