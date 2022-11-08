@@ -148,6 +148,8 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createCell(ICloneable cell)
 		{
+			//logfile.Log("createCell()");
+
 			Restorable it;
 			it.RestoreType = UrType.rt_Cell;
 
@@ -179,6 +181,8 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row, UrType type)
 		{
+			//logfile.Log("createRow() type= " + type);
+
 			Restorable it;
 			it.RestoreType = type;
 
@@ -207,6 +211,8 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row)
 		{
+			//logfile.Log("createRow()");
+
 			Restorable it;
 			it.RestoreType = UrType.rt_Overwrite;
 
@@ -238,6 +244,8 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createArray(int rows, UrType type)
 		{
+			//logfile.Log("createArray() type= " + type);
+
 			Restorable it;
 			it.RestoreType = type;
 
@@ -294,8 +302,27 @@ namespace yata
 		/// Undo's a cell-text change or a row-insert/delete/overwrite or a
 		/// row-array insert/delete.
 		/// </summary>
-		internal void Undo()
+		/// <returns><c>true</c> if not bypassed due to diffed
+		/// <c><see cref="_grid"/></c></returns>
+		internal bool Undo()
 		{
+			//logfile.Log("Undo() " + Undoables.Peek().RestoreType + " diffed= " + isDiffedTable());
+
+			switch (Undoables.Peek().RestoreType)
+			{
+				case UrType.rt_Insert:
+				case UrType.rt_Delete:
+				case UrType.rt_ArrayInsert:
+				case UrType.rt_ArrayDelete:
+					if (isDiffedTable())
+					{
+						_grid._f.error_TableDiffed(); // do not allow rows to be created/deleted
+						return false;
+					}
+					break;
+			}
+
+
 			_it = Undoables.Pop();
 
 			bool finish = _it.chain == (uint)0
@@ -342,15 +369,37 @@ namespace yata
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Undo);
 				_grid.SyncSelect();
 			}
-			else Undo(); // recurse funct.
+			else
+				Undo(); // recurse funct.
+
+			return true;
 		}
 
 		/// <summary>
 		/// Redo's a cell-text change or a row-insert/delete/overwrite or a
 		/// row-array insert/delete.
 		/// </summary>
-		internal void Redo()
+		/// <returns><c>true</c> if not bypassed due to diffed
+		/// <c><see cref="_grid"/></c></returns>
+		internal bool Redo()
 		{
+			//logfile.Log("Redo() " + Redoables.Peek().RestoreType + " diffed= " + isDiffedTable());
+
+			switch (Redoables.Peek().RestoreType)
+			{
+				case UrType.rt_Insert:
+				case UrType.rt_Delete:
+				case UrType.rt_ArrayInsert:
+				case UrType.rt_ArrayDelete:
+					if (isDiffedTable())
+					{
+						_grid._f.error_TableDiffed(); // do not allow rows to be created/deleted
+						return false;
+					}
+					break;
+			}
+
+
 			_it = Redoables.Pop();
 
 			bool finish = _it.chain == (uint)0
@@ -397,7 +446,10 @@ namespace yata
 				_grid.Changed = (_it.isSaved != IsSavedType.is_Redo);
 				_grid.SyncSelect();
 			}
-			else Redo(); // recurse funct.
+			else
+				Redo(); // recurse funct.
+
+			return true;
 		}
 		#endregion Methods
 
@@ -471,7 +523,7 @@ namespace yata
 				fields[c] = String.Copy(row[c].text);
 
 			int r = row._id;
-			_grid.Insert(r, fields, row._brush, isDiffedTable());
+			_grid.Insert(r, fields, row._brush);
 
 			YataGrid._init = true;
 			Cell cell;
@@ -507,7 +559,7 @@ namespace yata
 
 			int r = _it.r._id;
 
-			_grid.Delete(r, isDiffedTable());
+			_grid.Delete(r);
 
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
@@ -600,7 +652,8 @@ namespace yata
 				}
 			}
 
-			if (!isDiffedTable()) _grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
+			// Calibrate() needs to fire to layout/draw the table
+			_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
@@ -638,7 +691,8 @@ namespace yata
 				_grid.Delete(_it.array[a]._id, true);
 			}
 
-			if (!isDiffedTable()) _grid.Calibrate();
+			// Calibrate() needs to fire to layout/draw the table
+			_grid.Calibrate();
 
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));

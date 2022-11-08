@@ -74,8 +74,13 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CutRange(object sender, EventArgs e)
 		{
-			editrowsclick_CopyRange(  sender, e);
-			editrowsclick_DeleteRange(sender, e);
+			if (!isTableDiffed())
+			{
+				editrowsclick_CopyRange(  sender, e);
+				editrowsclick_DeleteRange(sender, e);
+			}
+			else
+				error_TableDiffed();
 		}
 
 		/// <summary>
@@ -135,42 +140,47 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_PasteRange(object sender, EventArgs e)
 		{
-			Obfuscate();
-			DrawRegulator.SuspendDrawing(Table);
-
-
-			Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
-
-			int selr = Table.getSelectedRow();
-			if (selr == -1)
-				selr = Table.RowCount;
-
-			int r = selr;
-			for (int i = 0; i != _copyr.Count; ++i, ++r)
+			if (!isTableDiffed())
 			{
-				Table.Insert(r, _copyr[i], Brushes.Created, true);
-				rest.array[i] = Table.Rows[r].Clone() as Row;
+				Obfuscate();
+				DrawRegulator.SuspendDrawing(Table);
+
+
+				Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
+
+				int selr = Table.getSelectedRow();
+				if (selr == -1)
+					selr = Table.RowCount;
+
+				int r = selr;
+				for (int i = 0; i != _copyr.Count; ++i, ++r)
+				{
+					Table.Insert(r, _copyr[i], Brushes.Created, true);
+					rest.array[i] = Table.Rows[r].Clone() as Row;
+				}
+				Table.Calibrate(selr, _copyr.Count - 1); // paste range
+
+				Table.ClearSelects(false, true);
+				Table.Rows[selr].selected = true;
+				Table.RangeSelect = _copyr.Count - 1;
+				Table.EnsureDisplayedRow(selr);
+
+
+				if (!Table.Changed)
+				{
+					Table.Changed = true;
+					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+				}
+				Table._ur.Push(rest);
+
+
+				DrawRegulator.ResumeDrawing(Table);
+				Obfuscate(false);
+
+				if (Settings._autorder && order() != 0) layout();
 			}
-			Table.Calibrate(selr, _copyr.Count - 1); // paste range
-
-			Table.ClearSelects(false, true);
-			Table.Rows[selr].selected = true;
-			Table.RangeSelect = _copyr.Count - 1;
-			Table.EnsureDisplayedRow(selr);
-
-
-			if (!Table.Changed)
-			{
-				Table.Changed = true;
-				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-			}
-			Table._ur.Push(rest);
-
-
-			DrawRegulator.ResumeDrawing(Table);
-			Obfuscate(false);
-
-			if (Settings._autorder && order() != 0) layout();
+			else
+				error_TableDiffed();
 		}
 
 		/// <summary>
@@ -190,13 +200,18 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_DeleteRange(object sender, EventArgs e)
 		{
-			Table.DeleteRows();
+			if (!isTableDiffed())
+			{
+				Table.DeleteRows();
 
-			EnableRoweditOperations();
-			EnableGotoReplaced(Table.anyReplaced());
-			EnableGotoLoadchanged(Table.anyLoadchanged());
+				EnableRoweditOperations();
+				EnableGotoReplaced(Table.anyReplaced());
+				EnableGotoLoadchanged(Table.anyLoadchanged());
 
-			if (Settings._autorder && order() != 0) layout();
+				if (Settings._autorder && order() != 0) layout();
+			}
+			else
+				error_TableDiffed();
 		}
 
 
@@ -212,72 +227,77 @@ namespace yata
 		/// </list></remarks>
 		void editrowsclick_CreateRows(object sender, EventArgs e)
 		{
-			int selr = Table.getSelectedRowOrCells();
-
-			using (var rcd = new RowCreatorDialog(this, selr, _copyr.Count != 0))
+			if (!isTableDiffed())
 			{
-				if (rcd.ShowDialog(this) == DialogResult.OK)
+				int selr = Table.getSelectedRowOrCells();
+
+				using (var rcd = new RowCreatorDialog(this, selr, _copyr.Count != 0))
 				{
-					Obfuscate();
-					DrawRegulator.SuspendDrawing(Table);
-
-
-					Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
-
-					var cells = new string[Table.ColCount];
-					switch (_fillCr)
+					if (rcd.ShowDialog(this) == DialogResult.OK)
 					{
-						case CrFillType.Stars:
-							for (int i = 0; i != Table.ColCount; ++i)
-								cells[i] = gs.Stars;
-							break;
+						Obfuscate();
+						DrawRegulator.SuspendDrawing(Table);
 
-						case CrFillType.Selected:
-							for (int i = 0; i != Table.ColCount; ++i)
-								cells[i] = Table[selr, i].text;
-							break;
 
-						case CrFillType.Copied:
-							for (int i = 0; i != Table.ColCount; ++i)
-							{
-								if (i < _copyr[0].Length)
-									cells[i] = _copyr[0][i];
-								else
+						Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
+
+						var cells = new string[Table.ColCount];
+						switch (_fillCr)
+						{
+							case CrFillType.Stars:
+								for (int i = 0; i != Table.ColCount; ++i)
 									cells[i] = gs.Stars;
-							}
-							break;
+								break;
+
+							case CrFillType.Selected:
+								for (int i = 0; i != Table.ColCount; ++i)
+									cells[i] = Table[selr, i].text;
+								break;
+
+							case CrFillType.Copied:
+								for (int i = 0; i != Table.ColCount; ++i)
+								{
+									if (i < _copyr[0].Length)
+										cells[i] = _copyr[0][i];
+									else
+										cells[i] = gs.Stars;
+								}
+								break;
+						}
+
+						int r = _startCr;
+						for (int i = 0; i != _lengthCr; ++i, ++r)
+						{
+							cells[0] = r.ToString(CultureInfo.InvariantCulture);
+
+							Table.Insert(r, cells, Brushes.Created, true);
+							rest.array[i] = Table.Rows[r].Clone() as Row;
+						}
+						Table.Calibrate(_startCr, _lengthCr - 1); // insert range
+
+						Table.ClearSelects(false, true);
+						Table.Rows[_startCr].selected = true;
+						Table.RangeSelect = _lengthCr - 1;
+						Table.EnsureDisplayedRow(_startCr);
+
+
+						if (!Table.Changed)
+						{
+							Table.Changed = true;
+							rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+						}
+						Table._ur.Push(rest);
+
+
+						DrawRegulator.ResumeDrawing(Table);
+						Obfuscate(false);
+
+						if (Settings._autorder && order() != 0) layout();
 					}
-
-					int r = _startCr;
-					for (int i = 0; i != _lengthCr; ++i, ++r)
-					{
-						cells[0] = r.ToString(CultureInfo.InvariantCulture);
-
-						Table.Insert(r, cells, Brushes.Created, true);
-						rest.array[i] = Table.Rows[r].Clone() as Row;
-					}
-					Table.Calibrate(_startCr, _lengthCr - 1); // insert range
-
-					Table.ClearSelects(false, true);
-					Table.Rows[_startCr].selected = true;
-					Table.RangeSelect = _lengthCr - 1;
-					Table.EnsureDisplayedRow(_startCr);
-
-
-					if (!Table.Changed)
-					{
-						Table.Changed = true;
-						rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-					}
-					Table._ur.Push(rest);
-
-
-					DrawRegulator.ResumeDrawing(Table);
-					Obfuscate(false);
-
-					if (Settings._autorder && order() != 0) layout();
 				}
 			}
+			else
+				error_TableDiffed();
 		}
 		#endregion Handlers (editrows)
 

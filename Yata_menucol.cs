@@ -16,7 +16,7 @@ namespace yata
 		/// <param name="e"></param>
 		void col_dropdownopening(object sender, EventArgs e)
 		{
-			if (Table != null)
+			if (Table != null && !isTableDiffed())
 			{
 				bool isColSelected = Table.getSelectedCol() > 0; // id-col is disallowed
 

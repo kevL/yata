@@ -30,15 +30,18 @@ namespace yata
 
 			rowit_Header.Text = "_row @ id " + _r;
 
-			rowit_PasteAbove .Enabled =
-			rowit_Paste      .Enabled =
-			rowit_PasteBelow .Enabled = !Table.Readonly && _copyr.Count != 0;
+			bool paster = !Table.Readonly && _copyr.Count != 0;
+			bool diffed = isTableDiffed();
 
+			rowit_Paste      .Enabled = paster;
+			rowit_PasteAbove .Enabled =
+			rowit_PasteBelow .Enabled = paster && !diffed;
+
+			rowit_Clear      .Enabled = !Table.Readonly;
 			rowit_Cut        .Enabled =
 			rowit_CreateAbove.Enabled =
-			rowit_Clear      .Enabled =
 			rowit_CreateBelow.Enabled =
-			rowit_Delete     .Enabled = !Table.Readonly;
+			rowit_Delete     .Enabled = !Table.Readonly && !diffed;
 
 			Point loc;
 			if (Settings._context)							// static location
@@ -184,7 +187,7 @@ namespace yata
 			EnableGotoReplaced(Table.anyReplaced());
 			EnableGotoLoadchanged(Table.anyLoadchanged());
 
-			Table.Calibrate(_r);
+			if (!isTableDiffed()) Table.Calibrate(_r);
 
 			Table.Invalidator(YataGrid.INVALID_GRID);
 
@@ -300,7 +303,7 @@ namespace yata
 			EnableGotoReplaced(Table.anyReplaced());
 			EnableGotoLoadchanged(Table.anyLoadchanged());
 
-			Table.Calibrate(_r);
+			if (!isTableDiffed()) Table.Calibrate(_r);
 
 			Table.Invalidator(YataGrid.INVALID_GRID);
 

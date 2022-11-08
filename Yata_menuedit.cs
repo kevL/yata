@@ -79,12 +79,14 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Undo(object sender, EventArgs e)
 		{
-			Table._ur.Undo();
-			it_Undo.Enabled = Table._ur.CanUndo;
-			it_Redo.Enabled = true;
+			if (Table._ur.Undo())
+			{
+				it_Undo.Enabled = Table._ur.CanUndo;
+				it_Redo.Enabled = true;
 
-			Point? cords = new Point(_track_x, _track_y);
-			PrintInfo(cords, true);
+				Point? cords = new Point(_track_x, _track_y);
+				PrintInfo(cords, true);
+			}
 		}
 
 		/// <summary>
@@ -98,12 +100,14 @@ namespace yata
 		/// </list></remarks>
 		void editclick_Redo(object sender, EventArgs e)
 		{
-			Table._ur.Redo();
-			it_Redo.Enabled = Table._ur.CanRedo;
-			it_Undo.Enabled = true;
+			if (Table._ur.Redo())
+			{
+				it_Redo.Enabled = Table._ur.CanRedo;
+				it_Undo.Enabled = true;
 
-			Point? cords = new Point(_track_x, _track_y);
-			PrintInfo(cords, true);
+				Point? cords = new Point(_track_x, _track_y);
+				PrintInfo(cords, true);
+			}
 		}
 
 

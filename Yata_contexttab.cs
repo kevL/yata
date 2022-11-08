@@ -428,15 +428,34 @@ namespace yata
 		#endregion Methods (tab)
 
 
-/*		/// <summary>
+		/// <summary>
 		/// Checks if <c><see cref="Table"/></c> is an actively diffed table.
 		/// </summary>
-		/// <returns><c>true</c> if this is one of two diffed tables</returns>
-		internal bool isTableDiffed()
+		/// <returns><c>true</c> if this is one of two currently diffed tables</returns>
+		bool isTableDiffed()
 		{
 			return Table != null
 				&& _diff1 != null && _diff2 != null
 				&& (Table == _diff1 || Table == _diff2);
-		} */
+		}
+
+		/// <summary>
+		/// Issues an error if user attempts to create or delete a row/col when
+		/// <c><see cref="Table"/></c> is currently diffed.
+		/// </summary>
+		/// <remarks>Allowing rows/cols to be created or deleted can cause the
+		/// info in <c><see cref="DifferDialog"/></c> to go wonky. Allowing rows
+		/// to be created or deleted via <c><see cref="UndoRedo"/></c> can cause
+		/// the <c><see cref="YataGrid"/></c> to not redraw properly.</remarks>
+		internal void error_TableDiffed()
+		{
+			using (var ib = new Infobox(Infobox.Title_warni,
+										"Creating or deleting rows or cols is not allowed on a diffed table.",
+										null,
+										InfoboxType.Warn))
+			{
+				ib.ShowDialog(this);
+			}
+		}
 	}
 }
