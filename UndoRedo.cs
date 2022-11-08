@@ -316,7 +316,7 @@ namespace yata
 				case UrType.rt_ArrayDelete:
 					if (isDiffedTable())
 					{
-						_grid._f.error_TableDiffed(); // do not allow rows to be created/deleted
+						_f.error_TableDiffed(); // do not allow rows to be created/deleted
 						return false;
 					}
 					break;
@@ -393,7 +393,7 @@ namespace yata
 				case UrType.rt_ArrayDelete:
 					if (isDiffedTable())
 					{
-						_grid._f.error_TableDiffed(); // do not allow rows to be created/deleted
+						_f.error_TableDiffed(); // do not allow rows to be created/deleted
 						return false;
 					}
 					break;
@@ -715,9 +715,8 @@ namespace yata
 		/// <returns></returns>
 		bool isDiffedTable()
 		{
-			Yata f = _grid._f;
-			return f._diff1 != null && f._diff2 != null
-				&& (_grid == f._diff1 || _grid == f._diff2);
+			return _f._diff1 != null && _f._diff2 != null
+				&& (_grid == _f._diff1 || _grid == _f._diff2);
 		}
 		#endregion Methods (actions)
 
