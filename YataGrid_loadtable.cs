@@ -445,7 +445,7 @@ namespace yata
 							}
 							else
 							{
-								InputDialog.SpellcheckDefaultval(ref _defaultval, true);
+								InputDialog.VerifyDefaultval(ref _defaultval, true);
 
 								if (!quelch && Settings._strict && tr != gs.Default + _defaultval)
 								{

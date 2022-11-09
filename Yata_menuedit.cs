@@ -432,7 +432,7 @@ namespace yata
 		void editclick_Defaultval(object sender, EventArgs e)
 		{
 			InputDialog._defaultval = Table._defaultval;
-			using (var idc = new InputDialog(this))
+			using (var idc = new InputDialog(this, InputDialog.Idtype.defval))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialog._defaultval != Table._defaultval)

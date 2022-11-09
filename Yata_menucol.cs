@@ -80,7 +80,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Handles the <c>Click</c> event on the col-list its.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -161,7 +161,7 @@ namespace yata
 				if (ib.ShowDialog(this) == DialogResult.OK)
 				{
 					int selc = Table.getSelectedCol();
-					using (var idc = new InputDialog(this, selc))
+					using (var idc = new InputDialog(this, InputDialog.Idtype.createhead, selc))
 					{
 						if (idc.ShowDialog(this) == DialogResult.OK
 							&& InputDialog._colabel.Length != 0)
@@ -263,7 +263,7 @@ namespace yata
 
 			string head = Table.Fields[selc - 1];
 			InputDialog._colabel = head;
-			using (var idc = new InputDialog(this, selc))
+			using (var idc = new InputDialog(this, InputDialog.Idtype.relabelhead, selc))
 			{
 				if (idc.ShowDialog(this) == DialogResult.OK
 					&& InputDialog._colabel.Length != 0

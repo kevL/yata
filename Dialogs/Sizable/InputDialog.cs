@@ -13,6 +13,13 @@ namespace yata
 	sealed partial class InputDialog
 		: YataDialog
 	{
+		#region Enumbs
+		internal enum Idtype
+		{
+			non, defval, createhead, relabelhead
+		}
+		#endregion Enumbs
+
 		#region Fields (static)
 		internal static string _colabel    = String.Empty;
 		internal static string _defaultval = String.Empty;
@@ -20,27 +27,18 @@ namespace yata
 		const int MIN_w = 275;
 
 		const int hCheckbox = 20;
-
-		/// <summary>
-		/// This <c>InputDialog</c> is configured to deal with input for the
-		/// Default value text in a 2da-file when <c><see cref="_selc"/></c> is
-		/// set to <c>DEFVAL</c>. This <c>InputDialog</c> is configured to deal
-		/// with input for colhead-label text when <c>_selc</c> is any other
-		/// value.
-		/// </summary>
-		const int DEFVAL = -2;
 		#endregion Fields (static)
 
 
 		#region Fields
+		Idtype _type;
+
 		/// <summary>
-		/// The col-id iff not set to <c><see cref="DEFVAL"/></c>. Can be
-		/// <c>-1</c>.
+		/// The col-id iff <c><see cref="_type"/></c> is
+		/// <c><see cref="Idtype.createhead"/></c> or
+		/// <c><see cref="Idtype.relabelhead"/></c>.
 		/// </summary>
-		/// <remarks>This <c>InputDialog</c> is configured to deal with input
-		/// for the Default value text in a 2da-file when <c>_selc</c> is set to
-		/// <c>DEFVAL</c>. This <c>InputDialog</c> is configured to deal with
-		/// input for colhead-label text when <c>_selc</c> is any other value.</remarks>
+		/// <remarks> Can be <c>-1</c>.</remarks>
 		int _selc;
 
 		bool _bypasstextchanged;
@@ -55,9 +53,17 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f">parent <c><see cref="Yata"/></c></param>
-		/// <param name="selc">the currently selected col-id; default -2 enables
-		/// defaultval input</param>
-		internal InputDialog(Yata f, int selc = DEFVAL)
+		/// <param name="type">the <c><see cref="Idtype"/></c> of this
+		/// <c>InputDialog</c>
+		/// <list type="bullet">
+		/// <item><c><see cref="Idtype.defval"/></c></item>
+		/// <item><c><see cref="Idtype.createhead"/></c></item>
+		/// <item><c><see cref="Idtype.relabelhead"/></c></item>
+		/// </list></param>
+		/// <param name="selc">the currently selected col-id if
+		/// <paramref name="type"/> is <c><see cref="Idtype.createhead"/></c> or
+		/// <c><see cref="Idtype.relabelhead"/></c></param>
+		internal InputDialog(Yata f, Idtype type, int selc = -1)
 		{
 			_f = f;
 			_selc = selc;
@@ -65,35 +71,43 @@ namespace yata
 			InitializeComponent();
 			Initialize(METRIC_FUL);
 
-			if (_selc != DEFVAL)
+			switch (_type = type)
 			{
-				Text = " yata - Colhead text";
-				tb_Input.Text = _colabel;
+				case Idtype.defval:
+					Text = " yata - Default value";
+					tb_Input.Text = _defaultval;
+					break;
 
-				if (Settings._strict) // show 'allow extended punctuation' toggle ->
-				{
-					cb_Punctuation = new CheckBox();
-					cb_Punctuation.Text = "accept nonstandard punctuation";
-					cb_Punctuation.TextAlign = ContentAlignment.MiddleLeft;
-					cb_Punctuation.Padding = new Padding(9,2,0,0);
-					cb_Punctuation.Size = new Size(100, hCheckbox);
-					cb_Punctuation.Dock = DockStyle.Top;
-					cb_Punctuation.TabIndex = 1;
-					cb_Punctuation.Checked = true;
-					cb_Punctuation.CheckedChanged += checkedchanged_Punctuation;
+				case Idtype.createhead:
+					Text = " yata - Create colhead";
+					goto case Idtype.non;
 
-					Controls.Add(cb_Punctuation);
-					cb_Punctuation.BringToFront();
+				case Idtype.relabelhead:
+					Text = " yata - Relabel colhead";
+					tb_Input.Text = _colabel;
+					goto case Idtype.non;
 
-					ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox);
+				case Idtype.non: // IMPORTANT: Do not use this. It's only a fallthrough case.
+					if (Settings._strict) // show 'allow extended punctuation' toggle ->
+					{
+						cb_Punctuation = new CheckBox();
+						cb_Punctuation.Text = "accept nonstandard punctuation";
+						cb_Punctuation.TextAlign = ContentAlignment.MiddleLeft;
+						cb_Punctuation.Padding = new Padding(9,2,0,0);
+						cb_Punctuation.Size = new Size(100, hCheckbox);
+						cb_Punctuation.Dock = DockStyle.Top;
+						cb_Punctuation.TabIndex = 1;
+						cb_Punctuation.Checked = true;
+						cb_Punctuation.CheckedChanged += checkedchanged_Punctuation;
 
-					cb_Punctuation.Checked = false; // call checkedchanged_Punctuation() at start.
-				}
-			}
-			else
-			{
-				Text = " yata - Default value";
-				tb_Input.Text = _defaultval;
+						Controls.Add(cb_Punctuation);
+						cb_Punctuation.BringToFront();
+
+						ClientSize = new Size(ClientSize.Width, ClientSize.Height + hCheckbox);
+
+						cb_Punctuation.Checked = false; // call checkedchanged_Punctuation() at start.
+					}
+					break;
 			}
 
 			MinimumSize = new Size(MIN_w,          Height);
@@ -116,7 +130,7 @@ namespace yata
 				_cancel = false;
 			else
 			{
-				if (_selc != DEFVAL && Settings._strict)
+				if (_type != Idtype.defval && Settings._strict)
 					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox); // conform static telemetry
 
 				base.OnFormClosing(e);
@@ -135,7 +149,7 @@ namespace yata
 		{
 			if (!_bypasstextchanged)
 			{
-				if (_selc != DEFVAL) // colhead
+				if (_type != Idtype.defval) // colhead
 				{
 					char character;
 					for (int i = 0; i != tb_Input.Text.Length; ++i)
@@ -155,10 +169,17 @@ namespace yata
 					}
 				}
 
-				if (_selc != DEFVAL)
-					_colabel = tb_Input.Text;
-				else
-					_defaultval = tb_Input.Text;
+				switch (_type)
+				{
+					case Idtype.defval:
+						_defaultval = tb_Input.Text;
+						break;
+
+					case Idtype.createhead:
+					case Idtype.relabelhead:
+						_colabel = tb_Input.Text;
+						break;
+				}
 			}
 		}
 
@@ -193,49 +214,55 @@ namespace yata
 
 		/// <summary>
 		/// 1. colhead: Cancels close if the input-text is already taken by
-		/// another colhead.
-		/// 
-		/// 2. defaultval:
+		/// another colhead. 2. defaultval: Cancels close if the default-value
+		/// fails verification.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Okay"/></c></param>
 		/// <param name="e"></param>
 		void click_Okay(object sender, EventArgs e)
 		{
-			if (_selc != DEFVAL) // colhead
+			switch (_type)
 			{
-				string[] fields = Yata.Table.Fields;
-				for (int i = 0; i != fields.Length; ++i)
+				case Idtype.defval:
 				{
-					if ((_selc == -1 || _selc != i + 1)
-						&& String.Equals(fields[i],
-										 tb_Input.Text,
-										 StringComparison.OrdinalIgnoreCase))
+					string val = tb_Input.Text;
+					if (!VerifyDefaultval(ref val))
 					{
-						using (var ib = new Infobox(Infobox.Title_error,
-													"That label is already used by another colhead.",
+						using (var ib = new Infobox(Infobox.Title_warni,
+													"The text has changed.",
 													null,
-													InfoboxType.Error))
+													InfoboxType.Warn))
 						{
 							ib.ShowDialog(this);
 						}
+						tb_Input.Text = val;
 						_cancel = true;
 					}
+					break;
 				}
-			}
-			else // defaultval
-			{
-				string val = tb_Input.Text;
-				if (!SpellcheckDefaultval(ref val))
+
+				case Idtype.createhead:
+				case Idtype.relabelhead:
 				{
-					using (var ib = new Infobox(Infobox.Title_warni,
-												"The text has changed.",
-												null,
-												InfoboxType.Warn))
+					string[] fields = Yata.Table.Fields;
+					for (int i = 0; i != fields.Length; ++i)
 					{
-						ib.ShowDialog(this);
+						if ((_selc == -1 || _selc != i + 1)
+							&& String.Equals(fields[i],
+											 tb_Input.Text,
+											 StringComparison.OrdinalIgnoreCase))
+						{
+							using (var ib = new Infobox(Infobox.Title_error,
+														"That label is already used by another colhead.",
+														null,
+														InfoboxType.Error))
+							{
+								ib.ShowDialog(this);
+							}
+							_cancel = true;
+						}
 					}
-					tb_Input.Text = val;
-					_cancel = true;
+					break;
 				}
 			}
 		}
@@ -250,7 +277,7 @@ namespace yata
 		/// <param name="forceQuotes"><c>true</c> to assign two double-quotes if
 		/// the <c>string</c> is blanked (used by the load routine)</param>
 		/// <returns><c>true</c> if <paramref name="val"/> is correct as-is</returns>
-		internal static bool SpellcheckDefaultval(ref string val, bool forceQuotes = false)
+		internal static bool VerifyDefaultval(ref string val, bool forceQuotes = false)
 		{
 			string val0 = val.Trim();
 
