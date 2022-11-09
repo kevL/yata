@@ -48,12 +48,12 @@ namespace yata
 		/// <summary>
 		/// The height of the entire panel (incl/ non-displayed top and bot).
 		/// </summary>
-		readonly int HeightProps;
+		int HeightProps;
 
 		/// <summary>
 		/// The left col in this <c>Propanel</c>.
 		/// </summary>
-		readonly int _widthVars;
+		int _widthVars;
 
 		/// <summary>
 		/// The right col in this <c>Propanel</c>.
@@ -164,25 +164,13 @@ namespace yata
 
 			_editRect.Height = _heightr - 1; // cf YataGrid.EditCell()
 
-			HeightProps = _grid.ColCount * _heightr;
-
-			int wT;
-			for (int c = 0; c != _grid.ColCount; ++c)
-			{
-				wT = YataGraphics.MeasureWidth(_grid.Cols[c].text, Font);
-				if (wT > _widthVars)
-					_widthVars = wT;
-			}
-			_widthVars += _padHori * 2 + 1;
-
 			_scroll.Dock = DockStyle.Right;
 			_scroll.LargeChange = _heightr;
 			_scroll.ValueChanged += scroll_valuechanged;
 
-			widthValcol();
+			tele();
 
 			Controls.Add(_scroll);
-
 			_grid.Controls.Add(this);
 
 			_editor.Leave += editor_leave;
@@ -194,11 +182,40 @@ namespace yata
 
 		#region Methods
 		/// <summary>
+		/// 
+		/// </summary>
+		internal void tele()
+		{
+			widthVarcol();
+			widthValcol();
+			telemetric();
+		}
+
+		/// <summary>
+		/// Determines required width for the variable-fields col.
+		/// </summary>
+		internal void widthVarcol()
+		{
+			_widthVars = 0;
+
+			int wT;
+			for (int c = 0; c != _grid.ColCount; ++c)
+			{
+				wT = YataGraphics.MeasureWidth(_grid.Cols[c].text, Font);
+				if (wT > _widthVars)
+					_widthVars = wT;
+			}
+			_widthVars += _padHori * 2 + 1;
+		}
+
+		/// <summary>
 		/// Determines required width for the value-fields col.
 		/// </summary>
 		internal void widthValcol()
 		{
-//			for (int r = 0; r != _grid.RowCount; ++r)
+			_widthVals = 0;
+
+//			for (int r = 0; r != _grid.RowCount; ++r) // find the widest field in the entire table ->
 //			for (int c = 0; c != _grid.ColCount; ++c)
 //			{
 //				wT = YataGraphics.MeasureWidth(_grid[r,c].text, Font);
@@ -207,25 +224,21 @@ namespace yata
 //			}
 //			_widthVals += _padHori * 2;
 
-			_widthVals = 0;
-
-			int wT, rT = 0, cT = 0;
-			for (int r = 0; r != _grid.RowCount; ++r)
-			for (int c = 0; c != _grid.ColCount; ++c)
+			int width, rwidest = 0, cwidest = 0;
+			for (int r = 0; r != _grid.RowCount; ++r) // assume that the widest text in the table-font
+			for (int c = 0; c != _grid.ColCount; ++c) // will be widest text in the propanel font. Much faster ->
 			{
-				if ((wT = _grid[r,c]._widthtext) > _widthVals)	// NOTE: Assume that the widest text in the table-font
-				{												// will be widest text in the propanel font. Much faster.
-					_widthVals = wT;
-					rT = r;
-					cT = c;
+				if ((width = _grid[r,c]._widthtext) > _widthVals)
+				{
+					_widthVals = width;
+					rwidest = r;
+					cwidest = c;
 				}
 			}
 
 			_widthVals =
-			_editRect.Width = YataGraphics.MeasureWidth(_grid[rT,cT].text, Font) + _padHori * 2;
+			_editRect.Width = YataGraphics.MeasureWidth(_grid[rwidest, cwidest].text, Font) + _padHori * 2;
 			_editor  .Width = _widthVals - 6; // cf YataGrid.Celledit()
-
-			telemetric();
 		}
 
 		/// <summary>
@@ -234,6 +247,8 @@ namespace yata
 		/// </summary>
 		internal void telemetric()
 		{
+			HeightProps = _grid.ColCount * _heightr;
+
 			Width = _widthVars + _widthVals;
 
 			int h = _grid.ColCount * _heightr;

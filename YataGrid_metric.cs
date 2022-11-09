@@ -116,7 +116,10 @@ namespace yata
 			}
 
 			if (Propanel != null && Propanel.Visible)
+			{
 				Propanel.widthValcol(); // TODO: Re-calc the 'c' col only.
+				Propanel.telemetric();
+			}
 		}
 
 

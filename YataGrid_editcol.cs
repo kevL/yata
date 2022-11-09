@@ -76,6 +76,8 @@ namespace yata
 			InitScroll();
 			EnsureDisplayedCol(selc);
 
+			// NOTE: Propanel will not be visible.
+
 			_f.EnableCelleditOperations();
 
 			if (!Changed) Changed = true;
@@ -124,6 +126,8 @@ namespace yata
 
 			InitScroll();
 
+			// NOTE: Propanel will not be visible.
+
 			_f.EnableCelleditOperations();
 
 			if (!Changed) Changed = true;
@@ -142,6 +146,13 @@ namespace yata
 			Colwidth(selc);
 			InitScroll();
 			EnsureDisplayedCol(selc);
+
+			if (Propanel != null && Propanel.Visible)
+			{
+				Propanel.widthVarcol();
+				Propanel.telemetric(); // does not appear to need invalidation
+			}
+
 			Invalidator(INVALID_COLS);
 
 			if (!Changed) Changed = true;
