@@ -876,13 +876,13 @@ namespace yata
 		/// <summary>
 		/// Creates the cols and caches the 2da's colhead data.
 		/// </summary>
-		/// <param name="rewidthOnly"><c>true</c> to only re-width cols - ie.
-		/// Font changed</param>
+		/// <param name="rewidth"><c>true</c> to bypass col-creation and only
+		/// re-width the cols - ie. Font changed</param>
 		/// <seealso cref="CreateCol()"><c>CreateCol()</c></seealso>
-		internal void CreateCols(bool rewidthOnly = false)
+		internal void CreateCols(bool rewidth = false)
 		{
 			int c = 0;
-			if (!rewidthOnly)
+			if (!rewidth)
 			{
 				ColCount = Fields.Length + 1; // 'Fields' does not include rowhead or id-col
 
@@ -893,17 +893,17 @@ namespace yata
 			}
 
 			int widthtext; c = 0;
-			foreach (string head in Fields) // set initial col-widths based on colheads only ->
+			foreach (string field in Fields) // set initial col-widths based on colheads only ->
 			{
 				++c; // start at col 1 - skip id col
 
-				if (!rewidthOnly)
-					Cols[c].text = head;
+				if (!rewidth)
+					Cols[c].text = field;
 
-				widthtext = YataGraphics.MeasureWidth(head, _f.FontAccent);
+				widthtext = YataGraphics.MeasureWidth(field, _f.FontAccent);
 				Cols[c]._widthtext = widthtext;
 
-				Cols[c].SetWidth(widthtext + _padHori * 2 + _padHoriSort, rewidthOnly);
+				Cols[c].SetWidth(widthtext + _padHori * 2 + _padHoriSort, rewidth);
 			}
 		}
 
