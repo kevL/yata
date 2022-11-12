@@ -1163,6 +1163,7 @@ namespace yata
 			if (cell.text != tb.Text)
 			{
 				cell.text = tb.Text;
+				doTextwidth(cell);
 
 				Colwidth(cell.x, cell.y);
 				MetricFrozenControls(cell.x);
@@ -1209,6 +1210,7 @@ namespace yata
 			if (cell.text != text)
 			{
 				cell.text = text;
+				doTextwidth(cell);
 
 				Colwidth(cell.x, cell.y);
 				MetricFrozenControls(cell.x);
@@ -1265,6 +1267,7 @@ namespace yata
 				cell.diff = false; // TODO: Check the differ if the celltext is identical or still different.
 
 			cell.text = text;
+			doTextwidth(cell);
 
 			if (!bypassCalibrate)
 			{

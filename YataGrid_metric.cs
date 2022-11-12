@@ -17,6 +17,31 @@ namespace yata
 
 		#region Methods
 		/// <summary>
+		/// Deters <c><see cref="Cell._widthtext">Cell._widthtext</see></c> for
+		/// all <c><see cref="Cell">Cells</see></c> in a specified col-id.
+		/// </summary>
+		/// <param name="c">col-id</param>
+		internal void colTextwidth(int c)
+		{
+			for (int r = 0; r != RowCount; ++r)
+				doTextwidth(this[r,c]);
+		}
+
+		/// <summary>
+		/// Deters <c><see cref="Cell._widthtext">Cell._widthtext</see></c> for
+		/// a specified <c><see cref="Cell"/></c>.
+		/// </summary>
+		/// <param name="cell">the <c>Cell</c> for which to set the
+		/// <c>_widthtext</c></param>
+		internal void doTextwidth(Cell cell)
+		{
+			if (cell.text == gs.Stars) // bingo.
+				cell._widthtext = _wStars;
+			else
+				cell._widthtext = YataGraphics.MeasureWidth(cell.text, Font);
+		}
+
+		/// <summary>
 		/// Lays out this <c>YataGrid</c> per
 		/// <c><see cref="Yata.doFont()">Yata.doFont()</see></c> or
 		/// <c><see cref="Yata"/>.AutosizeCols()</c> or when row(s) are
@@ -62,53 +87,45 @@ namespace yata
 		{
 			Col col = Cols[c];
 
-			int colwidth = col._widthtext + _padHoriSort;
-			int widthtext;
-
-			if (r != -1) // re-calc '_widthtext' regardless of what happens below ->
+			if (!col.UserSized) // ie. don't resize a col that user has adjusted - if it needs to be forced unflag UserSized on all cols first (eg. on reload).
 			{
-				string text;
+				int width = col._widthtext + _padHoriSort;
+				int widthtext;
 
-				int rend = r + range;
-				for (; r <= rend; ++r)
+				// find the greatest widthtext (changed) in the col ->
+				if (r != -1)
 				{
-					if ((text = this[r,c].text) == gs.Stars) // bingo.
-						widthtext = _wStars;
-					else
-						widthtext = YataGraphics.MeasureWidth(text, Font);
-
-					this[r,c]._widthtext = widthtext;
-
-					if (widthtext > colwidth)
-						colwidth = widthtext;
+					int rend = r + range;
+					for (; r <= rend; ++r)
+					{
+						if ((widthtext = this[r,c]._widthtext) > width) // TODO: Ensure that _widthtext gets calc'd before call to Colwidth()
+							width = widthtext;
+					}
 				}
-			}
 
-//			if (!isDiffedTable())
-			if (!col.UserSized)	// ie. don't resize a col that user has adjusted. If it needs to
-			{					// be forced (eg. on reload) unflag UserSized on all cols first.
-				int totalwidth = col.Width;
 
-				if ((colwidth += _padHori * 2) > totalwidth)
+				int widthcurrent = col.Width;
+
+				if ((width += _padHori * 2) > widthcurrent)
 				{
-					col.SetWidth(colwidth);
+					col.SetWidth(width);
 				}
-				else if (colwidth < totalwidth) // recalc width on the entire col
+				else if (width < widthcurrent) // recalc width on the entire col
 				{
-					if (c == 0 || _wId > colwidth)
-						colwidth = _wId;
+					if (c == 0 || _wId > width)
+						width = _wId;
 
 					for (r = 0; r != RowCount; ++r)
 					{
 						widthtext = this[r,c]._widthtext + _padHori * 2;
 
-						if (widthtext > colwidth)
-							colwidth = widthtext;
+						if (widthtext > width)
+							width = widthtext;
 					}
-					col.SetWidth(colwidth, true);
+					col.SetWidth(width, true);
 				}
 
-				if (range == 0 && totalwidth != colwidth)	// if range >0 let Calibrate() handle multiple
+				if (range == 0 && widthcurrent != width)	// if range >0 let Calibrate() handle multiple
 				{											// cols or at least the scrollers and do the UI-update
 					InitScroll();
 					Invalidator(INVALID_GRID | INVALID_COLS);
@@ -121,17 +138,6 @@ namespace yata
 				Propanel.telemetric();
 			}
 		}
-
-
-/*		/// <summary>
-		/// Checks if this <c>YataGrid</c> is an actively diffed table.
-		/// </summary>
-		/// <returns><c>true</c> if this is one of two diffed tables</returns>
-		internal bool isDiffedTable()
-		{
-			return _f._diff1 != null && _f._diff2 != null
-				&& (this == _f._diff1 || this == _f._diff2);
-		} */
 
 
 		/// <summary>

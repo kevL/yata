@@ -151,13 +151,14 @@ namespace yata
 			int c = 0;
 			if (Settings._autorder)
 			{
-				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
+				row[0].text = _r.ToString(CultureInfo.InvariantCulture);
+				Table.doTextwidth(row[0]);
 
-				if (row[c].diff)
-					row[c].diff = false;
+				if (row[0].diff)
+					row[0].diff = false;
 
-				if (row[c].loadchanged)
-					row[c].loadchanged = false;
+				if (row[0].loadchanged)
+					row[0].loadchanged = false;
 
 				// note that ReplaceTextDialog shall not replace the id-col's text
 
@@ -170,6 +171,8 @@ namespace yata
 					row[c].text = _copyr[0][c];
 				else
 					row[c].text = gs.Stars; // TODO: perhaps keep any remaining cells as they are.
+
+				Table.doTextwidth(row[c]);
 
 				if (row[c].diff)
 					row[c].diff = false;
@@ -270,13 +273,14 @@ namespace yata
 			int c = 0;
 			if (Settings._autorder)
 			{
-				row[c].text = _r.ToString(CultureInfo.InvariantCulture);
+				row[0].text = _r.ToString(CultureInfo.InvariantCulture);
+				Table.doTextwidth(row[0]);
 
-				if (row[c].diff)
-					row[c].diff = false;
+				if (row[0].diff)
+					row[0].diff = false;
 
-				if (row[c].loadchanged)
-					row[c].loadchanged = false;
+				if (row[0].loadchanged)
+					row[0].loadchanged = false;
 
 				// note that ReplaceTextDialog shall not replace the id-col's text
 
@@ -286,6 +290,7 @@ namespace yata
 			for (; c != Table.ColCount; ++c)
 			{
 				row[c].text = gs.Stars;
+				Table.doTextwidth(row[c]);
 
 				if (row[c].diff)
 					row[c].diff = false;

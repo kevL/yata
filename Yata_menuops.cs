@@ -104,6 +104,7 @@ namespace yata
 			if      (_diff1 == Table) _diff1 = null;
 			else if (_diff2 == Table) _diff2 = null;
 
+			Table.colTextwidth(0);
 			Table.Colwidth(0, 0, Table.RowCount - 1);
 			Table.MetricFrozenControls(FROZEN_COL_Id);
 

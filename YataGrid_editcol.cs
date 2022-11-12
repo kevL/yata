@@ -38,9 +38,9 @@ namespace yata
 					Cols.Insert(i + 1, col);
 					++ColCount;
 
-					for (int r = 0; r != RowCount; ++r)
+					for (int r = 0; r != RowCount; ++r) // create a new Cells array in each row ->
 					{
-						var cells = new Cell[ColCount]; // create a new Cells array in each row ->
+						var cells = new Cell[ColCount];
 						for (int c = 0; c != ColCount; ++c)
 						{
 							if (c < selc + 1)
@@ -50,8 +50,8 @@ namespace yata
 							else if (c == selc + 1)
 							{
 								cells[c] = new Cell(r,c, gs.Stars);
-								cells[c].selected = true;
 								cells[c]._widthtext = _wStars;
+								cells[c].selected = true;
 							}
 							else // (c > selc + 1)
 							{
@@ -187,6 +187,7 @@ namespace yata
 				}
 			}
 
+			colTextwidth(selc);
 			Colwidth(selc, 0, RowCount - 1);
 			InitScroll();
 			EnsureDisplayedCol(selc);

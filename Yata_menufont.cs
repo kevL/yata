@@ -122,6 +122,12 @@ namespace yata
 				{
 					table = Tabs.TabPages[tab].Tag as YataGrid;
 					table.CreateCols(true);
+
+					for (int c = 0; c != table.ColCount; ++c)
+					{
+						table.colTextwidth(c);
+					}
+
 					table.Calibrate(0, table.RowCount - 1); // font
 
 					// TODO: This is effed because the Height (at least) of each

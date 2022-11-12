@@ -587,6 +587,11 @@ namespace yata
 
 			_grid.Rows[r] = row.Clone() as Row;
 
+			for (int c = 0; c != _grid.ColCount; ++c)
+			{
+				_grid.doTextwidth(_grid[r,c]);
+			}
+
 			if (!isDiffedTable()) _grid.Calibrate(r);
 
 			_grid.ClearSelects(false, true);

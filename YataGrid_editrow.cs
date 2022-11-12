@@ -8,7 +8,7 @@ namespace yata
 	sealed partial class YataGrid
 	{
 		/// <summary>
-		/// Inserts a <c><see cref="Row"/></c> into the table.
+		/// Inserts a <c><see cref="Row"/></c> into this <c>YataGrid</c>.
 		/// </summary>
 		/// <param name="rowid">row-id to insert at</param>
 		/// <param name="fields">an array of fields</param>
@@ -16,6 +16,7 @@ namespace yata
 		/// <param name="bypassCalibrate"><c>false</c> to re-layout the grid or
 		/// <c>true</c> if <c><see cref="Calibrate()">Calibrate()</see></c> will
 		/// be done by the caller</param>
+		/// <remarks>Ensure that <paramref name="fields"/> is valid.</remarks>
 		internal void Insert(int rowid,
 							 string[] fields,
 							 Brush brush,
@@ -24,30 +25,28 @@ namespace yata
 			if (!bypassCalibrate)
 				DrawRegulator.SuspendDrawing(this);
 
-			if (fields != null)
+			var row = new Row(rowid, ColCount, brush, this);
+
+			string field;
+			for (int c = 0; c != ColCount; ++c)
 			{
-				var row = new Row(rowid, ColCount, brush, this);
+				if (c < fields.Length)
+					field = fields[c];
+				else
+					field = gs.Stars;
 
-				string field;
+				row[c] = new Cell(rowid, c, field);
+				doTextwidth(row[c]);
+			}
+
+			Rows.Insert(rowid, row);
+			++RowCount;
+
+			for (int r = rowid + 1; r != RowCount; ++r) // straighten out row._id and cell.y ->
+			{
+				++(row = Rows[r])._id;
 				for (int c = 0; c != ColCount; ++c)
-				{
-					if (c < fields.Length)
-						field = fields[c];
-					else
-						field = gs.Stars;
-
-					row[c] = new Cell(rowid, c, field);
-				}
-
-				Rows.Insert(rowid, row);
-				++RowCount;
-
-				for (int r = rowid + 1; r != RowCount; ++r) // straighten out row._id and cell.y ->
-				{
-					++(row = Rows[r])._id;
-					for (int c = 0; c != ColCount; ++c)
-						++row[c].y;
-				}
+					++row[c].y;
 			}
 
 			if (!bypassCalibrate)
@@ -93,10 +92,18 @@ namespace yata
 
 				int c = 0;
 				if (Settings._autorder)
-					row[c++] = new Cell(0,0, "0");
+				{
+					row[0] = new Cell(0,0, "0");
+					doTextwidth(row[0]);
+
+					++c;
+				}
 
 				for (; c != ColCount; ++c)
+				{
 					row[c] = new Cell(0, c, gs.Stars);
+					doTextwidth(row[c]);
+				}
 
 				Rows.Add(row);
 
