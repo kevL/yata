@@ -431,7 +431,13 @@ namespace yata
 		/// <summary>
 		/// Checks if <c><see cref="Table"/></c> is an actively diffed table.
 		/// </summary>
-		/// <returns><c>true</c> if this is one of two currently diffed tables</returns>
+		/// <returns><c>true</c> if <c>Table</c> is one of two currently diffed
+		/// <c><see cref="YataGrid">YataGrids</see></c></returns>
+		/// <remarks>See also
+		/// <list type="bullet">
+		/// <item><c><see cref="YataGrid"/>.isGridDiffed()</c></item>
+		/// <item><c><see cref="UndoRedo"/>.isDiffedTable()</c></item>
+		/// </list></remarks>
 		bool isTableDiffed()
 		{
 			return Table != null

@@ -715,9 +715,16 @@ namespace yata
 
 
 		/// <summary>
-		/// Checks if this <c>UndoRedo</c> belongs to an actively diffed table.
+		/// Checks if this <c>UndoRedo</c> belongs to an actively diffed
+		/// <c><see cref="YataGrid"/></c>.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><c>true</c> if this <c>UndoRedo</c> belongs to one of two
+		/// currently diffed tables</returns>
+		/// <remarks>See also
+		/// <list type="bullet">
+		/// <item><c><see cref="Yata"/>.isTableDiffed()</c></item>
+		/// <item><c><see cref="YataGrid"/>.isGridDiffed()</c></item>
+		/// </list></remarks>
 		bool isDiffedTable()
 		{
 			return _f._diff1 != null && _f._diff2 != null
