@@ -578,7 +578,7 @@ namespace yata
 			int r = _sel.y;
 			int c = _sel.x;
 
-			table.ChangeCellText(table[r,c], _sel.text, true); // does not do a text-check, does Invalidate
+			table.ChangeCellText(table[r,c], _sel.text); // does not do a text-check, does Invalidate
 
 			_diff1[r,c].diff =
 			_diff2[r,c].diff = false;

@@ -1124,6 +1124,21 @@ namespace yata
 
 
 		/// <summary>
+		/// Checks if this <c>YataGrid</c> is actively diffed.
+		/// </summary>
+		/// <returns><c>true</c> if this is one of two currently diffed tables</returns>
+		/// <remarks>See also
+		/// <list type="bullet">
+		/// <item><c><see cref="Yata"/>.isTableDiffed()</c></item>
+		/// <item><c><see cref="UndoRedo"/>.isDiffedTable()</c></item>
+		/// </list></remarks>
+		bool isGridDiffed()
+		{
+			return _f._diff1 != null && _f._diff2 != null
+				&& (this == _f._diff1 || this == _f._diff2);
+		}
+
+		/// <summary>
 		/// Changes a cell's text by either
 		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> or
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c>,
@@ -1142,6 +1157,8 @@ namespace yata
 		/// <c><see cref="Cell.diff">Cell.diff</see></c> flags regardless.</remarks>
 		internal bool ChangeCellText(Cell cell, Control tb)
 		{
+			//logfile.Log("YataGrid.ChangeCellText(Cell,Control)");
+
 			Restorable rest = UndoRedo.createCell(cell);
 			if (!Changed)
 			{
@@ -1165,8 +1182,11 @@ namespace yata
 				cell.text = tb.Text;
 				doTextwidth(cell);
 
-				Colwidth(cell.x, cell.y);
-				MetricFrozenControls(cell.x);
+				if (!isGridDiffed())
+				{
+					Colwidth(cell.x, cell.y);
+					MetricFrozenControls(cell.x);
+				}
 
 				if (!Changed) Changed = true;
 
@@ -1187,6 +1207,8 @@ namespace yata
 		/// <returns><c>true</c> if the text gets sanitized</returns>
 		internal bool ChangeCellText_repl(Cell cell, string text)
 		{
+			//logfile.Log("YataGrid.ChangeCellText_repl(Cell,string)");
+
 			// TODO: Optimize this for multiple calls/cells.
 
 			Restorable rest = UndoRedo.createCell(cell);
@@ -1212,8 +1234,11 @@ namespace yata
 				cell.text = text;
 				doTextwidth(cell);
 
-				Colwidth(cell.x, cell.y);
-				MetricFrozenControls(cell.x);
+				if (!isGridDiffed())
+				{
+					Colwidth(cell.x, cell.y);
+					MetricFrozenControls(cell.x);
+				}
 
 				if (!Changed) Changed = true;
 
@@ -1240,13 +1265,13 @@ namespace yata
 		/// </summary>
 		/// <param name="cell">a <c><see cref="Cell"/></c></param>
 		/// <param name="text">the text to change to</param>
-		/// <param name="bypassCalibrate"><c>true</c> to not rewidth the cell's
-		/// col</param>
 		/// <remarks>Does *not* perform text verification. A check should be
 		/// done for if the texts differ before calling this function since the
 		/// table shall be flagged <c><see cref="Changed"/></c>.</remarks>
-		internal void ChangeCellText(Cell cell, string text, bool bypassCalibrate = false)
+		internal void ChangeCellText(Cell cell, string text)
 		{
+			//logfile.Log("YataGrid.ChangeCellText(Cell,string,bool)");
+
 			// TODO: Optimize this for multiple calls/cells.
 
 			Restorable rest = UndoRedo.createCell(cell);
@@ -1269,17 +1294,17 @@ namespace yata
 			cell.text = text;
 			doTextwidth(cell);
 
-			if (!bypassCalibrate)
+			if (!isGridDiffed())
 			{
 				Colwidth(cell.x, cell.y);
 				MetricFrozenControls(cell.x);
-
-				int invalid = INVALID_GRID;
-				if (Propanel != null && Propanel.Visible)
-					invalid |= INVALID_PROP;
-
-				Invalidator(invalid);
 			}
+
+			int invalid = INVALID_GRID;
+			if (Propanel != null && Propanel.Visible)
+				invalid |= INVALID_PROP;
+
+			Invalidator(invalid);
 
 
 			rest.postext = cell.text;
