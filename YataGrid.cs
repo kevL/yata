@@ -1157,8 +1157,6 @@ namespace yata
 		/// <c><see cref="Cell.diff">Cell.diff</see></c> flags regardless.</remarks>
 		internal bool ChangeCellText(Cell cell, Control tb)
 		{
-			//logfile.Log("YataGrid.ChangeCellText(Cell,Control)");
-
 			Restorable rest = UndoRedo.createCell(cell);
 			if (!Changed)
 			{
@@ -1207,8 +1205,6 @@ namespace yata
 		/// <returns><c>true</c> if the text gets sanitized</returns>
 		internal bool ChangeCellText_repl(Cell cell, string text)
 		{
-			//logfile.Log("YataGrid.ChangeCellText_repl(Cell,string)");
-
 			// TODO: Optimize this for multiple calls/cells.
 
 			Restorable rest = UndoRedo.createCell(cell);
@@ -1270,8 +1266,6 @@ namespace yata
 		/// table shall be flagged <c><see cref="Changed"/></c>.</remarks>
 		internal void ChangeCellText(Cell cell, string text)
 		{
-			//logfile.Log("YataGrid.ChangeCellText(Cell,string,bool)");
-
 			// TODO: Optimize this for multiple calls/cells.
 
 			Restorable rest = UndoRedo.createCell(cell);
