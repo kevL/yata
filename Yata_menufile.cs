@@ -544,9 +544,13 @@ namespace yata
 
 			if (close)
 			{
+				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
+
 				TabPage lastpage = _lastpage;
 				ClosePage(Tabs.SelectedTab);
 				Tabs.SelectedTab = lastpage;
+
+				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
@@ -568,8 +572,12 @@ namespace yata
 		{
 			if (!CancelChangedTables("close"))
 			{
+				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
+
 				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
 					ClosePage(Tabs.TabPages[tab]);
+
+				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
