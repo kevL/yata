@@ -458,7 +458,7 @@ namespace yata
 			using (var ib = new Infobox(Infobox.Title_warni,
 										"Creating or deleting rows or cols is not allowed on a diffed table.",
 										null,
-										InfoboxType.Warn))
+										InfoboxType.Error))
 			{
 				ib.ShowDialog(this);
 			}
