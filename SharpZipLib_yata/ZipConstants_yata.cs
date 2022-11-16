@@ -45,7 +45,7 @@ namespace yata
 
 
 	/// <summary>
-	/// Yata needs only a few zip-specfic constants.
+	/// Yata needs only a few zip-specific constants.
 	/// </summary>
 	static class ZipConstants
 	{
