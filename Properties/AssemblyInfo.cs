@@ -20,9 +20,9 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 //[assembly: Guid("")]
 
-[assembly: AssemblyVersion("5.4.0.2")]
-[assembly: AssemblyFileVersion("5.4.0.2")]
-[assembly: AssemblyInformationalVersion("5.4.0.2")]
+[assembly: AssemblyVersion("5.4.2.2")]
+[assembly: AssemblyFileVersion("5.4.2.2")]
+[assembly: AssemblyInformationalVersion("5.4.2.2")]
 
 //[assembly: System.CLSCompliant(true)]
 
