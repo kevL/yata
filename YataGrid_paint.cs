@@ -32,19 +32,22 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				int r,c;
+				int
+					r,c,
+					r_start  = OffsetVert / HeightRow,
+					offset_y = HeightColhead - OffsetVert;
 
 				// paint backgrounds full-height/width of table ->
 
-				int offset_y = HeightColhead - OffsetVert;
-
 				// rows background - scrollable
-				var rect = new Rectangle(Left,       offset_y,
-										 WidthTable, HeightRow);
+				var rect = new Rectangle(Left, 0, WidthTable, HeightRow);
 
 				Brush brush;
-				for (r = 0; r != RowCount; ++r)
+				for (r = r_start; r != RowCount; ++r)
 				{
+					if ((rect.Y = HeightRow * r + offset_y) > Bottom)
+						break;
+
 					switch (Info)
 					{
 						case InfoType.INFO_SPELL:
@@ -59,9 +62,7 @@ namespace yata
 							brush = Rows[r]._brush;
 							break;
 					}
-
 					graphics.FillRectangle(brush, rect);
-					rect.Y += HeightRow;
 				}
 
 				// cell text - scrollable
@@ -69,7 +70,7 @@ namespace yata
 
 				int left = WidthRowhead - OffsetHori + _padHori - 1;
 
-				for (r = OffsetVert / HeightRow; r != RowCount; ++r)
+				for (r = r_start; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r + offset_y) > Bottom)
 						break;
