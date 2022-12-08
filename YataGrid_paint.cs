@@ -32,15 +32,12 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				int
-					r,c,
-					r_start  = OffsetVert / HeightRow,
-					offset_y = HeightColhead - OffsetVert;
+				int r,c, r_start = OffsetVert / HeightRow;
+				int offset_y = HeightColhead - OffsetVert;
 
-				// paint backgrounds full-height/width of table ->
-
-				// rows background - scrollable
-				var rect = new Rectangle(Left, 0, WidthTable, HeightRow);
+				// fill backgrounds ->
+				int left = WidthRowhead + FrozenPanel.Width;
+				var rect = new Rectangle(left, 0, WidthTable - left, HeightRow);
 
 				Brush brush;
 				for (r = r_start; r != RowCount; ++r)
@@ -65,22 +62,23 @@ namespace yata
 					graphics.FillRectangle(brush, rect);
 				}
 
-				// cell text - scrollable
+
+				// draw text and fill backgrounds of nondefault cells ->
 				Row row; Cell cell;
 
-				int left = WidthRowhead - OffsetHori + _padHori - 1;
+				int leftcell = WidthRowhead - OffsetHori + _padHori - 1;
 
 				for (r = r_start; r != RowCount; ++r)
 				{
 					if ((rect.Y = HeightRow * r + offset_y) > Bottom)
 						break;
 
-					rect.X = left;
+					rect.X = leftcell;
 
 					row = Rows[r];
 					for (c = 0; c != ColCount; ++c)
 					{
-						if (rect.X + (rect.Width = Cols[c].Width) > WidthRowhead)
+						if (rect.X + (rect.Width = Cols[c].Width) > left)
 						{
 							if ((cell = row[c]).state != Cell.CellState.Default)
 							{
@@ -105,43 +103,39 @@ namespace yata
 				}
 
 
-//				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
-//				if (_piColhead != null) graphics_.DrawImage(_piColhead, 0,0);
-
-//				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
-//				if (_piRowhead != null) graphics_.DrawImage(_piRowhead, 0,0);
-
-
-				// paint horizontal lines full-width of table ->
-
-				// row lines - scrollable
+				// draw horizontal lines ->
 				int y;
-				for (r = 1; r != RowCount + 1; ++r)
+				for (r = r_start + 1; r != RowCount + 1; ++r)
 				{
 					if ((y = HeightRow * r + offset_y) > Bottom)
 						break;
 
 					if (y > HeightColhead)
 						graphics.DrawLine(Pencils.DarkLine,
-										  Left,       y,
-										  WidthTable, y);
+										  left,  y,
+										  Width, y);
 				}
 
-
-				// paint vertical lines full-height of table ->
-
-				// col lines - scrollable
+				// draw vertical lines ->
+				left += 1;
 				int x = WidthRowhead - OffsetHori;
 				for (c = 0; c != ColCount; ++c)
 				{
 					if ((x += Cols[c].Width) > Right)
 						break;
 
-					if (x > WidthRowhead)
+					if (x > left)
 						graphics.DrawLine(Pencils.DarkLine,
 										  x, Top,
 										  x, Bottom);
 				}
+
+
+//				using (var pi = new Bitmap(_bluePi, new Size(WidthTable, HeightColhead)))
+//				if (_piColhead != null) graphics_.DrawImage(_piColhead, 0,0);
+
+//				using (var pi = new Bitmap(_bluePi, new Size(WidthRowhead, HeightTable)))
+//				if (_piRowhead != null) graphics_.DrawImage(_piRowhead, 0,0);
 			}
 		}
 
