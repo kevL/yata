@@ -63,10 +63,12 @@ namespace yata
 				}
 
 
+				int x = WidthRowhead - OffsetHori;
+
 				// draw text and fill backgrounds of nondefault cells ->
 				Row row; Cell cell;
 
-				int leftcell = WidthRowhead - OffsetHori + _padHori - 1;
+				int leftcell = x + _padHori - 1;
 
 				for (r = r_start; r != RowCount; ++r)
 				{
@@ -118,7 +120,6 @@ namespace yata
 
 				// draw vertical lines ->
 				left += 1;
-				int x = WidthRowhead - OffsetHori;
 				for (c = 0; c != ColCount; ++c)
 				{
 					if ((x += Cols[c].Width) > Right)
