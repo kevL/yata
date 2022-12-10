@@ -106,6 +106,7 @@ namespace yata
 
 
 				// draw horizontal lines ->
+				int val = Math.Min(Width, WidthTable);
 				int y;
 				for (r = r_start + 1; r != RowCount + 1; ++r)
 				{
@@ -114,11 +115,12 @@ namespace yata
 
 					if (y > HeightColhead)
 						graphics.DrawLine(Pencils.DarkLine,
-										  left,  y,
-										  Width, y);
+										  left, y,
+										  val,  y);
 				}
 
 				// draw vertical lines ->
+				val = Math.Min(Height, HeightTable);
 				left += 1;
 				for (c = 0; c != ColCount; ++c)
 				{
@@ -127,8 +129,8 @@ namespace yata
 
 					if (x > left)
 						graphics.DrawLine(Pencils.DarkLine,
-										  x, Top,
-										  x, Bottom);
+										  x, HeightColhead,
+										  x, val);
 				}
 
 
