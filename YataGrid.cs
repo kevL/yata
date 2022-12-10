@@ -53,9 +53,19 @@ namespace yata
 
 
 		#region Fields (static)
+		/// <summary>
+		/// The current width of the rowhead-panel.
+		/// </summary>
 		internal static int WidthRowhead;
+
+		/// <summary>
+		/// The current height of the colhead-panel.
+		/// </summary>
 		internal static int HeightColhead;
 
+		/// <summary>
+		/// The height of a single row based on the current table-font.
+		/// </summary>
 		static int HeightRow;
 
 		const int SORT_DES = -1;
