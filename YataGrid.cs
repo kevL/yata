@@ -727,12 +727,11 @@ namespace yata
 			SelectRow(selr);
 			EnsureDisplayedRow(selr);
 
-			int invalid = YataGrid.INVALID_GRID
-						| YataGrid.INVALID_FROZ
-						| YataGrid.INVALID_ROWS;
-
+			int invalid = INVALID_GRID
+						| INVALID_FROZ
+						| INVALID_ROWS;
 			if (Propanel != null && Propanel.Visible)
-				invalid |= YataGrid.INVALID_PROP;
+				invalid |= INVALID_PROP;
 
 			Invalidator(invalid);
 		}
@@ -773,7 +772,7 @@ namespace yata
 //			if (Propanel != null && Propanel.Visible)
 //				invalid |= INVALID_PROP;				// <- doesn't seem to be needed.
 
-			Invalidator(YataGrid.INVALID_COLS | YataGrid.INVALID_GRID);
+			Invalidator(INVALID_COLS | INVALID_GRID);
 		}
 
 
@@ -1536,7 +1535,7 @@ namespace yata
 				_f._replacer.EnableReplacedOps(false);
 
 //			if (activetable)
-			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			Invalidator(INVALID_GRID | INVALID_FROZ);
 		}
 
 		/// <summary>
@@ -1548,7 +1547,7 @@ namespace yata
 		internal void ClearReplaced(Cell cell)
 		{
 			cell.replaced = false;
-			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			Invalidator(INVALID_GRID | INVALID_FROZ);
 		}
 
 		/// <summary>
@@ -1669,12 +1668,12 @@ namespace yata
 				}
 			}
 
-//			int invalid = YataGrid.INVALID_GRID
-//						| YataGrid.INVALID_FROZ
-//						| YataGrid.INVALID_ROWS
-//						| YataGrid.INVALID_COLS;
+//			int invalid = INVALID_GRID
+//						| INVALID_FROZ
+//						| INVALID_ROWS
+//						| INVALID_COLS;
 //			if (Propanel != null && Propanel.Visible)
-//				invalid |= YataGrid.INVALID_PROP;
+//				invalid |= INVALID_PROP;
 
 //			Invalidator(invalid);
 //			}
@@ -1716,7 +1715,7 @@ namespace yata
 
 			_f.EnableGotoLoadchanged(false);
 
-			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			Invalidator(INVALID_GRID | INVALID_FROZ);
 		}
 
 		/// <summary>
@@ -1728,7 +1727,7 @@ namespace yata
 		internal void ClearLoadchanged(Cell cell)
 		{
 			cell.loadchanged = false;
-			Invalidator(YataGrid.INVALID_GRID | YataGrid.INVALID_FROZ);
+			Invalidator(INVALID_GRID | INVALID_FROZ);
 		}
 
 		/// <summary>
@@ -1849,12 +1848,12 @@ namespace yata
 				}
 			}
 
-//			int invalid = YataGrid.INVALID_GRID
-//						| YataGrid.INVALID_FROZ
-//						| YataGrid.INVALID_ROWS
-//						| YataGrid.INVALID_COLS;
+//			int invalid = INVALID_GRID
+//						| INVALID_FROZ
+//						| INVALID_ROWS
+//						| INVALID_COLS;
 //			if (Propanel != null && Propanel.Visible)
-//				invalid |= YataGrid.INVALID_PROP;
+//				invalid |= INVALID_PROP;
 
 //			Invalidator(invalid);
 //			}
@@ -2271,12 +2270,12 @@ namespace yata
 						}
 					}
 
-					int invalid = YataGrid.INVALID_GRID
-								| YataGrid.INVALID_FROZ
-								| YataGrid.INVALID_ROWS
-								| YataGrid.INVALID_COLS;
+					int invalid = INVALID_GRID
+								| INVALID_FROZ
+								| INVALID_ROWS
+								| INVALID_COLS;
 					if (Propanel != null && Propanel.Visible)
-						invalid |= YataGrid.INVALID_PROP;
+						invalid |= INVALID_PROP;
 
 					Invalidator(invalid);
 					Update();

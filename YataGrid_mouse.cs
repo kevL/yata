@@ -823,7 +823,9 @@ namespace yata
 
 							if (display) EnsureDisplayedRow(click_r);
 
-							int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+							int invalid = INVALID_GRID
+										| INVALID_FROZ
+										| INVALID_ROWS;
 							if (Propanel != null && Propanel.Visible)
 								invalid |= INVALID_PROP;
 
@@ -842,7 +844,9 @@ namespace yata
 								SelectRow(click_r);
 								EnsureDisplayedRow(click_r);
 
-								int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+								int invalid = INVALID_GRID
+											| INVALID_FROZ
+											| INVALID_ROWS;
 								if (Propanel != null && Propanel.Visible)
 									invalid |= INVALID_PROP;
 
@@ -858,7 +862,9 @@ namespace yata
 					ClearSelects();
 					ClearSelects_sync();
 
-					int invalid = INVALID_GRID | INVALID_FROZ | INVALID_ROWS;
+					int invalid = INVALID_GRID
+								| INVALID_FROZ
+								| INVALID_ROWS;
 					if (Propanel != null && Propanel.Visible)
 						invalid |= INVALID_PROP;
 
