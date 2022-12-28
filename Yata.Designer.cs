@@ -178,6 +178,7 @@ namespace yata
 		ToolStripSeparator separator_37;
 		ToolStripSeparator separator_38;
 		ToolStripSeparator separator_39;
+		ToolStripSeparator separator_40;
 
 		internal ContextMenuStrip _contextRo;
 		ToolStripMenuItem rowit_Header;
@@ -201,6 +202,7 @@ namespace yata
 		ToolStripMenuItem cellit_Upper;
 		ToolStripMenuItem cellit_MergeCe;
 		ToolStripMenuItem cellit_MergeRo;
+		ToolStripMenuItem cellit_Selectrow;
 		ToolStripMenuItem cellit_Input;
 		ToolStripMenuItem cellit_Input_zip;
 		ToolStripMenuItem cellit_Strref;
@@ -418,6 +420,8 @@ namespace yata
 			this.cellit_MergeCe = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_MergeRo = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_28 = new System.Windows.Forms.ToolStripSeparator();
+			this.cellit_Selectrow = new System.Windows.Forms.ToolStripMenuItem();
+			this.separator_40 = new System.Windows.Forms.ToolStripSeparator();
 			this.cellit_Strref = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Strref_talktable = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellit_Strref_custom = new System.Windows.Forms.ToolStripMenuItem();
@@ -1773,6 +1777,8 @@ namespace yata
 			this.cellit_MergeCe,
 			this.cellit_MergeRo,
 			this.separator_28,
+			this.cellit_Selectrow,
+			this.separator_40,
 			this.cellit_Strref,
 			this.cellit_Input,
 			this.cellit_Input_zip});
@@ -1862,6 +1868,18 @@ namespace yata
 			// 
 			this.separator_28.Name = "separator_28";
 			this.separator_28.Size = new System.Drawing.Size(170, 6);
+			// 
+			// cellit_Selectrow
+			// 
+			this.cellit_Selectrow.Name = "cellit_Selectrow";
+			this.cellit_Selectrow.Size = new System.Drawing.Size(173, 22);
+			this.cellit_Selectrow.Text = "select row";
+			this.cellit_Selectrow.Click += new System.EventHandler(this.cellclick_Selectrow);
+			// 
+			// separator_40
+			// 
+			this.separator_40.Name = "separator_40";
+			this.separator_40.Size = new System.Drawing.Size(170, 6);
 			// 
 			// cellit_Strref
 			// 

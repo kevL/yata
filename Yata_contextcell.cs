@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -8,6 +9,16 @@ namespace yata
 {
 	sealed partial class Yata
 	{
+		#region Fields
+		List<string> Strrefheads = new List<string>();
+
+		internal string _strref; // the strref assigned by 'TalkDialog'
+
+		int _strInt;	// cache for cell-context's dropdown functs
+		Cell _sel;		// cache for cell-context's dropdown functs
+		#endregion Fields
+
+
 		#region Methods (cell)
 		/// <summary>
 		/// Shows the RMB-context on a cell for single-cell edit operations.
@@ -35,6 +46,8 @@ namespace yata
 
 			cellit_Strref .Enabled = isStrrefEnabled();
 
+
+			cellit_Selectrow.Text = "Select row @ id " + _sel.y;
 
 			cellit_Input_zip.Visible = false;
 
@@ -464,7 +477,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="cellit_Copy"/></c></item>
-		/// <item><c><see cref="cellit_Cut"/></c></item>
+		/// <item><c><see cref="cellclick_Cut()">cellclick_Cut()</see></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		void cellclick_Copy(object sender, EventArgs e)
@@ -507,7 +520,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="cellit_Clear"/></c></item>
-		/// <item><c><see cref="cellit_Cut"/></c></item>
+		/// <item><c><see cref="cellclick_Cut()">cellclick_Cut()</see></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
 		void cellclick_Delete(object sender, EventArgs e)
@@ -639,6 +652,28 @@ namespace yata
 			// - store the row's changed state to 'rPos' in the Restorable
 			rest.rPos = table.Rows[r].Clone() as Row;
 			table._ur.Push(rest);
+		}
+
+
+		/// <summary>
+		/// Handles a select-row operation.
+		/// </summary>
+		/// <param name="sender"><c><see cref="cellit_Selectrow"/></c></param>
+		/// <param name="e"></param>
+		void cellclick_Selectrow(object sender, EventArgs e)
+		{
+			Table.ClearSelects();
+
+			Table.SelectRow(_sel.y);
+
+			int invalid = YataGrid.INVALID_GRID
+						| YataGrid.INVALID_FROZ
+						| YataGrid.INVALID_ROWS;
+
+			if (Table.Propanel != null && Table.Propanel.Visible)
+				invalid |= YataGrid.INVALID_PROP;
+
+			Table.Invalidator(invalid);
 		}
 
 

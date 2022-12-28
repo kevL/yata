@@ -152,11 +152,6 @@ namespace yata
 		/// </summary>
 		internal bool IsMin;
 
-		List<string> Strrefheads = new List<string>();
-		internal string _strref; // the strref assigned by 'TalkDialog'
-		int _strInt;	// cache for cell-context's dropdown functs
-		Cell _sel;		// cache for cell-context's dropdown functs
-
 		internal int _track_x = -1; // tracks last mouseover coords ->
 		internal int _track_y = -1;
 
