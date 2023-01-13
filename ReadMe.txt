@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2022 december 27
+2023 january 12
 kevL's
-ver 5.4.3.0
+ver 5.4.3.1
 
 c# source .net 3.5
 https://github.com/kevL/yata
