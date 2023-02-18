@@ -23,7 +23,7 @@ namespace yata
 
 		#region cTor
 		/// <summary>
-		/// And NwN2 Data compatible Zipfile.
+		/// An NwN2 Data compatible Zipfile.
 		/// </summary>
 		/// <param name="file"></param>
 		internal ZipFile(FileStream file)
@@ -68,7 +68,7 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// 
+		/// Creates an array of <c><see cref="ZipEntry">ZipEntries</see></c>.
 		/// </summary>
 		void ReadEntries()
 		{
@@ -83,7 +83,7 @@ namespace yata
 
 
 			// Search for the End Of Central Directory. When a zip comment is
-			// present the directory will start earlier
+			// present the directory will start earlier.
 			//
 			// The search is limited to 64K which is the maximum size of a
 			// trailing comment field to aid speed. This should be compatible
@@ -99,7 +99,7 @@ namespace yata
 			// read end of central directory record
 			ushort thisDiskNumber            = _file.ReadLEUshort();
 			ushort startCentralDirDisk       = _file.ReadLEUshort();
-			ulong  entriesForThisDisk        = _file.ReadLEUshort();	//logfile.Log(". entriesForThisDisk= " + entriesForThisDisk);
+			ulong  entriesForThisDisk        = _file.ReadLEUshort(); //logfile.Log(". entriesForThisDisk= " + entriesForThisDisk);
 			ulong  entriesForWholeCentralDir = _file.ReadLEUshort();
 			ulong  centralDirSize            = _file.ReadLEUint();
 			long   offsetOfCentralDir        = _file.ReadLEUint();
@@ -108,7 +108,7 @@ namespace yata
 
 			_file.Seek(OffsetOfFirstEntry + offsetOfCentralDir, SeekOrigin.Begin);
 
-			for (ulong i = 0; i < entriesForThisDisk; i++)
+			for (ulong i = 0; i < entriesForThisDisk; ++i)
 			{
 //				logfile.Log("i= " + i);
 
