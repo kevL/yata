@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 january 12
+2023 january 25
 kevL's
 ver 5.4.3.1
 
@@ -914,7 +914,7 @@ press Escape or right-click on the panel. Note that clicking elsewhere causes
 the panel to lose focus and cancel your current edit.
 
 Advanced: Note that it is possible to change the ID-value of a row in the
-Property Panel. It is recommended however to use 2da Ops->Order row ids instead
+Property Panel. It is recommended however to use 2da Ops|Order row ids instead
 unless you have special reason not to. The value of a currently frozen col's
 cell can also be changed this way (but, note that such a value could be
 changed by unfreezing the col and editing the cell directly).
