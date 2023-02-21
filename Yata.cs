@@ -537,50 +537,53 @@ namespace yata
 
 				_fileresult = FileWatcherDialog.Output.non;
 
-				if (!File.Exists(Table.Fullpath))
+				if (Table != null) // safety. There appears to be a bug when closing a tabpage ... (the obscuration panel doesn't go away and it hides remaining tabs/tables)
 				{
-					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileDeleted))
-						fwd.ShowDialog(this);
-				}
-				else if (File.GetLastWriteTime(Table.Fullpath) != Table.Lastwrite)
-				{
-					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileChanged))
-						fwd.ShowDialog(this);
-				}
+					if (!File.Exists(Table.Fullpath))
+					{
+						using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileDeleted))
+							fwd.ShowDialog(this);
+					}
+					else if (File.GetLastWriteTime(Table.Fullpath) != Table.Lastwrite)
+					{
+						using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileChanged))
+							fwd.ShowDialog(this);
+					}
 
-				//logfile.Log(". _fileresult= " + _fileresult);
-				switch (_fileresult)
-				{
-//					case FileWatcherDialog.Output.non: break;
+					//logfile.Log(". _fileresult= " + _fileresult);
+					switch (_fileresult)
+					{
+//						case FileWatcherDialog.Output.non: break;
 
-					case FileWatcherDialog.Output.Cancel:
-						Table.Readonly = false;
-						Table.Changed  = true;
+						case FileWatcherDialog.Output.Cancel:
+							Table.Readonly = false;
+							Table.Changed  = true;
 
-						if (File.Exists(Table.Fullpath))
-							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
-						break;
+							if (File.Exists(Table.Fullpath))
+								Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+							break;
 
-					case FileWatcherDialog.Output.Close2da:
-						Table.Changed = false;					// <- bypass Close warn
-						fileclick_ClosePage(null, EventArgs.Empty);
-						break;
+						case FileWatcherDialog.Output.Close2da:
+							Table.Changed = false;					// <- bypass Close warn
+							fileclick_ClosePage(null, EventArgs.Empty);
+							break;
 
-					case FileWatcherDialog.Output.Resave:
-						Table.Changed = false;					// <- bypass Close warn
-						fileclick_Save(null, EventArgs.Empty);
+						case FileWatcherDialog.Output.Resave:
+							Table.Changed = false;					// <- bypass Close warn
+							fileclick_Save(null, EventArgs.Empty);
 
-						if (File.Exists(Table.Fullpath))
-							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
-						break;
+							if (File.Exists(Table.Fullpath))
+								Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+							break;
 
-					case FileWatcherDialog.Output.Reload:
-						Table.Changed = false;					// <- bypass Close warn
-						fileclick_Reload(null, EventArgs.Empty);
+						case FileWatcherDialog.Output.Reload:
+							Table.Changed = false;					// <- bypass Close warn
+							fileclick_Reload(null, EventArgs.Empty);
 
-						if (Table != null && File.Exists(Table.Fullpath)) // Table can fail on reload
-							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
-						break;
+							if (Table != null && File.Exists(Table.Fullpath)) // Table can fail on reload
+								Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
+							break;
+					}
 				}
 
 				_bypassVerifyFile = false;
