@@ -609,7 +609,7 @@ namespace yata
 			this.it_CloseAll.Name = "it_CloseAll";
 			this.it_CloseAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
 			this.it_CloseAll.Size = new System.Drawing.Size(181, 22);
-			this.it_CloseAll.Text = "Close &all";
+			this.it_CloseAll.Text = "C&lose all";
 			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
 			// 
 			// separator_2
