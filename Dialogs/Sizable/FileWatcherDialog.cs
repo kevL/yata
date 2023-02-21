@@ -129,7 +129,7 @@ namespace yata
 
 
 			_t1.Tick += t1_OnTick;
-			_t1.Interval = 330; // enable button delay.
+			_t1.Interval = 330; // buttons-enabled delay.
 			_t1.Start();
 
 			_t2.Tick += t2_OnTick;
