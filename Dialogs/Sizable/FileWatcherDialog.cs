@@ -18,7 +18,7 @@ namespace yata
 		/// Deters whether this <c>FileWatcherDialog</c> needs to deal with a
 		/// 2da-file that was deleted or changed.
 		/// </summary>
-		internal enum FwdType
+		internal enum Input
 		{
 			FileDeleted, // file's not there, Jim.
 			FileChanged  // file's writestamp changed
@@ -28,7 +28,7 @@ namespace yata
 		/// The result that this <c>FileWatcherDialog</c> returns in
 		/// <c><see cref="OnFormClosing()">OnFormClosing()</see></c>.
 		/// </summary>
-		internal enum FwdResult
+		internal enum Output
 		{
 			non,
 			Cancel,
@@ -57,13 +57,13 @@ namespace yata
 		/// Used to deter this <c>FileWatcherDialog's</c> current
 		/// <c><see cref="bu_Action"/></c> operation.
 		/// <list type="bullet">
-		/// <item><c><see cref="FwdType.FileDeleted">Fwd.FileDeleted</see></c> -
+		/// <item><c><see cref="Input.FileDeleted">Input.FileDeleted</see></c> -
 		/// <c><see cref="Yata.fileclick_Save()">Yata.fileclick_Save()</see></c></item>
-		/// <item><c><see cref="FwdType.FileChanged">Fwd.FileChanged</see></c> -
+		/// <item><c><see cref="Input.FileChanged">Input.FileChanged</see></c> -
 		/// <c><see cref="Yata.fileclick_Reload()">Yata.fileclick_Reload()</see></c></item>
 		/// </list>
 		/// </summary>
-		internal FwdType _fwdType;
+		Input _input;
 
 		/// <summary>
 		/// A <c>Timer</c> that enables the <c>Buttons</c>.
@@ -84,14 +84,14 @@ namespace yata
 		/// cTor. Instantiates this <c>FileWatcherDialog</c>.
 		/// </summary>
 		/// <param name="grid">the <c><see cref="YataGrid"/></c> being watched</param>
-		/// <param name="fwdType"><c><see cref="FwdType"/></c>
+		/// <param name="input"><c><see cref="Input"/></c>
 		/// <list type="bullet">
-		/// <item><c><see cref="FwdType.FileDeleted">Fwd.FileDeleted</see></c></item>
-		/// <item><c><see cref="FwdType.FileChanged">Fwd.FileChanged</see></c></item>
+		/// <item><c><see cref="Input.FileDeleted">Input.FileDeleted</see></c></item>
+		/// <item><c><see cref="Input.FileChanged">Input.FileChanged</see></c></item>
 		/// </list></param>
 		internal FileWatcherDialog(
 				YataGrid grid,
-				FwdType fwdType)
+				Input input)
 		{
 			//logfile.Log("FileWatcherDialog.cTor()");
 			_f = (_grid = grid)._f; // 'YataDialog._f' is used only to set UI parameters.
@@ -100,14 +100,14 @@ namespace yata
 			Initialize(METRIC_NON);
 
 			string text = String.Empty;
-			switch (_fwdType = fwdType)
+			switch (_input = input)
 			{
-				case FwdType.FileDeleted:
+				case Input.FileDeleted:
 					text           = FILE_Del;
 					bu_Action.Text = "Resave";
 					break;
 
-				case FwdType.FileChanged:
+				case Input.FileChanged:
 					text           = FILE_Wsc;
 					bu_Action.Text = "Reload";
 					break;
@@ -161,30 +161,30 @@ namespace yata
 		/// <summary>
 		/// Watches the 2da-file on the hardrive for changes while this
 		/// <c>FileWatcherDialog</c> is open and changes
-		/// <c><see cref="_fwdType"/></c> etc as appropriate.
+		/// <c><see cref="_input"/></c> etc as appropriate.
 		/// </summary>
 		/// <param name="sender"><c><see cref="_t2"/></c></param>
 		/// <param name="e"></param>
 		void t2_OnTick(object sender, EventArgs e)
 		{
-			switch (_fwdType)
+			switch (_input)
 			{
-				case FwdType.FileChanged:
+				case Input.FileChanged:
 					if (!File.Exists(_grid.Fullpath))
 					{
-						_fwdType = FwdType.FileDeleted;
+						_input = Input.FileDeleted;
 
 						la_Info  .Text = FILE_Del;
 						bu_Action.Text = "Resave";
 					}
 					break;
 
-				case FwdType.FileDeleted:
+				case Input.FileDeleted:
 					if (File.Exists(_grid.Fullpath))
 					{
 						if (File.GetLastWriteTime(_grid.Fullpath) != _grid.Lastwrite)
 						{
-							_fwdType = FwdType.FileChanged;
+							_input = Input.FileChanged;
 
 							la_Info  .Text = FILE_Wsc;
 							bu_Action.Text = "Reload";
@@ -237,22 +237,22 @@ namespace yata
 //				case DialogResult.Ignore: break;				// t2_OnTick() - 2da-file was moved out and back with the same timestamp.
 
 				case DialogResult.Cancel:						// bu_Cancel
-					_grid._f._fileresult = FwdResult.Cancel;
+					_grid._f._fileresult = Output.Cancel;
 					break;
 
 				case DialogResult.Abort:						// bu_Close2da
-					_grid._f._fileresult = FwdResult.Close2da;
+					_grid._f._fileresult = Output.Close2da;
 					break;
 
 				case DialogResult.Yes:							// bu_Action
-					switch (_fwdType)
+					switch (_input)
 					{
-						case FwdType.FileDeleted:
-							_grid._f._fileresult = FwdResult.Resave;
+						case Input.FileDeleted:
+							_grid._f._fileresult = Output.Resave;
 							break;
 
-						case FwdType.FileChanged:
-							_grid._f._fileresult = FwdResult.Reload;
+						case Input.FileChanged:
+							_grid._f._fileresult = Output.Reload;
 							break;
 					}
 					break;

@@ -187,7 +187,7 @@ namespace yata
 		/// A result returned by
 		/// <c><see cref="FileWatcherDialog"/>.OnFormClosing()</c>.
 		/// </summary>
-		internal FileWatcherDialog.FwdResult _fileresult;
+		internal FileWatcherDialog.Output _fileresult;
 
 
 		/// <summary>
@@ -535,25 +535,25 @@ namespace yata
 			{
 				_bypassVerifyFile = true; // bypass this funct when the FileWatcherDialog closes and this form's Activate event fires.
 
-				_fileresult = FileWatcherDialog.FwdResult.non;
+				_fileresult = FileWatcherDialog.Output.non;
 
 				if (!File.Exists(Table.Fullpath))
 				{
-					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.FwdType.FileDeleted))
+					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileDeleted))
 						fwd.ShowDialog(this);
 				}
 				else if (File.GetLastWriteTime(Table.Fullpath) != Table.Lastwrite)
 				{
-					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.FwdType.FileChanged))
+					using (var fwd = new FileWatcherDialog(Table, FileWatcherDialog.Input.FileChanged))
 						fwd.ShowDialog(this);
 				}
 
 				//logfile.Log(". _fileresult= " + _fileresult);
 				switch (_fileresult)
 				{
-//					case FileWatcherDialog.FwdResult.non: break;
+//					case FileWatcherDialog.Output.non: break;
 
-					case FileWatcherDialog.FwdResult.Cancel:
+					case FileWatcherDialog.Output.Cancel:
 						Table.Readonly = false;
 						Table.Changed  = true;
 
@@ -561,12 +561,12 @@ namespace yata
 							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
 						break;
 
-					case FileWatcherDialog.FwdResult.Close2da:
+					case FileWatcherDialog.Output.Close2da:
 						Table.Changed = false;					// <- bypass Close warn
 						fileclick_ClosePage(null, EventArgs.Empty);
 						break;
 
-					case FileWatcherDialog.FwdResult.Resave:
+					case FileWatcherDialog.Output.Resave:
 						Table.Changed = false;					// <- bypass Close warn
 						fileclick_Save(null, EventArgs.Empty);
 
@@ -574,7 +574,7 @@ namespace yata
 							Table.Lastwrite = File.GetLastWriteTime(Table.Fullpath);
 						break;
 
-					case FileWatcherDialog.FwdResult.Reload:
+					case FileWatcherDialog.Output.Reload:
 						Table.Changed = false;					// <- bypass Close warn
 						fileclick_Reload(null, EventArgs.Empty);
 
