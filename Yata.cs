@@ -1321,13 +1321,13 @@ namespace yata
 		{
 			var table = tab.Tag as YataGrid;
 
-			table.Dispose();
-
-			if      (_diff1 == table) _diff1 = null;
-			else if (_diff2 == table) _diff2 = null;
+			if      (table == _diff1) _diff1 = null;
+			else if (table == _diff2) _diff2 = null;
 
 			if (_fdiffer != null && _diff1 == null && _diff2 == null)
 				_fdiffer.Close();
+
+			table.Dispose();
 
 			Tabs.TabPages.Remove(tab);
 			tab.Dispose();
