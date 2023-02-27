@@ -537,7 +537,11 @@ namespace yata
 
 				_fileresult = FileWatcherDialog.Output.non;
 
-				if (Table != null) // safety. There appears to be a bug when closing a tabpage ... (the obscuration panel doesn't go away and it hides remaining tabs/tables)
+				// There appears to be a bug when closing the form or perhaps
+				// just a tabpage but is cancelled ... the obscuration panel
+				// doesn't go away (the remaining tabs/tables remain obscured)
+				// so add a safety here ->
+				if (Table != null) // safety.
 				{
 					if (!File.Exists(Table.Fullpath))
 					{
