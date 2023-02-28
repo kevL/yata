@@ -1335,6 +1335,7 @@ namespace yata
 				_fdiffer.Close();
 
 			table.Dispose();
+			table = null; // safety for VerifyCurrentFileState()
 
 			Tabs.TabPages.Remove(tab);
 			tab.Dispose();
