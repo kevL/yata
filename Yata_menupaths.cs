@@ -16,7 +16,20 @@ namespace yata
 		/// <returns></returns>
 		internal static string GetFileFilter(string ext)
 		{
-			return "2da files (*." + ext + ")|*." + ext + "|All files (*.*)|*.*";
+			string file;
+			switch (ext)
+			{
+				default:    file = "2da";            break;
+				case "mdb": file = "Model";          break;
+				case "nss": file = "NwScript";       break;
+				case "sef": file = "Special Effect"; break;
+				case "tga": file = "Tga";            break;
+				case "tlk": file = "Tlk";            break;
+				case "uti": file = "Item Resource";  break;
+				case "wav": file = "Wave";           break;
+				case "zip": file = "Zip";            break;
+			}
+			return file + " files (*." + ext + ")|*." + ext + "|All files (*.*)|*.*";
 		}
 
 		/// <summary>
