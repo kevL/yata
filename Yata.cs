@@ -1419,7 +1419,8 @@ namespace yata
 		#region Methods (statusbar)
 		/// <summary>
 		/// Mouseover cells prints table-cords plus PathInfo to the statusbar if
-		/// a relevant 2da (ie. Crafting, Spells, Feat) is loaded.
+		/// a relevant 2da (ie. Crafting, Spells, Feat, Classes, Baseitems) is
+		/// loaded.
 		/// </summary>
 		/// <param name="cords"><c>null</c> to clear statusbar-cords and
 		/// -pathinfo</param>
