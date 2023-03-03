@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 february 28
+2023 march 2
 kevL's
 ver 5.4.5.0
 
@@ -536,6 +536,15 @@ dirpreset=   another path for the Open ... @ folder dialog
 dirpreset=   etc. (there can be as many or as few dirpresets as you like)
 gradient=    "true" (without quotes) to draw the colhead bar with gradient
              colors
+icondir=     a path without quotes to the parent directory of your stock NwN2
+             icon files. Eg, "C:\Neverwinter Nights 2\UI\default\images"
+             (without quotes). This allows Yata to look in the subfolders
+             "icons", "icons_x1", and "icons_x2" for TGA-icons to display on the
+             statusbar when the cursor hovers over cells of the IconResRef col
+             in Spells.2da and the ICON col in Feat.2da.
+icondiralt=  a path without quotes to another icon directory in which you can
+             have non-stock, NwN2-compatible TGA-icons. This directory has
+             priority over "icondir=" and subfolders will not be considered.
 instantgoto= "true" (without quotes) causes the current table to select a row as
              digits are typed in the goto-box. If false [Enter] needs to be
              pressed to select a row after digits are typed
