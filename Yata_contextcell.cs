@@ -48,6 +48,7 @@ namespace yata
 
 
 			cellit_Selectrow.Text = "Select row @ id " + _sel.y;
+			cellit_Copyrowid.Text = "Copy row id " + Table.Rows[_sel.y]._cells[0].text;
 
 			cellit_Input_zip.Visible = false;
 
@@ -674,6 +675,16 @@ namespace yata
 				invalid |= YataGrid.INVALID_PROP;
 
 			Table.Invalidator(invalid);
+		}
+
+		/// <summary>
+		/// Handles a copy-rowid operation.
+		/// </summary>
+		/// <param name="sender"><c><see cref="cellit_Copyrowid"/></c></param>
+		/// <param name="e"></param>
+		void cellclick_Copyrowid(object sender, EventArgs e)
+		{
+			ClipboardService.SetText(Table.Rows[_sel.y]._cells[0].text);
 		}
 
 
