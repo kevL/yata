@@ -1344,6 +1344,15 @@ namespace yata
 			tab.Dispose();
 
 			YataGrid.MetricStaticHeads(this);
+
+			if (Table == null) // clear the statusbar if closed by [F4] ->
+			{
+				_track_x = _track_y = -1;
+				statbar_Cords.Text =
+				statbar_Info .Text = String.Empty;
+
+				ClearIconResref();
+			}
 		}
 
 		/// <summary>
