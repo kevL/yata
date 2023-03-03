@@ -72,11 +72,22 @@ namespace yata
 
 		#region Handlers
 		/// <summary>
+		/// Saves current text to Settings.Cfg file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_Save(object sender, EventArgs e)
+		{
+			click_Okay(null, EventArgs.Empty);
+		}
+
+		/// <summary>
 		/// Writes file and closes this <c>SettingsEditor</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="bu_Okay"/></c></item>
+		/// <item><c>null</c> - <c><see cref="bu_Save"/></c></item>
 		/// <item><c>null</c> - <c>[Ctrl+s]</c></item>
 		/// </list></param>
 		/// <param name="e"></param>

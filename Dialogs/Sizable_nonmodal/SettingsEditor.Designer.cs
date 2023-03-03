@@ -9,17 +9,19 @@ namespace yata
 		#region Designer
 		RichTextBox rt_Settings;
 		Panel pa_Buttons;
-		Button bu_Cancel;
-		Button bu_Okay;
 		Button bu_Insert;
+		Button bu_Save;
+		Button bu_Okay;
+		Button bu_Cancel;
 
 		private void InitializeComponent()
 		{
 			this.rt_Settings = new System.Windows.Forms.RichTextBox();
 			this.pa_Buttons = new System.Windows.Forms.Panel();
 			this.bu_Insert = new System.Windows.Forms.Button();
-			this.bu_Cancel = new System.Windows.Forms.Button();
+			this.bu_Save = new System.Windows.Forms.Button();
 			this.bu_Okay = new System.Windows.Forms.Button();
+			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.pa_Buttons.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -40,8 +42,9 @@ namespace yata
 			// pa_Buttons
 			// 
 			this.pa_Buttons.Controls.Add(this.bu_Insert);
-			this.pa_Buttons.Controls.Add(this.bu_Cancel);
+			this.pa_Buttons.Controls.Add(this.bu_Save);
 			this.pa_Buttons.Controls.Add(this.bu_Okay);
+			this.pa_Buttons.Controls.Add(this.bu_Cancel);
 			this.pa_Buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.pa_Buttons.Location = new System.Drawing.Point(0, 423);
 			this.pa_Buttons.Margin = new System.Windows.Forms.Padding(0);
@@ -63,30 +66,42 @@ namespace yata
 			this.bu_Insert.UseVisualStyleBackColor = true;
 			this.bu_Insert.Click += new System.EventHandler(this.click_Insert);
 			// 
-			// bu_Cancel
+			// bu_Save
 			// 
-			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(511, 5);
-			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(75, 26);
-			this.bu_Cancel.TabIndex = 2;
-			this.bu_Cancel.Text = "cancel";
-			this.bu_Cancel.UseVisualStyleBackColor = true;
-			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
+			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Save.Location = new System.Drawing.Point(336, 5);
+			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Save.Name = "bu_Save";
+			this.bu_Save.Size = new System.Drawing.Size(80, 26);
+			this.bu_Save.TabIndex = 1;
+			this.bu_Save.Text = "Save";
+			this.bu_Save.UseVisualStyleBackColor = true;
+			this.bu_Save.Click += new System.EventHandler(this.click_Save);
 			// 
 			// bu_Okay
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Okay.Location = new System.Drawing.Point(430, 5);
+			this.bu_Okay.Location = new System.Drawing.Point(421, 5);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
-			this.bu_Okay.Size = new System.Drawing.Size(75, 26);
-			this.bu_Okay.TabIndex = 1;
-			this.bu_Okay.Text = "Save";
+			this.bu_Okay.Size = new System.Drawing.Size(80, 26);
+			this.bu_Okay.TabIndex = 2;
+			this.bu_Okay.Text = "Save/close";
 			this.bu_Okay.UseVisualStyleBackColor = true;
 			this.bu_Okay.Click += new System.EventHandler(this.click_Okay);
+			// 
+			// bu_Cancel
+			// 
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Location = new System.Drawing.Point(505, 5);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Cancel.Name = "bu_Cancel";
+			this.bu_Cancel.Size = new System.Drawing.Size(80, 26);
+			this.bu_Cancel.TabIndex = 3;
+			this.bu_Cancel.Text = "close";
+			this.bu_Cancel.UseVisualStyleBackColor = true;
+			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// SettingsEditor
 			// 
