@@ -59,19 +59,20 @@ namespace yata
 
 		#region Handlers (row)
 		/// <summary>
-		/// Handles context-click on the context-header.
+		/// Handles context-click on the context-header. Copies the rowid to the
+		/// Windows Clipboard and hides the context.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Header"/></c></param>
 		/// <param name="e"></param>
 		void rowclick_Header(object sender, EventArgs e)
 		{
+			ClipboardService.SetText(_r.ToString());
 			_contextRo.Hide();
 		}
 
 		/// <summary>
-		/// Handles context-click to cut a row. Copies a
-		/// <c><see cref="Row">Row's</see></c> fields then deletes the
-		/// <c>Row</c>.
+		/// Handles context-click to cut a <c><see cref="Row"/></c>. Copies the
+		/// <c>Row's</c> fields then deletes that <c>Row</c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="rowit_Cut"/></c></param>
 		/// <param name="e"></param>
