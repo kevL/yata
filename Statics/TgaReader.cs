@@ -81,7 +81,7 @@ namespace yata
 				return null;
 
 
-			info = width + " x " + height + " x " + pixeldepth + " bits per pixel";
+			info = width + " . " + height + " . " + pixeldepth + " bits per pixel";
 
 			// Assume that the ImageID and ColorMapData will not be present in
 			// NwN2 TGA files so just continue the stream @ pos ->
