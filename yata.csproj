@@ -62,6 +62,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\StripRenderer.cs" />
     <Compile Include="Controls\YataStrip.cs" />
     <Compile Include="Controls\Propanel.cs" />
     <Compile Include="Controls\PropanelButton.cs" />
