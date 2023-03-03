@@ -172,6 +172,7 @@
     <Compile Include="Statics\Sorter.cs" />
     <Compile Include="Statics\StringDecryptor.cs" />
     <Compile Include="Statics\TalkReader.cs" />
+    <Compile Include="Statics\TgaReader.cs" />
     <Compile Include="Statics\YataGraphics.cs" />
     <Compile Include="UndoRedo.cs" />
     <Compile Include="Yata.cs" />
