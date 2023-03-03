@@ -94,24 +94,27 @@ namespace yata
 	static class Brushes
 	{
 		// table
-		internal static readonly Brush Alice       = new SolidBrush(Color.AliceBlue);
-		internal static readonly Brush Bob         = new SolidBrush(Color.BlanchedAlmond);
-		internal static readonly Brush Created     = new SolidBrush(SystemColors.ControlLight);
+		internal static readonly Brush Alice          = new SolidBrush(Color.AliceBlue);
+		internal static readonly Brush Bob            = new SolidBrush(Color.BlanchedAlmond);
+		internal static readonly Brush Created        = new SolidBrush(SystemColors.ControlLight);
 
-		internal static readonly Brush Selected    = new SolidBrush(Color.PaleGreen);
-		internal static readonly Brush SubSelected = new SolidBrush(Color.Honeydew);
-		internal static readonly Brush Editor      = new SolidBrush(Colors.Editor);
+		internal static readonly Brush Selected       = new SolidBrush(Color.PaleGreen);
+		internal static readonly Brush SubSelected    = new SolidBrush(Color.Honeydew);
+		internal static readonly Brush Editor         = new SolidBrush(Colors.Editor);
 
-		internal static readonly Brush LoadChanged = new SolidBrush(Color.Pink);
-		internal static readonly Brush Diff        = new SolidBrush(Color.Turquoise);
-		internal static readonly Brush Replaced    = new SolidBrush(Color.Goldenrod);
+		internal static readonly Brush LoadChanged    = new SolidBrush(Color.Pink);
+		internal static readonly Brush Diff           = new SolidBrush(Color.Turquoise);
+		internal static readonly Brush Replaced       = new SolidBrush(Color.Goldenrod);
 
-		internal static readonly Brush Disabled_a  = new SolidBrush(Color.LavenderBlush);
-		internal static readonly Brush Disabled_b  = new SolidBrush(Color.MistyRose);
+		internal static readonly Brush Disabled_a     = new SolidBrush(Color.LavenderBlush);
+		internal static readonly Brush Disabled_b     = new SolidBrush(Color.MistyRose);
 
 		// propanel
 //		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
 		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
+
+		// statusbar
+		internal static readonly Brush Mint           = new SolidBrush(Color.MintCream);
 	}
 
 	static class Colors

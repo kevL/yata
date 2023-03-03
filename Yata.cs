@@ -242,6 +242,8 @@ namespace yata
 
 			_bar.setYata(this);
 
+			statusbar.Renderer = new StripRenderer();
+
 			tb_Search.BackColor =
 			tb_Goto  .BackColor = Color.GhostWhite;
 

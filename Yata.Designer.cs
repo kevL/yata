@@ -1747,9 +1747,10 @@ namespace yata
 			// statbar_Icon
 			// 
 			this.statbar_Icon.AutoSize = false;
+			this.statbar_Icon.BackColor = System.Drawing.Color.MintCream;
 			this.statbar_Icon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.statbar_Icon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
-			this.statbar_Icon.Margin = new System.Windows.Forms.Padding(0, 2, 0, 3);
+			this.statbar_Icon.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.statbar_Icon.Name = "statbar_Icon";
 			this.statbar_Icon.Size = new System.Drawing.Size(36, 17);
 			// 
