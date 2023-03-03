@@ -53,6 +53,8 @@ namespace yata
 		internal static string _diff;
 		internal static string _dialog;
 		internal static string _dialogalt;
+		internal static string _icondir;
+		internal static string _icondiralt;
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
@@ -65,14 +67,14 @@ namespace yata
 		#region Methods (static)
 		internal static void ScanSettings()
 		{
-			int result;
-
 			string pfe = Path.Combine(Application.StartupPath, FE);
 			if (File.Exists(pfe))
 			{
 				using (var fs = File.OpenRead(pfe))
 				using (var sr = new StreamReader(fs))
 				{
+					int result;
+
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
@@ -334,6 +336,20 @@ namespace yata
 							_clearquotes = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
 										&& (line == "1" || line.ToLowerInvariant() == "true");
 						}
+						else if (line.StartsWith("icondir=", StringComparison.Ordinal))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(8).Trim()))
+							{
+								_icondir = line;
+							}
+						}
+						else if (line.StartsWith("icondiralt=", StringComparison.Ordinal))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(11).Trim()))
+							{
+								_icondiralt = line;
+							}
+						}
 					}
 				}
 			}
@@ -419,7 +435,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 28;
+		internal const int ids = 30;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -454,6 +470,8 @@ namespace yata
 			options[++i] = "diff=";
 			options[++i] = "dirpreset=";
 			options[++i] = "gradient=";
+			options[++i] = "icondir=";
+			options[++i] = "icondiralt=";
 			options[++i] = "instantgoto=";
 			options[++i] = "pathall=";
 			options[++i] = "pathzipdata=";

@@ -223,6 +223,7 @@ namespace yata
 
 		StatusStrip statusbar;
 		ToolStripStatusLabel statbar_lblCords;
+		ToolStripStatusLabel statbar_lblPic;
 		ToolStripStatusLabel statbar_lblInfo;
 
 		Panel panel_ColorFill;
@@ -404,6 +405,7 @@ namespace yata
 			this.rowit_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
 			this.statbar_lblCords = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_lblPic = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statbar_lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this._contextCe = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -1095,7 +1097,7 @@ namespace yata
 			// it_SelectCol_fake
 			// 
 			this.it_SelectCol_fake.Name = "it_SelectCol_fake";
-			this.it_SelectCol_fake.Size = new System.Drawing.Size(152, 22);
+			this.it_SelectCol_fake.Size = new System.Drawing.Size(99, 22);
 			this.it_SelectCol_fake.Text = "fake";
 			// 
 			// tb_Goto
@@ -1726,6 +1728,7 @@ namespace yata
 			this.statusbar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.statbar_lblCords,
+			this.statbar_lblPic,
 			this.statbar_lblInfo});
 			this.statusbar.Location = new System.Drawing.Point(0, 477);
 			this.statusbar.Name = "statusbar";
@@ -1738,8 +1741,17 @@ namespace yata
 			this.statbar_lblCords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statbar_lblCords.Font = new System.Drawing.Font("Verdana", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblCords.Name = "statbar_lblCords";
-			this.statbar_lblCords.Size = new System.Drawing.Size(160, 17);
+			this.statbar_lblCords.Size = new System.Drawing.Size(130, 17);
 			this.statbar_lblCords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// statbar_lblPic
+			// 
+			this.statbar_lblPic.AutoSize = false;
+			this.statbar_lblPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.statbar_lblPic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
+			this.statbar_lblPic.Margin = new System.Windows.Forms.Padding(0, 2, 0, 3);
+			this.statbar_lblPic.Name = "statbar_lblPic";
+			this.statbar_lblPic.Size = new System.Drawing.Size(36, 17);
 			// 
 			// statbar_lblInfo
 			// 
@@ -1747,7 +1759,7 @@ namespace yata
 			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statbar_lblInfo.Name = "statbar_lblInfo";
-			this.statbar_lblInfo.Size = new System.Drawing.Size(692, 17);
+			this.statbar_lblInfo.Size = new System.Drawing.Size(686, 17);
 			this.statbar_lblInfo.Spring = true;
 			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1784,7 +1796,7 @@ namespace yata
 			this.cellit_Input_zip});
 			this._contextCe.Name = "_contextCe";
 			this._contextCe.ShowImageMargin = false;
-			this._contextCe.Size = new System.Drawing.Size(174, 292);
+			this._contextCe.Size = new System.Drawing.Size(174, 320);
 			// 
 			// cellit_Edit
 			// 

@@ -308,7 +308,8 @@ namespace yata
 
 				statusbar       .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
 				statbar_lblCords.Height =
-				statbar_lblInfo .Height = (hBar     < 17) ? 17 : hBar;
+				statbar_lblPic  .Height =
+				statbar_lblInfo .Height = (hBar < 17) ? 17 : hBar;
 
 				statbar_lblCords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblCords.Font) + 20;
 
@@ -1439,6 +1440,8 @@ namespace yata
 				{
 					if (c != _track_x || r != _track_y || force)
 					{
+						ClearIconResref();
+
 						_track_x = c; _track_y = r;
 
 						statbar_lblCords.Text = " id= " + r + "  col= " + c;
@@ -1493,10 +1496,16 @@ namespace yata
 									statbar_lblInfo.Text = getCraftInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_SPELL:
-									statbar_lblInfo.Text = getSpellInfo(r,c);
+									if (Table.Fields[c - 1] == "IconResRef")
+										DrawIconResref(Table[r,c].text + ".tga");
+									else
+										statbar_lblInfo.Text = getSpellInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_FEAT:
-									statbar_lblInfo.Text = getFeatInfo(r,c);
+									if (Table.Fields[c - 1] == "ICON")
+										DrawIconResref(Table[r,c].text + ".tga");
+									else
+										statbar_lblInfo.Text = getFeatInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_CLASS:
 									statbar_lblInfo.Text = getClassInfo(r,c);
@@ -1518,6 +1527,72 @@ namespace yata
 			_track_x = _track_y = -1;
 			statbar_lblCords.Text =
 			statbar_lblInfo .Text = String.Empty;
+
+			ClearIconResref();
+		}
+
+		/// <summary>
+		/// Draws an icon to the statusbar when the mousecursor hovers over
+		/// Spells.2da "IconResRef" col.
+		/// </summary>
+		/// <param name="resref"></param>
+		void DrawIconResref(string resref)
+		{
+			statbar_lblPic.Width = statbar_lblPic.Height * 2;
+
+			string pfeIcon = null;
+			string pfe_t;
+
+			string dir = Settings._icondiralt;
+			if (Directory.Exists(dir)
+				&& File.Exists(pfe_t = Path.Combine(dir, resref)))
+			{
+				pfeIcon = pfe_t;
+			}
+
+			if (pfeIcon == null && Directory.Exists(dir = Settings._icondir))
+			{
+				string dirIcons = Path.Combine(dir, "icons_x2");
+				if (File.Exists(pfe_t = Path.Combine(dirIcons, resref)))
+					pfeIcon = pfe_t;
+				else
+				{
+					dirIcons = Path.Combine(dir, "icons_x1");
+					if (File.Exists(pfe_t = Path.Combine(dirIcons, resref)))
+						pfeIcon = pfe_t;
+					else
+					{
+						dirIcons = Path.Combine(dir, "icons");
+						if (File.Exists(pfe_t = Path.Combine(dirIcons, resref)))
+							pfeIcon = pfe_t;
+					}
+				}
+			}
+
+			if (pfeIcon != null)
+			{
+				string info = String.Empty;
+				Bitmap pic = TgaReader.Create(pfeIcon, ref info);
+				if (pic != null)
+				{
+					statbar_lblPic.BackgroundImage = pic;
+					statbar_lblInfo.Text = info;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Clears the icon on the statusbar when the mousecursor leaves
+		/// Spells.2da "IconResRef" col.
+		/// </summary>
+		void ClearIconResref()
+		{
+			if (statbar_lblPic.BackgroundImage != null)
+			{
+				statbar_lblPic.BackgroundImage.Dispose();
+				statbar_lblPic.BackgroundImage = null;
+			}
+			statbar_lblInfo.Text = String.Empty;
 		}
 		#endregion Methods (statusbar)
 
