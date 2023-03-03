@@ -222,9 +222,9 @@ namespace yata
 		ToolStripMenuItem tabit_DiffSync;
 
 		StatusStrip statusbar;
-		ToolStripStatusLabel statbar_lblCords;
-		ToolStripStatusLabel statbar_lblPic;
-		ToolStripStatusLabel statbar_lblInfo;
+		ToolStripStatusLabel statbar_Cords;
+		ToolStripStatusLabel statbar_Icon;
+		ToolStripStatusLabel statbar_Info;
 
 		Panel panel_ColorFill;
 
@@ -404,9 +404,9 @@ namespace yata
 			this.separator_10 = new System.Windows.Forms.ToolStripSeparator();
 			this.rowit_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
-			this.statbar_lblCords = new System.Windows.Forms.ToolStripStatusLabel();
-			this.statbar_lblPic = new System.Windows.Forms.ToolStripStatusLabel();
-			this.statbar_lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_Cords = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_Icon = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statbar_Info = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel_ColorFill = new System.Windows.Forms.Panel();
 			this._contextCe = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.cellit_Edit = new System.Windows.Forms.ToolStripMenuItem();
@@ -1727,41 +1727,41 @@ namespace yata
 			// 
 			this.statusbar.Font = new System.Drawing.Font("Verdana", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.statbar_lblCords,
-			this.statbar_lblPic,
-			this.statbar_lblInfo});
+			this.statbar_Cords,
+			this.statbar_Icon,
+			this.statbar_Info});
 			this.statusbar.Location = new System.Drawing.Point(0, 477);
 			this.statusbar.Name = "statusbar";
 			this.statusbar.Size = new System.Drawing.Size(867, 22);
 			this.statusbar.TabIndex = 1;
 			// 
-			// statbar_lblCords
+			// statbar_Cords
 			// 
-			this.statbar_lblCords.AutoSize = false;
-			this.statbar_lblCords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statbar_lblCords.Font = new System.Drawing.Font("Verdana", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.statbar_lblCords.Name = "statbar_lblCords";
-			this.statbar_lblCords.Size = new System.Drawing.Size(130, 17);
-			this.statbar_lblCords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statbar_Cords.AutoSize = false;
+			this.statbar_Cords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statbar_Cords.Font = new System.Drawing.Font("Verdana", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_Cords.Name = "statbar_Cords";
+			this.statbar_Cords.Size = new System.Drawing.Size(130, 17);
+			this.statbar_Cords.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// statbar_lblPic
+			// statbar_Icon
 			// 
-			this.statbar_lblPic.AutoSize = false;
-			this.statbar_lblPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.statbar_lblPic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
-			this.statbar_lblPic.Margin = new System.Windows.Forms.Padding(0, 2, 0, 3);
-			this.statbar_lblPic.Name = "statbar_lblPic";
-			this.statbar_lblPic.Size = new System.Drawing.Size(36, 17);
+			this.statbar_Icon.AutoSize = false;
+			this.statbar_Icon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.statbar_Icon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
+			this.statbar_Icon.Margin = new System.Windows.Forms.Padding(0, 2, 0, 3);
+			this.statbar_Icon.Name = "statbar_Icon";
+			this.statbar_Icon.Size = new System.Drawing.Size(36, 17);
 			// 
-			// statbar_lblInfo
+			// statbar_Info
 			// 
-			this.statbar_lblInfo.AutoSize = false;
-			this.statbar_lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.statbar_lblInfo.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.statbar_lblInfo.Name = "statbar_lblInfo";
-			this.statbar_lblInfo.Size = new System.Drawing.Size(686, 17);
-			this.statbar_lblInfo.Spring = true;
-			this.statbar_lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.statbar_Info.AutoSize = false;
+			this.statbar_Info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.statbar_Info.Font = new System.Drawing.Font("Verdana", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statbar_Info.Name = "statbar_Info";
+			this.statbar_Info.Size = new System.Drawing.Size(686, 17);
+			this.statbar_Info.Spring = true;
+			this.statbar_Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel_ColorFill
 			// 

@@ -286,9 +286,9 @@ namespace yata
 				// Relative Font-sizes (as defined in the Designers):
 				//
 				// _bar, statusbar, _contextTa, _contextRo, _contextCe = all unity.
-				// rowit_Header     = +0.75
-				// statbar_lblCords = -0.75
-				// statbar_lblInfo  = +1.50
+				// rowit_Header  = +0.75
+				// statbar_Cords = -0.75
+				// statbar_Info  = +1.50
 
 				_bar.Font.Dispose();
 				_bar.Font = Settings._font2;
@@ -296,22 +296,22 @@ namespace yata
 				statusbar.Font.Dispose();
 				statusbar.Font = Settings._font2;
 
-				statbar_lblCords.Font.Dispose();
-				statbar_lblCords.Font = new Font(Settings._font2.FontFamily,
-												 Settings._font2.SizeInPoints - 0.75f);
+				statbar_Cords.Font.Dispose();
+				statbar_Cords.Font = new Font(Settings._font2.FontFamily,
+											  Settings._font2.SizeInPoints - 0.75f);
 
-				statbar_lblInfo.Font.Dispose();
-				statbar_lblInfo.Font = new Font(Settings._font2.FontFamily,
-												Settings._font2.SizeInPoints + 1.5f);
+				statbar_Info.Font.Dispose();
+				statbar_Info.Font = new Font(Settings._font2.FontFamily,
+											 Settings._font2.SizeInPoints + 1.5f);
 
-				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statbar_lblInfo.Font) + 2;
+				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statbar_Info.Font) + 2;
 
-				statusbar       .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
-				statbar_lblCords.Height =
-				statbar_lblPic  .Height =
-				statbar_lblInfo .Height = (hBar < 17) ? 17 : hBar;
+				statusbar    .Height = (hBar + 5 < 22) ? 22 : hBar + 5;
+				statbar_Cords.Height =
+				statbar_Icon .Height =
+				statbar_Info .Height = (hBar < 17) ? 17 : hBar;
 
-				statbar_lblCords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_lblCords.Font) + 20;
+				statbar_Cords.Width = YataGraphics.MeasureWidth(YataGraphics.WIDTH_CORDS, statbar_Cords.Font) + 20;
 
 
 				rowit_Header.Font.Dispose();
@@ -1444,7 +1444,7 @@ namespace yata
 
 						_track_x = c; _track_y = r;
 
-						statbar_lblCords.Text = " id= " + r + "  col= " + c;
+						statbar_Cords.Text = " id= " + r + "  col= " + c;
 
 						if (c > 0 && Strrefheads.Contains(Table.Fields[c - 1])) // NOTE: 'c' can be -1
 						{
@@ -1483,39 +1483,39 @@ namespace yata
 								if      (text .Length > 99) text = text.Substring(0, 99) + " ...";
 								else if (array.Length >  1) text += " ...";
 
-								statbar_lblInfo.Text = text;
+								statbar_Info.Text = text;
 							}
 							else
-								statbar_lblInfo.Text = gs.non;
+								statbar_Info.Text = gs.non;
 						}
 						else
 						{
 							switch (Table.Info)
 							{
 								case YataGrid.InfoType.INFO_CRAFT:
-									statbar_lblInfo.Text = getCraftInfo(r,c);
+									statbar_Info.Text = getCraftInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_SPELL:
 									if (Table.Fields[c - 1] == "IconResRef")
 										DrawIconResref(Table[r,c].text + ".tga");
 									else
-										statbar_lblInfo.Text = getSpellInfo(r,c);
+										statbar_Info.Text = getSpellInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_FEAT:
 									if (Table.Fields[c - 1] == "ICON")
 										DrawIconResref(Table[r,c].text + ".tga");
 									else
-										statbar_lblInfo.Text = getFeatInfo(r,c);
+										statbar_Info.Text = getFeatInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_CLASS:
-									statbar_lblInfo.Text = getClassInfo(r,c);
+									statbar_Info.Text = getClassInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_ITEM:
-									statbar_lblInfo.Text = getBaseitemInfo(r,c);
+									statbar_Info.Text = getBaseitemInfo(r,c);
 									break;
 
 								default:
-									statbar_lblInfo.Text = String.Empty;
+									statbar_Info.Text = String.Empty;
 									break;
 							}
 						}
@@ -1525,8 +1525,8 @@ namespace yata
 			}
 
 			_track_x = _track_y = -1;
-			statbar_lblCords.Text =
-			statbar_lblInfo .Text = String.Empty;
+			statbar_Cords.Text =
+			statbar_Info .Text = String.Empty;
 
 			ClearIconResref();
 		}
@@ -1538,7 +1538,7 @@ namespace yata
 		/// <param name="resref"></param>
 		void DrawIconResref(string resref)
 		{
-			statbar_lblPic.Width = statbar_lblPic.Height * 2;
+			statbar_Icon.Width = statbar_Icon.Height * 2;
 
 			string pfeIcon = null;
 			string pfe_t;
@@ -1575,8 +1575,8 @@ namespace yata
 				Bitmap pic = TgaReader.Create(pfeIcon, ref info);
 				if (pic != null)
 				{
-					statbar_lblPic.BackgroundImage = pic;
-					statbar_lblInfo.Text = info;
+					statbar_Icon.BackgroundImage = pic;
+					statbar_Info.Text = info;
 				}
 			}
 		}
@@ -1587,12 +1587,12 @@ namespace yata
 		/// </summary>
 		void ClearIconResref()
 		{
-			if (statbar_lblPic.BackgroundImage != null)
+			if (statbar_Icon.BackgroundImage != null)
 			{
-				statbar_lblPic.BackgroundImage.Dispose();
-				statbar_lblPic.BackgroundImage = null;
+				statbar_Icon.BackgroundImage.Dispose();
+				statbar_Icon.BackgroundImage = null;
 			}
-			statbar_lblInfo.Text = String.Empty;
+			statbar_Info.Text = String.Empty;
 		}
 		#endregion Methods (statusbar)
 
