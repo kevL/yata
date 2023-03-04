@@ -1345,7 +1345,7 @@ namespace yata
 
 			YataGrid.MetricStaticHeads(this);
 
-			if (Table == null) // clear the statusbar if closed by [F4] ->
+			if (Table == null) // clear the statusbar in case closed by [F4] ->
 			{
 				_track_x = _track_y = -1;
 				statbar_Cords.Text =
