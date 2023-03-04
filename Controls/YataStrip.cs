@@ -33,8 +33,7 @@ namespace yata
 		/// <remarks>I'm doing it this way so that this <c>YataStrip</c> can be
 		/// instantiated and built in <c>Yata's</c> designer, rather than
 		/// passing <paramref name="f"/> into the cTor.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Cheers. Welcome to winforms workaround #2368.</remarks>
 		internal void setYata(Yata f)
 		{
@@ -62,7 +61,7 @@ namespace yata
 //					if ((e.KeyData & ~gc.ControlShift) != 0)
 //						logfile.Log(it.Text);
 
-					if (YataStrip.hasShortcut(it, keyData))
+					if (hasShortcut(it, keyData))
 						return true;
 				}
 			}
