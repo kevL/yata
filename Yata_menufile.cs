@@ -511,8 +511,8 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_Close"/></c></item>
-		/// <item><c><see cref="tabit_Close"/></c></item>
 		/// <item><c><see cref="it_Reload"/></c></item>
+		/// <item><c><see cref="tabit_Close"/></c></item>
 		/// <item><c><see cref="tabit_Reload"/></c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
@@ -568,7 +568,7 @@ namespace yata
 		/// <item>File|CloseAll <c>[Ctrl+F4]</c></item>
 		/// <item>tab|CloseAll</item>
 		/// </list></remarks>
-		void fileclick_CloseAllTabs(object sender, EventArgs e)
+		void fileclick_CloseAllPages(object sender, EventArgs e)
 		{
 			if (!CancelChangedTables("close"))
 			{

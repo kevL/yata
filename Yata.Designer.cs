@@ -614,7 +614,7 @@ namespace yata
 			this.it_CloseAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
 			this.it_CloseAll.Size = new System.Drawing.Size(181, 22);
 			this.it_CloseAll.Text = "C&lose all";
-			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
+			this.it_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllPages);
 			// 
 			// separator_2
 			// 
@@ -1985,7 +1985,7 @@ namespace yata
 			this.tabit_CloseAll.Size = new System.Drawing.Size(138, 22);
 			this.tabit_CloseAll.Text = "Close all";
 			this.tabit_CloseAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.tabit_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllTabs);
+			this.tabit_CloseAll.Click += new System.EventHandler(this.fileclick_CloseAllPages);
 			// 
 			// tabit_CloseAllOthers
 			// 
