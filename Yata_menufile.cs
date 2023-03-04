@@ -611,17 +611,16 @@ namespace yata
 				// iterate through all tables and if a different table has the
 				// same Fullpath and neither table is Readonly return false ->
 
-				YataGrid table0, table1;
-				string pfe;
+				YataGrid table; string pfe;
 
 				for (int i = 0; i != Tabs.TabPages.Count; ++i)
-				if (!(table0 = Tabs.TabPages[i].Tag as YataGrid).Readonly)
+				if (!(table = Tabs.TabPages[i].Tag as YataGrid).Readonly)
 				{
-					pfe = table0.Fullpath;
+					pfe = table.Fullpath;
 					for (int j = 0; j != Tabs.TabPages.Count; ++j)
 					if (j != i
-						&& !(table1 = Tabs.TabPages[j].Tag as YataGrid).Readonly
-						&& table1.Fullpath == pfe)
+						&& !(table = Tabs.TabPages[j].Tag as YataGrid).Readonly
+						&& table.Fullpath == pfe)
 					{
 						return false;
 					}
