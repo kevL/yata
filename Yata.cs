@@ -446,7 +446,7 @@ namespace yata
 		/// <param name="descriptor">"close" files or "quit" Yata</param>
 		/// <param name="excludecurrent"><c>true</c> to exclude the current
 		/// table - used by
-		/// <c><see cref="tabclick_CloseAllOtherTabs()">tabclick_CloseAllOtherTabs()</see></c></param>
+		/// <c><see cref="tabclick_CloseAllOtherPages()">tabclick_CloseAllOtherPages()</see></c></param>
 		/// <returns><c>true</c> if there are any changed tables and user
 		/// chooses to cancel; <c>false</c> if there are no changed tables or
 		/// user chooses to close/quit anyway</returns>

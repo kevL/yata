@@ -86,7 +86,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="tabit_CloseAllOthers"/></c></param>
 		/// <param name="e"></param>
-		void tabclick_CloseAllOtherTabs(object sender, EventArgs e)
+		void tabclick_CloseAllOtherPages(object sender, EventArgs e)
 		{
 			if (!CancelChangedTables("close", true))
 			{

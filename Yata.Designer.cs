@@ -1993,7 +1993,7 @@ namespace yata
 			this.tabit_CloseAllOthers.Size = new System.Drawing.Size(138, 22);
 			this.tabit_CloseAllOthers.Text = "Close all others";
 			this.tabit_CloseAllOthers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.tabit_CloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherTabs);
+			this.tabit_CloseAllOthers.Click += new System.EventHandler(this.tabclick_CloseAllOtherPages);
 			// 
 			// separator_14
 			// 
