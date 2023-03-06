@@ -158,7 +158,7 @@ namespace yata
 				&& Fields[c - 1] == "REMOVED"
 				&& this[r,c].text != "0")
 			{
-				return (r % 2 == 0) ? Brushes.Disabled_a : Brushes.Disabled_b;
+				return (r % 2 == 0) ? Brushers.Disabled_a : Brushers.Disabled_b;
 			}
 			return Rows[r]._brush;
 		}
@@ -437,11 +437,11 @@ namespace yata
 				if (selr != -1)
 				{
 					if (r == selr)
-						brush = Brushes.Selected;
+						brush = Brushers.Selected;
 					else if ((r < selr && r >= selr + RangeSelect)
 						||   (r > selr && r <= selr + RangeSelect))
 					{
-						brush = Brushes.SubSelected;
+						brush = Brushers.SubSelected;
 					}
 					else
 						brush = null;

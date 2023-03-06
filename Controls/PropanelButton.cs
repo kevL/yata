@@ -84,7 +84,7 @@ namespace yata
 		protected override void OnPaint(PaintEventArgs pevent)
 		{
 			// and you know it don't come easy - Ringo
-//			graphics.FillRectangle(Brushes.PropanelButton, _rectBg);
+//			graphics.FillRectangle(Brushers.PropanelButton, _rectBg);
 
 			if (_depressed)
 			{

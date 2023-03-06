@@ -838,7 +838,7 @@ namespace yata
 			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
-				graphics.FillRectangle(Brushes.PropanelFrozen, rect);
+				graphics.FillRectangle(Brushers.PropanelFrozen, rect);
 			}
 
 			// fill any selected cell's var/val-rect ->
@@ -846,7 +846,7 @@ namespace yata
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);
-				graphics.FillRectangle(Brushes.Selected, rect);
+				graphics.FillRectangle(Brushers.Selected, rect);
 			}
 
 			// fill the editor's val-rect if visible ->
@@ -856,7 +856,7 @@ namespace yata
 				rect = _editRect;
 				rect.Y -= offset;
 
-				graphics.FillRectangle(Brushes.Editor, rect);
+				graphics.FillRectangle(Brushers.Editor, rect);
 			}
 
 			// draw vertical lines ->

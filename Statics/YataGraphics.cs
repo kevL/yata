@@ -91,7 +91,7 @@ namespace yata
 		internal static readonly Pen LightLine = SystemPens.ControlLightLight;
 	}
 
-	static class Brushes
+	static class Brushers
 	{
 		// table
 		internal static readonly Brush Alice          = new SolidBrush(Color.AliceBlue);
