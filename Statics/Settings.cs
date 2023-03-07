@@ -83,7 +83,7 @@ namespace yata
 					{
 						if (line.StartsWith("font=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
+							if ((line = line.Substring(5).Trim()).Length != 0)
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 								_font = tc.ConvertFromInvariantString(line) as Font;
@@ -103,7 +103,7 @@ namespace yata
 						}
 						else if (line.StartsWith("font2=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							if ((line = line.Substring(6).Trim()).Length != 0)
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 								_font2 = tc.ConvertFromInvariantString(line) as Font;
@@ -123,7 +123,7 @@ namespace yata
 						}
 						else if (line.StartsWith("font3=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							if ((line = line.Substring(6).Trim()).Length != 0)
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 								_font3 = tc.ConvertFromInvariantString(line) as Font;
@@ -141,7 +141,7 @@ namespace yata
 						}
 						else if (line.StartsWith("fontf=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							if ((line = line.Substring(6).Trim()).Length != 0)
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 								_fontf = tc.ConvertFromInvariantString(line) as Font;
@@ -161,7 +161,7 @@ namespace yata
 						}
 						else if (line.StartsWith("fonti=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(6).Trim()))
+							if ((line = line.Substring(6).Trim()).Length != 0)
 							{
 								TypeConverter tc = TypeDescriptor.GetConverter(typeof(Font));
 								_fonti = tc.ConvertFromInvariantString(line) as Font;
@@ -179,7 +179,7 @@ namespace yata
 						}
 						else if (line.StartsWith("dirpreset=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim())
+							if ((line = line.Substring(10).Trim()).Length != 0
 								&& Directory.Exists(line))
 							{
 								_dirpreset.Add(line);
@@ -187,7 +187,7 @@ namespace yata
 						}
 						else if (line.StartsWith("pathall=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(8).Trim())
+							if ((line = line.Substring(8).Trim()).Length != 0
 								&& Directory.Exists(line))
 							{
 								_pathall.Add(line);
@@ -195,7 +195,7 @@ namespace yata
 						}
 						else if (line.StartsWith("pathzipdata=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim())
+							if ((line = line.Substring(12).Trim()).Length != 0
 								&& Directory.Exists(line))
 							{
 								_pathzipdata = line;
@@ -203,7 +203,7 @@ namespace yata
 						}
 						else if (line.StartsWith("x=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+							if ((line = line.Substring(2).Trim()).Length != 0
 								&& Int32.TryParse(line, out result) && result > -1)
 							{
 								_x = result;
@@ -211,7 +211,7 @@ namespace yata
 						}
 						else if (line.StartsWith("y=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+							if ((line = line.Substring(2).Trim()).Length != 0
 								&& Int32.TryParse(line, out result) && result > -1)
 							{
 								_y = result;
@@ -219,7 +219,7 @@ namespace yata
 						}
 						else if (line.StartsWith("w=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+							if ((line = line.Substring(2).Trim()).Length != 0
 								&& Int32.TryParse(line, out result) && result > -1)
 							{
 								_w = result;
@@ -227,7 +227,7 @@ namespace yata
 						}
 						else if (line.StartsWith("h=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(2).Trim())
+							if ((line = line.Substring(2).Trim()).Length != 0
 								&& Int32.TryParse(line, out result) && result > -1)
 							{
 								_h = result;
@@ -235,22 +235,22 @@ namespace yata
 						}
 						else if (line.StartsWith("strict=", StringComparison.Ordinal))
 						{
-							_strict = !String.IsNullOrEmpty(line = line.Substring(7).Trim())
+							_strict = (line = line.Substring(7).Trim()).Length != 0
 								   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("gradient=", StringComparison.Ordinal))
 						{
-							_gradient = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+							_gradient = (line = line.Substring(9).Trim()).Length != 0
 									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("context=", StringComparison.Ordinal))
 						{
-							_context = !String.IsNullOrEmpty(line = line.Substring(8).Trim())
+							_context = (line = line.Substring(8).Trim()).Length != 0
 									&& line.ToLowerInvariant() == "static";
 						}
 						else if (line.StartsWith("recent=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim())
+							if ((line = line.Substring(7).Trim()).Length != 0
 								&& Int32.TryParse(line, out result) && result > 0)
 							{
 								if (result > 16) result = 16;
@@ -259,43 +259,43 @@ namespace yata
 						}
 						else if (line.StartsWith("diff=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(5).Trim()))
+							if ((line = line.Substring(5).Trim()).Length != 0)
 							{
 								_diff = line;
 							}
 						}
 						else if (line.StartsWith("dialog=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(7).Trim()))
+							if ((line = line.Substring(7).Trim()).Length != 0)
 							{
 								_dialog = line;
 							}
 						}
 						else if (line.StartsWith("dialogalt=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim()))
+							if ((line = line.Substring(10).Trim()).Length != 0)
 							{
 								_dialogalt = line;
 							}
 						}
 						else if (line.StartsWith("maximized=", StringComparison.Ordinal))
 						{
-							_maximized = !String.IsNullOrEmpty(line = line.Substring(10).Trim())
+							_maximized = (line = line.Substring(10).Trim()).Length != 0
 									  && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("instantgoto=", StringComparison.Ordinal))
 						{
-							_instantgoto = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
+							_instantgoto = (line = line.Substring(12).Trim()).Length != 0
 										&& (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("casesort=", StringComparison.Ordinal))
 						{
-							_casesort = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+							_casesort = (line = line.Substring(9).Trim()).Length != 0
 									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("alignoutput=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(12).Trim()))
+							if ((line = line.Substring(12).Trim()).Length != 0)
 							{
 								switch (line.ToLowerInvariant())
 								{
@@ -312,7 +312,7 @@ namespace yata
 						}
 						else if (line.StartsWith("codepage=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(9).Trim())
+							if ((line = line.Substring(9).Trim()).Length != 0
 								&& Int32.TryParse(line, out result)
 								&& result > -1 && result < 65536)
 							{
@@ -321,41 +321,41 @@ namespace yata
 						}
 						else if (line.StartsWith("autorder=", StringComparison.Ordinal))
 						{
-							_autorder = !String.IsNullOrEmpty(line = line.Substring(9).Trim())
+							_autorder = (line = line.Substring(9).Trim()).Length != 0
 									 && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("allowdupls=", StringComparison.Ordinal))
 						{
-							_allowdupls = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
+							_allowdupls = (line = line.Substring(11).Trim()).Length != 0
 									   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("acceptedit=", StringComparison.Ordinal))
 						{
-							_acceptedit = !String.IsNullOrEmpty(line = line.Substring(11).Trim())
+							_acceptedit = (line = line.Substring(11).Trim()).Length != 0
 									   && (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("clearquotes=", StringComparison.Ordinal))
 						{
-							_clearquotes = !String.IsNullOrEmpty(line = line.Substring(12).Trim())
+							_clearquotes = (line = line.Substring(12).Trim()).Length != 0
 										&& (line == "1" || line.ToLowerInvariant() == "true");
 						}
 						else if (line.StartsWith("icondir=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(8).Trim()))
+							if ((line = line.Substring(8).Trim()).Length != 0)
 							{
 								_icondir = line;
 							}
 						}
 						else if (line.StartsWith("icondiralt=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(11).Trim()))
+							if ((line = line.Substring(11).Trim()).Length != 0)
 							{
 								_icondiralt = line;
 							}
 						}
 						else if (line.StartsWith("statcolor=", StringComparison.Ordinal))
 						{
-							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim()))
+							if ((line = line.Substring(10).Trim()).Length != 0)
 							{
 								PropertyInfo pi = typeof(Brushes).GetProperty(line);
 								if (pi != null)
