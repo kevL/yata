@@ -1507,15 +1507,11 @@ namespace yata
 									statbar_Info.Text = getCraftInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_SPELL:
-									if (Table.Fields[c - 1] == "IconResRef")
-										DrawIconResref(Table[r,c].text + ".tga");
-									else
+									if (Table.Fields[c - 1] != "IconResRef" || !DrawIconResref(Table[r,c].text + ".tga"))
 										statbar_Info.Text = getSpellInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_FEAT:
-									if (Table.Fields[c - 1] == "ICON")
-										DrawIconResref(Table[r,c].text + ".tga");
-									else
+									if (Table.Fields[c - 1] != "ICON" || !DrawIconResref(Table[r,c].text + ".tga"))
 										statbar_Info.Text = getFeatInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_CLASS:
@@ -1544,10 +1540,10 @@ namespace yata
 
 		/// <summary>
 		/// Draws an icon to the statusbar when the mousecursor hovers over
-		/// Spells.2da "IconResRef" col.
+		/// Spells.2da "IconResRef" col or Feat.2da "ICON" col.
 		/// </summary>
 		/// <param name="resref"></param>
-		void DrawIconResref(string resref)
+		bool DrawIconResref(string resref)
 		{
 			statbar_Icon.Width = statbar_Icon.Height * 2;
 
@@ -1588,13 +1584,15 @@ namespace yata
 				{
 					statbar_Icon.BackgroundImage = pic;
 					statbar_Info.Text = info;
+					return true;
 				}
 			}
+			return false;
 		}
 
 		/// <summary>
 		/// Clears the icon on the statusbar when the mousecursor leaves
-		/// Spells.2da "IconResRef" col.
+		/// Spells.2da "IconResRef" col or Feat.2da "ICON" col.
 		/// </summary>
 		void ClearIconResref()
 		{
