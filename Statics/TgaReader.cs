@@ -30,84 +30,90 @@ namespace yata
 			byte[] bytes = File.ReadAllBytes(pfeTga);
 
 //			if (!CheckSignature(bytes))        return null;
-//			if (!CheckImageIdLength(bytes[0])) return null; // field 1 (1 byte pos 0)
-			if (!CheckColormapType(bytes[1]))  return null; // field 2 (1 byte pos 1)
-			if (!CheckImagedataType(bytes[2])) return null; // field 3 (1 byte pos 2)
+//			if (!CheckImageIdLength(bytes[0])) return null;	// field 1 (1 byte pos 0)
 
-			bool le = BitConverter.IsLittleEndian; // hardware architecture
-
-			uint b;
-
-			// Field 4: Color Map Specification (5 bytes pos 3)
-			// skip this. Colormaps are not supported here.
-			// field 4.1 - first entry id (2 bytes pos 3)
-			// field 4.2 - color map length (2 bytes pos 5)
-			// field 4.3 - color map entry size (1 byte pos 7)
-
-			// Field 5: Image Specification (10 bytes pos 8)
-			// field 5.1 - x-origin (2 bytes pos 8) // assume val=0
-			// field 5.2 - y-origin (2 bytes pos 10) // assume val=0
-			// field 5.3 - width (2 bytes pos 12)
-			uint pos = 12;
-			var buffer = new byte[2];
-			for (b = 0; b != 2; ++b)
-				buffer[b] = bytes[pos++];
-
-			if (!le) Array.Reverse(buffer);
-			ushort width = BitConverter.ToUInt16(buffer, 0);
-
-			// field 5.4 - height (2 bytes pos 14)
-			buffer = new byte[2];
-			for (b = 0; b != 2; ++b)
-				buffer[b] = bytes[pos++];
-
-			if (!le) Array.Reverse(buffer);
-			ushort height = BitConverter.ToUInt16(buffer, 0);
-
-			// field 5.5 - pixel depth (1 byte pos 16)
-			byte pixeldepth = bytes[pos++];
-			if (!CheckPixeldepth(pixeldepth)) return null;
-
-			int bytesperpixel = pixeldepth / 8;
-
-			// field 5.6 - image descriptor (1 byte pos 17)
-			byte descriptor = bytes[pos++];
-//			if (!CheckDescriptor(descriptor)) return null;
-
-			PixelFormat pf;
-			if      (descriptor == 8) pf = PixelFormat.Format32bppRgb;
-			else if (descriptor == 0) pf = PixelFormat.Format24bppRgb;
-			else
-				return null;
-
-
-			info = width + " . " + height + " . " + pixeldepth + " bits per pixel";
-
-			// Assume that the ImageID and ColorMapData will not be present in
-			// NwN2 TGA files so just continue the stream @ pos ->
-//			pos = 18; // + idlength + colormapdatalength;
-
-			int datalength = width * height * bytesperpixel;
-
-			buffer = new byte[datalength];
-			for (b = 0; b != datalength; ++b)
-				buffer[b] = bytes[pos++];
-
-			var data = new byte[datalength]; // invert row order ->
-			int stride = width * bytesperpixel;
-			for (int r = 0; r != height; ++r)
+			if (CheckColormapType(bytes[1])					// field 2 (1 byte pos 1)
+				&& CheckImagedataType(bytes[2])) 			// field 3 (1 byte pos 2)
 			{
-				Buffer.BlockCopy(buffer, r * stride,
-								 data,   datalength - (r + 1) * stride,
-								 stride);
+				bool le = BitConverter.IsLittleEndian; // hardware architecture
+
+				uint b;
+
+				// Field 4: Color Map Specification (5 bytes pos 3)
+				// skip this. Colormaps are not supported here.
+				// field 4.1 - first entry id (2 bytes pos 3)
+				// field 4.2 - color map length (2 bytes pos 5)
+				// field 4.3 - color map entry size (1 byte pos 7)
+
+				// Field 5: Image Specification (10 bytes pos 8)
+				// field 5.1 - x-origin (2 bytes pos 8) // assume val=0
+				// field 5.2 - y-origin (2 bytes pos 10) // assume val=0
+				// field 5.3 - width (2 bytes pos 12)
+				uint pos = 12;
+				var buffer = new byte[2];
+				for (b = 0; b != 2; ++b)
+					buffer[b] = bytes[pos++];
+
+				if (!le) Array.Reverse(buffer);
+				ushort width = BitConverter.ToUInt16(buffer, 0);
+
+				// field 5.4 - height (2 bytes pos 14)
+				buffer = new byte[2];
+				for (b = 0; b != 2; ++b)
+					buffer[b] = bytes[pos++];
+
+				if (!le) Array.Reverse(buffer);
+				ushort height = BitConverter.ToUInt16(buffer, 0);
+
+				// field 5.5 - pixel depth (1 byte pos 16)
+				byte pixeldepth = bytes[pos++];
+				if (CheckPixeldepth(pixeldepth))
+				{
+					int bytesperpixel = pixeldepth / 8;
+
+					// field 5.6 - image descriptor (1 byte pos 17)
+					byte descriptor = bytes[pos++];
+//					if (!CheckDescriptor(descriptor)) return null;
+
+					PixelFormat pf;
+					switch (descriptor)
+					{
+						case 8: pf = PixelFormat.Format32bppRgb; break;
+						case 0: pf = PixelFormat.Format24bppRgb; break;
+
+						default: return null;
+					}
+
+					info = width + " . " + height + " . " + pixeldepth + " bits per pixel";
+
+					// Assume that the ImageID and ColorMapData will not be present in
+					// NwN2 TGA files so just continue the stream @ pos ->
+//					pos = 18; // + idlength + colormapdatalength;
+
+					int datalength = width * height * bytesperpixel;
+
+					buffer = new byte[datalength];
+					for (b = 0; b != datalength; ++b)
+						buffer[b] = bytes[pos++];
+
+					var data = new byte[datalength]; // invert row order ->
+					int stride = width * bytesperpixel;
+					for (int r = 0; r != height; ++r)
+					{
+						Buffer.BlockCopy(buffer, r * stride,
+										 data,   datalength - (r + 1) * stride,
+										 stride);
+					}
+
+					var pic = new Bitmap(width, height, pf);
+					BitmapData locked = pic.LockBits(new Rectangle(0,0, width, height), ImageLockMode.WriteOnly, pf);
+					Marshal.Copy(data, 0, locked.Scan0, datalength);
+					pic.UnlockBits(locked);
+
+					return pic; // WARNING: Dispose that when done with it.
+				}
 			}
-
-			var pic = new Bitmap(width, height, pf);
-			BitmapData locked = pic.LockBits(new Rectangle(0,0, width, height), ImageLockMode.WriteOnly, pf);
-			Marshal.Copy(data, 0, locked.Scan0, datalength);
-			pic.UnlockBits(locked);
-
-			return pic; // WARNING: Dispose that when done with it.
+			return null;
 		}
 
 
