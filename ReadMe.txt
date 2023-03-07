@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 3
+2023 march 7
 kevL's
 ver 5.4.5.0
 
@@ -569,6 +569,8 @@ recent=      (integer) a count of recently opened file-paths to store. If left
              filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
              variety of reasons that I really don't want to be arshed with -
              hence the option so you can decide if it works on your OS
+statcolor =  the background color of the statusbar. A .NET string (case
+             sensitive) that represents a KnownColor - default is 'MintCream'
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:

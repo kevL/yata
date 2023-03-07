@@ -274,7 +274,7 @@ namespace yata
 
 			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
-			Settings.ScanSettings(); // load the Optional settings file Settings.Cfg
+			Settings.ScanSettings(); // load the Optional settings file 'Settings.Cfg'
 
 			if (Settings._font != null)
 				Font = Settings._font;

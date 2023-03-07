@@ -112,9 +112,6 @@ namespace yata
 		// propanel
 //		internal static readonly Brush PropanelButton = new SolidBrush(SystemColors.Control);
 		internal static readonly Brush PropanelFrozen = new SolidBrush(Color.LightGray);
-
-		// statusbar
-		internal static readonly Brush Mint           = new SolidBrush(Color.MintCream);
 	}
 
 	static class Colors

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 
@@ -55,6 +56,8 @@ namespace yata
 		internal static string _dialogalt;
 		internal static string _icondir;
 		internal static string _icondiralt;
+
+		internal static Brush _statcolor = Brushes.MintCream;
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
@@ -350,6 +353,17 @@ namespace yata
 								_icondiralt = line;
 							}
 						}
+						else if (line.StartsWith("statcolor=", StringComparison.Ordinal))
+						{
+							if (!String.IsNullOrEmpty(line = line.Substring(10).Trim()))
+							{
+								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+								if (pi != null)
+								{
+									_statcolor = pi.GetValue(null,null) as Brush;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -435,7 +449,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 30;
+		internal const int ids = 31;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -476,6 +490,7 @@ namespace yata
 			options[++i] = "pathall=";
 			options[++i] = "pathzipdata=";
 			options[++i] = "recent=";
+			options[++i] = "statcolor=";
 			options[++i] = "strict=";
 		}
 		#endregion options (static)
