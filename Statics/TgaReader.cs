@@ -214,6 +214,129 @@ namespace yata
 //
 //			logfile.Log(". alpha channel depth= " + (b & 0xF));
 		} */
+
+
+/*		/// <summary>
+		/// Adjusts the gamma of a specified <c>Bitmap</c>.
+		/// </summary>
+		/// <param name="pic"></param>
+		/// <param name="ga">values less than one lighten the image; values
+		/// greater than one darken the image - pass a positive value only</param>
+		/// <returns></returns>
+		public static Bitmap AdjustGamma(Bitmap pic, double ga)
+		{
+			BitmapData locked = pic.LockBits(new Rectangle(0,0, pic.Width, pic.Height),
+														   ImageLockMode.ReadWrite,
+														   pic.PixelFormat);
+			int h = pic.Height;
+			int w = pic.Width;
+
+			unsafe
+			{
+				for (int y = 0; y != h; ++y)
+				{
+					byte* row = (byte*)locked.Scan0 + (y * locked.Stride);
+					int offset = 0;
+
+					for (int x = 0; x != w; ++x)
+					{
+						double r = row[offset + 2] / 255.0;
+						double g = row[offset + 1] / 255.0;
+						double b = row[offset]     / 255.0;
+
+						r = Math.Pow(r, ga) * 255.0;
+						g = Math.Pow(g, ga) * 255.0;
+						b = Math.Pow(b, ga) * 255.0;
+
+						int ir = (int)r;
+						int ig = (int)g;
+						int ib = (int)b;
+
+						if (ir > 255) ir = 255;
+						if (ig > 255) ig = 255;
+						if (ib > 255) ib = 255;
+
+						row[offset + 2] = (byte)ir;
+						row[offset + 1] = (byte)ig;
+						row[offset]     = (byte)ib;
+
+						if (pic.PixelFormat == PixelFormat.Format32bppRgb)
+							offset += 4;
+						else
+							offset += 3;
+					}
+				}
+			}
+			pic.UnlockBits(locked);
+
+			return pic;
+		} */
+
+/*		/// <summary>
+		/// Adjusts the contrast of a specified <c>Bitmap</c>.
+		/// </summary>
+		/// <param name="pic"></param>
+		/// <param name="contrast"></param>
+		/// <returns></returns>
+		public static Bitmap AdjustContrast(Bitmap pic, float contrast)
+		{
+			contrast = (100.0f + contrast) / 100.0f;
+			contrast *= contrast;
+
+			BitmapData data = pic.LockBits(new Rectangle(0,0, pic.Width, pic.Height),
+														 ImageLockMode.ReadWrite,
+														 pic.PixelFormat);
+			int h = pic.Height;
+			int w = pic.Width;
+
+			unsafe
+			{
+				for (int y = 0; y != h; ++y)
+				{
+					byte* row = (byte*)data.Scan0 + (y * data.Stride);
+					int offset = 0;
+
+					for (int x = 0; x != w; ++x)
+					{
+						byte b = row[offset];
+						byte g = row[offset + 1];
+						byte r = row[offset + 2];
+
+						float red   = r / 255.0f;
+						float green = g / 255.0f;
+						float blue  = b / 255.0f;
+
+						red   = (((red   - 0.5f) * contrast) + 0.5f) * 255.0f;
+						green = (((green - 0.5f) * contrast) + 0.5f) * 255.0f;
+						blue  = (((blue  - 0.5f) * contrast) + 0.5f) * 255.0f;
+
+						int ir = (int)red;
+						if      (ir > 255) ir = 255;
+						else if (ir <   0) ir =   0;
+
+						int ig = (int)green;
+						if      (ig > 255) ig = 255;
+						else if (ig <   0) ig =   0;
+
+						int ib = (int)blue;
+						if      (ib > 255) ib = 255;
+						else if (ib <   0) ib =   0;
+
+						row[offset]     = (byte)ib;
+						row[offset + 1] = (byte)ig;
+						row[offset + 2] = (byte)ir;
+
+						if (pic.PixelFormat == PixelFormat.Format32bppRgb)
+							offset += 4;
+						else
+							offset += 3;
+					}
+				}
+			}
+			pic.UnlockBits(data);
+
+			return pic;
+		} */
 		#endregion Methods (static)
 	}
 }
