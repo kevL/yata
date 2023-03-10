@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 7
+2023 march 10
 kevL's
 ver 5.4.5.0
 
@@ -569,8 +569,6 @@ recent=      (integer) a count of recently opened file-paths to store. If left
              filepaths (without quotes). THE WRITE-OPERATION CAN FAIL for a
              variety of reasons that I really don't want to be arshed with -
              hence the option so you can decide if it works on your OS
-statcolor =  the background color of the statusbar. A .NET string (case
-             sensitive) that represents a KnownColor - default is 'MintCream'
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
@@ -614,6 +612,22 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  and issue a notice that the text has been changed if "true";
                  otherwise Yata will clear the quotes without bothering the
                  user.
+
+color settings:
+
+A color-value is a legal .NET KnownColor. They are listed at
+https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor?view=netframework-3.5
+and a decent chart showing the colors with legal strings is found at
+https://en.wikipedia.org/wiki/Web_colors
+
+colorfrozen=       the background color of the frozen panel (default OldLace)
+colorfrozentext=   the text color of the frozen panel (default ControlText)
+colorrowa=         the background color of rows (default AliceBlue)
+colorrowb=         the background color of rows (default BlanchedAlmond)
+colorrowdisableda= the background color of disabled rows (default LavenderBlush)
+colorrowdisabledb= the background color of disabled rows (default MistyRose)
+colorstatusbar=    the background color of the statusbar (default MintCream)
+colortabletext=    the text color of rows (default ControlText)
 
 The dirpresets appear on the File menu (if specified) and are a quick way to
 show an open-file-dialog at your frequently used directory(s).
