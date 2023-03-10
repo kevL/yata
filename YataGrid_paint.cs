@@ -94,7 +94,7 @@ namespace yata
 												  cell.text,
 												  Font,
 												  rect,
-												  Colors.Text,
+												  Settings._colortabletext,
 												  YataGraphics.flags);
 							rect.Width += _padHori;
 						}
@@ -158,7 +158,7 @@ namespace yata
 				&& Fields[c - 1] == "REMOVED"
 				&& this[r,c].text != "0")
 			{
-				return (r % 2 == 0) ? Brushers.Disabled_a : Brushers.Disabled_b;
+				return (r % 2 == 0) ? Settings._colorrowdisableda : Settings._colorrowdisabledb;
 			}
 			return Rows[r]._brush;
 		}
@@ -517,7 +517,7 @@ namespace yata
 										  cell.text,
 										  Font,
 										  rect,
-										  Colors.Text,
+										  Settings._colorfrozentext,
 										  YataGraphics.flags);
 					rect.X += rect.Width;
 				}

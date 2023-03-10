@@ -928,8 +928,8 @@ namespace yata
 
 				Rows.Add(new Row(r,
 								 ColCount,
-								 (r % 2 == 0) ? Brushers.Alice
-											  : Brushers.Bob,
+								 (r % 2 == 0) ? Settings._colorrowa
+											  : Settings._colorrowb,
 								 this));
 
 				for (int c = 0; c != ColCount; ++c)

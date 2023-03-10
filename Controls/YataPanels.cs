@@ -413,7 +413,7 @@ namespace yata
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
-			BackColor = Colors.FrozenPanel;
+			BackColor = Settings._colorfrozen;
 
 			Width = w;
 		}
