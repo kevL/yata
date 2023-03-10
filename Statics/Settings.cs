@@ -57,7 +57,21 @@ namespace yata
 		internal static string _icondir;
 		internal static string _icondiralt;
 
+
+		// default color for the statusbar ->
 		internal static Brush _colorstatusbar = Brushes.MintCream;
+
+		// default colors for the grid ->
+		internal static Color _colortabletext = Colors.Text;
+		internal static Brush _colorrowa = Brushers.Alice;
+		internal static Brush _colorrowb = Brushers.Bob;
+		internal static Brush _colorrowdisableda = Brushers.Disabled_a;
+		internal static Brush _colorrowdisabledb = Brushers.Disabled_b;
+
+		// default colors for the frozen panel ->
+		internal static Color _colorfrozentext = Colors.Text;
+		internal static Color _colorfrozen = Colors.FrozenPanel;
+
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
@@ -364,6 +378,83 @@ namespace yata
 								}
 							}
 						}
+						else if (line.StartsWith("colortabletext=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(15).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colortabletext = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
+						else if (line.StartsWith("colorrowa=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(10).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowa = pi.GetValue(null,null) as Brush;
+								}
+							}
+						}
+						else if (line.StartsWith("colorrowb=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(10).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowb = pi.GetValue(null,null) as Brush;
+								}
+							}
+						}
+						else if (line.StartsWith("colorrowdisableda=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(18).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowdisableda = pi.GetValue(null,null) as Brush;
+								}
+							}
+						}
+						else if (line.StartsWith("colorrowdisabledb=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(18).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowdisabledb = pi.GetValue(null,null) as Brush;
+								}
+							}
+						}
+						else if (line.StartsWith("colorfrozentext=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(16).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colorfrozentext = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
+						else if (line.StartsWith("colorfrozen=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(12).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colorfrozen = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
 					}
 				}
 			}
@@ -449,7 +540,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 31;
+		internal const int ids = 38;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -478,6 +569,14 @@ namespace yata
 			options[++i] = "casesort=";
 			options[++i] = "clearquotes=";
 			options[++i] = "codepage=";
+			options[++i] = "colorfrozen=";
+			options[++i] = "colorfrozentext=";
+			options[++i] = "colorrowa=";
+			options[++i] = "colorrowb=";
+			options[++i] = "colorrowdisableda=";
+			options[++i] = "colorrowdisabledb=";
+			options[++i] = "colorstatusbar=";
+			options[++i] = "colortabletext=";
 			options[++i] = "context=";
 			options[++i] = "dialog=";
 			options[++i] = "dialogalt=";
@@ -490,7 +589,6 @@ namespace yata
 			options[++i] = "pathall=";
 			options[++i] = "pathzipdata=";
 			options[++i] = "recent=";
-			options[++i] = "colorstatusbar=";
 			options[++i] = "strict=";
 		}
 		#endregion options (static)
