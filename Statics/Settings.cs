@@ -57,21 +57,16 @@ namespace yata
 		internal static string _icondir;
 		internal static string _icondiralt;
 
+		internal static Brush _colorstatusbar    = Brushes.MintCream;	// default color for the statusbar
 
-		// default color for the statusbar ->
-		internal static Brush _colorstatusbar = Brushes.MintCream;
-
-		// default colors for the grid ->
-		internal static Color _colortabletext = Colors.Text;
-		internal static Brush _colorrowa = Brushers.Alice;
-		internal static Brush _colorrowb = Brushers.Bob;
+		internal static Color _colortabletext    = Colors.Text;			// default colors for the tablegrid ->
+		internal static Brush _colorrowa         = Brushers.Alice;
+		internal static Brush _colorrowb         = Brushers.Bob;
 		internal static Brush _colorrowdisableda = Brushers.Disabled_a;
 		internal static Brush _colorrowdisabledb = Brushers.Disabled_b;
 
-		// default colors for the frozen panel ->
-		internal static Color _colorfrozentext = Colors.Text;
-		internal static Color _colorfrozen = Colors.FrozenPanel;
-
+		internal static Color _colorfrozentext   = Colors.Text;			// default colors for the frozenpanel ->
+		internal static Color _colorfrozen       = Colors.FrozenPanel;
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
