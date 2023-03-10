@@ -20,7 +20,7 @@ namespace yata
 		/// with the color here - or <c>Color.Transparent</c>.</remarks>
 		protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
 		{
-			e.Graphics.FillRectangle(Settings._statcolor, e.AffectedBounds);
+			e.Graphics.FillRectangle(Settings._colorstatusbar, e.AffectedBounds);
 		}
 
 		/// <summary>

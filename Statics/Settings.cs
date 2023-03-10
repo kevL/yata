@@ -57,7 +57,7 @@ namespace yata
 		internal static string _icondir;
 		internal static string _icondiralt;
 
-		internal static Brush _statcolor = Brushes.MintCream;
+		internal static Brush _colorstatusbar = Brushes.MintCream;
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
@@ -353,14 +353,14 @@ namespace yata
 								_icondiralt = line;
 							}
 						}
-						else if (line.StartsWith("statcolor=", StringComparison.Ordinal))
+						else if (line.StartsWith("colorstatusbar=", StringComparison.Ordinal))
 						{
-							if ((line = line.Substring(10).Trim()).Length != 0)
+							if ((line = line.Substring(15).Trim()).Length != 0)
 							{
 								PropertyInfo pi = typeof(Brushes).GetProperty(line);
 								if (pi != null)
 								{
-									_statcolor = pi.GetValue(null,null) as Brush;
+									_colorstatusbar = pi.GetValue(null,null) as Brush;
 								}
 							}
 						}
@@ -490,7 +490,7 @@ namespace yata
 			options[++i] = "pathall=";
 			options[++i] = "pathzipdata=";
 			options[++i] = "recent=";
-			options[++i] = "statcolor=";
+			options[++i] = "colorstatusbar=";
 			options[++i] = "strict=";
 		}
 		#endregion options (static)
