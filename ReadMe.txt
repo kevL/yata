@@ -642,6 +642,8 @@ colorrowpaneltext= the text color of the rowpanel (default ControlText)
 colorstatusbar=    the background color of the statusbar (default MintCream)
 colortabletext=    the text color of rows (default ControlText)
 
+Not all colors used in Yata are configurable.
+
 IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
 loadchanged cells, as well as selected and created rows, etc etc etc, be a bit
 wary when changing a color away from its default value. Arbitrary changes to
