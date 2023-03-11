@@ -618,7 +618,7 @@ color settings:
 A color-value is a legal .NET KnownColor. They are listed at
 https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor?view=netframework-3.5
 and a decent chart showing the colors with legal strings is found at
-https://en.wikipedia.org/wiki/Web_colors
+https://en.wikipedia.org/wiki/Web_colors#Extended_colors
 
 colorfrozen=       the background color of the frozen panel (default OldLace)
 colorfrozentext=   the text color of the frozen panel (default ControlText)
