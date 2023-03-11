@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 10
+2023 march 11
 kevL's
 ver 5.4.5.0
 
@@ -613,6 +613,15 @@ strict=      "true" (without quotes) to show extra warnings when loading a
                  otherwise Yata will clear the quotes without bothering the
                  user.
 
+The dirpresets appear on the File menu (if specified) and are a quick way to
+show an open-file-dialog at your frequently used directory(s).
+
+The pathall directories are for gathering Info that will appear on the statusbar
+if Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da are loaded
+as the cursor is moved over their cells. (Yata was designed with Crafting in
+mind and can show stuff like Encoded IPs as readable strings on the statusbar,
+eg.)
+
 color settings:
 
 A color-value is a legal .NET KnownColor. They are listed at
@@ -622,21 +631,22 @@ https://en.wikipedia.org/wiki/Web_colors#Extended_colors
 
 colorfrozen=       the background color of the frozen panel (default OldLace)
 colorfrozentext=   the text color of the frozen panel (default ControlText)
+colorpropanel=     the background color of the propanel (default LightSteelBlue)
+colorpropaneltext= the text color of the propanel (default ControlText)
 colorrowa=         the background color of rows (default AliceBlue)
 colorrowb=         the background color of rows (default BlanchedAlmond)
 colorrowdisableda= the background color of disabled rows (default LavenderBlush)
 colorrowdisabledb= the background color of disabled rows (default MistyRose)
+colorrowpanel=     the background color of the rowpanel (default Azure)
+colorrowpaneltext= the text color of the rowpanel (default ControlText)
 colorstatusbar=    the background color of the statusbar (default MintCream)
 colortabletext=    the text color of rows (default ControlText)
 
-The dirpresets appear on the File menu (if specified) and are a quick way to
-show an open-file-dialog at your frequently used directory(s).
+IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
+loadchanged cells, as well as selected and created rows, etc etc etc, be a bit
+wary when changing a color away from its default value. Arbitrary changes to
+colors could hide visual cues that Yata wants to inform the user about.
 
-The pathall directories are for gathering Info that will appear on the statusbar
-if Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or BaseItems.2da are loaded
-as the cursor is moved over their cells. (Yata was designed with Crafting in
-mind and can show stuff like Encoded IPs as readable strings on the statusbar,
-eg.)
 
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
