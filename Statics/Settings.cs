@@ -68,8 +68,11 @@ namespace yata
 		internal static Color _colorfrozentext   = SystemColors.ControlText;	// default colors for the frozenpanel ->
 		internal static Color _colorfrozen       = Color.OldLace;
 
-		internal static Color _colorpropanel     = Color.LightSteelBlue;		// default colors for the propanel ->
-		internal static Color _colorpropaneltext = SystemColors.ControlText;
+		internal static Color _colorpropaneltext = SystemColors.ControlText;	// default colors for the propanel ->
+		internal static Color _colorpropanel     = Color.LightSteelBlue;
+
+		internal static Color _colorrowpaneltext = SystemColors.ControlText;	// default colors for the rowpanel ->
+		internal static Color _colorrowpanel     = Color.Azure;
 
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
@@ -475,6 +478,28 @@ namespace yata
 								}
 							}
 						}
+						else if (line.StartsWith("colorrowpanel=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(14).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowpanel = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
+						else if (line.StartsWith("colorrowpaneltext=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(18).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colorrowpaneltext = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
 					}
 				}
 			}
@@ -560,7 +585,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 40;
+		internal const int ids = 42;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -597,6 +622,8 @@ namespace yata
 			options[++i] = "colorrowb=";
 			options[++i] = "colorrowdisableda=";
 			options[++i] = "colorrowdisabledb=";
+			options[++i] = "colorrowpanel=";
+			options[++i] = "colorrowpaneltext=";
 			options[++i] = "colorstatusbar=";
 			options[++i] = "colortabletext=";
 			options[++i] = "context=";

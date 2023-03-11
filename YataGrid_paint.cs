@@ -465,7 +465,7 @@ namespace yata
 									  r.ToString(CultureInfo.InvariantCulture),
 									  _f.FontAccent,
 									  rect,
-									  Colors.Text,
+									  Settings._colorrowpaneltext,
 									  YataGraphics.flags);
 			}
 		}

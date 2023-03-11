@@ -323,7 +323,7 @@ namespace yata
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
-			BackColor = Colors.RowheadPanel;
+			BackColor = Settings._colorrowpanel;
 		}
 		#endregion cTor
 
