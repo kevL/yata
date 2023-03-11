@@ -893,7 +893,7 @@ namespace yata
 									  _grid.Cols[c].text,
 									  Font,
 									  rect,
-									  Colors.Text,
+									  Settings._colorpropaneltext,
 									  YataGraphics.flags);
 			}
 
@@ -913,7 +913,7 @@ namespace yata
 											  _grid[r,c].text,
 											  Font,
 											  rect,
-											  Colors.Text,
+											  Settings._colorpropaneltext,
 											  YataGraphics.flags);
 					}
 				}
