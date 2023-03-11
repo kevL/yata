@@ -139,10 +139,7 @@ namespace yata
 
 			_grid = grid;
 
-			if (Settings._gradient)
-				BackColor = Color.SkyBlue;
-			else
-				BackColor = Color.LightBlue;
+			BackColor = Settings._colorpropanel;
 
 			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			TabStop = false; // <- the Propanel is not currently coded to cope w/ keyboard-input.

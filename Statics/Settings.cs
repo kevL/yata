@@ -68,6 +68,8 @@ namespace yata
 		internal static Color _colorfrozentext   = SystemColors.ControlText;	// default colors for the frozenpanel ->
 		internal static Color _colorfrozen       = Color.OldLace;
 
+		internal static Color _colorpropanel     = Color.LightSteelBlue;
+
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
 		internal const int AoTrue     = 1;
@@ -450,6 +452,17 @@ namespace yata
 								}
 							}
 						}
+						else if (line.StartsWith("colorpropanel=", StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(14).Trim()).Length != 0)
+							{
+								PropertyInfo pi = typeof(Color).GetProperty(line);
+								if (pi != null)
+								{
+									_colorpropanel = (Color)pi.GetValue(null,null);
+								}
+							}
+						}
 					}
 				}
 			}
@@ -535,7 +548,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 38;
+		internal const int ids = 39;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -566,6 +579,7 @@ namespace yata
 			options[++i] = "codepage=";
 			options[++i] = "colorfrozen=";
 			options[++i] = "colorfrozentext=";
+			options[++i] = "colorpropanel=";
 			options[++i] = "colorrowa=";
 			options[++i] = "colorrowb=";
 			options[++i] = "colorrowdisableda=";
