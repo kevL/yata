@@ -78,7 +78,7 @@ namespace yata
 			if (   (sender == it_Settings && _foptions == null)
 				|| (sender == it_Colors   && _fcolors  == null))
 			{
-				string pfe = (sender == it_Settings) ? Settings.FE : ColorOptions.FE;
+				string pfe = (sender == it_Settings) ? Options.FE : ColorOptions.FE;
 					   pfe = Path.Combine(Application.StartupPath, pfe);
 
 				if (!File.Exists(pfe))
@@ -104,11 +104,11 @@ namespace yata
 
 									if (sender == it_Settings)
 									{
-										if (Settings.options == null)
-											Settings.CreateOptions();
+										if (Options.options == null)
+											Options.CreateOptions();
 
-										for (int i = 0; i != Settings.ids; ++i)
-											sw.WriteLine(Settings.options[i]);
+										for (int i = 0; i != Options.ids; ++i)
+											sw.WriteLine(Options.options[i]);
 									}
 									else // it_Colors
 									{

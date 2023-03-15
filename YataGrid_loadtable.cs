@@ -28,7 +28,7 @@ namespace yata
 		/// <summary>
 		/// This <c>static bool</c> is set <c>true</c> when loading
 		/// Crafting.2da, Spells.2da, Feat.2da, or Classes.2da to indicate that
-		/// the <c><see cref="Settings._pathall">Settings._pathall</see></c>
+		/// the <c><see cref="Options._pathall">Options._pathall</see></c>
 		/// directories have been groped.
 		/// </summary>
 		static bool Groped;
@@ -197,7 +197,7 @@ namespace yata
 				if (lines[i].Contains("�"))
 				{
 					if (CodePage == -1)
-						CodePage = Settings._codepage; // init.
+						CodePage = Options._codepage; // init.
 
 					Encoding enc;
 
@@ -278,7 +278,7 @@ namespace yata
 
 			// 2. test for Tabs ->
 
-			if (Settings._strict && Settings._alignoutput != Settings.AoTabs)
+			if (Options._strict && Options._alignoutput != Options.AoTabs)
 			{
 				for (int i = 0; i != lines.Length; ++i)
 				{
@@ -325,7 +325,7 @@ namespace yata
 				switch (i)
 				{
 					case LINE_VERSION:
-						if (!quelch && Settings._strict)
+						if (!quelch && Options._strict)
 						{
 							if (line != (tr = line.Trim()))
 							{
@@ -395,7 +395,7 @@ namespace yata
 					case LINE_DEFAULT:
 						tr = line.Trim();
 
-						if (!quelch && Settings._strict && line != tr)
+						if (!quelch && Options._strict && line != tr)
 						{
 							head = "The 2nd line (default value) has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -438,7 +438,7 @@ namespace yata
 											goto case DialogResult.Retry;
 
 										case DialogResult.Retry:
-											if (Settings._strict) loadresult = LOADRESULT_CHANGED;
+											if (Options._strict) loadresult = LOADRESULT_CHANGED;
 											break;
 									}
 								}
@@ -447,7 +447,7 @@ namespace yata
 							{
 								InputDialog.VerifyDefaultval(ref _defaultval, true);
 
-								if (!quelch && Settings._strict && tr != gs.Default + _defaultval)
+								if (!quelch && Options._strict && tr != gs.Default + _defaultval)
 								{
 									head = "The Default on the 2nd line has been changed.";
 									copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -473,7 +473,7 @@ namespace yata
 						{
 							_defaultval = String.Empty;
 
-							if (!quelch && Settings._strict && tr.Length != 0)
+							if (!quelch && Options._strict && tr.Length != 0)
 							{
 								head = "The 2nd line (default value) in the 2da contains garbage. It will be cleared if the file is saved.";
 								copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -502,7 +502,7 @@ namespace yata
 						// TODO: check for redundant whitespace at the start of the line also
 						// flag Changed if found ...
 
-						if (!quelch && Settings._strict && line != tr)
+						if (!quelch && Options._strict && line != tr)
 						{
 							head = "The 3nd line (colhead labels) has extraneous whitespace. It will be trimmed if the file is saved.";
 							copy = Fullpath + Environment.NewLine + Environment.NewLine
@@ -524,9 +524,9 @@ namespace yata
 						}
 
 						if (!quelch
-							&& Settings._strict													// line.Length shall not be 0
-							&&   line[0] != 32													// space
-							&& !(line[0] ==  9 && Settings._alignoutput == Settings.AoTabs))	// tab
+							&& Options._strict												// line.Length shall not be 0
+							&&   line[0] != 32												// space
+							&& !(line[0] ==  9 && Options._alignoutput == Options.AoTabs))	// tab
 						{
 							// NOTE: This is an autocorrecting error and there was
 							// really no need for the Bioware spec. to indent the 3rd line.
@@ -566,10 +566,10 @@ namespace yata
 								if (!chars.Contains(character)
 									&& !(   character == 32 // space
 										|| (character ==  9 // tab
-											&& (Settings._alignoutput == Settings.AoTabs
-												|| !Settings._strict))
+											&& (Options._alignoutput == Options.AoTabs
+												|| !Options._strict))
 										|| Util.isAsciiAlphanumericOrUnderscore(character)
-										|| (!Settings._strict
+										|| (!Options._strict
 											&& Util.isPrintableAsciiNotDoublequote(character))))
 								{
 									head = "Detected a suspect character in the colhead labels ...";
@@ -603,7 +603,7 @@ namespace yata
 
 						if (tr.Length == 0)
 						{
-							if (!quelch && Settings._strict)
+							if (!quelch && Options._strict)
 							{
 								head = "A blank row is detected. It will be deleted if the file is saved.";
 								copy = Fullpath;
@@ -627,9 +627,9 @@ namespace yata
 						{
 							++id;
 
-							if (!quelch && Settings._strict && !whitespacewarned
-								&& (   (Settings._alignoutput == Settings.AoElectron && line != line.TrimEnd()) // 'AoElectron' indents each row with at least one space
-									|| (Settings._alignoutput != Settings.AoElectron && line != tr)))
+							if (!quelch && Options._strict && !whitespacewarned
+								&& (   (Options._alignoutput == Options.AoElectron && line != line.TrimEnd()) // 'AoElectron' indents each row with at least one space
+									|| (Options._alignoutput != Options.AoElectron && line != tr)))
 							{
 								whitespacewarned = true;
 
@@ -731,7 +731,7 @@ namespace yata
 							}
 
 
-							if (Settings._autorder && id.ToString(CultureInfo.InvariantCulture) != celltexts[0])
+							if (Options._autorder && id.ToString(CultureInfo.InvariantCulture) != celltexts[0])
 							{
 								celltexts[0] = id.ToString(CultureInfo.InvariantCulture);
 								autordered = true;
@@ -760,7 +760,7 @@ namespace yata
 				var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 
 				int c = 0;
-				if (Settings._autorder)
+				if (Options._autorder)
 					cells[c++] = "0";
 
 				for (; c <= Fields.Length; ++c)
@@ -837,10 +837,10 @@ namespace yata
 
 //					_f.CreateInfoStructs();
 
-					if (Directory.Exists(Settings._pathzipdata))
+					if (Directory.Exists(Options._pathzipdata))
 						_f.GropeZipData();
 
-					foreach (var dir in Settings._pathall)
+					foreach (var dir in Options._pathall)
 						_f.GropeLabels(dir);
 
 //					_f.ClearInfoStructs();
@@ -1184,7 +1184,7 @@ namespace yata
 		/// <param name="e"></param>
 		void label_Resize(object sender, EventArgs e)
 		{
-			if (Settings._gradient && _heightColheadCached != HeightColhead)
+			if (Options._gradient && _heightColheadCached != HeightColhead)
 			{
 				_heightColheadCached = HeightColhead;
 
@@ -1216,7 +1216,7 @@ namespace yata
 
 			var cells = new string[Fields.Length + 1]; // NOTE: 'Fields' does not contain the ID-col.
 
-			cells[0] = "0"; // force 'Settings._autorder'
+			cells[0] = "0"; // force 'Options._autorder'
 
 			for (int c = 1; c <= Fields.Length; ++c)
 				cells[c] = gs.Stars;

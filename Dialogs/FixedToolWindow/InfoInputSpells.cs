@@ -129,10 +129,10 @@ namespace yata
 
 			// NOTE: Don't bother inheriting from YataDialog since setting the
 			// font is the only benefit ->
-			if (Settings._font2dialog != null)
-				Font = Settings._font2dialog;
+			if (Options._font2dialog != null)
+				Font = Options._font2dialog;
 			else
-				Font = Settings._fontdialog;
+				Font = Options._fontdialog;
 
 			init();
 		}

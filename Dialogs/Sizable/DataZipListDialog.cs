@@ -68,11 +68,11 @@ namespace yata
 
 			Initialize(METRIC_FUL);
 
-			// cf. Settings.SetFonts() ->
-			if (Settings._fontf != null)
+			// cf. Options.SetFonts() ->
+			if (Options._fontf != null)
 			{
 				lb_List.Font.Dispose();
-				lb_List.Font = Settings._fontf;
+				lb_List.Font = Options._fontf;
 			}
 			lb_List.BackColor = Colors.TextboxBackground;
 

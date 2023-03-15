@@ -100,7 +100,7 @@ namespace yata
 					_widthFrozenCached += _grid.Cols[f].Width;
 			}
 
-			if (Settings._gradient)
+			if (Options._gradient)
 			{
 				if (Gradients.ColheadPanel != null)
 					Gradients.ColheadPanel.Dispose();
@@ -126,7 +126,7 @@ namespace yata
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				if (Gradients.ColheadPanel != null) // Settings._gradient
+				if (Gradients.ColheadPanel != null) // Options._gradient
 				{
 					var rect = new Rectangle(0,0, Width, Height);
 					YataGrid.graphics.FillRectangle(Gradients.ColheadPanel, rect);
@@ -176,7 +176,7 @@ namespace yata
 		/// <summary>
 		/// Overrides the <c>MouseDown</c> handler on this <c>YataPanelCols</c>.
 		/// Accepts or cancels the editor based on
-		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c>.
+		/// <c><see cref="Options._acceptedit">Options._acceptedit</see></c>.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -447,7 +447,7 @@ namespace yata
 		/// <item><c>LMB</c> - accept edit</item>
 		/// <item><c>RMB</c> - cancel edit</item>
 		/// <item><c>MMB</c> - accept or cancel based on
-		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c></item>
+		/// <c><see cref="Options._acceptedit">Options._acceptedit</see></c></item>
 		/// </list>
 		/// </summary>
 		/// <param name="e"></param>

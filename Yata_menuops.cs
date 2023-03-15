@@ -417,10 +417,10 @@ namespace yata
 		/// </list></remarks>
 		void opsclick_ExternalDiff(object sender, EventArgs e)
 		{
-			if (File.Exists(Settings._diff))
+			if (File.Exists(Options._diff))
 			{
 				var differ = new Process();
-				differ.StartInfo.FileName = Settings._diff;
+				differ.StartInfo.FileName = Options._diff;
 
 				if (_diff1 != null && _diff2 != null
 					&& File.Exists(_diff1.Fullpath)
@@ -486,7 +486,7 @@ namespace yata
 			it_PropanelLoc_pre.Enabled =
 			it_Propanel       .Checked = Table.Propanel != null && Table.Propanel.Visible;
 
-			it_ExternDiff     .Enabled = File.Exists(Settings._diff);
+			it_ExternDiff     .Enabled = File.Exists(Options._diff);
 		}
 
 		/// <summary>

@@ -101,8 +101,8 @@ namespace yata
 			Font.Dispose();
 			Font = font;
 
-			Settings._fontdialog.Dispose();
-			Settings._fontdialog = Settings.CreateDialogFont(Font);
+			Options._fontdialog.Dispose();
+			Options._fontdialog = Options.CreateDialogFont(Font);
 
 			FontAccent.Dispose();
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));

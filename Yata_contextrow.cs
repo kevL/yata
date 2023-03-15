@@ -44,7 +44,7 @@ namespace yata
 			rowit_Delete     .Enabled = !Table.Readonly && !diffed;
 
 			Point loc;
-			if (Settings._context)							// static location
+			if (Options._context)							// static location
 			{
 				loc = new Point(YataGrid.WidthRowhead,
 								YataGrid.HeightColhead);
@@ -129,7 +129,7 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (Settings._autorder && order() != 0) layout();
+			if (Options._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -150,7 +150,7 @@ namespace yata
 			Row row = Table.Rows[_r];
 
 			int c = 0;
-			if (Settings._autorder)
+			if (Options._autorder)
 			{
 				row[0].text = _r.ToString(CultureInfo.InvariantCulture);
 				Table.doTextwidth(row[0]);
@@ -226,7 +226,7 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (Settings._autorder && order() != 0) layout();
+			if (Options._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -252,7 +252,7 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (Settings._autorder && order() != 0) layout();
+			if (Options._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -272,7 +272,7 @@ namespace yata
 			Row row = Table.Rows[_r];
 
 			int c = 0;
-			if (Settings._autorder)
+			if (Options._autorder)
 			{
 				row[0].text = _r.ToString(CultureInfo.InvariantCulture);
 				Table.doTextwidth(row[0]);
@@ -348,7 +348,7 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (Settings._autorder && order() != 0) layout();
+			if (Options._autorder && order() != 0) layout();
 		}
 
 		/// <summary>
@@ -380,7 +380,7 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (Settings._autorder && order() != 0) layout();
+			if (Options._autorder && order() != 0) layout();
 		}
 		#endregion Handlers (row)
 	}

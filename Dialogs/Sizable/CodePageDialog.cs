@@ -145,7 +145,7 @@ namespace yata
 		/// <param name="e"></param>
 		void bu_Custom_click(object sender, EventArgs e)
 		{
-			tb_Codepage.Text = Settings._codepage.ToString(CultureInfo.InvariantCulture);
+			tb_Codepage.Text = Options._codepage.ToString(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>

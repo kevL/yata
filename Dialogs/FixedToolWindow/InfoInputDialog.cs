@@ -77,8 +77,8 @@ namespace yata
 				IntPtr hdc = GetWindowDC(m.HWnd);
 				Graphics graphics = Graphics.FromHdc(hdc);
 
-				if (Settings._fontf_tb != null)
-					TitleFont = Settings._fontf_tb;
+				if (Options._fontf_tb != null)
+					TitleFont = Options._fontf_tb;
 
 				Size size = YataGraphics.MeasureSize(_title, TitleFont);
 				float x = (_width  - size.Width)  / 2.0f - 1.0f;

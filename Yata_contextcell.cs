@@ -624,7 +624,7 @@ namespace yata
 				Table[r,c].diff = false;
 			}
 
-			if (Settings._autorder)
+			if (Options._autorder)
 				table[r,0].text = table[r,0].y.ToString(CultureInfo.InvariantCulture);	// not likely to happen. user'd have to load a table w/
 																						// an out of order id then merge that row to another table.
 			if (table.ColCount > Table.ColCount)
@@ -1153,9 +1153,9 @@ namespace yata
 				ofd.AutoUpgradeEnabled = false;
 
 				string dir;
-				if (Directory.Exists(Settings._pathzipdata))
+				if (Directory.Exists(Options._pathzipdata))
 				{
-					dir = Settings._pathzipdata;
+					dir = Options._pathzipdata;
 					ofd.RestoreDirectory = true;	// while this restores the app's CurrentDirectory it does
 				}									// not restore the directory in the registry ComDlg32 MRU - oh well
 				else

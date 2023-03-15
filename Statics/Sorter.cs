@@ -113,7 +113,7 @@ namespace yata
 			_a = r1[_sortcol].text;
 			_b = r2[_sortcol].text;
 
-			if (!Settings._casesort)
+			if (!Options._casesort)
 			{
 				_a = _a.ToUpper(CultureInfo.CurrentCulture);
 				_b = _b.ToUpper(CultureInfo.CurrentCulture);

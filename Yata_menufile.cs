@@ -30,7 +30,7 @@ namespace yata
 			it_Reload.Enabled = Table != null && File.Exists(Table.Fullpath);
 
 
-			if (Settings._dirpreset.Count != 0) // directory presets ->
+			if (Options._dirpreset.Count != 0) // directory presets ->
 			{
 				ToolStripItemCollection presets = it_OpenFolder.DropDownItems;
 				for (int i = presets.Count - 1; i != -1; --i)
@@ -39,7 +39,7 @@ namespace yata
 				presets.Clear();
 
 				ToolStripItem preset;
-				foreach (var dir in Settings._dirpreset)
+				foreach (var dir in Options._dirpreset)
 				{
 					if (Directory.Exists(dir))
 					{
@@ -50,7 +50,7 @@ namespace yata
 				it_OpenFolder.Visible = presets.Count != 0;
 			}
 
-			if (Settings._recent != 0) // recent files ->
+			if (Options._recent != 0) // recent files ->
 			{
 				ToolStripItem it;
 				ToolStripItemCollection recents = it_Recent.DropDownItems;
@@ -606,7 +606,7 @@ namespace yata
 		/// <returns><c>true</c> if SaveAll is allowed</returns>
 		bool AllowSaveAll()
 		{
-			if (Settings._allowdupls)
+			if (Options._allowdupls)
 			{
 				// iterate through all tables and if a different table has the
 				// same Fullpath and neither table is Readonly return false ->

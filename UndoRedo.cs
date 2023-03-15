@@ -542,7 +542,7 @@ namespace yata
 			_grid.Rows[r].selected = true;
 			_grid.EnsureDisplayedRow(r);
 
-			if (Settings._autorder && Yata.order() != 0)
+			if (Options._autorder && Yata.order() != 0)
 				_f.layout(true);
 
 			Invalidate();
@@ -567,7 +567,7 @@ namespace yata
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			if (Settings._autorder && Yata.order() != 0)
+			if (Options._autorder && Yata.order() != 0)
 				_f.layout(true);
 
 			Invalidate();
@@ -601,7 +601,7 @@ namespace yata
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			if (Settings._autorder && Yata.order() != 0)
+			if (Options._autorder && Yata.order() != 0)
 				_f.layout(true);
 
 			Invalidate();
@@ -670,7 +670,7 @@ namespace yata
 														// and since only 1 row shall ever be selected you can't just select them all either.
 			_grid.EnsureDisplayedRow(r);				// TODO: EnsureDisplayedRows()
 
-			if (Settings._autorder && Yata.order() != 0)
+			if (Options._autorder && Yata.order() != 0)
 				_f.layout(true);
 
 
@@ -705,7 +705,7 @@ namespace yata
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			if (Settings._autorder && Yata.order() != 0)
+			if (Options._autorder && Yata.order() != 0)
 				_f.layout(true);
 
 

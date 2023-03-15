@@ -170,7 +170,7 @@
     <Compile Include="Statics\Constants.cs" />
     <Compile Include="Statics\Info.cs" />
     <Compile Include="Statics\logfile.cs" />
-    <Compile Include="Statics\Settings.cs" />
+    <Compile Include="Statics\Options.cs" />
     <Compile Include="Statics\Sorter.cs" />
     <Compile Include="Statics\StringDecryptor.cs" />
     <Compile Include="Statics\TalkReader.cs" />

@@ -13,12 +13,12 @@ namespace yata
 		/// Writes a 2da-file to
 		/// <c><see cref="YataGrid.Fullpath">YataGrid.Fullpath</see></c> based
 		/// on user's
-		/// <c><see cref="Settings._alignoutput">Settings._alignoutput</see></c>.
+		/// <c><see cref="Options._alignoutput">Options._alignoutput</see></c>.
 		/// <list type="bullet">
-		/// <item><c><see cref="Settings.AoFalse">Settings.AoFalse</see></c></item>
-		/// <item><c><see cref="Settings.AoTrue">Settings.AoTrue</see></c></item>
-		/// <item><c><see cref="Settings.AoTabs">Settings.AoTabs</see></c></item>
-		/// <item><c><see cref="Settings.AoElectron">Settings.AoElectron</see></c></item>
+		/// <item><c><see cref="Options.AoFalse">Options.AoFalse</see></c></item>
+		/// <item><c><see cref="Options.AoTrue">Options.AoTrue</see></c></item>
+		/// <item><c><see cref="Options.AoTabs">Options.AoTabs</see></c></item>
+		/// <item><c><see cref="Options.AoElectron">Options.AoElectron</see></c></item>
 		/// </list>
 		/// </summary>
 		/// <param name="table">a <c><see cref="YataGrid"/> to write the data
@@ -49,9 +49,9 @@ namespace yata
 				{
 					int f,r,c, fields, width; int[] widths;
 
-					switch (Settings._alignoutput)
+					switch (Options._alignoutput)
 					{
-						case Settings.AoFalse:
+						case Options.AoFalse:
 							fields = table.Fields.Length - 1;		// colabels ->
 							for (f = 0; f != fields; ++f)
 								sw.Write(gs.Space + table.Fields[f]);
@@ -67,7 +67,7 @@ namespace yata
 							}
 							break;
 
-						case Settings.AoTrue:
+						case Options.AoTrue:
 							widths = GetWidths(table);
 
 							sw.Write(new string(gs.Spacechar, widths[0]));	// colabels ->
@@ -86,7 +86,7 @@ namespace yata
 							}
 							break;
 
-						case Settings.AoTabs:
+						case Options.AoTabs:
 						{
 							widths = GetWidths(table);
 
@@ -146,7 +146,7 @@ namespace yata
 							break;
 						}
 
-						case Settings.AoElectron:
+						case Options.AoElectron:
 						{
 							// writes to file using the Electron toolset routine -
 							// this routine is based on OEIShared.IO.TwoDA.TwoDAFile.Save(string)
@@ -183,24 +183,24 @@ namespace yata
 				}
 				else // is freshly Created
 				{
-					switch (Settings._alignoutput)
+					switch (Options._alignoutput)
 					{
-						case Settings.AoFalse:
+						case Options.AoFalse:
 							sw.WriteLine(" "  + gs.DefaultColLabel);	// colabels
 							sw.WriteLine("0 " + gs.Stars);				// celltexts
 							break;
 
-						case Settings.AoTrue:
+						case Options.AoTrue:
 							sw.WriteLine("  " + gs.DefaultColLabel);
 							sw.WriteLine("0 " + gs.Stars);
 							break;
 
-						case Settings.AoTabs:
+						case Options.AoTabs:
 							sw.WriteLine("\t"  + gs.DefaultColLabel);
 							sw.WriteLine("0\t" + gs.Stars);
 							break;
 
-						case Settings.AoElectron:
+						case Options.AoElectron:
 							sw.WriteLine("        " + gs.DefaultColLabel);
 							sw.WriteLine(" 0      " + gs.Stars);
 							break;

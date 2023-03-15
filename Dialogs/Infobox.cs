@@ -60,19 +60,19 @@ namespace yata
 				pa_Copyable.BringToFront();
 				YataDialog.SetTabs(rt_Copyable);
 
-				if (Settings._fontf != null)
+				if (Options._fontf != null)
 				{
 					rt_Copyable.Font.Dispose();
-					rt_Copyable.Font = Settings._fontf;
+					rt_Copyable.Font = Options._fontf;
 				}
 			}
 			else
 				la_head.Dock = DockStyle.Fill;
 
-			if (Settings._fonti != null)
+			if (Options._fonti != null)
 			{
 				Font.Dispose();
-				Font = Settings._fonti;
+				Font = Options._fonti;
 			}
 
 

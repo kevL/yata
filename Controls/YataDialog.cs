@@ -237,7 +237,7 @@ namespace yata
 				ClientSize = new Size(_w,_h); // foff .net
 
 			PopulateTextboxbaseList(this);
-			Settings.SetFonts(this, bypassColor, bypassFont);
+			Options.SetFonts(this, bypassColor, bypassFont);
 		}
 
 		/// <summary>

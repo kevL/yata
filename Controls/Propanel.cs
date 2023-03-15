@@ -144,14 +144,14 @@ namespace yata
 			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			TabStop = false; // <- the Propanel is not currently coded to cope w/ keyboard-input.
 
-			if (Settings._font3 != null)
+			if (Options._font3 != null)
 			{
 //				Font.Dispose(); // be wary. Be very wary. -> Do NOT Dispose()
 				// debug builds don't throw
 				// but release builds CTD when invoking the ConfigEditor after
 				// the Propanel has been opened ... eg.
 
-				Font = Settings._font3;
+				Font = Options._font3;
 			}
 			else
 				Font = new Font("Verdana", 7.25F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
@@ -412,14 +412,14 @@ namespace yata
 
 			if (!_bypassleaveditor)
 			{
-				if (Settings._acceptedit)
+				if (Options._acceptedit)
 				{
-					//logfile.Log(". Settings._acceptedit");
+					//logfile.Log(". Options._acceptedit");
 					editresultaccept(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
-					//logfile.Log(". Settings._acceptedit FALSE");
+					//logfile.Log(". Options._acceptedit FALSE");
 					editresultcancel(); // do NOT focus the table.
 				}
 			}

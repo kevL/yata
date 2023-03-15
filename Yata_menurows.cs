@@ -177,7 +177,7 @@ namespace yata
 				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 
-				if (Settings._autorder && order() != 0) layout();
+				if (Options._autorder && order() != 0) layout();
 			}
 			else
 				error_TableDiffed();
@@ -208,7 +208,7 @@ namespace yata
 				EnableGotoReplaced(Table.anyReplaced());
 				EnableGotoLoadchanged(Table.anyLoadchanged());
 
-				if (Settings._autorder && order() != 0) layout();
+				if (Options._autorder && order() != 0) layout();
 			}
 			else
 				error_TableDiffed();
@@ -292,7 +292,7 @@ namespace yata
 						DrawRegulator.ResumeDrawing(Table);
 						Obfuscate(false);
 
-						if (Settings._autorder && order() != 0) layout();
+						if (Options._autorder && order() != 0) layout();
 					}
 				}
 			}

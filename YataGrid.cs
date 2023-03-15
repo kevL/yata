@@ -1038,14 +1038,14 @@ namespace yata
 		{
 			if (!_bypassleaveditor)
 			{
-				if (Settings._acceptedit)
+				if (Options._acceptedit)
 				{
-					//logfile.Log(". Settings._acceptedit");
+					//logfile.Log(". Options._acceptedit");
 					editresultaccept(); // do NOT focus the table here. Do it in the calling funct if req'd.
 				}
 				else
 				{
-					//logfile.Log(". Settings._acceptedit FALSE");
+					//logfile.Log(". Options._acceptedit FALSE");
 					editresultcancel(INVALID_GRID); // do NOT focus the table.
 				}
 			}
@@ -1122,7 +1122,7 @@ namespace yata
 		/// <remarks>After calling this ensure that focus changes so that the
 		/// respective editor's <c>Leave</c> event fires, which shall either
 		/// cancel or accept the text in <c><see cref="YataEditbox"/></c> per
-		/// <c><see cref="Settings._acceptedit">Settings._acceptedit</see></c>.</remarks>
+		/// <c><see cref="Options._acceptedit">Options._acceptedit</see></c>.</remarks>
 		internal void editresultdefault()
 		{
 			if (_editor.Visible)
@@ -1396,7 +1396,7 @@ namespace yata
 					if (load)
 						return true;
 
-					return Settings._strict; // <- bother user if he/she wants auto-quotes only if Strict.
+					return Options._strict; // <- bother user if he/she wants auto-quotes only if Strict.
 				}
 			}
 
@@ -1427,7 +1427,7 @@ namespace yata
 					}
 				}
 			}
-			else if (Settings._clearquotes) // quoted but user doesn't want quotes (unless there's whitespace) ->
+			else if (Options._clearquotes) // quoted but user doesn't want quotes (unless there's whitespace) ->
 			{
 				bool cleared = true;
 
@@ -1445,7 +1445,7 @@ namespace yata
 				if (cleared) // existing quotes were successfully cleared ->
 				{
 					verified = sb.ToString();
-					sanitized = Settings._strict && verified != text; // <- bother user if he/she wants to clear quotes only if Strict.
+					sanitized = Options._strict && verified != text; // <- bother user if he/she wants to clear quotes only if Strict.
 
 					text = verified;
 					return sanitized;

@@ -1190,7 +1190,7 @@ namespace yata
 			_sortcol = col;
 
 
-			if (!Settings._strict) // ASSUME people who use strict settings know what they're doing.
+			if (!Options._strict) // ASSUME people who use strict settings know what they're doing.
 			{
 				if (_sortcol == 0 && _sortdir == SORT_ASC)
 					TooltipSort.SetToolTip(_labelid, "");

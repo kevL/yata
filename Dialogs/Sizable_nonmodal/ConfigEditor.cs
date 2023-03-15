@@ -106,14 +106,14 @@ namespace yata
 		{
 			try
 			{
-				string pfeT = _isColors ? ColorOptions.FE : Settings.FE;
+				string pfeT = _isColors ? ColorOptions.FE : Options.FE;
 					   pfeT = Path.Combine(Application.StartupPath, pfeT) + ".t";
 
 				File.WriteAllText(pfeT, rt_Settings.Text);
 
 				if (File.Exists(pfeT))
 				{
-					string pfe = _isColors ? ColorOptions.FE : Settings.FE;
+					string pfe = _isColors ? ColorOptions.FE : Options.FE;
 						   pfe = Path.Combine(Application.StartupPath, pfe);
 
 					File.Delete(pfe);
@@ -183,9 +183,9 @@ namespace yata
 			else
 			{
 				string option;
-				for (int i = 0; i != Settings.ids; ++i)
+				for (int i = 0; i != Options.ids; ++i)
 				{
-					if (!text.Contains(option = Settings.options[i]))
+					if (!text.Contains(option = Options.options[i]))
 					{
 						if (!found)
 						{
@@ -226,14 +226,14 @@ namespace yata
 			}
 			else
 			{
-				if (Settings.options == null)
-					Settings.CreateOptions();
+				if (Options.options == null)
+					Options.CreateOptions();
 
 				string text = rt_Settings.Text;
 
-				for (int i = 0; i != Settings.ids; ++i)
+				for (int i = 0; i != Options.ids; ++i)
 				{
-					if (!text.Contains(Settings.options[i]))
+					if (!text.Contains(Options.options[i]))
 						return true;
 				}
 			}

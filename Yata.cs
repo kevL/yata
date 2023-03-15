@@ -274,17 +274,17 @@ namespace yata
 
 			YataGraphics.hFontDefault = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, Font);
 
-			Settings.ScanSettings(); // load the Optional settings file 'Settings.Cfg'
+			Options.ScanSettings(); // load the Optional settings file 'Settings.Cfg'
 			ColorOptions.ScanSettings(); // load the Optional settings file 'Colors.Cfg'
 
-			if (Settings._font != null)
-				Font = Settings._font;
+			if (Options._font != null)
+				Font = Options._font;
 			else
-				Settings._fontdialog = Settings.CreateDialogFont(Font);
+				Options._fontdialog = Options.CreateDialogFont(Font);
 
 			FontAccent = new Font(Font, getStyleAccented(Font.FontFamily));
 
-			if (Settings._font2 != null)
+			if (Options._font2 != null)
 			{
 				// Relative Font-sizes (as defined in the Designers):
 				//
@@ -294,18 +294,18 @@ namespace yata
 				// statbar_Info  = +1.50
 
 				_bar.Font.Dispose();
-				_bar.Font = Settings._font2;
+				_bar.Font = Options._font2;
 
 				statusbar.Font.Dispose();
-				statusbar.Font = Settings._font2;
+				statusbar.Font = Options._font2;
 
 				statbar_Cords.Font.Dispose();
-				statbar_Cords.Font = new Font(Settings._font2.FontFamily,
-											  Settings._font2.SizeInPoints - 0.75f);
+				statbar_Cords.Font = new Font(Options._font2.FontFamily,
+											  Options._font2.SizeInPoints - 0.75f);
 
 				statbar_Info.Font.Dispose();
-				statbar_Info.Font = new Font(Settings._font2.FontFamily,
-											 Settings._font2.SizeInPoints + 1.5f);
+				statbar_Info.Font = new Font(Options._font2.FontFamily,
+											 Options._font2.SizeInPoints + 1.5f);
 
 				int hBar = YataGraphics.MeasureHeight(YataGraphics.HEIGHT_TEST, statbar_Info.Font) + 2;
 
@@ -318,25 +318,25 @@ namespace yata
 
 
 				rowit_Header.Font.Dispose();
-				rowit_Header.Font = new Font(Settings._font2.FontFamily,
-											 Settings._font2.SizeInPoints + 0.75f,
-											 getStyleAccented(Settings._font2.FontFamily));
+				rowit_Header.Font = new Font(Options._font2.FontFamily,
+											 Options._font2.SizeInPoints + 0.75f,
+											 getStyleAccented(Options._font2.FontFamily));
 
 				_contextTa.Font.Dispose();
-				_contextTa.Font = Settings._font2;
+				_contextTa.Font = Options._font2;
 
 				_contextRo.Font.Dispose();
-				_contextRo.Font = Settings._font2;
+				_contextRo.Font = Options._font2;
 
 				_contextCe.Font.Dispose();
-				_contextCe.Font = Settings._font2;
+				_contextCe.Font = Options._font2;
 			}
 
 			int
-				x = Settings._x,
-				y = Settings._y,
-				w = Settings._w,
-				h = Settings._h;
+				x = Options._x,
+				y = Options._y,
+				w = Options._w,
+				h = Options._h;
 
 			if (x != -1 || y != -1)
 			{
@@ -367,7 +367,7 @@ namespace yata
 			bu_Propanel.Top = -1; // NOTE: This won't work in PP button's cTor. So do it here.
 
 
-			if (Settings._recent != 0)
+			if (Options._recent != 0)
 				CreateRecentsSubits(); // init recents before (potentially) loading a table from FileExplorer
 
 			if (File.Exists(PfeLoad))
@@ -381,10 +381,10 @@ namespace yata
 			DontBeepEvent += HandleDontBeepEvent;
 
 			TalkReader.LoadTalkingHeads(Strrefheads);
-			TalkReader.Load(Settings._dialog,    it_PathTalkD);
-			TalkReader.Load(Settings._dialogalt, it_PathTalkC);
+			TalkReader.Load(Options._dialog,    it_PathTalkD);
+			TalkReader.Load(Options._dialogalt, it_PathTalkC);
 
-			if (Settings._maximized)
+			if (Options._maximized)
 				WindowState = FormWindowState.Maximized;
 
 //			_bar.TabStop = true; // can be set in the designer <-
@@ -417,7 +417,7 @@ namespace yata
 						it.Click += fileclick_Recent;
 						recents.Add(it);
 
-						if (recents.Count == Settings._recent)
+						if (recents.Count == Options._recent)
 							break;
 					}
 				}
@@ -635,7 +635,7 @@ namespace yata
 				_bypassVerifyFile = false;
 				VerifyCurrentFileState();
 			}
-			else if (Settings._recent != 0)
+			else if (Options._recent != 0)
 			{
 				int i = -1;
 				var recents = new string[it_Recent.DropDownItems.Count];
@@ -830,7 +830,7 @@ namespace yata
 			if (File.Exists(pfe)										// ~safety
 				&& Path.GetFileNameWithoutExtension(pfe).Length != 0)	// what idjut would ... oh wait.
 			{
-				if (Settings._recent != 0)
+				if (Options._recent != 0)
 				{
 					ToolStripItemCollection recents = it_Recent.DropDownItems;
 					ToolStripItem it;
@@ -858,7 +858,7 @@ namespace yata
 						it.Click += fileclick_Recent;
 						recents.Insert(0, it);
 
-						if (recents.Count > Settings._recent)
+						if (recents.Count > Options._recent)
 						{
 							recents.Remove(it = recents[recents.Count - 1]);
 							it.Dispose();
@@ -876,7 +876,7 @@ namespace yata
 
 					Tabs.SelectedIndex = i;
 
-					if (!Settings._allowdupls) return;
+					if (!Options._allowdupls) return;
 
 					using (var ib = new Infobox(Infobox.Title_warni,
 												"The 2da-file is already open. Do you want another instance ...",
@@ -1551,14 +1551,14 @@ namespace yata
 			string pfeIcon = null;
 			string pfe_t;
 
-			string dir = Settings._icondiralt;
+			string dir = Options._icondiralt;
 			if (Directory.Exists(dir)
 				&& File.Exists(pfe_t = Path.Combine(dir, resref)))
 			{
 				pfeIcon = pfe_t;
 			}
 
-			if (pfeIcon == null && Directory.Exists(dir = Settings._icondir))
+			if (pfeIcon == null && Directory.Exists(dir = Options._icondir))
 			{
 				string dirIcons = Path.Combine(dir, "icons_x2");
 				if (File.Exists(pfe_t = Path.Combine(dirIcons, resref)))

@@ -11,7 +11,7 @@ namespace yata
 	/// <summary>
 	/// A static class for reading and interpreting the Settings.Cfg file.
 	/// </summary>
-	static class Settings // TODO -> Options
+	static class Options
 	{
 		#region Fields (static)
 		internal const string FE = "settings.cfg";

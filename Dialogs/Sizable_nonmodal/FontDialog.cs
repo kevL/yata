@@ -486,7 +486,7 @@ namespace yata
 					_font = new Font(_ffs[_id].Name, size, style);
 					if (cb_Reduced.Checked)
 					{
-						lbl_Lazydog.Font = Settings.CreateDialogFont(_font);
+						lbl_Lazydog.Font = Options.CreateDialogFont(_font);
 					}
 					else
 						lbl_Lazydog.Font = _font;

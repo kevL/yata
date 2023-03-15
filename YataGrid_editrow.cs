@@ -91,7 +91,7 @@ namespace yata
 				row = new Row(0, ColCount, Brushers.Created, this);
 
 				int c = 0;
-				if (Settings._autorder)
+				if (Options._autorder)
 				{
 					row[0] = new Cell(0,0, "0");
 					doTextwidth(row[0]);

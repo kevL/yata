@@ -48,7 +48,7 @@ namespace yata
 				{
 					_copytext[i, ++j] = (cell = Table[r,c]).text;
 
-					if (c == 0 && Settings._autorder)
+					if (c == 0 && Options._autorder)
 						text = r.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
@@ -147,7 +147,7 @@ namespace yata
 					(sel = Table[r + sel.y,
 								 c + sel.x]).selected = true;
 
-					if (sel.x == 0 && Settings._autorder)
+					if (sel.x == 0 && Options._autorder)
 						text = sel.y.ToString(CultureInfo.InvariantCulture);
 					else
 						text = _copytext[r,c];
@@ -175,7 +175,7 @@ namespace yata
 			}
 			else
 			{
-				if (sel.x == 0 && Settings._autorder)
+				if (sel.x == 0 && Options._autorder)
 					text = sel.y.ToString(CultureInfo.InvariantCulture);
 				else
 					text = _copytext[0,0];
@@ -225,7 +225,7 @@ namespace yata
 			{
 				if ((sel = row[c]).selected)
 				{
-					if (c == 0 && Settings._autorder)
+					if (c == 0 && Options._autorder)
 						text = sel.y.ToString(CultureInfo.InvariantCulture);
 					else
 						text = gs.Stars;
@@ -380,7 +380,7 @@ namespace yata
 					{
 						if ((sel = row[c]).selected)
 						{
-							if (c == 0 && Settings._autorder)
+							if (c == 0 && Options._autorder)
 								text = sel.y.ToString(CultureInfo.InvariantCulture);
 							else
 								text = _copytext[0,0];

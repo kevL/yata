@@ -277,7 +277,7 @@ namespace yata
 			_table.OffsetVert = _table._scrollVert.Value;
 
 			if (!_f.IsSearch										// <- if not Search
-				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
+				&& (!_f.tb_Goto.Focused || !Options._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				editresultdefault();
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
@@ -314,7 +314,7 @@ namespace yata
 			_table.OffsetHori = _table._scrollHori.Value;
 
 			if (!_f.IsSearch										// <- if not Search
-				&& (!_f.tb_Goto.Focused || !Settings._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
+				&& (!_f.tb_Goto.Focused || !Options._instantgoto))	// <- if not "instantgoto=true" when gotobox has focus
 			{
 				editresultdefault();
 				Select(); // <- workaround: refocus the table when the bar is moved by mousedrag (bar has to move > 0px)
@@ -377,7 +377,7 @@ namespace yata
 			}
 
 			bool @select = !_f.Tabs.Focused									// <- if tabs not focused
-						&& (!_f.tb_Goto.Focused || !Settings._instantgoto);	// <- if not "instantgoto" when gotobox has focus
+						&& (!_f.tb_Goto.Focused || !Options._instantgoto);	// <- if not "instantgoto" when gotobox has focus
 
 			if (table.MaxVert != 0)
 			{

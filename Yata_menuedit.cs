@@ -329,7 +329,7 @@ namespace yata
 			{
 				tb_Goto.Text = "0"; // recurse
 			}
-			else if (Table != null && Settings._instantgoto)
+			else if (Table != null && Options._instantgoto)
 			{
 				Table.Goto(tb_Goto.Text, false); // NOTE: Text is checked for validity in Goto().
 			}

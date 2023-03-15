@@ -88,7 +88,7 @@ namespace yata
 					goto case Idtype.non;
 
 				case Idtype.non: // IMPORTANT: Do not use this. It's only a fallthrough case.
-					if (Settings._strict) // show 'allow extended punctuation' toggle ->
+					if (Options._strict) // show 'allow extended punctuation' toggle ->
 					{
 						cb_Punctuation = new CheckBox();
 						cb_Punctuation.Text = "accept nonstandard punctuation";
@@ -130,7 +130,7 @@ namespace yata
 				_cancel = false;
 			else
 			{
-				if (_type != Idtype.defval && Settings._strict)
+				if (_type != Idtype.defval && Options._strict)
 					ClientSize = new Size(ClientSize.Width, ClientSize.Height - hCheckbox); // conform static telemetry
 
 				base.OnFormClosing(e);

@@ -216,7 +216,7 @@ namespace yata
 		/// </summary>
 		internal void GropeZipData()
 		{
-			string dir = Settings._pathzipdata;
+			string dir = Options._pathzipdata;
 
 			var zips = new List<string>
 			{
