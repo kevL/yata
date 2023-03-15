@@ -10,9 +10,14 @@ namespace yata
 	{
 		#region Fields
 		/// <summary>
-		/// The <c><see cref="SettingsEditor"/></c> dialog/editor.
+		/// The <c><see cref="ConfigEditor"/></c> editor for Settings.Cfg.
 		/// </summary>
-		SettingsEditor _fsettings;
+		ConfigEditor _foptions;
+
+		/// <summary>
+		/// The <c><see cref="ConfigEditor"/></c> editor for Colors.Cfg.
+		/// </summary>
+		ConfigEditor _fcolors;
 		#endregion Fields
 
 
@@ -29,9 +34,7 @@ namespace yata
 		void helpclick_Help(object sender, EventArgs e)
 		{
 			string pfe = Path.Combine(Application.StartupPath, "ReadMe.txt");
-			if (File.Exists(pfe))
-				Process.Start(pfe);
-			else
+			if (!File.Exists(pfe))
 			{
 				using (var ib = new Infobox(Infobox.Title_error,
 											"ReadMe.txt was not found in the application directory.",
@@ -41,6 +44,8 @@ namespace yata
 					ib.ShowDialog(this);
 				}
 			}
+			else
+				Process.Start(pfe);
 		}
 
 		/// <summary>
@@ -60,19 +65,25 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click to open the <c><see cref="SettingsEditor"/></c>.
+		/// Handles it-click to open the <c><see cref="ConfigEditor"/></c>.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_Settings"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="it_Settings"/></c></item>
+		/// <item><c><see cref="it_Colors"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void helpclick_Settings(object sender, EventArgs e)
 		{
-			if (_fsettings == null)
+			if (   (sender == it_Settings && _foptions == null)
+				|| (sender == it_Colors   && _fcolors  == null))
 			{
-				string pfe = Path.Combine(Application.StartupPath, Settings.FE);
+				string pfe = (sender == it_Settings) ? Settings.FE : ColorOptions.FE;
+					   pfe = Path.Combine(Application.StartupPath, pfe);
 
 				if (!File.Exists(pfe))
 				{
-					const string head = "a Settings.cfg file does not exist in the application directory. Do you want to create one ...";
+					const string head = "The config file does not exist in the application directory. Do you want to create one ...";
 
 					using (var ib = new Infobox(Infobox.Title_infor,
 												head,
@@ -91,17 +102,28 @@ namespace yata
 								{
 									sw.WriteLine("#Help|ReadMe.txt describes these settings.");
 
-									if (Settings.options == null)
-										Settings.CreateOptions();
+									if (sender == it_Settings)
+									{
+										if (Settings.options == null)
+											Settings.CreateOptions();
 
-									for (int i = 0; i != Settings.ids; ++i)
-										sw.WriteLine(Settings.options[i]);
+										for (int i = 0; i != Settings.ids; ++i)
+											sw.WriteLine(Settings.options[i]);
+									}
+									else // it_Colors
+									{
+										if (ColorOptions.options == null)
+											ColorOptions.CreateOptions();
+
+										for (int i = 0; i != ColorOptions.ids; ++i)
+											sw.WriteLine(ColorOptions.options[i]);
+									}
 								}
 							}
 							catch (Exception ex)
 							{
 								using (var ibo = new Infobox(Infobox.Title_excep,
-															"a Settings.cfg file could not be created in the application directory.",
+															"The config file could not be created in the application directory.",
 															ex.ToString(),
 															InfoboxType.Error))
 								{
@@ -117,22 +139,31 @@ namespace yata
 					try
 					{
 						string[] lines = File.ReadAllLines(pfe);
-						_fsettings = new SettingsEditor(this, lines);
-						it_Settings.Checked = true;
+
+						if (sender == it_Settings)
+						{
+							_foptions = new ConfigEditor(this, lines, false);
+							it_Settings.Checked = true;
+						}
+						else // it_Colors
+						{
+							_fcolors = new ConfigEditor(this, lines, true);
+							it_Colors.Checked = true;
+						}
 					}
 					catch (Exception ex)
 					{
 						// the stock MessageBox 'shall' be used if an exception is going to cause a CTD:
-						// eg. a stock Font was disposed but the SettingsEditor needs it during its
+						// eg. a stock Font was disposed but the ConfigEditor needs it during its
 						// initialization ... The app can't show a Yata-dialog in such a case; but the
 						// stock MessageBox will pop up then ... CTD.
 
-//						MessageBox.Show("The Settings.cfg file could not be read in the application directory."
+//						MessageBox.Show("The config file could not be read in the application directory."
 //										+ Environment.NewLine + Environment.NewLine
 //										+ ex);
 
 						using (var ib = new Infobox(Infobox.Title_excep,
-													"The Settings.cfg file could not be read in the application directory.",
+													"The config file could not be read in the application directory.",
 													ex.ToString(),
 													InfoboxType.Error))
 						{
@@ -141,16 +172,27 @@ namespace yata
 					}
 				}
 			}
-			else
+			else if (sender == it_Settings)
 			{
-				if (_fsettings.WindowState == FormWindowState.Minimized)
+				if (_foptions.WindowState == FormWindowState.Minimized)
 				{
-					if (_fsettings.Maximized)
-						_fsettings.WindowState = FormWindowState.Maximized;
+					if (_foptions.Maximized)
+						_foptions.WindowState = FormWindowState.Maximized;
 					else
-						_fsettings.WindowState = FormWindowState.Normal;
+						_foptions.WindowState = FormWindowState.Normal;
 				}
-				_fsettings.BringToFront();
+				_foptions.BringToFront();
+			}
+			else // it_Colors
+			{
+				if (_fcolors.WindowState == FormWindowState.Minimized)
+				{
+					if (_fcolors.Maximized)
+						_fcolors.WindowState = FormWindowState.Maximized;
+					else
+						_fcolors.WindowState = FormWindowState.Normal;
+				}
+				_fcolors.BringToFront();
 			}
 		}
 		#endregion Handlers (help)
@@ -158,13 +200,24 @@ namespace yata
 
 		#region Methods (help)
 		/// <summary>
-		/// Clears the check on <c><see cref="it_Settings"/></c> and nulls
-		/// <c><see cref="_fsettings"/></c> when the settings-editor closes.
+		/// Clears the check on <c><see cref="it_Settings"/></c> or
+		/// <c><see cref="it_Colors"/></c> and nulls
+		/// <c><see cref="_foptions"/></c> or <c><see cref="_fcolors"/></c>
+		/// when the <c><see cref="ConfigEditor"/></c> closes.
 		/// </summary>
-		internal void CloseSettingsEditor()
+		/// <param name="isColors"><c>true</c> if editing Colors.Cfg</param>
+		internal void CloseSettingsEditor(bool isColors)
 		{
-			_fsettings = null;
-			it_Settings.Checked = false;
+			if (!isColors)
+			{
+				_foptions = null;
+				it_Settings.Checked = false;
+			}
+			else
+			{
+				_fcolors = null;
+				it_Colors.Checked = false;
+			}
 		}
 		#endregion Methods (help)
 	}

@@ -139,7 +139,7 @@ namespace yata
 
 			_grid = grid;
 
-			BackColor = Settings._colorpropanel;
+			BackColor = ColorOptions._propanel;
 
 			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			TabStop = false; // <- the Propanel is not currently coded to cope w/ keyboard-input.
@@ -148,7 +148,7 @@ namespace yata
 			{
 //				Font.Dispose(); // be wary. Be very wary. -> Do NOT Dispose()
 				// debug builds don't throw
-				// but release builds CTD when invoking the SettingsEditor after
+				// but release builds CTD when invoking the ConfigEditor after
 				// the Propanel has been opened ... eg.
 
 				Font = Settings._font3;
@@ -893,7 +893,7 @@ namespace yata
 									  _grid.Cols[c].text,
 									  Font,
 									  rect,
-									  Settings._colorpropaneltext,
+									  ColorOptions._propaneltext,
 									  YataGraphics.flags);
 			}
 
@@ -913,7 +913,7 @@ namespace yata
 											  _grid[r,c].text,
 											  Font,
 											  rect,
-											  Settings._colorpropaneltext,
+											  ColorOptions._propaneltext,
 											  YataGraphics.flags);
 					}
 				}

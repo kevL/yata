@@ -928,8 +928,8 @@ namespace yata
 
 				Rows.Add(new Row(r,
 								 ColCount,
-								 (r % 2 == 0) ? Settings._colorrowa
-											  : Settings._colorrowb,
+								 (r % 2 == 0) ? ColorOptions._rowa
+											  : ColorOptions._rowb,
 								 this));
 
 				for (int c = 0; c != ColCount; ++c)
@@ -1121,7 +1121,7 @@ namespace yata
 				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated / updated-on-Reload better.
 				{
 					DrawRegulator.SetDoubleBuffered(_labelid);
-					_labelid.BackColor = Colors.FrozenHead;
+					_labelid.BackColor = ColorOptions._frozenhead;
 
 					_labelid.Resize     += label_Resize;
 					_labelid.Paint      += labelid_Paint;
@@ -1137,7 +1137,7 @@ namespace yata
 					if (_initFrozenLabels)
 					{
 						DrawRegulator.SetDoubleBuffered(_labelfirst);
-						_labelfirst.BackColor = Colors.FrozenHead;
+						_labelfirst.BackColor = ColorOptions._frozenhead;
 
 						_labelfirst.Resize     += label_Resize;
 						_labelfirst.Paint      += labelfirst_Paint;
@@ -1153,7 +1153,7 @@ namespace yata
 						if (_initFrozenLabels)
 						{
 							DrawRegulator.SetDoubleBuffered(_labelsecond);
-							_labelsecond.BackColor = Colors.FrozenHead;
+							_labelsecond.BackColor = ColorOptions._frozenhead;
 
 							_labelsecond.Resize     += label_Resize;
 							_labelsecond.Paint      += labelsecond_Paint;

@@ -122,9 +122,9 @@
     <Compile Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.Designer.cs">
       <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.cs" />
-    <Compile Include="Dialogs\Sizable_nonmodal\SettingsEditor.Designer.cs">
-      <DependentUpon>SettingsEditor.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable_nonmodal\ConfigEditor.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ConfigEditor.Designer.cs">
+      <DependentUpon>ConfigEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\CodePageDialog.cs" />
     <Compile Include="Dialogs\Sizable\CodePageDialog.Designer.cs">
@@ -162,6 +162,7 @@
     <Compile Include="SharpZipLib_yata\ZipEntry_yata.cs" />
     <Compile Include="SharpZipLib_yata\ZipFile_yata.cs" />
     <Compile Include="Statics\ClipboardService.cs" />
+    <Compile Include="Statics\ColorOptions.cs" />
     <Compile Include="Statics\Crap.cs" />
     <Compile Include="Statics\DateTimeExtension.cs" />
     <Compile Include="Statics\DrawRegulator.cs" />
@@ -297,8 +298,8 @@
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.resx">
       <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\SettingsEditor.resx">
-      <DependentUpon>SettingsEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ConfigEditor.resx">
+      <DependentUpon>ConfigEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\CodePageDialog.resx">
       <DependentUpon>CodePageDialog.cs</DependentUpon>

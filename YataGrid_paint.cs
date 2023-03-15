@@ -94,7 +94,7 @@ namespace yata
 												  cell.text,
 												  Font,
 												  rect,
-												  Settings._colortabletext,
+												  ColorOptions._tabletext,
 												  YataGraphics.flags);
 							rect.Width += _padHori;
 						}
@@ -158,7 +158,8 @@ namespace yata
 				&& Fields[c - 1] == "REMOVED"
 				&& this[r,c].text != "0")
 			{
-				return (r % 2 == 0) ? Settings._colorrowdisableda : Settings._colorrowdisabledb;
+				return (r % 2 == 0) ? ColorOptions._rowdisableda
+									: ColorOptions._rowdisabledb;
 			}
 			return Rows[r]._brush;
 		}
@@ -194,7 +195,7 @@ namespace yata
 					graphics.FillRectangle(grad, rect);
 				}
 				else if (_sortcol == 0 && _sortdir == SORT_ASC)
-					_labelid.BackColor = Colors.FrozenHead;
+					_labelid.BackColor = ColorOptions._frozenhead;
 				else
 					_labelid.BackColor = Colors.LabelSorted;
 
@@ -465,7 +466,7 @@ namespace yata
 									  r.ToString(CultureInfo.InvariantCulture),
 									  _f.FontAccent,
 									  rect,
-									  Settings._colorrowpaneltext,
+									  ColorOptions._rowpaneltext,
 									  YataGraphics.flags);
 			}
 		}
@@ -517,7 +518,7 @@ namespace yata
 										  cell.text,
 										  Font,
 										  rect,
-										  Settings._colorfrozentext,
+										  ColorOptions._frozentext,
 										  YataGraphics.flags);
 					rect.X += rect.Width;
 				}

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class SettingsEditor
+	sealed partial class ConfigEditor
 	{
 		#region Designer
 		RichTextBox rt_Settings;
@@ -103,7 +103,7 @@ namespace yata
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
-			// SettingsEditor
+			// ConfigEditor
 			// 
 			this.CancelButton = this.bu_Cancel;
 			this.ClientSize = new System.Drawing.Size(592, 458);
@@ -111,7 +111,7 @@ namespace yata
 			this.Controls.Add(this.pa_Buttons);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
-			this.Name = "SettingsEditor";
+			this.Name = "ConfigEditor";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Settings.Cfg";

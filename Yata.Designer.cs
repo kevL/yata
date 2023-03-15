@@ -140,6 +140,7 @@ namespace yata
 		ToolStripMenuItem it_ReadMe;
 		ToolStripMenuItem it_About;
 		ToolStripMenuItem it_Settings;
+		ToolStripMenuItem it_Colors;
 
 		ToolStripSeparator separator_1;
 		ToolStripSeparator separator_2;
@@ -389,6 +390,7 @@ namespace yata
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_36 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_Settings = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Colors = new System.Windows.Forms.ToolStripMenuItem();
 			this._contextRo = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.rowit_Header = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_7 = new System.Windows.Forms.ToolStripSeparator();
@@ -1579,7 +1581,8 @@ namespace yata
 			this.it_ReadMe,
 			this.it_About,
 			this.separator_36,
-			this.it_Settings});
+			this.it_Settings,
+			this.it_Colors});
 			this.it_MenuHelp.Name = "it_MenuHelp";
 			this.it_MenuHelp.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.it_MenuHelp.Size = new System.Drawing.Size(40, 20);
@@ -1611,6 +1614,13 @@ namespace yata
 			this.it_Settings.Size = new System.Drawing.Size(158, 22);
 			this.it_Settings.Text = "&Options file";
 			this.it_Settings.Click += new System.EventHandler(this.helpclick_Settings);
+			// 
+			// it_Colors
+			// 
+			this.it_Colors.Name = "it_Colors";
+			this.it_Colors.Size = new System.Drawing.Size(158, 22);
+			this.it_Colors.Text = "&Colors file";
+			this.it_Colors.Click += new System.EventHandler(this.helpclick_Settings);
 			// 
 			// _contextRo
 			// 

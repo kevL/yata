@@ -212,8 +212,8 @@ namespace yata
 		{
 			for (int r = 0; r != Table.RowCount; ++r)
 			{
-				Table.Rows[r]._brush = (r % 2 == 0) ? Settings._colorrowa
-													: Settings._colorrowb;
+				Table.Rows[r]._brush = (r % 2 == 0) ? ColorOptions._rowa
+													: ColorOptions._rowb;
 			}
 			Table.ClearReplaced();
 			Table.ClearLoadchanged();

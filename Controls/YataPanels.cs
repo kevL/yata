@@ -76,7 +76,7 @@ namespace yata
 			_grid = grid;
 
 			Dock      = DockStyle.Top;
-			BackColor = Colors.ColheadPanel;
+			BackColor = ColorOptions._colhead;
 
 			Height = YataGrid.HeightColhead;
 		}
@@ -323,7 +323,7 @@ namespace yata
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
-			BackColor = Settings._colorrowpanel;
+			BackColor = ColorOptions._rowpanel;
 		}
 		#endregion cTor
 
@@ -413,7 +413,7 @@ namespace yata
 			_grid = grid;
 
 			Dock      = DockStyle.Left;
-			BackColor = Settings._colorfrozen;
+			BackColor = ColorOptions._frozen;
 
 			Width = w;
 		}

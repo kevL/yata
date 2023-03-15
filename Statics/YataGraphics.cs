@@ -110,8 +110,6 @@ namespace yata
 
 	static class Colors
 	{
-		internal static readonly Color ColheadPanel      = Color.Thistle;
-		internal static readonly Color FrozenHead        = Color.Moccasin;
 		internal static readonly Color LabelSorted       = Color.LightCoral;
 
 		internal static readonly Color Editor            = Color.Crimson;

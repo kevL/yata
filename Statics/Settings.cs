@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 
 namespace yata
 {
-	static class Settings
+	/// <summary>
+	/// A static class for reading and interpreting the Settings.Cfg file.
+	/// </summary>
+	static class Settings // TODO -> Options
 	{
 		#region Fields (static)
 		internal const string FE = "settings.cfg";
@@ -57,23 +59,6 @@ namespace yata
 		internal static string _icondir;
 		internal static string _icondiralt;
 
-		internal static Brush _colorstatusbar    = Brushes.MintCream;			// default color for the statusbar
-
-		internal static Color _colortabletext    = SystemColors.ControlText;	// default colors for the tablegrid ->
-		internal static Brush _colorrowa         = Brushes.AliceBlue;
-		internal static Brush _colorrowb         = Brushes.BlanchedAlmond;
-		internal static Brush _colorrowdisableda = Brushes.LavenderBlush;
-		internal static Brush _colorrowdisabledb = Brushes.MistyRose;
-
-		internal static Color _colorfrozentext   = SystemColors.ControlText;	// default colors for the frozenpanel ->
-		internal static Color _colorfrozen       = Color.OldLace;
-
-		internal static Color _colorpropaneltext = SystemColors.ControlText;	// default colors for the propanel ->
-		internal static Color _colorpropanel     = Color.LightSteelBlue;
-
-		internal static Color _colorrowpaneltext = SystemColors.ControlText;	// default colors for the rowpanel ->
-		internal static Color _colorrowpanel     = Color.Azure;
-
 
 		internal const int AoFalse    = 0; // '_alignoutput' vals ->
 		internal const int AoTrue     = 1;
@@ -83,6 +68,9 @@ namespace yata
 
 
 		#region Methods (static)
+		/// <summary>
+		/// Scans the Settings.Cfg file for Yata options.
+		/// </summary>
 		internal static void ScanSettings()
 		{
 			string pfe = Path.Combine(Application.StartupPath, FE);
@@ -368,138 +356,6 @@ namespace yata
 								_icondiralt = line;
 							}
 						}
-						else if (line.StartsWith("colorstatusbar=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(15).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-								if (pi != null)
-								{
-									_colorstatusbar = pi.GetValue(null,null) as Brush;
-								}
-							}
-						}
-						else if (line.StartsWith("colortabletext=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(15).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colortabletext = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowa=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(10).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowa = pi.GetValue(null,null) as Brush;
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowb=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(10).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowb = pi.GetValue(null,null) as Brush;
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowdisableda=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(18).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowdisableda = pi.GetValue(null,null) as Brush;
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowdisabledb=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(18).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowdisabledb = pi.GetValue(null,null) as Brush;
-								}
-							}
-						}
-						else if (line.StartsWith("colorfrozentext=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(16).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorfrozentext = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorfrozen=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(12).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorfrozen = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorpropanel=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(14).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorpropanel = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorpropaneltext=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(18).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorpropaneltext = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowpanel=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(14).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowpanel = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
-						else if (line.StartsWith("colorrowpaneltext=", StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(18).Trim()).Length != 0)
-							{
-								PropertyInfo pi = typeof(Color).GetProperty(line);
-								if (pi != null)
-								{
-									_colorrowpaneltext = (Color)pi.GetValue(null,null);
-								}
-							}
-						}
 					}
 				}
 			}
@@ -585,7 +441,7 @@ namespace yata
 		/// The count of options in <c><see cref="options"/></c>.
 		/// </summary>
 		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 42;
+		internal const int ids = 30;
 
 		/// <summary>
 		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
@@ -614,18 +470,6 @@ namespace yata
 			options[++i] = "casesort=";
 			options[++i] = "clearquotes=";
 			options[++i] = "codepage=";
-			options[++i] = "colorfrozen=";
-			options[++i] = "colorfrozentext=";
-			options[++i] = "colorpropanel=";
-			options[++i] = "colorpropaneltext=";
-			options[++i] = "colorrowa=";
-			options[++i] = "colorrowb=";
-			options[++i] = "colorrowdisableda=";
-			options[++i] = "colorrowdisabledb=";
-			options[++i] = "colorrowpanel=";
-			options[++i] = "colorrowpaneltext=";
-			options[++i] = "colorstatusbar=";
-			options[++i] = "colortabletext=";
 			options[++i] = "context=";
 			options[++i] = "dialog=";
 			options[++i] = "dialogalt=";

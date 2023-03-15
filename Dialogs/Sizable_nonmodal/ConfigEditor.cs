@@ -6,19 +6,30 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class SettingsEditor
+	sealed partial class ConfigEditor
 		: YataDialog
 	{
+		#region Fields
+		/// <summary>
+		/// <c>true</c> if invoked to edit Colors.Cfg - <c>false</c> if invoked
+		/// to edit Settings.Cfg
+		/// </summary>
+		bool _isColors;
+		#endregion Fields
+
+
 		#region cTor
 		/// <summary>
-		/// The editor for Settings.Cfg.
+		/// The editor for Settings.Cfg and/or Colors.Cfg.
 		/// </summary>
 		/// <param name="f">pointer to <c><see cref="Yata"/></c></param>
 		/// <param name="lines">array of <c>strings</c> in user's current
 		/// settings file</param>
-		internal SettingsEditor(Yata f, string[] lines)
+		/// <param name="isColors"><c>true</c> if editing Colors.Cfg</param>
+		internal ConfigEditor(Yata f, string[] lines, bool isColors)
 		{
 			_f = f;
+			_isColors = isColors;
 
 			InitializeComponent();
 			Initialize(METRIC_FUL);
@@ -47,7 +58,7 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as Yata).CloseSettingsEditor();
+			(_f as Yata).CloseSettingsEditor(_isColors);
 			base.OnFormClosing(e);
 		}
 
@@ -82,7 +93,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Writes file and closes this <c>SettingsEditor</c>.
+		/// Writes file and closes this <c>ConfigEditor</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -95,13 +106,15 @@ namespace yata
 		{
 			try
 			{
-				string pfeT = Path.Combine(Application.StartupPath, Settings.FE) + ".t";
+				string pfeT = _isColors ? ColorOptions.FE : Settings.FE;
+					   pfeT = Path.Combine(Application.StartupPath, pfeT) + ".t";
 
 				File.WriteAllText(pfeT, rt_Settings.Text);
 
 				if (File.Exists(pfeT))
 				{
-					string pfe = Path.Combine(Application.StartupPath, Settings.FE);
+					string pfe = _isColors ? ColorOptions.FE : Settings.FE;
+						   pfe = Path.Combine(Application.StartupPath, pfe);
 
 					File.Delete(pfe);
 					File.Copy(pfeT, pfe);
@@ -123,7 +136,7 @@ namespace yata
 			catch (Exception ex)
 			{
 				using (var ib = new Infobox(Infobox.Title_excep,
-											"the Settings.cfg file could not be written to the application directory.",
+											"The config file could not be written to the application directory.",
 											ex.ToString(),
 											InfoboxType.Error))
 				{
@@ -139,7 +152,7 @@ namespace yata
 
 		/// <summary>
 		/// Inserts any settings that are not found in the current Settings.Cfg
-		/// file.
+		/// file or Colors.Cfg file.
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Insert"/></c></param>
 		/// <param name="e"></param>
@@ -151,20 +164,39 @@ namespace yata
 
 			bool found = false;
 
-			string option;
-			for (int i = 0; i != Settings.ids; ++i)
+			if (_isColors)
 			{
-				option = Settings.options[i];
-				if (!text.Contains(option))
+				string option;
+				for (int i = 0; i != ColorOptions.ids; ++i)
 				{
-					if (!found)
+					if (!text.Contains(option = ColorOptions.options[i]))
 					{
-						found = true;
-						text += Environment.NewLine;
+						if (!found)
+						{
+							found = true;
+							text += Environment.NewLine;
+						}
+						text += option + Environment.NewLine;
 					}
-					text += option + Environment.NewLine;
 				}
 			}
+			else
+			{
+				string option;
+				for (int i = 0; i != Settings.ids; ++i)
+				{
+					if (!text.Contains(option = Settings.options[i]))
+					{
+						if (!found)
+						{
+							found = true;
+							text += Environment.NewLine;
+						}
+						text += option + Environment.NewLine;
+					}
+				}
+			}
+
 			rt_Settings.Text = text;
 			rt_Settings.SelectionStart = rt_Settings.Text.Length;
 			rt_Settings.Focus();
@@ -176,18 +208,34 @@ namespace yata
 		/// <summary>
 		/// Checks if the Insert button should be visible.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><c>true</c> if the button should be visible</returns>
 		bool CheckInsertVisible()
 		{
-			if (Settings.options == null)
-				Settings.CreateOptions();
-
-			string text = rt_Settings.Text;
-
-			for (int i = 0; i != Settings.ids; ++i)
+			if (_isColors)
 			{
-				if (!text.Contains(Settings.options[i]))
-					return true;
+				if (ColorOptions.options == null)
+					ColorOptions.CreateOptions();
+
+				string text = rt_Settings.Text;
+
+				for (int i = 0; i != ColorOptions.ids; ++i)
+				{
+					if (!text.Contains(ColorOptions.options[i]))
+						return true;
+				}
+			}
+			else
+			{
+				if (Settings.options == null)
+					Settings.CreateOptions();
+
+				string text = rt_Settings.Text;
+
+				for (int i = 0; i != Settings.ids; ++i)
+				{
+					if (!text.Contains(Settings.options[i]))
+						return true;
+				}
 			}
 			return false;
 		}
