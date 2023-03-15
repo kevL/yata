@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 11
+2023 march 15
 kevL's
 ver 5.4.5.0
 
@@ -18,6 +18,7 @@ Table of Contents
 2. Keyboard input
 3. Mouse input
 4. Settings.Cfg file
+5. Colors.Cfg file
 
 Appendix A: note on Load
 Appendix B: copy/paste range
@@ -622,34 +623,6 @@ as the cursor is moved over their cells. (Yata was designed with Crafting in
 mind and can show stuff like Encoded IPs as readable strings on the statusbar,
 eg.)
 
-color settings:
-
-A color-value is a legal .NET KnownColor. They are listed at
-https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor?view=netframework-3.5
-and a decent chart showing the colors with legal strings is found at
-https://en.wikipedia.org/wiki/Web_colors#Extended_colors
-
-colorfrozen=       the background color of the frozen panel (default OldLace)
-colorfrozentext=   the text color of the frozen panel (default ControlText)
-colorpropanel=     the background color of the propanel (default LightSteelBlue)
-colorpropaneltext= the text color of the propanel (default ControlText)
-colorrowa=         the background color of rows (default AliceBlue)
-colorrowb=         the background color of rows (default BlanchedAlmond)
-colorrowdisableda= the background color of disabled rows (default LavenderBlush)
-colorrowdisabledb= the background color of disabled rows (default MistyRose)
-colorrowpanel=     the background color of the rowpanel (default Azure)
-colorrowpaneltext= the text color of the rowpanel (default ControlText)
-colorstatusbar=    the background color of the statusbar (default MintCream)
-colortabletext=    the text color of rows (default ControlText)
-
-Not all colors used in Yata are configurable.
-
-IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
-loadchanged cells, as well as selected and created rows, etc etc etc, be a bit
-wary when changing a color away from its default value. Arbitrary changes to
-colors could hide visual cues that Yata wants to inform the user about.
-
-
 To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
 above; any line that doesn't begin exactly with one of those strings is ignored.
@@ -658,6 +631,61 @@ The order of the settings in the file is arbitrary.
 
 If the Settings.Cfg file does not exist Yata should run okay with its default
 settings.
+
+
+5. Colors.Cfg file (do not use double-quotes)
+
+The file Colors.Cfg is not distributed; the package contains only the executable
+and help files. see Help|Colors file. If Colors.Cfg is not found the application
+directory you're asked if you want to create one; if the file found an internal
+texteditor opens where edits can be done. If I hardcode additional colors for a
+new release a button appears in the lower left corner of the editor that adds
+any variables that are not found to the text.
+
+Note that your OS could throw a hissy fit depending on its security settings. If
+so you have two options: install Yata to a directory that you have read/write
+privileges for, or create and/or edit Colors.Cfg by hand in your favorite text
+editor.
+
+Any change to colors requires a restart.
+
+A color-value is a legal .NET KnownColor. They are listed at
+https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor?view=netframework-3.5
+and a decent chart showing the colors with legal strings is found at
+https://en.wikipedia.org/wiki/Web_colors#Extended_colors
+
+the following variables ought be respected:
+
+colhead=      the background color of the col-heads (default Thistle)
+frozen=       the background color of the frozen panel (default OldLace)
+frozenhead=   the background color of the frozen-heads (default Moccasin)
+frozentext=   the text color of the frozen panel (default ControlText)
+propanel=     the background color of the propanel (default LightSteelBlue)
+propaneltext= the text color of the propanel (default ControlText)
+rowa=         the background color of rows (default AliceBlue)
+rowb=         the background color of rows (default BlanchedAlmond)
+rowdisableda= the background color of disabled rows (default LavenderBlush)
+rowdisabledb= the background color of disabled rows (default MistyRose)
+rowpanel=     the background color of the rowpanel (default Azure)
+rowpaneltext= the text color of the rowpanel (default ControlText)
+statusbar=    the background color of the statusbar (default MintCream)
+tabletext=    the text color of rows (default ControlText)
+
+Not all colors in Yata are configurable.
+
+IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
+loadchanged cells, as well as selected and created rows, etc etc etc, be a bit
+wary when changing a color away from its default value. Desired changes to
+colors could hide visual cues that Yata wants to inform you about.
+
+To bypass a color without deleting it, prefix its line with any character you
+want. The parser considers only lines that begin with the string-variables
+above; any line that doesn't begin exactly with one of those strings is ignored.
+
+The order of the colors in the file is arbitrary.
+
+If the Colors.Cfg file does not exist Yata should run okay with its default
+colors.
 
 
 Appendix A: note on Load
