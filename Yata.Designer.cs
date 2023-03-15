@@ -139,7 +139,7 @@ namespace yata
 		ToolStripMenuItem it_MenuHelp;
 		ToolStripMenuItem it_ReadMe;
 		ToolStripMenuItem it_About;
-		ToolStripMenuItem it_Settings;
+		ToolStripMenuItem it_Options;
 		ToolStripMenuItem it_Colors;
 
 		ToolStripSeparator separator_1;
@@ -389,7 +389,7 @@ namespace yata
 			this.it_ReadMe = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_36 = new System.Windows.Forms.ToolStripSeparator();
-			this.it_Settings = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_Colors = new System.Windows.Forms.ToolStripMenuItem();
 			this._contextRo = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.rowit_Header = new System.Windows.Forms.ToolStripMenuItem();
@@ -1581,7 +1581,7 @@ namespace yata
 			this.it_ReadMe,
 			this.it_About,
 			this.separator_36,
-			this.it_Settings,
+			this.it_Options,
 			this.it_Colors});
 			this.it_MenuHelp.Name = "it_MenuHelp";
 			this.it_MenuHelp.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -1608,19 +1608,19 @@ namespace yata
 			this.separator_36.Name = "separator_36";
 			this.separator_36.Size = new System.Drawing.Size(155, 6);
 			// 
-			// it_Settings
+			// it_Options
 			// 
-			this.it_Settings.Name = "it_Settings";
-			this.it_Settings.Size = new System.Drawing.Size(158, 22);
-			this.it_Settings.Text = "&Options file";
-			this.it_Settings.Click += new System.EventHandler(this.helpclick_Settings);
+			this.it_Options.Name = "it_Options";
+			this.it_Options.Size = new System.Drawing.Size(158, 22);
+			this.it_Options.Text = "&Options file";
+			this.it_Options.Click += new System.EventHandler(this.helpclick_Options);
 			// 
 			// it_Colors
 			// 
 			this.it_Colors.Name = "it_Colors";
 			this.it_Colors.Size = new System.Drawing.Size(158, 22);
 			this.it_Colors.Text = "&Colors file";
-			this.it_Colors.Click += new System.EventHandler(this.helpclick_Settings);
+			this.it_Colors.Click += new System.EventHandler(this.helpclick_Options);
 			// 
 			// _contextRo
 			// 

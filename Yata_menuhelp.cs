@@ -69,16 +69,16 @@ namespace yata
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
-		/// <item><c><see cref="it_Settings"/></c></item>
+		/// <item><c><see cref="it_Options"/></c></item>
 		/// <item><c><see cref="it_Colors"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		void helpclick_Settings(object sender, EventArgs e)
+		void helpclick_Options(object sender, EventArgs e)
 		{
-			if (   (sender == it_Settings && _foptions == null)
-				|| (sender == it_Colors   && _fcolors  == null))
+			if (   (sender == it_Options && _foptions == null)
+				|| (sender == it_Colors  && _fcolors  == null))
 			{
-				string pfe = (sender == it_Settings) ? Options.FE : ColorOptions.FE;
+				string pfe = (sender == it_Options) ? Options.FE : ColorOptions.FE;
 					   pfe = Path.Combine(Application.StartupPath, pfe);
 
 				if (!File.Exists(pfe))
@@ -102,7 +102,7 @@ namespace yata
 								{
 									sw.WriteLine("#Help|ReadMe.txt describes these settings.");
 
-									if (sender == it_Settings)
+									if (sender == it_Options)
 									{
 										if (Options.options == null)
 											Options.CreateOptions();
@@ -140,10 +140,10 @@ namespace yata
 					{
 						string[] lines = File.ReadAllLines(pfe);
 
-						if (sender == it_Settings)
+						if (sender == it_Options)
 						{
 							_foptions = new ConfigEditor(this, lines, false);
-							it_Settings.Checked = true;
+							it_Options.Checked = true;
 						}
 						else // it_Colors
 						{
@@ -172,7 +172,7 @@ namespace yata
 					}
 				}
 			}
-			else if (sender == it_Settings)
+			else if (sender == it_Options)
 			{
 				if (_foptions.WindowState == FormWindowState.Minimized)
 				{
@@ -200,7 +200,7 @@ namespace yata
 
 		#region Methods (help)
 		/// <summary>
-		/// Clears the check on <c><see cref="it_Settings"/></c> or
+		/// Clears the check on <c><see cref="it_Options"/></c> or
 		/// <c><see cref="it_Colors"/></c> and nulls
 		/// <c><see cref="_foptions"/></c> or <c><see cref="_fcolors"/></c>
 		/// when the <c><see cref="ConfigEditor"/></c> closes.
@@ -211,7 +211,7 @@ namespace yata
 			if (!isColors)
 			{
 				_foptions = null;
-				it_Settings.Checked = false;
+				it_Options.Checked = false;
 			}
 			else
 			{
