@@ -114,7 +114,7 @@ namespace yata
 
 		#region Methods (static)
 		/// <summary>
-		/// Converts HSV values to RGB Color.
+		/// Converts HSV values to RGB <c>Color</c>.
 		/// </summary>
 		/// <param name="hue">0d..360d - the colorwheel</param>
 		/// <param name="sat">0d..1d - white to saturated</param>
@@ -122,7 +122,8 @@ namespace yata
 		/// <param name="r"></param>
 		/// <param name="g"></param>
 		/// <param name="b"></param>
-		/// <remarks>https://stackoverflow.com/questions/31612232/color-table-algorithm#answer-31626758</remarks>
+		/// <remarks>https://stackoverflow.com/questions/359612/how-to-convert-rgb-color-to-hsv#answer-1626175<br/>
+		/// https://stackoverflow.com/questions/31612232/color-table-algorithm#answer-31626758</remarks>
 		static void HsvToRgb(double hue, double sat, double val, out byte r, out byte g, out byte b)
 		{
 			double huestep = hue / 60.0;
@@ -148,12 +149,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Converts RGB Color to HSV values.
+		/// Converts RGB <c>Color</c> to HSV values.
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="hue"></param>
 		/// <param name="sat"></param>
 		/// <param name="val"></param>
+		/// <remarks>https://stackoverflow.com/questions/359612/how-to-convert-rgb-color-to-hsv#answer-1626175<br/>
+		/// https://stackoverflow.com/questions/31612232/color-table-algorithm#answer-31626758</remarks>
 		static void ColorToHSV(Color color, out double hue, out double sat, out double val)
 		{
 			int i = Math.Max(color.R, Math.Max(color.G, color.B));
