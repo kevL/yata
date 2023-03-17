@@ -58,7 +58,7 @@ namespace yata
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(80, 26);
-			this.bu_Cancel.TabIndex = 3;
+			this.bu_Cancel.TabIndex = 9;
 			this.bu_Cancel.Text = "close";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
@@ -91,7 +91,7 @@ namespace yata
 			this.tb_Red.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Red.Name = "tb_Red";
 			this.tb_Red.Size = new System.Drawing.Size(40, 20);
-			this.tb_Red.TabIndex = 4;
+			this.tb_Red.TabIndex = 3;
 			this.tb_Red.WordWrap = false;
 			this.tb_Red.TextChanged += new System.EventHandler(this.textchanged_Rgb);
 			this.tb_Red.Leave += new System.EventHandler(this.leave_Rgb);
@@ -113,7 +113,7 @@ namespace yata
 			this.tb_Blue.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Blue.Name = "tb_Blue";
 			this.tb_Blue.Size = new System.Drawing.Size(40, 20);
-			this.tb_Blue.TabIndex = 6;
+			this.tb_Blue.TabIndex = 7;
 			this.tb_Blue.WordWrap = false;
 			this.tb_Blue.TextChanged += new System.EventHandler(this.textchanged_Rgb);
 			this.tb_Blue.Leave += new System.EventHandler(this.leave_Rgb);
@@ -124,7 +124,7 @@ namespace yata
 			this.la_Red.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Red.Name = "la_Red";
 			this.la_Red.Size = new System.Drawing.Size(15, 16);
-			this.la_Red.TabIndex = 7;
+			this.la_Red.TabIndex = 4;
 			this.la_Red.Text = "r";
 			this.la_Red.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -134,7 +134,7 @@ namespace yata
 			this.la_Green.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Green.Name = "la_Green";
 			this.la_Green.Size = new System.Drawing.Size(15, 16);
-			this.la_Green.TabIndex = 8;
+			this.la_Green.TabIndex = 6;
 			this.la_Green.Text = "g";
 			this.la_Green.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -144,7 +144,7 @@ namespace yata
 			this.la_Blue.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Blue.Name = "la_Blue";
 			this.la_Blue.Size = new System.Drawing.Size(15, 16);
-			this.la_Blue.TabIndex = 9;
+			this.la_Blue.TabIndex = 8;
 			this.la_Blue.Text = "b";
 			this.la_Blue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
