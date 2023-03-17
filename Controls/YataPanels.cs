@@ -530,4 +530,45 @@ namespace yata
 		}
 		#endregion Handlers (override)
 	}
+
+
+
+/*	/// <summary>
+	/// A selectable panel for the Colortable and Valslider.
+	/// </summary>
+	sealed class YataPanelSelectable
+		: Panel
+	{
+		internal YataPanelSelectable()
+		{
+			SetStyle(ControlStyles.Selectable, true);
+		}
+	} */
+
+/*	/// <summary>
+	/// A transparent panel for the Colortable overlay.
+	/// </summary>
+	sealed class YataPanelTransparent
+		: Panel
+	{
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams cp =  base.CreateParams;
+				cp.ExStyle |= 0x00000020; // WS_EX_TRANSPARENT
+				return cp;
+			}
+		}
+
+//		protected override void OnPaintBackground(PaintEventArgs e)
+//		{
+//			//base.OnPaintBackground(e);
+//		}
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			//base.OnPaint(e);
+			e.Graphics.DrawLine(Pens.Black, 0,0, Width, Height);
+		}
+	} */
 }
