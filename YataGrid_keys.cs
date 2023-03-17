@@ -115,7 +115,7 @@ namespace yata
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log("YataGrid.IsInputKey() keyData= " + keyData);
 
-			bool ret = base.ProcessDialogKey(keyData);
+			bool ret = base.IsInputKey(keyData);
 			if ((keyData & ~gc.ControlShift) != 0)
 				logfile.Log(". YataGrid.IsInputKey ret= " + ret);
 
