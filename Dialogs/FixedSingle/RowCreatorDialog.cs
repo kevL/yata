@@ -524,7 +524,7 @@ namespace yata
 				case  0: quote = "I find your lack of faith disturbing."; break;
 				case  1: quote = "When I left you I was but the learner."; break;
 				case  2: quote = "The Force is strong with this one."; break;
-				case  3: quote = "I am altering the deal."; break;
+				case  3: quote = "I am altering the deal. Pray I don't alter it any further."; break;
 				case  4: quote = "Obi-Wan has taught you well."; break;
 				case  5: quote = "Only your hatred can destroy me."; break;
 				case  6: quote = "I am your father!"; break;
@@ -559,6 +559,9 @@ namespace yata
 				case 35: quote = "The Emperor will show you the true nature of the Force."; break;
 				case 36: quote = "Now I am the master."; break;
 				case 37: quote = "You can't make this stuff up."; break; // that is not a DarthVader quote.
+
+				// "You have not seen what I have seen."
+				// "The sea is always right!"
 			}
 			return quote + Environment.NewLine + Environment.NewLine
 				 + "- Darth Vader";
