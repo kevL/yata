@@ -25,6 +25,8 @@ namespace yata
 
 		string _pretext = String.Empty;
 		bool _bypass; // bypasses the textchanged handler
+
+		Panel _panel; // origin panel in 'ColorOptionsF'
 		#endregion Fields
 
 
@@ -33,9 +35,11 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f"></param>
-		internal ColorSelectorD(ColorOptionsF f)
+		/// <param name="panel"></param>
+		internal ColorSelectorD(ColorOptionsF f, Panel panel)
 		{
 			_f = f;
+			_panel = panel;
 
 			InitializeComponent();
 			Initialize(METRIC_LOC);
@@ -45,7 +49,8 @@ namespace yata
 			CreateColortable();
 			CreateValsliderGradient();
 
-			init();
+			init(_panel.BackColor);
+			bu_Cancel.Select();
 		}
 
 		/// <summary>
@@ -97,17 +102,26 @@ namespace yata
 		/// <summary>
 		/// Initializes various fields as well as <c><see cref="pa_Color"/></c>.
 		/// </summary>
-		void init()
+		/// <param name="color"></param>
+		void init(Color color)
 		{
-			_val = pa_Valslider.Height - 1;
+			pa_Color.BackColor = color;
 
-			_hue = (double)_x1;
-			_sat = (double)_y1 / 201.0;
+			double val;
+			ColorToHSV(color, out _hue, out _sat, out val);
 
-			PrintCurrentColor(true);
-
-			pa_Colortable.Invalidate();
+			_val = (int)(val * 201.0);
 			pa_Valslider.Invalidate();
+
+			_x1 = (int)_hue;
+			_y1 = (int)(_sat * 201.0);
+			pa_Colortable.Invalidate();
+
+			_bypass = true;
+			tb_Red  .Text = color.R.ToString();
+			tb_Green.Text = color.G.ToString();
+			tb_Blue .Text = color.B.ToString();
+			_bypass = false;
 		}
 		#endregion cTor
 
@@ -387,6 +401,20 @@ namespace yata
 			}
 		}
 		#endregion handlers (textboxes)
+
+
+		#region handlers (buttons)
+		/// <summary>
+		/// Sets <c><see cref="_panel"/>.BackColor</c> to the current
+		/// <c><see cref="pa_Color"/>.BackColor</c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_Accept(object sender, EventArgs e)
+		{
+			_panel.BackColor = pa_Color.BackColor;
+		}
+		#endregion handlers (buttons)
 
 
 		#region Methods (override)

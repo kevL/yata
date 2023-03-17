@@ -7,12 +7,40 @@ namespace yata
 	sealed partial class ColorOptionsF
 	{
 		#region Designer
+
+		GroupBox gb_Colors;
+		Label la_01;
+		Panel pa_01;
+		Label la_02;
+		Panel pa_02;
+		Label la_03;
+		Panel pa_03;
+		Label la_04;
+		Panel pa_04;
+		Label la_05;
+		Panel pa_05;
+		Label la_06;
+		Panel pa_06;
+		Label la_07;
+		Panel pa_07;
+		Label la_08;
+		Panel pa_08;
+		Label la_09;
+		Panel pa_09;
+		Label la_10;
+		Panel pa_10;
+		Label la_11;
+		Panel pa_11;
+		Label la_12;
+		Panel pa_12;
+		Label la_13;
+		Panel pa_13;
+		Label la_14;
+		Panel pa_14;
+
+		Button bu_Commit;
 		Button bu_Cancel;
-		GroupBox gb_Region;
-		Label la_Grid;
-		RadioButton rb_Grid;
-		Label la_Backcolor;
-		Panel pa_Backcolor;
+
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -22,95 +50,381 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.gb_Colors = new System.Windows.Forms.GroupBox();
+			this.la_01 = new System.Windows.Forms.Label();
+			this.pa_01 = new System.Windows.Forms.Panel();
+			this.la_02 = new System.Windows.Forms.Label();
+			this.pa_02 = new System.Windows.Forms.Panel();
+			this.la_03 = new System.Windows.Forms.Label();
+			this.pa_03 = new System.Windows.Forms.Panel();
+			this.la_04 = new System.Windows.Forms.Label();
+			this.pa_04 = new System.Windows.Forms.Panel();
+			this.la_05 = new System.Windows.Forms.Label();
+			this.pa_05 = new System.Windows.Forms.Panel();
+			this.la_06 = new System.Windows.Forms.Label();
+			this.pa_06 = new System.Windows.Forms.Panel();
+			this.la_07 = new System.Windows.Forms.Label();
+			this.pa_07 = new System.Windows.Forms.Panel();
+			this.la_08 = new System.Windows.Forms.Label();
+			this.pa_08 = new System.Windows.Forms.Panel();
+			this.la_09 = new System.Windows.Forms.Label();
+			this.pa_09 = new System.Windows.Forms.Panel();
+			this.la_10 = new System.Windows.Forms.Label();
+			this.pa_10 = new System.Windows.Forms.Panel();
+			this.la_11 = new System.Windows.Forms.Label();
+			this.pa_11 = new System.Windows.Forms.Panel();
+			this.la_12 = new System.Windows.Forms.Label();
+			this.pa_12 = new System.Windows.Forms.Panel();
+			this.la_13 = new System.Windows.Forms.Label();
+			this.pa_13 = new System.Windows.Forms.Panel();
+			this.la_14 = new System.Windows.Forms.Label();
+			this.pa_14 = new System.Windows.Forms.Panel();
+			this.bu_Commit = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
-			this.gb_Region = new System.Windows.Forms.GroupBox();
-			this.la_Grid = new System.Windows.Forms.Label();
-			this.rb_Grid = new System.Windows.Forms.RadioButton();
-			this.la_Backcolor = new System.Windows.Forms.Label();
-			this.pa_Backcolor = new System.Windows.Forms.Panel();
-			this.gb_Region.SuspendLayout();
+			this.gb_Colors.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// gb_Colors
+			// 
+			this.gb_Colors.Controls.Add(this.la_01);
+			this.gb_Colors.Controls.Add(this.pa_01);
+			this.gb_Colors.Controls.Add(this.la_02);
+			this.gb_Colors.Controls.Add(this.pa_02);
+			this.gb_Colors.Controls.Add(this.la_03);
+			this.gb_Colors.Controls.Add(this.pa_03);
+			this.gb_Colors.Controls.Add(this.la_04);
+			this.gb_Colors.Controls.Add(this.pa_04);
+			this.gb_Colors.Controls.Add(this.la_05);
+			this.gb_Colors.Controls.Add(this.pa_05);
+			this.gb_Colors.Controls.Add(this.la_06);
+			this.gb_Colors.Controls.Add(this.pa_06);
+			this.gb_Colors.Controls.Add(this.la_07);
+			this.gb_Colors.Controls.Add(this.pa_07);
+			this.gb_Colors.Controls.Add(this.la_08);
+			this.gb_Colors.Controls.Add(this.pa_08);
+			this.gb_Colors.Controls.Add(this.la_09);
+			this.gb_Colors.Controls.Add(this.pa_09);
+			this.gb_Colors.Controls.Add(this.la_10);
+			this.gb_Colors.Controls.Add(this.pa_10);
+			this.gb_Colors.Controls.Add(this.la_11);
+			this.gb_Colors.Controls.Add(this.pa_11);
+			this.gb_Colors.Controls.Add(this.la_12);
+			this.gb_Colors.Controls.Add(this.pa_12);
+			this.gb_Colors.Controls.Add(this.la_13);
+			this.gb_Colors.Controls.Add(this.pa_13);
+			this.gb_Colors.Controls.Add(this.la_14);
+			this.gb_Colors.Controls.Add(this.pa_14);
+			this.gb_Colors.Controls.Add(this.bu_Commit);
+			this.gb_Colors.Controls.Add(this.bu_Cancel);
+			this.gb_Colors.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gb_Colors.Location = new System.Drawing.Point(0, 0);
+			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
+			this.gb_Colors.Name = "gb_Colors";
+			this.gb_Colors.Padding = new System.Windows.Forms.Padding(0);
+			this.gb_Colors.Size = new System.Drawing.Size(222, 401);
+			this.gb_Colors.TabIndex = 0;
+			this.gb_Colors.TabStop = false;
+			// 
+			// la_01
+			// 
+			this.la_01.Location = new System.Drawing.Point(11, 20);
+			this.la_01.Margin = new System.Windows.Forms.Padding(0);
+			this.la_01.Name = "la_01";
+			this.la_01.Size = new System.Drawing.Size(126, 16);
+			this.la_01.TabIndex = 0;
+			this.la_01.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_01
+			// 
+			this.pa_01.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_01.Location = new System.Drawing.Point(142, 15);
+			this.pa_01.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_01.Name = "pa_01";
+			this.pa_01.Size = new System.Drawing.Size(69, 24);
+			this.pa_01.TabIndex = 1;
+			this.pa_01.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_02
+			// 
+			this.la_02.Location = new System.Drawing.Point(11, 45);
+			this.la_02.Margin = new System.Windows.Forms.Padding(0);
+			this.la_02.Name = "la_02";
+			this.la_02.Size = new System.Drawing.Size(126, 16);
+			this.la_02.TabIndex = 2;
+			this.la_02.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_02
+			// 
+			this.pa_02.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_02.Location = new System.Drawing.Point(142, 40);
+			this.pa_02.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_02.Name = "pa_02";
+			this.pa_02.Size = new System.Drawing.Size(69, 24);
+			this.pa_02.TabIndex = 3;
+			this.pa_02.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_03
+			// 
+			this.la_03.Location = new System.Drawing.Point(11, 70);
+			this.la_03.Margin = new System.Windows.Forms.Padding(0);
+			this.la_03.Name = "la_03";
+			this.la_03.Size = new System.Drawing.Size(126, 16);
+			this.la_03.TabIndex = 4;
+			this.la_03.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_03
+			// 
+			this.pa_03.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_03.Location = new System.Drawing.Point(142, 65);
+			this.pa_03.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_03.Name = "pa_03";
+			this.pa_03.Size = new System.Drawing.Size(69, 24);
+			this.pa_03.TabIndex = 5;
+			this.pa_03.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_04
+			// 
+			this.la_04.Location = new System.Drawing.Point(11, 95);
+			this.la_04.Margin = new System.Windows.Forms.Padding(0);
+			this.la_04.Name = "la_04";
+			this.la_04.Size = new System.Drawing.Size(126, 16);
+			this.la_04.TabIndex = 6;
+			this.la_04.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_04
+			// 
+			this.pa_04.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_04.Location = new System.Drawing.Point(142, 90);
+			this.pa_04.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_04.Name = "pa_04";
+			this.pa_04.Size = new System.Drawing.Size(69, 24);
+			this.pa_04.TabIndex = 7;
+			this.pa_04.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_05
+			// 
+			this.la_05.Location = new System.Drawing.Point(11, 120);
+			this.la_05.Margin = new System.Windows.Forms.Padding(0);
+			this.la_05.Name = "la_05";
+			this.la_05.Size = new System.Drawing.Size(126, 16);
+			this.la_05.TabIndex = 8;
+			this.la_05.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_05
+			// 
+			this.pa_05.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_05.Location = new System.Drawing.Point(142, 115);
+			this.pa_05.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_05.Name = "pa_05";
+			this.pa_05.Size = new System.Drawing.Size(69, 24);
+			this.pa_05.TabIndex = 9;
+			this.pa_05.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_06
+			// 
+			this.la_06.Location = new System.Drawing.Point(11, 145);
+			this.la_06.Margin = new System.Windows.Forms.Padding(0);
+			this.la_06.Name = "la_06";
+			this.la_06.Size = new System.Drawing.Size(126, 16);
+			this.la_06.TabIndex = 10;
+			this.la_06.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_06
+			// 
+			this.pa_06.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_06.Location = new System.Drawing.Point(142, 140);
+			this.pa_06.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_06.Name = "pa_06";
+			this.pa_06.Size = new System.Drawing.Size(69, 24);
+			this.pa_06.TabIndex = 11;
+			this.pa_06.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_07
+			// 
+			this.la_07.Location = new System.Drawing.Point(11, 170);
+			this.la_07.Margin = new System.Windows.Forms.Padding(0);
+			this.la_07.Name = "la_07";
+			this.la_07.Size = new System.Drawing.Size(126, 16);
+			this.la_07.TabIndex = 12;
+			this.la_07.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_07
+			// 
+			this.pa_07.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_07.Location = new System.Drawing.Point(142, 165);
+			this.pa_07.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_07.Name = "pa_07";
+			this.pa_07.Size = new System.Drawing.Size(69, 24);
+			this.pa_07.TabIndex = 13;
+			this.pa_07.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_08
+			// 
+			this.la_08.Location = new System.Drawing.Point(11, 195);
+			this.la_08.Margin = new System.Windows.Forms.Padding(0);
+			this.la_08.Name = "la_08";
+			this.la_08.Size = new System.Drawing.Size(126, 16);
+			this.la_08.TabIndex = 14;
+			this.la_08.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_08
+			// 
+			this.pa_08.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_08.Location = new System.Drawing.Point(142, 190);
+			this.pa_08.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_08.Name = "pa_08";
+			this.pa_08.Size = new System.Drawing.Size(69, 24);
+			this.pa_08.TabIndex = 15;
+			this.pa_08.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_09
+			// 
+			this.la_09.Location = new System.Drawing.Point(11, 220);
+			this.la_09.Margin = new System.Windows.Forms.Padding(0);
+			this.la_09.Name = "la_09";
+			this.la_09.Size = new System.Drawing.Size(126, 16);
+			this.la_09.TabIndex = 16;
+			this.la_09.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_09
+			// 
+			this.pa_09.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_09.Location = new System.Drawing.Point(142, 215);
+			this.pa_09.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_09.Name = "pa_09";
+			this.pa_09.Size = new System.Drawing.Size(69, 24);
+			this.pa_09.TabIndex = 17;
+			this.pa_09.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_10
+			// 
+			this.la_10.Location = new System.Drawing.Point(11, 245);
+			this.la_10.Margin = new System.Windows.Forms.Padding(0);
+			this.la_10.Name = "la_10";
+			this.la_10.Size = new System.Drawing.Size(126, 16);
+			this.la_10.TabIndex = 18;
+			this.la_10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_10
+			// 
+			this.pa_10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_10.Location = new System.Drawing.Point(142, 240);
+			this.pa_10.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_10.Name = "pa_10";
+			this.pa_10.Size = new System.Drawing.Size(69, 24);
+			this.pa_10.TabIndex = 19;
+			this.pa_10.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_11
+			// 
+			this.la_11.Location = new System.Drawing.Point(11, 270);
+			this.la_11.Margin = new System.Windows.Forms.Padding(0);
+			this.la_11.Name = "la_11";
+			this.la_11.Size = new System.Drawing.Size(126, 16);
+			this.la_11.TabIndex = 20;
+			this.la_11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_11
+			// 
+			this.pa_11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_11.Location = new System.Drawing.Point(142, 265);
+			this.pa_11.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_11.Name = "pa_11";
+			this.pa_11.Size = new System.Drawing.Size(69, 24);
+			this.pa_11.TabIndex = 21;
+			this.pa_11.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_12
+			// 
+			this.la_12.Location = new System.Drawing.Point(11, 295);
+			this.la_12.Margin = new System.Windows.Forms.Padding(0);
+			this.la_12.Name = "la_12";
+			this.la_12.Size = new System.Drawing.Size(126, 16);
+			this.la_12.TabIndex = 22;
+			this.la_12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_12
+			// 
+			this.pa_12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_12.Location = new System.Drawing.Point(142, 290);
+			this.pa_12.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_12.Name = "pa_12";
+			this.pa_12.Size = new System.Drawing.Size(69, 24);
+			this.pa_12.TabIndex = 23;
+			this.pa_12.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_13
+			// 
+			this.la_13.Location = new System.Drawing.Point(11, 320);
+			this.la_13.Margin = new System.Windows.Forms.Padding(0);
+			this.la_13.Name = "la_13";
+			this.la_13.Size = new System.Drawing.Size(126, 16);
+			this.la_13.TabIndex = 24;
+			this.la_13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_13
+			// 
+			this.pa_13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_13.Location = new System.Drawing.Point(142, 315);
+			this.pa_13.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_13.Name = "pa_13";
+			this.pa_13.Size = new System.Drawing.Size(69, 24);
+			this.pa_13.TabIndex = 25;
+			this.pa_13.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// la_14
+			// 
+			this.la_14.Location = new System.Drawing.Point(11, 345);
+			this.la_14.Margin = new System.Windows.Forms.Padding(0);
+			this.la_14.Name = "la_14";
+			this.la_14.Size = new System.Drawing.Size(126, 16);
+			this.la_14.TabIndex = 26;
+			this.la_14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_14
+			// 
+			this.pa_14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_14.Location = new System.Drawing.Point(142, 340);
+			this.pa_14.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_14.Name = "pa_14";
+			this.pa_14.Size = new System.Drawing.Size(69, 24);
+			this.pa_14.TabIndex = 27;
+			this.pa_14.Click += new System.EventHandler(this.click_Colorpanel);
+			// 
+			// bu_Commit
+			// 
+			this.bu_Commit.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.bu_Commit.Location = new System.Drawing.Point(8, 369);
+			this.bu_Commit.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Commit.Name = "bu_Commit";
+			this.bu_Commit.Size = new System.Drawing.Size(100, 26);
+			this.bu_Commit.TabIndex = 28;
+			this.bu_Commit.Text = "commit";
+			this.bu_Commit.UseVisualStyleBackColor = true;
+			this.bu_Commit.Click += new System.EventHandler(this.click_Commit);
 			// 
 			// bu_Cancel
 			// 
-			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(674, 410);
+			this.bu_Cancel.Location = new System.Drawing.Point(115, 369);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(80, 26);
-			this.bu_Cancel.TabIndex = 0;
-			this.bu_Cancel.Text = "close";
+			this.bu_Cancel.Size = new System.Drawing.Size(100, 26);
+			this.bu_Cancel.TabIndex = 29;
+			this.bu_Cancel.Text = "Esc";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
-			// 
-			// gb_Region
-			// 
-			this.gb_Region.Controls.Add(this.la_Grid);
-			this.gb_Region.Controls.Add(this.rb_Grid);
-			this.gb_Region.Dock = System.Windows.Forms.DockStyle.Left;
-			this.gb_Region.Location = new System.Drawing.Point(0, 0);
-			this.gb_Region.Margin = new System.Windows.Forms.Padding(0);
-			this.gb_Region.Name = "gb_Region";
-			this.gb_Region.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Region.Size = new System.Drawing.Size(200, 442);
-			this.gb_Region.TabIndex = 1;
-			this.gb_Region.TabStop = false;
-			this.gb_Region.Text = " region ";
-			// 
-			// la_Grid
-			// 
-			this.la_Grid.Location = new System.Drawing.Point(30, 25);
-			this.la_Grid.Margin = new System.Windows.Forms.Padding(0);
-			this.la_Grid.Name = "la_Grid";
-			this.la_Grid.Size = new System.Drawing.Size(160, 16);
-			this.la_Grid.TabIndex = 1;
-			this.la_Grid.Text = "grid";
-			// 
-			// rb_Grid
-			// 
-			this.rb_Grid.Checked = true;
-			this.rb_Grid.Location = new System.Drawing.Point(10, 25);
-			this.rb_Grid.Margin = new System.Windows.Forms.Padding(0);
-			this.rb_Grid.Name = "rb_Grid";
-			this.rb_Grid.Size = new System.Drawing.Size(12, 16);
-			this.rb_Grid.TabIndex = 0;
-			this.rb_Grid.TabStop = true;
-			this.rb_Grid.UseVisualStyleBackColor = true;
-			// 
-			// la_Backcolor
-			// 
-			this.la_Backcolor.Location = new System.Drawing.Point(220, 24);
-			this.la_Backcolor.Margin = new System.Windows.Forms.Padding(0);
-			this.la_Backcolor.Name = "la_Backcolor";
-			this.la_Backcolor.Size = new System.Drawing.Size(100, 16);
-			this.la_Backcolor.TabIndex = 2;
-			this.la_Backcolor.Text = "backcolor";
-			this.la_Backcolor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// pa_Backcolor
-			// 
-			this.pa_Backcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_Backcolor.Location = new System.Drawing.Point(320, 20);
-			this.pa_Backcolor.Margin = new System.Windows.Forms.Padding(0);
-			this.pa_Backcolor.Name = "pa_Backcolor";
-			this.pa_Backcolor.Size = new System.Drawing.Size(25, 25);
-			this.pa_Backcolor.TabIndex = 3;
-			this.pa_Backcolor.Click += new System.EventHandler(this.click_colorpanel);
 			// 
 			// ColorOptionsF
 			// 
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(761, 442);
-			this.Controls.Add(this.pa_Backcolor);
-			this.Controls.Add(this.la_Backcolor);
-			this.Controls.Add(this.gb_Region);
-			this.Controls.Add(this.bu_Cancel);
+			this.ClientSize = new System.Drawing.Size(222, 401);
+			this.Controls.Add(this.gb_Colors);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "ColorOptionsF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Colors.Cfg";
-			this.gb_Region.ResumeLayout(false);
+			this.gb_Colors.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
