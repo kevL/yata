@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
@@ -75,6 +75,10 @@
     <Compile Include="Dialogs\FixedSingle\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\FixedSingle\ColorSelectorD.cs" />
+    <Compile Include="Dialogs\FixedSingle\ColorSelectorD.Designer.cs">
+      <DependentUpon>ColorSelectorD.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.cs" />
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.Designer.cs">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
@@ -109,6 +113,10 @@
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsF.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsF.Designer.cs">
+      <DependentUpon>ColorOptionsF.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.Designer.cs">
@@ -265,6 +273,9 @@
     <EmbeddedResource Include="Dialogs\FixedSingle\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\FixedSingle\ColorSelectorD.resx">
+      <DependentUpon>ColorSelectorD.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedSingle\RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -288,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorOptionsF.resx">
+      <DependentUpon>ColorOptionsF.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>

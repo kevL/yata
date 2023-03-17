@@ -1620,7 +1620,7 @@ namespace yata
 			this.it_Colors.Name = "it_Colors";
 			this.it_Colors.Size = new System.Drawing.Size(158, 22);
 			this.it_Colors.Text = "&Colors file";
-			this.it_Colors.Click += new System.EventHandler(this.helpclick_Options);
+			this.it_Colors.Click += new System.EventHandler(this.helpclick_ColorOptions);
 			// 
 			// _contextRo
 			// 

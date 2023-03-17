@@ -195,6 +195,13 @@ namespace yata
 				_fcolors.BringToFront();
 			}
 		}
+
+
+		void helpclick_ColorOptions(object sender, EventArgs e)
+		{
+			var lines = new string[0];
+			var f = new ColorOptionsF(this, lines);
+		}
 		#endregion Handlers (help)
 
 
