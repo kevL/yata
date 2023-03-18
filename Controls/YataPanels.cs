@@ -75,8 +75,8 @@ namespace yata
 
 			_grid = grid;
 
-			Dock      = DockStyle.Top;
-			BackColor = ColorOptions._colhead;
+			Dock = DockStyle.Top;
+//			BackColor = ColorOptions._colhead;
 
 			Height = YataGrid.HeightColhead;
 		}
@@ -123,6 +123,8 @@ namespace yata
 		{
 			if (!YataGrid._init)
 			{
+				BackColor = ColorOptions._colhead;
+
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
@@ -322,8 +324,8 @@ namespace yata
 
 			_grid = grid;
 
-			Dock      = DockStyle.Left;
-			BackColor = ColorOptions._rowpanel;
+			Dock = DockStyle.Left;
+//			BackColor = ColorOptions._rowpanel;
 		}
 		#endregion cTor
 
@@ -340,6 +342,8 @@ namespace yata
 		{
 			if (!YataGrid._init)
 			{
+				BackColor = ColorOptions._rowpanel;
+
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
@@ -412,8 +416,8 @@ namespace yata
 
 			_grid = grid;
 
-			Dock      = DockStyle.Left;
-			BackColor = ColorOptions._frozen;
+			Dock = DockStyle.Left;
+//			BackColor = ColorOptions._frozen;
 
 			Width = w;
 		}
@@ -432,6 +436,8 @@ namespace yata
 		{
 			if (!YataGrid._init)
 			{
+				BackColor = ColorOptions._frozen;
+
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 

@@ -139,7 +139,7 @@ namespace yata
 
 			_grid = grid;
 
-			BackColor = ColorOptions._propanel;
+//			BackColor = ColorOptions._propanel;
 
 			Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 			TabStop = false; // <- the Propanel is not currently coded to cope w/ keyboard-input.
@@ -823,6 +823,8 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			BackColor = ColorOptions._propanel;
+
 			Graphics graphics = e.Graphics;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 

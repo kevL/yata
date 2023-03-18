@@ -38,7 +38,9 @@ namespace yata
 		Label la_14;
 		Panel pa_14;
 
-		Button bu_Commit;
+		Button bu_Delete;
+		Button bu_Defaults;
+		Button bu_Save;
 		Button bu_Cancel;
 
 
@@ -79,7 +81,9 @@ namespace yata
 			this.pa_13 = new System.Windows.Forms.Panel();
 			this.la_14 = new System.Windows.Forms.Label();
 			this.pa_14 = new System.Windows.Forms.Panel();
-			this.bu_Commit = new System.Windows.Forms.Button();
+			this.bu_Delete = new System.Windows.Forms.Button();
+			this.bu_Defaults = new System.Windows.Forms.Button();
+			this.bu_Save = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.gb_Colors.SuspendLayout();
 			this.SuspendLayout();
@@ -114,14 +118,16 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_13);
 			this.gb_Colors.Controls.Add(this.la_14);
 			this.gb_Colors.Controls.Add(this.pa_14);
-			this.gb_Colors.Controls.Add(this.bu_Commit);
+			this.gb_Colors.Controls.Add(this.bu_Delete);
+			this.gb_Colors.Controls.Add(this.bu_Defaults);
+			this.gb_Colors.Controls.Add(this.bu_Save);
 			this.gb_Colors.Controls.Add(this.bu_Cancel);
 			this.gb_Colors.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gb_Colors.Location = new System.Drawing.Point(0, 0);
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Colors.Name = "gb_Colors";
 			this.gb_Colors.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Colors.Size = new System.Drawing.Size(222, 401);
+			this.gb_Colors.Size = new System.Drawing.Size(452, 401);
 			this.gb_Colors.TabIndex = 0;
 			this.gb_Colors.TabStop = false;
 			// 
@@ -142,6 +148,7 @@ namespace yata
 			this.pa_01.Name = "pa_01";
 			this.pa_01.Size = new System.Drawing.Size(69, 24);
 			this.pa_01.TabIndex = 1;
+			this.pa_01.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_01.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_02
@@ -161,6 +168,7 @@ namespace yata
 			this.pa_02.Name = "pa_02";
 			this.pa_02.Size = new System.Drawing.Size(69, 24);
 			this.pa_02.TabIndex = 3;
+			this.pa_02.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_02.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_03
@@ -180,6 +188,7 @@ namespace yata
 			this.pa_03.Name = "pa_03";
 			this.pa_03.Size = new System.Drawing.Size(69, 24);
 			this.pa_03.TabIndex = 5;
+			this.pa_03.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_03.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_04
@@ -199,6 +208,7 @@ namespace yata
 			this.pa_04.Name = "pa_04";
 			this.pa_04.Size = new System.Drawing.Size(69, 24);
 			this.pa_04.TabIndex = 7;
+			this.pa_04.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_04.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_05
@@ -218,6 +228,7 @@ namespace yata
 			this.pa_05.Name = "pa_05";
 			this.pa_05.Size = new System.Drawing.Size(69, 24);
 			this.pa_05.TabIndex = 9;
+			this.pa_05.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_05.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_06
@@ -237,6 +248,7 @@ namespace yata
 			this.pa_06.Name = "pa_06";
 			this.pa_06.Size = new System.Drawing.Size(69, 24);
 			this.pa_06.TabIndex = 11;
+			this.pa_06.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_06.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_07
@@ -256,6 +268,7 @@ namespace yata
 			this.pa_07.Name = "pa_07";
 			this.pa_07.Size = new System.Drawing.Size(69, 24);
 			this.pa_07.TabIndex = 13;
+			this.pa_07.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_07.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_08
@@ -275,6 +288,7 @@ namespace yata
 			this.pa_08.Name = "pa_08";
 			this.pa_08.Size = new System.Drawing.Size(69, 24);
 			this.pa_08.TabIndex = 15;
+			this.pa_08.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_08.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_09
@@ -294,6 +308,7 @@ namespace yata
 			this.pa_09.Name = "pa_09";
 			this.pa_09.Size = new System.Drawing.Size(69, 24);
 			this.pa_09.TabIndex = 17;
+			this.pa_09.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_09.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_10
@@ -313,6 +328,7 @@ namespace yata
 			this.pa_10.Name = "pa_10";
 			this.pa_10.Size = new System.Drawing.Size(69, 24);
 			this.pa_10.TabIndex = 19;
+			this.pa_10.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_10.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_11
@@ -332,6 +348,7 @@ namespace yata
 			this.pa_11.Name = "pa_11";
 			this.pa_11.Size = new System.Drawing.Size(69, 24);
 			this.pa_11.TabIndex = 21;
+			this.pa_11.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_11.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_12
@@ -351,6 +368,7 @@ namespace yata
 			this.pa_12.Name = "pa_12";
 			this.pa_12.Size = new System.Drawing.Size(69, 24);
 			this.pa_12.TabIndex = 23;
+			this.pa_12.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_12.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_13
@@ -370,6 +388,7 @@ namespace yata
 			this.pa_13.Name = "pa_13";
 			this.pa_13.Size = new System.Drawing.Size(69, 24);
 			this.pa_13.TabIndex = 25;
+			this.pa_13.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_13.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
 			// la_14
@@ -389,36 +408,63 @@ namespace yata
 			this.pa_14.Name = "pa_14";
 			this.pa_14.Size = new System.Drawing.Size(69, 24);
 			this.pa_14.TabIndex = 27;
+			this.pa_14.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_14.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
-			// bu_Commit
+			// bu_Delete
 			// 
-			this.bu_Commit.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Commit.Location = new System.Drawing.Point(8, 369);
-			this.bu_Commit.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Commit.Name = "bu_Commit";
-			this.bu_Commit.Size = new System.Drawing.Size(100, 26);
-			this.bu_Commit.TabIndex = 28;
-			this.bu_Commit.Text = "commit";
-			this.bu_Commit.UseVisualStyleBackColor = true;
-			this.bu_Commit.Click += new System.EventHandler(this.click_Commit);
+			this.bu_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Delete.Location = new System.Drawing.Point(9, 373);
+			this.bu_Delete.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Delete.Name = "bu_Delete";
+			this.bu_Delete.Size = new System.Drawing.Size(100, 22);
+			this.bu_Delete.TabIndex = 28;
+			this.bu_Delete.Text = "delete file";
+			this.bu_Delete.UseVisualStyleBackColor = true;
+			this.bu_Delete.Click += new System.EventHandler(this.click_Delete);
+			// 
+			// bu_Defaults
+			// 
+			this.bu_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Defaults.Location = new System.Drawing.Point(115, 373);
+			this.bu_Defaults.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Defaults.Name = "bu_Defaults";
+			this.bu_Defaults.Size = new System.Drawing.Size(100, 22);
+			this.bu_Defaults.TabIndex = 29;
+			this.bu_Defaults.Text = "restore defaults";
+			this.bu_Defaults.UseVisualStyleBackColor = true;
+			this.bu_Defaults.Click += new System.EventHandler(this.click_Defaults);
+			// 
+			// bu_Save
+			// 
+			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Save.Location = new System.Drawing.Point(238, 369);
+			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Save.Name = "bu_Save";
+			this.bu_Save.Size = new System.Drawing.Size(100, 26);
+			this.bu_Save.TabIndex = 30;
+			this.bu_Save.Text = "SAVE FILE";
+			this.bu_Save.UseVisualStyleBackColor = true;
+			this.bu_Save.Click += new System.EventHandler(this.click_Save);
 			// 
 			// bu_Cancel
 			// 
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(115, 369);
+			this.bu_Cancel.Location = new System.Drawing.Point(345, 369);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(100, 26);
-			this.bu_Cancel.TabIndex = 29;
+			this.bu_Cancel.TabIndex = 31;
 			this.bu_Cancel.Text = "Esc";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// ColorOptionsF
 			// 
+			this.AcceptButton = this.bu_Save;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(222, 401);
+			this.ClientSize = new System.Drawing.Size(452, 401);
 			this.Controls.Add(this.gb_Colors);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.Name = "ColorOptionsF";

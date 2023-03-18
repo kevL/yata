@@ -50,7 +50,7 @@ namespace yata
 			CreateValsliderGradient();
 
 			init(_panel.BackColor);
-			bu_Cancel.Select();
+			bu_Accept.Select();
 		}
 
 		/// <summary>
@@ -408,7 +408,7 @@ namespace yata
 		/// Sets <c><see cref="_panel"/>.BackColor</c> to the current
 		/// <c><see cref="pa_Color"/>.BackColor</c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="bu_Accept"/></c></param>
 		/// <param name="e"></param>
 		void click_Accept(object sender, EventArgs e)
 		{
@@ -562,7 +562,7 @@ namespace yata
 				{
 					case Keys.Enter:
 					case Keys.Escape:
-						bu_Cancel.Select();
+						bu_Accept.Select();
 						return true;
 
 

@@ -15,26 +15,16 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f"></param>
-		/// <param name="lines"></param>
-		internal ColorOptionsF(Yata f, string[] lines)
+		internal ColorOptionsF(Yata f)
 		{
 			_f = f;
 
 			InitializeComponent();
 			Initialize(METRIC_FUL);
 
-			if (lines.Length != 0)
-			{
-				var sb = new StringBuilder();
-				for (int i = 0; i != lines.Length; ++i)
-					sb.AppendLine(lines[i].Trim());
-
-//				rt_Settings.Text = sb.ToString();
-			}
-
 			init();
 
-			bu_Cancel.Select();
+			bu_Save.Select();
 			Show(_f); // Yata is owner.
 		}
 
@@ -75,7 +65,7 @@ namespace yata
 		#endregion cTor
 
 
-		#region handlers
+		#region handlers (color panel)
 		/// <summary>
 		/// Instantiates <c><see cref="ColorSelectorD"/></c>.
 		/// </summary>
@@ -88,23 +78,49 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Writes current colors to "Colors.Cfg" file.
+		/// Updates a ColorOption.
 		/// </summary>
-		/// <param name="sender"><c><see cref="bu_Commit"/></c></param>
+		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void click_Commit(object sender, EventArgs e)
+		void backcolorchanged_ColorPanel(object sender, EventArgs e)
+		{
+			if      (sender == pa_01)  ColorOptions._tabletext                         = pa_01.BackColor;
+			else if (sender == pa_02) (ColorOptions._rowa         as SolidBrush).Color = pa_02.BackColor;
+			else if (sender == pa_03) (ColorOptions._rowb         as SolidBrush).Color = pa_03.BackColor;
+			else if (sender == pa_04) (ColorOptions._rowdisableda as SolidBrush).Color = pa_04.BackColor;
+			else if (sender == pa_05) (ColorOptions._rowdisabledb as SolidBrush).Color = pa_05.BackColor;
+			else if (sender == pa_06)  ColorOptions._frozentext                        = pa_06.BackColor;
+			else if (sender == pa_07)  ColorOptions._frozen                            = pa_07.BackColor;
+			else if (sender == pa_08)  ColorOptions._frozenhead                        = pa_08.BackColor;
+			else if (sender == pa_09)  ColorOptions._colhead                           = pa_09.BackColor;
+			else if (sender == pa_10)  ColorOptions._rowpaneltext                      = pa_10.BackColor;
+			else if (sender == pa_11)  ColorOptions._rowpanel                          = pa_11.BackColor;
+			else if (sender == pa_12)  ColorOptions._propaneltext                      = pa_12.BackColor;
+			else if (sender == pa_13)  ColorOptions._propanel                          = pa_13.BackColor;
+			else                      (ColorOptions._statusbar    as SolidBrush).Color = pa_14.BackColor; // sender == pa_14
+
+			Yata.that.Refresh();
+		}
+		#endregion handlers (color panel)
+
+
+		#region handlers (buttons)
+		/// <summary>
+		/// Saves current colors to the "Colors.Cfg" file.
+		/// </summary>
+		/// <param name="sender"><c><see cref="bu_Save"/></c></param>
+		/// <param name="e"></param>
+		void click_Save(object sender, EventArgs e)
 		{
 			try
 			{
-				string pfeT = ColorOptions.FE;
-					   pfeT = Path.Combine(Application.StartupPath, pfeT) + ".t";
+				string pfeT = Path.Combine(Application.StartupPath, ColorOptions.FE) + ".t";
 
 				File.WriteAllText(pfeT, BuildFile());
 
 				if (File.Exists(pfeT))
 				{
-					string pfe = ColorOptions.FE;
-						   pfe = Path.Combine(Application.StartupPath, pfe);
+					string pfe = Path.Combine(Application.StartupPath, ColorOptions.FE);
 
 					File.Delete(pfe);
 					File.Copy(pfeT, pfe);
@@ -113,20 +129,20 @@ namespace yata
 					{
 						File.Delete(pfeT);
 
-						using (var ib = new Infobox(Infobox.Title_infor,
-													"Yata must be restarted for any changes to take effect.",
-													null,
-													InfoboxType.Warn))
-						{
-							ib.ShowDialog(this);
-						}
+//						using (var ib = new Infobox(Infobox.Title_infor,
+//													"Yata must be restarted for any changes to take effect.",
+//													null,
+//													InfoboxType.Warn))
+//						{
+//							ib.ShowDialog(this);
+//						}
 					}
 				}
 			}
 			catch (Exception ex)
 			{
 				using (var ib = new Infobox(Infobox.Title_excep,
-											"The config file could not be written to the application directory.",
+											"Colors.Cfg file could not be written to the application directory.",
 											ex.ToString(),
 											InfoboxType.Error))
 				{
@@ -140,7 +156,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Builds text for the "Colors.Cfg" file.
 		/// </summary>
 		/// <returns></returns>
 		string BuildFile()
@@ -178,6 +194,73 @@ namespace yata
 
 			return sb.ToString();
 		}
-		#endregion handlers
+
+
+		/// <summary>
+		/// Restores all colors to defaults.
+		/// </summary>
+		/// <param name="sender"><c><see cref="bu_Defaults"/></c></param>
+		/// <param name="e"></param>
+		void click_Defaults(object sender, EventArgs e)
+		{
+			 pa_01.BackColor                                 =
+			 ColorOptions._tabletext                         = SystemColors.ControlText;
+			 pa_02.BackColor                                 =
+			(ColorOptions._rowa         as SolidBrush).Color = Color.AliceBlue;
+			 pa_03.BackColor                                 =
+			(ColorOptions._rowb         as SolidBrush).Color = Color.BlanchedAlmond;
+			 pa_04.BackColor                                 =
+			(ColorOptions._rowdisableda as SolidBrush).Color = Color.LavenderBlush;
+			 pa_05.BackColor                                 =
+			(ColorOptions._rowdisabledb as SolidBrush).Color = Color.MistyRose;
+			 pa_06.BackColor                                 =
+			 ColorOptions._frozentext                        = SystemColors.ControlText;
+			 pa_07.BackColor                                 =
+			 ColorOptions._frozen                            = Color.OldLace;
+			 pa_08.BackColor                                 =
+			 ColorOptions._frozenhead                        = Color.Moccasin;
+			 pa_09.BackColor                                 =
+			 ColorOptions._colhead                           = Color.Thistle;
+			 pa_10.BackColor                                 =
+			 ColorOptions._rowpaneltext                      = SystemColors.ControlText;
+			 pa_11.BackColor                                 =
+			 ColorOptions._rowpanel                          = Color.Azure;
+			 pa_12.BackColor                                 =
+			 ColorOptions._propaneltext                      = SystemColors.ControlText;
+			 pa_13.BackColor                                 =
+			 ColorOptions._propanel                          = Color.LightSteelBlue;
+			 pa_14.BackColor                                 =
+			(ColorOptions._statusbar    as SolidBrush).Color = Color.MintCream;
+
+			Yata.that.Refresh();
+		}
+
+		/// <summary>
+		/// Deletes the "Colors.Cfg" file from the application folder.
+		/// </summary>
+		/// <param name="sender"><c><see cref="bu_Delete"/></c></param>
+		/// <param name="e"></param>
+		void click_Delete(object sender, EventArgs e)
+		{
+			string pfe = Path.Combine(Application.StartupPath, ColorOptions.FE);
+			if (File.Exists(pfe))
+			{
+				try
+				{
+					File.Delete(pfe);
+				}
+				catch (Exception ex)
+				{
+					using (var ib = new Infobox(Infobox.Title_excep,
+												"Colors.Cfg file could not be deleted from the application directory.",
+												ex.ToString(),
+												InfoboxType.Error))
+					{
+						ib.ShowDialog(this);
+					}
+				}
+			}
+		}
+		#endregion handlers (buttons)
 	}
 }
