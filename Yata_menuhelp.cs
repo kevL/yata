@@ -15,9 +15,9 @@ namespace yata
 		ConfigEditor _foptions;
 
 		/// <summary>
-		/// The <c><see cref="ConfigEditor"/></c> editor for Colors.Cfg.
+		/// The <c><see cref="ColorOptionsF"/></c> editor for Colors.Cfg.
 		/// </summary>
-		ConfigEditor _fcolors;
+		ColorOptionsF _fcolors;
 		#endregion Fields
 
 
@@ -75,15 +75,13 @@ namespace yata
 		/// <param name="e"></param>
 		void helpclick_Options(object sender, EventArgs e)
 		{
-			if (   (sender == it_Options && _foptions == null)
-				|| (sender == it_Colors  && _fcolors  == null))
+			if (_foptions == null)
 			{
-				string pfe = (sender == it_Options) ? Options.FE : ColorOptions.FE;
-					   pfe = Path.Combine(Application.StartupPath, pfe);
+				string pfe = Path.Combine(Application.StartupPath, Options.FE);
 
 				if (!File.Exists(pfe))
 				{
-					const string head = "The config file does not exist in the application directory. Do you want to create one ...";
+					const string head = "Settings.Cfg file does not exist in the application directory. Do you want to create one ...";
 
 					using (var ib = new Infobox(Infobox.Title_infor,
 												head,
@@ -102,28 +100,17 @@ namespace yata
 								{
 									sw.WriteLine("#Help|ReadMe.txt describes these settings.");
 
-									if (sender == it_Options)
-									{
-										if (Options.options == null)
-											Options.CreateOptions();
+									if (Options.options == null)
+										Options.CreateOptions();
 
-										for (int i = 0; i != Options.ids; ++i)
-											sw.WriteLine(Options.options[i]);
-									}
-									else // it_Colors
-									{
-										if (ColorOptions.options == null)
-											ColorOptions.CreateOptions();
-
-										for (int i = 0; i != ColorOptions.ids; ++i)
-											sw.WriteLine(ColorOptions.options[i]);
-									}
+									for (int i = 0; i != Options.ids; ++i)
+										sw.WriteLine(Options.options[i]);
 								}
 							}
 							catch (Exception ex)
 							{
 								using (var ibo = new Infobox(Infobox.Title_excep,
-															"The config file could not be created in the application directory.",
+															"Settings.Cfg file could not be created in the application directory.",
 															ex.ToString(),
 															InfoboxType.Error))
 								{
@@ -140,16 +127,8 @@ namespace yata
 					{
 						string[] lines = File.ReadAllLines(pfe);
 
-						if (sender == it_Options)
-						{
-							_foptions = new ConfigEditor(this, lines, false);
-							it_Options.Checked = true;
-						}
-						else // it_Colors
-						{
-							_fcolors = new ConfigEditor(this, lines, true);
-							it_Colors.Checked = true;
-						}
+						_foptions = new ConfigEditor(this, lines);
+						it_Options.Checked = true;
 					}
 					catch (Exception ex)
 					{
@@ -163,7 +142,7 @@ namespace yata
 //										+ ex);
 
 						using (var ib = new Infobox(Infobox.Title_excep,
-													"The config file could not be read in the application directory.",
+													"Settings.Cfg file could not be read in the application directory.",
 													ex.ToString(),
 													InfoboxType.Error))
 						{
@@ -172,7 +151,7 @@ namespace yata
 					}
 				}
 			}
-			else if (sender == it_Options)
+			else
 			{
 				if (_foptions.WindowState == FormWindowState.Minimized)
 				{
@@ -183,7 +162,21 @@ namespace yata
 				}
 				_foptions.BringToFront();
 			}
-			else // it_Colors
+		}
+
+		/// <summary>
+		/// Handles it-click to open <c><see cref="ColorOptionsF"/></c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void helpclick_ColorOptions(object sender, EventArgs e)
+		{
+			if (_fcolors == null)
+			{
+				_fcolors = new ColorOptionsF(this);
+				it_Colors.Checked = true;
+			}
+			else
 			{
 				if (_fcolors.WindowState == FormWindowState.Minimized)
 				{
@@ -195,36 +188,30 @@ namespace yata
 				_fcolors.BringToFront();
 			}
 		}
-
-
-		void helpclick_ColorOptions(object sender, EventArgs e)
-		{
-			var lines = new string[0];
-			var f = new ColorOptionsF(this);
-		}
 		#endregion Handlers (help)
 
 
 		#region Methods (help)
 		/// <summary>
-		/// Clears the check on <c><see cref="it_Options"/></c> or
-		/// <c><see cref="it_Colors"/></c> and nulls
-		/// <c><see cref="_foptions"/></c> or <c><see cref="_fcolors"/></c>
-		/// when the <c><see cref="ConfigEditor"/></c> closes.
+		/// Clears the check on <c><see cref="it_Options"/></c> and nulls
+		/// <c><see cref="_foptions"/></c> when the
+		/// <c><see cref="ConfigEditor"/></c> closes.
 		/// </summary>
-		/// <param name="isColors"><c>true</c> if editing Colors.Cfg</param>
-		internal void CloseSettingsEditor(bool isColors)
+		internal void CloseOptionsEditor()
 		{
-			if (!isColors)
-			{
-				_foptions = null;
-				it_Options.Checked = false;
-			}
-			else
-			{
-				_fcolors = null;
-				it_Colors.Checked = false;
-			}
+			_foptions = null;
+			it_Options.Checked = false;
+		}
+
+		/// <summary>
+		/// Clears the check on <c><see cref="it_Colors"/></c> and nulls
+		/// <c><see cref="_fcolors"/></c> when
+		/// <c><see cref="ColorOptionsF"/></c> closes.
+		/// </summary>
+		internal void CloseColorOptions()
+		{
+			_fcolors = null;
+			it_Colors.Checked = false;
 		}
 		#endregion Methods (help)
 	}

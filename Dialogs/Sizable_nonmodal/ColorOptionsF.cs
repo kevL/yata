@@ -65,6 +65,36 @@ namespace yata
 		#endregion cTor
 
 
+		#region Handlers (override)
+		/// <summary>
+		/// Overrides the <c>FormClosing</c> eventhandler.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			(_f as Yata).CloseColorOptions();
+			base.OnFormClosing(e);
+		}
+
+		/// <summary>
+		/// Saves current text to the Colors.Cfg file when <c>[Ctrl+s]</c> is
+		/// pressed.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyData == (Keys.Control | Keys.S))
+			{
+				e.SuppressKeyPress = true;
+				click_Save(null, EventArgs.Empty);
+			}
+			else
+				base.OnKeyDown(e);
+		}
+		#endregion Handlers (override)
+
+
 		#region handlers (color panel)
 		/// <summary>
 		/// Instantiates <c><see cref="ColorSelectorD"/></c>.
@@ -129,17 +159,20 @@ namespace yata
 					{
 						File.Delete(pfeT);
 
-//						using (var ib = new Infobox(Infobox.Title_infor,
-//													"Yata must be restarted for any changes to take effect.",
-//													null,
-//													InfoboxType.Warn))
-//						{
-//							ib.ShowDialog(this);
-//						}
+						if (sender == null) // inform user only if [Ctrl+s] was pressed ->
+						{
+							using (var ib = new Infobox(Infobox.Title_infor,
+														"Colors.Cfg file was written to the application directory.",
+														null,
+														InfoboxType.Warn))
+							{
+								ib.ShowDialog(this);
+							}
+						}
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (Exception ex) // handle locked etc. or file is flagged Readonly
 			{
 				using (var ib = new Infobox(Infobox.Title_excep,
 											"Colors.Cfg file could not be written to the application directory.",
@@ -151,7 +184,7 @@ namespace yata
 			}
 			finally
 			{
-				Close();
+				if (sender != null) Close();
 			}
 		}
 

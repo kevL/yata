@@ -53,6 +53,10 @@ namespace yata
 		private void InitializeComponent()
 		{
 			this.gb_Colors = new System.Windows.Forms.GroupBox();
+			this.bu_Delete = new System.Windows.Forms.Button();
+			this.bu_Defaults = new System.Windows.Forms.Button();
+			this.bu_Save = new System.Windows.Forms.Button();
+			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.la_01 = new System.Windows.Forms.Label();
 			this.pa_01 = new System.Windows.Forms.Panel();
 			this.la_02 = new System.Windows.Forms.Label();
@@ -81,15 +85,15 @@ namespace yata
 			this.pa_13 = new System.Windows.Forms.Panel();
 			this.la_14 = new System.Windows.Forms.Label();
 			this.pa_14 = new System.Windows.Forms.Panel();
-			this.bu_Delete = new System.Windows.Forms.Button();
-			this.bu_Defaults = new System.Windows.Forms.Button();
-			this.bu_Save = new System.Windows.Forms.Button();
-			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.gb_Colors.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// gb_Colors
 			// 
+			this.gb_Colors.Controls.Add(this.bu_Save);
+			this.gb_Colors.Controls.Add(this.bu_Cancel);
+			this.gb_Colors.Controls.Add(this.bu_Delete);
+			this.gb_Colors.Controls.Add(this.bu_Defaults);
 			this.gb_Colors.Controls.Add(this.la_01);
 			this.gb_Colors.Controls.Add(this.pa_01);
 			this.gb_Colors.Controls.Add(this.la_02);
@@ -118,10 +122,6 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_13);
 			this.gb_Colors.Controls.Add(this.la_14);
 			this.gb_Colors.Controls.Add(this.pa_14);
-			this.gb_Colors.Controls.Add(this.bu_Delete);
-			this.gb_Colors.Controls.Add(this.bu_Defaults);
-			this.gb_Colors.Controls.Add(this.bu_Save);
-			this.gb_Colors.Controls.Add(this.bu_Cancel);
 			this.gb_Colors.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gb_Colors.Location = new System.Drawing.Point(0, 0);
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
@@ -130,6 +130,55 @@ namespace yata
 			this.gb_Colors.Size = new System.Drawing.Size(452, 401);
 			this.gb_Colors.TabIndex = 0;
 			this.gb_Colors.TabStop = false;
+			// 
+			// bu_Delete
+			// 
+			this.bu_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Delete.Location = new System.Drawing.Point(9, 373);
+			this.bu_Delete.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Delete.Name = "bu_Delete";
+			this.bu_Delete.Size = new System.Drawing.Size(100, 22);
+			this.bu_Delete.TabIndex = 28;
+			this.bu_Delete.Text = "delete file";
+			this.bu_Delete.UseVisualStyleBackColor = true;
+			this.bu_Delete.Click += new System.EventHandler(this.click_Delete);
+			// 
+			// bu_Defaults
+			// 
+			this.bu_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Defaults.Location = new System.Drawing.Point(115, 373);
+			this.bu_Defaults.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Defaults.Name = "bu_Defaults";
+			this.bu_Defaults.Size = new System.Drawing.Size(100, 22);
+			this.bu_Defaults.TabIndex = 29;
+			this.bu_Defaults.Text = "restore defaults";
+			this.bu_Defaults.UseVisualStyleBackColor = true;
+			this.bu_Defaults.Click += new System.EventHandler(this.click_Defaults);
+			// 
+			// bu_Save
+			// 
+			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Save.Location = new System.Drawing.Point(238, 369);
+			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Save.Name = "bu_Save";
+			this.bu_Save.Size = new System.Drawing.Size(100, 26);
+			this.bu_Save.TabIndex = 30;
+			this.bu_Save.Text = "SAVE FILE";
+			this.bu_Save.UseVisualStyleBackColor = true;
+			this.bu_Save.Click += new System.EventHandler(this.click_Save);
+			// 
+			// bu_Cancel
+			// 
+			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.bu_Cancel.Location = new System.Drawing.Point(345, 369);
+			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Cancel.Name = "bu_Cancel";
+			this.bu_Cancel.Size = new System.Drawing.Size(100, 26);
+			this.bu_Cancel.TabIndex = 31;
+			this.bu_Cancel.Text = "Esc";
+			this.bu_Cancel.UseVisualStyleBackColor = true;
+			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
 			// la_01
 			// 
@@ -411,55 +460,6 @@ namespace yata
 			this.pa_14.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_14.Click += new System.EventHandler(this.click_Colorpanel);
 			// 
-			// bu_Delete
-			// 
-			this.bu_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bu_Delete.Location = new System.Drawing.Point(9, 373);
-			this.bu_Delete.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Delete.Name = "bu_Delete";
-			this.bu_Delete.Size = new System.Drawing.Size(100, 22);
-			this.bu_Delete.TabIndex = 28;
-			this.bu_Delete.Text = "delete file";
-			this.bu_Delete.UseVisualStyleBackColor = true;
-			this.bu_Delete.Click += new System.EventHandler(this.click_Delete);
-			// 
-			// bu_Defaults
-			// 
-			this.bu_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bu_Defaults.Location = new System.Drawing.Point(115, 373);
-			this.bu_Defaults.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Defaults.Name = "bu_Defaults";
-			this.bu_Defaults.Size = new System.Drawing.Size(100, 22);
-			this.bu_Defaults.TabIndex = 29;
-			this.bu_Defaults.Text = "restore defaults";
-			this.bu_Defaults.UseVisualStyleBackColor = true;
-			this.bu_Defaults.Click += new System.EventHandler(this.click_Defaults);
-			// 
-			// bu_Save
-			// 
-			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Save.Location = new System.Drawing.Point(238, 369);
-			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Save.Name = "bu_Save";
-			this.bu_Save.Size = new System.Drawing.Size(100, 26);
-			this.bu_Save.TabIndex = 30;
-			this.bu_Save.Text = "SAVE FILE";
-			this.bu_Save.UseVisualStyleBackColor = true;
-			this.bu_Save.Click += new System.EventHandler(this.click_Save);
-			// 
-			// bu_Cancel
-			// 
-			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(345, 369);
-			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(100, 26);
-			this.bu_Cancel.TabIndex = 31;
-			this.bu_Cancel.Text = "Esc";
-			this.bu_Cancel.UseVisualStyleBackColor = true;
-			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
-			// 
 			// ColorOptionsF
 			// 
 			this.AcceptButton = this.bu_Save;
@@ -467,6 +467,7 @@ namespace yata
 			this.ClientSize = new System.Drawing.Size(452, 401);
 			this.Controls.Add(this.gb_Colors);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
+			this.KeyPreview = true;
 			this.Name = "ColorOptionsF";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Colors.Cfg";

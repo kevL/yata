@@ -271,7 +271,7 @@ namespace yata
 		#endregion Methods (static)
 
 
-		#region options (static)
+/*		#region options (static)
 		/// <summary>
 		/// An array of all <c><see cref="options"/></c> <c>strings</c> that are
 		/// recognized in the Colors.Cfg file.
@@ -310,6 +310,6 @@ namespace yata
 			options[++i] = "propanel=";
 			options[++i] = "statusbar=";
 		}
-		#endregion options (static)
+		#endregion options (static) */
 	}
 }

@@ -9,27 +9,16 @@ namespace yata
 	sealed partial class ConfigEditor
 		: YataDialog
 	{
-		#region Fields
-		/// <summary>
-		/// <c>true</c> if invoked to edit Colors.Cfg - <c>false</c> if invoked
-		/// to edit Settings.Cfg
-		/// </summary>
-		bool _isColors;
-		#endregion Fields
-
-
 		#region cTor
 		/// <summary>
-		/// The editor for Settings.Cfg and/or Colors.Cfg.
+		/// The editor for the Settings.Cfg file.
 		/// </summary>
 		/// <param name="f">pointer to <c><see cref="Yata"/></c></param>
 		/// <param name="lines">array of <c>strings</c> in user's current
 		/// settings file</param>
-		/// <param name="isColors"><c>true</c> if editing Colors.Cfg</param>
-		internal ConfigEditor(Yata f, string[] lines, bool isColors)
+		internal ConfigEditor(Yata f, string[] lines)
 		{
 			_f = f;
-			_isColors = isColors;
 
 			InitializeComponent();
 			Initialize(METRIC_FUL);
@@ -43,7 +32,7 @@ namespace yata
 				rt_Settings.Text = sb.ToString();
 			}
 
-			bu_Insert.Visible = CheckInsertVisible();
+			bu_Update.Visible = CheckUpdateVisible();
 
 			rt_Settings.Select();
 			Show(_f); // Yata is owner.
@@ -58,12 +47,12 @@ namespace yata
 		/// <param name="e"></param>
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			(_f as Yata).CloseSettingsEditor(_isColors);
+			(_f as Yata).CloseOptionsEditor();
 			base.OnFormClosing(e);
 		}
 
 		/// <summary>
-		/// Saves current text to Settings.Cfg file when <c>[Ctrl+s]</c> is
+		/// Saves current text to the Settings.Cfg file when <c>[Ctrl+s]</c> is
 		/// pressed.
 		/// </summary>
 		/// <param name="e"></param>
@@ -93,7 +82,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Writes file and closes this <c>ConfigEditor</c>.
+		/// Writes the Settings.Cfg file and closes this <c>ConfigEditor</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -106,15 +95,13 @@ namespace yata
 		{
 			try
 			{
-				string pfeT = _isColors ? ColorOptions.FE : Options.FE;
-					   pfeT = Path.Combine(Application.StartupPath, pfeT) + ".t";
+				string pfeT = Path.Combine(Application.StartupPath, Options.FE) + ".t";
 
 				File.WriteAllText(pfeT, rt_Settings.Text);
 
 				if (File.Exists(pfeT))
 				{
-					string pfe = _isColors ? ColorOptions.FE : Options.FE;
-						   pfe = Path.Combine(Application.StartupPath, pfe);
+					string pfe = Path.Combine(Application.StartupPath, Options.FE);
 
 					File.Delete(pfe);
 					File.Copy(pfeT, pfe);
@@ -133,10 +120,10 @@ namespace yata
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (Exception ex) // handle locked etc. or file is flagged Readonly
 			{
 				using (var ib = new Infobox(Infobox.Title_excep,
-											"The config file could not be written to the application directory.",
+											"Settings.Cfg file could not be written to the application directory.",
 											ex.ToString(),
 											InfoboxType.Error))
 				{
@@ -151,49 +138,30 @@ namespace yata
 
 
 		/// <summary>
-		/// Inserts any settings that are not found in the current Settings.Cfg
-		/// file or Colors.Cfg file.
+		/// Updates any settings that are not found in the current Settings.Cfg
+		/// file.
 		/// </summary>
-		/// <param name="sender"><c><see cref="bu_Insert"/></c></param>
+		/// <param name="sender"><c><see cref="bu_Update"/></c></param>
 		/// <param name="e"></param>
-		void click_Insert(object sender, EventArgs e)
+		void click_Update(object sender, EventArgs e)
 		{
-			bu_Insert.Visible = false;
+			bu_Update.Visible = false;
 
 			string text = rt_Settings.Text;
 
 			bool found = false;
 
-			if (_isColors)
+			string option;
+			for (int i = 0; i != Options.ids; ++i)
 			{
-				string option;
-				for (int i = 0; i != ColorOptions.ids; ++i)
+				if (!text.Contains(option = Options.options[i]))
 				{
-					if (!text.Contains(option = ColorOptions.options[i]))
+					if (!found)
 					{
-						if (!found)
-						{
-							found = true;
-							text += Environment.NewLine;
-						}
-						text += option + Environment.NewLine;
+						found = true;
+						text += Environment.NewLine;
 					}
-				}
-			}
-			else
-			{
-				string option;
-				for (int i = 0; i != Options.ids; ++i)
-				{
-					if (!text.Contains(option = Options.options[i]))
-					{
-						if (!found)
-						{
-							found = true;
-							text += Environment.NewLine;
-						}
-						text += option + Environment.NewLine;
-					}
+					text += option + Environment.NewLine;
 				}
 			}
 
@@ -206,36 +174,20 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// Checks if the Insert button should be visible.
+		/// Checks if the Update button should be visible.
 		/// </summary>
 		/// <returns><c>true</c> if the button should be visible</returns>
-		bool CheckInsertVisible()
+		bool CheckUpdateVisible()
 		{
-			if (_isColors)
+			if (Options.options == null)
+				Options.CreateOptions();
+
+			string text = rt_Settings.Text;
+
+			for (int i = 0; i != Options.ids; ++i)
 			{
-				if (ColorOptions.options == null)
-					ColorOptions.CreateOptions();
-
-				string text = rt_Settings.Text;
-
-				for (int i = 0; i != ColorOptions.ids; ++i)
-				{
-					if (!text.Contains(ColorOptions.options[i]))
-						return true;
-				}
-			}
-			else
-			{
-				if (Options.options == null)
-					Options.CreateOptions();
-
-				string text = rt_Settings.Text;
-
-				for (int i = 0; i != Options.ids; ++i)
-				{
-					if (!text.Contains(Options.options[i]))
-						return true;
-				}
+				if (!text.Contains(Options.options[i]))
+					return true;
 			}
 			return false;
 		}

@@ -183,6 +183,7 @@ namespace yata
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "ColorSelectorD";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Color Selector";
 			this.ResumeLayout(false);

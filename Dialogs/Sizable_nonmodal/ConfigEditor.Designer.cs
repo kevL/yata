@@ -9,7 +9,7 @@ namespace yata
 		#region Designer
 		RichTextBox rt_Settings;
 		Panel pa_Buttons;
-		Button bu_Insert;
+		Button bu_Update;
 		Button bu_Save;
 		Button bu_Okay;
 		Button bu_Cancel;
@@ -18,7 +18,7 @@ namespace yata
 		{
 			this.rt_Settings = new System.Windows.Forms.RichTextBox();
 			this.pa_Buttons = new System.Windows.Forms.Panel();
-			this.bu_Insert = new System.Windows.Forms.Button();
+			this.bu_Update = new System.Windows.Forms.Button();
 			this.bu_Save = new System.Windows.Forms.Button();
 			this.bu_Okay = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
@@ -41,7 +41,7 @@ namespace yata
 			// 
 			// pa_Buttons
 			// 
-			this.pa_Buttons.Controls.Add(this.bu_Insert);
+			this.pa_Buttons.Controls.Add(this.bu_Update);
 			this.pa_Buttons.Controls.Add(this.bu_Save);
 			this.pa_Buttons.Controls.Add(this.bu_Okay);
 			this.pa_Buttons.Controls.Add(this.bu_Cancel);
@@ -52,19 +52,18 @@ namespace yata
 			this.pa_Buttons.Size = new System.Drawing.Size(592, 35);
 			this.pa_Buttons.TabIndex = 1;
 			// 
-			// bu_Insert
+			// bu_Update
 			// 
-			this.bu_Insert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.bu_Insert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Insert.ForeColor = System.Drawing.Color.Crimson;
-			this.bu_Insert.Location = new System.Drawing.Point(10, 8);
-			this.bu_Insert.Margin = new System.Windows.Forms.Padding(0);
-			this.bu_Insert.Name = "bu_Insert";
-			this.bu_Insert.Size = new System.Drawing.Size(75, 23);
-			this.bu_Insert.TabIndex = 0;
-			this.bu_Insert.Text = "Update";
-			this.bu_Insert.UseVisualStyleBackColor = true;
-			this.bu_Insert.Click += new System.EventHandler(this.click_Insert);
+			this.bu_Update.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.bu_Update.ForeColor = System.Drawing.Color.Crimson;
+			this.bu_Update.Location = new System.Drawing.Point(10, 8);
+			this.bu_Update.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Update.Name = "bu_Update";
+			this.bu_Update.Size = new System.Drawing.Size(75, 23);
+			this.bu_Update.TabIndex = 0;
+			this.bu_Update.Text = "Update";
+			this.bu_Update.UseVisualStyleBackColor = true;
+			this.bu_Update.Click += new System.EventHandler(this.click_Update);
 			// 
 			// bu_Save
 			// 
