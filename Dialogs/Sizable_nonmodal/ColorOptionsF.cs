@@ -298,33 +298,33 @@ namespace yata
 		{
 			var sb = new StringBuilder();
 
-			sb.Append("tabletext=");
+			sb.Append(ColorOptions.CFG_tabletext);
 			sb.AppendLine(pa_01.BackColor.R + "," + pa_01.BackColor.G + "," + pa_01.BackColor.B);
-			sb.Append("rowa=");
+			sb.Append(ColorOptions.CFG_rowa);
 			sb.AppendLine(pa_02.BackColor.R + "," + pa_02.BackColor.G + "," + pa_02.BackColor.B);
-			sb.Append("rowb=");
+			sb.Append(ColorOptions.CFG_rowb);
 			sb.AppendLine(pa_03.BackColor.R + "," + pa_03.BackColor.G + "," + pa_03.BackColor.B);
-			sb.Append("rowdisableda=");
+			sb.Append(ColorOptions.CFG_rowdisableda);
 			sb.AppendLine(pa_04.BackColor.R + "," + pa_04.BackColor.G + "," + pa_04.BackColor.B);
-			sb.Append("rowdisabledb=");
+			sb.Append(ColorOptions.CFG_rowdisabledb);
 			sb.AppendLine(pa_05.BackColor.R + "," + pa_05.BackColor.G + "," + pa_05.BackColor.B);
-			sb.Append("frozentext=");
+			sb.Append(ColorOptions.CFG_frozentext);
 			sb.AppendLine(pa_06.BackColor.R + "," + pa_06.BackColor.G + "," + pa_06.BackColor.B);
-			sb.Append("frozen=");
+			sb.Append(ColorOptions.CFG_frozen);
 			sb.AppendLine(pa_07.BackColor.R + "," + pa_07.BackColor.G + "," + pa_07.BackColor.B);
-			sb.Append("frozenhead=");
+			sb.Append(ColorOptions.CFG_frozenhead);
 			sb.AppendLine(pa_08.BackColor.R + "," + pa_08.BackColor.G + "," + pa_08.BackColor.B);
-			sb.Append("colhead=");
+			sb.Append(ColorOptions.CFG_colhead);
 			sb.AppendLine(pa_09.BackColor.R + "," + pa_09.BackColor.G + "," + pa_09.BackColor.B);
-			sb.Append("rowpaneltext=");
+			sb.Append(ColorOptions.CFG_rowpaneltext);
 			sb.AppendLine(pa_10.BackColor.R + "," + pa_10.BackColor.G + "," + pa_10.BackColor.B);
-			sb.Append("rowpanel=");
+			sb.Append(ColorOptions.CFG_rowpanel);
 			sb.AppendLine(pa_11.BackColor.R + "," + pa_11.BackColor.G + "," + pa_11.BackColor.B);
-			sb.Append("propaneltext=");
+			sb.Append(ColorOptions.CFG_propaneltext);
 			sb.AppendLine(pa_12.BackColor.R + "," + pa_12.BackColor.G + "," + pa_12.BackColor.B);
-			sb.Append("propanel=");
+			sb.Append(ColorOptions.CFG_propanel);
 			sb.AppendLine(pa_13.BackColor.R + "," + pa_13.BackColor.G + "," + pa_13.BackColor.B);
-			sb.Append("statusbar=");
+			sb.Append(ColorOptions.CFG_statusbar);
 			sb.AppendLine(pa_14.BackColor.R + "," + pa_14.BackColor.G + "," + pa_14.BackColor.B);
 
 			return sb.ToString();
