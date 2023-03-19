@@ -103,7 +103,24 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Colorpanel(object sender, EventArgs e)
 		{
-			var f = new ColorSelectorD(this, sender as Panel);
+			string title;
+
+			if      (sender == pa_01) title = la_01.Text;
+			else if (sender == pa_02) title = la_02.Text;
+			else if (sender == pa_03) title = la_03.Text;
+			else if (sender == pa_04) title = la_04.Text;
+			else if (sender == pa_05) title = la_05.Text;
+			else if (sender == pa_06) title = la_06.Text;
+			else if (sender == pa_07) title = la_07.Text;
+			else if (sender == pa_08) title = la_08.Text;
+			else if (sender == pa_09) title = la_09.Text;
+			else if (sender == pa_10) title = la_10.Text;
+			else if (sender == pa_11) title = la_11.Text;
+			else if (sender == pa_12) title = la_12.Text;
+			else if (sender == pa_13) title = la_13.Text;
+			else                      title = la_14.Text; // sender == pa_14
+
+			var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
 			f.ShowDialog(this);
 		}
 

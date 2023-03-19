@@ -36,10 +36,12 @@ namespace yata
 		/// </summary>
 		/// <param name="f"></param>
 		/// <param name="panel"></param>
-		internal ColorSelectorD(ColorOptionsF f, Panel panel)
+		/// <param name="title"></param>
+		internal ColorSelectorD(ColorOptionsF f, Panel panel, string title)
 		{
 			_f = f;
 			_panel = panel;
+			Text = title;
 
 			InitializeComponent();
 			Initialize(METRIC_LOC);
