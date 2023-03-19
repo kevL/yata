@@ -11,8 +11,8 @@ namespace yata
 		: YataDialog
 	{
 		#region Fields (static)
-		const double STEPS_SAT = 201.0;
-		const double STEPS_VAL = 255.0;
+		const double STEPS_SAT = 201.0; // one less than count because 0
+		const double STEPS_VAL = 255.0; // one less than count because 0
 		#endregion Fields (static)
 
 
@@ -113,7 +113,8 @@ namespace yata
 		/// <param name="color"></param>
 		void init(Color color)
 		{
-			pa_Color.BackColor = color;
+			pa_Color   .BackColor =
+			pa_Colorpre.BackColor = color;
 
 			double val;
 			ColorToHSV(color, out _hue, out _sat, out val);
@@ -423,6 +424,42 @@ namespace yata
 			_panel.BackColor = pa_Color.BackColor;
 		}
 		#endregion handlers (buttons)
+
+
+		#region handlers (panels)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="pa_Color"/></c></item>
+		/// <item><c><see cref="pa_Colorpre"/></c></item>
+		/// </list></param>
+		/// <param name="e"></param>
+		void mouseclick_Color(object sender, MouseEventArgs e)
+		{
+			Color color = (sender as Panel).BackColor;
+
+			if (e.Button == MouseButtons.Right && sender == pa_Colorpre) // assign clicked color to Colorpre only on RMB ->
+				pa_Color.BackColor = color;
+
+			double val;
+			ColorToHSV(color, out _hue, out _sat, out val);
+
+			_val = (int)(val * STEPS_VAL);
+			pa_Valslider.Invalidate();
+
+			_x1 = (int)_hue;
+			_y1 = (int)(_sat * STEPS_SAT);
+			pa_Colortable.Invalidate();
+
+			_bypass = true;
+			tb_Red  .Text = color.R.ToString();
+			tb_Green.Text = color.G.ToString();
+			tb_Blue .Text = color.B.ToString();
+			_bypass = false;
+		}
+		#endregion handlers (panels)
 
 
 		#region Methods (override)
