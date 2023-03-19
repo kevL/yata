@@ -154,14 +154,14 @@ namespace yata
 
 			switch (Convert.ToInt32(huestepfloor) % 6)
 			{
-				default:
-				case 0: r = v; g = t; b = p; break;
-				case 1: r = q; g = v; b = p; break;
-				case 2: r = p; g = v; b = t; break;
-				case 3: r = p; g = q; b = v; break;
-				case 4: r = t; g = p; b = v; break;
-				case 5: r = v; g = p; b = q; break;
+				case 0: r = v; g = t; b = p; return;
+				case 1: r = q; g = v; b = p; return;
+				case 2: r = p; g = v; b = t; return;
+				case 3: r = p; g = q; b = v; return;
+				case 4: r = t; g = p; b = v; return;
+				case 5: r = v; g = p; b = q; return;
 			}
+			r = (byte)0; g = (byte)0; b = (byte)0; // stop .net whining <-
 		}
 
 		/// <summary>
@@ -365,8 +365,8 @@ namespace yata
 					_pretext = tb.Text;
 
 					Color color = Color.FromArgb(Int32.Parse((tb_Red  .Text.Length == 0) ? "0" : tb_Red  .Text),
-					                             Int32.Parse((tb_Green.Text.Length == 0) ? "0" : tb_Green.Text),
-					                             Int32.Parse((tb_Blue .Text.Length == 0) ? "0" : tb_Blue .Text));
+												 Int32.Parse((tb_Green.Text.Length == 0) ? "0" : tb_Green.Text),
+												 Int32.Parse((tb_Blue .Text.Length == 0) ? "0" : tb_Blue .Text));
 					pa_Color.BackColor = color;
 
 					double val;
