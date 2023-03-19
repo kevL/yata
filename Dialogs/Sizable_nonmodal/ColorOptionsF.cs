@@ -97,31 +97,116 @@ namespace yata
 
 		#region handlers (color panel)
 		/// <summary>
-		/// Instantiates <c><see cref="ColorSelectorD"/></c>.
+		/// Instantiates <c><see cref="ColorSelectorD"/></c> on leftclick.
+		/// Restores default color on right click.
 		/// </summary>
 		/// <param name="sender"><c>pa_*</c></param>
 		/// <param name="e"></param>
-		void click_Colorpanel(object sender, EventArgs e)
+		void mouseclick_Colorpanel(object sender, MouseEventArgs e)
 		{
-			string title;
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+				{
+					string title;
 
-			if      (sender == pa_01) title = la_01.Text;
-			else if (sender == pa_02) title = la_02.Text;
-			else if (sender == pa_03) title = la_03.Text;
-			else if (sender == pa_04) title = la_04.Text;
-			else if (sender == pa_05) title = la_05.Text;
-			else if (sender == pa_06) title = la_06.Text;
-			else if (sender == pa_07) title = la_07.Text;
-			else if (sender == pa_08) title = la_08.Text;
-			else if (sender == pa_09) title = la_09.Text;
-			else if (sender == pa_10) title = la_10.Text;
-			else if (sender == pa_11) title = la_11.Text;
-			else if (sender == pa_12) title = la_12.Text;
-			else if (sender == pa_13) title = la_13.Text;
-			else                      title = la_14.Text; // sender == pa_14
+					if      (sender == pa_01) title = la_01.Text;
+					else if (sender == pa_02) title = la_02.Text;
+					else if (sender == pa_03) title = la_03.Text;
+					else if (sender == pa_04) title = la_04.Text;
+					else if (sender == pa_05) title = la_05.Text;
+					else if (sender == pa_06) title = la_06.Text;
+					else if (sender == pa_07) title = la_07.Text;
+					else if (sender == pa_08) title = la_08.Text;
+					else if (sender == pa_09) title = la_09.Text;
+					else if (sender == pa_10) title = la_10.Text;
+					else if (sender == pa_11) title = la_11.Text;
+					else if (sender == pa_12) title = la_12.Text;
+					else if (sender == pa_13) title = la_13.Text;
+					else                      title = la_14.Text; // sender == pa_14
 
-			var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
-			f.ShowDialog(this);
+					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
+					f.ShowDialog(this);
+					break;
+				}
+
+				case MouseButtons.Right:
+				{
+					if (sender == pa_01)
+					{
+						pa_01.BackColor =
+						ColorOptions._tabletext = SystemColors.ControlText;
+					}
+					else if (sender == pa_02)
+					{
+						pa_02.BackColor =
+						(ColorOptions._rowa as SolidBrush).Color = Color.AliceBlue;
+					}
+					else if (sender == pa_03)
+					{
+						pa_03.BackColor =
+						(ColorOptions._rowb as SolidBrush).Color = Color.BlanchedAlmond;
+					}
+					else if (sender == pa_04)
+					{
+						pa_04.BackColor =
+						(ColorOptions._rowdisableda as SolidBrush).Color = Color.LavenderBlush;
+					}
+					else if (sender == pa_05)
+					{
+						pa_05.BackColor =
+						(ColorOptions._rowdisabledb as SolidBrush).Color = Color.MistyRose;
+					}
+					else if (sender == pa_06)
+					{
+						pa_06.BackColor =
+						ColorOptions._frozentext = SystemColors.ControlText;
+					}
+					else if (sender == pa_07)
+					{
+						pa_07.BackColor =
+						ColorOptions._frozen = Color.OldLace;
+					}
+					else if (sender == pa_08)
+					{
+						pa_08.BackColor =
+						ColorOptions._frozenhead = Color.Moccasin;
+					}
+					else if (sender == pa_09)
+					{
+						pa_09.BackColor =
+						ColorOptions._colhead = Color.Thistle;
+					}
+					else if (sender == pa_10)
+					{
+						pa_10.BackColor =
+						ColorOptions._rowpaneltext = SystemColors.ControlText;
+					}
+					else if (sender == pa_11)
+					{
+						pa_11.BackColor =
+						ColorOptions._rowpanel = Color.Azure;
+					}
+					else if (sender == pa_12)
+					{
+						pa_12.BackColor =
+						ColorOptions._propaneltext = SystemColors.ControlText;
+					}
+					else if (sender == pa_13)
+					{
+						pa_13.BackColor =
+						ColorOptions._propanel = Color.LightSteelBlue;
+					}
+					else // sender == pa_14
+					{
+						pa_14.BackColor =
+						(ColorOptions._statusbar as SolidBrush).Color = Color.MintCream;
+					}
+
+					Yata.that.Refresh();
+					break;
+				}
+			}
 		}
 
 		/// <summary>

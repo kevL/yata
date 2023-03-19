@@ -198,7 +198,7 @@ namespace yata
 			this.pa_01.Size = new System.Drawing.Size(69, 24);
 			this.pa_01.TabIndex = 1;
 			this.pa_01.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_01.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_01.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_02
 			// 
@@ -218,7 +218,7 @@ namespace yata
 			this.pa_02.Size = new System.Drawing.Size(69, 24);
 			this.pa_02.TabIndex = 3;
 			this.pa_02.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_02.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_02.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_03
 			// 
@@ -238,7 +238,7 @@ namespace yata
 			this.pa_03.Size = new System.Drawing.Size(69, 24);
 			this.pa_03.TabIndex = 5;
 			this.pa_03.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_03.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_03.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_04
 			// 
@@ -258,7 +258,7 @@ namespace yata
 			this.pa_04.Size = new System.Drawing.Size(69, 24);
 			this.pa_04.TabIndex = 7;
 			this.pa_04.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_04.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_04.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_05
 			// 
@@ -278,7 +278,7 @@ namespace yata
 			this.pa_05.Size = new System.Drawing.Size(69, 24);
 			this.pa_05.TabIndex = 9;
 			this.pa_05.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_05.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_05.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_06
 			// 
@@ -298,7 +298,7 @@ namespace yata
 			this.pa_06.Size = new System.Drawing.Size(69, 24);
 			this.pa_06.TabIndex = 11;
 			this.pa_06.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_06.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_06.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_07
 			// 
@@ -318,7 +318,7 @@ namespace yata
 			this.pa_07.Size = new System.Drawing.Size(69, 24);
 			this.pa_07.TabIndex = 13;
 			this.pa_07.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_07.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_07.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_08
 			// 
@@ -338,7 +338,7 @@ namespace yata
 			this.pa_08.Size = new System.Drawing.Size(69, 24);
 			this.pa_08.TabIndex = 15;
 			this.pa_08.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_08.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_08.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_09
 			// 
@@ -358,7 +358,7 @@ namespace yata
 			this.pa_09.Size = new System.Drawing.Size(69, 24);
 			this.pa_09.TabIndex = 17;
 			this.pa_09.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_09.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_09.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_10
 			// 
@@ -378,7 +378,7 @@ namespace yata
 			this.pa_10.Size = new System.Drawing.Size(69, 24);
 			this.pa_10.TabIndex = 19;
 			this.pa_10.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_10.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_10.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_11
 			// 
@@ -398,7 +398,7 @@ namespace yata
 			this.pa_11.Size = new System.Drawing.Size(69, 24);
 			this.pa_11.TabIndex = 21;
 			this.pa_11.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_11.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_11.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_12
 			// 
@@ -418,7 +418,7 @@ namespace yata
 			this.pa_12.Size = new System.Drawing.Size(69, 24);
 			this.pa_12.TabIndex = 23;
 			this.pa_12.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_12.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_12.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_13
 			// 
@@ -438,7 +438,7 @@ namespace yata
 			this.pa_13.Size = new System.Drawing.Size(69, 24);
 			this.pa_13.TabIndex = 25;
 			this.pa_13.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_13.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_13.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_14
 			// 
@@ -458,7 +458,7 @@ namespace yata
 			this.pa_14.Size = new System.Drawing.Size(69, 24);
 			this.pa_14.TabIndex = 27;
 			this.pa_14.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_14.Click += new System.EventHandler(this.click_Colorpanel);
+			this.pa_14.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// ColorOptionsF
 			// 
