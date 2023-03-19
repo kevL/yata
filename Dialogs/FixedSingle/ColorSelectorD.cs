@@ -10,6 +10,12 @@ namespace yata
 	sealed partial class ColorSelectorD
 		: YataDialog
 	{
+		#region Fields (static)
+		const double STEPS_SAT = 201.0;
+		const double STEPS_VAL = 255.0;
+		#endregion Fields (static)
+
+
 		#region Fields
 		int _x1, _y1; // tracker on the Colortable
 		int _val;     // tracker on the Valslider
@@ -75,7 +81,7 @@ namespace yata
 
 					for (int x = 0; x != pic.Width; ++x)
 					{
-						HsvToRgb((double)x, (double)y / 201.0, 1.0, out r, out g, out b);
+						HsvToRgb((double)x, (double)y / STEPS_SAT, 1.0, out r, out g, out b);
 
 						row[offset + 2] = r;
 						row[offset + 1] = g;
@@ -112,11 +118,11 @@ namespace yata
 			double val;
 			ColorToHSV(color, out _hue, out _sat, out val);
 
-			_val = (int)(val * 201.0);
+			_val = (int)(val * STEPS_VAL);
 			pa_Valslider.Invalidate();
 
 			_x1 = (int)_hue;
-			_y1 = (int)(_sat * 201.0);
+			_y1 = (int)(_sat * STEPS_SAT);
 			pa_Colortable.Invalidate();
 
 			_bypass = true;
@@ -193,7 +199,7 @@ namespace yata
 		void PrintCurrentColor(bool bypass = false)
 		{
 			byte r,g,b;
-			HsvToRgb(_hue, _sat, (double)_val / 201.0, out r, out g, out b);
+			HsvToRgb(_hue, _sat, (double)_val / STEPS_VAL, out r, out g, out b);
 			pa_Color.BackColor = Color.FromArgb(r,g,b);
 
 			_bypass = bypass;
@@ -233,7 +239,7 @@ namespace yata
 				_y1 = e.Y;
 
 				_hue = (double)_x1;
-				_sat = (double)_y1 / 201.0;
+				_sat = (double)_y1 / STEPS_SAT;
 
 				PrintCurrentColor(true);
 
@@ -256,7 +262,7 @@ namespace yata
 				_y1 = Math.Min(Math.Max(0, e.Y), pa_Colortable.Height - 1);
 
 				_hue = (double)_x1;
-				_sat = (double)_y1 / 201.0;
+				_sat = (double)_y1 / STEPS_SAT;
 
 				PrintCurrentColor(true);
 
@@ -372,11 +378,11 @@ namespace yata
 					double val;
 					ColorToHSV(color, out _hue, out _sat, out val);
 
-					_val = (int)(val * 201.0);
+					_val = (int)(val * STEPS_VAL);
 					pa_Valslider.Invalidate();
 
 					_x1 = (int)_hue;
-					_y1 = (int)(_sat * 201.0);
+					_y1 = (int)(_sat * STEPS_SAT);
 					pa_Colortable.Invalidate();
 				}
 			}
@@ -438,7 +444,7 @@ namespace yata
 							--_y1;
 							pa_Colortable.Invalidate();
 
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}
@@ -450,7 +456,7 @@ namespace yata
 							++_y1;
 							pa_Colortable.Invalidate();
 
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}
@@ -488,7 +494,7 @@ namespace yata
 							pa_Colortable.Invalidate();
 
 							_hue = (double)_x1;
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}
@@ -502,7 +508,7 @@ namespace yata
 							pa_Colortable.Invalidate();
 
 							_hue = (double)_x1;
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}
@@ -516,7 +522,7 @@ namespace yata
 							pa_Colortable.Invalidate();
 
 							_hue = (double)_x1;
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}
@@ -530,7 +536,7 @@ namespace yata
 							pa_Colortable.Invalidate();
 
 							_hue = (double)_x1;
-							_sat = (double)_y1 / 201.0;
+							_sat = (double)_y1 / STEPS_SAT;
 
 							PrintCurrentColor(true);
 						}

@@ -58,7 +58,7 @@ namespace yata
 			this.pa_Valslider.Location = new System.Drawing.Point(381, 7);
 			this.pa_Valslider.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Valslider.Name = "pa_Valslider";
-			this.pa_Valslider.Size = new System.Drawing.Size(50, 202);
+			this.pa_Valslider.Size = new System.Drawing.Size(50, 256);
 			this.pa_Valslider.TabIndex = 1;
 			this.pa_Valslider.Paint += new System.Windows.Forms.PaintEventHandler(this.paint_Valslider);
 			this.pa_Valslider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_Valslider);
