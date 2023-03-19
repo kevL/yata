@@ -67,11 +67,7 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to open the <c><see cref="ConfigEditor"/></c>.
 		/// </summary>
-		/// <param name="sender">
-		/// <list type="bullet">
-		/// <item><c><see cref="it_Options"/></c></item>
-		/// <item><c><see cref="it_Colors"/></c></item>
-		/// </list></param>
+		/// <param name="sender"><c><see cref="it_Options"/></c></param>
 		/// <param name="e"></param>
 		void helpclick_Options(object sender, EventArgs e)
 		{
@@ -167,7 +163,7 @@ namespace yata
 		/// <summary>
 		/// Handles it-click to open <c><see cref="ColorOptionsF"/></c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="it_Colors"/></c></param>
 		/// <param name="e"></param>
 		void helpclick_ColorOptions(object sender, EventArgs e)
 		{
