@@ -114,7 +114,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics.DrawLine(Pencils.DarkLine,
+						graphics.DrawLine(ColorOptions._tablelines,
 										  left, y,
 										  val,  y);
 				}
@@ -128,7 +128,7 @@ namespace yata
 						break;
 
 					if (x > left)
-						graphics.DrawLine(Pencils.DarkLine,
+						graphics.DrawLine(ColorOptions._tablelines,
 										  x, HeightColhead,
 										  x, val);
 				}
@@ -206,10 +206,10 @@ namespace yata
 									  gs.Id,
 									  _f.FontAccent,
 									  rect,
-									  Colors.Text,
+									  ColorOptions._frozenheadtext,
 									  YataGraphics.flags);
 
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._frozenheadlines,
 								  _labelid.Width, _labelid.Top,
 								  _labelid.Width, _labelid.Bottom);
 
@@ -272,7 +272,7 @@ namespace yata
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
-					color = Colors.Text;
+					color = ColorOptions._frozenheadtext;
 
 				TextRenderer.DrawText(graphics,
 									  Cols[1].text,
@@ -281,7 +281,7 @@ namespace yata
 									  color,
 									  YataGraphics.flags);
 
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._frozenheadlines,
 								  _labelfirst.Width, _labelfirst.Top,
 								  _labelfirst.Width, _labelfirst.Bottom);
 			}
@@ -332,7 +332,7 @@ namespace yata
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
-					color = Colors.Text;
+					color = ColorOptions._frozenheadtext;
 
 				TextRenderer.DrawText(graphics,
 									  Cols[2].text,
@@ -341,7 +341,7 @@ namespace yata
 									  color,
 									  YataGraphics.flags);
 
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._frozenheadlines,
 								  _labelsecond.Width, _labelsecond.Top,
 								  _labelsecond.Width, _labelsecond.Bottom);
 			}
@@ -398,7 +398,7 @@ namespace yata
 
 						if      (col.selected)  color = Colors.TextColSelected;
 						else if (col.UserSized) color = Colors.TextColSized;
-						else                    color = Colors.Text;
+						else                    color = ColorOptions._colheadtext;
 					}
 
 					rect.Width -= clip;
@@ -453,10 +453,10 @@ namespace yata
 						graphics.FillRectangle(brush, rect);
 						rect.X += _padHoriRowhead;
 
-						graphics.DrawLine(Pencils.DarkLine,
+						graphics.DrawLine(ColorOptions._rowpanellines,
 										  0,            rect.Y,
 										  WidthRowhead, rect.Y);
-						graphics.DrawLine(Pencils.DarkLine,
+						graphics.DrawLine(ColorOptions._rowpanellines,
 										  0,            rect.Y + HeightRow,
 										  WidthRowhead, rect.Y + HeightRow);
 					}
@@ -485,7 +485,7 @@ namespace yata
 			for (; c != FrozenCount; ++c)
 			{
 				x += Cols[c].Width;
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._frozenlines,
 								  x, 0,
 								  x, Height);
 			}
@@ -523,7 +523,7 @@ namespace yata
 					rect.X += rect.Width;
 				}
 
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._frozenlines,
 								  0,                   rect.Y + HeightRow,
 								  rect.X + rect.Width, rect.Y + HeightRow);
 			}

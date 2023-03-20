@@ -134,10 +134,10 @@ namespace yata
 					YataGrid.graphics.FillRectangle(Gradients.ColheadPanel, rect);
 				}
 
-				YataGrid.graphics.DrawLine(Pencils.DarkLine,
+				YataGrid.graphics.DrawLine(ColorOptions._colheadlines,
 										   0,     Height,
 										   Width, Height);
-				YataGrid.graphics.DrawLine(Pencils.DarkLine,
+				YataGrid.graphics.DrawLine(ColorOptions._colheadlines,
 										   Width, 0,
 										   Width, Height);
 
@@ -347,10 +347,10 @@ namespace yata
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				YataGrid.graphics.DrawLine(Pencils.DarkLine,
+				YataGrid.graphics.DrawLine(ColorOptions._rowpanellines,
 										   Width, 0,
 										   Width, Height);
-				YataGrid.graphics.DrawLine(Pencils.DarkLine,
+				YataGrid.graphics.DrawLine(ColorOptions._rowpanellines,
 										   Width - 1, 0,
 										   Width - 1, Height);
 

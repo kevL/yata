@@ -61,6 +61,21 @@ namespace yata
 			pa_13.BackColor = ColorOptions._propanel;
 			la_14.Text = "Statusbar";
 			pa_14.BackColor = (ColorOptions._statusbar as SolidBrush).Color;
+
+			la_15.Text = "Table lines";
+			pa_15.BackColor = ColorOptions._tablelines.Color;
+			la_16.Text = "Frozen panel lines";
+			pa_16.BackColor = ColorOptions._frozenlines.Color;
+			la_17.Text = "Frozen header lines";
+			pa_17.BackColor = ColorOptions._frozenheadlines.Color;
+			la_18.Text = "Frozen header text";
+			pa_18.BackColor = ColorOptions._frozenheadtext;
+			la_19.Text = "Row panel lines";
+			pa_19.BackColor = ColorOptions._rowpanellines.Color;
+			la_20.Text = "Col header text";
+			pa_20.BackColor = ColorOptions._colheadtext;
+			la_21.Text = "Col header lines";
+			pa_21.BackColor = ColorOptions._colheadlines.Color;
 		}
 		#endregion cTor
 
@@ -123,15 +138,25 @@ namespace yata
 					else if (sender == pa_11) title = la_11.Text;
 					else if (sender == pa_12) title = la_12.Text;
 					else if (sender == pa_13) title = la_13.Text;
-					else                      title = la_14.Text; // sender == pa_14
+					else if (sender == pa_14) title = la_14.Text;
+
+					else if (sender == pa_15) title = la_15.Text;
+					else if (sender == pa_16) title = la_16.Text;
+					else if (sender == pa_17) title = la_17.Text;
+					else if (sender == pa_18) title = la_18.Text;
+					else if (sender == pa_19) title = la_19.Text;
+					else if (sender == pa_20) title = la_20.Text;
+					else if (sender == pa_21) title = la_21.Text;
+					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
 					f.ShowDialog(this);
+
+					Yata.that.Refresh();
 					break;
 				}
 
 				case MouseButtons.Right:
-				{
 					if (sender == pa_01)
 					{
 						pa_01.BackColor =
@@ -197,15 +222,50 @@ namespace yata
 						pa_13.BackColor =
 						ColorOptions._propanel = Color.LightSteelBlue;
 					}
-					else // sender == pa_14
+					else if (sender == pa_14)
 					{
 						pa_14.BackColor =
 						(ColorOptions._statusbar as SolidBrush).Color = Color.MintCream;
 					}
 
+					else if (sender == pa_15)
+					{
+						pa_15.BackColor =
+						ColorOptions._tablelines.Color = SystemColors.ControlDark;
+					}
+					else if (sender == pa_16)
+					{
+						pa_16.BackColor =
+						ColorOptions._frozenlines.Color = SystemColors.ControlDark;
+					}
+					else if (sender == pa_17)
+					{
+						pa_17.BackColor =
+						ColorOptions._frozenheadlines.Color = SystemColors.ControlDark;
+					}
+					else if (sender == pa_18)
+					{
+						pa_18.BackColor =
+						ColorOptions._frozenheadtext = SystemColors.ControlText;
+					}
+					else if (sender == pa_19)
+					{
+						pa_19.BackColor =
+						ColorOptions._rowpanellines.Color = SystemColors.ControlDark;
+					}
+					else if (sender == pa_20)
+					{
+						pa_20.BackColor =
+						ColorOptions._colheadtext = SystemColors.ControlText;
+					}
+					else if (sender == pa_21)
+					{
+						pa_21.BackColor =
+						ColorOptions._colheadlines.Color = SystemColors.ControlDark;
+					}
+
 					Yata.that.Refresh();
 					break;
-				}
 			}
 		}
 
@@ -229,7 +289,15 @@ namespace yata
 			else if (sender == pa_11)  ColorOptions._rowpanel                          = pa_11.BackColor;
 			else if (sender == pa_12)  ColorOptions._propaneltext                      = pa_12.BackColor;
 			else if (sender == pa_13)  ColorOptions._propanel                          = pa_13.BackColor;
-			else                      (ColorOptions._statusbar    as SolidBrush).Color = pa_14.BackColor; // sender == pa_14
+			else if (sender == pa_14) (ColorOptions._statusbar    as SolidBrush).Color = pa_14.BackColor;
+
+			else if (sender == pa_15)  ColorOptions._tablelines                 .Color = pa_15.BackColor;
+			else if (sender == pa_16)  ColorOptions._frozenlines                .Color = pa_16.BackColor;
+			else if (sender == pa_17)  ColorOptions._frozenheadlines            .Color = pa_17.BackColor;
+			else if (sender == pa_18)  ColorOptions._frozenheadtext                    = pa_18.BackColor;
+			else if (sender == pa_19)  ColorOptions._rowpanellines              .Color = pa_19.BackColor;
+			else if (sender == pa_20)  ColorOptions._colheadtext                       = pa_20.BackColor;
+			else if (sender == pa_21)  ColorOptions._colheadlines               .Color = pa_21.BackColor;
 
 			Yata.that.Refresh();
 		}
@@ -264,9 +332,7 @@ namespace yata
 						if (sender == null) // inform user only if [Ctrl+s] was pressed ->
 						{
 							using (var ib = new Infobox(Infobox.Title_infor,
-														"Colors.Cfg file was written to the application directory.",
-														null,
-														InfoboxType.Warn))
+														"Colors.Cfg file was written to the application directory."))
 							{
 								ib.ShowDialog(this);
 							}
@@ -327,6 +393,21 @@ namespace yata
 			sb.Append(ColorOptions.CFG_statusbar);
 			sb.AppendLine(pa_14.BackColor.R + "," + pa_14.BackColor.G + "," + pa_14.BackColor.B);
 
+			sb.Append(ColorOptions.CFG_tablelines);
+			sb.AppendLine(pa_15.BackColor.R + "," + pa_15.BackColor.G + "," + pa_15.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenlines);
+			sb.AppendLine(pa_16.BackColor.R + "," + pa_16.BackColor.G + "," + pa_16.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenheadlines);
+			sb.AppendLine(pa_17.BackColor.R + "," + pa_17.BackColor.G + "," + pa_17.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenheadtext);
+			sb.AppendLine(pa_18.BackColor.R + "," + pa_18.BackColor.G + "," + pa_18.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowpanellines);
+			sb.AppendLine(pa_19.BackColor.R + "," + pa_19.BackColor.G + "," + pa_19.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadtext);
+			sb.AppendLine(pa_20.BackColor.R + "," + pa_20.BackColor.G + "," + pa_20.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadlines);
+			sb.AppendLine(pa_21.BackColor.R + "," + pa_21.BackColor.G + "," + pa_21.BackColor.B);
+
 			return sb.ToString();
 		}
 
@@ -366,6 +447,21 @@ namespace yata
 			 ColorOptions._propanel                          = Color.LightSteelBlue;
 			 pa_14.BackColor                                 =
 			(ColorOptions._statusbar    as SolidBrush).Color = Color.MintCream;
+
+			 pa_15.BackColor                                 =
+			 ColorOptions._tablelines                 .Color = SystemColors.ControlDark;
+			 pa_16.BackColor                                 =
+			 ColorOptions._frozenlines                .Color = SystemColors.ControlDark;
+			 pa_17.BackColor                                 =
+			 ColorOptions._frozenheadlines            .Color = SystemColors.ControlDark;
+			 pa_18.BackColor                                 =
+			 ColorOptions._frozenheadtext                    = SystemColors.ControlText;
+			 pa_19.BackColor                                 =
+			 ColorOptions._rowpanellines              .Color = SystemColors.ControlDark;
+			 pa_20.BackColor                                 =
+			 ColorOptions._colheadtext                       = SystemColors.ControlText;
+			 pa_19.BackColor                                 =
+			 ColorOptions._colheadlines               .Color = SystemColors.ControlDark;
 
 			Yata.that.Refresh();
 		}
