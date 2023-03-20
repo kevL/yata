@@ -28,8 +28,13 @@ namespace yata
 		internal const string CFG_frozenheadtext  = "frozenheadtext=";
 		internal const string CFG_frozenheadlines = "frozenheadlines=";
 		internal const string CFG_frozenhead      = "frozenhead=";
+		internal const string CFG_frozenidunsort  = "frozenidunsort=";
 
 		internal const string CFG_colheadtext     = "colheadtext=";
+		internal const string CFG_colheadtextsel  = "colheadtextsel=";
+		internal const string CFG_colheadtextsize = "colheadtextsize=";
+		internal const string CFG_headtextsortasc = "headtextsortasc";
+		internal const string CFG_headtextsortdes = "headtextsortdes";
 		internal const string CFG_colheadlines    = "colheadlines=";
 		internal const string CFG_colhead         = "colhead=";
 
@@ -51,7 +56,6 @@ namespace yata
 		internal const string CFG_celledit        = "celledit=";
 
 		// TODO: PropanelFrozen row(s)
-		// TODO: colhead text selected + sortedasc + sorteddec + sized
 		// TODO: row selected + subselected
 
 
@@ -68,8 +72,13 @@ namespace yata
 		internal static Color _frozenheadtext  = SystemColors.ControlText;
 		internal static Pen   _frozenheadlines = new Pen(SystemColors.ControlDark);
 		internal static Color _frozenhead      = Color.Moccasin;
+		internal static Color _frozenidunsort  = Color.LightCoral;
 
 		internal static Color _colheadtext     = SystemColors.ControlText;			// default colors for the colhead ->
+		internal static Color _colheadtextsel  = Color.White;
+		internal static Color _colheadtextsize = Color.DarkGray;
+		internal static Color _headtextsortasc = Color.SteelBlue;
+		internal static Color _headtextsortdes = Color.DarkGoldenrod;
 		internal static Pen   _colheadlines    = new Pen(SystemColors.ControlDark);
 		internal static Color _colhead         = Color.Thistle;
 
@@ -254,6 +263,18 @@ namespace yata
 									_frozenhead = color;
 							}
 						}
+						else if (line.StartsWith(CFG_frozenidunsort, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozenidunsort.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozenidunsorted = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozenidunsort = color;
+							}
+						}
 						else if (line.StartsWith(CFG_colheadtext, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_colheadtext.Length).Trim()).Length != 0)
@@ -264,6 +285,54 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadtext = color;
+							}
+						}
+						else if (line.StartsWith(CFG_colheadtextsel, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_colheadtextsel.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_colheadtextselected = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_colheadtextsel = color;
+							}
+						}
+						else if (line.StartsWith(CFG_colheadtextsize, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_colheadtextsize.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_colheadtextsized = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_colheadtextsize = color;
+							}
+						}
+						else if (line.StartsWith(CFG_headtextsortasc, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_headtextsortasc.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_colheadtextsortasc = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_headtextsortasc = color;
+							}
+						}
+						else if (line.StartsWith(CFG_headtextsortdes, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_headtextsortdes.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_colheadtextsortdes = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_headtextsortdes = color;
 							}
 						}
 						else if (line.StartsWith(CFG_colheadlines, StringComparison.Ordinal))

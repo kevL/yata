@@ -197,7 +197,7 @@ namespace yata
 				else if (_sortcol == 0 && _sortdir == SORT_ASC)
 					_labelid.BackColor = ColorOptions._frozenhead;
 				else
-					_labelid.BackColor = Colors.LabelSorted;
+					_labelid.BackColor = ColorOptions._frozenidunsort;
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top,
 									 Cols[0].Width, HeightColhead);
@@ -259,12 +259,12 @@ namespace yata
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color    = Colors.TextColSorted_asc;
+						color    = ColorOptions._headtextsortasc;
 						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color    = Colors.TextColSorted_des;
+						color    = ColorOptions._headtextsortdes;
 						sorticon = Resources.des_16px;
 					}
 					graphics.DrawImage(sorticon,
@@ -318,12 +318,12 @@ namespace yata
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color    = Colors.TextColSorted_asc;
+						color    = ColorOptions._headtextsortasc;
 						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color    = Colors.TextColSorted_des;
+						color    = ColorOptions._headtextsortdes;
 						sorticon = Resources.des_16px;
 					}
 
@@ -373,15 +373,15 @@ namespace yata
 						Bitmap sort;
 						if (_sortdir == SORT_ASC)
 						{
-							if (col.selected) color = Colors.TextColSelected;
-							else              color = Colors.TextColSorted_asc;
+							if (col.selected) color = ColorOptions._colheadtextsel;
+							else              color = ColorOptions._headtextsortasc;
 
 							sort  = Resources.asc_16px;
 						}
 						else
 						{
-							if (col.selected) color = Colors.TextColSelected;
-							else              color = Colors.TextColSorted_des;
+							if (col.selected) color = ColorOptions._colheadtextsel;
+							else              color = ColorOptions._headtextsortdes;
 
 							sort  = Resources.des_16px;
 						}
@@ -396,8 +396,8 @@ namespace yata
 					{
 						clip = 7;
 
-						if      (col.selected)  color = Colors.TextColSelected;
-						else if (col.UserSized) color = Colors.TextColSized;
+						if      (col.selected)  color = ColorOptions._colheadtextsel;
+						else if (col.UserSized) color = ColorOptions._colheadtextsize;
 						else                    color = ColorOptions._colheadtext;
 					}
 

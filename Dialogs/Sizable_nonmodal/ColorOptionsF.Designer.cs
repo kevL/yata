@@ -65,6 +65,16 @@ namespace yata
 		Panel pa_27;
 		Label la_28;
 		Panel pa_28;
+		Label la_29;
+		Panel pa_29;
+		Label la_30;
+		Panel pa_30;
+		Label la_31;
+		Panel pa_31;
+		Label la_32;
+		Panel pa_32;
+		Label la_33;
+		Panel pa_33;
 
 		Panel pa_bot;
 		Button bu_Delete;
@@ -138,6 +148,16 @@ namespace yata
 			this.pa_27 = new System.Windows.Forms.Panel();
 			this.la_28 = new System.Windows.Forms.Label();
 			this.pa_28 = new System.Windows.Forms.Panel();
+			this.la_29 = new System.Windows.Forms.Label();
+			this.pa_29 = new System.Windows.Forms.Panel();
+			this.la_30 = new System.Windows.Forms.Label();
+			this.pa_30 = new System.Windows.Forms.Panel();
+			this.la_31 = new System.Windows.Forms.Label();
+			this.pa_31 = new System.Windows.Forms.Panel();
+			this.la_32 = new System.Windows.Forms.Label();
+			this.pa_32 = new System.Windows.Forms.Panel();
+			this.la_33 = new System.Windows.Forms.Label();
+			this.pa_33 = new System.Windows.Forms.Panel();
 			this.pa_bot = new System.Windows.Forms.Panel();
 			this.bu_Save = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
@@ -205,12 +225,22 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_27);
 			this.gb_Colors.Controls.Add(this.la_28);
 			this.gb_Colors.Controls.Add(this.pa_28);
+			this.gb_Colors.Controls.Add(this.la_29);
+			this.gb_Colors.Controls.Add(this.pa_29);
+			this.gb_Colors.Controls.Add(this.la_30);
+			this.gb_Colors.Controls.Add(this.pa_30);
+			this.gb_Colors.Controls.Add(this.la_31);
+			this.gb_Colors.Controls.Add(this.pa_31);
+			this.gb_Colors.Controls.Add(this.la_32);
+			this.gb_Colors.Controls.Add(this.pa_32);
+			this.gb_Colors.Controls.Add(this.la_33);
+			this.gb_Colors.Controls.Add(this.pa_33);
 			this.gb_Colors.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gb_Colors.Location = new System.Drawing.Point(0, 0);
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Colors.Name = "gb_Colors";
 			this.gb_Colors.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Colors.Size = new System.Drawing.Size(452, 399);
+			this.gb_Colors.Size = new System.Drawing.Size(659, 399);
 			this.gb_Colors.TabIndex = 0;
 			this.gb_Colors.TabStop = false;
 			// 
@@ -774,6 +804,106 @@ namespace yata
 			this.pa_28.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_28.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
+			// la_29
+			// 
+			this.la_29.Location = new System.Drawing.Point(449, 19);
+			this.la_29.Margin = new System.Windows.Forms.Padding(0);
+			this.la_29.Name = "la_29";
+			this.la_29.Size = new System.Drawing.Size(126, 16);
+			this.la_29.TabIndex = 56;
+			this.la_29.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_29
+			// 
+			this.pa_29.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_29.Location = new System.Drawing.Point(580, 14);
+			this.pa_29.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_29.Name = "pa_29";
+			this.pa_29.Size = new System.Drawing.Size(69, 24);
+			this.pa_29.TabIndex = 57;
+			this.pa_29.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_29.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// la_30
+			// 
+			this.la_30.Location = new System.Drawing.Point(449, 44);
+			this.la_30.Margin = new System.Windows.Forms.Padding(0);
+			this.la_30.Name = "la_30";
+			this.la_30.Size = new System.Drawing.Size(126, 16);
+			this.la_30.TabIndex = 58;
+			this.la_30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_30
+			// 
+			this.pa_30.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_30.Location = new System.Drawing.Point(580, 39);
+			this.pa_30.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_30.Name = "pa_30";
+			this.pa_30.Size = new System.Drawing.Size(69, 24);
+			this.pa_30.TabIndex = 59;
+			this.pa_30.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_30.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// la_31
+			// 
+			this.la_31.Location = new System.Drawing.Point(449, 69);
+			this.la_31.Margin = new System.Windows.Forms.Padding(0);
+			this.la_31.Name = "la_31";
+			this.la_31.Size = new System.Drawing.Size(126, 16);
+			this.la_31.TabIndex = 60;
+			this.la_31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_31
+			// 
+			this.pa_31.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_31.Location = new System.Drawing.Point(580, 64);
+			this.pa_31.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_31.Name = "pa_31";
+			this.pa_31.Size = new System.Drawing.Size(69, 24);
+			this.pa_31.TabIndex = 61;
+			this.pa_31.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_31.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// la_32
+			// 
+			this.la_32.Location = new System.Drawing.Point(449, 94);
+			this.la_32.Margin = new System.Windows.Forms.Padding(0);
+			this.la_32.Name = "la_32";
+			this.la_32.Size = new System.Drawing.Size(126, 16);
+			this.la_32.TabIndex = 62;
+			this.la_32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_32
+			// 
+			this.pa_32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_32.Location = new System.Drawing.Point(580, 89);
+			this.pa_32.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_32.Name = "pa_32";
+			this.pa_32.Size = new System.Drawing.Size(69, 24);
+			this.pa_32.TabIndex = 63;
+			this.pa_32.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_32.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// la_33
+			// 
+			this.la_33.Location = new System.Drawing.Point(449, 119);
+			this.la_33.Margin = new System.Windows.Forms.Padding(0);
+			this.la_33.Name = "la_33";
+			this.la_33.Size = new System.Drawing.Size(126, 16);
+			this.la_33.TabIndex = 64;
+			this.la_33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_33
+			// 
+			this.pa_33.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_33.Location = new System.Drawing.Point(580, 114);
+			this.pa_33.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_33.Name = "pa_33";
+			this.pa_33.Size = new System.Drawing.Size(69, 24);
+			this.pa_33.TabIndex = 65;
+			this.pa_33.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_33.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
 			// pa_bot
 			// 
 			this.pa_bot.Controls.Add(this.bu_Save);
@@ -784,13 +914,13 @@ namespace yata
 			this.pa_bot.Location = new System.Drawing.Point(0, 399);
 			this.pa_bot.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_bot.Name = "pa_bot";
-			this.pa_bot.Size = new System.Drawing.Size(452, 35);
+			this.pa_bot.Size = new System.Drawing.Size(659, 35);
 			this.pa_bot.TabIndex = 1;
 			// 
 			// bu_Save
 			// 
 			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Save.Location = new System.Drawing.Point(237, 4);
+			this.bu_Save.Location = new System.Drawing.Point(444, 4);
 			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Save.Name = "bu_Save";
 			this.bu_Save.Size = new System.Drawing.Size(103, 26);
@@ -803,7 +933,7 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(345, 4);
+			this.bu_Cancel.Location = new System.Drawing.Point(552, 4);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(99, 26);
@@ -840,7 +970,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Save;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(452, 434);
+			this.ClientSize = new System.Drawing.Size(659, 434);
 			this.Controls.Add(this.gb_Colors);
 			this.Controls.Add(this.pa_bot);
 			this.Icon = global::yata.Properties.Resources.yata_icon;

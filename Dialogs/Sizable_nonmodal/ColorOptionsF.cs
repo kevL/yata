@@ -91,6 +91,17 @@ namespace yata
 			pa_27.BackColor = (ColorOptions._cellreplaced as SolidBrush).Color;
 			la_28.Text = "Cell edit";
 			pa_28.BackColor = (ColorOptions._celledit as SolidBrush).Color;
+
+			la_29.Text = "Frozen id unsorted";
+			pa_29.BackColor = ColorOptions._frozenidunsort;
+			la_30.Text = "Col header text selected";
+			pa_30.BackColor = ColorOptions._colheadtextsel;
+			la_31.Text = "Col header text sized";
+			pa_31.BackColor = ColorOptions._colheadtextsize;
+			la_32.Text = "Header text sorted ascend";
+			pa_32.BackColor = ColorOptions._headtextsortasc;
+			la_33.Text = "Header text sorted descend";
+			pa_33.BackColor = ColorOptions._headtextsortdes;
 		}
 		#endregion cTor
 
@@ -169,6 +180,12 @@ namespace yata
 					else if (sender == pa_26) title = la_26.Text;
 					else if (sender == pa_27) title = la_27.Text;
 					else if (sender == pa_28) title = la_28.Text;
+
+					else if (sender == pa_29) title = la_29.Text;
+					else if (sender == pa_30) title = la_30.Text;
+					else if (sender == pa_31) title = la_31.Text;
+					else if (sender == pa_32) title = la_32.Text;
+					else if (sender == pa_33) title = la_33.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -322,6 +339,32 @@ namespace yata
 						(ColorOptions._celledit as SolidBrush).Color = Color.Crimson;
 					}
 
+					else if (sender == pa_29)
+					{
+						pa_29.BackColor =
+						ColorOptions._frozenidunsort = Color.LightCoral;
+					}
+					else if (sender == pa_30)
+					{
+						pa_30.BackColor =
+						ColorOptions._colheadtextsel = Color.White;
+					}
+					else if (sender == pa_31)
+					{
+						pa_31.BackColor =
+						ColorOptions._colheadtextsize = Color.DarkGray;
+					}
+					else if (sender == pa_32)
+					{
+						pa_32.BackColor =
+						ColorOptions._headtextsortasc = Color.SteelBlue;
+					}
+					else if (sender == pa_33)
+					{
+						pa_33.BackColor =
+						ColorOptions._headtextsortdes = Color.DarkGoldenrod;
+					}
+
 					Yata.that.Refresh();
 					break;
 			}
@@ -368,6 +411,12 @@ namespace yata
 				(ColorOptions._celledit        as SolidBrush).Color = pa_28.BackColor;
 				Yata.that.UpdateEditorColor(pa_28.BackColor); // iterate through all YataGrids
 			}
+
+			else if (sender == pa_29)  ColorOptions._frozenidunsort                       = pa_29.BackColor;
+			else if (sender == pa_30)  ColorOptions._colheadtextsel                       = pa_30.BackColor;
+			else if (sender == pa_31)  ColorOptions._colheadtextsize                      = pa_31.BackColor;
+			else if (sender == pa_32)  ColorOptions._headtextsortasc                      = pa_32.BackColor;
+			else if (sender == pa_33)  ColorOptions._headtextsortdes                      = pa_33.BackColor;
 
 			Yata.that.Refresh();
 		}
@@ -493,6 +542,17 @@ namespace yata
 			sb.Append(ColorOptions.CFG_celledit);
 			sb.AppendLine(pa_28.BackColor.R + "," + pa_28.BackColor.G + "," + pa_28.BackColor.B);
 
+			sb.Append(ColorOptions.CFG_frozenidunsort);
+			sb.AppendLine(pa_29.BackColor.R + "," + pa_29.BackColor.G + "," + pa_29.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadtextsel);
+			sb.AppendLine(pa_30.BackColor.R + "," + pa_30.BackColor.G + "," + pa_30.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadtextsize);
+			sb.AppendLine(pa_31.BackColor.R + "," + pa_31.BackColor.G + "," + pa_31.BackColor.B);
+			sb.Append(ColorOptions.CFG_headtextsortasc);
+			sb.AppendLine(pa_32.BackColor.R + "," + pa_32.BackColor.G + "," + pa_32.BackColor.B);
+			sb.Append(ColorOptions.CFG_headtextsortdes);
+			sb.AppendLine(pa_33.BackColor.R + "," + pa_33.BackColor.G + "," + pa_33.BackColor.B);
+
 			return sb.ToString();
 		}
 
@@ -563,7 +623,18 @@ namespace yata
 			 pa_28.BackColor                                    =
 			(ColorOptions._celledit        as SolidBrush).Color = Color.Crimson;
 
-			Yata.that.Refresh();
+			 pa_29.BackColor                                    =
+			 ColorOptions._frozenidunsort                       = Color.LightCoral;
+			 pa_30.BackColor                                    =
+			 ColorOptions._colheadtextsel                       = Color.White;
+			 pa_31.BackColor                                    =
+			 ColorOptions._colheadtextsize                      = Color.DarkGray;
+			 pa_32.BackColor                                    =
+			 ColorOptions._headtextsortasc                      = Color.SteelBlue;
+			 pa_33.BackColor                                    =
+			 ColorOptions._headtextsortdes                      = Color.DarkGoldenrod;
+
+			 Yata.that.Refresh();
 		}
 
 		/// <summary>
