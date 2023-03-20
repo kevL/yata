@@ -13,6 +13,8 @@ namespace yata
 		#region Fields (static)
 		const double STEPS_SAT = 201.0; // one less than count because 0
 		const double STEPS_VAL = 255.0; // one less than count because 0
+
+		static Color Stored = Color.White;
 		#endregion Fields (static)
 
 
@@ -438,26 +440,51 @@ namespace yata
 		/// <param name="e"></param>
 		void mouseclick_Color(object sender, MouseEventArgs e)
 		{
-			Color color = (sender as Panel).BackColor;
+			if ((ModifierKeys & (Keys.Alt | Keys.Shift)) == Keys.None)
+			{
+				if ((ModifierKeys & Keys.Control) == Keys.None)
+				{
+					Color color = (sender as Panel).BackColor;
 
-			if (e.Button == MouseButtons.Right && sender == pa_Colorpre) // assign clicked color to Colorpre only on RMB ->
-				pa_Color.BackColor = color;
+					if (e.Button == MouseButtons.Right)
+					{
+						if (sender == pa_Color)			// assign 'Stored' color to Color
+						{
+							pa_Color.BackColor = color = Stored;
+						}
+						else if (sender == pa_Colorpre)	// assign clicked color to Colorpre
+						{
+							pa_Color.BackColor = color;
+						}
+					}
 
-			double val;
-			ColorToHSV(color, out _hue, out _sat, out val);
+					double val;
+					ColorToHSV(color, out _hue, out _sat, out val);
 
-			_val = (int)(val * STEPS_VAL);
-			pa_Valslider.Invalidate();
+					_val = (int)(val * STEPS_VAL);
+					pa_Valslider.Invalidate();
 
-			_x1 = (int)_hue;
-			_y1 = (int)(_sat * STEPS_SAT);
-			pa_Colortable.Invalidate();
+					_x1 = (int)_hue;
+					_y1 = (int)(_sat * STEPS_SAT);
+					pa_Colortable.Invalidate();
 
-			_bypass = true;
-			tb_Red  .Text = color.R.ToString();
-			tb_Green.Text = color.G.ToString();
-			tb_Blue .Text = color.B.ToString();
-			_bypass = false;
+					_bypass = true;
+					tb_Red  .Text = color.R.ToString();
+					tb_Green.Text = color.G.ToString();
+					tb_Blue .Text = color.B.ToString();
+					_bypass = false;
+				}
+				else // store the panel's color in 'Stored' ->
+				{
+					Stored = (sender as Panel).BackColor;
+
+					using (var ib = new Infobox(Infobox.Title_infor,
+												"Color stored."))
+					{
+						ib.ShowDialog(this);
+					}
+				}
+			}
 		}
 		#endregion handlers (panels)
 
