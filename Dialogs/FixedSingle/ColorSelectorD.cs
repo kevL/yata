@@ -479,7 +479,7 @@ namespace yata
 					Stored = (sender as Panel).BackColor;
 
 					using (var ib = new Infobox(Infobox.Title_infor,
-												"Color stored."))
+												"Color copied."))
 					{
 						ib.ShowDialog(this);
 					}
