@@ -270,7 +270,7 @@ namespace yata
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Colors.Name = "gb_Colors";
 			this.gb_Colors.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Colors.Size = new System.Drawing.Size(659, 399);
+			this.gb_Colors.Size = new System.Drawing.Size(659, 400);
 			this.gb_Colors.TabIndex = 0;
 			this.gb_Colors.TabStop = false;
 			// 
@@ -1041,10 +1041,10 @@ namespace yata
 			this.pa_bot.Controls.Add(this.bu_Defaults);
 			this.pa_bot.Controls.Add(this.bu_Delete);
 			this.pa_bot.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.pa_bot.Location = new System.Drawing.Point(0, 399);
+			this.pa_bot.Location = new System.Drawing.Point(0, 400);
 			this.pa_bot.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_bot.Name = "pa_bot";
-			this.pa_bot.Size = new System.Drawing.Size(659, 35);
+			this.pa_bot.Size = new System.Drawing.Size(659, 34);
 			this.pa_bot.TabIndex = 1;
 			// 
 			// bu_Save
