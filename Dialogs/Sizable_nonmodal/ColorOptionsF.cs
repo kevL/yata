@@ -29,7 +29,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Initializes panel-colors and label-texts.
 		/// </summary>
 		void init()
 		{
@@ -80,6 +80,17 @@ namespace yata
 			pa_22.BackColor = ColorOptions._propanellines.Color;
 			la_23.Text = "Propanel border";
 			pa_23.BackColor = ColorOptions._propanelborder.Color;
+
+			la_24.Text = "Cell selected";
+			pa_24.BackColor = (ColorOptions._cellselected as SolidBrush).Color;
+			la_25.Text = "Cell loadchanged";
+			pa_25.BackColor = (ColorOptions._cellloadchanged as SolidBrush).Color;
+			la_26.Text = "Cell diffed";
+			pa_26.BackColor = (ColorOptions._celldiffed as SolidBrush).Color;
+			la_27.Text = "Cell replaced";
+			pa_27.BackColor = (ColorOptions._cellreplaced as SolidBrush).Color;
+			la_28.Text = "Cell edit";
+			pa_28.BackColor = (ColorOptions._celledit as SolidBrush).Color;
 		}
 		#endregion cTor
 
@@ -153,6 +164,11 @@ namespace yata
 					else if (sender == pa_21) title = la_21.Text;
 					else if (sender == pa_22) title = la_22.Text;
 					else if (sender == pa_23) title = la_23.Text;
+					else if (sender == pa_24) title = la_24.Text;
+					else if (sender == pa_25) title = la_25.Text;
+					else if (sender == pa_26) title = la_26.Text;
+					else if (sender == pa_27) title = la_27.Text;
+					else if (sender == pa_28) title = la_28.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -280,6 +296,32 @@ namespace yata
 						ColorOptions._propanelborder.Color = SystemColors.ControlDarkDark;
 					}
 
+					else if (sender == pa_24)
+					{
+						pa_24.BackColor =
+						(ColorOptions._cellselected as SolidBrush).Color = Color.PaleGreen;
+					}
+					else if (sender == pa_25)
+					{
+						pa_25.BackColor =
+						(ColorOptions._cellloadchanged as SolidBrush).Color = Color.Pink;
+					}
+					else if (sender == pa_26)
+					{
+						pa_26.BackColor =
+						(ColorOptions._celldiffed as SolidBrush).Color = Color.Turquoise;
+					}
+					else if (sender == pa_27)
+					{
+						pa_27.BackColor =
+						(ColorOptions._cellreplaced as SolidBrush).Color = Color.Goldenrod;
+					}
+					else if (sender == pa_28)
+					{
+						pa_28.BackColor =
+						(ColorOptions._celledit as SolidBrush).Color = Color.Crimson;
+					}
+
 					Yata.that.Refresh();
 					break;
 			}
@@ -292,30 +334,40 @@ namespace yata
 		/// <param name="e"></param>
 		void backcolorchanged_ColorPanel(object sender, EventArgs e)
 		{
-			if      (sender == pa_01)  ColorOptions._tabletext                         = pa_01.BackColor;
-			else if (sender == pa_02) (ColorOptions._rowa         as SolidBrush).Color = pa_02.BackColor;
-			else if (sender == pa_03) (ColorOptions._rowb         as SolidBrush).Color = pa_03.BackColor;
-			else if (sender == pa_04) (ColorOptions._rowdisableda as SolidBrush).Color = pa_04.BackColor;
-			else if (sender == pa_05) (ColorOptions._rowdisabledb as SolidBrush).Color = pa_05.BackColor;
-			else if (sender == pa_06)  ColorOptions._frozentext                        = pa_06.BackColor;
-			else if (sender == pa_07)  ColorOptions._frozen                            = pa_07.BackColor;
-			else if (sender == pa_08)  ColorOptions._frozenhead                        = pa_08.BackColor;
-			else if (sender == pa_09)  ColorOptions._colhead                           = pa_09.BackColor;
-			else if (sender == pa_10)  ColorOptions._rowpaneltext                      = pa_10.BackColor;
-			else if (sender == pa_11)  ColorOptions._rowpanel                          = pa_11.BackColor;
-			else if (sender == pa_12)  ColorOptions._propaneltext                      = pa_12.BackColor;
-			else if (sender == pa_13)  ColorOptions._propanel                          = pa_13.BackColor;
-			else if (sender == pa_14) (ColorOptions._statusbar    as SolidBrush).Color = pa_14.BackColor;
+			if      (sender == pa_01)  ColorOptions._tabletext                            = pa_01.BackColor;
+			else if (sender == pa_02) (ColorOptions._rowa            as SolidBrush).Color = pa_02.BackColor;
+			else if (sender == pa_03) (ColorOptions._rowb            as SolidBrush).Color = pa_03.BackColor;
+			else if (sender == pa_04) (ColorOptions._rowdisableda    as SolidBrush).Color = pa_04.BackColor;
+			else if (sender == pa_05) (ColorOptions._rowdisabledb    as SolidBrush).Color = pa_05.BackColor;
+			else if (sender == pa_06)  ColorOptions._frozentext                           = pa_06.BackColor;
+			else if (sender == pa_07)  ColorOptions._frozen                               = pa_07.BackColor;
+			else if (sender == pa_08)  ColorOptions._frozenhead                           = pa_08.BackColor;
+			else if (sender == pa_09)  ColorOptions._colhead                              = pa_09.BackColor;
+			else if (sender == pa_10)  ColorOptions._rowpaneltext                         = pa_10.BackColor;
+			else if (sender == pa_11)  ColorOptions._rowpanel                             = pa_11.BackColor;
+			else if (sender == pa_12)  ColorOptions._propaneltext                         = pa_12.BackColor;
+			else if (sender == pa_13)  ColorOptions._propanel                             = pa_13.BackColor;
+			else if (sender == pa_14) (ColorOptions._statusbar       as SolidBrush).Color = pa_14.BackColor;
 
-			else if (sender == pa_15)  ColorOptions._tablelines                 .Color = pa_15.BackColor;
-			else if (sender == pa_16)  ColorOptions._frozenlines                .Color = pa_16.BackColor;
-			else if (sender == pa_17)  ColorOptions._frozenheadlines            .Color = pa_17.BackColor;
-			else if (sender == pa_18)  ColorOptions._frozenheadtext                    = pa_18.BackColor;
-			else if (sender == pa_19)  ColorOptions._rowpanellines              .Color = pa_19.BackColor;
-			else if (sender == pa_20)  ColorOptions._colheadtext                       = pa_20.BackColor;
-			else if (sender == pa_21)  ColorOptions._colheadlines               .Color = pa_21.BackColor;
-			else if (sender == pa_22)  ColorOptions._propanellines              .Color = pa_22.BackColor;
-			else if (sender == pa_23)  ColorOptions._propanelborder             .Color = pa_23.BackColor;
+			else if (sender == pa_15)  ColorOptions._tablelines                    .Color = pa_15.BackColor;
+			else if (sender == pa_16)  ColorOptions._frozenlines                   .Color = pa_16.BackColor;
+			else if (sender == pa_17)  ColorOptions._frozenheadlines               .Color = pa_17.BackColor;
+			else if (sender == pa_18)  ColorOptions._frozenheadtext                       = pa_18.BackColor;
+			else if (sender == pa_19)  ColorOptions._rowpanellines                 .Color = pa_19.BackColor;
+			else if (sender == pa_20)  ColorOptions._colheadtext                          = pa_20.BackColor;
+			else if (sender == pa_21)  ColorOptions._colheadlines                  .Color = pa_21.BackColor;
+			else if (sender == pa_22)  ColorOptions._propanellines                 .Color = pa_22.BackColor;
+			else if (sender == pa_23)  ColorOptions._propanelborder                .Color = pa_23.BackColor;
+
+			else if (sender == pa_24) (ColorOptions._cellselected    as SolidBrush).Color = pa_24.BackColor;
+			else if (sender == pa_25) (ColorOptions._cellloadchanged as SolidBrush).Color = pa_25.BackColor;
+			else if (sender == pa_26) (ColorOptions._celldiffed      as SolidBrush).Color = pa_26.BackColor;
+			else if (sender == pa_27) (ColorOptions._cellreplaced    as SolidBrush).Color = pa_27.BackColor;
+			else if (sender == pa_28)
+			{
+				(ColorOptions._celledit        as SolidBrush).Color = pa_28.BackColor;
+				Yata.that.UpdateEditorColor(pa_28.BackColor); // iterate through all YataGrids
+			}
 
 			Yata.that.Refresh();
 		}
@@ -350,7 +402,7 @@ namespace yata
 						if (sender == null) // inform user only if [Ctrl+s] was pressed ->
 						{
 							using (var ib = new Infobox(Infobox.Title_infor,
-														"Colors.Cfg file was written to the application directory."))
+														"Colors.Cfg success."))
 							{
 								ib.ShowDialog(this);
 							}
@@ -430,6 +482,17 @@ namespace yata
 			sb.Append(ColorOptions.CFG_propanelborder);
 			sb.AppendLine(pa_23.BackColor.R + "," + pa_23.BackColor.G + "," + pa_23.BackColor.B);
 
+			sb.Append(ColorOptions.CFG_cellselected);
+			sb.AppendLine(pa_24.BackColor.R + "," + pa_24.BackColor.G + "," + pa_24.BackColor.B);
+			sb.Append(ColorOptions.CFG_cellloadchanged);
+			sb.AppendLine(pa_25.BackColor.R + "," + pa_25.BackColor.G + "," + pa_25.BackColor.B);
+			sb.Append(ColorOptions.CFG_celldiffed);
+			sb.AppendLine(pa_26.BackColor.R + "," + pa_26.BackColor.G + "," + pa_26.BackColor.B);
+			sb.Append(ColorOptions.CFG_cellreplaced);
+			sb.AppendLine(pa_27.BackColor.R + "," + pa_27.BackColor.G + "," + pa_27.BackColor.B);
+			sb.Append(ColorOptions.CFG_celledit);
+			sb.AppendLine(pa_28.BackColor.R + "," + pa_28.BackColor.G + "," + pa_28.BackColor.B);
+
 			return sb.ToString();
 		}
 
@@ -441,53 +504,64 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Defaults(object sender, EventArgs e)
 		{
-			 pa_01.BackColor                                 =
-			 ColorOptions._tabletext                         = SystemColors.ControlText;
-			 pa_02.BackColor                                 =
-			(ColorOptions._rowa         as SolidBrush).Color = Color.AliceBlue;
-			 pa_03.BackColor                                 =
-			(ColorOptions._rowb         as SolidBrush).Color = Color.BlanchedAlmond;
-			 pa_04.BackColor                                 =
-			(ColorOptions._rowdisableda as SolidBrush).Color = Color.LavenderBlush;
-			 pa_05.BackColor                                 =
-			(ColorOptions._rowdisabledb as SolidBrush).Color = Color.MistyRose;
-			 pa_06.BackColor                                 =
-			 ColorOptions._frozentext                        = SystemColors.ControlText;
-			 pa_07.BackColor                                 =
-			 ColorOptions._frozen                            = Color.OldLace;
-			 pa_08.BackColor                                 =
-			 ColorOptions._frozenhead                        = Color.Moccasin;
-			 pa_09.BackColor                                 =
-			 ColorOptions._colhead                           = Color.Thistle;
-			 pa_10.BackColor                                 =
-			 ColorOptions._rowpaneltext                      = SystemColors.ControlText;
-			 pa_11.BackColor                                 =
-			 ColorOptions._rowpanel                          = Color.Azure;
-			 pa_12.BackColor                                 =
-			 ColorOptions._propaneltext                      = SystemColors.ControlText;
-			 pa_13.BackColor                                 =
-			 ColorOptions._propanel                          = Color.LightSteelBlue;
-			 pa_14.BackColor                                 =
-			(ColorOptions._statusbar    as SolidBrush).Color = Color.MintCream;
+			 pa_01.BackColor                                    =
+			 ColorOptions._tabletext                            = SystemColors.ControlText;
+			 pa_02.BackColor                                    =
+			(ColorOptions._rowa            as SolidBrush).Color = Color.AliceBlue;
+			 pa_03.BackColor                                    =
+			(ColorOptions._rowb            as SolidBrush).Color = Color.BlanchedAlmond;
+			 pa_04.BackColor                                    =
+			(ColorOptions._rowdisableda    as SolidBrush).Color = Color.LavenderBlush;
+			 pa_05.BackColor                                    =
+			(ColorOptions._rowdisabledb    as SolidBrush).Color = Color.MistyRose;
+			 pa_06.BackColor                                    =
+			 ColorOptions._frozentext                           = SystemColors.ControlText;
+			 pa_07.BackColor                                    =
+			 ColorOptions._frozen                               = Color.OldLace;
+			 pa_08.BackColor                                    =
+			 ColorOptions._frozenhead                           = Color.Moccasin;
+			 pa_09.BackColor                                    =
+			 ColorOptions._colhead                              = Color.Thistle;
+			 pa_10.BackColor                                    =
+			 ColorOptions._rowpaneltext                         = SystemColors.ControlText;
+			 pa_11.BackColor                                    =
+			 ColorOptions._rowpanel                             = Color.Azure;
+			 pa_12.BackColor                                    =
+			 ColorOptions._propaneltext                         = SystemColors.ControlText;
+			 pa_13.BackColor                                    =
+			 ColorOptions._propanel                             = Color.LightSteelBlue;
+			 pa_14.BackColor                                    =
+			(ColorOptions._statusbar       as SolidBrush).Color = Color.MintCream;
 
-			 pa_15.BackColor                                 =
-			 ColorOptions._tablelines                 .Color = SystemColors.ControlDark;
-			 pa_16.BackColor                                 =
-			 ColorOptions._frozenlines                .Color = SystemColors.ControlDark;
-			 pa_17.BackColor                                 =
-			 ColorOptions._frozenheadlines            .Color = SystemColors.ControlDark;
-			 pa_18.BackColor                                 =
-			 ColorOptions._frozenheadtext                    = SystemColors.ControlText;
-			 pa_19.BackColor                                 =
-			 ColorOptions._rowpanellines              .Color = SystemColors.ControlDark;
-			 pa_20.BackColor                                 =
-			 ColorOptions._colheadtext                       = SystemColors.ControlText;
-			 pa_21.BackColor                                 =
-			 ColorOptions._colheadlines               .Color = SystemColors.ControlDark;
-			 pa_22.BackColor                                 =
-			 ColorOptions._propanellines              .Color = SystemColors.ControlDark;
-			 pa_23.BackColor                                 =
-			 ColorOptions._propanelborder             .Color = SystemColors.ControlDarkDark;
+			 pa_15.BackColor                                    =
+			 ColorOptions._tablelines                    .Color = SystemColors.ControlDark;
+			 pa_16.BackColor                                    =
+			 ColorOptions._frozenlines                   .Color = SystemColors.ControlDark;
+			 pa_17.BackColor                                    =
+			 ColorOptions._frozenheadlines               .Color = SystemColors.ControlDark;
+			 pa_18.BackColor                                    =
+			 ColorOptions._frozenheadtext                       = SystemColors.ControlText;
+			 pa_19.BackColor                                    =
+			 ColorOptions._rowpanellines                 .Color = SystemColors.ControlDark;
+			 pa_20.BackColor                                    =
+			 ColorOptions._colheadtext                          = SystemColors.ControlText;
+			 pa_21.BackColor                                    =
+			 ColorOptions._colheadlines                  .Color = SystemColors.ControlDark;
+			 pa_22.BackColor                                    =
+			 ColorOptions._propanellines                 .Color = SystemColors.ControlDark;
+			 pa_23.BackColor                                    =
+			 ColorOptions._propanelborder                .Color = SystemColors.ControlDarkDark;
+
+			 pa_24.BackColor                                    =
+			(ColorOptions._cellselected    as SolidBrush).Color = Color.PaleGreen;
+			 pa_25.BackColor                                    =
+			(ColorOptions._cellloadchanged as SolidBrush).Color = Color.Pink;
+			 pa_26.BackColor                                    =
+			(ColorOptions._celldiffed      as SolidBrush).Color = Color.Turquoise;
+			 pa_27.BackColor                                    =
+			(ColorOptions._cellreplaced    as SolidBrush).Color = Color.Goldenrod;
+			 pa_28.BackColor                                    =
+			(ColorOptions._celledit        as SolidBrush).Color = Color.Crimson;
 
 			Yata.that.Refresh();
 		}

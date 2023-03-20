@@ -21,23 +21,39 @@ namespace yata
 		internal const string CFG_rowb            = "rowb=";
 		internal const string CFG_rowdisableda    = "rowdisableda=";
 		internal const string CFG_rowdisabledb    = "rowdisabledb=";
+
 		internal const string CFG_frozentext      = "frozentext=";
 		internal const string CFG_frozenlines     = "frozenlines=";
 		internal const string CFG_frozen          = "frozen=";
 		internal const string CFG_frozenheadtext  = "frozenheadtext=";
 		internal const string CFG_frozenheadlines = "frozenheadlines=";
 		internal const string CFG_frozenhead      = "frozenhead=";
+
 		internal const string CFG_colheadtext     = "colheadtext=";
 		internal const string CFG_colheadlines    = "colheadlines=";
 		internal const string CFG_colhead         = "colhead=";
+
 		internal const string CFG_rowpaneltext    = "rowpaneltext=";
 		internal const string CFG_rowpanellines   = "rowpanellines=";
 		internal const string CFG_rowpanel        = "rowpanel=";
+
 		internal const string CFG_propaneltext    = "propaneltext=";
 		internal const string CFG_propanellines   = "propanellines=";
 		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
+
 		internal const string CFG_statusbar       = "statusbar=";
+
+		internal const string CFG_cellselected    = "cellselected=";
+		internal const string CFG_cellloadchanged = "cellloadchanged=";
+		internal const string CFG_celldiffed      = "celldiffed=";
+		internal const string CFG_cellreplaced    = "cellreplaced=";
+		internal const string CFG_celledit        = "celledit=";
+
+		// TODO: PropanelFrozen row(s)
+		// TODO: colhead text selected + sortedasc + sorteddec + sized
+		// TODO: row selected + subselected
+
 
 		internal static Color _tabletext       = SystemColors.ControlText;			// default colors for the tablegrid ->
 		internal static Pen   _tablelines      = new Pen(SystemColors.ControlDark);
@@ -67,6 +83,12 @@ namespace yata
 		internal static Color _propanel        = Color.LightSteelBlue;
 
 		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);	// default color for the statusbar
+
+		internal static Brush _cellselected    = new SolidBrush(Color.PaleGreen);
+		internal static Brush _cellloadchanged = new SolidBrush(Color.Pink);
+		internal static Brush _celldiffed      = new SolidBrush(Color.Turquoise);
+		internal static Brush _cellreplaced    = new SolidBrush(Color.Goldenrod);
+		internal static Brush _celledit        = new SolidBrush(Color.Crimson);
 
 
 //		internal static Color _grid_backcolor = ;
@@ -362,6 +384,66 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_statusbar as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_cellselected, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_cellselected.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_cellselected = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_cellselected as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_cellloadchanged, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_cellloadchanged.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_cellloadchanged = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_cellloadchanged as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_celldiffed, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_celldiffed.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_celldiffed = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_celldiffed as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_cellreplaced, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_cellreplaced.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_cellreplaced = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_cellreplaced as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_celledit, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_celledit.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_celledit = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_celledit as SolidBrush).Color = color;
 							}
 						}
 					}

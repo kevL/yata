@@ -855,7 +855,7 @@ namespace yata
 				rect = _editRect;
 				rect.Y -= offset;
 
-				graphics.FillRectangle(Brushers.Editor, rect);
+				graphics.FillRectangle(ColorOptions._celledit, rect);
 			}
 
 			// draw vertical lines ->

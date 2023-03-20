@@ -98,11 +98,6 @@ namespace yata
 
 		internal static readonly Brush Selected    = Brushes.PaleGreen;
 		internal static readonly Brush SubSelected = Brushes.Honeydew;
-		internal static readonly Brush Editor      = new SolidBrush(Colors.Editor);
-
-		internal static readonly Brush LoadChanged = Brushes.Pink;
-		internal static readonly Brush Diff        = Brushes.Turquoise;
-		internal static readonly Brush Replaced    = Brushes.Goldenrod;
 
 		// propanel
 		internal static readonly Brush PropanelFrozen = Brushes.LightGray;
@@ -111,8 +106,6 @@ namespace yata
 	static class Colors
 	{
 		internal static readonly Color LabelSorted       = Color.LightCoral;
-
-		internal static readonly Color Editor            = Color.Crimson;
 
 		internal static readonly Color Text              = SystemColors.ControlText;
 		internal static readonly Color TextReadonly      = Color.Firebrick;

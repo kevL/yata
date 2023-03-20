@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -14,7 +15,7 @@ namespace yata
 		internal YataEditbox()
 		{
 			Visible       = false;
-			BackColor     = Colors.Editor;
+			BackColor     = (ColorOptions._celledit as SolidBrush).Color;
 			BorderStyle   = BorderStyle.None;
 			WordWrap      = false;
 			Margin        = new Padding(0);

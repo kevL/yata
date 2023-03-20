@@ -334,17 +334,17 @@ namespace yata
 			switch (state)
 			{
 				case CellState.Selected:
-					if (edit) return Brushers.Editor;
-					return Brushers.Selected;
+					if (edit) return ColorOptions._celledit;
+					return ColorOptions._cellselected;
 
 				case CellState.Diff:
-					return Brushers.Diff;
+					return ColorOptions._celldiffed;
 
 				case CellState.LoadChanged:
-					return Brushers.LoadChanged;
+					return ColorOptions._cellloadchanged;
 
 				case CellState.Replaced:
-					return Brushers.Replaced;
+					return ColorOptions._cellreplaced;
 			}
 			return null; // shall never happen.
 		}

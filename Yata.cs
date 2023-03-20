@@ -438,6 +438,24 @@ namespace yata
 				Table.MouseLeaveTicker();
 		}
 
+		/// <summary>
+		/// Updates the <c>BackColor</c> of
+		/// <c><see cref="YataGrid._editor">YataGrid._editors</see></c> when the
+		/// user changes it in <c><see cref="ColorOptionsF"/></c>.
+		/// </summary>
+		/// <param name="color"></param>
+		internal void UpdateEditorColor(Color color)
+		{
+			YataGrid table;
+			foreach (TabPage page in Tabs.TabPages)
+			{
+				(table = page.Tag as YataGrid)._editor.BackColor = color;
+
+				if (table.Propanel != null)
+					table.Propanel._editor.BackColor = color;
+			}
+		}
+
 
 		#region Methods (close)
 		/// <summary>
