@@ -105,6 +105,14 @@ namespace yata
 
 			la_34.Text = "Propanel frozen col";
 			pa_34.BackColor = (ColorOptions._propanelfrozen as SolidBrush).Color;
+			la_35.Text = "Row selected";
+			pa_35.BackColor = (ColorOptions._rowsel as SolidBrush).Color;
+			la_36.Text = "Row subselected";
+			pa_36.BackColor = (ColorOptions._rowsubsel as SolidBrush).Color;
+			la_37.Text = "Row created";
+			pa_37.BackColor = (ColorOptions._rowcreated as SolidBrush).Color;
+			la_38.Text = "Propanel selected cell";
+			pa_38.BackColor = (ColorOptions._propanelsel as SolidBrush).Color;
 		}
 		#endregion cTor
 
@@ -191,6 +199,10 @@ namespace yata
 					else if (sender == pa_33) title = la_33.Text;
 
 					else if (sender == pa_34) title = la_34.Text;
+					else if (sender == pa_35) title = la_35.Text;
+					else if (sender == pa_36) title = la_36.Text;
+					else if (sender == pa_37) title = la_37.Text;
+					else if (sender == pa_38) title = la_38.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -375,6 +387,26 @@ namespace yata
 						pa_34.BackColor =
 						(ColorOptions._propanelfrozen as SolidBrush).Color = Color.LightGray;
 					}
+					else if (sender == pa_35)
+					{
+						pa_35.BackColor =
+						(ColorOptions._rowsel as SolidBrush).Color = Color.PaleGreen;
+					}
+					else if (sender == pa_36)
+					{
+						pa_36.BackColor =
+						(ColorOptions._rowsubsel as SolidBrush).Color = Color.Honeydew;
+					}
+					else if (sender == pa_37)
+					{
+						pa_37.BackColor =
+						(ColorOptions._rowcreated as SolidBrush).Color = Color.Gainsboro;
+					}
+					else if (sender == pa_38)
+					{
+						pa_38.BackColor =
+						(ColorOptions._propanelsel as SolidBrush).Color = Color.PaleGreen;
+					}
 
 					Yata.that.Refresh();
 					break;
@@ -430,6 +462,10 @@ namespace yata
 			else if (sender == pa_33)  ColorOptions._headtextsortdes                      = pa_33.BackColor;
 
 			else if (sender == pa_34) (ColorOptions._propanelfrozen  as SolidBrush).Color = pa_34.BackColor;
+			else if (sender == pa_35) (ColorOptions._rowsel          as SolidBrush).Color = pa_35.BackColor;
+			else if (sender == pa_36) (ColorOptions._rowsubsel       as SolidBrush).Color = pa_36.BackColor;
+			else if (sender == pa_37) (ColorOptions._rowcreated      as SolidBrush).Color = pa_37.BackColor;
+			else if (sender == pa_38) (ColorOptions._propanelsel     as SolidBrush).Color = pa_38.BackColor;
 
 			Yata.that.Refresh();
 		}
@@ -568,6 +604,14 @@ namespace yata
 
 			sb.Append(ColorOptions.CFG_propanelfrozen);
 			sb.AppendLine(pa_34.BackColor.R + "," + pa_34.BackColor.G + "," + pa_34.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowsel);
+			sb.AppendLine(pa_35.BackColor.R + "," + pa_35.BackColor.G + "," + pa_35.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowsubsel);
+			sb.AppendLine(pa_36.BackColor.R + "," + pa_36.BackColor.G + "," + pa_36.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowcreated);
+			sb.AppendLine(pa_37.BackColor.R + "," + pa_37.BackColor.G + "," + pa_37.BackColor.B);
+			sb.Append(ColorOptions.CFG_propanelsel);
+			sb.AppendLine(pa_38.BackColor.R + "," + pa_38.BackColor.G + "," + pa_38.BackColor.B);
 
 			return sb.ToString();
 		}
@@ -652,6 +696,14 @@ namespace yata
 
 			 pa_34.BackColor                                    =
 			(ColorOptions._propanelfrozen  as SolidBrush).Color = Color.LightGray;
+			 pa_35.BackColor                                    =
+			(ColorOptions._rowsel          as SolidBrush).Color = Color.PaleGreen;
+			 pa_36.BackColor                                    =
+			(ColorOptions._rowsubsel       as SolidBrush).Color = Color.Honeydew;
+			 pa_37.BackColor                                    =
+			(ColorOptions._rowcreated      as SolidBrush).Color = Color.Gainsboro;
+			 pa_38.BackColor                                    =
+			(ColorOptions._propanelsel     as SolidBrush).Color = Color.PaleGreen;
 
 			 Yata.that.Refresh();
 		}

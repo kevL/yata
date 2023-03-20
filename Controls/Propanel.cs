@@ -845,7 +845,7 @@ namespace yata
 			if (sel != null)
 			{
 				rect = new Rectangle(0, sel.x * _heightr - offset, Width, _heightr);
-				graphics.FillRectangle(Brushers.Selected, rect);
+				graphics.FillRectangle(ColorOptions._propanelsel, rect);
 			}
 
 			// fill the editor's val-rect if visible ->

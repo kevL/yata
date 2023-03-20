@@ -155,7 +155,7 @@ namespace yata
 				int r = selr;
 				for (int i = 0; i != _copyr.Count; ++i, ++r)
 				{
-					Table.Insert(r, _copyr[i], Brushers.Created, true);
+					Table.Insert(r, _copyr[i], ColorOptions._rowcreated, true);
 					rest.array[i] = Table.Rows[r].Clone() as Row;
 				}
 				Table.Calibrate(selr, _copyr.Count - 1); // paste range
@@ -270,7 +270,7 @@ namespace yata
 						{
 							cells[0] = r.ToString(CultureInfo.InvariantCulture);
 
-							Table.Insert(r, cells, Brushers.Created, true);
+							Table.Insert(r, cells, ColorOptions._rowcreated, true);
 							rest.array[i] = Table.Rows[r].Clone() as Row;
 						}
 						Table.Calibrate(_startCr, _lengthCr - 1); // insert range

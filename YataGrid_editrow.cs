@@ -88,7 +88,7 @@ namespace yata
 			{
 				++RowCount;
 
-				row = new Row(0, ColCount, Brushers.Created, this);
+				row = new Row(0, ColCount, ColorOptions._rowcreated, this);
 
 				int c = 0;
 				if (Options._autorder)

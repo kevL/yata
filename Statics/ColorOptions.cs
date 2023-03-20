@@ -21,6 +21,9 @@ namespace yata
 		internal const string CFG_rowb            = "rowb=";
 		internal const string CFG_rowdisableda    = "rowdisableda=";
 		internal const string CFG_rowdisabledb    = "rowdisabledb=";
+		internal const string CFG_rowsel          = "rowsel=";
+		internal const string CFG_rowsubsel       = "rowsubsel=";
+		internal const string CFG_rowcreated      = "rowcreated=";
 
 		internal const string CFG_frozentext      = "frozentext=";
 		internal const string CFG_frozenlines     = "frozenlines=";
@@ -47,6 +50,7 @@ namespace yata
 		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
 		internal const string CFG_propanelfrozen  = "propanelfrozen=";
+		internal const string CFG_propanelsel     = "propanelsel";
 
 		internal const string CFG_statusbar       = "statusbar=";
 
@@ -56,16 +60,15 @@ namespace yata
 		internal const string CFG_cellreplaced    = "cellreplaced=";
 		internal const string CFG_celledit        = "celledit=";
 
-		// TODO: PropanelFrozen row(s)
-		// TODO: row selected + subselected
-
-
 		internal static Color _tabletext       = SystemColors.ControlText;			// default colors for the tablegrid ->
 		internal static Pen   _tablelines      = new Pen(SystemColors.ControlDark);
 		internal static Brush _rowa            = new SolidBrush(Color.AliceBlue);
 		internal static Brush _rowb            = new SolidBrush(Color.BlanchedAlmond);
 		internal static Brush _rowdisableda    = new SolidBrush(Color.LavenderBlush);
 		internal static Brush _rowdisabledb    = new SolidBrush(Color.MistyRose);
+		internal static Brush _rowsel          = new SolidBrush(Color.PaleGreen);
+		internal static Brush _rowsubsel       = new SolidBrush(Color.Honeydew);
+		internal static Brush _rowcreated      = new SolidBrush(Color.Gainsboro);
 
 		internal static Color _frozentext      = SystemColors.ControlText;			// default colors for the frozenpanel ->
 		internal static Pen   _frozenlines     = new Pen(SystemColors.ControlDark);
@@ -92,6 +95,7 @@ namespace yata
 		internal static Pen   _propanelborder  = new Pen(SystemColors.ControlDarkDark);
 		internal static Color _propanel        = Color.LightSteelBlue;
 		internal static Brush _propanelfrozen  = new SolidBrush(Color.LightGray);
+		internal static Brush _propanelsel     = new SolidBrush(Color.PaleGreen);
 
 		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);	// default color for the statusbar
 
@@ -191,6 +195,42 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowdisabledb as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowsel, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowsel.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_rowsel = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_rowsel as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowsubsel, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowsubsel.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_rowsubsel = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_rowsubsel as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowcreated, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowcreated.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_rowcreated = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_rowcreated as SolidBrush).Color = color;
 							}
 						}
 						else if (line.StartsWith(CFG_frozentext, StringComparison.Ordinal))
@@ -443,6 +483,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanel = color;
+							}
+						}
+						else if (line.StartsWith(CFG_propanelsel, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_propanelsel.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
+//								if (pi != null)
+//									_propanelsel = pi.GetValue(null,null) as Brush;
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_propanelsel as SolidBrush).Color = color;
 							}
 						}
 						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))

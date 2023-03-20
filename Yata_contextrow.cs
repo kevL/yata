@@ -118,7 +118,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteAbove(object sender, EventArgs e)
 		{
-			Table.Insert(_r, _copyr[0], Brushers.Created);
+			Table.Insert(_r, _copyr[0], ColorOptions._rowcreated);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -184,7 +184,7 @@ namespace yata
 				if (row[c].replaced)
 					row[c].replaced = false;
 			}
-			row._brush = Brushers.Created;
+			row._brush = ColorOptions._rowcreated;
 
 			YataGrid._init = false;
 
@@ -215,7 +215,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_PasteBelow(object sender, EventArgs e)
 		{
-			Table.Insert(_r + 1, _copyr[0], Brushers.Created);
+			Table.Insert(_r + 1, _copyr[0], ColorOptions._rowcreated);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);
@@ -241,7 +241,7 @@ namespace yata
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
-			Table.Insert(_r, fields, Brushers.Created);
+			Table.Insert(_r, fields, ColorOptions._rowcreated);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Delete);
@@ -302,7 +302,7 @@ namespace yata
 				if (row[c].replaced)
 					row[c].replaced = false;
 			}
-			row._brush = Brushers.Created;
+			row._brush = ColorOptions._rowcreated;
 
 			YataGrid._init = false;
 
@@ -337,7 +337,7 @@ namespace yata
 			for (int c = 0; c != Table.ColCount; ++c)
 				fields[c] = gs.Stars;
 
-			Table.Insert(_r + 1, fields, Brushers.Created);
+			Table.Insert(_r + 1, fields, ColorOptions._rowcreated);
 
 
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r + 1], UndoRedo.UrType.rt_Delete);

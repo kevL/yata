@@ -85,15 +85,6 @@ namespace yata
 	}
 
 
-	static class Brushers
-	{
-		// table
-		internal static readonly Brush Created     = SystemBrushes.ControlLight;
-
-		internal static readonly Brush Selected    = Brushes.PaleGreen;
-		internal static readonly Brush SubSelected = Brushes.Honeydew;
-	}
-
 	static class Colors
 	{
 		internal static readonly Color Text              = SystemColors.ControlText;

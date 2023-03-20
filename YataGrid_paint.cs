@@ -438,11 +438,11 @@ namespace yata
 				if (selr != -1)
 				{
 					if (r == selr)
-						brush = Brushers.Selected;
+						brush = ColorOptions._rowsel;
 					else if ((r < selr && r >= selr + RangeSelect)
 						||   (r > selr && r <= selr + RangeSelect))
 					{
-						brush = Brushers.SubSelected;
+						brush = ColorOptions._rowsubsel;
 					}
 					else
 						brush = null;
