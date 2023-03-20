@@ -1329,7 +1329,7 @@ namespace yata
 				if (y == 1 && Tabs.Focused)
 				{
 					y = rect.Y + rect.Height - 5;
-					graphics.DrawLine(Pencils.LightLine,
+					graphics.DrawLine(SystemPens.ControlLightLight,
 									  rect.X,     y,
 									  rect.X + w, y);
 				}

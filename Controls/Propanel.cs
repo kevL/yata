@@ -837,7 +837,7 @@ namespace yata
 			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect = new Rectangle(0, c * _heightr - offset, Width, _heightr);
-				graphics.FillRectangle(Brushers.PropanelFrozen, rect);
+				graphics.FillRectangle(ColorOptions._propanelfrozen, rect);
 			}
 
 			// fill any selected cell's var/val-rect ->

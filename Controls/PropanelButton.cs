@@ -41,8 +41,8 @@ namespace yata
 			Width  = 26;
 			Height = HEIGHT;
 
-			pen1 = Pens.Black;
-			pen2 = Pencils.DarkLine;
+			pen1 = SystemPens.ControlDarkDark;
+			pen2 = SystemPens.ControlDark;
 
 //			_rectBg = new Rectangle(0,0, Width, Height);
 			_rectGr = new Rectangle(3,3, Width - 6, Height - 6);

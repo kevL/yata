@@ -85,12 +85,6 @@ namespace yata
 	}
 
 
-	static class Pencils
-	{
-		internal static readonly Pen DarkLine  = SystemPens.ControlDark;
-		internal static readonly Pen LightLine = SystemPens.ControlLightLight;
-	}
-
 	static class Brushers
 	{
 		// table
@@ -98,9 +92,6 @@ namespace yata
 
 		internal static readonly Brush Selected    = Brushes.PaleGreen;
 		internal static readonly Brush SubSelected = Brushes.Honeydew;
-
-		// propanel
-		internal static readonly Brush PropanelFrozen = Brushes.LightGray;
 	}
 
 	static class Colors

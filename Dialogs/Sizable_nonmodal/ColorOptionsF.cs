@@ -102,6 +102,9 @@ namespace yata
 			pa_32.BackColor = ColorOptions._headtextsortasc;
 			la_33.Text = "Header text sorted descend";
 			pa_33.BackColor = ColorOptions._headtextsortdes;
+
+			la_34.Text = "Propanel frozen col";
+			pa_34.BackColor = (ColorOptions._propanelfrozen as SolidBrush).Color;
 		}
 		#endregion cTor
 
@@ -186,6 +189,8 @@ namespace yata
 					else if (sender == pa_31) title = la_31.Text;
 					else if (sender == pa_32) title = la_32.Text;
 					else if (sender == pa_33) title = la_33.Text;
+
+					else if (sender == pa_34) title = la_34.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -365,6 +370,12 @@ namespace yata
 						ColorOptions._headtextsortdes = Color.DarkGoldenrod;
 					}
 
+					else if (sender == pa_34)
+					{
+						pa_34.BackColor =
+						(ColorOptions._propanelfrozen as SolidBrush).Color = Color.LightGray;
+					}
+
 					Yata.that.Refresh();
 					break;
 			}
@@ -417,6 +428,8 @@ namespace yata
 			else if (sender == pa_31)  ColorOptions._colheadtextsize                      = pa_31.BackColor;
 			else if (sender == pa_32)  ColorOptions._headtextsortasc                      = pa_32.BackColor;
 			else if (sender == pa_33)  ColorOptions._headtextsortdes                      = pa_33.BackColor;
+
+			else if (sender == pa_34) (ColorOptions._propanelfrozen  as SolidBrush).Color = pa_34.BackColor;
 
 			Yata.that.Refresh();
 		}
@@ -553,6 +566,9 @@ namespace yata
 			sb.Append(ColorOptions.CFG_headtextsortdes);
 			sb.AppendLine(pa_33.BackColor.R + "," + pa_33.BackColor.G + "," + pa_33.BackColor.B);
 
+			sb.Append(ColorOptions.CFG_propanelfrozen);
+			sb.AppendLine(pa_34.BackColor.R + "," + pa_34.BackColor.G + "," + pa_34.BackColor.B);
+
 			return sb.ToString();
 		}
 
@@ -633,6 +649,9 @@ namespace yata
 			 ColorOptions._headtextsortasc                      = Color.SteelBlue;
 			 pa_33.BackColor                                    =
 			 ColorOptions._headtextsortdes                      = Color.DarkGoldenrod;
+
+			 pa_34.BackColor                                    =
+			(ColorOptions._propanelfrozen  as SolidBrush).Color = Color.LightGray;
 
 			 Yata.that.Refresh();
 		}

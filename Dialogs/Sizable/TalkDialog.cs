@@ -360,10 +360,10 @@ namespace yata
 			var bl = new Point(0, h);
 
 			Graphics graphics = e.Graphics;
-			graphics.DrawLine(Pencils.DarkLine, tl, tr);
-			graphics.DrawLine(Pencils.DarkLine, tr, br);
-			graphics.DrawLine(Pencils.DarkLine, br, bl);
-			graphics.DrawLine(Pencils.DarkLine, bl, tl);
+			graphics.DrawLine(SystemPens.ControlDark, tl, tr);
+			graphics.DrawLine(SystemPens.ControlDark, tr, br);
+			graphics.DrawLine(SystemPens.ControlDark, br, bl);
+			graphics.DrawLine(SystemPens.ControlDark, bl, tl);
 		}
 		#endregion Handlers
 

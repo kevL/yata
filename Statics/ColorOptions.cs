@@ -46,6 +46,7 @@ namespace yata
 		internal const string CFG_propanellines   = "propanellines=";
 		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
+		internal const string CFG_propanelfrozen  = "propanelfrozen=";
 
 		internal const string CFG_statusbar       = "statusbar=";
 
@@ -90,6 +91,7 @@ namespace yata
 		internal static Pen   _propanellines   = new Pen(SystemColors.ControlDark);
 		internal static Pen   _propanelborder  = new Pen(SystemColors.ControlDarkDark);
 		internal static Color _propanel        = Color.LightSteelBlue;
+		internal static Brush _propanelfrozen  = new SolidBrush(Color.LightGray);
 
 		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);	// default color for the statusbar
 
