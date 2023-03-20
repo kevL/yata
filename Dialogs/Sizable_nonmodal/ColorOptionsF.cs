@@ -76,6 +76,10 @@ namespace yata
 			pa_20.BackColor = ColorOptions._colheadtext;
 			la_21.Text = "Col header lines";
 			pa_21.BackColor = ColorOptions._colheadlines.Color;
+			la_22.Text = "Propanel lines";
+			pa_22.BackColor = ColorOptions._propanellines.Color;
+			la_23.Text = "Propanel border";
+			pa_23.BackColor = ColorOptions._propanelborder.Color;
 		}
 		#endregion cTor
 
@@ -147,6 +151,8 @@ namespace yata
 					else if (sender == pa_19) title = la_19.Text;
 					else if (sender == pa_20) title = la_20.Text;
 					else if (sender == pa_21) title = la_21.Text;
+					else if (sender == pa_22) title = la_22.Text;
+					else if (sender == pa_23) title = la_23.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -263,6 +269,16 @@ namespace yata
 						pa_21.BackColor =
 						ColorOptions._colheadlines.Color = SystemColors.ControlDark;
 					}
+					else if (sender == pa_22)
+					{
+						pa_22.BackColor =
+						ColorOptions._propanellines.Color = SystemColors.ControlDark;
+					}
+					else if (sender == pa_23)
+					{
+						pa_23.BackColor =
+						ColorOptions._propanelborder.Color = SystemColors.ControlDarkDark;
+					}
 
 					Yata.that.Refresh();
 					break;
@@ -298,6 +314,8 @@ namespace yata
 			else if (sender == pa_19)  ColorOptions._rowpanellines              .Color = pa_19.BackColor;
 			else if (sender == pa_20)  ColorOptions._colheadtext                       = pa_20.BackColor;
 			else if (sender == pa_21)  ColorOptions._colheadlines               .Color = pa_21.BackColor;
+			else if (sender == pa_22)  ColorOptions._propanellines              .Color = pa_22.BackColor;
+			else if (sender == pa_23)  ColorOptions._propanelborder             .Color = pa_23.BackColor;
 
 			Yata.that.Refresh();
 		}
@@ -407,6 +425,10 @@ namespace yata
 			sb.AppendLine(pa_20.BackColor.R + "," + pa_20.BackColor.G + "," + pa_20.BackColor.B);
 			sb.Append(ColorOptions.CFG_colheadlines);
 			sb.AppendLine(pa_21.BackColor.R + "," + pa_21.BackColor.G + "," + pa_21.BackColor.B);
+			sb.Append(ColorOptions.CFG_propanellines);
+			sb.AppendLine(pa_22.BackColor.R + "," + pa_22.BackColor.G + "," + pa_22.BackColor.B);
+			sb.Append(ColorOptions.CFG_propanelborder);
+			sb.AppendLine(pa_23.BackColor.R + "," + pa_23.BackColor.G + "," + pa_23.BackColor.B);
 
 			return sb.ToString();
 		}
@@ -460,8 +482,12 @@ namespace yata
 			 ColorOptions._rowpanellines              .Color = SystemColors.ControlDark;
 			 pa_20.BackColor                                 =
 			 ColorOptions._colheadtext                       = SystemColors.ControlText;
-			 pa_19.BackColor                                 =
+			 pa_21.BackColor                                 =
 			 ColorOptions._colheadlines               .Color = SystemColors.ControlDark;
+			 pa_22.BackColor                                 =
+			 ColorOptions._propanellines              .Color = SystemColors.ControlDark;
+			 pa_23.BackColor                                 =
+			 ColorOptions._propanelborder             .Color = SystemColors.ControlDarkDark;
 
 			Yata.that.Refresh();
 		}

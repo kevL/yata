@@ -34,6 +34,8 @@ namespace yata
 		internal const string CFG_rowpanellines   = "rowpanellines=";
 		internal const string CFG_rowpanel        = "rowpanel=";
 		internal const string CFG_propaneltext    = "propaneltext=";
+		internal const string CFG_propanellines   = "propanellines=";
+		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
 		internal const string CFG_statusbar       = "statusbar=";
 
@@ -60,6 +62,8 @@ namespace yata
 		internal static Color _rowpanel        = Color.Azure;
 
 		internal static Color _propaneltext    = SystemColors.ControlText;			// default colors for the propanel ->
+		internal static Pen   _propanellines   = new Pen(SystemColors.ControlDark);
+		internal static Pen   _propanelborder  = new Pen(SystemColors.ControlDarkDark);
 		internal static Color _propanel        = Color.LightSteelBlue;
 
 		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);	// default color for the statusbar
@@ -298,6 +302,30 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowpanel = color;
+							}
+						}
+						else if (line.StartsWith(CFG_propanellines, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_propanellines.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_propanellines = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_propanellines.Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_propanelborder, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_propanelborder.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_propanelborder = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_propanelborder.Color = color;
 							}
 						}
 						else if (line.StartsWith(CFG_propaneltext, StringComparison.Ordinal))

@@ -859,19 +859,19 @@ namespace yata
 			}
 
 			// draw vertical lines ->
-			graphics.DrawLine(Pens.Black,										// vertical left line
+			graphics.DrawLine(ColorOptions._propanelborder,					// vertical left line
 							  1, 0,
 							  1, HeightProps - offset);
-			graphics.DrawLine(Pencils.DarkLine,									// vertical center line
+			graphics.DrawLine(ColorOptions._propanellines,					// vertical center line
 							  _widthVars, 1,
 							  _widthVars, HeightProps - offset - 1);
-			graphics.DrawLine(Pencils.DarkLine,									// vertical right line
+			graphics.DrawLine(ColorOptions._propanelborder,					// vertical right line
 							  _widthVars + _widthVals, 1,
 							  _widthVars + _widthVals, HeightProps - offset - 1);
-			graphics.DrawLine(Pens.Black,										// horizontal top line
+			graphics.DrawLine(ColorOptions._propanelborder,					// horizontal top line
 							  1,     1,
 							  Width, 1);
-			graphics.DrawLine(Pens.Black,										// horizontal bot line
+			graphics.DrawLine(ColorOptions._propanelborder,					// horizontal bot line
 							  1,     _heightr * _grid.ColCount - offset,
 							  Width, _heightr * _grid.ColCount - offset);
 
@@ -880,7 +880,7 @@ namespace yata
 			for (c = 1; c != _grid.ColCount; ++c)
 			{
 				y = _heightr * c - offset + 1;
-				graphics.DrawLine(Pencils.DarkLine,
+				graphics.DrawLine(ColorOptions._propanellines,
 								  0,     y,
 								  Width, y);
 			}
