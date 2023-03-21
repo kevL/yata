@@ -150,21 +150,7 @@ namespace yata
 			pa_Color   .BackColor =
 			pa_Colorpre.BackColor = color;
 
-			double val;
-			ColorToHSV(color, out _hue, out _sat, out val);
-
-			_val = (int)(val * STEPS_VAL);
-			pa_Valslider.Invalidate();
-
-			_x1 = (int)_hue;
-			_y1 = (int)(_sat * STEPS_SAT);
-			pa_Colortable.Invalidate();
-
-			_bypass = true;
-			tb_Red  .Text = color.R.ToString();
-			tb_Green.Text = color.G.ToString();
-			tb_Blue .Text = color.B.ToString();
-			_bypass = false;
+			SetCurrentValues(color);
 		}
 		#endregion cTor
 
@@ -242,6 +228,38 @@ namespace yata
 			tb_Green.Text = g.ToString();
 			tb_Blue .Text = b.ToString();
 			_bypass = false;
+		}
+
+		/// <summary>
+		/// Sets the various controls values from a specified <c>Color</c>.
+		/// </summary>
+		/// <param name="color"></param>
+		/// <param name="bypassRgbtext"><c>true</c> if called by
+		/// <c><see cref="textchanged_Rgb()">textchanged_Rgb()</see></c>
+		/// - This isn't a big deal since recalculating control-values per
+		/// RGB-texts isn't going to happen anyway but
+		/// <paramref name="bypassRgbtext"/> prevents resetting the texts
+		/// redundantly</param>
+		void SetCurrentValues(Color color, bool bypassRgbtext = false)
+		{
+			double val;
+			ColorToHSV(color, out _hue, out _sat, out val);
+
+			_val = (int)(val * STEPS_VAL);
+			pa_Valslider.Invalidate();
+
+			_x1 = (int)_hue;
+			_y1 = (int)(_sat * STEPS_SAT);
+			pa_Colortable.Invalidate();
+
+			if (!bypassRgbtext)
+			{
+				_bypass = true;
+				tb_Red  .Text = color.R.ToString();
+				tb_Green.Text = color.G.ToString();
+				tb_Blue .Text = color.B.ToString();
+				_bypass = false;
+			}
 		}
 		#endregion Methods
 
@@ -408,17 +426,7 @@ namespace yata
 					Color color = Color.FromArgb(Int32.Parse((tb_Red  .Text.Length == 0) ? "0" : tb_Red  .Text),
 												 Int32.Parse((tb_Green.Text.Length == 0) ? "0" : tb_Green.Text),
 												 Int32.Parse((tb_Blue .Text.Length == 0) ? "0" : tb_Blue .Text));
-					pa_Color.BackColor = color;
-
-					double val;
-					ColorToHSV(color, out _hue, out _sat, out val);
-
-					_val = (int)(val * STEPS_VAL);
-					pa_Valslider.Invalidate();
-
-					_x1 = (int)_hue;
-					_y1 = (int)(_sat * STEPS_SAT);
-					pa_Colortable.Invalidate();
+					SetCurrentValues(pa_Color.BackColor = color, true);
 				}
 			}
 		}
@@ -476,37 +484,19 @@ namespace yata
 			{
 				if ((ModifierKeys & Keys.Control) == Keys.None)
 				{
-					Color color = (sender as Panel).BackColor;
+					Color color;
 
-					if (e.Button == MouseButtons.Right)
-					{
-						if (sender == pa_Color)			// assign 'Stored' color to Color
-						{
-							pa_Color.BackColor = color = Stored;
-						}
-						else if (sender == pa_Colorpre)	// assign clicked color to Colorpre
-						{
-							pa_Color.BackColor = color;
-						}
-					}
+					if (sender == pa_Color && e.Button == MouseButtons.Right) // assign 'Stored' color to Color
+						color = pa_Color.BackColor = Stored;
+					else
+						color = (sender as Panel).BackColor;
 
-					double val;
-					ColorToHSV(color, out _hue, out _sat, out val);
+					if (sender == pa_Colorpre && e.Button == MouseButtons.Right) // assign Colorpre color to Color
+						pa_Color.BackColor = color;
 
-					_val = (int)(val * STEPS_VAL);
-					pa_Valslider.Invalidate();
-
-					_x1 = (int)_hue;
-					_y1 = (int)(_sat * STEPS_SAT);
-					pa_Colortable.Invalidate();
-
-					_bypass = true;
-					tb_Red  .Text = color.R.ToString();
-					tb_Green.Text = color.G.ToString();
-					tb_Blue .Text = color.B.ToString();
-					_bypass = false;
+					SetCurrentValues(color);
 				}
-				else // store the panel's color in 'Stored' ->
+				else if (e.Button == MouseButtons.Left) // store the panel's color in 'Stored' ->
 				{
 					Stored = (sender as Panel).BackColor;
 
@@ -537,7 +527,10 @@ namespace yata
 				else                        cb = cb_SysColors as ComboBox; // sender == cb_SysColors
 
 				if (cb.SelectedIndex != 0)
+				{
 					pa_Color.BackColor = Color.FromName(cb.SelectedItem.ToString());
+					SetCurrentValues(pa_Color.BackColor);
+				}
 			}
 		}
 
