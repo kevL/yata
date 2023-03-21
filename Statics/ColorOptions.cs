@@ -50,7 +50,7 @@ namespace yata
 		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
 		internal const string CFG_propanelfrozen  = "propanelfrozen=";
-		internal const string CFG_propanelsel     = "propanelsel";
+		internal const string CFG_propanelsel     = "propanelsel=";
 
 		internal const string CFG_statusbar       = "statusbar=";
 
