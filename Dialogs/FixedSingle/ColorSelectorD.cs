@@ -589,7 +589,76 @@ namespace yata
 		/// <returns></returns>
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (!tb_Red.Focused && !tb_Green.Focused && !tb_Blue.Focused)
+			if (tb_Red.Focused || tb_Green.Focused || tb_Blue.Focused)
+			{
+				switch (keyData)
+				{
+					case Keys.Enter:
+					case Keys.Escape:
+						bu_Accept.Select();
+						return true;
+
+
+					case Keys.Subtract:
+					{
+						TextBox tb;
+						if      (tb_Red  .Focused) tb = tb_Red;
+						else if (tb_Green.Focused) tb = tb_Green;
+						else                       tb = tb_Blue; // tb_Blue.Focused
+
+						if (tb.Text != "255")
+							tb.Text = (Byte.Parse(tb.Text) + 1).ToString();
+
+						return true;
+					}
+
+					case Keys.Add:
+					{
+						TextBox tb;
+						if      (tb_Red  .Focused) tb = tb_Red;
+						else if (tb_Green.Focused) tb = tb_Green;
+						else                       tb = tb_Blue; // tb_Blue.Focused
+
+						if (tb.Text.Length != 0 && tb.Text != "0")
+							tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
+
+						return true;
+					}
+
+					case Keys.PageUp:
+					{
+						TextBox tb;
+						if      (tb_Red  .Focused) tb = tb_Red;
+						else if (tb_Green.Focused) tb = tb_Green;
+						else                       tb = tb_Blue; // tb_Blue.Focused
+
+						tb.Text = "255";
+
+						return true;
+					}
+
+					case Keys.PageDown:
+					{
+						TextBox tb;
+						if      (tb_Red  .Focused) tb = tb_Red;
+						else if (tb_Green.Focused) tb = tb_Green;
+						else                       tb = tb_Blue; // tb_Blue.Focused
+
+						tb.Text = "0";
+
+						return true;
+					}
+				}
+			}
+			else if (cb_NetColors.Focused || cb_SysColors.Focused)
+			{
+				if (keyData == Keys.Escape)
+				{
+					bu_Accept.Select();
+					return true;
+				}
+			}
+			else
 			{
 				switch (keyData)
 				{
@@ -717,67 +786,6 @@ namespace yata
 							PrintCurrentColor(true);
 						}
 						return true;
-				}
-			}
-			else // is RGB textbox ->
-			{
-				switch (keyData)
-				{
-					case Keys.Enter:
-					case Keys.Escape:
-						bu_Accept.Select();
-						return true;
-
-
-					case Keys.Subtract:
-					{
-						TextBox tb;
-						if      (tb_Red  .Focused) tb = tb_Red;
-						else if (tb_Green.Focused) tb = tb_Green;
-						else                       tb = tb_Blue; // tb_Blue.Focused
-
-						if (tb.Text != "255")
-							tb.Text = (Byte.Parse(tb.Text) + 1).ToString();
-
-						return true;
-					}
-
-					case Keys.Add:
-					{
-						TextBox tb;
-						if      (tb_Red  .Focused) tb = tb_Red;
-						else if (tb_Green.Focused) tb = tb_Green;
-						else                       tb = tb_Blue; // tb_Blue.Focused
-
-						if (tb.Text.Length != 0 && tb.Text != "0")
-							tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
-
-						return true;
-					}
-
-					case Keys.PageUp:
-					{
-						TextBox tb;
-						if      (tb_Red  .Focused) tb = tb_Red;
-						else if (tb_Green.Focused) tb = tb_Green;
-						else                       tb = tb_Blue; // tb_Blue.Focused
-
-						tb.Text = "255";
-
-						return true;
-					}
-
-					case Keys.PageDown:
-					{
-						TextBox tb;
-						if      (tb_Red  .Focused) tb = tb_Red;
-						else if (tb_Green.Focused) tb = tb_Green;
-						else                       tb = tb_Blue; // tb_Blue.Focused
-
-						tb.Text = "0";
-
-						return true;
-					}
 				}
 			}
 
