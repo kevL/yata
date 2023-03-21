@@ -221,202 +221,202 @@ namespace yata
 					if (sender == pa_01)
 					{
 						pa_01.BackColor =
-						ColorOptions._tabletext = SystemColors.ControlText;
+						ColorOptions._tabletext = ColorOptions.Def_tabletext;
 					}
 					else if (sender == pa_02)
 					{
 						pa_02.BackColor =
-						(ColorOptions._rowa as SolidBrush).Color = Color.AliceBlue;
+						(ColorOptions._rowa as SolidBrush).Color = ColorOptions.Def_rowa;
 					}
 					else if (sender == pa_03)
 					{
 						pa_03.BackColor =
-						(ColorOptions._rowb as SolidBrush).Color = Color.BlanchedAlmond;
+						(ColorOptions._rowb as SolidBrush).Color = ColorOptions.Def_rowb;
 					}
 					else if (sender == pa_04)
 					{
 						pa_04.BackColor =
-						(ColorOptions._rowdisableda as SolidBrush).Color = Color.LavenderBlush;
+						(ColorOptions._rowdisableda as SolidBrush).Color = ColorOptions.Def_rowdisableda;
 					}
 					else if (sender == pa_05)
 					{
 						pa_05.BackColor =
-						(ColorOptions._rowdisabledb as SolidBrush).Color = Color.MistyRose;
+						(ColorOptions._rowdisabledb as SolidBrush).Color = ColorOptions.Def_rowdisabledb;
 					}
 					else if (sender == pa_06)
 					{
 						pa_06.BackColor =
-						ColorOptions._frozentext = SystemColors.ControlText;
+						ColorOptions._frozentext = ColorOptions.Def_frozentext;
 					}
 					else if (sender == pa_07)
 					{
 						pa_07.BackColor =
-						ColorOptions._frozen = Color.OldLace;
+						ColorOptions._frozen = ColorOptions.Def_frozen;
 					}
 					else if (sender == pa_08)
 					{
 						pa_08.BackColor =
-						ColorOptions._frozenhead = Color.Moccasin;
+						ColorOptions._frozenhead = ColorOptions.Def_frozenhead;
 					}
 					else if (sender == pa_09)
 					{
 						pa_09.BackColor =
-						ColorOptions._colhead = Color.Thistle;
+						ColorOptions._colhead = ColorOptions.Def_colhead;
 					}
 					else if (sender == pa_10)
 					{
 						pa_10.BackColor =
-						ColorOptions._rowpaneltext = SystemColors.ControlText;
+						ColorOptions._rowpaneltext = ColorOptions.Def_rowpaneltext;
 					}
 					else if (sender == pa_11)
 					{
 						pa_11.BackColor =
-						ColorOptions._rowpanel = Color.Azure;
+						ColorOptions._rowpanel = ColorOptions.Def_rowpanel;
 					}
 					else if (sender == pa_12)
 					{
 						pa_12.BackColor =
-						ColorOptions._propaneltext = SystemColors.ControlText;
+						ColorOptions._propaneltext = ColorOptions.Def_propaneltext;
 					}
 					else if (sender == pa_13)
 					{
 						pa_13.BackColor =
-						ColorOptions._propanel = Color.LightSteelBlue;
+						ColorOptions._propanel = ColorOptions.Def_propanel;
 					}
 					else if (sender == pa_14)
 					{
 						pa_14.BackColor =
-						(ColorOptions._statusbar as SolidBrush).Color = Color.MintCream;
+						(ColorOptions._statusbar as SolidBrush).Color = ColorOptions.Def_statusbar;
 					}
 
 					else if (sender == pa_15)
 					{
 						pa_15.BackColor =
-						ColorOptions._tablelines.Color = SystemColors.ControlDark;
+						ColorOptions._tablelines.Color = ColorOptions.Def_tablelines;
 					}
 					else if (sender == pa_16)
 					{
 						pa_16.BackColor =
-						ColorOptions._frozenlines.Color = SystemColors.ControlDark;
+						ColorOptions._frozenlines.Color = ColorOptions.Def_frozenlines;
 					}
 					else if (sender == pa_17)
 					{
 						pa_17.BackColor =
-						ColorOptions._frozenheadlines.Color = SystemColors.ControlDark;
+						ColorOptions._frozenheadlines.Color = ColorOptions.Def_frozenheadlines;
 					}
 					else if (sender == pa_18)
 					{
 						pa_18.BackColor =
-						ColorOptions._frozenheadtext = SystemColors.ControlText;
+						ColorOptions._frozenheadtext = ColorOptions.Def_frozenheadtext;
 					}
 					else if (sender == pa_19)
 					{
 						pa_19.BackColor =
-						ColorOptions._rowpanellines.Color = SystemColors.ControlDark;
+						ColorOptions._rowpanellines.Color = ColorOptions.Def_rowpanellines;
 					}
 					else if (sender == pa_20)
 					{
 						pa_20.BackColor =
-						ColorOptions._colheadtext = SystemColors.ControlText;
+						ColorOptions._colheadtext = ColorOptions.Def_colheadtext;
 					}
 					else if (sender == pa_21)
 					{
 						pa_21.BackColor =
-						ColorOptions._colheadlines.Color = SystemColors.ControlDark;
+						ColorOptions._colheadlines.Color = ColorOptions.Def_colheadlines;
 					}
 					else if (sender == pa_22)
 					{
 						pa_22.BackColor =
-						ColorOptions._propanellines.Color = SystemColors.ControlDark;
+						ColorOptions._propanellines.Color = ColorOptions.Def_propanellines;
 					}
 					else if (sender == pa_23)
 					{
 						pa_23.BackColor =
-						ColorOptions._propanelborder.Color = SystemColors.ControlDarkDark;
+						ColorOptions._propanelborder.Color = ColorOptions.Def_propanelborder;
 					}
 
 					else if (sender == pa_24)
 					{
 						pa_24.BackColor =
-						(ColorOptions._cellselected as SolidBrush).Color = Color.PaleGreen;
+						(ColorOptions._cellselected as SolidBrush).Color = ColorOptions.Def_cellselected;
 					}
 					else if (sender == pa_25)
 					{
 						pa_25.BackColor =
-						(ColorOptions._cellloadchanged as SolidBrush).Color = Color.Pink;
+						(ColorOptions._cellloadchanged as SolidBrush).Color = ColorOptions.Def_cellloadchanged;
 					}
 					else if (sender == pa_26)
 					{
 						pa_26.BackColor =
-						(ColorOptions._celldiffed as SolidBrush).Color = Color.Turquoise;
+						(ColorOptions._celldiffed as SolidBrush).Color = ColorOptions.Def_celldiffed;
 					}
 					else if (sender == pa_27)
 					{
 						pa_27.BackColor =
-						(ColorOptions._cellreplaced as SolidBrush).Color = Color.Goldenrod;
+						(ColorOptions._cellreplaced as SolidBrush).Color = ColorOptions.Def_cellreplaced;
 					}
 					else if (sender == pa_28)
 					{
 						pa_28.BackColor =
-						(ColorOptions._celledit as SolidBrush).Color = Color.Crimson;
+						(ColorOptions._celledit as SolidBrush).Color = ColorOptions.Def_celledit;
 					}
 
 					else if (sender == pa_29)
 					{
 						pa_29.BackColor =
-						ColorOptions._frozenidunsort = Color.LightCoral;
+						ColorOptions._frozenidunsort = ColorOptions.Def_frozenidunsort;
 					}
 					else if (sender == pa_30)
 					{
 						pa_30.BackColor =
-						ColorOptions._colheadtextsel = Color.White;
+						ColorOptions._colheadtextsel = ColorOptions.Def_colheadtextsel;
 					}
 					else if (sender == pa_31)
 					{
 						pa_31.BackColor =
-						ColorOptions._colheadtextsize = Color.DarkGray;
+						ColorOptions._colheadtextsize = ColorOptions.Def_colheadtextsize;
 					}
 					else if (sender == pa_32)
 					{
 						pa_32.BackColor =
-						ColorOptions._headtextsortasc = Color.SteelBlue;
+						ColorOptions._headtextsortasc = ColorOptions.Def_headtextsortasc;
 					}
 					else if (sender == pa_33)
 					{
 						pa_33.BackColor =
-						ColorOptions._headtextsortdes = Color.DarkGoldenrod;
+						ColorOptions._headtextsortdes = ColorOptions.Def_headtextsortdes;
 					}
 
 					else if (sender == pa_34)
 					{
 						pa_34.BackColor =
-						(ColorOptions._propanelfrozen as SolidBrush).Color = Color.LightGray;
+						(ColorOptions._propanelfrozen as SolidBrush).Color = ColorOptions.Def_propanelfrozen;
 					}
 					else if (sender == pa_35)
 					{
 						pa_35.BackColor =
-						(ColorOptions._rowsel as SolidBrush).Color = Color.PaleGreen;
+						(ColorOptions._rowsel as SolidBrush).Color = ColorOptions.Def_rowsel;
 					}
 					else if (sender == pa_36)
 					{
 						pa_36.BackColor =
-						(ColorOptions._rowsubsel as SolidBrush).Color = Color.Honeydew;
+						(ColorOptions._rowsubsel as SolidBrush).Color = ColorOptions.Def_rowsubsel;
 					}
 					else if (sender == pa_37)
 					{
 						pa_37.BackColor =
-						(ColorOptions._rowcreated as SolidBrush).Color = Color.Gainsboro;
+						(ColorOptions._rowcreated as SolidBrush).Color = ColorOptions.Def_rowcreated;
 					}
 					else if (sender == pa_38)
 					{
 						pa_38.BackColor =
-						(ColorOptions._propanelsel as SolidBrush).Color = Color.PaleGreen;
+						(ColorOptions._propanelsel as SolidBrush).Color = ColorOptions.Def_propanelsel;
 					}
 
 					else if (sender == pa_39)
 					{
 						pa_39.BackColor =
-						ColorOptions._statusbartext = SystemColors.ControlText;
+						ColorOptions._statusbartext = ColorOptions.Def_statusbartext;
 					}
 
 					Yata.that.Refresh();
@@ -645,88 +645,88 @@ namespace yata
 		void click_Defaults(object sender, EventArgs e)
 		{
 			 pa_01.BackColor                                    =
-			 ColorOptions._tabletext                            = SystemColors.ControlText;
+			 ColorOptions._tabletext                            = ColorOptions.Def_tabletext;
 			 pa_02.BackColor                                    =
-			(ColorOptions._rowa            as SolidBrush).Color = Color.AliceBlue;
+			(ColorOptions._rowa            as SolidBrush).Color = ColorOptions.Def_rowa;
 			 pa_03.BackColor                                    =
-			(ColorOptions._rowb            as SolidBrush).Color = Color.BlanchedAlmond;
+			(ColorOptions._rowb            as SolidBrush).Color = ColorOptions.Def_rowb;
 			 pa_04.BackColor                                    =
-			(ColorOptions._rowdisableda    as SolidBrush).Color = Color.LavenderBlush;
+			(ColorOptions._rowdisableda    as SolidBrush).Color = ColorOptions.Def_rowdisableda;
 			 pa_05.BackColor                                    =
-			(ColorOptions._rowdisabledb    as SolidBrush).Color = Color.MistyRose;
+			(ColorOptions._rowdisabledb    as SolidBrush).Color = ColorOptions.Def_rowdisabledb;
 			 pa_06.BackColor                                    =
-			 ColorOptions._frozentext                           = SystemColors.ControlText;
+			 ColorOptions._frozentext                           = ColorOptions.Def_frozentext;
 			 pa_07.BackColor                                    =
-			 ColorOptions._frozen                               = Color.OldLace;
+			 ColorOptions._frozen                               = ColorOptions.Def_frozen;
 			 pa_08.BackColor                                    =
-			 ColorOptions._frozenhead                           = Color.Moccasin;
+			 ColorOptions._frozenhead                           = ColorOptions.Def_frozenhead;
 			 pa_09.BackColor                                    =
-			 ColorOptions._colhead                              = Color.Thistle;
+			 ColorOptions._colhead                              = ColorOptions.Def_colhead;
 			 pa_10.BackColor                                    =
-			 ColorOptions._rowpaneltext                         = SystemColors.ControlText;
+			 ColorOptions._rowpaneltext                         = ColorOptions.Def_rowpaneltext;
 			 pa_11.BackColor                                    =
-			 ColorOptions._rowpanel                             = Color.Azure;
+			 ColorOptions._rowpanel                             = ColorOptions.Def_rowpanel;
 			 pa_12.BackColor                                    =
-			 ColorOptions._propaneltext                         = SystemColors.ControlText;
+			 ColorOptions._propaneltext                         = ColorOptions.Def_propaneltext;
 			 pa_13.BackColor                                    =
-			 ColorOptions._propanel                             = Color.LightSteelBlue;
+			 ColorOptions._propanel                             = ColorOptions.Def_propanel;
 			 pa_14.BackColor                                    =
-			(ColorOptions._statusbar       as SolidBrush).Color = Color.MintCream;
+			(ColorOptions._statusbar       as SolidBrush).Color = ColorOptions.Def_statusbar;
 
 			 pa_15.BackColor                                    =
-			 ColorOptions._tablelines                    .Color = SystemColors.ControlDark;
+			 ColorOptions._tablelines                    .Color = ColorOptions.Def_tablelines;
 			 pa_16.BackColor                                    =
-			 ColorOptions._frozenlines                   .Color = SystemColors.ControlDark;
+			 ColorOptions._frozenlines                   .Color = ColorOptions.Def_frozenlines;
 			 pa_17.BackColor                                    =
-			 ColorOptions._frozenheadlines               .Color = SystemColors.ControlDark;
+			 ColorOptions._frozenheadlines               .Color = ColorOptions.Def_frozenheadlines;
 			 pa_18.BackColor                                    =
-			 ColorOptions._frozenheadtext                       = SystemColors.ControlText;
+			 ColorOptions._frozenheadtext                       = ColorOptions.Def_frozenheadtext;
 			 pa_19.BackColor                                    =
-			 ColorOptions._rowpanellines                 .Color = SystemColors.ControlDark;
+			 ColorOptions._rowpanellines                 .Color = ColorOptions.Def_rowpanellines;
 			 pa_20.BackColor                                    =
-			 ColorOptions._colheadtext                          = SystemColors.ControlText;
+			 ColorOptions._colheadtext                          = ColorOptions.Def_colheadtext;
 			 pa_21.BackColor                                    =
-			 ColorOptions._colheadlines                  .Color = SystemColors.ControlDark;
+			 ColorOptions._colheadlines                  .Color = ColorOptions.Def_colheadlines;
 			 pa_22.BackColor                                    =
-			 ColorOptions._propanellines                 .Color = SystemColors.ControlDark;
+			 ColorOptions._propanellines                 .Color = ColorOptions.Def_propanellines;
 			 pa_23.BackColor                                    =
-			 ColorOptions._propanelborder                .Color = SystemColors.ControlDarkDark;
+			 ColorOptions._propanelborder                .Color = ColorOptions.Def_propanelborder;
 
 			 pa_24.BackColor                                    =
-			(ColorOptions._cellselected    as SolidBrush).Color = Color.PaleGreen;
+			(ColorOptions._cellselected    as SolidBrush).Color = ColorOptions.Def_cellselected;
 			 pa_25.BackColor                                    =
-			(ColorOptions._cellloadchanged as SolidBrush).Color = Color.Pink;
+			(ColorOptions._cellloadchanged as SolidBrush).Color = ColorOptions.Def_cellloadchanged;
 			 pa_26.BackColor                                    =
-			(ColorOptions._celldiffed      as SolidBrush).Color = Color.Turquoise;
+			(ColorOptions._celldiffed      as SolidBrush).Color = ColorOptions.Def_celldiffed;
 			 pa_27.BackColor                                    =
-			(ColorOptions._cellreplaced    as SolidBrush).Color = Color.Goldenrod;
+			(ColorOptions._cellreplaced    as SolidBrush).Color = ColorOptions.Def_cellreplaced;
 			 pa_28.BackColor                                    =
-			(ColorOptions._celledit        as SolidBrush).Color = Color.Crimson;
+			(ColorOptions._celledit        as SolidBrush).Color = ColorOptions.Def_celledit;
 
 			 pa_29.BackColor                                    =
-			 ColorOptions._frozenidunsort                       = Color.LightCoral;
+			 ColorOptions._frozenidunsort                       = ColorOptions.Def_frozenidunsort;
 			 pa_30.BackColor                                    =
-			 ColorOptions._colheadtextsel                       = Color.White;
+			 ColorOptions._colheadtextsel                       = ColorOptions.Def_colheadtextsel;
 			 pa_31.BackColor                                    =
-			 ColorOptions._colheadtextsize                      = Color.DarkGray;
+			 ColorOptions._colheadtextsize                      = ColorOptions.Def_colheadtextsize;
 			 pa_32.BackColor                                    =
-			 ColorOptions._headtextsortasc                      = Color.SteelBlue;
+			 ColorOptions._headtextsortasc                      = ColorOptions.Def_headtextsortasc;
 			 pa_33.BackColor                                    =
-			 ColorOptions._headtextsortdes                      = Color.DarkGoldenrod;
+			 ColorOptions._headtextsortdes                      = ColorOptions.Def_headtextsortdes;
 
 			 pa_34.BackColor                                    =
-			(ColorOptions._propanelfrozen  as SolidBrush).Color = Color.LightGray;
+			(ColorOptions._propanelfrozen  as SolidBrush).Color = ColorOptions.Def_propanelfrozen;
 			 pa_35.BackColor                                    =
-			(ColorOptions._rowsel          as SolidBrush).Color = Color.PaleGreen;
+			(ColorOptions._rowsel          as SolidBrush).Color = ColorOptions.Def_rowsel;
 			 pa_36.BackColor                                    =
-			(ColorOptions._rowsubsel       as SolidBrush).Color = Color.Honeydew;
+			(ColorOptions._rowsubsel       as SolidBrush).Color = ColorOptions.Def_rowsubsel;
 			 pa_37.BackColor                                    =
-			(ColorOptions._rowcreated      as SolidBrush).Color = Color.Gainsboro;
+			(ColorOptions._rowcreated      as SolidBrush).Color = ColorOptions.Def_rowcreated;
 			 pa_38.BackColor                                    =
-			(ColorOptions._propanelsel     as SolidBrush).Color = Color.PaleGreen;
+			(ColorOptions._propanelsel     as SolidBrush).Color = ColorOptions.Def_propanelsel;
 
 			 pa_39.BackColor                                    =
-			 ColorOptions._statusbartext                        = SystemColors.ControlText;
+			 ColorOptions._statusbartext                        = ColorOptions.Def_statusbartext;
 
 			 Yata.that.Refresh();
 		}

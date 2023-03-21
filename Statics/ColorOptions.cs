@@ -15,6 +15,7 @@ namespace yata
 		#region Fields (static)
 		internal const string FE = "colors.cfg";
 
+		// strings in Colors.Cfg ->
 		internal const string CFG_tabletext       = "tabletext=";
 		internal const string CFG_tablelines      = "tablelines=";
 		internal const string CFG_rowa            = "rowa=";
@@ -61,51 +62,93 @@ namespace yata
 		internal const string CFG_cellreplaced    = "cellreplaced=";
 		internal const string CFG_celledit        = "celledit=";
 
-		internal static Color _tabletext       = SystemColors.ControlText;			// default colors for the tablegrid ->
-		internal static Pen   _tablelines      = new Pen(SystemColors.ControlDark);
-		internal static Brush _rowa            = new SolidBrush(Color.AliceBlue);
-		internal static Brush _rowb            = new SolidBrush(Color.BlanchedAlmond);
-		internal static Brush _rowdisableda    = new SolidBrush(Color.LavenderBlush);
-		internal static Brush _rowdisabledb    = new SolidBrush(Color.MistyRose);
-		internal static Brush _rowsel          = new SolidBrush(Color.PaleGreen);
-		internal static Brush _rowsubsel       = new SolidBrush(Color.Honeydew);
-		internal static Brush _rowcreated      = new SolidBrush(Color.Gainsboro);
+		// color defaults ->
+		internal static Color Def_tabletext       = SystemColors.ControlText;
+		internal static Color Def_tablelines      = SystemColors.ControlDark;
+		internal static Color Def_rowa            = Color.AliceBlue;
+		internal static Color Def_rowb            = Color.BlanchedAlmond;
+		internal static Color Def_rowdisableda    = Color.LavenderBlush;
+		internal static Color Def_rowdisabledb    = Color.MistyRose;
+		internal static Color Def_rowsel          = Color.PaleGreen;
+		internal static Color Def_rowsubsel       = Color.Honeydew;
+		internal static Color Def_rowcreated      = Color.Gainsboro;
+		internal static Color Def_frozentext      = SystemColors.ControlText;
+		internal static Color Def_frozenlines     = SystemColors.ControlDark;
+		internal static Color Def_frozen          = Color.OldLace;
+		internal static Color Def_frozenheadtext  = SystemColors.ControlText;
+		internal static Color Def_frozenheadlines = SystemColors.ControlDark;
+		internal static Color Def_frozenhead      = Color.Moccasin;
+		internal static Color Def_frozenidunsort  = Color.LightCoral;
+		internal static Color Def_colheadtext     = SystemColors.ControlText;
+		internal static Color Def_colheadtextsel  = Color.White;
+		internal static Color Def_colheadtextsize = Color.DarkGray;
+		internal static Color Def_headtextsortasc = Color.SteelBlue;
+		internal static Color Def_headtextsortdes = Color.DarkGoldenrod;
+		internal static Color Def_colheadlines    = SystemColors.ControlDark;
+		internal static Color Def_colhead         = Color.Thistle;
+		internal static Color Def_rowpaneltext    = SystemColors.ControlText;
+		internal static Color Def_rowpanellines   = SystemColors.ControlDark;
+		internal static Color Def_rowpanel        = Color.Azure;
+		internal static Color Def_propaneltext    = SystemColors.ControlText;
+		internal static Color Def_propanellines   = SystemColors.ControlDark;
+		internal static Color Def_propanelborder  = SystemColors.ControlDarkDark;
+		internal static Color Def_propanel        = Color.LightSteelBlue;
+		internal static Color Def_propanelfrozen  = Color.LightGray;
+		internal static Color Def_propanelsel     = Color.PaleGreen;
+		internal static Color Def_statusbartext   = SystemColors.ControlText;
+		internal static Color Def_statusbar       = Color.MintCream;
+		internal static Color Def_cellselected    = Color.PaleGreen;
+		internal static Color Def_cellloadchanged = Color.Pink;
+		internal static Color Def_celldiffed      = Color.Turquoise;
+		internal static Color Def_cellreplaced    = Color.Goldenrod;
+		internal static Color Def_celledit        = Color.Crimson;
 
-		internal static Color _frozentext      = SystemColors.ControlText;			// default colors for the frozenpanel ->
-		internal static Pen   _frozenlines     = new Pen(SystemColors.ControlDark);
-		internal static Color _frozen          = Color.OldLace;
-		internal static Color _frozenheadtext  = SystemColors.ControlText;
-		internal static Pen   _frozenheadlines = new Pen(SystemColors.ControlDark);
-		internal static Color _frozenhead      = Color.Moccasin;
-		internal static Color _frozenidunsort  = Color.LightCoral;
+		// colors brushes pens for the Yata controls ->
+		internal static Color _tabletext       = Def_tabletext;						// default colors for the tablegrid ->
+		internal static Pen   _tablelines      = new Pen(Def_tablelines);
+		internal static Brush _rowa            = new SolidBrush(Def_rowa);
+		internal static Brush _rowb            = new SolidBrush(Def_rowb);
+		internal static Brush _rowdisableda    = new SolidBrush(Def_rowdisableda);
+		internal static Brush _rowdisabledb    = new SolidBrush(Def_rowdisabledb);
+		internal static Brush _rowsel          = new SolidBrush(Def_rowsel);
+		internal static Brush _rowsubsel       = new SolidBrush(Def_rowsubsel);
+		internal static Brush _rowcreated      = new SolidBrush(Def_rowcreated);
 
-		internal static Color _colheadtext     = SystemColors.ControlText;			// default colors for the colhead ->
-		internal static Color _colheadtextsel  = Color.White;
-		internal static Color _colheadtextsize = Color.DarkGray;
-		internal static Color _headtextsortasc = Color.SteelBlue;
-		internal static Color _headtextsortdes = Color.DarkGoldenrod;
-		internal static Pen   _colheadlines    = new Pen(SystemColors.ControlDark);
-		internal static Color _colhead         = Color.Thistle;
+		internal static Color _frozentext      = Def_frozentext;					// default colors for the frozenpanel ->
+		internal static Pen   _frozenlines     = new Pen(Def_frozenlines);
+		internal static Color _frozen          = Def_frozen;
+		internal static Color _frozenheadtext  = Def_frozenheadtext;
+		internal static Pen   _frozenheadlines = new Pen(Def_frozenheadlines);
+		internal static Color _frozenhead      = Def_frozenhead;
+		internal static Color _frozenidunsort  = Def_frozenidunsort;
 
-		internal static Color _rowpaneltext    = SystemColors.ControlText;			// default colors for the rowpanel ->
-		internal static Pen   _rowpanellines   = new Pen(SystemColors.ControlDark);
-		internal static Color _rowpanel        = Color.Azure;
+		internal static Color _colheadtext     = Def_colheadtext;					// default colors for the colhead ->
+		internal static Color _colheadtextsel  = Def_colheadtextsel;
+		internal static Color _colheadtextsize = Def_colheadtextsize;
+		internal static Color _headtextsortasc = Def_headtextsortasc;
+		internal static Color _headtextsortdes = Def_headtextsortdes;
+		internal static Pen   _colheadlines    = new Pen(Def_colheadlines);
+		internal static Color _colhead         = Def_colhead;
 
-		internal static Color _propaneltext    = SystemColors.ControlText;			// default colors for the propanel ->
-		internal static Pen   _propanellines   = new Pen(SystemColors.ControlDark);
-		internal static Pen   _propanelborder  = new Pen(SystemColors.ControlDarkDark);
-		internal static Color _propanel        = Color.LightSteelBlue;
-		internal static Brush _propanelfrozen  = new SolidBrush(Color.LightGray);
-		internal static Brush _propanelsel     = new SolidBrush(Color.PaleGreen);
+		internal static Color _rowpaneltext    = Def_rowpaneltext;					// default colors for the rowpanel ->
+		internal static Pen   _rowpanellines   = new Pen(Def_rowpanellines);
+		internal static Color _rowpanel        = Def_rowpanel;
 
-		internal static Color _statusbartext   = SystemColors.ControlText;			// default colors for the statusbar ->
-		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);
+		internal static Color _propaneltext    = Def_propaneltext;					// default colors for the propanel ->
+		internal static Pen   _propanellines   = new Pen(Def_propanellines);
+		internal static Pen   _propanelborder  = new Pen(Def_propanelborder);
+		internal static Color _propanel        = Def_propanel;
+		internal static Brush _propanelfrozen  = new SolidBrush(Def_propanelfrozen);
+		internal static Brush _propanelsel     = new SolidBrush(Def_propanelsel);
 
-		internal static Brush _cellselected    = new SolidBrush(Color.PaleGreen);	// default colors for cell texts ->
-		internal static Brush _cellloadchanged = new SolidBrush(Color.Pink);
-		internal static Brush _celldiffed      = new SolidBrush(Color.Turquoise);
-		internal static Brush _cellreplaced    = new SolidBrush(Color.Goldenrod);
-		internal static Brush _celledit        = new SolidBrush(Color.Crimson);
+		internal static Color _statusbartext   = Def_statusbartext;					// default colors for the statusbar ->
+		internal static Brush _statusbar       = new SolidBrush(Def_statusbar);
+
+		internal static Brush _cellselected    = new SolidBrush(Def_cellselected);	// default colors for cell texts ->
+		internal static Brush _cellloadchanged = new SolidBrush(Def_cellloadchanged);
+		internal static Brush _celldiffed      = new SolidBrush(Def_celldiffed);
+		internal static Brush _cellreplaced    = new SolidBrush(Def_cellreplaced);
+		internal static Brush _celledit        = new SolidBrush(Def_celledit);
 
 
 //		internal static Color _grid_backcolor = ;
