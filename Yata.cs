@@ -456,6 +456,18 @@ namespace yata
 			}
 		}
 
+		/// <summary>
+		/// Updates the <c>ForeColor</c> of the <c>ToolStripStatusLabels</c>
+		/// on the <c><see cref="statusbar"/></c>.
+		/// </summary>
+		/// <param name="color"></param>
+		internal void UpdateStatusbarTextcolor(Color color)
+		{
+			statbar_Cords.ForeColor =
+			statbar_Icon .ForeColor =
+			statbar_Info .ForeColor = color;
+		}
+
 
 		#region Methods (close)
 		/// <summary>

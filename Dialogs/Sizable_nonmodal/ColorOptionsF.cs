@@ -113,6 +113,9 @@ namespace yata
 			pa_37.BackColor = (ColorOptions._rowcreated as SolidBrush).Color;
 			la_38.Text = "Propanel selected cell";
 			pa_38.BackColor = (ColorOptions._propanelsel as SolidBrush).Color;
+
+			la_39.Text = "Statusbar text";
+			pa_39.BackColor = ColorOptions._statusbartext;
 		}
 		#endregion cTor
 
@@ -203,6 +206,8 @@ namespace yata
 					else if (sender == pa_36) title = la_36.Text;
 					else if (sender == pa_37) title = la_37.Text;
 					else if (sender == pa_38) title = la_38.Text;
+
+					else if (sender == pa_39) title = la_39.Text;
 					else title = ""; // t
 
 					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
@@ -408,6 +413,12 @@ namespace yata
 						(ColorOptions._propanelsel as SolidBrush).Color = Color.PaleGreen;
 					}
 
+					else if (sender == pa_39)
+					{
+						pa_39.BackColor =
+						ColorOptions._statusbartext = SystemColors.ControlText;
+					}
+
 					Yata.that.Refresh();
 					break;
 			}
@@ -451,7 +462,7 @@ namespace yata
 			else if (sender == pa_27) (ColorOptions._cellreplaced    as SolidBrush).Color = pa_27.BackColor;
 			else if (sender == pa_28)
 			{
-				(ColorOptions._celledit        as SolidBrush).Color = pa_28.BackColor;
+				(ColorOptions._celledit as SolidBrush).Color = pa_28.BackColor;
 				Yata.that.UpdateEditorColor(pa_28.BackColor); // iterate through all YataGrids
 			}
 
@@ -466,6 +477,12 @@ namespace yata
 			else if (sender == pa_36) (ColorOptions._rowsubsel       as SolidBrush).Color = pa_36.BackColor;
 			else if (sender == pa_37) (ColorOptions._rowcreated      as SolidBrush).Color = pa_37.BackColor;
 			else if (sender == pa_38) (ColorOptions._propanelsel     as SolidBrush).Color = pa_38.BackColor;
+
+			else if (sender == pa_39)
+			{
+				ColorOptions._statusbartext = pa_39.BackColor;
+				Yata.that.UpdateStatusbarTextcolor(pa_39.BackColor); // update all ToolStripStatusLabels
+			}
 
 			Yata.that.Refresh();
 		}
@@ -613,6 +630,9 @@ namespace yata
 			sb.Append(ColorOptions.CFG_propanelsel);
 			sb.AppendLine(pa_38.BackColor.R + "," + pa_38.BackColor.G + "," + pa_38.BackColor.B);
 
+			sb.Append(ColorOptions.CFG_statusbartext);
+			sb.AppendLine(pa_39.BackColor.R + "," + pa_39.BackColor.G + "," + pa_39.BackColor.B);
+
 			return sb.ToString();
 		}
 
@@ -704,6 +724,9 @@ namespace yata
 			(ColorOptions._rowcreated      as SolidBrush).Color = Color.Gainsboro;
 			 pa_38.BackColor                                    =
 			(ColorOptions._propanelsel     as SolidBrush).Color = Color.PaleGreen;
+
+			 pa_39.BackColor                                    =
+			 ColorOptions._statusbartext                        = SystemColors.ControlText;
 
 			 Yata.that.Refresh();
 		}

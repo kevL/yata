@@ -52,6 +52,7 @@ namespace yata
 		internal const string CFG_propanelfrozen  = "propanelfrozen=";
 		internal const string CFG_propanelsel     = "propanelsel=";
 
+		internal const string CFG_statusbartext   = "statusbartext=";
 		internal const string CFG_statusbar       = "statusbar=";
 
 		internal const string CFG_cellselected    = "cellselected=";
@@ -97,9 +98,10 @@ namespace yata
 		internal static Brush _propanelfrozen  = new SolidBrush(Color.LightGray);
 		internal static Brush _propanelsel     = new SolidBrush(Color.PaleGreen);
 
-		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);	// default color for the statusbar
+		internal static Color _statusbartext   = SystemColors.ControlText;			// default colors for the statusbar ->
+		internal static Brush _statusbar       = new SolidBrush(Color.MintCream);
 
-		internal static Brush _cellselected    = new SolidBrush(Color.PaleGreen);
+		internal static Brush _cellselected    = new SolidBrush(Color.PaleGreen);	// default colors for cell texts ->
 		internal static Brush _cellloadchanged = new SolidBrush(Color.Pink);
 		internal static Brush _celldiffed      = new SolidBrush(Color.Turquoise);
 		internal static Brush _cellreplaced    = new SolidBrush(Color.Goldenrod);
@@ -495,6 +497,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_propanelsel as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_statusbartext, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_statusbartext.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_statusbartext = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_statusbartext = color;
 							}
 						}
 						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))

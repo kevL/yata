@@ -85,6 +85,8 @@ namespace yata
 		Panel pa_37;
 		Label la_38;
 		Panel pa_38;
+		Label la_39;
+		Panel pa_39;
 
 		Panel pa_bot;
 		Button bu_Delete;
@@ -178,6 +180,8 @@ namespace yata
 			this.pa_37 = new System.Windows.Forms.Panel();
 			this.la_38 = new System.Windows.Forms.Label();
 			this.pa_38 = new System.Windows.Forms.Panel();
+			this.la_39 = new System.Windows.Forms.Label();
+			this.pa_39 = new System.Windows.Forms.Panel();
 			this.pa_bot = new System.Windows.Forms.Panel();
 			this.bu_Save = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
@@ -265,6 +269,8 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_37);
 			this.gb_Colors.Controls.Add(this.la_38);
 			this.gb_Colors.Controls.Add(this.pa_38);
+			this.gb_Colors.Controls.Add(this.la_39);
+			this.gb_Colors.Controls.Add(this.pa_39);
 			this.gb_Colors.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gb_Colors.Location = new System.Drawing.Point(0, 0);
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
@@ -1033,6 +1039,26 @@ namespace yata
 			this.pa_38.TabIndex = 75;
 			this.pa_38.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_38.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// la_39
+			// 
+			this.la_39.Location = new System.Drawing.Point(449, 270);
+			this.la_39.Margin = new System.Windows.Forms.Padding(0);
+			this.la_39.Name = "la_39";
+			this.la_39.Size = new System.Drawing.Size(166, 16);
+			this.la_39.TabIndex = 76;
+			this.la_39.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pa_39
+			// 
+			this.pa_39.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_39.Location = new System.Drawing.Point(620, 265);
+			this.pa_39.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_39.Name = "pa_39";
+			this.pa_39.Size = new System.Drawing.Size(69, 24);
+			this.pa_39.TabIndex = 77;
+			this.pa_39.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_39.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// pa_bot
 			// 
