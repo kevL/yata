@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Reflection;
 using System.Windows.Forms;
 
 
@@ -35,6 +37,8 @@ namespace yata
 		bool _bypass; // bypasses the textchanged handler
 
 		Panel _panel; // origin panel in 'ColorOptionsF'
+
+		bool _init = true;
 		#endregion Fields
 
 
@@ -55,6 +59,34 @@ namespace yata
 			Initialize(METRIC_LOC);
 
 			DrawRegulator.SetDoubleBuffered(pa_Valslider);
+
+			cb_NetColors.Items.Add(".net colors");
+			cb_SysColors.Items.Add("OS colors");
+
+			string label;
+
+			PropertyInfo[] infos = typeof(Color).GetProperties();
+			foreach (PropertyInfo info in infos)
+			{
+				if (info.PropertyType == typeof(Color)
+					&& (label = info.Name) != "Transparent")
+				{
+					cb_NetColors.Items.Add(label);
+				}
+			}
+
+			foreach (KnownColor kc in Enum.GetValues(typeof(KnownColor)))
+			{
+				if ((label = kc.ToString()) != "Transparent"
+					&& !cb_NetColors.Items.Contains(label))
+				{
+					cb_SysColors.Items.Add(label);
+				}
+			}
+
+			cb_NetColors.SelectedIndex = 0;
+			cb_SysColors.SelectedIndex = 0;
+			_init = false;
 
 			CreateColortable();
 			CreateValsliderGradient();
@@ -487,6 +519,65 @@ namespace yata
 			}
 		}
 		#endregion handlers (panels)
+
+
+		#region handlers (combobox)
+		/// <summary>
+		/// Changes the current color to the selected it in either
+		/// <c>Combobox</c>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void selectedindexchanged_cb_Colors(object sender, EventArgs e)
+		{
+			if (!_init)
+			{
+				ComboBox cb;
+				if (sender == cb_NetColors) cb = cb_NetColors as ComboBox;
+				else                        cb = cb_SysColors as ComboBox; // sender == cb_SysColors
+
+				if (cb.SelectedIndex != 0)
+					pa_Color.BackColor = Color.FromName(cb.SelectedItem.ToString());
+			}
+		}
+
+		/// <summary>
+		/// Draws the <c>ComboBox</c> its.
+		/// </summary>
+		/// <param name="sender"><c><see cref="cb_NetColors"/></c></param>
+		/// <param name="e"></param>
+		void drawitem_cb_Colors(object sender, DrawItemEventArgs e)
+		{
+			e.DrawBackground();
+
+			if (e.Index == 0)
+			{
+//				e.Graphics.DrawString(); // -> font looks wonky
+				TextRenderer.DrawText(e.Graphics,
+									  (sender as ComboBox).Items[0].ToString(),
+									  Font,
+									  new Point(e.Bounds.Left + 3, e.Bounds.Top),
+									  SystemColors.ControlText);
+			}
+			else
+			{
+				string label = (sender as ComboBox).Items[e.Index].ToString();
+				Brush brush = new SolidBrush(Color.FromName(label));
+				e.Graphics.FillRectangle(brush,
+										 new RectangleF(e.Bounds.Left,   e.Bounds.Top,
+														e.Bounds.Height, e.Bounds.Height));
+
+//				e.Graphics.DrawString(); // -> font looks wonky
+				TextRenderer.DrawText(e.Graphics,
+									  label,
+									  Font,
+									  new Point(e.Bounds.Left + e.Bounds.Height + 3, e.Bounds.Top),
+									  SystemColors.ControlText);
+			}
+
+			e.DrawFocusRectangle();
+		}
+		#endregion handlers (combobox)
 
 
 		#region Methods (override)

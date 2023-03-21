@@ -16,6 +16,8 @@ namespace yata
 		Label la_Red;
 		Label la_Green;
 		Label la_Blue;
+		ComboBox cb_NetColors;
+		ComboBox cb_SysColors;
 		Button bu_Accept;
 		Button bu_Cancel;
 
@@ -30,21 +32,23 @@ namespace yata
 			this.pa_Colortable = new System.Windows.Forms.Panel();
 			this.pa_Valslider = new System.Windows.Forms.Panel();
 			this.pa_Color = new System.Windows.Forms.Panel();
+			this.pa_Colorpre = new System.Windows.Forms.Panel();
 			this.tb_Red = new System.Windows.Forms.TextBox();
 			this.tb_Green = new System.Windows.Forms.TextBox();
 			this.tb_Blue = new System.Windows.Forms.TextBox();
 			this.la_Red = new System.Windows.Forms.Label();
 			this.la_Green = new System.Windows.Forms.Label();
 			this.la_Blue = new System.Windows.Forms.Label();
+			this.cb_NetColors = new System.Windows.Forms.ComboBox();
+			this.cb_SysColors = new System.Windows.Forms.ComboBox();
 			this.bu_Accept = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
-			this.pa_Colorpre = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
 			// 
 			// pa_Colortable
 			// 
 			this.pa_Colortable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_Colortable.Location = new System.Drawing.Point(14, 7);
+			this.pa_Colortable.Location = new System.Drawing.Point(5, 5);
 			this.pa_Colortable.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Colortable.Name = "pa_Colortable";
 			this.pa_Colortable.Size = new System.Drawing.Size(360, 202);
@@ -57,7 +61,7 @@ namespace yata
 			// pa_Valslider
 			// 
 			this.pa_Valslider.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_Valslider.Location = new System.Drawing.Point(381, 7);
+			this.pa_Valslider.Location = new System.Drawing.Point(371, 5);
 			this.pa_Valslider.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Valslider.Name = "pa_Valslider";
 			this.pa_Valslider.Size = new System.Drawing.Size(50, 256);
@@ -70,7 +74,7 @@ namespace yata
 			// pa_Color
 			// 
 			this.pa_Color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_Color.Location = new System.Drawing.Point(14, 215);
+			this.pa_Color.Location = new System.Drawing.Point(5, 213);
 			this.pa_Color.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Color.Name = "pa_Color";
 			this.pa_Color.Size = new System.Drawing.Size(75, 35);
@@ -80,7 +84,7 @@ namespace yata
 			// pa_Colorpre
 			// 
 			this.pa_Colorpre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_Colorpre.Location = new System.Drawing.Point(14, 249);
+			this.pa_Colorpre.Location = new System.Drawing.Point(5, 247);
 			this.pa_Colorpre.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_Colorpre.Name = "pa_Colorpre";
 			this.pa_Colorpre.Size = new System.Drawing.Size(75, 35);
@@ -89,7 +93,7 @@ namespace yata
 			// 
 			// tb_Red
 			// 
-			this.tb_Red.Location = new System.Drawing.Point(100, 215);
+			this.tb_Red.Location = new System.Drawing.Point(91, 213);
 			this.tb_Red.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Red.Name = "tb_Red";
 			this.tb_Red.Size = new System.Drawing.Size(40, 20);
@@ -100,7 +104,7 @@ namespace yata
 			// 
 			// tb_Green
 			// 
-			this.tb_Green.Location = new System.Drawing.Point(100, 240);
+			this.tb_Green.Location = new System.Drawing.Point(91, 238);
 			this.tb_Green.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Green.Name = "tb_Green";
 			this.tb_Green.Size = new System.Drawing.Size(40, 20);
@@ -111,7 +115,7 @@ namespace yata
 			// 
 			// tb_Blue
 			// 
-			this.tb_Blue.Location = new System.Drawing.Point(100, 265);
+			this.tb_Blue.Location = new System.Drawing.Point(91, 263);
 			this.tb_Blue.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Blue.Name = "tb_Blue";
 			this.tb_Blue.Size = new System.Drawing.Size(40, 20);
@@ -122,7 +126,7 @@ namespace yata
 			// 
 			// la_Red
 			// 
-			this.la_Red.Location = new System.Drawing.Point(144, 215);
+			this.la_Red.Location = new System.Drawing.Point(135, 213);
 			this.la_Red.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Red.Name = "la_Red";
 			this.la_Red.Size = new System.Drawing.Size(15, 16);
@@ -132,7 +136,7 @@ namespace yata
 			// 
 			// la_Green
 			// 
-			this.la_Green.Location = new System.Drawing.Point(144, 240);
+			this.la_Green.Location = new System.Drawing.Point(135, 238);
 			this.la_Green.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Green.Name = "la_Green";
 			this.la_Green.Size = new System.Drawing.Size(15, 16);
@@ -142,7 +146,7 @@ namespace yata
 			// 
 			// la_Blue
 			// 
-			this.la_Blue.Location = new System.Drawing.Point(144, 265);
+			this.la_Blue.Location = new System.Drawing.Point(135, 263);
 			this.la_Blue.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Blue.Name = "la_Blue";
 			this.la_Blue.Size = new System.Drawing.Size(15, 16);
@@ -150,28 +154,52 @@ namespace yata
 			this.la_Blue.Text = "b";
 			this.la_Blue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// cb_NetColors
+			// 
+			this.cb_NetColors.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.cb_NetColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cb_NetColors.FormattingEnabled = true;
+			this.cb_NetColors.Location = new System.Drawing.Point(175, 213);
+			this.cb_NetColors.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_NetColors.Name = "cb_NetColors";
+			this.cb_NetColors.Size = new System.Drawing.Size(190, 21);
+			this.cb_NetColors.TabIndex = 10;
+			this.cb_NetColors.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.drawitem_cb_Colors);
+			this.cb_NetColors.SelectedIndexChanged += new System.EventHandler(this.selectedindexchanged_cb_Colors);
+			// 
+			// cb_SysColors
+			// 
+			this.cb_SysColors.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.cb_SysColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cb_SysColors.FormattingEnabled = true;
+			this.cb_SysColors.Location = new System.Drawing.Point(175, 240);
+			this.cb_SysColors.Margin = new System.Windows.Forms.Padding(0);
+			this.cb_SysColors.Name = "cb_SysColors";
+			this.cb_SysColors.Size = new System.Drawing.Size(190, 21);
+			this.cb_SysColors.TabIndex = 11;
+			this.cb_SysColors.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.drawitem_cb_Colors);
+			this.cb_SysColors.SelectedIndexChanged += new System.EventHandler(this.selectedindexchanged_cb_Colors);
+			// 
 			// bu_Accept
 			// 
-			this.bu_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Accept.Location = new System.Drawing.Point(269, 344);
+			this.bu_Accept.Location = new System.Drawing.Point(193, 267);
 			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Accept.Name = "bu_Accept";
-			this.bu_Accept.Size = new System.Drawing.Size(80, 26);
-			this.bu_Accept.TabIndex = 10;
+			this.bu_Accept.Size = new System.Drawing.Size(112, 26);
+			this.bu_Accept.TabIndex = 12;
 			this.bu_Accept.Text = "accept";
 			this.bu_Accept.UseVisualStyleBackColor = true;
 			this.bu_Accept.Click += new System.EventHandler(this.click_Accept);
 			// 
 			// bu_Cancel
 			// 
-			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(357, 344);
+			this.bu_Cancel.Location = new System.Drawing.Point(310, 267);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(80, 26);
-			this.bu_Cancel.TabIndex = 11;
+			this.bu_Cancel.Size = new System.Drawing.Size(112, 26);
+			this.bu_Cancel.TabIndex = 13;
 			this.bu_Cancel.Text = "Esc";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
@@ -179,7 +207,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Accept;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(444, 376);
+			this.ClientSize = new System.Drawing.Size(426, 296);
 			this.Controls.Add(this.pa_Colortable);
 			this.Controls.Add(this.pa_Valslider);
 			this.Controls.Add(this.pa_Color);
@@ -190,6 +218,8 @@ namespace yata
 			this.Controls.Add(this.la_Blue);
 			this.Controls.Add(this.la_Green);
 			this.Controls.Add(this.la_Red);
+			this.Controls.Add(this.cb_NetColors);
+			this.Controls.Add(this.cb_SysColors);
 			this.Controls.Add(this.bu_Accept);
 			this.Controls.Add(this.bu_Cancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
