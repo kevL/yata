@@ -36,7 +36,7 @@ namespace yata
 		string _pretext = String.Empty;
 		bool _bypass; // bypasses the textchanged handler
 
-		Panel _panel; // origin panel in 'ColorOptionsF'
+		Panel _panel; // origin panel in 'ColorOptionsDialog'
 
 		bool _init = true;
 		#endregion Fields
@@ -49,7 +49,7 @@ namespace yata
 		/// <param name="f"></param>
 		/// <param name="panel"></param>
 		/// <param name="title"></param>
-		internal ColorSelectorDialog(ColorOptionsF f, Panel panel, string title)
+		internal ColorSelectorDialog(ColorOptionsDialog f, Panel panel, string title)
 		{
 			_f = f;
 			_panel = panel;

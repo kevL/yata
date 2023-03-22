@@ -15,9 +15,9 @@ namespace yata
 		ConfigEditor _foptions;
 
 		/// <summary>
-		/// The <c><see cref="ColorOptionsF"/></c> editor for Colors.Cfg.
+		/// The <c><see cref="ColorOptionsDialog"/></c> editor for Colors.Cfg.
 		/// </summary>
-		ColorOptionsF _fcolors;
+		ColorOptionsDialog _fcolors;
 		#endregion Fields
 
 
@@ -161,7 +161,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles it-click to open <c><see cref="ColorOptionsF"/></c>.
+		/// Handles it-click to open <c><see cref="ColorOptionsDialog"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Colors"/></c></param>
 		/// <param name="e"></param>
@@ -169,7 +169,7 @@ namespace yata
 		{
 			if (_fcolors == null)
 			{
-				_fcolors = new ColorOptionsF(this);
+				_fcolors = new ColorOptionsDialog(this);
 				it_Colors.Checked = true;
 			}
 			else
@@ -202,7 +202,7 @@ namespace yata
 		/// <summary>
 		/// Clears the check on <c><see cref="it_Colors"/></c> and nulls
 		/// <c><see cref="_fcolors"/></c> when
-		/// <c><see cref="ColorOptionsF"/></c> closes.
+		/// <c><see cref="ColorOptionsDialog"/></c> closes.
 		/// </summary>
 		internal void CloseColorOptions()
 		{

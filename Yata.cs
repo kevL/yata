@@ -441,7 +441,7 @@ namespace yata
 		/// <summary>
 		/// Updates the <c>BackColor</c> of
 		/// <c><see cref="YataGrid._editor">YataGrid._editors</see></c> when the
-		/// user changes it in <c><see cref="ColorOptionsF"/></c>.
+		/// user changes it in <c><see cref="ColorOptionsDialog"/></c>.
 		/// </summary>
 		/// <param name="color"></param>
 		internal void UpdateEditorColor(Color color)

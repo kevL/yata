@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ColorOptionsF
+	sealed partial class ColorOptionsDialog
 		: YataDialog
 	{
 		#region cTor
@@ -15,7 +15,7 @@ namespace yata
 		/// cTor.
 		/// </summary>
 		/// <param name="f"></param>
-		internal ColorOptionsF(Yata f)
+		internal ColorOptionsDialog(Yata f)
 		{
 			_f = f;
 
