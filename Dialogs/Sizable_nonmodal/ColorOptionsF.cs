@@ -164,7 +164,7 @@ namespace yata
 
 		#region handlers (color panel)
 		/// <summary>
-		/// Instantiates <c><see cref="ColorSelectorD"/></c> on leftclick.
+		/// Instantiates <c><see cref="ColorSelectorDialog"/></c> on leftclick.
 		/// Restores default color on right click.
 		/// </summary>
 		/// <param name="sender"><c>pa_*</c></param>
@@ -230,7 +230,7 @@ namespace yata
 					else if (sender == pa_27) title = la_27.Text;
 					else                      title = la_28.Text; // sender == pa_28
 
-					var f = new ColorSelectorD(this, sender as Panel, " yata - " + title);
+					var f = new ColorSelectorDialog(this, sender as Panel, " yata - " + title);
 					f.ShowDialog(this);
 
 					Yata.that.Refresh();

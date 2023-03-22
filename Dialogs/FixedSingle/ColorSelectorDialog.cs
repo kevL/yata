@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ColorSelectorD
+	sealed partial class ColorSelectorDialog
 		: YataDialog
 	{
 		#region Fields (static)
@@ -49,7 +49,7 @@ namespace yata
 		/// <param name="f"></param>
 		/// <param name="panel"></param>
 		/// <param name="title"></param>
-		internal ColorSelectorD(ColorOptionsF f, Panel panel, string title)
+		internal ColorSelectorDialog(ColorOptionsF f, Panel panel, string title)
 		{
 			_f = f;
 			_panel = panel;

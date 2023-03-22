@@ -75,9 +75,9 @@
     <Compile Include="Dialogs\FixedSingle\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\FixedSingle\ColorSelectorD.cs" />
-    <Compile Include="Dialogs\FixedSingle\ColorSelectorD.Designer.cs">
-      <DependentUpon>ColorSelectorD.cs</DependentUpon>
+    <Compile Include="Dialogs\FixedSingle\ColorSelectorDialog.cs" />
+    <Compile Include="Dialogs\FixedSingle\ColorSelectorDialog.Designer.cs">
+      <DependentUpon>ColorSelectorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.cs" />
     <Compile Include="Dialogs\FixedSingle\RowCreatorDialog.Designer.cs">
@@ -273,8 +273,8 @@
     <EmbeddedResource Include="Dialogs\FixedSingle\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FixedSingle\ColorSelectorD.resx">
-      <DependentUpon>ColorSelectorD.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\FixedSingle\ColorSelectorDialog.resx">
+      <DependentUpon>ColorSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FixedSingle\RowCreatorDialog.resx">
       <DependentUpon>RowCreatorDialog.cs</DependentUpon>

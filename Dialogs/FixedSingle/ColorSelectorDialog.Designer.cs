@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ColorSelectorD
+	sealed partial class ColorSelectorDialog
 	{
 		Panel pa_Colortable;
 		Panel pa_Valslider;
@@ -233,7 +233,7 @@ namespace yata
 			this.toolTip1.InitialDelay = 100;
 			this.toolTip1.ReshowDelay = 50;
 			// 
-			// ColorSelectorD
+			// ColorSelectorDialog
 			// 
 			this.AcceptButton = this.bu_Accept;
 			this.CancelButton = this.bu_Cancel;
@@ -257,7 +257,7 @@ namespace yata
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
-			this.Name = "ColorSelectorD";
+			this.Name = "ColorSelectorDialog";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.ResumeLayout(false);
