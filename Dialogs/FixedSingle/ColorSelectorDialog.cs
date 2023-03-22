@@ -90,7 +90,11 @@ namespace yata
 			CreateColortable();
 			CreateValsliderGradient();
 
-			init(_panel.BackColor);
+			pa_Color   .BackColor =
+			pa_Colorpre.BackColor = _panel.BackColor;
+
+			SetCurrentValues(_panel.BackColor);
+
 			bu_Accept.Select();
 		}
 
@@ -138,18 +142,6 @@ namespace yata
 			_gradient = new LinearGradientBrush(new Point(0, 0),
 												new Point(0, pa_Valslider.Height),
 												Color.Black, Color.White);
-		}
-
-		/// <summary>
-		/// Initializes various fields as well as <c><see cref="pa_Color"/></c>.
-		/// </summary>
-		/// <param name="color"></param>
-		void init(Color color)
-		{
-			pa_Color   .BackColor =
-			pa_Colorpre.BackColor = color;
-
-			SetCurrentValues(color);
 		}
 		#endregion cTor
 
@@ -478,7 +470,7 @@ namespace yata
 
 		#region handlers (panels)
 		/// <summary>
-		/// 
+		/// Handles <c>MouseClick</c> on the colorpanels.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -508,8 +500,7 @@ namespace yata
 				{
 					Stored = (sender as Panel).BackColor;
 
-					using (var ib = new Infobox(Infobox.Title_infor,
-												"Color copied."))
+					using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
 					{
 						ib.ShowDialog(this);
 					}
