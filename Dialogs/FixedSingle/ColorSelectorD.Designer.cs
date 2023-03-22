@@ -19,6 +19,7 @@ namespace yata
 		Label la_Blue;
 		ComboBox cb_NetColors;
 		ComboBox cb_SysColors;
+		Button bu_Help;
 		Button bu_Accept;
 		Button bu_Cancel;
 		ToolTip toolTip1;
@@ -47,6 +48,7 @@ namespace yata
 			this.la_Blue = new System.Windows.Forms.Label();
 			this.cb_NetColors = new System.Windows.Forms.ComboBox();
 			this.cb_SysColors = new System.Windows.Forms.ComboBox();
+			this.bu_Help = new System.Windows.Forms.Button();
 			this.bu_Accept = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -191,14 +193,25 @@ namespace yata
 			this.cb_SysColors.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.drawitem_cb_Colors);
 			this.cb_SysColors.SelectedIndexChanged += new System.EventHandler(this.selectedindexchanged_cb_Colors);
 			// 
+			// bu_Help
+			// 
+			this.bu_Help.Location = new System.Drawing.Point(175, 272);
+			this.bu_Help.Margin = new System.Windows.Forms.Padding(0);
+			this.bu_Help.Name = "bu_Help";
+			this.bu_Help.Size = new System.Drawing.Size(75, 21);
+			this.bu_Help.TabIndex = 12;
+			this.bu_Help.Text = "hep";
+			this.bu_Help.UseVisualStyleBackColor = true;
+			this.bu_Help.Click += new System.EventHandler(this.click_Help);
+			// 
 			// bu_Accept
 			// 
 			this.bu_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.bu_Accept.Location = new System.Drawing.Point(193, 267);
+			this.bu_Accept.Location = new System.Drawing.Point(262, 267);
 			this.bu_Accept.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Accept.Name = "bu_Accept";
-			this.bu_Accept.Size = new System.Drawing.Size(112, 26);
-			this.bu_Accept.TabIndex = 12;
+			this.bu_Accept.Size = new System.Drawing.Size(80, 26);
+			this.bu_Accept.TabIndex = 13;
 			this.bu_Accept.Text = "accept";
 			this.bu_Accept.UseVisualStyleBackColor = true;
 			this.bu_Accept.Click += new System.EventHandler(this.click_Accept);
@@ -206,11 +219,11 @@ namespace yata
 			// bu_Cancel
 			// 
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(310, 267);
+			this.bu_Cancel.Location = new System.Drawing.Point(343, 267);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(112, 26);
-			this.bu_Cancel.TabIndex = 13;
+			this.bu_Cancel.Size = new System.Drawing.Size(80, 26);
+			this.bu_Cancel.TabIndex = 14;
 			this.bu_Cancel.Text = "Esc";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			// 
@@ -225,6 +238,7 @@ namespace yata
 			this.AcceptButton = this.bu_Accept;
 			this.CancelButton = this.bu_Cancel;
 			this.ClientSize = new System.Drawing.Size(426, 296);
+			this.Controls.Add(this.bu_Help);
 			this.Controls.Add(this.pa_Colortable);
 			this.Controls.Add(this.pa_Valslider);
 			this.Controls.Add(this.pa_Color);

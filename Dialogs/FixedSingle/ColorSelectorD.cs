@@ -465,6 +465,15 @@ namespace yata
 		{
 			_panel.BackColor = pa_Color.BackColor;
 		}
+
+		/// <summary>
+		/// Opens a help dialog.
+		/// </summary>
+		/// <param name="sender"><c><see cref="bu_Help"/></c></param>
+		/// <param name="e"></param>
+		void click_Help(object sender, EventArgs e)
+		{
+		}
 		#endregion handlers (buttons)
 
 
