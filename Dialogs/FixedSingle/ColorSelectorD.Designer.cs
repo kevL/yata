@@ -86,7 +86,8 @@ namespace yata
 			this.pa_Color.Name = "pa_Color";
 			this.pa_Color.Size = new System.Drawing.Size(75, 35);
 			this.pa_Color.TabIndex = 2;
-			this.toolTip1.SetToolTip(this.pa_Color, "LMB - set values\r\nLMB + Ctrl - copy color\r\nRMB - paste color");
+			this.toolTip1.SetToolTip(this.pa_Color, "LMB - set values\r\n[Ctrl]+LMB - copy color to buffer\r\nRMB - paste color from buffe" +
+		"r");
 			this.pa_Color.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
 			// 
 			// pa_Colorpre
@@ -97,7 +98,8 @@ namespace yata
 			this.pa_Colorpre.Name = "pa_Colorpre";
 			this.pa_Colorpre.Size = new System.Drawing.Size(75, 35);
 			this.pa_Colorpre.TabIndex = 3;
-			this.toolTip1.SetToolTip(this.pa_Colorpre, "LMB - set values\r\nLMB + Ctrl - copy color\r\nRMB - set values and assign color");
+			this.toolTip1.SetToolTip(this.pa_Colorpre, "LMB - set values\r\n[Ctrl]+LMB - copy color to buffer\r\nRMB - set values and assign " +
+		"color");
 			this.pa_Colorpre.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
 			// 
 			// tb_Red

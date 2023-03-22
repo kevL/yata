@@ -1076,12 +1076,12 @@ namespace yata
 			// bu_Save
 			// 
 			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Save.Location = new System.Drawing.Point(577, 4);
+			this.bu_Save.Location = new System.Drawing.Point(516, 4);
 			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Save.Name = "bu_Save";
-			this.bu_Save.Size = new System.Drawing.Size(103, 26);
+			this.bu_Save.Size = new System.Drawing.Size(164, 26);
 			this.bu_Save.TabIndex = 2;
-			this.bu_Save.Text = "SAVE  FILE";
+			this.bu_Save.Text = "SAVE  FILE / close";
 			this.bu_Save.UseVisualStyleBackColor = true;
 			this.bu_Save.Click += new System.EventHandler(this.click_Save);
 			// 
