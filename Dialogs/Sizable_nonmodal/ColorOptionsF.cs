@@ -139,7 +139,11 @@ namespace yata
 			base.OnFormClosing(e);
 		}
 
-		/// <summary>
+		// kL_note: I don't like this. This dialog is nonmodal so if [Ctrl+s] is
+		// pressed when user accidentally has Yataform focused the table gets
+		// saved ... not good. -> check for [Ctrl] on the Save-button instead
+		// (to keep the dialog open)
+/*		/// <summary>
 		/// Saves current text to the Colors.Cfg file when <c>[Ctrl+s]</c> is
 		/// pressed.
 		/// </summary>
@@ -154,7 +158,7 @@ namespace yata
 			}
 			else
 				base.OnKeyDown(e);
-		}
+		} */
 		#endregion Handlers (override)
 
 
@@ -529,6 +533,8 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Save(object sender, EventArgs e)
 		{
+			bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
+
 			try
 			{
 				string pfeT = Path.Combine(Application.StartupPath, ColorOptions.FE) + ".t";
@@ -546,10 +552,12 @@ namespace yata
 					{
 						File.Delete(pfeT);
 
-						if (sender == null) // inform user only if [Ctrl+s] was pressed ->
+//						if (sender == null) // inform user only if [Ctrl+s] was pressed ->
+						if (ctrl)
 						{
-							using (var ib = new Infobox(Infobox.Title_infor,
-														"Colors.Cfg success."))
+							using (var ib = new Infobox(Infobox.Title_succf,
+														"Colors.Cfg saved.", null,
+														InfoboxType.Success))
 							{
 								ib.ShowDialog(this);
 							}
@@ -569,7 +577,8 @@ namespace yata
 			}
 			finally
 			{
-				if (sender != null) Close();
+//				if (sender != null) Close(); // do not close if [Ctrl+s] was pressed
+				if (!ctrl) Close();
 			}
 		}
 
