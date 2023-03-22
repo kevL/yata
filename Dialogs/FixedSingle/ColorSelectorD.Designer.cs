@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 
@@ -20,6 +21,10 @@ namespace yata
 		ComboBox cb_SysColors;
 		Button bu_Accept;
 		Button bu_Cancel;
+		ToolTip toolTip1;
+
+		IContainer components;
+
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -29,6 +34,7 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.pa_Colortable = new System.Windows.Forms.Panel();
 			this.pa_Valslider = new System.Windows.Forms.Panel();
 			this.pa_Color = new System.Windows.Forms.Panel();
@@ -43,6 +49,7 @@ namespace yata
 			this.cb_SysColors = new System.Windows.Forms.ComboBox();
 			this.bu_Accept = new System.Windows.Forms.Button();
 			this.bu_Cancel = new System.Windows.Forms.Button();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// pa_Colortable
@@ -79,6 +86,7 @@ namespace yata
 			this.pa_Color.Name = "pa_Color";
 			this.pa_Color.Size = new System.Drawing.Size(75, 35);
 			this.pa_Color.TabIndex = 2;
+			this.toolTip1.SetToolTip(this.pa_Color, "LMB - set values\r\nLMB + Ctrl - copy color\r\nRMB - paste color");
 			this.pa_Color.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
 			// 
 			// pa_Colorpre
@@ -89,6 +97,7 @@ namespace yata
 			this.pa_Colorpre.Name = "pa_Colorpre";
 			this.pa_Colorpre.Size = new System.Drawing.Size(75, 35);
 			this.pa_Colorpre.TabIndex = 3;
+			this.toolTip1.SetToolTip(this.pa_Colorpre, "LMB - set values\r\nLMB + Ctrl - copy color\r\nRMB - set values and assign color");
 			this.pa_Colorpre.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
 			// 
 			// tb_Red
@@ -202,6 +211,12 @@ namespace yata
 			this.bu_Cancel.TabIndex = 13;
 			this.bu_Cancel.Text = "Esc";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
+			// 
+			// toolTip1
+			// 
+			this.toolTip1.AutoPopDelay = 8000;
+			this.toolTip1.InitialDelay = 100;
+			this.toolTip1.ReshowDelay = 50;
 			// 
 			// ColorSelectorD
 			// 
