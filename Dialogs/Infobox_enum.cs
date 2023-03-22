@@ -20,7 +20,11 @@ namespace yata
 		/// <summary>
 		/// head bg-color reddish
 		/// </summary>
-		Error
+		Error,
+		/// <summary>
+		/// head bg-color greenish
+		/// </summary>
+		Success
 	}
 
 	/// <summary>

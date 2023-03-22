@@ -24,6 +24,8 @@ namespace yata
 		internal const string Title_excep = " Exception";
 		internal const string Title_alert = " Alert"; // <- for save routines only.
 
+		internal const string Title_succf = " Success";
+
 		const int w_Min = 350;
 		const int w_Max = 800;
 		const int h_Max = 475;
@@ -80,9 +82,10 @@ namespace yata
 
 			switch (ibt)
 			{
-				case InfoboxType.Info:  la_head.BackColor = Color.Lavender;   break;
-				case InfoboxType.Warn:  la_head.BackColor = Color.Moccasin;   break;
-				case InfoboxType.Error: la_head.BackColor = Color.SandyBrown; break;
+				case InfoboxType.Info:    la_head.BackColor = Color.Lavender;   break;
+				case InfoboxType.Warn:    la_head.BackColor = Color.Moccasin;   break;
+				case InfoboxType.Error:   la_head.BackColor = Color.SandyBrown; break;
+				case InfoboxType.Success: la_head.BackColor = Color.Chartreuse; break;
 			}
 
 			switch (buttons)
