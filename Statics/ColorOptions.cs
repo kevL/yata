@@ -37,8 +37,8 @@ namespace yata
 		internal const string CFG_colheadtext     = "colheadtext=";
 		internal const string CFG_colheadtextsel  = "colheadtextsel=";
 		internal const string CFG_colheadtextsize = "colheadtextsize=";
-		internal const string CFG_headtextsortasc = "headtextsortasc";
-		internal const string CFG_headtextsortdes = "headtextsortdes";
+		internal const string CFG_headtextsortasc = "headtextsortasc=";
+		internal const string CFG_headtextsortdes = "headtextsortdes=";
 		internal const string CFG_colheadlines    = "colheadlines=";
 		internal const string CFG_colhead         = "colhead=";
 
