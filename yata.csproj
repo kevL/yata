@@ -118,6 +118,10 @@
     <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsDialog.Designer.cs">
       <DependentUpon>ColorOptionsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.Designer.cs">
+      <DependentUpon>ColorSelectorHelp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\DifferDialog.Designer.cs">
       <DependentUpon>DifferDialog.cs</DependentUpon>
@@ -302,6 +306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorOptionsDialog.resx">
       <DependentUpon>ColorOptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.resx">
+      <DependentUpon>ColorSelectorHelp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\DifferDialog.resx">
       <DependentUpon>DifferDialog.cs</DependentUpon>

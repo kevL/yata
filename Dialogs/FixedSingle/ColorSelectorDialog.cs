@@ -38,6 +38,8 @@ namespace yata
 		Panel _panel; // origin panel in 'ColorOptionsDialog'
 
 		bool _init = true;
+
+		internal ColorSelectorHelp _fhelp;
 		#endregion Fields
 
 
@@ -464,6 +466,21 @@ namespace yata
 		/// <param name="e"></param>
 		void click_Help(object sender, EventArgs e)
 		{
+			if (_fhelp == null)
+			{
+				_fhelp = new ColorSelectorHelp(this);
+			}
+			else
+			{
+				if (_fhelp.WindowState == FormWindowState.Minimized)
+				{
+					if (_fhelp.Maximized)
+						_fhelp.WindowState = FormWindowState.Maximized;
+					else
+						_fhelp.WindowState = FormWindowState.Normal;
+				}
+				_fhelp.BringToFront();
+			}
 		}
 		#endregion handlers (buttons)
 
