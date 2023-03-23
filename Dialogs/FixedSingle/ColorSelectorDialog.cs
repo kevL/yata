@@ -478,6 +478,17 @@ namespace yata
 					tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
 			}
 		}
+
+
+		/// <summary>
+		/// Focuses the Accept button when any of the RGB-labels is clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void click_la_Rgb(object sender, EventArgs e)
+		{
+			bu_Accept.Select();
+		}
 		#endregion handlers (textboxes)
 
 

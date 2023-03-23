@@ -146,6 +146,7 @@ namespace yata
 			this.la_Red.TabIndex = 5;
 			this.la_Red.Text = "r";
 			this.la_Red.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_Red.Click += new System.EventHandler(this.click_la_Rgb);
 			// 
 			// la_Green
 			// 
@@ -156,6 +157,7 @@ namespace yata
 			this.la_Green.TabIndex = 7;
 			this.la_Green.Text = "g";
 			this.la_Green.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_Green.Click += new System.EventHandler(this.click_la_Rgb);
 			// 
 			// la_Blue
 			// 
@@ -166,6 +168,7 @@ namespace yata
 			this.la_Blue.TabIndex = 9;
 			this.la_Blue.Text = "b";
 			this.la_Blue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.la_Blue.Click += new System.EventHandler(this.click_la_Rgb);
 			// 
 			// cb_NetColors
 			// 
