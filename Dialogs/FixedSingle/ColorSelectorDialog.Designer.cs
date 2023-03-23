@@ -112,8 +112,8 @@ namespace yata
 			this.tb_Red.Size = new System.Drawing.Size(40, 20);
 			this.tb_Red.TabIndex = 4;
 			this.tb_Red.WordWrap = false;
-			this.tb_Red.TextChanged += new System.EventHandler(this.textchanged_Rgb);
-			this.tb_Red.Leave += new System.EventHandler(this.leave_Rgb);
+			this.tb_Red.TextChanged += new System.EventHandler(this.textchanged_tb_Rgb);
+			this.tb_Red.Leave += new System.EventHandler(this.leave_tb_Rgb);
 			// 
 			// tb_Green
 			// 
@@ -123,8 +123,8 @@ namespace yata
 			this.tb_Green.Size = new System.Drawing.Size(40, 20);
 			this.tb_Green.TabIndex = 6;
 			this.tb_Green.WordWrap = false;
-			this.tb_Green.TextChanged += new System.EventHandler(this.textchanged_Rgb);
-			this.tb_Green.Leave += new System.EventHandler(this.leave_Rgb);
+			this.tb_Green.TextChanged += new System.EventHandler(this.textchanged_tb_Rgb);
+			this.tb_Green.Leave += new System.EventHandler(this.leave_tb_Rgb);
 			// 
 			// tb_Blue
 			// 
@@ -134,8 +134,8 @@ namespace yata
 			this.tb_Blue.Size = new System.Drawing.Size(40, 20);
 			this.tb_Blue.TabIndex = 8;
 			this.tb_Blue.WordWrap = false;
-			this.tb_Blue.TextChanged += new System.EventHandler(this.textchanged_Rgb);
-			this.tb_Blue.Leave += new System.EventHandler(this.leave_Rgb);
+			this.tb_Blue.TextChanged += new System.EventHandler(this.textchanged_tb_Rgb);
+			this.tb_Blue.Leave += new System.EventHandler(this.leave_tb_Rgb);
 			// 
 			// la_Red
 			// 

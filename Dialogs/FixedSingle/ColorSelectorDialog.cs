@@ -61,6 +61,10 @@ namespace yata
 
 			DrawRegulator.SetDoubleBuffered(pa_Valslider);
 
+			tb_Red  .MouseWheel += mousewheel_tb_Rgb;
+			tb_Green.MouseWheel += mousewheel_tb_Rgb;
+			tb_Blue .MouseWheel += mousewheel_tb_Rgb;
+
 			cb_NetColors.Items.Add(".net colors");
 			cb_SysColors.Items.Add("OS colors");
 
@@ -397,7 +401,7 @@ namespace yata
 		/// <item><c><see cref="tb_Blue"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		void textchanged_Rgb(object sender, EventArgs e)
+		void textchanged_tb_Rgb(object sender, EventArgs e)
 		{
 			if (!_bypass)
 			{
@@ -434,7 +438,7 @@ namespace yata
 		/// <item><c><see cref="tb_Blue"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		void leave_Rgb(object sender, EventArgs e)
+		void leave_tb_Rgb(object sender, EventArgs e)
 		{
 			var tb = sender as TextBox;
 			if (tb.Text.Length == 0)
@@ -442,6 +446,36 @@ namespace yata
 				_bypass = true;
 				tb.Text = "0";
 				_bypass = false;
+			}
+		}
+
+		/// <summary>
+		/// Increments or decrements the value in an Rgb-textbox on the
+		/// <c>MouseWheel</c> event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void mousewheel_tb_Rgb(object sender, MouseEventArgs e)
+		{
+			if (e.Delta > 0)
+			{
+				TextBox tb;
+				if      (tb_Red  .Focused) tb = tb_Red;
+				else if (tb_Green.Focused) tb = tb_Green;
+				else                       tb = tb_Blue; // tb_Blue.Focused
+
+				if (tb.Text != "255")
+					tb.Text = (Byte.Parse(tb.Text) + 1).ToString();
+			}
+			else if (e.Delta < 0)
+			{
+				TextBox tb;
+				if      (tb_Red  .Focused) tb = tb_Red;
+				else if (tb_Green.Focused) tb = tb_Green;
+				else                       tb = tb_Blue; // tb_Blue.Focused
+
+				if (tb.Text.Length != 0 && tb.Text != "0")
+					tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
 			}
 		}
 		#endregion handlers (textboxes)
