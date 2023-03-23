@@ -232,7 +232,7 @@ namespace yata
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="bypassRgbtext"><c>true</c> if called by
-		/// <c><see cref="textchanged_Rgb()">textchanged_Rgb()</see></c>
+		/// <c><see cref="textchanged_tb_Rgb()">textchanged_tb_Rgb()</see></c>
 		/// - This isn't a big deal since recalculating control-values per
 		/// RGB-texts isn't going to happen anyway but
 		/// <paramref name="bypassRgbtext"/> prevents resetting the texts
@@ -844,6 +844,41 @@ namespace yata
 			}
 
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		/// <summary>
+		/// Increments or decrements the Valslider on the <c>MouseWheel</c>
+		/// event - as long as a <c>TextBox</c> or <c>ComboBox</c> does not have
+		/// focus.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			if (!tb_Red.Focused && !tb_Green.Focused && !tb_Blue.Focused
+				&& !cb_NetColors.Focused && !cb_SysColors.Focused)
+			{
+				if (e.Delta > 0)
+				{
+					if (_val != 0)
+					{
+						--_val;
+						pa_Valslider.Invalidate();
+
+						PrintCurrentColor(true);
+					}
+				}
+				else if (e.Delta < 0)
+				{
+					if (_val != pa_Valslider.Height - 1)
+					{
+						++_val;
+						pa_Valslider.Invalidate();
+
+						PrintCurrentColor(true);
+					}
+				}
+			}
+			base.OnMouseWheel(e);
 		}
 		#endregion Methods (override)
 	}
