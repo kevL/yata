@@ -85,7 +85,7 @@ namespace yata
 				case InfoboxType.Info:    la_head.BackColor = Color.Lavender;   break;
 				case InfoboxType.Warn:    la_head.BackColor = Color.Moccasin;   break;
 				case InfoboxType.Error:   la_head.BackColor = Color.SandyBrown; break;
-				case InfoboxType.Success: la_head.BackColor = Color.Chartreuse; break;
+				case InfoboxType.Success: la_head.BackColor = Color.LightGreen; break;
 			}
 
 			switch (buttons)
