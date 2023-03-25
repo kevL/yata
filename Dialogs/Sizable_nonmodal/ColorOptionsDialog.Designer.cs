@@ -1078,7 +1078,7 @@ namespace yata
 			this.la_Help.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this.la_Help.Size = new System.Drawing.Size(210, 56);
 			this.la_Help.TabIndex = 78;
-			this.la_Help.Text = "LMB to open the Color Selector\r\nRMB to restore the default color";
+			this.la_Help.Text = "LMB - open the Color Selector\r\nRMB - restore the default color";
 			this.la_Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// pa_bot
