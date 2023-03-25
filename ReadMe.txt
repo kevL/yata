@@ -667,10 +667,12 @@ SAVE FILE        - create or overwrite the Colors.Cfg file with the currently
                    displayed colors and close the dialog
 Esc              - exit the dialog
 
+Not all colors in Yata are configurable.
+
 IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
-loadchanged cells, as well as selected and created rows, etc etc etc, be a bit
-wary when changing colors away from their default value. Desired changes to
-colors could hide visual cues that Yata wants to inform you about.
+loadchanged cells, as well as selected and created rows, various texts, etc etc
+etc, be a bit wary when changing colors away from their default value. Desired
+changes to colors could hide visual cues that Yata wants to inform you about.
 
 If the Colors.Cfg file does not exist Yata should run okay with its default
 colors.
