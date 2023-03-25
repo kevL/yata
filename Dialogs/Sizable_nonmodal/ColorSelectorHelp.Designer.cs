@@ -30,12 +30,12 @@ namespace yata
 			this.tb_Help.Name = "tb_Help";
 			this.tb_Help.ReadOnly = true;
 			this.tb_Help.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.tb_Help.Size = new System.Drawing.Size(392, 239);
+			this.tb_Help.Size = new System.Drawing.Size(462, 514);
 			this.tb_Help.TabIndex = 0;
 			// 
 			// ColorSelectorHelp
 			// 
-			this.ClientSize = new System.Drawing.Size(392, 239);
+			this.ClientSize = new System.Drawing.Size(462, 514);
 			this.Controls.Add(this.tb_Help);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;

@@ -19,21 +19,42 @@ namespace yata
 			InitializeComponent();
 			Initialize(METRIC_FUL);
 
-			tb_Help.Text = "- keyboard input -"
+			tb_Help.Text = "- COLORFIELD -"
 						 + Environment.NewLine + Environment.NewLine
-						 + "The numpad keys navigate the Colorfield directionally."        + Environment.NewLine
-						 + "[Subtract] - decreases the Valuefield"                         + Environment.NewLine
-						 + "[Add] increases the Valuefield"
+						 + "[Left] decreases Hue" + Environment.NewLine
+						 + "[Right] increases Hue" + Environment.NewLine
+						 + "[Up] decreases Saturation" + Environment.NewLine
+						 + "[Down] increases Saturation" + Environment.NewLine
+						 + "[Home] decreases Hue + decreases Saturation" + Environment.NewLine
+						 + "[End] decreases Hue + increases Saturation" + Environment.NewLine
+						 + "[PageUp] increases Hue + decreases Saturation" + Environment.NewLine
+						 + "[PageDown] increases Hue + increases Saturation"
 						 + Environment.NewLine + Environment.NewLine
-						 + "The RGB textboxes accept special keyboard input when focused." + Environment.NewLine
-						 + "[Subtract] increases the textbox value"                        + Environment.NewLine
-						 + "[Add] decreases the textbox value"                             + Environment.NewLine
-						 + "[PageUp] sets the value to 255"                                + Environment.NewLine
-						 + "[PageDown] sets the value to 0"                                + Environment.NewLine
-						 + "[Enter] defocuses a textbox"                                   + Environment.NewLine
-						 + "[Esc] defocuses a textbox or dropdownbox"
+						 + "- VALUEFIELD -"
 						 + Environment.NewLine + Environment.NewLine
-						 + "Otherwise the keyboard and mouse operate normally for .NET controls.";
+						 + "[Subtract] decreases Value" + Environment.NewLine
+						 + "[Add] increases Value"
+						 + Environment.NewLine + Environment.NewLine
+						 + "MouseWheel increases or decreases Value if no textbox/combobox has focus." + Environment.NewLine
+						 + "MouseClick and MouseDrag adjust the fields."
+						 + Environment.NewLine + Environment.NewLine
+						 + "- RGB focused -"
+						 + Environment.NewLine + Environment.NewLine
+						 + "[Subtract] increases the byte" + Environment.NewLine
+						 + "[Add] decreases the byte" + Environment.NewLine
+						 + "[PageUp] sets the byte to 255" + Environment.NewLine
+						 + "[PageDown] sets the byte to 0" + Environment.NewLine
+						 + "[Escape] or [Enter] switches focus to the Accept button"
+						 + Environment.NewLine + Environment.NewLine
+						 + "MouseWheel increases or decreases a focused RGB byte."
+						 + Environment.NewLine + Environment.NewLine
+						 + "- COLORS focused -"
+						 + Environment.NewLine + Environment.NewLine
+						 + "[Escape] switches focus to the Accept button"
+						 + Environment.NewLine + Environment.NewLine
+						 + "MouseClick on an RGB label switches focus to the Accept button."
+						 + Environment.NewLine + Environment.NewLine
+						 + "Otherwise the keyboard and mouse behave normally for .NET controls.";
 
 			Show(_f); // ColorSelectorDialog is owner.
 		}
