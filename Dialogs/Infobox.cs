@@ -207,7 +207,7 @@ namespace yata
 		{
 			if (pa_Copyable != null)
 			{
-				rt_Copyable.AutoWordSelection = false;
+				rt_Copyable.AutoWordSelection = false; // <- needs to be here not in the designer to work right.
 
 				if (HoriScrollBarVisible(rt_Copyable))
 				{
