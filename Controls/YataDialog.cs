@@ -14,6 +14,26 @@ namespace yata
 	public class YataDialog
 		: Form
 	{
+		#region Fields (static)
+		/// <summary>
+		/// Do not respect Telemetry. Location and Size is detered by the
+		/// derived class.
+		/// </summary>
+		protected const int METRIC_NON = 0;
+
+		/// <summary>
+		/// Respect only location Telemetry. Size is detered by the derived
+		/// class.
+		/// </summary>
+		protected const int METRIC_LOC = 1;
+
+		/// <summary>
+		/// Respect both location and size Telemetry.
+		/// </summary>
+		protected const int METRIC_FUL = 2;
+		#endregion Fields (static)
+
+
 		#region Fields
 		/// <summary>
 		/// A <c>List</c> of <c>TextBoxBases</c> that shall be initialized w/
@@ -36,21 +56,10 @@ namespace yata
 		int Metric;
 
 		/// <summary>
-		/// Do not respect Telemetry. Location and Size is detered by the
-		/// derived class.
+		/// <c>true</c> to instantiate this <c>YataDialog</c> in a
+		/// cascade location.
 		/// </summary>
-		protected const int METRIC_NON = 0;
-
-		/// <summary>
-		/// Respect only location Telemetry. Size is detered by the derived
-		/// class.
-		/// </summary>
-		protected const int METRIC_LOC = 1;
-
-		/// <summary>
-		/// Respect both location and size Telemetry.
-		/// </summary>
-		protected const int METRIC_FUL = 2;
+		protected bool _cascade;
 		#endregion Fields
 
 
@@ -136,7 +145,17 @@ namespace yata
 				if (Metric != METRIC_NON)
 				{
 					if (_x == -1)
-						CenterToParent();
+					{
+						if (_cascade)
+						{
+							Left = _f.Left + 25;
+							Top  = _f.Top  + 25;
+						}
+						else
+						{
+							CenterToParent();
+						}
+					}
 					else
 					{
 						Left = _x;
