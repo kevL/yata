@@ -7,7 +7,8 @@ namespace yata
 	sealed partial class ColorSelectorHelp
 	{
 		#region Designer
-		TextBox tb_Help;
+		Panel pa_Help;
+		RichTextBox rt_Help;
 
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
@@ -17,33 +18,48 @@ namespace yata
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.tb_Help = new System.Windows.Forms.TextBox();
+			this.rt_Help = new System.Windows.Forms.RichTextBox();
+			this.pa_Help = new System.Windows.Forms.Panel();
+			this.pa_Help.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// tb_Help
+			// pa_Help
 			// 
-			this.tb_Help.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_Help.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tb_Help.Location = new System.Drawing.Point(0, 0);
-			this.tb_Help.Margin = new System.Windows.Forms.Padding(0);
-			this.tb_Help.Multiline = true;
-			this.tb_Help.Name = "tb_Help";
-			this.tb_Help.ReadOnly = true;
-			this.tb_Help.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.tb_Help.Size = new System.Drawing.Size(462, 514);
-			this.tb_Help.TabIndex = 0;
+			this.pa_Help.BackColor = System.Drawing.SystemColors.Control;
+			this.pa_Help.Controls.Add(this.rt_Help);
+			this.pa_Help.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pa_Help.Location = new System.Drawing.Point(0, 0);
+			this.pa_Help.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_Help.Name = "pa_Help";
+			this.pa_Help.Padding = new System.Windows.Forms.Padding(15, 5, 10, 5);
+			this.pa_Help.Size = new System.Drawing.Size(472, 544);
+			this.pa_Help.TabIndex = 0;
+			// 
+			// rt_Help
+			// 
+			this.rt_Help.BackColor = System.Drawing.SystemColors.Control;
+			this.rt_Help.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.rt_Help.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rt_Help.Location = new System.Drawing.Point(15, 5);
+			this.rt_Help.Margin = new System.Windows.Forms.Padding(0);
+			this.rt_Help.Name = "rt_Help";
+			this.rt_Help.ReadOnly = true;
+			this.rt_Help.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.rt_Help.Size = new System.Drawing.Size(447, 534);
+			this.rt_Help.TabIndex = 1;
+			this.rt_Help.Text = "";
 			// 
 			// ColorSelectorHelp
 			// 
-			this.ClientSize = new System.Drawing.Size(462, 514);
-			this.Controls.Add(this.tb_Help);
+			this.ClientSize = new System.Drawing.Size(472, 544);
+			this.Controls.Add(this.pa_Help);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.MaximizeBox = false;
 			this.Name = "ColorSelectorHelp";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - ColorSelector help";
+			this.pa_Help.ResumeLayout(false);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion Designer
