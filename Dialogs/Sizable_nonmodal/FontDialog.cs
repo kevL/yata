@@ -101,10 +101,9 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(METRIC_FUL, true, true);
+			Initialize(METRIC_FUL, false, true);
 
-			tb_FontSize  .BackColor = Color.White;
-			tb_FontString.BackColor = Colors.TextboxBackground;
+			tb_FontSize.BackColor = Color.White; // explicitly set that BackColor <-
 
 			_tip.AutoPopDelay = 10000;
 			_tip.InitialDelay = 500;
