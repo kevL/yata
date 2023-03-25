@@ -87,9 +87,6 @@ namespace yata
 
 	static class Colors
 	{
-		internal static readonly Color Text              = SystemColors.ControlText;
-		internal static readonly Color TextReadonly      = Color.Firebrick;
-
 		internal static readonly Color TextboxBackground = Color.WhiteSmoke;
 		internal static readonly Color TextboxSelected   = Color.FloralWhite;
 		internal static readonly Color TextboxReadonly   = Color.MistyRose;

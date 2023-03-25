@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
@@ -102,14 +103,14 @@ namespace yata
 				{
 					enc = Encoding.GetEncoding(_pre);
 
-					la_CodepageInfo.ForeColor = Colors.Text;
+					la_CodepageInfo.ForeColor = SystemColors.ControlText;
 					la_CodepageInfo.Text = enc.HeaderName   + Environment.NewLine
 										 + enc.EncodingName + Environment.NewLine
 										 + enc.CodePage;
 				}
 				else
 				{
-					la_CodepageInfo.ForeColor = Colors.TextReadonly;
+					la_CodepageInfo.ForeColor = Color.Firebrick;
 					la_CodepageInfo.Text = "invalid Codepage";
 				}
 			}

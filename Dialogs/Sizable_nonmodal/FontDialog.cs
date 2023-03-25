@@ -350,7 +350,7 @@ namespace yata
 									  font.Name,
 									  font,
 									  e.Bounds,
-									  Colors.Text,
+									  SystemColors.ControlText,
 									  TextFormatFlags.NoPrefix);
 			}
 		}

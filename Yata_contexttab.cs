@@ -382,7 +382,7 @@ namespace yata
 			if (copyable.Length == 0)
 			{
 				label = "Tables are identical.";
-				color = Colors.Text;
+				color = SystemColors.ControlText;
 			}
 			else
 			{

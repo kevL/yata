@@ -1327,9 +1327,9 @@ namespace yata
 				// will slough off ....
 
 				if (tab.Tag != null && (tab.Tag as YataGrid).Readonly)
-					color = Colors.TextReadonly;
+					color = Color.Firebrick;
 				else
-					color = Colors.Text;
+					color = SystemColors.ControlText;
 
 				TextRenderer.DrawText(graphics,
 									  tab.Text,
