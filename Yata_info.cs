@@ -16,7 +16,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns></returns>
-		string getCraftInfo(int id, int col)
+		static string getCraftInfo(int id, int col)
 		{
 			string info = gs.non;
 
@@ -348,7 +348,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns></returns>
-		string getSpellInfo(int id, int col)
+		static string getSpellInfo(int id, int col)
 		{
 			string info = gs.non;
 
@@ -1134,7 +1134,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns>info text for the statusbar</returns>
-		string getFeatInfo(int id, int col)
+		static string getFeatInfo(int id, int col)
 		{
 			string info = gs.non;
 
@@ -1386,7 +1386,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns>info text for the statusbar</returns>
-		string getClassInfo(int id, int col)
+		static string getClassInfo(int id, int col)
 		{
 			string info = gs.non;
 
@@ -1491,8 +1491,8 @@ namespace yata
 
 											if ((artresult & ALIGNRESTRICTTYPE_GOODEVIL) != 0)
 											{
-												if (art != String.Empty) art += "/morals";
-												else                     art  = " morals";
+												if (art.Length != 0) art += "/morals";
+												else                 art  = " morals";
 											}
 										}
 									}
@@ -1683,7 +1683,7 @@ namespace yata
 		/// <param name="id"></param>
 		/// <param name="col"></param>
 		/// <returns>info text for the statusbar</returns>
-		string getBaseitemInfo(int id, int col)
+		static string getBaseitemInfo(int id, int col)
 		{
 			string info = gs.non;
 

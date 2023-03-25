@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 
@@ -167,7 +168,7 @@ namespace yata
 							Row row;
 							for (r = 0; r != table.RowCount; r++)			// celltexts ->
 							{
-								sw.Write(r.ToString().PadLeft(width)); // DOES NOT WRITE THE VALUE IN THE ID-CELL
+								sw.Write(r.ToString(CultureInfo.InvariantCulture).PadLeft(width)); // DOES NOT WRITE THE VALUE IN THE ID-CELL
 
 								row = table.Rows[r];
 								for (f = 0; f != table.Fields.Length; ++f)

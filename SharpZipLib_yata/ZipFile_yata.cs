@@ -14,7 +14,7 @@ namespace yata
 
 
 		#region Fields
-		readonly string _label;
+//		readonly string _label;
 		readonly Stream _file;
 
 		ZipEntry[] _entries;
@@ -29,7 +29,7 @@ namespace yata
 		internal ZipFile(FileStream file)
 		{
 			_file  = file;
-			_label = file.Name;
+//			_label = file.Name;
 
 			ReadEntries();
 		}
@@ -307,7 +307,7 @@ namespace yata
 			: Stream
 		{
 			#region Fields
-			readonly ZipFile _zipFile;
+//			readonly ZipFile _zipFile;
 			readonly Stream _baseStream;
 
 			readonly long _start;
@@ -337,7 +337,8 @@ namespace yata
 				// Stream reader = zf.GetInputStream(0);
 				// uses reader here....
 
-				_baseStream = (_zipFile = zipFile)._file;
+//				_zipFile = zipFile;
+				_baseStream = zipFile._file;
 				_end = (_pos = _start = start) + (_length = length);
 			}
 			#endregion cTor

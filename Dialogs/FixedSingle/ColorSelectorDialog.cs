@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -221,9 +222,9 @@ namespace yata
 			pa_Color.BackColor = Color.FromArgb(r,g,b);
 
 			_bypass = bypass;
-			tb_Red  .Text = r.ToString();
-			tb_Green.Text = g.ToString();
-			tb_Blue .Text = b.ToString();
+			tb_Red  .Text = r.ToString(CultureInfo.InvariantCulture);
+			tb_Green.Text = g.ToString(CultureInfo.InvariantCulture);
+			tb_Blue .Text = b.ToString(CultureInfo.InvariantCulture);
 			_bypass = false;
 		}
 
@@ -252,9 +253,9 @@ namespace yata
 			if (!bypassRgbtext)
 			{
 				_bypass = true;
-				tb_Red  .Text = color.R.ToString();
-				tb_Green.Text = color.G.ToString();
-				tb_Blue .Text = color.B.ToString();
+				tb_Red  .Text = color.R.ToString(CultureInfo.InvariantCulture);
+				tb_Green.Text = color.G.ToString(CultureInfo.InvariantCulture);
+				tb_Blue .Text = color.B.ToString(CultureInfo.InvariantCulture);
 				_bypass = false;
 			}
 		}
@@ -420,9 +421,9 @@ namespace yata
 				{
 					_pretext = tb.Text;
 
-					Color color = Color.FromArgb(Int32.Parse((tb_Red  .Text.Length == 0) ? "0" : tb_Red  .Text),
-												 Int32.Parse((tb_Green.Text.Length == 0) ? "0" : tb_Green.Text),
-												 Int32.Parse((tb_Blue .Text.Length == 0) ? "0" : tb_Blue .Text));
+					Color color = Color.FromArgb(Int32.Parse((tb_Red  .Text.Length == 0) ? "0" : tb_Red  .Text, CultureInfo.InvariantCulture),
+												 Int32.Parse((tb_Green.Text.Length == 0) ? "0" : tb_Green.Text, CultureInfo.InvariantCulture),
+												 Int32.Parse((tb_Blue .Text.Length == 0) ? "0" : tb_Blue .Text, CultureInfo.InvariantCulture));
 					SetCurrentValues(pa_Color.BackColor = color, true);
 				}
 			}
@@ -465,7 +466,7 @@ namespace yata
 				else                       tb = tb_Blue; // tb_Blue.Focused
 
 				if (tb.Text != "255")
-					tb.Text = (Byte.Parse(tb.Text) + 1).ToString();
+					tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) + 1).ToString(CultureInfo.InvariantCulture);
 			}
 			else if (e.Delta < 0)
 			{
@@ -475,7 +476,7 @@ namespace yata
 				else                       tb = tb_Blue; // tb_Blue.Focused
 
 				if (tb.Text.Length != 0 && tb.Text != "0")
-					tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
+					tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) - 1).ToString(CultureInfo.InvariantCulture);
 			}
 		}
 
@@ -544,6 +545,8 @@ namespace yata
 		{
 			if ((ModifierKeys & (Keys.Alt | Keys.Shift)) == Keys.None)
 			{
+				var pa = sender as Panel;
+
 				if ((ModifierKeys & Keys.Control) == Keys.None)
 				{
 					Color color;
@@ -551,7 +554,7 @@ namespace yata
 					if (sender == pa_Color && e.Button == MouseButtons.Right) // assign 'Stored' color to Color
 						color = pa_Color.BackColor = Stored;
 					else
-						color = (sender as Panel).BackColor;
+						color = pa.BackColor;
 
 					if (sender == pa_Colorpre && e.Button == MouseButtons.Right) // assign Colorpre color to Color
 						pa_Color.BackColor = color;
@@ -560,7 +563,7 @@ namespace yata
 				}
 				else if (e.Button == MouseButtons.Left) // store the panel's color in 'Stored' ->
 				{
-					Stored = (sender as Panel).BackColor;
+					Stored = pa.BackColor;
 
 					using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
 					{
@@ -604,18 +607,19 @@ namespace yata
 		{
 			e.DrawBackground();
 
+			var cb = sender as ComboBox;
 			if (e.Index == 0)
 			{
 //				e.Graphics.DrawString(); // -> font looks wonky
 				TextRenderer.DrawText(e.Graphics,
-									  (sender as ComboBox).Items[0].ToString(),
+									  cb.Items[0].ToString(),
 									  Font,
 									  new Point(e.Bounds.Left + 3, e.Bounds.Top),
 									  SystemColors.ControlText);
 			}
 			else
 			{
-				string label = (sender as ComboBox).Items[e.Index].ToString();
+				string label = cb.Items[e.Index].ToString();
 				Brush brush = new SolidBrush(Color.FromName(label));
 				e.Graphics.FillRectangle(brush,
 										 new RectangleF(e.Bounds.Left,   e.Bounds.Top,
@@ -661,7 +665,7 @@ namespace yata
 						else                       tb = tb_Blue; // tb_Blue.Focused
 
 						if (tb.Text != "255")
-							tb.Text = (Byte.Parse(tb.Text) + 1).ToString();
+							tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) + 1).ToString(CultureInfo.InvariantCulture);
 
 						return true;
 					}
@@ -674,7 +678,7 @@ namespace yata
 						else                       tb = tb_Blue; // tb_Blue.Focused
 
 						if (tb.Text.Length != 0 && tb.Text != "0")
-							tb.Text = (Byte.Parse(tb.Text) - 1).ToString();
+							tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) - 1).ToString(CultureInfo.InvariantCulture);
 
 						return true;
 					}

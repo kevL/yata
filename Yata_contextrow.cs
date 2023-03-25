@@ -66,7 +66,7 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Header(object sender, EventArgs e)
 		{
-			ClipboardService.SetText(_r.ToString());
+			ClipboardService.SetText(_r.ToString(CultureInfo.InvariantCulture));
 			_contextRo.Hide();
 		}
 
