@@ -1538,11 +1538,11 @@ namespace yata
 									statbar_Info.Text = getCraftInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_SPELL:
-									if (Table.Fields[c - 1] != "IconResRef" || !DrawIconResref(Table[r,c].text + ".tga"))
+									if (c > 0 && (Table.Fields[c - 1] != "IconResRef" || !DrawIconResref(Table[r,c].text + ".tga")))
 										statbar_Info.Text = getSpellInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_FEAT:
-									if (Table.Fields[c - 1] != "ICON" || !DrawIconResref(Table[r,c].text + ".tga"))
+									if (c > 0 && (Table.Fields[c - 1] != "ICON" || !DrawIconResref(Table[r,c].text + ".tga")))
 										statbar_Info.Text = getFeatInfo(r,c);
 									break;
 								case YataGrid.InfoType.INFO_CLASS:
