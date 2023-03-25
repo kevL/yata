@@ -1078,7 +1078,7 @@ namespace yata
 			this.la_Help.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this.la_Help.Size = new System.Drawing.Size(210, 56);
 			this.la_Help.TabIndex = 78;
-			this.la_Help.Text = "LMB - open the Color Selector\r\nRMB - restore the default color";
+			this.la_Help.Text = "LMB - opens the Color Selector\r\nRMB - restore default color";
 			this.la_Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// pa_bot
@@ -1103,7 +1103,7 @@ namespace yata
 			this.bu_Save.Size = new System.Drawing.Size(164, 26);
 			this.bu_Save.TabIndex = 2;
 			this.bu_Save.Text = "SAVE  FILE / close";
-			this.toolTip1.SetToolTip(this.bu_Save, "Saves Colors.Cfg file\r\n[Ctrl] to not close dialog");
+			this.toolTip1.SetToolTip(this.bu_Save, "Saves Colors.Cfg file\r\n[Ctrl]+click to not close dialog");
 			this.bu_Save.UseVisualStyleBackColor = true;
 			this.bu_Save.Click += new System.EventHandler(this.click_Save);
 			// 
@@ -1117,7 +1117,7 @@ namespace yata
 			this.bu_Cancel.Size = new System.Drawing.Size(99, 26);
 			this.bu_Cancel.TabIndex = 3;
 			this.bu_Cancel.Text = "Esc";
-			this.toolTip1.SetToolTip(this.bu_Cancel, "go away now");
+			this.toolTip1.SetToolTip(this.bu_Cancel, "go away");
 			this.bu_Cancel.UseVisualStyleBackColor = true;
 			this.bu_Cancel.Click += new System.EventHandler(this.click_Cancel);
 			// 
