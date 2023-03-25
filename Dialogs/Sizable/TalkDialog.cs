@@ -423,10 +423,10 @@ namespace yata
 			if (bu_Backward.Enabled =
 				bu_Forward .Enabled = _dict.Count != 0)
 			{
-				color = Colors.TalkfileLoaded;
+				color = Color.Khaki;
 			}
 			else
-				color = Colors.TalkfileLoaded_f;
+				color = Color.IndianRed;
 
 			pa_Copyable.BackColor =
 			rt_Copyable.BackColor = color;
