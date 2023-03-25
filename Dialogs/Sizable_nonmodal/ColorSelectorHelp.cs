@@ -20,7 +20,7 @@ namespace yata
 			_cascade = true;
 
 			InitializeComponent();
-			Initialize(METRIC_FUL);
+			Initialize(METRIC_FUL, true);
 
 			// https://stackoverflow.com/questions/17284573/rich-text-box-bold#answer-17284741
 			// http://www.pindari.com/rtf1.html
@@ -57,7 +57,6 @@ namespace yata
 
 			rt_Help.Rtf = sb.ToString();
 
-			rt_Help.BackColor = SystemColors.Control; // go figur. cf. DifferDialog panel/rtb
 			Show(_f); // ColorSelectorDialog is owner.
 		}
 		#endregion cTor
