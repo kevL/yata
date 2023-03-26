@@ -1193,7 +1193,7 @@ namespace yata
 			if (!Options._strict) // ASSUME people who use strict settings know what they're doing.
 			{
 				if (_sortcol == 0 && _sortdir == SORT_ASC)
-					TooltipSort.SetToolTip(_labelid, "");
+					TooltipSort.SetToolTip(_labelid, String.Empty);
 				else
 					TooltipSort.SetToolTip(_labelid, "warn : Table is not sorted by ascending ID");
 			}
