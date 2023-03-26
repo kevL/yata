@@ -40,7 +40,7 @@ namespace yata
 			sb.Append(@"   \b - VALUEFIELD -\b0\line\line ");
 			sb.Append(@"[Subtract]\tab decreases Value\line ");
 			sb.Append(@"[Add]\tab\tab increases Value\line\line ");
-			sb.Append(@"MouseWheel decreases or increases Value if no textbox/combobox has focus.\line\line ");
+			sb.Append(@"MouseWheel decrements or increments Value if no textbox/combobox has focus.\line\line ");
 			sb.Append(@"   \b - RGB TextBox focused -\b0\line\line ");
 			sb.Append(@"[Subtract]\tab increments the byte\line ");
 			sb.Append(@"[Add]\tab\tab decrements the byte\line ");
