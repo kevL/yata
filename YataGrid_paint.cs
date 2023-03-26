@@ -45,20 +45,26 @@ namespace yata
 					if ((rect.Y = HeightRow * r + offset_y) > Bottom)
 						break;
 
-					switch (Info)
+					if (Rows[r]._brush != ColorOptions._rowcreated)
 					{
-						case InfoType.INFO_SPELL:
-							brush = getDisabled(r, InfoInputSpells.Removed);
-							break;
+						switch (Info)
+						{
+							case InfoType.INFO_SPELL:
+								brush = getDisabledBrush(r, InfoInputSpells.Removed);
+								break;
 
-						case InfoType.INFO_FEAT:
-							brush = getDisabled(r, InfoInputFeat.REMOVED);
-							break;
+							case InfoType.INFO_FEAT:
+								brush = getDisabledBrush(r, InfoInputFeat.REMOVED);
+								break;
 
-						default:
-							brush = Rows[r]._brush;
-							break;
+							default:
+								brush = Rows[r]._brush;
+								break;
+						}
 					}
+					else
+						brush = ColorOptions._rowcreated;
+
 					graphics.FillRectangle(brush, rect);
 				}
 
@@ -66,7 +72,7 @@ namespace yata
 				int x = WidthRowhead - OffsetHori;
 
 				// draw text and fill backgrounds of nondefault cells ->
-				Row row; Cell cell;
+				Row row; Cell cell; Color color; int coldisabled;
 
 				int leftcell = x + _padHori - 1;
 
@@ -78,6 +84,20 @@ namespace yata
 					rect.X = leftcell;
 
 					row = Rows[r];
+
+					if (Rows[r]._brush != ColorOptions._rowcreated)
+					{
+						switch (Info)
+						{
+							case InfoType.INFO_SPELL: coldisabled = InfoInputSpells.Removed; break;
+							case InfoType.INFO_FEAT:  coldisabled = InfoInputFeat  .REMOVED; break;
+							default:                  coldisabled = -1;                      break;
+						}
+						color = getRowTextColor(r, coldisabled);
+					}
+					else
+						color = ColorOptions._rowcreated_t;
+
 					for (c = 0; c != ColCount; ++c)
 					{
 						if (rect.X + (rect.Width = Cols[c].Width) > left)
@@ -85,7 +105,7 @@ namespace yata
 							if ((cell = row[c]).state != Cell.CellState.Default)
 							{
 								rect.X -= _padHori;
-								graphics.FillRectangle(cell.getBrush(_editor.Visible && _editcell == cell), rect);
+								graphics.FillRectangle(cell.getCellBrush(_editor.Visible && _editcell == cell), rect);
 								rect.X += _padHori;
 							}
 
@@ -94,7 +114,7 @@ namespace yata
 												  cell.text,
 												  Font,
 												  rect,
-												  ColorOptions._tabletext,
+												  color, //ColorOptions._tabletext
 												  YataGraphics.flags);
 							rect.Width += _padHori;
 						}
@@ -152,16 +172,47 @@ namespace yata
 		/// <returns><c><see cref="Row._brush">Row._brush</see></c> if the
 		/// <c>Row</c> is not disabled</returns>
 		/// <remarks>Helper for <c><see cref="OnPaint()">OnPaint()</see></c></remarks>
-		Brush getDisabled(int r, int c)
+		Brush getDisabledBrush(int r, int c)
 		{
-			if (ColCount > c
-				&& Fields[c - 1] == "REMOVED"
-				&& this[r,c].text != "0")
+			if (isDisabled(r,c))
 			{
 				return (r % 2 == 0) ? ColorOptions._rowdisableda
 									: ColorOptions._rowdisabledb;
 			}
 			return Rows[r]._brush;
+		}
+
+		/// <summary>
+		/// Gets a <c><see cref="ColorOptions"/></c> with which to draw the text
+		/// of a specified row-id.
+		/// </summary>
+		/// <param name="r">row-id</param>
+		/// <param name="c">col-id of the REMOVED col (pass <c>-1</c> if not
+		/// Spells/Feat.2da)</param>
+		/// <returns>a <c><see cref="ColorOptions"/> for the text</c></returns>
+		Color getRowTextColor(int r, int c)
+		{
+			if (isDisabled(r,c))
+			{
+				return (r % 2 == 0) ? ColorOptions._rowdisableda_t
+									: ColorOptions._rowdisabledb_t;
+			}
+			return (r % 2 == 0) ? ColorOptions._rowa_t
+								: ColorOptions._rowb_t;
+		}
+
+		/// <summary>
+		/// Checks if a row in Spells.2da or Feat.2da is disabled.
+		/// </summary>
+		/// <param name="r">row-id</param>
+		/// <param name="c">col-id of the REMOVED col</param>
+		/// <returns><c>true</c> if row <paramref name="r"/> is disabled</returns>
+		bool isDisabled(int r, int c)
+		{
+			return 0 < c && c < ColCount
+				&& Fields[c - 1] == "REMOVED"
+				&& this[r,c].text != "0";
+//				&& this[r,c].text != gs.Stars; // TODO Test creation of row(s) in Spells/Feat.2da psst works now.
 		}
 		#endregion Handlers (override)
 
@@ -509,7 +560,7 @@ namespace yata
 					{
 						rect.X     -= _padHori - 1;
 						rect.Width -= 1;
-						graphics.FillRectangle(cell.getBrush(), rect);
+						graphics.FillRectangle(cell.getCellBrush(), rect);
 						rect.X     += _padHori - 1;
 						rect.Width += 1;
 					}

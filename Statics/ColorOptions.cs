@@ -17,13 +17,18 @@ namespace yata
 
 		// strings in Colors.Cfg
 		// Table ->
-		internal const string CFG_tabletext       = "tabletext=";
+//		internal const string CFG_tabletext       = "tabletext=";
 		internal const string CFG_tablelines      = "tablelines=";
 		internal const string CFG_rowa            = "rowa=";
+		internal const string CFG_rowa_t          = "rowa_t=";
 		internal const string CFG_rowb            = "rowb=";
+		internal const string CFG_rowb_t          = "rowb_t=";
 		internal const string CFG_rowdisableda    = "rowdisableda=";
+		internal const string CFG_rowdisableda_t  = "rowdisableda_t=";
 		internal const string CFG_rowdisabledb    = "rowdisabledb=";
+		internal const string CFG_rowdisabledb_t  = "rowdisabledb_t=";
 		internal const string CFG_rowcreated      = "rowcreated=";
+		internal const string CFG_rowcreated_t    = "rowcreated_t=";
 
 		// Frozen ->
 		internal const string CFG_frozentext      = "frozentext=";
@@ -77,13 +82,18 @@ namespace yata
 
 		// color defaults
 		// Table ->
-		internal static Color Def_tabletext       = SystemColors.ControlText;
+//		internal static Color Def_tabletext       = SystemColors.ControlText;
 		internal static Color Def_tablelines      = SystemColors.ControlDark;
 		internal static Color Def_rowa            = Color.AliceBlue;
+		internal static Color Def_rowa_t          = SystemColors.ControlText;
 		internal static Color Def_rowb            = Color.BlanchedAlmond;
+		internal static Color Def_rowb_t          = SystemColors.ControlText;
 		internal static Color Def_rowdisableda    = Color.LavenderBlush;
+		internal static Color Def_rowdisableda_t  = SystemColors.ControlText;
 		internal static Color Def_rowdisabledb    = Color.MistyRose;
+		internal static Color Def_rowdisabledb_t  = SystemColors.ControlText;
 		internal static Color Def_rowcreated      = Color.Gainsboro;
+		internal static Color Def_rowcreated_t    = SystemColors.ControlText;
 
 		// Frozen ->
 		internal static Color Def_frozentext      = SystemColors.ControlText;
@@ -137,13 +147,18 @@ namespace yata
 
 		// colors brushes pens for the Yata controls
 		// Table ->
-		internal static Color _tabletext       = Def_tabletext;						// default colors for the tablegrid ->
+//		internal static Color _tabletext       = Def_tabletext;						// default colors for the tablegrid ->
 		internal static Pen   _tablelines      = new Pen(Def_tablelines);
 		internal static Brush _rowa            = new SolidBrush(Def_rowa);
+		internal static Color _rowa_t          = Def_rowa_t;
 		internal static Brush _rowb            = new SolidBrush(Def_rowb);
+		internal static Color _rowb_t          = Def_rowb_t;
 		internal static Brush _rowdisableda    = new SolidBrush(Def_rowdisableda);
+		internal static Color _rowdisableda_t  = Def_rowdisableda_t;
 		internal static Brush _rowdisabledb    = new SolidBrush(Def_rowdisabledb);
+		internal static Color _rowdisabledb_t  = Def_rowdisabledb_t;
 		internal static Brush _rowcreated      = new SolidBrush(Def_rowcreated);
+		internal static Color _rowcreated_t    = Def_rowcreated_t;
 
 		// Frozen ->
 		internal static Color _frozentext      = Def_frozentext;					// default colors for the frozenpanel ->
@@ -216,7 +231,7 @@ namespace yata
 					while ((line = sr.ReadLine()) != null)
 					{
 						// Table ->
-						if (line.StartsWith(CFG_tabletext, StringComparison.Ordinal))
+/*						if (line.StartsWith(CFG_tabletext, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_tabletext.Length).Trim()).Length != 0)
 							{
@@ -227,8 +242,8 @@ namespace yata
 								if ((color = ParseColor(line)) != Color.Empty)
 									_tabletext = color;
 							}
-						}
-						else if (line.StartsWith(CFG_tablelines, StringComparison.Ordinal))
+						} */
+						if (line.StartsWith(CFG_tablelines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_tablelines.Length).Trim()).Length != 0)
 							{
@@ -252,6 +267,18 @@ namespace yata
 									(_rowa as SolidBrush).Color = color;
 							}
 						}
+						else if (line.StartsWith(CFG_rowa_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowa_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowa_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowa_t = color;
+							}
+						}
 						else if (line.StartsWith(CFG_rowb, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_rowb.Length).Trim()).Length != 0)
@@ -262,6 +289,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowb as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowb_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowb_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowb_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowb_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_rowdisableda, StringComparison.Ordinal))
@@ -276,6 +315,18 @@ namespace yata
 									(_rowdisableda as SolidBrush).Color = color;
 							}
 						}
+						else if (line.StartsWith(CFG_rowdisableda_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowdisableda_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowdisableda_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowdisableda_t = color;
+							}
+						}
 						else if (line.StartsWith(CFG_rowdisabledb, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_rowdisabledb.Length).Trim()).Length != 0)
@@ -288,6 +339,18 @@ namespace yata
 									(_rowdisabledb as SolidBrush).Color = color;
 							}
 						}
+						else if (line.StartsWith(CFG_rowdisabledb_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowdisabledb_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowdisabledb_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowdisabledb_t = color;
+							}
+						}
 						else if (line.StartsWith(CFG_rowcreated, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_rowcreated.Length).Trim()).Length != 0)
@@ -298,6 +361,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowcreated as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowcreated_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowcreated_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowcreated_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowcreated_t = color;
 							}
 						}
 

@@ -205,7 +205,7 @@ namespace yata
 
 		/// <summary>
 		/// <c><see cref="state"/></c> is used only for priority of brush-color
-		/// by <c><see cref="getBrush()">getBrush()</see></c>.
+		/// by <c><see cref="getCellBrush()">getCellBrush()</see></c>.
 		/// </summary>
 		internal CellState state;
 		#endregion Fields
@@ -322,14 +322,13 @@ namespace yata
 		/// <remarks>Check that <c><see cref="state"/></c> is not
 		/// <c><see cref="CellState.Default">CellState.Default</see></c> before
 		/// call.
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Called by
 		/// <list type="bullet">
 		/// <item><c><see cref="YataGrid"/>.OnPaint()</c></item>
 		/// <item><c><see cref="YataGrid.PaintFrozenPanel()">YataGrid.PaintFrozenPanel()</see></c></item>
 		/// </list></remarks>
-		internal Brush getBrush(bool edit = false)
+		internal Brush getCellBrush(bool edit = false)
 		{
 			switch (state)
 			{
@@ -348,6 +347,31 @@ namespace yata
 			}
 			return null; // shall never happen.
 		}
+
+/*		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="edit"></param>
+		/// <returns></returns>
+		internal Color getCellTextColor(bool edit = false)
+		{
+			switch (state)
+			{
+				case CellState.Selected:
+					if (edit) return ColorOptions._celledit_t;
+					return ColorOptions._cellselected_t;
+
+				case CellState.Diff:
+					return ColorOptions._celldiffed_t;
+
+				case CellState.LoadChanged:
+					return ColorOptions._cellloadchanged_t;
+
+				case CellState.Replaced:
+					return ColorOptions._cellreplaced_t;
+			}
+			return Color.Empty; // shall never happen.
+		} */
 		#endregion Methods
 
 

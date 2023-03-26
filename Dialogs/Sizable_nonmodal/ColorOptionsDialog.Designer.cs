@@ -13,12 +13,16 @@ namespace yata
 		Panel pa_01;
 		Label la_02;
 		Panel pa_02;
+		Panel pa_02_t;
 		Label la_03;
 		Panel pa_03;
+		Panel pa_03_t;
 		Label la_04;
 		Panel pa_04;
+		Panel pa_04_t;
 		Label la_05;
 		Panel pa_05;
+		Panel pa_05_t;
 		Label la_06;
 		Panel pa_06;
 		Label la_07;
@@ -83,6 +87,7 @@ namespace yata
 		Panel pa_36;
 		Label la_37;
 		Panel pa_37;
+		Panel pa_37_t;
 		Label la_38;
 		Panel pa_38;
 		Label la_39;
@@ -126,12 +131,16 @@ namespace yata
 			this.pa_01 = new System.Windows.Forms.Panel();
 			this.la_02 = new System.Windows.Forms.Label();
 			this.pa_02 = new System.Windows.Forms.Panel();
+			this.pa_02_t = new System.Windows.Forms.Panel();
 			this.la_03 = new System.Windows.Forms.Label();
 			this.pa_03 = new System.Windows.Forms.Panel();
+			this.pa_03_t = new System.Windows.Forms.Panel();
 			this.la_04 = new System.Windows.Forms.Label();
 			this.pa_04 = new System.Windows.Forms.Panel();
+			this.pa_04_t = new System.Windows.Forms.Panel();
 			this.la_05 = new System.Windows.Forms.Label();
 			this.pa_05 = new System.Windows.Forms.Panel();
+			this.pa_05_t = new System.Windows.Forms.Panel();
 			this.la_06 = new System.Windows.Forms.Label();
 			this.pa_06 = new System.Windows.Forms.Panel();
 			this.la_07 = new System.Windows.Forms.Label();
@@ -196,6 +205,7 @@ namespace yata
 			this.pa_36 = new System.Windows.Forms.Panel();
 			this.la_37 = new System.Windows.Forms.Label();
 			this.pa_37 = new System.Windows.Forms.Panel();
+			this.pa_37_t = new System.Windows.Forms.Panel();
 			this.la_38 = new System.Windows.Forms.Label();
 			this.pa_38 = new System.Windows.Forms.Panel();
 			this.la_39 = new System.Windows.Forms.Label();
@@ -229,12 +239,16 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_01);
 			this.gb_Colors.Controls.Add(this.la_02);
 			this.gb_Colors.Controls.Add(this.pa_02);
+			this.gb_Colors.Controls.Add(this.pa_02_t);
 			this.gb_Colors.Controls.Add(this.la_03);
 			this.gb_Colors.Controls.Add(this.pa_03);
+			this.gb_Colors.Controls.Add(this.pa_03_t);
 			this.gb_Colors.Controls.Add(this.la_04);
 			this.gb_Colors.Controls.Add(this.pa_04);
+			this.gb_Colors.Controls.Add(this.pa_04_t);
 			this.gb_Colors.Controls.Add(this.la_05);
 			this.gb_Colors.Controls.Add(this.pa_05);
+			this.gb_Colors.Controls.Add(this.pa_05_t);
 			this.gb_Colors.Controls.Add(this.la_06);
 			this.gb_Colors.Controls.Add(this.pa_06);
 			this.gb_Colors.Controls.Add(this.la_07);
@@ -299,6 +313,7 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.pa_36);
 			this.gb_Colors.Controls.Add(this.la_37);
 			this.gb_Colors.Controls.Add(this.pa_37);
+			this.gb_Colors.Controls.Add(this.pa_37_t);
 			this.gb_Colors.Controls.Add(this.la_38);
 			this.gb_Colors.Controls.Add(this.pa_38);
 			this.gb_Colors.Controls.Add(this.la_39);
@@ -321,7 +336,7 @@ namespace yata
 			this.gb_Colors.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Colors.Name = "gb_Colors";
 			this.gb_Colors.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Colors.Size = new System.Drawing.Size(492, 741);
+			this.gb_Colors.Size = new System.Drawing.Size(592, 741);
 			this.gb_Colors.TabIndex = 0;
 			this.gb_Colors.TabStop = false;
 			// 
@@ -365,6 +380,17 @@ namespace yata
 			this.pa_02.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_02.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
+			// pa_02_t
+			// 
+			this.pa_02_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_02_t.Location = new System.Drawing.Point(262, 62);
+			this.pa_02_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_02_t.Name = "pa_02_t";
+			this.pa_02_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_02_t.TabIndex = 91;
+			this.pa_02_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_02_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
 			// la_03
 			// 
 			this.la_03.Location = new System.Drawing.Point(4, 92);
@@ -384,6 +410,17 @@ namespace yata
 			this.pa_03.TabIndex = 7;
 			this.pa_03.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_03.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// pa_03_t
+			// 
+			this.pa_03_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_03_t.Location = new System.Drawing.Point(262, 87);
+			this.pa_03_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_03_t.Name = "pa_03_t";
+			this.pa_03_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_03_t.TabIndex = 92;
+			this.pa_03_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_03_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_04
 			// 
@@ -405,6 +442,17 @@ namespace yata
 			this.pa_04.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_04.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
+			// pa_04_t
+			// 
+			this.pa_04_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_04_t.Location = new System.Drawing.Point(262, 112);
+			this.pa_04_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_04_t.Name = "pa_04_t";
+			this.pa_04_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_04_t.TabIndex = 93;
+			this.pa_04_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_04_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
 			// la_05
 			// 
 			this.la_05.Location = new System.Drawing.Point(4, 142);
@@ -424,6 +472,17 @@ namespace yata
 			this.pa_05.TabIndex = 11;
 			this.pa_05.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_05.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// pa_05_t
+			// 
+			this.pa_05_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_05_t.Location = new System.Drawing.Point(262, 137);
+			this.pa_05_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_05_t.Name = "pa_05_t";
+			this.pa_05_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_05_t.TabIndex = 94;
+			this.pa_05_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_05_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_06
 			// 
@@ -507,7 +566,7 @@ namespace yata
 			// 
 			// la_10
 			// 
-			this.la_10.Location = new System.Drawing.Point(272, 16);
+			this.la_10.Location = new System.Drawing.Point(368, 16);
 			this.la_10.Margin = new System.Windows.Forms.Padding(0);
 			this.la_10.Name = "la_10";
 			this.la_10.Size = new System.Drawing.Size(139, 16);
@@ -517,7 +576,7 @@ namespace yata
 			// pa_10
 			// 
 			this.pa_10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_10.Location = new System.Drawing.Point(414, 11);
+			this.pa_10.Location = new System.Drawing.Point(510, 11);
 			this.pa_10.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_10.Name = "pa_10";
 			this.pa_10.Size = new System.Drawing.Size(69, 24);
@@ -527,7 +586,7 @@ namespace yata
 			// 
 			// la_11
 			// 
-			this.la_11.Location = new System.Drawing.Point(272, 66);
+			this.la_11.Location = new System.Drawing.Point(368, 66);
 			this.la_11.Margin = new System.Windows.Forms.Padding(0);
 			this.la_11.Name = "la_11";
 			this.la_11.Size = new System.Drawing.Size(139, 16);
@@ -537,7 +596,7 @@ namespace yata
 			// pa_11
 			// 
 			this.pa_11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_11.Location = new System.Drawing.Point(414, 61);
+			this.pa_11.Location = new System.Drawing.Point(510, 61);
 			this.pa_11.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_11.Name = "pa_11";
 			this.pa_11.Size = new System.Drawing.Size(69, 24);
@@ -547,7 +606,7 @@ namespace yata
 			// 
 			// la_12
 			// 
-			this.la_12.Location = new System.Drawing.Point(272, 151);
+			this.la_12.Location = new System.Drawing.Point(368, 151);
 			this.la_12.Margin = new System.Windows.Forms.Padding(0);
 			this.la_12.Name = "la_12";
 			this.la_12.Size = new System.Drawing.Size(139, 16);
@@ -557,7 +616,7 @@ namespace yata
 			// pa_12
 			// 
 			this.pa_12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_12.Location = new System.Drawing.Point(414, 146);
+			this.pa_12.Location = new System.Drawing.Point(510, 146);
 			this.pa_12.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_12.Name = "pa_12";
 			this.pa_12.Size = new System.Drawing.Size(69, 24);
@@ -567,7 +626,7 @@ namespace yata
 			// 
 			// la_13
 			// 
-			this.la_13.Location = new System.Drawing.Point(272, 226);
+			this.la_13.Location = new System.Drawing.Point(368, 226);
 			this.la_13.Margin = new System.Windows.Forms.Padding(0);
 			this.la_13.Name = "la_13";
 			this.la_13.Size = new System.Drawing.Size(139, 16);
@@ -577,7 +636,7 @@ namespace yata
 			// pa_13
 			// 
 			this.pa_13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_13.Location = new System.Drawing.Point(414, 221);
+			this.pa_13.Location = new System.Drawing.Point(510, 221);
 			this.pa_13.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_13.Name = "pa_13";
 			this.pa_13.Size = new System.Drawing.Size(69, 24);
@@ -587,7 +646,7 @@ namespace yata
 			// 
 			// la_14
 			// 
-			this.la_14.Location = new System.Drawing.Point(272, 336);
+			this.la_14.Location = new System.Drawing.Point(368, 336);
 			this.la_14.Margin = new System.Windows.Forms.Padding(0);
 			this.la_14.Name = "la_14";
 			this.la_14.Size = new System.Drawing.Size(139, 16);
@@ -597,7 +656,7 @@ namespace yata
 			// pa_14
 			// 
 			this.pa_14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_14.Location = new System.Drawing.Point(414, 331);
+			this.pa_14.Location = new System.Drawing.Point(510, 331);
 			this.pa_14.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_14.Name = "pa_14";
 			this.pa_14.Size = new System.Drawing.Size(69, 24);
@@ -687,7 +746,7 @@ namespace yata
 			// 
 			// la_19
 			// 
-			this.la_19.Location = new System.Drawing.Point(272, 41);
+			this.la_19.Location = new System.Drawing.Point(368, 41);
 			this.la_19.Margin = new System.Windows.Forms.Padding(0);
 			this.la_19.Name = "la_19";
 			this.la_19.Size = new System.Drawing.Size(139, 16);
@@ -697,7 +756,7 @@ namespace yata
 			// pa_19
 			// 
 			this.pa_19.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_19.Location = new System.Drawing.Point(414, 36);
+			this.pa_19.Location = new System.Drawing.Point(510, 36);
 			this.pa_19.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_19.Name = "pa_19";
 			this.pa_19.Size = new System.Drawing.Size(69, 24);
@@ -747,7 +806,7 @@ namespace yata
 			// 
 			// la_22
 			// 
-			this.la_22.Location = new System.Drawing.Point(272, 176);
+			this.la_22.Location = new System.Drawing.Point(368, 176);
 			this.la_22.Margin = new System.Windows.Forms.Padding(0);
 			this.la_22.Name = "la_22";
 			this.la_22.Size = new System.Drawing.Size(139, 16);
@@ -757,7 +816,7 @@ namespace yata
 			// pa_22
 			// 
 			this.pa_22.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_22.Location = new System.Drawing.Point(414, 171);
+			this.pa_22.Location = new System.Drawing.Point(510, 171);
 			this.pa_22.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_22.Name = "pa_22";
 			this.pa_22.Size = new System.Drawing.Size(69, 24);
@@ -767,7 +826,7 @@ namespace yata
 			// 
 			// la_23
 			// 
-			this.la_23.Location = new System.Drawing.Point(272, 201);
+			this.la_23.Location = new System.Drawing.Point(368, 201);
 			this.la_23.Margin = new System.Windows.Forms.Padding(0);
 			this.la_23.Name = "la_23";
 			this.la_23.Size = new System.Drawing.Size(139, 16);
@@ -777,7 +836,7 @@ namespace yata
 			// pa_23
 			// 
 			this.pa_23.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_23.Location = new System.Drawing.Point(414, 196);
+			this.pa_23.Location = new System.Drawing.Point(510, 196);
 			this.pa_23.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_23.Name = "pa_23";
 			this.pa_23.Size = new System.Drawing.Size(69, 24);
@@ -787,7 +846,7 @@ namespace yata
 			// 
 			// la_24
 			// 
-			this.la_24.Location = new System.Drawing.Point(272, 371);
+			this.la_24.Location = new System.Drawing.Point(368, 371);
 			this.la_24.Margin = new System.Windows.Forms.Padding(0);
 			this.la_24.Name = "la_24";
 			this.la_24.Size = new System.Drawing.Size(139, 16);
@@ -797,7 +856,7 @@ namespace yata
 			// pa_24
 			// 
 			this.pa_24.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_24.Location = new System.Drawing.Point(414, 366);
+			this.pa_24.Location = new System.Drawing.Point(510, 366);
 			this.pa_24.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_24.Name = "pa_24";
 			this.pa_24.Size = new System.Drawing.Size(69, 24);
@@ -807,7 +866,7 @@ namespace yata
 			// 
 			// la_25
 			// 
-			this.la_25.Location = new System.Drawing.Point(272, 396);
+			this.la_25.Location = new System.Drawing.Point(368, 396);
 			this.la_25.Margin = new System.Windows.Forms.Padding(0);
 			this.la_25.Name = "la_25";
 			this.la_25.Size = new System.Drawing.Size(139, 16);
@@ -817,7 +876,7 @@ namespace yata
 			// pa_25
 			// 
 			this.pa_25.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_25.Location = new System.Drawing.Point(414, 391);
+			this.pa_25.Location = new System.Drawing.Point(510, 391);
 			this.pa_25.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_25.Name = "pa_25";
 			this.pa_25.Size = new System.Drawing.Size(69, 24);
@@ -827,7 +886,7 @@ namespace yata
 			// 
 			// la_26
 			// 
-			this.la_26.Location = new System.Drawing.Point(272, 421);
+			this.la_26.Location = new System.Drawing.Point(368, 421);
 			this.la_26.Margin = new System.Windows.Forms.Padding(0);
 			this.la_26.Name = "la_26";
 			this.la_26.Size = new System.Drawing.Size(139, 16);
@@ -837,7 +896,7 @@ namespace yata
 			// pa_26
 			// 
 			this.pa_26.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_26.Location = new System.Drawing.Point(414, 416);
+			this.pa_26.Location = new System.Drawing.Point(510, 416);
 			this.pa_26.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_26.Name = "pa_26";
 			this.pa_26.Size = new System.Drawing.Size(69, 24);
@@ -847,7 +906,7 @@ namespace yata
 			// 
 			// la_27
 			// 
-			this.la_27.Location = new System.Drawing.Point(272, 446);
+			this.la_27.Location = new System.Drawing.Point(368, 446);
 			this.la_27.Margin = new System.Windows.Forms.Padding(0);
 			this.la_27.Name = "la_27";
 			this.la_27.Size = new System.Drawing.Size(139, 16);
@@ -857,7 +916,7 @@ namespace yata
 			// pa_27
 			// 
 			this.pa_27.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_27.Location = new System.Drawing.Point(414, 441);
+			this.pa_27.Location = new System.Drawing.Point(510, 441);
 			this.pa_27.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_27.Name = "pa_27";
 			this.pa_27.Size = new System.Drawing.Size(69, 24);
@@ -867,7 +926,7 @@ namespace yata
 			// 
 			// la_28
 			// 
-			this.la_28.Location = new System.Drawing.Point(272, 471);
+			this.la_28.Location = new System.Drawing.Point(368, 471);
 			this.la_28.Margin = new System.Windows.Forms.Padding(0);
 			this.la_28.Name = "la_28";
 			this.la_28.Size = new System.Drawing.Size(139, 16);
@@ -877,7 +936,7 @@ namespace yata
 			// pa_28
 			// 
 			this.pa_28.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_28.Location = new System.Drawing.Point(414, 466);
+			this.pa_28.Location = new System.Drawing.Point(510, 466);
 			this.pa_28.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_28.Name = "pa_28";
 			this.pa_28.Size = new System.Drawing.Size(69, 24);
@@ -987,7 +1046,7 @@ namespace yata
 			// 
 			// la_34
 			// 
-			this.la_34.Location = new System.Drawing.Point(272, 251);
+			this.la_34.Location = new System.Drawing.Point(368, 251);
 			this.la_34.Margin = new System.Windows.Forms.Padding(0);
 			this.la_34.Name = "la_34";
 			this.la_34.Size = new System.Drawing.Size(139, 16);
@@ -997,7 +1056,7 @@ namespace yata
 			// pa_34
 			// 
 			this.pa_34.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_34.Location = new System.Drawing.Point(414, 246);
+			this.pa_34.Location = new System.Drawing.Point(510, 246);
 			this.pa_34.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_34.Name = "pa_34";
 			this.pa_34.Size = new System.Drawing.Size(69, 24);
@@ -1007,7 +1066,7 @@ namespace yata
 			// 
 			// la_35
 			// 
-			this.la_35.Location = new System.Drawing.Point(272, 91);
+			this.la_35.Location = new System.Drawing.Point(368, 91);
 			this.la_35.Margin = new System.Windows.Forms.Padding(0);
 			this.la_35.Name = "la_35";
 			this.la_35.Size = new System.Drawing.Size(139, 16);
@@ -1017,7 +1076,7 @@ namespace yata
 			// pa_35
 			// 
 			this.pa_35.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_35.Location = new System.Drawing.Point(414, 86);
+			this.pa_35.Location = new System.Drawing.Point(510, 86);
 			this.pa_35.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_35.Name = "pa_35";
 			this.pa_35.Size = new System.Drawing.Size(69, 24);
@@ -1027,7 +1086,7 @@ namespace yata
 			// 
 			// la_36
 			// 
-			this.la_36.Location = new System.Drawing.Point(272, 116);
+			this.la_36.Location = new System.Drawing.Point(368, 116);
 			this.la_36.Margin = new System.Windows.Forms.Padding(0);
 			this.la_36.Name = "la_36";
 			this.la_36.Size = new System.Drawing.Size(139, 16);
@@ -1037,7 +1096,7 @@ namespace yata
 			// pa_36
 			// 
 			this.pa_36.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_36.Location = new System.Drawing.Point(414, 111);
+			this.pa_36.Location = new System.Drawing.Point(510, 111);
 			this.pa_36.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_36.Name = "pa_36";
 			this.pa_36.Size = new System.Drawing.Size(69, 24);
@@ -1065,9 +1124,20 @@ namespace yata
 			this.pa_37.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_37.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
+			// pa_37_t
+			// 
+			this.pa_37_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_37_t.Location = new System.Drawing.Point(262, 162);
+			this.pa_37_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_37_t.Name = "pa_37_t";
+			this.pa_37_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_37_t.TabIndex = 95;
+			this.pa_37_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_37_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
 			// la_38
 			// 
-			this.la_38.Location = new System.Drawing.Point(272, 276);
+			this.la_38.Location = new System.Drawing.Point(368, 276);
 			this.la_38.Margin = new System.Windows.Forms.Padding(0);
 			this.la_38.Name = "la_38";
 			this.la_38.Size = new System.Drawing.Size(139, 16);
@@ -1077,7 +1147,7 @@ namespace yata
 			// pa_38
 			// 
 			this.pa_38.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_38.Location = new System.Drawing.Point(414, 271);
+			this.pa_38.Location = new System.Drawing.Point(510, 271);
 			this.pa_38.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_38.Name = "pa_38";
 			this.pa_38.Size = new System.Drawing.Size(69, 24);
@@ -1087,7 +1157,7 @@ namespace yata
 			// 
 			// la_39
 			// 
-			this.la_39.Location = new System.Drawing.Point(272, 311);
+			this.la_39.Location = new System.Drawing.Point(368, 311);
 			this.la_39.Margin = new System.Windows.Forms.Padding(0);
 			this.la_39.Name = "la_39";
 			this.la_39.Size = new System.Drawing.Size(139, 16);
@@ -1097,7 +1167,7 @@ namespace yata
 			// pa_39
 			// 
 			this.pa_39.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_39.Location = new System.Drawing.Point(414, 306);
+			this.pa_39.Location = new System.Drawing.Point(510, 306);
 			this.pa_39.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_39.Name = "pa_39";
 			this.pa_39.Size = new System.Drawing.Size(69, 24);
@@ -1228,7 +1298,7 @@ namespace yata
 			// la_Help
 			// 
 			this.la_Help.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.la_Help.Location = new System.Drawing.Point(274, 500);
+			this.la_Help.Location = new System.Drawing.Point(370, 500);
 			this.la_Help.Margin = new System.Windows.Forms.Padding(0);
 			this.la_Help.Name = "la_Help";
 			this.la_Help.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -1247,13 +1317,13 @@ namespace yata
 			this.pa_bot.Location = new System.Drawing.Point(0, 741);
 			this.pa_bot.Margin = new System.Windows.Forms.Padding(0);
 			this.pa_bot.Name = "pa_bot";
-			this.pa_bot.Size = new System.Drawing.Size(492, 33);
+			this.pa_bot.Size = new System.Drawing.Size(592, 33);
 			this.pa_bot.TabIndex = 1;
 			// 
 			// bu_Save
 			// 
 			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Save.Location = new System.Drawing.Point(224, 4);
+			this.bu_Save.Location = new System.Drawing.Point(324, 4);
 			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Save.Name = "bu_Save";
 			this.bu_Save.Size = new System.Drawing.Size(164, 26);
@@ -1267,7 +1337,7 @@ namespace yata
 			// 
 			this.bu_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.bu_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bu_Cancel.Location = new System.Drawing.Point(389, 4);
+			this.bu_Cancel.Location = new System.Drawing.Point(489, 4);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
 			this.bu_Cancel.Size = new System.Drawing.Size(99, 26);
@@ -1313,7 +1383,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Save;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(492, 774);
+			this.ClientSize = new System.Drawing.Size(592, 774);
 			this.Controls.Add(this.gb_Colors);
 			this.Controls.Add(this.pa_bot);
 			this.Icon = global::yata.Properties.Resources.yata_icon;

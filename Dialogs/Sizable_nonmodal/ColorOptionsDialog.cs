@@ -34,8 +34,8 @@ namespace yata
 		void init()
 		{
 			// Table ->
-			la_01.Text = "Table text";
-			pa_01.BackColor = ColorOptions._tabletext;
+//			la_01.Text = "Table text";
+//			pa_01.BackColor = ColorOptions._tabletext;
 			la_15.Text = "Table lines";
 			pa_15.BackColor = ColorOptions._tablelines.Color;
 			la_02.Text = "Row a";
@@ -48,6 +48,12 @@ namespace yata
 			pa_05.BackColor = (ColorOptions._rowdisabledb as SolidBrush).Color;
 			la_37.Text = "Row created";
 			pa_37.BackColor = (ColorOptions._rowcreated as SolidBrush).Color;
+
+			pa_02_t.BackColor = ColorOptions._rowa_t;
+			pa_03_t.BackColor = ColorOptions._rowb_t;
+			pa_04_t.BackColor = ColorOptions._rowdisableda_t;
+			pa_05_t.BackColor = ColorOptions._rowdisabledb_t;
+			pa_37_t.BackColor = ColorOptions._rowcreated_t;
 
 			// Frozen ->
 			la_06.Text = "Frozen panel text";
@@ -190,13 +196,19 @@ namespace yata
 					string title;
 
 					// Table ->
-					if      (sender == pa_01) title = la_01.Text;
-					else if (sender == pa_15) title = la_15.Text;
+//					if      (sender == pa_01) title = la_01.Text;
+					if      (sender == pa_15) title = la_15.Text;
 					else if (sender == pa_02) title = la_02.Text;
 					else if (sender == pa_03) title = la_03.Text;
 					else if (sender == pa_04) title = la_04.Text;
 					else if (sender == pa_05) title = la_05.Text;
 					else if (sender == pa_37) title = la_37.Text;
+
+					else if (sender == pa_02_t) title = la_02.Text + " text";
+					else if (sender == pa_03_t) title = la_03.Text + " text";
+					else if (sender == pa_04_t) title = la_04.Text + " text";
+					else if (sender == pa_05_t) title = la_05.Text + " text";
+					else if (sender == pa_37_t) title = la_37.Text + " text";
 
 					// Frozen ->
 					else if (sender == pa_06) title = la_06.Text;
@@ -257,12 +269,12 @@ namespace yata
 
 				case MouseButtons.Right:
 					// Table ->
-					if (sender == pa_01)
-					{
-						pa_01.BackColor =
-						ColorOptions._tabletext = ColorOptions.Def_tabletext;
-					}
-					else if (sender == pa_15)
+//					if (sender == pa_01)
+//					{
+//						pa_01.BackColor =
+//						ColorOptions._tabletext = ColorOptions.Def_tabletext;
+//					}
+					if (sender == pa_15)
 					{
 						pa_15.BackColor =
 						ColorOptions._tablelines.Color = ColorOptions.Def_tablelines;
@@ -291,6 +303,32 @@ namespace yata
 					{
 						pa_37.BackColor =
 						(ColorOptions._rowcreated as SolidBrush).Color = ColorOptions.Def_rowcreated;
+					}
+
+					else if (sender == pa_02_t)
+					{
+						pa_02_t.BackColor =
+						ColorOptions._rowa_t = ColorOptions.Def_rowa_t;
+					}
+					else if (sender == pa_03_t)
+					{
+						pa_03_t.BackColor =
+						ColorOptions._rowb_t = ColorOptions.Def_rowb_t;
+					}
+					else if (sender == pa_04_t)
+					{
+						pa_04_t.BackColor =
+						ColorOptions._rowdisableda_t = ColorOptions.Def_rowdisableda_t;
+					}
+					else if (sender == pa_05_t)
+					{
+						pa_05_t.BackColor =
+						ColorOptions._rowdisabledb_t = ColorOptions.Def_rowdisabledb_t;
+					}
+					else if (sender == pa_37_t)
+					{
+						pa_37_t.BackColor =
+						ColorOptions._rowcreated_t = ColorOptions.Def_rowcreated_t;
 					}
 
 					// Frozen ->
@@ -508,13 +546,19 @@ namespace yata
 		void backcolorchanged_ColorPanel(object sender, EventArgs e)
 		{
 			// Table ->
-			if      (sender == pa_01)  ColorOptions._tabletext                            = pa_01.BackColor;
-			else if (sender == pa_15)  ColorOptions._tablelines                    .Color = pa_15.BackColor;
+//			if      (sender == pa_01)  ColorOptions._tabletext                            = pa_01.BackColor;
+			if      (sender == pa_15)  ColorOptions._tablelines                    .Color = pa_15.BackColor;
 			else if (sender == pa_02) (ColorOptions._rowa            as SolidBrush).Color = pa_02.BackColor;
 			else if (sender == pa_03) (ColorOptions._rowb            as SolidBrush).Color = pa_03.BackColor;
 			else if (sender == pa_04) (ColorOptions._rowdisableda    as SolidBrush).Color = pa_04.BackColor;
 			else if (sender == pa_05) (ColorOptions._rowdisabledb    as SolidBrush).Color = pa_05.BackColor;
 			else if (sender == pa_37) (ColorOptions._rowcreated      as SolidBrush).Color = pa_37.BackColor;
+
+			else if (sender == pa_02_t) ColorOptions._rowa_t         = pa_02_t.BackColor;
+			else if (sender == pa_03_t) ColorOptions._rowb_t         = pa_03_t.BackColor;
+			else if (sender == pa_04_t) ColorOptions._rowdisableda_t = pa_04_t.BackColor;
+			else if (sender == pa_05_t) ColorOptions._rowdisabledb_t = pa_05_t.BackColor;
+			else if (sender == pa_37_t) ColorOptions._rowcreated_t   = pa_37_t.BackColor;
 
 			// Frozen ->
 			else if (sender == pa_06)  ColorOptions._frozentext                           = pa_06.BackColor;
@@ -672,8 +716,8 @@ namespace yata
 			var sb = new StringBuilder();
 
 			// Table ->
-			sb.Append(ColorOptions.CFG_tabletext);
-			sb.AppendLine(pa_01.BackColor.R + "," + pa_01.BackColor.G + "," + pa_01.BackColor.B);
+//			sb.Append(ColorOptions.CFG_tabletext);
+//			sb.AppendLine(pa_01.BackColor.R + "," + pa_01.BackColor.G + "," + pa_01.BackColor.B);
 			sb.Append(ColorOptions.CFG_tablelines);
 			sb.AppendLine(pa_15.BackColor.R + "," + pa_15.BackColor.G + "," + pa_15.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowa);
@@ -686,6 +730,17 @@ namespace yata
 			sb.AppendLine(pa_05.BackColor.R + "," + pa_05.BackColor.G + "," + pa_05.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowcreated);
 			sb.AppendLine(pa_37.BackColor.R + "," + pa_37.BackColor.G + "," + pa_37.BackColor.B);
+
+			sb.Append(ColorOptions.CFG_rowa_t);
+			sb.AppendLine(pa_02_t.BackColor.R + "," + pa_02_t.BackColor.G + "," + pa_02_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowb_t);
+			sb.AppendLine(pa_03_t.BackColor.R + "," + pa_03_t.BackColor.G + "," + pa_03_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowdisableda_t);
+			sb.AppendLine(pa_04_t.BackColor.R + "," + pa_04_t.BackColor.G + "," + pa_04_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowdisabledb_t);
+			sb.AppendLine(pa_05_t.BackColor.R + "," + pa_05_t.BackColor.G + "," + pa_05_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowcreated_t);
+			sb.AppendLine(pa_37_t.BackColor.R + "," + pa_37_t.BackColor.G + "," + pa_37_t.BackColor.B);
 
 			// Frozen ->
 			sb.Append(ColorOptions.CFG_frozentext);
@@ -787,8 +842,8 @@ namespace yata
 		void click_Defaults(object sender, EventArgs e)
 		{
 			// Table ->
-			 pa_01.BackColor                                    =
-			 ColorOptions._tabletext                            = ColorOptions.Def_tabletext;
+//			 pa_01.BackColor                                    =
+//			 ColorOptions._tabletext                            = ColorOptions.Def_tabletext;
 			 pa_15.BackColor                                    =
 			 ColorOptions._tablelines                    .Color = ColorOptions.Def_tablelines;
 			 pa_02.BackColor                                    =
@@ -801,6 +856,17 @@ namespace yata
 			(ColorOptions._rowdisabledb    as SolidBrush).Color = ColorOptions.Def_rowdisabledb;
 			 pa_37.BackColor                                    =
 			(ColorOptions._rowcreated      as SolidBrush).Color = ColorOptions.Def_rowcreated;
+
+			 pa_02_t.BackColor            =
+			 ColorOptions._rowa_t         = ColorOptions.Def_rowa_t;
+			 pa_03_t.BackColor            =
+			 ColorOptions._rowb_t         = ColorOptions.Def_rowb_t;
+			 pa_04_t.BackColor            =
+			 ColorOptions._rowdisableda_t = ColorOptions.Def_rowdisableda_t;
+			 pa_05_t.BackColor            =
+			 ColorOptions._rowdisabledb_t = ColorOptions.Def_rowdisabledb_t;
+			 pa_37_t.BackColor            =
+			 ColorOptions._rowcreated_t   = ColorOptions.Def_rowcreated_t;
 
 			 // Frozen ->
 			 pa_06.BackColor                                    =
