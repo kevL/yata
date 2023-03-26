@@ -183,7 +183,7 @@ namespace yata
 
 				Rectangle rect;
 
-				if (Gradients.FrozenLabel != null)
+				if (Options._gradient)
 				{
 					LinearGradientBrush grad;
 					if (_sortcol == 0 && _sortdir == SORT_ASC)
@@ -244,7 +244,7 @@ namespace yata
 
 				Rectangle rect;
 
-				if (Gradients.FrozenLabel != null)
+				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
@@ -303,7 +303,7 @@ namespace yata
 
 				Rectangle rect;
 
-				if (Gradients.FrozenLabel != null)
+				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);

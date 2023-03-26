@@ -64,6 +64,14 @@ namespace yata
 			pa_08.BackColor = ColorOptions._frozenhead;
 			la_29.Text = "Frozen id unsorted";
 			pa_29.BackColor = ColorOptions._frozenidunsort;
+			la_42.Text = "Frozen header gradient a";
+			pa_42.BackColor = ColorOptions._frozenheadgrada;
+			la_43.Text = "Frozen header gradient b";
+			pa_43.BackColor = ColorOptions._frozenheadgradb;
+			la_44.Text = "Frozen id unsorted gradient a";
+			pa_44.BackColor = ColorOptions._frozenidgrada;
+			la_45.Text = "Frozen id unsorted gradient b";
+			pa_45.BackColor = ColorOptions._frozenidgradb;
 
 			// Colhead ->
 			la_20.Text = "Col header text";
@@ -80,6 +88,10 @@ namespace yata
 			pa_32.BackColor = ColorOptions._headtextsortasc;
 			la_33.Text = "Header text sorted descend";
 			pa_33.BackColor = ColorOptions._headtextsortdes;
+			la_40.Text = "Col header gradient a";
+			pa_40.BackColor = ColorOptions._colheadgrada;
+			la_41.Text = "Col header gradient b";
+			pa_41.BackColor = ColorOptions._colheadgradb;
 
 			// Rowpanel ->
 			la_10.Text = "Row panel text";
@@ -194,6 +206,10 @@ namespace yata
 					else if (sender == pa_17) title = la_17.Text;
 					else if (sender == pa_08) title = la_08.Text;
 					else if (sender == pa_29) title = la_29.Text;
+					else if (sender == pa_42) title = la_42.Text;
+					else if (sender == pa_43) title = la_43.Text;
+					else if (sender == pa_44) title = la_44.Text;
+					else if (sender == pa_45) title = la_45.Text;
 
 					// Colhead ->
 					else if (sender == pa_20) title = la_20.Text;
@@ -203,6 +219,8 @@ namespace yata
 					else if (sender == pa_09) title = la_09.Text;
 					else if (sender == pa_32) title = la_32.Text;
 					else if (sender == pa_33) title = la_33.Text;
+					else if (sender == pa_40) title = la_40.Text;
+					else if (sender == pa_41) title = la_41.Text;
 
 					// Rowpanel ->
 					else if (sender == pa_10) title = la_10.Text;
@@ -311,6 +329,26 @@ namespace yata
 						pa_29.BackColor =
 						ColorOptions._frozenidunsort = ColorOptions.Def_frozenidunsort;
 					}
+					else if (sender == pa_42)
+					{
+						pa_42.BackColor =
+						ColorOptions._frozenheadgrada = ColorOptions.Def_frozenheadgrada;
+					}
+					else if (sender == pa_43)
+					{
+						pa_43.BackColor =
+						ColorOptions._frozenheadgradb = ColorOptions.Def_frozenheadgradb;
+					}
+					else if (sender == pa_44)
+					{
+						pa_44.BackColor =
+						ColorOptions._frozenidgrada = ColorOptions.Def_frozenidgrada;
+					}
+					else if (sender == pa_45)
+					{
+						pa_45.BackColor =
+						ColorOptions._frozenidgradb = ColorOptions.Def_frozenidgradb;
+					}
 
 					// Colhead ->
 					else if (sender == pa_20)
@@ -347,6 +385,16 @@ namespace yata
 					{
 						pa_33.BackColor =
 						ColorOptions._headtextsortdes = ColorOptions.Def_headtextsortdes;
+					}
+					else if (sender == pa_40)
+					{
+						pa_40.BackColor =
+						ColorOptions._colheadgrada = ColorOptions.Def_colheadgrada;
+					}
+					else if (sender == pa_41)
+					{
+						pa_41.BackColor =
+						ColorOptions._colheadgradb = ColorOptions.Def_colheadgradb;
 					}
 
 					// Rowpanel ->
@@ -476,6 +524,28 @@ namespace yata
 			else if (sender == pa_17)  ColorOptions._frozenheadlines               .Color = pa_17.BackColor;
 			else if (sender == pa_08)  ColorOptions._frozenhead                           = pa_08.BackColor;
 			else if (sender == pa_29)  ColorOptions._frozenidunsort                       = pa_29.BackColor;
+			else if (sender == pa_42 || sender == pa_43)
+			{
+				if (sender == pa_42) ColorOptions._frozenheadgrada = pa_42.BackColor;
+				else                 ColorOptions._frozenheadgradb = pa_43.BackColor; // sender == pa_43
+
+				if (Options._gradient && Yata.Table != null)
+				{
+					Yata.Table.UpdateFrozenLabelGradientBrush(); // recreate 'Gradients.FrozenLabel'
+				}
+				else return;
+			}
+			else if (sender == pa_44 || sender == pa_45)
+			{
+				if (sender == pa_44) ColorOptions._frozenidgrada = pa_44.BackColor;
+				else                 ColorOptions._frozenidgradb = pa_45.BackColor; // sender == pa_45
+
+				if (Options._gradient && Yata.Table != null)
+				{
+					Yata.Table.UpdateDisorderedGradientBrush(); // recreate 'Gradients.Disordered'
+				}
+				else return;
+			}
 
 			// Colhead ->
 			else if (sender == pa_20)  ColorOptions._colheadtext                          = pa_20.BackColor;
@@ -485,6 +555,17 @@ namespace yata
 			else if (sender == pa_09)  ColorOptions._colhead                              = pa_09.BackColor;
 			else if (sender == pa_32)  ColorOptions._headtextsortasc                      = pa_32.BackColor;
 			else if (sender == pa_33)  ColorOptions._headtextsortdes                      = pa_33.BackColor;
+			else if (sender == pa_40 || sender == pa_41)
+			{
+				if (sender == pa_40) ColorOptions._colheadgrada = pa_40.BackColor;
+				else                 ColorOptions._colheadgradb = pa_41.BackColor; // sender == pa_41
+
+				if (Options._gradient && Yata.Table != null)
+				{
+					Yata.Table._panelCols.UpdateGradientBrush(); // recreate 'Gradients.ColheadPanel'
+				}
+				else return;
+			}
 
 			// Rowpanel ->
 			else if (sender == pa_10)  ColorOptions._rowpaneltext                         = pa_10.BackColor;
@@ -505,7 +586,7 @@ namespace yata
 			else if (sender == pa_39)
 			{
 				ColorOptions._statusbartext = pa_39.BackColor;
-				Yata.that.UpdateStatusbarTextcolor(pa_39.BackColor); // update all ToolStripStatusLabels
+				Yata.that.UpdateStatusbarTextColor(pa_39.BackColor); // update all ToolStripStatusLabels
 			}
 			else if (sender == pa_14) (ColorOptions._statusbar       as SolidBrush).Color = pa_14.BackColor;
 
@@ -539,7 +620,7 @@ namespace yata
 			{
 				string pfeT = Path.Combine(Application.StartupPath, ColorOptions.FE) + ".t";
 
-				File.WriteAllText(pfeT, BuildFile());
+				File.WriteAllText(pfeT, BuildColorsText());
 
 				if (File.Exists(pfeT))
 				{
@@ -586,7 +667,7 @@ namespace yata
 		/// Builds text for the "Colors.Cfg" file.
 		/// </summary>
 		/// <returns></returns>
-		string BuildFile()
+		string BuildColorsText()
 		{
 			var sb = new StringBuilder();
 
@@ -621,6 +702,14 @@ namespace yata
 			sb.AppendLine(pa_08.BackColor.R + "," + pa_08.BackColor.G + "," + pa_08.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenidunsort);
 			sb.AppendLine(pa_29.BackColor.R + "," + pa_29.BackColor.G + "," + pa_29.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenheadgrada);
+			sb.AppendLine(pa_42.BackColor.R + "," + pa_42.BackColor.G + "," + pa_42.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenheadgradb);
+			sb.AppendLine(pa_43.BackColor.R + "," + pa_43.BackColor.G + "," + pa_43.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenidgrada);
+			sb.AppendLine(pa_44.BackColor.R + "," + pa_44.BackColor.G + "," + pa_44.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenidgradb);
+			sb.AppendLine(pa_45.BackColor.R + "," + pa_45.BackColor.G + "," + pa_45.BackColor.B);
 
 			// Colhead ->
 			sb.Append(ColorOptions.CFG_colheadtext);
@@ -637,6 +726,10 @@ namespace yata
 			sb.AppendLine(pa_32.BackColor.R + "," + pa_32.BackColor.G + "," + pa_32.BackColor.B);
 			sb.Append(ColorOptions.CFG_headtextsortdes);
 			sb.AppendLine(pa_33.BackColor.R + "," + pa_33.BackColor.G + "," + pa_33.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadgrada);
+			sb.AppendLine(pa_40.BackColor.R + "," + pa_40.BackColor.G + "," + pa_40.BackColor.B);
+			sb.Append(ColorOptions.CFG_colheadgradb);
+			sb.AppendLine(pa_41.BackColor.R + "," + pa_41.BackColor.G + "," + pa_41.BackColor.B);
 
 			// Rowpanel ->
 			sb.Append(ColorOptions.CFG_rowpaneltext);
@@ -724,6 +817,14 @@ namespace yata
 			 ColorOptions._frozenhead                           = ColorOptions.Def_frozenhead;
 			 pa_29.BackColor                                    =
 			 ColorOptions._frozenidunsort                       = ColorOptions.Def_frozenidunsort;
+			 pa_42.BackColor                                    =
+			 ColorOptions._frozenheadgrada                      = ColorOptions.Def_frozenheadgrada;
+			 pa_43.BackColor                                    =
+			 ColorOptions._frozenheadgradb                      = ColorOptions.Def_frozenheadgradb;
+			 pa_44.BackColor                                    =
+			 ColorOptions._frozenidgrada                        = ColorOptions.Def_frozenidgrada;
+			 pa_45.BackColor                                    =
+			 ColorOptions._frozenidgradb                        = ColorOptions.Def_frozenidgradb;
 
 			 // Colhead ->
 			 pa_20.BackColor                                    =
@@ -740,6 +841,10 @@ namespace yata
 			 ColorOptions._headtextsortasc                      = ColorOptions.Def_headtextsortasc;
 			 pa_33.BackColor                                    =
 			 ColorOptions._headtextsortdes                      = ColorOptions.Def_headtextsortdes;
+			 pa_40.BackColor                                    =
+			 ColorOptions._colheadgrada                         = ColorOptions.Def_colheadgrada;
+			 pa_41.BackColor                                    =
+			 ColorOptions._colheadgradb                         = ColorOptions.Def_colheadgradb;
 
 			 // Rowpanel ->
 			 pa_10.BackColor                                    =

@@ -1188,20 +1188,40 @@ namespace yata
 			{
 				_heightColheadCached = HeightColhead;
 
-				if (Gradients.FrozenLabel != null)
-					Gradients.FrozenLabel.Dispose();
-
-				Gradients.FrozenLabel = new LinearGradientBrush(new Point(0, 0),
-																new Point(0, HeightColhead),
-																Color.Cornsilk, Color.BurlyWood);
-
-				if (Gradients.Disordered != null)
-					Gradients.Disordered.Dispose();
-
-				Gradients.Disordered = new LinearGradientBrush(new Point(0, 0),
-															   new Point(0, HeightColhead),
-															   Color.LightCoral, Color.Lavender);
+				UpdateFrozenLabelGradientBrush();
+				UpdateDisorderedGradientBrush();
 			}
+		}
+
+
+		/// <summary>
+		/// Updates the colors of
+		/// <c><see cref="Gradients.FrozenLabel">Gradients.FrozenLabel</see></c>
+		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// </summary>
+		internal void UpdateFrozenLabelGradientBrush()
+		{
+			if (Gradients.FrozenLabel != null)
+				Gradients.FrozenLabel.Dispose();
+
+			Gradients.FrozenLabel = new LinearGradientBrush(new Point(0, 0),
+															new Point(0, HeightColhead),
+															ColorOptions._frozenheadgrada, ColorOptions._frozenheadgradb);
+		}
+
+		/// <summary>
+		/// Updates the colors of
+		/// <c><see cref="Gradients.Disordered">Gradients.Disordered</see></c>
+		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// </summary>
+		internal void UpdateDisorderedGradientBrush()
+		{
+			if (Gradients.Disordered != null)
+				Gradients.Disordered.Dispose();
+
+			Gradients.Disordered = new LinearGradientBrush(new Point(0, 0),
+														   new Point(0, HeightColhead),
+														   ColorOptions._frozenidgrada, ColorOptions._frozenidgradb);
 		}
 		#endregion Methods (load)
 

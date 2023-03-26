@@ -101,14 +101,22 @@ namespace yata
 			}
 
 			if (Options._gradient)
-			{
-				if (Gradients.ColheadPanel != null)
-					Gradients.ColheadPanel.Dispose();
+				UpdateGradientBrush();
+		}
 
-				Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
-																 new Point(0, Height),
-																 Color.Lavender, Color.MediumOrchid);
-			}
+		/// <summary>
+		/// Updates the colors of
+		/// <c><see cref="Gradients.ColheadPanel">Gradients.ColheadPanel</see></c>
+		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// </summary>
+		internal void UpdateGradientBrush()
+		{
+			if (Gradients.ColheadPanel != null)
+				Gradients.ColheadPanel.Dispose();
+
+			Gradients.ColheadPanel = new LinearGradientBrush(new Point(0, 0),
+															 new Point(0, Height),
+															 ColorOptions._colheadgrada, ColorOptions._colheadgradb);
 		}
 
 
@@ -128,7 +136,7 @@ namespace yata
 				YataGrid.graphics = e.Graphics;
 				YataGrid.graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				if (Gradients.ColheadPanel != null) // Options._gradient
+				if (Options._gradient)
 				{
 					var rect = new Rectangle(0,0, Width, Height);
 					YataGrid.graphics.FillRectangle(Gradients.ColheadPanel, rect);
