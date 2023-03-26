@@ -906,6 +906,8 @@ namespace yata
 				try
 				{
 					File.Delete(pfe);
+					using (var ib = new Infobox(Infobox.Title_infor, "Colors.Cfg deleted."))
+						ib.ShowDialog(this);
 				}
 				catch (Exception ex)
 				{
@@ -916,6 +918,16 @@ namespace yata
 					{
 						ib.ShowDialog(this);
 					}
+				}
+			}
+			else
+			{
+				using (var ib = new Infobox(Infobox.Title_warni,
+											"Colors.Cfg does not exist.",
+											null,
+											InfoboxType.Warn))
+				{
+					ib.ShowDialog(this);
 				}
 			}
 		}
