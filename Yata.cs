@@ -440,7 +440,8 @@ namespace yata
 
 		/// <summary>
 		/// Updates the <c>BackColor</c> of
-		/// <c><see cref="YataGrid._editor">YataGrid._editors</see></c> when the
+		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and
+		/// <c><see cref="Propanel._editor">Propanel._editor</see></c> when the
 		/// user changes it in <c><see cref="ColorOptionsDialog"/></c>.
 		/// </summary>
 		/// <param name="color"></param>
@@ -453,6 +454,24 @@ namespace yata
 
 				if (table.Propanel != null)
 					table.Propanel._editor.BackColor = color;
+			}
+		}
+
+		/// <summary>
+		/// Updates the <c>ForeColor</c> of
+		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and
+		/// <c><see cref="Propanel._editor">Propanel._editor</see></c> when the
+		/// user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// </summary>
+		internal void UpdateEditorTextColor()
+		{
+			YataGrid table;
+			foreach (TabPage page in Tabs.TabPages)
+			{
+				(table = page.Tag as YataGrid)._editor.ForeColor = ColorOptions._celledit_t;
+
+				if (table.Propanel != null)
+					table.Propanel._editor.ForeColor = ColorOptions._celledit_t;
 			}
 		}
 

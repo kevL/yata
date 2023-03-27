@@ -98,11 +98,16 @@ namespace yata
 									  pa_14_t.BackColor =  ColorOptions._statusbar_t;
 
 			// Cells ->
-			la_24.Text = "Cell selected";    pa_24.BackColor = (ColorOptions._cellselected    as SolidBrush).Color;
-			la_25.Text = "Cell loadchanged"; pa_25.BackColor = (ColorOptions._cellloadchanged as SolidBrush).Color;
-			la_26.Text = "Cell diffed";      pa_26.BackColor = (ColorOptions._celldiffed      as SolidBrush).Color;
-			la_27.Text = "Cell replaced";    pa_27.BackColor = (ColorOptions._cellreplaced    as SolidBrush).Color;
-			la_28.Text = "Cell edit";        pa_28.BackColor = (ColorOptions._celledit        as SolidBrush).Color;
+			la_24.Text = "Cell selected";    pa_24  .BackColor = (ColorOptions._cellselected    as SolidBrush).Color;
+											 pa_24_t.BackColor =  ColorOptions._cellselected_t;
+			la_25.Text = "Cell loadchanged"; pa_25  .BackColor = (ColorOptions._cellloadchanged as SolidBrush).Color;
+											 pa_25_t.BackColor =  ColorOptions._cellloadchanged_t;
+			la_26.Text = "Cell diffed";      pa_26  .BackColor = (ColorOptions._celldiffed      as SolidBrush).Color;
+											 pa_26_t.BackColor =  ColorOptions._celldiffed_t;
+			la_27.Text = "Cell replaced";    pa_27  .BackColor = (ColorOptions._cellreplaced    as SolidBrush).Color;
+											 pa_27_t.BackColor =  ColorOptions._cellreplaced_t;
+			la_28.Text = "Cell edit";        pa_28  .BackColor = (ColorOptions._celledit        as SolidBrush).Color;
+											 pa_28_t.BackColor =  ColorOptions._celledit_t;
 
 			_init = false;
 		}
@@ -218,10 +223,15 @@ namespace yata
 
 					// Cells ->
 					else if (sender == pa_24)   title = la_24.Text;
+					else if (sender == pa_24_t) title = la_24.Text + " text";
 					else if (sender == pa_25)   title = la_25.Text;
+					else if (sender == pa_25_t) title = la_25.Text + " text";
 					else if (sender == pa_26)   title = la_26.Text;
+					else if (sender == pa_26_t) title = la_26.Text + " text";
 					else if (sender == pa_27)   title = la_27.Text;
-					else                        title = la_28.Text; // sender == pa_28
+					else if (sender == pa_27_t) title = la_27.Text + " text";
+					else if (sender == pa_28)   title = la_28.Text;
+					else                        title = la_28.Text + " text"; // sender == pa_28_t
 
 					var f = new ColorSelectorDialog(this, sender as Panel, " yata - " + title);
 					f.ShowDialog(this);
@@ -322,7 +332,7 @@ namespace yata
 				else if (sender == pa_22)   ColorOptions._propanellines                 .Color = pa_22  .BackColor;
 				else if (sender == pa_23)   ColorOptions._propanelborder                .Color = pa_23  .BackColor;
 				else if (sender == pa_13)   ColorOptions._propanel                             = pa_13  .BackColor;
-				else if (sender == pa_13_t) ColorOptions._propanel_t                         = pa_13_t.BackColor;
+				else if (sender == pa_13_t) ColorOptions._propanel_t                           = pa_13_t.BackColor;
 				else if (sender == pa_34)  (ColorOptions._propanelfrozen  as SolidBrush).Color = pa_34  .BackColor;
 				else if (sender == pa_38)  (ColorOptions._propanelsel     as SolidBrush).Color = pa_38  .BackColor;
 
@@ -335,14 +345,23 @@ namespace yata
 				}
 
 				// Cells ->
-				else if (sender == pa_24)  (ColorOptions._cellselected    as SolidBrush).Color = pa_24  .BackColor;
-				else if (sender == pa_25)  (ColorOptions._cellloadchanged as SolidBrush).Color = pa_25  .BackColor;
-				else if (sender == pa_26)  (ColorOptions._celldiffed      as SolidBrush).Color = pa_26  .BackColor;
-				else if (sender == pa_27)  (ColorOptions._cellreplaced    as SolidBrush).Color = pa_27  .BackColor;
+				else if (sender == pa_24)   (ColorOptions._cellselected    as SolidBrush).Color = pa_24  .BackColor;
+				else if (sender == pa_24_t)  ColorOptions._cellselected_t                       = pa_24_t.BackColor;
+				else if (sender == pa_25)   (ColorOptions._cellloadchanged as SolidBrush).Color = pa_25  .BackColor;
+				else if (sender == pa_25_t)  ColorOptions._cellloadchanged_t                    = pa_25_t.BackColor;
+				else if (sender == pa_26)   (ColorOptions._celldiffed      as SolidBrush).Color = pa_26  .BackColor;
+				else if (sender == pa_26_t)  ColorOptions._celldiffed_t                         = pa_26_t.BackColor;
+				else if (sender == pa_27)   (ColorOptions._cellreplaced    as SolidBrush).Color = pa_27  .BackColor;
+				else if (sender == pa_27_t)  ColorOptions._cellreplaced_t                       = pa_27_t.BackColor;
 				else if (sender == pa_28)
 				{
 					(ColorOptions._celledit as SolidBrush).Color = pa_28.BackColor;
 					Yata.that.UpdateEditorColor(pa_28.BackColor); // iterate through all YataGrids
+				}
+				else // sender == pa_28_t
+				{
+					ColorOptions._celledit_t = pa_28_t.BackColor;
+					Yata.that.UpdateEditorTextColor(); // iterate through all YataGrids
 				}
 
 				Yata.that.Refresh();
@@ -519,27 +538,26 @@ namespace yata
 			// Cells ->
 			sb.Append(ColorOptions.CFG_cellselected);
 			sb.AppendLine(pa_24.BackColor.R + "," + pa_24.BackColor.G + "," + pa_24.BackColor.B);
+			sb.Append(ColorOptions.CFG_cellselected_t);
+			sb.AppendLine(pa_24_t.BackColor.R + "," + pa_24_t.BackColor.G + "," + pa_24_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_cellloadchanged);
 			sb.AppendLine(pa_25.BackColor.R + "," + pa_25.BackColor.G + "," + pa_25.BackColor.B);
+			sb.Append(ColorOptions.CFG_cellloadchanged_t);
+			sb.AppendLine(pa_25_t.BackColor.R + "," + pa_25_t.BackColor.G + "," + pa_25_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_celldiffed);
 			sb.AppendLine(pa_26.BackColor.R + "," + pa_26.BackColor.G + "," + pa_26.BackColor.B);
+			sb.Append(ColorOptions.CFG_celldiffed_t);
+			sb.AppendLine(pa_26_t.BackColor.R + "," + pa_26_t.BackColor.G + "," + pa_26_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_cellreplaced);
 			sb.AppendLine(pa_27.BackColor.R + "," + pa_27.BackColor.G + "," + pa_27.BackColor.B);
+			sb.Append(ColorOptions.CFG_cellreplaced_t);
+			sb.AppendLine(pa_27_t.BackColor.R + "," + pa_27_t.BackColor.G + "," + pa_27_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_celledit);
 			sb.AppendLine(pa_28.BackColor.R + "," + pa_28.BackColor.G + "," + pa_28.BackColor.B);
+			sb.Append(ColorOptions.CFG_celledit_t);
+			sb.AppendLine(pa_28_t.BackColor.R + "," + pa_28_t.BackColor.G + "," + pa_28_t.BackColor.B);
 
 			return sb.ToString();
-		}
-
-
-		/// <summary>
-		/// Restores all colors to defaults.
-		/// </summary>
-		/// <param name="sender"><c><see cref="bu_Defaults"/></c></param>
-		/// <param name="e"></param>
-		void click_RestoreDefaults(object sender, EventArgs e)
-		{
-			RestoreDefaults(null);
 		}
 
 		/// <summary>
@@ -579,6 +597,17 @@ namespace yata
 					ib.ShowDialog(this);
 				}
 			}
+		}
+
+
+		/// <summary>
+		/// Restores all colors to defaults.
+		/// </summary>
+		/// <param name="sender"><c><see cref="bu_Defaults"/></c></param>
+		/// <param name="e"></param>
+		void click_RestoreDefaults(object sender, EventArgs e)
+		{
+			RestoreDefaults(null);
 		}
 		#endregion handlers (buttons)
 
@@ -660,10 +689,15 @@ namespace yata
 
 				// Cells ->
 				pa_24  .BackColor = ColorOptions.Def_cellselected;
+				pa_24_t.BackColor = ColorOptions.Def_cellselected_t;
 				pa_25  .BackColor = ColorOptions.Def_cellloadchanged;
+				pa_25_t.BackColor = ColorOptions.Def_cellloadchanged_t;
 				pa_26  .BackColor = ColorOptions.Def_celldiffed;
+				pa_26_t.BackColor = ColorOptions.Def_celldiffed_t;
 				pa_27  .BackColor = ColorOptions.Def_cellreplaced;
+				pa_27_t.BackColor = ColorOptions.Def_cellreplaced_t;
 				pa_28  .BackColor = ColorOptions.Def_celledit;
+				pa_28_t.BackColor = ColorOptions.Def_celledit_t;
 
 
 				DrawRegulator.ResumeDrawing(gb_Colors);
@@ -731,10 +765,15 @@ namespace yata
 
 				// Cells ->
 				else if (panel == pa_24)   pa_24  .BackColor = ColorOptions.Def_cellselected;
+				else if (panel == pa_24_t) pa_24_t.BackColor = ColorOptions.Def_cellselected_t;
 				else if (panel == pa_25)   pa_25  .BackColor = ColorOptions.Def_cellloadchanged;
+				else if (panel == pa_25_t) pa_25_t.BackColor = ColorOptions.Def_cellloadchanged_t;
 				else if (panel == pa_26)   pa_26  .BackColor = ColorOptions.Def_celldiffed;
+				else if (panel == pa_26_t) pa_26_t.BackColor = ColorOptions.Def_celldiffed_t;
 				else if (panel == pa_27)   pa_27  .BackColor = ColorOptions.Def_cellreplaced;
+				else if (panel == pa_27_t) pa_27_t.BackColor = ColorOptions.Def_cellreplaced_t;
 				else if (panel == pa_28)   pa_28  .BackColor = ColorOptions.Def_celledit;
+				else if (panel == pa_28_t) pa_28_t.BackColor = ColorOptions.Def_celledit_t;
 
 
 				Yata.that.Refresh();

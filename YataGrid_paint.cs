@@ -72,7 +72,7 @@ namespace yata
 				int x = WidthRowhead - OffsetHori;
 
 				// draw text and fill backgrounds of nondefault cells ->
-				Row row; Cell cell; Color color; int coldisabled;
+				Row row; Cell cell; Color color0, color; int coldisabled; bool edit;
 
 				int leftcell = x + _padHori - 1;
 
@@ -93,10 +93,10 @@ namespace yata
 							case InfoType.INFO_FEAT:  coldisabled = InfoInputFeat  .REMOVED; break;
 							default:                  coldisabled = -1;                      break;
 						}
-						color = getRowTextColor(r, coldisabled);
+						color0 = getRowTextColor(r, coldisabled);
 					}
 					else
-						color = ColorOptions._rowcreated_t;
+						color0 = ColorOptions._rowcreated_t;
 
 					for (c = 0; c != ColCount; ++c)
 					{
@@ -104,10 +104,16 @@ namespace yata
 						{
 							if ((cell = row[c]).state != Cell.CellState.Default)
 							{
+								edit = _editor.Visible && _editcell == cell;
+
 								rect.X -= _padHori;
-								graphics.FillRectangle(cell.getCellBrush(_editor.Visible && _editcell == cell), rect);
+								graphics.FillRectangle(cell.getCellBrush(edit), rect);
 								rect.X += _padHori;
+
+								color = cell.getCellTextColor(edit);
 							}
+							else
+								color = color0;
 
 							rect.Width -= _padHori;
 							TextRenderer.DrawText(graphics,

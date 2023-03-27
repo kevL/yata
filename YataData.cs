@@ -315,7 +315,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Gets a brush for the background color of this <c>Cell</c>.
+		/// Gets a <c>Brush</c> for the background color of this <c>Cell</c>.
 		/// </summary>
 		/// <param name="edit"><c>true</c> if cell is in edit</param>
 		/// <returns></returns>
@@ -348,17 +348,26 @@ namespace yata
 			return null; // shall never happen.
 		}
 
-/*		/// <summary>
-		/// 
+		/// <summary>
+		/// Gets a <c>Color</c> for the text of this <c>Cell</c>.
 		/// </summary>
-		/// <param name="edit"></param>
+		/// <param name="edit"><c>true</c> if cell is in edit</param>
 		/// <returns></returns>
+		/// <remarks>Check that <c><see cref="state"/></c> is not
+		/// <c><see cref="CellState.Default">CellState.Default</see></c> before
+		/// call.
+		/// <br/><br/>
+		/// Called by
+		/// <list type="bullet">
+		/// <item><c><see cref="YataGrid"/>.OnPaint()</c></item>
+		/// <item><c><see cref="YataGrid.PaintFrozenPanel()">YataGrid.PaintFrozenPanel()</see></c></item>
+		/// </list></remarks>
 		internal Color getCellTextColor(bool edit = false)
 		{
 			switch (state)
 			{
 				case CellState.Selected:
-					if (edit) return ColorOptions._celledit_t;
+					if (edit) return ColorOptions._celledit_t; // TODO: the text in the cell will always be hidden by the YataEditbox that appears (with the text also in it)
 					return ColorOptions._cellselected_t;
 
 				case CellState.Diff:
@@ -371,7 +380,7 @@ namespace yata
 					return ColorOptions._cellreplaced_t;
 			}
 			return Color.Empty; // shall never happen.
-		} */
+		}
 		#endregion Methods
 
 

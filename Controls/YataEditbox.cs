@@ -16,6 +16,7 @@ namespace yata
 		{
 			Visible       = false;
 			BackColor     = (ColorOptions._celledit as SolidBrush).Color;
+			ForeColor     =  ColorOptions._celledit_t;
 			BorderStyle   = BorderStyle.None;
 			WordWrap      = false;
 			Margin        = new Padding(0);
