@@ -554,30 +554,20 @@ namespace yata
 		/// <param name="e"></param>
 		void mouseclick_Color(object sender, MouseEventArgs e)
 		{
-			if ((ModifierKeys & (Keys.Alt | Keys.Shift)) == Keys.None)
+			switch (e.Button)
 			{
-				if ((ModifierKeys & Keys.Control) == Keys.None)
-				{
-					switch (e.Button)
-					{
-						case MouseButtons.Left:
-							if (sender == pa_Colorpre)
-								pa_Color.BackColor = pa_Colorpre.BackColor;
+				case MouseButtons.Left:
+					if      (sender == pa_Color)    pa_Color.BackColor = Stored;
+					else if (sender == pa_Colorpre) pa_Color.BackColor = pa_Colorpre.BackColor;
 
-							SetCurrentValues(pa_Color.BackColor);
-							break;
+					SetCurrentValues(pa_Color.BackColor);
+					break;
 
-						case MouseButtons.Right: // copy the panel's color to 'Stored' ->
-							Stored = (sender as Panel).BackColor;
-							using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
-								ib.ShowDialog(this);
-							break;
-					}
-				}
-				else if (sender == pa_Color && e.Button == MouseButtons.Left) // paste 'Stored' w/ [Ctrl] ->
-				{
-					SetCurrentValues(pa_Color.BackColor = Stored);
-				}
+				case MouseButtons.Right: // copy the panel's color to 'Stored' ->
+					Stored = (sender as Panel).BackColor;
+					using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
+						ib.ShowDialog(this);
+					break;
 			}
 		}
 		#endregion handlers (panels)
