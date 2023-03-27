@@ -471,7 +471,18 @@ namespace yata
 				else                       tb = tb_Blue; // tb_Blue.Focused
 
 				if (tb.Text != "255")
-					tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) + 1).ToString(CultureInfo.InvariantCulture);
+				{
+					int val;
+					if (tb.Text.Length != 0)
+						val = Byte.Parse(tb.Text, CultureInfo.InvariantCulture);
+					else
+						val = 0;
+
+					val += ((ModifierKeys & Keys.Shift) == Keys.Shift) ? 10 : 1;
+					if (val > 255) val = 255;
+
+					tb.Text = val.ToString(CultureInfo.InvariantCulture);
+				}
 			}
 			else if (e.Delta < 0)
 			{
@@ -480,8 +491,19 @@ namespace yata
 				else if (tb_Green.Focused) tb = tb_Green;
 				else                       tb = tb_Blue; // tb_Blue.Focused
 
-				if (tb.Text.Length != 0 && tb.Text != "0")
-					tb.Text = (Byte.Parse(tb.Text, CultureInfo.InvariantCulture) - 1).ToString(CultureInfo.InvariantCulture);
+				if (tb.Text != "0")
+				{
+					int val;
+					if (tb.Text.Length != 0)
+						val = Byte.Parse(tb.Text, CultureInfo.InvariantCulture);
+					else
+						val = 0;
+
+					val -= ((ModifierKeys & Keys.Shift) == Keys.Shift) ? 10 : 1;
+					if (val < 0) val = 0;
+
+					tb.Text = val.ToString(CultureInfo.InvariantCulture);
+				}
 			}
 		}
 
@@ -871,7 +893,10 @@ namespace yata
 				{
 					if (_val != 0)
 					{
-						--_val;
+						if ((ModifierKeys & Keys.Shift) == Keys.Shift) _val -= 10;
+						else                                           _val -=  1;
+						if (_val < 0) _val = 0;
+
 						pa_Valslider.Invalidate();
 
 						PrintCurrentColor(true);
@@ -881,7 +906,10 @@ namespace yata
 				{
 					if (_val != pa_Valslider.Height - 1)
 					{
-						++_val;
+						if ((ModifierKeys & Keys.Shift) == Keys.Shift) _val += 10;
+						else                                           _val +=  1;
+						if (_val > 255) _val = 255;
+
 						pa_Valslider.Invalidate();
 
 						PrintCurrentColor(true);
