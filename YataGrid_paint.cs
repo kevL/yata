@@ -449,7 +449,7 @@ namespace yata
 
 						if      (col.selected)  color = ColorOptions._colheadtextsel;
 						else if (col.UserSized) color = ColorOptions._colheadtextsize;
-						else                    color = ColorOptions._colheadtext;
+						else                    color = ColorOptions._colhead_t;
 					}
 
 					rect.Width -= clip;

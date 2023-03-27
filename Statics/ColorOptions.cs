@@ -44,11 +44,11 @@ namespace yata
 		internal const string CFG_frozenidgradb   = "frozenidgradb";
 
 		// Colhead ->
-		internal const string CFG_colheadtext     = "colheadtext=";
 		internal const string CFG_colheadtextsel  = "colheadtextsel=";
 		internal const string CFG_colheadtextsize = "colheadtextsize=";
 		internal const string CFG_colheadlines    = "colheadlines=";
 		internal const string CFG_colhead         = "colhead=";
+		internal const string CFG_colhead_t       = "colhead_t=";
 		internal const string CFG_headtextsortasc = "headtextsortasc=";
 		internal const string CFG_headtextsortdes = "headtextsortdes=";
 		internal const string CFG_colheadgrada    = "colheadgrada";
@@ -109,11 +109,11 @@ namespace yata
 		internal static Color Def_frozenidgradb   = Color.Lavender;
 
 		// Colhead ->
-		internal static Color Def_colheadtext     = SystemColors.ControlText;
 		internal static Color Def_colheadtextsel  = Color.White;
 		internal static Color Def_colheadtextsize = Color.DarkGray;
 		internal static Color Def_colheadlines    = SystemColors.ControlDark;
 		internal static Color Def_colhead         = Color.Thistle;
+		internal static Color Def_colhead_t       = SystemColors.ControlText;
 		internal static Color Def_headtextsortasc = Color.SteelBlue;
 		internal static Color Def_headtextsortdes = Color.DarkGoldenrod;
 		internal static Color Def_colheadgrada    = Color.Lavender;
@@ -174,11 +174,11 @@ namespace yata
 		internal static Color _frozenidgradb   = Def_frozenidgradb;
 
 		// Colhead ->
-		internal static Color _colheadtext     = Def_colheadtext;					// default colors for the colhead ->
-		internal static Color _colheadtextsel  = Def_colheadtextsel;
+		internal static Color _colheadtextsel  = Def_colheadtextsel;				// default colors for the colhead ->
 		internal static Color _colheadtextsize = Def_colheadtextsize;
 		internal static Pen   _colheadlines    = new Pen(Def_colheadlines);
 		internal static Color _colhead         = Def_colhead;
+		internal static Color _colhead_t       = Def_colhead_t;
 		internal static Color _headtextsortasc = Def_headtextsortasc;
 		internal static Color _headtextsortdes = Def_headtextsortdes;
 		internal static Color _colheadgrada    = Def_colheadgrada;
@@ -511,18 +511,6 @@ namespace yata
 						}
 
 						// Colhead ->
-						else if (line.StartsWith(CFG_colheadtext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadtext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadtext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadtext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_colheadtextsel, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_colheadtextsel.Length).Trim()).Length != 0)
@@ -569,6 +557,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colhead = color;
+							}
+						}
+						else if (line.StartsWith(CFG_colhead_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_colhead_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_colhead_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_colhead_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_headtextsortasc, StringComparison.Ordinal))
