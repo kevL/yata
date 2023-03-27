@@ -101,7 +101,7 @@ namespace yata
 			}
 
 			if (Options._gradient)
-				UpdateGradientBrush();
+				UpdateColheadGradientBrush();
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace yata
 		/// <c><see cref="Gradients.ColheadPanel">Gradients.ColheadPanel</see></c>
 		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
 		/// </summary>
-		internal void UpdateGradientBrush()
+		internal void UpdateColheadGradientBrush()
 		{
 			if (Gradients.ColheadPanel != null)
 				Gradients.ColheadPanel.Dispose();

@@ -614,7 +614,7 @@ namespace yata
 
 					if (Options._gradient && Yata.Table != null)
 					{
-						Yata.Table._panelCols.UpdateGradientBrush(); // recreate 'Gradients.ColheadPanel'
+						Yata.Table._panelCols.UpdateColheadGradientBrush(); // recreate 'Gradients.ColheadPanel'
 					}
 					else return;
 				}
