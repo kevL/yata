@@ -42,18 +42,17 @@ namespace yata
 //			la_01.Text = "Table text";
 //			pa_01.BackColor = ColorOptions._tabletext;
 
-			la_15.Text = "Table lines";    pa_15.BackColor =  ColorOptions._tablelines                 .Color;
-			la_02.Text = "Row a";          pa_02.BackColor = (ColorOptions._rowa         as SolidBrush).Color;
-			la_03.Text = "Row b";          pa_03.BackColor = (ColorOptions._rowb         as SolidBrush).Color;
-			la_04.Text = "Row disabled a"; pa_04.BackColor = (ColorOptions._rowdisableda as SolidBrush).Color;
-			la_05.Text = "Row disabled b"; pa_05.BackColor = (ColorOptions._rowdisabledb as SolidBrush).Color;
-			la_37.Text = "Row created";    pa_37.BackColor = (ColorOptions._rowcreated   as SolidBrush).Color;
-
-			pa_02_t.BackColor = ColorOptions._rowa_t;
-			pa_03_t.BackColor = ColorOptions._rowb_t;
-			pa_04_t.BackColor = ColorOptions._rowdisableda_t;
-			pa_05_t.BackColor = ColorOptions._rowdisabledb_t;
-			pa_37_t.BackColor = ColorOptions._rowcreated_t;
+			la_15.Text = "Table lines";    pa_15  .BackColor =  ColorOptions._tablelines                 .Color;
+			la_02.Text = "Row a";          pa_02  .BackColor = (ColorOptions._rowa         as SolidBrush).Color;
+										   pa_02_t.BackColor =  ColorOptions._rowa_t;
+			la_03.Text = "Row b";          pa_03  .BackColor = (ColorOptions._rowb         as SolidBrush).Color;
+										   pa_03_t.BackColor =  ColorOptions._rowb_t;
+			la_04.Text = "Row disabled a"; pa_04  .BackColor = (ColorOptions._rowdisableda as SolidBrush).Color;
+										   pa_04_t.BackColor =  ColorOptions._rowdisableda_t;
+			la_05.Text = "Row disabled b"; pa_05  .BackColor = (ColorOptions._rowdisabledb as SolidBrush).Color;
+										   pa_05_t.BackColor =  ColorOptions._rowdisabledb_t;
+			la_37.Text = "Row created";    pa_37  .BackColor = (ColorOptions._rowcreated   as SolidBrush).Color;
+										   pa_37_t.BackColor =  ColorOptions._rowcreated_t;
 
 			// Frozen ->
 			la_16.Text = "Frozen panel lines";            pa_16  .BackColor = ColorOptions._frozenlines.Color;
@@ -164,15 +163,14 @@ namespace yata
 
 					if      (sender == pa_15)   title = la_15.Text;
 					else if (sender == pa_02)   title = la_02.Text;
-					else if (sender == pa_03)   title = la_03.Text;
-					else if (sender == pa_04)   title = la_04.Text;
-					else if (sender == pa_05)   title = la_05.Text;
-					else if (sender == pa_37)   title = la_37.Text;
-
 					else if (sender == pa_02_t) title = la_02.Text + " text";
+					else if (sender == pa_03)   title = la_03.Text;
 					else if (sender == pa_03_t) title = la_03.Text + " text";
+					else if (sender == pa_04)   title = la_04.Text;
 					else if (sender == pa_04_t) title = la_04.Text + " text";
+					else if (sender == pa_05)   title = la_05.Text;
 					else if (sender == pa_05_t) title = la_05.Text + " text";
+					else if (sender == pa_37)   title = la_37.Text;
 					else if (sender == pa_37_t) title = la_37.Text + " text";
 
 					// Frozen ->
@@ -252,15 +250,14 @@ namespace yata
 
 				if      (sender == pa_15)   ColorOptions._tablelines                    .Color = pa_15  .BackColor;
 				else if (sender == pa_02)  (ColorOptions._rowa            as SolidBrush).Color = pa_02  .BackColor;
-				else if (sender == pa_03)  (ColorOptions._rowb            as SolidBrush).Color = pa_03  .BackColor;
-				else if (sender == pa_04)  (ColorOptions._rowdisableda    as SolidBrush).Color = pa_04  .BackColor;
-				else if (sender == pa_05)  (ColorOptions._rowdisabledb    as SolidBrush).Color = pa_05  .BackColor;
-				else if (sender == pa_37)  (ColorOptions._rowcreated      as SolidBrush).Color = pa_37  .BackColor;
-
 				else if (sender == pa_02_t) ColorOptions._rowa_t                               = pa_02_t.BackColor;
+				else if (sender == pa_03)  (ColorOptions._rowb            as SolidBrush).Color = pa_03  .BackColor;
 				else if (sender == pa_03_t) ColorOptions._rowb_t                               = pa_03_t.BackColor;
+				else if (sender == pa_04)  (ColorOptions._rowdisableda    as SolidBrush).Color = pa_04  .BackColor;
 				else if (sender == pa_04_t) ColorOptions._rowdisableda_t                       = pa_04_t.BackColor;
+				else if (sender == pa_05)  (ColorOptions._rowdisabledb    as SolidBrush).Color = pa_05  .BackColor;
 				else if (sender == pa_05_t) ColorOptions._rowdisabledb_t                       = pa_05_t.BackColor;
+				else if (sender == pa_37)  (ColorOptions._rowcreated      as SolidBrush).Color = pa_37  .BackColor;
 				else if (sender == pa_37_t) ColorOptions._rowcreated_t                         = pa_37_t.BackColor;
 
 				// Frozen ->
@@ -424,23 +421,22 @@ namespace yata
 			sb.AppendLine(pa_15.BackColor.R + "," + pa_15.BackColor.G + "," + pa_15.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowa);
 			sb.AppendLine(pa_02.BackColor.R + "," + pa_02.BackColor.G + "," + pa_02.BackColor.B);
-			sb.Append(ColorOptions.CFG_rowb);
-			sb.AppendLine(pa_03.BackColor.R + "," + pa_03.BackColor.G + "," + pa_03.BackColor.B);
-			sb.Append(ColorOptions.CFG_rowdisableda);
-			sb.AppendLine(pa_04.BackColor.R + "," + pa_04.BackColor.G + "," + pa_04.BackColor.B);
-			sb.Append(ColorOptions.CFG_rowdisabledb);
-			sb.AppendLine(pa_05.BackColor.R + "," + pa_05.BackColor.G + "," + pa_05.BackColor.B);
-			sb.Append(ColorOptions.CFG_rowcreated);
-			sb.AppendLine(pa_37.BackColor.R + "," + pa_37.BackColor.G + "," + pa_37.BackColor.B);
-
 			sb.Append(ColorOptions.CFG_rowa_t);
 			sb.AppendLine(pa_02_t.BackColor.R + "," + pa_02_t.BackColor.G + "," + pa_02_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowb);
+			sb.AppendLine(pa_03.BackColor.R + "," + pa_03.BackColor.G + "," + pa_03.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowb_t);
 			sb.AppendLine(pa_03_t.BackColor.R + "," + pa_03_t.BackColor.G + "," + pa_03_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowdisableda);
+			sb.AppendLine(pa_04.BackColor.R + "," + pa_04.BackColor.G + "," + pa_04.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowdisableda_t);
 			sb.AppendLine(pa_04_t.BackColor.R + "," + pa_04_t.BackColor.G + "," + pa_04_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowdisabledb);
+			sb.AppendLine(pa_05.BackColor.R + "," + pa_05.BackColor.G + "," + pa_05.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowdisabledb_t);
 			sb.AppendLine(pa_05_t.BackColor.R + "," + pa_05_t.BackColor.G + "," + pa_05_t.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowcreated);
+			sb.AppendLine(pa_37.BackColor.R + "," + pa_37.BackColor.G + "," + pa_37.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowcreated_t);
 			sb.AppendLine(pa_37_t.BackColor.R + "," + pa_37_t.BackColor.G + "," + pa_37_t.BackColor.B);
 
@@ -609,15 +605,14 @@ namespace yata
 
 				pa_15  .BackColor = ColorOptions.Def_tablelines;
 				pa_02  .BackColor = ColorOptions.Def_rowa;
-				pa_03  .BackColor = ColorOptions.Def_rowb;
-				pa_04  .BackColor = ColorOptions.Def_rowdisableda;
-				pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
-				pa_37  .BackColor = ColorOptions.Def_rowcreated;
-
 				pa_02_t.BackColor = ColorOptions.Def_rowa_t;
+				pa_03  .BackColor = ColorOptions.Def_rowb;
 				pa_03_t.BackColor = ColorOptions.Def_rowb_t;
+				pa_04  .BackColor = ColorOptions.Def_rowdisableda;
 				pa_04_t.BackColor = ColorOptions.Def_rowdisableda_t;
+				pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
 				pa_05_t.BackColor = ColorOptions.Def_rowdisabledb_t;
+				pa_37  .BackColor = ColorOptions.Def_rowcreated;
 				pa_37_t.BackColor = ColorOptions.Def_rowcreated_t;
 
 				// Frozen ->
@@ -681,15 +676,14 @@ namespace yata
 
 				if      (panel == pa_15)   pa_15  .BackColor = ColorOptions.Def_tablelines;
 				else if (panel == pa_02)   pa_02  .BackColor = ColorOptions.Def_rowa;
-				else if (panel == pa_03)   pa_03  .BackColor = ColorOptions.Def_rowb;
-				else if (panel == pa_04)   pa_04  .BackColor = ColorOptions.Def_rowdisableda;
-				else if (panel == pa_05)   pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
-				else if (panel == pa_37)   pa_37  .BackColor = ColorOptions.Def_rowcreated;
-
 				else if (panel == pa_02_t) pa_02_t.BackColor = ColorOptions.Def_rowa_t;
+				else if (panel == pa_03)   pa_03  .BackColor = ColorOptions.Def_rowb;
 				else if (panel == pa_03_t) pa_03_t.BackColor = ColorOptions.Def_rowb_t;
+				else if (panel == pa_04)   pa_04  .BackColor = ColorOptions.Def_rowdisableda;
 				else if (panel == pa_04_t) pa_04_t.BackColor = ColorOptions.Def_rowdisableda_t;
+				else if (panel == pa_05)   pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
 				else if (panel == pa_05_t) pa_05_t.BackColor = ColorOptions.Def_rowdisabledb_t;
+				else if (panel == pa_37)   pa_37  .BackColor = ColorOptions.Def_rowcreated;
 				else if (panel == pa_37_t) pa_37_t.BackColor = ColorOptions.Def_rowcreated_t;
 
 				// Frozen ->
