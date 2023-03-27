@@ -27,8 +27,10 @@ namespace yata
 			var sb = new StringBuilder();
 
 			sb.Append(@"{\rtf1\ansi ");
-			sb.Append(@"MouseClick and MouseDrag change the color and value fields.\line\line ");
+			sb.Append(@"MouseClick/Drag adjusts the Hue/Saturation and Value parameters.\line\line ");
+
 			sb.Append(@"   \b - COLORFIELD -\b0\line\line ");
+
 			sb.Append(@"[Left]\tab\tab decreases Hue\line ");
 			sb.Append(@"[Right]\tab\tab increases Hue\line ");
 			sb.Append(@"[Up]\tab\tab decreases Saturation\line ");
@@ -37,22 +39,34 @@ namespace yata
 			sb.Append(@"[End]\tab\tab decreases Hue + increases Saturation\line ");
 			sb.Append(@"[PageUp]\tab increases Hue + decreases Saturation\line ");
 			sb.Append(@"[PageDown]\tab increases Hue + increases Saturation\line\line ");
+
 			sb.Append(@"   \b - VALUEFIELD -\b0\line\line ");
+
 			sb.Append(@"[Subtract]\tab decreases Value\line ");
 			sb.Append(@"[Add]\tab\tab increases Value\line\line ");
-			sb.Append(@"MouseWheel decrements or increments Value if no textbox/combobox has focus.\line\line ");
+
+			sb.Append(@"MouseWheel adjusts Value if no textbox/combobox has focus.\line ");
+			sb.Append(@"[Shift]+MouseWheel steps Value by 10.\line\line ");
+
 			sb.Append(@"   \b - RGB TextBox focused -\b0\line\line ");
-			sb.Append(@"[Subtract]\tab increments the byte\line ");
-			sb.Append(@"[Add]\tab\tab decrements the byte\line ");
+
+			sb.Append(@"[Subtract]\tab increases the byte\line ");
+			sb.Append(@"[Add]\tab\tab decreases the byte\line ");
 			sb.Append(@"[PageUp]\tab sets the byte to 255\line ");
 			sb.Append(@"[PageDown]\tab sets the byte to 0\line ");
 			sb.Append(@"[Escape]\line ");
 			sb.Append(@"[Enter]\tab\tab switches focus to the Accept button\line\line ");
-			sb.Append(@"MouseWheel increases or decreases an RGB byte.\line\line ");
-			sb.Append(@"MouseClick on an RGB Label switches focus to the Accept button.\line\line ");
+
+			sb.Append(@"MouseWheel adjusts an RGB byte.\line ");
+			sb.Append(@"[Shift]+MouseWheel steps the byte by 10.\line\line ");
+
+			sb.Append(@"MouseClick an RGB Label to switch focus to the Accept button.\line\line ");
+
 			sb.Append(@"   \b - COLORS ComboBox focused -\b0\line\line ");
-			sb.Append(@"[Escape]\tab switches focus to the Accept button\line\line ");
-			sb.Append(@"Otherwise the mouse and keyboard respect standard .NET behavior.");
+
+			sb.Append(@"[Escape]\tab switches focus to the Accept button");
+
+//			sb.Append(@"Otherwise the mouse and keyboard have standard .NET behaviors.");
 			sb.Append(@"}");
 
 			rt_Help.Rtf = sb.ToString();
@@ -92,6 +106,20 @@ namespace yata
 					return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		/// <summary>
+		/// Fixes a glitch with <c>RichTextBox</c> by clearing and resetting the
+		/// <c>ScrollBars</c>. The vertical scrollbar doesn't setup properly
+		/// when lessening the height of the <c>RichTextBox</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			rt_Help.ScrollBars = RichTextBoxScrollBars.None;
+			rt_Help.ScrollBars = RichTextBoxScrollBars.Vertical;
 		}
 		#endregion handlers (override)
 	}
