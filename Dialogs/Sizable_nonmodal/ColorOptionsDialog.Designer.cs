@@ -35,10 +35,9 @@ namespace yata
 		Label la_11;
 		Panel pa_11;
 		Panel pa_11_t;
-		Label la_12;
-		Panel pa_12;
 		Label la_13;
 		Panel pa_13;
+		Panel pa_13_t;
 		Label la_14;
 		Panel pa_14;
 		Panel pa_14_t;
@@ -148,10 +147,9 @@ namespace yata
 			this.la_11 = new System.Windows.Forms.Label();
 			this.pa_11 = new System.Windows.Forms.Panel();
 			this.pa_11_t = new System.Windows.Forms.Panel();
-			this.la_12 = new System.Windows.Forms.Label();
-			this.pa_12 = new System.Windows.Forms.Panel();
 			this.la_13 = new System.Windows.Forms.Label();
 			this.pa_13 = new System.Windows.Forms.Panel();
+			this.pa_13_t = new System.Windows.Forms.Panel();
 			this.la_14 = new System.Windows.Forms.Label();
 			this.pa_14 = new System.Windows.Forms.Panel();
 			this.pa_14_t = new System.Windows.Forms.Panel();
@@ -251,10 +249,9 @@ namespace yata
 			this.gb_Colors.Controls.Add(this.la_11);
 			this.gb_Colors.Controls.Add(this.pa_11);
 			this.gb_Colors.Controls.Add(this.pa_11_t);
-			this.gb_Colors.Controls.Add(this.la_12);
-			this.gb_Colors.Controls.Add(this.pa_12);
 			this.gb_Colors.Controls.Add(this.la_13);
 			this.gb_Colors.Controls.Add(this.pa_13);
+			this.gb_Colors.Controls.Add(this.pa_13_t);
 			this.gb_Colors.Controls.Add(this.la_14);
 			this.gb_Colors.Controls.Add(this.pa_14);
 			this.gb_Colors.Controls.Add(this.pa_14_t);
@@ -593,26 +590,6 @@ namespace yata
 			this.pa_11_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_11_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
-			// la_12
-			// 
-			this.la_12.Location = new System.Drawing.Point(368, 151);
-			this.la_12.Margin = new System.Windows.Forms.Padding(0);
-			this.la_12.Name = "la_12";
-			this.la_12.Size = new System.Drawing.Size(139, 16);
-			this.la_12.TabIndex = 52;
-			this.la_12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// pa_12
-			// 
-			this.pa_12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pa_12.Location = new System.Drawing.Point(581, 146);
-			this.pa_12.Margin = new System.Windows.Forms.Padding(0);
-			this.pa_12.Name = "pa_12";
-			this.pa_12.Size = new System.Drawing.Size(69, 24);
-			this.pa_12.TabIndex = 53;
-			this.pa_12.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
-			this.pa_12.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
-			// 
 			// la_13
 			// 
 			this.la_13.Location = new System.Drawing.Point(368, 226);
@@ -632,6 +609,17 @@ namespace yata
 			this.pa_13.TabIndex = 59;
 			this.pa_13.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
 			this.pa_13.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
+			// 
+			// pa_13_t
+			// 
+			this.pa_13_t.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pa_13_t.Location = new System.Drawing.Point(581, 221);
+			this.pa_13_t.Margin = new System.Windows.Forms.Padding(0);
+			this.pa_13_t.Name = "pa_13_t";
+			this.pa_13_t.Size = new System.Drawing.Size(69, 24);
+			this.pa_13_t.TabIndex = 53;
+			this.pa_13_t.BackColorChanged += new System.EventHandler(this.backcolorchanged_ColorPanel);
+			this.pa_13_t.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Colorpanel);
 			// 
 			// la_14
 			// 

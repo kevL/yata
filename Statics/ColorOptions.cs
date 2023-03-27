@@ -62,10 +62,10 @@ namespace yata
 		internal const string CFG_rowsubsel       = "rowsubsel=";
 
 		// Propanel ->
-		internal const string CFG_propaneltext    = "propaneltext=";
 		internal const string CFG_propanellines   = "propanellines=";
 		internal const string CFG_propanelborder  = "propanelborder=";
 		internal const string CFG_propanel        = "propanel=";
+		internal const string CFG_propanel_t      = "propanel_t=";
 		internal const string CFG_propanelfrozen  = "propanelfrozen=";
 		internal const string CFG_propanelsel     = "propanelsel=";
 
@@ -127,10 +127,10 @@ namespace yata
 		internal static Color Def_rowsubsel       = Color.Honeydew;
 
 		// Propanel ->
-		internal static Color Def_propaneltext    = SystemColors.ControlText;
 		internal static Color Def_propanellines   = SystemColors.ControlDark;
 		internal static Color Def_propanelborder  = SystemColors.ControlDarkDark;
 		internal static Color Def_propanel        = Color.LightSteelBlue;
+		internal static Color Def_propanel_t      = SystemColors.ControlText;
 		internal static Color Def_propanelfrozen  = Color.LightGray;
 		internal static Color Def_propanelsel     = Color.PaleGreen;
 
@@ -192,10 +192,10 @@ namespace yata
 		internal static Brush _rowsubsel       = new SolidBrush(Def_rowsubsel);
 
 		// Propanel ->
-		internal static Color _propaneltext    = Def_propaneltext;					// default colors for the propanel ->
-		internal static Pen   _propanellines   = new Pen(Def_propanellines);
+		internal static Pen   _propanellines   = new Pen(Def_propanellines);		// default colors for the propanel ->
 		internal static Pen   _propanelborder  = new Pen(Def_propanelborder);
 		internal static Color _propanel        = Def_propanel;
+		internal static Color _propanel_t      = Def_propanel_t;
 		internal static Brush _propanelfrozen  = new SolidBrush(Def_propanelfrozen);
 		internal static Brush _propanelsel     = new SolidBrush(Def_propanelsel);
 
@@ -683,18 +683,6 @@ namespace yata
 						}
 
 						// Propanel ->
-						else if (line.StartsWith(CFG_propaneltext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propaneltext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_propaneltext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propaneltext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_propanellines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_propanellines.Length).Trim()).Length != 0)
@@ -729,6 +717,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanel = color;
+							}
+						}
+						else if (line.StartsWith(CFG_propanel_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_propanel_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_propanel_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_propanel_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_propanelfrozen, StringComparison.Ordinal))
