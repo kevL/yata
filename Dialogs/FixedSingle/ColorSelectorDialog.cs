@@ -430,7 +430,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Handles the <c>Leave</c> event in the RBG fields.
+		/// Handles the <c>Leave</c> event in the RBG <c>TextBoxes</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
@@ -451,10 +451,15 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Increments or decrements the value in an Rgb-textbox on the
+		/// Increments or decrements the value in an RGB <c>TextBox</c> on the
 		/// <c>MouseWheel</c> event.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="tb_Red"/></c></item>
+		/// <item><c><see cref="tb_Green"/></c></item>
+		/// <item><c><see cref="tb_Blue"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void mousewheel_tb_Rgb(object sender, MouseEventArgs e)
 		{
@@ -482,9 +487,15 @@ namespace yata
 
 
 		/// <summary>
-		/// Focuses the Accept button when any of the RGB-labels is clicked.
+		/// Focuses the Accept <c>Button</c> when an RGB <c>Label</c> is
+		/// clicked.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="la_Red"/></c></item>
+		/// <item><c><see cref="la_Green"/></c></item>
+		/// <item><c><see cref="la_Blue"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void click_la_Rgb(object sender, EventArgs e)
 		{
@@ -545,30 +556,27 @@ namespace yata
 		{
 			if ((ModifierKeys & (Keys.Alt | Keys.Shift)) == Keys.None)
 			{
-				var pa = sender as Panel;
-
 				if ((ModifierKeys & Keys.Control) == Keys.None)
 				{
-					Color color;
-
-					if (sender == pa_Color && e.Button == MouseButtons.Right) // assign 'Stored' color to Color
-						color = pa_Color.BackColor = Stored;
-					else
-						color = pa.BackColor;
-
-					if (sender == pa_Colorpre && e.Button == MouseButtons.Right) // assign Colorpre color to Color
-						pa_Color.BackColor = color;
-
-					SetCurrentValues(color);
-				}
-				else if (e.Button == MouseButtons.Left) // store the panel's color in 'Stored' ->
-				{
-					Stored = pa.BackColor;
-
-					using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
+					switch (e.Button)
 					{
-						ib.ShowDialog(this);
+						case MouseButtons.Left:
+							if (sender == pa_Colorpre)
+								pa_Color.BackColor = pa_Colorpre.BackColor;
+
+							SetCurrentValues(pa_Color.BackColor);
+							break;
+
+						case MouseButtons.Right: // copy the panel's color to 'Stored' ->
+							Stored = (sender as Panel).BackColor;
+							using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
+								ib.ShowDialog(this);
+							break;
 					}
+				}
+				else if (sender == pa_Color && e.Button == MouseButtons.Left) // paste 'Stored' w/ [Ctrl] ->
+				{
+					SetCurrentValues(pa_Color.BackColor = Stored);
 				}
 			}
 		}
@@ -580,7 +588,11 @@ namespace yata
 		/// Changes the current color to the selected it in either
 		/// <c>Combobox</c>.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="cb_NetColors"/></c></item>
+		/// <item><c><see cref="cb_SysColors"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void selectedindexchanged_cb_Colors(object sender, EventArgs e)
 		{
@@ -601,7 +613,11 @@ namespace yata
 		/// <summary>
 		/// Draws the <c>ComboBox</c> its.
 		/// </summary>
-		/// <param name="sender"><c><see cref="cb_NetColors"/></c></param>
+		/// <param name="sender">
+		/// <list type="bullet">
+		/// <item><c><see cref="cb_NetColors"/></c></item>
+		/// <item><c><see cref="cb_SysColors"/></c></item>
+		/// </list></param>
 		/// <param name="e"></param>
 		void drawitem_cb_Colors(object sender, DrawItemEventArgs e)
 		{
