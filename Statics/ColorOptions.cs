@@ -70,8 +70,8 @@ namespace yata
 		internal const string CFG_propanelsel     = "propanelsel=";
 
 		// Statusbar ->
-		internal const string CFG_statusbartext   = "statusbartext=";
 		internal const string CFG_statusbar       = "statusbar=";
+		internal const string CFG_statusbar_t     = "statusbar_t=";
 
 		// Cells ->
 		internal const string CFG_cellselected    = "cellselected=";
@@ -135,8 +135,8 @@ namespace yata
 		internal static Color Def_propanelsel     = Color.PaleGreen;
 
 		// Statusbar ->
-		internal static Color Def_statusbartext   = SystemColors.ControlText;
 		internal static Color Def_statusbar       = Color.MintCream;
+		internal static Color Def_statusbar_t     = SystemColors.ControlText;
 
 		// Cells ->
 		internal static Color Def_cellselected    = Color.PaleGreen;
@@ -200,8 +200,8 @@ namespace yata
 		internal static Brush _propanelsel     = new SolidBrush(Def_propanelsel);
 
 		// Statusbar ->
-		internal static Color _statusbartext   = Def_statusbartext;					// default colors for the statusbar ->
-		internal static Brush _statusbar       = new SolidBrush(Def_statusbar);
+		internal static Brush _statusbar       = new SolidBrush(Def_statusbar);		// default colors for the statusbar ->
+		internal static Color _statusbar_t     = Def_statusbar_t;
 
 		// Cells ->
 		internal static Brush _cellselected    = new SolidBrush(Def_cellselected);	// default colors for cell texts ->
@@ -757,18 +757,6 @@ namespace yata
 						}
 
 						// Statusbar ->
-						else if (line.StartsWith(CFG_statusbartext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_statusbartext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_statusbartext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_statusbartext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0)
@@ -779,6 +767,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_statusbar as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_statusbar_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_statusbar_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_statusbar_t = color;
 							}
 						}
 
@@ -846,6 +846,8 @@ namespace yata
 					}
 				}
 			}
+
+			Yata.that.UpdateStatusbarTextColor(); // update all ToolStripStatusLabels
 		}
 
 		/// <summary>

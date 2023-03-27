@@ -461,12 +461,11 @@ namespace yata
 		/// on the <c><see cref="statusbar"/></c> when the user changes it in
 		/// <c><see cref="ColorOptionsDialog"/></c>.
 		/// </summary>
-		/// <param name="color"></param>
-		internal void UpdateStatusbarTextColor(Color color)
+		internal void UpdateStatusbarTextColor()
 		{
 			statbar_Cords.ForeColor =
 			statbar_Icon .ForeColor =
-			statbar_Info .ForeColor = color;
+			statbar_Info .ForeColor = ColorOptions._statusbar_t;
 		}
 
 
