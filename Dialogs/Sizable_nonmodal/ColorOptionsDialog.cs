@@ -593,288 +593,158 @@ namespace yata
 		/// </summary>
 		/// <param name="panel">the <c>Panel</c> right-clicked or <c>null</c> to
 		/// restore all default colors</param>
+		/// <remarks>Setting a <c>Panel's</c> <c>BackColor</c> fires
+		/// <c><see cref="backcolorchanged_ColorPanel()">backcolorchanged_ColorPanel()</see></c></remarks>
+		/// which is what sets the user's
+		/// <c><see cref="ColorOptions">ColorOption</see></c>.
 		void RestoreDefaults(object panel)
 		{
-			if (panel == null)
+			if (panel == null) // restore all defaults ->
 			{
 				DrawRegulator.SuspendDrawing(gb_Colors);
 				DrawRegulator.SuspendDrawing(Yata.that);
-			}
 
-			// Table ->
-//			if (panel == null || panel == pa_01)
-//			{
-//				pa_01.BackColor = ColorOptions.Def_tabletext;
-//				if (panel != null) return;
-//			}
+				// Table ->
+//				pa_01  .BackColor = ColorOptions.Def_tabletext;
 
-			if (panel == null || panel == pa_15)
-			{
-				pa_15.BackColor = ColorOptions.Def_tablelines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_02)
-			{
-				pa_02.BackColor = ColorOptions.Def_rowa;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_03)
-			{
-				pa_03.BackColor = ColorOptions.Def_rowb;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_04)
-			{
-				pa_04.BackColor = ColorOptions.Def_rowdisableda;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_05)
-			{
-				pa_05.BackColor = ColorOptions.Def_rowdisabledb;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_37)
-			{
-				pa_37.BackColor = ColorOptions.Def_rowcreated;
-				if (panel != null) return;
-			}
+				pa_15  .BackColor = ColorOptions.Def_tablelines;
+				pa_02  .BackColor = ColorOptions.Def_rowa;
+				pa_03  .BackColor = ColorOptions.Def_rowb;
+				pa_04  .BackColor = ColorOptions.Def_rowdisableda;
+				pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
+				pa_37  .BackColor = ColorOptions.Def_rowcreated;
 
-			if (panel == null || panel == pa_02_t)
-			{
 				pa_02_t.BackColor = ColorOptions.Def_rowa_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_03_t)
-			{
 				pa_03_t.BackColor = ColorOptions.Def_rowb_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_04_t)
-			{
 				pa_04_t.BackColor = ColorOptions.Def_rowdisableda_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_05_t)
-			{
 				pa_05_t.BackColor = ColorOptions.Def_rowdisabledb_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_37_t)
-			{
 				pa_37_t.BackColor = ColorOptions.Def_rowcreated_t;
-				if (panel != null) return;
-			}
 
-			// Frozen ->
-			if (panel == null || panel == pa_16)
-			{
-				pa_16.BackColor = ColorOptions.Def_frozenlines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_07)
-			{
-				pa_07.BackColor = ColorOptions.Def_frozen;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_07_t)
-			{
+				// Frozen ->
+				pa_16  .BackColor = ColorOptions.Def_frozenlines;
+				pa_07  .BackColor = ColorOptions.Def_frozen;
 				pa_07_t.BackColor = ColorOptions.Def_frozen_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_17)
-			{
-				pa_17.BackColor = ColorOptions.Def_frozenheadlines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_08)
-			{
-				pa_08.BackColor = ColorOptions.Def_frozenhead;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_08_t)
-			{
+				pa_17  .BackColor = ColorOptions.Def_frozenheadlines;
+				pa_08  .BackColor = ColorOptions.Def_frozenhead;
 				pa_08_t.BackColor = ColorOptions.Def_frozenhead_t;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_29)
-			{
-				pa_29.BackColor = ColorOptions.Def_frozenidunsort;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_42)
-			{
-				pa_42.BackColor = ColorOptions.Def_frozenheadgrada;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_43)
-			{
-				pa_43.BackColor = ColorOptions.Def_frozenheadgradb;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_44)
-			{
-				pa_44.BackColor = ColorOptions.Def_frozenidgrada;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_45)
-			{
-				pa_45.BackColor = ColorOptions.Def_frozenidgradb;
-				if (panel != null) return;
-			}
+				pa_29  .BackColor = ColorOptions.Def_frozenidunsort;
+				pa_42  .BackColor = ColorOptions.Def_frozenheadgrada;
+				pa_43  .BackColor = ColorOptions.Def_frozenheadgradb;
+				pa_44  .BackColor = ColorOptions.Def_frozenidgrada;
+				pa_45  .BackColor = ColorOptions.Def_frozenidgradb;
 
-			// Colhead ->
-			if (panel == null || panel == pa_20)
-			{
-				pa_20.BackColor = ColorOptions.Def_colheadtext;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_30)
-			{
-				pa_30.BackColor = ColorOptions.Def_colheadtextsel;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_31)
-			{
-				pa_31.BackColor = ColorOptions.Def_colheadtextsize;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_21)
-			{
-				pa_21.BackColor = ColorOptions.Def_colheadlines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_09)
-			{
-				pa_09.BackColor = ColorOptions.Def_colhead;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_32)
-			{
-				pa_32.BackColor = ColorOptions.Def_headtextsortasc;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_33)
-			{
-				pa_33.BackColor = ColorOptions.Def_headtextsortdes;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_40)
-			{
-				pa_40.BackColor = ColorOptions.Def_colheadgrada;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_41)
-			{
-				pa_41.BackColor = ColorOptions.Def_colheadgradb;
-				if (panel != null) return;
-			}
+				// Colhead ->
+				pa_20  .BackColor = ColorOptions.Def_colheadtext;
+				pa_30  .BackColor = ColorOptions.Def_colheadtextsel;
+				pa_31  .BackColor = ColorOptions.Def_colheadtextsize;
+				pa_21  .BackColor = ColorOptions.Def_colheadlines;
+				pa_09  .BackColor = ColorOptions.Def_colhead;
+				pa_32  .BackColor = ColorOptions.Def_headtextsortasc;
+				pa_33  .BackColor = ColorOptions.Def_headtextsortdes;
+				pa_40  .BackColor = ColorOptions.Def_colheadgrada;
+				pa_41  .BackColor = ColorOptions.Def_colheadgradb;
 
-			// Rowpanel ->
-			if (panel == null || panel == pa_10)
-			{
-				pa_10.BackColor = ColorOptions.Def_rowpaneltext;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_19)
-			{
-				pa_19.BackColor = ColorOptions.Def_rowpanellines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_11)
-			{
-				pa_11.BackColor = ColorOptions.Def_rowpanel;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_35)
-			{
-				pa_35.BackColor = ColorOptions.Def_rowsel;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_36)
-			{
-				pa_36.BackColor = ColorOptions.Def_rowsubsel;
-				if (panel != null) return;
-			}
+				// Rowpanel ->
+				pa_10  .BackColor = ColorOptions.Def_rowpaneltext;
+				pa_19  .BackColor = ColorOptions.Def_rowpanellines;
+				pa_11  .BackColor = ColorOptions.Def_rowpanel;
+				pa_35  .BackColor = ColorOptions.Def_rowsel;
+				pa_36  .BackColor = ColorOptions.Def_rowsubsel;
 
-			// Propanel ->
-			if (panel == null || panel == pa_12)
-			{
-				pa_12.BackColor = ColorOptions.Def_propaneltext;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_22)
-			{
-				pa_22.BackColor = ColorOptions.Def_propanellines;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_23)
-			{
-				pa_23.BackColor = ColorOptions.Def_propanelborder;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_13)
-			{
-				pa_13.BackColor = ColorOptions.Def_propanel;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_34)
-			{
-				pa_34.BackColor = ColorOptions.Def_propanelfrozen;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_38)
-			{
-				pa_38.BackColor = ColorOptions.Def_propanelsel;
-				if (panel != null) return;
-			}
+				// Propanel ->
+				pa_12  .BackColor = ColorOptions.Def_propaneltext;
+				pa_22  .BackColor = ColorOptions.Def_propanellines;
+				pa_23  .BackColor = ColorOptions.Def_propanelborder;
+				pa_13  .BackColor = ColorOptions.Def_propanel;
+				pa_34  .BackColor = ColorOptions.Def_propanelfrozen;
+				pa_38  .BackColor = ColorOptions.Def_propanelsel;
 
-			// Statusbar ->
-			if (panel == null || panel == pa_14)
-			{
-				pa_14.BackColor = ColorOptions.Def_statusbar;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_14_t)
-			{
+				// Statusbar ->
+				pa_14  .BackColor = ColorOptions.Def_statusbar;
 				pa_14_t.BackColor = ColorOptions.Def_statusbar_t;
-				if (panel != null) return;
-			}
 
-			// Cells ->
-			if (panel == null || panel == pa_24)
-			{
-				pa_24.BackColor = ColorOptions.Def_cellselected;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_25)
-			{
-				pa_25.BackColor = ColorOptions.Def_cellloadchanged;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_26)
-			{
-				pa_26.BackColor = ColorOptions.Def_celldiffed;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_27)
-			{
-				pa_27.BackColor = ColorOptions.Def_cellreplaced;
-				if (panel != null) return;
-			}
-			if (panel == null || panel == pa_28)
-			{
-				pa_28.BackColor = ColorOptions.Def_celledit;
-				if (panel != null) return;
-			}
+				// Cells ->
+				pa_24  .BackColor = ColorOptions.Def_cellselected;
+				pa_25  .BackColor = ColorOptions.Def_cellloadchanged;
+				pa_26  .BackColor = ColorOptions.Def_celldiffed;
+				pa_27  .BackColor = ColorOptions.Def_cellreplaced;
+				pa_28  .BackColor = ColorOptions.Def_celledit;
 
 
-			if (panel == null)
-			{
 				DrawRegulator.ResumeDrawing(gb_Colors);
 				DrawRegulator.ResumeDrawing(Yata.that);
 			}
-			else
+			else // restore option default ->
+			{
+				// Table ->
+//				if (panel == pa_01) pa_01.BackColor = ColorOptions.Def_tabletext;
+
+				if      (panel == pa_15)   pa_15  .BackColor = ColorOptions.Def_tablelines;
+				else if (panel == pa_02)   pa_02  .BackColor = ColorOptions.Def_rowa;
+				else if (panel == pa_03)   pa_03  .BackColor = ColorOptions.Def_rowb;
+				else if (panel == pa_04)   pa_04  .BackColor = ColorOptions.Def_rowdisableda;
+				else if (panel == pa_05)   pa_05  .BackColor = ColorOptions.Def_rowdisabledb;
+				else if (panel == pa_37)   pa_37  .BackColor = ColorOptions.Def_rowcreated;
+
+				else if (panel == pa_02_t) pa_02_t.BackColor = ColorOptions.Def_rowa_t;
+				else if (panel == pa_03_t) pa_03_t.BackColor = ColorOptions.Def_rowb_t;
+				else if (panel == pa_04_t) pa_04_t.BackColor = ColorOptions.Def_rowdisableda_t;
+				else if (panel == pa_05_t) pa_05_t.BackColor = ColorOptions.Def_rowdisabledb_t;
+				else if (panel == pa_37_t) pa_37_t.BackColor = ColorOptions.Def_rowcreated_t;
+
+				// Frozen ->
+				else if (panel == pa_16)   pa_16  .BackColor = ColorOptions.Def_frozenlines;
+				else if (panel == pa_07)   pa_07  .BackColor = ColorOptions.Def_frozen;
+				else if (panel == pa_07_t) pa_07_t.BackColor = ColorOptions.Def_frozen_t;
+				else if (panel == pa_17)   pa_17  .BackColor = ColorOptions.Def_frozenheadlines;
+				else if (panel == pa_08)   pa_08  .BackColor = ColorOptions.Def_frozenhead;
+				else if (panel == pa_08_t) pa_08_t.BackColor = ColorOptions.Def_frozenhead_t;
+				else if (panel == pa_29)   pa_29  .BackColor = ColorOptions.Def_frozenidunsort;
+				else if (panel == pa_42)   pa_42  .BackColor = ColorOptions.Def_frozenheadgrada;
+				else if (panel == pa_43)   pa_43  .BackColor = ColorOptions.Def_frozenheadgradb;
+				else if (panel == pa_44)   pa_44  .BackColor = ColorOptions.Def_frozenidgrada;
+				else if (panel == pa_45)   pa_45  .BackColor = ColorOptions.Def_frozenidgradb;
+
+				// Colhead ->
+				else if (panel == pa_20)   pa_20  .BackColor = ColorOptions.Def_colheadtext;
+				else if (panel == pa_30)   pa_30  .BackColor = ColorOptions.Def_colheadtextsel;
+				else if (panel == pa_31)   pa_31  .BackColor = ColorOptions.Def_colheadtextsize;
+				else if (panel == pa_21)   pa_21  .BackColor = ColorOptions.Def_colheadlines;
+				else if (panel == pa_09)   pa_09  .BackColor = ColorOptions.Def_colhead;
+				else if (panel == pa_32)   pa_32  .BackColor = ColorOptions.Def_headtextsortasc;
+				else if (panel == pa_33)   pa_33  .BackColor = ColorOptions.Def_headtextsortdes;
+				else if (panel == pa_40)   pa_40  .BackColor = ColorOptions.Def_colheadgrada;
+				else if (panel == pa_41)   pa_41  .BackColor = ColorOptions.Def_colheadgradb;
+
+				// Rowpanel ->
+				else if (panel == pa_10)   pa_10  .BackColor = ColorOptions.Def_rowpaneltext;
+				else if (panel == pa_19)   pa_19  .BackColor = ColorOptions.Def_rowpanellines;
+				else if (panel == pa_11)   pa_11  .BackColor = ColorOptions.Def_rowpanel;
+				else if (panel == pa_35)   pa_35  .BackColor = ColorOptions.Def_rowsel;
+				else if (panel == pa_36)   pa_36  .BackColor = ColorOptions.Def_rowsubsel;
+
+				// Propanel ->
+				else if (panel == pa_12)   pa_12  .BackColor = ColorOptions.Def_propaneltext;
+				else if (panel == pa_22)   pa_22  .BackColor = ColorOptions.Def_propanellines;
+				else if (panel == pa_23)   pa_23  .BackColor = ColorOptions.Def_propanelborder;
+				else if (panel == pa_13)   pa_13  .BackColor = ColorOptions.Def_propanel;
+				else if (panel == pa_34)   pa_34  .BackColor = ColorOptions.Def_propanelfrozen;
+				else if (panel == pa_38)   pa_38  .BackColor = ColorOptions.Def_propanelsel;
+
+				// Statusbar ->
+				else if (panel == pa_14)   pa_14  .BackColor = ColorOptions.Def_statusbar;
+				else if (panel == pa_14_t) pa_14_t.BackColor = ColorOptions.Def_statusbar_t;
+
+				// Cells ->
+				else if (panel == pa_24)   pa_24  .BackColor = ColorOptions.Def_cellselected;
+				else if (panel == pa_25)   pa_25  .BackColor = ColorOptions.Def_cellloadchanged;
+				else if (panel == pa_26)   pa_26  .BackColor = ColorOptions.Def_celldiffed;
+				else if (panel == pa_27)   pa_27  .BackColor = ColorOptions.Def_cellreplaced;
+				else if (panel == pa_28)   pa_28  .BackColor = ColorOptions.Def_celledit;
+
+
 				Yata.that.Refresh();
+			}
 		}
 		#endregion Methods
 	}
