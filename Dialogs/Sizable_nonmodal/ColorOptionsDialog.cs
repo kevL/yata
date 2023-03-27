@@ -68,15 +68,15 @@ namespace yata
 			la_45.Text = "Frozen id unsorted gradient b"; pa_45  .BackColor = ColorOptions._frozenidgradb;
 
 			// Colhead ->
-			la_21.Text = "Col header lines";           pa_21  .BackColor = ColorOptions._colheadlines.Color;
-			la_09.Text = "Col header";                 pa_09  .BackColor = ColorOptions._colhead;
-													   pa_09_t.BackColor = ColorOptions._colhead_t;
-			la_30.Text = "Col header selected text";   pa_30  .BackColor = ColorOptions._colheadsel_t;
-			la_31.Text = "Col header resized text";    pa_31  .BackColor = ColorOptions._colheadsize_t;
-			la_32.Text = "Header sorted ascend text";  pa_32  .BackColor = ColorOptions._headsortasc_t;
-			la_33.Text = "Header sorted descend text"; pa_33  .BackColor = ColorOptions._headsortdes_t;
-			la_40.Text = "Col header gradient a";      pa_40  .BackColor = ColorOptions._colheadgrada;
-			la_41.Text = "Col header gradient b";      pa_41  .BackColor = ColorOptions._colheadgradb;
+			la_21.Text = "Col header lines";         pa_21  .BackColor = ColorOptions._colheadlines.Color;
+			la_09.Text = "Col header";               pa_09  .BackColor = ColorOptions._colhead;
+													 pa_09_t.BackColor = ColorOptions._colhead_t;
+			la_30.Text = "Col header selected";      pa_30  .BackColor = ColorOptions._colheadsel_t;
+			la_31.Text = "Col header resized";       pa_31  .BackColor = ColorOptions._colheadsize_t;
+			la_32.Text = "Header sorted ascending";  pa_32  .BackColor = ColorOptions._headsortasc_t;
+			la_33.Text = "Header sorted descending"; pa_33  .BackColor = ColorOptions._headsortdes_t;
+			la_40.Text = "Col header gradient a";    pa_40  .BackColor = ColorOptions._colheadgrada;
+			la_41.Text = "Col header gradient b";    pa_41  .BackColor = ColorOptions._colheadgradb;
 
 			// Rowpanel ->
 			la_19.Text = "Row panel lines";       pa_19  .BackColor =  ColorOptions._rowpanellines           .Color;
@@ -90,7 +90,7 @@ namespace yata
 			la_23.Text = "Propanel border";        pa_23  .BackColor =  ColorOptions._propanelborder               .Color;
 			la_13.Text = "Propanel";               pa_13  .BackColor =  ColorOptions._propanel;
 												   pa_13_t.BackColor =  ColorOptions._propanel_t;
-			la_34.Text = "Propanel frozen col";    pa_34  .BackColor = (ColorOptions._propanelfrozen as SolidBrush).Color;
+			la_34.Text = "Propanel frozen cell";   pa_34  .BackColor = (ColorOptions._propanelfrozen as SolidBrush).Color;
 			la_38.Text = "Propanel selected cell"; pa_38  .BackColor = (ColorOptions._propanelsel    as SolidBrush).Color;
 
 			// Statusbar ->
