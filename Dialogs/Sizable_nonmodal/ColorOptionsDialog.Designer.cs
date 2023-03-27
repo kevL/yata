@@ -1334,7 +1334,7 @@ namespace yata
 			this.bu_Defaults.Text = "restore defaults";
 			this.toolTip1.SetToolTip(this.bu_Defaults, "restores all colors to hardcoded defaults");
 			this.bu_Defaults.UseVisualStyleBackColor = true;
-			this.bu_Defaults.Click += new System.EventHandler(this.click_Defaults);
+			this.bu_Defaults.Click += new System.EventHandler(this.click_RestoreDefaults);
 			// 
 			// bu_Delete
 			// 
