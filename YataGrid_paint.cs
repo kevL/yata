@@ -310,12 +310,12 @@ namespace yata
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color    = ColorOptions._headtextsortasc;
+						color    = ColorOptions._headsortasc_t;
 						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color    = ColorOptions._headtextsortdes;
+						color    = ColorOptions._headsortdes_t;
 						sorticon = Resources.des_16px;
 					}
 					graphics.DrawImage(sorticon,
@@ -369,12 +369,12 @@ namespace yata
 					Bitmap sorticon;
 					if (_sortdir == SORT_ASC)
 					{
-						color    = ColorOptions._headtextsortasc;
+						color    = ColorOptions._headsortasc_t;
 						sorticon = Resources.asc_16px;
 					}
 					else
 					{
-						color    = ColorOptions._headtextsortdes;
+						color    = ColorOptions._headsortdes_t;
 						sorticon = Resources.des_16px;
 					}
 
@@ -424,15 +424,15 @@ namespace yata
 						Bitmap sort;
 						if (_sortdir == SORT_ASC)
 						{
-							if (col.selected) color = ColorOptions._colheadtextsel;
-							else              color = ColorOptions._headtextsortasc;
+							if (col.selected) color = ColorOptions._colheadsel_t;
+							else              color = ColorOptions._headsortasc_t;
 
 							sort  = Resources.asc_16px;
 						}
 						else
 						{
-							if (col.selected) color = ColorOptions._colheadtextsel;
-							else              color = ColorOptions._headtextsortdes;
+							if (col.selected) color = ColorOptions._colheadsel_t;
+							else              color = ColorOptions._headsortdes_t;
 
 							sort  = Resources.des_16px;
 						}
@@ -447,8 +447,8 @@ namespace yata
 					{
 						clip = 7;
 
-						if      (col.selected)  color = ColorOptions._colheadtextsel;
-						else if (col.UserSized) color = ColorOptions._colheadtextsize;
+						if      (col.selected)  color = ColorOptions._colheadsel_t;
+						else if (col.UserSized) color = ColorOptions._colheadsize_t;
 						else                    color = ColorOptions._colhead_t;
 					}
 
@@ -517,7 +517,7 @@ namespace yata
 									  r.ToString(CultureInfo.InvariantCulture),
 									  _f.FontAccent,
 									  rect,
-									  ColorOptions._rowpaneltext,
+									  ColorOptions._rowpanel_t,
 									  YataGraphics.flags);
 			}
 		}

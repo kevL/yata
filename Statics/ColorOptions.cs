@@ -44,20 +44,20 @@ namespace yata
 		internal const string CFG_frozenidgradb   = "frozenidgradb";
 
 		// Colhead ->
-		internal const string CFG_colheadtextsel  = "colheadtextsel=";
-		internal const string CFG_colheadtextsize = "colheadtextsize=";
 		internal const string CFG_colheadlines    = "colheadlines=";
 		internal const string CFG_colhead         = "colhead=";
 		internal const string CFG_colhead_t       = "colhead_t=";
-		internal const string CFG_headtextsortasc = "headtextsortasc=";
-		internal const string CFG_headtextsortdes = "headtextsortdes=";
+		internal const string CFG_colheadsel_t    = "colheadsel_t=";
+		internal const string CFG_colheadsize_t   = "colheadsize_t=";
+		internal const string CFG_headsortasc_t   = "headsortasc_t=";
+		internal const string CFG_headsortdes_t   = "headsortdes_t=";
 		internal const string CFG_colheadgrada    = "colheadgrada";
 		internal const string CFG_colheadgradb    = "colheadgradb";
 
 		// Rowpanel ->
-		internal const string CFG_rowpaneltext    = "rowpaneltext=";
 		internal const string CFG_rowpanellines   = "rowpanellines=";
 		internal const string CFG_rowpanel        = "rowpanel=";
+		internal const string CFG_rowpanel_t      = "rowpanel_t=";
 		internal const string CFG_rowsel          = "rowsel=";
 		internal const string CFG_rowsubsel       = "rowsubsel=";
 
@@ -109,20 +109,20 @@ namespace yata
 		internal static Color Def_frozenidgradb   = Color.Lavender;
 
 		// Colhead ->
-		internal static Color Def_colheadtextsel  = Color.White;
-		internal static Color Def_colheadtextsize = Color.DarkGray;
 		internal static Color Def_colheadlines    = SystemColors.ControlDark;
 		internal static Color Def_colhead         = Color.Thistle;
 		internal static Color Def_colhead_t       = SystemColors.ControlText;
-		internal static Color Def_headtextsortasc = Color.SteelBlue;
-		internal static Color Def_headtextsortdes = Color.DarkGoldenrod;
+		internal static Color Def_colheadsel_t    = Color.White;
+		internal static Color Def_colheadsize_t   = Color.DarkGray;
+		internal static Color Def_headsortasc_t   = Color.SteelBlue;
+		internal static Color Def_headsortdes_t   = Color.DarkGoldenrod;
 		internal static Color Def_colheadgrada    = Color.Lavender;
 		internal static Color Def_colheadgradb    = Color.MediumOrchid;
 
 		// Rowpanel ->
-		internal static Color Def_rowpaneltext    = SystemColors.ControlText;
 		internal static Color Def_rowpanellines   = SystemColors.ControlDark;
 		internal static Color Def_rowpanel        = Color.Azure;
+		internal static Color Def_rowpanel_t      = SystemColors.ControlText;
 		internal static Color Def_rowsel          = Color.PaleGreen;
 		internal static Color Def_rowsubsel       = Color.Honeydew;
 
@@ -174,20 +174,20 @@ namespace yata
 		internal static Color _frozenidgradb   = Def_frozenidgradb;
 
 		// Colhead ->
-		internal static Color _colheadtextsel  = Def_colheadtextsel;				// default colors for the colhead ->
-		internal static Color _colheadtextsize = Def_colheadtextsize;
-		internal static Pen   _colheadlines    = new Pen(Def_colheadlines);
+		internal static Pen   _colheadlines    = new Pen(Def_colheadlines);			// default colors for the colhead ->
 		internal static Color _colhead         = Def_colhead;
 		internal static Color _colhead_t       = Def_colhead_t;
-		internal static Color _headtextsortasc = Def_headtextsortasc;
-		internal static Color _headtextsortdes = Def_headtextsortdes;
+		internal static Color _colheadsel_t    = Def_colheadsel_t;
+		internal static Color _colheadsize_t   = Def_colheadsize_t;
+		internal static Color _headsortasc_t   = Def_headsortasc_t;
+		internal static Color _headsortdes_t   = Def_headsortdes_t;
 		internal static Color _colheadgrada    = Def_colheadgrada;
 		internal static Color _colheadgradb    = Def_colheadgradb;
 
 		// Rowpanel ->
-		internal static Color _rowpaneltext    = Def_rowpaneltext;					// default colors for the rowpanel ->
-		internal static Pen   _rowpanellines   = new Pen(Def_rowpanellines);
+		internal static Pen   _rowpanellines   = new Pen(Def_rowpanellines);		// default colors for the rowpanel ->
 		internal static Color _rowpanel        = Def_rowpanel;
+		internal static Color _rowpanel_t      = Def_rowpanel_t;
 		internal static Brush _rowsel          = new SolidBrush(Def_rowsel);
 		internal static Brush _rowsubsel       = new SolidBrush(Def_rowsubsel);
 
@@ -511,30 +511,6 @@ namespace yata
 						}
 
 						// Colhead ->
-						else if (line.StartsWith(CFG_colheadtextsel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadtextsel.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadtextselected = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadtextsel = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colheadtextsize, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadtextsize.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadtextsized = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadtextsize = color;
-							}
-						}
 						else if (line.StartsWith(CFG_colheadlines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_colheadlines.Length).Trim()).Length != 0)
@@ -571,28 +547,52 @@ namespace yata
 									_colhead_t = color;
 							}
 						}
-						else if (line.StartsWith(CFG_headtextsortasc, StringComparison.Ordinal))
+						else if (line.StartsWith(CFG_colheadsel_t, StringComparison.Ordinal))
 						{
-							if ((line = line.Substring(CFG_headtextsortasc.Length).Trim()).Length != 0)
+							if ((line = line.Substring(CFG_colheadsel_t.Length).Trim()).Length != 0)
 							{
 //								PropertyInfo pi = typeof(Color).GetProperty(line);
 //								if (pi != null)
-//									_headtextsortasc = (Color)pi.GetValue(null,null);
+//									_colheadsel_t = (Color)pi.GetValue(null,null);
 
 								if ((color = ParseColor(line)) != Color.Empty)
-									_headtextsortasc = color;
+									_colheadsel_t = color;
 							}
 						}
-						else if (line.StartsWith(CFG_headtextsortdes, StringComparison.Ordinal))
+						else if (line.StartsWith(CFG_colheadsize_t, StringComparison.Ordinal))
 						{
-							if ((line = line.Substring(CFG_headtextsortdes.Length).Trim()).Length != 0)
+							if ((line = line.Substring(CFG_colheadsize_t.Length).Trim()).Length != 0)
 							{
 //								PropertyInfo pi = typeof(Color).GetProperty(line);
 //								if (pi != null)
-//									_headtextsortdes = (Color)pi.GetValue(null,null);
+//									_colheadsize_t = (Color)pi.GetValue(null,null);
 
 								if ((color = ParseColor(line)) != Color.Empty)
-									_headtextsortdes = color;
+									_colheadsize_t = color;
+							}
+						}
+						else if (line.StartsWith(CFG_headsortasc_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_headsortasc_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_headsortasc_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_headsortasc_t = color;
+							}
+						}
+						else if (line.StartsWith(CFG_headsortdes_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_headsortdes_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_headsortdes_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_headsortdes_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_colheadgrada, StringComparison.Ordinal))
@@ -621,18 +621,6 @@ namespace yata
 						}
 
 						// Rowpanel ->
-						else if (line.StartsWith(CFG_rowpaneltext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowpaneltext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowpaneltext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowpaneltext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_rowpanellines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_rowpanellines.Length).Trim()).Length != 0)
@@ -655,6 +643,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowpanel = color;
+							}
+						}
+						else if (line.StartsWith(CFG_rowpanel_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_rowpanel_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_rowpanel_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_rowpanel_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_rowsel, StringComparison.Ordinal))
