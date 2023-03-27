@@ -257,7 +257,7 @@ namespace yata
 									  gs.Id,
 									  _f.FontAccent,
 									  rect,
-									  ColorOptions._frozenheadtext,
+									  ColorOptions._frozenhead_t,
 									  YataGraphics.flags);
 
 				graphics.DrawLine(ColorOptions._frozenheadlines,
@@ -323,7 +323,7 @@ namespace yata
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
-					color = ColorOptions._frozenheadtext;
+					color = ColorOptions._frozenhead_t;
 
 				TextRenderer.DrawText(graphics,
 									  Cols[1].text,
@@ -383,7 +383,7 @@ namespace yata
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
 				else
-					color = ColorOptions._frozenheadtext;
+					color = ColorOptions._frozenhead_t;
 
 				TextRenderer.DrawText(graphics,
 									  Cols[2].text,

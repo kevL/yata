@@ -34,9 +34,9 @@ namespace yata
 		internal const string CFG_frozenlines     = "frozenlines=";
 		internal const string CFG_frozen          = "frozen=";
 		internal const string CFG_frozen_t        = "frozen_t=";
-		internal const string CFG_frozenheadtext  = "frozenheadtext=";
 		internal const string CFG_frozenheadlines = "frozenheadlines=";
 		internal const string CFG_frozenhead      = "frozenhead=";
+		internal const string CFG_frozenhead_t    = "frozenhead_t=";
 		internal const string CFG_frozenidunsort  = "frozenidunsort=";
 		internal const string CFG_frozenheadgrada = "frozenheadgrada";
 		internal const string CFG_frozenheadgradb = "frozenheadgradb";
@@ -99,9 +99,9 @@ namespace yata
 		internal static Color Def_frozenlines     = SystemColors.ControlDark;
 		internal static Color Def_frozen          = Color.OldLace;
 		internal static Color Def_frozen_t        = SystemColors.ControlText;
-		internal static Color Def_frozenheadtext  = SystemColors.ControlText;
 		internal static Color Def_frozenheadlines = SystemColors.ControlDark;
 		internal static Color Def_frozenhead      = Color.Moccasin;
+		internal static Color Def_frozenhead_t    = SystemColors.ControlText;
 		internal static Color Def_frozenidunsort  = Color.LightCoral;
 		internal static Color Def_frozenheadgrada = Color.Cornsilk;
 		internal static Color Def_frozenheadgradb = Color.BurlyWood;
@@ -164,9 +164,9 @@ namespace yata
 		internal static Pen   _frozenlines     = new Pen(Def_frozenlines);			// default colors for the frozenpanel ->
 		internal static Color _frozen          = Def_frozen;
 		internal static Color _frozen_t        = Def_frozen_t;
-		internal static Color _frozenheadtext  = Def_frozenheadtext;
 		internal static Pen   _frozenheadlines = new Pen(Def_frozenheadlines);
 		internal static Color _frozenhead      = Def_frozenhead;
+		internal static Color _frozenhead_t    = Def_frozenhead_t;
 		internal static Color _frozenidunsort  = Def_frozenidunsort;
 		internal static Color _frozenheadgrada = Def_frozenheadgrada;
 		internal static Color _frozenheadgradb = Def_frozenheadgradb;
@@ -413,18 +413,6 @@ namespace yata
 									_frozen_t = color;
 							}
 						}
-						else if (line.StartsWith(CFG_frozenheadtext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenheadtext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenheadtext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenheadtext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_frozenheadlines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_frozenheadlines.Length).Trim()).Length != 0)
@@ -447,6 +435,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenhead = color;
+							}
+						}
+						else if (line.StartsWith(CFG_frozenhead_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozenhead_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozenhead_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozenhead_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_frozenidunsort, StringComparison.Ordinal))

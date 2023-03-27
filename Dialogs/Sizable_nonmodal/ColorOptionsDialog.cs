@@ -59,9 +59,9 @@ namespace yata
 			la_16.Text = "Frozen panel lines";            pa_16  .BackColor = ColorOptions._frozenlines.Color;
 			la_07.Text = "Frozen panel";                  pa_07  .BackColor = ColorOptions._frozen;
 														  pa_07_t.BackColor = ColorOptions._frozen_t;
-			la_18.Text = "Frozen header text";            pa_18  .BackColor = ColorOptions._frozenheadtext;
 			la_17.Text = "Frozen header lines";           pa_17  .BackColor = ColorOptions._frozenheadlines.Color;
 			la_08.Text = "Frozen header";                 pa_08  .BackColor = ColorOptions._frozenhead;
+														  pa_08_t.BackColor = ColorOptions._frozenhead_t;
 			la_29.Text = "Frozen id unsorted";            pa_29  .BackColor = ColorOptions._frozenidunsort;
 			la_42.Text = "Frozen header gradient a";      pa_42  .BackColor = ColorOptions._frozenheadgrada;
 			la_43.Text = "Frozen header gradient b";      pa_43  .BackColor = ColorOptions._frozenheadgradb;
@@ -179,9 +179,9 @@ namespace yata
 					else if (sender == pa_16)   title = la_16.Text;
 					else if (sender == pa_07)   title = la_07.Text;
 					else if (sender == pa_07_t) title = la_07.Text + " text";
-					else if (sender == pa_18)   title = la_18.Text;
 					else if (sender == pa_17)   title = la_17.Text;
 					else if (sender == pa_08)   title = la_08.Text;
+					else if (sender == pa_08_t) title = la_08.Text + " text";
 					else if (sender == pa_29)   title = la_29.Text;
 					else if (sender == pa_42)   title = la_42.Text;
 					else if (sender == pa_43)   title = la_43.Text;
@@ -267,9 +267,9 @@ namespace yata
 				else if (sender == pa_16)   ColorOptions._frozenlines                   .Color = pa_16.BackColor;
 				else if (sender == pa_07)   ColorOptions._frozen                               = pa_07.BackColor;
 				else if (sender == pa_07_t) ColorOptions._frozen_t                             = pa_07_t.BackColor;
-				else if (sender == pa_18)   ColorOptions._frozenheadtext                       = pa_18.BackColor;
 				else if (sender == pa_17)   ColorOptions._frozenheadlines               .Color = pa_17.BackColor;
 				else if (sender == pa_08)   ColorOptions._frozenhead                           = pa_08.BackColor;
+				else if (sender == pa_08_t) ColorOptions._frozenhead_t                         = pa_08_t.BackColor;
 				else if (sender == pa_29)   ColorOptions._frozenidunsort                       = pa_29.BackColor;
 				else if (sender == pa_42 || sender == pa_43)
 				{
@@ -451,12 +451,12 @@ namespace yata
 			sb.AppendLine(pa_07.BackColor.R + "," + pa_07.BackColor.G + "," + pa_07.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozen_t);
 			sb.AppendLine(pa_07_t.BackColor.R + "," + pa_07_t.BackColor.G + "," + pa_07_t.BackColor.B);
-			sb.Append(ColorOptions.CFG_frozenheadtext);
-			sb.AppendLine(pa_18.BackColor.R + "," + pa_18.BackColor.G + "," + pa_18.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadlines);
 			sb.AppendLine(pa_17.BackColor.R + "," + pa_17.BackColor.G + "," + pa_17.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenhead);
 			sb.AppendLine(pa_08.BackColor.R + "," + pa_08.BackColor.G + "," + pa_08.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozenhead_t);
+			sb.AppendLine(pa_08_t.BackColor.R + "," + pa_08_t.BackColor.G + "," + pa_08_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenidunsort);
 			sb.AppendLine(pa_29.BackColor.R + "," + pa_29.BackColor.G + "," + pa_29.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadgrada);
@@ -681,11 +681,6 @@ namespace yata
 				pa_07_t.BackColor = ColorOptions.Def_frozen_t;
 				if (panel != null) return;
 			}
-			if (panel == null || panel == pa_18)
-			{
-				pa_18.BackColor = ColorOptions.Def_frozenheadtext;
-				if (panel != null) return;
-			}
 			if (panel == null || panel == pa_17)
 			{
 				pa_17.BackColor = ColorOptions.Def_frozenheadlines;
@@ -694,6 +689,11 @@ namespace yata
 			if (panel == null || panel == pa_08)
 			{
 				pa_08.BackColor = ColorOptions.Def_frozenhead;
+				if (panel != null) return;
+			}
+			if (panel == null || panel == pa_08_t)
+			{
+				pa_08_t.BackColor = ColorOptions.Def_frozenhead_t;
 				if (panel != null) return;
 			}
 			if (panel == null || panel == pa_29)
