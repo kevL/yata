@@ -569,7 +569,7 @@ namespace yata
 										  cell.text,
 										  Font,
 										  rect,
-										  ColorOptions._frozentext,
+										  ColorOptions._frozen_t,
 										  YataGraphics.flags);
 					rect.X += rect.Width;
 				}

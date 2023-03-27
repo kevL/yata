@@ -31,9 +31,9 @@ namespace yata
 		internal const string CFG_rowcreated_t    = "rowcreated_t=";
 
 		// Frozen ->
-		internal const string CFG_frozentext      = "frozentext=";
 		internal const string CFG_frozenlines     = "frozenlines=";
 		internal const string CFG_frozen          = "frozen=";
+		internal const string CFG_frozen_t        = "frozen_t=";
 		internal const string CFG_frozenheadtext  = "frozenheadtext=";
 		internal const string CFG_frozenheadlines = "frozenheadlines=";
 		internal const string CFG_frozenhead      = "frozenhead=";
@@ -96,9 +96,9 @@ namespace yata
 		internal static Color Def_rowcreated_t    = SystemColors.ControlText;
 
 		// Frozen ->
-		internal static Color Def_frozentext      = SystemColors.ControlText;
 		internal static Color Def_frozenlines     = SystemColors.ControlDark;
 		internal static Color Def_frozen          = Color.OldLace;
+		internal static Color Def_frozen_t        = SystemColors.ControlText;
 		internal static Color Def_frozenheadtext  = SystemColors.ControlText;
 		internal static Color Def_frozenheadlines = SystemColors.ControlDark;
 		internal static Color Def_frozenhead      = Color.Moccasin;
@@ -161,9 +161,9 @@ namespace yata
 		internal static Color _rowcreated_t    = Def_rowcreated_t;
 
 		// Frozen ->
-		internal static Color _frozentext      = Def_frozentext;					// default colors for the frozenpanel ->
-		internal static Pen   _frozenlines     = new Pen(Def_frozenlines);
+		internal static Pen   _frozenlines     = new Pen(Def_frozenlines);			// default colors for the frozenpanel ->
 		internal static Color _frozen          = Def_frozen;
+		internal static Color _frozen_t        = Def_frozen_t;
 		internal static Color _frozenheadtext  = Def_frozenheadtext;
 		internal static Pen   _frozenheadlines = new Pen(Def_frozenheadlines);
 		internal static Color _frozenhead      = Def_frozenhead;
@@ -377,18 +377,6 @@ namespace yata
 						}
 
 						// Frozen ->
-						else if (line.StartsWith(CFG_frozentext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozentext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozentext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozentext = color;
-							}
-						}
 						else if (line.StartsWith(CFG_frozenlines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_frozenlines.Length).Trim()).Length != 0)
@@ -411,6 +399,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozen = color;
+							}
+						}
+						else if (line.StartsWith(CFG_frozen_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozen_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozen_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozen_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_frozenheadtext, StringComparison.Ordinal))

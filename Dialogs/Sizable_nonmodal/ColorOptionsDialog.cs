@@ -61,12 +61,11 @@ namespace yata
 			pa_37_t.BackColor = ColorOptions._rowcreated_t;
 
 			// Frozen ->
-			la_06.Text = "Frozen panel text";
-			pa_06.BackColor = ColorOptions._frozentext;
 			la_16.Text = "Frozen panel lines";
 			pa_16.BackColor = ColorOptions._frozenlines.Color;
 			la_07.Text = "Frozen panel";
 			pa_07.BackColor = ColorOptions._frozen;
+			pa_07_t.BackColor = ColorOptions._frozen_t;
 			la_18.Text = "Frozen header text";
 			pa_18.BackColor = ColorOptions._frozenheadtext;
 			la_17.Text = "Frozen header lines";
@@ -217,9 +216,9 @@ namespace yata
 					else if (sender == pa_37_t) title = la_37.Text + " text";
 
 					// Frozen ->
-					else if (sender == pa_06) title = la_06.Text;
 					else if (sender == pa_16) title = la_16.Text;
 					else if (sender == pa_07) title = la_07.Text;
+					else if (sender == pa_07_t) title = la_07.Text + " text";
 					else if (sender == pa_18) title = la_18.Text;
 					else if (sender == pa_17) title = la_17.Text;
 					else if (sender == pa_08) title = la_08.Text;
@@ -338,11 +337,6 @@ namespace yata
 					}
 
 					// Frozen ->
-					else if (sender == pa_06)
-					{
-						pa_06.BackColor =
-						ColorOptions._frozentext = ColorOptions.Def_frozentext;
-					}
 					else if (sender == pa_16)
 					{
 						pa_16.BackColor =
@@ -352,6 +346,11 @@ namespace yata
 					{
 						pa_07.BackColor =
 						ColorOptions._frozen = ColorOptions.Def_frozen;
+					}
+					else if (sender == pa_07_t)
+					{
+						pa_07_t.BackColor =
+						ColorOptions._frozen_t = ColorOptions.Def_frozen_t;
 					}
 					else if (sender == pa_18)
 					{
@@ -569,9 +568,9 @@ namespace yata
 				else if (sender == pa_37_t) ColorOptions._rowcreated_t   = pa_37_t.BackColor;
 
 				// Frozen ->
-				else if (sender == pa_06)  ColorOptions._frozentext                           = pa_06.BackColor;
 				else if (sender == pa_16)  ColorOptions._frozenlines                   .Color = pa_16.BackColor;
 				else if (sender == pa_07)  ColorOptions._frozen                               = pa_07.BackColor;
+				else if (sender == pa_07_t)  ColorOptions._frozen_t                           = pa_07_t.BackColor;
 				else if (sender == pa_18)  ColorOptions._frozenheadtext                       = pa_18.BackColor;
 				else if (sender == pa_17)  ColorOptions._frozenheadlines               .Color = pa_17.BackColor;
 				else if (sender == pa_08)  ColorOptions._frozenhead                           = pa_08.BackColor;
@@ -752,12 +751,12 @@ namespace yata
 			sb.AppendLine(pa_37_t.BackColor.R + "," + pa_37_t.BackColor.G + "," + pa_37_t.BackColor.B);
 
 			// Frozen ->
-			sb.Append(ColorOptions.CFG_frozentext);
-			sb.AppendLine(pa_06.BackColor.R + "," + pa_06.BackColor.G + "," + pa_06.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenlines);
 			sb.AppendLine(pa_16.BackColor.R + "," + pa_16.BackColor.G + "," + pa_16.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozen);
 			sb.AppendLine(pa_07.BackColor.R + "," + pa_07.BackColor.G + "," + pa_07.BackColor.B);
+			sb.Append(ColorOptions.CFG_frozen_t);
+			sb.AppendLine(pa_07_t.BackColor.R + "," + pa_07_t.BackColor.G + "," + pa_07_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadtext);
 			sb.AppendLine(pa_18.BackColor.R + "," + pa_18.BackColor.G + "," + pa_18.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadlines);
@@ -878,12 +877,12 @@ namespace yata
 			 ColorOptions._rowcreated_t   = ColorOptions.Def_rowcreated_t;
 
 			 // Frozen ->
-			 pa_06.BackColor                                    =
-			 ColorOptions._frozentext                           = ColorOptions.Def_frozentext;
 			 pa_16.BackColor                                    =
 			 ColorOptions._frozenlines                   .Color = ColorOptions.Def_frozenlines;
 			 pa_07.BackColor                                    =
 			 ColorOptions._frozen                               = ColorOptions.Def_frozen;
+			 pa_07_t.BackColor                                  =
+			 ColorOptions._frozen_t                             = ColorOptions.Def_frozen_t;
 			 pa_18.BackColor                                    =
 			 ColorOptions._frozenheadtext                       = ColorOptions.Def_frozenheadtext;
 			 pa_17.BackColor                                    =
