@@ -264,27 +264,10 @@ namespace yata
 					while ((line = sr.ReadLine()) != null)
 					{
 						// Table ->
-/*						if (line.StartsWith(CFG_tabletext, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_tabletext.Length).Trim()).Length != 0)
-							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_tabletext = (Color)pi.GetValue(null,null);
-
-								if ((color = ParseColor(line)) != Color.Empty)
-									_tabletext = color;
-							}
-						} */
-
 						if (line.StartsWith(CFG_rowlines, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_rowlines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Pencils).GetProperty(line);
-//								if (pi != null)
-//									_rowlines.Color = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowlines.Color = color;
 							}
@@ -293,10 +276,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowa.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowa = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowa as SolidBrush).Color = color;
 							}
@@ -305,10 +284,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowa_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowa_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowa_t = color;
 							}
@@ -317,10 +292,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowb.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowb = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowb as SolidBrush).Color = color;
 							}
@@ -329,10 +300,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowb_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowb_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowb_t = color;
 							}
@@ -341,10 +308,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowdisableda.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowdisableda = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowdisableda as SolidBrush).Color = color;
 							}
@@ -353,10 +316,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowdisableda_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowdisableda_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowdisableda_t = color;
 							}
@@ -365,10 +324,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowdisabledb.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowdisabledb = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowdisabledb as SolidBrush).Color = color;
 							}
@@ -377,10 +332,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowdisabledb_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowdisabledb_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowdisabledb_t = color;
 							}
@@ -389,10 +340,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowcreated.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowcreated = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowcreated as SolidBrush).Color = color;
 							}
@@ -401,10 +348,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowcreated_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowcreated_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowcreated_t = color;
 							}
@@ -415,10 +358,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenlines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Pencils).GetProperty(line);
-//								if (pi != null)
-//									_frozenlines.Color = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenlines.Color = color;
 							}
@@ -427,10 +366,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozen.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozen = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozen = color;
 							}
@@ -439,10 +374,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozen_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozen_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozen_t = color;
 							}
@@ -451,10 +382,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenheadlines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Pencils).GetProperty(line);
-//								if (pi != null)
-//									_frozenheadlines.Color = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenheadlines.Color = color;
 							}
@@ -463,10 +390,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenhead.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenhead = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenhead = color;
 							}
@@ -475,10 +398,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenhead_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenhead_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenhead_t = color;
 							}
@@ -487,10 +406,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenidunsort.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenidunsorted = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenidunsort = color;
 							}
@@ -499,10 +414,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenidunsort_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenidunsorted_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenidunsort_t = color;
 							}
@@ -511,10 +422,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenheadgrada.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenheadgrada = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenheadgrada = color;
 							}
@@ -523,10 +430,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenheadgradb.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenheadgradb = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenheadgradb = color;
 							}
@@ -535,10 +438,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenidgrada.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenidgrada = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenidgrada = color;
 							}
@@ -547,10 +446,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_frozenidgradb.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_frozenidgradb = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenidgradb = color;
 							}
@@ -561,10 +456,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colheadlines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadlines = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadlines.Color = color;
 							}
@@ -573,10 +464,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colhead.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colhead = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colhead = color;
 							}
@@ -585,10 +472,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colhead_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colhead_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colhead_t = color;
 							}
@@ -597,10 +480,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colheadsel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadsel_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadsel_t = color;
 							}
@@ -609,10 +488,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colheadsize_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadsize_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadsize_t = color;
 							}
@@ -621,10 +496,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_headsortasc_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_headsortasc_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_headsortasc_t = color;
 							}
@@ -633,10 +504,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_headsortdes_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_headsortdes_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_headsortdes_t = color;
 							}
@@ -645,10 +512,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colheadgrada.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadgrada = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadgrada = color;
 							}
@@ -657,10 +520,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_colheadgradb.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_colheadgradb = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_colheadgradb = color;
 							}
@@ -671,10 +530,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowpanellines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowpanellines = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowpanellines.Color = color;
 							}
@@ -683,10 +538,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowpanel.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowpanel = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowpanel = color;
 							}
@@ -695,10 +546,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowpanel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_rowpanel_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowpanel_t = color;
 							}
@@ -707,10 +554,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowsel.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowsel = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowsel as SolidBrush).Color = color;
 							}
@@ -719,10 +562,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowsel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowsel_t = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowsel_t = color;
 							}
@@ -731,10 +570,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowsubsel.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowsubsel = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_rowsubsel as SolidBrush).Color = color;
 							}
@@ -743,10 +578,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_rowsubsel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_rowsubsel_t = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_rowsubsel_t = color;
 							}
@@ -757,10 +588,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanellines.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_propanellines = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanellines.Color = color;
 							}
@@ -769,10 +596,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanelborder.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_propanelborder = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanelborder.Color = color;
 							}
@@ -781,10 +604,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanel.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_propanel = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanel = color;
 							}
@@ -793,10 +612,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_propanel_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanel_t = color;
 							}
@@ -805,10 +620,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanelfrozen.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_propanelfrozen = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_propanelfrozen as SolidBrush).Color = color;
 							}
@@ -817,10 +628,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanelfrozen_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_propanelfrozen_t = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanelfrozen_t = color;
 							}
@@ -829,10 +636,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanelsel.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_propanelsel = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_propanelsel as SolidBrush).Color = color;
 							}
@@ -841,10 +644,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_propanelsel_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_propanelsel_t = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_propanelsel_t = color;
 							}
@@ -855,10 +654,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_statusbar = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_statusbar as SolidBrush).Color = color;
 							}
@@ -867,10 +662,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_statusbar_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_statusbar_t = color;
 							}
@@ -881,10 +672,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellselected.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_cellselected = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_cellselected as SolidBrush).Color = color;
 							}
@@ -893,10 +680,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellselected_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_cellselected_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_cellselected_t = color;
 							}
@@ -905,10 +688,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellloadchanged.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_cellloadchanged = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_cellloadchanged as SolidBrush).Color = color;
 							}
@@ -917,10 +696,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellloadchanged_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_cellloadchanged_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_cellloadchanged_t = color;
 							}
@@ -929,10 +704,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_celldiffed.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_celldiffed = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_celldiffed as SolidBrush).Color = color;
 							}
@@ -941,10 +712,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_celldiffed_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_celldiffed_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_celldiffed_t = color;
 							}
@@ -953,10 +720,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellreplaced.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_cellreplaced = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_cellreplaced as SolidBrush).Color = color;
 							}
@@ -965,10 +728,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_cellreplaced_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_cellreplaced_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_cellreplaced_t = color;
 							}
@@ -977,10 +736,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_celledit.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Brushes).GetProperty(line);
-//								if (pi != null)
-//									_celledit = pi.GetValue(null,null) as Brush;
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									(_celledit as SolidBrush).Color = color;
 							}
@@ -989,10 +744,6 @@ namespace yata
 						{
 							if ((line = line.Substring(CFG_celledit_t.Length).Trim()).Length != 0)
 							{
-//								PropertyInfo pi = typeof(Color).GetProperty(line);
-//								if (pi != null)
-//									_celledit_t = (Color)pi.GetValue(null,null);
-
 								if ((color = ParseColor(line)) != Color.Empty)
 									_celledit_t = color;
 							}
@@ -1045,47 +796,5 @@ namespace yata
 			return Color.Empty;
 		}
 		#endregion Methods (static)
-
-
-/*		#region options (static)
-		/// <summary>
-		/// An array of all <c><see cref="options"/></c> <c>strings</c> that are
-		/// recognized in the Colors.Cfg file.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal static string[] options;
-
-		/// <summary>
-		/// The count of options in <c><see cref="options"/></c>.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal const int ids = 14;
-
-		/// <summary>
-		/// Creates an array of all <c><see cref="options"/></c> <c>strings</c>
-		/// that are recognized in the Colors.Cfg file.
-		/// </summary>
-		/// <remarks>Update if options are added to Yata.</remarks>
-		internal static void CreateOptions()
-		{
-			options = new string[ids];
-
-			int i = -1;
-			options[++i] = CFG_tabletext;
-			options[++i] = CFG_rowa;
-			options[++i] = CFG_rowb;
-			options[++i] = CFG_rowdisableda;
-			options[++i] = CFG_rowdisabledb;
-			options[++i] = CFG_frozentext;
-			options[++i] = CFG_frozen;
-			options[++i] = CFG_frozenhead;
-			options[++i] = CFG_colhead;
-			options[++i] = CFG_rowpaneltext;
-			options[++i] = CFG_rowpanel;
-			options[++i] = CFG_propaneltext;
-			options[++i] = CFG_propanel;
-			options[++i] = CFG_statusbar;
-		}
-		#endregion options (static) */
 	}
 }
