@@ -60,6 +60,7 @@ namespace yata
 			InitializeComponent();
 			Initialize(METRIC_LOC);
 
+			DrawRegulator.SetDoubleBuffered(pa_Colortable);
 			DrawRegulator.SetDoubleBuffered(pa_Valslider);
 
 			tb_Red  .MouseWheel += mousewheel_tb_Rgb;
