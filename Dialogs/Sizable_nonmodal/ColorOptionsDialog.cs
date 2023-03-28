@@ -39,10 +39,9 @@ namespace yata
 		void init()
 		{
 			// Table ->
-//			la_01.Text = "Table text";
-//			pa_01.BackColor = ColorOptions._tabletext;
+//			la_01.Text = "Table text"; pa_01.BackColor = ColorOptions._tabletext;
 
-			la_15.Text = "Table lines";    pa_15  .BackColor =  ColorOptions._tablelines                 .Color;
+			la_15.Text = "Row lines";      pa_15  .BackColor =  ColorOptions._rowlines                   .Color;
 			la_02.Text = "Row a";          pa_02  .BackColor = (ColorOptions._rowa         as SolidBrush).Color;
 										   pa_02_t.BackColor =  ColorOptions._rowa_t;
 			la_03.Text = "Row b";          pa_03  .BackColor = (ColorOptions._rowb         as SolidBrush).Color;
@@ -266,7 +265,7 @@ namespace yata
 				// Table ->
 //				if      (sender == pa_01)   ColorOptions._tabletext                            = pa_01  .BackColor;
 
-				if      (sender == pa_15)   ColorOptions._tablelines                    .Color = pa_15  .BackColor;
+				if      (sender == pa_15)   ColorOptions._rowlines                      .Color = pa_15  .BackColor;
 				else if (sender == pa_02)  (ColorOptions._rowa            as SolidBrush).Color = pa_02  .BackColor;
 				else if (sender == pa_02_t) ColorOptions._rowa_t                               = pa_02_t.BackColor;
 				else if (sender == pa_03)  (ColorOptions._rowb            as SolidBrush).Color = pa_03  .BackColor;
@@ -448,7 +447,8 @@ namespace yata
 			// Table ->
 //			sb.Append(ColorOptions.CFG_tabletext);
 //			sb.AppendLine(pa_01.BackColor.R + "," + pa_01.BackColor.G + "," + pa_01.BackColor.B);
-			sb.Append(ColorOptions.CFG_tablelines);
+
+			sb.Append(ColorOptions.CFG_rowlines);
 			sb.AppendLine(pa_15.BackColor.R + "," + pa_15.BackColor.G + "," + pa_15.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowa);
 			sb.AppendLine(pa_02.BackColor.R + "," + pa_02.BackColor.G + "," + pa_02.BackColor.B);
@@ -652,7 +652,7 @@ namespace yata
 				// Table ->
 //				pa_01  .BackColor = ColorOptions.Def_tabletext;
 
-				pa_15  .BackColor = ColorOptions.Def_tablelines;
+				pa_15  .BackColor = ColorOptions.Def_rowlines;
 				pa_02  .BackColor = ColorOptions.Def_rowa;
 				pa_02_t.BackColor = ColorOptions.Def_rowa_t;
 				pa_03  .BackColor = ColorOptions.Def_rowb;
@@ -732,7 +732,7 @@ namespace yata
 				// Table ->
 //				if (panel == pa_01) pa_01.BackColor = ColorOptions.Def_tabletext;
 
-				if      (panel == pa_15)   pa_15  .BackColor = ColorOptions.Def_tablelines;
+				if      (panel == pa_15)   pa_15  .BackColor = ColorOptions.Def_rowlines;
 				else if (panel == pa_02)   pa_02  .BackColor = ColorOptions.Def_rowa;
 				else if (panel == pa_02_t) pa_02_t.BackColor = ColorOptions.Def_rowa_t;
 				else if (panel == pa_03)   pa_03  .BackColor = ColorOptions.Def_rowb;

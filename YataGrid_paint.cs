@@ -140,7 +140,7 @@ namespace yata
 						break;
 
 					if (y > HeightColhead)
-						graphics.DrawLine(ColorOptions._tablelines,
+						graphics.DrawLine(ColorOptions._rowlines,
 										  left, y,
 										  val,  y);
 				}
@@ -154,7 +154,7 @@ namespace yata
 						break;
 
 					if (x > left)
-						graphics.DrawLine(ColorOptions._tablelines,
+						graphics.DrawLine(ColorOptions._rowlines,
 										  x, HeightColhead,
 										  x, val);
 				}

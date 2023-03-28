@@ -18,7 +18,8 @@ namespace yata
 		// strings in Colors.Cfg
 		// Table ->
 //		internal const string CFG_tabletext         = "tabletext=";
-		internal const string CFG_tablelines        = "tablelines=";
+
+		internal const string CFG_rowlines          = "rowlines=";
 		internal const string CFG_rowa              = "rowa=";
 		internal const string CFG_rowa_t            = "rowa_t=";
 		internal const string CFG_rowb              = "rowb=";
@@ -92,7 +93,8 @@ namespace yata
 		// color defaults
 		// Table ->
 //		internal static Color Def_tabletext         = SystemColors.ControlText;
-		internal static Color Def_tablelines        = SystemColors.ControlDark;
+
+		internal static Color Def_rowlines          = SystemColors.ControlDark;
 		internal static Color Def_rowa              = Color.AliceBlue;
 		internal static Color Def_rowa_t            = SystemColors.ControlText;
 		internal static Color Def_rowb              = Color.BlanchedAlmond;
@@ -166,7 +168,8 @@ namespace yata
 		// colors brushes pens for the Yata controls
 		// Table ->
 //		internal static Color _tabletext         = Def_tabletext;						// default colors for the tablegrid ->
-		internal static Pen   _tablelines        = new Pen(Def_tablelines);
+
+		internal static Pen   _rowlines          = new Pen(Def_rowlines);
 		internal static Brush _rowa              = new SolidBrush(Def_rowa);
 		internal static Color _rowa_t            = Def_rowa_t;
 		internal static Brush _rowb              = new SolidBrush(Def_rowb);
@@ -270,16 +273,17 @@ namespace yata
 									_tabletext = color;
 							}
 						} */
-						if (line.StartsWith(CFG_tablelines, StringComparison.Ordinal))
+
+						if (line.StartsWith(CFG_rowlines, StringComparison.Ordinal))
 						{
-							if ((line = line.Substring(CFG_tablelines.Length).Trim()).Length != 0)
+							if ((line = line.Substring(CFG_rowlines.Length).Trim()).Length != 0)
 							{
 //								PropertyInfo pi = typeof(Pencils).GetProperty(line);
 //								if (pi != null)
-//									_tablelines.Color = (Color)pi.GetValue(null,null);
+//									_rowlines.Color = (Color)pi.GetValue(null,null);
 
 								if ((color = ParseColor(line)) != Color.Empty)
-									_tablelines.Color = color;
+									_rowlines.Color = color;
 							}
 						}
 						else if (line.StartsWith(CFG_rowa, StringComparison.Ordinal))
