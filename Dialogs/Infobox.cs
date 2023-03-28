@@ -18,13 +18,31 @@ namespace yata
 		: Form
 	{
 		#region Fields (static)
+		/// <summary>
+		/// info
+		/// </summary>
 		internal const string Title_infor = " info";
+		/// <summary>
+		/// burp
+		/// </summary>
 		internal const string Title_warni = " burp";
+		/// <summary>
+		/// aargh!
+		/// </summary>
 		internal const string Title_error = " aargh!";
+		/// <summary>
+		/// Exception
+		/// </summary>
 		internal const string Title_excep = " Exception";
-		internal const string Title_alert = " Alert"; // <- for save routines only.
-
-		internal const string Title_succf = " Success";
+		/// <summary>
+		/// Alert
+		/// </summary>
+		/// <remarks>For save routines only.</remarks>
+		internal const string Title_alert = " Alert";
+		/// <summary>
+		/// ay Matey
+		/// </summary>
+		internal const string Title_succf = " ay Matey";
 
 		const int w_Min = 350;
 		const int w_Max = 800;
@@ -85,7 +103,7 @@ namespace yata
 				case InfoboxType.Info:    la_head.BackColor = Color.Lavender;   break;
 				case InfoboxType.Warn:    la_head.BackColor = Color.Moccasin;   break;
 				case InfoboxType.Error:   la_head.BackColor = Color.SandyBrown; break;
-				case InfoboxType.Success: la_head.BackColor = Color.LightGreen; break;
+				case InfoboxType.Success: la_head.BackColor = Color.PaleGreen;  break;
 			}
 
 			switch (buttons)
