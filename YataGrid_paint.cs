@@ -485,7 +485,7 @@ namespace yata
 									 WidthRowhead - 1, HeightRow);	//       (w)-1 accounts for the double vertical line
 
 			int selr = getSelectedRow();
-			Brush brush;
+			Brush brush; Color color;
 
 			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
 			{
@@ -495,14 +495,21 @@ namespace yata
 				if (selr != -1)
 				{
 					if (r == selr)
+					{
 						brush = ColorOptions._rowsel;
+						color = ColorOptions._rowsel_t;
+					}
 					else if ((r < selr && r >= selr + RangeSelect)
 						||   (r > selr && r <= selr + RangeSelect))
 					{
 						brush = ColorOptions._rowsubsel;
+						color = ColorOptions._rowsubsel_t;
 					}
 					else
+					{
 						brush = null;
+						color = ColorOptions._rowpanel_t;
+					}
 
 					if (brush != null)
 					{
@@ -518,12 +525,14 @@ namespace yata
 										  WidthRowhead, rect.Y + HeightRow);
 					}
 				}
+				else
+					color = ColorOptions._rowpanel_t;
 
 				TextRenderer.DrawText(graphics,
 									  r.ToString(CultureInfo.InvariantCulture),
 									  _f.FontAccent,
 									  rect,
-									  ColorOptions._rowpanel_t,
+									  color,
 									  YataGraphics.flags);
 			}
 		}

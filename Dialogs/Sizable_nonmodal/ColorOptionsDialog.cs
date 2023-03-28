@@ -83,7 +83,9 @@ namespace yata
 			la_11.Text = "Row panel";             pa_11  .BackColor =  ColorOptions._rowpanel;
 												  pa_11_t.BackColor =  ColorOptions._rowpanel_t;
 			la_35.Text = "Row panel selected";    pa_35  .BackColor = (ColorOptions._rowsel    as SolidBrush).Color;
+												  pa_35_t.BackColor =  ColorOptions._rowsel_t;
 			la_36.Text = "Row panel subselected"; pa_36  .BackColor = (ColorOptions._rowsubsel as SolidBrush).Color;
+												  pa_36_t.BackColor =  ColorOptions._rowsubsel_t;
 
 			// Propanel ->
 			la_22.Text = "Propanel lines";         pa_22  .BackColor =  ColorOptions._propanellines                .Color;
@@ -209,7 +211,9 @@ namespace yata
 					else if (sender == pa_11)   title = la_11.Text;
 					else if (sender == pa_11_t) title = la_11.Text + " text";
 					else if (sender == pa_35)   title = la_35.Text;
+					else if (sender == pa_35_t) title = la_35.Text + " text";
 					else if (sender == pa_36)   title = la_36.Text;
+					else if (sender == pa_36_t) title = la_36.Text + " text";
 
 					// Propanel ->
 					else if (sender == pa_22)   title = la_22.Text;
@@ -330,7 +334,9 @@ namespace yata
 				else if (sender == pa_11)   ColorOptions._rowpanel                             = pa_11  .BackColor;
 				else if (sender == pa_11_t) ColorOptions._rowpanel_t                           = pa_11_t.BackColor;
 				else if (sender == pa_35)  (ColorOptions._rowsel          as SolidBrush).Color = pa_35  .BackColor;
+				else if (sender == pa_35_t) ColorOptions._rowsel_t                             = pa_35_t.BackColor;
 				else if (sender == pa_36)  (ColorOptions._rowsubsel       as SolidBrush).Color = pa_36  .BackColor;
+				else if (sender == pa_36_t) ColorOptions._rowsubsel_t                          = pa_36_t.BackColor;
 
 				// Propanel ->
 				else if (sender == pa_22)   ColorOptions._propanellines                 .Color = pa_22  .BackColor;
@@ -518,8 +524,12 @@ namespace yata
 			sb.AppendLine(pa_11_t.BackColor.R + "," + pa_11_t.BackColor.G + "," + pa_11_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowsel);
 			sb.AppendLine(pa_35.BackColor.R + "," + pa_35.BackColor.G + "," + pa_35.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowsel_t);
+			sb.AppendLine(pa_35_t.BackColor.R + "," + pa_35_t.BackColor.G + "," + pa_35_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowsubsel);
 			sb.AppendLine(pa_36.BackColor.R + "," + pa_36.BackColor.G + "," + pa_36.BackColor.B);
+			sb.Append(ColorOptions.CFG_rowsubsel_t);
+			sb.AppendLine(pa_36_t.BackColor.R + "," + pa_36_t.BackColor.G + "," + pa_36_t.BackColor.B);
 
 			// Propanel ->
 			sb.Append(ColorOptions.CFG_propanellines);
@@ -683,7 +693,9 @@ namespace yata
 				pa_11  .BackColor = ColorOptions.Def_rowpanel;
 				pa_11_t.BackColor = ColorOptions.Def_rowpanel_t;
 				pa_35  .BackColor = ColorOptions.Def_rowsel;
+				pa_35_t.BackColor = ColorOptions.Def_rowsel_t;
 				pa_36  .BackColor = ColorOptions.Def_rowsubsel;
+				pa_36_t.BackColor = ColorOptions.Def_rowsubsel_t;
 
 				// Propanel ->
 				pa_22  .BackColor = ColorOptions.Def_propanellines;
@@ -761,7 +773,9 @@ namespace yata
 				else if (panel == pa_11)   pa_11  .BackColor = ColorOptions.Def_rowpanel;
 				else if (panel == pa_11_t) pa_11_t.BackColor = ColorOptions.Def_rowpanel_t;
 				else if (panel == pa_35)   pa_35  .BackColor = ColorOptions.Def_rowsel;
+				else if (panel == pa_35_t) pa_35_t.BackColor = ColorOptions.Def_rowsel_t;
 				else if (panel == pa_36)   pa_36  .BackColor = ColorOptions.Def_rowsubsel;
+				else if (panel == pa_36_t) pa_36_t.BackColor = ColorOptions.Def_rowsubsel_t;
 
 				// Propanel ->
 				else if (panel == pa_22)   pa_22  .BackColor = ColorOptions.Def_propanellines;
