@@ -214,14 +214,13 @@ namespace yata
 		/// <summary>
 		/// Prints the current color in the colorfield and textboxes.
 		/// </summary>
-		/// <param name="bypass"><c>true</c> to bypass firing textchanged</param>
-		void PrintCurrentColor(bool bypass = false)
+		void PrintCurrentColor()
 		{
 			byte r,g,b;
 			HsvToRgb(_hue, _sat, (double)_val / STEPS_VAL, out r, out g, out b);
 			pa_Color.BackColor = Color.FromArgb(r,g,b);
 
-			_bypass = bypass;
+			_bypass = true;
 			tb_Red  .Text = r.ToString(CultureInfo.InvariantCulture);
 			tb_Green.Text = g.ToString(CultureInfo.InvariantCulture);
 			tb_Blue .Text = b.ToString(CultureInfo.InvariantCulture);
@@ -234,7 +233,7 @@ namespace yata
 		/// <param name="color"></param>
 		/// <param name="bypassRgbtext"><c>true</c> if called by
 		/// <c><see cref="textchanged_tb_Rgb()">textchanged_tb_Rgb()</see></c>
-		/// - This isn't a big deal since recalculating control-values per
+		/// - this isn't a big deal since recalculating control-values per
 		/// RGB-texts isn't going to happen anyway but
 		/// <paramref name="bypassRgbtext"/> prevents resetting the texts
 		/// redundantly</param>
@@ -292,7 +291,7 @@ namespace yata
 				_hue = (double)_x1;
 				_sat = (double)_y1 / STEPS_SAT;
 
-				PrintCurrentColor(true);
+				PrintCurrentColor();
 
 				pa_Colortable.Invalidate();
 
@@ -315,7 +314,7 @@ namespace yata
 				_hue = (double)_x1;
 				_sat = (double)_y1 / STEPS_SAT;
 
-				PrintCurrentColor(true);
+				PrintCurrentColor();
 
 				pa_Colortable.Invalidate();
 			}
@@ -357,7 +356,7 @@ namespace yata
 				_val = e.Y;
 				pa_Valslider.Invalidate();
 
-				PrintCurrentColor(true);
+				PrintCurrentColor();
 
 				_dragSlider = true;
 			}
@@ -375,7 +374,7 @@ namespace yata
 				_val = Math.Min(Math.Max(0, e.Y), pa_Valslider.Height - 1);
 				pa_Valslider.Invalidate();
 
-				PrintCurrentColor(true);
+				PrintCurrentColor();
 			}
 		}
 
@@ -756,7 +755,7 @@ namespace yata
 
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -768,7 +767,7 @@ namespace yata
 
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -780,7 +779,7 @@ namespace yata
 
 							_hue = (double)_x1;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -792,7 +791,7 @@ namespace yata
 
 							_hue = (double)_x1;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -806,7 +805,7 @@ namespace yata
 							_hue = (double)_x1;
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -820,7 +819,7 @@ namespace yata
 							_hue = (double)_x1;
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -834,7 +833,7 @@ namespace yata
 							_hue = (double)_x1;
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -848,7 +847,7 @@ namespace yata
 							_hue = (double)_x1;
 							_sat = (double)_y1 / STEPS_SAT;
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -859,7 +858,7 @@ namespace yata
 							--_val;
 							pa_Valslider.Invalidate();
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 
@@ -869,7 +868,7 @@ namespace yata
 							++_val;
 							pa_Valslider.Invalidate();
 
-							PrintCurrentColor(true);
+							PrintCurrentColor();
 						}
 						return true;
 				}
@@ -899,7 +898,7 @@ namespace yata
 
 						pa_Valslider.Invalidate();
 
-						PrintCurrentColor(true);
+						PrintCurrentColor();
 					}
 				}
 				else if (e.Delta < 0)
@@ -912,7 +911,7 @@ namespace yata
 
 						pa_Valslider.Invalidate();
 
-						PrintCurrentColor(true);
+						PrintCurrentColor();
 					}
 				}
 			}
