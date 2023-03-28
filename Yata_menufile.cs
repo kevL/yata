@@ -249,7 +249,7 @@ namespace yata
 			else
 			{
 				using (var ib = new Infobox(Infobox.Title_error,
-											"File does not exist.",
+											"File could not be found.",
 											Table.Fullpath,
 											InfoboxType.Error))
 				{

@@ -636,7 +636,7 @@ namespace yata
 				try
 				{
 					File.Delete(pfe);
-					using (var ib = new Infobox(Infobox.Title_infor, "Colors.Cfg deleted."))
+					using (var ib = new Infobox(Infobox.Title_infor, "Colors.Cfg deleted"))
 						ib.ShowDialog(this);
 				}
 				catch (Exception ex)
@@ -653,7 +653,7 @@ namespace yata
 			else
 			{
 				using (var ib = new Infobox(Infobox.Title_warni,
-											"Colors.Cfg does not exist.",
+											"Colors.Cfg could not be found in the application directory.",
 											null,
 											InfoboxType.Warn))
 				{
@@ -684,7 +684,7 @@ namespace yata
 					DrawRegulator.ResumeDrawing(Yata.that);
 
 					using (var ib = new Infobox(Infobox.Title_succf,
-												"Colors.Cfg reloaded.",
+												"Colors.Cfg reloaded",
 												null,
 												InfoboxType.Success))
 					{
@@ -705,7 +705,7 @@ namespace yata
 			else
 			{
 				using (var ib = new Infobox(Infobox.Title_error,
-											"Colors.Cfg does not exist.",
+											"Colors.Cfg could not be found in the application directory.",
 											null,
 											InfoboxType.Error))
 				{

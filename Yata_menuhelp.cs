@@ -37,7 +37,7 @@ namespace yata
 			if (!File.Exists(pfe))
 			{
 				using (var ib = new Infobox(Infobox.Title_error,
-											"ReadMe.txt was not found in the application directory.",
+											"ReadMe.txt could not be found in the application directory.",
 											null,
 											InfoboxType.Error))
 				{
@@ -77,7 +77,7 @@ namespace yata
 
 				if (!File.Exists(pfe))
 				{
-					const string head = "Settings.Cfg file does not exist in the application directory. Do you want to create one ...";
+					const string head = "Settings.Cfg file could not be found in the application directory. Do you want to create one ...";
 
 					using (var ib = new Infobox(Infobox.Title_infor,
 												head,
