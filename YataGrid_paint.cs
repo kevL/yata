@@ -558,7 +558,7 @@ namespace yata
 
 			var rect = new Rectangle(0,0, 0, HeightRow);
 
-			Row row; Cell cell;
+			Row row; Cell cell; Color color;
 			for (int r = OffsetVert / HeightRow; r != RowCount; ++r)
 			{
 				if ((rect.Y = HeightRow * r - OffsetVert) > Height)
@@ -578,13 +578,17 @@ namespace yata
 						graphics.FillRectangle(cell.getCellBrush(), rect);
 						rect.X     += _padHori - 1;
 						rect.Width += 1;
+
+						color = cell.getCellTextColor();
 					}
+					else
+						color = ColorOptions._frozen_t;
 
 					TextRenderer.DrawText(graphics,
 										  cell.text,
 										  Font,
 										  rect,
-										  ColorOptions._frozen_t,
+										  color,
 										  YataGraphics.flags);
 					rect.X += rect.Width;
 				}
