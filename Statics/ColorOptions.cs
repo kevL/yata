@@ -15,7 +15,7 @@ namespace yata
 		#region Fields (static)
 		internal const string FE = "colors.cfg";
 
-		// strings in Colors.Cfg
+		// strings in the Colors.Cfg file
 		// Table ->
 		internal const string CFG_rowlines          = "rowlines=";
 		internal const string CFG_rowa              = "rowa=";
@@ -73,10 +73,6 @@ namespace yata
 		internal const string CFG_propanelsel       = "propanelsel=";
 		internal const string CFG_propanelsel_t     = "propanelsel_t=";
 
-		// Statusbar ->
-		internal const string CFG_statusbar         = "statusbar=";
-		internal const string CFG_statusbar_t       = "statusbar_t=";
-
 		// Cells ->
 		internal const string CFG_cellselected      = "cellselected=";
 		internal const string CFG_cellselected_t    = "cellselected_t=";
@@ -89,7 +85,11 @@ namespace yata
 		internal const string CFG_celledit          = "celledit=";
 		internal const string CFG_celledit_t        = "celledit_t=";
 
-		// color defaults
+		// Statusbar ->
+		internal const string CFG_statusbar         = "statusbar=";
+		internal const string CFG_statusbar_t       = "statusbar_t=";
+
+		// default colors
 		// Table ->
 		internal static Color Def_rowlines          = SystemColors.ControlDark;
 		internal static Color Def_rowa              = Color.AliceBlue;
@@ -147,10 +147,6 @@ namespace yata
 		internal static Color Def_propanelsel       = Color.PaleGreen;
 		internal static Color Def_propanelsel_t     = SystemColors.ControlText;
 
-		// Statusbar ->
-		internal static Color Def_statusbar         = Color.MintCream;
-		internal static Color Def_statusbar_t       = SystemColors.ControlText;
-
 		// Cells ->
 		internal static Color Def_cellselected      = Color.PaleGreen;
 		internal static Color Def_cellselected_t    = SystemColors.ControlText;
@@ -163,7 +159,11 @@ namespace yata
 		internal static Color Def_celledit          = Color.Crimson;
 		internal static Color Def_celledit_t        = SystemColors.ControlText;
 
-		// colors brushes pens for the Yata controls
+		// Statusbar ->
+		internal static Color Def_statusbar         = Color.MintCream;
+		internal static Color Def_statusbar_t       = SystemColors.ControlText;
+
+		// colors brushes pens for the Yata controls (current)
 		// Table ->
 		internal static Pen   _rowlines          = new Pen(Def_rowlines);
 		internal static Brush _rowa              = new SolidBrush(Def_rowa);
@@ -221,12 +221,8 @@ namespace yata
 		internal static Brush _propanelsel       = new SolidBrush(Def_propanelsel);
 		internal static Color _propanelsel_t     = Def_propanelsel_t;
 
-		// Statusbar ->
-		internal static Brush _statusbar         = new SolidBrush(Def_statusbar);		// default colors for the statusbar ->
-		internal static Color _statusbar_t       = Def_statusbar_t;
-
 		// Cells ->
-		internal static Brush _cellselected      = new SolidBrush(Def_cellselected);	// default colors for cell texts ->
+		internal static Brush _cellselected      = new SolidBrush(Def_cellselected);	// default colors for special cells ->
 		internal static Color _cellselected_t    = Def_cellselected_t;
 		internal static Brush _cellloadchanged   = new SolidBrush(Def_cellloadchanged);
 		internal static Color _cellloadchanged_t = Def_cellloadchanged_t;
@@ -236,6 +232,10 @@ namespace yata
 		internal static Color _cellreplaced_t    = Def_cellreplaced_t;
 		internal static Brush _celledit          = new SolidBrush(Def_celledit);
 		internal static Color _celledit_t        = Def_celledit_t;
+
+		// Statusbar ->
+		internal static Brush _statusbar         = new SolidBrush(Def_statusbar);		// default colors for the statusbar ->
+		internal static Color _statusbar_t       = Def_statusbar_t;
 
 
 //		internal static Color _grid_backcolor = ;
@@ -643,24 +643,6 @@ namespace yata
 							}
 						}
 
-						// Statusbar ->
-						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_statusbar as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_statusbar_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_statusbar_t = color;
-							}
-						}
-
 						// Cells ->
 						else if (line.StartsWith(CFG_cellselected, StringComparison.Ordinal))
 						{
@@ -742,11 +724,29 @@ namespace yata
 									_celledit_t = color;
 							}
 						}
+
+						// Statusbar ->
+						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0)
+							{
+								if ((color = ParseColor(line)) != Color.Empty)
+									(_statusbar as SolidBrush).Color = color;
+							}
+						}
+						else if (line.StartsWith(CFG_statusbar_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0)
+							{
+								if ((color = ParseColor(line)) != Color.Empty)
+									_statusbar_t = color;
+							}
+						}
 					}
 				}
 			}
 
-			Yata.that.UpdateStatusbarTextColor(); // update all ToolStripStatusLabels
+			Yata.that.UpdateStatusbarTextColor(); // update all 'ToolStripStatusLabels'
 		}
 
 		/// <summary>
