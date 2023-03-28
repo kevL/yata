@@ -17,8 +17,6 @@ namespace yata
 
 		// strings in Colors.Cfg
 		// Table ->
-//		internal const string CFG_tabletext         = "tabletext=";
-
 		internal const string CFG_rowlines          = "rowlines=";
 		internal const string CFG_rowa              = "rowa=";
 		internal const string CFG_rowa_t            = "rowa_t=";
@@ -93,8 +91,6 @@ namespace yata
 
 		// color defaults
 		// Table ->
-//		internal static Color Def_tabletext         = SystemColors.ControlText;
-
 		internal static Color Def_rowlines          = SystemColors.ControlDark;
 		internal static Color Def_rowa              = Color.AliceBlue;
 		internal static Color Def_rowa_t            = SystemColors.ControlText;
@@ -169,8 +165,6 @@ namespace yata
 
 		// colors brushes pens for the Yata controls
 		// Table ->
-//		internal static Color _tabletext         = Def_tabletext;						// default colors for the tablegrid ->
-
 		internal static Pen   _rowlines          = new Pen(Def_rowlines);
 		internal static Brush _rowa              = new SolidBrush(Def_rowa);
 		internal static Color _rowa_t            = Def_rowa_t;
