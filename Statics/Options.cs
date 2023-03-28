@@ -71,7 +71,7 @@ namespace yata
 		/// <summary>
 		/// Scans the Settings.Cfg file for Yata options.
 		/// </summary>
-		internal static void ScanSettings()
+		internal static void ScanOptions()
 		{
 			string pfe = Path.Combine(Application.StartupPath, FE);
 			if (File.Exists(pfe))

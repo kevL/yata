@@ -245,7 +245,7 @@ namespace yata
 		/// <summary>
 		/// Scans the Colors.Cfg file for color options.
 		/// </summary>
-		internal static void ScanSettings()
+		internal static void ScanColorOptions()
 		{
 			string pfe = Path.Combine(Application.StartupPath, FE);
 			if (File.Exists(pfe))
