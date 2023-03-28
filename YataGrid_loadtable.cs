@@ -1121,7 +1121,6 @@ namespace yata
 				if (_initFrozenLabels) // TODO: FrozenLabels could be instantiated / updated-on-Reload better.
 				{
 					DrawRegulator.SetDoubleBuffered(_labelid);
-					_labelid.BackColor = ColorOptions._frozenhead;
 
 					_labelid.Resize     += label_Resize;
 					_labelid.Paint      += labelid_Paint;
@@ -1137,7 +1136,6 @@ namespace yata
 					if (_initFrozenLabels)
 					{
 						DrawRegulator.SetDoubleBuffered(_labelfirst);
-						_labelfirst.BackColor = ColorOptions._frozenhead;
 
 						_labelfirst.Resize     += label_Resize;
 						_labelfirst.Paint      += labelfirst_Paint;
@@ -1153,7 +1151,6 @@ namespace yata
 						if (_initFrozenLabels)
 						{
 							DrawRegulator.SetDoubleBuffered(_labelsecond);
-							_labelsecond.BackColor = ColorOptions._frozenhead;
 
 							_labelsecond.Resize     += label_Resize;
 							_labelsecond.Paint      += labelsecond_Paint;

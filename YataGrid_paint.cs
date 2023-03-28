@@ -238,23 +238,35 @@ namespace yata
 				graphics = e.Graphics;
 				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-				Rectangle rect;
+				Rectangle rect; Color color;
 
 				if (Options._gradient)
 				{
 					LinearGradientBrush grad;
 					if (_sortcol == 0 && _sortdir == SORT_ASC)
-						grad = Gradients.FrozenLabel;
+					{
+						grad  = Gradients.FrozenLabel;
+						color = ColorOptions._frozenheadgrad_t;
+					}
 					else
-						grad = Gradients.Disordered;
+					{
+						grad  = Gradients.Disordered;
+						color = ColorOptions._frozenidgrad_t;
+					}
 
 					rect = new Rectangle(0,0, _labelid.Width, _labelid.Height);
 					graphics.FillRectangle(grad, rect);
 				}
 				else if (_sortcol == 0 && _sortdir == SORT_ASC)
+				{
 					_labelid.BackColor = ColorOptions._frozenhead;
+					color = ColorOptions._frozenhead_t;
+				}
 				else
+				{
 					_labelid.BackColor = ColorOptions._frozenidunsort;
+					color = ColorOptions._frozenidunsort_t;
+				}
 
 				rect = new Rectangle(WidthRowhead + _padHori, Top,
 									 Cols[0].Width, HeightColhead);
@@ -263,7 +275,7 @@ namespace yata
 									  gs.Id,
 									  _f.FontAccent,
 									  rect,
-									  ColorOptions._frozenhead_t,
+									  color,
 									  YataGraphics.flags);
 
 				graphics.DrawLine(ColorOptions._frozenheadlines,
@@ -301,13 +313,18 @@ namespace yata
 
 				Rectangle rect;
 
+				Color color = Color.Empty;;
+
 				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
-				}
 
-				Color color;
+					color = ColorOptions._frozenheadgrad_t;
+				}
+				else
+					_labelfirst.BackColor = ColorOptions._frozenhead;
+
 				rect = new Rectangle(_padHori, Top,
 									 Cols[1].Width, HeightColhead);
 
@@ -328,8 +345,10 @@ namespace yata
 									   rect.X + rect.Width  - _offsetSortHori,
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
-				else
+				else if (color == Color.Empty)
+				{
 					color = ColorOptions._frozenhead_t;
+				}
 
 				TextRenderer.DrawText(graphics,
 									  Cols[1].text,
@@ -360,13 +379,18 @@ namespace yata
 
 				Rectangle rect;
 
+				Color color = Color.Empty;
+
 				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
-				}
 
-				Color color;
+					color = ColorOptions._frozenheadgrad_t;
+				}
+				else
+					_labelsecond.BackColor = ColorOptions._frozenhead;
+
 				rect = new Rectangle(_padHori, Top,
 									 Cols[2].Width, HeightColhead);
 
@@ -388,8 +412,10 @@ namespace yata
 									   rect.X + rect.Width  - _offsetSortHori,
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
-				else
+				else if (color == Color.Empty)
+				{
 					color = ColorOptions._frozenhead_t;
+				}
 
 				TextRenderer.DrawText(graphics,
 									  Cols[2].text,

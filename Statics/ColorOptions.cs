@@ -39,9 +39,12 @@ namespace yata
 		internal const string CFG_frozenhead        = "frozenhead=";
 		internal const string CFG_frozenhead_t      = "frozenhead_t=";
 		internal const string CFG_frozenidunsort    = "frozenidunsort=";
+		internal const string CFG_frozenidunsort_t  = "frozenidunsort_t=";
 		internal const string CFG_frozenheadgrada   = "frozenheadgrada";
+		internal const string CFG_frozenheadgrad_t  = "frozenheadgrad_t";
 		internal const string CFG_frozenheadgradb   = "frozenheadgradb";
 		internal const string CFG_frozenidgrada     = "frozenidgrada";
+		internal const string CFG_frozenidgrad_t    = "frozenidgrad_t";
 		internal const string CFG_frozenidgradb     = "frozenidgradb";
 
 		// Colhead ->
@@ -114,9 +117,12 @@ namespace yata
 		internal static Color Def_frozenhead        = Color.Moccasin;
 		internal static Color Def_frozenhead_t      = SystemColors.ControlText;
 		internal static Color Def_frozenidunsort    = Color.LightCoral;
+		internal static Color Def_frozenidunsort_t  = SystemColors.ControlText;
 		internal static Color Def_frozenheadgrada   = Color.Cornsilk;
+		internal static Color Def_frozenheadgrad_t  = SystemColors.ControlText;
 		internal static Color Def_frozenheadgradb   = Color.BurlyWood;
 		internal static Color Def_frozenidgrada     = Color.LightCoral;
+		internal static Color Def_frozenidgrad_t    = SystemColors.ControlText;
 		internal static Color Def_frozenidgradb     = Color.Lavender;
 
 		// Colhead ->
@@ -189,9 +195,12 @@ namespace yata
 		internal static Color _frozenhead        = Def_frozenhead;
 		internal static Color _frozenhead_t      = Def_frozenhead_t;
 		internal static Color _frozenidunsort    = Def_frozenidunsort;
+		internal static Color _frozenidunsort_t  = Def_frozenidunsort_t;
 		internal static Color _frozenheadgrada   = Def_frozenheadgrada;
+		internal static Color _frozenheadgrad_t  = Def_frozenheadgrad_t;
 		internal static Color _frozenheadgradb   = Def_frozenheadgradb;
 		internal static Color _frozenidgrada     = Def_frozenidgrada;
+		internal static Color _frozenidgrad_t     = Def_frozenidgrad_t;
 		internal static Color _frozenidgradb     = Def_frozenidgradb;
 
 		// Colhead ->
@@ -492,6 +501,18 @@ namespace yata
 									_frozenidunsort = color;
 							}
 						}
+						else if (line.StartsWith(CFG_frozenidunsort_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozenidunsort_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozenidunsorted_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozenidunsort_t = color;
+							}
+						}
 						else if (line.StartsWith(CFG_frozenheadgrada, StringComparison.Ordinal))
 						{
 							if ((line = line.Substring(CFG_frozenheadgrada.Length).Trim()).Length != 0)
@@ -502,6 +523,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenheadgrada = color;
+							}
+						}
+						else if (line.StartsWith(CFG_frozenheadgrad_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozenheadgrad_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozenheadgrad_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozenheadgrad_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_frozenheadgradb, StringComparison.Ordinal))
@@ -526,6 +559,18 @@ namespace yata
 
 								if ((color = ParseColor(line)) != Color.Empty)
 									_frozenidgrada = color;
+							}
+						}
+						else if (line.StartsWith(CFG_frozenidgrad_t, StringComparison.Ordinal))
+						{
+							if ((line = line.Substring(CFG_frozenidgrad_t.Length).Trim()).Length != 0)
+							{
+//								PropertyInfo pi = typeof(Color).GetProperty(line);
+//								if (pi != null)
+//									_frozenidgrad_t = (Color)pi.GetValue(null,null);
+
+								if ((color = ParseColor(line)) != Color.Empty)
+									_frozenidgrad_t = color;
 							}
 						}
 						else if (line.StartsWith(CFG_frozenidgradb, StringComparison.Ordinal))
