@@ -454,7 +454,8 @@ namespace yata
 						if (ctrl)
 						{
 							using (var ib = new Infobox(Infobox.Title_succf,
-														"Colors.Cfg saved.", null,
+														"Colors.Cfg saved.",
+														null,
 														InfoboxType.Success))
 							{
 								ib.ShowDialog(this);
@@ -671,15 +672,45 @@ namespace yata
 			string pfe = Path.Combine(Application.StartupPath, ColorOptions.FE);
 			if (File.Exists(pfe))
 			{
-				DrawRegulator.SuspendDrawing(gb_Colors);
-				DrawRegulator.SuspendDrawing(Yata.that);
+				try
+				{
+					DrawRegulator.SuspendDrawing(gb_Colors);
+					DrawRegulator.SuspendDrawing(Yata.that);
 
-				ColorOptions.ParseColorsFile(pfe);
-				InitColors();
+					ColorOptions.ParseColorsFile(pfe);
+					InitColors();
 
+					DrawRegulator.ResumeDrawing(gb_Colors);
+					DrawRegulator.ResumeDrawing(Yata.that);
 
-				DrawRegulator.ResumeDrawing(gb_Colors);
-				DrawRegulator.ResumeDrawing(Yata.that);
+					using (var ib = new Infobox(Infobox.Title_succf,
+												"Colors.Cfg reloaded.",
+												null,
+												InfoboxType.Success))
+					{
+						ib.ShowDialog(this);
+					}
+				}
+				catch (Exception ex)
+				{
+					using (var ib = new Infobox(Infobox.Title_excep,
+												"Colors.Cfg file could not be read in the application directory.",
+												ex.ToString(),
+												InfoboxType.Error))
+					{
+						ib.ShowDialog(this);
+					}
+				}
+			}
+			else
+			{
+				using (var ib = new Infobox(Infobox.Title_error,
+											"Colors.Cfg does not exist.",
+											null,
+											InfoboxType.Error))
+				{
+					ib.ShowDialog(this);
+				}
 			}
 		}
 
