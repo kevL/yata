@@ -249,510 +249,519 @@ namespace yata
 		{
 			string pfe = Path.Combine(Application.StartupPath, FE);
 			if (File.Exists(pfe))
-			{
-				using (var fs = File.OpenRead(pfe))
-				using (var sr = new StreamReader(fs))
-				{
-					string line; Color color;
-					while ((line = sr.ReadLine()) != null)
-					{
-						// Table ->
-						if (line.StartsWith(CFG_rowlines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowlines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowlines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowa, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowa.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowa as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowa_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowa_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowa_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowb, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowb.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowb as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowb_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowb_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowb_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowdisableda, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowdisableda.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowdisableda as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowdisableda_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowdisableda_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowdisableda_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowdisabledb, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowdisabledb.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowdisabledb as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowdisabledb_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowdisabledb_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowdisabledb_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowcreated, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowcreated.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowcreated as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowcreated_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowcreated_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowcreated_t = color;
-							}
-						}
-
-						// Frozen ->
-						else if (line.StartsWith(CFG_frozenlines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenlines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenlines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozen, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozen.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozen = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozen_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozen_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozen_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenheadlines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenheadlines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenheadlines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenhead, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenhead.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenhead = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenhead_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenhead_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenhead_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenidunsort, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenidunsort.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenidunsort = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenidunsort_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenidunsort_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenidunsort_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenheadgrada, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenheadgrada.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenheadgrada = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenheadgradb, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenheadgradb.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenheadgradb = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenidgrada, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenidgrada.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenidgrada = color;
-							}
-						}
-						else if (line.StartsWith(CFG_frozenidgradb, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_frozenidgradb.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_frozenidgradb = color;
-							}
-						}
-
-						// Colhead ->
-						else if (line.StartsWith(CFG_colheadlines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadlines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadlines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colhead, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colhead.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colhead = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colhead_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colhead_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colhead_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colheadsel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadsel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadsel_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colheadsize_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadsize_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadsize_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_headsortasc_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_headsortasc_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_headsortasc_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_headsortdes_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_headsortdes_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_headsortdes_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colheadgrada, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadgrada.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadgrada = color;
-							}
-						}
-						else if (line.StartsWith(CFG_colheadgradb, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_colheadgradb.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_colheadgradb = color;
-							}
-						}
-
-						// Rowpanel ->
-						else if (line.StartsWith(CFG_rowpanellines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowpanellines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowpanellines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowpanel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowpanel.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowpanel = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowpanel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowpanel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowpanel_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowsel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowsel.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowsel as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowsel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowsel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowsel_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowsubsel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowsubsel.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_rowsubsel as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_rowsubsel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_rowsubsel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_rowsubsel_t = color;
-							}
-						}
-
-						// Propanel ->
-						else if (line.StartsWith(CFG_propanellines, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanellines.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanellines.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanelborder, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanelborder.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanelborder.Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanel.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanel = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanel_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanelfrozen, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanelfrozen.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_propanelfrozen as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanelfrozen_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanelfrozen_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanelfrozen_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanelsel, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanelsel.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_propanelsel as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_propanelsel_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_propanelsel_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_propanelsel_t = color;
-							}
-						}
-
-						// Cells ->
-						else if (line.StartsWith(CFG_cellselected, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellselected.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_cellselected as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_cellselected_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellselected_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_cellselected_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_cellloadchanged, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellloadchanged.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_cellloadchanged as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_cellloadchanged_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellloadchanged_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_cellloadchanged_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_celldiffed, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_celldiffed.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_celldiffed as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_celldiffed_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_celldiffed_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_celldiffed_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_cellreplaced, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellreplaced.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_cellreplaced as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_cellreplaced_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_cellreplaced_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_cellreplaced_t = color;
-							}
-						}
-						else if (line.StartsWith(CFG_celledit, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_celledit.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_celledit as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_celledit_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_celledit_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_celledit_t = color;
-							}
-						}
-
-						// Statusbar ->
-						else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									(_statusbar as SolidBrush).Color = color;
-							}
-						}
-						else if (line.StartsWith(CFG_statusbar_t, StringComparison.Ordinal))
-						{
-							if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0)
-							{
-								if ((color = ParseColor(line)) != Color.Empty)
-									_statusbar_t = color;
-							}
-						}
-					}
-				}
-			}
+				ParseColorsFile(pfe);
 
 			Yata.that.UpdateStatusbarTextColor(); // update all 'ToolStripStatusLabels'
 		}
 
 		/// <summary>
-		/// Parses a given r,g,b string into a <c>Color</c>.
+		/// Parses the Colors.Cfg file for color options.
 		/// </summary>
-		/// <param name="rgb"></param>
+		/// <param name="pfe"></param>
 		/// <returns></returns>
+		static void ParseColorsFile(string pfe)
+		{
+			using (var fs = File.OpenRead(pfe))
+			using (var sr = new StreamReader(fs))
+			{
+				string line; Color color;
+				while ((line = sr.ReadLine()) != null)
+				{
+					// Table ->
+					if (line.StartsWith(CFG_rowlines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowlines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowlines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowa, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowa.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowa as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowa_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowa_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowa_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowb, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowb.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowb as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowb_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowb_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowb_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowdisableda, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowdisableda.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowdisableda as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowdisableda_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowdisableda_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowdisableda_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowdisabledb, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowdisabledb.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowdisabledb as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowdisabledb_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowdisabledb_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowdisabledb_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowcreated, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowcreated.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowcreated as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowcreated_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowcreated_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowcreated_t = color;
+						}
+					}
+
+					// Frozen ->
+					else if (line.StartsWith(CFG_frozenlines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenlines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenlines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozen, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozen.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozen = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozen_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozen_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozen_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenheadlines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenheadlines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenheadlines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenhead, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenhead.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenhead = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenhead_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenhead_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenhead_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenidunsort, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenidunsort.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenidunsort = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenidunsort_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenidunsort_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenidunsort_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenheadgrada, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenheadgrada.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenheadgrada = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenheadgradb, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenheadgradb.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenheadgradb = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenidgrada, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenidgrada.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenidgrada = color;
+						}
+					}
+					else if (line.StartsWith(CFG_frozenidgradb, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_frozenidgradb.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_frozenidgradb = color;
+						}
+					}
+
+					// Colhead ->
+					else if (line.StartsWith(CFG_colheadlines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colheadlines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colheadlines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colhead, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colhead.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colhead = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colhead_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colhead_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colhead_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colheadsel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colheadsel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colheadsel_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colheadsize_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colheadsize_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colheadsize_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_headsortasc_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_headsortasc_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_headsortasc_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_headsortdes_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_headsortdes_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_headsortdes_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colheadgrada, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colheadgrada.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colheadgrada = color;
+						}
+					}
+					else if (line.StartsWith(CFG_colheadgradb, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_colheadgradb.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_colheadgradb = color;
+						}
+					}
+
+					// Rowpanel ->
+					else if (line.StartsWith(CFG_rowpanellines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowpanellines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowpanellines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowpanel, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowpanel.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowpanel = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowpanel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowpanel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowpanel_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowsel, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowsel.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowsel as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowsel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowsel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowsel_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowsubsel, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowsubsel.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_rowsubsel as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_rowsubsel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_rowsubsel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_rowsubsel_t = color;
+						}
+					}
+
+					// Propanel ->
+					else if (line.StartsWith(CFG_propanellines, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanellines.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanellines.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanelborder, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanelborder.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanelborder.Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanel, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanel.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanel = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanel_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanelfrozen, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanelfrozen.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_propanelfrozen as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanelfrozen_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanelfrozen_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanelfrozen_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanelsel, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanelsel.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_propanelsel as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_propanelsel_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_propanelsel_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_propanelsel_t = color;
+						}
+					}
+
+					// Cells ->
+					else if (line.StartsWith(CFG_cellselected, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellselected.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_cellselected as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_cellselected_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellselected_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_cellselected_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_cellloadchanged, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellloadchanged.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_cellloadchanged as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_cellloadchanged_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellloadchanged_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_cellloadchanged_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_celldiffed, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_celldiffed.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_celldiffed as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_celldiffed_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_celldiffed_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_celldiffed_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_cellreplaced, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellreplaced.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_cellreplaced as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_cellreplaced_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_cellreplaced_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_cellreplaced_t = color;
+						}
+					}
+					else if (line.StartsWith(CFG_celledit, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_celledit.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_celledit as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_celledit_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_celledit_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_celledit_t = color;
+						}
+					}
+
+					// Statusbar ->
+					else if (line.StartsWith(CFG_statusbar, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_statusbar.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							(_statusbar as SolidBrush).Color = color;
+						}
+					}
+					else if (line.StartsWith(CFG_statusbar_t, StringComparison.Ordinal))
+					{
+						if ((line = line.Substring(CFG_statusbar_t.Length).Trim()).Length != 0
+							&& (color = ParseColor(line)) != Color.Empty)
+						{
+							_statusbar_t = color;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Parses a specified r,g,b string into a <c>Color</c>.
+		/// </summary>
+		/// <param name="rgb">eg. "255,255,255"</param>
+		/// <returns>a valid <c>Color</c> else <c>Color.Empty</c> if
+		/// <paramref name="rgb"/> fails to parse correctly</returns>
 		static Color ParseColor(string rgb)
 		{
 			string val;
