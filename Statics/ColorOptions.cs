@@ -259,7 +259,7 @@ namespace yata
 		/// </summary>
 		/// <param name="pfe"></param>
 		/// <returns></returns>
-		static void ParseColorsFile(string pfe)
+		internal static void ParseColorsFile(string pfe)
 		{
 			using (var fs = File.OpenRead(pfe))
 			using (var sr = new StreamReader(fs))
