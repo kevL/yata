@@ -851,27 +851,26 @@ namespace yata
 			// fill the editor's val-rect if visible ->
 			if (_editor.Visible)
 			{
-				rect = new Rectangle();
 				rect = _editRect;
 				rect.Y -= offset;
 
 				graphics.FillRectangle(ColorOptions._celledit, rect);
 			}
 
-			// draw vertical lines ->
-			graphics.DrawLine(ColorOptions._propanelborder,					// vertical left line
+			// draw border and center lines ->
+			graphics.DrawLine(ColorOptions._propanelborder,						// vertical left line
 							  1, 0,
 							  1, HeightProps - offset);
-			graphics.DrawLine(ColorOptions._propanellines,					// vertical center line
+			graphics.DrawLine(ColorOptions._propanellines,						// vertical center line
 							  _widthVars, 1,
 							  _widthVars, HeightProps - offset - 1);
-			graphics.DrawLine(ColorOptions._propanelborder,					// vertical right line
+			graphics.DrawLine(ColorOptions._propanelborder,						// vertical right line
 							  _widthVars + _widthVals, 1,
 							  _widthVars + _widthVals, HeightProps - offset - 1);
-			graphics.DrawLine(ColorOptions._propanelborder,					// horizontal top line
+			graphics.DrawLine(ColorOptions._propanelborder,						// horizontal top line
 							  1,     1,
 							  Width, 1);
-			graphics.DrawLine(ColorOptions._propanelborder,					// horizontal bot line
+			graphics.DrawLine(ColorOptions._propanelborder,						// horizontal bot line
 							  1,     _heightr * _grid.ColCount - offset,
 							  Width, _heightr * _grid.ColCount - offset);
 
@@ -888,14 +887,26 @@ namespace yata
 			// draw var-texts ->
 			rect = new Rectangle(_padHori, 0, _widthVars, _heightr);
 
-			for (c = 0; c != _grid.ColCount; ++c)
+			for (c = 0; c != _grid.FrozenCount; ++c)
 			{
 				rect.Y = _heightr * c - offset;
 				TextRenderer.DrawText(graphics,
 									  _grid.Cols[c].text,
 									  Font,
 									  rect,
-									  ColorOptions._propanel_t,
+									  ColorOptions._propanelfrozen_t,
+									  YataGraphics.flags);
+			}
+
+			for (; c != _grid.ColCount; ++c)
+			{
+				rect.Y = _heightr * c - offset;
+				TextRenderer.DrawText(graphics,
+									  _grid.Cols[c].text,
+									  Font,
+									  rect,
+									  (sel != null && c == sel.x) ? ColorOptions._propanelsel_t
+																  : ColorOptions._propanel_t,
 									  YataGraphics.flags);
 			}
 
@@ -908,14 +919,26 @@ namespace yata
 					rect.X    += _widthVars;
 					rect.Width = _widthVals;
 
-					for (c = 0; c != _grid.ColCount; ++c)
+					for (c = 0; c != _grid.FrozenCount; ++c)
 					{
 						rect.Y = _heightr * c - offset;
 						TextRenderer.DrawText(graphics,
 											  _grid[r,c].text,
 											  Font,
 											  rect,
-											  ColorOptions._propanel_t,
+											  ColorOptions._propanelfrozen_t,
+											  YataGraphics.flags);
+					}
+
+					for (; c != _grid.ColCount; ++c)
+					{
+						rect.Y = _heightr * c - offset;
+						TextRenderer.DrawText(graphics,
+											  _grid[r,c].text,
+											  Font,
+											  rect,
+											  (sel != null && c == sel.x) ? ColorOptions._propanelsel_t
+																		  : ColorOptions._propanel_t,
 											  YataGraphics.flags);
 					}
 				}
