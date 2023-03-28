@@ -246,12 +246,12 @@ namespace yata
 					if (_sortcol == 0 && _sortdir == SORT_ASC)
 					{
 						grad  = Gradients.FrozenLabel;
-						color = ColorOptions._frozenheadgrad_t;
+						color = ColorOptions._frozenhead_t;
 					}
 					else
 					{
 						grad  = Gradients.Disordered;
-						color = ColorOptions._frozenidgrad_t;
+						color = ColorOptions._frozenidunsort_t;
 					}
 
 					rect = new Rectangle(0,0, _labelid.Width, _labelid.Height);
@@ -313,14 +313,10 @@ namespace yata
 
 				Rectangle rect;
 
-				Color color = Color.Empty;;
-
 				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelfirst.Width, _labelfirst.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
-
-					color = ColorOptions._frozenheadgrad_t;
 				}
 				else
 					_labelfirst.BackColor = ColorOptions._frozenhead;
@@ -328,6 +324,7 @@ namespace yata
 				rect = new Rectangle(_padHori, Top,
 									 Cols[1].Width, HeightColhead);
 
+				Color color;
 				if (_sortcol == 1)
 				{
 					Bitmap sorticon;
@@ -345,10 +342,8 @@ namespace yata
 									   rect.X + rect.Width  - _offsetSortHori,
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
-				else if (color == Color.Empty)
-				{
+				else
 					color = ColorOptions._frozenhead_t;
-				}
 
 				TextRenderer.DrawText(graphics,
 									  Cols[1].text,
@@ -379,14 +374,10 @@ namespace yata
 
 				Rectangle rect;
 
-				Color color = Color.Empty;
-
 				if (Options._gradient)
 				{
 					rect = new Rectangle(0,0, _labelsecond.Width, _labelsecond.Height);
 					graphics.FillRectangle(Gradients.FrozenLabel, rect);
-
-					color = ColorOptions._frozenheadgrad_t;
 				}
 				else
 					_labelsecond.BackColor = ColorOptions._frozenhead;
@@ -394,6 +385,7 @@ namespace yata
 				rect = new Rectangle(_padHori, Top,
 									 Cols[2].Width, HeightColhead);
 
+				Color color;
 				if (_sortcol == 2)
 				{
 					Bitmap sorticon;
@@ -412,10 +404,8 @@ namespace yata
 									   rect.X + rect.Width  - _offsetSortHori,
 									   rect.Y + rect.Height - _offsetSortVert);
 				}
-				else if (color == Color.Empty)
-				{
+				else
 					color = ColorOptions._frozenhead_t;
-				}
 
 				TextRenderer.DrawText(graphics,
 									  Cols[2].text,

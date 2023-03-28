@@ -39,81 +39,77 @@ namespace yata
 		void init()
 		{
 			// Table ->
-//			la_01.Text = "Table text"; pa_01.BackColor = ColorOptions._tabletext;
-
-			la_15.Text = "Row lines";      pa_15  .BackColor =  ColorOptions._rowlines                   .Color;
-			la_02.Text = "Row a";          pa_02  .BackColor = (ColorOptions._rowa         as SolidBrush).Color;
-										   pa_02_t.BackColor =  ColorOptions._rowa_t;
-			la_03.Text = "Row b";          pa_03  .BackColor = (ColorOptions._rowb         as SolidBrush).Color;
-										   pa_03_t.BackColor =  ColorOptions._rowb_t;
-			la_04.Text = "Row disabled a"; pa_04  .BackColor = (ColorOptions._rowdisableda as SolidBrush).Color;
-										   pa_04_t.BackColor =  ColorOptions._rowdisableda_t;
-			la_05.Text = "Row disabled b"; pa_05  .BackColor = (ColorOptions._rowdisabledb as SolidBrush).Color;
-										   pa_05_t.BackColor =  ColorOptions._rowdisabledb_t;
-			la_37.Text = "Row created";    pa_37  .BackColor = (ColorOptions._rowcreated   as SolidBrush).Color;
-										   pa_37_t.BackColor =  ColorOptions._rowcreated_t;
+			la_15.Text = "Row lines";                     pa_15  .BackColor =  ColorOptions._rowlines                      .Color;
+			la_02.Text = "Row a";                         pa_02  .BackColor = (ColorOptions._rowa            as SolidBrush).Color;
+														  pa_02_t.BackColor =  ColorOptions._rowa_t;
+			la_03.Text = "Row b";                         pa_03  .BackColor = (ColorOptions._rowb            as SolidBrush).Color;
+														  pa_03_t.BackColor =  ColorOptions._rowb_t;
+			la_04.Text = "Row disabled a";                pa_04  .BackColor = (ColorOptions._rowdisableda    as SolidBrush).Color;
+														  pa_04_t.BackColor =  ColorOptions._rowdisableda_t;
+			la_05.Text = "Row disabled b";                pa_05  .BackColor = (ColorOptions._rowdisabledb    as SolidBrush).Color;
+														  pa_05_t.BackColor =  ColorOptions._rowdisabledb_t;
+			la_37.Text = "Row created";                   pa_37  .BackColor = (ColorOptions._rowcreated      as SolidBrush).Color;
+														  pa_37_t.BackColor =  ColorOptions._rowcreated_t;
 
 			// Frozen ->
-			la_16.Text = "Frozen panel lines";            pa_16  .BackColor = ColorOptions._frozenlines.Color;
+			la_16.Text = "Frozen panel lines";            pa_16  .BackColor = ColorOptions._frozenlines                    .Color;
 			la_07.Text = "Frozen panel";                  pa_07  .BackColor = ColorOptions._frozen;
 														  pa_07_t.BackColor = ColorOptions._frozen_t;
-			la_17.Text = "Frozen header lines";           pa_17  .BackColor = ColorOptions._frozenheadlines.Color;
+			la_17.Text = "Frozen header lines";           pa_17  .BackColor = ColorOptions._frozenheadlines                .Color;
 			la_08.Text = "Frozen header";                 pa_08  .BackColor = ColorOptions._frozenhead;
 														  pa_08_t.BackColor = ColorOptions._frozenhead_t;
 			la_29.Text = "Frozen id unsorted";            pa_29  .BackColor = ColorOptions._frozenidunsort;
 														  pa_29_t.BackColor = ColorOptions._frozenidunsort_t;
 			la_42.Text = "Frozen header gradient a";      pa_42  .BackColor = ColorOptions._frozenheadgrada;
-														  pa_42_t.BackColor = ColorOptions._frozenheadgrad_t;
 			la_43.Text = "Frozen header gradient b";      pa_43  .BackColor = ColorOptions._frozenheadgradb;
 			la_44.Text = "Frozen id unsorted gradient a"; pa_44  .BackColor = ColorOptions._frozenidgrada;
-														  pa_44_t.BackColor = ColorOptions._frozenidgrad_t;
 			la_45.Text = "Frozen id unsorted gradient b"; pa_45  .BackColor = ColorOptions._frozenidgradb;
 
 			// Colhead ->
-			la_21.Text = "Col header lines";         pa_21  .BackColor = ColorOptions._colheadlines.Color;
-			la_09.Text = "Col header";               pa_09  .BackColor = ColorOptions._colhead;
-													 pa_09_t.BackColor = ColorOptions._colhead_t;
-			la_30.Text = "Col header selected";      pa_30  .BackColor = ColorOptions._colheadsel_t;
-			la_31.Text = "Col header resized";       pa_31  .BackColor = ColorOptions._colheadsize_t;
-			la_32.Text = "Header sorted ascending";  pa_32  .BackColor = ColorOptions._headsortasc_t;
-			la_33.Text = "Header sorted descending"; pa_33  .BackColor = ColorOptions._headsortdes_t;
-			la_40.Text = "Col header gradient a";    pa_40  .BackColor = ColorOptions._colheadgrada;
-			la_41.Text = "Col header gradient b";    pa_41  .BackColor = ColorOptions._colheadgradb;
+			la_21.Text = "Col header lines";              pa_21  .BackColor = ColorOptions._colheadlines                   .Color;
+			la_09.Text = "Col header";                    pa_09  .BackColor = ColorOptions._colhead;
+														  pa_09_t.BackColor = ColorOptions._colhead_t;
+			la_30.Text = "Col header selected";           pa_30  .BackColor = ColorOptions._colheadsel_t;
+			la_31.Text = "Col header resized";            pa_31  .BackColor = ColorOptions._colheadsize_t;
+			la_32.Text = "Header sorted ascending";       pa_32  .BackColor = ColorOptions._headsortasc_t;
+			la_33.Text = "Header sorted descending";      pa_33  .BackColor = ColorOptions._headsortdes_t;
+			la_40.Text = "Col header gradient a";         pa_40  .BackColor = ColorOptions._colheadgrada;
+			la_41.Text = "Col header gradient b";         pa_41  .BackColor = ColorOptions._colheadgradb;
 
 			// Rowpanel ->
-			la_19.Text = "Row panel lines";       pa_19  .BackColor =  ColorOptions._rowpanellines           .Color;
-			la_11.Text = "Row panel";             pa_11  .BackColor =  ColorOptions._rowpanel;
-												  pa_11_t.BackColor =  ColorOptions._rowpanel_t;
-			la_35.Text = "Row panel selected";    pa_35  .BackColor = (ColorOptions._rowsel    as SolidBrush).Color;
-												  pa_35_t.BackColor =  ColorOptions._rowsel_t;
-			la_36.Text = "Row panel subselected"; pa_36  .BackColor = (ColorOptions._rowsubsel as SolidBrush).Color;
-												  pa_36_t.BackColor =  ColorOptions._rowsubsel_t;
+			la_19.Text = "Row panel lines";               pa_19  .BackColor =  ColorOptions._rowpanellines                 .Color;
+			la_11.Text = "Row panel";                     pa_11  .BackColor =  ColorOptions._rowpanel;
+														  pa_11_t.BackColor =  ColorOptions._rowpanel_t;
+			la_35.Text = "Row panel selected";            pa_35  .BackColor = (ColorOptions._rowsel          as SolidBrush).Color;
+														  pa_35_t.BackColor =  ColorOptions._rowsel_t;
+			la_36.Text = "Row panel subselected";         pa_36  .BackColor = (ColorOptions._rowsubsel       as SolidBrush).Color;
+														  pa_36_t.BackColor =  ColorOptions._rowsubsel_t;
 
 			// Propanel ->
-			la_22.Text = "Propanel lines";         pa_22  .BackColor =  ColorOptions._propanellines                .Color;
-			la_23.Text = "Propanel border";        pa_23  .BackColor =  ColorOptions._propanelborder               .Color;
-			la_13.Text = "Propanel";               pa_13  .BackColor =  ColorOptions._propanel;
-												   pa_13_t.BackColor =  ColorOptions._propanel_t;
-			la_34.Text = "Propanel frozen cell";   pa_34  .BackColor = (ColorOptions._propanelfrozen as SolidBrush).Color;
-												   pa_34_t.BackColor =  ColorOptions._propanelfrozen_t;
-			la_38.Text = "Propanel selected cell"; pa_38  .BackColor = (ColorOptions._propanelsel    as SolidBrush).Color;
-												   pa_38_t.BackColor =  ColorOptions._propanelsel_t;
+			la_22.Text = "Propanel lines";                pa_22  .BackColor =  ColorOptions._propanellines                 .Color;
+			la_23.Text = "Propanel border";               pa_23  .BackColor =  ColorOptions._propanelborder                .Color;
+			la_13.Text = "Propanel";                      pa_13  .BackColor =  ColorOptions._propanel;
+														  pa_13_t.BackColor =  ColorOptions._propanel_t;
+			la_34.Text = "Propanel frozen cell";          pa_34  .BackColor = (ColorOptions._propanelfrozen  as SolidBrush).Color;
+														  pa_34_t.BackColor =  ColorOptions._propanelfrozen_t;
+			la_38.Text = "Propanel selected cell";        pa_38  .BackColor = (ColorOptions._propanelsel     as SolidBrush).Color;
+														  pa_38_t.BackColor =  ColorOptions._propanelsel_t;
 
 			// Statusbar ->
-			la_14.Text = "Statusbar"; pa_14  .BackColor = (ColorOptions._statusbar as SolidBrush).Color;
-									  pa_14_t.BackColor =  ColorOptions._statusbar_t;
+			la_14.Text = "Statusbar";                     pa_14  .BackColor = (ColorOptions._statusbar       as SolidBrush).Color;
+														  pa_14_t.BackColor =  ColorOptions._statusbar_t;
 
 			// Cells ->
-			la_24.Text = "Cell selected";    pa_24  .BackColor = (ColorOptions._cellselected    as SolidBrush).Color;
-											 pa_24_t.BackColor =  ColorOptions._cellselected_t;
-			la_25.Text = "Cell loadchanged"; pa_25  .BackColor = (ColorOptions._cellloadchanged as SolidBrush).Color;
-											 pa_25_t.BackColor =  ColorOptions._cellloadchanged_t;
-			la_26.Text = "Cell diffed";      pa_26  .BackColor = (ColorOptions._celldiffed      as SolidBrush).Color;
-											 pa_26_t.BackColor =  ColorOptions._celldiffed_t;
-			la_27.Text = "Cell replaced";    pa_27  .BackColor = (ColorOptions._cellreplaced    as SolidBrush).Color;
-											 pa_27_t.BackColor =  ColorOptions._cellreplaced_t;
-			la_28.Text = "Cell edit";        pa_28  .BackColor = (ColorOptions._celledit        as SolidBrush).Color;
-											 pa_28_t.BackColor =  ColorOptions._celledit_t;
+			la_24.Text = "Cell selected";                 pa_24  .BackColor = (ColorOptions._cellselected    as SolidBrush).Color;
+														  pa_24_t.BackColor =  ColorOptions._cellselected_t;
+			la_25.Text = "Cell loadchanged";              pa_25  .BackColor = (ColorOptions._cellloadchanged as SolidBrush).Color;
+														  pa_25_t.BackColor =  ColorOptions._cellloadchanged_t;
+			la_26.Text = "Cell diffed";                   pa_26  .BackColor = (ColorOptions._celldiffed      as SolidBrush).Color;
+														  pa_26_t.BackColor =  ColorOptions._celldiffed_t;
+			la_27.Text = "Cell replaced";                 pa_27  .BackColor = (ColorOptions._cellreplaced    as SolidBrush).Color;
+														  pa_27_t.BackColor =  ColorOptions._cellreplaced_t;
+			la_28.Text = "Cell edit";                     pa_28  .BackColor = (ColorOptions._celledit        as SolidBrush).Color;
+														  pa_28_t.BackColor =  ColorOptions._celledit_t;
 
 			_init = false;
 		}
@@ -130,27 +126,6 @@ namespace yata
 			(_f as Yata).CloseColorOptions();
 			base.OnFormClosing(e);
 		}
-
-		// kL_note: I don't like this. This dialog is nonmodal so if [Ctrl+s] is
-		// pressed when user accidentally has Yataform focused the table gets
-		// saved ... not good. -> check for [Ctrl] on the Save-button instead
-		// (to keep the dialog open)
-/*		/// <summary>
-		/// Saves current text to the Colors.Cfg file when <c>[Ctrl+s]</c> is
-		/// pressed.
-		/// </summary>
-		/// <param name="e"></param>
-		/// <remarks>Requires <c>KeyPreview</c> <c>true</c>.</remarks>
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			if (e.KeyData == (Keys.Control | Keys.S))
-			{
-				e.SuppressKeyPress = true;
-				click_Save(null, EventArgs.Empty);
-			}
-			else
-				base.OnKeyDown(e);
-		} */
 		#endregion Handlers (override)
 
 
@@ -170,8 +145,6 @@ namespace yata
 					string title;
 
 					// Table ->
-//					if      (sender == pa_01) title = la_01.Text;
-
 					if      (sender == pa_15)   title = la_15.Text;
 					else if (sender == pa_02)   title = la_02.Text;
 					else if (sender == pa_02_t) title = la_02.Text + " text";
@@ -194,20 +167,18 @@ namespace yata
 					else if (sender == pa_29)   title = la_29.Text;
 					else if (sender == pa_29_t) title = la_29.Text + " text";
 					else if (sender == pa_42)   title = la_42.Text;
-					else if (sender == pa_42_t) title = la_42.Text + " text";
 					else if (sender == pa_43)   title = la_43.Text;
 					else if (sender == pa_44)   title = la_44.Text;
-					else if (sender == pa_44_t) title = la_44.Text + " text";
 					else if (sender == pa_45)   title = la_45.Text;
 
 					// Colhead ->
 					else if (sender == pa_21)   title = la_21.Text;
 					else if (sender == pa_09)   title = la_09.Text;
 					else if (sender == pa_09_t) title = la_09.Text + " text";
-					else if (sender == pa_30)   title = la_30.Text;
-					else if (sender == pa_31)   title = la_31.Text;
-					else if (sender == pa_32)   title = la_32.Text;
-					else if (sender == pa_33)   title = la_33.Text;
+					else if (sender == pa_30)   title = la_30.Text + " text";
+					else if (sender == pa_31)   title = la_31.Text + " text";
+					else if (sender == pa_32)   title = la_32.Text + " text";
+					else if (sender == pa_33)   title = la_33.Text + " text";
 					else if (sender == pa_40)   title = la_40.Text;
 					else if (sender == pa_41)   title = la_41.Text;
 
@@ -269,8 +240,6 @@ namespace yata
 			if (!_init)
 			{
 				// Table ->
-//				if      (sender == pa_01)   ColorOptions._tabletext                            = pa_01  .BackColor;
-
 				if      (sender == pa_15)   ColorOptions._rowlines                      .Color = pa_15  .BackColor;
 				else if (sender == pa_02)  (ColorOptions._rowa            as SolidBrush).Color = pa_02  .BackColor;
 				else if (sender == pa_02_t) ColorOptions._rowa_t                               = pa_02_t.BackColor;
@@ -303,7 +272,6 @@ namespace yata
 					}
 					else return;
 				}
-				else if (sender == pa_42_t) ColorOptions._frozenheadgrad_t                     = pa_42_t.BackColor;
 				else if (sender == pa_44 || sender == pa_45)
 				{
 					if (sender == pa_44) ColorOptions._frozenidgrada = pa_44.BackColor;
@@ -315,7 +283,6 @@ namespace yata
 					}
 					else return;
 				}
-				else if (sender == pa_44_t) ColorOptions._frozenidgrad_t                       = pa_44_t.BackColor;
 
 				// Colhead ->
 				else if (sender == pa_21)   ColorOptions._colheadlines                  .Color = pa_21  .BackColor;
@@ -454,9 +421,6 @@ namespace yata
 			var sb = new StringBuilder();
 
 			// Table ->
-//			sb.Append(ColorOptions.CFG_tabletext);
-//			sb.AppendLine(pa_01.BackColor.R + "," + pa_01.BackColor.G + "," + pa_01.BackColor.B);
-
 			sb.Append(ColorOptions.CFG_rowlines);
 			sb.AppendLine(pa_15.BackColor.R + "," + pa_15.BackColor.G + "," + pa_15.BackColor.B);
 			sb.Append(ColorOptions.CFG_rowa);
@@ -499,14 +463,10 @@ namespace yata
 			sb.AppendLine(pa_29_t.BackColor.R + "," + pa_29_t.BackColor.G + "," + pa_29_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadgrada);
 			sb.AppendLine(pa_42.BackColor.R + "," + pa_42.BackColor.G + "," + pa_42.BackColor.B);
-			sb.Append(ColorOptions.CFG_frozenheadgrad_t);
-			sb.AppendLine(pa_42_t.BackColor.R + "," + pa_42_t.BackColor.G + "," + pa_42_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenheadgradb);
 			sb.AppendLine(pa_43.BackColor.R + "," + pa_43.BackColor.G + "," + pa_43.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenidgrada);
 			sb.AppendLine(pa_44.BackColor.R + "," + pa_44.BackColor.G + "," + pa_44.BackColor.B);
-			sb.Append(ColorOptions.CFG_frozenidgrad_t);
-			sb.AppendLine(pa_44_t.BackColor.R + "," + pa_44_t.BackColor.G + "," + pa_44_t.BackColor.B);
 			sb.Append(ColorOptions.CFG_frozenidgradb);
 			sb.AppendLine(pa_45.BackColor.R + "," + pa_45.BackColor.G + "," + pa_45.BackColor.B);
 
@@ -665,8 +625,6 @@ namespace yata
 				DrawRegulator.SuspendDrawing(Yata.that);
 
 				// Table ->
-//				pa_01  .BackColor = ColorOptions.Def_tabletext;
-
 				pa_15  .BackColor = ColorOptions.Def_rowlines;
 				pa_02  .BackColor = ColorOptions.Def_rowa;
 				pa_02_t.BackColor = ColorOptions.Def_rowa_t;
@@ -689,10 +647,8 @@ namespace yata
 				pa_29  .BackColor = ColorOptions.Def_frozenidunsort;
 				pa_29_t.BackColor = ColorOptions.Def_frozenidunsort_t;
 				pa_42  .BackColor = ColorOptions.Def_frozenheadgrada;
-				pa_42_t.BackColor = ColorOptions.Def_frozenheadgrad_t;
 				pa_43  .BackColor = ColorOptions.Def_frozenheadgradb;
 				pa_44  .BackColor = ColorOptions.Def_frozenidgrada;
-				pa_44_t.BackColor = ColorOptions.Def_frozenidgrad_t;
 				pa_45  .BackColor = ColorOptions.Def_frozenidgradb;
 
 				// Colhead ->
@@ -748,8 +704,6 @@ namespace yata
 			else // restore option default ->
 			{
 				// Table ->
-//				if (panel == pa_01) pa_01.BackColor = ColorOptions.Def_tabletext;
-
 				if      (panel == pa_15)   pa_15  .BackColor = ColorOptions.Def_rowlines;
 				else if (panel == pa_02)   pa_02  .BackColor = ColorOptions.Def_rowa;
 				else if (panel == pa_02_t) pa_02_t.BackColor = ColorOptions.Def_rowa_t;
@@ -772,10 +726,8 @@ namespace yata
 				else if (panel == pa_29)   pa_29  .BackColor = ColorOptions.Def_frozenidunsort;
 				else if (panel == pa_29_t) pa_29_t.BackColor = ColorOptions.Def_frozenidunsort_t;
 				else if (panel == pa_42)   pa_42  .BackColor = ColorOptions.Def_frozenheadgrada;
-				else if (panel == pa_42_t) pa_42_t.BackColor = ColorOptions.Def_frozenheadgrad_t;
 				else if (panel == pa_43)   pa_43  .BackColor = ColorOptions.Def_frozenheadgradb;
 				else if (panel == pa_44)   pa_44  .BackColor = ColorOptions.Def_frozenidgrada;
-				else if (panel == pa_44_t) pa_44_t.BackColor = ColorOptions.Def_frozenidgrad_t;
 				else if (panel == pa_45)   pa_45  .BackColor = ColorOptions.Def_frozenidgradb;
 
 				// Colhead ->
