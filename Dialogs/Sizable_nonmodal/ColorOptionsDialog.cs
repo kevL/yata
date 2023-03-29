@@ -10,6 +10,11 @@ namespace yata
 	sealed partial class ColorOptionsDialog
 		: YataDialog
 	{
+		#region Fields (static)
+		internal static Color Stored = Color.White; // TODO: Color.Empty ...
+		#endregion Fields (static)
+
+
 		#region Fields
 		bool _init = true;
 		#endregion Fields
@@ -27,27 +32,19 @@ namespace yata
 			InitializeComponent();
 			Initialize(METRIC_FUL);
 
-			init();
+			InitializeColorLabels();
+			InitializeColorPanels();
+			_init = false;
 
 			bu_Save.Select();
 			Show(_f); // Yata is owner.
 		}
 
 		/// <summary>
-		/// Initializes panel-colors and label-texts.
+		/// Initializes the textual <c>Labels</c> that describe various elements
+		/// for which the color can be customized.
 		/// </summary>
-		void init()
-		{
-			InitTexts();
-			InitColors();
-
-			_init = false;
-		}
-
-		/// <summary>
-		/// Initializes the <c>Labels</c>.
-		/// </summary>
-		void InitTexts()
+		void InitializeColorLabels()
 		{
 			// Table ->
 			la_15.Text = "Row lines";
@@ -103,9 +100,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Initializes the <c>Panels</c>.
+		/// Initializes the color <c>Panels</c> with the current color of
+		/// their corresponding elements in <c><see cref="ColorOptions"/></c>.
 		/// </summary>
-		void InitColors()
+		void InitializeColorPanels()
 		{
 			// Table ->
 			pa_15  .BackColor =  ColorOptions._rowlines                      .Color;
@@ -198,102 +196,129 @@ namespace yata
 
 		#region handlers (color panel)
 		/// <summary>
-		/// Instantiates <c><see cref="ColorSelectorDialog"/></c> on leftclick.
-		/// Restores default color on right click.
+		/// Instantiates <c><see cref="ColorSelectorDialog"/></c> on <c>LMB</c>
+		/// or <c>RMB</c>. Restores default color on <c>[Shift]+RMB</c>. Copies
+		/// color on <c>[Ctrl]+RMB</c> and pastes copied color on
+		/// <c>[Ctrl]+LMB</c>.
 		/// </summary>
 		/// <param name="sender"><c>pa_*</c></param>
 		/// <param name="e"></param>
 		void mouseclick_Colorpanel(object sender, MouseEventArgs e)
 		{
-			switch (e.Button)
+			if ((ModifierKeys & Keys.Alt) == Keys.None)
 			{
-				case MouseButtons.Left:
+				if (ModifierKeys == Keys.Control) // copy or paste color
 				{
-					string title;
+					switch (e.Button)
+					{
+						case MouseButtons.Right: // copy color
+							Stored = (sender as Panel).BackColor;
+							using (var ib = new Infobox(Infobox.Title_infor, "Color copied"))
+								ib.ShowDialog(this);
+							break;
 
-					// Table ->
-					if      (sender == pa_15)   title = la_15.Text;
-					else if (sender == pa_02)   title = la_02.Text;
-					else if (sender == pa_02_t) title = la_02.Text + " text";
-					else if (sender == pa_03)   title = la_03.Text;
-					else if (sender == pa_03_t) title = la_03.Text + " text";
-					else if (sender == pa_04)   title = la_04.Text;
-					else if (sender == pa_04_t) title = la_04.Text + " text";
-					else if (sender == pa_05)   title = la_05.Text;
-					else if (sender == pa_05_t) title = la_05.Text + " text";
-					else if (sender == pa_37)   title = la_37.Text;
-					else if (sender == pa_37_t) title = la_37.Text + " text";
-
-					// Frozen ->
-					else if (sender == pa_16)   title = la_16.Text;
-					else if (sender == pa_07)   title = la_07.Text;
-					else if (sender == pa_07_t) title = la_07.Text + " text";
-					else if (sender == pa_17)   title = la_17.Text;
-					else if (sender == pa_08)   title = la_08.Text;
-					else if (sender == pa_08_t) title = la_08.Text + " text";
-					else if (sender == pa_29)   title = la_29.Text;
-					else if (sender == pa_29_t) title = la_29.Text + " text";
-					else if (sender == pa_42)   title = la_42.Text;
-					else if (sender == pa_43)   title = la_43.Text;
-					else if (sender == pa_44)   title = la_44.Text;
-					else if (sender == pa_45)   title = la_45.Text;
-
-					// Colhead ->
-					else if (sender == pa_21)   title = la_21.Text;
-					else if (sender == pa_09)   title = la_09.Text;
-					else if (sender == pa_09_t) title = la_09.Text + " text";
-					else if (sender == pa_30)   title = la_30.Text + " text";
-					else if (sender == pa_31)   title = la_31.Text + " text";
-					else if (sender == pa_32)   title = la_32.Text + " text";
-					else if (sender == pa_33)   title = la_33.Text + " text";
-					else if (sender == pa_40)   title = la_40.Text;
-					else if (sender == pa_41)   title = la_41.Text;
-
-					// Rowpanel ->
-					else if (sender == pa_19)   title = la_19.Text;
-					else if (sender == pa_11)   title = la_11.Text;
-					else if (sender == pa_11_t) title = la_11.Text + " text";
-					else if (sender == pa_35)   title = la_35.Text;
-					else if (sender == pa_35_t) title = la_35.Text + " text";
-					else if (sender == pa_36)   title = la_36.Text;
-					else if (sender == pa_36_t) title = la_36.Text + " text";
-
-					// Propanel ->
-					else if (sender == pa_22)   title = la_22.Text;
-					else if (sender == pa_23)   title = la_23.Text;
-					else if (sender == pa_13)   title = la_13.Text;
-					else if (sender == pa_13_t) title = la_13.Text + " text";
-					else if (sender == pa_34)   title = la_34.Text;
-					else if (sender == pa_34_t) title = la_34.Text + " text";
-					else if (sender == pa_38)   title = la_38.Text;
-					else if (sender == pa_38_t) title = la_38.Text + " text";
-
-					// Cells ->
-					else if (sender == pa_24)   title = la_24.Text;
-					else if (sender == pa_24_t) title = la_24.Text + " text";
-					else if (sender == pa_25)   title = la_25.Text;
-					else if (sender == pa_25_t) title = la_25.Text + " text";
-					else if (sender == pa_26)   title = la_26.Text;
-					else if (sender == pa_26_t) title = la_26.Text + " text";
-					else if (sender == pa_27)   title = la_27.Text;
-					else if (sender == pa_27_t) title = la_27.Text + " text";
-					else if (sender == pa_28)   title = la_28.Text;
-					else if (sender == pa_28_t) title = la_28.Text + " text";
-
-					// Statusbar ->
-					else if (sender == pa_14)   title = la_14.Text;
-					else                        title = la_14.Text + " text"; // sender == pa_14_t
-
-					var f = new ColorSelectorDialog(this, sender as Panel, " yata - " + title);
-					f.ShowDialog(this);
-
-					Yata.that.Refresh();
-					break;
+						case MouseButtons.Left: // paste color
+							(sender as Panel).BackColor = Stored;
+							break;
+					}
 				}
+				else if (ModifierKeys == Keys.Shift)
+				{
+					if (e.Button == MouseButtons.Right) // restore color
+					{
+						RestoreDefaults(sender);
+					}
+				}
+				else // open the ColorSelector dialog
+				{
+					switch (e.Button)
+					{
+						case MouseButtons.Left:
+						case MouseButtons.Right:
+						{
+							string title;
 
-				case MouseButtons.Right:
-					RestoreDefaults(sender);
-					break;
+							// Table ->
+							if      (sender == pa_15)   title = la_15.Text;
+							else if (sender == pa_02)   title = la_02.Text;
+							else if (sender == pa_02_t) title = la_02.Text + " text";
+							else if (sender == pa_03)   title = la_03.Text;
+							else if (sender == pa_03_t) title = la_03.Text + " text";
+							else if (sender == pa_04)   title = la_04.Text;
+							else if (sender == pa_04_t) title = la_04.Text + " text";
+							else if (sender == pa_05)   title = la_05.Text;
+							else if (sender == pa_05_t) title = la_05.Text + " text";
+							else if (sender == pa_37)   title = la_37.Text;
+							else if (sender == pa_37_t) title = la_37.Text + " text";
+
+							// Frozen ->
+							else if (sender == pa_16)   title = la_16.Text;
+							else if (sender == pa_07)   title = la_07.Text;
+							else if (sender == pa_07_t) title = la_07.Text + " text";
+							else if (sender == pa_17)   title = la_17.Text;
+							else if (sender == pa_08)   title = la_08.Text;
+							else if (sender == pa_08_t) title = la_08.Text + " text";
+							else if (sender == pa_29)   title = la_29.Text;
+							else if (sender == pa_29_t) title = la_29.Text + " text";
+							else if (sender == pa_42)   title = la_42.Text;
+							else if (sender == pa_43)   title = la_43.Text;
+							else if (sender == pa_44)   title = la_44.Text;
+							else if (sender == pa_45)   title = la_45.Text;
+
+							// Colhead ->
+							else if (sender == pa_21)   title = la_21.Text;
+							else if (sender == pa_09)   title = la_09.Text;
+							else if (sender == pa_09_t) title = la_09.Text + " text";
+							else if (sender == pa_30)   title = la_30.Text + " text";
+							else if (sender == pa_31)   title = la_31.Text + " text";
+							else if (sender == pa_32)   title = la_32.Text + " text";
+							else if (sender == pa_33)   title = la_33.Text + " text";
+							else if (sender == pa_40)   title = la_40.Text;
+							else if (sender == pa_41)   title = la_41.Text;
+
+							// Rowpanel ->
+							else if (sender == pa_19)   title = la_19.Text;
+							else if (sender == pa_11)   title = la_11.Text;
+							else if (sender == pa_11_t) title = la_11.Text + " text";
+							else if (sender == pa_35)   title = la_35.Text;
+							else if (sender == pa_35_t) title = la_35.Text + " text";
+							else if (sender == pa_36)   title = la_36.Text;
+							else if (sender == pa_36_t) title = la_36.Text + " text";
+
+							// Propanel ->
+							else if (sender == pa_22)   title = la_22.Text;
+							else if (sender == pa_23)   title = la_23.Text;
+							else if (sender == pa_13)   title = la_13.Text;
+							else if (sender == pa_13_t) title = la_13.Text + " text";
+							else if (sender == pa_34)   title = la_34.Text;
+							else if (sender == pa_34_t) title = la_34.Text + " text";
+							else if (sender == pa_38)   title = la_38.Text;
+							else if (sender == pa_38_t) title = la_38.Text + " text";
+
+							// Cells ->
+							else if (sender == pa_24)   title = la_24.Text;
+							else if (sender == pa_24_t) title = la_24.Text + " text";
+							else if (sender == pa_25)   title = la_25.Text;
+							else if (sender == pa_25_t) title = la_25.Text + " text";
+							else if (sender == pa_26)   title = la_26.Text;
+							else if (sender == pa_26_t) title = la_26.Text + " text";
+							else if (sender == pa_27)   title = la_27.Text;
+							else if (sender == pa_27_t) title = la_27.Text + " text";
+							else if (sender == pa_28)   title = la_28.Text;
+							else if (sender == pa_28_t) title = la_28.Text + " text";
+
+							// Statusbar ->
+							else if (sender == pa_14)   title = la_14.Text;
+							else                        title = la_14.Text + " text"; // sender == pa_14_t
+
+							var f = new ColorSelectorDialog(this, sender as Panel, " yata - " + title);
+							f.ShowDialog(this);
+
+							Yata.that.Refresh();
+							break;
+						}
+					}
+				}
 			}
 		}
 
@@ -678,7 +703,7 @@ namespace yata
 					DrawRegulator.SuspendDrawing(Yata.that);
 
 					ColorOptions.ParseColorsFile(pfe);
-					InitColors();
+					InitializeColorPanels();
 
 					DrawRegulator.ResumeDrawing(gb_Colors);
 					DrawRegulator.ResumeDrawing(Yata.that);

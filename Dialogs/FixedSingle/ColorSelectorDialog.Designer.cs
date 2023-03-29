@@ -88,8 +88,8 @@ namespace yata
 			this.pa_Color.Name = "pa_Color";
 			this.pa_Color.Size = new System.Drawing.Size(75, 35);
 			this.pa_Color.TabIndex = 2;
-			this.toolTip1.SetToolTip(this.pa_Color, "LMB - paste copied color\r\nRMB - copy color");
-			this.pa_Color.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
+			this.toolTip1.SetToolTip(this.pa_Color, "[Ctrl]+RMB - copy color\r\n[Ctrl]+LMB - paste copied color");
+			this.pa_Color.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_pa_Color);
 			// 
 			// pa_Colorpre
 			// 
@@ -99,8 +99,8 @@ namespace yata
 			this.pa_Colorpre.Name = "pa_Colorpre";
 			this.pa_Colorpre.Size = new System.Drawing.Size(75, 35);
 			this.pa_Colorpre.TabIndex = 3;
-			this.toolTip1.SetToolTip(this.pa_Colorpre, "LMB - recall color\r\nRMB - copy color");
-			this.pa_Colorpre.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_Color);
+			this.toolTip1.SetToolTip(this.pa_Colorpre, "[Ctrl]+RMB - copy color\r\n[Ctrl]+LMB - recall color");
+			this.pa_Colorpre.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_pa_Color);
 			// 
 			// tb_Red
 			// 
@@ -203,7 +203,7 @@ namespace yata
 			this.bu_Help.TabIndex = 12;
 			this.bu_Help.Text = "hep";
 			this.bu_Help.UseVisualStyleBackColor = true;
-			this.bu_Help.Click += new System.EventHandler(this.click_Help);
+			this.bu_Help.Click += new System.EventHandler(this.click_bu_Help);
 			// 
 			// bu_Accept
 			// 
@@ -215,7 +215,7 @@ namespace yata
 			this.bu_Accept.TabIndex = 13;
 			this.bu_Accept.Text = "accept";
 			this.bu_Accept.UseVisualStyleBackColor = true;
-			this.bu_Accept.Click += new System.EventHandler(this.click_Accept);
+			this.bu_Accept.Click += new System.EventHandler(this.click_bu_Accept);
 			// 
 			// bu_Cancel
 			// 

@@ -15,8 +15,6 @@ namespace yata
 		#region Fields (static)
 		const double STEPS_SAT = 201.0; // one less than count because 0
 		const double STEPS_VAL = 255.0; // one less than count because 0
-
-		static Color Stored = Color.White;
 		#endregion Fields (static)
 
 
@@ -533,7 +531,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Accept"/></c></param>
 		/// <param name="e"></param>
-		void click_Accept(object sender, EventArgs e)
+		void click_bu_Accept(object sender, EventArgs e)
 		{
 			_panel.BackColor = pa_Color.BackColor;
 		}
@@ -543,7 +541,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="bu_Help"/></c></param>
 		/// <param name="e"></param>
-		void click_Help(object sender, EventArgs e)
+		void click_bu_Help(object sender, EventArgs e)
 		{
 			if (_fhelp == null)
 			{
@@ -574,22 +572,25 @@ namespace yata
 		/// <item><c><see cref="pa_Colorpre"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		void mouseclick_Color(object sender, MouseEventArgs e)
+		void mouseclick_pa_Color(object sender, MouseEventArgs e)
 		{
-			switch (e.Button)
+			if (ModifierKeys == Keys.Control)
 			{
-				case MouseButtons.Left:
-					if      (sender == pa_Color)    pa_Color.BackColor = Stored;
-					else if (sender == pa_Colorpre) pa_Color.BackColor = pa_Colorpre.BackColor;
+				switch (e.Button)
+				{
+					case MouseButtons.Right: // copy color
+						ColorOptionsDialog.Stored = (sender as Panel).BackColor;
+						using (var ib = new Infobox(Infobox.Title_infor, "Color copied"))
+							ib.ShowDialog(this);
+						break;
 
-					SetCurrentValues(pa_Color.BackColor);
-					break;
+					case MouseButtons.Left: // paste or recall color
+						if      (sender == pa_Color)    pa_Color.BackColor = ColorOptionsDialog.Stored;
+						else if (sender == pa_Colorpre) pa_Color.BackColor = pa_Colorpre.BackColor;
 
-				case MouseButtons.Right: // copy the panel's color to 'Stored' ->
-					Stored = (sender as Panel).BackColor;
-					using (var ib = new Infobox(Infobox.Title_infor, "Color copied."))
-						ib.ShowDialog(this);
-					break;
+						SetCurrentValues(pa_Color.BackColor);
+						break;
+				}
 			}
 		}
 		#endregion handlers (panels)
