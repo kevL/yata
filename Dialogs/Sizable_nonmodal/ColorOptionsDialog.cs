@@ -11,7 +11,7 @@ namespace yata
 		: YataDialog
 	{
 		#region Fields (static)
-		internal static Color Stored = Color.White; // TODO: Color.Empty ...
+		internal static Color Stored = Color.Empty;
 		#endregion Fields (static)
 
 
@@ -218,7 +218,18 @@ namespace yata
 							break;
 
 						case MouseButtons.Left: // paste color
-							(sender as Panel).BackColor = Stored;
+							if (Stored == Color.Empty)
+							{
+								using (var ib = new Infobox(Infobox.Title_error,
+															"A color has not been copied yet.",
+															null,
+															InfoboxType.Error))
+								{
+									ib.ShowDialog(this);
+								}
+							}
+							else
+								(sender as Panel).BackColor = Stored;
 							break;
 					}
 				}

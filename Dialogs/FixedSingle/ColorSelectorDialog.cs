@@ -585,8 +585,25 @@ namespace yata
 						break;
 
 					case MouseButtons.Left: // paste or recall color
-						if      (sender == pa_Color)    pa_Color.BackColor = ColorOptionsDialog.Stored;
-						else if (sender == pa_Colorpre) pa_Color.BackColor = pa_Colorpre.BackColor;
+						if (sender == pa_Color)
+						{
+							if (ColorOptionsDialog.Stored == Color.Empty)
+							{
+								using (var ib = new Infobox(Infobox.Title_error,
+															"A color has not been copied yet.",
+															null,
+															InfoboxType.Error))
+								{
+									ib.ShowDialog(this);
+								}
+								return;
+							}
+							pa_Color.BackColor = ColorOptionsDialog.Stored;
+						}
+						else if (sender == pa_Colorpre)
+						{
+							pa_Color.BackColor = pa_Colorpre.BackColor;
+						}
 
 						SetCurrentValues(pa_Color.BackColor);
 						break;
