@@ -40,9 +40,9 @@ namespace yata
 		/// <remarks>For save routines only.</remarks>
 		internal const string Title_alert = " Alert";
 		/// <summary>
-		/// ay Matey
+		/// a miracle occurred
 		/// </summary>
-		internal const string Title_succf = " ay Matey";
+		internal const string Title_succf = " a miracle occurred";
 
 		const int w_Min = 350;
 		const int w_Max = 800;
