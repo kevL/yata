@@ -454,7 +454,7 @@ namespace yata
 						if (ctrl)
 						{
 							using (var ib = new Infobox(Infobox.Title_succf,
-														"Colors.Cfg saved.",
+														"Colors.Cfg saved",
 														null,
 														InfoboxType.Success))
 							{
