@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 25
+2023 march 30
 kevL's
-ver 5.4.5.0
+ver 5.5.0.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -646,12 +646,17 @@ so you have two options: install Yata to a directory that you have read/write
 privileges for, or create and/or edit Colors.Cfg by hand in your favorite text
 editor.
 
+Respected variables can be found here
+https://github.com/kevL/yata/blob/master/Statics/ColorOptions.cs
+
 Colors are stored in the Colors.Cfg file as "r,g,b" strings (without quotes)
 where r is red, g is green, b is blue with values between 0..255 (inclusive).
 
 The Help|Colors file operation opens a dialog that displays all of the editable
-colors for Yata. Leftclick any color panel to open the Color Selector dialog for
-that control; rightclick any color panel to restore its hardcoded default color.
+colors for Yata. Click any color panel to open the Color Selector dialog for
+that color; [Shift]+RMB on a color panel restores its hardcoded default color.
+[Ctrl]+RMB copies a color to an internal buffer; [Ctrl]+LMB pastes the copied
+color.
 
 The Color Selector uses HSV (hue/saturation/value) to RGB (red/green/blue)
 colorspace.
@@ -660,12 +665,15 @@ NOTE THAT CUSTOM COLORS WILL NOT BE SAVED until the Save File button is clicked.
 
 buttons for the Color Options dialog:
 
-delete file      - delete the Colors.Cfg file (colors will revert to their
-                   hardcoded default values the next time Yata runs)
-restore defaults - restore all colors to their hardcoded default values
-SAVE FILE        - create or overwrite the Colors.Cfg file with the currently
-                   displayed colors and close the dialog
-Esc              - exit the dialog
+delete file      - deletes the Colors.Cfg file (colors will revert to their
+                   hardcoded default values the next time Yata starts)
+reload file      - reloads the Colors.Cfg file
+restore defaults - restores all colors to their hardcoded default values (this
+                   does not affect the Colors.Cfg file itself)
+SAVE FILE        - creates or overwrites the Colors.Cfg file with the currently
+                   displayed colors and closes the dialog; [Ctrl]+click keeps
+                   the dialog open for further edits
+Esc              - exits the dialog
 
 Not all colors in Yata are configurable.
 
