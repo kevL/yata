@@ -251,7 +251,7 @@ namespace yata
 		/// <param name="bypassDialogFont"><c>true</c> to bypass setting the
 		/// dialog's <c>Font</c></param>
 		/// <param name="bypassTextboxFont"><c>true</c> to bypass setting the
-		/// <c>TextBoxBases'</c> <c>Font</c></param>
+		/// <c>TextBoxBases'</c> <c>Fonts</c></param>
 		protected void Initialize(int metric,
 								  bool bypassTextboxColor = false,
 								  bool bypassDialogFont = false,
@@ -260,8 +260,51 @@ namespace yata
 			if ((Metric = metric) == METRIC_FUL && _w != -1)
 				ClientSize = new Size(_w,_h); // foff .net
 
-			PopulateTextboxbaseList(this);
 			SetFonts(bypassTextboxColor, bypassDialogFont, bypassTextboxFont);
+		}
+
+		/// <summary>
+		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
+		/// </summary>
+		/// <param name="bypassTextboxColor"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
+		/// <param name="bypassDialogFont"><c>true</c> to bypass setting the
+		/// dialog's <c>Font</c></param>
+		/// <param name="bypassTextboxFont"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>Fonts</c></param>
+		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
+		/// <c>TextBoxBases</c> ARE INSTANTIATED in the Designer - this funct
+		/// will <c>Dispose()</c> those <c>Fonts</c>. If a <c>TextBoxBase</c>
+		/// happens to use the .net default <c>Font</c> it will get disposed and
+		/// then the app is borked since the .net default <c>Font</c> will no
+		/// longer be available at all.</remarks>
+		void SetFonts(bool bypassTextboxColor,
+					  bool bypassDialogFont,
+					  bool bypassTextboxFont)
+		{
+			PopulateTextboxbaseList(this);
+
+			if (!bypassDialogFont)
+			{
+				if (Options._font2dialog != null)
+					Font = Options._font2dialog;
+				else
+					Font = Options._fontdialog;
+			}
+
+			foreach (TextBoxBase @base in _bases)
+			{
+				if (!bypassTextboxFont && Options._fontf != null)
+				{
+					@base.Font.Dispose();
+
+					if (@base is RichTextBox) @base.Font = Options._fontf;
+					else                      @base.Font = Options._fontf_tb; // is TextBox
+				}
+
+				if (!bypassTextboxColor)
+					@base.BackColor = Colors.TextboxBackground;
+			}
 		}
 
 		/// <summary>
@@ -285,49 +328,6 @@ namespace yata
 			}
 		}
 		#endregion Methods
-
-
-		/// <summary>
-		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
-		/// </summary>
-		/// <param name="bypassTextboxColor"><c>true</c> to bypass setting the
-		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
-		/// <param name="bypassDialogFont"><c>true</c> to bypass setting the
-		/// dialog's <c>Font</c></param>
-		/// <param name="bypassTextboxFont"><c>true</c> to bypass setting the
-		/// <c>TextBoxBases'</c> <c>Font</c></param>
-		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
-		/// <c>TextBoxBases</c> ARE INSTANTIATED in the Designer - this funct
-		/// will <c>Dispose()</c> those <c>Fonts</c>. If a <c>TextBoxBase</c>
-		/// happens to use the .net default <c>Font</c> it will get disposed and
-		/// then the app is borked since the .net default <c>Font</c> will no
-		/// longer be available at all.</remarks>
-		void SetFonts(bool bypassTextboxColor,
-					  bool bypassDialogFont,
-					  bool bypassTextboxFont)
-		{
-			if (!bypassDialogFont)
-			{
-				if (Options._font2dialog != null)
-					Font = Options._font2dialog;
-				else
-					Font = Options._fontdialog;
-			}
-
-			foreach (TextBoxBase @base in _bases)
-			{
-				if (!bypassTextboxFont && Options._fontf != null)
-				{
-					@base.Font.Dispose();
-
-					if (@base is RichTextBox) @base.Font = Options._fontf;
-					else                      @base.Font = Options._fontf_tb; // is TextBox
-				}
-
-				if (!bypassTextboxColor)
-					@base.BackColor = Colors.TextboxBackground;
-			}
-		}
 
 
 		#region PInvoke
