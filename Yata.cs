@@ -442,7 +442,7 @@ namespace yata
 		/// Updates the <c>BackColor</c> of
 		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c> when the
-		/// user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		/// <param name="color"></param>
 		internal void UpdateEditorColor(Color color)
@@ -461,7 +461,7 @@ namespace yata
 		/// Updates the <c>ForeColor</c> of
 		/// <c><see cref="YataGrid._editor">YataGrid._editor</see></c> and
 		/// <c><see cref="Propanel._editor">Propanel._editor</see></c> when the
-		/// user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		internal void UpdateEditorTextColor()
 		{
@@ -478,7 +478,7 @@ namespace yata
 		/// <summary>
 		/// Updates the <c>ForeColor</c> of the <c>ToolStripStatusLabels</c>
 		/// on the <c><see cref="statusbar"/></c> when the user changes it in
-		/// <c><see cref="ColorOptionsDialog"/></c>.
+		/// <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		internal void UpdateStatusbarTextColor()
 		{

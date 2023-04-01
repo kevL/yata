@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ColorOptionsDialog
+	sealed partial class ColorOptionsEditor
 	{
 		#region Designer
 		GroupBox gb_Colors;
@@ -1438,7 +1438,7 @@ namespace yata
 			this.toolTip1.InitialDelay = 100;
 			this.toolTip1.ReshowDelay = 50;
 			// 
-			// ColorOptionsDialog
+			// ColorOptionsEditor
 			// 
 			this.AcceptButton = this.bu_Save;
 			this.CancelButton = this.bu_Cancel;
@@ -1447,7 +1447,7 @@ namespace yata
 			this.Controls.Add(this.pa_bot);
 			this.Icon = global::yata.Properties.Resources.yata_icon;
 			this.KeyPreview = true;
-			this.Name = "ColorOptionsDialog";
+			this.Name = "ColorOptionsEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = " yata - Colors.Cfg";
 			this.gb_Colors.ResumeLayout(false);

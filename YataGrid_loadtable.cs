@@ -1194,7 +1194,7 @@ namespace yata
 		/// <summary>
 		/// Updates the colors of
 		/// <c><see cref="Gradients.FrozenLabel">Gradients.FrozenLabel</see></c>
-		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// when the user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		internal void UpdateFrozenLabelGradientBrush()
 		{
@@ -1209,7 +1209,7 @@ namespace yata
 		/// <summary>
 		/// Updates the colors of
 		/// <c><see cref="Gradients.Disordered">Gradients.Disordered</see></c>
-		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// when the user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		internal void UpdateDisorderedGradientBrush()
 		{

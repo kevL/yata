@@ -114,9 +114,9 @@
     <Compile Include="Dialogs\Sizable_nonmodal\ClipboardEditor.Designer.cs">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsDialog.cs" />
-    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsDialog.Designer.cs">
-      <DependentUpon>ColorOptionsDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsEditor.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\ColorOptionsEditor.Designer.cs">
+      <DependentUpon>ColorOptionsEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.cs" />
     <Compile Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.Designer.cs">
@@ -304,8 +304,8 @@
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ClipboardEditor.resx">
       <DependentUpon>ClipboardEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorOptionsDialog.resx">
-      <DependentUpon>ColorOptionsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorOptionsEditor.resx">
+      <DependentUpon>ColorOptionsEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ColorSelectorHelp.resx">
       <DependentUpon>ColorSelectorHelp.cs</DependentUpon>

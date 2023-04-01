@@ -106,7 +106,7 @@ namespace yata
 		/// <summary>
 		/// Updates the colors of
 		/// <c><see cref="Gradients.ColheadPanel">Gradients.ColheadPanel</see></c>
-		/// when the user changes it in <c><see cref="ColorOptionsDialog"/></c>.
+		/// when the user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
 		internal void UpdateColheadGradientBrush()
 		{

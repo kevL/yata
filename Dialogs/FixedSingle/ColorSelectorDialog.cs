@@ -34,7 +34,7 @@ namespace yata
 		string _pretext = String.Empty;
 		bool _bypass; // bypasses the textchanged handler
 
-		Panel _panel; // origin panel in 'ColorOptionsDialog'
+		Panel _panel; // origin panel in 'ColorOptionsEditor'
 
 		bool _init = true;
 
@@ -49,7 +49,7 @@ namespace yata
 		/// <param name="f"></param>
 		/// <param name="panel"></param>
 		/// <param name="title"></param>
-		internal ColorSelectorDialog(ColorOptionsDialog f, Panel panel, string title)
+		internal ColorSelectorDialog(ColorOptionsEditor f, Panel panel, string title)
 		{
 			_f = f;
 			_panel = panel;
@@ -579,7 +579,7 @@ namespace yata
 				switch (e.Button)
 				{
 					case MouseButtons.Right: // copy color
-						ColorOptionsDialog.Stored = (sender as Panel).BackColor;
+						ColorOptionsEditor.Stored = (sender as Panel).BackColor;
 						using (var ib = new Infobox(Infobox.Title_infor, "Color copied"))
 							ib.ShowDialog(this);
 						break;
@@ -587,7 +587,7 @@ namespace yata
 					case MouseButtons.Left: // paste or recall color
 						if (sender == pa_Color)
 						{
-							if (ColorOptionsDialog.Stored == Color.Empty)
+							if (ColorOptionsEditor.Stored == Color.Empty)
 							{
 								using (var ib = new Infobox(Infobox.Title_error,
 															"A color has not been copied yet.",
@@ -598,7 +598,7 @@ namespace yata
 								}
 								return;
 							}
-							pa_Color.BackColor = ColorOptionsDialog.Stored;
+							pa_Color.BackColor = ColorOptionsEditor.Stored;
 						}
 						else if (sender == pa_Colorpre)
 						{
