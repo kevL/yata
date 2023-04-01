@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -20,7 +19,7 @@ namespace yata
 			_cascade = true;
 
 			InitializeComponent();
-			Initialize(METRIC_FUL, true);
+			Initialize(METRIC_FUL, true, false, true);
 
 			// https://stackoverflow.com/questions/17284573/rich-text-box-bold#answer-17284741
 			// http://www.pindari.com/rtf1.html
@@ -32,7 +31,7 @@ namespace yata
 			sb.Append(@"   \b - COLORFIELD -\b0\line\line ");
 
 			sb.Append(@"[Left]\tab\tab decreases Hue\line ");
-			sb.Append(@"[Right]\tab\tab increases Hue\line ");
+			sb.Append(@"[Right]\tab increases Hue\line ");
 			sb.Append(@"[Up]\tab\tab decreases Saturation\line ");
 			sb.Append(@"[Down]\tab\tab increases Saturation\line ");
 			sb.Append(@"[Home]\tab\tab decreases Hue + decreases Saturation\line ");
@@ -55,7 +54,7 @@ namespace yata
 			sb.Append(@"[PageUp]\tab sets the byte to 255\line ");
 			sb.Append(@"[PageDown]\tab sets the byte to 0\line ");
 			sb.Append(@"[Escape]\line ");
-			sb.Append(@"[Enter]\tab\tab switches focus to the Accept button\line\line ");
+			sb.Append(@"[Enter]\tab switches focus to the Accept button\line\line ");
 
 			sb.Append(@"MouseWheel adjusts an RGB byte.\line ");
 			sb.Append(@"[Shift]+MouseWheel steps the byte by 10.\line\line ");
