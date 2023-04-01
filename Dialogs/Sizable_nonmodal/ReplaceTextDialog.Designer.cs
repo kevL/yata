@@ -88,7 +88,7 @@ namespace yata
 			this.tb_Pretext.Location = new System.Drawing.Point(43, 2);
 			this.tb_Pretext.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Pretext.Name = "tb_Pretext";
-			this.tb_Pretext.Size = new System.Drawing.Size(204, 22);
+			this.tb_Pretext.Size = new System.Drawing.Size(248, 22);
 			this.tb_Pretext.TabIndex = 1;
 			this.tb_Pretext.TextChanged += new System.EventHandler(this.textchanged_Pretext);
 			// 
@@ -110,7 +110,7 @@ namespace yata
 			this.tb_Postext.Location = new System.Drawing.Point(43, 25);
 			this.tb_Postext.Margin = new System.Windows.Forms.Padding(0);
 			this.tb_Postext.Name = "tb_Postext";
-			this.tb_Postext.Size = new System.Drawing.Size(204, 22);
+			this.tb_Postext.Size = new System.Drawing.Size(248, 22);
 			this.tb_Postext.TabIndex = 3;
 			this.tb_Postext.TextChanged += new System.EventHandler(this.textchanged_Postext);
 			// 
@@ -123,7 +123,7 @@ namespace yata
 			this.gb_Match.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Match.Name = "gb_Match";
 			this.gb_Match.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Match.Size = new System.Drawing.Size(106, 79);
+			this.gb_Match.Size = new System.Drawing.Size(118, 79);
 			this.gb_Match.TabIndex = 4;
 			this.gb_Match.TabStop = false;
 			this.gb_Match.Text = " Match ";
@@ -136,7 +136,7 @@ namespace yata
 			this.rb_Subfield.Location = new System.Drawing.Point(9, 15);
 			this.rb_Subfield.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Subfield.Name = "rb_Subfield";
-			this.rb_Subfield.Size = new System.Drawing.Size(92, 20);
+			this.rb_Subfield.Size = new System.Drawing.Size(104, 20);
 			this.rb_Subfield.TabIndex = 0;
 			this.rb_Subfield.Text = "subfield";
 			this.rb_Subfield.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -151,7 +151,7 @@ namespace yata
 			this.rb_Fulfield.Location = new System.Drawing.Point(9, 35);
 			this.rb_Fulfield.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Fulfield.Name = "rb_Fulfield";
-			this.rb_Fulfield.Size = new System.Drawing.Size(92, 20);
+			this.rb_Fulfield.Size = new System.Drawing.Size(104, 20);
 			this.rb_Fulfield.TabIndex = 1;
 			this.rb_Fulfield.TabStop = true;
 			this.rb_Fulfield.Text = "wholefield";
@@ -166,7 +166,7 @@ namespace yata
 			this.cb_Casesen.Location = new System.Drawing.Point(9, 56);
 			this.cb_Casesen.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Casesen.Name = "cb_Casesen";
-			this.cb_Casesen.Size = new System.Drawing.Size(92, 20);
+			this.cb_Casesen.Size = new System.Drawing.Size(104, 20);
 			this.cb_Casesen.TabIndex = 2;
 			this.cb_Casesen.Text = "matchcase";
 			this.cb_Casesen.UseVisualStyleBackColor = true;
@@ -176,11 +176,11 @@ namespace yata
 			// 
 			this.gb_Dir.Controls.Add(this.rb_U);
 			this.gb_Dir.Controls.Add(this.rb_D);
-			this.gb_Dir.Location = new System.Drawing.Point(106, 50);
+			this.gb_Dir.Location = new System.Drawing.Point(118, 50);
 			this.gb_Dir.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Dir.Name = "gb_Dir";
 			this.gb_Dir.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Dir.Size = new System.Drawing.Size(49, 59);
+			this.gb_Dir.Size = new System.Drawing.Size(50, 59);
 			this.gb_Dir.TabIndex = 5;
 			this.gb_Dir.TabStop = false;
 			this.gb_Dir.Text = " Dir ";
@@ -194,7 +194,7 @@ namespace yata
 			this.rb_U.Location = new System.Drawing.Point(9, 15);
 			this.rb_U.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_U.Name = "rb_U";
-			this.rb_U.Size = new System.Drawing.Size(35, 20);
+			this.rb_U.Size = new System.Drawing.Size(36, 20);
 			this.rb_U.TabIndex = 0;
 			this.rb_U.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.rb_U.UseVisualStyleBackColor = true;
@@ -210,7 +210,7 @@ namespace yata
 			this.rb_D.Location = new System.Drawing.Point(9, 35);
 			this.rb_D.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_D.Name = "rb_D";
-			this.rb_D.Size = new System.Drawing.Size(35, 20);
+			this.rb_D.Size = new System.Drawing.Size(36, 20);
 			this.rb_D.TabIndex = 1;
 			this.rb_D.TabStop = true;
 			this.rb_D.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -225,11 +225,11 @@ namespace yata
 			this.gb_Start.Controls.Add(this.rb_Sel);
 			this.gb_Start.Controls.Add(this.rb_Bot);
 			this.gb_Start.Controls.Add(this.cb_Autstep);
-			this.gb_Start.Location = new System.Drawing.Point(155, 50);
+			this.gb_Start.Location = new System.Drawing.Point(168, 50);
 			this.gb_Start.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Start.Name = "gb_Start";
 			this.gb_Start.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Start.Size = new System.Drawing.Size(93, 99);
+			this.gb_Start.Size = new System.Drawing.Size(124, 99);
 			this.gb_Start.TabIndex = 6;
 			this.gb_Start.TabStop = false;
 			this.gb_Start.Text = " Start ";
@@ -241,7 +241,7 @@ namespace yata
 			this.rb_Top.Location = new System.Drawing.Point(9, 15);
 			this.rb_Top.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Top.Name = "rb_Top";
-			this.rb_Top.Size = new System.Drawing.Size(79, 20);
+			this.rb_Top.Size = new System.Drawing.Size(110, 20);
 			this.rb_Top.TabIndex = 0;
 			this.rb_Top.Text = "top";
 			this.rb_Top.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -256,7 +256,7 @@ namespace yata
 			this.rb_Sel.Location = new System.Drawing.Point(9, 35);
 			this.rb_Sel.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Sel.Name = "rb_Sel";
-			this.rb_Sel.Size = new System.Drawing.Size(79, 20);
+			this.rb_Sel.Size = new System.Drawing.Size(110, 20);
 			this.rb_Sel.TabIndex = 1;
 			this.rb_Sel.TabStop = true;
 			this.rb_Sel.Text = "selected";
@@ -271,7 +271,7 @@ namespace yata
 			this.rb_Bot.Location = new System.Drawing.Point(9, 55);
 			this.rb_Bot.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_Bot.Name = "rb_Bot";
-			this.rb_Bot.Size = new System.Drawing.Size(79, 20);
+			this.rb_Bot.Size = new System.Drawing.Size(110, 20);
 			this.rb_Bot.TabIndex = 2;
 			this.rb_Bot.Text = "bottom";
 			this.rb_Bot.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -285,7 +285,7 @@ namespace yata
 			this.cb_Autstep.Location = new System.Drawing.Point(9, 76);
 			this.cb_Autstep.Margin = new System.Windows.Forms.Padding(0);
 			this.cb_Autstep.Name = "cb_Autstep";
-			this.cb_Autstep.Size = new System.Drawing.Size(79, 20);
+			this.cb_Autstep.Size = new System.Drawing.Size(110, 20);
 			this.cb_Autstep.TabIndex = 3;
 			this.cb_Autstep.Text = "autostep";
 			this.cb_Autstep.UseVisualStyleBackColor = true;
@@ -323,7 +323,7 @@ namespace yata
 			this.bu_Cancel.Location = new System.Drawing.Point(166, 152);
 			this.bu_Cancel.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Cancel.Name = "bu_Cancel";
-			this.bu_Cancel.Size = new System.Drawing.Size(79, 25);
+			this.bu_Cancel.Size = new System.Drawing.Size(123, 25);
 			this.bu_Cancel.TabIndex = 9;
 			this.bu_Cancel.Text = "Cancel";
 			this.bu_Cancel.UseVisualStyleBackColor = true;
@@ -340,7 +340,7 @@ namespace yata
 			this.gb_Replall.Margin = new System.Windows.Forms.Padding(0);
 			this.gb_Replall.Name = "gb_Replall";
 			this.gb_Replall.Padding = new System.Windows.Forms.Padding(0);
-			this.gb_Replall.Size = new System.Drawing.Size(248, 68);
+			this.gb_Replall.Size = new System.Drawing.Size(292, 68);
 			this.gb_Replall.TabIndex = 10;
 			this.gb_Replall.TabStop = false;
 			this.gb_Replall.Text = " Replace all ";
@@ -364,7 +364,7 @@ namespace yata
 			this.bu_ClearReplaced.Location = new System.Drawing.Point(126, 11);
 			this.bu_ClearReplaced.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_ClearReplaced.Name = "bu_ClearReplaced";
-			this.bu_ClearReplaced.Size = new System.Drawing.Size(117, 25);
+			this.bu_ClearReplaced.Size = new System.Drawing.Size(161, 25);
 			this.bu_ClearReplaced.TabIndex = 1;
 			this.bu_ClearReplaced.Text = "Clear replaced";
 			this.bu_ClearReplaced.UseVisualStyleBackColor = true;
@@ -390,7 +390,7 @@ namespace yata
 			this.bu_GotoReplaced.Location = new System.Drawing.Point(126, 38);
 			this.bu_GotoReplaced.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_GotoReplaced.Name = "bu_GotoReplaced";
-			this.bu_GotoReplaced.Size = new System.Drawing.Size(117, 25);
+			this.bu_GotoReplaced.Size = new System.Drawing.Size(161, 25);
 			this.bu_GotoReplaced.TabIndex = 3;
 			this.bu_GotoReplaced.Text = "Goto next";
 			this.bu_GotoReplaced.UseVisualStyleBackColor = true;
@@ -400,7 +400,7 @@ namespace yata
 			// 
 			this.AcceptButton = this.bu_Search;
 			this.CancelButton = this.bu_Cancel;
-			this.ClientSize = new System.Drawing.Size(248, 248);
+			this.ClientSize = new System.Drawing.Size(292, 248);
 			this.Controls.Add(this.gb_Replall);
 			this.Controls.Add(this.la_Pretext);
 			this.Controls.Add(this.tb_Pretext);
