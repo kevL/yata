@@ -134,9 +134,9 @@
     <Compile Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.Designer.cs">
       <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Sizable_nonmodal\ConfigEditor.cs" />
-    <Compile Include="Dialogs\Sizable_nonmodal\ConfigEditor.Designer.cs">
-      <DependentUpon>ConfigEditor.cs</DependentUpon>
+    <Compile Include="Dialogs\Sizable_nonmodal\OptionsEditor.cs" />
+    <Compile Include="Dialogs\Sizable_nonmodal\OptionsEditor.Designer.cs">
+      <DependentUpon>OptionsEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Sizable\CodePageDialog.cs" />
     <Compile Include="Dialogs\Sizable\CodePageDialog.Designer.cs">
@@ -319,8 +319,8 @@
     <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ReplaceTextDialog.resx">
       <DependentUpon>ReplaceTextDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\ConfigEditor.resx">
-      <DependentUpon>ConfigEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\Sizable_nonmodal\OptionsEditor.resx">
+      <DependentUpon>OptionsEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Sizable\CodePageDialog.resx">
       <DependentUpon>CodePageDialog.cs</DependentUpon>

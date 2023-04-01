@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace yata
 {
-	sealed partial class ConfigEditor
+	sealed partial class OptionsEditor
 		: YataDialog
 	{
 		#region cTor
@@ -16,7 +16,7 @@ namespace yata
 		/// <param name="f">pointer to <c><see cref="Yata"/></c></param>
 		/// <param name="lines">array of <c>strings</c> in user's current
 		/// settings file</param>
-		internal ConfigEditor(Yata f, string[] lines)
+		internal OptionsEditor(Yata f, string[] lines)
 		{
 			_f = f;
 
@@ -82,7 +82,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Writes the Settings.Cfg file and closes this <c>ConfigEditor</c>.
+		/// Writes the Settings.Cfg file and closes this <c>OptionsEditor</c>.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">

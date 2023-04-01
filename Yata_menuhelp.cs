@@ -10,9 +10,9 @@ namespace yata
 	{
 		#region Fields
 		/// <summary>
-		/// The <c><see cref="ConfigEditor"/></c> editor for Settings.Cfg.
+		/// The <c><see cref="OptionsEditor"/></c> editor for Settings.Cfg.
 		/// </summary>
-		ConfigEditor _foptions;
+		OptionsEditor _foptions;
 
 		/// <summary>
 		/// The <c><see cref="ColorOptionsDialog"/></c> editor for Colors.Cfg.
@@ -65,7 +65,7 @@ namespace yata
 
 
 		/// <summary>
-		/// Handles it-click to open the <c><see cref="ConfigEditor"/></c>.
+		/// Handles it-click to open the <c><see cref="OptionsEditor"/></c>.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Options"/></c></param>
 		/// <param name="e"></param>
@@ -123,13 +123,13 @@ namespace yata
 					{
 						string[] lines = File.ReadAllLines(pfe);
 
-						_foptions = new ConfigEditor(this, lines);
+						_foptions = new OptionsEditor(this, lines);
 						it_Options.Checked = true;
 					}
 					catch (Exception ex)
 					{
 						// the stock MessageBox 'shall' be used if an exception is going to cause a CTD:
-						// eg. a stock Font was disposed but the ConfigEditor needs it during its
+						// eg. a stock Font was disposed but the OptionsEditor needs it during its
 						// initialization ... The app can't show a Yata-dialog in such a case; but the
 						// stock MessageBox will pop up then ... CTD.
 
@@ -191,7 +191,7 @@ namespace yata
 		/// <summary>
 		/// Clears the check on <c><see cref="it_Options"/></c> and nulls
 		/// <c><see cref="_foptions"/></c> when the
-		/// <c><see cref="ConfigEditor"/></c> closes.
+		/// <c><see cref="OptionsEditor"/></c> closes.
 		/// </summary>
 		internal void CloseOptionsEditor()
 		{

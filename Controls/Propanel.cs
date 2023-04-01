@@ -148,7 +148,7 @@ namespace yata
 			{
 //				Font.Dispose(); // be wary. Be very wary. -> Do NOT Dispose()
 				// debug builds don't throw
-				// but release builds CTD when invoking the ConfigEditor after
+				// but release builds CTD when invoking the OptionsEditor after
 				// the Propanel has been opened ... eg.
 
 				Font = Options._font3;
