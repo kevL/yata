@@ -39,9 +39,9 @@ namespace yata
 		/// A <c>List</c> of <c>TextBoxBases</c> that shall be initialized w/
 		/// consistent values and behaviors.
 		/// </summary>
-		/// <remarks><c>_tbbs</c> is populated by
+		/// <remarks><c>_bases</c> is populated by
 		/// <c><see cref="Initialize()">Initialize()</see></c> and can be empty.</remarks>
-		internal IList<TextBoxBase> _tbbs = new List<TextBoxBase>();
+		internal IList<TextBoxBase> _bases = new List<TextBoxBase>();
 
 		/// <summary>
 		/// The type of telemetry that this <c>YataDialog</c> respects.
@@ -174,20 +174,20 @@ namespace yata
 				}
 
 				RichTextBox rt;
-				foreach (var tbb in _tbbs)
+				foreach (var @base in _bases)
 				{
-					if ((rt = tbb as RichTextBox) != null)	// is RichTextBox ->
+					if ((rt = @base as RichTextBox) != null)	// is RichTextBox ->
 					{
 						rt.AutoWordSelection = false; // <- needs to be here not in the designer or cTor to work right.
 					}
 					else									// is TextBox ->
 					{
-						tbb.SelectionStart = 0;
+						@base.SelectionStart = 0;
 						
-						if (tbb.Multiline)
-							tbb.SelectionLength = 0;
+						if (@base.Multiline)
+							@base.SelectionLength = 0;
 						else
-							tbb.SelectionLength = tbb.Text.Length;
+							@base.SelectionLength = @base.Text.Length;
 					}
 				}
 			}
@@ -246,40 +246,88 @@ namespace yata
 		/// <item><c><see cref="METRIC_LOC"/></c> - store location</item>
 		/// <item><c><see cref="METRIC_FUL"/></c> - store location and size</item>
 		/// </list></param>
-		/// <param name="bypassColor"><c>true</c> to bypass setting the
+		/// <param name="bypassTextboxColor"><c>true</c> to bypass setting the
 		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
-		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
-		/// <c>Font</c></param>
-		protected void Initialize(int metric, bool bypassColor = false, bool bypassFont = false)
+		/// <param name="bypassDialogFont"><c>true</c> to bypass setting the
+		/// dialog's <c>Font</c></param>
+		/// <param name="bypassTextboxFont"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>Font</c></param>
+		protected void Initialize(int metric,
+								  bool bypassTextboxColor = false,
+								  bool bypassDialogFont = false,
+								  bool bypassTextboxFont = false)
 		{
 			if ((Metric = metric) == METRIC_FUL && _w != -1)
 				ClientSize = new Size(_w,_h); // foff .net
 
 			PopulateTextboxbaseList(this);
-			Options.SetFonts(this, bypassColor, bypassFont);
+			SetFonts(bypassTextboxColor, bypassDialogFont, bypassTextboxFont);
 		}
 
 		/// <summary>
 		/// Recursive funct that adds all <c>TextBoxBases</c> in a specified
-		/// <c>Control</c> to <c><see cref="_tbbs"/></c>.
+		/// <c>Control</c> to <c><see cref="_bases"/></c>.
 		/// </summary>
 		/// <param name="f">a <c>Control</c> to investigate</param>
 		/// <returns>a <c>List</c> of <c>TextBoxBases</c></returns>
 		void PopulateTextboxbaseList(Control f)
 		{
-			TextBoxBase tbb;
+			TextBoxBase @base;
 			foreach (Control control in f.Controls)
 			{
-				if ((tbb = control as TextBoxBase) != null)
+				if ((@base = control as TextBoxBase) != null)
 				{
-					_tbbs.Add(tbb);
-					SetTabs(tbb);
+					_bases.Add(@base);
+					SetTabs(@base);
 				}
 				else
 					PopulateTextboxbaseList(control);
 			}
 		}
 		#endregion Methods
+
+
+		/// <summary>
+		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
+		/// </summary>
+		/// <param name="bypassTextboxColor"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
+		/// <param name="bypassDialogFont"><c>true</c> to bypass setting the
+		/// dialog's <c>Font</c></param>
+		/// <param name="bypassTextboxFont"><c>true</c> to bypass setting the
+		/// <c>TextBoxBases'</c> <c>Font</c></param>
+		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
+		/// <c>TextBoxBases</c> ARE INSTANTIATED in the Designer - this funct
+		/// will <c>Dispose()</c> those <c>Fonts</c>. If a <c>TextBoxBase</c>
+		/// happens to use the .net default <c>Font</c> it will get disposed and
+		/// then the app is borked since the .net default <c>Font</c> will no
+		/// longer be available at all.</remarks>
+		void SetFonts(bool bypassTextboxColor,
+					  bool bypassDialogFont,
+					  bool bypassTextboxFont)
+		{
+			if (!bypassDialogFont)
+			{
+				if (Options._font2dialog != null)
+					Font = Options._font2dialog;
+				else
+					Font = Options._fontdialog;
+			}
+
+			foreach (TextBoxBase @base in _bases)
+			{
+				if (!bypassTextboxFont && Options._fontf != null)
+				{
+					@base.Font.Dispose();
+
+					if (@base is RichTextBox) @base.Font = Options._fontf;
+					else                      @base.Font = Options._fontf_tb; // is TextBox
+				}
+
+				if (!bypassTextboxColor)
+					@base.BackColor = Colors.TextboxBackground;
+			}
+		}
 
 
 		#region PInvoke

@@ -386,46 +386,6 @@ namespace yata
 			}
 			return fontdialog;
 		}
-
-
-		/// <summary>
-		/// Sets <c>Fonts</c> for a <c><see cref="YataDialog"/></c>.
-		/// </summary>
-		/// <param name="f">a <c><see cref="YataDialog"/></c></param>
-		/// <param name="bypassColor"><c>true</c> to bypass setting the
-		/// <c>TextBoxBases'</c> <c>BackColors</c> to the Yata-default</param>
-		/// <param name="bypassFont"><c>true</c> to bypass setting the dialog's
-		/// <c>Font</c></param>
-		/// <remarks>IMPORTANT: Make sure that the <c>Font</c> for any
-		/// <c>TextBoxBases</c> ARE INSTANTIATED in the Designer - this funct
-		/// will <c>Dispose()</c> those <c>Fonts</c>. If a <c>TextBoxBase</c>
-		/// happens to use the .net default <c>Font</c> it will get disposed and
-		/// then the app is borked since the .net default <c>Font</c> will no
-		/// longer be available at all.</remarks>
-		internal static void SetFonts(YataDialog f, bool bypassColor, bool bypassFont)
-		{
-			if (!bypassFont)
-			{
-				if (_font2dialog != null)
-					f.Font = _font2dialog;
-				else
-					f.Font = _fontdialog;
-			}
-
-			foreach (var tbb in f._tbbs)
-			{
-				if (_fontf != null)
-				{
-					tbb.Font.Dispose();
-
-					if (tbb is RichTextBox) tbb.Font = _fontf;
-					else                    tbb.Font = _fontf_tb; // is TextBox
-				}
-
-				if (!bypassColor)
-					tbb.BackColor = Colors.TextboxBackground;
-			}
-		}
 		#endregion Methods (static)
 
 
