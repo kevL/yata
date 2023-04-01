@@ -4,7 +4,7 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 march 30
+2023 april 1
 kevL's
 ver 5.5.0.0
 
@@ -670,7 +670,7 @@ delete file      - deletes the Colors.Cfg file (colors will revert to their
 reload file      - reloads the Colors.Cfg file
 restore defaults - restores all colors to their hardcoded default values (this
                    does not affect the Colors.Cfg file itself)
-SAVE FILE        - creates or overwrites the Colors.Cfg file with the currently
+SAVE FILE/close  - creates or overwrites the Colors.Cfg file with the currently
                    displayed colors and closes the dialog; [Ctrl]+click keeps
                    the dialog open for further edits
 Esc              - exits the dialog
@@ -681,6 +681,12 @@ IMPORTANT: Since Yata uses many colors for things like selected, replaced, and
 loadchanged cells, as well as selected and created rows, various texts, etc etc
 etc, be a bit wary when changing colors away from their default value. Desired
 changes to colors could hide visual cues that Yata wants to inform you about.
+
+The Color Selector dialog has a dropdown that lists your operating system
+colors but Yata does not store exact references to those colors; instead they
+will be converted to RGB values in Colors.Cfg. Therefore changing such a color
+in your operating system does not actually change the color in Yata - it would
+need to be reselected and reapplied with the Color Selector.
 
 If the Colors.Cfg file does not exist Yata should run okay with its default
 colors.
