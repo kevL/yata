@@ -177,7 +177,7 @@ namespace yata
 		internal static Color _rowcreated_t      = Def_rowcreated_t;
 
 		// Frozen ->
-		internal static Pen   _frozenlines       = new Pen(Def_frozenlines);			// default colors for the frozenpanel ->
+		internal static Pen   _frozenlines       = new Pen(Def_frozenlines);
 		internal static Color _frozen            = Def_frozen;
 		internal static Color _frozen_t          = Def_frozen_t;
 		internal static Pen   _frozenheadlines   = new Pen(Def_frozenheadlines);
@@ -191,7 +191,7 @@ namespace yata
 		internal static Color _frozenidgradb     = Def_frozenidgradb;
 
 		// Colhead ->
-		internal static Pen   _colheadlines      = new Pen(Def_colheadlines);			// default colors for the colhead ->
+		internal static Pen   _colheadlines      = new Pen(Def_colheadlines);
 		internal static Color _colhead           = Def_colhead;
 		internal static Color _colhead_t         = Def_colhead_t;
 		internal static Color _colheadsel_t      = Def_colheadsel_t;
@@ -202,7 +202,7 @@ namespace yata
 		internal static Color _colheadgradb      = Def_colheadgradb;
 
 		// Rowpanel ->
-		internal static Pen   _rowpanellines     = new Pen(Def_rowpanellines);			// default colors for the rowpanel ->
+		internal static Pen   _rowpanellines     = new Pen(Def_rowpanellines);
 		internal static Color _rowpanel          = Def_rowpanel;
 		internal static Color _rowpanel_t        = Def_rowpanel_t;
 		internal static Brush _rowsel            = new SolidBrush(Def_rowsel);
@@ -211,7 +211,7 @@ namespace yata
 		internal static Color _rowsubsel_t       = Def_rowsubsel_t;
 
 		// Propanel ->
-		internal static Pen   _propanellines     = new Pen(Def_propanellines);			// default colors for the propanel ->
+		internal static Pen   _propanellines     = new Pen(Def_propanellines);
 		internal static Pen   _propanelborder    = new Pen(Def_propanelborder);
 		internal static Color _propanel          = Def_propanel;
 		internal static Color _propanel_t        = Def_propanel_t;
@@ -221,7 +221,7 @@ namespace yata
 		internal static Color _propanelsel_t     = Def_propanelsel_t;
 
 		// Cells ->
-		internal static Brush _cellselected      = new SolidBrush(Def_cellselected);	// default colors for special cells ->
+		internal static Brush _cellselected      = new SolidBrush(Def_cellselected);
 		internal static Color _cellselected_t    = Def_cellselected_t;
 		internal static Brush _cellloadchanged   = new SolidBrush(Def_cellloadchanged);
 		internal static Color _cellloadchanged_t = Def_cellloadchanged_t;
@@ -233,7 +233,7 @@ namespace yata
 		internal static Color _celledit_t        = Def_celledit_t;
 
 		// Statusbar ->
-		internal static Brush _statusbar         = new SolidBrush(Def_statusbar);		// default colors for the statusbar ->
+		internal static Brush _statusbar         = new SolidBrush(Def_statusbar);
 		internal static Color _statusbar_t       = Def_statusbar_t;
 
 
