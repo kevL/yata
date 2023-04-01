@@ -68,7 +68,7 @@ namespace yata
 			// bu_Save
 			// 
 			this.bu_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Save.Location = new System.Drawing.Point(336, 5);
+			this.bu_Save.Location = new System.Drawing.Point(316, 5);
 			this.bu_Save.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Save.Name = "bu_Save";
 			this.bu_Save.Size = new System.Drawing.Size(80, 26);
@@ -80,10 +80,10 @@ namespace yata
 			// bu_Okay
 			// 
 			this.bu_Okay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.bu_Okay.Location = new System.Drawing.Point(421, 5);
+			this.bu_Okay.Location = new System.Drawing.Point(401, 5);
 			this.bu_Okay.Margin = new System.Windows.Forms.Padding(0);
 			this.bu_Okay.Name = "bu_Okay";
-			this.bu_Okay.Size = new System.Drawing.Size(80, 26);
+			this.bu_Okay.Size = new System.Drawing.Size(100, 26);
 			this.bu_Okay.TabIndex = 2;
 			this.bu_Okay.Text = "Save/close";
 			this.bu_Okay.UseVisualStyleBackColor = true;
