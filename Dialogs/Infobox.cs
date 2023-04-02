@@ -37,7 +37,7 @@ namespace yata
 		/// <summary>
 		/// Alert
 		/// </summary>
-		/// <remarks>For save routines only.</remarks>
+		/// <remarks>For save file routines and file delete requests only.</remarks>
 		internal const string Title_alert = " Alert";
 		/// <summary>
 		/// a miracle occurred

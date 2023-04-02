@@ -669,20 +669,30 @@ namespace yata
 			string pfe = Path.Combine(Application.StartupPath, ColorOptions.FE);
 			if (File.Exists(pfe))
 			{
-				try
+				using (var ib0 = new Infobox(Infobox.Title_alert,
+											 "Are you sure you want to delete the Colors.Cfg file ...",
+											 null,
+											 InfoboxType.Warn,
+											 InfoboxButtons.CancelYes))
 				{
-					File.Delete(pfe);
-					using (var ib = new Infobox(Infobox.Title_infor, "Colors.Cfg deleted"))
-						ib.ShowDialog(this);
-				}
-				catch (Exception ex)
-				{
-					using (var ib = new Infobox(Infobox.Title_excep,
-												"Colors.Cfg file could not be deleted from the application directory.",
-												ex.ToString(),
-												InfoboxType.Error))
+					if (ib0.ShowDialog(this) == DialogResult.OK)
 					{
-						ib.ShowDialog(this);
+						try
+						{
+							File.Delete(pfe);
+							using (var ib = new Infobox(Infobox.Title_infor, "Colors.Cfg deleted"))
+								ib.ShowDialog(this);
+						}
+						catch (Exception ex)
+						{
+							using (var ib = new Infobox(Infobox.Title_excep,
+														"Colors.Cfg file could not be deleted from the application directory.",
+														ex.ToString(),
+														InfoboxType.Error))
+							{
+								ib.ShowDialog(this);
+							}
+						}
 					}
 				}
 			}
