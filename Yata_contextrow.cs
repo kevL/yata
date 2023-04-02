@@ -68,6 +68,9 @@ namespace yata
 		{
 			ClipboardService.SetText(_r.ToString(CultureInfo.InvariantCulture));
 			_contextRo.Hide();
+
+			if (_fclip != null)
+				_fclip.click_Get(sender, e);
 		}
 
 		/// <summary>

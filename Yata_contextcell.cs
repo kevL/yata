@@ -685,6 +685,9 @@ namespace yata
 		void cellclick_Copyrowid(object sender, EventArgs e)
 		{
 			ClipboardService.SetText(Table.Rows[_sel.y]._cells[0].text);
+
+			if (_fclip != null)
+				_fclip.click_Get(sender, e);
 		}
 
 

@@ -118,6 +118,8 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="bu_Get"/></c></item>
 		/// <item><c><see cref="Yata"/>.it_ClipExport</c></item>
+		/// <item><c><see cref="Yata"/>.rowit_Header</c></item>
+		/// <item><c><see cref="Yata"/>.cellit_Copyrowid</c></item>
 		/// <item><c>null</c></item>
 		/// </list></param>
 		/// <param name="e"></param>
@@ -125,7 +127,9 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>Get button</item>
 		/// <item><c><see cref="Yata"/>.clipclick_ExportCopy()</c></item>
-		/// <item><c><see cref="Infobox"/>.OnKeyDown()</c></item>
+		/// <item><c><see cref="Yata"/>.rowclick_Header()</c></item>
+		/// <item><c><see cref="Yata"/>.cellclick_Copyrowid()</c></item>
+		/// <item><c><see cref="Infobox"/>.OnKeyUp()</c></item>
 		/// </list></remarks>
 		internal void click_Get(object sender, EventArgs e)
 		{

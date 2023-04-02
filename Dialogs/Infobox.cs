@@ -297,11 +297,8 @@ namespace yata
 			if (e.KeyData == (Keys.Control | Keys.C)
 				&& Yata.that._fclip != null)
 			{
-//				e.SuppressKeyPress = true;
 				Yata.that._fclip.click_Get(null, EventArgs.Empty);
 			}
-//			else
-//				base.OnKeyUp(e);
 		}
 
 
