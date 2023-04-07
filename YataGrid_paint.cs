@@ -83,9 +83,7 @@ namespace yata
 
 					rect.X = leftcell;
 
-					row = Rows[r];
-
-					if (Rows[r]._brush != ColorOptions._rowcreated)
+					if ((row = Rows[r])._brush != ColorOptions._rowcreated)
 					{
 						switch (Info)
 						{
