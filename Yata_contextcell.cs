@@ -1144,6 +1144,8 @@ namespace yata
 		/// file-label into the <c><see cref="Cell.text">Cell.text</see></c> of
 		/// <c><see cref="_sel">_sel</see></c>.
 		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="base"></param>
 		/// <remarks>This is waranteed only for the Zipfiles in the NwN2 /Data
 		/// folder.</remarks>
 		void SelectFile(string title, bool @base = false)
