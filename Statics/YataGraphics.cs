@@ -24,7 +24,7 @@ namespace yata
 		internal static int hFontDefault;
 
 		/// <summary>
-		/// Flags used when measuring texts.
+		/// Flags used when measuring or drawing texts.
 		/// </summary>
 		internal const TextFormatFlags flags = TextFormatFlags.NoPrefix
 											 | TextFormatFlags.NoPadding
