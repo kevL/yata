@@ -97,22 +97,45 @@ namespace yata
 			long locatedEndOfCentralDir = LocateEndOfCentralDirectory(); // not used. advances read-position.
 
 			// read end of central directory record
-			ushort thisDiskNumber            = _file.ReadLEUshort();
+			ushort thisDiskNumber            = _file.ReadLEUshort(); // kL_note: wtf did they mismatch types - are they that stupid.
+			ushort startCentralDirDisk       = _file.ReadLEUshort();
+			ushort entriesForThisDisk        = _file.ReadLEUshort();
+			ushort entriesForWholeCentralDir = _file.ReadLEUshort();
+			uint   centralDirSize            = _file.ReadLEUint();
+			uint   offsetOfCentralDir        = _file.ReadLEUint();
+/*			ushort thisDiskNumber            = _file.ReadLEUshort();
 			ushort startCentralDirDisk       = _file.ReadLEUshort();
 			ulong  entriesForThisDisk        = _file.ReadLEUshort(); //logfile.Log(". entriesForThisDisk= " + entriesForThisDisk);
 			ulong  entriesForWholeCentralDir = _file.ReadLEUshort();
 			ulong  centralDirSize            = _file.ReadLEUint();
-			long   offsetOfCentralDir        = _file.ReadLEUint();
+			long   offsetOfCentralDir        = _file.ReadLEUint(); */
 
 			_entries = new ZipEntry[entriesForThisDisk];
 
-			_file.Seek(OffsetOfFirstEntry + offsetOfCentralDir, SeekOrigin.Begin);
+			_file.Seek(OffsetOfFirstEntry + (long)offsetOfCentralDir, SeekOrigin.Begin);
 
-			for (ulong i = 0; i < entriesForThisDisk; ++i)
+			for (ushort i = 0; i < entriesForThisDisk; ++i)
+//			for (ulong  i = 0; i < entriesForThisDisk; ++i)
 			{
 //				logfile.Log("i= " + i);
 
-				uint centralHeaderSignature = _file.ReadLEUint();	//logfile.Log(". centralHeaderSignature= " + centralHeaderSignature);
+				uint   centralHeaderSignature = _file.ReadLEUint(); // kL_note: wtf did they mismatch types - are they that stupid.
+				ushort versionMadeBy          = _file.ReadLEUshort();
+				ushort versionToExtract       = _file.ReadLEUshort();
+				ushort bitFlags               = _file.ReadLEUshort();
+				ushort method                 = _file.ReadLEUshort();
+				uint   dostime                = _file.ReadLEUint();
+				uint   crc                    = _file.ReadLEUint();
+				uint   csize                  = _file.ReadLEUint();
+				uint   size                   = _file.ReadLEUint();
+				ushort lenLabel               = _file.ReadLEUshort();
+				ushort lenExtra               = _file.ReadLEUshort();
+				ushort lenComment             = _file.ReadLEUshort();
+				ushort diskStartNo            = _file.ReadLEUshort();
+				ushort internalAttributes     = _file.ReadLEUshort();
+				uint   externalAttributes     = _file.ReadLEUint();
+				uint   offset                 = _file.ReadLEUint();
+/*				uint centralHeaderSignature = _file.ReadLEUint();	//logfile.Log(". centralHeaderSignature= " + centralHeaderSignature);
 				int  versionMadeBy          = _file.ReadLEUshort();	//logfile.Log(". versionMadeBy= " + versionMadeBy);
 				int  versionToExtract       = _file.ReadLEUshort();	//logfile.Log(". versionToExtract= " + versionToExtract);
 				int  bitFlags               = _file.ReadLEUshort();	//logfile.Log(". bitFlags= " + bitFlags);
@@ -127,22 +150,25 @@ namespace yata
 				int  diskStartNo            = _file.ReadLEUshort();	//logfile.Log(". diskStartNo= " + diskStartNo);
 				int  internalAttributes     = _file.ReadLEUshort();	//logfile.Log(". internalAttributes= " + internalAttributes);
 				uint externalAttributes     = _file.ReadLEUint();	//logfile.Log(". externalAttributes= " + externalAttributes);
-				long offset                 = _file.ReadLEUint();	//logfile.Log(". offset= " + offset);
+				long offset                 = _file.ReadLEUint();	//logfile.Log(". offset= " + offset); */
 
 				var buffer = new byte[Math.Max(lenLabel, lenComment)];
-				ReadFully(_file, buffer, 0, lenLabel);
-				string label = enc.GetString(buffer, 0, lenLabel);
+				ReadFully(_file, buffer, 0, (int)lenLabel);
+				string label = enc.GetString(buffer, 0, (int)lenLabel);
 
 				var entry = new ZipEntry(label, (Method)method)
 				{
-//					Crc                    = crc   & 0xffffffffL,
-//					Size                   = size  & 0xffffffffL,
+/*					Crc                    = crc   & 0xffffffffL,
+					Size                   = size  & 0xffffffffL,
 					CompressedSize         = csize & 0xffffffffL,
-//					Flags                  = bitFlags,
-//					DosTime                = dostime,
-//					Id                     = (long)i,
+					Flags                  = bitFlags,
+					DosTime                = dostime,
+					Id                     = (long)i,
 					Offset                 = offset,
-//					ExternalFileAttributes = (int)externalAttributes
+					ExternalFileAttributes = (int)externalAttributes */
+
+					CompressedSize = (long)csize,
+					Offset         = (long)offset,
 				};
 				_entries[i] = entry;
 			}
@@ -156,7 +182,7 @@ namespace yata
 		/// else -1</returns>
 		long LocateEndOfCentralDirectory()
 		{
-			long pos = _file.Length - ZipConstants.EndOfCentralRecordBaseSize;
+			long pos = _file.Length - (long)ZipConstants.EndOfCentralRecordBaseSize;
 			if (pos >= 0)
 			{
 				long giveUpMarker = Math.Max(0, pos - 0xffff);
@@ -172,7 +198,7 @@ namespace yata
 
 				return _file.Position;
 			}
-			return -1;
+			return (long)-1;
 		}
 
 
@@ -252,7 +278,18 @@ namespace yata
 			{
 				_file.Seek(OffsetOfFirstEntry + entry.Offset, SeekOrigin.Begin);
 
-				int   signature         =      (int)_file.ReadLEUint();
+				uint   signature         =     (uint)_file.ReadLEUint(); // kL_note: wtf did they mismatch types - are they that stupid.
+				ushort extractVersion    =  (ushort)(_file.ReadLEUshort() & 0x00ff);
+				var    localFlags        = (Bitflags)_file.ReadLEUshort();
+				var    compressionMethod =   (Method)_file.ReadLEUshort();
+				ushort fileTime          =   (ushort)_file.ReadLEUshort();
+				ushort fileDate          =   (ushort)_file.ReadLEUshort();
+				uint   crcValue          =           _file.ReadLEUint();
+				uint   compressedSize    =     (uint)_file.ReadLEUint();
+				uint   size              =     (uint)_file.ReadLEUint();
+				ushort storedNameLength  =   (ushort)_file.ReadLEUshort();
+				ushort extraDataLength   =   (ushort)_file.ReadLEUshort();
+/*				int   signature         =      (int)_file.ReadLEUint();
 				short extractVersion    =   (short)(_file.ReadLEUshort() & 0x00ff);
 				var   localFlags        = (Bitflags)_file.ReadLEUshort();
 				var   compressionMethod =   (Method)_file.ReadLEUshort();
@@ -262,13 +299,13 @@ namespace yata
 				long  compressedSize    =     (long)_file.ReadLEUint();
 				long  size              =     (long)_file.ReadLEUint();
 				int   storedNameLength  =      (int)_file.ReadLEUshort();
-				int   extraDataLength   =      (int)_file.ReadLEUshort();
+				int   extraDataLength   =      (int)_file.ReadLEUshort(); */
 
 				return OffsetOfFirstEntry
 					 + entry.Offset
-					 + ZipConstants.LocalHeaderBaseSize
-					 + storedNameLength
-					 + extraDataLength;
+					 + (long)ZipConstants.LocalHeaderBaseSize
+					 + (long)storedNameLength
+					 + (long)extraDataLength;
 			}
 		}
 		#endregion Methods
