@@ -153,7 +153,7 @@ namespace yata
 				}
 				client_w += pa_Copyable.Padding.Horizontal + widthScroller;
 
-				client_h = rt_Copyable.Font.Height + 1;
+				client_h = rt_Copyable.Font.Height + 2;
 				pa_Copyable.Height = client_h * (lines.Length + 1)
 								   + pa_Copyable.Padding.Vertical;
 
