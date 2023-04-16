@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 april 7
+2023 april 16
 kevL's
-ver 5.5.3.0
+ver 5.5.3.1
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -574,7 +574,7 @@ recent=      (integer) a count of recently opened file-paths to store. If left
 strict=      "true" (without quotes) to show extra warnings when loading a
              2da-file (default false). Strict is intended for users who want to
              notice stuff that is by and large safe to disregard:
-             (1) warn about the existance of tab-characters if "alignoutput=" is
+             (1) warn about the existence of tab-characters if "alignoutput=" is
                  not set to "tabs". Note that tabs are generally safe for NwN2
                  but perhaps not for NwN ... there is at least one app for NwN2
                  that fails if tabs delimit the colhead labels (the Players
@@ -628,7 +628,8 @@ To bypass a setting without deleting it, prefix its line with any character you
 want. The parser considers only lines that begin with the string-variables
 above; any line that doesn't begin exactly with one of those strings is ignored.
 
-The order of the settings in the file is arbitrary.
+The order of the settings in the file is rather arbitrary - if a setting is
+duplicated the later entry has priority.
 
 If the Settings.Cfg file does not exist Yata should run okay with its default
 settings.
