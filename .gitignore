@@ -4,5 +4,8 @@ dist/
 obj/
 t/
 
+# GIMP file for 'yata_icon.ico'
+icon/yata_icon.xcf
+
 # batchfile helper
 copyout.bat
