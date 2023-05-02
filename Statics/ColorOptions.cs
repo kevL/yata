@@ -37,10 +37,10 @@ namespace yata
 		internal const string CFG_frozenhead_t      = "frozenhead_t=";
 		internal const string CFG_frozenidunsort    = "frozenidunsort=";
 		internal const string CFG_frozenidunsort_t  = "frozenidunsort_t=";
-		internal const string CFG_frozenheadgrada   = "frozenheadgrada";
-		internal const string CFG_frozenheadgradb   = "frozenheadgradb";
-		internal const string CFG_frozenidgrada     = "frozenidgrada";
-		internal const string CFG_frozenidgradb     = "frozenidgradb";
+		internal const string CFG_frozenheadgrada   = "frozenheadgrada=";
+		internal const string CFG_frozenheadgradb   = "frozenheadgradb=";
+		internal const string CFG_frozenidgrada     = "frozenidgrada=";
+		internal const string CFG_frozenidgradb     = "frozenidgradb=";
 
 		// Colhead ->
 		internal const string CFG_colheadlines      = "colheadlines=";
@@ -50,8 +50,8 @@ namespace yata
 		internal const string CFG_colheadsize_t     = "colheadsize_t=";
 		internal const string CFG_headsortasc_t     = "headsortasc_t=";
 		internal const string CFG_headsortdes_t     = "headsortdes_t=";
-		internal const string CFG_colheadgrada      = "colheadgrada";
-		internal const string CFG_colheadgradb      = "colheadgradb";
+		internal const string CFG_colheadgrada      = "colheadgrada=";
+		internal const string CFG_colheadgradb      = "colheadgradb=";
 
 		// Rowpanel ->
 		internal const string CFG_rowpanellines     = "rowpanellines=";
