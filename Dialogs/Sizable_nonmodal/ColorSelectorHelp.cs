@@ -108,11 +108,13 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Fixes a glitch with <c>RichTextBox</c> by clearing and resetting the
-		/// <c>ScrollBars</c>. The vertical scrollbar doesn't setup properly
-		/// when lessening the height of the <c>RichTextBox</c>.
+		/// Clears and resets the <c>ScrollBars</c> type for
+		/// <c><see cref="rt_Help"/></c> when this
+		/// <c><see cref="YataDialog"/></c> is resized.
 		/// </summary>
 		/// <param name="e"></param>
+		/// <remarks>This fixes a glitch or two with <c>RichTextBox</c> by
+		/// clearing and resetting the <c>ScrollBars</c>.</remarks>
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
