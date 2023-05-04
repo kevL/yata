@@ -30,11 +30,25 @@ namespace yata
 			_f = f;
 
 			InitializeComponent();
-			Initialize(METRIC_FUL);
+			Initialize(METRIC_LOC);
 
 			InitializeColorLabels();
 			InitializeColorPanels();
+
+			pa_text1.Width = YataGraphics.MeasureWidth(la_44.Text, Font) + 17;
+			pa_text2.Width = YataGraphics.MeasureWidth(la_38.Text, Font) + 17;
+
+			pa_text1 .Left = 5;
+			pa_color1.Left = pa_text1 .Right;
+			pa_text2 .Left = pa_color1.Right + 14;
+			pa_color2.Left = pa_text2 .Right;
+
+			ClientSize = new Size(pa_color2.Right + 7, ClientSize.Height);
 			_init = false;
+
+			const string text = "[Shift]+RMB - restore default color";
+			la_Help.Width = YataGraphics.MeasureWidth(text, Font) + 20;
+			la_Help.Left  = gb_Colors.Width - la_Help.Width - 7;
 
 			bu_Save.Select();
 			Show(_f); // Yata is owner.
@@ -190,6 +204,21 @@ namespace yata
 		{
 			(_f as Yata).CloseColorOptions();
 			base.OnFormClosing(e);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			if (!_init)
+			{
+				la_Help.Visible = la_Help.Top  > pa_color2.Bottom
+							   && la_Help.Left > pa_color1.Right;
+			}
 		}
 		#endregion Handlers (override)
 
