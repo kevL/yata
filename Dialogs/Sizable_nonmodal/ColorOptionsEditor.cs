@@ -11,7 +11,16 @@ namespace yata
 		: YataDialog
 	{
 		#region Fields (static)
+		/// <summary>
+		/// Cache for the user to store a color.
+		/// </summary>
 		internal static Color Stored = Color.Empty;
+
+		/// <summary>
+		/// The longest help-string in <c><see cref="la_Help"/></c>.
+		/// </summary>
+		/// <remarks>Used to set the width of <c>la_Help</c>.</remarks>
+		const string HELP = "[Shift]+RMB - restore default color";
 		#endregion Fields (static)
 
 
@@ -46,8 +55,7 @@ namespace yata
 			ClientSize = new Size(pa_color2.Right + 7, ClientSize.Height);
 			_init = false;
 
-			const string text = "[Shift]+RMB - restore default color";
-			la_Help.Width = YataGraphics.MeasureWidth(text, Font) + 20;
+			la_Help.Width = YataGraphics.MeasureWidth(HELP, Font) + 20;
 			la_Help.Left  = gb_Colors.Width - la_Help.Width - 7;
 
 			bu_Save.Select();
@@ -207,14 +215,14 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Overrides the <c>Resize</c> eventhandler.
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
 
-			if (!_init)
+			if (!_init) // that appears to be needed else the help-label is !Visible
 			{
 				la_Help.Visible = la_Help.Top  > pa_color2.Bottom
 							   && la_Help.Left > pa_color1.Right;
