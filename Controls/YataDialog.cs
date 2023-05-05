@@ -59,7 +59,9 @@ namespace yata
 		/// <c>true</c> to instantiate this <c>YataDialog</c> in a
 		/// cascade location.
 		/// </summary>
-		protected bool _cascade;
+		bool _cascade;
+		protected void SetCascade()
+		{ _cascade = true; }
 		#endregion Fields
 
 

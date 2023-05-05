@@ -16,7 +16,7 @@ namespace yata
 		internal ColorSelectorHelp(ColorSelectorDialog f)
 		{
 			_f = f;
-			_cascade = true;
+			SetCascade();
 
 			InitializeComponent();
 			Initialize(METRIC_FUL, true, false, true);
