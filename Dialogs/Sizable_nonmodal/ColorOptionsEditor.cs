@@ -408,7 +408,7 @@ namespace yata
 
 					if (Options._gradient && Yata.Table != null)
 					{
-						Yata.Table.UpdateFrozenLabelGradientBrush(); // recreate 'Gradients.FrozenLabel'
+						YataGrid.UpdateFrozenLabelGradientBrush(); // recreate 'Gradients.FrozenLabel'
 					}
 					else return;
 				}
@@ -419,7 +419,7 @@ namespace yata
 
 					if (Options._gradient && Yata.Table != null)
 					{
-						Yata.Table.UpdateDisorderedGradientBrush(); // recreate 'Gradients.Disordered'
+						YataGrid.UpdateDisorderedGradientBrush(); // recreate 'Gradients.Disordered'
 					}
 					else return;
 				}

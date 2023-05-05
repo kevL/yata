@@ -1196,7 +1196,7 @@ namespace yata
 		/// <c><see cref="Gradients.FrozenLabel">Gradients.FrozenLabel</see></c>
 		/// when the user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
-		internal void UpdateFrozenLabelGradientBrush()
+		internal static void UpdateFrozenLabelGradientBrush()
 		{
 			if (Gradients.FrozenLabel != null)
 				Gradients.FrozenLabel.Dispose();
@@ -1211,7 +1211,7 @@ namespace yata
 		/// <c><see cref="Gradients.Disordered">Gradients.Disordered</see></c>
 		/// when the user changes it in <c><see cref="ColorOptionsEditor"/></c>.
 		/// </summary>
-		internal void UpdateDisorderedGradientBrush()
+		internal static void UpdateDisorderedGradientBrush()
 		{
 			if (Gradients.Disordered != null)
 				Gradients.Disordered.Dispose();
