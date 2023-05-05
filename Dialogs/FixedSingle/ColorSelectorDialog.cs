@@ -282,6 +282,8 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Colortable(object sender, MouseEventArgs e)
 		{
+			bu_Accept.Select();
+
 			if (e.Button == MouseButtons.Left && ModifierKeys == Keys.None)
 			{
 				_x1 = e.X;
@@ -350,6 +352,8 @@ namespace yata
 		/// <param name="e"></param>
 		void mousedown_Valslider(object sender, MouseEventArgs e)
 		{
+			bu_Accept.Select();
+
 			if (e.Button == MouseButtons.Left && ModifierKeys == Keys.None)
 			{
 				_val = e.Y;
@@ -507,17 +511,18 @@ namespace yata
 
 
 		/// <summary>
-		/// Focuses the Accept <c>Button</c> when an RGB <c>Label</c> is
-		/// clicked.
+		/// Focuses the Accept <c>Button</c> on a <c>MouseDown</c> event.
 		/// </summary>
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="la_Red"/></c></item>
 		/// <item><c><see cref="la_Green"/></c></item>
 		/// <item><c><see cref="la_Blue"/></c></item>
+		/// <item><c><see cref="pa_Color"/></c></item>
+		/// <item><c><see cref="pa_Colorpre"/></c></item>
 		/// </list></param>
 		/// <param name="e"></param>
-		void click_la_Rgb(object sender, EventArgs e)
+		void mousedown_select(object sender, MouseEventArgs e)
 		{
 			bu_Accept.Select();
 		}
@@ -600,7 +605,7 @@ namespace yata
 							}
 							pa_Color.BackColor = ColorOptionsEditor.Stored;
 						}
-						else if (sender == pa_Colorpre)
+						else // pa_Colorpre
 						{
 							pa_Color.BackColor = pa_Colorpre.BackColor;
 						}

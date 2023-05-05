@@ -90,6 +90,7 @@ namespace yata
 			this.pa_Color.TabIndex = 2;
 			this.toolTip1.SetToolTip(this.pa_Color, "[Ctrl]+RMB - copy color\r\n[Ctrl]+LMB - paste copied color");
 			this.pa_Color.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_pa_Color);
+			this.pa_Color.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_select);
 			// 
 			// pa_Colorpre
 			// 
@@ -101,6 +102,7 @@ namespace yata
 			this.pa_Colorpre.TabIndex = 3;
 			this.toolTip1.SetToolTip(this.pa_Colorpre, "[Ctrl]+RMB - copy color\r\n[Ctrl]+LMB - recall color");
 			this.pa_Colorpre.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseclick_pa_Color);
+			this.pa_Colorpre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_select);
 			// 
 			// tb_Red
 			// 
@@ -147,7 +149,7 @@ namespace yata
 			this.la_Red.TabIndex = 5;
 			this.la_Red.Text = "r";
 			this.la_Red.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.la_Red.Click += new System.EventHandler(this.click_la_Rgb);
+			this.la_Red.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_select);
 			// 
 			// la_Green
 			// 
@@ -158,7 +160,7 @@ namespace yata
 			this.la_Green.TabIndex = 7;
 			this.la_Green.Text = "g";
 			this.la_Green.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.la_Green.Click += new System.EventHandler(this.click_la_Rgb);
+			this.la_Green.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_select);
 			// 
 			// la_Blue
 			// 
@@ -169,7 +171,7 @@ namespace yata
 			this.la_Blue.TabIndex = 9;
 			this.la_Blue.Text = "b";
 			this.la_Blue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.la_Blue.Click += new System.EventHandler(this.click_la_Rgb);
+			this.la_Blue.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mousedown_select);
 			// 
 			// cb_NetColors
 			// 
