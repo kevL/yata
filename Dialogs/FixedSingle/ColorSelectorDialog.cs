@@ -227,7 +227,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Sets the various controls values from a specified <c>Color</c>.
+		/// Sets the various controls' values from a specified <c>Color</c>.
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="bypassRgbtext"><c>true</c> if called by
