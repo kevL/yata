@@ -553,7 +553,7 @@ instantgoto= "true" (without quotes) causes the current table to select a row as
 pathall=     a path without quotes to a valid directory to grope for 2da info
              for Crafting.2da, Spells.2da, Feat.2da, Classes.2da, or
              BaseItems.2da (see Appendix E: how to use Info paths)
-pathall=     another path for Crafting, Spells, and Feat info
+pathall=     another path for Crafting, Spells, and Feat (etc) info
 pathall=     etc. (the first pathall has lowest priority and any info found will
              be replaced by any info found in subsequent pathall directories;
              there can be as many or as few pathall directories as you like)
