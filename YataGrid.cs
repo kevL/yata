@@ -556,6 +556,9 @@ namespace yata
 		/// <param name="cell">a <c>Cell</c> to select</param>
 		/// <param name="sync"><c>true</c> to sync the select between diffed
 		/// tables; <c>false</c> if sync will be performed by the caller</param>
+		/// <param name="bypassHoriscroll"><c>true</c> to bypass any horizontal
+		/// scroll - used by <c><see cref="Propanel"></see>.OnMouseClick()</c>
+		/// only</param>
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item><c><see cref="Yata"/>.Search()</c></item>
@@ -565,7 +568,7 @@ namespace yata
 		/// <item><c>Yata.SelectDiffCell()</c></item>
 		/// <item><c><see cref="Propanel"/>.OnMouseClick()</c></item>
 		/// </list></remarks>
-		internal void SelectCell(Cell cell, bool sync = true)
+		internal void SelectCell(Cell cell, bool sync = true, bool bypassHoriscroll = false)
 		{
 			if (sync) SelectCell_sync(cell);
 
@@ -573,7 +576,7 @@ namespace yata
 			Invalidator(INVALID_GRID
 					  | INVALID_FROZ
 					  | INVALID_ROWS
-					  | EnsureDisplayed(cell));
+					  | EnsureDisplayed(cell, bypassHoriscroll, bypassHoriscroll));
 
 			_f.EnableCelleditOperations();
 		}
@@ -1892,12 +1895,15 @@ namespace yata
 		/// <param name="cell">the <c>Cell</c> to display</param>
 		/// <param name="bypassPropanel"><c>true</c> to bypass any
 		/// <c><see cref="Propanel"/></c> considerations</param>
+		/// <param name="bypassHoriscroll"><c>true</c> to bypass any horizontal
+		/// scroll - used by <c><see cref="Propanel"></see>.OnMouseClick()</c>
+		/// only</param>
 		/// <returns>a bitwise <c>int</c> defining controls that need to be
 		/// invalidated</returns>
 		/// <remarks>The <c>Propanel's</c> invalidation bit will be flagged as
 		/// long as the panel is visible regardless of whether it really needs
 		/// to be redrawn.</remarks>
-		internal int EnsureDisplayed(Cell cell, bool bypassPropanel = false)
+		internal int EnsureDisplayed(Cell cell, bool bypassPropanel = false, bool bypassHoriscroll = false)
 		{
 			int invalid = INVALID_NONE;
 
@@ -1905,27 +1911,28 @@ namespace yata
 			{
 				Rectangle rect = getCellRectangle(cell);
 
-				int left = getLeft();
-				int bar;
-
-				if (rect.X != left)
+				if (!bypassHoriscroll)
 				{
-					bar = (_visVert ? _scrollVert.Width : 0);
-					int right = Width - bar;
-
-					if (rect.X < left
-						|| (rect.Width > right - left
-							&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
-					{																	// than the table's visible width.
-						int val = _scrollHori.Value - left + rect.X;
-						_scrollHori.Value = Math.Max(val, 0);
-						invalid = INVALID_GRID;
-					}
-					else if (rect.X + rect.Width > right && rect.Width < right - left)
+					int left = getLeft();
+					if (rect.X != left)
 					{
-						int val = _scrollHori.Value + rect.X + rect.Width + bar - Width;
-						_scrollHori.Value = Math.Min(val, MaxHori);
-						invalid = INVALID_GRID;
+						int bar = (_visVert ? _scrollVert.Width : 0);
+						int right = Width - bar;
+
+						if (rect.X < left
+							|| (rect.Width > right - left
+								&& (rect.X > right || rect.X + left > (right - left) / 2)))	// <- for cells with width greater
+						{																	// than the table's visible width.
+							int val = _scrollHori.Value - left + rect.X;
+							_scrollHori.Value = Math.Max(val, 0);
+							invalid = INVALID_GRID;
+						}
+						else if (rect.X + rect.Width > right && rect.Width < right - left)
+						{
+							int val = _scrollHori.Value + rect.X + rect.Width + bar - Width;
+							_scrollHori.Value = Math.Min(val, MaxHori);
+							invalid = INVALID_GRID;
+						}
 					}
 				}
 
@@ -1939,7 +1946,7 @@ namespace yata
 					}
 					else
 					{
-						bar = (_visHori ? _scrollHori.Height : 0);
+						int bar = (_visHori ? _scrollHori.Height : 0);
 						if (rect.Y + rect.Height + bar > Height)
 						{
 							int val = _scrollVert.Value + rect.Y + rect.Height + bar - Height;

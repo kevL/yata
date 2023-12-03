@@ -179,7 +179,7 @@ namespace yata
 
 		#region Methods
 		/// <summary>
-		/// 
+		/// Calculates and sets all the telemetry of this <c>Propanel</c>.
 		/// </summary>
 		internal void tele()
 		{
@@ -714,12 +714,12 @@ namespace yata
 										for (int c = 0; c != _grid.ColCount; ++c)
 											_grid[_r,c].selected = false;
 
-										_grid.SelectCell(_grid[_r,_c]);
+										_grid.SelectCell(_grid[_r,_c], true, true);
 									}
 									else
 									{
 										_grid.EnsureDisplayedRow(_r);
-										_grid.EnsureDisplayedCol(_c);
+//										_grid.EnsureDisplayedCol(_c); // don't horiscroll the table
 									}
 
 									EnsureDisplayed(_c);
