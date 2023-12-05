@@ -81,22 +81,28 @@ namespace yata
 
 
 		/// <summary>
-		/// Closes all other tables when a tab's context-closeall item is
+		/// Closes all other tables when a tab's context-closeallothers item is
 		/// clicked.
 		/// </summary>
 		/// <param name="sender"><c><see cref="tabit_CloseAllOthers"/></c></param>
 		/// <param name="e"></param>
-		void tabclick_CloseAllOtherPages(object sender, EventArgs e)
+		/// <remarks>Called by
+		/// <list type="bullet">
+		/// <item>tab|CloseAllOthers</item>
+		/// </list></remarks>
+		void tabclick_CloseOtherTabpages(object sender, EventArgs e)
 		{
 			if (!CancelChangedTables("close", true))
 			{
 				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
-				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
+				int selid = Tabs.SelectedIndex;
+				for (int tabid = Tabs.TabCount - 1; tabid != -1; --tabid)
+				if (tabid != selid)
 				{
-					if (tab != Tabs.SelectedIndex)
-						ClosePage(Tabs.TabPages[tab]);
+					CloseTabpage(Tabs.TabPages[tabid], true);
 				}
+				_lasttabs.Clear();
 
 				SetTabSize();
 

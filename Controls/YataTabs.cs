@@ -77,19 +77,19 @@ namespace yata
 
 		#region Handlers (override)
 		/// <summary>
-		/// Sets the focused <c>TabPage</c> as previously focused before
-		/// changing focus to another <c>TabPage</c>.
+		/// Sets the currently focused <c>TabPage</c> as previously focused
+		/// before focus changes to another <c>TabPage</c>.
 		/// </summary>
 		/// <param name="e"></param>
 		/// <remarks>This is used to refocus the previously focused
-		/// <c>TabPage</c> when a <c>TabPage</c>/ <c><see cref="YataGrid"/></c>
-		/// gets closed.</remarks>
-		protected override void OnDeselecting(TabControlCancelEventArgs e)
+		/// <c>TabPage</c> when user closes a <c><see cref="YataGrid"/></c>.</remarks>
+		protected override void OnDeselected(TabControlEventArgs e)
 		{
-			Yata.that.SetLastPage(e.TabPage);
-			base.OnDeselecting(e);
-		}
+			if (e.TabPage != null)
+				Yata.that.AddLastTabpage(e.TabPage);
 
+			base.OnDeselected(e);
+		}
 
 		/// <summary>
 		/// Overrides the <c>PreviewKeyDown</c> eventhandler.

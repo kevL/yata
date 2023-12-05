@@ -191,9 +191,13 @@ namespace yata
 
 
 		/// <summary>
-		/// Stores the previously focused <c>TabPage</c>.
+		/// Stores previously focused <c><see cref="TabPage">TabPages</see></c>
+		/// in a <c>List</c>. The most recently deselected page is last in the
+		/// list. This is used to revert focus to the last selected table when a
+		/// table is closed. The currently focused table (if any) is not in the
+		/// list.
 		/// </summary>
-		TabPage _lastpage;
+		List<TabPage> _lasttabs = new List<TabPage>();
 		#endregion Fields
 
 
@@ -496,7 +500,7 @@ namespace yata
 		/// <param name="descriptor">"close" files or "quit" Yata</param>
 		/// <param name="excludecurrent"><c>true</c> to exclude the current
 		/// table - used by
-		/// <c><see cref="tabclick_CloseAllOtherPages()">tabclick_CloseAllOtherPages()</see></c></param>
+		/// <c><see cref="tabclick_CloseOtherTabpages()">tabclick_CloseOtherTabpages()</see></c></param>
 		/// <returns><c>true</c> if there are any changed tables and user
 		/// chooses to cancel; <c>false</c> if there are no changed tables or
 		/// user chooses to close/quit anyway</returns>
@@ -622,7 +626,7 @@ namespace yata
 
 						case FileWatcherDialog.Output.Close2da:
 							Table.Changed = false;					// <- bypass Close warn
-							fileclick_ClosePage(null, EventArgs.Empty);
+							fileclick_CloseTabpage(null, EventArgs.Empty);
 							break;
 
 						case FileWatcherDialog.Output.Resave:
@@ -855,15 +859,6 @@ namespace yata
 			if (obscure) panel_ColorFill.BringToFront();
 			else         panel_ColorFill.SendToBack();
 		}
-
-		/// <summary>
-		/// Caches the previously focused <c>TabPage</c>.
-		/// </summary>
-		/// <param name="page"></param>
-		internal void SetLastPage(TabPage page)
-		{
-			_lastpage = page;
-		}
 		#endregion Methods
 
 
@@ -1024,8 +1019,7 @@ namespace yata
 		/// <remarks>This should be bypassed when a page other than tabid #0 is
 		/// active and user closes all other tabs - if tabid #0 is already
 		/// active the selected-id does not change (but the event fires anyway).
-		/// 
-		/// 
+		/// <br/><br/>
 		/// Invoked by
 		/// <list type="bullet">
 		/// <item>tabpage change</item>
@@ -1037,155 +1031,173 @@ namespace yata
 		{
 			//logfile.Log("Yata.tab_SelectedIndexChanged() id= " + Tabs.SelectedIndex);
 
-			bool replaced;
-
-			if (Tabs.SelectedIndex != -1)
+			// .NET can set the SelectedIndex to -1 when there is a valid
+			// TabPage available. Don't let that happen: Ensure that a Table is
+			// always valid as long as there is a TabPage instantiated ->
+			if (Tabs.SelectedIndex == -1 && Tabs.TabCount != 0)
 			{
-				Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
-
-				// NOTE: Hiding a visible editor when user changes the tabpage
-				// is usually handled by YataGrid's Leave event; but
-				// [Ctrl+PageUp]/[Ctrl+PageDown] will change the tabpage without
-				// firing the Leave event. So do this typically redundant check
-				// ->
-//				HideEditor();
-				// NOTE: Appears to no longer be needed.
-
-				visPath_its();
-
-				bu_Propanel           .Visible = true;
-
-				it_freeze1            .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
-				it_freeze2            .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
-
-				it_Readonly           .Checked = Table.Readonly;
-
-
-				it_Reload             .Enabled = File.Exists(Table.Fullpath);
-				it_Save               .Enabled = !Table.Readonly;
-				it_SaveAll            .Enabled = AllowSaveAll();
-				it_SaveAs             .Enabled =
-				it_Readonly           .Enabled =
-				it_Close              .Enabled =
-				it_CloseAll           .Enabled = true;
-
-				it_Undo               .Enabled = Table._ur.CanUndo;
-				it_Redo               .Enabled = Table._ur.CanRedo;
-				it_Searchnext         .Enabled =
-				it_Searchprev         .Enabled = tb_Search.Text.Length != 0;
-				it_GotoReplaced       .Enabled =
-				it_GotoReplaced_pre   .Enabled =
-				it_ClearReplaced      .Enabled = (replaced = Table.anyReplaced());
-				it_GotoLoadchanged    .Enabled =
-				it_GotoLoadchanged_pre.Enabled =
-				it_ClearLoadchanged   .Enabled = Table.anyLoadchanged();
-				it_Defaultval         .Enabled = true;
-				it_Defaultclear       .Enabled = Table._defaultval.Length != 0;
-
-				EnableCelleditOperations();
-				EnableRoweditOperations();
-				Enable2daOperations();
-
-
-				if (Table.Propanel != null && Table.Propanel.Visible)
-				{
-					Table.Propanel.telemetric();
-
-					Cell sel = Table.getSelectedCell();
-					if (sel != null)
-						Table.Propanel.EnsureDisplayed(sel.x);
-				}
-
-				if (_fdiffer != null)
-					_fdiffer.EnableGotoButton(true);
-
-				SetTabSize();
-
-				if (!_t1.Enabled) _t1.Enabled = true;
-
-				Obfuscate(false);
-
-				//logfile.Log(". call VerifyCurrentFileState()");
-				VerifyCurrentFileState();
+				Tabs.SelectedIndex = 0;
 			}
 			else
 			{
-				Obfuscate();
+				bool replaced;
 
-				_t1.Enabled = false;
-				Table = null;
+				if (Tabs.SelectedIndex != -1)
+				{
+					for (int tabid = 0; tabid != _lasttabs.Count; ++tabid)
+					if (_lasttabs[tabid] == Tabs.SelectedTab)
+					{
+						_lasttabs.RemoveAt(tabid);
+						break;
+					}
 
-				// Visible ->
 
-				bu_Propanel           .Visible =
-				it_MenuPaths          .Visible =
+					Table = Tabs.SelectedTab.Tag as YataGrid; // <- very Important <--||
 
-				// Checked ->
+					// NOTE: Hiding a visible editor when user changes the tabpage
+					// is usually handled by YataGrid's Leave event; but
+					// [Ctrl+PageUp]/[Ctrl+PageDown] will change the tabpage without
+					// firing the Leave event. So do this typically redundant check
+					// ->
+//					HideEditor();
+					// NOTE: Appears to no longer be needed.
 
-				it_freeze1            .Checked =
-				it_freeze2            .Checked =
-				it_Propanel           .Checked =
-				it_Readonly           .Checked =
+					visPath_its();
 
-				// Enabled ->
+					bu_Propanel           .Visible = true;
 
-				it_Reload             .Enabled =
-				it_Save               .Enabled =
-				it_SaveAll            .Enabled =
-				it_SaveAs             .Enabled =
-				it_Readonly           .Enabled =
-				it_Close              .Enabled =
-				it_CloseAll           .Enabled =
+					it_freeze1            .Checked = Table.FrozenCount == YataGrid.FreezeFirst;
+					it_freeze2            .Checked = Table.FrozenCount == YataGrid.FreezeSecond;
 
-				it_Undo               .Enabled =
-				it_Redo               .Enabled =
-				it_Searchnext         .Enabled =
-				it_Searchprev         .Enabled =
-				it_GotoReplaced       .Enabled =
-				it_GotoReplaced_pre   .Enabled =
-				it_ClearReplaced      .Enabled =
-				it_GotoLoadchanged    .Enabled =
-				it_GotoLoadchanged_pre.Enabled =
-				it_ClearLoadchanged   .Enabled =
-				it_Defaultval         .Enabled =
-				it_Defaultclear       .Enabled =
+					it_Readonly           .Checked = Table.Readonly;
 
-				it_DeselectCell       .Enabled =
-				it_CutCell            .Enabled =
-				it_CopyCell           .Enabled =
-				it_PasteCell          .Enabled =
-				it_DeleteCell         .Enabled =
-				it_Lower              .Enabled =
-				it_Upper              .Enabled =
-				it_Apply              .Enabled =
 
-				it_DeselectRows       .Enabled =
-				it_CutRange           .Enabled =
-				it_CopyRange          .Enabled =
-				it_PasteRange         .Enabled =
-				it_DeleteRange        .Enabled =
-				it_CreateRows         .Enabled =
+					it_Reload             .Enabled = File.Exists(Table.Fullpath);
+					it_Save               .Enabled = !Table.Readonly;
+					it_SaveAll            .Enabled = AllowSaveAll();
+					it_SaveAs             .Enabled =
+					it_Readonly           .Enabled =
+					it_Close              .Enabled =
+					it_CloseAll           .Enabled = true;
 
-				it_OrderRows          .Enabled =
-				it_CheckRows          .Enabled =
-				it_ColorRows          .Enabled =
-				it_AutoCols           .Enabled =
-				it_freeze1            .Enabled =
-				it_freeze2            .Enabled =
-				it_Propanel           .Enabled =
-				it_PropanelLoc        .Enabled =
-				it_PropanelLoc_pre    .Enabled =
-				it_ExternDiff         .Enabled = false;
+					it_Undo               .Enabled = Table._ur.CanUndo;
+					it_Redo               .Enabled = Table._ur.CanRedo;
+					it_Searchnext         .Enabled =
+					it_Searchprev         .Enabled = tb_Search.Text.Length != 0;
+					it_GotoReplaced       .Enabled =
+					it_GotoReplaced_pre   .Enabled =
+					it_ClearReplaced      .Enabled = (replaced = Table.anyReplaced());
+					it_GotoLoadchanged    .Enabled =
+					it_GotoLoadchanged_pre.Enabled =
+					it_ClearLoadchanged   .Enabled = Table.anyLoadchanged();
+					it_Defaultval         .Enabled = true;
+					it_Defaultclear       .Enabled = Table._defaultval.Length != 0;
 
-				_fdiffer = null;
+					EnableCelleditOperations();
+					EnableRoweditOperations();
+					Enable2daOperations();
 
-				replaced = false;
+
+					if (Table.Propanel != null && Table.Propanel.Visible)
+					{
+						Table.Propanel.telemetric();
+
+						Cell sel = Table.getSelectedCell();
+						if (sel != null)
+							Table.Propanel.EnsureDisplayed(sel.x);
+					}
+
+					if (_fdiffer != null)
+						_fdiffer.EnableGotoButton(true);
+
+					SetTabSize();
+
+					if (!_t1.Enabled) _t1.Enabled = true;
+
+					Obfuscate(false);
+
+					//logfile.Log(". call VerifyCurrentFileState()");
+					VerifyCurrentFileState();
+				}
+				else
+				{
+					Obfuscate();
+
+					_t1.Enabled = false;
+					Table = null;
+
+					// Visible ->
+
+					bu_Propanel           .Visible =
+					it_MenuPaths          .Visible =
+
+					// Checked ->
+
+					it_freeze1            .Checked =
+					it_freeze2            .Checked =
+					it_Propanel           .Checked =
+					it_Readonly           .Checked =
+
+					// Enabled ->
+
+					it_Reload             .Enabled =
+					it_Save               .Enabled =
+					it_SaveAll            .Enabled =
+					it_SaveAs             .Enabled =
+					it_Readonly           .Enabled =
+					it_Close              .Enabled =
+					it_CloseAll           .Enabled =
+
+					it_Undo               .Enabled =
+					it_Redo               .Enabled =
+					it_Searchnext         .Enabled =
+					it_Searchprev         .Enabled =
+					it_GotoReplaced       .Enabled =
+					it_GotoReplaced_pre   .Enabled =
+					it_ClearReplaced      .Enabled =
+					it_GotoLoadchanged    .Enabled =
+					it_GotoLoadchanged_pre.Enabled =
+					it_ClearLoadchanged   .Enabled =
+					it_Defaultval         .Enabled =
+					it_Defaultclear       .Enabled =
+
+					it_DeselectCell       .Enabled =
+					it_CutCell            .Enabled =
+					it_CopyCell           .Enabled =
+					it_PasteCell          .Enabled =
+					it_DeleteCell         .Enabled =
+					it_Lower              .Enabled =
+					it_Upper              .Enabled =
+					it_Apply              .Enabled =
+
+					it_DeselectRows       .Enabled =
+					it_CutRange           .Enabled =
+					it_CopyRange          .Enabled =
+					it_PasteRange         .Enabled =
+					it_DeleteRange        .Enabled =
+					it_CreateRows         .Enabled =
+
+					it_OrderRows          .Enabled =
+					it_CheckRows          .Enabled =
+					it_ColorRows          .Enabled =
+					it_AutoCols           .Enabled =
+					it_freeze1            .Enabled =
+					it_freeze2            .Enabled =
+					it_Propanel           .Enabled =
+					it_PropanelLoc        .Enabled =
+					it_PropanelLoc_pre    .Enabled =
+					it_ExternDiff         .Enabled = false;
+
+					_fdiffer = null;
+
+					replaced = false;
+				}
+
+				SetTitlebarText();
+
+				if (_replacer != null)
+					_replacer.EnableOps(replaced);
 			}
-
-			SetTitlebarText();
-
-			if (_replacer != null)
-				_replacer.EnableOps(replaced);
 		}
 
 
@@ -1371,14 +1383,39 @@ namespace yata
 
 		#region Methods (tabs)
 		/// <summary>
+		/// Adds a deselected <c>TabPage</c> to the
+		/// <c><see cref="_lasttabs"></see></c> list.
+		/// </summary>
+		/// <param name="tab">a <c>TabPage</c> to add to <c>_lasttabs</c></param>
+		internal void AddLastTabpage(TabPage tab)
+		{
+			for (int tabid = 0; tabid != _lasttabs.Count; ++tabid)
+			if (_lasttabs[tabid] == tab)
+			{
+				_lasttabs.RemoveAt(tabid);
+				break;
+			}
+			_lasttabs.Add(tab);
+		}
+
+		/// <summary>
 		/// Disposes a tab's <c><see cref="YataGrid"/></c> before the specified
 		/// <c>TabPage</c> is removed from the <c>TabPageCollection</c>. Closes
 		/// <c><see cref="_fdiffer"/></c> if it's no longer required and the
 		/// <c>TabPage</c> is then <c>Disposed()</c>.
 		/// </summary>
 		/// <param name="tab">the <c>TabPage</c> with which to deal</param>
-		void ClosePage(TabPage tab)
+		/// <param name="bypassLasttabs"><c>true</c> to bypass
+		/// <c><see cref="_lasttabs"></see></c> considerations when
+		/// 2+ tabs are closed by CloseAll or CloseOthers</param>
+		void CloseTabpage(TabPage tab, bool bypassLasttabs = false)
 		{
+			if (!bypassLasttabs && _lasttabs.Count != 0) // focus the lasttab before closing the current tab ->
+			{
+				Tabs.SelectedTab = _lasttabs[_lasttabs.Count - 1];
+			}
+
+
 			var table = tab.Tag as YataGrid;
 
 			if      (table == _diff1) _diff1 = null;
@@ -1392,6 +1429,7 @@ namespace yata
 
 			Tabs.TabPages.Remove(tab);
 			tab.Dispose();
+			tab = null; // probably not needed <-
 
 			YataGrid.MetricStaticHeads(this);
 
@@ -1403,6 +1441,14 @@ namespace yata
 
 				ClearIconResref();
 			}
+
+
+			if (!bypassLasttabs && _lasttabs.Count != 0) // clear the tab from the _lasttabs list ->
+			{
+				_lasttabs.RemoveAt(_lasttabs.Count - 1);
+			}
+
+			SetTabSize();
 		}
 
 		/// <summary>

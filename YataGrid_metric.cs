@@ -184,7 +184,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item><c><see cref="Calibrate()">Calibrate()</see></c></item>
 		/// <item><c><see cref="Init()">Init()</see></c></item>
-		/// <item><c><see cref="Yata"/>.ClosePage()</c></item>
+		/// <item><c><see cref="Yata"/>.CloseTabpage()</c></item>
 		/// </list></remarks>
 		internal static void MetricStaticHeads(Yata f)
 		{

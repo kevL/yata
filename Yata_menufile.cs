@@ -84,6 +84,8 @@ namespace yata
 
 			if (File.Exists(Table.Fullpath)) // instead of CreatePage() ->
 			{
+				// TODO: add to Recents list
+
 				DrawRegulator.SuspendDrawing(Table);
 
 				var tab = new TabPage();
@@ -234,7 +236,7 @@ namespace yata
 					else
 					{
 						Table.Changed = false; // bypass Close warn
-						fileclick_ClosePage(sender, e);
+						fileclick_CloseTabpage(sender, e);
 					}
 
 					_bypassVerifyFile = false;
@@ -527,7 +529,7 @@ namespace yata
 		/// <c><see cref="fileclick_Reload()">fileclick_Reload()</see></c></item>
 		/// <item><c><see cref="VerifyCurrentFileState()">VerifyCurrentFileState()</see></c></item>
 		/// </list></remarks>
-		internal void fileclick_ClosePage(object sender, EventArgs e)
+		internal void fileclick_CloseTabpage(object sender, EventArgs e)
 		{
 			bool close = !Table.Changed;
 			if (!close)
@@ -546,9 +548,7 @@ namespace yata
 			{
 				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
-				TabPage lastpage = _lastpage;
-				ClosePage(Tabs.SelectedTab);
-				Tabs.SelectedTab = lastpage;
+				CloseTabpage(Tabs.SelectedTab);
 
 				DrawRegulator.ResumeDrawing(this);
 			}
@@ -568,14 +568,16 @@ namespace yata
 		/// <item>File|CloseAll <c>[Ctrl+F4]</c></item>
 		/// <item>tab|CloseAll</item>
 		/// </list></remarks>
-		void fileclick_CloseAllPages(object sender, EventArgs e)
+		void fileclick_CloseTabpages(object sender, EventArgs e)
 		{
 			if (!CancelChangedTables("close"))
 			{
 				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
-				for (int tab = Tabs.TabCount - 1; tab != -1; --tab)
-					ClosePage(Tabs.TabPages[tab]);
+				for (int tabid = Tabs.TabCount - 1; tabid != -1; --tabid)
+					CloseTabpage(Tabs.TabPages[tabid], true);
+
+				_lasttabs.Clear();
 
 				DrawRegulator.ResumeDrawing(this);
 			}
