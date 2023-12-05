@@ -72,6 +72,8 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_Create"/></c></param>
 		/// <param name="e"></param>
+ 		/// <seealso cref="YataGrid.LoadTable()"><c>YataGrid.LoadTable()</c></seealso>
+ 		/// <seealso cref="CreatePage()"><c>CreatePage()</c></seealso>
 		void fileclick_Create(object sender, EventArgs e)
 		{
 			Table = new YataGrid(this, String.Empty, false);
@@ -82,9 +84,10 @@ namespace yata
 			fileclick_SaveAs(it_SaveAs, EventArgs.Empty); // shall set Fullpath (incl. tab-string).
 			_isCreate = false;
 
-			if (File.Exists(Table.Fullpath)) // instead of CreatePage() ->
+			if (File.Exists(Table.Fullpath)											// ~safety // instead of CreatePage() ->
+				&& Path.GetFileNameWithoutExtension(Table.Fullpath).Length != 0)	// what idjut would ... oh wait.
 			{
-				// TODO: add to Recents list
+				AddRecentFile(Table.Fullpath);
 
 				DrawRegulator.SuspendDrawing(Table);
 

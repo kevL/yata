@@ -157,6 +157,7 @@ namespace yata
 		/// <item><c><see cref="LOADRESULT_TRUE"/></c></item>
 		/// <item><c><see cref="LOADRESULT_CHANGED"/></c></item>
 		/// </list></returns>
+		/// <seealso cref="CreateTable()"><c>CreateTable()</c></seealso>
 		internal int LoadTable()
 		{
 			// �
@@ -1227,6 +1228,7 @@ namespace yata
 		/// <summary>
 		/// Creates a table from scratch w/ 1 row and 1 colhead.
 		/// </summary>
+		/// <seealso cref="LoadTable()"><c>LoadTable()</c></seealso>
 		internal void CreateTable()
 		{
 			Fields = new[] { gs.DefaultColLabel };

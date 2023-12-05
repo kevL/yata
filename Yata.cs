@@ -869,47 +869,13 @@ namespace yata
 		/// <param name="pfe">path_file_extension</param>
 		/// <param name="read"><c>true</c> to create table as
 		/// <c><see cref="YataGrid.Readonly">YataGrid.Readonly</see></c></param>
+ 		/// <seealso cref="fileclick_Create()"><c>fileclick_Create()</c></seealso>
 		void CreatePage(string pfe, bool read = false)
 		{
 			if (File.Exists(pfe)										// ~safety
 				&& Path.GetFileNameWithoutExtension(pfe).Length != 0)	// what idjut would ... oh wait.
 			{
-				if (Options._recent != 0)
-				{
-					ToolStripItemCollection recents = it_Recent.DropDownItems;
-					ToolStripItem it;
-
-					bool found = false;
-
-					for (int i = 0; i != recents.Count; ++i)
-					{
-						if ((it = recents[i]).Text == pfe)
-						{
-							found = true;
-
-							if (i != 0)
-							{
-								recents.Remove(it);
-								recents.Insert(0, it);
-							}
-							break;
-						}
-					}
-
-					if (!found)
-					{
-						it = new ToolStripMenuItem(pfe);
-						it.Click += fileclick_Recent;
-						recents.Insert(0, it);
-
-						if (recents.Count > Options._recent)
-						{
-							recents.Remove(it = recents[recents.Count - 1]);
-							it.Dispose();
-						}
-					}
-				}
-
+				AddRecentFile(pfe);
 
 				// check if 2da-file is already open ->
 				for (int i = 0; i != Tabs.TabPages.Count; ++i)
@@ -982,6 +948,50 @@ namespace yata
 				tab_SelectedIndexChanged(null, EventArgs.Empty);
 			}
 		}
+
+		/// <summary>
+		/// Adds a recently opened file to the list of recently opened files.
+		/// </summary>
+		/// <param name="pfe">fullpath of file to add</param>
+		void AddRecentFile(string pfe)
+		{
+			if (Options._recent != 0)
+			{
+				ToolStripItemCollection recents = it_Recent.DropDownItems;
+				ToolStripItem it;
+
+				bool found = false;
+
+				for (int i = 0; i != recents.Count; ++i)
+				{
+					if ((it = recents[i]).Text == pfe)
+					{
+						found = true;
+
+						if (i != 0)
+						{
+							recents.Remove(it);
+							recents.Insert(0, it);
+						}
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					it = new ToolStripMenuItem(pfe);
+					it.Click += fileclick_Recent;
+					recents.Insert(0, it);
+
+					if (recents.Count > Options._recent)
+					{
+						recents.Remove(it = recents[recents.Count - 1]);
+						it.Dispose();
+					}
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Sets the titlebar text to something reasonable.
