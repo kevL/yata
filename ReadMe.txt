@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 dec 3
+2023 dec 6
 kevL's
-ver 5.5.6.0
+ver 5.6.0.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -118,10 +118,16 @@ Rows
 - Deselect : deselects selected row and any subselected rows along with their
              selected cells
 
-- Cut    : Shift+Ctrl+x (cuts selected row and any selected subrow(s))
-- Copy   : Shift+Ctrl+c (copies selected row and any selected subrow(s))
-- Paste  : Shift+Ctrl+v (pastes copied row(s))
-- Delete : Shift+Delete (deletes selected row and any selected subrow(s))
+- Cut               : Shift+Ctrl+x (cuts selected row and any selected
+                      subrow(s))
+- Copy              : Shift+Ctrl+c (copies selected row and any selected
+                      subrow(s))
+- Paste - insert    : Shift+Ctrl+v (pastes copied row(s) by inserting at
+                      selected row)
+- Paste - overwrite : Shift+Ctrl+w (pastes copied row(s) by overwriting
+                      selected row and any selected subrow(s))
+- Delete            : Shift+Delete (deletes selected row and any selected
+                      subrow(s))
 
 - Create ... : F2 (opens a dialog that inserts 1+ rows with options to fill the
                fields. (a) selected row (b) first copied row (c) ****)

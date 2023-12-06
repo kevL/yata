@@ -131,7 +131,10 @@ namespace yata
 		/// Deletes a single or multiple <c><see cref="Row">Rows</see></c>.
 		/// </summary>
 		/// <remarks>Called by
-		/// <c><see cref="Yata"/>.editrowsclick_DeleteRange()</c>.</remarks>
+		/// <list type="bullet">
+		/// <item><c><see cref="Yata"/>.editrowsclick_DeleteRange()</c></item>
+		/// <item><c><see cref="Yata"/>.editrowsclick_PasteRangeOverwrite()</c></item>
+		/// </list></remarks>
 		internal void DeleteRows()
 		{
 			_f.Obfuscate();

@@ -87,7 +87,8 @@ namespace yata
 
 		/// <summary>
 		/// Handles context-click to copy a <c><see cref="Row">Row's</see></c>
-		/// fields and enables <c><see cref="it_PasteRange"/></c> and
+		/// fields and enables <c><see cref="it_PasteRangeInsert"/></c> and
+		/// <c><see cref="it_PasteRangeOverwrite"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
@@ -109,8 +110,9 @@ namespace yata
 			if (_fclip != null)
 				_fclip.SetRowsBufferText();
 
-			it_PasteRange.Enabled = !Table.Readonly;
-			it_ClipExport.Enabled = true;
+			it_PasteRangeInsert   .Enabled = !Table.Readonly;
+			it_PasteRangeOverwrite.Enabled = !Table.Readonly && Table.getSelectedRow() != -1;
+			it_ClipExport         .Enabled = true;
 		}
 
 		/// <summary>

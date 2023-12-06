@@ -197,7 +197,7 @@ namespace yata
 		/// table is closed. The currently focused table (if any) is not in the
 		/// list.
 		/// </summary>
-		List<TabPage> _lasttabs = new List<TabPage>();
+		readonly List<TabPage> _lasttabs = new List<TabPage>();
 		#endregion Fields
 
 
@@ -1183,7 +1183,8 @@ namespace yata
 					it_DeselectRows       .Enabled =
 					it_CutRange           .Enabled =
 					it_CopyRange          .Enabled =
-					it_PasteRange         .Enabled =
+					it_PasteRangeInsert   .Enabled =
+					it_PasteRangeOverwrite.Enabled =
 					it_DeleteRange        .Enabled =
 					it_CreateRows         .Enabled =
 

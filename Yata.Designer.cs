@@ -65,7 +65,8 @@ namespace yata
 		ToolStripMenuItem it_DeselectRows;
 		ToolStripMenuItem it_CutRange;
 		ToolStripMenuItem it_CopyRange;
-		ToolStripMenuItem it_PasteRange;
+		ToolStripMenuItem it_PasteRangeInsert;
+		ToolStripMenuItem it_PasteRangeOverwrite;
 		ToolStripMenuItem it_DeleteRange;
 		ToolStripMenuItem it_CreateRows;
 
@@ -314,7 +315,8 @@ namespace yata
 			this.separator_33 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CutRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PasteRange = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteRangeInsert = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteRangeOverwrite = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeleteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
@@ -940,7 +942,8 @@ namespace yata
 			this.separator_33,
 			this.it_CutRange,
 			this.it_CopyRange,
-			this.it_PasteRange,
+			this.it_PasteRangeInsert,
+			this.it_PasteRangeOverwrite,
 			this.it_DeleteRange,
 			this.separator_13,
 			this.it_CreateRows});
@@ -981,15 +984,25 @@ namespace yata
 			this.it_CopyRange.Text = "&Copy";
 			this.it_CopyRange.Click += new System.EventHandler(this.editrowsclick_CopyRange);
 			// 
-			// it_PasteRange
+			// it_PasteRangeInsert
 			// 
-			this.it_PasteRange.Enabled = false;
-			this.it_PasteRange.Name = "it_PasteRange";
-			this.it_PasteRange.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.it_PasteRangeInsert.Enabled = false;
+			this.it_PasteRangeInsert.Name = "it_PasteRangeInsert";
+			this.it_PasteRangeInsert.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
 			| System.Windows.Forms.Keys.V)));
-			this.it_PasteRange.Size = new System.Drawing.Size(185, 22);
-			this.it_PasteRange.Text = "&Paste";
-			this.it_PasteRange.Click += new System.EventHandler(this.editrowsclick_PasteRange);
+			this.it_PasteRangeInsert.Size = new System.Drawing.Size(185, 22);
+			this.it_PasteRangeInsert.Text = "&Paste - insert";
+			this.it_PasteRangeInsert.Click += new System.EventHandler(this.editrowsclick_PasteRangeInsert);
+			// 
+			// it_PasteRangeOverwrite
+			// 
+			this.it_PasteRangeOverwrite.Enabled = false;
+			this.it_PasteRangeOverwrite.Name = "it_PasteRangeOverwrite";
+			this.it_PasteRangeOverwrite.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			| System.Windows.Forms.Keys.W)));
+			this.it_PasteRangeOverwrite.Size = new System.Drawing.Size(185, 22);
+			this.it_PasteRangeOverwrite.Text = "&Paste - overwrite";
+			this.it_PasteRangeOverwrite.Click += new System.EventHandler(this.editrowsclick_PasteRangeOverwrite);
 			// 
 			// it_DeleteRange
 			// 

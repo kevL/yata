@@ -85,7 +85,8 @@ namespace yata
 
 		/// <summary>
 		/// Copies the fields of a range of <c><see cref="Row">Rows</see></c>
-		/// and enables <c><see cref="it_PasteRange"/></c> and
+		/// and enables <c><see cref="it_PasteRangeInsert"/></c> and
+		/// <c><see cref="it_PasteRangeOverwrite"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
@@ -124,21 +125,23 @@ namespace yata
 			if (_fclip != null)
 				_fclip.SetRowsBufferText();
 
-			it_PasteRange.Enabled = !Table.Readonly;
-			it_ClipExport.Enabled = true;
+			it_PasteRangeInsert   .Enabled = !Table.Readonly;
+			it_PasteRangeOverwrite.Enabled = !Table.Readonly && Table.getSelectedRow() != -1;
+			it_ClipExport         .Enabled = true;
 		}
 
 		/// <summary>
 		/// Creates a range of <c><see cref="Row">Rows</see></c> and pastes
 		/// copied fields into them.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_PasteRange"/></c></param>
+		/// <param name="sender"><c><see cref="it_PasteRangeInsert"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
-		/// <item>Rows|Paste <c>[Ctrl+Shift+v]</c></item>
+		/// <item>Rows|Paste - insert <c>[Ctrl+Shift+v]</c></item>
 		/// </list></remarks>
-		void editrowsclick_PasteRange(object sender, EventArgs e)
+		/// <seealso cref="editrowsclick_PasteRangeOverwrite()"><c>editrowsclick_PasteRangeOverwrite()</c></seealso>
+		void editrowsclick_PasteRangeInsert(object sender, EventArgs e)
 		{
 			if (!isTableDiffed())
 			{
@@ -146,32 +149,11 @@ namespace yata
 				DrawRegulator.SuspendDrawing(Table);
 
 
-				Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
-
 				int selr = Table.getSelectedRow();
 				if (selr == -1)
 					selr = Table.RowCount;
 
-				int r = selr;
-				for (int i = 0; i != _copyr.Count; ++i, ++r)
-				{
-					Table.Insert(r, _copyr[i], ColorOptions._rowcreated, true);
-					rest.array[i] = Table.Rows[r].Clone() as Row;
-				}
-				Table.Calibrate(selr, _copyr.Count - 1); // paste range
-
-				Table.ClearSelects(false, true);
-				Table.Rows[selr].selected = true;
-				Table.RangeSelect = _copyr.Count - 1;
-				Table.EnsureDisplayedRow(selr);
-
-
-				if (!Table.Changed)
-				{
-					Table.Changed = true;
-					rest.isSaved = UndoRedo.IsSavedType.is_Undo;
-				}
-				Table._ur.Push(rest);
+				pasterange(selr);
 
 
 				DrawRegulator.ResumeDrawing(Table);
@@ -181,6 +163,73 @@ namespace yata
 			}
 			else
 				error_TableDiffed();
+		}
+
+		/// <summary>
+		/// Creates a range of <c><see cref="Row">Rows</see></c> and pastes
+		/// copied fields into them after deleting any selected rows.
+		/// </summary>
+		/// <param name="sender"><c><see cref="it_PasteRangeOverwrite"/></c></param>
+		/// <param name="e"></param>
+		/// <remarks>Fired by
+		/// <list type="bullet">
+		/// <item>Rows|Paste - overwrite <c>[Ctrl+Shift+w]</c></item>
+		/// </list></remarks>
+		/// <seealso cref="editrowsclick_PasteRangeInsert()"><c>editrowsclick_PasteRangeInsert()</c></seealso>
+		void editrowsclick_PasteRangeOverwrite(object sender, EventArgs e)
+		{
+			if (!isTableDiffed())
+			{
+				Obfuscate();
+				DrawRegulator.SuspendDrawing(Table);
+
+
+				int selr = Table.getSelectedRow(); // shall not be -1
+
+				Table.DeleteRows();
+
+				pasterange(selr);
+
+				Table._ur.SetChained(2);
+
+
+				DrawRegulator.ResumeDrawing(Table);
+				Obfuscate(false);
+
+				if (Options._autorder && order() != 0) layout();
+			}
+			else
+				error_TableDiffed();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="selr"></param>
+		void pasterange(int selr)
+		{
+			Restorable rest = UndoRedo.createArray(_copyr.Count, UndoRedo.UrType.rt_ArrayDelete);
+
+			int r = selr;
+			for (int i = 0; i != _copyr.Count; ++i, ++r)
+			{
+				Table.Insert(r, _copyr[i], ColorOptions._rowcreated, true);
+				rest.array[i] = Table.Rows[r].Clone() as Row;
+			}
+			Table.Calibrate(selr, _copyr.Count - 1); // paste range
+
+			Table.ClearSelects(false, true);
+			Table.Rows[selr].selected = true;
+			Table.RangeSelect = _copyr.Count - 1;
+			Table.EnsureDisplayedRow(selr);
+
+
+			if (!Table.Changed)
+			{
+				Table.Changed = true;
+				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
+			}
+			Table._ur.Push(rest);
 		}
 
 		/// <summary>
@@ -308,16 +357,17 @@ namespace yata
 		/// </summary>
 		internal void EnableRoweditOperations()
 		{
-			bool isrowselected = (Table.getSelectedRow() != -1);
+			bool isrowselected = Table.getSelectedRow() != -1;
 
-			it_DeselectRows.Enabled = isrowselected;
+			it_DeselectRows       .Enabled = isrowselected;
 
-			it_CutRange    .Enabled = !Table.Readonly && isrowselected;
-			it_CopyRange   .Enabled = isrowselected;
-			it_PasteRange  .Enabled = !Table.Readonly && _copyr.Count != 0;
-			it_DeleteRange .Enabled = !Table.Readonly && isrowselected;
+			it_CutRange           .Enabled = !Table.Readonly && isrowselected;
+			it_CopyRange          .Enabled = isrowselected;
+			it_PasteRangeInsert   .Enabled = !Table.Readonly && _copyr.Count != 0;
+			it_PasteRangeOverwrite.Enabled = !Table.Readonly && _copyr.Count != 0 && isrowselected;
+			it_DeleteRange        .Enabled = !Table.Readonly && isrowselected;
 
-			it_CreateRows  .Enabled = !Table.Readonly;
+			it_CreateRows         .Enabled = !Table.Readonly;
 		}
 		#endregion Methods (editrows)
 	}

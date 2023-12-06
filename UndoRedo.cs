@@ -352,12 +352,12 @@ namespace yata
 					break;
 
 				case UrType.rt_ArrayInsert:
-					InsertArray();
+					InsertArray(finish);
 					_it.RestoreType = UrType.rt_ArrayDelete;
 					break;
 
 				case UrType.rt_ArrayDelete:
-					DeleteArray();
+					DeleteArray(finish);
 					_it.RestoreType = UrType.rt_ArrayInsert;
 					break;
 			}
@@ -429,12 +429,12 @@ namespace yata
 					break;
 
 				case UrType.rt_ArrayInsert:
-					InsertArray();
+					InsertArray(finish);
 					_it.RestoreType = UrType.rt_ArrayDelete;
 					break;
 
 				case UrType.rt_ArrayDelete:
-					DeleteArray();
+					DeleteArray(finish);
 					_it.RestoreType = UrType.rt_ArrayInsert;
 					break;
 			}
@@ -561,7 +561,7 @@ namespace yata
 
 			_grid.Delete(r);
 
-			_grid.ClearSelects();
+			_grid.ClearSelects(false, true);
 			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
 
 			_f.EnableRoweditOperations();
@@ -629,7 +629,7 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void InsertArray()
+		void InsertArray(bool finish)
 		{
 			//logfile.Log("UndoRedo.InsertArray()");
 
@@ -658,21 +658,24 @@ namespace yata
 				}
 			}
 
-			// Calibrate() needs to fire to layout/draw the table
-			_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
+			if (finish)
+			{
+				// Calibrate() needs to fire to layout/draw the table
+				_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
-			_f.EnableGotoReplaced(_grid.anyReplaced());
-			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+				_f.EnableGotoReplaced(_grid.anyReplaced());
+				_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			_grid.ClearSelects(false, true);
-			int r = _it.array[0]._id;
-			_grid.Rows[r].selected = true;
-//			_grid.RangeSelect = _it.array.Length - 1;	// that's problematic ... wrt/ re-Sorted cols
-														// and since only 1 row shall ever be selected you can't just select them all either.
-			_grid.EnsureDisplayedRow(r);				// TODO: EnsureDisplayedRows()
+				_grid.ClearSelects(false, true);
+				int r = _it.array[0]._id;
+				_grid.Rows[r].selected = true;
+//				_grid.RangeSelect = _it.array.Length - 1;	// that's problematic ... wrt/ re-Sorted cols
+															// and since only 1 row shall ever be selected you can't just select them all either.
+				_grid.EnsureDisplayedRow(r);				// TODO: EnsureDisplayedRows()
 
-			if (Options._autorder && Yata.order() != 0)
-				_f.layout(true);
+				if (Options._autorder && Yata.order() != 0)
+					_f.layout(true);
+			}
 
 
 			DrawRegulator.ResumeDrawing(_grid);
@@ -684,7 +687,7 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void DeleteArray()
+		void DeleteArray(bool finish)
 		{
 			//logfile.Log("UndoRedo.DeleteArray()");
 
@@ -697,18 +700,21 @@ namespace yata
 				_grid.Delete(_it.array[a]._id, true);
 			}
 
-			// Calibrate() needs to fire to layout/draw the table
-			_grid.Calibrate();
+			if (finish)
+			{
+				// Calibrate() needs to fire to layout/draw the table
+				_grid.Calibrate();
 
-			_grid.ClearSelects();
-			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
+				_grid.ClearSelects(false, true);
+				_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
 
-			_f.EnableRoweditOperations();
-			_f.EnableGotoReplaced(_grid.anyReplaced());
-			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+				_f.EnableRoweditOperations();
+				_f.EnableGotoReplaced(_grid.anyReplaced());
+				_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			if (Options._autorder && Yata.order() != 0)
-				_f.layout(true);
+				if (Options._autorder && Yata.order() != 0)
+					_f.layout(true);
+			}
 
 
 			DrawRegulator.ResumeDrawing(_grid);
