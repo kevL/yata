@@ -543,7 +543,8 @@ namespace yata
 				}
 				else
 				{
-					using (var ib = new Infobox(Infobox.Title_infor, replaced + " field" + plural + " replaced."))
+					using (var ib = new Infobox(Infobox.Title_infor,
+												replaced + " field" + plural + " replaced."))
 					{
 						ib.ShowDialog(this);
 					}
