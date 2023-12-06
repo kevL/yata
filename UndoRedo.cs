@@ -348,7 +348,7 @@ namespace yata
 
 				case UrType.rt_Overwrite:
 					_it.r = _it.rPre;
-					Overwrite();
+					OverwriteRow();
 					break;
 
 				case UrType.rt_ArrayInsert:
@@ -425,7 +425,7 @@ namespace yata
 
 				case UrType.rt_Overwrite:
 					_it.r = _it.rPos;
-					Overwrite();
+					OverwriteRow();
 					break;
 
 				case UrType.rt_ArrayInsert:
@@ -564,6 +564,7 @@ namespace yata
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
 
+			_f.EnableRoweditOperations();
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
@@ -578,9 +579,9 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void Overwrite()
+		void OverwriteRow()
 		{
-			//logfile.Log("UndoRedo.Overwrite()");
+			//logfile.Log("UndoRedo.OverwriteRow()");
 
 			Row row = _it.r;
 			int r = row._id;
@@ -702,6 +703,7 @@ namespace yata
 			_grid.ClearSelects();
 			_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
 
+			_f.EnableRoweditOperations();
 			_f.EnableGotoReplaced(_grid.anyReplaced());
 			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
