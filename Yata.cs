@@ -1184,7 +1184,7 @@ namespace yata
 					it_CutRange           .Enabled =
 					it_CopyRange          .Enabled =
 					it_PasteRangeInsert   .Enabled =
-					it_PasteRangeOverwrite.Enabled =
+					it_PasteRangeReplace  .Enabled =
 					it_DeleteRange        .Enabled =
 					it_CreateRows         .Enabled =
 

@@ -133,7 +133,7 @@ namespace yata
 		/// <remarks>Called by
 		/// <list type="bullet">
 		/// <item><c><see cref="Yata"/>.editrowsclick_DeleteRange()</c></item>
-		/// <item><c><see cref="Yata"/>.editrowsclick_PasteRangeOverwrite()</c></item>
+		/// <item><c><see cref="Yata"/>.editrowsclick_PasteRangeReplace()</c></item>
 		/// </list></remarks>
 		internal void DeleteRows()
 		{

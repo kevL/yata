@@ -86,7 +86,7 @@ namespace yata
 		/// <summary>
 		/// Copies the fields of a range of <c><see cref="Row">Rows</see></c>
 		/// and enables <c><see cref="it_PasteRangeInsert"/></c> and
-		/// <c><see cref="it_PasteRangeOverwrite"/></c> and
+		/// <c><see cref="it_PasteRangeReplace"/></c> and
 		/// <c><see cref="it_ClipExport"/></c>.
 		/// </summary>
 		/// <param name="sender">
@@ -125,9 +125,9 @@ namespace yata
 			if (_fclip != null)
 				_fclip.SetRowsBufferText();
 
-			it_PasteRangeInsert   .Enabled = !Table.Readonly;
-			it_PasteRangeOverwrite.Enabled = !Table.Readonly && Table.getSelectedRow() != -1;
-			it_ClipExport         .Enabled = true;
+			it_PasteRangeInsert .Enabled = !Table.Readonly;
+			it_PasteRangeReplace.Enabled = !Table.Readonly && Table.getSelectedRow() != -1;
+			it_ClipExport       .Enabled = true;
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ namespace yata
 		/// <list type="bullet">
 		/// <item>Rows|Paste - insert <c>[Ctrl+Shift+v]</c></item>
 		/// </list></remarks>
-		/// <seealso cref="editrowsclick_PasteRangeOverwrite()"><c>editrowsclick_PasteRangeOverwrite()</c></seealso>
+		/// <seealso cref="editrowsclick_PasteRangeReplace()"><c>editrowsclick_PasteRangeReplace()</c></seealso>
 		void editrowsclick_PasteRangeInsert(object sender, EventArgs e)
 		{
 			if (!isTableDiffed())
@@ -169,14 +169,14 @@ namespace yata
 		/// Creates a range of <c><see cref="Row">Rows</see></c> and pastes
 		/// copied fields into them after deleting any selected rows.
 		/// </summary>
-		/// <param name="sender"><c><see cref="it_PasteRangeOverwrite"/></c></param>
+		/// <param name="sender"><c><see cref="it_PasteRangeReplace"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks>Fired by
 		/// <list type="bullet">
 		/// <item>Rows|Paste - overwrite <c>[Ctrl+Shift+w]</c></item>
 		/// </list></remarks>
 		/// <seealso cref="editrowsclick_PasteRangeInsert()"><c>editrowsclick_PasteRangeInsert()</c></seealso>
-		void editrowsclick_PasteRangeOverwrite(object sender, EventArgs e)
+		void editrowsclick_PasteRangeReplace(object sender, EventArgs e)
 		{
 			if (!isTableDiffed())
 			{
@@ -185,6 +185,8 @@ namespace yata
 
 
 				int selr = Table.getSelectedRow(); // shall not be -1
+				if (Table.RangeSelect < 0)
+					selr += Table.RangeSelect;
 
 				Table.DeleteRows();
 
@@ -359,15 +361,15 @@ namespace yata
 		{
 			bool isrowselected = Table.getSelectedRow() != -1;
 
-			it_DeselectRows       .Enabled = isrowselected;
+			it_DeselectRows     .Enabled = isrowselected;
 
-			it_CutRange           .Enabled = !Table.Readonly && isrowselected;
-			it_CopyRange          .Enabled = isrowselected;
-			it_PasteRangeInsert   .Enabled = !Table.Readonly && _copyr.Count != 0;
-			it_PasteRangeOverwrite.Enabled = !Table.Readonly && _copyr.Count != 0 && isrowselected;
-			it_DeleteRange        .Enabled = !Table.Readonly && isrowselected;
+			it_CutRange         .Enabled = !Table.Readonly && isrowselected;
+			it_CopyRange        .Enabled = isrowselected;
+			it_PasteRangeInsert .Enabled = !Table.Readonly && _copyr.Count != 0;
+			it_PasteRangeReplace.Enabled = !Table.Readonly && _copyr.Count != 0 && isrowselected;
+			it_DeleteRange      .Enabled = !Table.Readonly && isrowselected;
 
-			it_CreateRows         .Enabled = !Table.Readonly;
+			it_CreateRows       .Enabled = !Table.Readonly;
 		}
 		#endregion Methods (editrows)
 	}

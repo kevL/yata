@@ -66,7 +66,7 @@ namespace yata
 		ToolStripMenuItem it_CutRange;
 		ToolStripMenuItem it_CopyRange;
 		ToolStripMenuItem it_PasteRangeInsert;
-		ToolStripMenuItem it_PasteRangeOverwrite;
+		ToolStripMenuItem it_PasteRangeReplace;
 		ToolStripMenuItem it_DeleteRange;
 		ToolStripMenuItem it_CreateRows;
 
@@ -316,7 +316,7 @@ namespace yata
 			this.it_CutRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_CopyRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_PasteRangeInsert = new System.Windows.Forms.ToolStripMenuItem();
-			this.it_PasteRangeOverwrite = new System.Windows.Forms.ToolStripMenuItem();
+			this.it_PasteRangeReplace = new System.Windows.Forms.ToolStripMenuItem();
 			this.it_DeleteRange = new System.Windows.Forms.ToolStripMenuItem();
 			this.separator_13 = new System.Windows.Forms.ToolStripSeparator();
 			this.it_CreateRows = new System.Windows.Forms.ToolStripMenuItem();
@@ -943,7 +943,7 @@ namespace yata
 			this.it_CutRange,
 			this.it_CopyRange,
 			this.it_PasteRangeInsert,
-			this.it_PasteRangeOverwrite,
+			this.it_PasteRangeReplace,
 			this.it_DeleteRange,
 			this.separator_13,
 			this.it_CreateRows});
@@ -994,15 +994,15 @@ namespace yata
 			this.it_PasteRangeInsert.Text = "&Paste - insert";
 			this.it_PasteRangeInsert.Click += new System.EventHandler(this.editrowsclick_PasteRangeInsert);
 			// 
-			// it_PasteRangeOverwrite
+			// it_PasteRangeReplace
 			// 
-			this.it_PasteRangeOverwrite.Enabled = false;
-			this.it_PasteRangeOverwrite.Name = "it_PasteRangeOverwrite";
-			this.it_PasteRangeOverwrite.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.it_PasteRangeReplace.Enabled = false;
+			this.it_PasteRangeReplace.Name = "it_PasteRangeReplace";
+			this.it_PasteRangeReplace.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
 			| System.Windows.Forms.Keys.W)));
-			this.it_PasteRangeOverwrite.Size = new System.Drawing.Size(185, 22);
-			this.it_PasteRangeOverwrite.Text = "&Paste - overwrite";
-			this.it_PasteRangeOverwrite.Click += new System.EventHandler(this.editrowsclick_PasteRangeOverwrite);
+			this.it_PasteRangeReplace.Size = new System.Drawing.Size(185, 22);
+			this.it_PasteRangeReplace.Text = "&Paste - replace";
+			this.it_PasteRangeReplace.Click += new System.EventHandler(this.editrowsclick_PasteRangeReplace);
 			// 
 			// it_DeleteRange
 			// 
