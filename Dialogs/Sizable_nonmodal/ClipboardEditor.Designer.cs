@@ -72,12 +72,12 @@ namespace yata
 			// rb_RowsBuffer
 			// 
 			this.rb_RowsBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.rb_RowsBuffer.Location = new System.Drawing.Point(250, 1);
+			this.rb_RowsBuffer.Location = new System.Drawing.Point(341, 1);
 			this.rb_RowsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_RowsBuffer.Name = "rb_RowsBuffer";
-			this.rb_RowsBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_RowsBuffer.Size = new System.Drawing.Size(101, 19);
 			this.rb_RowsBuffer.TabIndex = 1;
-			this.rb_RowsBuffer.Text = "view Rows buffer";
+			this.rb_RowsBuffer.Text = "Rows buffer";
 			this.rb_RowsBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_RowsBuffer.UseVisualStyleBackColor = true;
 			this.rb_RowsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
@@ -85,12 +85,12 @@ namespace yata
 			// rb_ColBuffer
 			// 
 			this.rb_ColBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.rb_ColBuffer.Location = new System.Drawing.Point(510, 1);
+			this.rb_ColBuffer.Location = new System.Drawing.Point(547, 1);
 			this.rb_ColBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_ColBuffer.Name = "rb_ColBuffer";
-			this.rb_ColBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_ColBuffer.Size = new System.Drawing.Size(93, 19);
 			this.rb_ColBuffer.TabIndex = 3;
-			this.rb_ColBuffer.Text = "view Col buffer";
+			this.rb_ColBuffer.Text = "Col buffer";
 			this.rb_ColBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_ColBuffer.UseVisualStyleBackColor = true;
 			this.rb_ColBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
@@ -98,12 +98,12 @@ namespace yata
 			// rb_CellsBuffer
 			// 
 			this.rb_CellsBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.rb_CellsBuffer.Location = new System.Drawing.Point(380, 1);
+			this.rb_CellsBuffer.Location = new System.Drawing.Point(445, 1);
 			this.rb_CellsBuffer.Margin = new System.Windows.Forms.Padding(0);
 			this.rb_CellsBuffer.Name = "rb_CellsBuffer";
-			this.rb_CellsBuffer.Size = new System.Drawing.Size(130, 19);
+			this.rb_CellsBuffer.Size = new System.Drawing.Size(99, 19);
 			this.rb_CellsBuffer.TabIndex = 2;
-			this.rb_CellsBuffer.Text = "view Cells buffer";
+			this.rb_CellsBuffer.Text = "Cells buffer";
 			this.rb_CellsBuffer.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.rb_CellsBuffer.UseVisualStyleBackColor = true;
 			this.rb_CellsBuffer.CheckedChanged += new System.EventHandler(this.checkedchanged);
