@@ -63,28 +63,33 @@ namespace yata
 		/// <summary>
 		/// Deletes a <c><see cref="Row"/></c> from this <c>YataGrid</c>.
 		/// </summary>
-		/// <param name="idr">row-id to delete</param>
+		/// <param name="rowid">row-id to delete</param>
 		/// <param name="bypassCalibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
-		internal void Delete(int idr, bool bypassCalibrate = false)
+		/// <param name="undoredo"><c>true</c> if called by <c><see cref="UndoRedo"/></c></param>
+		/// <returns>a <c><see cref="Row"/></c> iff a default row has been
+		/// created</returns>
+		internal Row Delete(int rowid, bool bypassCalibrate = false, bool undoredo = false)
 		{
+			//logfile.Log("YataGrid.Delete() undoredo= " + undoredo);
+
 			if (!bypassCalibrate)
 				DrawRegulator.SuspendDrawing(this);
 
-			Row row;
+			Row row = null;
 
-			Rows.Remove(Rows[idr]);
+			Rows.Remove(Rows[rowid]);
 			--RowCount;
 
-			for (int r = idr; r != RowCount; ++r) // straighten out row._id and cell.y ->
+			for (int r = rowid; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
 				--(row = Rows[r])._id;
 				for (int c = 0; c != ColCount; ++c)
 					--row[c].y;
 			}
 
-			if (RowCount == 0) // add a row of stars so grid is not left blank ->
+			if (RowCount == 0 && !undoredo) // add a row of stars so grid is not left blank ->
 			{
 				++RowCount;
 
@@ -112,7 +117,7 @@ namespace yata
 					Calibrate(0);
 					DrawRegulator.ResumeDrawing(this);
 
-					return;
+					return row; // <- that row needs to be added to UndoRedo after the delete operation
 				}
 			}
 
@@ -120,11 +125,12 @@ namespace yata
 			{
 				Calibrate();
 
-				if (idr < RowCount)
-					EnsureDisplayedRow(idr);
+				if (rowid < RowCount)
+					EnsureDisplayedRow(rowid);
 
 				DrawRegulator.ResumeDrawing(this);
 			}
+			return row;
 		}
 
 		/// <summary>
@@ -137,6 +143,8 @@ namespace yata
 		/// </list></remarks>
 		internal void DeleteRows()
 		{
+			//logfile.Log("YataGrid.DeleteRows()");
+
 			_f.Obfuscate();
 			DrawRegulator.SuspendDrawing(this);
 
@@ -146,6 +154,8 @@ namespace yata
 			int range = Math.Abs(RangeSelect);
 			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
 
+			Row row = null;
+
 			int rFirst, rLast;
 			if (RangeSelect > 0) { rFirst = selr; rLast = selr + RangeSelect; }
 			else                 { rFirst = selr + RangeSelect; rLast = selr; }
@@ -153,7 +163,7 @@ namespace yata
 			while (rLast >= rFirst) // reverse delete.
 			{
 				rest.array[range--] = Rows[rLast].Clone() as Row;
-				Delete(rLast, true);
+				row = Delete(rLast, true);
 
 				--rLast;
 			}
@@ -174,6 +184,14 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			_ur.Push(rest);
+
+			if (row != null)
+			{
+				rest = UndoRedo.createArray(1, UndoRedo.UrType.rt_ArrayDelete);
+				rest.array[0] = row.Clone() as Row;
+				_ur.Push(rest);
+				_ur.SetChained(2);
+			}
 
 
 			DrawRegulator.ResumeDrawing(this);

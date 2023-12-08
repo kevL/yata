@@ -337,12 +337,12 @@ namespace yata
 					break;
 
 				case UrType.rt_Insert:
-					InsertRow();
+					InsertRow(finish);
 					_it.RestoreType = UrType.rt_Delete;
 					break;
 
 				case UrType.rt_Delete:
-					DeleteRow();
+					DeleteRow(finish);
 					_it.RestoreType = UrType.rt_Insert;
 					break;
 
@@ -414,12 +414,12 @@ namespace yata
 					break;
 
 				case UrType.rt_Insert:
-					InsertRow();
+					InsertRow(finish);
 					_it.RestoreType = UrType.rt_Delete;
 					break;
 
 				case UrType.rt_Delete:
-					DeleteRow();
+					DeleteRow(finish);
 					_it.RestoreType = UrType.rt_Insert;
 					break;
 
@@ -512,7 +512,7 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void InsertRow()
+		void InsertRow(bool finish)
 		{
 			//logfile.Log("UndoRedo.InsertRow()");
 
@@ -535,17 +535,22 @@ namespace yata
 			}
 			YataGrid._init = false;
 
-			_f.EnableGotoReplaced(_grid.anyReplaced());
-			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+			if (finish)
+			{
+				//logfile.Log(". finish");
 
-			_grid.ClearSelects(false, true);
-			_grid.Rows[r].selected = true;
-			_grid.EnsureDisplayedRow(r);
+				_f.EnableGotoReplaced(_grid.anyReplaced());
+				_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
 
-			if (Options._autorder && Yata.order() != 0)
-				_f.layout(true);
+				_grid.ClearSelects(false, true);
+				_grid.Rows[r].selected = true;
+				_grid.EnsureDisplayedRow(r);
 
-			Invalidate();
+				if (Options._autorder && Yata.order() != 0)
+					_f.layout(true);
+
+				Invalidate();
+			}
 		}
 
 		/// <summary>
@@ -553,25 +558,34 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
-		void DeleteRow()
+		void DeleteRow(bool finish)
 		{
 			//logfile.Log("UndoRedo.DeleteRow()");
 
 			int r = _it.r._id;
 
-			_grid.Delete(r);
+			_grid.Delete(r, false, true);
 
-			_grid.ClearSelects(false, true);
-			_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
+			if (finish)
+			{
+				//logfile.Log(". finish");
 
-			_f.EnableRoweditOperations();
-			_f.EnableGotoReplaced(_grid.anyReplaced());
-			_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+				_grid.ClearSelects(false, true);
 
-			if (Options._autorder && Yata.order() != 0)
-				_f.layout(true);
+				//logfile.Log(". _grid.RowCount= " + _grid.RowCount);
 
-			Invalidate();
+				if (_grid.RowCount != 0)
+					_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
+
+				_f.EnableRoweditOperations();
+				_f.EnableGotoReplaced(_grid.anyReplaced());
+				_f.EnableGotoLoadchanged(_grid.anyLoadchanged());
+
+				if (Options._autorder && Yata.order() != 0)
+					_f.layout(true);
+
+				Invalidate();
+			}
 		}
 
 		/// <summary>
@@ -629,6 +643,7 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
+		/// <param name="finish"><c>true</c> to finish any chained actions</param>
 		void InsertArray(bool finish)
 		{
 			//logfile.Log("UndoRedo.InsertArray()");
@@ -660,6 +675,8 @@ namespace yata
 
 			if (finish)
 			{
+				//logfile.Log(". finish");
+
 				// Calibrate() needs to fire to layout/draw the table
 				_grid.Calibrate(0, _grid.RowCount - 1); // that sets 'YataGrid._init' false <-
 
@@ -687,6 +704,7 @@ namespace yata
 		/// <c><see cref="Undo()">Undo()</see></c> or
 		/// <c><see cref="Redo()">Redo()</see></c>.
 		/// </summary>
+		/// <param name="finish"><c>true</c> to finish any chained actions</param>
 		void DeleteArray(bool finish)
 		{
 			//logfile.Log("UndoRedo.DeleteArray()");
@@ -697,16 +715,22 @@ namespace yata
 
 			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
 			{
-				_grid.Delete(_it.array[a]._id, true);
+				_grid.Delete(_it.array[a]._id, true, true);
 			}
 
 			if (finish)
 			{
+				//logfile.Log(". finish");
+
 				// Calibrate() needs to fire to layout/draw the table
 				_grid.Calibrate();
 
 				_grid.ClearSelects(false, true);
-				_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
+
+				//logfile.Log(". _grid.RowCount= " + _grid.RowCount);
+
+				if (_grid.RowCount != 0)
+					_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
 
 				_f.EnableRoweditOperations();
 				_f.EnableGotoReplaced(_grid.anyReplaced());

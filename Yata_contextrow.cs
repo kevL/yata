@@ -368,10 +368,12 @@ namespace yata
 		/// <param name="e"></param>
 		void rowclick_Delete(object sender, EventArgs e)
 		{
+			//logfile.Log("Yata.rowclick_Delete()");
+
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
 
-			Table.Delete(_r);
+			Row row = Table.Delete(_r);
 
 			EnableRoweditOperations();
 			EnableGotoReplaced(Table.anyReplaced());
@@ -384,6 +386,13 @@ namespace yata
 				rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 			}
 			Table._ur.Push(rest);
+
+			if (row != null)
+			{
+				rest = UndoRedo.createRow(row, UndoRedo.UrType.rt_Delete);
+				Table._ur.Push(rest);
+				Table._ur.SetChained(2);
+			}
 
 			if (Options._autorder && order() != 0) layout();
 		}
