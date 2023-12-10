@@ -72,12 +72,10 @@ namespace yata
 		/// created</returns>
 		internal Row Delete(int rowid, bool bypassCalibrate = false, bool undoredo = false)
 		{
-			//logfile.Log("YataGrid.Delete() undoredo= " + undoredo);
-
 			if (!bypassCalibrate)
 				DrawRegulator.SuspendDrawing(this);
 
-			Row row = null;
+			Row row;
 
 			Rows.Remove(Rows[rowid]);
 			--RowCount;
@@ -88,6 +86,8 @@ namespace yata
 				for (int c = 0; c != ColCount; ++c)
 					--row[c].y;
 			}
+
+			row = null;
 
 			if (RowCount == 0 && !undoredo) // add a row of stars so grid is not left blank ->
 			{
@@ -143,8 +143,6 @@ namespace yata
 		/// </list></remarks>
 		internal void DeleteRows()
 		{
-			//logfile.Log("YataGrid.DeleteRows()");
-
 			_f.Obfuscate();
 			DrawRegulator.SuspendDrawing(this);
 
