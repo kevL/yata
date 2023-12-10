@@ -306,6 +306,7 @@ namespace yata
 		/// <c><see cref="_grid"/></c></returns>
 		internal bool Undo()
 		{
+			//logfile.Log();
 			//logfile.Log("Undo() " + Undoables.Peek().RestoreType + " diffed= " + isDiffedTable());
 
 			switch (Undoables.Peek().RestoreType)
@@ -383,6 +384,7 @@ namespace yata
 		/// <c><see cref="_grid"/></c></returns>
 		internal bool Redo()
 		{
+			//logfile.Log();
 			//logfile.Log("Redo() " + Redoables.Peek().RestoreType + " diffed= " + isDiffedTable());
 
 			switch (Redoables.Peek().RestoreType)
@@ -467,6 +469,7 @@ namespace yata
 			//logfile.Log("UndoRedo.RestoreCell()");
 
 			var cell = _it.cell.Clone() as Cell;
+			_grid.doTextwidth(cell);
 
 			int c = cell.x;
 			_grid[cell.y, c] = cell;
@@ -571,8 +574,6 @@ namespace yata
 				//logfile.Log(". finish");
 
 				_grid.ClearSelects(false, true);
-
-				//logfile.Log(". _grid.RowCount= " + _grid.RowCount);
 
 				if (_grid.RowCount != 0)
 					_grid.EnsureDisplayedRow(Math.Min(r, _grid.RowCount - 1));
@@ -726,8 +727,6 @@ namespace yata
 				_grid.Calibrate();
 
 				_grid.ClearSelects(false, true);
-
-				//logfile.Log(". _grid.RowCount= " + _grid.RowCount);
 
 				if (_grid.RowCount != 0)
 					_grid.EnsureDisplayedRow(Math.Min(_it.array[0]._id, _grid.RowCount - 1));
