@@ -879,7 +879,7 @@ namespace yata
 
 				// check if 2da-file is already open ->
 				for (int i = 0; i != Tabs.TabPages.Count; ++i)
-				if ((Tabs.TabPages[i].Tag as YataGrid).Fullpath == pfe)
+				if ((Tabs.TabPages[i].Tag as YataGrid).Fullpath == pfe) // TODO: case insensitive <-
 				{
 					TopMost = true; // drag&drop from FileExplorer could leave the Infobox hidden behind other windows.
 					TopMost = false;
