@@ -915,7 +915,7 @@ namespace yata
 				{
 					Table = table; // NOTE: Is done in tab_SelectedIndexChanged() also.
 
-					DrawRegulator.SuspendDrawing(Table);
+//					DrawRegulator.SuspendDrawing(Table);
 
 					var tab = new TabPage();
 					Tabs.TabPages.Add(tab);
@@ -935,7 +935,7 @@ namespace yata
 					TopMost = true;
 					TopMost = false;
 
-					DrawRegulator.ResumeDrawing(Table);
+//					DrawRegulator.ResumeDrawing(Table);
 				}
 				else
 				{
@@ -1496,7 +1496,7 @@ namespace yata
 		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> property.</remarks>
 		internal void SetTabText(YataGrid table)
 		{
-			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+//			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			string asterics = table.Changed ? ASTERICS : String.Empty;
 			foreach (TabPage tab in Tabs.TabPages)
@@ -1509,7 +1509,7 @@ namespace yata
 			}
 			SetTabSize();
 
-			DrawRegulator.ResumeDrawing(this);
+//			DrawRegulator.ResumeDrawing(this);
 		}
 
 		/// <summary>
@@ -1519,7 +1519,7 @@ namespace yata
 		/// <c><see cref="fileclick_SaveAll()">fileclick_SaveAll()</see></c>.</remarks>
 		void SetAllTabTexts()
 		{
-			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
+//			DrawRegulator.SuspendDrawing(this); // stop tab-flicker on Sort etc.
 
 			YataGrid table;
 			foreach (TabPage tab in Tabs.TabPages)
@@ -1530,7 +1530,7 @@ namespace yata
 			}
 			SetTabSize();
 
-			DrawRegulator.ResumeDrawing(this);
+//			DrawRegulator.ResumeDrawing(this);
 		}
 		#endregion Methods (tabs)
 

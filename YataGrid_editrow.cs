@@ -22,8 +22,8 @@ namespace yata
 							 Brush brush,
 							 bool bypassCalibrate = false)
 		{
-			if (!bypassCalibrate)
-				DrawRegulator.SuspendDrawing(this);
+//			if (!bypassCalibrate)
+//				DrawRegulator.SuspendDrawing(this);
 
 			var row = new Row(rowid, ColCount, brush, this);
 
@@ -56,7 +56,7 @@ namespace yata
 				if (rowid < RowCount)
 					EnsureDisplayedRow(rowid);
 
-				DrawRegulator.ResumeDrawing(this);
+//				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
@@ -72,8 +72,8 @@ namespace yata
 		/// created</returns>
 		internal Row Delete(int rowid, bool bypassCalibrate = false, bool undoredo = false)
 		{
-			if (!bypassCalibrate)
-				DrawRegulator.SuspendDrawing(this);
+//			if (!bypassCalibrate)
+//				DrawRegulator.SuspendDrawing(this);
 
 			Row row;
 
@@ -115,7 +115,7 @@ namespace yata
 				if (!bypassCalibrate)
 				{
 					Calibrate(0);
-					DrawRegulator.ResumeDrawing(this);
+//					DrawRegulator.ResumeDrawing(this);
 
 					return row; // <- that row needs to be added to UndoRedo after the delete operation
 				}
@@ -128,7 +128,7 @@ namespace yata
 				if (rowid < RowCount)
 					EnsureDisplayedRow(rowid);
 
-				DrawRegulator.ResumeDrawing(this);
+//				DrawRegulator.ResumeDrawing(this);
 			}
 			return row;
 		}
@@ -144,7 +144,7 @@ namespace yata
 		internal void DeleteRows()
 		{
 			_f.Obfuscate();
-			DrawRegulator.SuspendDrawing(this);
+//			DrawRegulator.SuspendDrawing(this);
 
 
 			int selr = getSelectedRow();
@@ -192,7 +192,7 @@ namespace yata
 			}
 
 
-			DrawRegulator.ResumeDrawing(this);
+//			DrawRegulator.ResumeDrawing(this);
 			_f.Obfuscate(false);
 		}
 	}

@@ -651,7 +651,7 @@ namespace yata
 			//logfile.Log("UndoRedo.InsertArray()");
 
 			_f.Obfuscate();
-			DrawRegulator.SuspendDrawing(_grid);
+//			DrawRegulator.SuspendDrawing(_grid);
 
 
 			int cols = _it.array[0].Length;
@@ -697,7 +697,7 @@ namespace yata
 			}
 
 
-			DrawRegulator.ResumeDrawing(_grid);
+//			DrawRegulator.ResumeDrawing(_grid);
 			_f.Obfuscate(false);
 		}
 
@@ -712,7 +712,7 @@ namespace yata
 			//logfile.Log("UndoRedo.DeleteArray()");
 
 			_f.Obfuscate();
-			DrawRegulator.SuspendDrawing(_grid);
+//			DrawRegulator.SuspendDrawing(_grid);
 
 
 			for (int a = _it.array.Length - 1; a != -1; --a) // reverse delete.
@@ -741,7 +741,7 @@ namespace yata
 			}
 
 
-			DrawRegulator.ResumeDrawing(_grid);
+//			DrawRegulator.ResumeDrawing(_grid);
 			_f.Obfuscate(false);
 		}
 

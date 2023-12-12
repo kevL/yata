@@ -1173,7 +1173,7 @@ namespace yata
 		void ColSort(int col)
 		{
 			_isColsort = true;
-			DrawRegulator.SuspendDrawing(_f);
+//			DrawRegulator.SuspendDrawing(_f);
 
 			_f.tabclick_DiffReset(null, EventArgs.Empty);
 
@@ -1220,7 +1220,7 @@ namespace yata
 			}
 			_ur.ResetY(); // straighten out row._id and cell.y in UndoRedo's Restorables
 
-			DrawRegulator.ResumeDrawing(_f);
+//			DrawRegulator.ResumeDrawing(_f);
 			_isColsort = false;
 		}
 		#endregion Sort

@@ -93,7 +93,7 @@ namespace yata
 		/// <param name="bypassInvalidate"></param>
 		internal void layout(bool bypassInvalidate = false)
 		{
-			DrawRegulator.SuspendDrawing(this);
+//			DrawRegulator.SuspendDrawing(this);
 
 
 			if (!Table.Changed)
@@ -119,7 +119,7 @@ namespace yata
 				Table.Invalidator(invalid);
 			}
 
-			DrawRegulator.ResumeDrawing(this);
+//			DrawRegulator.ResumeDrawing(this);
 		}
 
 		/// <summary>
@@ -238,11 +238,11 @@ namespace yata
 		internal void opsclick_AutosizeCols(object sender, EventArgs e)
 		{
 			Obfuscate();
-			DrawRegulator.SuspendDrawing(Table);
+//			DrawRegulator.SuspendDrawing(Table);
 
 			AutosizeCols(Table);
 
-			DrawRegulator.ResumeDrawing(Table);
+//			DrawRegulator.ResumeDrawing(Table);
 			Obfuscate(false);
 		}
 

@@ -113,7 +113,7 @@ namespace yata
 			if (Table != null)
 			{
 				Obfuscate();
-				DrawRegulator.SuspendDrawing(Table);
+//				DrawRegulator.SuspendDrawing(Table);
 
 				SetTabSize();
 
@@ -150,7 +150,7 @@ namespace yata
 						table.Invalidator(table.EnsureDisplayed());
 				}
 
-				DrawRegulator.ResumeDrawing(Table);
+//				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 
 				if (_ffont != null)			// layout for big tables will send the Font dialog below the form ->

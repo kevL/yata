@@ -40,7 +40,7 @@ namespace yata
 			}
 		}
 
-		/// <summary>
+/*		/// <summary>
 		/// Suspend drawing updates for the specified <c>IWin32Window</c>
 		/// control. After the control has been updated call
 		/// <c><see cref="ResumeDrawing()">ResumeDrawing()</see></c>.
@@ -49,9 +49,9 @@ namespace yata
 		internal static void SuspendDrawing(IWin32Window control)
 		{
 			SendMessage(control.Handle, WM_SETREDRAW, false, 0);
-		}
+		} */
 
-		/// <summary>
+/*		/// <summary>
 		/// Resume drawing updates for the specified <c>Control</c>.
 		/// </summary>
 		/// <param name="control">the <c>Control</c> to resume draw updates on</param>
@@ -59,6 +59,6 @@ namespace yata
 		{
 			SendMessage(control.Handle, WM_SETREDRAW, true, 0);
 			control.Refresh();
-		}
+		} */
 	}
 }

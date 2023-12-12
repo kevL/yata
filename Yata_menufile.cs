@@ -89,7 +89,7 @@ namespace yata
 			{
 				AddRecentFile(Table.Fullpath);
 
-				DrawRegulator.SuspendDrawing(Table);
+//				DrawRegulator.SuspendDrawing(Table);
 
 				var tab = new TabPage();
 				Tabs.TabPages.Add(tab);
@@ -103,7 +103,7 @@ namespace yata
 
 				Table.Init();
 
-				DrawRegulator.ResumeDrawing(Table);
+//				DrawRegulator.ResumeDrawing(Table);
 			}
 			else
 			{
@@ -219,7 +219,7 @@ namespace yata
 					int result = Table.LoadTable();
 					if (result != YataGrid.LOADRESULT_FALSE)
 					{
-						DrawRegulator.SuspendDrawing(Table);
+//						DrawRegulator.SuspendDrawing(Table);
 
 						Table._ur.Clear();
 
@@ -234,7 +234,7 @@ namespace yata
 							Table.Propanel = null;
 						}
 
-						DrawRegulator.ResumeDrawing(Table);
+//						DrawRegulator.ResumeDrawing(Table);
 					}
 					else
 					{
@@ -549,11 +549,11 @@ namespace yata
 
 			if (close)
 			{
-				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
+//				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
 				CloseTabpage(Tabs.SelectedTab);
 
-				DrawRegulator.ResumeDrawing(this);
+//				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 
@@ -575,14 +575,14 @@ namespace yata
 		{
 			if (!CancelChangedTables("close"))
 			{
-				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
+//				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
 				for (int tabid = Tabs.TabCount - 1; tabid != -1; --tabid)
 					CloseTabpage(Tabs.TabPages[tabid], true);
 
 				_lasttabs.Clear();
 
-				DrawRegulator.ResumeDrawing(this);
+//				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 

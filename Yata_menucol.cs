@@ -167,7 +167,7 @@ namespace yata
 							&& InputDialog._colabel.Length != 0)
 						{
 							Obfuscate();
-							DrawRegulator.SuspendDrawing(Table);
+//							DrawRegulator.SuspendDrawing(Table);
 
 							// create at far right if no col selected
 							if (selc < Table.FrozenCount) // ~safety.
@@ -180,7 +180,7 @@ namespace yata
 							it_freeze1.Enabled = Table.ColCount > 1;
 							it_freeze2.Enabled = Table.ColCount > 2;
 
-							DrawRegulator.ResumeDrawing(Table);
+//							DrawRegulator.ResumeDrawing(Table);
 							Obfuscate(false);
 						}
 					}
@@ -207,7 +207,7 @@ namespace yata
 				if (ib.ShowDialog(this) == DialogResult.OK)
 				{
 					Obfuscate();
-					DrawRegulator.SuspendDrawing(Table);
+//					DrawRegulator.SuspendDrawing(Table);
 
 					steadystate();
 
@@ -216,7 +216,7 @@ namespace yata
 					it_freeze1.Enabled = Table.ColCount > 1;
 					it_freeze2.Enabled = Table.ColCount > 2;
 
-					DrawRegulator.ResumeDrawing(Table);
+//					DrawRegulator.ResumeDrawing(Table);
 					Obfuscate(false);
 				}
 			}
@@ -330,11 +330,11 @@ namespace yata
 			if (diff == 0)
 			{
 				Obfuscate();
-				DrawRegulator.SuspendDrawing(Table);
+//				DrawRegulator.SuspendDrawing(Table);
 
 				Table.PasteCol(_copyc);
 
-				DrawRegulator.ResumeDrawing(Table);
+//				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 			}
 		}

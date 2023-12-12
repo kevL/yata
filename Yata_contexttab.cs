@@ -94,7 +94,7 @@ namespace yata
 		{
 			if (!CancelChangedTables("close", true))
 			{
-				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
+//				DrawRegulator.SuspendDrawing(this); // stops tab-flickering on Remove tab
 
 				int selid = Tabs.SelectedIndex;
 				for (int tabid = Tabs.TabCount - 1; tabid != -1; --tabid)
@@ -108,7 +108,7 @@ namespace yata
 
 				it_SaveAll.Enabled = AllowSaveAll();
 
-				DrawRegulator.ResumeDrawing(this);
+//				DrawRegulator.ResumeDrawing(this);
 			}
 		}
 

@@ -757,14 +757,14 @@ namespace yata
 			{
 				try
 				{
-					DrawRegulator.SuspendDrawing(gb_Colors);
-					DrawRegulator.SuspendDrawing(Yata.that);
+//					DrawRegulator.SuspendDrawing(gb_Colors);
+//					DrawRegulator.SuspendDrawing(Yata.that);
 
 					ColorOptions.ParseColorsFile(pfe);
 					InitializeColorPanels();
 
-					DrawRegulator.ResumeDrawing(gb_Colors);
-					DrawRegulator.ResumeDrawing(Yata.that);
+//					DrawRegulator.ResumeDrawing(gb_Colors);
+//					DrawRegulator.ResumeDrawing(Yata.that);
 
 					using (var ib = new Infobox(Infobox.Title_succf,
 												"Colors.Cfg reloaded",
@@ -824,8 +824,8 @@ namespace yata
 		{
 			if (panel == null) // restore all defaults ->
 			{
-				DrawRegulator.SuspendDrawing(gb_Colors);
-				DrawRegulator.SuspendDrawing(Yata.that);
+//				DrawRegulator.SuspendDrawing(gb_Colors);
+//				DrawRegulator.SuspendDrawing(Yata.that);
 
 				// Table ->
 				pa_15  .BackColor = ColorOptions.Def_rowlines;
@@ -901,8 +901,8 @@ namespace yata
 				pa_14_t.BackColor = ColorOptions.Def_statusbar_t;
 
 
-				DrawRegulator.ResumeDrawing(gb_Colors);
-				DrawRegulator.ResumeDrawing(Yata.that);
+//				DrawRegulator.ResumeDrawing(gb_Colors);
+//				DrawRegulator.ResumeDrawing(Yata.that);
 			}
 			else // restore option default ->
 			{

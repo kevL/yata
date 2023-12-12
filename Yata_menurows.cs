@@ -146,7 +146,7 @@ namespace yata
 			if (!isTableDiffed())
 			{
 				Obfuscate();
-				DrawRegulator.SuspendDrawing(Table);
+//				DrawRegulator.SuspendDrawing(Table);
 
 
 				int selr = Table.getSelectedRow();
@@ -156,7 +156,7 @@ namespace yata
 				pasterange(selr);
 
 
-				DrawRegulator.ResumeDrawing(Table);
+//				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 
 				if (Options._autorder && order() != 0) layout();
@@ -181,7 +181,7 @@ namespace yata
 			if (!isTableDiffed())
 			{
 				Obfuscate();
-				DrawRegulator.SuspendDrawing(Table);
+//				DrawRegulator.SuspendDrawing(Table);
 
 
 				int selr = Table.getSelectedRow(); // shall not be -1
@@ -195,7 +195,7 @@ namespace yata
 				Table._ur.SetChained(2);
 
 
-				DrawRegulator.ResumeDrawing(Table);
+//				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
 
 				if (Options._autorder && order() != 0) layout();
@@ -287,7 +287,7 @@ namespace yata
 					if (rcd.ShowDialog(this) == DialogResult.OK)
 					{
 						Obfuscate();
-						DrawRegulator.SuspendDrawing(Table);
+//						DrawRegulator.SuspendDrawing(Table);
 
 
 						Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
@@ -340,7 +340,7 @@ namespace yata
 						Table._ur.Push(rest);
 
 
-						DrawRegulator.ResumeDrawing(Table);
+//						DrawRegulator.ResumeDrawing(Table);
 						Obfuscate(false);
 
 						if (Options._autorder && order() != 0) layout();
