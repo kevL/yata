@@ -494,6 +494,7 @@ namespace yata
 					{
 						_grid.Colwidth(col, 0, _grid.RowCount - 1);
 						_grid.MetricFrozenControls(col);
+						_grid.InitScroll();
 					}
 				}
 				_cols.Clear();
