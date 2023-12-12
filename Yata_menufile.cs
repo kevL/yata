@@ -373,8 +373,8 @@ namespace yata
 
 					if (!_isCreate) // stuff that's unneeded and/or unwanted when creating a 2da ->
 					{
-						if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly is saved
-																//               *as itself* it loses its Readonly flag.
+						if (overwrite) _table.Readonly = false;	// <- IMPORTANT: If a file that was opened Readonly
+																// is saved *as itself* it loses its Readonly flag.
 
 						_table.Changed = false;
 						_table._ur.ResetSaved();
@@ -387,6 +387,11 @@ namespace yata
 					}
 
 					FileOutput.Write(_table);
+
+					if (sender == it_SaveAs && File.Exists(_table.Fullpath))
+					{
+						AddRecentFile(_table.Fullpath);
+					}
 				}
 //				}
 			}
