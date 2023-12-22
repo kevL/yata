@@ -148,7 +148,7 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createCell(ICloneable cell)
 		{
-			//logfile.Log("createCell()");
+			//logfile.Log("UndoRedo.createCell()");
 
 			Restorable it;
 			it.RestoreType = UrType.rt_Cell;
@@ -181,7 +181,7 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row, UrType type)
 		{
-			//logfile.Log("createRow() type= " + type);
+			//logfile.Log("UndoRedo.createRow() type= " + type);
 
 			Restorable it;
 			it.RestoreType = type;
@@ -211,7 +211,7 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createRow(ICloneable row)
 		{
-			//logfile.Log("createRow()");
+			//logfile.Log("UndoRedo.createRow()");
 
 			Restorable it;
 			it.RestoreType = UrType.rt_Overwrite;
@@ -244,7 +244,7 @@ namespace yata
 		/// <returns></returns>
 		internal static Restorable createArray(int rows, UrType type)
 		{
-			//logfile.Log("createArray() type= " + type);
+			//logfile.Log("UndoRedo.createArray() type= " + type);
 
 			Restorable it;
 			it.RestoreType = type;
@@ -307,7 +307,7 @@ namespace yata
 		internal bool Undo()
 		{
 			//logfile.Log();
-			//logfile.Log("Undo() " + Undoables.Peek().RestoreType + " diffed= " + isDiffedTable());
+			//logfile.Log("UndoRedo.Undo() " + Undoables.Peek().RestoreType + " diffed= " + isDiffedTable());
 
 			switch (Undoables.Peek().RestoreType)
 			{
@@ -385,7 +385,7 @@ namespace yata
 		internal bool Redo()
 		{
 			//logfile.Log();
-			//logfile.Log("Redo() " + Redoables.Peek().RestoreType + " diffed= " + isDiffedTable());
+			//logfile.Log("UndoRedo.Redo() " + Redoables.Peek().RestoreType + " diffed= " + isDiffedTable());
 
 			switch (Redoables.Peek().RestoreType)
 			{
