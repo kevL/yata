@@ -188,7 +188,7 @@ namespace yata
 				if (Table.RangeSelect < 0)
 					selr += Table.RangeSelect;
 
-				Table.DeleteRows();
+				Table.DeleteRows(true);
 
 				pasterange(selr);
 
@@ -205,7 +205,8 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Pastes the <c><see cref="_copyr"/></c> buffer at the specified
+		/// row-id.
 		/// </summary>
 		/// <param name="selr"></param>
 		void pasterange(int selr)

@@ -373,7 +373,7 @@ namespace yata
 			Restorable rest = UndoRedo.createRow(Table.Rows[_r], UndoRedo.UrType.rt_Insert);
 
 
-			Row row = Table.Delete(_r);
+			Row created = Table.Delete(_r);
 
 			EnableRoweditOperations();
 			EnableGotoReplaced(Table.anyReplaced());
@@ -387,9 +387,9 @@ namespace yata
 			}
 			Table._ur.Push(rest);
 
-			if (row != null)
+			if (created != null)
 			{
-				rest = UndoRedo.createRow(row, UndoRedo.UrType.rt_Delete);
+				rest = UndoRedo.createRow(created, UndoRedo.UrType.rt_Delete);
 				Table._ur.Push(rest);
 				Table._ur.SetChained(2);
 			}

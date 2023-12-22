@@ -67,59 +67,65 @@ namespace yata
 		/// <param name="bypassCalibrate"><c>true</c> to re-layout the grid or
 		/// <c>false</c> if <c><see cref="Calibrate()">Calibrate()</see></c>
 		/// will be done by the caller</param>
-		/// <param name="undoredo"><c>true</c> if called by <c><see cref="UndoRedo"/></c></param>
+		/// <param name="bypassCreate"><c>true</c> to bypass the creation of a
+		/// blank row if all rows are deleted - passed by
+		/// <list type="bullet">
+		/// <item><c><see cref="UndoRedo"/>.DeleteRow()</c></item>
+		/// <item><c><see cref="UndoRedo"/>.DeleteArray()</c></item>
+		/// <item><c><see cref="Yata"/>.editrowsclick_PasteRangeReplace()</c></item>
+		/// </list></param>
 		/// <returns>a <c><see cref="Row"/></c> iff a default row has been
 		/// created</returns>
-		internal Row Delete(int rowid, bool bypassCalibrate = false, bool undoredo = false)
+		internal Row Delete(int rowid, bool bypassCalibrate = false, bool bypassCreate = false)
 		{
 //			if (!bypassCalibrate)
 //				DrawRegulator.SuspendDrawing(this);
 
-			Row row;
 
 			Rows.Remove(Rows[rowid]);
 			--RowCount;
 
+			Row created;
 			for (int r = rowid; r != RowCount; ++r) // straighten out row._id and cell.y ->
 			{
-				--(row = Rows[r])._id;
+				--(created = Rows[r])._id;
 				for (int c = 0; c != ColCount; ++c)
-					--row[c].y;
+					--created[c].y;
 			}
 
-			row = null;
-
-			if (RowCount == 0 && !undoredo) // add a row of stars so grid is not left blank ->
+			if (RowCount == 0 && !bypassCreate) // add a row of stars so grid is not left blank ->
 			{
 				++RowCount;
 
-				row = new Row(0, ColCount, ColorOptions._rowcreated, this);
+				created = new Row(0, ColCount, ColorOptions._rowcreated, this);
 
 				int c = 0;
 				if (Options._autorder)
 				{
-					row[0] = new Cell(0,0, "0");
-					doTextwidth(row[0]);
+					created[0] = new Cell(0,0, "0");
+					doTextwidth(created[0]);
 
 					++c;
 				}
 
 				for (; c != ColCount; ++c)
 				{
-					row[c] = new Cell(0, c, gs.Stars);
-					doTextwidth(row[c]);
+					created[c] = new Cell(0, c, gs.Stars);
+					doTextwidth(created[c]);
 				}
 
-				Rows.Add(row);
+				Rows.Add(created);
 
 				if (!bypassCalibrate)
 				{
 					Calibrate(0);
 //					DrawRegulator.ResumeDrawing(this);
 
-					return row; // <- that row needs to be added to UndoRedo after the delete operation
+					return created; // <- that row needs to be added to UndoRedo after the delete operation
 				}
 			}
+			else
+				created = null;
 
 			if (!bypassCalibrate)
 			{
@@ -130,7 +136,7 @@ namespace yata
 
 //				DrawRegulator.ResumeDrawing(this);
 			}
-			return row;
+			return created;
 		}
 
 		/// <summary>
@@ -141,7 +147,7 @@ namespace yata
 		/// <item><c><see cref="Yata"/>.editrowsclick_DeleteRange()</c></item>
 		/// <item><c><see cref="Yata"/>.editrowsclick_PasteRangeReplace()</c></item>
 		/// </list></remarks>
-		internal void DeleteRows()
+		internal void DeleteRows(bool bypassCreate = false)
 		{
 			_f.Obfuscate();
 //			DrawRegulator.SuspendDrawing(this);
@@ -152,7 +158,7 @@ namespace yata
 			int range = Math.Abs(RangeSelect);
 			Restorable rest = UndoRedo.createArray(range + 1, UndoRedo.UrType.rt_ArrayInsert);
 
-			Row row = null;
+			Row created = null;
 
 			int rFirst, rLast;
 			if (RangeSelect > 0) { rFirst = selr; rLast = selr + RangeSelect; }
@@ -161,7 +167,7 @@ namespace yata
 			while (rLast >= rFirst) // reverse delete.
 			{
 				rest.array[range--] = Rows[rLast].Clone() as Row;
-				row = Delete(rLast, true);
+				created = Delete(rLast, true, bypassCreate);
 
 				--rLast;
 			}
@@ -183,10 +189,10 @@ namespace yata
 			}
 			_ur.Push(rest);
 
-			if (row != null)
+			if (created != null)
 			{
 				rest = UndoRedo.createArray(1, UndoRedo.UrType.rt_ArrayDelete);
-				rest.array[0] = row.Clone() as Row;
+				rest.array[0] = created.Clone() as Row;
 				_ur.Push(rest);
 				_ur.SetChained(2);
 			}
