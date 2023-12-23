@@ -774,7 +774,7 @@ namespace yata
 			this.it_ClearReplaced.Enabled = false;
 			this.it_ClearReplaced.Name = "it_ClearReplaced";
 			this.it_ClearReplaced.Size = new System.Drawing.Size(280, 22);
-			this.it_ClearReplaced.Text = "Clear replaced";
+			this.it_ClearReplaced.Text = "Clear replaced flags";
 			this.it_ClearReplaced.Click += new System.EventHandler(this.editclick_ClearReplaced);
 			// 
 			// separator_3
@@ -806,7 +806,7 @@ namespace yata
 			this.it_ClearLoadchanged.Enabled = false;
 			this.it_ClearLoadchanged.Name = "it_ClearLoadchanged";
 			this.it_ClearLoadchanged.Size = new System.Drawing.Size(280, 22);
-			this.it_ClearLoadchanged.Text = "Clear loadchanged";
+			this.it_ClearLoadchanged.Text = "Clear loadchanged flags";
 			this.it_ClearLoadchanged.Click += new System.EventHandler(this.editclick_ClearLoadchanged);
 			// 
 			// separator_37
