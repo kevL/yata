@@ -212,7 +212,7 @@ namespace yata
 		}
 
 		/// <summary>
-		/// Stops <c><see cref="_t1"/></c> when the cursor enters this
+		/// Stops <c><see cref="_t1"/></c> when the cursor leaves this
 		/// <c>YataTabs</c>.
 		/// </summary>
 		/// <param name="e"></param>
