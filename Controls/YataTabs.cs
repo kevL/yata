@@ -72,7 +72,8 @@ namespace yata
 		/// <summary>
 		/// Gets the <c>TabPage</c> that the cursor is currently over.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>the <c>TabPage</c> or <c>null</c> if the cursor is not over
+		/// a <c>TabPage</c></returns>
 		TabPage get()
 		{
 			for (int i = 0; i != TabPages.Count; ++i)
@@ -223,9 +224,10 @@ namespace yata
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the tooltip text to the fullpath of the table that's loaded in
+		/// the <c>TabPage</c> that the cursor enters.
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender"><c><see cref="_t1"/></c></param>
 		/// <param name="e"></param>
 		void t1_tick(object sender, EventArgs e)
 		{
