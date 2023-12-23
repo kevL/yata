@@ -359,7 +359,7 @@ namespace yata
 			{
 				_t1 = new Timer();
 				_t1.Interval = SystemInformation.DoubleClickTime;
-				_t1.Tick += _t1_Tick;
+				_t1.Tick += t1_tick;
 			}
 		}
 		#endregion cTor

@@ -380,7 +380,7 @@ namespace yata
 				Obfuscate();
 
 			_t1.Interval = 223;
-			_t1.Tick += t1_Tick;
+			_t1.Tick += t1_tick;
 
 			DontBeepEvent += HandleDontBeepEvent;
 
@@ -436,7 +436,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void t1_Tick(object sender, EventArgs e)
+		void t1_tick(object sender, EventArgs e)
 		{
 			if (_track_x != -1)
 				Table.MouseLeaveTicker();

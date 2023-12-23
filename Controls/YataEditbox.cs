@@ -234,7 +234,7 @@ namespace yata
 		/// <param name="e"></param>
 		/// <remarks><c><see cref="YataGrid._doubletclick"/></c> is set by
 		/// <c><see cref="YataGrid"/>.OnMouseClick()</c> and cleared by
-		/// <c><see cref="YataGrid"/>._t1_Tick()</c>.</remarks>
+		/// <c><see cref="YataGrid"/>.t1_tick()</c>.</remarks>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 #if Clicks

@@ -68,7 +68,7 @@ namespace yata
 		/// <summary>
 		/// A <c>Timer</c> that enables the <c>Buttons</c>.
 		/// </summary>
-		/// <seealso cref="t1_OnTick()"><c>t1_OnTick()</c></seealso>
+		/// <seealso cref="t1_tick()"><c>t1_tick()</c></seealso>
 		Timer _t1 = new Timer();
 
 		/// <summary>
@@ -128,11 +128,11 @@ namespace yata
 			MaximumSize = new Size(Int32.MaxValue,             Height);
 
 
-			_t1.Tick += t1_OnTick;
+			_t1.Tick += t1_tick;
 			_t1.Interval = 330; // buttons-enabled delay.
 			_t1.Start();
 
-			_t2.Tick += t2_OnTick;
+			_t2.Tick += t2_tick;
 			_t2.Interval = 300; // watch file period.
 			_t2.Start();
 		}
@@ -146,7 +146,7 @@ namespace yata
 		/// <param name="sender"><c><see cref="_t1"/></c></param>
 		/// <param name="e"></param>
 		/// <remarks><c>Thread.Sleep()</c> doesn't work for this workaround.</remarks>
-		void t1_OnTick(object sender, EventArgs e)
+		void t1_tick(object sender, EventArgs e)
 		{
 			bu_Cancel  .Enabled =
 			bu_Close2da.Enabled =
@@ -165,7 +165,7 @@ namespace yata
 		/// </summary>
 		/// <param name="sender"><c><see cref="_t2"/></c></param>
 		/// <param name="e"></param>
-		void t2_OnTick(object sender, EventArgs e)
+		void t2_tick(object sender, EventArgs e)
 		{
 			switch (_input)
 			{
@@ -234,7 +234,7 @@ namespace yata
 
 			switch (DialogResult)
 			{
-//				case DialogResult.Ignore: break;				// t2_OnTick() - 2da-file was moved out and back with the same timestamp.
+//				case DialogResult.Ignore: break;				// t2_tick() - 2da-file was moved out and back with the same timestamp.
 
 				case DialogResult.Cancel:						// bu_Cancel
 					_grid._f._fileresult = Output.Cancel;
