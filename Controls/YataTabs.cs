@@ -16,6 +16,9 @@ namespace yata
 
 		#region Fields
 		TabPage _tabDrag;
+
+		ToolTip _tt = new ToolTip();
+		Timer   _t1 = new Timer();
 		#endregion Fields
 
 
@@ -54,6 +57,13 @@ namespace yata
 
 			Padding = new Point(0,0); // Padding uses Point and Margin uses Padding
 			Margin  = new Padding(0); // right got it.
+
+			_tt.AutoPopDelay = 8000;
+			_tt.InitialDelay = 100;
+			_tt.ReshowDelay  = 50;
+
+			_t1.Interval = 100;
+			_t1.Tick += t1_tick;
 		}
 		#endregion cTor
 
@@ -188,6 +198,40 @@ namespace yata
 //					return;
 			}
 			base.OnKeyDown(ke);
+		}
+
+		/// <summary>
+		/// Starts <c><see cref="_t1"/></c> when the cursor enters this
+		/// <c>YataTabs</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Bypasses <c>base.OnMouseEnter()</c>.</remarks>
+		protected override void OnMouseEnter(EventArgs e)
+		{
+			_t1.Start();
+		}
+
+		/// <summary>
+		/// Stops <c><see cref="_t1"/></c> when the cursor enters this
+		/// <c>YataTabs</c>.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>Bypasses <c>base.OnMouseLeave()</c>.</remarks>
+		protected override void OnMouseLeave(EventArgs e)
+		{
+			_t1.Stop();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void t1_tick(object sender, EventArgs e)
+		{
+			string text = (get().Tag as YataGrid).Fullpath;
+			if (text != _tt.GetToolTip(this))
+				_tt.SetToolTip(this, text);
 		}
 
 		/// <summary>
