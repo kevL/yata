@@ -229,9 +229,13 @@ namespace yata
 		/// <param name="e"></param>
 		void t1_tick(object sender, EventArgs e)
 		{
-			string text = (get().Tag as YataGrid).Fullpath;
-			if (text != _tt.GetToolTip(this))
-				_tt.SetToolTip(this, text);
+			TabPage tabpage = get();
+			if (tabpage != null)
+			{
+				string text = (tabpage.Tag as YataGrid).Fullpath;
+				if (text != _tt.GetToolTip(this))
+					_tt.SetToolTip(this, text);
+			}
 		}
 
 		/// <summary>
