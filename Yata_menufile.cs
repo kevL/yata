@@ -193,7 +193,7 @@ namespace yata
 		{
 			if (File.Exists(Table.Fullpath)) // check 'Table.Fullpath' in case user presses [Ctrl+r] after deleting the 2da-file on the hardrive.
 			{
-				bool reload = !Table.Changed;
+				bool reload = Table.Readonly || !Table.Changed;
 				if (!reload)
 				{
 					using (var ib = new Infobox(Infobox.Title_alert,
@@ -539,7 +539,7 @@ namespace yata
 		/// </list></remarks>
 		internal void fileclick_CloseTabpage(object sender, EventArgs e)
 		{
-			bool close = !Table.Changed;
+			bool close = Table.Readonly || !Table.Changed;
 			if (!close)
 			{
 				using (var ib = new Infobox(Infobox.Title_alert,
@@ -603,7 +603,7 @@ namespace yata
 		/// </list></remarks>
 		void fileclick_Quit(object sender, EventArgs e)
 		{
-			Close(); // let yata_Closing() handle it ...
+			Close(); // let Yata.OnFormClosing() handle it ...
 		}
 		#endregion Handlers (file)
 

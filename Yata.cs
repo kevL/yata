@@ -492,49 +492,6 @@ namespace yata
 		}
 
 
-		#region Methods (close)
-		/// <summary>
-		/// Checks if any currently opened tables have their
-		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
-		/// </summary>
-		/// <param name="descriptor">"close" files or "quit" Yata</param>
-		/// <param name="excludecurrent"><c>true</c> to exclude the current
-		/// table - used by
-		/// <c><see cref="tabclick_CloseOtherTabpages()">tabclick_CloseOtherTabpages()</see></c></param>
-		/// <returns><c>true</c> if there are any changed tables and user
-		/// chooses to cancel; <c>false</c> if there are no changed tables or
-		/// user chooses to close/quit anyway</returns>
-		bool CancelChangedTables(string descriptor, bool excludecurrent = false)
-		{
-			string tables = String.Empty;
-
-			YataGrid table;
-			foreach (TabPage page in Tabs.TabPages)
-			{
-				if ((table = page.Tag as YataGrid).Changed
-					&& (!excludecurrent || table != Table))
-				{
-					if (tables.Length != 0) tables += Environment.NewLine;
-					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant();
-				}
-			}
-
-			if (tables.Length != 0)
-			{
-				using (var ib = new Infobox(Infobox.Title_alert,
-											"Data has changed. Okay to " + descriptor + " ...",
-											tables,
-											InfoboxType.Warn,
-											InfoboxButtons.CancelYes))
-				{
-					return ib.ShowDialog(this) == DialogResult.Cancel;
-				}
-			}
-			return false;
-		}
-		#endregion Methods (close)
-
-
 		#region Handlers (override)
 		/// <summary>
 		/// Overrides Yata's <c>Activated</c> eventhandler. Checks if the
@@ -652,7 +609,6 @@ namespace yata
 			//else logfile.Log(". _bypassVerifyFile");
 		}
 
-
 		/// <summary>
 		/// Overrides Yata's <c>FormClosing</c> handler. Requests
 		/// user-confirmation if data has changed and writes a recent-files list
@@ -667,7 +623,7 @@ namespace yata
 			{
 				if (Tabs.TabPages.Count == 1)
 				{
-					if (e.Cancel = Table.Changed)
+					if (!Table.Readonly && Table.Changed)
 					{
 						using (var ib = new Infobox(Infobox.Title_alert,
 													"Data has changed. Okay to quit ...",
@@ -713,6 +669,47 @@ namespace yata
 			}
 
 			base.OnFormClosing(e);
+		}
+
+		/// <summary>
+		/// Checks if any currently opened tables have their
+		/// <c><see cref="YataGrid.Changed">YataGrid.Changed</see></c> flag set.
+		/// </summary>
+		/// <param name="descriptor">"close" files or "quit" Yata</param>
+		/// <param name="excludecurrent"><c>true</c> to exclude the current
+		/// table - used by
+		/// <c><see cref="tabclick_CloseOtherTabpages()">tabclick_CloseOtherTabpages()</see></c></param>
+		/// <returns><c>true</c> if there are any changed tables and user
+		/// chooses to cancel; <c>false</c> if there are no changed tables or
+		/// user chooses to close/quit anyway</returns>
+		bool CancelChangedTables(string descriptor, bool excludecurrent = false)
+		{
+			string tables = String.Empty;
+
+			YataGrid table;
+			foreach (TabPage page in Tabs.TabPages)
+			{
+				if (!(table = page.Tag as YataGrid).Readonly
+					&& table.Changed
+					&& (!excludecurrent || table != Table))
+				{
+					if (tables.Length != 0) tables += Environment.NewLine;
+					tables += Path.GetFileNameWithoutExtension(table.Fullpath).ToUpperInvariant();
+				}
+			}
+
+			if (tables.Length != 0)
+			{
+				using (var ib = new Infobox(Infobox.Title_alert,
+											"Data has changed. Okay to " + descriptor + " ...",
+											tables,
+											InfoboxType.Warn,
+											InfoboxButtons.CancelYes))
+				{
+					return ib.ShowDialog(this) == DialogResult.Cancel;
+				}
+			}
+			return false;
 		}
 
 

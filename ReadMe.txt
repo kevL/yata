@@ -4,9 +4,9 @@ This app does not write to the Registry, nor does it write any files that you
 don't tell it to. It can write 2da files. Various settings for Yata can be
 changed in the Settings.Cfg textfile.
 
-2023 dec 23
+2024 jan 22
 kevL's
-ver 5.6.2.0
+ver 5.6.3.0
 
 c# source .net 3.5
 https://github.com/kevL/yata
@@ -51,7 +51,10 @@ File
           in Settings.Cfg and at least one valid filepath exists in the list -
           see the Settings.Cfg file options below)
 
-- Readonly : F12 (toggles the currently focused table's Readonly flag)
+- Readonly : F12 (toggles the currently focused table's Readonly flag. A table
+             that is flagged Readonly cannot be edited; a request to close a
+             Changed table will not be shown regardless of the table's Changed
+             flag)
 
 - Save        : Ctrl+s
 - Save As ... : Ctrl+e
