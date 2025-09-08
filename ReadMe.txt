@@ -427,7 +427,7 @@ LMB+Shift  - selects a block of contiguous cells if there is only one currently
              selected cell, or resizes a currently selected contiguous block of
              cells. A contiguous block is required for multicell cut and copy
              operations
-RMB        - selects a cell and opens the cell context If a different cell is
+RMB        - selects a cell and opens the cell context. If a different cell is
              being editing then a right-click cancels or accepts the edit
              depending on the Setting "acceptedit="
 
@@ -708,7 +708,7 @@ Yata is pretty strict when loading a 2da file. If it detects anything awkward it
 lets the user know and will try to automatically fix cell-fields. Such cells
 should then appear highlighted with pink - these are called "loadchanged" cells,
 since they were changed when the 2da was loaded. An option under the Cells menu
-can cycle through these cells if there are any, for your review and or manual
+can cycle through these cells if there are any, for your review and/or manual
 corrections.
 
 Double-quote marks that are out of place can play havoc with loading a 2da. Yata
@@ -1070,7 +1070,7 @@ WinMerge is for ...
 
 Appendix M: WinMerge
 
-The operation under 2da Ops->External diff/merger will be enabled if the path to
+The operation under 2da Ops|External diff/merger will be enabled if the path to
 your WinMerge executable is specified in Settings.Cfg by the variable "diff="
 
 - eg
