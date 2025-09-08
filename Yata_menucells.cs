@@ -122,7 +122,7 @@ namespace yata
 		/// </list></remarks>
 		void editcellsclick_PasteCell(object sender, EventArgs e)
 		{
-			Cell sel = Table.getSelectedCell();
+			Cell sel = Table.getSelectedCell(), cel;
 			string text;
 
 			int invalid = -1;
@@ -133,27 +133,27 @@ namespace yata
 				for (int r = 0; r != _copytext.GetLength(0) && r + sel.y != Table.RowCount; ++r)
 				for (int c = 0; c != _copytext.GetLength(1) && c + sel.x != Table.ColCount; ++c)
 				{
-					(sel = Table[r + sel.y,
+					(cel = Table[r + sel.y,
 								 c + sel.x]).selected = true;
 
-					if (sel.x == 0 && Options._autorder)
-						text = sel.y.ToString(CultureInfo.InvariantCulture);
+					if (cel.x == 0 && Options._autorder)
+						text = cel.y.ToString(CultureInfo.InvariantCulture);
 					else
 						text = _copytext[r,c];
 
-					if (text != sel.text)
+					if (text != cel.text)
 					{
 						++replaced;
-						Table.ChangeCellText(sel, text); // does not do a text-check
+						Table.ChangeCellText(cel, text); // does not do a text-check
 						invalid = YataGrid.INVALID_NONE; // ChangeCellText() will run the Invalidator.
 					}
 					else
 					{
-						if (sel.replaced)
-							sel.replaced = false;
+						if (cel.replaced)
+							cel.replaced = false;
 
-						if (sel.loadchanged)
-							sel.loadchanged = false;
+						if (cel.loadchanged)
+							cel.loadchanged = false;
 
 						if (invalid == -1)
 							invalid = YataGrid.INVALID_GRID;
