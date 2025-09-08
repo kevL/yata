@@ -119,6 +119,7 @@ namespace yata
 		/// <param name="sender">
 		/// <list type="bullet">
 		/// <item><c><see cref="it_DeselectAll"/></c></item>
+		/// <item><c><see cref="it_DeselectCell"/></c></item>
 		/// <item><c><see cref="YataGrid"/></c> - <c>RMB</c> outside the grid</item>
 		/// </list></param>
 		/// <param name="e"></param>

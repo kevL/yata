@@ -856,7 +856,7 @@ namespace yata
 			this.it_DeselectCell.ShortcutKeyDisplayString = "Esc";
 			this.it_DeselectCell.Size = new System.Drawing.Size(175, 22);
 			this.it_DeselectCell.Text = "De&select all";
-			this.it_DeselectCell.Click += new System.EventHandler(this.editcellsclick_Deselect);
+			this.it_DeselectCell.Click += new System.EventHandler(this.editclick_Deselect);
 			// 
 			// separator_30
 			// 

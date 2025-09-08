@@ -9,17 +9,6 @@ namespace yata
 	{
 		#region Handlers (editcells)
 		/// <summary>
-		/// Deselects all <c><see cref="Cell">Cells</see></c>.
-		/// </summary>
-		/// <param name="sender"><c><see cref="it_DeselectCell"/></c></param>
-		/// <param name="e"></param>
-		void editcellsclick_Deselect(object sender, EventArgs e)
-		{
-			editclick_Deselect(sender, e);
-		}
-
-
-		/// <summary>
 		/// Cuts an only selected cell or cells in a contiguous block.
 		/// </summary>
 		/// <param name="sender"><c><see cref="it_CutCell"/></c></param>
