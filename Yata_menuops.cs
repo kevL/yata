@@ -95,7 +95,6 @@ namespace yata
 		{
 //			DrawRegulator.SuspendDrawing(this);
 
-
 			if (!Table.Changed)
 				 Table.Changed = true;
 
