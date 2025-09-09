@@ -148,13 +148,11 @@ namespace yata
 				Obfuscate();
 //				DrawRegulator.SuspendDrawing(Table);
 
-
 				int selr = Table.getSelectedRow();
 				if (selr == -1)
 					selr = Table.RowCount;
 
 				pasterange(selr);
-
 
 //				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
@@ -183,7 +181,6 @@ namespace yata
 				Obfuscate();
 //				DrawRegulator.SuspendDrawing(Table);
 
-
 				int selr = Table.getSelectedRow(); // shall not be -1
 				if (Table.RangeSelect < 0)
 					selr += Table.RangeSelect;
@@ -193,7 +190,6 @@ namespace yata
 				pasterange(selr);
 
 				Table._ur.SetChained(2);
-
 
 //				DrawRegulator.ResumeDrawing(Table);
 				Obfuscate(false);
@@ -290,7 +286,6 @@ namespace yata
 						Obfuscate();
 //						DrawRegulator.SuspendDrawing(Table);
 
-
 						Restorable rest = UndoRedo.createArray(_lengthCr, UndoRedo.UrType.rt_ArrayDelete);
 
 						var cells = new string[Table.ColCount];
@@ -339,7 +334,6 @@ namespace yata
 							rest.isSaved = UndoRedo.IsSavedType.is_Undo;
 						}
 						Table._ur.Push(rest);
-
 
 //						DrawRegulator.ResumeDrawing(Table);
 						Obfuscate(false);
